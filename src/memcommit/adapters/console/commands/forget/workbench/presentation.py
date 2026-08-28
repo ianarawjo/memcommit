@@ -212,3 +212,6 @@ class ForgetResolutionWorkbenchAdapter:
                 ),
             ),
         )
+
+
+__all__ = ["ForgetResolutionWorkbenchAdapter", "forget_memory_changes"]

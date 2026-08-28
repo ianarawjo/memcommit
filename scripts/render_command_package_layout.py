@@ -111,7 +111,7 @@ OWNED_SUPPORT_TARGETS = {
     "find_materialization": "find.materialization",
     "find_query_provider_policy": "find.provider_policy",
     "find_search_workbench": "find.search_workbench",
-    "forget_setup_workbench": "forget.setup_workbench",
+    "forget_setup_workbench": "forget.setup",
     "ground_named_shell": "ground.named_shell",
     "ground_session_picker": "ground.session_picker",
     "ground_shell": "ground.shell",

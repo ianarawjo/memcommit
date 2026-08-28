@@ -125,7 +125,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.flow_placeholder | retired-prototype | retire | none (retired) | 1 |
 | memcommit.forget_application | historical-compatibility-facade | remove | memcommit.application.operations.forget.application | 0 |
 | memcommit.forget_provider | operation-implementation | relocate-without-alias | memcommit.application.operations.forget.provider | 2 |
-| memcommit.forget_resolution_adapter | historical-compatibility-facade | remove | memcommit.adapters.interfaces.tui.operations.forget.resolution | 1 |
+| memcommit.forget_resolution_adapter | historical-compatibility-facade | remove | memcommit.adapters.console.commands.forget.workbench.presentation | 1 |
 | memcommit.forget_review | operation-implementation | relocate-without-alias | memcommit.application.operations.forget.review | 4 |
 | memcommit.forget_runtime | historical-compatibility-facade | remove | memcommit.application.operations.forget.runtime | 0 |
 | memcommit.goal_focus | shared-concept-implementation | relocate-without-alias | memcommit.application.semantic.goal_focus | 18 |

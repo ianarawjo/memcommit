@@ -485,7 +485,7 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.forget.setup_workbench",
+      "canonical_module": "memcommit.adapters.console.commands.forget.setup",
       "legacy_module": "memcommit.commands.forget_setup_workbench",
       "owner": "forget",
       "public_exports": [],

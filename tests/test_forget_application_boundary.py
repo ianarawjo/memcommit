@@ -28,16 +28,10 @@ from memcommit.application.operations.forget.runtime import (
     MemoryStoreForgetSourcePort,
     execute_forget_analysis,
 )
-from memcommit.adapters.interfaces.tui.operations.forget.resolution import (
-    ForgetResolutionWorkbenchAdapter as LegacyForgetResolutionWorkbenchAdapter,
-)
-from memcommit.adapters.console.commands.forget.setup_workbench import (
-    ForgetSetupReceipt as LegacyForgetSetupReceipt,
-)
-from memcommit.adapters.interfaces.tui.operations.forget.resolution import (
+from memcommit.adapters.console.commands.forget.workbench.presentation import (
     ForgetResolutionWorkbenchAdapter,
 )
-from memcommit.adapters.interfaces.tui.operations.forget.setup import ForgetSetupReceipt
+from memcommit.adapters.console.commands.forget.setup import ForgetSetupResult
 from memcommit.application.semantic.changes import ProposedChange
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
@@ -158,22 +152,34 @@ def test_forget_application_has_no_command_or_terminal_dependency() -> None:
         assert not any(name.startswith("prompt_toolkit") for name in imports)
 
 
-def test_forget_tui_modules_own_the_legacy_component_identities() -> None:
-    assert LegacyForgetSetupReceipt is ForgetSetupReceipt
-    assert (
-        LegacyForgetResolutionWorkbenchAdapter
-        is ForgetResolutionWorkbenchAdapter
+def test_forget_console_package_owns_setup_receipt_and_workbench() -> None:
+    repository_root = Path(__file__).parents[1]
+    command_root = (
+        repository_root / "src/memcommit/adapters/console/commands/forget"
     )
-    root = Path(__file__).parents[1] / "src" / "memcommit" / "adapters" / "interfaces" / "tui"
-    for name in ("setup.py", "resolution.py", "workbench.py"):
-        path = root / "operations" / "forget" / name
-        tree = ast.parse(path.read_text(encoding="utf-8"))
-        imports = {
-            node.module
-            for node in ast.walk(tree)
-            if isinstance(node, ast.ImportFrom) and node.module is not None
-        }
-        assert not any(module.startswith("memcommit.adapters.console.commands") for module in imports)
+    assert ForgetSetupResult.__module__ == (
+        "memcommit.adapters.console.commands.forget.setup"
+    )
+    assert ForgetResolutionWorkbenchAdapter.__module__ == (
+        "memcommit.adapters.console.commands.forget.workbench.presentation"
+    )
+    for relative_path in (
+        "receipt.py",
+        "setup.py",
+        "workbench/__init__.py",
+        "workbench/presentation.py",
+        "workbench/screen.py",
+    ):
+        assert (command_root / relative_path).is_file()
+    assert not (
+        repository_root / "src/memcommit/adapters/interfaces/cli/forget.py"
+    ).exists()
+    retired_tui = (
+        repository_root
+        / "src/memcommit/adapters/interfaces/tui/operations/forget"
+    )
+    assert not tuple(retired_tui.glob("*.py"))
+    assert not (command_root / "setup_workbench.py").exists()
 
 
 def test_forget_freezes_source_before_provider_construction() -> None:

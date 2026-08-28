@@ -64,7 +64,7 @@ COMPATIBILITY_TARGET_OVERRIDES = {
     "atomize_workflow": "memcommit.application.operations.atomize.workflow",
     "context_scope": "memcommit.core.context_targeting.loading",
     "forget_resolution_adapter": (
-        "memcommit.adapters.interfaces.tui.operations.forget.resolution"
+        "memcommit.adapters.console.commands.forget.workbench.presentation"
     ),
     # The baseline facade still names the pre-staging interface package; keep
     # its historical key while advancing only the canonical implementation.

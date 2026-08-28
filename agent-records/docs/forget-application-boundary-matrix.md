@@ -1,6 +1,6 @@
 # Forget application-boundary matrix
 
-Last reviewed: 2026-08-25.
+Last reviewed: 2026-08-28.
 
 ## Status
 
@@ -65,6 +65,16 @@ lazy. This is an ownership-only relocation: whole-frame selective curation,
 Source freshness, authority, checkpoint, review, Apply, and public adapter
 behavior are unchanged.
 
+Forget's terminal-specific adapters are now co-located under
+`memcommit.adapters.console.commands.forget`. `command.py` owns orchestration,
+`setup.py` collects the process-local Source and instruction,
+`receipt.py` projects the applied change receipt, and
+`workbench/presentation.py` plus `workbench/screen.py` adapt the typed review to
+the shared Resolution Session. The former operation-specific CLI/TUI trees and
+physical setup forwarding module were removed so that presentation code has
+one command-owned home. Historical flat imports remain centralized aliases to
+these canonical modules rather than parallel implementation files.
+
 ## Boundary matrix
 
 | Concern | Application owner | Production adapter | Invariant |
@@ -80,7 +90,7 @@ behavior are unchanged.
 | Apply | `run_forget_apply` | `MemoryStoreForgetSourcePort.apply` | Only sparse decided edits/removals enter the exact frozen Source mutation boundary |
 | Authority | runtime adapter | `authorized_context_mutation` | Local writes use Context CAS; granted writes retain required UPDATE/DELETE permissions through the authority save |
 | Receipt | `ForgetApplyReceipt` | Store checkpoint | Source identity, removed/edited counts, checkpoint, Grant state, and local Undo availability must match the decided effect |
-| Presentation | none | `interfaces.tui.operations.forget` plus the CLI adapter | Terminal wording, focus, execution choices, and cancellation do not decide authority or mutate the Source |
+| Presentation | none | `commands.forget.setup`, `commands.forget.receipt`, and `commands.forget.workbench` | Terminal wording, focus, execution choices, and cancellation do not decide authority or mutate the Source |
 
 ## Process-local execution decision
 
@@ -144,9 +154,11 @@ passes 85 focused tests covering:
   reverse imports from the Forget-specific TUI owner.
 
 The existing ordered Forget PTY sets remain the visual baseline because this
-stage changes execution ownership and physical module placement, not terminal
-topology or key behavior. Legacy setup and Resolution import paths are thin
-identity-preserving facades over `interfaces.tui.operations.forget`; the flat
+stage changes ownership, physical module placement, and the setup value's
+internal name, not terminal topology or key behavior. The centralized
+`memcommit.commands.forget_setup_workbench` and
+`memcommit.forget_resolution_adapter` compatibility mappings resolve to the
+new command-owned modules without physical forwarding facades; the flat
 application/runtime aliases likewise preserve identity without re-owning the
 implementation.
 

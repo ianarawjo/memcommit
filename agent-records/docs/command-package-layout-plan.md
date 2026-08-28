@@ -72,7 +72,7 @@ operation evidence ledger.
 | `memcommit.commands.fit` | `memcommit.adapters.console.commands.fit.command` | command-entry | `fit` |
 | `memcommit.commands.flat_selection_dialog` | `memcommit.adapters.console.commands.shared.flat_selection_dialog` | shared-command-mechanism | `shared` |
 | `memcommit.commands.forget` | `memcommit.adapters.console.commands.forget.command` | command-entry | `forget` |
-| `memcommit.commands.forget_setup_workbench` | `memcommit.adapters.console.commands.forget.setup_workbench` | command-owned-support | `forget` |
+| `memcommit.commands.forget_setup_workbench` | `memcommit.adapters.console.commands.forget.setup` | command-owned-support | `forget` |
 | `memcommit.commands.ground` | `memcommit.adapters.console.commands.ground.command` | command-entry | `ground` |
 | `memcommit.commands.ground_named_shell` | `memcommit.adapters.console.commands.ground.named_shell` | command-owned-support | `ground` |
 | `memcommit.commands.ground_session_picker` | `memcommit.adapters.console.commands.ground.session_picker` | command-owned-support | `ground` |

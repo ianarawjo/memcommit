@@ -1191,8 +1191,8 @@
     },
     {
       "action": "remove",
-      "canonical_target": "memcommit.adapters.interfaces.tui.operations.forget.resolution",
-      "canonical_target_path": "memcommit/adapters/interfaces/tui/operations/forget/resolution.py",
+      "canonical_target": "memcommit.adapters.console.commands.forget.workbench.presentation",
+      "canonical_target_path": "memcommit/adapters/console/commands/forget/workbench/presentation.py",
       "inbound_package_importers": 1,
       "lines": 8,
       "module": "memcommit.forget_resolution_adapter",

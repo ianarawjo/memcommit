@@ -1,4 +1,4 @@
-"""Flagless Forget setup and command-entry contracts."""
+"""Forget setup and command-entry contracts."""
 
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
@@ -8,8 +8,8 @@ import memcommit.application.ops as ops
 import memcommit.application.operations.forget.runtime as forget_runtime
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.forget import command as forget_command
-from memcommit.adapters.console.commands.forget.setup_workbench import (
-    ForgetSetupReceipt,
+from memcommit.adapters.console.commands.forget.setup import (
+    ForgetSetupResult,
     choose_forget_setup,
 )
 from memcommit.application.semantic.changes import RemoveChange
@@ -43,7 +43,7 @@ def test_forget_setup_enter_runs_the_current_direct_source():
             require_tty=False,
         )
 
-    assert receipt == ForgetSetupReceipt(
+    assert receipt == ForgetSetupResult(
         context_name="alpha",
         instruction="Forget the old desk location.",
     )
@@ -61,7 +61,7 @@ def test_forget_setup_selects_one_peer_source_before_todo():
             require_tty=False,
         )
 
-    assert receipt == ForgetSetupReceipt(
+    assert receipt == ForgetSetupResult(
         context_name="beta",
         instruction="Forget the old desk location.",
     )
@@ -78,7 +78,7 @@ def test_forget_setup_keeps_backspace_as_instruction_deletion():
             require_tty=False,
         )
 
-    assert receipt == ForgetSetupReceipt(
+    assert receipt == ForgetSetupResult(
         context_name="alpha",
         instruction="Forget the old desk location.",
     )
@@ -122,7 +122,7 @@ def test_flagless_forget_uses_the_frozen_selected_context(
         forget_command,
         "choose_forget_setup",
         lambda names, *, current, annotations: (
-            ForgetSetupReceipt(selected_name, "Forget the old desk location.")
+            ForgetSetupResult(selected_name, "Forget the old desk location.")
         ),
     )
     monkeypatch.setattr(

@@ -15,7 +15,7 @@ from memcommit.adapters.console.commands.shared.resolution_workbench_shell impor
     session_todo_view,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.adapters.interfaces.tui.operations.forget.resolution import (
+from memcommit.adapters.console.commands.forget.workbench.presentation import (
     ForgetResolutionWorkbenchAdapter,
     forget_memory_changes,
 )
@@ -395,7 +395,7 @@ def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monke
         return action
 
     monkeypatch.setattr(
-        "memcommit.adapters.interfaces.tui.operations.forget.workbench.run_resolution_workbench_shell",
+        "memcommit.adapters.console.commands.forget.workbench.screen.run_resolution_workbench_shell",
         choose,
     )
 
@@ -433,7 +433,7 @@ def test_granted_forget_requires_review_only_when_it_will_publish_a_change(
         return ResolutionWorkbenchAction(kind="ACCEPT")
 
     monkeypatch.setattr(
-        "memcommit.adapters.interfaces.tui.operations.forget.workbench.run_resolution_workbench_shell",
+        "memcommit.adapters.console.commands.forget.workbench.screen.run_resolution_workbench_shell",
         choose,
     )
     monkeypatch.setattr(

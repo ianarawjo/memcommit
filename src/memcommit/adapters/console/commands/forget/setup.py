@@ -16,6 +16,12 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import TextArea
 
+from memcommit.adapters.console.terminal import (
+    require_interactive_terminal,
+)
+from memcommit.adapters.console.text import (
+    safe_terminal_text,
+)
 from memcommit.adapters.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,
@@ -36,12 +42,6 @@ from memcommit.adapters.interfaces.tui.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.adapters.console.terminal import (
-    require_interactive_terminal,
-)
-from memcommit.adapters.console.text import (
-    safe_terminal_text,
-)
 from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
@@ -50,7 +50,7 @@ from memcommit.source_projection.presentation import SourceDisplayValue
 
 
 @dataclass(frozen=True)
-class ForgetSetupReceipt:
+class ForgetSetupResult:
     """One process-local instruction bound to one canonical direct Source."""
 
     context_name: str
@@ -71,7 +71,7 @@ def choose_forget_setup(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
-) -> ForgetSetupReceipt | None:
+) -> ForgetSetupResult | None:
     """Compose a query-like instruction field with one shared Source selector."""
 
     catalog = tuple(names)
@@ -180,7 +180,7 @@ def choose_forget_setup(
         TuiRegion(todo_frame),
         TuiRegion(footer),
     )
-    app: Application[ForgetSetupReceipt | None] = Application(
+    app: Application[ForgetSetupResult | None] = Application(
         layout=Layout(root, focused_element=instruction_area),
         key_bindings=bindings,
         full_screen=True,
@@ -198,7 +198,7 @@ def choose_forget_setup(
             event.app.layout.focus(instruction_area)
             return "HANDLED"
         event.app.exit(
-            result=ForgetSetupReceipt(
+            result=ForgetSetupResult(
                 context_name=selector.selection.selected_name,
                 instruction=instruction,
             )
@@ -321,6 +321,9 @@ def choose_forget_setup(
         result = app.run()
     except (EOFError, KeyboardInterrupt):
         return None
-    if result is not None and not isinstance(result, ForgetSetupReceipt):
+    if result is not None and not isinstance(result, ForgetSetupResult):
         raise ValueError("Forget setup returned an invalid result.")
     return result
+
+
+__all__ = ["ForgetSetupResult", "choose_forget_setup"]

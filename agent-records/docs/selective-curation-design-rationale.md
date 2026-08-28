@@ -98,7 +98,7 @@ The current Context is initially checked and marked only for orientation.
 Selecting another row does not switch the global current Context. Enter from
 the Instruction field analyzes the checked current Source directly, matching
 Query and Find's quick input path; a person who changes Source may instead run
-from To Do. Both paths produce the same process-local `ForgetSetupReceipt`
+from To Do. Both paths produce the same process-local `ForgetSetupResult`
 containing one canonical public Context name and one nonblank instruction.
 The command retrieves the selected Context's exact store and Grant binding
 from the same frozen catalog rather than resolving current state again.

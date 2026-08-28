@@ -1,4 +1,4 @@
-"""Compact applied-receipt projection for Forget."""
+"""Compact applied receipt projection for Forget."""
 
 from __future__ import annotations
 
