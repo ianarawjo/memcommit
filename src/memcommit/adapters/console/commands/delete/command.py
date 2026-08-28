@@ -24,18 +24,18 @@ from memcommit.application.operations.delete.application import (
     run_direct_item_delete,
 )
 from memcommit.application.operations.delete.runtime import MemoryStoreDeletePort
-from memcommit.adapters.interfaces.cli.delete import (
-    context_delete_warning,
+from memcommit.adapters.console.commands.delete.picker import (
+    choose_delete_target,
+    delete_picker_rows,
+)
+from memcommit.adapters.console.commands.delete.receipt import (
     removed_item_description,
     render_context_delete_result,
     render_removed_item,
 )
+from memcommit.adapters.console.commands.delete.review import context_delete_warning
 from memcommit.adapters.console.errors import render_cli_error
 from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.interfaces.tui.operations.delete import (
-    choose_delete_target,
-    delete_picker_rows,
-)
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
@@ -64,7 +64,7 @@ def _choose_target(
         initial_target=initial_target,
         item_handler=item_handler,
         # Keep the historical command symbol patchable for focused adapter
-        # tests while all picker mechanics live in the TUI interface module.
+        # tests while all picker mechanics live in the Delete picker module.
         chooser=choose_context,
     )
 

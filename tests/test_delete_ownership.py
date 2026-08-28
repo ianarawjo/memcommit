@@ -32,3 +32,20 @@ assert "memcommit.application.operations.delete.runtime" not in sys.modules
         cwd=REPOSITORY_ROOT,
         check=True,
     )
+
+
+def test_delete_console_owns_review_receipt_and_picker_without_facades() -> None:
+    command_root = (
+        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/delete"
+    )
+
+    assert (command_root / "review.py").is_file()
+    assert (command_root / "receipt.py").is_file()
+    assert (command_root / "picker.py").is_file()
+    assert not (
+        REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/cli/delete.py"
+    ).exists()
+    assert not (
+        REPOSITORY_ROOT
+        / "src/memcommit/adapters/interfaces/tui/operations/delete.py"
+    ).exists()

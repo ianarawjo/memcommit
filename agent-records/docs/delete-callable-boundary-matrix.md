@@ -10,6 +10,16 @@ rename either spelling or split their selector grammar. It moves both effects
 behind the same terminal-independent operation package while retaining their
 different approval, receipt, and recovery contracts.
 
+Delete's console-specific adapters are co-located under
+`memcommit.adapters.console.commands.delete`: `command.py` owns orchestration,
+`review.py` owns the irreversible Context warning, `receipt.py` owns direct-item
+and Context success projections, and `picker.py` owns the operation-specific
+composition over the shared Context/Memory picker. The former
+`interfaces/cli/delete.py` and `interfaces/tui/operations/delete.py` paths are
+removed without compatibility facades. This is an ownership relocation only;
+selector resolution, approval, mutation, receipt text, picker behavior, and
+existing PTY evidence are unchanged.
+
 ## Callable ownership
 
 | Callable | Owner | Input → output | Allowed effects | Required invariant | State |
@@ -22,8 +32,8 @@ different approval, receipt, and recovery contracts.
 | `memcommit.application.operations.delete.runtime.MemoryStoreDeletePort.remove_item` | infrastructure | frozen item → checkpointed result | one authorized Context save and `remove` checkpoint | full UID, owner UID/digest, Grant revision, protection, and Store CAS remain valid through save | `VERIFIED` |
 | `memcommit.application.operations.delete.runtime.MemoryStoreDeletePort.freeze_context` | infrastructure | ordinary local locator → frozen plan | local Store read | relative locator resolves once; a Grant never authorizes deletion of the authority Context | `VERIFIED` |
 | `memcommit.application.operations.delete.runtime.MemoryStoreDeletePort.delete_context` | infrastructure | frozen plan → lifecycle result | exact Context/history deletion, artifact cleanup, Profile lifecycle event | `delete_context_if` compares name, UID, and digest; descendants survive; committed cleanup failure returns a non-retryable committed receipt | `VERIFIED` |
-| `interfaces.cli.delete` | CLI adapter | typed plan/result → warning or terminal receipt | stdout/stderr only | human warning lists every irreversible effect; a committed cleanup warning still says deletion happened | `VERIFIED` |
-| `interfaces.tui.operations.delete` | TUI adapter | frozen local catalog + typed callback → picker receipt | terminal interaction and process-local focus only | display text is never re-parsed as a target; shared picker owns navigation mechanics | `VERIFIED` |
+| `commands.delete.review` / `commands.delete.receipt` | console presentation | typed plan/result → warning or terminal receipt | stdout/stderr only | human warning lists every irreversible effect; a committed cleanup warning still says deletion happened | `VERIFIED` |
+| `commands.delete.picker` | console picker composition | frozen local catalog + typed callback → picker receipt | terminal interaction and process-local focus only | display text is never re-parsed as a target; shared picker owns navigation mechanics | `VERIFIED` |
 | `commands.delete.cmd` | console composition | variadic argv/TTY → ordered application requests and presentation | interface intake, optional shared human confirmation, independently committed application effects | every selector is frozen before Apply; one current snapshot resolves every relative Context spelling; duplicates and owner/child overlap fail before mutation; `--force` skips only the human Context confirmation | `VERIFIED` |
 | `commands.remove.cmd` | compatibility facade | alias dispatch → canonical command composition | none independently | contains no behavior and preserves complete command parity | `VERIFIED` |
 | `api.client.MemCommitClient.remove_item` | public Python facade | exact selector + optional owner → immutable receipt | same checkpointed application mutation | stable typed error and no terminal import | `VERIFIED` |

@@ -12,13 +12,13 @@ from memcommit.core.context_targeting.tui.picker import (
     ContextPickerActionReceipt,
     choose_context,
 )
+from memcommit.persistence.store import MemoryStore
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,
     SourceReach,
     SourceState,
 )
-from memcommit.persistence.store import MemoryStore
 
 
 DeletePickerChooser = Callable[..., object]

@@ -1,29 +1,15 @@
-"""Human-readable projections for the unified Delete operation."""
+"""Human-readable receipts for the unified Delete operation."""
 
 from __future__ import annotations
 
 import typer
 
+from memcommit.adapters.console.text import display_escape_text
 from memcommit.application.operations.delete.application import (
     ContextDeleteResult,
     DeletedDirectItem,
     DirectItemDeleteResult,
-    FrozenContextDeletePlan,
 )
-from memcommit.adapters.console.text import display_escape_text
-
-
-def context_delete_warning(plan: FrozenContextDeletePlan) -> str:
-    """Describe every irreversible effect before a human CLI approval."""
-
-    return (
-        f"This will permanently delete context "
-        f"'{display_escape_text(plan.context_name)}' and its checkpoint history, "
-        "plus its matching atomize analysis and semantic review artifacts, "
-        "including peer Compare analyses. Descendant contexts will be preserved. "
-        "A Profile-scoped lifecycle event will retain the deleted Context identity "
-        "and digests, but no Memory content or restorable snapshot."
-    )
 
 
 def removed_item_description(item: DeletedDirectItem) -> str:
@@ -86,7 +72,6 @@ def render_context_delete_result(result: ContextDeleteResult) -> None:
 
 
 __all__ = [
-    "context_delete_warning",
     "removed_item_description",
     "render_context_delete_result",
     "render_removed_item",
