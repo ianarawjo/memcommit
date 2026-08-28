@@ -158,15 +158,16 @@ The intended dependency direction is:
 
 ```text
 commands.meld (CLI orchestration)
-  -> commands.meld_setup (freeze readable authority)
-  -> interfaces.tui.operations.meld (setup and saved-session presentation)
+  -> commands.meld.setup (typed setup and frozen readable authority)
+  -> commands.meld.workbench (saved-session presentation)
   -> interfaces.tui.components (operation-neutral mechanics)
 ```
 
-The CLI may open a TUI adapter, but the adapter does not invoke the CLI. Meld
-runtime, provider, cache, receipt, and Apply semantics remain outside this
-relocation. Historical command-owned modules remain import-only compatibility
-facades where existing callers still need their names.
+The CLI may open its workbench adapter, but the adapter does not invoke the
+CLI. Meld runtime, provider, cache, receipt, and Apply semantics remain outside
+this relocation. The operation-specific setup and saved-session presentation
+belong to the Meld command package; only operation-neutral endpoint and
+resolution mechanics remain under `interfaces.tui`.
 
 ## Verification boundary
 
@@ -206,6 +207,14 @@ Viewer owns focus; they do not submit a response or change session state.
   directly, while `commands.meld_shell` is an import-only compatibility facade.
   The relocation preserves the current Resolution Workbench projection and
   does not move provider, cache, receipt, or Apply semantics into presentation.
+- The later command-package consolidation moved the setup types and endpoint
+  projection into `commands.meld.setup` and the saved-session adapter into
+  `commands.meld.workbench`. It removed both the operation-specific
+  `interfaces.tui.operations.meld` package and the `commands.meld.shell`
+  facade. Public receipt and action shapes, provider/session/Apply boundaries,
+  and visible interaction behavior are unchanged. Existing captures therefore
+  remain historical evidence of that behavior and were not rewritten merely
+  to replace their recorded module path.
 - `bb61fd9d` recorded the physical TUI migration separately from the still
   command-owned provider, cache, session-lifecycle, and Apply boundaries.
 - `ef48b073` moved Compare report rendering to a neutral presenter, and

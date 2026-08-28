@@ -46,7 +46,7 @@ from memcommit.core.context import Context, Memory, MemoryRef
 from memcommit.configuration.config import Config
 from memcommit.adapters.console.commands.compare.command import render_comparison
 from memcommit.adapters.console.commands.meld.command import render_meld_session
-from memcommit.adapters.console.commands.meld.shell import (
+from memcommit.adapters.console.commands.meld.workbench import (
     MeldShellAction,
     _comparison_issue_resolution_badges,
     _line,

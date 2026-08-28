@@ -79,7 +79,7 @@ from memcommit.adapters.interfaces.tui.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.adapters.interfaces.tui.operations.meld.screen import run_meld_shell
+from memcommit.adapters.console.commands.meld.workbench import run_meld_shell
 from memcommit.adapters.console.commands.meld.sessions import (
     MeldSessionCatalogEntry,
     MeldSessionCatalogError,

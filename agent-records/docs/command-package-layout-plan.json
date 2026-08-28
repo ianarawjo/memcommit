@@ -695,7 +695,7 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.meld.shell",
+      "canonical_module": "memcommit.adapters.console.commands.meld.workbench",
       "legacy_module": "memcommit.commands.meld_shell",
       "owner": "meld",
       "public_exports": [],

@@ -100,7 +100,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.meld` | `memcommit.adapters.console.commands.meld.command` | command-entry | `meld` |
 | `memcommit.commands.meld_sessions` | `memcommit.adapters.console.commands.meld.sessions` | command-owned-support | `meld` |
 | `memcommit.commands.meld_setup` | `memcommit.adapters.console.commands.meld.setup` | command-owned-support | `meld` |
-| `memcommit.commands.meld_shell` | `memcommit.adapters.console.commands.meld.shell` | command-owned-support | `meld` |
+| `memcommit.commands.meld_shell` | `memcommit.adapters.console.commands.meld.workbench` | command-owned-support | `meld` |
 | `memcommit.commands.meld_target_picker` | `memcommit.adapters.console.commands.meld.target_picker` | command-owned-support | `meld` |
 | `memcommit.commands.memory_history` | `memcommit.adapters.console.shared.memory_history` | shared-command-mechanism | `shared` |
 | `memcommit.commands.memory_picker` | `memcommit.adapters.console.shared.memory_picker` | shared-command-mechanism | `shared` |

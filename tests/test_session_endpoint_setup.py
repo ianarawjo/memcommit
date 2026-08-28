@@ -26,7 +26,7 @@ from memcommit.adapters.console.shared.session_endpoint_setup import (
     _new_context_label_style,
     choose_session_endpoints,
 )
-from memcommit.adapters.interfaces.tui.operations.meld import MeldEndpointSelection
+from memcommit.adapters.console.commands.meld.setup import MeldEndpointSelection
 from memcommit.adapters.console.shared.context_picker import ContextMemoryRow, context_memory_rows
 from memcommit.core.context_targeting.tui.reach import ContextReachState
 from memcommit.core.context_targeting.tui.selection import ContextSelectionState

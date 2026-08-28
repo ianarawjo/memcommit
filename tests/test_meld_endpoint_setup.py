@@ -8,7 +8,7 @@ import memcommit.adapters.console.commands.meld.command as meld_command
 import memcommit.adapters.console.commands.meld.setup as meld_setup_command
 import memcommit.application.ops as ops
 from memcommit.adapters.interfaces.tui.components.endpoint_setup import EndpointSetupMemory
-from memcommit.adapters.interfaces.tui.operations.meld import (
+from memcommit.adapters.console.commands.meld.setup import (
     MeldEndpointSelection,
     MeldTuiSetup,
     choose_meld_endpoint_setup,
