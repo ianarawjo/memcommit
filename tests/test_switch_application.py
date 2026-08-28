@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.adapters.interfaces.tui.operations.switch import (
+from memcommit.adapters.console.commands.switch.setup import (
     SwitchTuiSetup,
     run_switch_tui,
 )
@@ -223,14 +223,13 @@ def test_switch_application_and_runtime_do_not_import_terminal_adapters() -> Non
         )
 
 
-def test_switch_tui_operation_does_not_import_command_adapters() -> None:
-    operation = ROOT / "src" / "memcommit" / "adapters" / "interfaces" / "tui" / "operations" / "switch"
-    offenders = [
-        source
-        for source in operation.rglob("*.py")
-        if any(
-            module == "memcommit.adapters.console.commands" or module.startswith("memcommit.adapters.console.commands.")
-            for module in _imports(source)
-        )
-    ]
-    assert offenders == []
+def test_switch_console_owns_setup_and_receipt_without_facades() -> None:
+    command_root = ROOT / "src/memcommit/adapters/console/commands/switch"
+    retired_tui_root = (
+        ROOT / "src/memcommit/adapters/interfaces/tui/operations/switch"
+    )
+
+    assert (command_root / "setup.py").is_file()
+    assert (command_root / "receipt.py").is_file()
+    assert not tuple(retired_tui_root.glob("*.py"))
+    assert not (ROOT / "src/memcommit/adapters/interfaces/cli/switch.py").exists()

@@ -245,7 +245,7 @@ memcommit.adapters.console.entrypoint
     │                                           # returns a name only
     ├── when NAME is supplied
     │   └── bypass the catalog UI and use the operand directly
-    ├── interfaces.tui.operations.switch         # name -> typed request
+    ├── commands.switch.setup                     # name -> typed request
     ├── switch_application.switch_context()      # locator/application policy
     └── switch_runtime.MemoryStoreSwitchContextPort
         ├── READ access + full target validation

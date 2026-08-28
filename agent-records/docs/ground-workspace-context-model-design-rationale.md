@@ -237,7 +237,7 @@ Physical workspace and draft launcher projection is owned by
 `commands.ground_workspace_picker` path is a module alias retained for import
 and monkeypatch compatibility; it does not contain a second implementation.
 
-- `interfaces.tui.operations.switch` interprets a row as a requested global
+- `commands.switch.setup` interprets a row as a requested global
   current-Context change.
 - `interfaces.tui.operations.ground` interprets a row as a process-local
   workspace surface change.

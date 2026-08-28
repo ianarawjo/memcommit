@@ -14,8 +14,8 @@ from memcommit.core.context_targeting.catalog import (
     freeze_granted_context_navigation,
     grant_navigation_annotation,
 )
-from memcommit.adapters.interfaces.cli.switch import render_switch_context
-from memcommit.adapters.interfaces.tui.operations.switch import (
+from memcommit.adapters.console.commands.switch.receipt import render_switch_context
+from memcommit.adapters.console.commands.switch.setup import (
     SwitchTuiSetup,
     run_switch_tui,
 )

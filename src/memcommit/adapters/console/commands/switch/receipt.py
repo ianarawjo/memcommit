@@ -1,4 +1,4 @@
-"""Plain console projection for a typed Switch receipt."""
+"""Human-readable console receipt for a completed Context Switch."""
 
 from __future__ import annotations
 
@@ -16,3 +16,6 @@ def render_switch_context(result: SwitchContextResult) -> None:
         typer.echo(f"Already on '{name}'.")
         return
     typer.secho(f"Switched to context '{name}'.", fg=typer.colors.GREEN)
+
+
+__all__ = ["render_switch_context"]
