@@ -1,18 +1,13 @@
-"""Operation assembly for public deterministic Dedup planning and Apply."""
+"""Public Python assembly for provider-free exact Dedup."""
 
 from __future__ import annotations
-
-from collections.abc import Mapping, Sequence
 
 from memcommit.adapters.python_api._runtime import ClientRuntime
 from memcommit.adapters.python_api._support.errors import raise_public
 from memcommit.adapters.python_api.dedup import (
-    DedunApplyResult,
-    DedunComponentResult,
-    DedunEvidenceResult,
-    DedunMemberResult,
-    DedunPlanResult,
+    ExactDedupContextResult,
     ExactDedupGroupResult,
+    ExactDedupResult,
 )
 from memcommit.adapters.python_api.errors import (
     SemanticAuthorityError,
@@ -22,207 +17,110 @@ from memcommit.adapters.python_api.errors import (
     SemanticInputError,
     SemanticStorageError,
 )
+from memcommit.application.authority.access import resolve_context_access
+from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.operations.dedup.application import (
-    DedupAuthorityError,
-    DedupConflictError,
-    DedupError,
-    DedupRequest,
-    DedupSelection,
-    apply_dedup as apply_core_dedup,
-    prepare_dedup,
+    ExactDedupError,
+    apply_exact_dedup_scope,
 )
-from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.reviewing.quality.handoff import (
-    QualityFindingHandoff,
-    QualityFindingHandoffError,
-)
 from memcommit.persistence.store import ConcurrentContextUpdateError
 
 
-def _port(runtime: ClientRuntime) -> MemoryStoreDedupPort:
+def _active_registry(runtime: ClientRuntime):
+    if runtime.registry is None or runtime.profile is None:
+        return None
     try:
-        current_name = runtime.store.current_context_name()
-    except FileNotFoundError:
-        current_name = None
-    except (OSError, ValueError) as error:
-        raise_public(SemanticStorageError, error)
-    registry = None
-    allow_grants = False
-    if runtime.registry is not None:
-        try:
-            live_registry = load_profile_registry()
-            allow_grants = bool(
-                runtime.profile is not None
-                and runtime.profile.uid == live_registry.active.uid
-                and runtime.store_root
-                == profile_store_dir(live_registry.active).resolve()
-            )
-            if allow_grants:
-                registry = live_registry
-        except (ProfileConfigError, ProfileError) as error:
-            raise_public(SemanticAuthorityError, error)
-        except OSError as error:
-            raise_public(SemanticStorageError, error)
-    return MemoryStoreDedupPort(
-        runtime.store,
-        current_name=current_name,
-        registry=registry,
-        allow_grants=allow_grants,
-    )
-
-
-def _public(plan) -> DedunPlanResult:
-    return DedunPlanResult(
-        context_name=plan.display_name,
-        context_uid=plan.context_uid,
-        revision=plan.revision,
-        components=tuple(
-            DedunComponentResult(
-                uid=component.uid,
-                members=tuple(
-                    DedunMemberResult(
-                        uid=member.uid,
-                        content=member.content,
-                        ordinal=member.ordinal,
-                        recommended=(member.uid == component.recommended_survivor_uid),
-                    )
-                    for member in component.members
-                ),
-                evidence=tuple(
-                    DedunEvidenceResult(
-                        finding_uid=evidence.finding_uid,
-                        relation=evidence.relation,
-                        left_uid=evidence.left_uid,
-                        right_uid=evidence.right_uid,
-                        reason=evidence.reason,
-                    )
-                    for evidence in component.evidence
-                ),
-                recommended_survivor_uid=component.recommended_survivor_uid,
-            )
-            for component in plan.components
-        ),
-        exact_item_groups=tuple(
-            ExactDedupGroupResult(
-                survivor_uid=group.survivor_uid,
-                absorbed_uids=group.absorbed_uids,
-                content=group.content,
-                item_kind=group.item_kind,
-                summary=group.summary,
-            )
-            for group in plan.exact_item_groups
-        ),
-        _application_plan=plan,
-    )
-
-
-def plan_dedun(
-    runtime: ClientRuntime,
-    evidence: Sequence[QualityFindingHandoff],
-    *,
-    expected_revision: str | None = None,
-) -> DedunPlanResult:
-    """Freeze typed exact-plus-semantic redundancy evidence into components."""
-
-    try:
-        if isinstance(evidence, (str, bytes)):
-            raise TypeError(
-                "Dedun evidence must be a sequence of typed redundancy receipts."
-            )
-        handoffs = tuple(evidence)
-        first = handoffs[0] if handoffs else None
-        request = DedupRequest(
-            handoffs,
-            exact_source=(first.sources[0] if first is not None else None),
-            exact_source_frame_digest=(
-                first.source_frame_digest if first is not None else None
-            ),
-        )
-        plan = prepare_dedup(request, port=_port(runtime))
-        if expected_revision is not None and plan.revision != expected_revision:
-            raise DedupConflictError("The reviewed Dedun revision was not regenerated.")
-    except DedupAuthorityError as error:
+        registry = load_profile_registry()
+        if (
+            runtime.profile.uid == registry.active.uid
+            and runtime.store_root == profile_store_dir(registry.active).resolve()
+        ):
+            return registry
+        return None
+    except (ProfileConfigError, ProfileError) as error:
         raise_public(SemanticAuthorityError, error)
-    except DedupConflictError as error:
-        raise_public(SemanticConflictError, error)
-    except (QualityFindingHandoffError, DedupError, TypeError, ValueError) as error:
-        raise_public(SemanticInputError, error)
+    except OSError as error:
+        raise_public(SemanticStorageError, error)
+
+
+def dedup(
+    runtime: ClientRuntime,
+    context_name: str | None = None,
+    *,
+    include_descendants: bool = False,
+) -> ExactDedupResult:
+    """Remove exact duplicates from one direct or lexical Context scope."""
+
+    try:
+        if type(include_descendants) is not bool:
+            raise TypeError("Exact Dedup descendant reach must be a boolean.")
+        current_name = runtime.store.current_context_name()
+        if context_name is None:
+            if current_name is None:
+                raise FileNotFoundError("No current Context is available.")
+            canonical = current_name
+        else:
+            canonical = resolve_context_locator(context_name, current=current_name)
+        registry = _active_registry(runtime)
+        access = resolve_context_access(
+            runtime.store,
+            canonical,
+            current_name=current_name,
+            required_permission="READ",
+            registry=registry,
+        )
+        receipt = apply_exact_dedup_scope(
+            runtime.store,
+            access,
+            include_descendants=include_descendants,
+            registry=registry,
+        )
     except (FileNotFoundError, KeyError) as error:
         raise_public(SemanticContextError, error)
     except (ProfileConfigError, ProfileError) as error:
         raise_public(SemanticAuthorityError, error)
-    except OSError as error:
-        raise_public(SemanticStorageError, error)
-    return _public(plan)
-
-
-def apply_dedun(
-    runtime: ClientRuntime,
-    plan: DedunPlanResult,
-    *,
-    survivors: Mapping[str, str],
-) -> DedunApplyResult:
-    """Apply one exact complete survivor mapping from a reviewed plan."""
-
-    if not isinstance(plan, DedunPlanResult):
-        raise SemanticInputError("Dedun Apply requires a DedunPlanResult.")
-    if not isinstance(survivors, Mapping) or any(
-        not isinstance(component_uid, str)
-        or not component_uid
-        or not isinstance(survivor_uid, str)
-        or not survivor_uid
-        for component_uid, survivor_uid in survivors.items()
-    ):
-        raise SemanticInputError("Dedun survivors must map group UIDs to Memory UIDs.")
-    try:
-        receipt = apply_core_dedup(
-            plan._application_plan,
-            tuple(
-                DedupSelection(component_uid, survivor_uid)
-                for component_uid, survivor_uid in survivors.items()
-            ),
-            port=_port(runtime),
-        )
-    except DedupAuthorityError as error:
-        raise_public(SemanticAuthorityError, error)
-    except (DedupConflictError, ConcurrentContextUpdateError) as error:
+    except ConcurrentContextUpdateError as error:
         raise_public(SemanticConflictError, error)
-    except (ProfileConfigError, ProfileError) as error:
-        raise_public(SemanticAuthorityError, error)
-    except DedupError as error:
-        raise_public(SemanticInputError, error)
     except OSError as error:
         raise_public(SemanticStorageError, error)
-    except (RuntimeError, TypeError, ValueError) as error:
+    except (ExactDedupError, RuntimeError) as error:
         raise_public(SemanticExecutionError, error)
-    return DedunApplyResult(
-        context_name=receipt.context_name,
-        context_uid=receipt.context_uid,
-        revision=receipt.revision,
-        checkpoint_uid=receipt.checkpoint_uid,
-        survivor_uids=receipt.survivor_uids,
-        absorbed_uids=receipt.absorbed_uids,
+    except (TypeError, ValueError) as error:
+        raise_public(SemanticInputError, error)
+    contexts = tuple(
+        ExactDedupContextResult(
+            context_name=frame.context_name,
+            groups=tuple(
+                ExactDedupGroupResult(
+                    survivor_uid=group.survivor_uid,
+                    absorbed_uids=group.absorbed_uids,
+                    content=group.content,
+                    item_kind=group.item_kind,
+                    summary=group.summary,
+                    context_name=frame.context_name,
+                )
+                for group in frame.groups
+            ),
+            checkpoint_uid=frame.checkpoint_uid,
+        )
+        for frame in receipt.contexts
+    )
+    groups = tuple(group for frame in contexts for group in frame.groups)
+    return ExactDedupResult(
+        context_name=receipt.root_name,
+        groups=groups,
+        checkpoint_uid=receipt.checkpoint_uids[0] if receipt.checkpoint_uids else None,
+        include_descendants=receipt.include_descendants,
+        contexts=contexts,
+        checkpoint_uids=receipt.checkpoint_uids,
+        operation_uid=receipt.operation_uid,
     )
 
 
-# Compatibility aliases for the pre-Dedun public Python surface.
-plan_consolidation = plan_dedun
-apply_consolidation = apply_dedun
-plan_dedup = plan_dedun
-apply_dedup = apply_dedun
-
-
-__all__ = [
-    "apply_consolidation",
-    "apply_dedun",
-    "apply_dedup",
-    "plan_consolidation",
-    "plan_dedun",
-    "plan_dedup",
-]
+__all__ = ["dedup"]

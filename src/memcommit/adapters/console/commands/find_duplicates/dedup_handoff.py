@@ -3,13 +3,13 @@
 from __future__ import annotations
 
 from memcommit.adapters.console.clipboard import write_system_clipboard
-from memcommit.application.operations.dedup.application import (
-    DedupRequest,
-    apply_dedup,
-    prepare_dedup,
+from memcommit.application.operations.dedun.application import (
+    DedunRequest,
+    apply_dedun,
+    prepare_dedun,
 )
-from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
-from memcommit.adapters.interfaces.tui.operations.dedup import run_dedup_tui
+from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
+from memcommit.adapters.console.commands.dedun.workbench import run_dedun_workbench
 from memcommit.application.reviewing.quality.handoff import QualityFindingHandoff
 from memcommit.persistence.store import MemoryStore
 
@@ -22,16 +22,16 @@ def run_dedun_resolution(
 ) -> None:
     """Open Dedun review after fresh Source and authority validation."""
 
-    request = DedupRequest(
+    request = DedunRequest(
         handoffs,
         exact_source=handoffs[0].sources[0],
         exact_source_frame_digest=handoffs[0].source_frame_digest,
     )
-    port = MemoryStoreDedupPort(store, current_name=current_name)
-    plan = prepare_dedup(request, port=port)
-    run_dedup_tui(
+    port = MemoryStoreDedunPort(store, current_name=current_name)
+    plan = prepare_dedun(request, port=port)
+    run_dedun_workbench(
         plan,
-        apply_selections=lambda selections: apply_dedup(
+        apply_selections=lambda selections: apply_dedun(
             plan,
             selections,
             port=port,

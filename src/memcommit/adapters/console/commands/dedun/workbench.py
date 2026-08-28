@@ -1,4 +1,4 @@
-"""Semantic Dedun projection into the common Resolution shell."""
+"""Dedun projection into the common Resolution workbench."""
 
 from __future__ import annotations
 
@@ -7,12 +7,12 @@ from collections.abc import Callable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.application.operations.dedup.application import (
-    DedupComponent,
-    DedupReceipt,
-    DedupSelection,
-    FrozenDedupPlan,
-    dedup_resolution_case,
+from memcommit.application.operations.dedun.application import (
+    DedunComponent,
+    DedunReceipt,
+    DedunSelection,
+    FrozenDedunPlan,
+    dedun_resolution_case,
 )
 from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (
@@ -36,7 +36,7 @@ from memcommit.application.semantic.redundancy_evidence import (
 )
 
 
-def _component_detail(component: DedupComponent) -> SemanticViewerDocument:
+def _component_detail(component: DedunComponent) -> SemanticViewerDocument:
     fragments: list[tuple[str, str]] = [
         ("class:title", "REDUNDANCY GROUP · EXISTING SURVIVOR ONLY\n"),
         ("class:report-label", f"ID · {safe_terminal_text(component.uid)}\n"),
@@ -89,7 +89,7 @@ def _component_detail(component: DedupComponent) -> SemanticViewerDocument:
     )
 
 
-def _component_compact_context(component: DedupComponent) -> str:
+def _component_compact_context(component: DedunComponent) -> str:
     """Keep the decision evidence adjacent without opening a separate Viewer."""
 
     lines = ["MEMBERS"]
@@ -109,7 +109,7 @@ def _component_compact_context(component: DedupComponent) -> str:
     return "\n".join(lines)
 
 
-def project_dedup_plan(plan: FrozenDedupPlan) -> SemanticViewerDocument:
+def project_dedun_plan(plan: FrozenDedunPlan) -> SemanticViewerDocument:
     fragments: list[tuple[str, str]] = [
         ("class:title", "DEDUN · CONFIRMED REDUNDANCIES\n"),
         (
@@ -175,7 +175,7 @@ def project_dedup_plan(plan: FrozenDedupPlan) -> SemanticViewerDocument:
     return SemanticViewerDocument(
         (
             SemanticViewerSection(
-                uid="dedup-report",
+                uid="dedun-report",
                 kind="REPORT",
                 block=SemanticViewerBlock(tuple(fragments), anchor="both"),
             ),
@@ -183,15 +183,15 @@ def project_dedup_plan(plan: FrozenDedupPlan) -> SemanticViewerDocument:
     )
 
 
-def _selections(outcome: ResolutionOutcome) -> tuple[DedupSelection, ...]:
+def _selections(outcome: ResolutionOutcome) -> tuple[DedunSelection, ...]:
     return tuple(
-        DedupSelection(component_uid, survivor_uid)
+        DedunSelection(component_uid, survivor_uid)
         for component_uid, survivor_uid in outcome.decisions
     )
 
 
-def dedup_exact_review(
-    plan: FrozenDedupPlan,
+def dedun_exact_review(
+    plan: FrozenDedunPlan,
     outcome: ResolutionOutcome,
 ) -> ExactCommandReview:
     selections = _selections(outcome)
@@ -233,8 +233,8 @@ def dedup_exact_review(
     )
 
 
-def dedup_resolution_spec(plan: FrozenDedupPlan) -> ResolutionWorkbenchSpec:
-    case = dedup_resolution_case(plan)
+def dedun_resolution_spec(plan: FrozenDedunPlan) -> ResolutionWorkbenchSpec:
+    case = dedun_resolution_case(plan)
     placeholder = ResolutionOutcome(
         tuple(
             (component.uid, component.recommended_survivor_uid)
@@ -245,7 +245,7 @@ def dedup_resolution_spec(plan: FrozenDedupPlan) -> ResolutionWorkbenchSpec:
         case=case,
         title="MEM DEDUN · RESOLUTION SESSION",
         subtitle="DUN EVIDENCE · EXISTING UID SURVIVOR · EXACT WHOLE-SET APPLY",
-        report=project_dedup_plan(plan),
+        report=project_dedun_plan(plan),
         items=tuple(
             ResolutionItem(
                 uid=component.uid,
@@ -269,7 +269,7 @@ def dedup_resolution_spec(plan: FrozenDedupPlan) -> ResolutionWorkbenchSpec:
             )
             for component in plan.components
         ),
-        exact_review=dedup_exact_review(plan, placeholder),
+        exact_review=dedun_exact_review(plan, placeholder),
         detail_title="VIEWER · REDUNDANCY GROUP EVIDENCE",
         responses_title="RESPONSES · REQUIRED · EXISTING SURVIVOR",
         items_title="ITEMS · REQUIRED REDUNDANCY GROUPS",
@@ -284,7 +284,7 @@ def dedup_resolution_spec(plan: FrozenDedupPlan) -> ResolutionWorkbenchSpec:
     )
 
 
-def _receipt(receipt: DedupReceipt) -> str:
+def _receipt(receipt: DedunReceipt) -> str:
     return (
         f"CONTEXT · {receipt.context_name}\n"
         f"COMPONENTS · {len(receipt.selections)}\n"
@@ -297,20 +297,20 @@ def _receipt(receipt: DedupReceipt) -> str:
     )
 
 
-def run_dedup_tui(
-    plan: FrozenDedupPlan,
+def run_dedun_workbench(
+    plan: FrozenDedunPlan,
     *,
-    apply_selections: Callable[[tuple[DedupSelection, ...]], DedupReceipt],
+    apply_selections: Callable[[tuple[DedunSelection, ...]], DedunReceipt],
     clipboard_writer: ClipboardWriter | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
-) -> DedupReceipt | None:
+) -> DedunReceipt | None:
     return run_resolution_workbench(
-        dedup_resolution_spec(plan),
+        dedun_resolution_spec(plan),
         apply_outcome=lambda outcome: apply_selections(_selections(outcome)),
         receipt_text=_receipt,
-        review_outcome=lambda outcome: dedup_exact_review(plan, outcome),
+        review_outcome=lambda outcome: dedun_exact_review(plan, outcome),
         clipboard_writer=clipboard_writer,
         app_input=app_input,
         app_output=app_output,
@@ -319,8 +319,8 @@ def run_dedup_tui(
 
 
 __all__ = [
-    "dedup_exact_review",
-    "dedup_resolution_spec",
-    "project_dedup_plan",
-    "run_dedup_tui",
+    "dedun_exact_review",
+    "dedun_resolution_spec",
+    "project_dedun_plan",
+    "run_dedun_workbench",
 ]

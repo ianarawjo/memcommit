@@ -1,1 +1,1 @@
-"""Operation-owned Dedup application and runtime boundaries."""
+"""Provider-free exact Dedup discovery and Apply."""

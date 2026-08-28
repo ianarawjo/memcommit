@@ -344,7 +344,7 @@ _LAZY_EXPORTS = {
     "MeldProposalResult": ("memcommit.adapters.python_api.meld", "MeldProposalResult"),
     "MeldSessionResult": ("memcommit.adapters.python_api.meld", "MeldSessionResult"),
     **{
-        name: ("memcommit.adapters.python_api.dedup", name)
+        name: ("memcommit.adapters.python_api.dedun", name)
         for name in (
             "DedupApplyResult",
             "DedupComponentResult",
@@ -356,6 +356,11 @@ _LAZY_EXPORTS = {
             "DedunEvidenceResult",
             "DedunMemberResult",
             "DedunPlanResult",
+        )
+    },
+    **{
+        name: ("memcommit.adapters.python_api.dedup", name)
+        for name in (
             "ExactDedupGroupResult",
             "ExactDedupContextResult",
             "ExactDedupResult",

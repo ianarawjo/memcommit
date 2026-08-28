@@ -7,18 +7,18 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.adapters.console.clipboard import write_system_clipboard
-from memcommit.application.operations.dedup.application import (
-    DedupConflictError,
-    DedupError,
-    DedupRequest,
-    DedupSelection,
-    apply_dedup,
-    prepare_dedup,
+from memcommit.application.operations.dedun.application import (
+    DedunConflictError,
+    DedunError,
+    DedunRequest,
+    DedunSelection,
+    apply_dedun,
+    prepare_dedun,
 )
-from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
-from memcommit.adapters.interfaces.cli.dedup import (
-    render_dedup_plan_plain,
-    render_dedup_receipt,
+from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
+from memcommit.adapters.console.commands.dedun.presentation import (
+    render_dedun_plan_plain,
+    render_dedun_receipt,
 )
 from memcommit.adapters.console import (
     ConsoleMode,
@@ -27,7 +27,7 @@ from memcommit.adapters.console import (
     resolve_console_mode,
 )
 from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.interfaces.tui.operations.dedup import run_dedup_tui
+from memcommit.adapters.console.commands.dedun.workbench import run_dedun_workbench
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.reviewing.quality.handoff import (
@@ -39,11 +39,11 @@ from memcommit.application.semantic.redundancy_evidence import (
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
-def _selection(value: str) -> DedupSelection:
+def _selection(value: str) -> DedunSelection:
     if value.count("=") != 1:
-        raise DedupError("Dedun --survivor must be COMPONENT=MEMORY.")
+        raise DedunError("Dedun --survivor must be COMPONENT=MEMORY.")
     component_uid, survivor_uid = value.split("=", 1)
-    return DedupSelection(component_uid, survivor_uid)
+    return DedunSelection(component_uid, survivor_uid)
 
 
 def cmd(
@@ -89,28 +89,28 @@ def cmd(
     try:
         mode = resolve_console_mode(plain=plain, tui=tui)
         if not evidence:
-            raise DedupError(
+            raise DedunError(
                 "Dedun requires exact or semantic redundancy evidence from its review."
             )
         if apply_now:
             if not survivors or expected_revision is None:
-                raise DedupError(
+                raise DedunError(
                     "Dedun --apply requires --survivor and "
                     "--expected-revision."
                 )
             if mode is ConsoleMode.TUI:
-                raise DedupError(
+                raise DedunError(
                     "Dedun --apply is already exact; do not combine it "
                     "with --tui."
                 )
         elif survivors or expected_revision is not None:
-            raise DedupError(
+            raise DedunError(
                 "Dedun --survivor and --expected-revision require --apply."
             )
         handoffs = tuple(
             redundancy_evidence_from_json(item) for item in evidence
         )
-        request = DedupRequest(
+        request = DedunRequest(
             handoffs,
             exact_source=handoffs[0].sources[0],
             exact_source_frame_digest=handoffs[0].source_frame_digest,
@@ -120,20 +120,20 @@ def cmd(
             current_name = store.current_context_name()
         except FileNotFoundError:
             current_name = None
-        port = MemoryStoreDedupPort(store, current_name=current_name)
-        plan = prepare_dedup(request, port=port)
+        port = MemoryStoreDedunPort(store, current_name=current_name)
+        plan = prepare_dedun(request, port=port)
         if expected_revision is not None and plan.revision != expected_revision:
-            raise DedupConflictError(
+            raise DedunConflictError(
                 "The reviewed consolidation revision was not regenerated; "
                 "nothing was written."
             )
         if apply_now:
-            receipt = apply_dedup(
+            receipt = apply_dedun(
                 plan,
                 tuple(_selection(value) for value in survivors or ()),
                 port=port,
             )
-            render_dedup_receipt(receipt)
+            render_dedun_receipt(receipt)
             return
         interactive = SystemTerminalCapabilities().is_interactive()
         selected_mode = (
@@ -144,9 +144,9 @@ def cmd(
             else mode
         )
         if selected_mode is ConsoleMode.TUI:
-            run_dedup_tui(
+            run_dedun_workbench(
                 plan,
-                apply_selections=lambda values: apply_dedup(
+                apply_selections=lambda values: apply_dedun(
                     plan,
                     values,
                     port=port,
@@ -154,11 +154,11 @@ def cmd(
                 clipboard_writer=write_system_clipboard,
             )
         else:
-            render_dedup_plan_plain(plan)
+            render_dedun_plan_plain(plan)
     except (
         ConcurrentContextUpdateError,
         ConsoleModeError,
-        DedupError,
+        DedunError,
         FileNotFoundError,
         OSError,
         ProfileConfigError,

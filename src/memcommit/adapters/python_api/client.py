@@ -31,11 +31,10 @@ from memcommit.adapters.python_api.delete import (
     DirectItemDeleteReceipt,
 )
 from memcommit.adapters.python_api.dedup import (
-    DedunApplyResult,
-    DedunPlanResult,
     ExactDedupResult,
     ExactDuplicateFindResult,
 )
+from memcommit.adapters.python_api.dedun import DedunApplyResult, DedunPlanResult
 from memcommit.adapters.python_api.embed import EmbeddedContextResult, EmbeddedMemoryResult
 from memcommit.adapters.python_api.forget import (
     ForgetApplyResult,
@@ -596,9 +595,9 @@ class MemCommitClient:
     ) -> ExactDedupResult:
         """Remove exact groups from one direct or atomic lexical scope."""
 
-        from memcommit.adapters.python_api._operations.exact_dedup import dedup_exact
+        from memcommit.adapters.python_api._operations.dedup import dedup
 
-        return dedup_exact(
+        return dedup(
             self._runtime,
             context_name,
             include_descendants=include_descendants,
@@ -612,7 +611,7 @@ class MemCommitClient:
     ) -> DedunPlanResult:
         """Plan survivor choices from typed exact-plus-semantic DUN evidence."""
 
-        from memcommit.adapters.python_api._operations.dedup import plan_dedun
+        from memcommit.adapters.python_api._operations.dedun import plan_dedun
 
         return plan_dedun(
             self._runtime,
@@ -628,7 +627,7 @@ class MemCommitClient:
     ) -> DedunApplyResult:
         """Apply one exact complete existing-survivor mapping."""
 
-        from memcommit.adapters.python_api._operations.dedup import apply_dedun
+        from memcommit.adapters.python_api._operations.dedun import apply_dedun
 
         return apply_dedun(self._runtime, plan, survivors=survivors)
 

@@ -13,15 +13,23 @@ participates in DUN.
 | --- | --- | --- | --- |
 | CLI | `mem dedun [CONTEXT] [-d\| -r]` | shared per-Context redundancy analyzer plus role-aware exact detector, then direct Apply or recursive scope preparation and batch Apply | one direct checkpoint, one atomic multi-Context command unit, or a no-change receipt in every terminal mode |
 | Exact CLI replay | hidden evidence/revision/survivor fields emitted by the final review | the same core | one checkpoint or no write |
-| Public Python | `plan_dedun` / `apply_dedun` over reviewed redundancy evidence | `api._operations.dedup` | `DedunPlanResult` and `DedunApplyResult` |
+| Public Python | `plan_dedun` / `apply_dedun` over reviewed redundancy evidence | `adapters.python_api._operations.dedun` | `DedunPlanResult` and `DedunApplyResult` |
 | Agent/MCP | `memcommit_dedun` | the same public Python routes | JSON-safe plan or checkpoint result |
 
-The remaining `dedup_*` and `consolidate` module names are implementation or
-executable compatibility boundaries. The separate
+Canonical application ownership is
+`memcommit.application.operations.dedun`; plain presentation and the optional
+resolution workbench are co-located under
+`memcommit.adapters.console.commands.dedun`. The hidden `consolidate` command
+remains only an executable replay compatibility boundary. The separate
 `find_duplicates` command module is shared with Find Redundancies but enters
 immediate Apply only when called by Dedun. Canonical applying vocabulary is
 `dedun`, `redundancy-evidence-v2`, `REDUNDANCY`, `DEDUN`, and
 `memcommit_dedun`.
+
+The historical `dedup-component-*` identifier prefix remains frozen because
+component UIDs occur in exact replay commands and retained checkpoints. Public
+Python `Dedup*Result`, `plan_dedup`, and `apply_dedup` spellings remain thin
+aliases; new implementation code and module ownership use Dedun names only.
 
 ## Shared behavior evidence
 

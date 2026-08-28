@@ -18,8 +18,8 @@ from memcommit.application.operations.dedun.scope import (
     freeze_recursive_dedun_scope,
     prepare_recursive_dedun_scope,
 )
-from memcommit.application.operations.dedup.application import DedupConflictError
-from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
+from memcommit.application.operations.dedun.application import DedunConflictError
+from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
 from memcommit.application.reviewing.quality.findings import DuplicateReport, FindingsError
 from memcommit.application.reviewing.quality.redundancy_scope import analyze_independent_redundancy_scope
 from memcommit.persistence.store import MemoryStore
@@ -94,7 +94,7 @@ def _prepared(store: MemoryStore, root_name: str):
     prepared = prepare_recursive_dedun_scope(
         frozen,
         analysis,
-        port=MemoryStoreDedupPort(
+        port=MemoryStoreDedunPort(
             store,
             current_name=root_name,
             allow_grants=False,
@@ -241,7 +241,7 @@ def test_recursive_dedun_blocks_inbound_reference_before_any_write(isolated_stor
     store.save(sibling)
     prepared = _prepared(store, root.name)
 
-    with pytest.raises(DedupConflictError, match="inbound references"):
+    with pytest.raises(DedunConflictError, match="inbound references"):
         apply_recursive_dedun_scope(store, prepared)
 
     assert tuple(store.load_direct(root.name).memories) == (
@@ -293,7 +293,7 @@ def test_recursive_dedun_rejects_namespace_drift_before_apply(isolated_store):
     added = ops.init("dedun/tree/new-child")
     store.save(added)
 
-    with pytest.raises(DedupConflictError, match="namespace changed"):
+    with pytest.raises(DedunConflictError, match="namespace changed"):
         apply_recursive_dedun_scope(store, prepared)
 
     assert all(

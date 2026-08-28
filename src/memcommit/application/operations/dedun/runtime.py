@@ -1,4 +1,4 @@
-"""MemoryStore authority, freshness, and atomic Apply boundary for Dedup."""
+"""MemoryStore authority, freshness, and atomic Apply boundary for Dedun."""
 
 from __future__ import annotations
 
@@ -13,24 +13,24 @@ from memcommit.application.authority.access import (
     resolve_context_access,
 )
 from memcommit.core.context import AutoCheckpoint, Memory, MemoryRef
-from memcommit.application.operations.dedup.application import (
-    DedupAuthorityError,
-    DedupConflictError,
-    DedupError,
-    DedupProjection,
-    DedupReceipt,
-    DedupRequest,
-    FrozenDedupPlan,
-    dedup_projection_record,
+from memcommit.application.operations.dedun.application import (
+    DedunAuthorityError,
+    DedunConflictError,
+    DedunError,
+    DedunProjection,
+    DedunReceipt,
+    DedunRequest,
+    FrozenDedunPlan,
+    dedun_projection_record,
 )
-from memcommit.application.operations.dedup.planning import freeze_dedup_plan
+from memcommit.application.operations.dedun.planning import freeze_dedun_plan
 from memcommit.application.reviewing.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 @dataclass
-class MemoryStoreDedupPort:
+class MemoryStoreDedunPort:
     """Apply confirmed duplicate components in one exact Context."""
 
     active_store: MemoryStore
@@ -44,7 +44,7 @@ class MemoryStoreDedupPort:
         if not isinstance(self.allow_grants, bool):
             raise TypeError("Dedun grant availability must be boolean.")
 
-    def _access(self, request: DedupRequest) -> ContextAccess:
+    def _access(self, request: DedunRequest) -> ContextAccess:
         source = request.source
         if not self.allow_grants and not self.active_store.context_exists(
             source.display_name
@@ -66,12 +66,12 @@ class MemoryStoreDedupPort:
             {"READ", "DERIVE", "DELETE"} - set(access.view.grant.permissions)
         )
         if missing:
-            raise DedupAuthorityError(
+            raise DedunAuthorityError(
                 "Dedun Grant lacks required authority: " + ", ".join(missing)
             )
 
-    def freeze(self, request: DedupRequest) -> FrozenDedupPlan:
-        if not isinstance(request, DedupRequest):
+    def freeze(self, request: DedunRequest) -> FrozenDedunPlan:
+        if not isinstance(request, DedunRequest):
             raise TypeError("Dedun freeze requires a typed request.")
         access = self._access(request)
         self._require_grant_permissions(access)
@@ -81,11 +81,11 @@ class MemoryStoreDedupPort:
             context.uid != source.context_uid
             or access.display_name != source.display_name
         ):
-            raise DedupConflictError(
+            raise DedunConflictError(
                 "The confirmed duplicate Source identity changed. Run the finder again."
             )
         if direct_context_digest(context) != source.direct_memory_digest:
-            raise DedupConflictError(
+            raise DedunConflictError(
                 "The confirmed duplicate Source changed. Run the finder again."
             )
         memories = tuple(
@@ -101,7 +101,7 @@ class MemoryStoreDedupPort:
             else ()
         )
         digest = context_record_digest(context)
-        return freeze_dedup_plan(
+        return freeze_dedun_plan(
             request,
             memories,
             context_uid=context.uid,
@@ -117,7 +117,7 @@ class MemoryStoreDedupPort:
             ),
         )
 
-    def _revalidated_access(self, plan: FrozenDedupPlan) -> ContextAccess:
+    def _revalidated_access(self, plan: FrozenDedunPlan) -> ContextAccess:
         if plan.granted_binding is not None:
             try:
                 access = revalidate_granted_context_binding(
@@ -127,11 +127,11 @@ class MemoryStoreDedupPort:
                     registry=self.registry,
                 )
             except Exception as error:
-                raise DedupAuthorityError(str(error)) from error
+                raise DedunAuthorityError(str(error)) from error
             self._require_grant_permissions(access)
             return access
         if not self.active_store.context_exists(plan.context_name):
-            raise DedupConflictError(
+            raise DedunConflictError(
                 f"Dedun Context '{plan.context_name}' no longer exists."
             )
         return ContextAccess(
@@ -162,12 +162,12 @@ class MemoryStoreDedupPort:
 
     def apply(
         self,
-        plan: FrozenDedupPlan,
-        projection: DedupProjection,
-    ) -> DedupReceipt:
-        if not isinstance(plan, FrozenDedupPlan) or not isinstance(
+        plan: FrozenDedunPlan,
+        projection: DedunProjection,
+    ) -> DedunReceipt:
+        if not isinstance(plan, FrozenDedunPlan) or not isinstance(
             projection,
-            DedupProjection,
+            DedunProjection,
         ):
             raise TypeError("Dedun Apply requires a frozen plan and projection.")
         selections = projection.selections
@@ -200,7 +200,7 @@ class MemoryStoreDedupPort:
                     current.uid != plan.context_uid
                     or context_record_digest(current) != plan.context_digest
                 ):
-                    raise DedupConflictError(
+                    raise DedunConflictError(
                         "The Dedun Source changed before Apply; nothing was written."
                     )
                 inbound = self._inbound_references(
@@ -216,13 +216,13 @@ class MemoryStoreDedupPort:
                         f"{owner}#{reference_uid[:8]}"
                         for owner, reference_uid in inbound
                     )
-                    raise DedupConflictError(
+                    raise DedunConflictError(
                         "Dedun cannot absorb Memories with inbound references in "
                         f"version 1: {locations}."
                     )
                 for uid in semantic_absorbed_uids:
                     if not isinstance(current.memories.get(uid), Memory):
-                        raise DedupConflictError(
+                        raise DedunConflictError(
                             f"Dedun Memory '{uid[:8]}' is no longer directly owned."
                         )
                 for uid in absorbed_uids:
@@ -232,7 +232,7 @@ class MemoryStoreDedupPort:
                     AutoCheckpoint(
                         command="dedun",
                         args={
-                            **dedup_projection_record(plan, projection),
+                            **dedun_projection_record(plan, projection),
                             **grant_checkpoint_args(access),
                         },
                         description=(
@@ -245,10 +245,10 @@ class MemoryStoreDedupPort:
                     expected_context_digest=plan.context_digest,
                 )
                 if checkpoint is None:
-                    raise DedupError(
+                    raise DedunError(
                         "Dedun Apply produced no checkpoint for a nonempty plan."
                     )
-        return DedupReceipt(
+        return DedunReceipt(
             context_uid=plan.context_uid,
             context_name=plan.display_name,
             revision=plan.revision,
@@ -260,4 +260,4 @@ class MemoryStoreDedupPort:
         )
 
 
-__all__ = ["MemoryStoreDedupPort"]
+__all__ = ["MemoryStoreDedunPort"]

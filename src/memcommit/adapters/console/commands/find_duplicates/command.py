@@ -37,14 +37,14 @@ from memcommit.providers.subscription import (
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.operations.dedup.application import (
-    DEDUP_ELIGIBLE_RELATIONS,
-    DedupRequest,
-    apply_dedup,
-    prepare_dedup,
-    recommended_dedup_selections,
+from memcommit.application.operations.dedun.application import (
+    DEDUN_ELIGIBLE_RELATIONS,
+    DedunRequest,
+    apply_dedun,
+    prepare_dedun,
+    recommended_dedun_selections,
 )
-from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
+from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
 from memcommit.application.operations.dedun.scope import (
     DedunScopeReceipt,
     apply_recursive_dedun_scope,
@@ -273,7 +273,7 @@ def _run(
     if dedun_handoff:
         if source.include_descendants:
             assert recursive_dedun is not None
-            port = MemoryStoreDedupPort(
+            port = MemoryStoreDedunPort(
                 store,
                 current_name=context_snapshot.current_name,
                 allow_grants=False,
@@ -292,18 +292,18 @@ def _run(
         applicable = tuple(
             handoff
             for handoff in frame.handoffs
-            if handoff.classification in DEDUP_ELIGIBLE_RELATIONS
+            if handoff.classification in DEDUN_ELIGIBLE_RELATIONS
         )
         context_label = display_escape_text(access.display_name)
         if not applicable and not report.exact_item_groups:
             typer.echo(f"No redundancies in '{context_label}'.")
             return
-        port = MemoryStoreDedupPort(
+        port = MemoryStoreDedunPort(
             store,
             current_name=context_snapshot.current_name,
         )
-        plan = prepare_dedup(
-            DedupRequest(
+        plan = prepare_dedun(
+            DedunRequest(
                 applicable,
                 exact_source=QualityFindingSource(
                     context_uid=ctx.uid,
@@ -314,9 +314,9 @@ def _run(
             ),
             port=port,
         )
-        receipt = apply_dedup(
+        receipt = apply_dedun(
             plan,
-            recommended_dedup_selections(plan),
+            recommended_dedun_selections(plan),
             port=port,
         )
         typer.secho(

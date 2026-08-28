@@ -61,6 +61,26 @@ canonical `find-redundancies` identity. The exact-review `consolidate` spelling
 remains hidden for existing stateless receipts; it is a Dedun Apply adapter,
 not another discovery operation.
 
+## Canonical ownership
+
+The public split is reflected in the implementation layout. Provider-free
+exact cleanup is owned by `memcommit.application.operations.dedup`, while the
+complete DUN request, planning, Store runtime, and recursive scope are owned by
+`memcommit.application.operations.dedun`. Dedun's plain presentation and
+optional exact-review workbench live beside its command under
+`memcommit.adapters.console.commands.dedun`; the old operation-specific
+`interfaces/cli/dedup.py` and `interfaces/tui/operations/dedup` paths are
+removed without facades. Public Python assembly follows the same split through
+`_operations.dedup` and `_operations.dedun`.
+
+This is an ownership and vocabulary correction, not a new command contract.
+Checkpoint contracts, evidence wire values, exact replay arguments, receipts,
+authority checks, and survivor behavior remain unchanged. In particular, the
+historical `dedup-component-*` prefix is retained because those component UIDs
+are embedded in exact replay commands and durable checkpoints. The established
+public Python `Dedup*Result`, `plan_dedup`, and `apply_dedup` compatibility
+aliases remain thin projections onto canonical Dedun types and functions.
+
 ## Invariants
 
 - Every provider-free same-role exact group is part of DUN. Direct Memory

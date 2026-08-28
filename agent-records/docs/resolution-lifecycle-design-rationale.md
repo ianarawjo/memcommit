@@ -197,7 +197,7 @@ only the already-verified candidate selection and exact Apply handoff.
 
 ## Complete-DUN vertical slice with exact Apply
 
-The compatibility-named `DedupRequest` accepts typed single-Context DUN
+`DedunRequest` accepts typed single-Context DUN
 evidence whose classification is `EXACT`, `SURFACE_EQUIVALENT`, or
 `SEMANTIC_EQUIVALENT`; `mem dedup` remains the exact-only shortcut.
 The operation creates connected components, projects each component as one
@@ -213,7 +213,7 @@ single checkpoint. No provider or generic solver callback is involved. The
 full contract is recorded in
 [`dedun-design-rationale.md`](dedun-design-rationale.md).
 The deterministic workbench projects component and member UIDs directly from
-`dedup_resolution_case(plan)` and revalidates the complete outcome before the
+`dedun_resolution_case(plan)` and revalidates the complete outcome before the
 Dedun adapter translates it to survivor selections.
 
 ## Interface and persistence boundary

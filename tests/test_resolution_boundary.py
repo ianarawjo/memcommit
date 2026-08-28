@@ -115,10 +115,10 @@ def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
     ("application_name", "tui_path", "cli_path", "public_path", "agent_path"),
     (
         (
-            "memcommit.application.operations.dedup.application",
-            PACKAGE / "adapters" / "interfaces" / "tui" / "operations" / "dedup" / "screen.py",
-            PACKAGE / "adapters" / "interfaces" / "cli" / "dedup.py",
-            PACKAGE / "adapters" / "python_api" / "_operations" / "dedup.py",
+            "memcommit.application.operations.dedun.application",
+            PACKAGE / "adapters" / "console" / "commands" / "dedun" / "workbench.py",
+            PACKAGE / "adapters" / "console" / "commands" / "dedun" / "presentation.py",
+            PACKAGE / "adapters" / "python_api" / "_operations" / "dedun.py",
             PACKAGE / "adapters" / "interfaces" / "agent" / "dedup.py",
         ),
         (

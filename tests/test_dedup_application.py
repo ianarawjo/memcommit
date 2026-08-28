@@ -24,17 +24,17 @@ from memcommit.application.retained_history.context_snapshot import (
     ContextSnapshotRef,
     context_snapshot_digest,
 )
-from memcommit.application.operations.dedup.application import (
-    DedupAuthorityError,
-    DedupConflictError,
-    DedupError,
-    DedupRequest,
-    DedupSelection,
-    apply_dedup,
-    prepare_dedup,
-    recommended_dedup_selections,
+from memcommit.application.operations.dedun.application import (
+    DedunAuthorityError,
+    DedunConflictError,
+    DedunError,
+    DedunRequest,
+    DedunSelection,
+    apply_dedun,
+    prepare_dedun,
+    recommended_dedun_selections,
 )
-from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
+from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
 from memcommit.application.reviewing.direct_item_duplicates import find_exact_duplicate_groups
 from memcommit.application.reviewing.quality.findings import DuplicateFinding, DuplicateReport
 from memcommit.adapters.interfaces.agent import (
@@ -45,10 +45,10 @@ from memcommit.adapters.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.adapters.interfaces.tui.operations.dedup import (
-    dedup_exact_review,
-    dedup_resolution_spec,
-    run_dedup_tui,
+from memcommit.adapters.console.commands.dedun.workbench import (
+    dedun_exact_review,
+    dedun_resolution_spec,
+    run_dedun_workbench,
 )
 from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionOutcome
 from memcommit.application.reviewing.quality.workbench import create_quality_find_workbench
@@ -223,16 +223,16 @@ def _role_aware_exact_fixture(store: MemoryStore):
 def test_dedup_builds_transitive_components_and_keeps_context_order(isolated_store):
     store = MemoryStore()
     context, first, second, third, _unrelated = _context(store)
-    request = DedupRequest(
+    request = DedunRequest(
         (
             _handoff(context, second.uid, third.uid, index=1),
             _handoff(context, first.uid, second.uid, index=2),
         )
     )
 
-    plan = prepare_dedup(
+    plan = prepare_dedun(
         request,
-        port=MemoryStoreDedupPort(store, current_name=context.name),
+        port=MemoryStoreDedunPort(store, current_name=context.name),
     )
 
     assert len(plan.components) == 1
@@ -244,15 +244,15 @@ def test_dedup_builds_transitive_components_and_keeps_context_order(isolated_sto
     )
     assert component.recommended_survivor_uid == first.uid
     # A finder draft is never an executable survivor selection.
-    assert recommended_dedup_selections(plan) == (
-        DedupSelection(component.uid, first.uid),
+    assert recommended_dedun_selections(plan) == (
+        DedunSelection(component.uid, first.uid),
     )
 
 
 def test_dedun_combines_exact_dup_and_semantic_dun_evidence(isolated_store):
     store = MemoryStore()
     context, first, second, third, _unrelated = _context(store)
-    request = DedupRequest(
+    request = DedunRequest(
         (
             _handoff(context, first.uid, second.uid, relation="EXACT", index=1),
             _handoff(
@@ -265,9 +265,9 @@ def test_dedun_combines_exact_dup_and_semantic_dun_evidence(isolated_store):
         )
     )
 
-    plan = prepare_dedup(
+    plan = prepare_dedun(
         request,
-        port=MemoryStoreDedupPort(store, current_name=context.name),
+        port=MemoryStoreDedunPort(store, current_name=context.name),
     )
 
     assert len(plan.components) == 1
@@ -280,17 +280,17 @@ def test_dedun_combines_exact_dup_and_semantic_dun_evidence(isolated_store):
 def test_dedup_applies_one_checkpoint_without_rewriting_survivor(isolated_store):
     store = MemoryStore()
     context, first, second, third, unrelated = _context(store)
-    request = DedupRequest(
+    request = DedunRequest(
         (
             _handoff(context, first.uid, second.uid, index=1),
             _handoff(context, second.uid, third.uid, index=2),
         )
     )
-    port = MemoryStoreDedupPort(store, current_name=context.name)
-    plan = prepare_dedup(request, port=port)
-    selection = (DedupSelection(plan.components[0].uid, second.uid),)
+    port = MemoryStoreDedunPort(store, current_name=context.name)
+    plan = prepare_dedun(request, port=port)
+    selection = (DedunSelection(plan.components[0].uid, second.uid),)
 
-    receipt = apply_dedup(plan, selection, port=port)
+    receipt = apply_dedun(plan, selection, port=port)
 
     current = store.load_direct(context.name)
     assert current.memories[second.uid].content == "The office opens at 8."
@@ -311,24 +311,24 @@ def test_dedun_rejects_partial_overlap_until_memories_are_atomized(
     second = ops.add(context, "bcd")
     store.save(context)
 
-    with pytest.raises(DedupError, match="OVERLAP"):
-        DedupRequest((_handoff(context, first.uid, second.uid, relation="OVERLAP"),))
+    with pytest.raises(DedunError, match="OVERLAP"):
+        DedunRequest((_handoff(context, first.uid, second.uid, relation="OVERLAP"),))
 
 
 def test_dedup_fails_closed_when_source_changes(isolated_store):
     store = MemoryStore()
     context, first, second, _third, _unrelated = _context(store)
-    request = DedupRequest((_handoff(context, first.uid, second.uid),))
-    port = MemoryStoreDedupPort(store, current_name=context.name)
-    plan = prepare_dedup(request, port=port)
+    request = DedunRequest((_handoff(context, first.uid, second.uid),))
+    port = MemoryStoreDedunPort(store, current_name=context.name)
+    plan = prepare_dedun(request, port=port)
     current = store.load_direct(context.name)
     ops.add(current, "A later write.")
     store.save(current)
 
-    with pytest.raises(DedupConflictError, match="changed before Apply"):
-        apply_dedup(
+    with pytest.raises(DedunConflictError, match="changed before Apply"):
+        apply_dedun(
             plan,
-            recommended_dedup_selections(plan),
+            recommended_dedun_selections(plan),
             port=port,
         )
 
@@ -349,14 +349,14 @@ def test_dedup_blocks_absorbing_an_inbound_reference(isolated_store):
         )
     )
     store.save(observer)
-    request = DedupRequest((_handoff(context, first.uid, second.uid),))
-    port = MemoryStoreDedupPort(store, current_name=context.name)
-    plan = prepare_dedup(request, port=port)
+    request = DedunRequest((_handoff(context, first.uid, second.uid),))
+    port = MemoryStoreDedunPort(store, current_name=context.name)
+    plan = prepare_dedun(request, port=port)
 
-    with pytest.raises(DedupConflictError, match="inbound references"):
-        apply_dedup(
+    with pytest.raises(DedunConflictError, match="inbound references"):
+        apply_dedun(
             plan,
-            recommended_dedup_selections(plan),
+            recommended_dedun_selections(plan),
             port=port,
         )
 
@@ -366,16 +366,16 @@ def test_dedup_blocks_absorbing_an_inbound_reference(isolated_store):
 def test_dedup_requires_one_survivor_for_every_component(isolated_store):
     store = MemoryStore()
     context, first, second, _third, _unrelated = _context(store)
-    plan = prepare_dedup(
-        DedupRequest((_handoff(context, first.uid, second.uid),)),
-        port=MemoryStoreDedupPort(store, current_name=context.name),
+    plan = prepare_dedun(
+        DedunRequest((_handoff(context, first.uid, second.uid),)),
+        port=MemoryStoreDedunPort(store, current_name=context.name),
     )
 
-    with pytest.raises(DedupError, match="unresolved redundancy groups"):
-        apply_dedup(
+    with pytest.raises(DedunError, match="unresolved redundancy groups"):
+        apply_dedun(
             plan,
             (),
-            port=MemoryStoreDedupPort(store, current_name=context.name),
+            port=MemoryStoreDedunPort(store, current_name=context.name),
         )
 
 
@@ -391,9 +391,9 @@ def test_dedup_tui_uses_common_required_resolution_order(isolated_store):
             "The claims are substitutable.",
         ),
     )[0]
-    port = MemoryStoreDedupPort(store, current_name=context.name)
-    plan = prepare_dedup(DedupRequest((handoff,)), port=port)
-    spec = dedup_resolution_spec(plan)
+    port = MemoryStoreDedunPort(store, current_name=context.name)
+    plan = prepare_dedun(DedunRequest((handoff,)), port=port)
+    spec = dedun_resolution_spec(plan)
 
     assert spec.detail_title.startswith("VIEWER")
     assert spec.responses_title.startswith("RESPONSES")
@@ -405,7 +405,7 @@ def test_dedup_tui_uses_common_required_resolution_order(isolated_store):
     }
     assert "class:impact.add" in report_styles
     assert "class:impact.keep" not in report_styles
-    review = dedup_exact_review(
+    review = dedun_exact_review(
         plan,
         ResolutionOutcome(
             ((plan.components[0].uid, plan.components[0].recommended_survivor_uid),)
@@ -421,9 +421,9 @@ def test_dedup_tui_uses_common_required_resolution_order(isolated_store):
         # Viewer -> Items/open -> Viewer detail -> Responses/select -> Items ->
         # To Do/final review -> exact Apply -> close receipt.
         pipe_input.send_text("\t\r\t\r\t\t\r\r\r")
-        receipt = run_dedup_tui(
+        receipt = run_dedun_workbench(
             plan,
-            apply_selections=lambda selections: apply_dedup(
+            apply_selections=lambda selections: apply_dedun(
                 plan,
                 selections,
                 port=port,
@@ -660,9 +660,9 @@ def test_cli_dedun_replay_applies_the_reviewed_survivor(isolated_store):
             "The claims are substitutable.",
         ),
     )[0]
-    plan = prepare_dedup(
-        DedupRequest((handoff,)),
-        port=MemoryStoreDedupPort(store, current_name=context.name),
+    plan = prepare_dedun(
+        DedunRequest((handoff,)),
+        port=MemoryStoreDedunPort(store, current_name=context.name),
     )
 
     result = runner.invoke(
@@ -1054,10 +1054,10 @@ def test_granted_dedup_requires_derive_and_delete_before_review(
         _granted_dedup_fixture(tmp_path, monkeypatch, ("READ", "DERIVE"))
     )
 
-    with pytest.raises(DedupAuthorityError, match="DELETE"):
-        prepare_dedup(
-            DedupRequest((handoff,)),
-            port=MemoryStoreDedupPort(local, current_name="workspace"),
+    with pytest.raises(DedunAuthorityError, match="DELETE"):
+        prepare_dedun(
+            DedunRequest((handoff,)),
+            port=MemoryStoreDedunPort(local, current_name="workspace"),
         )
 
     assert len(target.memories) == 2
@@ -1075,12 +1075,12 @@ def test_granted_dedup_revalidates_delete_through_apply(
             ("READ", "DERIVE", "DELETE"),
         )
     )
-    port = MemoryStoreDedupPort(local, current_name="workspace")
-    plan = prepare_dedup(DedupRequest((handoff,)), port=port)
+    port = MemoryStoreDedunPort(local, current_name="workspace")
+    plan = prepare_dedun(DedunRequest((handoff,)), port=port)
     update_authority_grant(grant.uid, permissions=("READ", "DERIVE"))
 
-    with pytest.raises(DedupAuthorityError):
-        apply_dedup(plan, recommended_dedup_selections(plan), port=port)
+    with pytest.raises(DedunAuthorityError):
+        apply_dedun(plan, recommended_dedun_selections(plan), port=port)
 
     current = authority_store.load_direct(target.name)
     assert first.uid in current.memories

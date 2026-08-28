@@ -1,12 +1,8 @@
-"""Stable public values for exact Dedup and semantic Dedun."""
+"""Stable public values for provider-free exact Dedup."""
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from memcommit.application.operations.dedup.application import FrozenDedupPlan
+from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
@@ -78,71 +74,7 @@ class ExactDuplicateContextResult:
         return sum(len(group.absorbed_uids) for group in self.groups)
 
 
-@dataclass(frozen=True)
-class DedunMemberResult:
-    uid: str
-    content: str
-    ordinal: int
-    recommended: bool
-
-
-@dataclass(frozen=True)
-class DedunEvidenceResult:
-    finding_uid: str
-    relation: str
-    left_uid: str
-    right_uid: str
-    reason: str
-
-
-@dataclass(frozen=True)
-class DedunComponentResult:
-    uid: str
-    members: tuple[DedunMemberResult, ...]
-    evidence: tuple[DedunEvidenceResult, ...]
-    recommended_survivor_uid: str
-
-
-@dataclass(frozen=True)
-class DedunPlanResult:
-    context_name: str
-    context_uid: str
-    revision: str
-    components: tuple[DedunComponentResult, ...]
-    exact_item_groups: tuple[ExactDedupGroupResult, ...]
-    _application_plan: "FrozenDedupPlan" = field(repr=False, compare=False)
-
-
-@dataclass(frozen=True)
-class DedunApplyResult:
-    context_name: str
-    context_uid: str
-    revision: str
-    checkpoint_uid: str
-    survivor_uids: tuple[str, ...]
-    absorbed_uids: tuple[str, ...]
-
-
-# Compatibility aliases for callers compiled against the former semantic
-# Dedup/Consolidate public vocabulary.
-DedupMemberResult = DedunMemberResult
-DedupEvidenceResult = DedunEvidenceResult
-DedupComponentResult = DedunComponentResult
-DedupPlanResult = DedunPlanResult
-DedupApplyResult = DedunApplyResult
-
-
 __all__ = [
-    "DedupApplyResult",
-    "DedupComponentResult",
-    "DedupEvidenceResult",
-    "DedupMemberResult",
-    "DedupPlanResult",
-    "DedunApplyResult",
-    "DedunComponentResult",
-    "DedunEvidenceResult",
-    "DedunMemberResult",
-    "DedunPlanResult",
     "ExactDedupGroupResult",
     "ExactDedupContextResult",
     "ExactDedupResult",

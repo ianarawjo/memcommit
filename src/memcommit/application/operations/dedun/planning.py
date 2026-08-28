@@ -1,4 +1,4 @@
-"""Pure connected-component planning for confirmed duplicate edges."""
+"""Pure connected-component planning for confirmed Dedun edges."""
 
 from __future__ import annotations
 
@@ -6,13 +6,13 @@ import hashlib
 import json
 from typing import TYPE_CHECKING
 
-from memcommit.application.operations.dedup.application import (
-    DedupComponent,
-    DedupEvidence,
-    DedupMember,
-    DedupRequest,
-    FrozenDedupPlan,
-    DEDUP_CONTRACT_VERSION,
+from memcommit.application.operations.dedun.application import (
+    DedunComponent,
+    DedunEvidence,
+    DedunMember,
+    DedunRequest,
+    FrozenDedunPlan,
+    DEDUN_CONTRACT_VERSION,
 )
 from memcommit.core.context import Memory
 from memcommit.application.reviewing.direct_item_duplicates import ExactDuplicateGroup
@@ -38,23 +38,25 @@ def _component_uid(
             sort_keys=True,
         ).encode("utf-8")
     ).hexdigest()
+    # Component UIDs are embedded in exact replay commands and retained
+    # checkpoints, so the historical prefix cannot change with Python ownership.
     return "dedup-component-" + digest
 
 
-def build_dedup_components(
-    request: DedupRequest,
+def build_dedun_components(
+    request: DedunRequest,
     memories: tuple[Memory, ...],
-) -> tuple[DedupComponent, ...]:
+) -> tuple[DedunComponent, ...]:
     """Return stable Context-ordered components from all confirmed edges.
 
     Edge order cannot choose the survivor. The existing direct Context order is
     the deterministic recommendation and also stabilizes every projected row.
     """
 
-    if not isinstance(request, DedupRequest) or any(
+    if not isinstance(request, DedunRequest) or any(
         not isinstance(memory, Memory) for memory in memories
     ):
-        raise TypeError("Dedup component planning requires typed inputs.")
+        raise TypeError("Dedun component planning requires typed inputs.")
     memory_by_uid = {memory.uid: memory for memory in memories}
     order = {memory.uid: index for index, memory in enumerate(memories, 1)}
     requested_uids = {
@@ -62,9 +64,9 @@ def build_dedup_components(
     }
     missing = sorted(requested_uids - set(memory_by_uid))
     if missing:
-        from memcommit.application.operations.dedup.application import DedupConflictError
+        from memcommit.application.operations.dedun.application import DedunConflictError
 
-        raise DedupConflictError(
+        raise DedunConflictError(
             "Confirmed duplicate Memories are no longer directly owned by the "
             "Source: " + ", ".join(uid[:8] for uid in missing)
         )
@@ -96,7 +98,7 @@ def build_dedup_components(
     for uid in requested_uids:
         groups.setdefault(find(uid), []).append(uid)
 
-    components: list[DedupComponent] = []
+    components: list[DedunComponent] = []
     for member_uids in sorted(
         groups.values(),
         key=lambda values: min(order[uid] for uid in values),
@@ -109,7 +111,7 @@ def build_dedup_components(
             if set(handoff.memory_uids).issubset(member_set)
         )
         components.append(
-            DedupComponent(
+            DedunComponent(
                 uid=_component_uid(
                     member_uids=ordered_uids,
                     finding_uids=tuple(
@@ -117,7 +119,7 @@ def build_dedup_components(
                     ),
                 ),
                 members=tuple(
-                    DedupMember(
+                    DedunMember(
                         uid=uid,
                         content=memory_by_uid[uid].content,
                         ordinal=order[uid],
@@ -125,7 +127,7 @@ def build_dedup_components(
                     for uid in ordered_uids
                 ),
                 evidence=tuple(
-                    DedupEvidence(
+                    DedunEvidence(
                         finding_uid=handoff.finding_uid,
                         handoff_uid=handoff.uid,
                         left_uid=handoff.memory_uids[0],
@@ -141,8 +143,8 @@ def build_dedup_components(
     return tuple(components)
 
 
-def dedup_plan_revision(
-    request: DedupRequest,
+def dedun_plan_revision(
+    request: DedunRequest,
     *,
     context_uid: str,
     context_name: str,
@@ -154,7 +156,7 @@ def dedup_plan_revision(
     """Bind one Dedun plan to its complete projected direct-item frame."""
 
     payload = {
-        "contract": DEDUP_CONTRACT_VERSION,
+        "contract": DEDUN_CONTRACT_VERSION,
         "context": {
             "uid": context_uid,
             "name": context_name,
@@ -183,8 +185,8 @@ def dedup_plan_revision(
     ).hexdigest()
 
 
-def freeze_dedup_plan(
-    request: DedupRequest,
+def freeze_dedun_plan(
+    request: DedunRequest,
     memories: tuple[Memory, ...],
     *,
     context_uid: str,
@@ -194,7 +196,7 @@ def freeze_dedup_plan(
     direct_memory_digest: str,
     exact_item_groups: tuple[ExactDuplicateGroup, ...] = (),
     granted_binding: "GrantedUpdateTarget | None" = None,
-) -> FrozenDedupPlan:
+) -> FrozenDedunPlan:
     """Freeze Dedun policy for a stored or unpublished exact Context frame."""
 
     source = request.source
@@ -203,13 +205,13 @@ def freeze_dedup_plan(
         or source.display_name != display_name
         or source.direct_memory_digest != direct_memory_digest
     ):
-        from memcommit.application.operations.dedup.application import DedupConflictError
+        from memcommit.application.operations.dedun.application import DedunConflictError
 
-        raise DedupConflictError(
+        raise DedunConflictError(
             "The confirmed duplicate Source changed. Run the finder again."
         )
-    components = build_dedup_components(request, memories)
-    revision = dedup_plan_revision(
+    components = build_dedun_components(request, memories)
+    revision = dedun_plan_revision(
         request,
         context_uid=context_uid,
         context_name=context_name,
@@ -218,7 +220,7 @@ def freeze_dedup_plan(
         component_uids=tuple(component.uid for component in components),
         exact_item_groups=exact_item_groups,
     )
-    return FrozenDedupPlan(
+    return FrozenDedunPlan(
         request=request,
         context_uid=context_uid,
         context_name=context_name,
@@ -232,7 +234,7 @@ def freeze_dedup_plan(
 
 
 __all__ = [
-    "build_dedup_components",
-    "dedup_plan_revision",
-    "freeze_dedup_plan",
+    "build_dedun_components",
+    "dedun_plan_revision",
+    "freeze_dedun_plan",
 ]

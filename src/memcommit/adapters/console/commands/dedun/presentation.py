@@ -1,10 +1,10 @@
-"""Plain terminal projection for semantic Dedun plans and receipts."""
+"""Plain terminal projection for Dedun plans and receipts."""
 
 from __future__ import annotations
 
 import typer
 
-from memcommit.application.operations.dedup.application import DedupReceipt, FrozenDedupPlan
+from memcommit.application.operations.dedun.application import DedunReceipt, FrozenDedunPlan
 from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.console.theme import (
     SemanticColorRole,
@@ -21,7 +21,7 @@ def _semantic_line(label: str, value: str, role: SemanticColorRole) -> None:
     typer.echo(" · " + display_escape_text(value))
 
 
-def render_dedup_plan_plain(plan: FrozenDedupPlan) -> None:
+def render_dedun_plan_plain(plan: FrozenDedunPlan) -> None:
     typer.secho("DEDUN · CONFIRMED EXACT + SEMANTIC REDUNDANCIES", bold=True)
     _line("CONTEXT", plan.display_name)
     _line("REVISION", plan.revision)
@@ -69,7 +69,7 @@ def render_dedup_plan_plain(plan: FrozenDedupPlan) -> None:
     )
 
 
-def render_dedup_receipt(receipt: DedupReceipt) -> None:
+def render_dedun_receipt(receipt: DedunReceipt) -> None:
     typer.secho("DEDUN APPLIED", fg=typer.colors.GREEN, bold=True)
     _line("CONTEXT", receipt.context_name)
     _line("REVISION", receipt.revision)
@@ -90,4 +90,4 @@ def render_dedup_receipt(receipt: DedupReceipt) -> None:
     _line("RECOVERY", "mem undo")
 
 
-__all__ = ["render_dedup_plan_plain", "render_dedup_receipt"]
+__all__ = ["render_dedun_plan_plain", "render_dedun_receipt"]

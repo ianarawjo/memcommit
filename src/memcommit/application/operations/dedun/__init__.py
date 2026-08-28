@@ -1,1 +1,1 @@
-"""Immediate Dedun scope planning and application."""
+"""Semantic Dedun planning, review, and atomic application."""

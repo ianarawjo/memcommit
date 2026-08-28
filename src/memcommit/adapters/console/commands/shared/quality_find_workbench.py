@@ -84,7 +84,7 @@ from memcommit.application.reviewing.quality.handoff import (
     quality_finding_handoff,
     quality_finding_handoffs,
 )
-from memcommit.application.operations.dedup.application import DEDUP_ELIGIBLE_RELATIONS
+from memcommit.application.operations.dedun.application import DEDUN_ELIGIBLE_RELATIONS
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.reviewing.read_report import (
@@ -658,7 +658,7 @@ def run_quality_find_resolution_workbench(
         return tuple(
             handoff
             for handoff in quality_finding_handoffs(session)
-            if handoff.classification in DEDUP_ELIGIBLE_RELATIONS
+            if handoff.classification in DEDUN_ELIGIBLE_RELATIONS
         )
 
     conflict_handoff_available = (

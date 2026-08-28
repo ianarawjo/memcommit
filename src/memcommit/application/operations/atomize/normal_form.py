@@ -22,13 +22,13 @@ from memcommit.application.operations.atomize.domain import (
     impact_atomize,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.dedup.application import (
-    DedupRequest,
-    DedupSelection,
-    dedup_projection_record,
-    project_dedup,
+from memcommit.application.operations.dedun.application import (
+    DedunRequest,
+    DedunSelection,
+    dedun_projection_record,
+    project_dedun,
 )
-from memcommit.application.operations.dedup.planning import freeze_dedup_plan
+from memcommit.application.operations.dedun.planning import freeze_dedun_plan
 from memcommit.application.reviewing.quality.findings import DuplicateFinding, DuplicateReport, find_redundancies
 from memcommit.application.reviewing.quality.workbench import create_quality_find_workbench
 from memcommit.application.reviewing.quality.handoff import quality_finding_handoffs
@@ -86,11 +86,11 @@ def _dedun_projection(
         projected,
         relevant_report,
     )
-    request = DedupRequest(quality_finding_handoffs(workbench))
+    request = DedunRequest(quality_finding_handoffs(workbench))
     memories = tuple(
         item for item in projected.iter_items() if isinstance(item, Memory)
     )
-    plan = freeze_dedup_plan(
+    plan = freeze_dedun_plan(
         request,
         memories,
         context_uid=projected.uid,
@@ -100,7 +100,7 @@ def _dedun_projection(
         direct_memory_digest=direct_context_digest(projected),
     )
     selections = tuple(
-        DedupSelection(
+        DedunSelection(
             component_uid=component.uid,
             # A focused Atomize must not replace an unchanged neighboring UID
             # with a newly generated child merely because the child appeared
@@ -116,7 +116,7 @@ def _dedun_projection(
         )
         for component in plan.components
     )
-    projection = project_dedup(plan, selections)
+    projection = project_dedun(plan, selections)
     survivor_by_absorbed = tuple(
         (member.uid, selection.survivor_uid)
         for component, selection in zip(
@@ -129,7 +129,7 @@ def _dedun_projection(
     )
     for absorbed_uid in projection.absorbed_uids:
         projected.remove(absorbed_uid)
-    return dedup_projection_record(plan, projection), survivor_by_absorbed
+    return dedun_projection_record(plan, projection), survivor_by_absorbed
 
 
 def _final_affected_uids(

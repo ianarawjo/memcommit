@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.python_api._operations.exact_dedup import _active_registry
+from memcommit.adapters.python_api._operations.dedup import _active_registry
 from memcommit.adapters.python_api._runtime import ClientRuntime
 from memcommit.adapters.python_api._support.errors import raise_public
 from memcommit.adapters.python_api.dedup import (
@@ -18,7 +18,7 @@ from memcommit.adapters.python_api.errors import (
 )
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.application.context_locator import resolve_context_locator
-from memcommit.application.operations.exact_dedup.application import find_exact_duplicate_scope
+from memcommit.application.operations.dedup.application import find_exact_duplicate_scope
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 

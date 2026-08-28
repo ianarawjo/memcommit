@@ -11,7 +11,7 @@ from memcommit.adapters.python_api import MemCommitClient
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.application.retained_history.command_history import build_command_stacks
 from memcommit.core.context import MemoryRef
-from memcommit.application.operations.exact_dedup.application import (
+from memcommit.application.operations.dedup.application import (
     ExactDedupError,
     apply_exact_dedup_scope,
 )

@@ -10,19 +10,19 @@ from memcommit.core.context import AutoCheckpoint, Memory, MemoryRef
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.operations.dedup.application import (
-    DEDUP_CONTRACT_VERSION,
-    DEDUP_ELIGIBLE_RELATIONS,
-    DedupConflictError,
-    DedupError,
-    DedupRequest,
-    DedupSelection,
-    FrozenDedupPlan,
-    prepare_dedup,
-    recommended_dedup_selections,
-    validate_dedup_selections,
+from memcommit.application.operations.dedun.application import (
+    DEDUN_CONTRACT_VERSION,
+    DEDUN_ELIGIBLE_RELATIONS,
+    DedunConflictError,
+    DedunError,
+    DedunRequest,
+    DedunSelection,
+    FrozenDedunPlan,
+    prepare_dedun,
+    recommended_dedun_selections,
+    validate_dedun_selections,
 )
-from memcommit.application.operations.dedup.runtime import MemoryStoreDedupPort
+from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
 from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.reviewing.quality.workbench import QualityFindSourceFrame
 from memcommit.application.reviewing.quality.handoff import QualityFindingSource
@@ -46,7 +46,7 @@ class PreparedDedunContext:
     context_name: str
     context_uid: str
     group_count: int
-    plan: FrozenDedupPlan | None
+    plan: FrozenDedunPlan | None
     projection: "DedunScopeProjection | None"
 
 
@@ -54,7 +54,7 @@ class PreparedDedunContext:
 class DedunScopeProjection:
     """One validated provider-free survivor effect before batch publication."""
 
-    selections: tuple[DedupSelection, ...]
+    selections: tuple[DedunSelection, ...]
     survivor_uids: tuple[str, ...]
     absorbed_uids: tuple[str, ...]
 
@@ -118,7 +118,7 @@ def freeze_recursive_dedun_scope(
     ):
         raise TypeError("Recursive Dedun requires a Store and Context access.")
     if access.is_granted:
-        raise DedupError(
+        raise DedunError(
             "Recursive Dedun cannot start from a granted Context; dedun that "
             "Context directly."
         )
@@ -130,7 +130,7 @@ def freeze_recursive_dedun_scope(
     )
     granted_descendants = readable.granted_names_below(access.display_name)
     if granted_descendants:
-        raise DedupError(
+        raise DedunError(
             "Recursive Dedun cannot cross granted Context boundaries: "
             + ", ".join(repr(name) for name in granted_descendants)
             + ". Dedun those Contexts directly."
@@ -159,7 +159,7 @@ def prepare_recursive_dedun_scope(
     frozen: FrozenRecursiveDedunScope,
     analysis: RedundancyScopeAnalysis,
     *,
-    port: MemoryStoreDedupPort,
+    port: MemoryStoreDedunPort,
 ) -> PreparedRecursiveDedunScope:
     """Prepare every deterministic survivor effect before publication."""
 
@@ -168,13 +168,13 @@ def prepare_recursive_dedun_scope(
     ):
         raise TypeError("Recursive Dedun preparation requires frozen analysis.")
     if analysis.source.digest != frozen.source.digest:
-        raise DedupConflictError("Recursive Dedun analysis does not match its scope.")
+        raise DedunConflictError("Recursive Dedun analysis does not match its scope.")
     contexts: list[PreparedDedunContext] = []
     for frame in analysis.contexts:
         eligible = tuple(
             handoff
             for handoff in frame.handoffs
-            if handoff.classification in DEDUP_ELIGIBLE_RELATIONS
+            if handoff.classification in DEDUN_ELIGIBLE_RELATIONS
         )
         group_count = frame.report.group_count
         context = frame.source.contexts[0]
@@ -189,7 +189,7 @@ def prepare_recursive_dedun_scope(
                 )
             )
             continue
-        request = DedupRequest(
+        request = DedunRequest(
             eligible,
             exact_source=QualityFindingSource(
                 context_uid=context.uid,
@@ -198,10 +198,10 @@ def prepare_recursive_dedun_scope(
             ),
             exact_source_frame_digest=frame.source.digest,
         )
-        plan = prepare_dedup(request, port=port)
+        plan = prepare_dedun(request, port=port)
         projection = _project_dedun_scope_effect(
             plan,
-            recommended_dedup_selections(plan),
+            recommended_dedun_selections(plan),
         )
         contexts.append(
             PreparedDedunContext(
@@ -216,12 +216,12 @@ def prepare_recursive_dedun_scope(
 
 
 def _project_dedun_scope_effect(
-    plan: FrozenDedupPlan,
-    selections: tuple[DedupSelection, ...],
+    plan: FrozenDedunPlan,
+    selections: tuple[DedunSelection, ...],
 ) -> DedunScopeProjection:
     """Validate the complete survivor set without entering the direct port."""
 
-    exact = validate_dedup_selections(plan, selections)
+    exact = validate_dedun_selections(plan, selections)
     semantic_survivors = tuple(selection.survivor_uid for selection in exact)
     semantic_absorbed = tuple(
         member.uid
@@ -237,7 +237,7 @@ def _project_dedun_scope_effect(
     )
     absorbed = semantic_absorbed + exact_absorbed
     if not absorbed:
-        raise DedupError("Recursive Dedun requires a nonempty direct-item effect.")
+        raise DedunError("Recursive Dedun requires a nonempty direct-item effect.")
     return DedunScopeProjection(
         selections=exact,
         survivor_uids=semantic_survivors + exact_survivors,
@@ -246,13 +246,13 @@ def _project_dedun_scope_effect(
 
 
 def _dedun_scope_record(
-    plan: FrozenDedupPlan,
+    plan: FrozenDedunPlan,
     projection: DedunScopeProjection,
 ) -> dict[str, object]:
     """Retain the same immutable per-Context Review evidence as direct Dedun."""
 
     return {
-        "contract": DEDUP_CONTRACT_VERSION,
+        "contract": DEDUN_CONTRACT_VERSION,
         "revision": plan.revision,
         "selections": [
             {
@@ -310,7 +310,7 @@ def _dedun_scope_record(
 
 
 def _memory_absorptions(
-    plan: FrozenDedupPlan,
+    plan: FrozenDedunPlan,
     projection: DedunScopeProjection,
 ) -> set[str]:
     semantic_members = {
@@ -355,7 +355,7 @@ def apply_recursive_dedun_scope(
         )
 
     if tuple(active_store.list_context_names()) != prepared.frozen.context_catalog:
-        raise DedupConflictError(
+        raise DedunConflictError(
             "The Context namespace changed during recursive Dedun; nothing was written."
         )
     graph = tuple(active_store.load_direct_context_graph_strict())
@@ -363,20 +363,20 @@ def apply_recursive_dedun_scope(
         context.name: context_record_digest(context) for context in graph
     }
     applications: list[
-        tuple[PreparedDedunContext, FrozenDedupPlan, DedunScopeProjection]
+        tuple[PreparedDedunContext, FrozenDedunPlan, DedunScopeProjection]
     ] = []
     for frame in changed:
         assert frame.plan is not None and frame.projection is not None
         plan = frame.plan
         projection = frame.projection
         if plan.granted_binding is not None or plan.context_name != frame.context_name:
-            raise DedupError("Recursive Dedun accepts only local Context plans.")
+            raise DedunError("Recursive Dedun accepts only local Context plans.")
         current = active_store.load_for_update(plan.context_name)
         if (
             current.uid != plan.context_uid
             or context_record_digest(current) != plan.context_digest
         ):
-            raise DedupConflictError(
+            raise DedunConflictError(
                 f"Dedun Context '{plan.display_name}' changed; nothing was written."
             )
         applications.append((frame, plan, projection))
@@ -397,7 +397,7 @@ def apply_recursive_dedun_scope(
         locations = ", ".join(
             f"{owner}#{reference_uid[:8]}" for owner, reference_uid in inbound
         )
-        raise DedupConflictError(
+        raise DedunConflictError(
             "Recursive Dedun cannot absorb Memories with inbound references in "
             f"version 1: {locations}."
         )
@@ -435,7 +435,7 @@ def apply_recursive_dedun_scope(
             if uid in semantic_members and not isinstance(
                 current.memories.get(uid), Memory
             ):
-                raise DedupConflictError(
+                raise DedunConflictError(
                     f"Dedun Memory '{uid[:8]}' is no longer directly owned."
                 )
             current.remove(uid)

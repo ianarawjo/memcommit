@@ -121,7 +121,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     )
     for operation in ("dedup", "find-duplicates"):
         assert (
-            "memcommit.application.operations.exact_dedup.application"
+            "memcommit.application.operations.dedup.application"
             in by_operation[operation].application_modules
         )
     assert (
