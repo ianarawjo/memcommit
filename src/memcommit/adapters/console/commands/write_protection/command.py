@@ -8,7 +8,7 @@ import typer
 
 import memcommit.application.ops as ops
 from memcommit.adapters.interfaces.cli.command_group import CanonicalCommandGroup
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.core.context_targeting.loading import (
     resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,

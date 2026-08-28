@@ -26,8 +26,8 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame
 
-from memcommit.adapters.console.commands.shared.background_turn import BackgroundExecutorTurn
-from memcommit.adapters.console.commands.shared.command_progress import (
+from memcommit.adapters.console.shared.background_turn import BackgroundExecutorTurn
+from memcommit.adapters.console.shared.command_progress import (
     BUSY_INTERVAL_SECONDS,
     CommandProgress,
     render_progress_line,
@@ -48,10 +48,10 @@ from memcommit.application.authority.access import (
     resolve_context_access,
 )
 from memcommit.adapters.console.commands.help_inventory.command import CommandEntry
-from memcommit.adapters.console.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.adapters.console.commands.shared.session_help import (
+from memcommit.adapters.console.shared.session_help import (
     SessionHelpController,
     current_help_entries,
 )

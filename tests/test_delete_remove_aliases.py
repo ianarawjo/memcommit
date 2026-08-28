@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.shared.context_picker import ContextMemorySelection
+from memcommit.adapters.console.shared.context_picker import ContextMemorySelection
 from memcommit.core.context import Context, Memory
 from memcommit.persistence.store import MemoryStore
 

@@ -2,8 +2,9 @@
 
 This is the exact path-only classification of the formerly flat
 `memcommit.commands` modules. Their canonical implementations now live under
-`memcommit.adapters.console.commands`; route closure remains solely in the
-operation evidence ledger.
+`memcommit.adapters.console.commands` for command-owned code and
+`memcommit.adapters.console.shared` for multi-command console mechanics;
+route closure remains solely in the operation evidence ledger.
 
 - Baseline modules: 153
 - Command entry packages: 64
@@ -19,18 +20,18 @@ operation evidence ledger.
 | `memcommit.commands.atomize_workbench_shell` | `memcommit.adapters.console.commands.atomize.workbench.screen` | command-owned-support | `atomize` |
 | `memcommit.commands.audit` | `memcommit.adapters.console.commands.audit.command` | command-entry | `audit` |
 | `memcommit.commands.audit_sessions` | `memcommit.adapters.console.commands.audit.sessions` | command-owned-support | `audit` |
-| `memcommit.commands.background_turn` | `memcommit.adapters.console.commands.shared.background_turn` | shared-command-mechanism | `shared` |
-| `memcommit.commands.batch_input` | `memcommit.adapters.console.commands.shared.batch_input` | shared-command-mechanism | `shared` |
+| `memcommit.commands.background_turn` | `memcommit.adapters.console.shared.background_turn` | shared-command-mechanism | `shared` |
+| `memcommit.commands.batch_input` | `memcommit.adapters.console.shared.batch_input` | shared-command-mechanism | `shared` |
 | `memcommit.commands.branch` | `memcommit.adapters.console.commands.branch.command` | command-entry | `branch` |
 | `memcommit.commands.branch_dialog` | `memcommit.adapters.console.commands.branch.setup` | command-owned-support | `branch` |
 | `memcommit.commands.check_conformance` | `memcommit.adapters.console.commands.check_conformance.command` | command-entry | `check_conformance` |
 | `memcommit.commands.checkpoint` | `memcommit.adapters.console.commands.checkpoint.command` | command-entry | `checkpoint` |
-| `memcommit.commands.checkpoint_diff` | `memcommit.adapters.console.commands.shared.checkpoint_diff` | shared-command-mechanism | `shared` |
+| `memcommit.commands.checkpoint_diff` | `memcommit.adapters.console.shared.checkpoint_diff` | shared-command-mechanism | `shared` |
 | `memcommit.commands.chunk` | `memcommit.adapters.console.commands.chunk.command` | command-entry | `chunk` |
 | `memcommit.commands.clear` | `memcommit.adapters.console.commands.clear.command` | command-entry | `clear` |
-| `memcommit.commands.command_group` | `memcommit.adapters.console.commands.shared.command_group` | shared-command-mechanism | `shared` |
-| `memcommit.commands.command_progress` | `memcommit.adapters.console.commands.shared.command_progress` | shared-command-mechanism | `shared` |
-| `memcommit.commands.command_wait` | `memcommit.adapters.console.commands.shared.command_wait` | shared-command-mechanism | `shared` |
+| `memcommit.commands.command_group` | `memcommit.adapters.console.shared.command_group` | shared-command-mechanism | `shared` |
+| `memcommit.commands.command_progress` | `memcommit.adapters.console.shared.command_progress` | shared-command-mechanism | `shared` |
+| `memcommit.commands.command_wait` | `memcommit.adapters.console.shared.command_wait` | shared-command-mechanism | `shared` |
 | `memcommit.commands.compare` | `memcommit.adapters.console.commands.compare.command` | command-entry | `compare` |
 | `memcommit.commands.compare_sessions` | `memcommit.adapters.console.commands.compare.sessions` | command-owned-support | `compare` |
 | `memcommit.commands.compare_setup` | `memcommit.adapters.console.commands.compare.setup` | command-owned-support | `compare` |
@@ -39,9 +40,9 @@ operation evidence ledger.
 | `memcommit.commands.config` | `memcommit.adapters.console.commands.config.command` | command-entry | `config` |
 | `memcommit.commands.conflict_resolve_handoff` | `memcommit.adapters.console.commands.find_conflicts.resolve_handoff` | command-owned-support | `find_conflicts` |
 | `memcommit.commands.consolidate` | `memcommit.adapters.console.commands.consolidate.command` | command-entry | `consolidate` |
-| `memcommit.commands.context_operand` | `memcommit.adapters.console.commands.shared.context_operand` | shared-command-mechanism | `shared` |
-| `memcommit.commands.context_picker` | `memcommit.adapters.console.commands.shared.context_picker` | shared-command-mechanism | `shared` |
-| `memcommit.commands.context_reach_dialog` | `memcommit.adapters.console.commands.shared.context_reach_dialog` | shared-command-mechanism | `shared` |
+| `memcommit.commands.context_operand` | `memcommit.adapters.console.shared.context_operand` | shared-command-mechanism | `shared` |
+| `memcommit.commands.context_picker` | `memcommit.adapters.console.shared.context_picker` | shared-command-mechanism | `shared` |
+| `memcommit.commands.context_reach_dialog` | `memcommit.adapters.console.shared.context_reach_dialog` | shared-command-mechanism | `shared` |
 | `memcommit.commands.context_trace_projection` | `memcommit.adapters.console.commands.trace.context_projection` | command-owned-support | `trace` |
 | `memcommit.commands.contexts` | `memcommit.adapters.console.commands.contexts.command` | command-entry | `contexts` |
 | `memcommit.commands.dedun` | `memcommit.adapters.console.commands.dedun.command` | command-entry | `dedun` |
@@ -49,16 +50,16 @@ operation evidence ledger.
 | `memcommit.commands.delete` | `memcommit.adapters.console.commands.delete.command` | command-entry | `delete` |
 | `memcommit.commands.dev` | `memcommit.adapters.console.commands.dev.command` | command-entry | `dev` |
 | `memcommit.commands.diff` | `memcommit.adapters.console.commands.diff.command` | command-entry | `diff` |
-| `memcommit.commands.diff_browser` | `memcommit.adapters.console.commands.shared.diff_browser` | shared-command-mechanism | `shared` |
-| `memcommit.commands.direct_item_placement` | `memcommit.adapters.console.commands.shared.direct_item_placement` | shared-command-mechanism | `shared` |
+| `memcommit.commands.diff_browser` | `memcommit.adapters.console.shared.diff_browser` | shared-command-mechanism | `shared` |
+| `memcommit.commands.direct_item_placement` | `memcommit.adapters.console.shared.direct_item_placement` | shared-command-mechanism | `shared` |
 | `memcommit.commands.distill` | `memcommit.adapters.console.commands.distill.command` | command-entry | `distill` |
 | `memcommit.commands.duplicate_dedup_handoff` | `memcommit.adapters.console.commands.find_duplicates.dedup_handoff` | command-owned-support | `find_duplicates` |
 | `memcommit.commands.edit` | `memcommit.adapters.console.commands.edit.command` | command-entry | `edit` |
 | `memcommit.commands.elaborate` | `memcommit.adapters.console.commands.elaborate.command` | command-entry | `elaborate` |
-| `memcommit.commands.endpoint_setup_flows` | `memcommit.adapters.console.commands.shared.endpoint_setup_flows` | shared-command-mechanism | `shared` |
-| `memcommit.commands.exact_command_review` | `memcommit.adapters.console.commands.shared.exact_command_review` | shared-command-mechanism | `shared` |
-| `memcommit.commands.exact_command_review_shell` | `memcommit.adapters.console.commands.shared.exact_command_review_shell` | shared-command-mechanism | `shared` |
-| `memcommit.commands.exact_name_dialog` | `memcommit.adapters.console.commands.shared.exact_name_dialog` | shared-command-mechanism | `shared` |
+| `memcommit.commands.endpoint_setup_flows` | `memcommit.adapters.console.shared.endpoint_setup_flows` | shared-command-mechanism | `shared` |
+| `memcommit.commands.exact_command_review` | `memcommit.adapters.console.shared.exact_command_review` | shared-command-mechanism | `shared` |
+| `memcommit.commands.exact_command_review_shell` | `memcommit.adapters.console.shared.exact_command_review_shell` | shared-command-mechanism | `shared` |
+| `memcommit.commands.exact_name_dialog` | `memcommit.adapters.console.shared.exact_name_dialog` | shared-command-mechanism | `shared` |
 | `memcommit.commands.find` | `memcommit.adapters.console.commands.search.command` | command-entry | `search` |
 | `memcommit.commands.find_ambiguities` | `memcommit.adapters.console.commands.find_ambiguities.command` | command-entry | `find_ambiguities` |
 | `memcommit.commands.find_chat_shell` | `memcommit.adapters.console.commands.search.chat_shell` | command-owned-support | `search` |
@@ -68,9 +69,9 @@ operation evidence ledger.
 | `memcommit.commands.find_materialization` | `memcommit.adapters.console.commands.search.materialization` | command-owned-support | `search` |
 | `memcommit.commands.find_query_provider_policy` | `memcommit.adapters.console.commands.search.provider_policy` | command-owned-support | `search` |
 | `memcommit.commands.find_search_workbench` | `memcommit.adapters.console.commands.search.search_workbench` | command-owned-support | `search` |
-| `memcommit.commands.findings_render` | `memcommit.adapters.console.commands.shared.findings_render` | shared-command-mechanism | `shared` |
+| `memcommit.commands.findings_render` | `memcommit.adapters.console.shared.findings_render` | shared-command-mechanism | `shared` |
 | `memcommit.commands.fit` | `memcommit.adapters.console.commands.fit.command` | command-entry | `fit` |
-| `memcommit.commands.flat_selection_dialog` | `memcommit.adapters.console.commands.shared.flat_selection_dialog` | shared-command-mechanism | `shared` |
+| `memcommit.commands.flat_selection_dialog` | `memcommit.adapters.console.shared.flat_selection_dialog` | shared-command-mechanism | `shared` |
 | `memcommit.commands.forget` | `memcommit.adapters.console.commands.forget.command` | command-entry | `forget` |
 | `memcommit.commands.forget_setup_workbench` | `memcommit.adapters.console.commands.forget.setup` | command-owned-support | `forget` |
 | `memcommit.commands.ground` | `memcommit.adapters.console.commands.ground.command` | command-entry | `ground` |
@@ -79,11 +80,11 @@ operation evidence ledger.
 | `memcommit.commands.ground_shell` | `memcommit.adapters.console.commands.ground.shell` | command-owned-support | `ground` |
 | `memcommit.commands.ground_workspace_picker` | `memcommit.adapters.console.commands.ground.workspace_picker` | command-owned-support | `ground` |
 | `memcommit.commands.help_inventory` | `memcommit.adapters.console.commands.help_inventory.command` | command-entry | `help_inventory` |
-| `memcommit.commands.history_location_picker` | `memcommit.adapters.console.commands.shared.history_location_picker` | shared-command-mechanism | `shared` |
-| `memcommit.commands.history_picker` | `memcommit.adapters.console.commands.shared.history_picker` | shared-command-mechanism | `shared` |
-| `memcommit.commands.history_present` | `memcommit.adapters.console.commands.shared.history_present` | shared-command-mechanism | `shared` |
-| `memcommit.commands.history_target` | `memcommit.adapters.console.commands.shared.history_target` | shared-command-mechanism | `shared` |
-| `memcommit.commands.horizontal_choice` | `memcommit.adapters.console.commands.shared.horizontal_choice` | shared-command-mechanism | `shared` |
+| `memcommit.commands.history_location_picker` | `memcommit.adapters.console.shared.history_location_picker` | shared-command-mechanism | `shared` |
+| `memcommit.commands.history_picker` | `memcommit.adapters.console.shared.history_picker` | shared-command-mechanism | `shared` |
+| `memcommit.commands.history_present` | `memcommit.adapters.console.shared.history_present` | shared-command-mechanism | `shared` |
+| `memcommit.commands.history_target` | `memcommit.adapters.console.shared.history_target` | shared-command-mechanism | `shared` |
+| `memcommit.commands.horizontal_choice` | `memcommit.adapters.console.shared.horizontal_choice` | shared-command-mechanism | `shared` |
 | `memcommit.commands.impact` | `memcommit.adapters.console.commands.impact.command` | command-entry | `impact` |
 | `memcommit.commands.impact_catalog` | `memcommit.adapters.console.commands.impact.catalog` | command-owned-support | `impact` |
 | `memcommit.commands.impact_process_local` | `memcommit.adapters.console.commands.impact.process_local` | command-owned-support | `impact` |
@@ -101,46 +102,46 @@ operation evidence ledger.
 | `memcommit.commands.meld_setup` | `memcommit.adapters.console.commands.meld.setup` | command-owned-support | `meld` |
 | `memcommit.commands.meld_shell` | `memcommit.adapters.console.commands.meld.shell` | command-owned-support | `meld` |
 | `memcommit.commands.meld_target_picker` | `memcommit.adapters.console.commands.meld.target_picker` | command-owned-support | `meld` |
-| `memcommit.commands.memory_history` | `memcommit.adapters.console.commands.shared.memory_history` | shared-command-mechanism | `shared` |
-| `memcommit.commands.memory_picker` | `memcommit.adapters.console.commands.shared.memory_picker` | shared-command-mechanism | `shared` |
-| `memcommit.commands.memory_report_recents` | `memcommit.adapters.console.commands.shared.memory_report_recents` | shared-command-mechanism | `shared` |
+| `memcommit.commands.memory_history` | `memcommit.adapters.console.shared.memory_history` | shared-command-mechanism | `shared` |
+| `memcommit.commands.memory_picker` | `memcommit.adapters.console.shared.memory_picker` | shared-command-mechanism | `shared` |
+| `memcommit.commands.memory_report_recents` | `memcommit.adapters.console.shared.memory_report_recents` | shared-command-mechanism | `shared` |
 | `memcommit.commands.merge` | `memcommit.adapters.console.commands.merge.command` | command-entry | `merge` |
-| `memcommit.commands.operation_launcher_location` | `memcommit.adapters.console.commands.shared.operation_launcher_location` | shared-command-mechanism | `shared` |
+| `memcommit.commands.operation_launcher_location` | `memcommit.adapters.console.shared.operation_launcher_location` | shared-command-mechanism | `shared` |
 | `memcommit.commands.ordinary_query_provider_policy` | `memcommit.adapters.console.commands.query.provider_policy` | command-owned-support | `query` |
-| `memcommit.commands.paste_input` | `memcommit.adapters.console.commands.shared.paste_input` | shared-command-mechanism | `shared` |
+| `memcommit.commands.paste_input` | `memcommit.adapters.console.shared.paste_input` | shared-command-mechanism | `shared` |
 | `memcommit.commands.profile` | `memcommit.adapters.console.commands.profile.command` | command-entry | `profile` |
 | `memcommit.commands.profile_group` | `memcommit.adapters.console.commands.profile.group` | command-owned-support | `profile` |
 | `memcommit.commands.profile_picker` | `memcommit.adapters.console.commands.profile.picker` | command-owned-support | `profile` |
 | `memcommit.commands.provider` | `memcommit.adapters.console.commands.provider.command` | command-entry | `provider` |
 | `memcommit.commands.pwd` | `memcommit.adapters.console.commands.pwd.command` | command-entry | `pwd` |
-| `memcommit.commands.quality_find_workbench` | `memcommit.adapters.console.commands.shared.quality_find_workbench` | shared-command-mechanism | `shared` |
+| `memcommit.commands.quality_find_workbench` | `memcommit.adapters.console.shared.quality_find_workbench` | shared-command-mechanism | `shared` |
 | `memcommit.commands.query` | `memcommit.adapters.console.commands.query.command` | command-entry | `query` |
 | `memcommit.commands.query_workbench` | `memcommit.adapters.console.commands.query.workbench` | command-owned-support | `query` |
 | `memcommit.commands.rationale` | `memcommit.adapters.console.commands.rationale.command` | command-entry | `rationale` |
-| `memcommit.commands.readable_context_catalog` | `memcommit.adapters.console.commands.shared.readable_context_catalog` | shared-command-mechanism | `shared` |
+| `memcommit.commands.readable_context_catalog` | `memcommit.adapters.console.shared.readable_context_catalog` | shared-command-mechanism | `shared` |
 | `memcommit.commands.redo` | `memcommit.adapters.console.commands.redo.command` | command-entry | `redo` |
 | `memcommit.commands.reference` | `memcommit.adapters.console.commands.reference.command` | command-entry | `reference` |
 | `memcommit.commands.remove` | `memcommit.adapters.console.commands.remove.command` | command-entry | `remove` |
 | `memcommit.commands.rename` | `memcommit.adapters.console.commands.rename.command` | command-entry | `rename` |
 | `memcommit.commands.replace` | `memcommit.adapters.console.commands.replace.command` | command-entry | `replace` |
-| `memcommit.commands.resolution_workbench_shell` | `memcommit.adapters.console.commands.shared.resolution_workbench_shell` | shared-command-mechanism | `shared` |
+| `memcommit.commands.resolution_workbench_shell` | `memcommit.adapters.console.shared.resolution_workbench_shell` | shared-command-mechanism | `shared` |
 | `memcommit.commands.resolve` | `memcommit.adapters.console.commands.resolve.command` | command-entry | `resolve` |
-| `memcommit.commands.restoration_present` | `memcommit.adapters.console.commands.shared.restoration_present` | shared-command-mechanism | `shared` |
+| `memcommit.commands.restoration_present` | `memcommit.adapters.console.shared.restoration_present` | shared-command-mechanism | `shared` |
 | `memcommit.commands.revert` | `memcommit.adapters.console.commands.revert.command` | command-entry | `revert` |
 | `memcommit.commands.review` | `memcommit.adapters.console.commands.review.command` | command-entry | `review` |
 | `memcommit.commands.review_report` | `memcommit.adapters.console.commands.review.report` | command-owned-support | `review` |
 | `memcommit.commands.review_resolution_shell` | `memcommit.adapters.console.commands.review.resolution_shell` | command-owned-support | `review` |
 | `memcommit.commands.review_sessions` | `memcommit.adapters.console.commands.review.sessions` | command-owned-support | `review` |
-| `memcommit.commands.root_group` | `memcommit.adapters.console.commands.shared.root_group` | shared-command-mechanism | `shared` |
-| `memcommit.commands.save_location_control` | `memcommit.adapters.console.commands.shared.save_location_control` | shared-command-mechanism | `shared` |
-| `memcommit.commands.save_location_review` | `memcommit.adapters.console.commands.shared.save_location_review` | shared-command-mechanism | `shared` |
+| `memcommit.commands.root_group` | `memcommit.adapters.console.shared.root_group` | shared-command-mechanism | `shared` |
+| `memcommit.commands.save_location_control` | `memcommit.adapters.console.shared.save_location_control` | shared-command-mechanism | `shared` |
+| `memcommit.commands.save_location_review` | `memcommit.adapters.console.shared.save_location_review` | shared-command-mechanism | `shared` |
 | `memcommit.commands.search_result_present` | `memcommit.adapters.console.commands.search.result_present` | command-owned-support | `search` |
-| `memcommit.commands.semantic_clipboard` | `memcommit.adapters.console.commands.shared.semantic_clipboard` | shared-command-mechanism | `shared` |
-| `memcommit.commands.semantic_detail_renderer` | `memcommit.adapters.console.commands.shared.semantic_detail_renderer` | shared-command-mechanism | `shared` |
+| `memcommit.commands.semantic_clipboard` | `memcommit.adapters.console.shared.semantic_clipboard` | shared-command-mechanism | `shared` |
+| `memcommit.commands.semantic_detail_renderer` | `memcommit.adapters.console.shared.semantic_detail_renderer` | shared-command-mechanism | `shared` |
 | `memcommit.commands.semantic_eval` | `memcommit.adapters.console.commands.semantic_eval.command` | command-entry | `semantic_eval` |
-| `memcommit.commands.session_endpoint_setup` | `memcommit.adapters.console.commands.shared.session_endpoint_setup` | shared-command-mechanism | `shared` |
-| `memcommit.commands.session_help` | `memcommit.adapters.console.commands.shared.session_help` | shared-command-mechanism | `shared` |
-| `memcommit.commands.session_picker` | `memcommit.adapters.console.commands.shared.session_picker` | shared-command-mechanism | `shared` |
+| `memcommit.commands.session_endpoint_setup` | `memcommit.adapters.console.shared.session_endpoint_setup` | shared-command-mechanism | `shared` |
+| `memcommit.commands.session_help` | `memcommit.adapters.console.shared.session_help` | shared-command-mechanism | `shared` |
+| `memcommit.commands.session_picker` | `memcommit.adapters.console.shared.session_picker` | shared-command-mechanism | `shared` |
 | `memcommit.commands.sever` | `memcommit.adapters.console.commands.sever.command` | command-entry | `sever` |
 | `memcommit.commands.sever_sessions` | `memcommit.adapters.console.commands.sever.sessions` | command-owned-support | `sever` |
 | `memcommit.commands.sever_setup_shell` | `memcommit.adapters.console.commands.sever.setup_shell` | command-owned-support | `sever` |
@@ -156,8 +157,8 @@ operation evidence ledger.
 | `memcommit.commands.trace` | `memcommit.adapters.console.commands.trace.command` | command-entry | `trace` |
 | `memcommit.commands.trace_projection` | `memcommit.adapters.console.commands.trace.projection` | command-owned-support | `trace` |
 | `memcommit.commands.translate` | `memcommit.adapters.console.commands.translate.command` | command-entry | `translate` |
-| `memcommit.commands.tui_primitives` | `memcommit.adapters.console.commands.shared.tui_primitives` | shared-command-mechanism | `shared` |
-| `memcommit.commands.tui_table` | `memcommit.adapters.console.commands.shared.tui_table` | shared-command-mechanism | `shared` |
+| `memcommit.commands.tui_primitives` | `memcommit.adapters.console.shared.tui_primitives` | shared-command-mechanism | `shared` |
+| `memcommit.commands.tui_table` | `memcommit.adapters.console.shared.tui_table` | shared-command-mechanism | `shared` |
 | `memcommit.commands.undo` | `memcommit.adapters.console.commands.undo.command` | command-entry | `undo` |
 | `memcommit.commands.update` | `memcommit.adapters.console.commands.update.command` | command-entry | `update` |
 | `memcommit.commands.update_checkpoint_history` | `memcommit.adapters.console.commands.update.checkpoint_history` | command-owned-support | `update` |

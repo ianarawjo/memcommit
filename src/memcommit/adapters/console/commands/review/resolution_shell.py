@@ -7,7 +7,7 @@ from collections.abc import Callable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.shared.resolution_workbench_shell import (
     run_resolution_workbench_shell,
 )
 from memcommit.core.context import Context, Memory

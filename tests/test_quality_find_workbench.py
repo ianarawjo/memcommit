@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.shared.quality_find_workbench import (
+from memcommit.adapters.console.shared.quality_find_workbench import (
     QualityFindSetupReceipt,
     choose_quality_find_setup,
     run_interactive_quality_find,
@@ -131,7 +131,7 @@ def test_interactive_orchestration_does_not_analyze_a_cancelled_setup(
     analyzed: list[str] = []
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench.choose_quality_find_setup",
+        "memcommit.adapters.console.shared.quality_find_workbench.choose_quality_find_setup",
         lambda *_args, **_kwargs: None,
     )
 
@@ -161,7 +161,7 @@ def test_interactive_orchestration_builds_one_cross_context_analysis_frame(
     observed: list[QualityFindSourceFrame] = []
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench.choose_quality_find_setup",
+        "memcommit.adapters.console.shared.quality_find_workbench.choose_quality_find_setup",
         lambda *_args, **_kwargs: QualityFindSetupReceipt(
             target_names=(root.name,),
             context_names=(root.name, child.name),
@@ -170,7 +170,7 @@ def test_interactive_orchestration_builds_one_cross_context_analysis_frame(
         ),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench."
+        "memcommit.adapters.console.shared.quality_find_workbench."
         "run_quality_find_resolution_workbench",
         lambda *_args, **_kwargs: None,
     )
@@ -225,25 +225,25 @@ def test_interactive_orchestration_replays_recent_target_without_saved_session(
     )
     observed: list[QualityFindSourceFrame] = []
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench.read_report_recents",
+        "memcommit.adapters.console.shared.quality_find_workbench.read_report_recents",
         lambda *_args, **_kwargs: (recent,),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench.choose_read_report_recent",
+        "memcommit.adapters.console.shared.quality_find_workbench.choose_read_report_recent",
         lambda *_args, **_kwargs: target,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench.revalidate_read_report_recent",
+        "memcommit.adapters.console.shared.quality_find_workbench.revalidate_read_report_recent",
         lambda *_args, **_kwargs: target,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench.choose_quality_find_setup",
+        "memcommit.adapters.console.shared.quality_find_workbench.choose_quality_find_setup",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             AssertionError("a recent target must bypass fresh setup")
         ),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench."
+        "memcommit.adapters.console.shared.quality_find_workbench."
         "run_quality_find_resolution_workbench",
         lambda *_args, **_kwargs: None,
     )
@@ -290,19 +290,19 @@ def test_profile_recent_reexpands_the_current_frozen_readable_catalog(
     )
     observed: list[QualityFindSourceFrame] = []
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench.read_report_recents",
+        "memcommit.adapters.console.shared.quality_find_workbench.read_report_recents",
         lambda *_args, **_kwargs: (recent,),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench.choose_read_report_recent",
+        "memcommit.adapters.console.shared.quality_find_workbench.choose_read_report_recent",
         lambda *_args, **_kwargs: target,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench.revalidate_read_report_recent",
+        "memcommit.adapters.console.shared.quality_find_workbench.revalidate_read_report_recent",
         lambda *_args, **_kwargs: target,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench."
+        "memcommit.adapters.console.shared.quality_find_workbench."
         "run_quality_find_resolution_workbench",
         lambda *_args, **_kwargs: None,
     )

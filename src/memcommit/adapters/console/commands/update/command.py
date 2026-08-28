@@ -7,7 +7,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.application.flow import run_application_flow
-from memcommit.adapters.console.commands.shared.command_wait import (
+from memcommit.adapters.console.shared.command_wait import (
     CommandWaitView,
     run_command_wait,
 )

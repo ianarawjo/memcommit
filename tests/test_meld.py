@@ -18,7 +18,7 @@ import memcommit.application.ops as ops
 import memcommit.configuration.config as config_module
 import memcommit.adapters.console.commands.meld.command as meld_command
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.adapters.console.commands.shared.endpoint_setup_flows import MeldSetupReceipt
+from memcommit.adapters.console.shared.endpoint_setup_flows import MeldSetupReceipt
 from memcommit.application.operations.atomize.grounding import (
     AtomizeGroundingAnchor,
     AtomizeGroundingBindings,
@@ -52,7 +52,7 @@ from memcommit.adapters.console.commands.meld.shell import (
     _line,
     run_meld_shell,
 )
-from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.shared.resolution_workbench_shell import (
     _viewer_focus_fragments,
     RESOLUTION_WORKBENCH_STYLE,
     ResolutionGlobalStrategy,

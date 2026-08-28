@@ -3,20 +3,20 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 
 import memcommit.application.ops as ops
-import memcommit.adapters.console.commands.shared.endpoint_setup_flows as endpoint_setup_flows
+import memcommit.adapters.console.shared.endpoint_setup_flows as endpoint_setup_flows
 import memcommit.adapters.console.commands.meld.setup as meld_setup_command
 from memcommit.adapters.console.commands.compare.setup import choose_compare_setup
-from memcommit.adapters.console.commands.shared.endpoint_setup_flows import (
+from memcommit.adapters.console.shared.endpoint_setup_flows import (
     choose_atomize_setup,
     choose_meld_setup,
     choose_update_setup,
 )
-from memcommit.adapters.console.commands.shared.horizontal_choice import (
+from memcommit.adapters.console.shared.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.adapters.console.commands.shared.session_endpoint_setup import (
+from memcommit.adapters.console.shared.session_endpoint_setup import (
     EndpointModeSpec,
     EndpointRoleSpec,
     _confirmed_new_context_row,
@@ -27,7 +27,7 @@ from memcommit.adapters.console.commands.shared.session_endpoint_setup import (
     choose_session_endpoints,
 )
 from memcommit.adapters.interfaces.tui.operations.meld import MeldEndpointSelection
-from memcommit.adapters.console.commands.shared.context_picker import ContextMemoryRow, context_memory_rows
+from memcommit.adapters.console.shared.context_picker import ContextMemoryRow, context_memory_rows
 from memcommit.core.context_targeting.tui.reach import ContextReachState
 from memcommit.core.context_targeting.tui.selection import ContextSelectionState
 from memcommit.core.context_targeting.tui.tree import ContextTreeState, build_context_tree

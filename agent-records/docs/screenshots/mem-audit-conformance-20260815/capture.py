@@ -31,7 +31,7 @@ def _demo_child() -> None:
     from memcommit.providers.types import ProviderIdentity
     from memcommit.application.reviewing.quality.audit import quality_audit_resolution_view
     from memcommit.application.reviewing.quality.audit_store import QualityAuditStore
-    from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
+    from memcommit.adapters.console.shared.resolution_workbench_shell import (
         render_resolution_workbench_snapshot,
     )
     from memcommit.application.operations.review.model import direct_context_digest

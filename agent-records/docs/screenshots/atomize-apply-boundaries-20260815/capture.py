@@ -165,8 +165,8 @@ def _review(store):
 
 def _invoke_save(store) -> None:
     import memcommit.adapters.console.commands.atomize.command as atomize_command
-    import memcommit.adapters.console.commands.shared.command_wait as command_wait
-    import memcommit.adapters.console.commands.shared.session_help as session_help
+    import memcommit.adapters.console.shared.command_wait as command_wait
+    import memcommit.adapters.console.shared.session_help as session_help
 
     atomize_command.MemoryStore = lambda *args, **kwargs: store
     command_wait.current_help_entries = lambda: ()

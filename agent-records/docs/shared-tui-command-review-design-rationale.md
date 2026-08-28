@@ -40,7 +40,7 @@ The neutral layer contains:
 
 `ExactCommandReview` is owned by the interface-neutral
 `memcommit.exact_command_review` module.  The terminal component owns only its
-rendering.  The former `memcommit.adapters.console.commands.shared.exact_command_review` module and the
+rendering.  The former `memcommit.adapters.console.shared.exact_command_review` module and the
 component's former `model` module are compatibility imports of that same class,
 not parallel implementations.  This placement matters even though the value is
 small: a review constructed by an application or operation adapter must pass

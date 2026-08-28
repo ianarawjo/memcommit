@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,

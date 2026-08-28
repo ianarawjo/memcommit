@@ -7,7 +7,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.ground.command as ground_command
-import memcommit.adapters.console.commands.shared.operation_launcher_location as launcher_location_module
+import memcommit.adapters.console.shared.operation_launcher_location as launcher_location_module
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.ground.session_picker import (

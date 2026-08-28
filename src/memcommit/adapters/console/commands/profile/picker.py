@@ -23,19 +23,19 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style, merge_styles
 
-from memcommit.adapters.console.commands.shared.background_turn import BackgroundExecutorTurn
-from memcommit.adapters.console.commands.shared.command_progress import (
+from memcommit.adapters.console.shared.background_turn import BackgroundExecutorTurn
+from memcommit.adapters.console.shared.command_progress import (
     BUSY_INTERVAL_SECONDS,
     busy_suffix,
 )
-from memcommit.adapters.console.commands.shared.exact_command_review import (
+from memcommit.adapters.console.shared.exact_command_review import (
     ExactCommandReview,
     render_exact_command_review,
 )
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     bind_exact_command_approval,
 )
-from memcommit.adapters.console.commands.shared.tui_primitives import (
+from memcommit.adapters.console.shared.tui_primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )

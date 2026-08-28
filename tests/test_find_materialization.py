@@ -13,7 +13,7 @@ from memcommit.adapters.console.commands.search.search_workbench import (
     FindSearchResult,
 )
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.adapters.console.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
 from memcommit.core.context import Memory, MemoryRef

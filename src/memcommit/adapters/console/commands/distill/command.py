@@ -12,9 +12,9 @@ from memcommit.application.authority.access import (
 )
 from memcommit.bootstrap import build_distill_console_runner
 from memcommit.adapters.console.clipboard import write_system_clipboard
-from memcommit.adapters.console.commands.shared.command_progress import CommandProgress
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.adapters.console.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.shared.command_progress import CommandProgress
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context_targeting.presets import (

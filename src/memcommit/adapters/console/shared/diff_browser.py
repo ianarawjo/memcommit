@@ -6,7 +6,7 @@ from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, replace as dataclass_replace
 
-from memcommit.adapters.console.commands.shared.checkpoint_diff import (
+from memcommit.adapters.console.shared.checkpoint_diff import (
     checkpoint_revision_detail_renderer,
 )
 from memcommit.core.context_targeting.tui.picker import (
@@ -19,7 +19,7 @@ from memcommit.adapters.interfaces.tui.components.checkpoint_location import (
     CheckpointLocationSelection,
     choose_history_location,
 )
-from memcommit.adapters.console.commands.shared.history_picker import (
+from memcommit.adapters.console.shared.history_picker import (
     HISTORY_BACK,
     HistoryBackNavigation,
     HistoryPickerMode,
@@ -27,7 +27,7 @@ from memcommit.adapters.console.commands.shared.history_picker import (
     choose_history,
     revert_exact_command_review,
 )
-from memcommit.adapters.console.commands.shared.history_present import checkpoint_picker_entries
+from memcommit.adapters.console.shared.history_present import checkpoint_picker_entries
 from memcommit.adapters.console.commands.update.checkpoint_history import (
     choose_update_checkpoint_at_location,
     choose_update_checkpoint_subtree,

@@ -11,13 +11,13 @@ from memcommit.application.exact_command_review import ExactCommandReview
 import memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell as resolution_shell_package
 import memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell.presentation as resolution_presentation_module
 import memcommit.adapters.interfaces.tui.workbenches.resolution.session_shell.runtime as resolution_runtime_module
-from memcommit.adapters.console.commands.shared.semantic_detail_renderer import (
+from memcommit.adapters.console.shared.semantic_detail_renderer import (
     semantic_detail_block_fragments,
 )
 from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
 )
-from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.shared.resolution_workbench_shell import (
     RESOLUTION_WORKBENCH_STYLE,
     ResolutionDestination,
     ResolutionGlobalStrategy,

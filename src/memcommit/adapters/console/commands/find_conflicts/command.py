@@ -10,7 +10,7 @@ import memcommit.application.ops as ops
 from memcommit.adapters.console.commands.find_conflicts.resolve_handoff import (
     run_conflict_resolve_handoff,
 )
-from memcommit.adapters.console.commands.shared.context_operand import (
+from memcommit.adapters.console.shared.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
@@ -21,8 +21,8 @@ from memcommit.adapters.interfaces.cli.quality_findings import (
     render_question,
     render_reason,
 )
-from memcommit.adapters.console.commands.shared.command_progress import CommandProgress
-from memcommit.adapters.console.commands.shared.quality_find_workbench import (
+from memcommit.adapters.console.shared.command_progress import CommandProgress
+from memcommit.adapters.console.shared.quality_find_workbench import (
     annotate_quality_find_attempt,
     freeze_all_readable_quality_find_source,
     interactive_quality_find_available,

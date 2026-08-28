@@ -12,7 +12,7 @@ import memcommit.application.ops as ops
 import memcommit.adapters.console.commands.update.command as update_command
 import memcommit.adapters.console.commands.update.render as update_render
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.shared.endpoint_setup_flows import UpdateSetupReceipt
+from memcommit.adapters.console.shared.endpoint_setup_flows import UpdateSetupReceipt
 from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
 )

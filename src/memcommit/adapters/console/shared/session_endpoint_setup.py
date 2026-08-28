@@ -51,12 +51,12 @@ from memcommit.core.context_targeting.tui.picker import (
     ContextMemoryRow,
     memory_visibility_key_hint,
 )
-from memcommit.adapters.console.commands.shared.horizontal_choice import (
+from memcommit.adapters.console.shared.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.adapters.console.commands.shared.tui_primitives import (
+from memcommit.adapters.console.shared.tui_primitives import (
     ExactNameFieldView,
     ExactNameInputControl,
 )

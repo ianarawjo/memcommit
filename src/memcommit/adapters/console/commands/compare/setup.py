@@ -12,7 +12,7 @@ from memcommit.application.authority.access import (
     context_access_display_facts,
 )
 from memcommit.core.context_targeting.tui.picker import context_memory_rows
-from memcommit.adapters.console.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.adapters.interfaces.tui.components.endpoint_setup import (

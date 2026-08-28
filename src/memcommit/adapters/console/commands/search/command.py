@@ -7,13 +7,13 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.application.authority.access import (
     ContextAccess,
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.adapters.console.commands.shared.exact_command_review import (
+from memcommit.adapters.console.shared.exact_command_review import (
     ExactCommandReview,
     format_exact_command,
 )
@@ -35,8 +35,8 @@ from memcommit.application.operations.search.materialization_application import 
 from memcommit.application.operations.search.materialization_runtime import (
     execute_find_materialization,
 )
-from memcommit.adapters.console.commands.shared.command_progress import CommandProgress
-from memcommit.adapters.console.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.shared.command_progress import CommandProgress
+from memcommit.adapters.console.shared.readable_context_catalog import (
     ReadableContextCatalog,
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,

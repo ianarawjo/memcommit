@@ -33,7 +33,7 @@ _BASE.ROWS = ROWS
 
 
 def _run_child() -> None:
-    from memcommit.adapters.console.commands.shared.quality_find_workbench import choose_quality_find_setup
+    from memcommit.adapters.console.shared.quality_find_workbench import choose_quality_find_setup
 
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
     receipt = choose_quality_find_setup(

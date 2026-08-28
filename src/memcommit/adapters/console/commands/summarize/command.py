@@ -10,8 +10,8 @@ import typer
 from memcommit.bootstrap import build_summarize_console_runner
 from memcommit.adapters.console.clipboard import ClipboardError, write_system_clipboard
 from memcommit.persistence.command_ledger.attempts import annotate_read_report_attempt
-from memcommit.adapters.console.commands.shared.command_progress import CommandProgress
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.command_progress import CommandProgress
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.adapters.interfaces.tui.components.operation_launcher.location import (
     operation_launcher_orientation,
 )
@@ -19,7 +19,7 @@ from memcommit.application.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.adapters.console.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context_targeting.presets import (

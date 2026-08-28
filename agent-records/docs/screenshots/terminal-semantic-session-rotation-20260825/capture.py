@@ -148,10 +148,10 @@ def _prepare_review_store(root: Path):
 
 def _patch_command_stores(store) -> None:
     import memcommit.adapters.console.commands.atomize.command as atomize_command
-    import memcommit.adapters.console.commands.shared.command_wait as command_wait
+    import memcommit.adapters.console.shared.command_wait as command_wait
     import memcommit.adapters.console.commands.meld.command as meld_command
     import memcommit.adapters.console.commands.review.command as review_command
-    import memcommit.adapters.console.commands.shared.session_help as session_help
+    import memcommit.adapters.console.shared.session_help as session_help
     import memcommit.adapters.interfaces.tui.components.session_help as tui_session_help
 
     atomize_command.MemoryStore = lambda *args, **kwargs: store

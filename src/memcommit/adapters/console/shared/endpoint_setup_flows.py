@@ -14,10 +14,10 @@ from memcommit.application.authority.access import (
     resolve_context_access,
 )
 from memcommit.adapters.console.commands.meld.setup import choose_meld_setup as choose_meld_setup
-from memcommit.adapters.console.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.adapters.console.commands.shared.session_endpoint_setup import (
+from memcommit.adapters.console.shared.session_endpoint_setup import (
     EndpointModeSpec,
     EndpointRoleSpec,
     EndpointSetupDraft,

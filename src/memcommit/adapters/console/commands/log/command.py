@@ -11,12 +11,12 @@ from memcommit.persistence.command_ledger.attempts import (
     current_command_attempt_uid,
     annotate_memory_report_attempt,
 )
-from memcommit.adapters.console.commands.shared.command_progress import CommandProgress
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.adapters.console.commands.shared.history_present import (
+from memcommit.adapters.console.shared.command_progress import CommandProgress
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.history_present import (
     history_result_recovery_label,
 )
-from memcommit.adapters.console.commands.shared.memory_history import (
+from memcommit.adapters.console.shared.memory_history import (
     build_memory_history,
     load_retained_history_context,
 )

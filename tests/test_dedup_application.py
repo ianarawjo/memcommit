@@ -15,7 +15,7 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.python_api import DedunPlanResult, MemCommitClient
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.shared.quality_find_workbench import (
+from memcommit.adapters.console.shared.quality_find_workbench import (
     run_quality_find_resolution_workbench,
 )
 from memcommit.core.context import Context, MemoryRef, QueryContextRef

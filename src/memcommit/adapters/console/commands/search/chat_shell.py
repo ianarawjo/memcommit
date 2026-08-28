@@ -44,12 +44,12 @@ from memcommit.adapters.console.terminal import (
 from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.console.commands.shared.background_turn import BackgroundExecutorTurn
-from memcommit.adapters.console.commands.shared.command_progress import (
+from memcommit.adapters.console.shared.background_turn import BackgroundExecutorTurn
+from memcommit.adapters.console.shared.command_progress import (
     BUSY_INTERVAL_SECONDS,
     busy_suffix,
 )
-from memcommit.adapters.console.commands.shared.session_help import bind_session_help
+from memcommit.adapters.console.shared.session_help import bind_session_help
 from memcommit.adapters.interfaces.cli.search_results import (
     SearchResultViewRow,
     render_grouped_search_results,

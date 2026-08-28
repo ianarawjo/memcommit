@@ -13,7 +13,7 @@ from memcommit.adapters.console.commands.update.checkpoint_history import (
     update_subtree_checkpoint_entries,
     update_subtree_locations,
 )
-from memcommit.adapters.console.commands.shared.history_picker import HistoryDetailView
+from memcommit.adapters.console.shared.history_picker import HistoryDetailView
 from memcommit.application.operations.update.model import (
     UpdateApplicationReceipt,
     UpdateCheckpointReceipt,

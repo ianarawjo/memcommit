@@ -27,7 +27,7 @@ that identity again at its mutation or dispatch boundary.
 
 The standalone full-screen approval surface is owned by
 `memcommit.adapters.interfaces.tui.components.exact_command_review.shell`. The former
-`memcommit.adapters.console.commands.shared.exact_command_review_shell` path is a module-identity
+`memcommit.adapters.console.shared.exact_command_review_shell` path is a module-identity
 compatibility alias so legacy imports and monkeypatches reach the same globals.
 This is an ownership-only relocation: key bindings, rendering, validation,
 approval, cancellation, and terminal behavior are unchanged, so no interaction

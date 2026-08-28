@@ -19,8 +19,8 @@ from memcommit.adapters.interfaces.tui.components.operation_launcher.session imp
     SessionOpenReceipt,
     choose_session,
 )
-from memcommit.adapters.console.commands.shared.command_wait import run_command_wait
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.command_wait import run_command_wait
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.adapters.console.commands.sever.sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
@@ -417,7 +417,7 @@ def _run_workbench(
     *,
     allow_apply: bool = True,
 ) -> SeverSession:
-    from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
+    from memcommit.adapters.console.shared.resolution_workbench_shell import (
         ResolutionDestination,
         run_resolution_workbench_shell,
     )

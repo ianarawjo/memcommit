@@ -24,7 +24,7 @@ from memcommit.application.authority.access import (
 )
 from memcommit.adapters.console.commands.compare.sessions import comparison_session_entries
 from memcommit.adapters.console.commands.compare.setup import choose_compare_setup
-from memcommit.adapters.console.commands.shared.endpoint_setup_flows import (
+from memcommit.adapters.console.shared.endpoint_setup_flows import (
     _readable_endpoint_catalog,
     choose_update_setup,
 )

@@ -23,7 +23,7 @@ from memcommit.adapters.console.commands.audit.review import (
     run_quality_audit_review,
 )
 from memcommit.adapters.console.commands.audit.sessions import audit_session_entries
-from memcommit.adapters.console.commands.shared.quality_find_workbench import (
+from memcommit.adapters.console.shared.quality_find_workbench import (
     QualityFindSetupReceipt,
     choose_quality_find_setup,
 )

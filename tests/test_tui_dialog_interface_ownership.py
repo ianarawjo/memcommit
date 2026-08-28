@@ -11,11 +11,11 @@ import pytest
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 DIALOG_MODULES = (
     (
-        "memcommit.adapters.console.commands.shared.context_reach_dialog",
+        "memcommit.adapters.console.shared.context_reach_dialog",
         "memcommit.adapters.interfaces.tui.components.context_reach_dialog",
     ),
     (
-        "memcommit.adapters.console.commands.shared.flat_selection_dialog",
+        "memcommit.adapters.console.shared.flat_selection_dialog",
         "memcommit.adapters.interfaces.tui.components.flat_selection_dialog",
     ),
 )

@@ -4,7 +4,7 @@ from __future__ import annotations
 import typer
 
 from memcommit.application.retained_history.command_history import CommandHistoryError
-from memcommit.adapters.console.commands.shared.restoration_present import (
+from memcommit.adapters.console.shared.restoration_present import (
     render_command_restore_receipt,
 )
 from memcommit.application.operations.redo.runtime import execute_redo

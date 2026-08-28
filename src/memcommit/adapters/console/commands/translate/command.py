@@ -9,8 +9,8 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.commands.shared.command_progress import progressing_provider_factory
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.command_progress import progressing_provider_factory
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.application.operations.translate.application import (
@@ -474,7 +474,7 @@ def cmd(
             )
         _render_preview(prepared.plan, destination_name=destination_name)
         if destination_name is not None and not yes:
-            from memcommit.adapters.console.commands.shared.save_location_review import (
+            from memcommit.adapters.console.shared.save_location_review import (
                 review_save_location,
             )
 

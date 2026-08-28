@@ -6,8 +6,8 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.commands.shared.command_progress import CommandProgress
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.command_progress import CommandProgress
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.application.operations.conformance.model import ConformanceError, ConformanceReport
 from memcommit.application.operations.conformance.runtime import (
     execute_context_conformance_with_rules_operand,

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from memcommit.adapters.console.commands.shared.save_location_review import review_save_location
+from memcommit.adapters.console.shared.save_location_review import review_save_location
 
 
 def test_save_location_card_can_edit_the_exact_name_before_apply(
@@ -10,7 +10,7 @@ def test_save_location_card_can_edit_the_exact_name_before_apply(
     replies = iter(("e", "task-3/final", "y"))
     validated: list[str] = []
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.save_location_review.typer.prompt",
+        "memcommit.adapters.console.shared.save_location_review.typer.prompt",
         lambda *args, **kwargs: next(replies),
     )
 

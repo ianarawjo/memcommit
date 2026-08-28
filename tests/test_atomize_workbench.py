@@ -50,7 +50,7 @@ from memcommit.adapters.console.commands.atomize.sessions import (
     choose_atomize_session,
     revalidate_saved_atomize_analysis,
 )
-from memcommit.adapters.console.commands.shared.endpoint_setup_flows import AtomizeSetupReceipt
+from memcommit.adapters.console.shared.endpoint_setup_flows import AtomizeSetupReceipt
 from memcommit.adapters.interfaces.tui.workbenches.review import RESPONSE_LABEL
 from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionDestination
 from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
@@ -1952,7 +1952,7 @@ def test_atomize_persists_shared_destination_change_before_final_apply(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.save_location_review.review_save_location",
+        "memcommit.adapters.console.shared.save_location_review.review_save_location",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             AssertionError(
                 "a planned Output was already reviewed in the shared workbench"

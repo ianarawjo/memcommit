@@ -30,10 +30,12 @@ commands/atomize/
   workbench_shell.py
 ```
 
-Command-layer mechanics used by more than one entry live under
-`commands/shared/`. This is not a general utility directory: a module belongs
-there only when its command-adapter mechanics genuinely have multiple command
-consumers. Application policy remains under `operations/`; operation-owned
+Command-layer mechanics used by more than one entry live under the sibling
+`adapters/console/shared/` package. This is not a general utility directory: a
+module belongs there only when its console-adapter mechanics genuinely have
+multiple command consumers. Keeping it outside `commands/` makes that tree's
+physical invariant exact: every first-level child is an actual command entry
+package. Application policy remains under `operations/`; operation-owned
 console presentation and interactive setup live beside their command, while
 still-staged reusable terminal components retain their narrower owners until
 reviewed. Other neutral concepts keep their existing owners.
@@ -53,6 +55,14 @@ it is therefore an implementation of the console adapter rather than a peer
 architectural layer. This is deliberately a physical staging move. Command-local
 application policy that may later belong under `memcommit.application` is not
 split during this relocation.
+
+On 2026-08-28 the multi-command `shared/` package moved one level upward from
+`adapters/console/commands/shared/` to `adapters/console/shared/`. The earlier
+placement correctly identified these modules as console adapters but made
+`commands/` describe both command entries and cross-command infrastructure.
+The sibling placement preserves the same adapter layer and dependency meaning
+while giving the command tree one navigational grammar. No compatibility
+package remains at the former internal path.
 
 ## Why single-file entries are packages
 
@@ -88,8 +98,9 @@ move.
 ## Verification
 
 The layout check requires the console-owned `commands/__init__.py` to be the only Python file at
-the command root, verifies every classified canonical target and entry package,
-rejects internal imports through all 153 historical command names, and proves
+the command root, rejects a nested `commands/shared` package, verifies every
+classified command target, shared-console target, and entry package, rejects
+internal imports through all 153 historical command names, and proves
 in an isolated interpreter that neither those names nor `memcommit.commands`
 itself is restored. Package tests
 also verify that all 64 `__init__.py` files expose only their declared CLI

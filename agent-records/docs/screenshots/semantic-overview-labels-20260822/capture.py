@@ -249,7 +249,7 @@ def _resolution_view(kind: str):
 
 
 def _run_case_child(kind: str) -> None:
-    from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
+    from memcommit.adapters.console.shared.resolution_workbench_shell import (
         run_resolution_workbench_shell,
     )
     from memcommit.adapters.interfaces.tui.viewers.semantic import run_semantic_viewer

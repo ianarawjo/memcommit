@@ -4,13 +4,13 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
-from memcommit.adapters.console.commands.shared.command_wait import run_command_wait
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.command_wait import run_command_wait
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.application.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.adapters.console.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.adapters.console.commands.forget.receipt import render_forget_change_lines

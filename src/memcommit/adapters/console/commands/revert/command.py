@@ -10,19 +10,19 @@ from typing import Annotated, Any, Optional
 
 import typer
 
-from memcommit.adapters.console.commands.shared.checkpoint_diff import (
+from memcommit.adapters.console.shared.checkpoint_diff import (
     checkpoint_revision_detail_renderer,
 )
-from memcommit.adapters.console.commands.shared.command_progress import CommandProgress
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.adapters.console.commands.shared.diff_browser import browse_checkpoint_locations
-from memcommit.adapters.console.commands.shared.history_picker import (
+from memcommit.adapters.console.shared.command_progress import CommandProgress
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.diff_browser import browse_checkpoint_locations
+from memcommit.adapters.console.shared.history_picker import (
     HistorySelectionReceipt,
     choose_history,
     revert_exact_command_review,
 )
-from memcommit.adapters.console.commands.shared.history_present import checkpoint_picker_entries
-from memcommit.adapters.console.commands.shared.restoration_present import (
+from memcommit.adapters.console.shared.history_present import checkpoint_picker_entries
+from memcommit.adapters.console.shared.restoration_present import (
     MemoryRefTargetKey,
     memory_ref_target_key,
     render_checkpoint_unit_revert_receipt,

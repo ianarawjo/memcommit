@@ -10,12 +10,12 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 import typer
 
-from memcommit.adapters.console.commands.shared.command_progress import BUSY_INTERVAL_SECONDS
-from memcommit.adapters.console.commands.shared.command_wait import (
+from memcommit.adapters.console.shared.command_progress import BUSY_INTERVAL_SECONDS
+from memcommit.adapters.console.shared.command_wait import (
     CommandWaitProgress,
     run_command_wait,
 )
-from memcommit.adapters.console.commands.shared.context_operand import (
+from memcommit.adapters.console.shared.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
@@ -25,7 +25,7 @@ from memcommit.application.authority.access import (
     resolve_context_access,
 )
 from memcommit.adapters.console.commands.help_inventory.command import CommandEntry
-from memcommit.adapters.console.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.adapters.console.identity import collision_safe_uid_prefixes

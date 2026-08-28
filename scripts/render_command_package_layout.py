@@ -11,12 +11,12 @@ import sys
 
 
 REPOSITORY = Path(__file__).resolve().parents[1]
-COMMANDS = (
-    REPOSITORY / "src" / "memcommit" / "adapters" / "console" / "commands"
-)
+CONSOLE = REPOSITORY / "src" / "memcommit" / "adapters" / "console"
+COMMANDS = CONSOLE / "commands"
 FORMER_COMMANDS = REPOSITORY / "src" / "memcommit" / "commands"
 LEGACY_NAMESPACE = "memcommit.commands"
 CANONICAL_NAMESPACE = "memcommit.adapters.console.commands"
+SHARED_NAMESPACE = "memcommit.adapters.console.shared"
 OUTPUT_JSON = (
     REPOSITORY / "agent-records" / "docs" / "command-package-layout-plan.json"
 )
@@ -94,6 +94,14 @@ ENTRY_EXPORTS = {
 }
 
 
+# The public operation names were clarified after the historical flat-module
+# baseline: semantic Find is now `search`, while literal Find is now `find`.
+ENTRY_PACKAGE_TARGETS = {
+    "find": "search",
+    "literal_find": "find",
+}
+
+
 OWNED_SUPPORT_TARGETS = {
     "atomize_grounding": "atomize.grounding",
     "atomize_render": "atomize.render",
@@ -107,10 +115,10 @@ OWNED_SUPPORT_TARGETS = {
     "comparison_execution": "compare.execution",
     "conflict_resolve_handoff": "find_conflicts.resolve_handoff",
     "duplicate_dedup_handoff": "find_duplicates.dedup_handoff",
-    "find_chat_shell": "find.chat_shell",
-    "find_materialization": "find.materialization",
-    "find_query_provider_policy": "find.provider_policy",
-    "find_search_workbench": "find.search_workbench",
+    "find_chat_shell": "search.chat_shell",
+    "find_materialization": "search.materialization",
+    "find_query_provider_policy": "search.provider_policy",
+    "find_search_workbench": "search.search_workbench",
     "forget_setup_workbench": "forget.setup",
     "ground_named_shell": "ground.named_shell",
     "ground_session_picker": "ground.session_picker",
@@ -132,7 +140,7 @@ OWNED_SUPPORT_TARGETS = {
     "review_report": "review.report",
     "review_resolution_shell": "review.resolution_shell",
     "review_sessions": "review.sessions",
-    "search_result_present": "find.result_present",
+    "search_result_present": "search.result_present",
     "sever_sessions": "sever.sessions",
     "sever_setup_shell": "sever.setup_shell",
     "share_flow": "share.flow",
@@ -192,7 +200,11 @@ SHARED_MODULES = {
 
 
 def _target_path(module: str) -> Path:
-    return REPOSITORY / "src" / (module.replace(".", "/") + ".py")
+    module_path = REPOSITORY / "src" / module.replace(".", "/")
+    module_file = module_path.with_suffix(".py")
+    if module_file.is_file():
+        return module_file
+    return module_path / "__init__.py"
 
 
 def _baseline_modules() -> set[str]:
@@ -223,11 +235,12 @@ def _baseline_modules() -> set[str]:
 def build_plan() -> dict[str, object]:
     entries: list[dict[str, object]] = []
     for stem, exports in sorted(ENTRY_EXPORTS.items()):
+        target = ENTRY_PACKAGE_TARGETS.get(stem, stem)
         entries.append(
             {
                 "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
-                "canonical_module": f"{CANONICAL_NAMESPACE}.{stem}.command",
-                "owner": stem,
+                "canonical_module": f"{CANONICAL_NAMESPACE}.{target}.command",
+                "owner": target,
                 "role": "command-entry",
                 "public_exports": list(exports),
             }
@@ -247,7 +260,7 @@ def build_plan() -> dict[str, object]:
         entries.append(
             {
                 "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
-                "canonical_module": f"{CANONICAL_NAMESPACE}.shared.{stem}",
+                "canonical_module": f"{SHARED_NAMESPACE}.{stem}",
                 "owner": "shared",
                 "role": "shared-command-mechanism",
                 "public_exports": [],
@@ -265,8 +278,8 @@ def build_plan() -> dict[str, object]:
         "schema_version": 1,
         "purpose": (
             "Give every CLI entry a predictable package and place multi-file "
-            "support beside its owning entry under the explicit console adapter "
-            "without changing command behavior."
+            "support beside its owning entry while keeping multi-command console "
+            "mechanics outside the command-entry tree, without changing behavior."
         ),
         "baseline_commit": BASELINE_COMMIT,
         "baseline_module_count": len(entries),
@@ -282,8 +295,9 @@ def render_markdown(plan: dict[str, object]) -> str:
         "",
         "This is the exact path-only classification of the formerly flat",
         "`memcommit.commands` modules. Their canonical implementations now live under",
-        "`memcommit.adapters.console.commands`; route closure remains solely in the",
-        "operation evidence ledger.",
+        "`memcommit.adapters.console.commands` for command-owned code and",
+        "`memcommit.adapters.console.shared` for multi-command console mechanics;",
+        "route closure remains solely in the operation evidence ledger.",
         "",
         f"- Baseline modules: {plan['baseline_module_count']}",
         f"- Command entry packages: {plan['entry_package_count']}",
@@ -342,6 +356,8 @@ def verify_layout(plan: dict[str, object]) -> None:
         failures.append(
             f"flat command files remain: {sorted(root_files - {'__init__.py'})}"
         )
+    if (COMMANDS / "shared").exists():
+        failures.append("shared console mechanics remain inside the command tree")
     modules = plan["modules"]
     assert isinstance(modules, list)
     for entry in modules:
@@ -376,7 +392,7 @@ def verify_layout(plan: dict[str, object]) -> None:
     print(
         "command package layout is canonical: "
         f"{len(ENTRY_EXPORTS)} entry packages, {len(removed)} removed command paths, "
-        f"{len(SHARED_MODULES)} shared mechanisms"
+        f"{len(SHARED_MODULES)} shared console mechanisms"
     )
 
 
@@ -427,9 +443,10 @@ def main() -> int:
             if not path.is_file() or path.read_text(encoding="utf-8") != rendered:
                 raise SystemExit(f"stale command package layout artifact: {path}")
         for stem, exports in ENTRY_EXPORTS.items():
-            package_init = COMMANDS / stem / "__init__.py"
+            package = ENTRY_PACKAGE_TARGETS.get(stem, stem)
+            package_init = COMMANDS / package / "__init__.py"
             if package_init.read_text(encoding="utf-8") != render_entry_init(
-                stem, exports
+                package, exports
             ):
                 raise SystemExit(f"stale command package boundary: {package_init}")
         verify_layout(plan)
@@ -439,8 +456,9 @@ def main() -> int:
     OUTPUT_JSON.write_text(rendered_json, encoding="utf-8")
     OUTPUT_MARKDOWN.write_text(rendered_markdown, encoding="utf-8")
     for stem, exports in ENTRY_EXPORTS.items():
-        (COMMANDS / stem / "__init__.py").write_text(
-            render_entry_init(stem, exports),
+        package = ENTRY_PACKAGE_TARGETS.get(stem, stem)
+        (COMMANDS / package / "__init__.py").write_text(
+            render_entry_init(package, exports),
             encoding="utf-8",
         )
     print(f"wrote {len(plan['modules'])} command module records")

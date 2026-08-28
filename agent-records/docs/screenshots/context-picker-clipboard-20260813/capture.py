@@ -33,7 +33,7 @@ _BASE.ROWS = ROWS
 
 
 def _memory_rows(name: str):
-    from memcommit.adapters.console.commands.shared.context_picker import ContextMemoryRow
+    from memcommit.adapters.console.shared.context_picker import ContextMemoryRow
 
     if name == "task-1/description":
         return (
@@ -50,7 +50,7 @@ def _memory_rows(name: str):
 
 
 def _run_success_child() -> None:
-    from memcommit.adapters.console.commands.shared.context_picker import choose_context
+    from memcommit.adapters.console.shared.context_picker import choose_context
 
     writes: list[str] = []
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
@@ -109,7 +109,7 @@ def _run_success_child() -> None:
 
 def _run_failure_child() -> None:
     from memcommit.adapters.console.clipboard import ClipboardError
-    from memcommit.adapters.console.commands.shared.context_picker import choose_context
+    from memcommit.adapters.console.shared.context_picker import choose_context
 
     attempts: list[str] = []
 

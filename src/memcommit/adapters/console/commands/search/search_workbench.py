@@ -27,12 +27,12 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame, TextArea
 
-from memcommit.adapters.console.commands.shared.background_turn import BackgroundExecutorTurn
-from memcommit.adapters.console.commands.shared.command_progress import busy_suffix
+from memcommit.adapters.console.shared.background_turn import BackgroundExecutorTurn
+from memcommit.adapters.console.shared.command_progress import busy_suffix
 from memcommit.core.context_targeting.tui.compact_scope import (
     CompactReadableScopeControl,
 )
-from memcommit.adapters.console.commands.shared.horizontal_choice import (
+from memcommit.adapters.console.shared.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
     render_horizontal_choice,
@@ -60,13 +60,13 @@ from memcommit.adapters.console.commands.search.result_present import (
     SearchResultViewRow,
     render_grouped_search_results,
 )
-from memcommit.adapters.console.commands.shared.save_location_control import SaveLocationView
-from memcommit.adapters.console.commands.shared.semantic_clipboard import (
+from memcommit.adapters.console.shared.save_location_control import SaveLocationView
+from memcommit.adapters.console.shared.semantic_clipboard import (
     PlainTextClipboardReceipt,
     clipboard_failure_receipt,
     copy_plain_text,
 )
-from memcommit.adapters.console.commands.shared.session_help import bind_session_help
+from memcommit.adapters.console.shared.session_help import bind_session_help
 from memcommit.adapters.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceActionResult,

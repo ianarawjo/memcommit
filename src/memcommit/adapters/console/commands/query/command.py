@@ -5,8 +5,8 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.application.ops as ops
-from memcommit.adapters.console.commands.shared.command_progress import CommandProgress
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.command_progress import CommandProgress
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.application.authority.access import (
     ContextAccess,
     context_access_display_facts,
@@ -28,8 +28,8 @@ from memcommit.providers.find_query import (
 from memcommit.adapters.interfaces.tui.operations.query import (
     run_query_workbench,
 )
-from memcommit.adapters.console.commands.shared.session_help import bind_session_help
-from memcommit.adapters.console.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.shared.session_help import bind_session_help
+from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
 )

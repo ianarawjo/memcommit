@@ -37,7 +37,7 @@ from memcommit.application.authority.access import (
     revalidate_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.adapters.console.commands.shared.command_wait import (
+from memcommit.adapters.console.shared.command_wait import (
     CommandWaitView,
     run_command_wait,
 )
@@ -1025,7 +1025,7 @@ def _run_interactive(
     analysis_origin: str | None = None,
 ) -> MeldSession:
     """Run issue and whole-set turns through one shared interactive shell."""
-    from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
+    from memcommit.adapters.console.shared.resolution_workbench_shell import (
         ResolutionDestination,
     )
     from memcommit.application.operations.meld.runtime import (

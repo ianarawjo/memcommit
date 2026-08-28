@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.shared.resolution_workbench_shell import (
     SessionTodoView,
     resolution_report_fragments,
     resolution_seeded_report_fragments,

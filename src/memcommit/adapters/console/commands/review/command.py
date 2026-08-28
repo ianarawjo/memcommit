@@ -24,8 +24,8 @@ from memcommit.application.retained_history.applied_review import (
     list_applied_checkpoint_reviews,
     select_applied_checkpoint_review,
 )
-from memcommit.adapters.console.commands.shared.command_progress import CommandProgress
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.command_progress import CommandProgress
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.adapters.interfaces.cli.review import (
     render_review_snapshot,
     visible_ordinal_index,

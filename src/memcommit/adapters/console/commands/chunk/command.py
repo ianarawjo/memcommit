@@ -11,7 +11,7 @@ from memcommit.application.authority.access import (
 from memcommit.application.operations.chunk.application import chunk
 from memcommit.application.operations.chunk.domain import ChunkMethod, chunk_content
 from memcommit.application.operations.chunk.runtime import apply_chunk_proposals
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.core.context import Memory
 from memcommit.core.context_targeting.loading import (
     resolve_local_context_memory_target,

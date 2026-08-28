@@ -7,8 +7,8 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.adapters.console.clipboard import write_system_clipboard
-from memcommit.adapters.console.commands.shared.command_progress import CommandProgress
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.command_progress import CommandProgress
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.application.operations.fit.judgment import FitJudgmentError
 from memcommit.adapters.interfaces.cli.resolve import (
     render_resolve_plain,

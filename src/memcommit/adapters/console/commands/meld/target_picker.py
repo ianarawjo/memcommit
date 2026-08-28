@@ -15,7 +15,7 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import Style, merge_styles
 from prompt_toolkit.widgets import Frame
 
-from memcommit.adapters.console.commands.shared.tui_primitives import (
+from memcommit.adapters.console.shared.tui_primitives import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )

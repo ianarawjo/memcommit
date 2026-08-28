@@ -30,7 +30,7 @@ from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 from prompt_toolkit.widgets import Frame
 
-from memcommit.adapters.console.commands.shared.horizontal_choice import (
+from memcommit.adapters.console.shared.horizontal_choice import (
     HorizontalChoiceOption,
     HorizontalChoiceState,
     render_horizontal_choice,

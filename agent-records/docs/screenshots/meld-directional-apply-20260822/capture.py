@@ -83,9 +83,9 @@ def _initialize_store(store_root: Path):
 
 
 def _patch_meld_command(store, provider_factory) -> None:
-    import memcommit.adapters.console.commands.shared.command_wait as command_wait
+    import memcommit.adapters.console.shared.command_wait as command_wait
     import memcommit.adapters.console.commands.meld.command as meld_command
-    import memcommit.adapters.console.commands.shared.session_help as session_help
+    import memcommit.adapters.console.shared.session_help as session_help
     import memcommit.adapters.interfaces.tui.components.session_help as tui_session_help
 
     meld_command.MemoryStore = lambda *args, **kwargs: store
@@ -228,7 +228,7 @@ def _run_exact_accept_child(store_root: Path, *, repeated: bool) -> None:
 
 
 def _run_restore_child(store_root: Path, direction: str) -> None:
-    from memcommit.adapters.console.commands.shared.restoration_present import render_command_restore_receipt
+    from memcommit.adapters.console.shared.restoration_present import render_command_restore_receipt
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)

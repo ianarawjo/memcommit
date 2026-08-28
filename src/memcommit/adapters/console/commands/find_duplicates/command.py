@@ -7,7 +7,7 @@ from typing import Annotated, Optional
 import typer
 
 import memcommit.application.ops as ops
-from memcommit.adapters.console.commands.shared.context_operand import (
+from memcommit.adapters.console.shared.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
@@ -16,8 +16,8 @@ from memcommit.adapters.interfaces.cli.quality_findings import (
     render_cleanup_member,
     render_heading,
 )
-from memcommit.adapters.console.commands.shared.command_progress import CommandProgress
-from memcommit.adapters.console.commands.shared.quality_find_workbench import (
+from memcommit.adapters.console.shared.command_progress import CommandProgress
+from memcommit.adapters.console.shared.quality_find_workbench import (
     annotate_quality_find_attempt,
 )
 from memcommit.adapters.console.text import (

@@ -77,7 +77,13 @@ def test_summarize_operation_tui_only_composes_shared_workbench() -> None:
 
 def test_moved_component_symbols_no_longer_live_in_tui_primitives() -> None:
     tree = ast.parse(
-        (PACKAGE / "commands" / "shared" / "tui_primitives.py").read_text()
+        (
+            PACKAGE
+            / "adapters"
+            / "console"
+            / "shared"
+            / "tui_primitives.py"
+        ).read_text()
     )
     definitions = {
         node.name
@@ -122,7 +128,7 @@ def test_no_consumer_reaches_moved_input_symbols_through_legacy_primitives() -> 
         for node in ast.walk(tree):
             if not isinstance(node, ast.ImportFrom):
                 continue
-            if node.module != "memcommit.adapters.console.commands.shared.tui_primitives":
+            if node.module != "memcommit.adapters.console.shared.tui_primitives":
                 continue
             offenders.extend(
                 (str(path.relative_to(ROOT)), alias.name)

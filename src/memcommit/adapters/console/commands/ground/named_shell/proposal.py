@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from typing import Literal, Protocol
 
 
-from memcommit.adapters.console.commands.shared.exact_command_review import (
+from memcommit.adapters.console.shared.exact_command_review import (
     ExactCommandReview,
     render_exact_command_blocks,
 )

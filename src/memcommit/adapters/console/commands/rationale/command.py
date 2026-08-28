@@ -10,18 +10,18 @@ import typer
 
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.persistence.command_ledger.attempts import annotate_memory_report_attempt
-from memcommit.adapters.console.commands.shared.command_progress import progressing_provider_factory
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
-from memcommit.adapters.console.commands.shared.memory_picker import (
+from memcommit.adapters.console.shared.command_progress import progressing_provider_factory
+from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.memory_picker import (
     ScopedMemoryPickerItem,
     choose_memory_report_target,
 )
-from memcommit.adapters.console.commands.shared.memory_report_recents import (
+from memcommit.adapters.console.shared.memory_report_recents import (
     MemoryReportRecentSelection,
     MemoryReportSelectAction,
     choose_memory_report_recent,
 )
-from memcommit.adapters.console.commands.shared.history_target import resolve_explicit_context_history_target
+from memcommit.adapters.console.shared.history_target import resolve_explicit_context_history_target
 from memcommit.adapters.interfaces.tui.viewers.read_only import (
     interactive_report_terminal,
 )

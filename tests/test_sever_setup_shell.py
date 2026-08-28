@@ -7,7 +7,7 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 
 import memcommit.adapters.console.commands.sever.setup_shell as sever_setup_facade
-from memcommit.adapters.console.commands.shared.context_picker import ContextMemoryRow
+from memcommit.adapters.console.shared.context_picker import ContextMemoryRow
 from memcommit.adapters.interfaces.tui.operations import sever as sever_tui
 from memcommit.adapters.interfaces.tui.operations.sever import (
     SeverEndpointSelection,

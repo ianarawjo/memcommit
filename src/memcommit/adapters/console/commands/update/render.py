@@ -12,7 +12,7 @@ from memcommit.application.review_policy import (
 )
 from memcommit.adapters.interfaces.tui.workbenches.impact import ImpactController
 from memcommit.application.reviewing.memory_diff import update_operation_change
-from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.shared.resolution_workbench_shell import (
     ResolutionGlobalStrategy,
     render_resolution_workbench_snapshot,
     run_resolution_workbench_shell,

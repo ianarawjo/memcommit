@@ -7,7 +7,7 @@ from dataclasses import replace
 
 import typer
 
-from memcommit.adapters.console.commands.shared.save_location_control import (
+from memcommit.adapters.console.shared.save_location_control import (
     SaveLocationView,
     save_location_card_lines,
 )

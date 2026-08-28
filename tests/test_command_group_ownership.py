@@ -14,16 +14,16 @@ from typer.core import TyperGroup
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_MODULE = "memcommit.adapters.console.commands.shared.command_group"
+LEGACY_MODULE = "memcommit.adapters.console.shared.command_group"
 OWNER_MODULE = "memcommit.adapters.interfaces.cli.command_group"
 CANONICAL_CONSUMERS = (
-    "write_protection/command.py",
-    "config/command.py",
-    "profile/group.py",
-    "dev/command.py",
-    "profile/command.py",
+    "commands/write_protection/command.py",
+    "commands/config/command.py",
+    "commands/profile/group.py",
+    "commands/dev/command.py",
+    "commands/profile/command.py",
     "shared/root_group.py",
-    "semantic_eval/command.py",
+    "commands/semantic_eval/command.py",
 )
 
 
@@ -114,7 +114,6 @@ def test_legacy_command_group_facade_defines_no_behavior() -> None:
         / "memcommit"
         / "adapters"
         / "console"
-        / "commands"
         / "shared"
         / "command_group.py"
     )
@@ -145,19 +144,18 @@ def test_legacy_command_group_facade_defines_no_behavior() -> None:
 
 
 def test_clean_command_groups_import_the_interface_owner() -> None:
-    commands = (
+    console = (
         REPOSITORY_ROOT
         / "src"
         / "memcommit"
         / "adapters"
         / "console"
-        / "commands"
     )
 
     for filename in CANONICAL_CONSUMERS:
-        source = (commands / filename).read_text(encoding="utf-8")
+        source = (console / filename).read_text(encoding="utf-8")
         assert (
             "from memcommit.adapters.interfaces.cli.command_group import "
             "CanonicalCommandGroup" in source
         )
-        assert "from memcommit.adapters.console.commands.shared.command_group import" not in source
+        assert "from memcommit.adapters.console.shared.command_group import" not in source

@@ -9,7 +9,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.commands.shared.command_group import CanonicalCommandGroup
+from memcommit.adapters.console.shared.command_group import CanonicalCommandGroup
 
 from memcommit.application.operations.atomize.domain import (
     AtomizeFrameOrigin,
@@ -32,11 +32,11 @@ from memcommit.adapters.console.commands.atomize.workbench.screen import (
     render_atomize_workbench_snapshot,
     run_atomize_workbench_shell,
 )
-from memcommit.adapters.console.commands.shared.command_progress import (
+from memcommit.adapters.console.shared.command_progress import (
     CommandProgress,
     progressing_provider_factory,
 )
-from memcommit.adapters.console.commands.shared.context_operand import (
+from memcommit.adapters.console.shared.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )

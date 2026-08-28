@@ -10,9 +10,9 @@ import sys
 
 
 REPOSITORY = Path(__file__).resolve().parents[1]
-COMMANDS = (
-    REPOSITORY / "src" / "memcommit" / "adapters" / "console" / "commands"
-)
+CONSOLE = REPOSITORY / "src" / "memcommit" / "adapters" / "console"
+COMMANDS = CONSOLE / "commands"
+SHARED = CONSOLE / "shared"
 PLAN = json.loads(
     (
         REPOSITORY
@@ -29,12 +29,30 @@ def test_commands_root_contains_only_packages() -> None:
         entry["owner"] for entry in PLAN["modules"] if entry["role"] == "command-entry"
     }
     assert len(entry_packages) == 64
-    assert {path.name for path in COMMANDS.iterdir() if path.is_dir()} >= (
-        entry_packages | {"shared"}
-    )
-    for package in entry_packages:
+    command_packages = {
+        path.name
+        for path in COMMANDS.iterdir()
+        if path.is_dir() and not path.name.startswith("__")
+    }
+    assert "shared" not in command_packages
+    assert command_packages >= entry_packages
+    for package in command_packages:
         assert (COMMANDS / package / "__init__.py").is_file()
         assert (COMMANDS / package / "command.py").is_file()
+
+
+def test_multi_command_mechanisms_are_console_siblings() -> None:
+    shared_entries = [
+        entry for entry in PLAN["modules"] if entry["role"] == "shared-command-mechanism"
+    ]
+    assert len(shared_entries) == 41
+    assert (SHARED / "__init__.py").is_file()
+    for entry in shared_entries:
+        module = entry["canonical_module"]
+        assert module.startswith("memcommit.adapters.console.shared.")
+        assert (
+            REPOSITORY / "src" / (module.replace(".", "/") + ".py")
+        ).is_file()
 
 
 def test_entry_packages_publish_only_their_declared_cli_surface() -> None:

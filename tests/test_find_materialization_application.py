@@ -15,7 +15,7 @@ import memcommit.application.operations.search.materialization_application as ma
 import memcommit.application.operations.search.materialization_runtime as materialization_runtime
 import memcommit.persistence.store as store_module
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.adapters.console.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
 from memcommit.adapters.console.commands.search.search_workbench import FindSearchWorkbenchResult

@@ -7,7 +7,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.adapters.console.commands.shared.exact_command_review import (
+from memcommit.adapters.console.shared.exact_command_review import (
     ExactCommandReview,
     format_exact_command,
 )

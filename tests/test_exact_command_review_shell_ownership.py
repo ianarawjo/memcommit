@@ -12,7 +12,7 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_NAME = "memcommit.adapters.console.commands.shared.exact_command_review_shell"
+LEGACY_NAME = "memcommit.adapters.console.shared.exact_command_review_shell"
 CANONICAL_NAME = "memcommit.adapters.interfaces.tui.components.exact_command_review.shell"
 
 
@@ -58,7 +58,7 @@ def test_review_shell_is_exported_by_the_component_package() -> None:
 
 
 def test_legacy_review_shell_facade_defines_no_behavior() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/shared/exact_command_review_shell.py"
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/shared/exact_command_review_shell.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
 
     assert not any(

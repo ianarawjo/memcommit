@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
-from memcommit.adapters.console.commands.shared.history_picker import (
+from memcommit.adapters.console.shared.history_picker import (
     HistoryBackNavigation,
     HistoryDetailView,
     HistoryPickerEntry,

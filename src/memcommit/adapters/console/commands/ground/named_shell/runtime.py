@@ -24,7 +24,7 @@ from memcommit.adapters.console.commands.ground.shell import (
     GROUND_CONTEXTS_FRAME_HEIGHT,
     GROUND_GOAL_FRAME_HEIGHT,
 )
-from memcommit.adapters.console.commands.shared.session_help import bind_session_help
+from memcommit.adapters.console.shared.session_help import bind_session_help
 from memcommit.adapters.interfaces.tui.components.in_frame_input import (
     InFrameInputManager,
     InFrameInputSection,

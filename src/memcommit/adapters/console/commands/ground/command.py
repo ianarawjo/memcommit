@@ -17,7 +17,7 @@ from memcommit.adapters.console.commands.ground.shell import (
     proposal_argv,
     run_ground_shell,
 )
-from memcommit.adapters.console.commands.shared.exact_command_review import ExactCommandReview
+from memcommit.adapters.console.shared.exact_command_review import ExactCommandReview
 from memcommit.adapters.console.commands.ground.named_shell import (
     GroundCommandProposal,
     run_named_ground_shell,

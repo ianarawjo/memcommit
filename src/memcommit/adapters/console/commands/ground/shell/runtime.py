@@ -24,11 +24,11 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import Frame
 
-from memcommit.adapters.console.commands.shared.command_progress import (
+from memcommit.adapters.console.shared.command_progress import (
     BUSY_FRAMES,
     BUSY_INTERVAL_SECONDS,
 )
-from memcommit.adapters.console.commands.shared.session_help import bind_session_help
+from memcommit.adapters.console.shared.session_help import bind_session_help
 from memcommit.adapters.console.terminal import require_interactive_terminal
 from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (

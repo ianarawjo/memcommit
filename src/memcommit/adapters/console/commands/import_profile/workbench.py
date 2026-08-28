@@ -17,11 +17,11 @@ from memcommit.core.context_targeting.tui.picker import (
 from memcommit.adapters.interfaces.tui.components.context_reach_dialog import (
     choose_context_reach,
 )
-from memcommit.adapters.console.commands.shared.exact_command_review import ExactCommandReview
-from memcommit.adapters.console.commands.shared.exact_command_review_shell import approve_exact_command
+from memcommit.adapters.console.shared.exact_command_review import ExactCommandReview
+from memcommit.adapters.console.shared.exact_command_review_shell import approve_exact_command
 from memcommit.adapters.interfaces.tui.components.exact_name_dialog import choose_exact_name
 from memcommit.adapters.interfaces.tui.components.flat_selection_dialog import choose_flat_option
-from memcommit.adapters.console.commands.shared.tui_primitives import ExactNameFieldView
+from memcommit.adapters.console.shared.tui_primitives import ExactNameFieldView
 from memcommit.core.context import Memory, MemoryRef
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.core.context_targeting.tui.name_editor import (

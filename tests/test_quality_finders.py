@@ -1012,7 +1012,7 @@ def test_quality_finder_all_aliases_freeze_one_profile_wide_source(
         )
     authorized = []
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench.authorize_combination",
+        "memcommit.adapters.console.shared.quality_find_workbench.authorize_combination",
         lambda accesses: authorized.append(
             tuple(access.display_name for access in accesses)
         ),
@@ -1073,7 +1073,7 @@ def test_quality_finder_all_authority_failure_precedes_provider_connection(
     store.save(context)
     store.set_current(context.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.quality_find_workbench.authorize_combination",
+        "memcommit.adapters.console.shared.quality_find_workbench.authorize_combination",
         lambda _accesses: (_ for _ in ()).throw(ProfileError("combine denied")),
     )
     monkeypatch.setattr(

@@ -20,7 +20,7 @@ from memcommit.adapters.console.commands.sever.sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
 )
-from memcommit.adapters.console.commands.shared.resolution_workbench_shell import (
+from memcommit.adapters.console.shared.resolution_workbench_shell import (
     resolution_report_fragments,
     resolution_viewer_fragments,
     session_review_action_view,
@@ -1078,7 +1078,7 @@ def test_sever_routes_its_local_output_to_decision_free_auto_accept(
         return ResolutionWorkbenchAction(kind="CLOSE")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.shared.resolution_workbench_shell.run_resolution_workbench_shell",
+        "memcommit.adapters.console.shared.resolution_workbench_shell.run_resolution_workbench_shell",
         next_action,
     )
 

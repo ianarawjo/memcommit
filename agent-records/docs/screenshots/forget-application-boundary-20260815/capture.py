@@ -176,7 +176,7 @@ def _child_verify(store_root: Path) -> None:
 
 
 def _child_restore(store_root: Path, action: str) -> None:
-    from memcommit.adapters.console.commands.shared.restoration_present import render_command_restore_receipt
+    from memcommit.adapters.console.shared.restoration_present import render_command_restore_receipt
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)

@@ -48,7 +48,7 @@ class _SlowProvider:
 
 
 def _patch_shared_wait_help() -> None:
-    import memcommit.adapters.console.commands.shared.session_help as session_help
+    import memcommit.adapters.console.shared.session_help as session_help
     import memcommit.adapters.interfaces.tui.components.session_help as tui_session_help
 
     session_help.current_help_entries = lambda: ()

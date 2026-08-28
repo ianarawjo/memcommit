@@ -12,7 +12,7 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_NAME = "memcommit.adapters.console.commands.shared.direct_item_placement"
+LEGACY_NAME = "memcommit.adapters.console.shared.direct_item_placement"
 CANONICAL_NAME = "memcommit.adapters.interfaces.tui.components.direct_item_placement"
 
 
@@ -55,7 +55,7 @@ def test_legacy_placement_path_exposes_canonical_objects() -> None:
 
 
 def test_legacy_placement_facade_defines_no_behavior() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/shared/direct_item_placement.py"
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/shared/direct_item_placement.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
 
     assert not any(

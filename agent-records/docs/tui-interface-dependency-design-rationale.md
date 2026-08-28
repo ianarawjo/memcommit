@@ -27,7 +27,7 @@ embedders while keeping one set of implementation globals.
 
 The operation-neutral read-only table follows the same module-alias boundary:
 its implementation lives under `memcommit.adapters.interfaces.tui.components.table`,
-while `memcommit.adapters.console.commands.shared.tui_table` resolves to that exact module. The move is
+while `memcommit.adapters.console.shared.tui_table` resolves to that exact module. The move is
 ownership-only; table geometry, text, exceptions, and selected-cell styling
 remain unchanged.
 

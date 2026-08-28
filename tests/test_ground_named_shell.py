@@ -11,7 +11,7 @@ from prompt_toolkit.output import DummyOutput
 from prompt_toolkit.utils import get_cwidth
 
 import memcommit.adapters.console.commands.ground.named_shell.runtime as ground_named_shell_module
-from memcommit.adapters.console.commands.shared.exact_command_review import ExactCommandReview
+from memcommit.adapters.console.shared.exact_command_review import ExactCommandReview
 from memcommit.adapters.console.commands.ground.named_shell import (
     GroundCommandProposal,
     _line,

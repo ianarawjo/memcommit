@@ -58,7 +58,7 @@ from memcommit.adapters.console.text import display_escape_text
 from memcommit.adapters.console.commands.atomize.workbench.adapter import (
     present_atomize_workbench,
 )
-from memcommit.adapters.console.commands.shared.command_progress import progressing_provider_factory
+from memcommit.adapters.console.shared.command_progress import progressing_provider_factory
 from memcommit.adapters.console.commands.atomize.sessions import (
     atomize_analysis_was_applied,
     atomize_planned_output_was_applied,
@@ -67,11 +67,11 @@ from memcommit.adapters.console.commands.atomize.sessions import (
     load_saved_atomize_analysis,
     revalidate_saved_atomize_analysis,
 )
-from memcommit.adapters.console.commands.shared.endpoint_setup_flows import choose_atomize_setup
+from memcommit.adapters.console.shared.endpoint_setup_flows import choose_atomize_setup
 from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,
 )
-from memcommit.adapters.console.commands.shared.context_operand import (
+from memcommit.adapters.console.shared.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
@@ -1146,7 +1146,7 @@ def cmd(
             and not applying_planned_output
             and not store.context_exists(save_as)
         ):
-            from memcommit.adapters.console.commands.shared.save_location_review import (
+            from memcommit.adapters.console.shared.save_location_review import (
                 review_save_location,
             )
 

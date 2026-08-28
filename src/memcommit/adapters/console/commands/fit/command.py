@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.commands.shared.command_progress import CommandProgress
+from memcommit.adapters.console.shared.command_progress import CommandProgress
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.application.operations.fit.ground_report import FitError, FitReport
 from memcommit.application.operations.fit.application import (

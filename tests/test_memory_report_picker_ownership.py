@@ -12,7 +12,7 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_MODULE = "memcommit.adapters.console.commands.shared.memory_picker"
+LEGACY_MODULE = "memcommit.adapters.console.shared.memory_picker"
 OWNER_MODULE = "memcommit.adapters.interfaces.tui.components.memory_report_picker"
 
 
@@ -55,7 +55,7 @@ def test_memory_picker_legacy_path_is_the_canonical_module_object() -> None:
 
 
 def test_memory_picker_legacy_facade_defines_no_behavior() -> None:
-    source_path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/shared/memory_picker.py"
+    source_path = REPOSITORY_ROOT / "src/memcommit/adapters/console/shared/memory_picker.py"
     tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
 
     assert not any(

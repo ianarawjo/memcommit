@@ -32,7 +32,7 @@ from memcommit.application.authority.access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.adapters.console.commands.shared.readable_context_catalog import (
+from memcommit.adapters.console.shared.readable_context_catalog import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
     freeze_readable_context_catalog,
