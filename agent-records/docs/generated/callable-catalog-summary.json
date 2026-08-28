@@ -6,7 +6,7 @@
     "function": 8096,
     "lambda": 604
   },
-  "module_count": 1033,
+  "module_count": 1032,
   "operation_count": 66,
   "operation_curated_states": {
     "CLOSED": 37,
@@ -14,9 +14,9 @@
     "UNREVIEWED": 27
   },
   "operation_observed_shapes": {
-    "BOUNDED_INTERNAL": 27,
+    "BOUNDED_INTERNAL": 28,
     "COMMAND_ONLY": 18,
-    "MULTI_ADAPTER": 11,
+    "MULTI_ADAPTER": 10,
     "PARTIAL_SURFACE": 10
   },
   "visibility": {
