@@ -21,7 +21,7 @@ from memcommit.adapters.console.commands.edit.input_records import parse_input_r
 from memcommit.adapters.console.shared.batch_input_source import read_batch_input_text
 from memcommit.adapters.console.terminal import is_interactive_terminal
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.operations.edit import choose_edit_setup
+from memcommit.adapters.console.commands.edit.workbench import choose_edit_setup
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore

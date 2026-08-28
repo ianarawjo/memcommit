@@ -1,4 +1,4 @@
-"""Compose Edit's selector with UPDATE-aware Context access."""
+"""Compose Edit's console workbench with UPDATE-aware Context access."""
 
 from __future__ import annotations
 
@@ -12,8 +12,8 @@ from memcommit.core.context_targeting.model import DirectMemoryTarget
 from memcommit.core.context_targeting.tui.picker import context_memory_rows
 from memcommit.application.operations.edit.application import FrozenEditPlan, prepare_edit
 from memcommit.application.operations.edit.runtime import MemoryStoreEditPort
-from memcommit.adapters.interfaces.tui.operations.edit.model import EditTuiSetup
-from memcommit.adapters.interfaces.tui.operations.edit.screen import run_edit_tui
+from memcommit.adapters.console.commands.edit.workbench.model import EditTuiSetup
+from memcommit.adapters.console.commands.edit.workbench.screen import run_edit_tui
 
 
 def build_edit_tui_setup(

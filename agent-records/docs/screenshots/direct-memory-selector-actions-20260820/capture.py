@@ -43,9 +43,9 @@ def _configure_isolated_store(store_root: Path) -> None:
     def empty_navigation(_store):
         return SimpleNamespace(names=(), annotations={})
 
-    import memcommit.adapters.interfaces.tui.operations.edit.adapter as edit_adapter
+    import memcommit.adapters.console.commands.edit.workbench.setup as edit_setup
 
-    edit_adapter.freeze_granted_context_navigation = empty_navigation
+    edit_setup.freeze_granted_context_navigation = empty_navigation
 
 
 def _initialize_reference() -> None:

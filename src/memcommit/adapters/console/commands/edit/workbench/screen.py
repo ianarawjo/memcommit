@@ -1,4 +1,4 @@
-"""Interactive direct-Memory selection and exact replacement editor."""
+"""Interactive direct-Memory selection and exact replacement workbench."""
 
 from __future__ import annotations
 
@@ -59,7 +59,7 @@ from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.adapters.interfaces.tui.operations.edit.model import EditTuiSetup
+from memcommit.adapters.console.commands.edit.workbench.model import EditTuiSetup
 
 
 EDIT_COMMAND_FORM = ExactCommandForm(

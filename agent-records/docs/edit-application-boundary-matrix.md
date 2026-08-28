@@ -20,8 +20,16 @@ positional selector or content.
 | UPDATE access, direct-Memory/profile search, drift check, save, checkpoint | `memcommit.application.operations.edit.runtime.MemoryStoreEditPort` | Capture current once; freeze exact canonical Context UID/digest and full Memory UID/content; changed Context or Memory publishes nothing. Bare search enumerates ordinary local direct frames only. The former `memcommit.edit_runtime` path remains a module-identity compatibility alias. |
 | Prefix grammar | `memcommit.application.ops.resolve_direct_memory` | Exact UID or one unambiguous prefix across direct items; MemoryRef, embedded Context, and query rows are never editable Memories. |
 | Explicit and batch CLI composition | `memcommit.adapters.console.commands.edit.command` | Positional selector/content routes to the exact application; `--input` retains atomic UID-tab-content batch parsing and its existing checkpoint. |
-| Interactive setup | `memcommit.adapters.interfaces.tui.operations.edit` | Shared direct-Memory selector -> prefilled multiline replacement -> proposed exact command -> `FrozenEditPlan`; process-local editing has no durable effect. |
+| Interactive setup | `memcommit.adapters.console.commands.edit.workbench` | Shared direct-Memory selector -> prefilled multiline replacement -> proposed exact command -> `FrozenEditPlan`; process-local editing has no durable effect. |
 | Shared selector mechanics | `memcommit.core.context_targeting.tui.direct_memory_selector` | Context cursor, Memory hover, and checked exact Memory remain distinct; the control assigns no edit/snapshot/embed meaning. |
+
+Edit's process-local model, UPDATE-aware setup composition, and interactive
+screen are co-located under `commands/edit/workbench`. The former
+`interfaces/tui/operations/edit` path is removed without a compatibility
+facade, while shared selector, input, focus, frame, and exact-command controls
+remain in their operation-neutral owners. This relocation changes physical
+ownership only; interaction states and the existing ordered TUI captures remain
+valid.
 
 ## Freeze and Apply
 

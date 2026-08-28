@@ -1,11 +1,11 @@
-"""Interactive Edit adapter."""
+"""Interactive Edit console workbench."""
 
-from memcommit.adapters.interfaces.tui.operations.edit.adapter import (
+from memcommit.adapters.console.commands.edit.workbench.setup import (
     build_edit_tui_setup,
     choose_edit_setup,
 )
-from memcommit.adapters.interfaces.tui.operations.edit.model import EditTuiSetup
-from memcommit.adapters.interfaces.tui.operations.edit.screen import (
+from memcommit.adapters.console.commands.edit.workbench.model import EditTuiSetup
+from memcommit.adapters.console.commands.edit.workbench.screen import (
     EDIT_COMMAND_FORM,
     edit_exact_command_review,
     parse_edit_command_argv,

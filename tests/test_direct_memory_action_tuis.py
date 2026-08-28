@@ -12,12 +12,12 @@ from memcommit.application.operations.edit.application import EditRequest, Froze
 from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     format_exact_command,
 )
-from memcommit.adapters.interfaces.tui.operations.edit import (
+from memcommit.adapters.console.commands.edit.workbench import (
     EditTuiSetup,
     parse_edit_command_argv,
     run_edit_tui,
 )
-from memcommit.adapters.interfaces.tui.operations.edit.screen import (
+from memcommit.adapters.console.commands.edit.workbench.screen import (
     edit_exact_command_review,
 )
 from memcommit.adapters.interfaces.tui.operations.reference import (

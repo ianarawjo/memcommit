@@ -1,4 +1,4 @@
-"""Typed setup for interactive exact Edit."""
+"""Typed setup for the interactive exact Edit console workbench."""
 
 from __future__ import annotations
 
