@@ -7,7 +7,7 @@ from prompt_toolkit.output import Output
 
 from memcommit.application.operations.elaborate.application import ElaborateResult
 from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import ClipboardWriter
-from memcommit.adapters.interfaces.tui.operations.elaborate.adapter import (
+from memcommit.adapters.console.commands.elaborate.viewer.projection import (
     project_elaborate_clipboard,
     project_elaborate_result,
 )

@@ -141,7 +141,7 @@ def _distill_document():
 def _elaborate_document():
     from memcommit.application.operations.elaborate.model import ElaborateAnalysis, ElaboratedRule, ElaborateMode
     from memcommit.application.operations.elaborate.application import ElaborateResult
-    from memcommit.adapters.interfaces.tui.operations.elaborate.adapter import (
+    from memcommit.adapters.console.commands.elaborate.viewer.projection import (
         project_elaborate_result,
     )
 

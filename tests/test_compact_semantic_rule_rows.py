@@ -20,9 +20,9 @@ from memcommit.application.operations.elaborate.model import (
 from memcommit.application.operations.elaborate.application import ElaborateRequest
 from memcommit.application.operations.elaborate.runtime import execute_elaborate
 from memcommit.adapters.interfaces.cli.distill import distill_result_text
-from memcommit.adapters.interfaces.cli.elaborate import elaborate_result_text
+from memcommit.adapters.console.commands.elaborate.proposal import elaborate_result_text
 from memcommit.adapters.interfaces.tui.operations.distill import project_distill_clipboard
-from memcommit.adapters.interfaces.tui.operations.elaborate import project_elaborate_clipboard
+from memcommit.adapters.console.commands.elaborate.viewer import project_elaborate_clipboard
 from memcommit.persistence.store import MemoryStore
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,

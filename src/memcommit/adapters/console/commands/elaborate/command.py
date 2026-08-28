@@ -6,8 +6,10 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.bootstrap import build_elaborate_console_runner
 from memcommit.adapters.console.clipboard import write_system_clipboard
+from memcommit.adapters.console.commands.elaborate.runner import (
+    build_elaborate_console_runner,
+)
 from memcommit.adapters.console.commands.shared.command_progress import CommandProgress
 from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
 from memcommit.application.operations.elaborate.model import ElaborateError, ElaborateMode

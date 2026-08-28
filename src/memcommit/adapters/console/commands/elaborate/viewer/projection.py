@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from memcommit.application.operations.elaborate.model import ElaborateMode
 from memcommit.application.operations.elaborate.application import ElaborateResult
-from memcommit.adapters.interfaces.cli.elaborate import elaborate_result_text
+from memcommit.adapters.console.commands.elaborate.proposal import elaborate_result_text
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.operations.elaborate.model import (
+from memcommit.adapters.console.commands.elaborate.viewer.model import (
     ElaborateClipboardProjection,
 )
 from memcommit.adapters.interfaces.tui.viewers.semantic import (

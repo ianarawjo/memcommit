@@ -387,6 +387,18 @@ an input-composer TUI. That is intentional for this slice: CLI, Python, or
 agent input is validated before provider construction, while a future composer
 can remain a presentation adapter over the same request.
 
+The console-specific proposal presentation is co-located under
+`memcommit.adapters.console.commands.elaborate`. `proposal.py` owns the stable
+plain-text projection, `viewer/` owns the read-only semantic document and
+clipboard projection, and `runner.py` selects between those presentations for
+the Ground proposal route. These values are proposals rather than receipts:
+they explicitly remain `REVIEW ONLY`, `SUGGESTED`, and `UNVERIFIED`, and their
+presentation proves no durable effect. Apply and Ground-adoption receipts stay
+at their separate mutation boundary. The former operation-specific CLI/TUI
+paths and the generic-bootstrap Elaborate factory are removed without facades;
+this is an ownership relocation and does not alter proposal text, Viewer
+interaction, execution, adoption, or authority behavior.
+
 ## Remaining limits
 
 - no durable proposal/review session;

@@ -56,7 +56,7 @@ from memcommit.application.operations.ground.workspace_history import (
     build_ground_workspace_command_stack,
     undo_ground_workspace_command,
 )
-from memcommit.adapters.interfaces.tui.operations.elaborate import (
+from memcommit.adapters.console.commands.elaborate.viewer import (
     project_elaborate_clipboard,
     project_elaborate_result,
     run_elaborate_tui,
@@ -840,6 +840,32 @@ def test_elaborate_shared_viewer_copies_one_proposal_or_all() -> None:
     assert returned == result
     assert copied[0].startswith("[Suggested] [Unverified]")
     assert "PROPOSAL OVERVIEW" in copied[1]
+
+
+def test_elaborate_console_owns_proposal_viewer_and_runner_without_facades() -> None:
+    repository_root = Path(__file__).resolve().parents[1]
+    command_root = (
+        repository_root / "src/memcommit/adapters/console/commands/elaborate"
+    )
+    retired_tui_root = (
+        repository_root
+        / "src/memcommit/adapters/interfaces/tui/operations/elaborate"
+    )
+
+    assert (command_root / "proposal.py").is_file()
+    assert (command_root / "runner.py").is_file()
+    assert (command_root / "viewer/model.py").is_file()
+    assert (command_root / "viewer/projection.py").is_file()
+    assert (command_root / "viewer/screen.py").is_file()
+    assert not tuple(retired_tui_root.glob("*.py"))
+    assert not (
+        repository_root / "src/memcommit/adapters/interfaces/cli/elaborate.py"
+    ).exists()
+
+    bootstrap_source = (
+        repository_root / "src/memcommit/bootstrap.py"
+    ).read_text(encoding="utf-8")
+    assert "build_elaborate_console_runner" not in bootstrap_source
 
 
 def _bound_ground(store: MemoryStore):
