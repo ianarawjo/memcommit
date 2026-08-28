@@ -7,9 +7,9 @@ import json
 from dataclasses import dataclass, field
 from typing import Literal, Protocol
 
-from memcommit.application.operations.find.literal_application import (
-    LiteralFindRequest,
-    LiteralFindSpan,
+from memcommit.application.operations.find.application import (
+    FindRequest,
+    FindSpan,
     compile_find_pattern,
 )
 
@@ -41,7 +41,7 @@ class ReplaceRequest:
 
     def __post_init__(self) -> None:
         try:
-            LiteralFindRequest(
+            FindRequest(
                 pattern=self.pattern,
                 target_names=self.target_names,
                 include_descendants=self.include_descendants,
@@ -108,7 +108,7 @@ class ReplaceMemoryChange:
     memory_uid: str
     before_content: str
     after_content: str
-    spans: tuple[LiteralFindSpan, ...]
+    spans: tuple[FindSpan, ...]
 
     def __post_init__(self) -> None:
         if not isinstance(self.memory_uid, str) or not self.memory_uid:
@@ -122,7 +122,7 @@ class ReplaceMemoryChange:
         previous_end = -1
         for span in self.spans:
             if (
-                not isinstance(span, LiteralFindSpan)
+                not isinstance(span, FindSpan)
                 or span.start < previous_end
                 or self.before_content[span.start : span.end] != span.text
             ):
@@ -180,7 +180,9 @@ class FrozenReplacePlan:
         if (
             not isinstance(self.plan_digest, str)
             or len(self.plan_digest) != 64
-            or any(character not in "0123456789abcdef" for character in self.plan_digest)
+            or any(
+                character not in "0123456789abcdef" for character in self.plan_digest
+            )
         ):
             raise ReplaceError("Replace plan digest is invalid.")
 
@@ -203,9 +205,7 @@ class FrozenReplacePlan:
     @property
     def occurrence_count(self) -> int:
         return sum(
-            len(match.spans)
-            for context in self.contexts
-            for match in context.matches
+            len(match.spans) for context in self.contexts for match in context.matches
         )
 
 
@@ -240,7 +240,7 @@ class ReplacePort(Protocol):
     def apply(self, plan: FrozenReplacePlan) -> ReplaceApplyResult: ...
 
 
-def _replace_spans(content: str, spans: tuple[LiteralFindSpan, ...], value: str) -> str:
+def _replace_spans(content: str, spans: tuple[FindSpan, ...], value: str) -> str:
     pieces: list[str] = []
     cursor = 0
     for span in spans:
@@ -308,7 +308,7 @@ def plan_replace(request: ReplaceRequest, *, port: ReplacePort) -> FrozenReplace
     if not isinstance(request, ReplaceRequest):
         raise ReplaceInputError("Replace requires a ReplaceRequest.")
     compiled = compile_find_pattern(
-        LiteralFindRequest(
+        FindRequest(
             pattern=request.pattern,
             target_names=request.target_names,
             include_descendants=request.include_descendants,
@@ -325,7 +325,7 @@ def plan_replace(request: ReplaceRequest, *, port: ReplacePort) -> FrozenReplace
         changes: list[ReplaceMemoryChange] = []
         for memory in context.memories:
             spans = tuple(
-                LiteralFindSpan(match.start(), match.end(), match.group(0))
+                FindSpan(match.start(), match.end(), match.group(0))
                 for match in compiled.finditer(memory.content)
             )
             if not spans:

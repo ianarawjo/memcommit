@@ -2,27 +2,29 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.console.commands.find.source_row import render_literal_find_reference_row
+from memcommit.adapters.console.commands.find.source_row import (
+    render_find_reference_row,
+)
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.application.operations.find.literal_application import (
-    LiteralFindMatch,
-    LiteralFindResult,
+from memcommit.application.operations.find.application import (
+    FindMatch,
+    FindResult,
 )
 
 
-DEFAULT_LITERAL_FIND_PREVIEW_MATCHES = 10
+DEFAULT_FIND_PREVIEW_MATCHES = 10
 
 
-def literal_find_result_header_lines(
-    result: LiteralFindResult,
+def find_result_header_lines(
+    result: FindResult,
     *,
     visible_range: tuple[int, int] | None = None,
     all_readable_contexts: bool = False,
 ) -> tuple[str, str, str, str]:
     """Project stable Find chrome with an optional zero-based visible range."""
 
-    if not isinstance(result, LiteralFindResult):
-        raise TypeError("Find result presentation requires a LiteralFindResult.")
+    if not isinstance(result, FindResult):
+        raise TypeError("Find result presentation requires a FindResult.")
     if type(all_readable_contexts) is not bool:
         raise TypeError("Find all-readable presentation choice must be a boolean.")
     if visible_range is not None:
@@ -60,8 +62,8 @@ def literal_find_result_header_lines(
     )
 
 
-def render_literal_find_result(
-    result: LiteralFindResult,
+def render_find_result(
+    result: FindResult,
     *,
     match_limit: int | None = None,
     all_readable_contexts: bool = False,
@@ -79,12 +81,10 @@ def render_literal_find_result(
         result.matches if match_limit is None else result.matches[:match_limit]
     )
     visible_range = (
-        (0, len(shown_matches))
-        if len(shown_matches) < len(result.matches)
-        else None
+        (0, len(shown_matches)) if len(shown_matches) < len(result.matches) else None
     )
     lines = list(
-        literal_find_result_header_lines(
+        find_result_header_lines(
             result,
             visible_range=visible_range,
             all_readable_contexts=all_readable_contexts,
@@ -100,9 +100,7 @@ def render_literal_find_result(
         return "\n".join(lines)
     lines.append("")
     lines.extend(
-        safe_terminal_text(
-            render_literal_find_reference_row(match, number=index)
-        )
+        safe_terminal_text(render_find_reference_row(match, number=index))
         for index, match in enumerate(shown_matches, start=1)
     )
     hidden_count = len(result.matches) - len(shown_matches)
@@ -115,17 +113,15 @@ def render_literal_find_result(
     return "\n".join(lines)
 
 
-def project_literal_find_match(match: LiteralFindMatch, *, number: int = 1) -> str:
+def project_find_match(match: FindMatch, *, number: int = 1) -> str:
     """Project one focused result for the shared lowercase-y copy contract."""
 
-    return safe_terminal_text(
-        render_literal_find_reference_row(match, number=number)
-    )
+    return safe_terminal_text(render_find_reference_row(match, number=number))
 
 
 __all__ = [
-    "DEFAULT_LITERAL_FIND_PREVIEW_MATCHES",
-    "literal_find_result_header_lines",
-    "project_literal_find_match",
-    "render_literal_find_result",
+    "DEFAULT_FIND_PREVIEW_MATCHES",
+    "find_result_header_lines",
+    "project_find_match",
+    "render_find_result",
 ]

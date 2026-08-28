@@ -20,10 +20,11 @@ from memcommit.core.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.adapters.interfaces.cli.find import (
-    DEFAULT_LITERAL_FIND_PREVIEW_MATCHES,
-    render_literal_find_result,
+from memcommit.adapters.console.commands.find.presentation import (
+    DEFAULT_FIND_PREVIEW_MATCHES,
+    render_find_result,
 )
+from memcommit.adapters.console.commands.find.compact import run_compact_find_result
 from memcommit.adapters.console import (
     ConsoleMode,
     ConsoleModeError,
@@ -31,17 +32,16 @@ from memcommit.adapters.console import (
     resolve_console_mode,
 )
 from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.interfaces.tui.operations.find import (
-    LiteralFindTuiSetup,
-    run_compact_literal_find_result,
-    run_literal_find_tui,
+from memcommit.adapters.console.commands.find.workbench import (
+    FindTuiSetup,
+    run_find_workbench,
 )
-from memcommit.application.operations.find.literal_application import (
-    LiteralFindError,
-    LiteralFindRequest,
-    LiteralFindResult,
+from memcommit.application.operations.find.application import (
+    FindError,
+    FindRequest,
+    FindResult,
 )
-from memcommit.application.operations.find.literal_runtime import execute_literal_find
+from memcommit.application.operations.find.runtime import execute_find
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
@@ -191,7 +191,7 @@ def cmd(
         request = (
             None
             if pattern is None
-            else LiteralFindRequest(
+            else FindRequest(
                 pattern=pattern,
                 target_names=target_names,
                 include_descendants=traversal.include_descendants,
@@ -201,8 +201,8 @@ def cmd(
             )
         )
 
-        def execute(next_request: LiteralFindRequest) -> LiteralFindResult:
-            return execute_literal_find(next_request, catalog=catalog)
+        def execute(next_request: FindRequest) -> FindResult:
+            return execute_find(next_request, catalog=catalog)
 
         # A supplied pattern is already an executable request, so never send it
         # through full-screen setup implicitly. Short/static results stay
@@ -219,9 +219,9 @@ def cmd(
                 for name in names
                 if (access := catalog.access_for(name)).is_granted
             )
-            outcome = run_literal_find_tui(
+            outcome = run_find_workbench(
                 request,
-                setup=LiteralFindTuiSetup(
+                setup=FindTuiSetup(
                     names=names,
                     current_name=current_name,
                     initial_targets=target_names,
@@ -239,23 +239,21 @@ def cmd(
                 mode is ConsoleMode.AUTO
                 and terminal.is_interactive()
                 and not show_all_results
-                and len(result.matches) > DEFAULT_LITERAL_FIND_PREVIEW_MATCHES
+                and len(result.matches) > DEFAULT_FIND_PREVIEW_MATCHES
             ):
                 # A completed one-shot request stays in the primary terminal
                 # flow. Only its bounded rows become interactive; setup and
                 # result semantics remain outside the shared pager shell.
-                run_compact_literal_find_result(
+                run_compact_find_result(
                     result,
                     all_readable_contexts=all_contexts,
                 )
             else:
                 typer.echo(
-                    render_literal_find_result(
+                    render_find_result(
                         result,
                         match_limit=(
-                            None
-                            if show_all_results
-                            else DEFAULT_LITERAL_FIND_PREVIEW_MATCHES
+                            None if show_all_results else DEFAULT_FIND_PREVIEW_MATCHES
                         ),
                         all_readable_contexts=all_contexts,
                     )
@@ -267,11 +265,10 @@ def cmd(
         if copy_result:
             result_uses_all_readable_contexts = (
                 all_contexts
-                and result.request.target_names
-                == tuple(catalog.list_context_names())
+                and result.request.target_names == tuple(catalog.list_context_names())
             )
             write_system_clipboard(
-                render_literal_find_result(
+                render_find_result(
                     result,
                     all_readable_contexts=result_uses_all_readable_contexts,
                 )
@@ -281,7 +278,7 @@ def cmd(
         ClipboardError,
         ConsoleModeError,
         FileNotFoundError,
-        LiteralFindError,
+        FindError,
         OSError,
         ProfileConfigError,
         ProfileError,

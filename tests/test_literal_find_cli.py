@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import memcommit.adapters.console.commands.find.command as literal_find_command
+import memcommit.adapters.console.commands.find.command as find_command
 import memcommit.application.ops as ops
 from typer.testing import CliRunner
 
@@ -58,8 +58,7 @@ def test_find_row_distinguishes_match_order_from_frozen_source_position(
 
     assert result.exit_code == 0, result.output + result.stderr
     assert (
-        f"1 [{matched.uid[:8]}] needle appears here, [find/source m2]"
-        in result.output
+        f"1 [{matched.uid[:8]}] needle appears here, [find/source m2]" in result.output
     )
 
 
@@ -138,13 +137,13 @@ def test_find_pattern_defaults_to_inline_result_in_tty(
             return True
 
     monkeypatch.setattr(
-        literal_find_command,
+        find_command,
         "SystemTerminalCapabilities",
         InteractiveTerminal,
     )
     monkeypatch.setattr(
-        literal_find_command,
-        "run_literal_find_tui",
+        find_command,
+        "run_find_workbench",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             AssertionError("a supplied pattern must not open the Find TUI")
         ),
@@ -177,11 +176,11 @@ def test_find_tui_flag_still_opens_supplied_pattern_in_tty(
         return None
 
     monkeypatch.setattr(
-        literal_find_command,
+        find_command,
         "SystemTerminalCapabilities",
         InteractiveTerminal,
     )
-    monkeypatch.setattr(literal_find_command, "run_literal_find_tui", run_tui)
+    monkeypatch.setattr(find_command, "run_find_workbench", run_tui)
 
     result = runner.invoke(app, ["find", "Needle", "--tui"])
 
@@ -239,8 +238,7 @@ def test_find_all_and_short_alias_search_every_readable_context(
     assert short_option.exit_code == 0, short_option.output + short_option.stderr
     assert short_option.output == long_option.output
     assert (
-        "SCOPE · ALL READABLE CONTEXTS · EXACT · EXCLUDE EMBEDS"
-        in long_option.output
+        "SCOPE · ALL READABLE CONTEXTS · EXACT · EXCLUDE EMBEDS" in long_option.output
     )
     assert "SCOPE · find/first + find/second" not in long_option.output
     assert "SCANNED 2 · MATCHED 2 · OCCURRENCES 2" in long_option.output
@@ -274,7 +272,7 @@ def test_find_copy_remains_complete_when_terminal_output_is_previewed(
     store.save(context)
     store.set_current("find/source")
     copied: list[str] = []
-    monkeypatch.setattr(literal_find_command, "write_system_clipboard", copied.append)
+    monkeypatch.setattr(find_command, "write_system_clipboard", copied.append)
 
     result = runner.invoke(app, ["find", "--plain", "--copy", "needle"])
 
@@ -305,13 +303,13 @@ def test_find_long_tty_result_uses_compact_pager(isolated_store, monkeypatch) ->
         return 0
 
     monkeypatch.setattr(
-        literal_find_command,
+        find_command,
         "SystemTerminalCapabilities",
         InteractiveTerminal,
     )
     monkeypatch.setattr(
-        literal_find_command,
-        "run_compact_literal_find_result",
+        find_command,
+        "run_compact_find_result",
         run_compact,
     )
 

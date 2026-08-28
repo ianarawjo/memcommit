@@ -9,7 +9,13 @@ from prompt_toolkit.filters import has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.scroll import scroll_page_down, scroll_page_up
-from prompt_toolkit.layout import Dimension, FormattedTextControl, HSplit, Layout, Window
+from prompt_toolkit.layout import (
+    Dimension,
+    FormattedTextControl,
+    HSplit,
+    Layout,
+    Window,
+)
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
@@ -19,13 +25,15 @@ from memcommit.adapters.console.clipboard import ClipboardError
 from memcommit.core.context_targeting.tui.compact_scope import (
     CompactReadableScopeControl,
 )
-from memcommit.adapters.interfaces.cli.find import (
-    project_literal_find_match,
-    render_literal_find_result,
+from memcommit.adapters.console.commands.find.presentation import (
+    project_find_match,
+    render_find_result,
 )
 from memcommit.adapters.console.terminal import require_interactive_terminal
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.console.commands.find.source_row import render_literal_find_reference_row
+from memcommit.adapters.console.commands.find.source_row import (
+    render_find_reference_row,
+)
 from memcommit.adapters.interfaces.tui.components.focus import (
     FocusSurface,
     SurfaceFocusController,
@@ -46,17 +54,17 @@ from memcommit.adapters.interfaces.tui.core.theme import (
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
 )
-from memcommit.adapters.interfaces.tui.operations.find.model import (
-    LiteralFindTuiOutcome,
-    LiteralFindTuiSetup,
+from memcommit.adapters.console.commands.find.workbench.model import (
+    FindTuiOutcome,
+    FindTuiSetup,
 )
-from memcommit.application.operations.find.literal_application import (
-    LiteralFindRequest,
-    LiteralFindResult,
+from memcommit.application.operations.find.application import (
+    FindRequest,
+    FindResult,
 )
 
 
-LiteralFindRunner = Callable[[LiteralFindRequest], LiteralFindResult]
+FindRunner = Callable[[FindRequest], FindResult]
 
 
 def _choice(*values: tuple[str, str], selected: str) -> HorizontalChoiceState:
@@ -67,7 +75,7 @@ def _choice(*values: tuple[str, str], selected: str) -> HorizontalChoiceState:
 
 
 def _render_match_content(
-    result: LiteralFindResult,
+    result: FindResult,
     selected_index: int,
     *,
     surface_focused: bool,
@@ -99,7 +107,7 @@ def _render_match_content(
                     else ""
                 ),
                 safe_terminal_text(
-                    render_literal_find_reference_row(
+                    render_find_reference_row(
                         match,
                         number=index + 1,
                     )
@@ -111,17 +119,17 @@ def _render_match_content(
     return fragments
 
 
-def run_literal_find_tui(
-    request: LiteralFindRequest | None,
+def run_find_workbench(
+    request: FindRequest | None,
     *,
-    setup: LiteralFindTuiSetup,
-    execute: LiteralFindRunner,
+    setup: FindTuiSetup,
+    execute: FindRunner,
     clipboard_writer: Callable[[str], None] | None = None,
     initial_all_readable_contexts: bool = False,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
-) -> LiteralFindTuiOutcome | None:
+) -> FindTuiOutcome | None:
     """Edit one exact request, run explicitly, and inspect complete matches."""
 
     if require_tty:
@@ -129,10 +137,10 @@ def run_literal_find_tui(
             "Interactive Find",
             snapshot_hint='Pass a pattern, for example: mem find "parking".',
         )
-    if not isinstance(setup, LiteralFindTuiSetup):
-        raise TypeError("Find TUI requires a LiteralFindTuiSetup.")
-    if request is not None and not isinstance(request, LiteralFindRequest):
-        raise TypeError("Find TUI request must be a LiteralFindRequest or None.")
+    if not isinstance(setup, FindTuiSetup):
+        raise TypeError("Find TUI requires a FindTuiSetup.")
+    if request is not None and not isinstance(request, FindRequest):
+        raise TypeError("Find TUI request must be a FindRequest or None.")
     if type(initial_all_readable_contexts) is not bool:
         raise TypeError("Find initial all-readable choice must be a boolean.")
     if not callable(execute):
@@ -153,9 +161,11 @@ def run_literal_find_tui(
     case_choice = _choice(
         ("SENSITIVE", "SENSITIVE"),
         ("IGNORE", "IGNORE CASE"),
-        selected="IGNORE" if request is not None and request.ignore_case else "SENSITIVE",
+        selected="IGNORE"
+        if request is not None and request.ignore_case
+        else "SENSITIVE",
     )
-    result: LiteralFindResult | None = None
+    result: FindResult | None = None
     result_index = 0
     settings_row = 0
     status = "ENTER A PATTERN"
@@ -167,7 +177,7 @@ def run_literal_find_tui(
         prompt="› ",
         wrap_lines=False,
         height=Dimension.exact(1),
-        name="literal-find-pattern",
+        name="find-pattern",
     )
 
     def clear_result(message: str = "REQUEST CHANGED · PRESS ENTER TO RUN") -> None:
@@ -187,7 +197,7 @@ def run_literal_find_tui(
         include_descendants=False if request is None else request.include_descendants,
         follow_embeds=request is not None and request.follow_embeds,
         annotations=dict(setup.annotations),
-        input_name="literal-find-context",
+        input_name="find-context",
         on_change=clear_result,
         on_status=set_status,
     )
@@ -242,7 +252,7 @@ def run_literal_find_tui(
             return "HANDLED"
         try:
             targets, include_descendants = scope.request_scope()
-            candidate = LiteralFindRequest(
+            candidate = FindRequest(
                 pattern=pattern,
                 target_names=targets,
                 include_descendants=include_descendants,
@@ -267,12 +277,8 @@ def run_literal_find_tui(
                 f" · {result.occurrence_count} {occurrence_label}"
             )
         else:
-            memory_label = (
-                "MEMORY" if result.scanned_item_count == 1 else "MEMORIES"
-            )
-            status = (
-                f"NO MATCHES · {result.scanned_item_count} {memory_label} SCANNED"
-            )
+            memory_label = "MEMORY" if result.scanned_item_count == 1 else "MEMORIES"
+            status = f"NO MATCHES · {result.scanned_item_count} {memory_label} SCANNED"
         app.layout.focus(results_control)
         return "HANDLED"
 
@@ -356,7 +362,7 @@ def run_literal_find_tui(
             status = "NOTHING TO COPY"
             return
         text = (
-            render_literal_find_result(
+            render_find_result(
                 result,
                 all_readable_contexts=(
                     scope.profile_selected
@@ -367,7 +373,7 @@ def run_literal_find_tui(
                 ),
             )
             if whole or not result.matches
-            else project_literal_find_match(
+            else project_find_match(
                 result.matches[result_index],
                 number=result_index + 1,
             )
@@ -399,18 +405,18 @@ def run_literal_find_tui(
     @bindings.add("escape", eager=True)
     def _escape(event) -> None:
         if not scope.close_browser(event):
-            event.app.exit(result=None if result is None else LiteralFindTuiOutcome(result))
+            event.app.exit(result=None if result is None else FindTuiOutcome(result))
         event.app.invalidate()
 
     @bindings.add("c-c", eager=True)
     def _close(event) -> None:
-        event.app.exit(result=None if result is None else LiteralFindTuiOutcome(result))
+        event.app.exit(result=None if result is None else FindTuiOutcome(result))
 
     writable_focus = has_focus(pattern_area) | has_focus(scope.input)
 
     @bindings.add("q", filter=~writable_focus, eager=True)
     def _close_q(event) -> None:
-        event.app.exit(result=None if result is None else LiteralFindTuiOutcome(result))
+        event.app.exit(result=None if result is None else FindTuiOutcome(result))
 
     header = Window(
         FormattedTextControl([("class:report-label", "MEM FIND")]),
@@ -484,4 +490,4 @@ def run_literal_find_tui(
     return app.run()
 
 
-__all__ = ["run_literal_find_tui"]
+__all__ = ["run_find_workbench"]

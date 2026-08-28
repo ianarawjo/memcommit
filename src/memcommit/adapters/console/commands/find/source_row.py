@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.application.operations.find.literal_application import LiteralFindMatch
+from memcommit.application.operations.find.application import FindMatch
 from memcommit.source_projection.model import SourceReferenceRow
 from memcommit.source_projection.presentation import (
     SourceReferenceLayout,
@@ -10,15 +10,15 @@ from memcommit.source_projection.presentation import (
 )
 
 
-def literal_find_reference_row(
-    match: LiteralFindMatch,
+def find_reference_row(
+    match: FindMatch,
     *,
     number: int,
 ) -> SourceReferenceRow:
     """Retain owner and optional MemoryRef Source identities in one compact row."""
 
-    if not isinstance(match, LiteralFindMatch):
-        raise TypeError("Literal Find projection requires a LiteralFindMatch.")
+    if not isinstance(match, FindMatch):
+        raise TypeError("Find projection requires a FindMatch.")
     source = match.source
     return SourceReferenceRow(
         number=number,
@@ -31,17 +31,17 @@ def literal_find_reference_row(
     )
 
 
-def render_literal_find_reference_row(
-    match: LiteralFindMatch,
+def render_find_reference_row(
+    match: FindMatch,
     *,
     number: int,
 ) -> str:
     """Render Find's identity/content/location arrangement from shared facts."""
 
     return render_source_reference_row(
-        literal_find_reference_row(match, number=number),
+        find_reference_row(match, number=number),
         layout=SourceReferenceLayout.IDENTITY_FIRST,
     )
 
 
-__all__ = ["literal_find_reference_row", "render_literal_find_reference_row"]
+__all__ = ["find_reference_row", "render_find_reference_row"]

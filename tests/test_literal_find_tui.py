@@ -5,24 +5,24 @@ from __future__ import annotations
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.adapters.interfaces.tui.operations.find import (
-    LiteralFindTuiOutcome,
-    LiteralFindTuiSetup,
-    run_literal_find_tui,
+from memcommit.adapters.console.commands.find.workbench import (
+    FindTuiOutcome,
+    FindTuiSetup,
+    run_find_workbench,
 )
-from memcommit.application.operations.find.literal_application import (
-    FrozenLiteralFindSource,
-    LiteralFindRequest,
-    LiteralFindSourceItem,
-    run_literal_find,
+from memcommit.application.operations.find.application import (
+    FrozenFindSource,
+    FindRequest,
+    FindSourceItem,
+    run_find,
 )
 
 
 class _Source:
     def freeze(self, _request):
-        return FrozenLiteralFindSource(
+        return FrozenFindSource(
             (
-                LiteralFindSourceItem(
+                FindSourceItem(
                     context_name="alpha",
                     context_uid="context-1",
                     kind="memory",
@@ -34,12 +34,12 @@ class _Source:
         )
 
 
-def _execute(request: LiteralFindRequest):
-    return run_literal_find(request, source_port=_Source())
+def _execute(request: FindRequest):
+    return run_find(request, source_port=_Source())
 
 
-def _setup() -> LiteralFindTuiSetup:
-    return LiteralFindTuiSetup(
+def _setup() -> FindTuiSetup:
+    return FindTuiSetup(
         names=("alpha", "alpha/child", "peer"),
         current_name="alpha",
         initial_targets=("alpha",),
@@ -47,16 +47,16 @@ def _setup() -> LiteralFindTuiSetup:
 
 
 def test_find_tui_runs_only_after_enter_and_returns_complete_result() -> None:
-    requests: list[LiteralFindRequest] = []
+    requests: list[FindRequest] = []
 
-    def execute(request: LiteralFindRequest):
+    def execute(request: FindRequest):
         requests.append(request)
         return _execute(request)
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\rq")
-        returned = run_literal_find_tui(
-            LiteralFindRequest(pattern="needle", target_names=("alpha",)),
+        returned = run_find_workbench(
+            FindRequest(pattern="needle", target_names=("alpha",)),
             setup=_setup(),
             execute=execute,
             app_input=pipe_input,
@@ -64,18 +64,16 @@ def test_find_tui_runs_only_after_enter_and_returns_complete_result() -> None:
             require_tty=False,
         )
 
-    assert isinstance(returned, LiteralFindTuiOutcome)
+    assert isinstance(returned, FindTuiOutcome)
     assert returned.result.occurrence_count == 2
-    assert requests == [
-        LiteralFindRequest(pattern="needle", target_names=("alpha",))
-    ]
+    assert requests == [FindRequest(pattern="needle", target_names=("alpha",))]
 
 
 def test_find_tui_closes_without_execution() -> None:
-    requests: list[LiteralFindRequest] = []
+    requests: list[FindRequest] = []
     with create_pipe_input() as pipe_input:
         pipe_input.send_bytes(b"\x03")
-        returned = run_literal_find_tui(
+        returned = run_find_workbench(
             None,
             setup=_setup(),
             execute=lambda request: requests.append(request) or _execute(request),
@@ -92,8 +90,8 @@ def test_find_tui_lowercase_y_copies_focused_and_uppercase_y_copies_all() -> Non
     copied: list[str] = []
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\ryYq")
-        returned = run_literal_find_tui(
-            LiteralFindRequest(pattern="needle", target_names=("alpha",)),
+        returned = run_find_workbench(
+            FindRequest(pattern="needle", target_names=("alpha",)),
             setup=_setup(),
             execute=_execute,
             clipboard_writer=copied.append,
@@ -102,7 +100,7 @@ def test_find_tui_lowercase_y_copies_focused_and_uppercase_y_copies_all() -> Non
             require_tty=False,
         )
 
-    assert isinstance(returned, LiteralFindTuiOutcome)
+    assert isinstance(returned, FindTuiOutcome)
     assert len(copied) == 2
     assert copied[0].startswith(
         "1 [memory-1] Alpha needle and another needle. [alpha m1]"
@@ -117,12 +115,12 @@ def test_find_tui_whole_copy_keeps_initial_all_readable_label() -> None:
     setup = _setup()
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\rYq")
-        returned = run_literal_find_tui(
-            LiteralFindRequest(
+        returned = run_find_workbench(
+            FindRequest(
                 pattern="needle",
                 target_names=setup.names,
             ),
-            setup=LiteralFindTuiSetup(
+            setup=FindTuiSetup(
                 names=setup.names,
                 current_name=setup.current_name,
                 initial_targets=setup.names,
@@ -135,20 +133,20 @@ def test_find_tui_whole_copy_keeps_initial_all_readable_label() -> None:
             require_tty=False,
         )
 
-    assert isinstance(returned, LiteralFindTuiOutcome)
+    assert isinstance(returned, FindTuiOutcome)
     assert "SCOPE · ALL READABLE CONTEXTS" in copied[0]
     assert "SCOPE · alpha + alpha/child + peer" not in copied[0]
 
 
 def test_find_tui_projects_descendants_as_exact_checked_execution_set() -> None:
-    requests: list[LiteralFindRequest] = []
+    requests: list[FindRequest] = []
     with create_pipe_input() as pipe_input:
         # The compact form starts at Pattern even though Scope is above it.
         # Shift-Tab reaches Range; Right includes descendants; Tab returns to
         # Pattern, whose Enter runs the exact visible checked set.
         pipe_input.send_text("\x1b[Z\x1b[Z\x1b[Z\x1b[C\t\t\t\rq")
-        returned = run_literal_find_tui(
-            LiteralFindRequest(pattern="needle", target_names=("alpha",)),
+        returned = run_find_workbench(
+            FindRequest(pattern="needle", target_names=("alpha",)),
             setup=_setup(),
             execute=lambda request: requests.append(request) or _execute(request),
             app_input=pipe_input,
@@ -156,6 +154,6 @@ def test_find_tui_projects_descendants_as_exact_checked_execution_set() -> None:
             require_tty=False,
         )
 
-    assert isinstance(returned, LiteralFindTuiOutcome)
+    assert isinstance(returned, FindTuiOutcome)
     assert requests[0].target_names == ("alpha", "alpha/child")
     assert requests[0].include_descendants is False

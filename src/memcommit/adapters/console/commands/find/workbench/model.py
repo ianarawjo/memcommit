@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.operations.find.literal_application import LiteralFindResult
+from memcommit.application.operations.find.application import FindResult
 from memcommit.source_projection.presentation import SourceDisplayValue
 
 
 @dataclass(frozen=True, slots=True)
-class LiteralFindTuiSetup:
+class FindTuiSetup:
     names: tuple[str, ...]
     current_name: str
     initial_targets: tuple[str, ...]
@@ -38,12 +38,12 @@ class LiteralFindTuiSetup:
 
 
 @dataclass(frozen=True, slots=True)
-class LiteralFindTuiOutcome:
-    result: LiteralFindResult
+class FindTuiOutcome:
+    result: FindResult
 
     def __post_init__(self) -> None:
-        if not isinstance(self.result, LiteralFindResult):
+        if not isinstance(self.result, FindResult):
             raise ValueError("Find TUI requires one complete typed result.")
 
 
-__all__ = ["LiteralFindTuiOutcome", "LiteralFindTuiSetup"]
+__all__ = ["FindTuiOutcome", "FindTuiSetup"]

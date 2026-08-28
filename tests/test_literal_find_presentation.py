@@ -1,39 +1,39 @@
-"""Compact plain projection contracts for provider-free literal Find."""
+"""Compact plain projection contracts for provider-free Find."""
 
 from __future__ import annotations
 
-from memcommit.adapters.interfaces.cli.find import (
-    DEFAULT_LITERAL_FIND_PREVIEW_MATCHES,
-    literal_find_result_header_lines,
-    project_literal_find_match,
-    render_literal_find_result,
+from memcommit.adapters.console.commands.find.presentation import (
+    DEFAULT_FIND_PREVIEW_MATCHES,
+    find_result_header_lines,
+    project_find_match,
+    render_find_result,
 )
-from memcommit.application.operations.find.literal_application import (
-    FrozenLiteralFindSource,
-    LiteralFindRequest,
-    LiteralFindSourceItem,
-    run_literal_find,
+from memcommit.application.operations.find.application import (
+    FrozenFindSource,
+    FindRequest,
+    FindSourceItem,
+    run_find,
 )
 
 
 class _Source:
-    def __init__(self, items: tuple[LiteralFindSourceItem, ...]) -> None:
+    def __init__(self, items: tuple[FindSourceItem, ...]) -> None:
         self.items = items
 
-    def freeze(self, _request: LiteralFindRequest) -> FrozenLiteralFindSource:
-        return FrozenLiteralFindSource(self.items)
+    def freeze(self, _request: FindRequest) -> FrozenFindSource:
+        return FrozenFindSource(self.items)
 
 
-def _result(*items: LiteralFindSourceItem, pattern: str = "needle"):
-    return run_literal_find(
-        LiteralFindRequest(pattern=pattern, target_names=("scope",)),
+def _result(*items: FindSourceItem, pattern: str = "needle"):
+    return run_find(
+        FindRequest(pattern=pattern, target_names=("scope",)),
         source_port=_Source(tuple(items)),
     )
 
 
 def test_find_result_uses_compact_source_rows_without_exposing_raw_spans():
     result = _result(
-        LiteralFindSourceItem(
+        FindSourceItem(
             context_name="scope",
             context_uid="context-1",
             kind="memory",
@@ -43,30 +43,28 @@ def test_find_result_uses_compact_source_rows_without_exposing_raw_spans():
         )
     )
 
-    rendered = render_literal_find_result(result)
+    rendered = render_find_result(result)
 
     assert "1 [memory-1] First needle. Second line. [scope m1]" in rendered
     assert "SPANS" not in rendered
-    assert project_literal_find_match(result.matches[0], number=1) in rendered
+    assert project_find_match(result.matches[0], number=1) in rendered
 
 
 def test_find_all_readable_scope_hides_frozen_context_enumeration() -> None:
     result = _result()
 
-    header = literal_find_result_header_lines(
+    header = find_result_header_lines(
         result,
         all_readable_contexts=True,
     )
 
-    assert header[2] == (
-        "SCOPE · ALL READABLE CONTEXTS · EXACT · EXCLUDE EMBEDS"
-    )
+    assert header[2] == ("SCOPE · ALL READABLE CONTEXTS · EXACT · EXCLUDE EMBEDS")
     assert "SCOPE · scope ·" not in header[2]
 
 
 def test_find_memory_ref_row_keeps_owner_before_referenced_source():
     result = _result(
-        LiteralFindSourceItem(
+        FindSourceItem(
             context_name="target/context",
             context_uid="target-context-uid",
             kind="memory_ref",
@@ -82,12 +80,12 @@ def test_find_memory_ref_row_keeps_owner_before_referenced_source():
     assert (
         "1 [owner-re] Referenced needle. [target/context m1] "
         "→ [source-m] [source/context]"
-    ) in render_literal_find_result(result)
+    ) in render_find_result(result)
 
 
 def test_find_preview_is_explicit_about_hidden_rows_and_complete_counts():
     items = tuple(
-        LiteralFindSourceItem(
+        FindSourceItem(
             context_name="scope",
             context_uid="context-1",
             kind="memory",
@@ -95,15 +93,15 @@ def test_find_preview_is_explicit_about_hidden_rows_and_complete_counts():
             source_position=index + 1,
             content=f"needle row {index}",
         )
-        for index in range(DEFAULT_LITERAL_FIND_PREVIEW_MATCHES + 2)
+        for index in range(DEFAULT_FIND_PREVIEW_MATCHES + 2)
     )
     result = _result(*items)
 
-    preview = render_literal_find_result(
+    preview = render_find_result(
         result,
-        match_limit=DEFAULT_LITERAL_FIND_PREVIEW_MATCHES,
+        match_limit=DEFAULT_FIND_PREVIEW_MATCHES,
     )
-    complete = render_literal_find_result(result)
+    complete = render_find_result(result)
 
     assert "MATCHED 12 · OCCURRENCES 12 · SHOWING 1–10 OF 12" in preview
     assert "10 [memory-0] needle row 9, [scope m10]" in preview
@@ -119,7 +117,7 @@ def test_find_preview_is_explicit_about_hidden_rows_and_complete_counts():
 def test_find_human_row_retains_complete_folded_content_without_ellipsis():
     long_content = "needle " + ("supporting detail " * 12)
     result = _result(
-        LiteralFindSourceItem(
+        FindSourceItem(
             context_name="scope",
             context_uid="context-1",
             kind="memory",
@@ -129,7 +127,7 @@ def test_find_human_row_retains_complete_folded_content_without_ellipsis():
         )
     )
 
-    human = render_literal_find_result(result)
+    human = render_find_result(result)
 
     assert "…" not in human
     assert " ".join(long_content.split()) in human
@@ -138,7 +136,7 @@ def test_find_human_row_retains_complete_folded_content_without_ellipsis():
 def test_find_empty_scope_and_no_match_have_distinct_messages():
     empty_scope = _result()
     no_match = _result(
-        LiteralFindSourceItem(
+        FindSourceItem(
             context_name="scope",
             context_uid="context-1",
             kind="memory",
@@ -148,7 +146,5 @@ def test_find_empty_scope_and_no_match_have_distinct_messages():
         )
     )
 
-    assert "(scope contains no searchable Memories)" in render_literal_find_result(
-        empty_scope
-    )
-    assert "(no matching Memories)" in render_literal_find_result(no_match)
+    assert "(scope contains no searchable Memories)" in render_find_result(empty_scope)
+    assert "(no matching Memories)" in render_find_result(no_match)

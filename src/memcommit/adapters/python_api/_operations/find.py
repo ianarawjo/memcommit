@@ -6,7 +6,9 @@ from collections.abc import Sequence
 
 from memcommit.adapters.python_api._runtime import ClientRuntime
 from memcommit.adapters.python_api._support.errors import raise_public
-from memcommit.adapters.python_api._support.readable import freeze_client_readable_catalog
+from memcommit.adapters.python_api._support.readable import (
+    freeze_client_readable_catalog,
+)
 from memcommit.adapters.python_api.errors import (
     FindAuthorityError,
     FindContextError,
@@ -14,14 +16,18 @@ from memcommit.adapters.python_api.errors import (
     FindInputError,
     FindStorageError,
 )
-from memcommit.adapters.python_api.find import FindMatchResult, FindResult, FindSpanResult
-from memcommit.application.context_locator import resolve_context_locator
-from memcommit.application.operations.find.literal_application import (
-    LiteralFindError,
-    LiteralFindInputError,
-    LiteralFindRequest,
+from memcommit.adapters.python_api.find import (
+    FindMatchResult,
+    FindResult,
+    FindSpanResult,
 )
-from memcommit.application.operations.find.literal_runtime import execute_literal_find
+from memcommit.application.context_locator import resolve_context_locator
+from memcommit.application.operations.find.application import (
+    FindError as ApplicationFindError,
+    FindInputError as ApplicationFindInputError,
+    FindRequest,
+)
+from memcommit.application.operations.find.runtime import execute_find
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 
@@ -72,7 +78,7 @@ def find(
     try:
         current_name = _current_name(runtime)
         targets = _canonical_targets(context_names, current_name=current_name)
-        request = LiteralFindRequest(
+        request = FindRequest(
             pattern=pattern,
             target_names=targets,
             include_descendants=include_descendants,
@@ -86,7 +92,7 @@ def find(
             current_name=current_name,
             include_query_routes=False,
         )
-        result = execute_literal_find(request, catalog=catalog)
+        result = execute_find(request, catalog=catalog)
         return FindResult(
             pattern=request.pattern,
             context_names=request.target_names,
@@ -120,7 +126,7 @@ def find(
         )
     except FindStorageError:
         raise
-    except (LiteralFindInputError, TypeError, ValueError) as error:
+    except (ApplicationFindInputError, TypeError, ValueError) as error:
         raise_public(FindInputError, error)
     except (FileNotFoundError, KeyError) as error:
         raise_public(FindContextError, error)
@@ -128,7 +134,7 @@ def find(
         raise_public(FindAuthorityError, error)
     except OSError as error:
         raise_public(FindStorageError, error)
-    except (LiteralFindError, RuntimeError) as error:
+    except (ApplicationFindError, RuntimeError) as error:
         raise_public(FindExecutionError, error)
 
 

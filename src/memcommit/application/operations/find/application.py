@@ -7,28 +7,28 @@ from dataclasses import dataclass
 from typing import Literal, Protocol
 
 
-LiteralFindMode = Literal["LITERAL", "REGEX"]
-LiteralFindItemKind = Literal["memory", "memory_ref"]
+FindMode = Literal["LITERAL", "REGEX"]
+FindItemKind = Literal["memory", "memory_ref"]
 _PATTERN_LIMIT = 2_000
 
 
-class LiteralFindError(RuntimeError):
+class FindError(RuntimeError):
     """Base failure for provider-free text Find."""
 
 
-class LiteralFindInputError(LiteralFindError, ValueError):
+class FindInputError(FindError, ValueError):
     """The requested pattern or scope is invalid."""
 
 
 @dataclass(frozen=True, slots=True)
-class LiteralFindRequest:
+class FindRequest:
     """One exact text pattern and readable Context scope."""
 
     pattern: str
     target_names: tuple[str, ...]
     include_descendants: bool = False
     follow_embeds: bool = False
-    mode: LiteralFindMode = "LITERAL"
+    mode: FindMode = "LITERAL"
     ignore_case: bool = False
 
     def __post_init__(self) -> None:
@@ -37,7 +37,7 @@ class LiteralFindRequest:
             or not self.pattern
             or len(self.pattern) > _PATTERN_LIMIT
         ):
-            raise LiteralFindInputError(
+            raise FindInputError(
                 f"Find pattern must contain 1–{_PATTERN_LIMIT:,} characters."
             )
         if (
@@ -46,26 +46,27 @@ class LiteralFindRequest:
             or any(not isinstance(name, str) or not name for name in self.target_names)
             or len(set(self.target_names)) != len(self.target_names)
         ):
-            raise LiteralFindInputError(
+            raise FindInputError(
                 "Find requires at least one distinct readable Context."
             )
-        if type(self.include_descendants) is not bool or type(
-            self.follow_embeds
-        ) is not bool:
-            raise LiteralFindInputError("Find reach choices must be booleans.")
+        if (
+            type(self.include_descendants) is not bool
+            or type(self.follow_embeds) is not bool
+        ):
+            raise FindInputError("Find reach choices must be booleans.")
         if self.mode not in {"LITERAL", "REGEX"}:
-            raise LiteralFindInputError("Find mode must be LITERAL or REGEX.")
+            raise FindInputError("Find mode must be LITERAL or REGEX.")
         if type(self.ignore_case) is not bool:
-            raise LiteralFindInputError("Find ignore_case must be a boolean.")
+            raise FindInputError("Find ignore_case must be a boolean.")
 
 
 @dataclass(frozen=True, slots=True)
-class LiteralFindSourceItem:
+class FindSourceItem:
     """One authorized Memory-shaped value frozen before matching."""
 
     context_name: str
     context_uid: str
-    kind: LiteralFindItemKind
+    kind: FindItemKind
     item_uid: str
     source_position: int
     content: str
@@ -80,19 +81,17 @@ class LiteralFindSourceItem:
             self.item_uid,
         )
         if any(not isinstance(value, str) or not value for value in text_values):
-            raise LiteralFindError("Find source identities must be nonblank text.")
+            raise FindError("Find source identities must be nonblank text.")
         if self.kind not in {"memory", "memory_ref"}:
-            raise LiteralFindError("Find received an unsupported source item.")
+            raise FindError("Find received an unsupported source item.")
         if (
             not isinstance(self.source_position, int)
             or isinstance(self.source_position, bool)
             or self.source_position < 1
         ):
-            raise LiteralFindError(
-                "Find source position must be a positive integer."
-            )
+            raise FindError("Find source position must be a positive integer.")
         if not isinstance(self.content, str):
-            raise LiteralFindError("Find source content must be text.")
+            raise FindError("Find source content must be text.")
         reference = (
             self.source_context_name,
             self.source_context_uid,
@@ -100,38 +99,36 @@ class LiteralFindSourceItem:
         )
         if self.kind == "memory_ref":
             if not all(isinstance(value, str) and value for value in reference):
-                raise LiteralFindError(
-                    "Find Memory reference provenance must be complete."
-                )
+                raise FindError("Find Memory reference provenance must be complete.")
         elif any(value is not None for value in reference):
-            raise LiteralFindError(
+            raise FindError(
                 "Direct Find Memory sources cannot carry reference provenance."
             )
 
 
 @dataclass(frozen=True, slots=True)
-class FrozenLiteralFindSource:
+class FrozenFindSource:
     """Complete authorized item frame for one request."""
 
-    items: tuple[LiteralFindSourceItem, ...]
+    items: tuple[FindSourceItem, ...]
 
     def __post_init__(self) -> None:
         if not isinstance(self.items, tuple) or any(
-            not isinstance(item, LiteralFindSourceItem) for item in self.items
+            not isinstance(item, FindSourceItem) for item in self.items
         ):
-            raise LiteralFindError("Find source frame must contain typed items.")
+            raise FindError("Find source frame must contain typed items.")
         if tuple(item.source_position for item in self.items) != tuple(
             range(1, len(self.items) + 1)
         ):
             # The alias is a location in this complete frozen searchable frame,
             # not a rank among the later matching subset.
-            raise LiteralFindError(
+            raise FindError(
                 "Find source positions must cover the frozen frame in order."
             )
 
 
 @dataclass(frozen=True, slots=True)
-class LiteralFindSpan:
+class FindSpan:
     start: int
     end: int
     text: str
@@ -147,80 +144,85 @@ class LiteralFindSpan:
             or not isinstance(self.text, str)
             or len(self.text) != self.end - self.start
         ):
-            raise LiteralFindError("Find returned an invalid text span.")
+            raise FindError("Find returned an invalid text span.")
 
 
 @dataclass(frozen=True, slots=True)
-class LiteralFindMatch:
+class FindMatch:
     """All non-overlapping matches in one frozen Memory-shaped item."""
 
-    source: LiteralFindSourceItem
-    spans: tuple[LiteralFindSpan, ...]
+    source: FindSourceItem
+    spans: tuple[FindSpan, ...]
 
     def __post_init__(self) -> None:
         if not self.spans:
-            raise LiteralFindError("A Find match requires at least one span.")
+            raise FindError("A Find match requires at least one span.")
         previous_end = -1
         for span in self.spans:
-            if span.start < previous_end or self.source.content[span.start : span.end] != span.text:
-                raise LiteralFindError("Find spans do not match the frozen content.")
+            if (
+                span.start < previous_end
+                or self.source.content[span.start : span.end] != span.text
+            ):
+                raise FindError("Find spans do not match the frozen content.")
             previous_end = span.end
 
 
 @dataclass(frozen=True, slots=True)
-class LiteralFindResult:
+class FindResult:
     """Complete provider-free result for the exact request."""
 
-    request: LiteralFindRequest
+    request: FindRequest
     scanned_item_count: int
-    matches: tuple[LiteralFindMatch, ...]
+    matches: tuple[FindMatch, ...]
 
     @property
     def occurrence_count(self) -> int:
         return sum(len(match.spans) for match in self.matches)
 
 
-class LiteralFindSourcePort(Protocol):
-    def freeze(self, request: LiteralFindRequest) -> FrozenLiteralFindSource:
+class FindSourcePort(Protocol):
+    def freeze(self, request: FindRequest) -> FrozenFindSource:
         """Return one complete authorized frame without constructing a provider."""
 
 
-def compile_find_pattern(request: LiteralFindRequest) -> re.Pattern[str]:
+def compile_find_pattern(request: FindRequest) -> re.Pattern[str]:
     """Compile literal or explicit regex matching under one bounded contract."""
 
     flags = re.IGNORECASE if request.ignore_case else 0
-    pattern = re.escape(request.pattern) if request.mode == "LITERAL" else request.pattern
+    pattern = (
+        re.escape(request.pattern) if request.mode == "LITERAL" else request.pattern
+    )
     try:
         compiled = re.compile(pattern, flags)
     except re.error as error:
-        raise LiteralFindInputError(f"Invalid Find regular expression: {error}") from error
+        raise FindInputError(f"Invalid Find regular expression: {error}") from error
     if request.mode == "REGEX" and compiled.search("") is not None:
         # Zero-width matches are useful in a programming regex engine but are
         # not independently reviewable text occurrences and make replacement
         # cardinality surprising. Keep Find and the later Replace plan aligned.
-        raise LiteralFindInputError(
+        raise FindInputError(
             "Find regular expressions must consume at least one character."
         )
     return compiled
 
 
-def run_literal_find(
-    request: LiteralFindRequest,
+def run_find(
+    request: FindRequest,
     *,
-    source_port: LiteralFindSourcePort,
-) -> LiteralFindResult:
+    source_port: FindSourcePort,
+) -> FindResult:
     """Find every non-overlapping occurrence without provider or Store effects."""
 
-    if not isinstance(request, LiteralFindRequest):
-        raise LiteralFindInputError("Find requires a LiteralFindRequest.")
+    if not isinstance(request, FindRequest):
+        raise FindInputError("Find requires a FindRequest.")
     compiled = compile_find_pattern(request)
     frozen = source_port.freeze(request)
-    if not isinstance(frozen, FrozenLiteralFindSource):
-        raise LiteralFindError("Find source returned an invalid frozen frame.")
-    matches: list[LiteralFindMatch] = []
+    if not isinstance(frozen, FrozenFindSource):
+        raise FindError("Find source returned an invalid frozen frame.")
+    matches: list[FindMatch] = []
     for item in frozen.items:
         spans = tuple(
-            LiteralFindSpan(
+            FindSpan(
                 start=match.start(),
                 end=match.end(),
                 text=match.group(0),
@@ -228,8 +230,8 @@ def run_literal_find(
             for match in compiled.finditer(item.content)
         )
         if spans:
-            matches.append(LiteralFindMatch(source=item, spans=spans))
-    return LiteralFindResult(
+            matches.append(FindMatch(source=item, spans=spans))
+    return FindResult(
         request=request,
         scanned_item_count=len(frozen.items),
         matches=tuple(matches),
@@ -237,17 +239,17 @@ def run_literal_find(
 
 
 __all__ = [
-    "FrozenLiteralFindSource",
-    "LiteralFindError",
-    "LiteralFindInputError",
-    "LiteralFindItemKind",
-    "LiteralFindMatch",
-    "LiteralFindMode",
-    "LiteralFindRequest",
-    "LiteralFindResult",
-    "LiteralFindSourceItem",
-    "LiteralFindSourcePort",
-    "LiteralFindSpan",
+    "FrozenFindSource",
+    "FindError",
+    "FindInputError",
+    "FindItemKind",
+    "FindMatch",
+    "FindMode",
+    "FindRequest",
+    "FindResult",
+    "FindSourceItem",
+    "FindSourcePort",
+    "FindSpan",
     "compile_find_pattern",
-    "run_literal_find",
+    "run_find",
 ]

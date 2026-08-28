@@ -10,7 +10,7 @@ import sys
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_search_operation_package_import_is_lazy_and_separate_from_literal_find() -> None:
+def test_search_operation_package_import_is_lazy_and_separate_from_find() -> None:
     program = """
 import sys
 import memcommit.application.operations.search
@@ -20,8 +20,8 @@ blocked = (
     "memcommit.application.operations.search.runtime",
     "memcommit.application.operations.search.materialization_application",
     "memcommit.application.operations.search.materialization_runtime",
-    "memcommit.application.operations.find.literal_application",
-    "memcommit.application.operations.find.literal_runtime",
+    "memcommit.application.operations.find.application",
+    "memcommit.application.operations.find.runtime",
 )
 assert not [name for name in blocked if name in sys.modules]
 """
@@ -74,7 +74,9 @@ def test_search_analysis_and_materialization_remain_separate_use_cases() -> None
     )
 
     assert "materialization" not in application_source.lower()
-    assert "memcommit.application.operations.search.application" in materialization_source
+    assert (
+        "memcommit.application.operations.search.application" in materialization_source
+    )
     assert "memcommit.adapters.console.commands" not in package_source
     assert "memcommit.adapters.interfaces" not in package_source
 
@@ -87,7 +89,7 @@ import sys
 from pathlib import Path
 from memcommit.adapters.python_api import MemCommitClient, SemanticContextError
 
-client = MemCommitClient(root=Path({str(tmp_path / 'store')!r}), create=True)
+client = MemCommitClient(root=Path({str(tmp_path / "store")!r}), create=True)
 try:
     client.search('needle')
 except SemanticContextError:

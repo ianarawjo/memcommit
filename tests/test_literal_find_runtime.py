@@ -5,8 +5,8 @@ from __future__ import annotations
 import memcommit.application.ops as ops
 from memcommit.application.authority.access import ContextAccess
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
-from memcommit.application.operations.find.literal_application import LiteralFindRequest
-from memcommit.application.operations.find.literal_runtime import execute_literal_find
+from memcommit.application.operations.find.application import FindRequest
+from memcommit.application.operations.find.runtime import execute_find
 from memcommit.persistence.store import MemoryStore
 
 
@@ -36,8 +36,8 @@ def test_runtime_keeps_lexical_descendants_and_embeds_independent(tmp_path):
         store.save(context)
     catalog = _catalog(store, root.name)
 
-    descendants = execute_literal_find(
-        LiteralFindRequest(
+    descendants = execute_find(
+        FindRequest(
             pattern="needle",
             target_names=(root.name,),
             include_descendants=True,
@@ -45,8 +45,8 @@ def test_runtime_keeps_lexical_descendants_and_embeds_independent(tmp_path):
         ),
         catalog=catalog,
     )
-    embeds = execute_literal_find(
-        LiteralFindRequest(
+    embeds = execute_find(
+        FindRequest(
             pattern="needle",
             target_names=(root.name,),
             include_descendants=False,
@@ -75,8 +75,8 @@ def test_runtime_searches_resolved_reference_content_without_changing_source(tmp
     store.save(target)
     before = store.load_direct(source.name).to_dict()
 
-    result = execute_literal_find(
-        LiteralFindRequest(pattern="needle", target_names=(target.name,)),
+    result = execute_find(
+        FindRequest(pattern="needle", target_names=(target.name,)),
         catalog=_catalog(store, target.name),
     )
 

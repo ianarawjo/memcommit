@@ -14,19 +14,19 @@ semantic cache, visible session, or mutation plan.
 
 ```text
 mem find PATTERN -------------------\
-interactive Find workbench ----------+--> LiteralFindRequest
+interactive Find workbench ----------+--> FindRequest
 MemCommitClient.find ----------------+
 agent/MCP memcommit_find ------------/          |
                                                   v
-                                      run_literal_find
+                                      run_find
                                       (application)
                                                   |
-                                  LiteralFindSourcePort
+                                  FindSourcePort
                                                   |
-                             ReadableLiteralFindSourcePort
+                             ReadableFindSourcePort
                                       (runtime adapter)
                                                   |
-                                      LiteralFindResult
+                                      FindResult
                                       /             \
                               plain presenter    TUI Viewer
 ```
@@ -34,13 +34,22 @@ agent/MCP memcommit_find ------------/          |
 ## Package ownership
 
 The canonical provider-free implementation now lives under
-`memcommit.application.operations.find`. `literal_application.py` owns the exact request,
+`memcommit.application.operations.find`. `application.py` owns the exact request,
 frozen Source frame, span and result contracts, pattern validation, and
-complete non-overlapping matching. `literal_runtime.py` owns readable catalog
+complete non-overlapping matching. `runtime.py` owns readable catalog
 composition, lexical and embedded reach, MemoryRef resolution, and the Store
 adapter that freezes the authorized corpus before matching. CLI, TUI, Python,
 agent, MCP, and presentation adapters import those operation-owned modules
 directly.
+
+The human console vertical is co-located under
+`memcommit.adapters.console.commands.find`: `command.py` owns orchestration,
+`presentation.py` and `source_row.py` own plain result projection, `compact.py`
+owns completed-result paging, and `workbench/` owns interactive request setup
+and result inspection. The former CLI and operation-specific TUI interface
+paths are removed without facades. This changes ownership and canonical names
+only; it does not change matching, scope, clipboard, paging, or terminal
+interaction behavior.
 
 The historical `memcommit.literal_find_application` and
 `memcommit.literal_find_runtime` paths remain behavior-free module-identity
@@ -59,14 +68,14 @@ non-goals of the ownership-only move.
 
 | Boundary | Owner | Invariant |
 | --- | --- | --- |
-| Request | `LiteralFindRequest` | Nonempty pattern of at most 2,000 characters, at least one distinct public Context name, explicit lexical/embedded reach, case policy, and `LITERAL` or `REGEX` mode |
+| Request | `FindRequest` | Nonempty pattern of at most 2,000 characters, at least one distinct public Context name, explicit lexical/embedded reach, case policy, and `LITERAL` or `REGEX` mode |
 | Readable namespace | CLI/public composition adapters | Existing relative locators resolve against one captured current Context; Profile TUI breadth freezes `ReadableContextCatalog`; QUERY-only routes never become ordinary sources |
-| Frozen source | `ReadableLiteralFindSourcePort` | Complete readable roots are loaded before matching; lexical descendants and embedded traversal remain independent; following embeds resolves an exact local Context's displayed attached READ rows through their frozen Grant bindings without opening QUERY-only content; graph cycles are deduplicated by Context UID; each searchable Memory-shaped item receives one contiguous frozen-corpus position before matching |
-| Match semantics | `run_literal_find` | Literal is default; regex is opt-in; zero-width regex is rejected; every non-overlapping span is retained with exact start/end/text |
+| Frozen source | `ReadableFindSourcePort` | Complete readable roots are loaded before matching; lexical descendants and embedded traversal remain independent; following embeds resolves an exact local Context's displayed attached READ rows through their frozen Grant bindings without opening QUERY-only content; graph cycles are deduplicated by Context UID; each searchable Memory-shaped item receives one contiguous frozen-corpus position before matching |
+| Match semantics | `run_find` | Literal is default; regex is opt-in; zero-width regex is rejected; every non-overlapping span is retained with exact start/end/text |
 | MemoryRef | runtime source collector | The selected owner and referenced Source identity are both retained; unresolved or unreadable references are skipped rather than opened through concealed authority |
-| Result | `LiteralFindResult` | Complete scanned-item, matched-item, and occurrence counts accompany immutable per-item spans |
+| Result | `FindResult` | Complete scanned-item, matched-item, and occurrence counts accompany immutable per-item spans |
 | Durable effect | none | No provider, cache, session, checkpoint, Context write, current switch, or materialization occurs |
-| Presentation | independent CLI/TUI adapters, neutral Source Reference projection, shared compact Scope, and shared compact pager mechanics | Rows use `N [UID] content, [Context mX]`, where `N` is match order and `mX` is frozen searchable-corpus position; Up to ten matches print inline; a longer supplied-pattern TTY result uses a primary-screen ten-row pager with `SHOWING a–b OF total`, row/page/boundary arrow navigation, wrapped complete rows, and a non-erasing close; `--plain` retains the bounded static projection and `--all-results` prints every row; `-a/--all` instead freezes every readable Context as the exact target set; Find never content-elides a Source row; operand-free `mem find` or explicit `--tui` opens a primary-screen `SCOPE → FIND → RESULTS` form whose direct exact Context input expands to Profile/multiple tree selection only while Browse is open; `y` copies the complete numbered focused row there, while `--copy` and TUI `Y` copy the complete typed result projection |
+| Presentation | command-owned plain and interactive adapters, neutral Source Reference projection, shared compact Scope, and shared compact pager mechanics | Rows use `N [UID] content, [Context mX]`, where `N` is match order and `mX` is frozen searchable-corpus position; Up to ten matches print inline; a longer supplied-pattern TTY result uses a primary-screen ten-row pager with `SHOWING a–b OF total`, row/page/boundary arrow navigation, wrapped complete rows, and a non-erasing close; `--plain` retains the bounded static projection and `--all-results` prints every row; `-a/--all` instead freezes every readable Context as the exact target set; Find never content-elides a Source row; operand-free `mem find` or explicit `--tui` opens a primary-screen `SCOPE → FIND → RESULTS` form whose direct exact Context input expands to Profile/multiple tree selection only while Browse is open; `y` copies the complete numbered focused row there, while `--copy` and TUI `Y` copy the complete typed result projection |
 | Public adapters | Python and version-1 agent/MCP | Both call the same runtime/application boundary and return typed/JSON projections with `effect: NONE` and `provider_used: false` |
 
 The shared compact selector projects descendant choices into the exact visible
@@ -110,7 +119,7 @@ loader expansion.
   Replace. Those are separate reviewed operations.
 - Matching is non-overlapping. Overlapping regex enumeration would require a
   different span and Replace cardinality contract.
-- Compact rows do not remove spans from `LiteralFindResult`, public Python,
+- Compact rows do not remove spans from `FindResult`, public Python,
   agent/MCP projections, or Replace planning. They only omit raw offsets from
   the default human projection.
 - Compact paging is presentation-only. It receives one frozen complete result,

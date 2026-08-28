@@ -1,1 +1,1 @@
-"""Operation-owned Literal Find application and runtime boundaries."""
+"""Operation-owned provider-free Find application and runtime boundaries."""
