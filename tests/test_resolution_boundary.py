@@ -89,7 +89,9 @@ def test_meld_resolution_application_does_not_import_runtime_or_interfaces():
 
 
 def test_meld_interfaces_enter_the_operation_owned_resolution_boundary():
-    command_imports = _imports(PACKAGE / "commands" / "meld" / "command.py")
+    command_imports = _imports(
+        PACKAGE / "adapters" / "console" / "commands" / "meld" / "command.py"
+    )
     public_imports = _imports(
         PACKAGE / "adapters" / "python_api" / "_operations" / "meld.py"
     )

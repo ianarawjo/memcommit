@@ -124,6 +124,8 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
             "memcommit.application.operations.dedup.application"
             in by_operation[operation].application_modules
         )
+    assert by_operation["dedup"].public_methods == ("dedup",)
+    assert by_operation["find-duplicates"].public_methods == ("find_duplicates",)
     assert (
         "memcommit.application.operations.fit.judgment"
         in by_operation["fit"].application_modules

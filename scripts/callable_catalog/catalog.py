@@ -631,16 +631,15 @@ _OPERATION_DISCOVERY_TOKENS = {
     # operation-specific so the generated catalog does not attribute both
     # methods to each Help operation.
     "copy": ("copy", "memory_transfer"),
-    # Complete Dedun retains legacy finder, Consolidate, and Dedup module
-    # names while exact Dedup owns explicit exact_dedup modules. Keeping the
-    # mapping authored prevents the evidence ledger from conflating the routes.
+    # Complete Dedun composes the exact Dedup layer in addition to its own
+    # semantic packages. Keeping the mapping authored makes that dependency
+    # visible without conflating the two public operation identities.
     "dedun": ("dedun", "consolidate", "find_duplicates", "dedup"),
-    "dedup": ("exact_dedup",),
+    "dedup": ("dedup",),
     "eval": ("eval", "semantic_eval"),
     "find-duplicates": (
         "find_exact_duplicates",
         "exact_duplicates",
-        "exact_dedup",
     ),
     "find-redundancies": (
         "find_redundancies",
@@ -655,6 +654,13 @@ _OPERATION_DISCOVERY_TOKENS = {
     "move": ("move", "memory_transfer"),
     "pwd": ("pwd", "current_context"),
     "unlock": ("unlock", "write_protection"),
+}
+
+# Find Duplicates executes the exact Dedup application read-only, but its
+# Python surface remains find_duplicates rather than inheriting dedup merely
+# because both operations share that application package.
+_APPLICATION_DISCOVERY_TOKENS = {
+    "find-duplicates": ("find_exact_duplicates", "exact_duplicates", "dedup"),
 }
 
 
@@ -795,18 +801,22 @@ def _operation_routes(
     result: list[OperationRouteRecord] = []
     for operation in operations:
         tokens = _operation_tokens(operation)
+        application_tokens = _APPLICATION_DISCOVERY_TOKENS.get(operation, tokens)
         application_modules = tuple(
             sorted(
                 module
                 for module in module_names
                 if (
-                    (module.count(".") == 1 and _module_owner_matches(module, tokens))
-                    or _operation_package_matches(module, tokens)
+                    (
+                        module.count(".") == 1
+                        and _module_owner_matches(module, application_tokens)
+                    )
+                    or _operation_package_matches(module, application_tokens)
                 )
                 and (
                     "application" in module.split(".")[-1]
                     or "runtime" in module.split(".")[-1]
-                    or _operation_package_matches(module, tokens)
+                    or _operation_package_matches(module, application_tokens)
                 )
                 and not module.startswith("memcommit.adapters.python_api.")
                 and not module.startswith("memcommit.adapters.interfaces.")
