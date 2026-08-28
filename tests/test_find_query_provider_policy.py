@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from memcommit.providers import find_query as policy
+from memcommit.providers import operation_connections as policy
 
 
-def test_find_and_query_follow_the_active_profile_routes(monkeypatch):
+def test_search_and_query_follow_the_active_profile_routes(monkeypatch):
     provider = object()
     operations: list[str] = []
 
@@ -15,7 +15,7 @@ def test_find_and_query_follow_the_active_profile_routes(monkeypatch):
         lambda operation: operations.append(operation) or provider,
     )
 
-    assert policy.connect_find_provider() is provider
+    assert policy.connect_search_provider() is provider
     assert policy.connect_ordinary_query_provider() is provider
     assert operations == ["search", "query"]
 
@@ -81,7 +81,7 @@ def test_query_accepts_one_frozen_public_configuration(monkeypatch):
     ]
 
 
-def test_find_and_query_commands_import_the_shared_policy_owner():
+def test_search_and_query_commands_import_the_shared_policy_owner():
     commands = (
         Path(__file__).parents[1]
         / "src"
@@ -90,12 +90,19 @@ def test_find_and_query_commands_import_the_shared_policy_owner():
         / "console"
         / "commands"
     )
-    find_source = (commands / "search" / "command.py").read_text(encoding="utf-8")
+    search_source = (commands / "search" / "command.py").read_text(encoding="utf-8")
     query_source = (commands / "query" / "command.py").read_text(encoding="utf-8")
 
-    owner = "from memcommit.providers.find_query import ("
-    assert owner in find_source
+    owner = "from memcommit.providers.operation_connections import"
+    assert owner in search_source
     assert owner in query_source
-    assert "memcommit.adapters.console.commands.search.provider_policy" not in find_source
-    assert "memcommit.adapters.console.commands.search.provider_policy" not in query_source
-    assert "memcommit.adapters.console.commands.query.provider_policy" not in query_source
+    assert (
+        "memcommit.adapters.console.commands.search.provider_policy"
+        not in search_source
+    )
+    assert (
+        "memcommit.adapters.console.commands.search.provider_policy" not in query_source
+    )
+    assert (
+        "memcommit.adapters.console.commands.query.provider_policy" not in query_source
+    )

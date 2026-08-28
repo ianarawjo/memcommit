@@ -11,11 +11,15 @@ from memcommit.application.authority.access import resolve_context_access
 from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
 )
-from memcommit.application.operations.query.ordinary_runtime import execute_ordinary_query
+from memcommit.application.operations.query.ordinary_runtime import (
+    execute_ordinary_query,
+)
 from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
-from memcommit.application.operations.search.answer_references import FindAnswerEvidence
+from memcommit.application.operations.search.answer_references import (
+    SearchAnswerEvidence,
+)
 from memcommit.application.operations.query.answer import (
     OrdinaryQueryAnswerError,
     OrdinaryQueryCorpusTooLarge,
@@ -26,23 +30,23 @@ from memcommit.application.operations.query.answer import (
 from memcommit.persistence.store import MemoryStore
 
 
-def _evidence() -> tuple[FindAnswerEvidence, ...]:
+def _evidence() -> tuple[SearchAnswerEvidence, ...]:
     return (
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             "m1",
             "task/left",
             "memory",
             "11111111-left",
             "Left-side example.",
         ),
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             "m2",
             "task/right",
             "memory",
             "22222222-right",
             "Right-side example.",
         ),
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             "m3",
             "task",
             "artifact",
@@ -410,7 +414,7 @@ def test_prompt_and_schema_publish_the_case_derived_contract():
 
 def test_complete_corpus_over_one_shot_bound_fails_before_provider_use():
     oversized = tuple(
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             f"m{index}",
             "task",
             "memory",

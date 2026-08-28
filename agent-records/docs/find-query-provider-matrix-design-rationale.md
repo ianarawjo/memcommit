@@ -1,4 +1,4 @@
-# Find and Query provider-matrix design rationale
+# Search and Query provider-matrix design rationale
 
 ## Status
 
@@ -10,14 +10,14 @@ had been retained. The final executable snapshot is recoverable from commit
 
 The completed 54-call ledger and its readable summary remain under
 `agent-records/outputs/find-query-latency/`. Retiring the runner does not change
-the Task 3 fixtures, active Find or Query provider policy, production prompt
+the Task 3 fixtures, active Search or Query provider policy, production prompt
 contracts, or their ordinary tests.
 
 ## Problem
 
 Forget's compact-corpus evidence made `gpt-5.6-sol` with no reasoning a useful
-latency setting, but that result cannot be transferred to Find or Query without
-operation-specific evidence. Find must satisfy a strict candidate-ID schema and
+latency setting, but that result cannot be transferred to Search or Query without
+operation-specific evidence. Search must satisfy a strict candidate-ID schema and
 rank a 300-Memory corpus. Query instead produces a free-form answer from one
 opaque 75-Memory source. Earlier Compare evidence also showed that a faster
 reasoning setting can violate one operation's output contract even when another
@@ -29,7 +29,7 @@ The evaluation crosses three subscription-backed Codex models
 (`gpt-5.6-sol`, `gpt-5.6-terra`, and `gpt-5.6-luna`) with `none`, `low`, and
 `medium` reasoning. Each condition sees six English Task 3 cases once:
 
-- Find has two historically observed study searches and one deliberately
+- Search has two historically observed study searches and one deliberately
   unsupported lookup.
 - Query has one multi-fact synthesis, one narrow boundary question, and one
   request for details absent from the source.
@@ -44,9 +44,9 @@ latency difference is small.
 
 The historical runner in `memcommit.eval.find_query_latency` loaded only
 versioned study fixtures and built an in-memory Context hierarchy. It reused
-the production Find prompt, JSON schema, candidate collector, decoder, and
+the production Search prompt, JSON schema, candidate collector, decoder, and
 ranker. It also reused the production Query prompt over the same
-newline-separated source projection. Find used exactly one provider primitive
+newline-separated source projection. Search used exactly one provider primitive
 in this campaign; fixture growth that would have triggered staged execution
 failed the cell instead of silently changing the experimental unit.
 
@@ -57,10 +57,10 @@ prompt can be reconstructed from the fixture digest and case definition.
 
 ## Quality interpretation
 
-The two observed Find result lists and the smaller human-checked subsets are
+The two observed Search result lists and the smaller human-checked subsets are
 historical references, not a gold relevance judgment. Metrics are therefore
 named `historical_result_recall`, `historical_result_precision`, and
-`study_selected_recall`. The unsupported Find case separately checks that the
+`study_selected_recall`. The unsupported Search case separately checks that the
 primary tier stays empty; a clearly labelled related fallback remains valid.
 
 Query scoring records whether transparent regular-expression probes find each
@@ -77,12 +77,12 @@ provider outputs, or timing measurements.
 
 The JSON ledger was replaced atomically after every cell, and `--resume`
 skipped only cells already present under the same campaign fingerprint.
-Provider errors and invalid Find structures were retained without discarding
+Provider errors and invalid Search structures were retained without discarding
 later cells. The ledger reports connection, provider, validation, and total
 wall time separately.
 
 The campaign is English-only, uses one public synthetic fixture family, and
-does not measure TUI rendering, user review time, multi-call staged Find, or
+does not measure TUI rendering, user review time, multi-call staged Search, or
 provider-service variance across repeated days. A condition should not be
 selected from latency alone: structure validity, unsupported-answer behavior,
 and the auditable quality diagnostics remain hard gates.
@@ -90,14 +90,14 @@ and the auditable quality diagnostics remain hard gates.
 ## Original selected operation policy
 
 After reviewing the smoke matrix, the project selected `gpt-5.6-terra` with
-`low` reasoning for both Find and Query. Terra/low led the two Find reference
+`low` reasoning for both Search and Query. Terra/low led the two Search reference
 metrics while remaining materially faster than Sol/medium. Query's fastest
 full-coverage condition was Terra/none, but Terra/low also retained complete
 audited concept coverage and the unsupported-answer boundary. Using one shared
 Terra/low policy was selected to avoid an operation-dependent reasoning switch
 for a small measured latency difference in this single-repetition run.
 
-That original pin applied to the Find command family, ordinary Query, and
+That original pin applied to the Search command family, ordinary Query, and
 query-only routes whose authorized provider was Codex ChatGPT.
 
 ## Query one-shot supersession
@@ -111,7 +111,7 @@ does not justify retaining Terra/low after removing that ranker.
 
 The whole-corpus ordinary Query decision documented in
 `ordinary-query-one-shot-design-rationale.md` supersedes the Query half of this
-selection. Find keeps its independent provider policy and `TOP_K_RERANK`.
+selection. Search keeps its independent provider policy and `TOP_K_RERANK`.
 Codex-backed Query now uses Sol/none for its one-shot answer-and-alias contract.
 This does not change the global semantic-provider preference, Forget's
 independent policy, historical evaluation conditions, or a query-only Grant
@@ -120,11 +120,11 @@ subscription-authentication checks remain authoritative.
 
 ## Production owner and compatibility
 
-`memcommit.providers.find_query` is the single production owner
-of both operation pins. Find, Query, and the public Python client import that
-owner directly. The former `commands.find_query_provider_policy` and
-`commands.ordinary_query_provider_policy` paths remain implementation-free
-compatibility exports so existing captures and Python callers retain the same
-policy and connector objects without creating a second policy. Optional
-model/reasoning/timeout arguments exist only to inject one already-frozen
-non-secret client snapshot; no connector mutates user configuration.
+`memcommit.providers.operation_connections` is the single production owner of
+the shared Search, Query, and Help connection adapters. The neutral module name
+reflects that the owner is not a Search/Query command helper. Search and Query
+commands and public clients import it directly; the former Search command
+provider-policy module is removed rather than retained as an inverse facade.
+Optional model/reasoning/timeout arguments exist only to inject one
+already-frozen non-secret client snapshot; no connector mutates user
+configuration.

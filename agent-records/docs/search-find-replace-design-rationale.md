@@ -26,10 +26,11 @@ durable history is never rewritten merely to normalize the spelling. A legacy
 semantic Find checkpoint or evaluation record therefore keeps its recorded
 operation name, while new Search materialization records use `search`.
 
-Internal `FindSearch*` compatibility types and modules may remain temporarily
-while their callers migrate. They do not authorize a second semantic execution
-path. New adapters call the same typed Search application use cases rather than
-invoking the old CLI through a subprocess.
+The internal migration is now complete: semantic retrieval uses `Search*`
+types and functions, while provider-free matching uses `Find*`. No
+`FindSearch*`, `LiteralFind*`, or inverse adapter compatibility facade remains.
+Historical root-module import paths are handled only by the centralized lazy
+compatibility finder; production code imports the canonical operation owners.
 
 ## Provider-free Find
 

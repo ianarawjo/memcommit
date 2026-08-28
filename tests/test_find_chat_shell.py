@@ -9,22 +9,22 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.layout import FormattedTextControl
 from prompt_toolkit.output import DummyOutput
 
-import memcommit.adapters.console.commands.search.chat_shell as find_chat_shell_module
+import memcommit.adapters.console.commands.search.chat_shell as search_chat_shell_module
 from memcommit.adapters.console.commands.search.chat_shell import (
-    FindChatAction,
-    FindChatMessage,
-    FindChatResult,
-    FindChatSessionResult,
-    FindChatState,
+    SearchChatAction,
+    SearchChatMessage,
+    SearchChatResult,
+    SearchChatSessionResult,
+    SearchChatState,
     _result_text,
-    render_find_chat_snapshot,
-    run_find_chat_session,
-    run_find_chat_shell,
+    render_search_chat_snapshot,
+    run_search_chat_session,
+    run_search_chat_shell,
 )
 
 
 TASK_1_CAFE_RESULTS = (
-    FindChatResult(
+    SearchChatResult(
         alias="m1",
         context_name="temp/task-1-atomized-en",
         kind="memory",
@@ -37,14 +37,14 @@ TASK_1_CAFE_RESULTS = (
             "match the hours of the first-floor campus store."
         ),
     ),
-    FindChatResult(
+    SearchChatResult(
         alias="m2",
         context_name="temp/task-1-atomized-en",
         kind="memory",
         uid="6a53b8ae",
         content=("Dining will not operate during construction. Main building cafe."),
     ),
-    FindChatResult(
+    SearchChatResult(
         alias="m3",
         context_name="temp/task-1-atomized-en",
         kind="memory",
@@ -54,7 +54,7 @@ TASK_1_CAFE_RESULTS = (
             "coffee machine on the first floor, so please use that."
         ),
     ),
-    FindChatResult(
+    SearchChatResult(
         alias="m4",
         context_name="temp/task-1-atomized-en",
         kind="memory",
@@ -65,7 +65,7 @@ TASK_1_CAFE_RESULTS = (
             "to go to an appropriate place."
         ),
     ),
-    FindChatResult(
+    SearchChatResult(
         alias="m5",
         context_name="temp/task-1-atomized-en",
         kind="memory",
@@ -79,16 +79,16 @@ TASK_1_CAFE_RESULTS = (
 )
 
 
-def _state(**changes) -> FindChatState:
+def _state(**changes) -> SearchChatState:
     values = {
         "context_name": "temp/task-1-atomized-en",
         "current_query": "related to cafe and store",
         "messages": (
-            FindChatMessage(
+            SearchChatMessage(
                 role="USER",
                 text="Find things related to the cafe and store.",
             ),
-            FindChatMessage(
+            SearchChatMessage(
                 role="MEM",
                 text="I found five matching Memories.",
             ),
@@ -98,11 +98,11 @@ def _state(**changes) -> FindChatState:
         "status": "RESULTS READY",
     }
     values.update(changes)
-    return FindChatState(**values)
+    return SearchChatState(**values)
 
 
 def test_snapshot_exposes_chat_state_without_searching_or_mutating():
-    snapshot = render_find_chat_snapshot(_state())
+    snapshot = render_search_chat_snapshot(_state())
 
     assert "MEM SEARCH · temp/task-1-atomized-en" in snapshot
     assert "QUERY · related to cafe and store" in snapshot
@@ -125,7 +125,7 @@ def test_snapshot_exposes_chat_state_without_searching_or_mutating():
 
 
 def test_snapshot_separates_related_fallback_from_primary_matches():
-    related = FindChatResult(
+    related = SearchChatResult(
         alias="m1",
         context_name="task-3/personal-memory/2024/03",
         kind="memory",
@@ -133,7 +133,7 @@ def test_snapshot_separates_related_fallback_from_primary_matches():
         content="The instructions describe an evening medication time.",
         relevance="related",
     )
-    state = FindChatState(
+    state = SearchChatState(
         context_name="task-3",
         current_query="health insurance memories",
         results=(related,),
@@ -141,7 +141,7 @@ def test_snapshot_separates_related_fallback_from_primary_matches():
         status="NO PRIMARY MATCHES · SHOWING RELATED RESULTS",
     )
 
-    snapshot = render_find_chat_snapshot(state)
+    snapshot = render_search_chat_snapshot(state)
 
     assert "PRIMARY MATCHES 0 · RELATED 1 · KEPT 0" in snapshot
     assert "PRIMARY MATCHES\n  (none)" in snapshot
@@ -152,7 +152,7 @@ def test_snapshot_separates_related_fallback_from_primary_matches():
 
 
 def test_related_results_require_one_query_and_cannot_mix_with_primary():
-    related = FindChatResult(
+    related = SearchChatResult(
         alias="m2",
         context_name="task-3",
         kind="memory",
@@ -161,10 +161,10 @@ def test_related_results_require_one_query_and_cannot_mix_with_primary():
         relevance="related",
     )
     with pytest.raises(ValueError, match="require one related query"):
-        FindChatState(context_name="task-3", results=(related,))
+        SearchChatState(context_name="task-3", results=(related,))
 
     with pytest.raises(ValueError, match="cannot mix"):
-        FindChatState(
+        SearchChatState(
             context_name="task-3",
             results=(TASK_1_CAFE_RESULTS[0], related),
             related_query="broader topic",
@@ -186,8 +186,8 @@ def test_interactive_view_opens_at_the_first_ranked_result():
 
 
 def test_result_arrow_keys_move_the_read_only_scroll_cursor(monkeypatch):
-    original_text_area = find_chat_shell_module.TextArea
-    original_build_tui_frame = find_chat_shell_module.build_tui_frame
+    original_text_area = search_chat_shell_module.TextArea
+    original_build_tui_frame = search_chat_shell_module.build_tui_frame
     captured = {}
 
     def capturing_text_area(*args, **kwargs):
@@ -202,7 +202,7 @@ def test_result_arrow_keys_move_the_read_only_scroll_cursor(monkeypatch):
         return text_area
 
     monkeypatch.setattr(
-        find_chat_shell_module,
+        search_chat_shell_module,
         "TextArea",
         capturing_text_area,
     )
@@ -212,14 +212,14 @@ def test_result_arrow_keys_move_the_read_only_scroll_cursor(monkeypatch):
         return original_build_tui_frame(*regions)
 
     monkeypatch.setattr(
-        find_chat_shell_module,
+        search_chat_shell_module,
         "build_tui_frame",
         capturing_frame,
     )
     with create_pipe_input() as pipe_input:
         # Input → results, then move down and close from results.
         pipe_input.send_text("\t\x1b[Bq")
-        action = run_find_chat_shell(
+        action = run_search_chat_shell(
             _state(),
             app_input=pipe_input,
             app_output=DummyOutput(),
@@ -227,27 +227,27 @@ def test_result_arrow_keys_move_the_read_only_scroll_cursor(monkeypatch):
         )
 
     results_area = captured["results"]
-    assert action == FindChatAction(kind="CLOSE")
+    assert action == SearchChatAction(kind="CLOSE")
     assert captured["regions"][1].container is results_area.window
     assert results_area.buffer.document.cursor_position_row == 1
     assert results_area.buffer.read_only()
 
 
-def test_escape_closes_find_chat_from_the_root_input():
+def test_escape_closes_search_chat_from_the_root_input():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\x1b")
-        action = run_find_chat_shell(
+        action = run_search_chat_shell(
             _state(),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
 
-    assert action == FindChatAction(kind="CLOSE")
+    assert action == SearchChatAction(kind="CLOSE")
 
 
 def test_dialogue_arrow_keys_scroll_long_references(monkeypatch):
-    original_text_area = find_chat_shell_module.TextArea
+    original_text_area = search_chat_shell_module.TextArea
     captured = {}
 
     def capturing_text_area(*args, **kwargs):
@@ -258,13 +258,13 @@ def test_dialogue_arrow_keys_scroll_long_references(monkeypatch):
         return text_area
 
     monkeypatch.setattr(
-        find_chat_shell_module,
+        search_chat_shell_module,
         "TextArea",
         capturing_text_area,
     )
     state = _state(
         messages=(
-            FindChatMessage(
+            SearchChatMessage(
                 role="MEM",
                 text="\n".join(f"Reference line {index}" for index in range(20)),
             ),
@@ -273,7 +273,7 @@ def test_dialogue_arrow_keys_scroll_long_references(monkeypatch):
     with create_pipe_input() as pipe_input:
         # Input → results → dialogue, move one logical line up, then close.
         pipe_input.send_text("\t\t\x1b[Aq")
-        action = run_find_chat_shell(
+        action = run_search_chat_shell(
             state,
             app_input=pipe_input,
             app_output=DummyOutput(),
@@ -281,13 +281,13 @@ def test_dialogue_arrow_keys_scroll_long_references(monkeypatch):
         )
 
     dialogue_area = captured["dialogue"]
-    assert action == FindChatAction(kind="CLOSE")
+    assert action == SearchChatAction(kind="CLOSE")
     assert dialogue_area.buffer.document.cursor_position_row == 19
     assert dialogue_area.buffer.read_only()
 
 
-def test_empty_state_starts_with_an_open_find_question():
-    snapshot = render_find_chat_snapshot(FindChatState(context_name="task-1"))
+def test_empty_state_starts_with_an_open_search_question():
+    snapshot = render_search_chat_snapshot(SearchChatState(context_name="task-1"))
 
     assert "QUERY · (not asked yet)" in snapshot
     assert "OPEN QUESTION · SEARCH" in snapshot
@@ -295,10 +295,10 @@ def test_empty_state_starts_with_an_open_find_question():
 
 
 def test_terminal_controls_are_sanitized_in_controller_supplied_text():
-    snapshot = render_find_chat_snapshot(
+    snapshot = render_search_chat_snapshot(
         _state(
             messages=(
-                FindChatMessage(
+                SearchChatMessage(
                     role="MEM",
                     text="safe\x1b[2Jstill visible",
                 ),
@@ -314,14 +314,14 @@ def test_shell_returns_one_submission_for_a_future_controller():
     state = _state()
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("only the coffee-machine results\r")
-        action = run_find_chat_shell(
+        action = run_search_chat_shell(
             state,
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
 
-    assert action == FindChatAction(
+    assert action == SearchChatAction(
         kind="SUBMIT",
         text="only the coffee-machine results",
     )
@@ -331,14 +331,14 @@ def test_shell_returns_one_submission_for_a_future_controller():
 def test_ctrl_j_adds_a_newline_without_submitting_early():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("cafe\nand campus store\r")
-        action = run_find_chat_shell(
+        action = run_search_chat_shell(
             _state(),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
 
-    assert action == FindChatAction(
+    assert action == SearchChatAction(
         kind="SUBMIT",
         text="cafe\nand campus store",
     )
@@ -347,7 +347,7 @@ def test_ctrl_j_adds_a_newline_without_submitting_early():
 def test_blank_submission_waits_for_a_real_turn():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\rcoffee machine\r")
-        action = run_find_chat_shell(
+        action = run_search_chat_shell(
             _state(),
             app_input=pipe_input,
             app_output=DummyOutput(),
@@ -360,8 +360,8 @@ def test_blank_submission_waits_for_a_real_turn():
 def test_session_keeps_one_application_for_repeated_controller_turns(
     monkeypatch,
 ):
-    original_application = find_chat_shell_module.Application
-    original_header = find_chat_shell_module.render_find_chat_header
+    original_application = search_chat_shell_module.Application
+    original_header = search_chat_shell_module.render_search_chat_header
     application_count = 0
     first_applied = threading.Event()
     second_applied = threading.Event()
@@ -380,18 +380,18 @@ def test_session_keeps_one_application_for_repeated_controller_turns(
         return original_header(state)
 
     monkeypatch.setattr(
-        find_chat_shell_module,
+        search_chat_shell_module,
         "Application",
         capturing_application,
     )
     monkeypatch.setattr(
-        find_chat_shell_module,
-        "render_find_chat_header",
+        search_chat_shell_module,
+        "render_search_chat_header",
         capturing_header,
     )
     calls = []
 
-    def handle_turn(state: FindChatState, text: str) -> FindChatState:
+    def handle_turn(state: SearchChatState, text: str) -> SearchChatState:
         calls.append(text)
         narrowed = tuple(
             result
@@ -403,8 +403,8 @@ def test_session_keeps_one_application_for_repeated_controller_turns(
             current_query=f"turn {len(calls)}",
             messages=(
                 *state.messages,
-                FindChatMessage(role="USER", text=text),
-                FindChatMessage(
+                SearchChatMessage(role="USER", text=text),
+                SearchChatMessage(
                     role="MEM",
                     text=f"Completed turn {len(calls)}.",
                 ),
@@ -430,7 +430,7 @@ def test_session_keeps_one_application_for_repeated_controller_turns(
 
         feeder = threading.Thread(target=feed_turns)
         feeder.start()
-        result = run_find_chat_session(
+        result = run_search_chat_session(
             _state(kept_count=0),
             handle_turn=handle_turn,
             app_input=pipe_input,
@@ -442,7 +442,7 @@ def test_session_keeps_one_application_for_repeated_controller_turns(
     assert feeder_errors == []
     assert not feeder.is_alive()
     assert application_count == 1
-    assert result == FindChatSessionResult(
+    assert result == SearchChatSessionResult(
         status="CLOSED",
         state=result.state,
         submitted_turns=("first refinement", "second refinement"),
@@ -455,13 +455,13 @@ def test_session_keeps_one_application_for_repeated_controller_turns(
 
 
 def test_failed_controller_turn_preserves_results_in_same_application():
-    def fail(_state: FindChatState, _text: str) -> FindChatState:
+    def fail(_state: SearchChatState, _text: str) -> SearchChatState:
         raise RuntimeError("provider unavailable")
 
     initial = _state()
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("try another search\r\x03")
-        result = run_find_chat_session(
+        result = run_search_chat_session(
             initial,
             handle_turn=fail,
             app_input=pipe_input,
@@ -476,7 +476,7 @@ def test_failed_controller_turn_preserves_results_in_same_application():
 
 
 def test_busy_indicator_cycles_dot_frames_until_the_turn_finishes(monkeypatch):
-    original_label = find_chat_shell_module._processing_find_turn_label
+    original_label = search_chat_shell_module._processing_search_turn_label
     rendered_frames: set[str] = set()
     all_frames_rendered = threading.Event()
     handler_started = threading.Event()
@@ -491,17 +491,17 @@ def test_busy_indicator_cycles_dot_frames_until_the_turn_finishes(monkeypatch):
         return label
 
     monkeypatch.setattr(
-        find_chat_shell_module,
-        "_processing_find_turn_label",
+        search_chat_shell_module,
+        "_processing_search_turn_label",
         capture_label,
     )
     monkeypatch.setattr(
-        find_chat_shell_module,
-        "_FIND_BUSY_INTERVAL_SECONDS",
+        search_chat_shell_module,
+        "_SEARCH_BUSY_INTERVAL_SECONDS",
         0.01,
     )
 
-    def handle_turn(state: FindChatState, _text: str) -> FindChatState:
+    def handle_turn(state: SearchChatState, _text: str) -> SearchChatState:
         handler_started.set()
         if not release_handler.wait(2):
             raise RuntimeError("test did not release handler")
@@ -524,7 +524,7 @@ def test_busy_indicator_cycles_dot_frames_until_the_turn_finishes(monkeypatch):
 
         feeder = threading.Thread(target=close_after_animation)
         feeder.start()
-        result = run_find_chat_session(
+        result = run_search_chat_session(
             _state(),
             handle_turn=handle_turn,
             app_input=pipe_input,
@@ -544,7 +544,7 @@ def test_busy_indicator_cycles_dot_frames_until_the_turn_finishes(monkeypatch):
 
 
 def test_busy_turn_stays_visible_and_blocks_parallel_submission(monkeypatch):
-    original_header = find_chat_shell_module.render_find_chat_header
+    original_header = search_chat_shell_module.render_search_chat_header
     thinking_rendered = threading.Event()
     handler_started = threading.Event()
     release_handler = threading.Event()
@@ -557,12 +557,12 @@ def test_busy_turn_stays_visible_and_blocks_parallel_submission(monkeypatch):
         return original_header(state)
 
     monkeypatch.setattr(
-        find_chat_shell_module,
-        "render_find_chat_header",
+        search_chat_shell_module,
+        "render_search_chat_header",
         capturing_header,
     )
 
-    def handle_turn(state: FindChatState, text: str) -> FindChatState:
+    def handle_turn(state: SearchChatState, text: str) -> SearchChatState:
         calls.append(text)
         handler_started.set()
         if not release_handler.wait(2):
@@ -571,8 +571,8 @@ def test_busy_turn_stays_visible_and_blocks_parallel_submission(monkeypatch):
             state,
             messages=(
                 *state.messages,
-                FindChatMessage(role="USER", text=text),
-                FindChatMessage(role="MEM", text="Finished."),
+                SearchChatMessage(role="USER", text=text),
+                SearchChatMessage(role="MEM", text="Finished."),
             ),
             status="ANSWER READY",
         )
@@ -595,7 +595,7 @@ def test_busy_turn_stays_visible_and_blocks_parallel_submission(monkeypatch):
 
         feeder = threading.Thread(target=feed_while_busy)
         feeder.start()
-        result = run_find_chat_session(
+        result = run_search_chat_session(
             _state(),
             handle_turn=handle_turn,
             app_input=pipe_input,
@@ -615,7 +615,7 @@ def test_busy_control_d_waits_for_the_current_turn():
     handler_started = threading.Event()
     release_handler = threading.Event()
 
-    def handle_turn(state: FindChatState, text: str) -> FindChatState:
+    def handle_turn(state: SearchChatState, text: str) -> SearchChatState:
         handler_started.set()
         if not release_handler.wait(2):
             raise RuntimeError("test did not release handler")
@@ -623,8 +623,8 @@ def test_busy_control_d_waits_for_the_current_turn():
             state,
             messages=(
                 *state.messages,
-                FindChatMessage(role="USER", text=text),
-                FindChatMessage(role="MEM", text="Finished before EOF close."),
+                SearchChatMessage(role="USER", text=text),
+                SearchChatMessage(role="MEM", text="Finished before EOF close."),
             ),
             status="ANSWER READY",
         )
@@ -639,7 +639,7 @@ def test_busy_control_d_waits_for_the_current_turn():
 
         feeder = threading.Thread(target=close_while_busy)
         feeder.start()
-        result = run_find_chat_session(
+        result = run_search_chat_session(
             _state(),
             handle_turn=handle_turn,
             app_input=pipe_input,
@@ -657,7 +657,7 @@ def test_input_stream_eof_during_busy_turn_preserves_completed_state():
     handler_started = threading.Event()
     release_handler = threading.Event()
 
-    def handle_turn(state: FindChatState, text: str) -> FindChatState:
+    def handle_turn(state: SearchChatState, text: str) -> SearchChatState:
         handler_started.set()
         if not release_handler.wait(2):
             raise RuntimeError("test did not release handler")
@@ -665,8 +665,8 @@ def test_input_stream_eof_during_busy_turn_preserves_completed_state():
             state,
             messages=(
                 *state.messages,
-                FindChatMessage(role="USER", text=text),
-                FindChatMessage(role="MEM", text="Finished after stream EOF."),
+                SearchChatMessage(role="USER", text=text),
+                SearchChatMessage(role="MEM", text="Finished after stream EOF."),
             ),
             status="ANSWER READY",
         )
@@ -684,7 +684,7 @@ def test_input_stream_eof_during_busy_turn_preserves_completed_state():
 
         feeder = threading.Thread(target=end_input_while_busy)
         feeder.start()
-        result = run_find_chat_session(
+        result = run_search_chat_session(
             _state(),
             handle_turn=handle_turn,
             app_input=pipe_input,
@@ -703,27 +703,27 @@ def test_input_stream_eof_during_busy_turn_preserves_completed_state():
 def test_close_returns_without_controller_or_provider_work(keys: str):
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(keys)
-        action = run_find_chat_shell(
+        action = run_search_chat_shell(
             _state(),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
 
-    assert action == FindChatAction(kind="CLOSE")
+    assert action == SearchChatAction(kind="CLOSE")
 
 
 def test_state_copies_message_sequences_before_waiting():
     messages = [
-        FindChatMessage(role="USER", text="first query"),
+        SearchChatMessage(role="USER", text="first query"),
     ]
-    state = FindChatState(context_name="task-1", messages=messages)
+    state = SearchChatState(context_name="task-1", messages=messages)
 
-    messages.append(FindChatMessage(role="MEM", text="late mutation"))
+    messages.append(SearchChatMessage(role="MEM", text="late mutation"))
 
     assert len(state.messages) == 1
 
 
 def test_non_tty_entry_has_a_clear_error():
     with pytest.raises(ValueError, match="requires a TTY"):
-        run_find_chat_shell(_state(), require_tty=True)
+        run_search_chat_shell(_state(), require_tty=True)

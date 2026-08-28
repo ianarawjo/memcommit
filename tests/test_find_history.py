@@ -8,8 +8,8 @@ import pytest
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.search.command import _run_find_search_request
-from memcommit.adapters.console.commands.search.search_workbench import FindSearchRequest
+from memcommit.adapters.console.commands.search.command import _run_search_request
+from memcommit.adapters.console.commands.search.search_workbench import SearchRequest
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
@@ -32,11 +32,9 @@ class CurrentNoticeProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "search"
         assert output_schema is not None
-        payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+        payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
         self.queries.append(payload["query"])
-        contents = [
-            candidate.get("content", "") for candidate in payload["candidates"]
-        ]
+        contents = [candidate.get("content", "") for candidate in payload["candidates"]]
         self.candidate_contents.append(contents)
         matching = next(
             candidate["candidate_id"]
@@ -77,7 +75,7 @@ def test_time_language_searches_only_current_memories(
     _edited_fixture()
     provider = CurrentNoticeProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
 
@@ -107,17 +105,17 @@ def test_application_request_with_time_language_has_current_mode(
     catalog = freeze_readable_context_catalog(store, access)
     provider = CurrentNoticeProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
-    request = FindSearchRequest(
+    request = SearchRequest(
         "the last updated Memory",
         (current,),
         include_descendants=False,
         follow_embeds=False,
     )
 
-    response = _run_find_search_request(store, catalog, request)
+    response = _run_search_request(store, catalog, request)
 
     assert response.mode == "CURRENT"
     assert len(response.results) == 1

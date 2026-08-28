@@ -15,7 +15,9 @@ import memcommit.adapters.console.commands.rationale.command as rationale_comman
 from memcommit.adapters.python_api import MemCommitClient, ShowContextResult
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.authority.access import resolve_context_access
-from memcommit.adapters.console.shared.memory_picker import MemoryReportTargetSelection
+from memcommit.adapters.console.shared.memory_picker import (
+    MemoryReportTargetSelection,
+)
 from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_profile_readable_context_catalog,
 )
@@ -29,7 +31,10 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
+from memcommit.application.operations.profile.model import (
+    create_authority_grant,
+    update_authority_grant,
+)
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.summarize.application import SummarizeRequest
 from memcommit.application.operations.summarize.runtime import execute_summarize
@@ -398,14 +403,14 @@ def test_profile_target_workbenches_keep_all_readable_names_from_a_grant(
         )
 
     monkeypatch.setattr(query_command, "run_query_workbench", capture_query)
-    monkeypatch.setattr(find_command, "run_find_search_workbench", capture_find)
+    monkeypatch.setattr(find_command, "run_search_workbench", capture_find)
 
     query_command._open_query_workbench(
         store,
         context_name=None,
         language="en",
     )
-    find_command._open_find_search_workbench(
+    find_command._open_search_workbench(
         store,
         access,
         current_name="campus-wiki",

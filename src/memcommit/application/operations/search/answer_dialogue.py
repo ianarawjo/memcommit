@@ -1,4 +1,5 @@
 """Strict synthesis of one three-scope interactive Search answer."""
+
 from __future__ import annotations
 
 import json
@@ -8,9 +9,9 @@ from dataclasses import dataclass
 from typing import Literal, Protocol, Sequence
 
 from memcommit.application.operations.search.answer_references import (
-    FIND_ANSWER_SENTENCE_LIMIT,
-    FindAnswerEvidence,
-    FindAnswerSentence,
+    SEARCH_ANSWER_SENTENCE_LIMIT,
+    SearchAnswerEvidence,
+    SearchAnswerSentence,
 )
 from memcommit.providers.subscription import QueryProviderError
 from memcommit.application.semantic_execution import (
@@ -24,18 +25,22 @@ from memcommit.application.semantic_execution import (
 )
 
 
-FIND_ANSWER_OPERATION = "search answer"
-FIND_ANSWER_RESPONSE_LIMIT = 50_000
-FIND_ANSWER_CORPUS_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
-FIND_ANSWER_REQUEST_LIMIT = 20_000
-def _find_answer_execution_policy() -> SemanticExecutionPolicy:
+SEARCH_ANSWER_OPERATION = "search answer"
+SEARCH_ANSWER_RESPONSE_LIMIT = 50_000
+SEARCH_ANSWER_CORPUS_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
+SEARCH_ANSWER_REQUEST_LIMIT = 20_000
+
+
+def _search_answer_execution_policy() -> SemanticExecutionPolicy:
     return SemanticExecutionPolicy(
-        operation=FIND_ANSWER_OPERATION,
+        operation=SEARCH_ANSWER_OPERATION,
         strategy=ExecutionStrategy.HIERARCHICAL_REDUCE,
-        one_shot_limits=BudgetLimits(max_input_chars=FIND_ANSWER_CORPUS_LIMIT),
+        one_shot_limits=BudgetLimits(max_input_chars=SEARCH_ANSWER_CORPUS_LIMIT),
         staged_supported=False,
     )
-FindOutsideStatus = Literal[
+
+
+SearchOutsideStatus = Literal[
     "NOT_REQUESTED",
     "SEARCHED",
     "PARTIAL",
@@ -52,15 +57,15 @@ _OUTPUT_KEYS = {
 _HOST_CITATION_PATTERN = re.compile(r"\[[0-9]+\]")
 
 
-class FindAnswerError(RuntimeError):
+class SearchAnswerError(RuntimeError):
     """Safe failure at the scoped Search answer synthesis boundary."""
 
 
-class FindAnswerCorpusTooLarge(FindAnswerError):
+class SearchAnswerCorpusTooLarge(SearchAnswerError):
     """The requested evidence scopes cannot fit one prototype completion."""
 
 
-class FindAnswerProvider(Protocol):
+class SearchAnswerProvider(Protocol):
     def complete(
         self,
         prompt: str,
@@ -72,15 +77,15 @@ class FindAnswerProvider(Protocol):
 
 
 @dataclass(frozen=True)
-class FindScopedAnswer:
+class SearchScopedAnswer:
     """Exactly three answer sentences in visible/context/outside order."""
 
-    visible: FindAnswerSentence
-    context: FindAnswerSentence
-    outside: FindAnswerSentence
+    visible: SearchAnswerSentence
+    context: SearchAnswerSentence
+    outside: SearchAnswerSentence
 
     @property
-    def sentences(self) -> tuple[FindAnswerSentence, ...]:
+    def sentences(self) -> tuple[SearchAnswerSentence, ...]:
         return (self.visible, self.context, self.outside)
 
 
@@ -91,17 +96,15 @@ def _source_schema(aliases: Sequence[str]) -> dict[str, object]:
         # Codex strict output rejects ``uniqueItems``. The local parser still
         # rejects duplicate aliases before any answer is displayed.
         "items": (
-            {"type": "string", "enum": list(aliases)}
-            if aliases
-            else {"type": "string"}
+            {"type": "string", "enum": list(aliases)} if aliases else {"type": "string"}
         ),
     }
 
 
-def find_answer_output_schema(
-    visible: Sequence[FindAnswerEvidence],
-    context: Sequence[FindAnswerEvidence],
-    outside: Sequence[FindAnswerEvidence],
+def search_answer_output_schema(
+    visible: Sequence[SearchAnswerEvidence],
+    context: Sequence[SearchAnswerEvidence],
+    outside: Sequence[SearchAnswerEvidence],
 ) -> dict[str, object]:
     """Return a flat strict schema with scope-specific alias allowlists."""
     visible_aliases = [item.alias for item in visible]
@@ -110,7 +113,7 @@ def find_answer_output_schema(
     sentence = {
         "type": "string",
         "minLength": 1,
-        "maxLength": FIND_ANSWER_SENTENCE_LIMIT,
+        "maxLength": SEARCH_ANSWER_SENTENCE_LIMIT,
     }
     return {
         "type": "object",
@@ -149,17 +152,16 @@ def _bounded_sentence(value: object, label: str) -> str:
     if (
         not isinstance(value, str)
         or not value.strip()
-        or len(value) > FIND_ANSWER_SENTENCE_LIMIT
+        or len(value) > SEARCH_ANSWER_SENTENCE_LIMIT
         or "\n" in value
         or "\r" in value
         or _HOST_CITATION_PATTERN.search(value) is not None
         or any(
-            unicodedata.category(character) == "Cc"
-            and character != "\t"
+            unicodedata.category(character) == "Cc" and character != "\t"
             for character in value
         )
     ):
-        raise FindAnswerError(f"Search answer returned invalid {label}.")
+        raise SearchAnswerError(f"Search answer returned invalid {label}.")
     return value.strip()
 
 
@@ -169,20 +171,19 @@ def _optional_request_text(value: object, label: str) -> str | None:
     if (
         not isinstance(value, str)
         or not value.strip()
-        or len(value) > FIND_ANSWER_REQUEST_LIMIT
+        or len(value) > SEARCH_ANSWER_REQUEST_LIMIT
         or any(
-            unicodedata.category(character) == "Cc"
-            and character not in {"\n", "\t"}
+            unicodedata.category(character) == "Cc" and character not in {"\n", "\t"}
             for character in value
         )
     ):
-        raise FindAnswerError(f"Search answer requires valid {label}.")
+        raise SearchAnswerError(f"Search answer requires valid {label}.")
     return value.strip()
 
 
 def _source_aliases(
     value: object,
-    evidence: Sequence[FindAnswerEvidence],
+    evidence: Sequence[SearchAnswerEvidence],
     label: str,
 ) -> tuple[str, ...]:
     allowed = {item.alias for item in evidence}
@@ -193,14 +194,12 @@ def _source_aliases(
         or len(set(value)) != len(value)
         or any(alias not in allowed for alias in value)
     ):
-        raise FindAnswerError(
-            f"Search answer returned invalid {label} sources."
-        )
+        raise SearchAnswerError(f"Search answer returned invalid {label} sources.")
     return tuple(value)
 
 
 def _evidence_payload(
-    evidence: Sequence[FindAnswerEvidence],
+    evidence: Sequence[SearchAnswerEvidence],
 ) -> list[dict[str, str]]:
     # Durable UIDs stay local for the eventual reference list. The answer
     # provider receives only temporary aliases and already-visible projections.
@@ -217,39 +216,39 @@ def _evidence_payload(
 
 def _build_prompt(
     user_text: str,
-    visible: Sequence[FindAnswerEvidence],
-    context: Sequence[FindAnswerEvidence],
-    outside: Sequence[FindAnswerEvidence],
-    outside_status: FindOutsideStatus,
+    visible: Sequence[SearchAnswerEvidence],
+    context: Sequence[SearchAnswerEvidence],
+    outside: Sequence[SearchAnswerEvidence],
+    outside_status: SearchOutsideStatus,
     *,
     interpreted_request: str | None,
     pending_clarification: str | None,
 ) -> str:
     payload_value = {
-            "question": {
-                "latest_user_text": user_text,
-                "interpreted_request": interpreted_request,
-                "pending_visible_clarification": pending_clarification,
+        "question": {
+            "latest_user_text": user_text,
+            "interpreted_request": interpreted_request,
+            "pending_visible_clarification": pending_clarification,
+        },
+        "scopes": {
+            "visible_search_results": _evidence_payload(visible),
+            "same_context_outside_results": _evidence_payload(context),
+            "other_contexts": {
+                "status": outside_status,
+                "evidence": _evidence_payload(outside),
             },
-            "scopes": {
-                "visible_find_results": _evidence_payload(visible),
-                "same_context_outside_results": _evidence_payload(context),
-                "other_contexts": {
-                    "status": outside_status,
-                    "evidence": _evidence_payload(outside),
-                },
-            },
-        }
+        },
+    }
     payload = json.dumps(
         payload_value,
         ensure_ascii=False,
     )
     plan = plan_semantic_execution(
-        _find_answer_execution_policy(),
+        _search_answer_execution_policy(),
         BudgetVector(input_chars=len(payload)),
     )
     if plan.mode is not ExecutionMode.ONE_SHOT:
-        raise FindAnswerCorpusTooLarge(
+        raise SearchAnswerCorpusTooLarge(
             "The scoped Search answer corpus is too large for one prototype "
             "request; hierarchical evidence synthesis is not yet enabled."
         )
@@ -280,8 +279,7 @@ def _build_prompt(
         "check was incomplete. A query item exposes only its public name and "
         "query-only label; never infer concealed content.\n"
         "Return exactly one JSON object matching the supplied schema.\n\n"
-        "SCOPED FIND ANSWER PAYLOAD:\n"
-        + payload
+        "SCOPED SEARCH ANSWER PAYLOAD:\n" + payload
     )
 
 
@@ -308,7 +306,7 @@ def _host_empty_context_sentence(language_text: str) -> str:
 
 def _host_outside_sentence(
     language_text: str,
-    outside_status: FindOutsideStatus,
+    outside_status: SearchOutsideStatus,
 ) -> str:
     korean = _uses_korean(language_text)
     if outside_status == "NOT_REQUESTED":
@@ -337,8 +335,7 @@ def _host_outside_sentence(
             )
         )
     return (
-        "확인한 다른 Context에서는 이 답변을 뒷받침할 추가 근거를 "
-        "찾지 못했습니다."
+        "확인한 다른 Context에서는 이 답변을 뒷받침할 추가 근거를 찾지 못했습니다."
         if korean
         else (
             "No additional evidence supporting this answer was found in the "
@@ -349,25 +346,21 @@ def _host_outside_sentence(
 
 def _parse_answer(
     raw: object,
-    visible: Sequence[FindAnswerEvidence],
-    context: Sequence[FindAnswerEvidence],
-    outside: Sequence[FindAnswerEvidence],
-    outside_status: FindOutsideStatus,
-) -> FindScopedAnswer:
-    if not isinstance(raw, str) or len(raw) > FIND_ANSWER_RESPONSE_LIMIT:
-        raise FindAnswerError(
-            "Search answer returned invalid structured output."
-        )
+    visible: Sequence[SearchAnswerEvidence],
+    context: Sequence[SearchAnswerEvidence],
+    outside: Sequence[SearchAnswerEvidence],
+    outside_status: SearchOutsideStatus,
+) -> SearchScopedAnswer:
+    if not isinstance(raw, str) or len(raw) > SEARCH_ANSWER_RESPONSE_LIMIT:
+        raise SearchAnswerError("Search answer returned invalid structured output.")
     try:
         value = json.loads(raw, object_pairs_hook=_strict_json_object)
     except (json.JSONDecodeError, ValueError) as error:
-        raise FindAnswerError(
+        raise SearchAnswerError(
             "Search answer returned invalid structured output."
         ) from error
     if not isinstance(value, dict) or set(value) != _OUTPUT_KEYS:
-        raise FindAnswerError(
-            "Search answer returned invalid structured output."
-        )
+        raise SearchAnswerError("Search answer returned invalid structured output.")
     visible_sources = _source_aliases(
         value["visible_sources"],
         visible,
@@ -384,51 +377,47 @@ def _parse_answer(
         "outside-Context",
     )
     if not visible_sources:
-        raise FindAnswerError(
-            "Search answer requires visible-result provenance."
-        )
+        raise SearchAnswerError("Search answer requires visible-result provenance.")
     if outside_status in {"NOT_REQUESTED", "UNAVAILABLE"} and outside_sources:
-        raise FindAnswerError(
+        raise SearchAnswerError(
             "Search answer cited an outside Context that was not searched."
         )
-    return FindScopedAnswer(
-        visible=FindAnswerSentence(
+    return SearchScopedAnswer(
+        visible=SearchAnswerSentence(
             _bounded_sentence(value["visible_text"], "visible sentence"),
             visible_sources,
         ),
-        context=FindAnswerSentence(
+        context=SearchAnswerSentence(
             _bounded_sentence(value["context_text"], "Context sentence"),
             context_sources,
         ),
-        outside=FindAnswerSentence(
+        outside=SearchAnswerSentence(
             _bounded_sentence(value["outside_text"], "outside sentence"),
             outside_sources,
         ),
     )
 
 
-def synthesize_find_answer(
+def synthesize_search_answer(
     user_text: str,
-    visible: Sequence[FindAnswerEvidence],
-    context: Sequence[FindAnswerEvidence],
-    outside: Sequence[FindAnswerEvidence],
-    outside_status: FindOutsideStatus,
-    provider: FindAnswerProvider,
+    visible: Sequence[SearchAnswerEvidence],
+    context: Sequence[SearchAnswerEvidence],
+    outside: Sequence[SearchAnswerEvidence],
+    outside_status: SearchOutsideStatus,
+    provider: SearchAnswerProvider,
     *,
     interpreted_request: str | None = None,
     pending_clarification: str | None = None,
-) -> FindScopedAnswer:
+) -> SearchScopedAnswer:
     """Generate and validate one three-scope answer completion."""
     if (
         not isinstance(user_text, str)
         or not user_text.strip()
-        or len(user_text) > FIND_ANSWER_REQUEST_LIMIT
+        or len(user_text) > SEARCH_ANSWER_REQUEST_LIMIT
     ):
-        raise FindAnswerError("Search answer requires a nonblank question.")
+        raise SearchAnswerError("Search answer requires a nonblank question.")
     if not visible:
-        raise FindAnswerError(
-            "Search answer requires at least one visible result."
-        )
+        raise SearchAnswerError("Search answer requires at least one visible result.")
     interpreted_request = _optional_request_text(
         interpreted_request,
         "interpreted request",
@@ -448,19 +437,19 @@ def synthesize_find_answer(
                 interpreted_request=interpreted_request,
                 pending_clarification=pending_clarification,
             ),
-            operation=FIND_ANSWER_OPERATION,
-            output_schema=find_answer_output_schema(
+            operation=SEARCH_ANSWER_OPERATION,
+            output_schema=search_answer_output_schema(
                 visible,
                 context,
                 outside,
             ),
         )
-    except FindAnswerCorpusTooLarge:
+    except SearchAnswerCorpusTooLarge:
         raise
     except QueryProviderError as error:
-        raise FindAnswerError(str(error)) from error
+        raise SearchAnswerError(str(error)) from error
     except Exception as error:
-        raise FindAnswerError("Search answer provider failed.") from error
+        raise SearchAnswerError("Search answer provider failed.") from error
     answer = _parse_answer(
         raw,
         visible,
@@ -479,7 +468,7 @@ def synthesize_find_answer(
     )
     context_sentence = answer.context
     if not context_sentence.source_aliases:
-        context_sentence = FindAnswerSentence(
+        context_sentence = SearchAnswerSentence(
             _host_empty_context_sentence(language_text)
         )
     outside_sentence = answer.outside
@@ -487,10 +476,10 @@ def synthesize_find_answer(
         outside_status in {"NOT_REQUESTED", "UNAVAILABLE"}
         or not outside_sentence.source_aliases
     ):
-        outside_sentence = FindAnswerSentence(
+        outside_sentence = SearchAnswerSentence(
             _host_outside_sentence(language_text, outside_status)
         )
-    return FindScopedAnswer(
+    return SearchScopedAnswer(
         visible=answer.visible,
         context=context_sentence,
         outside=outside_sentence,

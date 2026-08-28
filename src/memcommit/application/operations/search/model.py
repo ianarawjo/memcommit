@@ -1,4 +1,5 @@
 """Validated semantic search over locally visible memcommit information."""
+
 from __future__ import annotations
 
 import json
@@ -28,15 +29,15 @@ from memcommit.application.semantic.disclosure import (
 )
 
 
-FIND_CORPUS_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
-FIND_RELATED_QUERY_LIMIT = 2_000
+SEARCH_CORPUS_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
+SEARCH_RELATED_QUERY_LIMIT = 2_000
 SearchKind = Literal["memory", "memory_ref", "query_context", "artifact"]
 SearchRelevance = Literal["primary", "related"]
 
-FIND_EXECUTION_POLICY = SemanticExecutionPolicy(
+SEARCH_EXECUTION_POLICY = SemanticExecutionPolicy(
     operation="search",
     strategy=ExecutionStrategy.TOP_K_RERANK,
-    one_shot_limits=BudgetLimits(max_input_chars=FIND_CORPUS_CHAR_LIMIT),
+    one_shot_limits=BudgetLimits(max_input_chars=SEARCH_CORPUS_CHAR_LIMIT),
     staged_supported=True,
 )
 
@@ -67,19 +68,17 @@ class SearchArtifact:
 SearchItem = Memory | MemoryRef | QueryContextRef | SearchArtifact
 
 
-class FindError(RuntimeError):
-    """Compatibility-named safe semantic Search error."""
+class SearchError(RuntimeError):
+    """Safe semantic Search error."""
 
 
 def _valid_related_query(value: object, *, allow_empty: bool) -> bool:
-    if not isinstance(value, str) or len(value) > FIND_RELATED_QUERY_LIMIT:
+    if not isinstance(value, str) or len(value) > SEARCH_RELATED_QUERY_LIMIT:
         return False
     stripped = value.strip()
     if not stripped:
         return allow_empty
-    return not any(
-        unicodedata.category(character) == "Cc" for character in value
-    )
+    return not any(unicodedata.category(character) == "Cc" for character in value)
 
 
 class PromptProvider(Protocol):
@@ -164,7 +163,7 @@ def collect_candidates_from_roots(
             follow_contexts=recursive,
         )
     except SemanticDisclosureError as error:
-        raise FindError(str(error)) from error
+        raise SearchError(str(error)) from error
     candidates: list[SearchCandidate] = []
     visited_contexts: set[str] = set()
     by_logical_identity: dict[tuple[str, str, str], int] = {}
@@ -272,8 +271,7 @@ def append_artifact_candidates(
                 context_names=(context_name,),
                 item=artifact,
                 search_text=(
-                    f"{artifact.artifact_kind}\n{artifact.title}\n"
-                    f"{artifact.content}"
+                    f"{artifact.artifact_kind}\n{artifact.title}\n{artifact.content}"
                 ),
             )
         )
@@ -293,7 +291,7 @@ def _candidate_payload(candidate: SearchCandidate) -> dict[str, object]:
     return payload
 
 
-def _find_output_schema(
+def _search_output_schema(
     limit: int,
     candidates: list[SearchCandidate],
 ) -> dict[str, object]:
@@ -302,10 +300,7 @@ def _find_output_schema(
         "properties": {
             "candidate_id": {
                 "type": "string",
-                "enum": [
-                    candidate.candidate_id
-                    for candidate in candidates
-                ],
+                "enum": [candidate.candidate_id for candidate in candidates],
             },
         },
         "required": ["candidate_id"],
@@ -321,7 +316,7 @@ def _find_output_schema(
             },
             "related_query": {
                 "type": "string",
-                "maxLength": FIND_RELATED_QUERY_LIMIT,
+                "maxLength": SEARCH_RELATED_QUERY_LIMIT,
             },
             "related_matches": {
                 "type": "array",
@@ -334,7 +329,7 @@ def _find_output_schema(
     }
 
 
-def _find_payload(
+def _search_payload(
     query: str,
     candidates: Sequence[SearchCandidate],
     limit: int,
@@ -342,44 +337,41 @@ def _find_payload(
     return {
         "query": query,
         "limit": limit,
-        "candidates": [
-            _candidate_payload(candidate)
-            for candidate in candidates
-        ],
+        "candidates": [_candidate_payload(candidate) for candidate in candidates],
     }
 
 
-def _find_workload(
+def _search_workload(
     query: str,
     candidates: Sequence[SearchCandidate],
     limit: int,
 ) -> BudgetVector:
     values = list(candidates)
     return json_budget(
-        _find_payload(query, values, limit),
+        _search_payload(query, values, limit),
         item_count=len(values),
-        output_schema=_find_output_schema(limit, values),
+        output_schema=_search_output_schema(limit, values),
         expected_output_items=limit,
     )
 
 
-def _build_find_prompt(
+def _build_search_prompt(
     query: str,
     candidates: list[SearchCandidate],
     limit: int,
 ) -> str:
     payload = json.dumps(
-        _find_payload(query, candidates, limit),
+        _search_payload(query, candidates, limit),
         ensure_ascii=False,
         separators=(",", ":"),
         sort_keys=True,
     )
     plan = plan_semantic_execution(
-        FIND_EXECUTION_POLICY,
-        _find_workload(query, candidates, limit),
+        SEARCH_EXECUTION_POLICY,
+        _search_workload(query, candidates, limit),
     )
     if plan.mode is not ExecutionMode.ONE_SHOT:
-        raise FindError(
+        raise SearchError(
             "The searchable Context is too large for one prototype search "
             "request. Narrow the scope with '--direct' or a smaller Context."
         )
@@ -408,8 +400,7 @@ def _build_find_prompt(
         "Do not answer the query and do not reproduce candidate contents.\n\n"
         # Retain the existing structured payload marker so recorded fixtures and
         # compatibility decoders do not need a schema migration for a CLI rename.
-        "FIND PAYLOAD:\n"
-        + payload
+        "SEARCH PAYLOAD:\n" + payload
     )
 
 
@@ -422,24 +413,24 @@ def _rank_candidate_batch(
 ) -> list[SearchMatch]:
     """Return validated primary matches or an explicitly related fallback."""
     if not isinstance(query, str) or not query.strip():
-        raise FindError("Search query must be non-empty.")
+        raise SearchError("Search query must be non-empty.")
     if not 1 <= limit <= 20:
-        raise FindError("Search limit must be between 1 and 20.")
+        raise SearchError("Search limit must be between 1 and 20.")
     if not candidates:
         return []
 
-    prompt = _build_find_prompt(query, candidates, limit)
+    prompt = _build_search_prompt(query, candidates, limit)
     raw = provider.complete(
         prompt,
         operation="search",
-        output_schema=_find_output_schema(limit, candidates),
+        output_schema=_search_output_schema(limit, candidates),
     )
     if not isinstance(raw, str):
-        raise FindError("Codex find returned invalid structured output.")
+        raise SearchError("Codex Search returned invalid structured output.")
     try:
         data = json.loads(raw, object_pairs_hook=_strict_json_object)
     except (json.JSONDecodeError, ValueError) as e:
-        raise FindError("Codex find returned invalid structured output.") from e
+        raise SearchError("Codex Search returned invalid structured output.") from e
     if (
         not isinstance(data, dict)
         or set(data) != {"matches", "related_query", "related_matches"}
@@ -449,21 +440,17 @@ def _rank_candidate_batch(
         or len(data["matches"]) > limit
         or len(data["related_matches"]) > min(limit, 5)
     ):
-        raise FindError("Codex find returned invalid structured output.")
+        raise SearchError("Codex Search returned invalid structured output.")
 
     if not _valid_related_query(data["related_query"], allow_empty=True):
-        raise FindError("Codex find returned invalid related query.")
+        raise SearchError("Codex Search returned invalid related query.")
     related_query = data["related_query"].strip()
-    if (
-        (data["matches"] and (related_query or data["related_matches"]))
-        or (bool(related_query) != bool(data["related_matches"]))
+    if (data["matches"] and (related_query or data["related_matches"])) or (
+        bool(related_query) != bool(data["related_matches"])
     ):
-        raise FindError("Codex find returned incompatible result tiers.")
+        raise SearchError("Codex Search returned incompatible result tiers.")
 
-    by_id = {
-        candidate.candidate_id: candidate
-        for candidate in candidates
-    }
+    by_id = {candidate.candidate_id: candidate for candidate in candidates}
     matches: list[SearchMatch] = []
     seen: set[str] = set()
     for relevance, records in (
@@ -472,13 +459,10 @@ def _rank_candidate_batch(
     ):
         for record in records:
             if not isinstance(record, dict) or set(record) != {"candidate_id"}:
-                raise FindError("Codex find returned invalid structured output.")
+                raise SearchError("Codex Search returned invalid structured output.")
             candidate_id = record.get("candidate_id")
-            if (
-                not isinstance(candidate_id, str)
-                or candidate_id not in by_id
-            ):
-                raise FindError("Codex find selected an unknown candidate.")
+            if not isinstance(candidate_id, str) or candidate_id not in by_id:
+                raise SearchError("Codex Search selected an unknown candidate.")
             if candidate_id in seen:
                 continue
             seen.add(candidate_id)
@@ -492,7 +476,7 @@ def _rank_candidate_batch(
     return matches
 
 
-def _staged_find_batches(
+def _staged_search_batches(
     query: str,
     candidates: list[SearchCandidate],
     limit: int,
@@ -501,12 +485,12 @@ def _staged_find_batches(
         return pack_grouped_items(
             candidates,
             group_key=lambda candidate: candidate.context_uid,
-            measure=lambda batch: _find_workload(query, batch, limit),
-            limits=FIND_EXECUTION_POLICY.one_shot_limits,
+            measure=lambda batch: _search_workload(query, batch, limit),
+            limits=SEARCH_EXECUTION_POLICY.one_shot_limits,
         )
     except PartitionError as error:
-        raise FindError(
-            "One searchable item is too large for a staged find request; "
+        raise SearchError(
+            "One searchable item is too large for a staged Search request; "
             "stored content is never truncated."
         ) from error
 
@@ -516,9 +500,7 @@ def _shortlist_staged_matches(
 ) -> list[SearchCandidate]:
     flattened = [match for batch in results for match in batch]
     primary = [match for match in flattened if match.relevance == "primary"]
-    related = [
-        match for match in flattened if match.relevance == "related"
-    ]
+    related = [match for match in flattened if match.relevance == "related"]
     # A shard-local primary is not allowed to suppress another shard's related
     # fallback before the global judge sees both. The final rerank restores the
     # ordinary mutually exclusive tier contract over their validated union.
@@ -545,21 +527,21 @@ def rank_candidates(
     """Rank one frozen corpus, staging Context-shaped batches when required."""
 
     if not isinstance(query, str) or not query.strip():
-        raise FindError("Search query must be non-empty.")
+        raise SearchError("Search query must be non-empty.")
     if not 1 <= limit <= 20:
-        raise FindError("Search limit must be between 1 and 20.")
+        raise SearchError("Search limit must be between 1 and 20.")
     if not candidates:
         return []
     plan = plan_semantic_execution(
-        FIND_EXECUTION_POLICY,
-        _find_workload(query, candidates, limit),
+        SEARCH_EXECUTION_POLICY,
+        _search_workload(query, candidates, limit),
     )
     if plan.mode is ExecutionMode.ONE_SHOT:
         return _rank_candidate_batch(query, candidates, provider, limit=limit)
     if plan.mode is not ExecutionMode.STAGED:
-        raise FindError("The searchable Context cannot be staged safely.")
+        raise SearchError("The searchable Context cannot be staged safely.")
 
-    batches = _staged_find_batches(query, candidates, limit)
+    batches = _staged_search_batches(query, candidates, limit)
 
     def batch_progress(value: ExecutionProgress) -> None:
         # Final completion belongs after the global rerank, not after the
@@ -585,11 +567,11 @@ def rank_candidates(
             on_progress(ExecutionProgress("COMPLETE", len(batches), len(batches)))
         return []
     final_plan = plan_semantic_execution(
-        FIND_EXECUTION_POLICY,
-        _find_workload(query, shortlist, limit),
+        SEARCH_EXECUTION_POLICY,
+        _search_workload(query, shortlist, limit),
     )
     if final_plan.mode is not ExecutionMode.ONE_SHOT:
-        raise FindError(
+        raise SearchError(
             "The staged Search shortlist is still too large for final reranking; "
             "stored content is never truncated."
         )

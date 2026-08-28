@@ -46,8 +46,8 @@ def test_production_search_consumers_use_the_operation_owner() -> None:
     legacy_imports = (
         "from memcommit.find_application import",
         "from memcommit.find_runtime import",
-        "from memcommit.find_materialization_application import",
-        "from memcommit.find_materialization_runtime import",
+        "from memcommit.search_materialization_application import",
+        "from memcommit.search_materialization_runtime import",
     )
 
     for relative_path in relative_paths:

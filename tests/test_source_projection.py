@@ -1,7 +1,7 @@
 import click
 
 from memcommit.adapters.console.commands.search.search_workbench import (
-    FindSearchResult,
+    SearchResult,
     _has_granted_materialization_source,
 )
 from memcommit.core.context_targeting.catalog import (
@@ -12,7 +12,10 @@ from memcommit.core.context_targeting.tui.rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )
-from memcommit.core.context_targeting.tui.tree import ContextTreeState, build_context_tree
+from memcommit.core.context_targeting.tui.tree import (
+    ContextTreeState,
+    build_context_tree,
+)
 from memcommit.adapters.console.theme import (
     SemanticColorRole,
     semantic_color_rgb,
@@ -124,8 +127,7 @@ def test_source_reference_row_retains_memory_ref_owner_and_source_identity():
     )
 
     assert render_source_reference_row(row) == (
-        "[2] Referenced content. — owner-re, target/context "
-        "→ source-m, source/context"
+        "[2] Referenced content. — owner-re, target/context → source-m, source/context"
     )
 
 
@@ -138,10 +140,13 @@ def test_source_reference_row_supports_identity_content_location_arrangement():
         alias="m5",
     )
 
-    assert render_source_reference_row(
-        row,
-        layout=SourceReferenceLayout.IDENTITY_FIRST,
-    ) == "1 [6fad23ab] First line second line. [practice/source m5]"
+    assert (
+        render_source_reference_row(
+            row,
+            layout=SourceReferenceLayout.IDENTITY_FIRST,
+        )
+        == "1 [6fad23ab] First line second line. [practice/source m5]"
+    )
 
 
 def test_source_reference_row_marks_optional_content_elision():
@@ -283,7 +288,7 @@ def test_shared_context_tree_places_grant_before_the_public_name():
 
 
 def test_find_authority_gate_uses_frozen_names_not_display_wording():
-    result = FindSearchResult(
+    result = SearchResult(
         context_name="public/source",
         kind="memory",
         uid="memory-1",

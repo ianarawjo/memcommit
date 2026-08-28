@@ -6,13 +6,17 @@ from memcommit.application.operations.atomize.domain import _atomize_execution_p
 from memcommit.application.operations.atomize.grounding_provider import (
     ATOMIZE_GROUNDING_EXECUTION_POLICY,
 )
-from memcommit.application.operations.compare.ledger.provider import COMPARISON_EXECUTION_POLICY
-from memcommit.application.operations.search.answer_dialogue import _find_answer_execution_policy
+from memcommit.application.operations.compare.ledger.provider import (
+    COMPARISON_EXECUTION_POLICY,
+)
+from memcommit.application.operations.search.answer_dialogue import (
+    _search_answer_execution_policy,
+)
 from memcommit.application.reviewing.quality.findings import _findings_execution_policy
 from memcommit.application.operations.log.search import HISTORY_SEARCH_EXECUTION_POLICY
 from memcommit.application.operations.meld.provider import MELD_EXECUTION_POLICY
 from memcommit.application.operations.rationale.model import RATIONALE_EXECUTION_POLICY
-from memcommit.application.operations.search.model import FIND_EXECUTION_POLICY
+from memcommit.application.operations.search.model import SEARCH_EXECUTION_POLICY
 from memcommit.application.semantic.selective_curation import (
     CurationBatch,
     CurationItem,
@@ -27,13 +31,15 @@ from memcommit.application.semantic_execution import (
     SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
 )
 from memcommit.application.operations.summarize.model import SUMMARIZE_EXECUTION_POLICY
-from memcommit.application.operations.translate.runtime import TRANSLATE_EXECUTION_POLICY
+from memcommit.application.operations.translate.runtime import (
+    TRANSLATE_EXECUTION_POLICY,
+)
 from memcommit.application.operations.update.model import UPDATE_EXECUTION_POLICY
 
 
 def test_only_implemented_find_and_translate_policies_advertise_staging():
-    assert FIND_EXECUTION_POLICY.strategy is ExecutionStrategy.TOP_K_RERANK
-    assert FIND_EXECUTION_POLICY.staged_supported is True
+    assert SEARCH_EXECUTION_POLICY.strategy is ExecutionStrategy.TOP_K_RERANK
+    assert SEARCH_EXECUTION_POLICY.staged_supported is True
     assert TRANSLATE_EXECUTION_POLICY.strategy is ExecutionStrategy.COVERAGE_MAP
     assert TRANSLATE_EXECUTION_POLICY.staged_supported is True
 
@@ -47,14 +53,12 @@ def test_only_implemented_find_and_translate_policies_advertise_staging():
         _findings_execution_policy("find_ambiguities"),
         _findings_execution_policy("find_conflicts"),
         HISTORY_SEARCH_EXECUTION_POLICY,
-        _find_answer_execution_policy(),
+        _search_answer_execution_policy(),
         RATIONALE_EXECUTION_POLICY,
         ATOMIZE_GROUNDING_EXECUTION_POLICY,
     )
     assert all(policy.staged_supported is False for policy in guarded)
-    assert {
-        policy.strategy for policy in guarded
-    } == {
+    assert {policy.strategy for policy in guarded} == {
         ExecutionStrategy.BLOCK_RELATIONS,
         ExecutionStrategy.MAP_PLUS_GLOBAL,
         ExecutionStrategy.TOP_K_RERANK,
@@ -73,10 +77,10 @@ def test_aggregate_policies_share_provider_capacity_without_count_gates():
         _findings_execution_policy("find_ambiguities"),
         _findings_execution_policy("find_conflicts"),
         HISTORY_SEARCH_EXECUTION_POLICY,
-        _find_answer_execution_policy(),
+        _search_answer_execution_policy(),
         RATIONALE_EXECUTION_POLICY,
         ATOMIZE_GROUNDING_EXECUTION_POLICY,
-        FIND_EXECUTION_POLICY,
+        SEARCH_EXECUTION_POLICY,
         TRANSLATE_EXECUTION_POLICY,
         SELECTIVE_CURATION_EXECUTION_POLICY,
     )
@@ -94,8 +98,7 @@ def test_selective_curation_has_no_fixed_item_count_gate():
         CurationBatch(
             source_label="source",
             source=tuple(
-                CurationItem(f"s{index}", "source content")
-                for index in range(501)
+                CurationItem(f"s{index}", "source content") for index in range(501)
             ),
             criteria=CriterionFrame(
                 kind="INSTRUCTION",

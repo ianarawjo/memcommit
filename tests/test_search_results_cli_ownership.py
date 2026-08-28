@@ -1,93 +1,56 @@
-"""Ownership contracts for the interface-owned search-result presenter."""
+"""Ownership contracts for Search's command-owned result presenter."""
 
 from __future__ import annotations
 
 import ast
 import importlib
 from pathlib import Path
-import subprocess
-import sys
 
 import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-LEGACY_MODULE = "memcommit.adapters.console.commands.search.result_present"
-OWNER_MODULE = "memcommit.adapters.interfaces.cli.search_results"
+OWNER_MODULE = "memcommit.adapters.console.commands.search.result_present"
+REMOVED_MODULE = "memcommit.adapters.interfaces.cli.search_results"
 
 
-@pytest.mark.parametrize(
-    "first_name,second_name",
-    ((LEGACY_MODULE, OWNER_MODULE), (OWNER_MODULE, LEGACY_MODULE)),
-    ids=("old-first", "new-first"),
-)
-def test_search_result_presenter_identity_is_independent_of_import_order(
-    first_name: str,
-    second_name: str,
-) -> None:
-    source = f"""
-import importlib
-import sys
+def test_search_result_presenter_is_owned_by_the_search_command() -> None:
+    owner = importlib.import_module(OWNER_MODULE)
 
-first = importlib.import_module({first_name!r})
-second = importlib.import_module({second_name!r})
-legacy = importlib.import_module({LEGACY_MODULE!r})
-canonical = importlib.import_module({OWNER_MODULE!r})
+    assert owner.SearchResultViewRow.__module__ == OWNER_MODULE
+    assert owner.SearchResultGroup.__module__ == OWNER_MODULE
+    assert owner.group_search_items.__module__ == OWNER_MODULE
+    assert owner.render_grouped_search_results.__module__ == OWNER_MODULE
 
-assert first is second
-assert legacy is canonical
-assert sys.modules[{LEGACY_MODULE!r}] is canonical
-assert sys.modules[{OWNER_MODULE!r}] is canonical
-assert "__all__" not in canonical.__dict__
-assert {{name for name in legacy.__dict__ if not name.startswith("_")}} == {{
-    name for name in canonical.__dict__ if not name.startswith("_")
-}}
-"""
 
-    subprocess.run(
-        [sys.executable, "-c", source],
-        cwd=REPOSITORY_ROOT,
-        check=True,
+def test_removed_interface_presenter_has_no_compatibility_facade() -> None:
+    removed_path = (
+        REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/cli/search_results.py"
     )
 
+    assert not removed_path.exists()
+    with pytest.raises(ModuleNotFoundError):
+        importlib.import_module(REMOVED_MODULE)
 
-def test_search_result_presenter_legacy_path_is_the_canonical_module() -> None:
-    legacy = importlib.import_module(LEGACY_MODULE)
-    canonical = importlib.import_module(OWNER_MODULE)
 
-    assert legacy is canonical
-    assert legacy.SearchResultViewRow is canonical.SearchResultViewRow
-    assert legacy.SearchResultGroup is canonical.SearchResultGroup
-    assert legacy.group_search_items is canonical.group_search_items
-    assert (
-        legacy.render_grouped_search_results
-        is canonical.render_grouped_search_results
+def test_search_presenter_owner_contains_the_behavior() -> None:
+    source_path = (
+        REPOSITORY_ROOT
+        / "src/memcommit/adapters/console/commands/search/result_present.py"
     )
-
-
-def test_search_result_presenter_legacy_facade_defines_no_behavior() -> None:
-    source_path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/search/result_present.py"
-    tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
-    assert any(
-        isinstance(node, ast.ImportFrom)
-        and node.module == "memcommit.adapters.interfaces.cli"
-        and any(alias.name == "search_results" for alias in node.names)
-        for node in ast.walk(tree)
-    )
-    assert any(
-        isinstance(node, ast.Assign)
-        and any(
-            isinstance(target, ast.Subscript)
-            and isinstance(target.value, ast.Attribute)
-            and isinstance(target.value.value, ast.Name)
-            and target.value.value.id == "sys"
-            and target.value.attr == "modules"
-            for target in node.targets
-        )
+    source = source_path.read_text(encoding="utf-8")
+    tree = ast.parse(source, filename=str(source_path))
+    definitions = {
+        node.name
         for node in tree.body
-    )
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+    }
+
+    assert {
+        "SearchResultViewRow",
+        "SearchResultGroup",
+        "group_search_items",
+        "group_search_result_rows",
+        "render_grouped_search_results",
+    } <= definitions
+    assert REMOVED_MODULE not in source

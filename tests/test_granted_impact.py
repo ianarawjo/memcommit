@@ -15,14 +15,20 @@ import memcommit.application.ops as ops
 import memcommit.adapters.console.commands.meld.command as meld_command
 import memcommit.adapters.console.commands.meld.setup as meld_setup_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.compare.ledger.provider import COMPARISON_PAYLOAD_MARKER
-from memcommit.application.operations.compare.ledger.store import comparison_analysis_path
+from memcommit.application.operations.compare.ledger.provider import (
+    COMPARISON_PAYLOAD_MARKER,
+)
+from memcommit.application.operations.compare.ledger.store import (
+    comparison_analysis_path,
+)
 from memcommit.application.authority.access import (
     freeze_granted_context_binding,
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.adapters.console.commands.compare.sessions import comparison_session_entries
+from memcommit.adapters.console.commands.compare.sessions import (
+    comparison_session_entries,
+)
 from memcommit.adapters.console.commands.compare.setup import choose_compare_setup
 from memcommit.adapters.console.shared.endpoint_setup_flows import (
     _readable_endpoint_catalog,
@@ -31,7 +37,10 @@ from memcommit.adapters.console.shared.endpoint_setup_flows import (
 from memcommit.adapters.console.commands.meld.setup import MeldSetupReceipt
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
-from memcommit.application.authority.derived_policy import analysis_retention, authorize_analysis_save
+from memcommit.application.authority.derived_policy import (
+    analysis_retention,
+    authorize_analysis_save,
+)
 from memcommit.application.operations.compare.ledger.granted_store import (
     granted_comparison_analysis_path,
     load_granted_comparison_artifact,
@@ -177,7 +186,7 @@ class _GrantedFindProvider:
         self.prompts.append(prompt)
         if operation != "search":
             return json.dumps({"findings": []})
-        payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+        payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
         matches = [
             {"candidate_id": candidate["candidate_id"]}
             for candidate in payload["candidates"]
@@ -697,7 +706,7 @@ def test_local_namespace_root_reads_granted_and_owned_descendants_together(
     active.set_current("task-root")
     provider = _GrantedFindProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
 
@@ -881,7 +890,7 @@ def test_find_and_quality_finders_read_granted_current_projection(
     active.set_current_virtual_context_if(source.name, "campus-wiki")
     provider = _GrantedFindProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
     for module in (

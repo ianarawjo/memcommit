@@ -6,7 +6,9 @@ import typer
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.context_operand import (
+    ContextOperandSnapshot,
+)
 from memcommit.application.authority.access import (
     ContextAccess,
     context_access_display_facts,
@@ -21,7 +23,7 @@ from memcommit.application.operations.query.granted_runtime import (
     freeze_granted_query_targets,
     resolve_granted_query_target,
 )
-from memcommit.providers.find_query import (
+from memcommit.providers.operation_connections import (
     connect_ordinary_query_provider as connect_codex_chatgpt_provider,
     connect_query_route_provider as connect_query_provider,
 )
@@ -51,20 +53,33 @@ from memcommit.core.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.application.authority.derived_policy import authorize_combination
-from memcommit.application.operations.search.answer_dialogue import FindAnswerCorpusTooLarge
+from memcommit.application.operations.search.answer_dialogue import (
+    SearchAnswerCorpusTooLarge,
+)
 from memcommit.application.operations.query.answer import OrdinaryQueryCorpusTooLarge
-from memcommit.application.operations.profile.config import ProfileConfigError, load_profile_registry
+from memcommit.application.operations.profile.config import (
+    ProfileConfigError,
+    load_profile_registry,
+)
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError
-from memcommit.application.operations.query.ordinary_application import OrdinaryQueryRequest
-from memcommit.application.operations.query.ordinary_runtime import execute_ordinary_query
-from memcommit.application.operations.query.reference_application import QueryReferenceRequest
-from memcommit.application.operations.query.reference_runtime import execute_query_reference
+from memcommit.application.operations.query.ordinary_application import (
+    OrdinaryQueryRequest,
+)
+from memcommit.application.operations.query.ordinary_runtime import (
+    execute_ordinary_query,
+)
+from memcommit.application.operations.query.reference_application import (
+    QueryReferenceRequest,
+)
+from memcommit.application.operations.query.reference_runtime import (
+    execute_query_reference,
+)
 from memcommit.application.operations.query.granted_source import (
     GrantedQuerySourceError,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.search.model import FindError
+from memcommit.application.operations.search.model import SearchError
 
 
 def _query_ordinary_context(
@@ -314,7 +329,9 @@ def _resolve_positional_query_target(
         return ordinary
     if granted is not None:
         return granted
-    if isinstance(ordinary_error, ProfileError) or is_relative_context_locator(selector):
+    if isinstance(ordinary_error, ProfileError) or is_relative_context_locator(
+        selector
+    ):
         assert ordinary_error is not None
         raise ordinary_error
     return None
@@ -478,9 +495,9 @@ def cmd(
             )
         except (
             FileNotFoundError,
-            FindAnswerCorpusTooLarge,
+            SearchAnswerCorpusTooLarge,
             OrdinaryQueryCorpusTooLarge,
-            FindError,
+            SearchError,
             OSError,
             ProfileConfigError,
             ProfileError,
@@ -524,9 +541,9 @@ def cmd(
             )
         except (
             FileNotFoundError,
-            FindAnswerCorpusTooLarge,
+            SearchAnswerCorpusTooLarge,
             OrdinaryQueryCorpusTooLarge,
-            FindError,
+            SearchError,
             OSError,
             ProfileConfigError,
             ProfileError,
@@ -653,9 +670,9 @@ def cmd(
                 return
     except (
         FileNotFoundError,
-        FindAnswerCorpusTooLarge,
+        SearchAnswerCorpusTooLarge,
         OrdinaryQueryCorpusTooLarge,
-        FindError,
+        SearchError,
         OSError,
         ProfileConfigError,
         ProfileError,

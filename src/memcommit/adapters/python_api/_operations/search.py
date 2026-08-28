@@ -6,7 +6,9 @@ from collections.abc import Sequence
 
 from memcommit.adapters.python_api._runtime import ClientRuntime
 from memcommit.adapters.python_api._support.errors import raise_public
-from memcommit.adapters.python_api._support.readable import freeze_client_readable_catalog
+from memcommit.adapters.python_api._support.readable import (
+    freeze_client_readable_catalog,
+)
 from memcommit.adapters.python_api._support.semantic import safe_semantic_provider
 from memcommit.adapters.python_api.errors import (
     SemanticAuthorityError,
@@ -19,15 +21,15 @@ from memcommit.adapters.python_api.errors import (
 from memcommit.adapters.python_api.search import SearchItemResult, SearchResult
 from memcommit.application.context_locator import resolve_context_locator
 from memcommit.application.operations.search.application import (
-    FindSearchRequest,
-    FindSearchResponse,
+    SearchRequest,
+    SearchResponse,
 )
-from memcommit.application.operations.search.runtime import execute_find_search
+from memcommit.application.operations.search.runtime import execute_search
 from memcommit.application.retained_history.reconstruction import HistoryError
 from memcommit.application.operations.log.search import HistorySearchError
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.operations.search.model import FindError
+from memcommit.application.operations.search.model import SearchError
 
 
 def _current_name(runtime: ClientRuntime) -> str | None:
@@ -62,7 +64,7 @@ def _canonical_targets(
     return canonical
 
 
-def _public(response: FindSearchResponse) -> SearchResult:
+def _public(response: SearchResponse) -> SearchResult:
     request = response.request
     return SearchResult(
         query=request.query,
@@ -105,7 +107,7 @@ def search(
             context_names,
             current_name=current_name,
         )
-        request = FindSearchRequest(
+        request = SearchRequest(
             query=query,
             target_names=targets,
             include_descendants=include_descendants,
@@ -118,7 +120,7 @@ def search(
             current_name=current_name,
             include_query_routes=follow_embeds,
         )
-        response = execute_find_search(
+        response = execute_search(
             request,
             store=runtime.store,
             catalog=catalog,
@@ -135,7 +137,7 @@ def search(
         raise_public(SemanticStorageError, error)
     except (TypeError, ValueError) as error:
         raise_public(SemanticInputError, error)
-    except (FindError, HistoryError, HistorySearchError, RuntimeError) as error:
+    except (SearchError, HistoryError, HistorySearchError, RuntimeError) as error:
         raise_public(SemanticExecutionError, error)
 
 

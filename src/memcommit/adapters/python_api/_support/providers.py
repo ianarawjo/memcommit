@@ -6,7 +6,7 @@ from memcommit.adapters.python_api.query import QueryProviderConfig
 
 
 def connect_ordinary_provider(config: QueryProviderConfig) -> object:
-    from memcommit.providers.find_query import (
+    from memcommit.providers.operation_connections import (
         connect_ordinary_query_provider,
     )
 
@@ -21,7 +21,7 @@ def connect_route_provider(
     config: QueryProviderConfig,
     provider_name: str,
 ) -> object:
-    from memcommit.providers.find_query import (
+    from memcommit.providers.operation_connections import (
         connect_query_route_provider,
     )
 
@@ -34,4 +34,3 @@ def connect_route_provider(
 
 
 __all__ = ["connect_ordinary_provider", "connect_route_provider"]
-

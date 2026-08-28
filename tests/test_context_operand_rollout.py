@@ -11,7 +11,9 @@ import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.impact import command as impact_command
 from memcommit.adapters.console.commands.review import command as review_command
-from memcommit.adapters.console.commands.compare.command import display_escape_text as compare_escape
+from memcommit.adapters.console.commands.compare.command import (
+    display_escape_text as compare_escape,
+)
 from memcommit.adapters.console.shared.context_picker import (
     _build_context_tree,
     _context_ancestors,
@@ -28,7 +30,11 @@ from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.core.context import AutoCheckpoint
-from memcommit.application.reviewing.quality.findings import AmbiguityReport, ConflictReport, DuplicateReport
+from memcommit.application.reviewing.quality.findings import (
+    AmbiguityReport,
+    ConflictReport,
+    DuplicateReport,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -74,7 +80,7 @@ def test_read_and_analysis_commands_share_relative_context_operand_boundary(
     current_reads = _count_current_reads(monkeypatch)
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: object(),
     )
     monkeypatch.setattr(

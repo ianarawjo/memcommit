@@ -1,4 +1,4 @@
-"""Application-boundary contracts for terminal-independent Find search."""
+"""Application-boundary contracts for terminal-independent Search."""
 
 from __future__ import annotations
 
@@ -10,13 +10,13 @@ import uuid
 import pytest
 
 from memcommit.core.context import Context, Memory, QueryContextRef
-import memcommit.application.operations.search.application as find_application
+import memcommit.application.operations.search.application as search_application
 from memcommit.application.operations.search.application import (
-    FindSearchRequest,
-    FrozenFindCurrentSource,
-    run_find_search,
+    SearchRequest,
+    FrozenSearchCurrentSource,
+    run_search,
 )
-from memcommit.application.operations.search.runtime import execute_find_search
+from memcommit.application.operations.search.runtime import execute_search
 from memcommit.application.operations.search.model import SearchCandidate
 from memcommit.persistence.store import MemoryStore
 
@@ -24,11 +24,12 @@ from memcommit.persistence.store import MemoryStore
 class _CurrentSource:
     def __init__(self, candidates=()):
         self.candidates = tuple(candidates)
-        self.calls: list[tuple[str, FindSearchRequest]] = []
+        self.calls: list[tuple[str, SearchRequest]] = []
 
     def freeze_current(self, request):
         self.calls.append(("CURRENT", request))
-        return FrozenFindCurrentSource(self.candidates)
+        return FrozenSearchCurrentSource(self.candidates)
+
 
 class _SelectingProvider:
     def __init__(self):
@@ -36,7 +37,7 @@ class _SelectingProvider:
 
     def complete(self, prompt, *, operation, output_schema=None):
         self.calls += 1
-        payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+        payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
         return json.dumps(
             {
                 "matches": [{"candidate_id": payload["candidates"][0]["candidate_id"]}],
@@ -58,8 +59,8 @@ def _candidate(content="One authorized search result."):
     )
 
 
-def test_run_find_search_returns_typed_current_result_without_terminal():
-    request = FindSearchRequest(
+def test_run_search_returns_typed_current_result_without_terminal():
+    request = SearchRequest(
         "authorized result",
         ("notes",),
         include_descendants=False,
@@ -69,7 +70,7 @@ def test_run_find_search_returns_typed_current_result_without_terminal():
     provider = _SelectingProvider()
     stages = []
 
-    response = run_find_search(
+    response = run_search(
         request,
         source_port=source,
         provider_factory=lambda: provider,
@@ -86,7 +87,7 @@ def test_run_find_search_returns_typed_current_result_without_terminal():
     assert response.results[0].current_match is not None
 
 
-def test_run_find_search_freezes_empty_current_frame_before_provider_factory():
+def test_run_search_freezes_empty_current_frame_before_provider_factory():
     events = []
 
     class Source(_CurrentSource):
@@ -98,8 +99,8 @@ def test_run_find_search_freezes_empty_current_frame_before_provider_factory():
         events.append("provider")
         return object()
 
-    response = run_find_search(
-        FindSearchRequest("anything", ("empty",)),
+    response = run_search(
+        SearchRequest("anything", ("empty",)),
         source_port=Source(),
         provider_factory=provider_factory,
     )
@@ -116,12 +117,12 @@ def test_run_find_search_freezes_empty_current_frame_before_provider_factory():
         "공사 기간 동안 바뀐 메모리",
     ],
 )
-def test_run_find_search_treats_time_language_as_current_content(query):
-    request = FindSearchRequest(query, ("notes",))
+def test_run_search_treats_time_language_as_current_content(query):
+    request = SearchRequest(query, ("notes",))
     source = _CurrentSource((_candidate("Current construction notice."),))
     provider = _SelectingProvider()
 
-    response = run_find_search(
+    response = run_search(
         request,
         source_port=source,
         provider_factory=lambda: provider,
@@ -133,7 +134,7 @@ def test_run_find_search_treats_time_language_as_current_content(query):
     assert response.results[0].content == "Current construction notice."
 
 
-def test_execute_find_search_freezes_direct_scope_and_query_route(
+def test_execute_search_freezes_direct_scope_and_query_route(
     isolated_store,
     monkeypatch,
     capsys,
@@ -179,10 +180,10 @@ def test_execute_find_search_freezes_direct_scope_and_query_route(
         observed.append((query, tuple(item.kind for item in candidates), limit))
         return []
 
-    monkeypatch.setattr(find_application, "rank_candidates", rank)
+    monkeypatch.setattr(search_application, "rank_candidates", rank)
 
-    response = execute_find_search(
-        FindSearchRequest(
+    response = execute_search(
+        SearchRequest(
             "policy",
             ("root",),
             include_descendants=False,
@@ -230,8 +231,8 @@ def test_execute_search_with_time_language_reads_granted_current_content(
             return Access()
 
     provider = _SelectingProvider()
-    response = execute_find_search(
-        FindSearchRequest("changes during construction", ("granted",)),
+    response = execute_search(
+        SearchRequest("changes during construction", ("granted",)),
         store=store,
         catalog=Catalog(),
         provider_factory=lambda: provider,
@@ -242,8 +243,8 @@ def test_execute_search_with_time_language_reads_granted_current_content(
     assert response.results[0].content == "Current granted notice."
 
 
-def test_find_application_has_no_command_typer_or_tui_imports():
-    source = Path(find_application.__file__).read_text(encoding="utf-8")
+def test_search_application_has_no_command_typer_or_tui_imports():
+    source = Path(search_application.__file__).read_text(encoding="utf-8")
     tree = ast.parse(source)
     imported = []
     for node in ast.walk(tree):
@@ -260,4 +261,7 @@ def test_find_application_has_no_command_typer_or_tui_imports():
         or name.startswith("memcommit.adapters.console.commands")
     )
     assert forbidden == ()
-    assert FindSearchRequest.__module__ == "memcommit.application.operations.search.application"
+    assert (
+        SearchRequest.__module__
+        == "memcommit.application.operations.search.application"
+    )

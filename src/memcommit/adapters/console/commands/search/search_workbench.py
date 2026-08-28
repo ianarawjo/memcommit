@@ -27,7 +27,9 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame, TextArea
 
-from memcommit.adapters.console.shared.background_turn import BackgroundExecutorTurn
+from memcommit.adapters.console.shared.background_turn import (
+    BackgroundExecutorTurn,
+)
 from memcommit.adapters.console.shared.command_progress import busy_suffix
 from memcommit.core.context_targeting.tui.compact_scope import (
     CompactReadableScopeControl,
@@ -60,7 +62,9 @@ from memcommit.adapters.console.commands.search.result_present import (
     SearchResultViewRow,
     render_grouped_search_results,
 )
-from memcommit.adapters.console.shared.save_location_control import SaveLocationView
+from memcommit.adapters.console.shared.save_location_control import (
+    SaveLocationView,
+)
 from memcommit.adapters.console.shared.semantic_clipboard import (
     PlainTextClipboardReceipt,
     clipboard_failure_receipt,
@@ -78,12 +82,17 @@ from memcommit.core.context_targeting.tui.name_editor import (
     ContextNameControl,
     suggest_fresh_context_name,
 )
-from memcommit.adapters.console.selection import FlatMultiSelectionState, SelectionOption
-from memcommit.adapters.console.selection.tui.multiple import render_vertical_multi_choice_rows
+from memcommit.adapters.console.selection import (
+    FlatMultiSelectionState,
+    SelectionOption,
+)
+from memcommit.adapters.console.selection.tui.multiple import (
+    render_vertical_multi_choice_rows,
+)
 from memcommit.application.operations.search.application import (
-    FindSearchRequest,
-    FindSearchResponse,
-    FindSearchResult,
+    SearchRequest,
+    SearchResponse,
+    SearchResult,
 )
 from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import (
@@ -101,7 +110,7 @@ _RESULT_SOURCE_FORMS = {
 }
 
 
-def _find_result_kind_label(result: "FindSearchResult") -> str:
+def _search_result_kind_label(result: "SearchResult") -> str:
     form = _RESULT_SOURCE_FORMS.get(result.kind)
     return (
         source_object_label(form)
@@ -110,12 +119,12 @@ def _find_result_kind_label(result: "FindSearchResult") -> str:
     )
 
 
-def _find_result_annotation(result: "FindSearchResult") -> str:
+def _search_result_annotation(result: "SearchResult") -> str:
     return "RELATED" if result.relevance == "related" else ""
 
 
-def _find_result_selection_label(
-    result: "FindSearchResult",
+def _search_result_selection_label(
+    result: "SearchResult",
     *,
     number: int,
     context_annotation: SourceDisplayValue | None = None,
@@ -126,8 +135,8 @@ def _find_result_selection_label(
     annotation = source_display_text(context_annotation)
     if annotation:
         location.append(annotation)
-    location.append(_find_result_kind_label(result).upper())
-    related = _find_result_annotation(result)
+    location.append(_search_result_kind_label(result).upper())
+    related = _search_result_annotation(result)
     if related:
         location.append(related)
     content = " ".join(result.content.split())
@@ -135,7 +144,7 @@ def _find_result_selection_label(
 
 
 def _has_granted_materialization_source(
-    results: Sequence["FindSearchResult"],
+    results: Sequence["SearchResult"],
     granted_context_names: AbstractSet[str],
 ) -> bool:
     """Keep authority decisions independent from presentation annotations."""
@@ -144,8 +153,8 @@ def _has_granted_materialization_source(
 
 
 @dataclass(frozen=True)
-class FindResultsClipboardProjection:
-    """One focused Find result or the complete frozen ranked result set."""
+class SearchResultsClipboardProjection:
+    """One focused Search result or the complete frozen ranked result set."""
 
     text: str
     scope: Literal["FOCUSED", "RESULT_SET"]
@@ -154,11 +163,11 @@ class FindResultsClipboardProjection:
 
 
 @dataclass(frozen=True)
-class FindSearchWorkbenchResult:
+class SearchWorkbenchResult:
     """Close state or one reviewed materialization request."""
 
     status: Literal["CLOSED", "MATERIALIZE"]
-    response: FindSearchResponse | None = None
+    response: SearchResponse | None = None
     selected_result_indices: tuple[int, ...] = ()
     materialize_as: Literal["COPY", "REFERENCE"] | None = None
     save_location: str | None = None
@@ -170,7 +179,7 @@ class FindSearchWorkbenchResult:
                 or self.materialize_as is not None
                 or self.save_location is not None
             ):
-                raise ValueError("A closed Find workbench cannot request a save.")
+                raise ValueError("A closed Search workbench cannot request a save.")
             return
         if (
             self.response is None
@@ -179,7 +188,7 @@ class FindSearchWorkbenchResult:
             or not isinstance(self.save_location, str)
             or not self.save_location.strip()
         ):
-            raise ValueError("Find Save As requires reviewed result choices.")
+            raise ValueError("Search Save As requires reviewed result choices.")
         if len(set(self.selected_result_indices)) != len(
             self.selected_result_indices
         ) or any(
@@ -188,14 +197,14 @@ class FindSearchWorkbenchResult:
             or not 0 <= index < len(self.response.results)
             for index in self.selected_result_indices
         ):
-            raise ValueError("Find Save As selected invalid result rows.")
+            raise ValueError("Search Save As selected invalid result rows.")
 
 
-FindSearchRunner = Callable[[FindSearchRequest], FindSearchResponse]
-FindSaveLocationValidator = Callable[[str], object]
+SearchRunner = Callable[[SearchRequest], SearchResponse]
+SearchSaveLocationValidator = Callable[[str], object]
 
 
-def _find_save_location_stem(context_name: str, query: str) -> str:
+def _search_save_location_stem(context_name: str, query: str) -> str:
     """Build one editable local name suggestion without assigning identity."""
 
     words = "-".join(query.strip().split()) or "search"
@@ -210,18 +219,18 @@ def _find_save_location_stem(context_name: str, query: str) -> str:
     return f"{context_name}/results/{safe}"
 
 
-def _find_search_result_view_row(
-    result: FindSearchResult,
+def _search_result_view_row(
+    result: SearchResult,
     *,
     rank: int,
 ) -> SearchResultViewRow:
     return SearchResultViewRow(
         context_name=result.context_name,
         label=(
-            f"[{rank} {_find_result_kind_label(result)} {result.uid[:8]}]"
+            f"[{rank} {_search_result_kind_label(result)} {result.uid[:8]}]"
             + (
-                f" · {_find_result_annotation(result)}"
-                if _find_result_annotation(result)
+                f" · {_search_result_annotation(result)}"
+                if _search_result_annotation(result)
                 else ""
             )
         ),
@@ -229,13 +238,13 @@ def _find_search_result_view_row(
     )
 
 
-def render_find_search_results(response: FindSearchResponse | None) -> str:
+def render_search_results(response: SearchResponse | None) -> str:
     """Render only rows whose request still matches the visible controls."""
 
     if response is None:
         return "SEARCH RESULTS\n  Enter a query to search the selected scope."
     rows = tuple(
-        _find_search_result_view_row(result, rank=index)
+        _search_result_view_row(result, rank=index)
         for index, result in enumerate(response.results, start=1)
     )
     return render_grouped_search_results(
@@ -244,32 +253,32 @@ def render_find_search_results(response: FindSearchResponse | None) -> str:
     )
 
 
-def project_find_results_clipboard(
-    response: FindSearchResponse | None,
+def project_search_results_clipboard(
+    response: SearchResponse | None,
     *,
     focused_index: int = 0,
     whole_result_set: bool = False,
-) -> FindResultsClipboardProjection:
+) -> SearchResultsClipboardProjection:
     """Project host-resolved results without checkbox or viewport wrapping."""
 
     if response is None or not response.results:
-        raise ValueError("There are no Find results to copy.")
+        raise ValueError("There are no Search results to copy.")
     count = len(response.results)
     if whole_result_set:
         suffix = "Result" if count == 1 else "Results"
-        return FindResultsClipboardProjection(
-            text=render_find_search_results(response),
+        return SearchResultsClipboardProjection(
+            text=render_search_results(response),
             scope="RESULT_SET",
-            label=f"complete Find result set · {count} {suffix}",
+            label=f"complete Search result set · {count} {suffix}",
             result_count=count,
         )
     if isinstance(focused_index, bool) or not 0 <= focused_index < count:
-        raise ValueError("The focused Find result is no longer available.")
+        raise ValueError("The focused Search result is no longer available.")
     result = response.results[focused_index]
-    return FindResultsClipboardProjection(
+    return SearchResultsClipboardProjection(
         text=render_grouped_search_results(
             (
-                _find_search_result_view_row(
+                _search_result_view_row(
                     result,
                     rank=focused_index + 1,
                 ),
@@ -278,22 +287,22 @@ def project_find_results_clipboard(
         ),
         scope="FOCUSED",
         label=(
-            f"Find result {focused_index + 1} · "
+            f"Search result {focused_index + 1} · "
             f"{safe_terminal_text(result.context_name)} · "
-            f"{safe_terminal_text(_find_result_kind_label(result))}"
+            f"{safe_terminal_text(_search_result_kind_label(result))}"
         ),
         result_count=1,
     )
 
 
-def _results_frame_title(turn: BackgroundExecutorTurn[FindSearchResponse]) -> str:
+def _results_frame_title(turn: BackgroundExecutorTurn[SearchResponse]) -> str:
     if turn.busy:
         return f"RESULTS · SEARCHING {busy_suffix(turn.frame)}"
     return "RESULTS"
 
 
-def _find_save_as_available(
-    response: FindSearchResponse | None,
+def _search_save_as_available(
+    response: SearchResponse | None,
     *,
     busy: bool,
 ) -> bool:
@@ -302,7 +311,7 @@ def _find_save_as_available(
     return response is not None and bool(response.results) and not busy
 
 
-def run_find_search_workbench(
+def run_search_workbench(
     names: Sequence[str],
     *,
     current: str,
@@ -311,16 +320,16 @@ def run_find_search_workbench(
     initial_include_descendants: bool,
     initial_follow_embeds: bool,
     limit: int,
-    run_search: FindSearchRunner,
+    run_search: SearchRunner,
     annotations: Mapping[str, SourceDisplayValue] | None = None,
     granted_context_names: AbstractSet[str] = frozenset(),
     local_context_names: Sequence[str] | None = None,
-    validate_save_location: FindSaveLocationValidator | None = None,
+    validate_save_location: SearchSaveLocationValidator | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
     clipboard_writer: Callable[[str], None] | None = None,
-) -> FindSearchWorkbenchResult:
+) -> SearchWorkbenchResult:
     """Search repeatedly while keeping query, targets, scope, and results visible."""
 
     catalog = tuple(names)
@@ -329,13 +338,9 @@ def run_find_search_workbench(
         or len(set(catalog)) != len(catalog)
         or any(not isinstance(name, str) or not name for name in catalog)
     ):
-        raise ValueError("Find requires a distinct readable Context catalog.")
+        raise ValueError("Search requires a distinct readable Context catalog.")
     staged_initial_targets = tuple(
-        dict.fromkeys(
-            (initial_target,)
-            if initial_targets is None
-            else initial_targets
-        )
+        dict.fromkeys((initial_target,) if initial_targets is None else initial_targets)
     )
     if (
         current not in catalog
@@ -343,9 +348,9 @@ def run_find_search_workbench(
         or not staged_initial_targets
         or any(name not in catalog for name in staged_initial_targets)
     ):
-        raise ValueError("Find's initial Context is outside the readable catalog.")
+        raise ValueError("Search's initial Context is outside the readable catalog.")
     if not callable(run_search):
-        raise ValueError("Find requires a search controller.")
+        raise ValueError("Search requires a search controller.")
     if require_tty:
         require_interactive_terminal(
             "Interactive Search",
@@ -354,20 +359,20 @@ def run_find_search_workbench(
 
     labels = dict(annotations or {})
     if set(labels) - set(catalog):
-        raise ValueError("Find Context annotations are outside the catalog.")
+        raise ValueError("Search Context annotations are outside the catalog.")
     try:
         for annotation in labels.values():
             normalize_source_display_tokens(annotation)
     except (TypeError, ValueError) as error:
-        raise ValueError("Find received an invalid Context annotation.") from error
+        raise ValueError("Search received an invalid Context annotation.") from error
     granted_catalog = frozenset(granted_context_names)
     if not granted_catalog <= set(catalog):
-        raise ValueError("Find granted Context names are outside the catalog.")
+        raise ValueError("Search granted Context names are outside the catalog.")
     local_catalog = tuple(
         dict.fromkeys(catalog if local_context_names is None else local_context_names)
     )
     if any(not isinstance(name, str) or not name for name in local_catalog):
-        raise ValueError("Find local Context names must be nonblank text.")
+        raise ValueError("Search local Context names must be nonblank text.")
 
     materialize_choice = HorizontalChoiceState(
         (
@@ -384,13 +389,11 @@ def run_find_search_workbench(
         ),
         selected_uid="COPY",
     )
-    response: FindSearchResponse | None = None
+    response: SearchResponse | None = None
     result_selection: FlatMultiSelectionState | None = None
     status = {"value": "ENTER A QUERY"}
     copy_receipt: PlainTextClipboardReceipt | None = None
-    background_turn: BackgroundExecutorTurn[FindSearchResponse] = (
-        BackgroundExecutorTurn()
-    )
+    background_turn: BackgroundExecutorTurn[SearchResponse] = BackgroundExecutorTurn()
 
     def scope_changed(message: str) -> None:
         nonlocal copy_receipt, response, result_selection
@@ -409,7 +412,7 @@ def run_find_search_workbench(
         include_descendants=initial_include_descendants,
         follow_embeds=initial_follow_embeds,
         annotations=labels,
-        input_name="find-search-context",
+        input_name="search-context",
         on_change=scope_changed,
         on_status=scope_status,
         locked=lambda: background_turn.busy,
@@ -422,10 +425,10 @@ def run_find_search_workbench(
         wrap_lines=False,
         height=Dimension.exact(1),
         read_only=Condition(lambda: background_turn.busy),
-        name="find-search-query",
+        name="search-query",
     )
     initial_save_location = suggest_fresh_context_name(
-        _find_save_location_stem(initial_target, "search"),
+        _search_save_location_stem(initial_target, "search"),
         local_catalog,
     )
     save_location = ContextNameControl.create(
@@ -437,7 +440,7 @@ def run_find_search_workbench(
             context_names=local_catalog,
             current_context=current if current in local_catalog else None,
         ),
-        input_name="find-save-location",
+        input_name="search-save-location",
         parent_height=1,
     )
     save_location_edit = {"edited": False, "programmatic": False}
@@ -464,7 +467,7 @@ def run_find_search_workbench(
                     ),
                 ]
             )
-        # Find now follows the service-wide one-column session grammar. Result
+        # Search now follows the service-wide one-column session grammar. Result
         # rows therefore own the full frame width instead of retaining the
         # former side-by-side Save As allowance.
         width = max(24, app.output.get_size().columns - 6)
@@ -595,7 +598,7 @@ def run_find_search_workbench(
             TuiRegion(todo_frame),
         ),
         filter=Condition(
-            lambda: _find_save_as_available(
+            lambda: _search_save_as_available(
                 response,
                 busy=background_turn.busy,
             )
@@ -609,7 +612,7 @@ def run_find_search_workbench(
         TuiRegion(save_as_panel),
         TuiRegion(footer),
     )
-    app: Application[FindSearchWorkbenchResult] = Application(
+    app: Application[SearchWorkbenchResult] = Application(
         layout=Layout(root, focused_element=search_area),
         key_bindings=bindings,
         full_screen=True,
@@ -737,7 +740,7 @@ def run_find_search_workbench(
         filter=read_non_search_focus,
         app_input=app_input,
         app_output=app_output,
-        study_surface="find-search",
+        study_surface="search",
     )
 
     def _focus_search(event) -> SurfaceActionResult:
@@ -757,7 +760,7 @@ def run_find_search_workbench(
             return "HANDLED"
         try:
             request_targets, request_descendants = scope.request_scope()
-            request = FindSearchRequest(
+            request = SearchRequest(
                 query=search_area.text.strip(),
                 target_names=request_targets,
                 include_descendants=request_descendants,
@@ -768,10 +771,10 @@ def run_find_search_workbench(
             status["value"] = str(error)
             return "HANDLED"
 
-        def work() -> FindSearchResponse:
+        def work() -> SearchResponse:
             next_response = run_search(request)
-            if not isinstance(next_response, FindSearchResponse):
-                raise ValueError("Find controller returned an invalid response.")
+            if not isinstance(next_response, SearchResponse):
+                raise ValueError("Search controller returned an invalid response.")
             if next_response.request != request:
                 raise ValueError(
                     "Search inputs changed while the request was running. "
@@ -779,7 +782,7 @@ def run_find_search_workbench(
                 )
             return next_response
 
-        def commit(next_response: FindSearchResponse) -> None:
+        def commit(next_response: SearchResponse) -> None:
             nonlocal copy_receipt, response, result_selection
             response = next_response
             copy_receipt = None
@@ -788,7 +791,7 @@ def run_find_search_workbench(
                     tuple(
                         SelectionOption(
                             str(index),
-                            _find_result_selection_label(
+                            _search_result_selection_label(
                                 result,
                                 number=index + 1,
                                 context_annotation=labels.get(result.context_name),
@@ -806,7 +809,7 @@ def run_find_search_workbench(
                 try:
                     save_location.set_text(
                         suggest_fresh_context_name(
-                            _find_save_location_stem(
+                            _search_save_location_stem(
                                 response.request.target_names[0],
                                 response.request.query,
                             ),
@@ -827,7 +830,7 @@ def run_find_search_workbench(
             app.layout.focus(results_control if response is not None else search_area)
 
         def close_after_search() -> None:
-            app.exit(result=FindSearchWorkbenchResult("CLOSED", response))
+            app.exit(result=SearchWorkbenchResult("CLOSED", response))
 
         background_turn.start(
             event.app,
@@ -866,11 +869,9 @@ def run_find_search_workbench(
         nonlocal copy_receipt
         try:
             focused_index = (
-                0
-                if result_selection is None
-                else int(result_selection.cursor_uid)
+                0 if result_selection is None else int(result_selection.cursor_uid)
             )
-            projection = project_find_results_clipboard(
+            projection = project_search_results_clipboard(
                 response,
                 focused_index=focused_index,
                 whole_result_set=whole_result_set,
@@ -971,7 +972,7 @@ def run_find_search_workbench(
             event.app.layout.focus(save_location.input)
             return "HANDLED"
         event.app.exit(
-            result=FindSearchWorkbenchResult(
+            result=SearchWorkbenchResult(
                 "MATERIALIZE",
                 response,
                 selected_indices,
@@ -1093,13 +1094,11 @@ def run_find_search_workbench(
             status["value"] = "Closing after the current search finishes."
             event.app.invalidate()
             return
-        event.app.exit(result=FindSearchWorkbenchResult("CLOSED", response))
+        event.app.exit(result=SearchWorkbenchResult("CLOSED", response))
 
     @bindings.add(
         "backspace",
-        filter=(
-            read_non_search_focus & ~tree_focus & ~has_focus(scope.tree_control)
-        ),
+        filter=(read_non_search_focus & ~tree_focus & ~has_focus(scope.tree_control)),
         eager=True,
     )
     def _back_to_search(event) -> None:
@@ -1143,7 +1142,7 @@ def run_find_search_workbench(
     try:
         result = app.run()
     except (EOFError, KeyboardInterrupt):
-        return FindSearchWorkbenchResult("CLOSED", response)
-    if not isinstance(result, FindSearchWorkbenchResult):
-        raise ValueError("Find workbench returned an invalid result.")
+        return SearchWorkbenchResult("CLOSED", response)
+    if not isinstance(result, SearchWorkbenchResult):
+        raise ValueError("Search workbench returned an invalid result.")
     return result

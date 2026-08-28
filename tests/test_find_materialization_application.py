@@ -1,4 +1,4 @@
-"""Application and runtime contracts for Find result materialization."""
+"""Application and runtime contracts for Search result materialization."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import uuid
 import pytest
 
 import memcommit.application.ops as ops
-import memcommit.adapters.console.commands.search.command as find_command
+import memcommit.adapters.console.commands.search.command as search_command
 import memcommit.application.operations.search.materialization_application as materialization_application
 import memcommit.application.operations.search.materialization_runtime as materialization_runtime
 import memcommit.persistence.store as store_module
@@ -18,23 +18,25 @@ from memcommit.application.authority.access import resolve_context_access
 from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
-from memcommit.adapters.console.commands.search.search_workbench import FindSearchWorkbenchResult
+from memcommit.adapters.console.commands.search.search_workbench import (
+    SearchWorkbenchResult,
+)
 from memcommit.core.context import Memory, MemoryRef
 from memcommit.application.operations.search.application import (
-    FindSearchRequest,
-    FindSearchResponse,
-    FindSearchResult,
+    SearchRequest,
+    SearchResponse,
+    SearchResult,
 )
 from memcommit.application.operations.search.materialization_application import (
-    FindMaterializationError,
-    FindMaterializationRequest,
-    FindMaterializationResult,
-    FrozenFindMaterialization,
-    run_find_materialization,
+    SearchMaterializationError,
+    SearchMaterializationRequest,
+    SearchMaterializationResult,
+    FrozenSearchMaterialization,
+    run_search_materialization,
 )
 from memcommit.application.operations.search.materialization_runtime import (
-    MemoryStoreFindMaterializationPort,
-    execute_find_materialization,
+    MemoryStoreSearchMaterializationPort,
+    execute_search_materialization,
 )
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
@@ -62,12 +64,12 @@ def _catalog(store: MemoryStore, context_name: str):
     return freeze_readable_context_catalog(store, access)
 
 
-def _response(source, *memories: Memory) -> FindSearchResponse:
-    return FindSearchResponse(
-        FindSearchRequest("accessibility", (source.name,)),
+def _response(source, *memories: Memory) -> SearchResponse:
+    return SearchResponse(
+        SearchRequest("accessibility", (source.name,)),
         "CURRENT",
         tuple(
-            FindSearchResult(
+            SearchResult(
                 context_name=source.name,
                 kind="memory",
                 uid=memory.uid,
@@ -87,8 +89,8 @@ def _request(
     indices=(0,),
     mode="COPY",
     destination="results/accessibility",
-) -> FindMaterializationRequest:
-    return FindMaterializationRequest(
+) -> SearchMaterializationRequest:
+    return SearchMaterializationRequest(
         response=_response(source, *memories),
         selected_result_indices=indices,
         mode=mode,
@@ -96,7 +98,7 @@ def _request(
     )
 
 
-def test_run_find_materialization_preserves_exact_prepare_publish_contract():
+def test_run_search_materialization_preserves_exact_prepare_publish_contract():
     source = ops.init("source")
     memory = ops.add(source, "Accessible entrance is on the east side.")
     request = _request(source, memory)
@@ -105,7 +107,7 @@ def test_run_find_materialization_preserves_exact_prepare_publish_contract():
     class Port:
         def prepare(self, value):
             phases.append(("prepare", value))
-            return FrozenFindMaterialization(
+            return FrozenSearchMaterialization(
                 mode=value.mode,
                 destination_name=value.destination_name,
                 source_count=1,
@@ -114,7 +116,7 @@ def test_run_find_materialization_preserves_exact_prepare_publish_contract():
 
         def materialize(self, prepared):
             phases.append(("materialize", prepared))
-            return FindMaterializationResult(
+            return SearchMaterializationResult(
                 mode=prepared.mode,
                 context_name=prepared.destination_name,
                 context_uid="context-result",
@@ -122,7 +124,7 @@ def test_run_find_materialization_preserves_exact_prepare_publish_contract():
                 item_uids=("memory-result",),
             )
 
-    result = run_find_materialization(request, port=Port())
+    result = run_search_materialization(request, port=Port())
 
     assert phases[0] == ("prepare", request)
     assert phases[1][0] == "materialize"
@@ -134,11 +136,11 @@ def test_materialization_request_rejects_nonmemory_and_duplicate_source():
     source = ops.init("source")
     memory = ops.add(source, "Source Memory")
     current = _response(source, memory)
-    artifact = FindSearchResponse(
+    artifact = SearchResponse(
         current.request,
         "CURRENT",
         (
-            FindSearchResult(
+            SearchResult(
                 context_name=source.name,
                 kind="artifact",
                 uid="artifact-1",
@@ -146,16 +148,16 @@ def test_materialization_request_rejects_nonmemory_and_duplicate_source():
             ),
         ),
     )
-    duplicate = FindSearchResponse(
+    duplicate = SearchResponse(
         current.request,
         "CURRENT",
         (current.results[0], current.results[0]),
     )
 
-    with pytest.raises(FindMaterializationError, match="artifact results"):
-        FindMaterializationRequest(artifact, (0,), "COPY", "result")
-    with pytest.raises(FindMaterializationError, match="more than once"):
-        FindMaterializationRequest(duplicate, (0, 1), "COPY", "result")
+    with pytest.raises(SearchMaterializationError, match="artifact results"):
+        SearchMaterializationRequest(artifact, (0,), "COPY", "result")
+    with pytest.raises(SearchMaterializationError, match="more than once"):
+        SearchMaterializationRequest(duplicate, (0, 1), "COPY", "result")
 
 
 def test_application_rejects_mismatched_prepared_plan_before_effect():
@@ -165,7 +167,7 @@ def test_application_rejects_mismatched_prepared_plan_before_effect():
 
     class Port:
         def prepare(self, _request):
-            return FrozenFindMaterialization(
+            return FrozenSearchMaterialization(
                 mode="COPY",
                 destination_name="different-result",
                 source_count=1,
@@ -177,8 +179,8 @@ def test_application_rejects_mismatched_prepared_plan_before_effect():
             materialize_calls += 1
             raise AssertionError("A mismatched plan must not reach publication.")
 
-    with pytest.raises(FindMaterializationError, match="does not match"):
-        run_find_materialization(_request(source, memory), port=Port())
+    with pytest.raises(SearchMaterializationError, match="does not match"):
+        run_search_materialization(_request(source, memory), port=Port())
 
     assert materialize_calls == 0
 
@@ -194,7 +196,7 @@ def test_runtime_materializes_only_selected_copy_without_terminal_or_source_chan
     store.save(source)
     source_before = context_record_digest(store.load_direct(source.name))
 
-    result = execute_find_materialization(
+    result = execute_search_materialization(
         _request(
             source,
             first,
@@ -217,7 +219,7 @@ def test_runtime_materializes_only_selected_copy_without_terminal_or_source_chan
     assert captured.err == ""
 
 
-def test_find_tui_adapter_submits_one_typed_materialization_request(
+def test_search_tui_adapter_submits_one_typed_materialization_request(
     isolated_store,
     monkeypatch,
 ):
@@ -237,9 +239,9 @@ def test_find_tui_adapter_submits_one_typed_materialization_request(
     observed = []
 
     monkeypatch.setattr(
-        find_command,
-        "run_find_search_workbench",
-        lambda *_args, **_kwargs: FindSearchWorkbenchResult(
+        search_command,
+        "run_search_workbench",
+        lambda *_args, **_kwargs: SearchWorkbenchResult(
             "MATERIALIZE",
             response,
             selected_result_indices=(0,),
@@ -250,7 +252,7 @@ def test_find_tui_adapter_submits_one_typed_materialization_request(
 
     def execute(request, *, store, catalog):
         observed.append((request, store, catalog))
-        return FindMaterializationResult(
+        return SearchMaterializationResult(
             mode=request.mode,
             context_name=request.destination_name,
             context_uid="result-context",
@@ -258,9 +260,9 @@ def test_find_tui_adapter_submits_one_typed_materialization_request(
             item_uids=("result-memory",),
         )
 
-    monkeypatch.setattr(find_command, "execute_find_materialization", execute)
+    monkeypatch.setattr(search_command, "execute_search_materialization", execute)
 
-    find_command._open_find_search_workbench(
+    search_command._open_search_workbench(
         store,
         access,
         current_name=source.name,
@@ -271,7 +273,7 @@ def test_find_tui_adapter_submits_one_typed_materialization_request(
 
     assert len(observed) == 1
     request, selected_store, catalog = observed[0]
-    assert isinstance(request, FindMaterializationRequest)
+    assert isinstance(request, SearchMaterializationRequest)
     assert request.response is response
     assert request.selected_result_indices == (0,)
     assert request.mode == "COPY"
@@ -289,7 +291,7 @@ def test_runtime_reference_uses_live_reference_and_leaves_source_unchanged(
     store.save(source)
     source_before = context_record_digest(store.load_direct(source.name))
 
-    result = execute_find_materialization(
+    result = execute_search_materialization(
         _request(
             source,
             memory,
@@ -313,7 +315,7 @@ def test_runtime_rechecks_source_between_prepare_and_publication(isolated_store)
     memory = ops.add(source, "Original source")
     store.save(source)
     destination = "task/local/results/stale"
-    port = MemoryStoreFindMaterializationPort(
+    port = MemoryStoreSearchMaterializationPort(
         store,
         _catalog(store, source.name),
     )
@@ -334,7 +336,7 @@ def test_runtime_require_new_blocks_concurrent_destination_owner(isolated_store)
     memory = ops.add(source, "Source result")
     store.save(source)
     destination = "task/local/results/collision"
-    port = MemoryStoreFindMaterializationPort(
+    port = MemoryStoreSearchMaterializationPort(
         store,
         _catalog(store, source.name),
     )
@@ -373,7 +375,7 @@ def test_runtime_write_failure_rolls_back_checkpoint_and_partial_context(
     monkeypatch.setattr(store_module, "_write_json_atomic", fail_destination_context)
 
     with pytest.raises(OSError, match="injected destination write failure"):
-        execute_find_materialization(
+        execute_search_materialization(
             _request(source, memory, destination=destination),
             store=store,
             catalog=_catalog(store, source.name),
@@ -393,7 +395,7 @@ def _granted_copy_fixture(tmp_path, monkeypatch):
 
     authority = ProfileEntry(
         uid=str(uuid.uuid4()),
-        name="find-authority",
+        name="search-authority",
         kind="MANAGED",
     )
     authoring = ProfileEntry(
@@ -430,11 +432,11 @@ def _granted_copy_fixture(tmp_path, monkeypatch):
         required_permission="READ",
     )
     catalog = freeze_readable_context_catalog(active_store, access)
-    response = FindSearchResponse(
-        FindSearchRequest("export result", ("shared/source",)),
+    response = SearchResponse(
+        SearchRequest("export result", ("shared/source",)),
         "CURRENT",
         (
-            FindSearchResult(
+            SearchResult(
                 context_name="shared/source",
                 kind="memory",
                 uid=memory.uid,
@@ -459,8 +461,8 @@ def test_granted_copy_revalidates_export_and_reference_stays_local_only(
     source_before = context_record_digest(authority_store.load_direct(source.name))
     copy_destination = "task-root/results/granted-copy"
 
-    result = execute_find_materialization(
-        FindMaterializationRequest(
+    result = execute_search_materialization(
+        SearchMaterializationRequest(
             response,
             (0,),
             "COPY",
@@ -478,9 +480,9 @@ def test_granted_copy_revalidates_export_and_reference_stays_local_only(
     )
 
     reference_destination = "task-root/results/granted-reference"
-    with pytest.raises(FindMaterializationError, match="locally owned"):
-        execute_find_materialization(
-            FindMaterializationRequest(
+    with pytest.raises(SearchMaterializationError, match="locally owned"):
+        execute_search_materialization(
+            SearchMaterializationRequest(
                 response,
                 (0,),
                 "REFERENCE",

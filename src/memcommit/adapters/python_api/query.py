@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.providers.find_query import QUERY_PROVIDER_POLICY
+from memcommit.providers.operation_connections import QUERY_PROVIDER_POLICY
 from memcommit.providers.types import CODEX_REASONING_EFFORTS
 
 

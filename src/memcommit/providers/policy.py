@@ -253,7 +253,7 @@ def _compatibility_policy(operation: str) -> OperationProviderPolicy:
 
 # These names remain for frozen public/evaluation adapters. They are projections
 # of the Study matrix, not production overrides for an ordinary Profile.
-FIND_PROVIDER_POLICY = _compatibility_policy("search")
+SEARCH_PROVIDER_POLICY = _compatibility_policy("search")
 QUERY_PROVIDER_POLICY = _compatibility_policy("query")
 HELP_PROVIDER_POLICY = _compatibility_policy("help")
 FORGET_PROVIDER_POLICY = _compatibility_policy("forget")
@@ -262,7 +262,7 @@ MELD_PROVIDER_POLICY = _compatibility_policy("meld_contexts")
 OPERATION_PROVIDER_POLICIES: dict[str, OperationProviderPolicy] = {
     policy.operation: policy
     for policy in (
-        FIND_PROVIDER_POLICY,
+        SEARCH_PROVIDER_POLICY,
         QUERY_PROVIDER_POLICY,
         HELP_PROVIDER_POLICY,
         FORGET_PROVIDER_POLICY,
@@ -462,7 +462,7 @@ def resolve_codex_evaluation_policy(
 __all__ = [
     "COMPARE_LEDGER_PROVIDER_POLICY",
     "ConfiguredProviderRoute",
-    "FIND_PROVIDER_POLICY",
+    "SEARCH_PROVIDER_POLICY",
     "FORGET_PROVIDER_POLICY",
     "HELP_PROVIDER_POLICY",
     "LEGACY_STUDY_PROVIDER_POLICY_VERSION",

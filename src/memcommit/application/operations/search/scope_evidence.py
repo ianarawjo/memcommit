@@ -1,27 +1,34 @@
-"""Local evidence projections for three-scope interactive Find answers."""
+"""Local evidence projections for three-scope interactive Search answers."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
 from typing import Hashable, Literal, Sequence
 
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.application.operations.search.answer_references import FindAnswerEvidence
-from memcommit.application.operations.search.model import SearchArtifact, SearchCandidate, collect_candidates
+from memcommit.application.operations.search.answer_references import (
+    SearchAnswerEvidence,
+)
+from memcommit.application.operations.search.model import (
+    SearchArtifact,
+    SearchCandidate,
+    collect_candidates,
+)
 from memcommit.persistence.store import MemoryStore
 
 
 OutsideCollectionStatus = Literal["SEARCHED", "PARTIAL"]
 
 
-class FindScopeEvidenceError(RuntimeError):
-    """Invalid or unavailable local evidence at a Find scope boundary."""
+class SearchScopeEvidenceError(RuntimeError):
+    """Invalid or unavailable local evidence at a Search scope boundary."""
 
 
 @dataclass(frozen=True)
 class OutsideEvidenceCollection:
     """Frozen evidence gathered from searchable Contexts outside one frame."""
 
-    evidence: tuple[FindAnswerEvidence, ...]
+    evidence: tuple[SearchAnswerEvidence, ...]
     status: OutsideCollectionStatus
 
 
@@ -46,13 +53,13 @@ def candidate_logical_identity(
         )
     if isinstance(item, SearchArtifact):
         return ("artifact", candidate.context_uid, item.uid)
-    raise FindScopeEvidenceError("Unsupported Find evidence candidate.")
+    raise SearchScopeEvidenceError("Unsupported Search evidence candidate.")
 
 
 def candidate_to_evidence(
     candidate: SearchCandidate,
     alias: str,
-) -> FindAnswerEvidence:
+) -> SearchAnswerEvidence:
     """Project one local candidate without opening query-only content."""
     item = candidate.item
     if isinstance(item, Memory):
@@ -60,7 +67,7 @@ def candidate_to_evidence(
         content = item.content
     elif isinstance(item, MemoryRef):
         if item.target is None:
-            raise FindScopeEvidenceError(
+            raise SearchScopeEvidenceError(
                 "A dangling Memory reference cannot become answer evidence."
             )
         kind = "ref"
@@ -72,8 +79,8 @@ def candidate_to_evidence(
         kind = "artifact"
         content = f"{item.title}\n{item.content}"
     else:  # pragma: no cover - SearchCandidate validates this union
-        raise FindScopeEvidenceError("Unsupported Find evidence candidate.")
-    return FindAnswerEvidence(
+        raise SearchScopeEvidenceError("Unsupported Search evidence candidate.")
+    return SearchAnswerEvidence(
         alias=alias,
         context_name=candidate.context_name,
         kind=kind,
@@ -84,7 +91,7 @@ def candidate_to_evidence(
 
 def visible_result_evidence(
     candidates: Sequence[SearchCandidate],
-) -> tuple[FindAnswerEvidence, ...]:
+) -> tuple[SearchAnswerEvidence, ...]:
     """Project ranked visible candidates as stable ``mN`` evidence."""
     return tuple(
         candidate_to_evidence(candidate, f"m{index}")
@@ -95,11 +102,10 @@ def visible_result_evidence(
 def context_remainder_evidence(
     frame_candidates: Sequence[SearchCandidate],
     visible_candidates: Sequence[SearchCandidate],
-) -> tuple[FindAnswerEvidence, ...]:
+) -> tuple[SearchAnswerEvidence, ...]:
     """Project the frozen searched frame minus visible logical results."""
     visible_identities = {
-        candidate_logical_identity(candidate)
-        for candidate in visible_candidates
+        candidate_logical_identity(candidate) for candidate in visible_candidates
     }
     remainder = [
         candidate
@@ -113,9 +119,9 @@ def context_remainder_evidence(
 
 
 def compact_artifact_references(
-    evidence: Sequence[FindAnswerEvidence],
+    evidence: Sequence[SearchAnswerEvidence],
     candidates: Sequence[SearchCandidate],
-) -> tuple[FindAnswerEvidence, ...]:
+) -> tuple[SearchAnswerEvidence, ...]:
     """Use artifact summaries in citations while retaining full answer input."""
     summaries = {
         (candidate.context_name, candidate.item.uid): (
@@ -138,10 +144,10 @@ def compact_artifact_references(
 
 
 def compact_reference_content(
-    evidence: Sequence[FindAnswerEvidence],
+    evidence: Sequence[SearchAnswerEvidence],
     *,
     limit: int = 600,
-) -> tuple[FindAnswerEvidence, ...]:
+) -> tuple[SearchAnswerEvidence, ...]:
     """Bound chat-style Query citations without changing synthesis evidence."""
     if limit < 80:
         raise ValueError("Reference excerpt limit is too small.")
@@ -164,7 +170,7 @@ def frame_context_uids(
     recursive: bool,
     additional_roots: Sequence[Context] = (),
 ) -> frozenset[str]:
-    """Return Context identities reachable from all selected Find roots."""
+    """Return Context identities reachable from all selected Search roots."""
     seen: set[str] = set()
 
     def visit(ctx: Context) -> None:
@@ -189,7 +195,7 @@ def collect_outside_context_evidence(
     excluded_context_uids: frozenset[str],
     excluded_candidates: Sequence[SearchCandidate],
 ) -> OutsideEvidenceCollection:
-    """Collect deduplicated direct candidates from outside the Find frame.
+    """Collect deduplicated direct candidates from outside the Search frame.
 
     Every stored Context is read directly exactly once. Memory references are
     resolved against that frozen direct snapshot before candidate collection.
@@ -197,14 +203,11 @@ def collect_outside_context_evidence(
     global logical-identity set still collapses Memory references and
     query-only pointers.
     """
-    seen = {
-        candidate_logical_identity(candidate)
-        for candidate in excluded_candidates
-    }
+    seen = {candidate_logical_identity(candidate) for candidate in excluded_candidates}
     outside: list[SearchCandidate] = []
     catalog = store.scan_context_catalog()
     # A tolerant navigation catalog omits malformed or unsafe records. Wider
-    # Find must retain that omission as evidence that its global scan was not
+    # Search must retain that omission as evidence that its global scan was not
     # complete; otherwise an empty result could overstate non-existence.
     partial = not catalog.complete
     direct_contexts: list[Context] = []

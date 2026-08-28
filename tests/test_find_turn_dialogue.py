@@ -1,4 +1,5 @@
-"""Strict provider boundary for one interactive Find follow-up."""
+"""Strict provider boundary for one interactive Search follow-up."""
+
 from __future__ import annotations
 
 import json
@@ -6,35 +7,35 @@ import json
 import pytest
 
 from memcommit.adapters.console.commands.search.chat_shell import (
-    FindChatMessage,
-    FindChatResult,
-    FindChatState,
+    SearchChatMessage,
+    SearchChatResult,
+    SearchChatState,
 )
 from memcommit.application.operations.search.turn_dialogue import (
-    FIND_TURN_OPERATION,
-    FindTurnAction,
-    FindTurnAnswer,
-    FindTurnAsk,
-    FindTurnError,
-    FindTurnRefine,
-    find_turn_output_schema,
-    interpret_find_turn,
+    SEARCH_TURN_OPERATION,
+    SearchTurnAction,
+    SearchTurnAnswer,
+    SearchTurnAsk,
+    SearchTurnError,
+    SearchTurnRefine,
+    search_turn_output_schema,
+    interpret_search_turn,
 )
 
 
-def _state() -> FindChatState:
-    return FindChatState(
+def _state() -> SearchChatState:
+    return SearchChatState(
         context_name="task-1",
         current_query="cafe and store",
         results=(
-            FindChatResult(
+            SearchChatResult(
                 alias="m1",
                 context_name="task-1",
                 kind="memory",
                 uid="durable-secret-uid-one",
                 content="The campus store will close.",
             ),
-            FindChatResult(
+            SearchChatResult(
                 alias="m2",
                 context_name="task-1",
                 kind="query",
@@ -67,20 +68,20 @@ def test_schema_and_prompt_expose_aliases_but_not_durable_uids():
         }
     )
 
-    turn = interpret_find_turn(
+    turn = interpret_search_turn(
         _state(),
         "show the first result",
         provider,
     )
 
-    assert turn == FindTurnAction(
+    assert turn == SearchTurnAction(
         understanding="You want to inspect the store result.",
         question="What would you like to inspect next?",
         selector="m1",
     )
     assert len(provider.calls) == 1
     prompt, operation, schema = provider.calls[0]
-    assert operation == FIND_TURN_OPERATION
+    assert operation == SEARCH_TURN_OPERATION
     assert schema["properties"]["kind"]["enum"] == [
         "ASK",
         "REFINE",
@@ -111,9 +112,9 @@ def test_ask_requires_an_empty_selector():
         }
     )
 
-    turn = interpret_find_turn(_state(), "show it", provider)
+    turn = interpret_search_turn(_state(), "show it", provider)
 
-    assert turn == FindTurnAsk(
+    assert turn == SearchTurnAsk(
         understanding="You want to inspect a result.",
         question="Which visible result should I show?",
     )
@@ -131,13 +132,13 @@ def test_answer_plans_same_context_research_without_answering():
         }
     )
 
-    turn = interpret_find_turn(
+    turn = interpret_search_turn(
         _state(),
         "When will the campus store reopen?",
         provider,
     )
 
-    assert turn == FindTurnAnswer(
+    assert turn == SearchTurnAnswer(
         understanding="You are asking when the campus store reopens.",
         scope="CONTEXT",
     )
@@ -158,20 +159,20 @@ def test_answer_uses_all_contexts_only_for_an_explicit_request():
         }
     )
 
-    turn = interpret_find_turn(
+    turn = interpret_search_turn(
         _state(),
         "Check other contexts too.",
         provider,
     )
 
-    assert turn == FindTurnAnswer(
+    assert turn == SearchTurnAnswer(
         understanding="You want other Contexts checked too.",
         scope="ALL_CONTEXTS",
     )
 
 
 def test_refine_turn_returns_a_standalone_same_frame_query_with_no_results():
-    state = FindChatState(
+    state = SearchChatState(
         context_name="task-3",
         current_query="건강보험 관련 메모리",
     )
@@ -186,13 +187,13 @@ def test_refine_turn_returns_a_standalone_same_frame_query_with_no_results():
         }
     )
 
-    turn = interpret_find_turn(
+    turn = interpret_search_turn(
         state,
         "related to health/healthcare/medicine",
         provider,
     )
 
-    assert turn == FindTurnRefine(
+    assert turn == SearchTurnRefine(
         understanding="You broadened the search to healthcare.",
         query="health healthcare medicine",
     )
@@ -202,11 +203,11 @@ def test_refine_turn_returns_a_standalone_same_frame_query_with_no_results():
 
 
 def test_related_fallback_can_be_inspected_or_refined_but_not_answered():
-    state = FindChatState(
+    state = SearchChatState(
         context_name="task-3",
         current_query="health insurance memories",
         results=(
-            FindChatResult(
+            SearchChatResult(
                 alias="m1",
                 context_name="task-3/personal-memory/2024/03",
                 kind="memory",
@@ -217,7 +218,7 @@ def test_related_fallback_can_be_inspected_or_refined_but_not_answered():
         ),
         related_query="health and healthcare memories",
     )
-    schema = find_turn_output_schema(state)
+    schema = search_turn_output_schema(state)
     provider = Provider(
         {
             "kind": "SHOW_RESULT",
@@ -229,14 +230,14 @@ def test_related_fallback_can_be_inspected_or_refined_but_not_answered():
         }
     )
 
-    turn = interpret_find_turn(state, "show that related item", provider)
+    turn = interpret_search_turn(state, "show that related item", provider)
 
     assert schema["properties"]["kind"]["enum"] == [
         "ASK",
         "REFINE",
         "SHOW_RESULT",
     ]
-    assert isinstance(turn, FindTurnAction)
+    assert isinstance(turn, SearchTurnAction)
     prompt = provider.calls[0][0]
     assert '"relevance": "related"' in prompt
     assert '"related_query": "health and healthcare memories"' in prompt
@@ -252,30 +253,27 @@ def test_related_fallback_can_be_inspected_or_refined_but_not_answered():
             "scope": "CONTEXT",
         }
     )
-    with pytest.raises(FindTurnError):
-        interpret_find_turn(state, "answer it", unsupported)
+    with pytest.raises(SearchTurnError):
+        interpret_search_turn(state, "answer it", unsupported)
 
 
 def test_short_reply_receives_only_the_pending_visible_clarification():
-    state = FindChatState(
+    state = SearchChatState(
         context_name="task-1",
         current_query="cafe and store",
         results=_state().results,
         messages=(
-            FindChatMessage(
+            SearchChatMessage(
                 role="STATUS",
                 text="mem show secret-receipt-uid --context task-1",
             ),
-            FindChatMessage(
+            SearchChatMessage(
                 role="USER",
                 text="show one of those",
             ),
-            FindChatMessage(
+            SearchChatMessage(
                 role="MEM",
-                text=(
-                    "You want one of two results.\n\n"
-                    "Do you mean m1 or m2?"
-                ),
+                text=("You want one of two results.\n\nDo you mean m1 or m2?"),
             ),
         ),
         status="WAITING FOR CLARIFICATION",
@@ -291,10 +289,10 @@ def test_short_reply_receives_only_the_pending_visible_clarification():
         }
     )
 
-    turn = interpret_find_turn(state, "the latter", provider)
+    turn = interpret_search_turn(state, "the latter", provider)
 
     prompt = provider.calls[0][0]
-    assert isinstance(turn, FindTurnAction)
+    assert isinstance(turn, SearchTurnAction)
     assert turn.selector == "m2"
     assert "Do you mean m1 or m2?" in prompt
     assert "secret-receipt-uid" not in prompt
@@ -371,13 +369,13 @@ def test_short_reply_receives_only_the_pending_visible_clarification():
     ],
 )
 def test_unknown_alias_action_or_command_authority_fails_closed(response):
-    with pytest.raises(FindTurnError):
-        interpret_find_turn(_state(), "show a result", Provider(response))
+    with pytest.raises(SearchTurnError):
+        interpret_search_turn(_state(), "show a result", Provider(response))
 
 
 def test_empty_results_allow_ask_or_refine():
-    state = FindChatState(context_name="task-1")
-    schema = find_turn_output_schema(state)
+    state = SearchChatState(context_name="task-1")
+    schema = search_turn_output_schema(state)
     provider = Provider(
         {
             "kind": "ASK",
@@ -389,10 +387,10 @@ def test_empty_results_allow_ask_or_refine():
         }
     )
 
-    turn = interpret_find_turn(state, "show one", provider)
+    turn = interpret_search_turn(state, "show one", provider)
 
     assert schema["properties"]["kind"]["enum"] == ["ASK", "REFINE"]
-    assert isinstance(turn, FindTurnAsk)
+    assert isinstance(turn, SearchTurnAsk)
 
     unsupported = Provider(
         {
@@ -404,8 +402,8 @@ def test_empty_results_allow_ask_or_refine():
             "scope": "CONTEXT",
         }
     )
-    with pytest.raises(FindTurnError):
-        interpret_find_turn(state, "answer anyway", unsupported)
+    with pytest.raises(SearchTurnError):
+        interpret_search_turn(state, "answer anyway", unsupported)
 
 
 def test_provider_factory_connects_once():
@@ -425,6 +423,6 @@ def test_provider_factory_connects_once():
         calls.append("connect")
         return provider
 
-    interpret_find_turn(_state(), "show it", factory)
+    interpret_search_turn(_state(), "show it", factory)
 
     assert calls == ["connect"]

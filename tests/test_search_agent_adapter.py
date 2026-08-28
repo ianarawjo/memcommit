@@ -17,7 +17,7 @@ from memcommit.persistence.store import MemoryStore
 class _Provider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "search"
-        payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+        payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
         candidate = payload["candidates"][0]
         return json.dumps(
             {

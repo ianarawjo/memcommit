@@ -5,7 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.application.operations.search.answer_references import FindAnswerReferenceDocument
+from memcommit.application.operations.search.answer_references import (
+    SearchAnswerReferenceDocument,
+)
 from memcommit.application.operations.search.scope_evidence import (
     compact_artifact_references,
     compact_reference_content,
@@ -57,7 +59,7 @@ class OrdinaryQueryResponse:
     request: OrdinaryQueryRequest
     answer: str
     grounded: bool
-    reference_document: FindAnswerReferenceDocument | None = None
+    reference_document: SearchAnswerReferenceDocument | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.request, OrdinaryQueryRequest):
@@ -69,7 +71,7 @@ class OrdinaryQueryResponse:
         if self.reference_document is not None:
             if not isinstance(
                 self.reference_document,
-                FindAnswerReferenceDocument,
+                SearchAnswerReferenceDocument,
             ):
                 raise ValueError("Ordinary Query reference document is invalid.")
             if not self.grounded:

@@ -11,9 +11,9 @@ import typer
 
 import memcommit.adapters.console.commands.query.command as query_command
 from memcommit.application.operations.search.answer_references import (
-    FindAnswerEvidence,
-    FindAnswerSentence,
-    build_find_answer_reference_document,
+    SearchAnswerEvidence,
+    SearchAnswerSentence,
+    build_search_answer_reference_document,
 )
 from memcommit.adapters.interfaces.tui.operations.query import (
     QueryAnswerFocus,
@@ -261,16 +261,16 @@ def test_query_workbench_can_start_on_one_typed_query_view():
 
 def test_query_answer_focus_and_clipboard_preserve_typed_references():
     request = OrdinaryQueryRequest("What changed?", ("task",))
-    document = build_find_answer_reference_document(
+    document = build_search_answer_reference_document(
         (
-            FindAnswerEvidence(
+            SearchAnswerEvidence(
                 "m1",
                 "task/a",
                 "memory",
                 "11111111-memory",
                 "First supporting Memory.",
             ),
-            FindAnswerEvidence(
+            SearchAnswerEvidence(
                 "m2",
                 "task/b",
                 "memory",
@@ -279,9 +279,9 @@ def test_query_answer_focus_and_clipboard_preserve_typed_references():
             ),
         ),
         (
-            FindAnswerSentence("First claim.", ("m1",)),
-            FindAnswerSentence("Second claim.", ("m2",)),
-            FindAnswerSentence("Third claim."),
+            SearchAnswerSentence("First claim.", ("m1",)),
+            SearchAnswerSentence("Second claim.", ("m2",)),
+            SearchAnswerSentence("Third claim."),
         ),
     )
     response = OrdinaryQueryResponse(request, document.text, True, document)

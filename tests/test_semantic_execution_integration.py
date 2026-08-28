@@ -7,15 +7,16 @@ import json
 import memcommit.application.ops as ops
 import pytest
 from memcommit.core.context import Memory
-from memcommit.application.operations.search.model import SearchCandidate, rank_candidates
+from memcommit.application.operations.search.model import (
+    SearchCandidate,
+    rank_candidates,
+)
 from memcommit.application.semantic_execution import SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 from memcommit.application.operations.translate.runtime import plan_translation
 
 
 def _large_text(marker: str) -> str:
-    return marker + " " + (
-        "x" * (SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT // 4 + 10_000)
-    )
+    return marker + " " + ("x" * (SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT // 4 + 10_000))
 
 
 class FirstFindCandidateProvider:
@@ -24,7 +25,7 @@ class FirstFindCandidateProvider:
 
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "search"
-        payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+        payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
         self.payloads.append(payload)
         candidate = payload["candidates"][0]
         return json.dumps(
@@ -95,10 +96,7 @@ class EchoTranslationProvider:
 
 def test_large_translate_maps_every_memory_once_across_atomic_batches():
     ctx = ops.init("large-translate")
-    memories = [
-        ops.add(ctx, _large_text(f"source {index}"))
-        for index in range(1, 5)
-    ]
+    memories = [ops.add(ctx, _large_text(f"source {index}")) for index in range(1, 5)]
     provider = EchoTranslationProvider()
     progress: list[str] = []
 
@@ -130,9 +128,7 @@ class KeepForgetLLM:
 
     def chat(self, messages):
         self.calls += 1
-        payload = json.loads(
-            messages[-1]["content"].split("FORGET PAYLOAD:\n", 1)[1]
-        )
+        payload = json.loads(messages[-1]["content"].split("FORGET PAYLOAD:\n", 1)[1])
         source = payload["source"]["memories"][0]
         return json.dumps(
             {

@@ -44,56 +44,58 @@ from memcommit.adapters.console.terminal import (
 from memcommit.adapters.console.text import (
     safe_terminal_text,
 )
-from memcommit.adapters.console.shared.background_turn import BackgroundExecutorTurn
+from memcommit.adapters.console.shared.background_turn import (
+    BackgroundExecutorTurn,
+)
 from memcommit.adapters.console.shared.command_progress import (
     BUSY_INTERVAL_SECONDS,
     busy_suffix,
 )
 from memcommit.adapters.console.shared.session_help import bind_session_help
-from memcommit.adapters.interfaces.cli.search_results import (
+from memcommit.adapters.console.commands.search.result_present import (
     SearchResultViewRow,
     render_grouped_search_results,
 )
 
 
-FindChatRole = Literal["USER", "MEM", "STATUS"]
-FindChatActionKind = Literal["SUBMIT", "CLOSE"]
-FindChatResultKind = Literal["memory", "ref", "query", "artifact"]
-FindChatRelevance = Literal["primary", "related"]
+SearchChatRole = Literal["USER", "MEM", "STATUS"]
+SearchChatActionKind = Literal["SUBMIT", "CLOSE"]
+SearchChatResultKind = Literal["memory", "ref", "query", "artifact"]
+SearchChatRelevance = Literal["primary", "related"]
 # Compatibility name remains patchable by focused shell tests while its
 # default comes from the shared blocking-progress visual contract.
-_FIND_BUSY_INTERVAL_SECONDS = BUSY_INTERVAL_SECONDS
+_SEARCH_BUSY_INTERVAL_SECONDS = BUSY_INTERVAL_SECONDS
 
 
-def _processing_find_turn_label(frame_index: int) -> str:
+def _processing_search_turn_label(frame_index: int) -> str:
     """Render one deterministic frame of the in-process busy indicator."""
     return " PROCESSING SEARCH TURN " + busy_suffix(frame_index)
 
 
 @dataclass(frozen=True)
-class FindChatMessage:
-    """One already-visible dialogue block supplied by the Find controller."""
+class SearchChatMessage:
+    """One already-visible dialogue block supplied by the Search controller."""
 
-    role: FindChatRole
+    role: SearchChatRole
     text: str
 
     def __post_init__(self) -> None:
         if self.role not in {"USER", "MEM", "STATUS"}:
-            raise ValueError("Invalid Find chat message role.")
+            raise ValueError("Invalid Search chat message role.")
         if not isinstance(self.text, str) or not self.text.strip():
-            raise ValueError("Find chat messages require nonblank text.")
+            raise ValueError("Search chat messages require nonblank text.")
 
 
 @dataclass(frozen=True)
-class FindChatResult:
+class SearchChatResult:
     """One locally validated result rendered without provider-authored text."""
 
     alias: str
     context_name: str
-    kind: FindChatResultKind
+    kind: SearchChatResultKind
     uid: str
     content: str
-    relevance: FindChatRelevance = "primary"
+    relevance: SearchChatRelevance = "primary"
 
     def __post_init__(self) -> None:
         if (
@@ -102,21 +104,21 @@ class FindChatResult:
             or not self.alias[1:].isdigit()
             or self.alias[1:].startswith("0")
         ):
-            raise ValueError("Find chat results require an alias like m1.")
+            raise ValueError("Search chat results require an alias like m1.")
         if not isinstance(self.context_name, str) or not self.context_name.strip():
-            raise ValueError("Find chat results require a Context name.")
+            raise ValueError("Search chat results require a Context name.")
         if self.kind not in {"memory", "ref", "query", "artifact"}:
-            raise ValueError("Invalid Find chat result kind.")
+            raise ValueError("Invalid Search chat result kind.")
         if not isinstance(self.uid, str) or not self.uid.strip():
-            raise ValueError("Find chat results require an item UID.")
+            raise ValueError("Search chat results require an item UID.")
         if not isinstance(self.content, str) or not self.content.strip():
-            raise ValueError("Find chat results require nonblank content.")
+            raise ValueError("Search chat results require nonblank content.")
         if self.relevance not in {"primary", "related"}:
-            raise ValueError("Invalid Find chat result relevance.")
+            raise ValueError("Invalid Search chat result relevance.")
 
 
 @dataclass(frozen=True)
-class FindPendingAnswerRequest:
+class SearchPendingAnswerRequest:
     """One wider-scope answer waiting for a host-owned confirmation token."""
 
     user_text: str
@@ -125,119 +127,119 @@ class FindPendingAnswerRequest:
 
     def __post_init__(self) -> None:
         if not isinstance(self.user_text, str) or not self.user_text.strip():
-            raise ValueError("Pending Find answers require user text.")
+            raise ValueError("Pending Search answers require user text.")
         if (
             not isinstance(self.interpreted_request, str)
             or not self.interpreted_request.strip()
         ):
-            raise ValueError("Pending Find answers require an interpreted request.")
+            raise ValueError("Pending Search answers require an interpreted request.")
         if self.pending_clarification is not None and (
             not isinstance(self.pending_clarification, str)
             or not self.pending_clarification.strip()
         ):
-            raise ValueError("Pending Find clarification must be nonblank text.")
+            raise ValueError("Pending Search clarification must be nonblank text.")
 
 
 @dataclass(frozen=True)
-class FindChatState:
-    """One immutable committed or transient view of the Find chat."""
+class SearchChatState:
+    """One immutable committed or transient view of the Search chat."""
 
     context_name: str
     current_query: str = ""
-    messages: tuple[FindChatMessage, ...] = ()
-    results: tuple[FindChatResult, ...] = ()
+    messages: tuple[SearchChatMessage, ...] = ()
+    results: tuple[SearchChatResult, ...] = ()
     related_query: str = ""
     kept_count: int = 0
     status: str = "READY"
-    pending_answer: FindPendingAnswerRequest | None = None
+    pending_answer: SearchPendingAnswerRequest | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.context_name, str) or not self.context_name.strip():
-            raise ValueError("Find chat requires a Context name.")
+            raise ValueError("Search chat requires a Context name.")
         if not isinstance(self.current_query, str):
-            raise ValueError("Find chat query must be text.")
+            raise ValueError("Search chat query must be text.")
         if isinstance(self.messages, (str, bytes)):
-            raise ValueError("Find chat messages must be a sequence.")
+            raise ValueError("Search chat messages must be a sequence.")
         try:
             messages = tuple(self.messages)
         except TypeError as error:
-            raise ValueError("Find chat messages must be a sequence.") from error
-        if any(not isinstance(message, FindChatMessage) for message in messages):
-            raise ValueError("Invalid Find chat message.")
+            raise ValueError("Search chat messages must be a sequence.") from error
+        if any(not isinstance(message, SearchChatMessage) for message in messages):
+            raise ValueError("Invalid Search chat message.")
         object.__setattr__(self, "messages", messages)
         if isinstance(self.results, (str, bytes)):
-            raise ValueError("Find chat results must be a sequence.")
+            raise ValueError("Search chat results must be a sequence.")
         try:
             results = tuple(self.results)
         except TypeError as error:
-            raise ValueError("Find chat results must be a sequence.") from error
-        if any(not isinstance(result, FindChatResult) for result in results):
-            raise ValueError("Invalid Find chat result.")
+            raise ValueError("Search chat results must be a sequence.") from error
+        if any(not isinstance(result, SearchChatResult) for result in results):
+            raise ValueError("Invalid Search chat result.")
         aliases = tuple(result.alias for result in results)
         if len(set(aliases)) != len(aliases):
-            raise ValueError("Find chat result aliases must be unique.")
+            raise ValueError("Search chat result aliases must be unique.")
         object.__setattr__(self, "results", results)
         if not isinstance(self.related_query, str):
-            raise ValueError("Find chat related query must be text.")
+            raise ValueError("Search chat related query must be text.")
         related_query = self.related_query.strip()
         related = tuple(result for result in results if result.relevance == "related")
         primary = tuple(result for result in results if result.relevance == "primary")
         if primary and related:
-            raise ValueError("Find chat cannot mix primary and related results.")
+            raise ValueError("Search chat cannot mix primary and related results.")
         if bool(related_query) != bool(related):
-            raise ValueError("Related Find chat results require one related query.")
+            raise ValueError("Related Search chat results require one related query.")
         object.__setattr__(self, "related_query", related_query)
         if type(self.kept_count) is not int or self.kept_count < 0:
-            raise ValueError("Find chat kept count must be a nonnegative integer.")
+            raise ValueError("Search chat kept count must be a nonnegative integer.")
         if not isinstance(self.status, str) or not self.status.strip():
-            raise ValueError("Find chat requires a nonblank status.")
+            raise ValueError("Search chat requires a nonblank status.")
         if self.pending_answer is not None and not isinstance(
             self.pending_answer,
-            FindPendingAnswerRequest,
+            SearchPendingAnswerRequest,
         ):
-            raise ValueError("Invalid pending Find answer.")
+            raise ValueError("Invalid pending Search answer.")
 
 
 @dataclass(frozen=True)
-class FindChatAction:
+class SearchChatAction:
     """The single controller-owned action returned by one shell invocation."""
 
-    kind: FindChatActionKind
+    kind: SearchChatActionKind
     text: str = ""
 
     def __post_init__(self) -> None:
         if self.kind not in {"SUBMIT", "CLOSE"}:
-            raise ValueError("Invalid Find chat action.")
+            raise ValueError("Invalid Search chat action.")
         if not isinstance(self.text, str):
-            raise ValueError("Find chat action text must be text.")
+            raise ValueError("Search chat action text must be text.")
         if self.kind == "SUBMIT" and not self.text.strip():
-            raise ValueError("A submitted Find turn cannot be blank.")
+            raise ValueError("A submitted Search turn cannot be blank.")
         if self.kind == "CLOSE" and self.text:
-            raise ValueError("A closed Find chat cannot carry submitted text.")
+            raise ValueError("A closed Search chat cannot carry submitted text.")
 
 
-class FindChatTurnHandler(Protocol):
-    """Controller boundary for one read-only follow-up Find turn."""
+class SearchChatTurnHandler(Protocol):
+    """Controller boundary for one read-only follow-up Search turn."""
 
     def __call__(
         self,
-        state: FindChatState,
+        state: SearchChatState,
         text: str,
-    ) -> FindChatState:
+    ) -> SearchChatState:
         """Return the complete next view after handling one submitted turn."""
 
 
 @dataclass(frozen=True)
-class FindChatSessionResult:
+class SearchChatSessionResult:
     """Final committed state after the person closes one continuous chat."""
 
     status: Literal["CLOSED"]
-    state: FindChatState
+    state: SearchChatState
     submitted_turns: tuple[str, ...] = ()
 
 
-def render_find_chat_header(state: FindChatState) -> str:
-    """Render the stable portion of the Find chat frame."""
+def render_search_chat_header(state: SearchChatState) -> str:
+    """Render the stable portion of the Search chat frame."""
     query = state.current_query.strip() or "(not asked yet)"
     related_count = sum(result.relevance == "related" for result in state.results)
     result_summary = (
@@ -255,7 +257,7 @@ def render_find_chat_header(state: FindChatState) -> str:
     )
 
 
-def _message_block(message: FindChatMessage) -> str:
+def _message_block(message: SearchChatMessage) -> str:
     label = {
         "USER": "YOU",
         "MEM": "MEM",
@@ -265,7 +267,7 @@ def _message_block(message: FindChatMessage) -> str:
     return f"{label}\n  {content}"
 
 
-def _result_view_row(result: FindChatResult) -> SearchResultViewRow:
+def _result_view_row(result: SearchChatResult) -> SearchResultViewRow:
     if result.relevance == "related":
         label = (
             f"[{safe_terminal_text(result.alias)} related "
@@ -283,7 +285,7 @@ def _result_view_row(result: FindChatResult) -> SearchResultViewRow:
     )
 
 
-def _result_blocks(state: FindChatState) -> tuple[str, ...]:
+def _result_blocks(state: SearchChatState) -> tuple[str, ...]:
     if not state.results:
         return ()
     return (
@@ -294,7 +296,7 @@ def _result_blocks(state: FindChatState) -> tuple[str, ...]:
     )
 
 
-def _dialogue_blocks(state: FindChatState) -> tuple[str, ...]:
+def _dialogue_blocks(state: SearchChatState) -> tuple[str, ...]:
     blocks = [_message_block(message) for message in state.messages]
     if not blocks:
         blocks.append(
@@ -311,24 +313,24 @@ def _dialogue_blocks(state: FindChatState) -> tuple[str, ...]:
     return tuple(blocks)
 
 
-def _body_blocks(state: FindChatState) -> tuple[str, ...]:
+def _body_blocks(state: SearchChatState) -> tuple[str, ...]:
     return (*_result_blocks(state), *_dialogue_blocks(state))
 
 
-def _dialogue_text(state: FindChatState) -> str:
+def _dialogue_text(state: SearchChatState) -> str:
     return "\n\n".join(_dialogue_blocks(state))
 
 
-def _result_text(state: FindChatState) -> str:
+def _result_text(state: SearchChatState) -> str:
     blocks = _result_blocks(state)
     return "\n\n".join(blocks) if blocks else "SEARCH RESULTS\n  (no matching items)"
 
 
-def render_find_chat_snapshot(state: FindChatState) -> str:
+def render_search_chat_snapshot(state: SearchChatState) -> str:
     """Render a stable non-interactive representation for tests and fallback."""
     return "\n\n".join(
         [
-            render_find_chat_header(state),
+            render_search_chat_header(state),
             "\n\n".join(_body_blocks(state)),
             "ASK OR REFINE THE SEARCH\n  (interactive input not shown)",
         ]
@@ -336,17 +338,17 @@ def render_find_chat_snapshot(state: FindChatState) -> str:
 
 
 def _failed_turn_state(
-    state: FindChatState,
+    state: SearchChatState,
     text: str,
     error: Exception,
-) -> FindChatState:
+) -> SearchChatState:
     """Preserve the committed view and append one visible failure receipt."""
     return replace(
         state,
         messages=(
             *state.messages,
-            FindChatMessage(role="USER", text=text),
-            FindChatMessage(
+            SearchChatMessage(role="USER", text=text),
+            SearchChatMessage(
                 role="STATUS",
                 text=(
                     f"Turn failed: {type(error).__name__}: {error}. "
@@ -358,14 +360,14 @@ def _failed_turn_state(
     )
 
 
-def _run_find_chat_application(
-    initial_state: FindChatState,
+def _run_search_chat_application(
+    initial_state: SearchChatState,
     *,
-    handle_turn: FindChatTurnHandler | None,
+    handle_turn: SearchChatTurnHandler | None,
     app_input: Input | None,
     app_output: Output | None,
     require_tty: bool,
-) -> FindChatAction | FindChatSessionResult:
+) -> SearchChatAction | SearchChatSessionResult:
     """Run one shell action or one long-lived controller-backed session."""
     if require_tty:
         require_interactive_terminal(
@@ -376,8 +378,8 @@ def _run_find_chat_application(
     committed_state = initial_state
     display_state = initial_state
     submitted_turns: list[str] = []
-    background_turn: BackgroundExecutorTurn[FindChatState] = BackgroundExecutorTurn(
-        interval_seconds=_FIND_BUSY_INTERVAL_SECONDS,
+    background_turn: BackgroundExecutorTurn[SearchChatState] = BackgroundExecutorTurn(
+        interval_seconds=_SEARCH_BUSY_INTERVAL_SECONDS,
     )
     status_message = {"value": ""}
     bindings = KeyBindings()
@@ -392,7 +394,7 @@ def _run_find_chat_application(
         read_only=Condition(lambda: background_turn.busy),
     )
     top_panel = Window(
-        FormattedTextControl(lambda: render_find_chat_header(display_state)),
+        FormattedTextControl(lambda: render_search_chat_header(display_state)),
         height=Dimension.exact(4),
         dont_extend_height=True,
         wrap_lines=False,
@@ -427,7 +429,7 @@ def _run_find_chat_application(
             Window(
                 FormattedTextControl(
                     lambda: (
-                        _processing_find_turn_label(background_turn.frame)
+                        _processing_search_turn_label(background_turn.frame)
                         if background_turn.busy
                         else " ASK OR REFINE THE SEARCH"
                     )
@@ -466,7 +468,7 @@ def _run_find_chat_application(
         TuiRegion(input_panel, separator_before=True),
         TuiRegion(footer),
     )
-    application: Application[FindChatAction | FindChatSessionResult] = Application(
+    application: Application[SearchChatAction | SearchChatSessionResult] = Application(
         layout=Layout(root, focused_element=input_area),
         key_bindings=bindings,
         full_screen=True,
@@ -478,7 +480,7 @@ def _run_find_chat_application(
         mouse_support=False,
     )
 
-    def refresh(next_state: FindChatState) -> None:
+    def refresh(next_state: SearchChatState) -> None:
         """Replace display buffers from the event-loop thread."""
         nonlocal display_state
         display_state = next_state
@@ -495,8 +497,8 @@ def _run_find_chat_application(
         )
         application.invalidate()
 
-    def session_result() -> FindChatSessionResult:
-        return FindChatSessionResult(
+    def session_result() -> SearchChatSessionResult:
+        return SearchChatSessionResult(
             status="CLOSED",
             state=committed_state,
             submitted_turns=tuple(submitted_turns),
@@ -515,7 +517,7 @@ def _run_find_chat_application(
             event.app.invalidate()
             return
         if handle_turn is None:
-            event.app.exit(result=FindChatAction(kind="SUBMIT", text=text))
+            event.app.exit(result=SearchChatAction(kind="SUBMIT", text=text))
             return
 
         base_state = committed_state
@@ -527,21 +529,23 @@ def _run_find_chat_application(
                 base_state,
                 messages=(
                     *base_state.messages,
-                    FindChatMessage(role="USER", text=text),
+                    SearchChatMessage(role="USER", text=text),
                 ),
                 status="THINKING",
             )
         )
         event.app.layout.focus(conversation_control)
 
-        def work() -> FindChatState:
+        def work() -> SearchChatState:
             assert handle_turn is not None
             updated = handle_turn(base_state, text)
-            if not isinstance(updated, FindChatState):
-                raise ValueError("Find chat controller returned an invalid next state.")
+            if not isinstance(updated, SearchChatState):
+                raise ValueError(
+                    "Search chat controller returned an invalid next state."
+                )
             return updated
 
-        def commit(updated: FindChatState) -> None:
+        def commit(updated: SearchChatState) -> None:
             nonlocal committed_state
             committed_state = updated
             refresh(updated)
@@ -613,8 +617,8 @@ def _run_find_chat_application(
             status_message["value"] = "Closing after the current turn finishes."
             event.app.invalidate()
             return
-        result: FindChatAction | FindChatSessionResult = (
-            FindChatAction(kind="CLOSE") if handle_turn is None else session_result()
+        result: SearchChatAction | SearchChatSessionResult = (
+            SearchChatAction(kind="CLOSE") if handle_turn is None else session_result()
         )
         event.app.exit(result=result)
 
@@ -624,7 +628,7 @@ def _run_find_chat_application(
         filter=navigation_focus,
         app_input=app_input,
         app_output=app_output,
-        study_surface="find-chat",
+        study_surface="search-chat",
     )
 
     @bindings.add("pageup", filter=navigation_focus, eager=True)
@@ -654,42 +658,44 @@ def _run_find_chat_application(
     try:
         result = application.run()
     except (EOFError, KeyboardInterrupt):
-        return FindChatAction(kind="CLOSE") if handle_turn is None else session_result()
-    if not isinstance(result, (FindChatAction, FindChatSessionResult)):
-        raise ValueError("Find chat application returned an invalid result.")
+        return (
+            SearchChatAction(kind="CLOSE") if handle_turn is None else session_result()
+        )
+    if not isinstance(result, (SearchChatAction, SearchChatSessionResult)):
+        raise ValueError("Search chat application returned an invalid result.")
     return result
 
 
-def run_find_chat_shell(
-    state: FindChatState,
+def run_search_chat_shell(
+    state: SearchChatState,
     *,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
-) -> FindChatAction:
-    """Collect one Find dialogue turn without controller work."""
-    result = _run_find_chat_application(
+) -> SearchChatAction:
+    """Collect one Search dialogue turn without controller work."""
+    result = _run_search_chat_application(
         state,
         handle_turn=None,
         app_input=app_input,
         app_output=app_output,
         require_tty=require_tty,
     )
-    if not isinstance(result, FindChatAction):  # pragma: no cover - invariant
-        raise ValueError("Find shell returned an invalid result.")
+    if not isinstance(result, SearchChatAction):  # pragma: no cover - invariant
+        raise ValueError("Search shell returned an invalid result.")
     return result
 
 
-def run_find_chat_session(
-    initial_state: FindChatState,
+def run_search_chat_session(
+    initial_state: SearchChatState,
     *,
-    handle_turn: FindChatTurnHandler,
+    handle_turn: SearchChatTurnHandler,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
-) -> FindChatSessionResult:
+) -> SearchChatSessionResult:
     """Run repeated controller turns without recreating the full-screen UI."""
-    result = _run_find_chat_application(
+    result = _run_search_chat_application(
         initial_state,
         handle_turn=handle_turn,
         app_input=app_input,
@@ -698,7 +704,7 @@ def run_find_chat_session(
     )
     if not isinstance(
         result,
-        FindChatSessionResult,
+        SearchChatSessionResult,
     ):  # pragma: no cover - invariant
-        raise ValueError("Find session returned an invalid result.")
+        raise ValueError("Search session returned an invalid result.")
     return result

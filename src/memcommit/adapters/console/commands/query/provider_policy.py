@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.providers.find_query import (
+from memcommit.providers.operation_connections import (
     QUERY_PROVIDER_POLICY,
     connect_ordinary_query_provider,
     connect_query_route_provider,

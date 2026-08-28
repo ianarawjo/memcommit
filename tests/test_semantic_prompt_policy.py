@@ -14,7 +14,9 @@ from memcommit.application.operations.atomize.domain import (
     _prompt as atomize_prompt,
     collect_atomize_candidates,
 )
-from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
+from memcommit.application.operations.atomize.workflow import (
+    open_or_create_atomize_workbench,
+)
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
 from memcommit.application.operations.compare.summary_rules import (
     comparison_summary_ruleset_prompt_payload,
@@ -23,7 +25,9 @@ from memcommit.application.semantic.generative_reduction_reference import (
     distill_elaborate_reference_payload,
     render_distill_elaborate_reference_examples,
 )
-from memcommit.application.operations.search.answer_references import FindAnswerEvidence
+from memcommit.application.operations.search.answer_references import (
+    SearchAnswerEvidence,
+)
 from memcommit.application.operations.profile.config import (
     STUDY_RUN_AUTHORITY_SOURCE_KIND,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
@@ -112,9 +116,7 @@ def test_rules_only_projection_drops_examples_but_not_rules() -> None:
     assert study["rules"] == general["rules"]
     assert general_reference["families"]
     assert study_reference["families"] == []
-    assert render_distill_elaborate_reference_examples(
-        include_examples=False
-    ) == ""
+    assert render_distill_elaborate_reference_examples(include_examples=False) == ""
 
 
 def test_atomize_study_prompt_keeps_input_and_rules_but_omits_demos() -> None:
@@ -159,7 +161,7 @@ def test_find_and_query_study_turns_omit_authored_examples(monkeypatch) -> None:
     assert cases == []
 
     evidence = (
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             "m1",
             "policy",
             "memory",
@@ -176,9 +178,7 @@ def test_find_and_query_study_turns_omit_authored_examples(monkeypatch) -> None:
         "When does the entrance close?",
         evidence,
     )
-    study_payload = json.loads(
-        study_prompt.split("ORDINARY QUERY PAYLOAD:\n", 1)[1]
-    )
+    study_payload = json.loads(study_prompt.split("ORDINARY QUERY PAYLOAD:\n", 1)[1])
     assert "PROVIDER-VISIBLE METHOD EXAMPLES" not in study_prompt
     assert study_payload["prompt_policy"] == (
         STUDY_SEMANTIC_PROMPT_POLICY.to_prompt_record()

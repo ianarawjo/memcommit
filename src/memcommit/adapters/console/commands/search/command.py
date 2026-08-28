@@ -7,7 +7,9 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.shared.context_operand import (
+    ContextOperandSnapshot,
+)
 from memcommit.application.authority.access import (
     ContextAccess,
     context_access_display_facts,
@@ -18,22 +20,22 @@ from memcommit.adapters.console.shared.exact_command_review import (
     format_exact_command,
 )
 from memcommit.adapters.console.commands.search.chat_shell import (
-    FindChatMessage,
-    FindChatResult,
-    FindChatSessionResult,
-    FindChatState,
-    FindPendingAnswerRequest,
-    run_find_chat_session,
+    SearchChatMessage,
+    SearchChatResult,
+    SearchChatSessionResult,
+    SearchChatState,
+    SearchPendingAnswerRequest,
+    run_search_chat_session,
 )
 from memcommit.adapters.console.commands.search.search_workbench import (
-    run_find_search_workbench,
+    run_search_workbench,
 )
 from memcommit.application.operations.search.materialization_application import (
-    FindMaterializationError,
-    FindMaterializationRequest,
+    SearchMaterializationError,
+    SearchMaterializationRequest,
 )
 from memcommit.application.operations.search.materialization_runtime import (
-    execute_find_materialization,
+    execute_search_materialization,
 )
 from memcommit.adapters.console.shared.command_progress import CommandProgress
 from memcommit.adapters.console.shared.readable_context_catalog import (
@@ -58,20 +60,20 @@ from memcommit.adapters.console.text import (
 from memcommit.adapters.console.commands.search.result_present import group_search_items
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.search.answer_dialogue import (
-    FindAnswerCorpusTooLarge,
-    FindAnswerProvider,
-    FindOutsideStatus,
-    synthesize_find_answer,
+    SearchAnswerCorpusTooLarge,
+    SearchAnswerProvider,
+    SearchOutsideStatus,
+    synthesize_search_answer,
 )
 from memcommit.application.operations.search.answer_references import (
-    render_find_answer_references,
+    render_search_answer_references,
 )
 from memcommit.application.operations.search.application import (
-    FindSearchRequest,
-    FindSearchResponse,
-    FindSearchStage,
+    SearchRequest,
+    SearchResponse,
+    SearchStage,
 )
-from memcommit.application.operations.search.runtime import execute_find_search
+from memcommit.application.operations.search.runtime import execute_search
 from memcommit.application.operations.search.scope_evidence import (
     collect_outside_context_evidence,
     compact_artifact_references,
@@ -80,18 +82,16 @@ from memcommit.application.operations.search.scope_evidence import (
     visible_result_evidence,
 )
 from memcommit.application.operations.search.turn_dialogue import (
-    FindTurnAction,
-    FindTurnAnswer,
-    FindTurnAsk,
-    FindTurnRefine,
-    interpret_find_turn,
+    SearchTurnAction,
+    SearchTurnAnswer,
+    SearchTurnAsk,
+    SearchTurnRefine,
+    interpret_search_turn,
 )
-from memcommit.providers.find_query import (
-    connect_find_provider as connect_codex_chatgpt_provider,
-)
+from memcommit.providers.operation_connections import connect_search_provider
 from memcommit.providers.subscription import QueryProviderError
 from memcommit.application.operations.search.model import (
-    FindError,
+    SearchError,
     SearchArtifact,
     SearchCandidate,
     SearchMatch,
@@ -111,8 +111,8 @@ from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 
 
-FIND_OUTSIDE_CONFIRMATION = "confirm other contexts"
-FIND_OUTSIDE_CANCELLATION = "cancel other contexts"
+SEARCH_OUTSIDE_CONFIRMATION = "confirm other contexts"
+SEARCH_OUTSIDE_CANCELLATION = "cancel other contexts"
 
 
 def _outside_confirmation_message(user_text: str) -> str:
@@ -121,18 +121,18 @@ def _outside_confirmation_message(user_text: str) -> str:
         return (
             "다른 저장 Context를 확인하면 그 안의 일반 Memory 내용도 "
             "이 답변을 만드는 provider에 전송됩니다.\n\n"
-            f"계속하려면 정확히 `{FIND_OUTSIDE_CONFIRMATION}`를, "
-            f"취소하려면 `{FIND_OUTSIDE_CANCELLATION}`를 입력하세요."
+            f"계속하려면 정확히 `{SEARCH_OUTSIDE_CONFIRMATION}`를, "
+            f"취소하려면 `{SEARCH_OUTSIDE_CANCELLATION}`를 입력하세요."
         )
     return (
         "Checking other stored Contexts will also send their ordinary Memory "
         "contents to the answer provider.\n\n"
-        f"Type exactly `{FIND_OUTSIDE_CONFIRMATION}` to continue, or "
-        f"`{FIND_OUTSIDE_CANCELLATION}` to cancel."
+        f"Type exactly `{SEARCH_OUTSIDE_CONFIRMATION}` to continue, or "
+        f"`{SEARCH_OUTSIDE_CANCELLATION}` to cancel."
     )
 
 
-def _pending_find_clarification(state: FindChatState) -> str | None:
+def _pending_search_clarification(state: SearchChatState) -> str | None:
     if state.status != "WAITING FOR CLARIFICATION":
         return None
     return next(
@@ -142,16 +142,16 @@ def _pending_find_clarification(state: FindChatState) -> str | None:
 
 
 @dataclass(frozen=True)
-class FindShowProposal:
-    """One locally resolved read-only command for a visible Find result."""
+class SearchShowProposal:
+    """One locally resolved read-only command for a visible Search result."""
 
-    action: FindTurnAction
-    result: FindChatResult
+    action: SearchTurnAction
+    result: SearchChatResult
     review: ExactCommandReview
     submitted_text: str
 
 
-def _find_answer_status(outside_status: FindOutsideStatus) -> str:
+def _search_answer_status(outside_status: SearchOutsideStatus) -> str:
     """Describe the scopes actually checked, not merely the requested scope."""
     return {
         "NOT_REQUESTED": ("ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS NOT CHECKED"),
@@ -164,8 +164,8 @@ def _find_answer_status(outside_status: FindOutsideStatus) -> str:
 
 
 @dataclass(frozen=True)
-class FindTurnController:
-    """Frozen local evidence frame and provider orchestration for one Find."""
+class SearchTurnController:
+    """Frozen local evidence frame and provider orchestration for one Search."""
 
     store: MemoryStore
     root_context: Context
@@ -176,31 +176,31 @@ class FindTurnController:
 
     def __call__(
         self,
-        state: FindChatState,
+        state: SearchChatState,
         text: str,
-    ) -> FindChatState:
+    ) -> SearchChatState:
         self._visible_candidates(state)
         if state.pending_answer is not None:
             return self._handle_scope_confirmation(state, text)
-        provider = connect_codex_chatgpt_provider()
-        turn = interpret_find_turn(state, text, provider)
-        if isinstance(turn, FindTurnRefine):
+        provider = connect_search_provider()
+        turn = interpret_search_turn(state, text, provider)
+        if isinstance(turn, SearchTurnRefine):
             return self._refine(state, text, turn, provider)
-        if isinstance(turn, FindTurnAnswer):
-            pending_clarification = _pending_find_clarification(state)
+        if isinstance(turn, SearchTurnAnswer):
+            pending_clarification = _pending_search_clarification(state)
             if turn.scope == "ALL_CONTEXTS":
                 return replace(
                     state,
                     messages=(
                         *state.messages,
-                        FindChatMessage(role="USER", text=text),
-                        FindChatMessage(
+                        SearchChatMessage(role="USER", text=text),
+                        SearchChatMessage(
                             role="MEM",
                             text=_outside_confirmation_message(text),
                         ),
                     ),
                     status="WAITING FOR OTHER CONTEXTS CONFIRMATION",
-                    pending_answer=FindPendingAnswerRequest(
+                    pending_answer=SearchPendingAnswerRequest(
                         user_text=text,
                         interpreted_request=turn.understanding,
                         pending_clarification=pending_clarification,
@@ -215,13 +215,13 @@ class FindTurnController:
                 include_outside=False,
                 provider=provider,
             )
-        if isinstance(turn, FindTurnAsk):
+        if isinstance(turn, SearchTurnAsk):
             return replace(
                 state,
                 messages=(
                     *state.messages,
-                    FindChatMessage(role="USER", text=text),
-                    FindChatMessage(
+                    SearchChatMessage(role="USER", text=text),
+                    SearchChatMessage(
                         role="MEM",
                         text=f"{turn.understanding}\n\n{turn.question}",
                     ),
@@ -238,7 +238,7 @@ class FindTurnController:
 
     def _visible_candidates(
         self,
-        state: FindChatState,
+        state: SearchChatState,
     ) -> tuple[SearchCandidate, ...]:
         """Resolve the current visible aliases against the frozen frame."""
         visible: list[SearchCandidate] = []
@@ -250,19 +250,19 @@ class FindTurnController:
                 and candidate.item.uid == result.uid
             ]
             if len(candidates) != 1:
-                raise FindError(
-                    "The visible Find result no longer matches its evidence frame."
+                raise SearchError(
+                    "The visible Search result no longer matches its evidence frame."
                 )
             visible.append(candidates[0])
         return tuple(visible)
 
     def _refine(
         self,
-        state: FindChatState,
+        state: SearchChatState,
         submitted_text: str,
-        turn: FindTurnRefine,
-        provider: FindAnswerProvider,
-    ) -> FindChatState:
+        turn: SearchTurnRefine,
+        provider: SearchAnswerProvider,
+    ) -> SearchChatState:
         """Replace visible results by reranking the same frozen frame."""
         matches = rank_candidates(
             turn.query,
@@ -285,12 +285,12 @@ class FindTurnController:
             current_query=turn.query,
             messages=(
                 *state.messages,
-                FindChatMessage(role="USER", text=submitted_text),
-                FindChatMessage(
+                SearchChatMessage(role="USER", text=submitted_text),
+                SearchChatMessage(
                     role="MEM",
                     text=(
                         f"{turn.understanding}\n\n"
-                        + _find_result_message(matches, refined=True)
+                        + _search_result_message(matches, refined=True)
                     ),
                 ),
             ),
@@ -300,26 +300,26 @@ class FindTurnController:
             ),
             related_query=related_query,
             kept_count=0,
-            status=_find_result_status(matches, refined=True),
+            status=_search_result_status(matches, refined=True),
             pending_answer=None,
         )
 
     def _handle_scope_confirmation(
         self,
-        state: FindChatState,
+        state: SearchChatState,
         text: str,
-    ) -> FindChatState:
+    ) -> SearchChatState:
         pending = state.pending_answer
         if pending is None:  # pragma: no cover - guarded by the caller
-            raise FindError("Find has no pending wider-scope answer.")
+            raise SearchError("Search has no pending wider-scope answer.")
         token = text.strip().casefold()
-        if token == FIND_OUTSIDE_CANCELLATION:
+        if token == SEARCH_OUTSIDE_CANCELLATION:
             return replace(
                 state,
                 messages=(
                     *state.messages,
-                    FindChatMessage(role="USER", text=text),
-                    FindChatMessage(
+                    SearchChatMessage(role="USER", text=text),
+                    SearchChatMessage(
                         role="MEM",
                         text="The other-Context answer request was cancelled.",
                     ),
@@ -327,24 +327,24 @@ class FindTurnController:
                 status="OTHER CONTEXTS CANCELLED",
                 pending_answer=None,
             )
-        if token != FIND_OUTSIDE_CONFIRMATION:
+        if token != SEARCH_OUTSIDE_CONFIRMATION:
             return replace(
                 state,
                 messages=(
                     *state.messages,
-                    FindChatMessage(role="USER", text=text),
-                    FindChatMessage(
+                    SearchChatMessage(role="USER", text=text),
+                    SearchChatMessage(
                         role="MEM",
                         text=(
                             "The wider scope was not confirmed. Type exactly "
-                            f"`{FIND_OUTSIDE_CONFIRMATION}` to continue, or "
-                            f"`{FIND_OUTSIDE_CANCELLATION}` to cancel."
+                            f"`{SEARCH_OUTSIDE_CONFIRMATION}` to continue, or "
+                            f"`{SEARCH_OUTSIDE_CANCELLATION}` to cancel."
                         ),
                     ),
                 ),
                 status="WAITING FOR OTHER CONTEXTS CONFIRMATION",
             )
-        provider = connect_codex_chatgpt_provider()
+        provider = connect_search_provider()
         return self._answer(
             state,
             submitted_text=text,
@@ -357,30 +357,30 @@ class FindTurnController:
 
     def _answer(
         self,
-        state: FindChatState,
+        state: SearchChatState,
         *,
         submitted_text: str,
         answer_question: str,
         interpreted_request: str,
         pending_clarification: str | None,
         include_outside: bool,
-        provider: FindAnswerProvider,
-    ) -> FindChatState:
+        provider: SearchAnswerProvider,
+    ) -> SearchChatState:
         # The provider object has already passed the same runtime interface
         # check used by the dialogue adapters; keeping this method provider-
         # agnostic makes the two-turn confirmation path share one boundary.
         complete = getattr(provider, "complete", None)
         if not callable(complete):
-            raise FindError("Find answer provider is not available.")
+            raise SearchError("Search answer provider is not available.")
         if not state.results or any(
             result.relevance != "primary" for result in state.results
         ):
             # Related fallbacks aid discovery but are not evidence that the
             # original query was satisfied. A REFINE turn must promote them
             # through a fresh primary ranking before answer synthesis.
-            raise FindError(
-                "Related Find results cannot answer the original query. "
-                "Refine the Find first."
+            raise SearchError(
+                "Related Search results cannot answer the original query. "
+                "Refine the Search first."
             )
         visible_candidates = self._visible_candidates(state)
         visible = visible_result_evidence(visible_candidates)
@@ -389,7 +389,7 @@ class FindTurnController:
             visible_candidates,
         )
         outside = ()
-        outside_status: FindOutsideStatus = "NOT_REQUESTED"
+        outside_status: SearchOutsideStatus = "NOT_REQUESTED"
         if include_outside:
             collected = collect_outside_context_evidence(
                 self.store,
@@ -403,7 +403,7 @@ class FindTurnController:
             outside = collected.evidence
             outside_status = collected.status
         try:
-            answer = synthesize_find_answer(
+            answer = synthesize_search_answer(
                 answer_question,
                 visible,
                 context,
@@ -413,7 +413,7 @@ class FindTurnController:
                 interpreted_request=interpreted_request,
                 pending_clarification=pending_clarification,
             )
-        except FindAnswerCorpusTooLarge:
+        except SearchAnswerCorpusTooLarge:
             if not include_outside:
                 raise
             # A confirmed global scan can exceed the prototype corpus ceiling.
@@ -421,7 +421,7 @@ class FindTurnController:
             # could not be completed instead of silently sampling a subset.
             outside = ()
             outside_status = "UNAVAILABLE"
-            answer = synthesize_find_answer(
+            answer = synthesize_search_answer(
                 answer_question,
                 visible,
                 context,
@@ -431,7 +431,7 @@ class FindTurnController:
                 interpreted_request=interpreted_request,
                 pending_clarification=pending_clarification,
             )
-        rendered = render_find_answer_references(
+        rendered = render_search_answer_references(
             compact_artifact_references(
                 (*visible, *context, *outside),
                 self.frame_candidates,
@@ -442,10 +442,10 @@ class FindTurnController:
             state,
             messages=(
                 *state.messages,
-                FindChatMessage(role="USER", text=submitted_text),
-                FindChatMessage(role="MEM", text=rendered),
+                SearchChatMessage(role="USER", text=submitted_text),
+                SearchChatMessage(role="MEM", text=rendered),
             ),
-            status=_find_answer_status(outside_status),
+            status=_search_answer_status(outside_status),
             pending_answer=None,
         )
 
@@ -454,14 +454,14 @@ def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
-def _load_find_frame_roots(
+def _load_search_frame_roots(
     store: MemoryStore,
     root: Context,
     *,
     recursive: bool,
     resolve_embeds: bool,
 ) -> tuple[Context, ...]:
-    """Compatibility adapter for the former Find-owned scope helper."""
+    """Compatibility adapter for the former Search-owned scope helper."""
 
     return load_readable_search_roots(
         store,
@@ -472,14 +472,14 @@ def _load_find_frame_roots(
     )
 
 
-def _load_find_scope_roots(
+def _load_search_scope_roots(
     store: ReadableContextCatalog,
     target_names: Sequence[str],
     *,
     include_descendants: bool,
     follow_embeds: bool,
 ) -> tuple[Context, ...]:
-    """Compatibility adapter for tests and retained Find callers."""
+    """Compatibility adapter for tests and retained Search callers."""
 
     return load_readable_search_roots(
         store,
@@ -489,7 +489,7 @@ def _load_find_scope_roots(
     )
 
 
-def _collect_find_frame_candidates(
+def _collect_search_frame_candidates(
     store: MemoryStore,
     frame_roots: Sequence[Context],
     *,
@@ -507,7 +507,7 @@ def _collect_find_frame_candidates(
 
 
 def _namespace_branch(name: str, root_name: str) -> str | None:
-    """Return the first canonical namespace segment below one Find root."""
+    """Return the first canonical namespace segment below one Search root."""
 
     prefix = root_name + "/"
     if not name.startswith(prefix):
@@ -662,7 +662,7 @@ def _render_match(match: SearchMatch) -> None:
         _render_labeled_content(label, f"{item.title} · {summary}")
 
 
-def _chat_result(match: SearchMatch, index: int) -> FindChatResult:
+def _chat_result(match: SearchMatch, index: int) -> SearchChatResult:
     candidate = match.candidate
     item = candidate.item
     if isinstance(item, Memory):
@@ -682,8 +682,8 @@ def _chat_result(match: SearchMatch, index: int) -> FindChatResult:
     elif isinstance(item, SearchArtifact):
         content = f"{item.title}\n{item.content}"
     else:  # pragma: no cover - SearchMatch validates the result union
-        raise FindError("Find returned an unsupported result type.")
-    return FindChatResult(
+        raise SearchError("Search returned an unsupported result type.")
+    return SearchChatResult(
         alias=f"m{index}",
         context_name=candidate.context_name,
         kind={
@@ -706,15 +706,15 @@ def _related_query_for_matches(matches: Sequence[SearchMatch]) -> str:
     primary_count = sum(match.relevance == "primary" for match in matches)
     related_count = sum(match.relevance == "related" for match in matches)
     if primary_count and related_count:
-        raise FindError("Find cannot mix primary and related results.")
+        raise SearchError("Search cannot mix primary and related results.")
     if related_count:
         if len(related_queries) != 1 or None in related_queries:
-            raise FindError("Related Find results require one broader query.")
+            raise SearchError("Related Search results require one broader query.")
         return next(iter(related_queries)) or ""
     return ""
 
 
-def _find_result_message(
+def _search_result_message(
     matches: Sequence[SearchMatch],
     *,
     refined: bool = False,
@@ -722,7 +722,7 @@ def _find_result_message(
     related_query = _related_query_for_matches(matches)
     count = len(matches)
     noun = "Memory" if count == 1 else "Memories"
-    suffix = " after refining the Find" if refined else ""
+    suffix = " after refining the Search" if refined else ""
     if related_query:
         return (
             "I found no primary matches. "
@@ -732,7 +732,7 @@ def _find_result_message(
     return f"I found {count} matching {noun}{suffix}."
 
 
-def _find_result_status(
+def _search_result_status(
     matches: Sequence[SearchMatch],
     *,
     refined: bool = False,
@@ -751,36 +751,36 @@ def _initial_chat_state(
     context_name: str,
     query: str,
     matches: list[SearchMatch],
-) -> FindChatState:
+) -> SearchChatState:
     related_query = _related_query_for_matches(matches)
-    return FindChatState(
+    return SearchChatState(
         context_name=context_name,
         current_query=query,
         messages=(
-            FindChatMessage(role="USER", text=query),
-            FindChatMessage(
+            SearchChatMessage(role="USER", text=query),
+            SearchChatMessage(
                 role="MEM",
-                text=_find_result_message(matches),
+                text=_search_result_message(matches),
             ),
         ),
         results=tuple(
             _chat_result(match, index) for index, match in enumerate(matches, start=1)
         ),
         related_query=related_query,
-        status=_find_result_status(matches),
+        status=_search_result_status(matches),
     )
 
 
 def _show_result_proposal(
-    state: FindChatState,
-    action: FindTurnAction,
+    state: SearchChatState,
+    action: SearchTurnAction,
     submitted_text: str,
-) -> FindShowProposal:
+) -> SearchShowProposal:
     matches = tuple(
         result for result in state.results if result.alias == action.selector
     )
     if len(matches) != 1:
-        raise FindError("The requested Find result is missing or ambiguous.")
+        raise SearchError("The requested Search result is missing or ambiguous.")
     selected = matches[0]
     review = ExactCommandReview(
         argv=(
@@ -795,7 +795,7 @@ def _show_result_proposal(
             "This opens the selected result without editing stored data.",
         ),
     )
-    return FindShowProposal(
+    return SearchShowProposal(
         action=action,
         result=selected,
         review=review,
@@ -804,24 +804,24 @@ def _show_result_proposal(
 
 
 def _apply_artifact_show_result(
-    state: FindChatState,
-    proposal: FindShowProposal,
-) -> FindChatState:
+    state: SearchChatState,
+    proposal: SearchShowProposal,
+) -> SearchChatState:
     """Inspect a frozen artifact without pretending it is an ordinary Memory."""
     action = proposal.action
     return replace(
         state,
         messages=(
             *state.messages,
-            FindChatMessage(role="USER", text=proposal.submitted_text),
-            FindChatMessage(
+            SearchChatMessage(role="USER", text=proposal.submitted_text),
+            SearchChatMessage(
                 role="MEM",
                 text=(
                     f"{action.understanding}\n\n{action.question}\n\n"
                     f"{proposal.result.content}"
                 ),
             ),
-            FindChatMessage(
+            SearchChatMessage(
                 role="STATUS",
                 text="ARTIFACT SHOWN",
             ),
@@ -830,7 +830,7 @@ def _apply_artifact_show_result(
     )
 
 
-def _run_read_only_find_command(
+def _run_read_only_search_command(
     argv: tuple[str, ...],
 ) -> subprocess.CompletedProcess[str]:
     """Run one allowlisted read-only logical mem argv without a shell."""
@@ -841,7 +841,7 @@ def _run_read_only_find_command(
         or not argv[2]
         or not argv[4]
     ):
-        raise FindError("Find refused a non-show follow-up command.")
+        raise SearchError("Search refused a non-show follow-up command.")
     return subprocess.run(
         [sys.executable, "-m", "memcommit.adapters.console.entrypoint", *argv[1:]],
         capture_output=True,
@@ -854,39 +854,37 @@ def _run_read_only_find_command(
 
 
 def _apply_show_result(
-    state: FindChatState,
-    proposal: FindShowProposal,
-) -> FindChatState:
+    state: SearchChatState,
+    proposal: SearchShowProposal,
+) -> SearchChatState:
     try:
-        completed = _run_read_only_find_command(proposal.review.argv)
+        completed = _run_read_only_search_command(proposal.review.argv)
     except subprocess.TimeoutExpired as error:
-        raise FindError("The mem show action timed out.") from error
+        raise SearchError("The mem show action timed out.") from error
     except OSError as error:
-        raise FindError(
-            "The mem show action could not be started."
-        ) from error
+        raise SearchError("The mem show action could not be started.") from error
     if completed.returncode != 0:
         detail = (completed.stderr or completed.stdout).strip()
-        raise FindError(
+        raise SearchError(
             "The mem show action failed" + (f": {detail}" if detail else ".")
         )
     actual_output = completed.stdout.strip()
     if not actual_output:
-        raise FindError("The mem show action returned no output.")
+        raise SearchError("The mem show action returned no output.")
     action = proposal.action
     return replace(
         state,
         messages=(
             *state.messages,
-            FindChatMessage(
+            SearchChatMessage(
                 role="USER",
                 text=proposal.submitted_text,
             ),
-            FindChatMessage(
+            SearchChatMessage(
                 role="MEM",
                 text=f"{action.understanding}\n\n{action.question}",
             ),
-            FindChatMessage(
+            SearchChatMessage(
                 role="STATUS",
                 text="\n".join(
                     [
@@ -905,10 +903,10 @@ def _apply_show_result(
     )
 
 
-def _handle_find_turn(
-    state: FindChatState,
+def _handle_search_turn(
+    state: SearchChatState,
     text: str,
-) -> FindChatState:
+) -> SearchChatState:
     store = MemoryStore()
     access = resolve_context_access(
         store,
@@ -918,21 +916,21 @@ def _handle_find_turn(
     )
     read_store = freeze_readable_context_catalog(store, access)
     root = read_store.load(access.display_name)
-    frame_roots = _load_find_frame_roots(
+    frame_roots = _load_search_frame_roots(
         read_store,
         root,
         recursive=True,
         resolve_embeds=True,
     )
-    frame_candidates = _collect_find_frame_candidates(
+    frame_candidates = _collect_search_frame_candidates(
         store,
         frame_roots,
         recursive=True,
         include_artifacts=not access.is_granted,
     )
-    return FindTurnController(
+    return SearchTurnController(
         # Other-Context confirmation retains its established profile-local
-        # boundary; the unified catalog is only the selected Find frame.
+        # boundary; the unified catalog is only the selected Search frame.
         store=store,
         root_context=root,
         frame_roots=frame_roots,
@@ -942,7 +940,7 @@ def _handle_find_turn(
     )(state, text)
 
 
-def _run_interactive_find(
+def _run_interactive_search(
     store: MemoryStore,
     outside_store: MemoryStore,
     root_context: Context,
@@ -953,8 +951,8 @@ def _run_interactive_find(
     recursive: bool,
     limit: int,
     frame_candidates: tuple[SearchCandidate, ...],
-) -> FindChatSessionResult:
-    controller = FindTurnController(
+) -> SearchChatSessionResult:
+    controller = SearchTurnController(
         store=outside_store,
         root_context=root_context,
         frame_roots=frame_roots,
@@ -962,7 +960,7 @@ def _run_interactive_find(
         limit=limit,
         frame_candidates=frame_candidates,
     )
-    result = run_find_chat_session(
+    result = run_search_chat_session(
         _initial_chat_state(root_context.name, query, matches),
         handle_turn=controller,
     )
@@ -973,26 +971,26 @@ def _run_interactive_find(
     return result
 
 
-def _run_find_search_request(
+def _run_search_request(
     store: MemoryStore,
     catalog: ReadableContextCatalog,
-    request: FindSearchRequest,
+    request: SearchRequest,
     *,
     observer=None,
-) -> FindSearchResponse:
-    """Compatibility adapter over the terminal-independent Find runtime."""
+) -> SearchResponse:
+    """Compatibility adapter over the terminal-independent Search runtime."""
 
-    return execute_find_search(
+    return execute_search(
         request,
         store=store,
         catalog=catalog,
-        provider_factory=connect_codex_chatgpt_provider,
+        provider_factory=connect_search_provider,
         observer=observer,
     )
 
 
-def _render_find_search_response(
-    response: FindSearchResponse,
+def _render_search_response(
+    response: SearchResponse,
     *,
     target_names: tuple[str, ...],
     all_readable_contexts: bool = False,
@@ -1015,12 +1013,9 @@ def _render_find_search_response(
             typer.echo()
         typer.secho("RELATED RESULTS", bold=True)
         typer.echo(
-            "  No matching results for: "
-            + display_escape_text(response.request.query)
+            "  No matching results for: " + display_escape_text(response.request.query)
         )
-        typer.echo(
-            "  Broader search: " + display_escape_text(response.related_query)
-        )
+        typer.echo("  Broader search: " + display_escape_text(response.related_query))
         typer.echo()
     groups = group_search_items(
         response.results,
@@ -1044,7 +1039,7 @@ def _render_find_search_response(
         typer.echo("Related results may not satisfy the original query.")
 
 
-def _open_find_search_workbench(
+def _open_search_workbench(
     store: MemoryStore,
     access: ContextAccess,
     *,
@@ -1054,7 +1049,7 @@ def _open_find_search_workbench(
     follow_embeds: bool,
     limit: int,
 ) -> None:
-    """Open a blank, query-focused Find over one frozen readable catalog."""
+    """Open a blank, query-focused Search over one frozen readable catalog."""
 
     catalog = freeze_profile_readable_context_catalog(
         store,
@@ -1073,7 +1068,7 @@ def _open_find_search_workbench(
         name: context_access_display_facts(catalog.access_for(name))
         for name in granted_names
     }
-    workbench_result = run_find_search_workbench(
+    workbench_result = run_search_workbench(
         names,
         current=displayed_current,
         initial_target=initial_target,
@@ -1081,7 +1076,7 @@ def _open_find_search_workbench(
         initial_include_descendants=include_descendants,
         initial_follow_embeds=follow_embeds,
         limit=limit,
-        run_search=lambda request: _run_find_search_request(
+        run_search=lambda request: _run_search_request(
             store,
             catalog,
             request,
@@ -1098,8 +1093,8 @@ def _open_find_search_workbench(
     assert workbench_result.response is not None
     assert workbench_result.materialize_as is not None
     assert workbench_result.save_location is not None
-    materialized = execute_find_materialization(
-        FindMaterializationRequest(
+    materialized = execute_search_materialization(
+        SearchMaterializationRequest(
             response=workbench_result.response,
             selected_result_indices=workbench_result.selected_result_indices,
             mode=workbench_result.materialize_as,
@@ -1248,7 +1243,7 @@ def cmd(
         )
         target_names = tuple(access.display_name for access in accesses)
         if len(set(target_names)) != len(target_names):
-            raise ValueError("Find Context roots must be distinct.")
+            raise ValueError("Search Context roots must be distinct.")
         access = accesses[0]
         all_readable_catalog = None
         if all_contexts:
@@ -1266,7 +1261,7 @@ def cmd(
             )
             # Semantic retrieval combines every frozen contributor in one
             # provider frame, so READ visibility alone is insufficient for
-            # granted Sources even though literal Find needs only READ.
+            # granted Sources even though provider-free Find needs only READ.
             authorize_combination(accesses)
     except (
         FileNotFoundError,
@@ -1308,10 +1303,10 @@ def cmd(
             }
             if len(target_names) > 1:
                 workbench_options["initial_targets"] = target_names
-            _open_find_search_workbench(store, access, **workbench_options)
+            _open_search_workbench(store, access, **workbench_options)
         except (
-            FindMaterializationError,
-            FindError,
+            SearchMaterializationError,
+            SearchError,
             QueryProviderError,
             FileNotFoundError,
             OSError,
@@ -1326,7 +1321,7 @@ def cmd(
             raise typer.Exit(1)
         return
 
-    request = FindSearchRequest(
+    request = SearchRequest(
         query=query,
         target_names=target_names,
         include_descendants=include_descendants,
@@ -1344,7 +1339,7 @@ def cmd(
                 )
             for target_access in accesses:
                 catalog.access_for(target_access.display_name)
-            response = _run_find_search_request(store, catalog, request)
+            response = _run_search_request(store, catalog, request)
         else:
             catalog = freeze_readable_context_catalog(
                 store,
@@ -1357,25 +1352,25 @@ def cmd(
                 total=3,
             ) as progress:
 
-                def observe(stage: FindSearchStage) -> None:
+                def observe(stage: SearchStage) -> None:
                     if stage == "SEARCHING":
                         progress.update("ranking candidates", step=2)
                     elif stage == "CHECKING_COVERAGE":
                         progress.update("checking namespace coverage", step=3)
 
-                response = _run_find_search_request(
+                response = _run_search_request(
                     store,
                     catalog,
                     request,
                     observer=observe,
                 )
-        _render_find_search_response(
+        _render_search_response(
             response,
             target_names=target_names,
             all_readable_contexts=all_contexts,
         )
     except (
-        FindError,
+        SearchError,
         QueryProviderError,
         FileNotFoundError,
         OSError,

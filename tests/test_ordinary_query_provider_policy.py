@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from memcommit.adapters.console.commands.query import provider_policy as compatibility
-from memcommit.providers import find_query as policy
-from memcommit.providers.find_query import QUERY_PROVIDER_POLICY
+from memcommit.providers import operation_connections as policy
+from memcommit.providers.operation_connections import QUERY_PROVIDER_POLICY
 
 
 def test_ordinary_query_compatibility_constants_follow_shared_policy():
@@ -41,7 +41,9 @@ def test_query_route_pins_codex_but_preserves_non_codex_authority(monkeypatch):
     routed = object()
     calls: list[str] = []
 
-    monkeypatch.setattr(policy, "_connect_pinned_codex_provider", lambda *_a, **_k: pinned)
+    monkeypatch.setattr(
+        policy, "_connect_pinned_codex_provider", lambda *_a, **_k: pinned
+    )
     monkeypatch.setattr(
         policy,
         "_connect_configured_query_provider",

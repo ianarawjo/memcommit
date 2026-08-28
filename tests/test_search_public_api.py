@@ -7,7 +7,11 @@ import json
 import pytest
 
 import memcommit.application.ops as ops
-from memcommit.adapters.python_api import MemCommitClient, SearchResult, SemanticInputError
+from memcommit.adapters.python_api import (
+    MemCommitClient,
+    SearchResult,
+    SemanticInputError,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -18,7 +22,7 @@ class _Provider:
     def complete(self, prompt, *, operation, output_schema=None):
         self.operations.append(operation)
         assert output_schema is not None
-        payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+        payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
         match = next(
             item
             for item in payload["candidates"]

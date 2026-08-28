@@ -1095,7 +1095,7 @@ def revise_integrate(
     return all_proposals, new_histories
 
 
-def find(
+def search(
     ctx: Context,
     query: str,
     provider_factory: Callable[[], "PromptProvider"],
@@ -1114,15 +1114,15 @@ def find(
     descendants without teaching this in-memory operation about persistence.
     """
     from memcommit.application.operations.search.model import (
-        FindError,
+        SearchError,
         collect_candidates_from_roots,
         rank_candidates,
     )
 
     if not isinstance(query, str) or not query.strip():
-        raise FindError("Find query must be non-empty.")
+        raise SearchError("Search query must be non-empty.")
     if not 1 <= limit <= 20:
-        raise FindError("Find limit must be between 1 and 20.")
+        raise SearchError("Search limit must be between 1 and 20.")
 
     candidates = collect_candidates_from_roots(
         (ctx, *additional_roots),

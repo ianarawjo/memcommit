@@ -1,24 +1,29 @@
-"""Checked Find result materialization contracts."""
+"""Checked Search result materialization contracts."""
 
 import pytest
 
 import memcommit.application.ops as ops
 from memcommit.adapters.console.commands.search.materialization import (
-    FindMaterializationError,
-    materialize_find_results,
+    SearchMaterializationError,
+    materialize_search_results,
 )
 from memcommit.adapters.console.commands.search.search_workbench import (
-    FindSearchRequest,
-    FindSearchResponse,
-    FindSearchResult,
+    SearchRequest,
+    SearchResponse,
+    SearchResult,
 )
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
 from memcommit.core.context import Memory, MemoryRef
-from memcommit.adapters.console.selection import FlatMultiSelectionState, SelectionOption
-from memcommit.adapters.console.selection.tui.multiple import render_vertical_multi_choice_rows
+from memcommit.adapters.console.selection import (
+    FlatMultiSelectionState,
+    SelectionOption,
+)
+from memcommit.adapters.console.selection.tui.multiple import (
+    render_vertical_multi_choice_rows,
+)
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
@@ -32,13 +37,13 @@ def _catalog(store: MemoryStore, context_name: str):
     return freeze_readable_context_catalog(store, access)
 
 
-def _response(source, memory, *, kind="memory") -> FindSearchResponse:
-    request = FindSearchRequest("accessibility", (source.name,))
-    return FindSearchResponse(
+def _response(source, memory, *, kind="memory") -> SearchResponse:
+    request = SearchRequest("accessibility", (source.name,))
+    return SearchResponse(
         request,
         "CURRENT",
         (
-            FindSearchResult(
+            SearchResult(
                 context_name=source.name,
                 kind=kind,
                 uid=memory.uid,
@@ -60,7 +65,7 @@ def test_copy_creates_fresh_memory_values_and_leaves_source_unchanged(
     store.save(source)
     source_before = context_record_digest(store.load_direct(source.name))
 
-    result = materialize_find_results(
+    result = materialize_search_results(
         store,
         _catalog(store, source.name),
         _response(source, memory),
@@ -79,9 +84,9 @@ def test_copy_creates_fresh_memory_values_and_leaves_source_unchanged(
     assert context_record_digest(store.load_direct(source.name)) == source_before
     checkpoint = store.list_checkpoints(result.context_name)[0]
     assert checkpoint["command"] == "search"
-    assert checkpoint["args"]["find_materialization"]["mode"] == "COPY"
+    assert checkpoint["args"]["search_materialization"]["mode"] == "COPY"
     assert checkpoint["description"].startswith(
-        "Saved 1 checked Find result(s) as COPY"
+        "Saved 1 checked Search result(s) as COPY"
     )
 
 
@@ -92,7 +97,7 @@ def test_reference_reuses_the_existing_live_reference_primitive(isolated_store):
     store.save(source)
     source_before = context_record_digest(store.load_direct(source.name))
 
-    result = materialize_find_results(
+    result = materialize_search_results(
         store,
         _catalog(store, source.name),
         _response(source, memory),
@@ -124,8 +129,8 @@ def test_materialization_fails_closed_when_visible_source_changed(isolated_store
     current.replace(Memory(uid=memory.uid, content="Changed accessibility detail"))
     store.save(current, expected_context_digest=current._store_digest)
 
-    with pytest.raises(FindMaterializationError, match="changed after search"):
-        materialize_find_results(
+    with pytest.raises(SearchMaterializationError, match="changed after search"):
+        materialize_search_results(
             store,
             _catalog(store, source.name),
             response,
@@ -137,15 +142,15 @@ def test_materialization_fails_closed_when_visible_source_changed(isolated_store
     assert not store.context_exists("task-3/local/results/accessibility")
 
 
-def test_non_memory_find_results_cannot_be_materialized(isolated_store):
+def test_non_memory_search_results_cannot_be_materialized(isolated_store):
     store = MemoryStore()
     source = ops.init("task-3")
     store.save(source)
-    response = FindSearchResponse(
-        FindSearchRequest("activity", (source.name,)),
+    response = SearchResponse(
+        SearchRequest("activity", (source.name,)),
         "CURRENT",
         (
-            FindSearchResult(
+            SearchResult(
                 context_name=source.name,
                 kind="artifact",
                 uid="artifact-one",
@@ -154,8 +159,8 @@ def test_non_memory_find_results_cannot_be_materialized(isolated_store):
         ),
     )
 
-    with pytest.raises(FindMaterializationError, match="artifact results"):
-        materialize_find_results(
+    with pytest.raises(SearchMaterializationError, match="artifact results"):
+        materialize_search_results(
             store,
             _catalog(store, source.name),
             response,

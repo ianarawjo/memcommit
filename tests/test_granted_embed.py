@@ -9,7 +9,10 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-from memcommit.application.authority.access import GrantedReadStore, resolve_context_access
+from memcommit.application.authority.access import (
+    GrantedReadStore,
+    resolve_context_access,
+)
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, Memory
 from memcommit.application.retained_history.context_snapshot import ContextSnapshotRef
@@ -32,7 +35,9 @@ from memcommit.application.operations.profile.model import (
     delete_authority_grant,
     update_authority_grant,
 )
-from memcommit.application.operations.reference.application import ContextReferenceRequest
+from memcommit.application.operations.reference.application import (
+    ContextReferenceRequest,
+)
 from memcommit.application.operations.reference.runtime import execute_context_reference
 from memcommit.source_projection.presentation import source_display_text
 from memcommit.persistence.store import MemoryStore
@@ -331,7 +336,7 @@ def test_recursive_find_and_search_open_attached_read_projection(
 
         def complete(self, prompt, *, operation, output_schema=None):
             assert operation == "search"
-            payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+            payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
             self.payloads.append(payload)
             matches = [
                 {"candidate_id": candidate["candidate_id"]}
@@ -348,7 +353,7 @@ def test_recursive_find_and_search_open_attached_read_projection(
 
     provider = Provider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
     semantic_direct = runner.invoke(

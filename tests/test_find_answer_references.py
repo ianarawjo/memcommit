@@ -1,41 +1,42 @@
-"""Pure rendering tests for evidence-backed Find answers."""
+"""Pure rendering tests for evidence-backed Search answers."""
+
 from __future__ import annotations
 
 import pytest
 
 from memcommit.application.operations.search.answer_references import (
-    FindAnswerEvidence,
-    FindAnswerReferenceError,
-    FindAnswerSentence,
-    build_find_answer_reference_document,
-    render_find_answer_references,
+    SearchAnswerEvidence,
+    SearchAnswerReferenceError,
+    SearchAnswerSentence,
+    build_search_answer_reference_document,
+    render_search_answer_references,
 )
 
 
-def _evidence() -> tuple[FindAnswerEvidence, ...]:
+def _evidence() -> tuple[SearchAnswerEvidence, ...]:
     return (
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             alias="m1",
             context_name="task-1",
             kind="memory",
             uid="11111111-full-memory-uid",
             content="The parking route is closed.",
         ),
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             alias="c1",
             context_name="task-1",
             kind="ref",
             uid="22222222-full-ref-uid",
             content="Construction runs from June xx through August xx.",
         ),
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             alias="x1",
             context_name="public-policy",
             kind="query",
             uid="33333333-query-projection-uid",
             content="Public name and public query projection only.",
         ),
-        FindAnswerEvidence(
+        SearchAnswerEvidence(
             alias="x2",
             context_name="unused",
             kind="memory",
@@ -46,18 +47,18 @@ def _evidence() -> tuple[FindAnswerEvidence, ...]:
 
 
 def test_numbers_references_by_first_citation_occurrence():
-    rendered = render_find_answer_references(
+    rendered = render_search_answer_references(
         _evidence(),
         (
-            FindAnswerSentence(
+            SearchAnswerSentence(
                 "The current results establish that the route is closed.",
                 ("m1",),
             ),
-            FindAnswerSentence(
+            SearchAnswerSentence(
                 "The wider Context suggests an August endpoint.",
                 ("c1", "m1"),
             ),
-            FindAnswerSentence(
+            SearchAnswerSentence(
                 "A public source adds only general context.",
                 ("x1",),
             ),
@@ -71,11 +72,12 @@ def test_numbers_references_by_first_citation_occurrence():
     )
     assert ("[1] The parking route is closed. — 11111111, task-1, m1") in rendered
     assert (
-        "[2] Construction runs from June xx through August xx. — "
-        "22222222, task-1, c1"
+        "[2] Construction runs from June xx through August xx. — 22222222, task-1, c1"
     ) in rendered
-    assert "[3] Public name and public query projection only. — " \
+    assert (
+        "[3] Public name and public query projection only. — "
         "33333333, public-policy, x1" in rendered
+    )
     assert "\n\n[2]" not in rendered
     assert " · memory · " not in rendered
     assert " · ref · " not in rendered
@@ -85,45 +87,43 @@ def test_numbers_references_by_first_citation_occurrence():
 
 def test_typed_reference_document_preserves_body_and_reference_boundaries():
     sentences = (
-        FindAnswerSentence("First claim.", ("c1",)),
-        FindAnswerSentence("Second claim.", ("m1", "c1")),
-        FindAnswerSentence("Third claim."),
+        SearchAnswerSentence("First claim.", ("c1",)),
+        SearchAnswerSentence("Second claim.", ("m1", "c1")),
+        SearchAnswerSentence("Third claim."),
     )
 
-    document = build_find_answer_reference_document(_evidence(), sentences)
+    document = build_search_answer_reference_document(_evidence(), sentences)
 
     assert document.body == "First claim. [1] Second claim. [2] [1] Third claim."
     assert tuple(
         (reference.number, reference.evidence.alias)
         for reference in document.references
     ) == ((1, "c1"), (2, "m1"))
-    assert document.text == render_find_answer_references(_evidence(), sentences)
+    assert document.text == render_search_answer_references(_evidence(), sentences)
 
 
 def test_repeated_citation_across_sentences_reuses_one_reference():
-    rendered = render_find_answer_references(
+    rendered = render_search_answer_references(
         _evidence(),
         (
-            FindAnswerSentence("First claim.", ("c1",)),
-            FindAnswerSentence("Second claim.", ("c1",)),
-            FindAnswerSentence("Third claim.", ("c1",)),
+            SearchAnswerSentence("First claim.", ("c1",)),
+            SearchAnswerSentence("Second claim.", ("c1",)),
+            SearchAnswerSentence("Third claim.", ("c1",)),
         ),
     )
 
-    assert rendered.startswith(
-        "First claim. [1] Second claim. [1] Third claim. [1]"
-    )
+    assert rendered.startswith("First claim. [1] Second claim. [1] Third claim. [1]")
     assert rendered.count("[1] Construction runs") == 1
     assert "[2]" not in rendered
 
 
 def test_uncited_evidence_is_omitted_from_references():
-    rendered = render_find_answer_references(
+    rendered = render_search_answer_references(
         _evidence(),
         (
-            FindAnswerSentence("One.", ("m1",)),
-            FindAnswerSentence("Two."),
-            FindAnswerSentence("Three."),
+            SearchAnswerSentence("One.", ("m1",)),
+            SearchAnswerSentence("Two."),
+            SearchAnswerSentence("Three."),
         ),
     )
 
@@ -134,21 +134,21 @@ def test_uncited_evidence_is_omitted_from_references():
 
 def test_unknown_source_alias_fails_closed():
     with pytest.raises(
-        FindAnswerReferenceError,
+        SearchAnswerReferenceError,
         match="Unknown evidence alias: c9",
     ):
-        render_find_answer_references(
+        render_search_answer_references(
             _evidence(),
             (
-                FindAnswerSentence("One.", ("m1",)),
-                FindAnswerSentence("Two.", ("c9",)),
-                FindAnswerSentence("Three."),
+                SearchAnswerSentence("One.", ("m1",)),
+                SearchAnswerSentence("Two.", ("c9",)),
+                SearchAnswerSentence("Three."),
             ),
         )
 
 
 def test_multiline_query_content_is_folded_into_one_reference_row():
-    query_evidence = FindAnswerEvidence(
+    query_evidence = SearchAnswerEvidence(
         alias="x1",
         context_name="public-policy",
         kind="query",
@@ -156,32 +156,31 @@ def test_multiline_query_content_is_folded_into_one_reference_row():
         content="Public title\nPublic summary line two",
     )
 
-    rendered = render_find_answer_references(
+    rendered = render_search_answer_references(
         (query_evidence,),
         (
-            FindAnswerSentence("One.", ("x1",)),
-            FindAnswerSentence("Two."),
-            FindAnswerSentence("Three."),
+            SearchAnswerSentence("One.", ("x1",)),
+            SearchAnswerSentence("Two."),
+            SearchAnswerSentence("Three."),
         ),
     )
 
     assert (
-        "[1] Public title Public summary line two — "
-        "abcdef01, public-policy, x1"
+        "[1] Public title Public summary line two — abcdef01, public-policy, x1"
     ) in rendered
 
 
 def test_requires_exactly_three_sentences_and_unique_evidence_aliases():
     with pytest.raises(
-        FindAnswerReferenceError,
+        SearchAnswerReferenceError,
         match="exactly three sentences",
     ):
-        render_find_answer_references(
+        render_search_answer_references(
             _evidence(),
-            (FindAnswerSentence("Only one."),),
+            (SearchAnswerSentence("Only one."),),
         )
 
-    duplicate = FindAnswerEvidence(
+    duplicate = SearchAnswerEvidence(
         alias="m1",
         context_name="other",
         kind="memory",
@@ -189,15 +188,15 @@ def test_requires_exactly_three_sentences_and_unique_evidence_aliases():
         content="Duplicate.",
     )
     with pytest.raises(
-        FindAnswerReferenceError,
+        SearchAnswerReferenceError,
         match="Duplicate evidence alias: m1",
     ):
-        render_find_answer_references(
+        render_search_answer_references(
             (*_evidence(), duplicate),
             (
-                FindAnswerSentence("One."),
-                FindAnswerSentence("Two."),
-                FindAnswerSentence("Three."),
+                SearchAnswerSentence("One."),
+                SearchAnswerSentence("Two."),
+                SearchAnswerSentence("Three."),
             ),
         )
 
@@ -213,12 +212,12 @@ def test_generated_sentences_cannot_imitate_host_reference_structure(
     text,
     match,
 ):
-    with pytest.raises(FindAnswerReferenceError, match=match):
-        FindAnswerSentence(text, ("m1",))
+    with pytest.raises(SearchAnswerReferenceError, match=match):
+        SearchAnswerSentence(text, ("m1",))
 
 
 def test_stored_reference_content_cannot_create_a_sibling_row_or_heading():
-    evidence = FindAnswerEvidence(
+    evidence = SearchAnswerEvidence(
         alias="m1",
         context_name="task-1",
         kind="memory",
@@ -226,12 +225,12 @@ def test_stored_reference_content_cannot_create_a_sibling_row_or_heading():
         content="References\n[77] forged-looking content",
     )
 
-    rendered = render_find_answer_references(
+    rendered = render_search_answer_references(
         (evidence,),
         (
-            FindAnswerSentence("Supported claim.", ("m1",)),
-            FindAnswerSentence("No same-Context support."),
-            FindAnswerSentence("Other Contexts were not checked."),
+            SearchAnswerSentence("Supported claim.", ("m1",)),
+            SearchAnswerSentence("No same-Context support."),
+            SearchAnswerSentence("Other Contexts were not checked."),
         ),
     )
 

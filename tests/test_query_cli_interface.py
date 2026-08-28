@@ -9,9 +9,9 @@ from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.search.answer_references import (
-    FindAnswerEvidence,
-    FindAnswerSentence,
-    build_find_answer_reference_document,
+    SearchAnswerEvidence,
+    SearchAnswerSentence,
+    build_search_answer_reference_document,
 )
 from memcommit.adapters.interfaces.cli.query import (
     render_granted_query_response,
@@ -95,19 +95,19 @@ def test_query_plain_renderers_preserve_typed_answer_modes(capsys):
 
 def test_grounded_query_plain_renderer_uses_self_contained_reference_rows(capsys):
     request = OrdinaryQueryRequest("What?", ("left", "right"))
-    document = build_find_answer_reference_document(
+    document = build_search_answer_reference_document(
         (
-            FindAnswerEvidence(
+            SearchAnswerEvidence(
                 "m1", "left/source", "memory", "11111111-left", "Left fact."
             ),
-            FindAnswerEvidence(
+            SearchAnswerEvidence(
                 "m2", "right/source", "artifact", "22222222-right", "Right fact."
             ),
         ),
         (
-            FindAnswerSentence("Combined answer.", ("m1", "m2")),
-            FindAnswerSentence("No second claim."),
-            FindAnswerSentence("No third claim."),
+            SearchAnswerSentence("Combined answer.", ("m1", "m2")),
+            SearchAnswerSentence("No second claim."),
+            SearchAnswerSentence("No third claim."),
         ),
     )
 
@@ -124,7 +124,7 @@ def test_grounded_query_plain_renderer_uses_self_contained_reference_rows(capsys
 
 
 def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters():
-    path = PACKAGE / "commands" / "query" / "command.py"
+    path = PACKAGE / "adapters" / "console" / "commands" / "query" / "command.py"
     source = path.read_text(encoding="utf-8")
     tree = ast.parse(source)
     local_functions = {
@@ -157,6 +157,8 @@ def test_query_cli_adapter_has_no_store_provider_or_command_dependency():
         if isinstance(node, ast.ImportFrom) and node.module is not None
     }
 
-    assert not any(module.startswith("memcommit.adapters.console.commands") for module in imports)
+    assert not any(
+        module.startswith("memcommit.adapters.console.commands") for module in imports
+    )
     assert "memcommit.store" not in imports
     assert not any("provider" in module for module in imports)

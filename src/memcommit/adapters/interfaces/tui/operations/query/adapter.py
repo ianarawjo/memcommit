@@ -5,13 +5,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from memcommit.application.operations.search.answer_references import (
-    FindAnswerReferenceDocument,
-    render_numbered_find_answer_reference,
+    SearchAnswerReferenceDocument,
+    render_numbered_search_answer_reference,
 )
 from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.core.theme import focused_control_style
-from memcommit.application.operations.query.granted_application import GrantedQueryResponse
-from memcommit.application.operations.query.ordinary_application import OrdinaryQueryResponse
+from memcommit.application.operations.query.ordinary_application import (
+    OrdinaryQueryResponse,
+)
 from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import source_object_label
 from memcommit.adapters.interfaces.tui.operations.query.model import (
@@ -33,7 +34,7 @@ def render_query_answer(response: QueryWorkbenchResponse | None) -> str:
 
 def query_answer_reference_document(
     response: QueryWorkbenchResponse | None,
-) -> FindAnswerReferenceDocument | None:
+) -> SearchAnswerReferenceDocument | None:
     if not isinstance(response, OrdinaryQueryResponse):
         return None
     return response.reference_document
@@ -111,7 +112,7 @@ def project_query_answer_clipboard(
         )
     reference = document.references[active_stop - 1]
     return QueryAnswerClipboardProjection(
-        text=safe_terminal_text(render_numbered_find_answer_reference(reference)),
+        text=safe_terminal_text(render_numbered_search_answer_reference(reference)),
         scope="FOCUSED",
         label=f"Reference {reference.number}",
         reference_count=reference_count,
@@ -155,7 +156,7 @@ def render_query_answer_fragments(
                     if active
                     else ""
                 ),
-                safe_terminal_text(render_numbered_find_answer_reference(reference)),
+                safe_terminal_text(render_numbered_search_answer_reference(reference)),
             )
         )
     return fragments

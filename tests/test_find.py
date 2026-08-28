@@ -1,4 +1,4 @@
-"""Semantic find traversal, validation, privacy, and CLI contracts."""
+"""Semantic search traversal, validation, privacy, and CLI contracts."""
 
 import json
 import subprocess
@@ -10,14 +10,14 @@ from typer.testing import CliRunner
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.search.command import (
-    FIND_OUTSIDE_CANCELLATION,
-    FIND_OUTSIDE_CONFIRMATION,
+    SEARCH_OUTSIDE_CANCELLATION,
+    SEARCH_OUTSIDE_CONFIRMATION,
     _apply_show_result,
-    _handle_find_turn,
+    _handle_search_turn,
     _initial_chat_state,
-    _load_find_scope_roots,
-    _run_find_search_request,
-    _run_read_only_find_command,
+    _load_search_scope_roots,
+    _run_search_request,
+    _run_read_only_search_command,
     _show_result_proposal,
     _supplement_namespace_branch_coverage,
 )
@@ -26,11 +26,11 @@ from memcommit.adapters.console.shared.readable_context_catalog import (
     freeze_readable_context_catalog,
 )
 from memcommit.adapters.console.commands.search.chat_shell import (
-    FindChatMessage,
+    SearchChatMessage,
 )
 from memcommit.adapters.console.commands.search.search_workbench import (
-    FindSearchRequest,
-    FindSearchResponse,
+    SearchRequest,
+    SearchResponse,
 )
 from memcommit.core.context import (
     Context,
@@ -40,9 +40,9 @@ from memcommit.core.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.application.operations.search.turn_dialogue import FindTurnAction
+from memcommit.application.operations.search.turn_dialogue import SearchTurnAction
 from memcommit.application.operations.search.model import (
-    FindError,
+    SearchError,
     SearchCandidate,
     SearchMatch,
     collect_candidates,
@@ -64,7 +64,7 @@ class KeywordProvider:
 
     def complete(self, prompt, *, operation, output_schema=None):
         self.calls.append((prompt, operation, output_schema))
-        payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+        payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
         query = payload["query"].casefold()
         matches = []
         for candidate in payload["candidates"]:
@@ -148,19 +148,19 @@ def test_interactive_scope_separates_namespace_descendants_from_embeds(
     )
     catalog = freeze_readable_context_catalog(store, access)
 
-    exact_roots = _load_find_scope_roots(
+    exact_roots = _load_search_scope_roots(
         catalog,
         (root.name,),
         include_descendants=False,
         follow_embeds=False,
     )
-    below_roots = _load_find_scope_roots(
+    below_roots = _load_search_scope_roots(
         catalog,
         (root.name,),
         include_descendants=True,
         follow_embeds=False,
     )
-    embedded_roots = _load_find_scope_roots(
+    embedded_roots = _load_search_scope_roots(
         catalog,
         (root.name,),
         include_descendants=False,
@@ -190,7 +190,7 @@ def test_interactive_scope_separates_namespace_descendants_from_embeds(
     } == {root_memory.uid, embedded_memory.uid}
 
 
-def test_interactive_find_searches_multiple_exact_targets_in_one_provider_turn(
+def test_interactive_searches_multiple_exact_targets_in_one_provider_turn(
     isolated_store,
     monkeypatch,
 ):
@@ -213,10 +213,10 @@ def test_interactive_find_searches_multiple_exact_targets_in_one_provider_turn(
     catalog = freeze_readable_context_catalog(store, access)
     provider = KeywordProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
-    request = FindSearchRequest(
+    request = SearchRequest(
         query="shared needle",
         target_names=(first.name, second.name),
         include_descendants=False,
@@ -224,7 +224,7 @@ def test_interactive_find_searches_multiple_exact_targets_in_one_provider_turn(
         limit=5,
     )
 
-    response = _run_find_search_request(store, catalog, request)
+    response = _run_search_request(store, catalog, request)
 
     assert response.request == request
     assert response.mode == "CURRENT"
@@ -232,14 +232,14 @@ def test_interactive_find_searches_multiple_exact_targets_in_one_provider_turn(
         first_memory.uid,
         second_memory.uid,
     }
-    payload = json.loads(provider.calls[0][0].split("FIND PAYLOAD:\n", 1)[1])
+    payload = json.loads(provider.calls[0][0].split("SEARCH PAYLOAD:\n", 1)[1])
     sent_content = {candidate.get("content", "") for candidate in payload["candidates"]}
     assert first_memory.content in sent_content
     assert second_memory.content in sent_content
     assert omitted_memory.content not in sent_content
 
 
-def test_explicit_find_repeats_context_for_the_same_multi_root_request(
+def test_explicit_search_repeats_context_for_the_same_multi_root_request(
     isolated_store,
     monkeypatch,
 ):
@@ -249,14 +249,14 @@ def test_explicit_find_repeats_context_for_the_same_multi_root_request(
     for context in (first, second):
         store.save(context)
     store.set_current(first.name)
-    observed: list[FindSearchRequest] = []
+    observed: list[SearchRequest] = []
 
     def run_request(_store, _catalog, request):
         observed.append(request)
-        return FindSearchResponse(request=request, mode="CURRENT", results=())
+        return SearchResponse(request=request, mode="CURRENT", results=())
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command._run_find_search_request",
+        "memcommit.adapters.console.commands.search.command._run_search_request",
         run_request,
     )
     result = runner.invoke(
@@ -273,12 +273,12 @@ def test_explicit_find_repeats_context_for_the_same_multi_root_request(
 
     assert result.exit_code == 0, result.output
     assert observed == [
-            FindSearchRequest(
-                query="shared detail",
-                target_names=(first.name, second.name),
-                include_descendants=False,
-                follow_embeds=False,
-                limit=5,
+        SearchRequest(
+            query="shared detail",
+            target_names=(first.name, second.name),
+            include_descendants=False,
+            follow_embeds=False,
+            limit=5,
         )
     ]
 
@@ -293,15 +293,15 @@ def test_search_all_and_short_alias_freeze_every_readable_context(
     for context in (first, second):
         store.save(context)
     store.set_current(first.name)
-    observed: list[FindSearchRequest] = []
+    observed: list[SearchRequest] = []
     authorized: list[tuple[str, ...]] = []
 
     def run_request(_store, _catalog, request):
         observed.append(request)
-        return FindSearchResponse(request=request, mode="CURRENT", results=())
+        return SearchResponse(request=request, mode="CURRENT", results=())
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command._run_find_search_request",
+        "memcommit.adapters.console.commands.search.command._run_search_request",
         run_request,
     )
     monkeypatch.setattr(
@@ -317,14 +317,14 @@ def test_search_all_and_short_alias_freeze_every_readable_context(
         assert result.output == "ALL READABLE CONTEXTS\n  (no matching items)\n"
 
     assert observed == [
-        FindSearchRequest(
+        SearchRequest(
             query="shared detail",
             target_names=(first.name, second.name),
             include_descendants=False,
             follow_embeds=False,
             limit=5,
         ),
-        FindSearchRequest(
+        SearchRequest(
             query="shared detail",
             target_names=(first.name, second.name),
             include_descendants=False,
@@ -344,7 +344,7 @@ def test_search_all_rejects_explicit_context(isolated_store, monkeypatch):
     store.save(context)
     store.set_current(context.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command._run_find_search_request",
+        "memcommit.adapters.console.commands.search.command._run_search_request",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             AssertionError("invalid Search scope must not execute")
         ),
@@ -359,7 +359,7 @@ def test_search_all_rejects_explicit_context(isolated_store, monkeypatch):
     assert "--all/-a cannot be combined with --context/-c" in result.stderr
 
 
-def test_find_cli_multi_roots_keep_descendants_and_embeds_independent(
+def test_search_cli_multi_roots_keep_descendants_and_embeds_independent(
     isolated_store,
     monkeypatch,
 ):
@@ -390,7 +390,7 @@ def test_find_cli_multi_roots_keep_descendants_and_embeds_independent(
     def exposed_memories(*scope_args: str) -> set[str]:
         provider = KeywordProvider()
         monkeypatch.setattr(
-            "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+            "memcommit.adapters.console.commands.search.command.connect_search_provider",
             lambda: provider,
         )
         result = runner.invoke(
@@ -406,10 +406,9 @@ def test_find_cli_multi_roots_keep_descendants_and_embeds_independent(
             ],
         )
         assert result.exit_code == 0, result.output
-        payload = json.loads(provider.calls[0][0].split("FIND PAYLOAD:\n", 1)[1])
+        payload = json.loads(provider.calls[0][0].split("SEARCH PAYLOAD:\n", 1)[1])
         return {
-            candidate.get("content", "")
-            for candidate in payload["candidates"]
+            candidate.get("content", "") for candidate in payload["candidates"]
         } & scope_values
 
     assert exposed_memories("--descendants", "--exclude-embeds") == {
@@ -544,10 +543,10 @@ def test_search_rejects_granted_live_embed_before_provider_construction():
         return KeywordProvider()
 
     with pytest.raises(
-        FindError,
+        SearchError,
         match="EMBED authorizes live reading, not provider disclosure",
     ):
-        ops.find(containing, "secret", provider_factory)
+        ops.search(containing, "secret", provider_factory)
 
     assert provider_connections == 0
 
@@ -578,10 +577,10 @@ def test_search_rejects_nested_granted_context_before_provider_construction():
         return KeywordProvider()
 
     with pytest.raises(
-        FindError,
+        SearchError,
         match="granted Context Embed.*not provider disclosure",
     ):
-        ops.find(containing, "secret", provider_factory)
+        ops.search(containing, "secret", provider_factory)
 
     assert provider_connections == 0
 
@@ -601,7 +600,7 @@ def test_query_context_contributes_name_only_and_never_loads_source(
     store.save(parent)
 
     def forbidden(*args, **kwargs):
-        raise AssertionError("find opened a concealed query source")
+        raise AssertionError("search opened a concealed query source")
 
     monkeypatch.setattr(MemoryStore, "load_query_source", forbidden)
     loaded = store.load("facilities-reference")
@@ -674,7 +673,7 @@ def test_rank_candidates_preserves_model_order_and_dedupes_repeats():
     assert all(match.relevance == "primary" for match in matches)
 
 
-def test_recursive_find_reserves_room_for_material_omitted_namespace_branch():
+def test_recursive_search_reserves_room_for_material_omitted_namespace_branch():
     candidates = []
     for index in range(1, 8):
         branch = "baseline" if index <= 5 else "participant"
@@ -776,7 +775,7 @@ def test_rank_candidates_rejects_malformed_or_unknown_output(raw):
         def complete(self, prompt, *, operation, output_schema=None):
             return raw
 
-    with pytest.raises(FindError):
+    with pytest.raises(SearchError):
         rank_candidates("query", [_candidate()], Provider())
 
 
@@ -815,22 +814,22 @@ def test_rank_candidates_rejects_incompatible_related_tiers(response):
         def complete(self, prompt, *, operation, output_schema=None):
             return json.dumps(response)
 
-    with pytest.raises(FindError):
+    with pytest.raises(SearchError):
         rank_candidates("query", [_candidate()], Provider())
 
 
-def test_ops_find_avoids_provider_for_empty_context_and_invalid_request():
+def test_ops_search_avoids_provider_for_empty_context_and_invalid_request():
     calls = []
 
     def provider_factory():
         calls.append("called")
         return KeywordProvider()
 
-    assert ops.find(ops.init("empty"), "anything", provider_factory) == []
-    with pytest.raises(FindError, match="non-empty"):
-        ops.find(ops.init("empty"), "  ", provider_factory)
-    with pytest.raises(FindError, match="between 1 and 20"):
-        ops.find(
+    assert ops.search(ops.init("empty"), "anything", provider_factory) == []
+    with pytest.raises(SearchError, match="non-empty"):
+        ops.search(ops.init("empty"), "  ", provider_factory)
+    with pytest.raises(SearchError, match="between 1 and 20"):
+        ops.search(
             ops.init("empty"),
             "anything",
             provider_factory,
@@ -839,7 +838,7 @@ def test_ops_find_avoids_provider_for_empty_context_and_invalid_request():
     assert calls == []
 
 
-def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
+def test_search_cli_recurses_renders_local_content_and_does_not_checkpoint(
     isolated_store,
     monkeypatch,
 ):
@@ -855,7 +854,7 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
     checkpoints_before = store.list_checkpoints("facilities-reference")
     provider = KeywordProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
 
@@ -865,7 +864,7 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
     assert "1 match" not in result.output
     assert "campus/parking\n" in result.output
     assert (
-        f"[memory {memory.uid[:8]}] " "Temporary parking is available in Lot C."
+        f"[memory {memory.uid[:8]}] Temporary parking is available in Lot C."
     ) in result.output
     assert store.list_checkpoints("facilities-reference") == checkpoints_before
 
@@ -875,7 +874,7 @@ def test_find_cli_recurses_renders_local_content_and_does_not_checkpoint(
     assert "Temporary parking" not in direct.output
 
 
-def test_find_cli_recursive_searches_materialized_namespace_descendants(
+def test_search_cli_recursive_searches_materialized_namespace_descendants(
     isolated_store,
     monkeypatch,
 ):
@@ -897,7 +896,7 @@ def test_find_cli_recursive_searches_materialized_namespace_descendants(
     store.set_current(root.name)
     provider = KeywordProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
 
@@ -906,7 +905,7 @@ def test_find_cli_recursive_searches_materialized_namespace_descendants(
     assert result.exit_code == 0, result.output
     assert "task-3/personal-memory\n" in result.output
     assert f"[memory {memory.uid[:8]}]" in result.output
-    payload = json.loads(provider.calls[0][0].split("FIND PAYLOAD:\n", 1)[1])
+    payload = json.loads(provider.calls[0][0].split("SEARCH PAYLOAD:\n", 1)[1])
     candidate_text = json.dumps(payload["candidates"])
     assert memory.content in candidate_text
     assert sibling_memory.content not in candidate_text
@@ -918,7 +917,7 @@ def test_find_cli_recursive_searches_materialized_namespace_descendants(
     assert len(provider.calls) == 1
 
 
-def test_find_cli_labels_related_fallback_when_primary_matches_are_empty(
+def test_search_cli_labels_related_fallback_when_primary_matches_are_empty(
     isolated_store,
     monkeypatch,
 ):
@@ -931,7 +930,7 @@ def test_find_cli_labels_related_fallback_when_primary_matches_are_empty(
 
     class RelatedProvider:
         def complete(self, prompt, *, operation, output_schema=None):
-            payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+            payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
             selected = next(
                 candidate["candidate_id"]
                 for candidate in payload["candidates"]
@@ -946,7 +945,7 @@ def test_find_cli_labels_related_fallback_when_primary_matches_are_empty(
             )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: RelatedProvider(),
     )
 
@@ -988,7 +987,7 @@ def test_initial_chat_state_preserves_related_tier_and_broader_query():
     assert "I found no primary matches" in state.messages[-1].text
 
 
-def test_find_cli_tty_prints_static_results_without_opening_chat(
+def test_search_cli_tty_prints_static_results_without_opening_chat(
     isolated_store,
     monkeypatch,
 ):
@@ -999,7 +998,7 @@ def test_find_cli_tty_prints_static_results_without_opening_chat(
     store.set_current(ctx.name)
     provider = KeywordProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
@@ -1007,9 +1006,9 @@ def test_find_cli_tty_prints_static_results_without_opening_chat(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.run_find_chat_session",
+        "memcommit.adapters.console.commands.search.command.run_search_chat_session",
         lambda *args, **kwargs: (_ for _ in ()).throw(
-            AssertionError("ordinary Find must not open the chat shell")
+            AssertionError("ordinary Search must not open the chat shell")
         ),
     )
 
@@ -1019,10 +1018,10 @@ def test_find_cli_tty_prints_static_results_without_opening_chat(
     assert ctx.name in result.output
     assert f"[memory {memory.uid[:8]}]" in result.output
     assert memory.content in result.output
-    assert "Find dialogue closed" not in result.output
+    assert "Search dialogue closed" not in result.output
 
 
-def test_find_without_query_opens_blank_interactive_search_in_a_tty(
+def test_search_without_query_opens_blank_interactive_search_in_a_tty(
     isolated_store,
     monkeypatch,
 ):
@@ -1036,7 +1035,7 @@ def test_find_without_query_opens_blank_interactive_search_in_a_tty(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command._open_find_search_workbench",
+        "memcommit.adapters.console.commands.search.command._open_search_workbench",
         lambda store, access, **options: opened.append(
             (store.store_dir, access.display_name, options)
         ),
@@ -1071,7 +1070,7 @@ def test_find_without_query_opens_blank_interactive_search_in_a_tty(
     ]
 
 
-def test_find_without_query_requires_a_terminal(isolated_store):
+def test_search_without_query_requires_a_terminal(isolated_store):
     store = MemoryStore()
     ctx = ops.init("facilities-reference")
     store.save(ctx)
@@ -1083,7 +1082,7 @@ def test_find_without_query_requires_a_terminal(isolated_store):
     assert "QUERY is required outside a terminal" in result.stderr
 
 
-def test_find_help_explains_the_bare_route_and_default_scope():
+def test_search_help_explains_the_bare_route_and_default_scope():
     result = runner.invoke(app, ["search", "--help"])
 
     assert result.exit_code == 0, result.output
@@ -1106,7 +1105,7 @@ def test_find_help_explains_the_bare_route_and_default_scope():
     assert "-r" in result.output
 
 
-def test_find_cli_tty_static_results_include_namespace_descendants(
+def test_search_cli_tty_static_results_include_namespace_descendants(
     isolated_store,
     monkeypatch,
 ):
@@ -1118,7 +1117,7 @@ def test_find_cli_tty_static_results_include_namespace_descendants(
     store.save(child)
     store.set_current(root.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: KeywordProvider(),
     )
     monkeypatch.setattr(
@@ -1127,9 +1126,9 @@ def test_find_cli_tty_static_results_include_namespace_descendants(
     )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.run_find_chat_session",
+        "memcommit.adapters.console.commands.search.command.run_search_chat_session",
         lambda *args, **kwargs: (_ for _ in ()).throw(
-            AssertionError("ordinary Find must not open the chat shell")
+            AssertionError("ordinary Search must not open the chat shell")
         ),
     )
 
@@ -1138,7 +1137,7 @@ def test_find_cli_tty_static_results_include_namespace_descendants(
     assert result.exit_code == 0, result.output
     assert child.name in result.output
     assert f"[memory {memory.uid[:8]}]" in result.output
-    assert "Find dialogue closed" not in result.output
+    assert "Search dialogue closed" not in result.output
 
 
 def test_zero_result_follow_up_refines_and_replaces_search_results(
@@ -1185,7 +1184,7 @@ def test_zero_result_follow_up_refines_and_replaces_search_results(
                     }
                 )
             assert operation == "search"
-            payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+            payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
             selected = next(
                 candidate["candidate_id"]
                 for candidate in payload["candidates"]
@@ -1201,11 +1200,11 @@ def test_zero_result_follow_up_refines_and_replaces_search_results(
 
     provider = RefineProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
 
-    updated = _handle_find_turn(
+    updated = _handle_search_turn(
         state,
         "related to health/healthcare/medicine",
     )
@@ -1214,7 +1213,7 @@ def test_zero_result_follow_up_refines_and_replaces_search_results(
     assert [result.uid for result in updated.results] == [healthcare.uid]
     assert updated.results[0].context_name == child.name
     assert updated.status == "RESULTS READY · REFINED"
-    assert updated.messages[-2] == FindChatMessage(
+    assert updated.messages[-2] == SearchChatMessage(
         role="USER",
         text="related to health/healthcare/medicine",
     )
@@ -1245,7 +1244,7 @@ def test_refine_can_replace_zero_results_with_a_labeled_related_fallback(
                         "scope": "CONTEXT",
                     }
                 )
-            payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+            payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
             selected = next(
                 candidate["candidate_id"]
                 for candidate in payload["candidates"]
@@ -1260,11 +1259,11 @@ def test_refine_can_replace_zero_results_with_a_labeled_related_fallback(
             )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: Provider(),
     )
 
-    updated = _handle_find_turn(state, "health insurance memories")
+    updated = _handle_search_turn(state, "health insurance memories")
 
     assert [result.uid for result in updated.results] == [clinic.uid]
     assert updated.results[0].relevance == "related"
@@ -1294,7 +1293,7 @@ def test_show_result_proposal_runs_exact_read_only_cli_and_preserves_results(
         "coffee",
         [SearchMatch(candidate=candidate)],
     )
-    action = FindTurnAction(
+    action = SearchTurnAction(
         understanding="You want the first result in full.",
         question="What would you like to inspect next?",
         selector="m1",
@@ -1309,15 +1308,11 @@ def test_show_result_proposal_runs_exact_read_only_cli_and_preserves_results(
         ctx.name,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command._run_read_only_find_command",
+        "memcommit.adapters.console.commands.search.command._run_read_only_search_command",
         lambda argv: subprocess.CompletedProcess(
             args=argv,
             returncode=0,
-            stdout=(
-                f"Memory: {memory.uid}\n"
-                f"Context: {ctx.name}\n\n"
-                f"{memory.content}\n"
-            ),
+            stdout=(f"Memory: {memory.uid}\nContext: {ctx.name}\n\n{memory.content}\n"),
             stderr="",
         ),
     )
@@ -1326,7 +1321,7 @@ def test_show_result_proposal_runs_exact_read_only_cli_and_preserves_results(
     assert updated.results == state.results
     assert updated.status == "SHOWED m1"
     receipt = updated.messages[-1].text
-    assert "SHOW COMPLETE" in receipt
+    assert "RESULT SHOWN" in receipt
     assert "mem show" in receipt
     assert memory.uid in receipt
     assert "ACTUAL OUTPUT" in receipt
@@ -1383,7 +1378,7 @@ def test_general_parking_question_gets_a_grounded_answer_without_a_command(
                     ),
                     "visible_sources": ["m1"],
                     "context_text": (
-                        "Another Memory places construction between June and " "August."
+                        "Another Memory places construction between June and August."
                     ),
                     "context_sources": ["c1"],
                     "outside_text": "Other Contexts were not checked.",
@@ -1393,7 +1388,7 @@ def test_general_parking_question_gets_a_grounded_answer_without_a_command(
 
     provider = AnswerProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
 
@@ -1401,18 +1396,18 @@ def test_general_parking_question_gets_a_grounded_answer_without_a_command(
         raise AssertionError("An ANSWER turn must not execute a command.")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command._run_read_only_find_command",
+        "memcommit.adapters.console.commands.search.command._run_read_only_search_command",
         refuse_command,
     )
 
-    updated = _handle_find_turn(
+    updated = _handle_search_turn(
         state,
         "garage will 언제까지 closed?",
     )
 
     assert updated.results == state.results
     assert updated.status == ("ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS NOT CHECKED")
-    assert updated.messages[-2] == FindChatMessage(
+    assert updated.messages[-2] == SearchChatMessage(
         role="USER",
         text="garage will 언제까지 closed?",
     )
@@ -1484,8 +1479,7 @@ def test_explicit_other_context_answer_collects_and_references_outside_memory(
                     ),
                     "context_sources": [],
                     "outside_text": (
-                        "Another Context schedules a completion review for "
-                        "August 28."
+                        "Another Context schedules a completion review for August 28."
                     ),
                     "outside_sources": ["x1"],
                 }
@@ -1493,24 +1487,24 @@ def test_explicit_other_context_answer_collects_and_references_outside_memory(
 
     provider = AnswerProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
 
-    pending = _handle_find_turn(
+    pending = _handle_search_turn(
         state,
         "Check the other contexts too: when does it end?",
     )
 
     assert pending.status == "WAITING FOR OTHER CONTEXTS CONFIRMATION"
     assert pending.pending_answer is not None
-    assert FIND_OUTSIDE_CONFIRMATION in pending.messages[-1].text
+    assert SEARCH_OUTSIDE_CONFIRMATION in pending.messages[-1].text
     assert outside.content not in pending.messages[-1].text
     assert provider.operations == ["search turn"]
 
-    updated = _handle_find_turn(
+    updated = _handle_search_turn(
         pending,
-        FIND_OUTSIDE_CONFIRMATION,
+        SEARCH_OUTSIDE_CONFIRMATION,
     )
 
     assert updated.status == ("ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS CHECKED")
@@ -1560,7 +1554,7 @@ def test_provider_cannot_expand_to_other_contexts_without_user_request(
 
     provider = OverbroadProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
@@ -1568,21 +1562,21 @@ def test_provider_cannot_expand_to_other_contexts_without_user_request(
         lambda *_args, **_kwargs: pytest.fail("outside Contexts must not be collected"),
     )
 
-    pending = _handle_find_turn(state, "When does it reopen?")
+    pending = _handle_search_turn(state, "When does it reopen?")
 
     assert pending.status == "WAITING FOR OTHER CONTEXTS CONFIRMATION"
     assert pending.pending_answer is not None
     assert provider.operations == ["search turn"]
 
-    still_pending = _handle_find_turn(pending, "yes")
+    still_pending = _handle_search_turn(pending, "yes")
     assert still_pending.status == "WAITING FOR OTHER CONTEXTS CONFIRMATION"
     assert still_pending.pending_answer == pending.pending_answer
     assert "not confirmed" in still_pending.messages[-1].text
     assert provider.operations == ["search turn"]
 
-    cancelled = _handle_find_turn(
+    cancelled = _handle_search_turn(
         still_pending,
-        FIND_OUTSIDE_CANCELLATION,
+        SEARCH_OUTSIDE_CANCELLATION,
     )
     assert cancelled.pending_answer is None
     assert cancelled.status == "OTHER CONTEXTS CANCELLED"
@@ -1590,9 +1584,9 @@ def test_provider_cannot_expand_to_other_contexts_without_user_request(
     assert provider.operations == ["search turn"]
 
 
-def test_read_only_find_runner_rejects_every_non_show_shape():
-    with pytest.raises(FindError, match="non-show"):
-        _run_read_only_find_command(
+def test_read_only_search_runner_rejects_every_non_show_shape():
+    with pytest.raises(SearchError, match="non-show"):
+        _run_read_only_search_command(
             ("mem", "delete", "memory-one", "--context", "task-1")
         )
 
@@ -1606,7 +1600,7 @@ def test_show_result_failure_does_not_claim_success(monkeypatch):
     )
     proposal = _show_result_proposal(
         state,
-        FindTurnAction(
+        SearchTurnAction(
             understanding="Inspect it.",
             question="Next?",
             selector="m1",
@@ -1614,7 +1608,7 @@ def test_show_result_failure_does_not_claim_success(monkeypatch):
         "show it",
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command._run_read_only_find_command",
+        "memcommit.adapters.console.commands.search.command._run_read_only_search_command",
         lambda _argv: subprocess.CompletedProcess(
             args=[],
             returncode=1,
@@ -1623,12 +1617,12 @@ def test_show_result_failure_does_not_claim_success(monkeypatch):
         ),
     )
 
-    with pytest.raises(FindError, match="injected failure"):
+    with pytest.raises(SearchError, match="injected failure"):
         _apply_show_result(state, proposal)
     assert state.status == "RESULTS READY"
 
 
-def test_find_cli_groups_contexts_and_aligns_multiline_content(
+def test_search_cli_groups_contexts_and_aligns_multiline_content(
     isolated_store,
     monkeypatch,
 ):
@@ -1645,7 +1639,7 @@ def test_find_cli_groups_contexts_and_aligns_multiline_content(
 
     class InterleavedProvider:
         def complete(self, prompt, *, operation, output_schema=None):
-            payload = json.loads(prompt.split("FIND PAYLOAD:\n", 1)[1])
+            payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
             by_content = {
                 candidate["content"]: candidate["candidate_id"]
                 for candidate in payload["candidates"]
@@ -1663,7 +1657,7 @@ def test_find_cli_groups_contexts_and_aligns_multiline_content(
             )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: InterleavedProvider(),
     )
 
@@ -1687,7 +1681,7 @@ def test_find_cli_groups_contexts_and_aligns_multiline_content(
     )
 
 
-def test_find_cli_groups_memory_ref_and_renders_target_inline(
+def test_search_cli_groups_memory_ref_and_renders_target_inline(
     isolated_store,
     monkeypatch,
 ):
@@ -1700,7 +1694,7 @@ def test_find_cli_groups_memory_ref_and_renders_target_inline(
     store.save(parent)
     store.set_current(parent.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: KeywordProvider(),
     )
 
@@ -1714,7 +1708,7 @@ def test_find_cli_groups_memory_ref_and_renders_target_inline(
     )
 
 
-def test_find_cli_explicit_context_does_not_switch_current(
+def test_search_cli_explicit_context_does_not_switch_current(
     isolated_store,
     monkeypatch,
 ):
@@ -1726,7 +1720,7 @@ def test_find_cli_explicit_context_does_not_switch_current(
     store.save(active)
     store.set_current("active")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: KeywordProvider(),
     )
 
@@ -1740,7 +1734,7 @@ def test_find_cli_explicit_context_does_not_switch_current(
     assert store.current_context_name() == "active"
 
 
-def test_find_cli_query_ref_hit_prints_hint_without_hidden_content(
+def test_search_cli_query_ref_hit_prints_hint_without_hidden_content(
     isolated_store,
     monkeypatch,
 ):
@@ -1758,7 +1752,7 @@ def test_find_cli_query_ref_hit_prints_hint_without_hidden_content(
     store.save(parent)
     store.set_current("facilities-reference")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: KeywordProvider(),
     )
 
@@ -1766,9 +1760,7 @@ def test_find_cli_query_ref_hit_prints_hint_without_hidden_content(
 
     assert result.exit_code == 0
     assert "facilities-reference\n" in result.output
-    assert (
-        f"[query view {ref.uid[:8]}] contractor-agreements"
-    ) in result.output
+    assert (f"[query view {ref.uid[:8]}] contractor-agreements") in result.output
     assert "mem query" in result.output
     assert HIDDEN_SECRET not in result.output
 
@@ -1797,7 +1789,7 @@ def test_query_ref_hint_shell_quotes_untrusted_names(
     )
     store.set_current(parent.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: KeywordProvider(),
     )
 
@@ -1808,12 +1800,12 @@ def test_query_ref_hint_shell_quotes_untrusted_names(
     assert "'parent$(unsafe)'" in result.output
 
 
-def test_find_cli_errors_for_missing_context_without_current_or_bad_limit(
+def test_search_cli_errors_for_missing_context_without_current_or_bad_limit(
     isolated_store,
     monkeypatch,
 ):
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: pytest.fail("provider should not be called"),
     )
 

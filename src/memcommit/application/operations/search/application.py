@@ -7,7 +7,7 @@ from typing import Literal, Protocol
 
 from memcommit.core.context import Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.search.model import (
-    FindError,
+    SearchError,
     SearchArtifact,
     SearchCandidate,
     SearchMatch,
@@ -15,15 +15,15 @@ from memcommit.application.operations.search.model import (
 )
 
 
-FindSearchMode = Literal["CURRENT"]
-FindSearchResultKind = Literal[
+SearchMode = Literal["CURRENT"]
+SearchResultKind = Literal[
     "memory",
     "ref",
     "query",
     "artifact",
 ]
-FindSearchRelevance = Literal["primary", "related"]
-FindSearchStage = Literal[
+SearchRelevance = Literal["primary", "related"]
+SearchStage = Literal[
     "INPUTS_FROZEN",
     "CONNECTING_PROVIDER",
     "SEARCHING",
@@ -32,7 +32,7 @@ FindSearchStage = Literal[
 
 
 @dataclass(frozen=True)
-class FindSearchRequest:
+class SearchRequest:
     """One exact process-local query and readable location scope."""
 
     query: str
@@ -59,14 +59,14 @@ class FindSearchRequest:
 
 
 @dataclass(frozen=True)
-class FindSearchResult:
+class SearchResult:
     """One host-resolved row tied to authorized frozen evidence."""
 
     context_name: str
-    kind: FindSearchResultKind
+    kind: SearchResultKind
     uid: str
     content: str
-    relevance: FindSearchRelevance = "primary"
+    relevance: SearchRelevance = "primary"
     source_context_name: str | None = None
     source_context_uid: str | None = None
     source_memory_uid: str | None = None
@@ -96,25 +96,27 @@ class FindSearchResult:
         if any(value is not None for value in source_values) and not all(
             isinstance(value, str) and value.strip() for value in source_values
         ):
-            raise ValueError("Search result Save As identity must be complete or absent.")
+            raise ValueError(
+                "Search result Save As identity must be complete or absent."
+            )
 
 
 @dataclass(frozen=True)
-class FindSearchResponse:
+class SearchResponse:
     """Read-only results tied to the exact request that produced them."""
 
-    request: FindSearchRequest
-    mode: FindSearchMode
-    results: tuple[FindSearchResult, ...]
+    request: SearchRequest
+    mode: SearchMode
+    results: tuple[SearchResult, ...]
     related_query: str = ""
 
     def __post_init__(self) -> None:
-        if not isinstance(self.request, FindSearchRequest):
+        if not isinstance(self.request, SearchRequest):
             raise ValueError("Search responses require the frozen request.")
         if self.mode != "CURRENT":
             raise ValueError("Search returned an invalid search mode.")
         if not isinstance(self.results, tuple) or any(
-            not isinstance(result, FindSearchResult) for result in self.results
+            not isinstance(result, SearchResult) for result in self.results
         ):
             raise ValueError("Search returned invalid result rows.")
         if not isinstance(self.related_query, str):
@@ -122,26 +124,29 @@ class FindSearchResponse:
         related = [result for result in self.results if result.relevance == "related"]
         primary = [result for result in self.results if result.relevance == "primary"]
         if related and (primary or not self.related_query.strip()):
-            raise ValueError("Related Search results require one separate broader query.")
+            raise ValueError(
+                "Related Search results require one separate broader query."
+            )
         if not related and self.related_query:
             raise ValueError("A broader Search query requires related results.")
 
 
 @dataclass(frozen=True)
-class FrozenFindCurrentSource:
+class FrozenSearchCurrentSource:
     """One authorized current-state candidate frame."""
 
     candidates: tuple[SearchCandidate, ...]
     coverage_root_name: str | None = None
 
 
-class FindSearchSourcePort(Protocol):
+class SearchSourcePort(Protocol):
     """Freeze readable evidence before semantic provider construction."""
 
-    def freeze_current(self, request: FindSearchRequest) -> FrozenFindCurrentSource:
+    def freeze_current(self, request: SearchRequest) -> FrozenSearchCurrentSource:
         """Return current-state candidates after readable-scope validation."""
 
-class FindSearchProvider(Protocol):
+
+class SearchProvider(Protocol):
     def complete(
         self,
         prompt: str,
@@ -151,17 +156,17 @@ class FindSearchProvider(Protocol):
     ) -> str: ...
 
 
-class FindSearchProviderFactory(Protocol):
+class SearchProviderFactory(Protocol):
     """Construct a provider only after the source port freezes authority."""
 
-    def __call__(self) -> FindSearchProvider: ...
+    def __call__(self) -> SearchProvider: ...
 
 
-class FindSearchObserver(Protocol):
-    def __call__(self, stage: FindSearchStage) -> None: ...
+class SearchObserver(Protocol):
+    def __call__(self, stage: SearchStage) -> None: ...
 
 
-def _observe(observer: FindSearchObserver | None, stage: FindSearchStage) -> None:
+def _observe(observer: SearchObserver | None, stage: SearchStage) -> None:
     if observer is not None:
         observer(stage)
 
@@ -177,7 +182,7 @@ def supplement_namespace_branch_coverage(
     query: str,
     candidates: tuple[SearchCandidate, ...] | list[SearchCandidate],
     matches: list[SearchMatch],
-    provider: FindSearchProvider,
+    provider: SearchProvider,
     *,
     root_name: str,
     limit: int,
@@ -247,19 +252,19 @@ def related_query_for_matches(matches: list[SearchMatch]) -> str:
     primary_count = sum(match.relevance == "primary" for match in matches)
     related_count = sum(match.relevance == "related" for match in matches)
     if primary_count and related_count:
-        raise FindError("Search cannot mix primary and related results.")
+        raise SearchError("Search cannot mix primary and related results.")
     if related_count:
         if len(related_queries) != 1 or None in related_queries:
-            raise FindError("Related Search results require one broader query.")
+            raise SearchError("Related Search results require one broader query.")
         return next(iter(related_queries)) or ""
     return ""
 
 
-def _current_result(match: SearchMatch) -> FindSearchResult:
+def _current_result(match: SearchMatch) -> SearchResult:
     candidate = match.candidate
     item = candidate.item
     if isinstance(item, Memory):
-        kind: FindSearchResultKind = "memory"
+        kind: SearchResultKind = "memory"
         content = item.content
         source_identity = (candidate.context_name, candidate.context_uid, item.uid)
     elif isinstance(item, MemoryRef):
@@ -281,8 +286,8 @@ def _current_result(match: SearchMatch) -> FindSearchResult:
         content = f"{item.title}\n{item.content}"
         source_identity = (None, None, None)
     else:  # pragma: no cover - SearchCandidate validates this union.
-        raise FindError("Search returned an unsupported result type.")
-    return FindSearchResult(
+        raise SearchError("Search returned an unsupported result type.")
+    return SearchResult(
         context_name=candidate.context_name,
         kind=kind,
         uid=item.uid,
@@ -295,13 +300,13 @@ def _current_result(match: SearchMatch) -> FindSearchResult:
     )
 
 
-def run_find_search(
-    request: FindSearchRequest,
+def run_search(
+    request: SearchRequest,
     *,
-    source_port: FindSearchSourcePort,
-    provider_factory: FindSearchProviderFactory,
-    observer: FindSearchObserver | None = None,
-) -> FindSearchResponse:
+    source_port: SearchSourcePort,
+    provider_factory: SearchProviderFactory,
+    observer: SearchObserver | None = None,
+) -> SearchResponse:
     """Execute one read-only Search request without CLI or TUI dependencies."""
 
     current_source = source_port.freeze_current(request)
@@ -325,7 +330,7 @@ def run_find_search(
             root_name=current_source.coverage_root_name,
             limit=request.limit,
         )
-    return FindSearchResponse(
+    return SearchResponse(
         request=request,
         mode="CURRENT",
         results=tuple(_current_result(match) for match in matches),
@@ -334,19 +339,19 @@ def run_find_search(
 
 
 __all__ = [
-    "FindSearchMode",
-    "FindSearchObserver",
-    "FindSearchProvider",
-    "FindSearchProviderFactory",
-    "FindSearchRequest",
-    "FindSearchResponse",
-    "FindSearchResult",
-    "FindSearchResultKind",
-    "FindSearchRelevance",
-    "FindSearchSourcePort",
-    "FindSearchStage",
-    "FrozenFindCurrentSource",
+    "SearchMode",
+    "SearchObserver",
+    "SearchProvider",
+    "SearchProviderFactory",
+    "SearchRequest",
+    "SearchResponse",
+    "SearchResult",
+    "SearchResultKind",
+    "SearchRelevance",
+    "SearchSourcePort",
+    "SearchStage",
+    "FrozenSearchCurrentSource",
     "related_query_for_matches",
-    "run_find_search",
+    "run_search",
     "supplement_namespace_branch_coverage",
 ]

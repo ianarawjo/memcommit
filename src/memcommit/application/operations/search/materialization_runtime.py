@@ -19,19 +19,19 @@ from memcommit.application.authority.derived_policy import (
     authorize_combination,
     authorize_derived_transfer,
 )
-from memcommit.application.operations.search.application import FindSearchResponse
+from memcommit.application.operations.search.application import SearchResponse
 from memcommit.application.operations.search.materialization_application import (
-    FindMaterializationError,
-    FindMaterializationPort,
-    FindMaterializationRequest,
-    FindMaterializationResult,
-    FrozenFindMaterialization,
-    run_find_materialization,
+    SearchMaterializationError,
+    SearchMaterializationPort,
+    SearchMaterializationRequest,
+    SearchMaterializationResult,
+    FrozenSearchMaterialization,
+    run_search_materialization,
 )
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
-class FindMaterializationCatalog(Protocol):
+class SearchMaterializationCatalog(Protocol):
     """Exact readable bindings frozen by the preceding search adapter."""
 
     def access_for(self, name: str) -> ContextAccess: ...
@@ -49,7 +49,7 @@ class _ResolvedSource:
 
 
 @dataclass(frozen=True)
-class _StoreFindMaterializationToken:
+class _StoreSearchMaterializationToken:
     output: Context
     output_uids: tuple[str, ...]
     checkpoint: AutoCheckpoint
@@ -71,7 +71,7 @@ def _local_output_access(store: MemoryStore, name: str) -> ContextAccess:
 
 
 def _source_public_name(
-    catalog: FindMaterializationCatalog,
+    catalog: SearchMaterializationCatalog,
     result,
 ) -> str:
     """Map a ref's authority-side target back into the frozen public tree."""
@@ -83,12 +83,12 @@ def _source_public_name(
     except FileNotFoundError:
         pass
     if result.kind != "ref":
-        raise FindMaterializationError(
+        raise SearchMaterializationError(
             f"Source Context '{result.source_context_name}' left the readable view."
         )
     containing = catalog.access_for(result.context_name)
     if not containing.is_granted or containing.view is None:
-        raise FindMaterializationError(
+        raise SearchMaterializationError(
             f"Referenced source Context '{result.source_context_name}' is not readable."
         )
     grant = containing.view.grant
@@ -98,7 +98,7 @@ def _source_public_name(
     elif authority_name.startswith(grant.resource_name + "/"):
         public_name = grant.public_name + authority_name[len(grant.resource_name) :]
     else:
-        raise FindMaterializationError(
+        raise SearchMaterializationError(
             "The referenced Memory target is outside its readable Grant resource."
         )
     catalog.access_for(public_name)
@@ -106,8 +106,8 @@ def _source_public_name(
 
 
 def _resolve_sources(
-    catalog: FindMaterializationCatalog,
-    response: FindSearchResponse,
+    catalog: SearchMaterializationCatalog,
+    response: SearchResponse,
     selected_result_indices: tuple[int, ...],
 ) -> tuple[_ResolvedSource, ...]:
     resolved: list[_ResolvedSource] = []
@@ -120,12 +120,12 @@ def _resolve_sources(
         access = catalog.access_for(public_name)
         context = access.store.load_direct(access.context_name)
         if context.uid != result.source_context_uid:
-            raise FindMaterializationError(
+            raise SearchMaterializationError(
                 f"Source Context '{public_name}' changed identity after search."
             )
         item = context.memories.get(result.source_memory_uid)
         if not isinstance(item, Memory) or item.content != result.content:
-            raise FindMaterializationError(
+            raise SearchMaterializationError(
                 f"Source Memory [{result.source_memory_uid[:8]}] changed after search."
             )
         resolved.append(
@@ -170,21 +170,21 @@ def _combination_has_multiple_domains(accesses: tuple[ContextAccess, ...]) -> bo
     return len(domains) > 1
 
 
-class MemoryStoreFindMaterializationPort(FindMaterializationPort):
-    """Prepare and publish one Find result under Store and Grant locks."""
+class MemoryStoreSearchMaterializationPort(SearchMaterializationPort):
+    """Prepare and publish one Search result under Store and Grant locks."""
 
     def __init__(
         self,
         store: MemoryStore,
-        catalog: FindMaterializationCatalog,
+        catalog: SearchMaterializationCatalog,
     ) -> None:
         self._store = store
         self._catalog = catalog
 
     def prepare(
         self,
-        request: FindMaterializationRequest,
-    ) -> FrozenFindMaterialization:
+        request: SearchMaterializationRequest,
+    ) -> FrozenSearchMaterialization:
         validate_portable_context_name(request.destination_name)
         self._store.assert_context_creatable(request.destination_name)
         sources = _resolve_sources(
@@ -198,7 +198,7 @@ class MemoryStoreFindMaterializationPort(FindMaterializationPort):
         if request.mode == "REFERENCE" and any(
             access.is_granted for access in accesses
         ):
-            raise FindMaterializationError(
+            raise SearchMaterializationError(
                 "REFERENCE requires locally owned source Memories; use COPY for "
                 "an export-authorized Grant result."
             )
@@ -255,7 +255,7 @@ class MemoryStoreFindMaterializationPort(FindMaterializationPort):
                     "context_uid": output.uid,
                     "context_name": output.name,
                 },
-                "find_materialization": {
+                "search_materialization": {
                     "query": request.response.request.query,
                     "mode": request.mode,
                     "output": output.name,
@@ -263,7 +263,7 @@ class MemoryStoreFindMaterializationPort(FindMaterializationPort):
                 },
             },
             description=(
-                f"Saved {len(sources)} checked Find result(s) as {request.mode} "
+                f"Saved {len(sources)} checked Search result(s) as {request.mode} "
                 f"in new Context '{request.destination_name}'; sources unchanged"
             ),
         )
@@ -298,11 +298,11 @@ class MemoryStoreFindMaterializationPort(FindMaterializationPort):
             for source in sources
             if source.access.is_granted
         }
-        return FrozenFindMaterialization(
+        return FrozenSearchMaterialization(
             mode=request.mode,
             destination_name=request.destination_name,
             source_count=len(sources),
-            token=_StoreFindMaterializationToken(
+            token=_StoreSearchMaterializationToken(
                 output=output,
                 output_uids=tuple(output_uids),
                 checkpoint=checkpoint,
@@ -316,20 +316,20 @@ class MemoryStoreFindMaterializationPort(FindMaterializationPort):
 
     def materialize(
         self,
-        prepared: FrozenFindMaterialization,
-    ) -> FindMaterializationResult:
+        prepared: FrozenSearchMaterialization,
+    ) -> SearchMaterializationResult:
         token = prepared.token
-        if not isinstance(token, _StoreFindMaterializationToken):
-            raise FindMaterializationError(
-                "The prepared Find materialization token is invalid."
+        if not isinstance(token, _StoreSearchMaterializationToken):
+            raise SearchMaterializationError(
+                "The prepared Search materialization token is invalid."
             )
         if (
             token.output.name != prepared.destination_name
             or len(token.sources) != prepared.source_count
             or len(token.output_uids) != prepared.source_count
         ):
-            raise FindMaterializationError(
-                "The prepared Find materialization changed before publication."
+            raise SearchMaterializationError(
+                "The prepared Search materialization changed before publication."
             )
 
         # This early check improves the ordinary collision error. The Store's
@@ -361,10 +361,10 @@ class MemoryStoreFindMaterializationPort(FindMaterializationPort):
                     )
 
         if created_checkpoint is None:
-            raise FindMaterializationError(
-                "Find result Context creation produced no checkpoint."
+            raise SearchMaterializationError(
+                "Search result Context creation produced no checkpoint."
             )
-        return FindMaterializationResult(
+        return SearchMaterializationResult(
             mode=prepared.mode,
             context_name=token.output.name,
             context_uid=token.output.uid,
@@ -373,22 +373,22 @@ class MemoryStoreFindMaterializationPort(FindMaterializationPort):
         )
 
 
-def execute_find_materialization(
-    request: FindMaterializationRequest,
+def execute_search_materialization(
+    request: SearchMaterializationRequest,
     *,
     store: MemoryStore,
-    catalog: FindMaterializationCatalog,
-) -> FindMaterializationResult:
+    catalog: SearchMaterializationCatalog,
+) -> SearchMaterializationResult:
     """Execute the reviewed write without CLI, TUI, or provider bootstrap."""
 
-    return run_find_materialization(
+    return run_search_materialization(
         request,
-        port=MemoryStoreFindMaterializationPort(store, catalog),
+        port=MemoryStoreSearchMaterializationPort(store, catalog),
     )
 
 
 __all__ = [
-    "FindMaterializationCatalog",
-    "MemoryStoreFindMaterializationPort",
-    "execute_find_materialization",
+    "SearchMaterializationCatalog",
+    "MemoryStoreSearchMaterializationPort",
+    "execute_search_materialization",
 ]

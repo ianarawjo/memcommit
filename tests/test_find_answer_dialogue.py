@@ -1,4 +1,5 @@
 """Strict three-scope synthesis tests for interactive Search answers."""
+
 from __future__ import annotations
 
 import json
@@ -6,14 +7,14 @@ import json
 import pytest
 
 from memcommit.application.operations.search.answer_dialogue import (
-    FIND_ANSWER_OPERATION,
-    FindAnswerCorpusTooLarge,
-    FindAnswerError,
-    synthesize_find_answer,
+    SEARCH_ANSWER_OPERATION,
+    SearchAnswerCorpusTooLarge,
+    SearchAnswerError,
+    synthesize_search_answer,
 )
 from memcommit.application.operations.search.answer_references import (
-    FindAnswerEvidence,
-    FindAnswerSentence,
+    SearchAnswerEvidence,
+    SearchAnswerSentence,
 )
 
 
@@ -22,8 +23,8 @@ def _item(
     content: str,
     *,
     context_name: str = "task-1",
-) -> FindAnswerEvidence:
-    return FindAnswerEvidence(
+) -> SearchAnswerEvidence:
+    return SearchAnswerEvidence(
         alias=alias,
         context_name=context_name,
         kind="memory",
@@ -48,9 +49,7 @@ def _response(**changes) -> dict[str, object]:
             "The visible results say the garage reopens after construction."
         ),
         "visible_sources": ["m1"],
-        "context_text": (
-            "The same Context gives an August endpoint for construction."
-        ),
+        "context_text": ("The same Context gives an August endpoint for construction."),
         "context_sources": ["c1"],
         "outside_text": "Other Contexts were not checked.",
         "outside_sources": [],
@@ -64,7 +63,7 @@ def test_synthesizes_three_scopes_without_sending_durable_uids():
     context = (_item("c1", "Construction runs June through August."),)
     provider = Provider(_response())
 
-    answer = synthesize_find_answer(
+    answer = synthesize_search_answer(
         "When will the garage reopen?",
         visible,
         context,
@@ -74,18 +73,18 @@ def test_synthesizes_three_scopes_without_sending_durable_uids():
     )
 
     assert answer.sentences == (
-        FindAnswerSentence(
+        SearchAnswerSentence(
             "The visible results say the garage reopens after construction.",
             ("m1",),
         ),
-        FindAnswerSentence(
+        SearchAnswerSentence(
             "The same Context gives an August endpoint for construction.",
             ("c1",),
         ),
-        FindAnswerSentence("Other Contexts were not checked."),
+        SearchAnswerSentence("Other Contexts were not checked."),
     )
     prompt, operation, schema = provider.calls[0]
-    assert operation == FIND_ANSWER_OPERATION
+    assert operation == SEARCH_ANSWER_OPERATION
     assert "durable-m1-uid" not in prompt
     assert "durable-c1-uid" not in prompt
     assert "Reopen immediately after construction." in prompt
@@ -107,8 +106,8 @@ def test_synthesizes_three_scopes_without_sending_durable_uids():
 def test_invalid_or_cross_scope_sources_fail_closed(changes, match):
     provider = Provider(_response(**changes))
 
-    with pytest.raises(FindAnswerError, match=match):
-        synthesize_find_answer(
+    with pytest.raises(SearchAnswerError, match=match):
+        synthesize_search_answer(
             "When?",
             (_item("m1", "Visible."),),
             (_item("c1", "Context."),),
@@ -126,8 +125,8 @@ def test_not_requested_outside_scope_cannot_be_cited():
         )
     )
 
-    with pytest.raises(FindAnswerError, match="not searched"):
-        synthesize_find_answer(
+    with pytest.raises(SearchAnswerError, match="not searched"):
+        synthesize_search_answer(
             "When?",
             (_item("m1", "Visible."),),
             (_item("c1", "Context."),),
@@ -145,7 +144,7 @@ def test_requested_outside_scope_accepts_only_x_aliases():
         )
     )
 
-    answer = synthesize_find_answer(
+    answer = synthesize_search_answer(
         "Check every Context.",
         (_item("m1", "Visible."),),
         (_item("c1", "Context."),),
@@ -167,7 +166,7 @@ def test_source_free_scope_text_is_host_owned():
         )
     )
 
-    answer = synthesize_find_answer(
+    answer = synthesize_search_answer(
         "When?",
         (_item("m1", "Visible."),),
         (),
@@ -176,13 +175,11 @@ def test_source_free_scope_text_is_host_owned():
         provider,
     )
 
-    assert answer.context == FindAnswerSentence(
+    assert answer.context == SearchAnswerSentence(
         "No additional evidence supporting this answer was found in the "
         "remainder of the same Context frame."
     )
-    assert answer.outside == FindAnswerSentence(
-        "Other Contexts were not checked."
-    )
+    assert answer.outside == SearchAnswerSentence("Other Contexts were not checked.")
     assert "October" not in answer.context.text
     assert "September" not in answer.outside.text
 
@@ -197,7 +194,7 @@ def test_host_scope_status_uses_korean_for_a_korean_question():
         )
     )
 
-    answer = synthesize_find_answer(
+    answer = synthesize_search_answer(
         "주차장은 언제까지 닫혀 있어?",
         (_item("m1", "Visible."),),
         (),
@@ -213,7 +210,7 @@ def test_host_scope_status_uses_korean_for_a_korean_question():
 def test_pending_clarification_and_interpreted_request_reach_synthesis():
     provider = Provider(_response())
 
-    synthesize_find_answer(
+    synthesize_search_answer(
         "yes",
         (_item("m1", "Visible."),),
         (_item("c1", "Context."),),
@@ -221,9 +218,7 @@ def test_pending_clarification_and_interpreted_request_reach_synthesis():
         "NOT_REQUESTED",
         provider,
         interpreted_request="The user confirmed the closure-date question.",
-        pending_clarification=(
-            "Do you want to know when the garage closure ends?"
-        ),
+        pending_clarification=("Do you want to know when the garage closure ends?"),
     )
 
     prompt = provider.calls[0][0]
@@ -239,8 +234,8 @@ def test_pending_clarification_and_interpreted_request_reach_synthesis():
 def test_generated_sentence_cannot_forge_a_host_citation(field):
     provider = Provider(_response(**{field: "Fabricated claim. [77]"}))
 
-    with pytest.raises(FindAnswerError, match="invalid"):
-        synthesize_find_answer(
+    with pytest.raises(SearchAnswerError, match="invalid"):
+        synthesize_search_answer(
             "When?",
             (_item("m1", "Visible."),),
             (_item("c1", "Context."),),
@@ -253,12 +248,12 @@ def test_generated_sentence_cannot_forge_a_host_citation(field):
 def test_oversized_scope_fails_before_provider_work(monkeypatch):
     provider = Provider(_response())
     monkeypatch.setattr(
-        "memcommit.application.operations.search.answer_dialogue.FIND_ANSWER_CORPUS_LIMIT",
+        "memcommit.application.operations.search.answer_dialogue.SEARCH_ANSWER_CORPUS_LIMIT",
         20,
     )
 
-    with pytest.raises(FindAnswerCorpusTooLarge):
-        synthesize_find_answer(
+    with pytest.raises(SearchAnswerCorpusTooLarge):
+        synthesize_search_answer(
             "When?",
             (_item("m1", "Visible."),),
             (),

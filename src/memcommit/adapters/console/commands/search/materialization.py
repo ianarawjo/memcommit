@@ -1,34 +1,34 @@
-"""Compatibility facade for reviewed Find result materialization."""
+"""Compatibility facade for reviewed Search result materialization."""
 
 from __future__ import annotations
 
-from memcommit.application.operations.search.application import FindSearchResponse
+from memcommit.application.operations.search.application import SearchResponse
 from memcommit.application.operations.search.materialization_application import (
-    FindMaterializationError,
-    FindMaterializationMode,
-    FindMaterializationRequest,
-    FindMaterializationResult,
+    SearchMaterializationError,
+    SearchMaterializationMode,
+    SearchMaterializationRequest,
+    SearchMaterializationResult,
 )
 from memcommit.application.operations.search.materialization_runtime import (
-    FindMaterializationCatalog,
-    execute_find_materialization,
+    SearchMaterializationCatalog,
+    execute_search_materialization,
 )
 from memcommit.persistence.store import MemoryStore
 
 
-def materialize_find_results(
+def materialize_search_results(
     store: MemoryStore,
-    catalog: FindMaterializationCatalog,
-    response: FindSearchResponse,
+    catalog: SearchMaterializationCatalog,
+    response: SearchResponse,
     *,
     selected_result_indices: tuple[int, ...],
-    mode: FindMaterializationMode,
+    mode: SearchMaterializationMode,
     destination_name: str,
-) -> FindMaterializationResult:
+) -> SearchMaterializationResult:
     """Retain the historical function signature over the typed application."""
 
-    return execute_find_materialization(
-        FindMaterializationRequest(
+    return execute_search_materialization(
+        SearchMaterializationRequest(
             response=response,
             selected_result_indices=selected_result_indices,
             mode=mode,
@@ -40,9 +40,9 @@ def materialize_find_results(
 
 
 __all__ = [
-    "FindMaterializationError",
-    "FindMaterializationMode",
-    "FindMaterializationRequest",
-    "FindMaterializationResult",
-    "materialize_find_results",
+    "SearchMaterializationError",
+    "SearchMaterializationMode",
+    "SearchMaterializationRequest",
+    "SearchMaterializationResult",
+    "materialize_search_results",
 ]
