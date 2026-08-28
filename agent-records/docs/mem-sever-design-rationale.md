@@ -102,8 +102,11 @@ mode. Their `MEMORY · READ ONLY` controls open the selected exact readable
 Context's direct Memories as viewport stops; Enter keeps the whole Context and
 cannot place a Memory UID in the typed setup receipt. Query-only rows remain
 name-only, and preview loading neither changes the frozen Sever scope nor
-starts provider analysis. The command-local 684-line screen was retired; the
-compatibility import now aliases `memcommit.adapters.interfaces.tui.operations.sever`.
+starts provider analysis. The command-local 684-line screen was retired in
+favor of the shared component. Sever's typed role specification, validation,
+and reviewed setup receipt now live in
+`memcommit.adapters.console.commands.sever.setup`; no operation-specific TUI
+facade remains under `adapters.interfaces`.
 
 The ordered 180×52 color trace under
 [`screenshots/sever-shared-endpoint-setup-20260823/`](screenshots/sever-shared-endpoint-setup-20260823/README.md)

@@ -144,7 +144,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.session_picker` | `memcommit.adapters.console.shared.session_picker` | shared-command-mechanism | `shared` |
 | `memcommit.commands.sever` | `memcommit.adapters.console.commands.sever.command` | command-entry | `sever` |
 | `memcommit.commands.sever_sessions` | `memcommit.adapters.console.commands.sever.sessions` | command-owned-support | `sever` |
-| `memcommit.commands.sever_setup_shell` | `memcommit.adapters.console.commands.sever.setup_shell` | command-owned-support | `sever` |
+| `memcommit.commands.sever_setup_shell` | `memcommit.adapters.console.commands.sever.setup` | command-owned-support | `sever` |
 | `memcommit.commands.share` | `memcommit.adapters.console.commands.share.command` | command-entry | `share` |
 | `memcommit.commands.share_flow` | `memcommit.adapters.console.commands.share.flow` | command-owned-support | `share` |
 | `memcommit.commands.share_viewer` | `memcommit.adapters.console.commands.share.viewer` | command-owned-support | `share` |

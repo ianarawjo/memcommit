@@ -1035,7 +1035,7 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.sever.setup_shell",
+      "canonical_module": "memcommit.adapters.console.commands.sever.setup",
       "legacy_module": "memcommit.commands.sever_setup_shell",
       "owner": "sever",
       "public_exports": [],

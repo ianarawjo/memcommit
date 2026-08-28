@@ -141,7 +141,7 @@ OWNED_SUPPORT_TARGETS = {
     "review_sessions": "review.sessions",
     "search_result_present": "search.result_present",
     "sever_sessions": "sever.sessions",
-    "sever_setup_shell": "sever.setup_shell",
+    "sever_setup_shell": "sever.setup",
     "share_flow": "share.flow",
     "share_viewer": "share.viewer",
     "study_name_dialog": "init_study.name_dialog",

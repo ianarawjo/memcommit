@@ -1,18 +1,19 @@
-"""Contracts for Sever's shared Endpoint Setup adapter and command facade."""
+"""Contracts for Sever's command-owned shared Endpoint Setup adapter."""
 
 from __future__ import annotations
+
+from pathlib import Path
 
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import pytest
 
-import memcommit.adapters.console.commands.sever.setup_shell as sever_setup_facade
 from memcommit.adapters.console.shared.context_picker import ContextMemoryRow
-from memcommit.adapters.interfaces.tui.operations import sever as sever_tui
-from memcommit.adapters.interfaces.tui.operations.sever import (
+from memcommit.adapters.console.commands.sever.setup import (
     SeverEndpointSelection,
     SeverSetupReceipt,
     SeverTuiSetup,
+    _validate_sever_draft,
     _shared_local_output_name,
     choose_sever_endpoint_setup,
     choose_sever_setup,
@@ -22,8 +23,10 @@ from memcommit.adapters.interfaces.tui.components.endpoint_setup import (
     EndpointSetupDraft,
     EndpointSetupValue,
 )
-from memcommit.adapters.interfaces.tui.operations.sever.setup import _validate_sever_draft
 from memcommit.source_projection.model import SourceAccess, SourceDisplayFacts
+
+
+REPOSITORY_ROOT = Path(__file__).parents[1]
 
 
 def _setup() -> SeverTuiSetup:
@@ -279,9 +282,18 @@ def test_granted_source_cannot_be_presented_as_a_local_self_save() -> None:
     )
 
 
-def test_command_setup_path_is_an_import_only_compatibility_facade() -> None:
-    assert sever_setup_facade.choose_sever_setup is sever_tui.choose_sever_setup
-    assert sever_setup_facade.SeverSetupReceipt is SeverSetupReceipt
+def test_sever_setup_is_command_owned_without_compatibility_facades() -> None:
+    assert choose_sever_setup.__module__ == (
+        "memcommit.adapters.console.commands.sever.setup"
+    )
+    assert not (
+        REPOSITORY_ROOT
+        / "src/memcommit/adapters/console/commands/sever/setup_shell.py"
+    ).exists()
+    former_interface = (
+        REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/tui/operations/sever"
+    )
+    assert not tuple(former_interface.glob("*.py"))
 
 
 def test_legacy_shaped_entry_uses_the_shared_role_pane() -> None:

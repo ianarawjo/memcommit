@@ -92,7 +92,7 @@ def _update_start() -> None:
 
 
 def _sever_start() -> None:
-    from memcommit.adapters.console.commands.sever.setup_shell import choose_sever_setup
+    from memcommit.adapters.console.commands.sever.setup import choose_sever_setup
 
     _print_terminal()
     result = choose_sever_setup(

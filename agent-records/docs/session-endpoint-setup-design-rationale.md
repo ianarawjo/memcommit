@@ -357,9 +357,9 @@ The implementation has three layers:
    per-mode/per-role descendant controls, editors, focus, and process-local
    draft state.
 3. Compare, Update, Meld, and Sever adapters own role specs, typed receipts,
-   semantic validation, and orchestration. Sever's command import is now a
-   behavior-free compatibility facade over
-   `memcommit.adapters.interfaces.tui.operations.sever`.
+   semantic validation, and orchestration. Sever owns that projection directly
+   in `memcommit.adapters.console.commands.sever.setup`; the shared component
+   remains operation-neutral.
 
 The Endpoint Setup composition lives under
 `memcommit.adapters.interfaces.tui.components.endpoint_setup` and imports the narrow
