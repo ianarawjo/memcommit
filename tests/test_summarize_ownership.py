@@ -35,10 +35,10 @@ def test_production_summarize_consumers_use_the_operation_owner() -> None:
         "src/memcommit/application/evaluation/study_summarize_exact_matrix.py",
         "src/memcommit/application/operations/ground/distill.py",
         "src/memcommit/adapters/console/commands/summarize/scope_label.py",
-        "src/memcommit/adapters/interfaces/cli/summarize.py",
-        "src/memcommit/adapters/interfaces/tui/operations/summarize/adapter.py",
-        "src/memcommit/adapters/interfaces/tui/operations/summarize/model.py",
-        "src/memcommit/adapters/interfaces/tui/operations/summarize/screen.py",
+        "src/memcommit/adapters/console/commands/summarize/presentation.py",
+        "src/memcommit/adapters/console/commands/summarize/workbench/presentation.py",
+        "src/memcommit/adapters/console/commands/summarize/workbench/model.py",
+        "src/memcommit/adapters/console/commands/summarize/workbench/screen.py",
         "src/memcommit/application/operations/summarize/runtime.py",
     )
 
@@ -47,3 +47,22 @@ def test_production_summarize_consumers_use_the_operation_owner() -> None:
         source = path.read_text(encoding="utf-8")
         assert "from memcommit.summarize_application import" not in source
         assert "from memcommit.summarize_runtime import" not in source
+
+
+def test_summarize_console_owns_presentation_and_workbench_without_facades() -> None:
+    command_root = (
+        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/summarize"
+    )
+    retired_tui_root = (
+        REPOSITORY_ROOT
+        / "src/memcommit/adapters/interfaces/tui/operations/summarize"
+    )
+
+    assert (command_root / "presentation.py").is_file()
+    assert (command_root / "workbench/model.py").is_file()
+    assert (command_root / "workbench/presentation.py").is_file()
+    assert (command_root / "workbench/screen.py").is_file()
+    assert not tuple(retired_tui_root.glob("*.py"))
+    assert not (
+        REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/cli/summarize.py"
+    ).exists()

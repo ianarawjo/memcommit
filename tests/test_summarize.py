@@ -15,7 +15,7 @@ from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
 from memcommit.application.operations.compare.ledger.provider import analyze_comparison
 from memcommit.core.context import Memory
-from memcommit.adapters.interfaces.tui.operations.summarize import SummarizeTuiOutcome
+from memcommit.adapters.console.commands.summarize.workbench import SummarizeTuiOutcome
 from memcommit.application.reviewing.read_report import ReadReportRecent, ReadReportTarget
 from memcommit.application.operations.summarize.model import (
     SUMMARIZE_OPERATION,

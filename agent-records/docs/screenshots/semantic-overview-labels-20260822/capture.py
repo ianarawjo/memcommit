@@ -46,11 +46,11 @@ CASES = (
 
 
 def _summary_document(*, both: bool):
-    from memcommit.adapters.interfaces.tui.operations.summarize.adapter import (
+    from memcommit.adapters.console.commands.summarize.workbench.presentation import (
         project_summarize_outcome,
         project_summarize_result,
     )
-    from memcommit.adapters.interfaces.tui.operations.summarize.model import SummarizeTuiOutcome
+    from memcommit.adapters.console.commands.summarize.workbench.model import SummarizeTuiOutcome
     from memcommit.application.operations.summarize.application import SummarizeResult
     from memcommit.application.semantic.understanding import UnderstandingSummary
 

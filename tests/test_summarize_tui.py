@@ -6,7 +6,7 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.adapters.interfaces.tui.operations.summarize import (
+from memcommit.adapters.console.commands.summarize.workbench import (
     SummarizeTuiOutcome,
     SummarizeTuiSetup,
     project_summarize_clipboard,

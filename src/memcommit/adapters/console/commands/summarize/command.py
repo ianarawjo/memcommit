@@ -40,7 +40,7 @@ from memcommit.adapters.interfaces.tui.workbenches.read_report import (
     choose_read_report_recent,
 )
 from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.interfaces.tui.operations.summarize import (
+from memcommit.adapters.console.commands.summarize.workbench import (
     SummarizeTuiOutcome,
     SummarizeTuiSetup,
     project_summarize_clipboard,

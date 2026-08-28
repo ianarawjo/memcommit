@@ -1,4 +1,4 @@
-"""Project a Summarize result into the shared semantic Viewer contract."""
+"""Project Summarize results into the shared semantic Viewer contract."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from memcommit.adapters.console.text import (
 from memcommit.adapters.console.commands.summarize.scope_label import (
     summarize_scope_label,
 )
-from memcommit.adapters.interfaces.tui.operations.summarize.model import (
+from memcommit.adapters.console.commands.summarize.workbench.model import (
     SummarizeClipboardProjection,
     SummarizeTuiOutcome,
 )

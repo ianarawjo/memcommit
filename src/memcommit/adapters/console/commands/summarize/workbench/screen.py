@@ -1,4 +1,4 @@
-"""Summarize adapter over the shared Context-result workbench."""
+"""Summarize console adapter over the shared Context-result workbench."""
 
 from __future__ import annotations
 
@@ -8,11 +8,11 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
 from memcommit.adapters.console.terminal import require_interactive_terminal
-from memcommit.adapters.interfaces.tui.operations.summarize.adapter import (
+from memcommit.adapters.console.commands.summarize.workbench.presentation import (
     project_summarize_clipboard,
     project_summarize_outcome,
 )
-from memcommit.adapters.interfaces.tui.operations.summarize.model import (
+from memcommit.adapters.console.commands.summarize.workbench.model import (
     SummarizeTuiOutcome,
     SummarizeTuiSetup,
 )

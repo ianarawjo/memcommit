@@ -1,4 +1,4 @@
-"""Plain terminal renderer for a typed Summarize result."""
+"""Plain terminal presentation for a typed Summarize result."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Process-local setup values for the Summarize terminal adapter."""
+"""Process-local setup values for the Summarize console workbench."""
 
 from __future__ import annotations
 

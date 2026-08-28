@@ -79,7 +79,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         "memcommit.application.operations.summarize.application"
         in by_operation["summarize"].application_modules
     )
-    assert "memcommit.adapters.interfaces.tui.operations.summarize.screen" in by_operation["summarize"].tui_modules
+    assert not by_operation["summarize"].tui_modules
     assert "query_ordinary" in by_operation["query"].public_methods
     assert "memcommit.adapters.interfaces.agent.query" in by_operation["query"].agent_modules
     for operation, public_method in (
