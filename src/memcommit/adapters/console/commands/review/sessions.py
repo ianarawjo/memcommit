@@ -23,7 +23,7 @@ from memcommit.adapters.interfaces.tui.components.operation_launcher.session imp
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.adapters.interfaces.tui.operations.audit.catalog import audit_session_entries
+from memcommit.adapters.console.commands.audit.sessions import audit_session_entries
 from memcommit.adapters.console.commands.sever.sessions import list_sever_session_catalog
 from memcommit.application.operations.sever.session_store import SeverSessionStore
 from memcommit.application.reviewing.quality.audit_store import QualityAuditStore

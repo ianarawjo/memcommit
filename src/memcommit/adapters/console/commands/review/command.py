@@ -256,11 +256,11 @@ def _run_audit_review(
 ) -> None:
     """Open one exact saved Audit without rerunning any finder."""
 
-    from memcommit.adapters.console.commands.audit.command import run_quality_audit_review
-    from memcommit.adapters.interfaces.tui.operations.audit.catalog import audit_session_entries
-    from memcommit.adapters.interfaces.tui.operations.audit import (
+    from memcommit.adapters.console.commands.audit.review import (
         render_quality_audit_review_snapshot,
+        run_quality_audit_review,
     )
+    from memcommit.adapters.console.commands.audit.sessions import audit_session_entries
 
     sessions = QualityAuditStore(store)
     selected = _select_report_session(

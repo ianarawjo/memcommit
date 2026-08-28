@@ -38,12 +38,10 @@ from memcommit.adapters.console.theme import (
     semantic_color_rgb,
     semantic_quality_role,
 )
-from memcommit.adapters.interfaces.tui.operations.audit import (
-    choose_audit_setup,
-    quality_audit_review_document,
+from memcommit.adapters.console.commands.audit.review import (
     render_quality_audit_review_snapshot,
 )
-from memcommit.adapters.interfaces.tui.viewers.semantic import run_semantic_viewer
+from memcommit.adapters.console.commands.audit.setup import choose_audit_setup
 from memcommit.core.context import Context
 from memcommit.application.operations.conformance.model import ConformanceError, check_context_conformance
 from memcommit.application.operations.conformance.runtime import freeze_context_conformance
@@ -144,30 +142,6 @@ def _run_quality_audit_checks(
 
 def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
-
-
-def run_quality_audit_review(
-    store: MemoryStore,
-    session: QualityAuditSession,
-    *,
-    app_input: Input | None = None,
-    app_output: Output | None = None,
-    require_tty: bool = True,
-) -> QualityAuditSession:
-    """Read one complete saved Audit without rerunning or editing it."""
-
-    # Keep the Store parameter for the established command adapter signature,
-    # but do not open it: the already validated saved snapshot is the review
-    # object and this Viewer owns no persistence boundary.
-    del store
-    run_semantic_viewer(
-        quality_audit_review_document(session),
-        title="AUDIT REVIEW",
-        app_input=app_input,
-        app_output=app_output,
-        require_tty=require_tty,
-    )
-    return session
 
 
 def _receipt_memory_preview(value: str) -> str:

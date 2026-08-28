@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from prompt_toolkit.input import Input
+from prompt_toolkit.output import Output
+
 from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.console.theme import semantic_quality_role
 from memcommit.adapters.interfaces.tui.core.theme import semantic_role_style
@@ -10,6 +13,7 @@ from memcommit.adapters.interfaces.tui.viewers.semantic import (
     SemanticViewerDocument,
     SemanticViewerSection,
     ViewerAnchor,
+    run_semantic_viewer,
     semantic_document_plain_text,
 )
 from memcommit.adapters.interfaces.tui.workbenches.findings import (
@@ -26,6 +30,7 @@ from memcommit.application.reviewing.quality.workbench import (
     QualityFindWorkbenchSession,
     quality_find_report_view,
 )
+from memcommit.persistence.store import MemoryStore
 
 
 def _inline(value: str) -> str:
@@ -237,7 +242,32 @@ def render_quality_audit_review_snapshot(session: QualityAuditSession) -> str:
     ).rstrip()
 
 
+def run_quality_audit_review(
+    store: MemoryStore,
+    session: QualityAuditSession,
+    *,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> QualityAuditSession:
+    """Read one complete saved Audit without rerunning or editing it."""
+
+    # Keep the Store parameter for the established command adapter signature,
+    # but do not open it: the already validated saved snapshot is the review
+    # object and this Viewer owns no persistence boundary.
+    del store
+    run_semantic_viewer(
+        quality_audit_review_document(session),
+        title="AUDIT REVIEW",
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+    )
+    return session
+
+
 __all__ = [
     "quality_audit_review_document",
     "render_quality_audit_review_snapshot",
+    "run_quality_audit_review",
 ]

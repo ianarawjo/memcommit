@@ -16,6 +16,10 @@ import memcommit.adapters.console.commands.audit.command as audit_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.audit.command import (
     _run_quality_audit_checks,
+)
+from memcommit.adapters.console.commands.audit.review import (
+    quality_audit_review_document,
+    render_quality_audit_review_snapshot,
     run_quality_audit_review,
 )
 from memcommit.adapters.console.commands.audit.sessions import audit_session_entries
@@ -33,10 +37,6 @@ from memcommit.application.reviewing.quality.findings import (
     DuplicateReport,
 )
 from memcommit.providers.types import CompletionRun, ProviderIdentity
-from memcommit.adapters.interfaces.tui.operations.audit import (
-    quality_audit_review_document,
-    render_quality_audit_review_snapshot,
-)
 from memcommit.adapters.console.theme import (
     SemanticColorRole,
     memory_object_color_rgb,
@@ -803,7 +803,7 @@ def test_flagless_audit_uses_current_context_and_prints_saved_session_receipt(
         ),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.audit.command.run_quality_audit_review",
+        "memcommit.adapters.console.commands.audit.review.run_quality_audit_review",
         lambda *_args, **_kwargs: pytest.fail(
             "Audit execution must not open Review automatically"
         ),

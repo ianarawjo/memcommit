@@ -71,15 +71,21 @@ source-linked finding projector.
 Answerable `mem review ambiguities` remains a separate operation with its own
 review contract.
 
-## Compatibility boundary
+## Console presentation ownership
 
-The saved-session catalog is owned by
-`memcommit.adapters.interfaces.tui.operations.audit.catalog`, alongside the other Audit
-terminal projections. `memcommit.adapters.console.commands.audit.sessions` remains an exact
-module alias so existing imports and monkeypatches observe the same module
-object. This is an ownership-only relocation: catalog reads, validation,
-timestamp and tie-break ordering, picker fields, detail text, reopen arguments,
-exceptions, and the zero-write boundary are unchanged.
+Audit's console-specific pieces are co-located under
+`memcommit.adapters.console.commands.audit`: `command.py` owns execution and
+the saved receipt, `setup.py` owns Source selection, `sessions.py` owns the
+saved-session catalog, and `review.py` owns the read-only report projection and
+Viewer launch. The former
+`memcommit.adapters.interfaces.tui.operations.audit` package and the
+`commands.audit.sessions` module alias are removed rather than retained as
+facades. `mem review audit` imports the narrow command-owned modules directly.
+This is an ownership-only relocation: setup interaction, catalog reads and
+ordering, report content, Viewer behavior, exceptions, and the zero-write
+boundary are unchanged. The existing Audit terminal captures therefore remain
+behaviorally valid; their reproduction script now imports the command-owned
+setup module.
 
 Audit schema versions 1 and 2 may contain response records written by the
 earlier UI. Version 2 Conflict records also contain the retired
