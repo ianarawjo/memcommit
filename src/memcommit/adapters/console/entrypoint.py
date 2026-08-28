@@ -66,7 +66,6 @@ from memcommit.adapters.console.commands import (
     write_protection,
 )
 from memcommit.adapters.console.commands.reference import command as reference
-from memcommit.adapters.interfaces.cli import shell_init
 from memcommit.adapters.console.commands.clear.command import cmd as clear_cmd
 from memcommit.adapters.console.commands.config.command import app as config_app
 from memcommit.adapters.console.commands.dev.command import app as dev_app
@@ -438,12 +437,6 @@ app.command(
     "help",
     help=operation_summary("help"),
 )(help_inventory.cmd)
-app.command(
-    "shell-init",
-    help=operation_summary("shell-init"),
-)(shell_init.cmd)
-
-
 # checkout preserves Git-style navigation syntax across two distinct operations.
 @app.command(
     "checkout",

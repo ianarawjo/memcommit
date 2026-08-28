@@ -6,8 +6,10 @@
 `composition.py` turns one packaged scenario into participant and authority
 stores, `publication.py` materializes Grants and atomically publishes the pair,
 and `application.py` selects `coffee` or `legacy` and coordinates the workflow.
-The console command owns only argument validation, receipts, and action-ledger
-presentation.
+The console command owns argument validation, receipts, action-ledger
+presentation, and the post-command handoff into a disposable Study shell.
+The shell is scheduled on root Context close so initialization and its command
+attempt are finalized before the child zsh begins.
 
 `operations/profile` remains reusable control-plane infrastructure: Profile
 validation, registry locking and replacement, store inspection, Grant
@@ -27,6 +29,9 @@ callers import the `init_study` operation directly.
   history, and removed after publication.
 - Neither scenario depends on a registered source Profile or installs a shared
   semantic prewarm.
+- Interactive initialization enters a fresh `zsh -d -f -i` process with a
+  run-private `ZDOTDIR` and `HISTFILE`. Exiting returns to the unchanged parent
+  shell. Non-interactive and already nested Study invocations remain one-shot.
 
 ## Limitation
 

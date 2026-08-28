@@ -22,7 +22,7 @@ def test_list_returns_all_operations_without_store_or_provider_access(tmp_path):
 
     assert response["ok"] is True
     assert response["kind"] == "list"
-    assert response["result"]["count"] == 66
+    assert response["result"]["count"] == 65
     assert response["result"]["operations"][0]["name"] == "add"
     assert response["result"]["effect"] == "NONE"
     assert not root.exists()
@@ -198,7 +198,7 @@ def test_schema_is_json_safe_and_bounds_describe_names_to_the_catalog():
         "not": {"required": ["operation"]}
     }
     assert schema["parameters"]["allOf"][0]["else"] == {"required": ["operation"]}
-    assert len(schema["parameters"]["properties"]["operation"]["enum"]) == 66
+    assert len(schema["parameters"]["properties"]["operation"]["enum"]) == 65
     assert schema["parameters"]["properties"]["detail"]["enum"] == [
         "actions",
         "copy-or-link",

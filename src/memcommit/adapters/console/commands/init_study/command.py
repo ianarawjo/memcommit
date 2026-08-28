@@ -15,7 +15,9 @@ from memcommit.providers.policy import (
     STUDY_PROVIDER_POLICY_DIGEST,
     STUDY_PROVIDER_POLICY_VERSION,
 )
-from memcommit.adapters.console.commands.init_study.name_dialog import choose_study_profile_name
+from memcommit.adapters.console.commands.init_study.name_dialog import (
+    choose_study_profile_name,
+)
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
@@ -33,6 +35,10 @@ from memcommit.persistence.command_ledger.study_actions import (
     record_study_action,
     record_study_action_for_profile,
 )
+from memcommit.adapters.console.commands.init_study.study_shell import (
+    schedule_study_shell,
+    should_enter_study_shell,
+)
 
 
 def _is_interactive_terminal() -> bool:
@@ -40,6 +46,7 @@ def _is_interactive_terminal() -> bool:
 
 
 def cmd(
+    ctx: typer.Context,
     name: Annotated[
         Optional[str],
         typer.Argument(
@@ -179,3 +186,6 @@ def cmd(
         "were not imported."
     )
     typer.echo("Active Profile: " + display_escape_text(result.active_profile_name))
+    if should_enter_study_shell():
+        typer.echo("Study shell: opens after this initialization attempt is recorded.")
+        schedule_study_shell(ctx, result.active_profile_name)

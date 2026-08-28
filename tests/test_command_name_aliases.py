@@ -8,7 +8,6 @@ from typer.main import get_command
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.persistence.command_ledger.attempts import CommandAttemptLedger
 from memcommit.adapters.console.shared.command_group import (
     CanonicalCommandGroup,
     command_name_alias_collisions,
@@ -24,7 +23,6 @@ runner = CliRunner(mix_stderr=False)
     (
         ("initstudy", "init-study"),
         ("checkconformance", "check-conformance"),
-        ("shellinit", "shell-init"),
         ("findredundancies", "find-redundancies"),
         ("find-redundancy", "find-redundancies"),
         ("findredundancy", "find-redundancies"),
@@ -101,12 +99,8 @@ def test_every_command_group_uses_collision_free_shared_routing():
     visit(root)
 
 
-def test_attempt_ledger_records_canonical_name_for_alias(isolated_store, monkeypatch):
-    monkeypatch.delenv("MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG", raising=False)
-
+def test_retired_shellinit_spelling_is_not_routed() -> None:
     result = runner.invoke(app, ["shellinit"])
 
-    assert result.exit_code == 0, result.output
-    attempt = CommandAttemptLedger(isolated_store).list()[0]
-    assert attempt.operation == "shell-init"
-    assert attempt.command == "mem shellinit"
+    assert result.exit_code == 2
+    assert "No such command 'shellinit'" in result.stderr

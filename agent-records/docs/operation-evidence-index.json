@@ -284,7 +284,6 @@
     "share": [
       "agent-records/docs/mem-share-design-rationale.md"
     ],
-    "shell-init": [],
     "show": [
       "agent-records/docs/show-application-boundary-matrix.md",
       "agent-records/docs/show-application-design-rationale.md"

@@ -533,13 +533,6 @@ _OPERATIONS = (
         "One exact ordinary Source Context, or its lexical descendants with -r",
     ),
     _operation(
-        "shell-init",
-        "Print opt-in shell integration for interactive command prefill.",
-        "Shell name -> integration script",
-        ExecutionKind.DETERMINISTIC,
-        "Read-only; installation requires explicit shell evaluation",
-    ),
-    _operation(
         "show",
         (
             "Show a Memory, reference, embedded Context, or complete Context "

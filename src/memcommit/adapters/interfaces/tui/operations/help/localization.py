@@ -245,10 +245,6 @@ _FR = {
         "Envoyer un Context ordinaire via un endpoint destinataire protégé par Grant.",
         "Transmettre un Context possédé à un destinataire autorisé.",
     ),
-    "shell-init": _copy(
-        "Afficher l’intégration shell facultative pour le préremplissage interactif des commandes.",
-        "Activer des facilités facultatives propres au shell.",
-    ),
     "show": _copy(
         "Afficher une Memory, une référence, un Context intégré ou le contenu direct du Context courant/indiqué.",
         "Lire le contenu complet d’un élément ou Context connu.",
@@ -500,10 +496,6 @@ _ZH = {
     "share": _copy(
         "通过由 Grant 支持的接收端点发送一个普通 Context。",
         "将自己拥有的 Context 交付给获授权接收者时。",
-    ),
-    "shell-init": _copy(
-        "输出可选的 shell 集成，用于交互式命令预填充。",
-        "启用可选的 shell 专用便利功能时。",
     ),
     "show": _copy(
         "显示 Memory、reference、嵌入的 Context，或当前/指定 Context 的直接内容。",
@@ -759,10 +751,6 @@ _KO = {
         "Grant 기반 receiver endpoint를 통해 하나의 일반 Context를 보냅니다.",
         "소유한 Context를 권한 있는 수신자에게 전달할 때.",
     ),
-    "shell-init": _copy(
-        "대화형 command prefill을 위한 선택적 shell integration을 출력합니다.",
-        "선택적인 shell별 편의 기능을 활성화할 때.",
-    ),
     "show": _copy(
         "Memory, reference, embedded Context 또는 현재/지정 Context의 직접 내용을 보여줍니다.",
         "알고 있는 항목이나 Context의 전체 내용을 읽을 때.",
@@ -1017,10 +1005,6 @@ _MN = {
     "share": _copy(
         "Grant-д суурилсан receiver endpoint-ээр нэг ердийн Context илгээнэ.",
         "Өөрийн Context-г зөвшөөрөгдсөн хүлээн авагчид хүргэх үед.",
-    ),
-    "shell-init": _copy(
-        "Интерактив command prefill-д зориулсан сонголттой shell integration-г хэвлэнэ.",
-        "Shell-д зориулсан нэмэлт хялбарчлалыг идэвхжүүлэх үед.",
     ),
     "show": _copy(
         "Memory, reference, embedded Context эсвэл одоогийн/заасан Context-н шууд агуулгыг харуулна.",

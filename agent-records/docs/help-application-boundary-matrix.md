@@ -4,13 +4,15 @@ Last reviewed: 2026-08-25.
 
 ## Closure statement
 
-Every currently implemented Help route reads the same 62-operation semantic
+Every currently implemented Help route reads the same 65-operation semantic
 catalog through a terminal-independent discovery boundary. Exact catalog
 queries remain provider-free. The optional natural-language CLI route adds one
 bounded provider-backed ID-selection turn, then renders only canonical catalog
 copy. No Help route opens a Store or authority source, reads Memory content,
-creates a session, executes a selected operation, or enters an Apply,
-checkpoint, or Undo lifecycle.
+creates a session, or enters an Apply, checkpoint, or Undo lifecycle. The
+interactive terminal adapter may hand one reviewed exact argv to a separate
+child invocation after the Help browser and editor close; that child owns its
+own operation lifecycle.
 
 ## Implementation ownership
 
@@ -29,16 +31,15 @@ globals without creating parallel implementations. Importing
 
 This relocation changes physical ownership only. It does not change catalog
 copy, exact-name validation, natural-language prompt or result cardinality,
-one-shot budget policy, provider routing, Study logging, projection, or the
-no-execution and no-Store boundary. Because no visible terminal state changes,
-the existing behavior-focused screenshots remain current.
+one-shot budget policy, provider routing, Study logging, or projection. The
+terminal-only command handoff remains outside the application package and does
+not broaden Help's Store or provider access.
 
 | Route | Entry | Application path | Projection | Effect | Evidence |
 | --- | --- | --- | --- | --- | --- |
 | Plain `mem help` | `interfaces.tui.operations.help.inventory.cmd` in a non-TTY | `command_entries` takes `list_operation_help()` once | Plain alphabetized inventory plus CLI-owned forms, maturity tags, and canonical expanded details | None | `test_help_catalog.py`, `test_help_application.py` |
-| Interactive `mem help` | Same command in a TTY | Same frozen application snapshot | Grouped/A–Z browser; shared Context/direct-Memory locator and key guide; collapsed maturity tags; expanded typed details | None | Help renderer tests, `agent-records/docs/screenshots/mem-help-common-locators-controls-20260821/`, `agent-records/docs/screenshots/mem-help-import-query-details-20260816/`, and the full reviewed sequence in `agent-records/docs/screenshots/mem-help-reviewed-content-20260816/` |
+| Interactive `mem help` | Same command in a TTY | Same frozen application snapshot | Grouped/A–Z browser; selected Form then shared exact-command argument editor | The editor closes before a separately recorded child command invocation; cancel has no effect | `test_help_command_handoff.py` and the ordered Help handoff captures |
 | Natural-language `mem help REQUEST` | Same command with one positional request in TTY or non-TTY | `prepare_help_lookup` freezes and preflights the complete catalog before `connect_help_provider`; `execute_help_lookup` requires exactly three distinct exact IDs | Three existing collapsed Help rows in semantic order: `mem NAME`, summary, and `WHEN`; no ordinal, browser, why, confidence, forms, or generated prose | None | `test_help_lookup_application.py`, `test_help_lookup_cli.py`, `test_help_lookup_provider_policy.py` |
-| Shell selection | Hidden `--emit-selection` route | Same frozen application snapshot | One interface-owned command template on stdout | None | Existing Help selection tests |
 | Selected CLI detail | One `CommandEntry` from the snapshot | Catalog meaning already bound to the entry | Common meaning composed with registered CLI syntax | None | `test_help_catalog.py` |
 | Python list | `MemCommitClient.list_operations()` | `_operations.help.list_operations` → `list_operation_help` | `HelpCatalogResult` of immutable DTOs, including compact typed-detail references | None | `test_help_public_api.py`, import-boundary tests |
 | Python describe | `MemCommitClient.describe_operation(name)` | `_operations.help.describe_operation` → application exact lookup | One `OperationHelpResult` or `HelpInputError` | None | `test_help_public_api.py` |
@@ -50,7 +51,7 @@ the existing behavior-focused screenshots remain current.
 ## Invariants
 
 1. The application list is alphabetized, unique, immutable, and complete for
-   all 62 visible public operations.
+   all 65 visible public operations.
 2. Describe accepts one exact public operation name and detail lookup accepts
    one exact operation-local detail ID; neither performs fuzzy, alias, case, or
    whitespace normalization.
@@ -79,6 +80,9 @@ the existing behavior-focused screenshots remain current.
    fitness and display-position effects remain an intentional study limitation.
 10. Agent/MCP Help is discovery only. It cannot execute another tool or confer
    authority to do so.
+11. Interactive CLI handoff fixes the selected `mem OPERATION` prefix, validates
+    the edited arguments, and passes an argv sequence directly to a child
+    process. It never evaluates a shell command string.
 
 ## Intentional exclusions
 

@@ -135,7 +135,6 @@ catalog rather than parsed from this document.
 | Sharing & Protection | unlock | NO | Protected resource → writable resource | Unlock the current Context, a recursive set, Memory, or Profile. | Removes protection metadata from the selected resource scope. | Reopening protected material for intentional revision. |
 | System & Study Tools | help | NO | Operation catalog → usage guidance | Enter the interactive command browser and open syntax help. | Read-only; does not execute the selected operation. | Discovering available operations and their invocation forms. |
 | System & Study Tools | provider | NO | Provider configuration ↔ status or probe | Select and verify Codex, Ollama, or OpenRouter semantic execution. | May change provider configuration or make a probe request. | Choosing which backend semantic operations should use, or checking that it is ready before durable work. |
-| System & Study Tools | shell-init | NO | Shell name → integration script | Print opt-in shell integration for interactive command prefill. | Read-only output; installation requires explicit shell evaluation. | Enabling optional shell-specific conveniences. |
 | System & Study Tools | config | NO | Configuration key ↔ value | Read or write stored global configuration values. | May change global configuration. | Inspecting or changing stored global settings through the legacy low-level interface. |
 
 ## Korean review table
@@ -202,7 +201,6 @@ catalog rather than parsed from this document.
 | 공유 및 보호 | unlock | 없음 | 보호된 resource → 쓰기 가능한 resource | Context, recursive 집합, Memory 또는 Profile의 잠금을 해제합니다. | 선택한 범위에서 보호 metadata를 제거합니다. | 보호된 자료를 의도적으로 다시 수정할 때. |
 | 시스템 및 Study 도구 | help | 없음 | Operation catalog → 사용 안내 | 대화형 command browser에 들어가 syntax help를 엽니다. | 읽기 전용이며 선택한 operation을 실행하지 않습니다. | 사용할 수 있는 operation과 호출 형식을 찾을 때. |
 | 시스템 및 Study 도구 | provider | 없음 | Provider 설정 ↔ 상태 또는 probe | Codex, Ollama 또는 OpenRouter semantic execution을 선택하고 검증합니다. | Provider 설정을 변경하거나 probe 요청을 보낼 수 있습니다. | Semantic operation이 사용할 backend를 선택하거나 지속적인 작업 전에 준비 상태를 확인할 때. |
-| 시스템 및 Study 도구 | shell-init | 없음 | Shell 이름 → integration script | 대화형 command prefill을 위한 선택적 shell integration을 출력합니다. | 출력은 읽기 전용이며 설치에는 명시적인 shell 실행이 필요합니다. | 선택적인 shell 편의 기능을 활성화할 때. |
 | 시스템 및 Study 도구 | config | 없음 | Configuration key ↔ 값 | 저장된 전역 configuration 값을 읽거나 씁니다. | 전역 configuration을 변경할 수 있습니다. | 기존의 low-level legacy interface를 통해 저장된 전역 설정을 확인하거나 변경할 때. |
 
 ## Merge implementation target

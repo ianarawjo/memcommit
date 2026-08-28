@@ -1,0 +1,18 @@
+52 180
+CAPTURE PTY · 180x52
+[38;2;138;173;244m$[0m mem init-study shell-owned-study
+[32mInitialized Study run 'shell-owned-study'.[0m
+Scenario: coffee
+Participant Profile: shell-owned-study
+Granted-memory Profile: shell-owned-study-granted-memory
+Provider config: study-provider-config-v2-fast · locked · sha256 b549e05b6930fdacbe9dbaec09543390840a2689cd4b4ef1fa6470ca71a5f1ca
+Contexts 10 · Memories 14 · current=practice
+Granted Contexts 9 · Granted Memories 56
+Task-owned and granted-memory data were copied into isolated run Profiles and connected with real authority grants.
+Operational history starts empty; no shared semantic prewarm was attached. Checkpoints, sessions, ad-hoc caches, locks, and run logs were not imported.
+Active Profile: shell-owned-study
+Study shell: opens after this initialization attempt is recorded.
+[36mEntering isolated Study shell · exit returns to the previous shell.[0m
+[1m[7m%[27m[1m[0m                                                                                                                                                                                    [0m[27m[24m[Jstudy:shell-owned-study% [K[?2004hffc -l -10[?2004l
+    1  fc -l -10
+[1m[7m%[27m[1m[0m                                                                                                                                                                                    [0m[27m[24m[Jstudy:shell-owned-study% [K[?2004h

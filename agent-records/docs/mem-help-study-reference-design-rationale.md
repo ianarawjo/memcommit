@@ -17,8 +17,6 @@ included operation. It deliberately excludes:
   participant task operation; and
 - `mem import` and `mem translate`, because neither operation belongs to the
   participant task paths represented in the printed reference;
-- `mem shell-init`, because shell integration setup must not appear as a
-  participant task possibility; and
 - `mem init-study`, because study-environment provisioning is facilitator
   setup rather than an operation participants should invoke; and
 - every operation currently marked `LEGACY`, because the study should not

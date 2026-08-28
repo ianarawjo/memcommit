@@ -5,7 +5,7 @@
 Study feedback identified operation discovery as an entry-point problem: a
 person or agent should be able to learn what an operation means, when to use
 it, and whether it is deterministic or semantic without reading command
-implementation files. MemCommit already had one audited 62-operation catalog
+implementation files. MemCommit now has one audited 65-operation catalog
 and a substantial CLI/TUI browser, but only terminal presentation consumed the
 catalog as a complete operation. Python and agent callers had no equivalent
 stable discovery route.

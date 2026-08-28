@@ -25,7 +25,7 @@ def test_list_returns_one_alphabetized_complete_immutable_snapshot():
         (operation.name for operation in first),
         key=lambda name: (name.casefold(), name),
     )
-    assert len(first) == 66
+    assert len(first) == 65
     assert len({operation.name for operation in first}) == len(first)
     assert first == second
 

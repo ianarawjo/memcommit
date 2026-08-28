@@ -28,7 +28,7 @@ closed.
 | History & Recovery | — | log, diff, undo, revert | trace, rationale, checkpoint, redo |
 | Profiles | — | profile | rename |
 | Sharing & Protection | — | — | share, lock, unlock |
-| System & Study Tools | — | provider, config, eval | help, shell-init, init-study |
+| System & Study Tools | — | provider, config, eval | help, init-study |
 
 ## Global Help UI
 

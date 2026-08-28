@@ -1,0 +1,15 @@
+pty=180x52
+TERM=xterm-256color
+COLORTERM=truecolor
+NO_COLOR=unset
+help_profile_root=/var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/memcommit-help-handoff-yb4w2djc
+01 command=mem help keys=none mutation=none
+02 keys=Shift-Tab,Right,Tab,End,Up×7,Enter,Down mutation=none
+03 keys=Enter mutation=none
+04 text=Ctrl-U,--branch mutation=none
+05 keys=Enter command=mem status --branch mutation=none
+study_profile_root=/var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/memcommit-study-shell-9pqp9ojp
+06 command=mem init-study shell-owned-study mutation=creates-and-selects-Study-Profile-pair
+07 command=fc -l -10 mutation=none
+08 command=mem status --short mutation=none
+09 command=exit mutation=none parent-history-visible-only-after-return

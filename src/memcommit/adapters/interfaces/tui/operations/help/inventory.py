@@ -18,7 +18,6 @@ from prompt_toolkit.layout import FormattedTextControl, HSplit, Layout, Window
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
-from prompt_toolkit.output.defaults import create_output
 from prompt_toolkit.styles import Style, merge_styles
 from prompt_toolkit.widgets import Frame
 
@@ -77,6 +76,10 @@ from memcommit.adapters.interfaces.tui.operations.help.localization import (
     operation_copy,
     validate_translation_coverage,
 )
+from memcommit.adapters.interfaces.tui.operations.help.command_handoff import (
+    edit_help_command,
+    run_help_command,
+)
 from memcommit.adapters.interfaces.tui.operations.help.study_copy_guard import (
     active_profile_is_study,
     authored_study_help_fields,
@@ -103,7 +106,7 @@ COMMAND_DISPLAY_ALIASES = {
 
 # Related spellings can live under another command group while remaining
 # visible in the canonical operation's detail. They are kept separate from
-# owned forms so parser-validation and shell-prefill semantics stay explicit.
+# owned forms so parser-validation and editable-command semantics stay explicit.
 COMMAND_RELATED_FORMS = {}
 
 HELP_CORE_CONCEPTS = (
@@ -320,7 +323,7 @@ HELP_CATEGORY_GROUPS = (
     ),
     (
         "SYSTEM & STUDY TOOLS",
-        ("help", "provider", "shell-init", "config", "init-study", "eval"),
+        ("help", "provider", "config", "init-study", "eval"),
     ),
 )
 
@@ -889,10 +892,6 @@ COMMAND_FORMS = {
         "mem share [source_context] (enter the interactive endpoint selector)",
         "mem share --to [endpoint] (enter the interactive Source selector)",
         "mem share [source_context] --to [endpoint] (explicit delivery)",
-    ),
-    "shell-init": (
-        "mem shell-init (print zsh integration)",
-        "mem shell-init zsh (explicit equivalent)",
     ),
     "show": (
         "mem show (show the direct contents of the current Context)",
@@ -2464,11 +2463,7 @@ def run_help_selector(
         enter_action = (
             "Enter open forms"
             if selected_form["value"] is None
-            else (
-                "Enter inspect form"
-                if mode == "EXPLORE"
-                else "Enter prefill command line"
-            )
+            else ("Enter inspect form" if mode == "EXPLORE" else "Enter edit command")
         )
         detail_action = (
             f"H hide Help  Q return to {explore_return_label}"
@@ -2598,16 +2593,6 @@ def _interactive_terminal() -> bool:
     return sys.stdin.isatty() and sys.stdout.isatty()
 
 
-def _selection_terminal() -> bool:
-    return sys.stdin.isatty() and sys.stderr.isatty()
-
-
-def _selection_output() -> Output:
-    # stdout is reserved for the one-line selection consumed by shell
-    # integration, so the full-screen interface must stay on the TTY stream.
-    return create_output(stdout=sys.stderr)
-
-
 def cmd(
     ctx: typer.Context,
     request: Annotated[
@@ -2620,14 +2605,6 @@ def cmd(
             ),
         ),
     ] = None,
-    emit_selection: Annotated[
-        bool,
-        typer.Option(
-            "--emit-selection",
-            hidden=True,
-            help="Emit one selected command for shell integration.",
-        ),
-    ] = False,
 ) -> None:
     """Enter the command browser and open syntax help for a selection."""
     root = ctx.parent
@@ -2641,14 +2618,6 @@ def cmd(
 
     entries = command_entries(root)
     if request is not None:
-        if emit_selection:
-            typer.secho(
-                "Help error: a natural-language request cannot be combined "
-                "with shell selection.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
         try:
             # Freeze and preflight the complete catalog before provider access.
             catalog_operations = tuple(
@@ -2714,23 +2683,6 @@ def cmd(
         )
         return
 
-    if emit_selection:
-        if not _selection_terminal():
-            typer.secho(
-                "Error: shell selection requires an interactive terminal.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        selection = run_help_selector(
-            entries,
-            app_output=_selection_output(),
-            require_tty=False,
-        )
-        if selection is not None:
-            typer.echo(selection.command_line)
-        return
-
     if not _interactive_terminal():
         _render_plain_inventory(entries)
         return
@@ -2739,7 +2691,23 @@ def cmd(
     if selection is None:
         return
     if not selection.show_help:
-        typer.echo(selection.command_line)
+        try:
+            argv = edit_help_command(
+                selection.command_name,
+                selection.command_line,
+            )
+            if argv is None:
+                return
+            exit_code = run_help_command(argv)
+        except (OSError, RuntimeError, TypeError, ValueError) as error:
+            typer.secho(
+                f"Help error: {display_escape_text(str(error))}",
+                fg=typer.colors.RED,
+                err=True,
+            )
+            raise typer.Exit(1) from error
+        if exit_code:
+            raise typer.Exit(exit_code)
         return
     selected = next(entry for entry in entries if entry.name == selection.command_name)
     _show_selected_command_help(root, selected)

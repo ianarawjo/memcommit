@@ -398,14 +398,13 @@ letters as ordinary input. Query, Find, Compare, Result, Resolution, and Ground
 share this lifecycle without sharing semantic or persisted session state. See
 [`session-help-design-rationale.md`](session-help-design-rationale.md).
 
-The child `mem help` process cannot itself prefill its parent shell's next
-editable command line. The opt-in output of `mem shell-init zsh` now supplies
-a parent-shell wrapper for zsh: its private selection mode keeps the TUI on
-the terminal, returns one validated command name to the wrapper, and uses
-zsh's `print -z` to prefill without executing. Bash Readline and Fish still
-need their own integrations. Unsafe terminal input injection is not used.
-See [`mem-zsh-prefill-design-rationale.md`](mem-zsh-prefill-design-rationale.md)
-for that shell-owned boundary.
+The child `mem help` process does not modify its parent shell's edit buffer.
+After a Form is selected, Help instead opens the shared exact-command editor
+with the operation prefix fixed. Enter validates the edited arguments, closes
+Help, and invokes that exact argv as a separate child process without shell
+interpretation. The retired parent-shell prefill design and its replacement
+boundary are recorded in
+[`mem-zsh-prefill-design-rationale.md`](mem-zsh-prefill-design-rationale.md).
 
 When stdin or stdout is not a TTY, `mem help` retains the stable plain-text
 inventory. This keeps pipes, captured study records, and automated tests
@@ -613,7 +612,7 @@ and invocation boundaries requires a separate reviewed parity pass rather than
 an unchecked fallback.
 
 All four non-English catalogs are checked in and must cover exactly the same
-62 visible operation names. Runtime provider translation is deliberately not
+65 visible operation names. Runtime provider translation is deliberately not
 used: two participants choosing the same language must see the same copy.
 `ZH` and `KO` use language rather than country codes; `MN` currently denotes
 Mongolian Cyrillic. The renderer wraps and pads translated prose by terminal

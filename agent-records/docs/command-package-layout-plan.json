@@ -1065,15 +1065,6 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.shell_init.command",
-      "legacy_module": "memcommit.commands.shell_init",
-      "owner": "shell_init",
-      "public_exports": [
-        "cmd"
-      ],
-      "role": "command-entry"
-    },
-    {
       "canonical_module": "memcommit.adapters.console.commands.show.command",
       "legacy_module": "memcommit.commands.show",
       "owner": "show",

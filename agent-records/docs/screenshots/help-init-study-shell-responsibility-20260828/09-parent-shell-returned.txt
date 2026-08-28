@@ -1,0 +1,25 @@
+52 180                                                                                                                                                                              
+CAPTURE PTY · 180x52                                                                                                                                                                
+$ mem init-study shell-owned-study                                                                                                                                                  
+Initialized Study run 'shell-owned-study'.                                                                                                                                          
+Scenario: coffee                                                                                                                                                                    
+Participant Profile: shell-owned-study                                                                                                                                              
+Granted-memory Profile: shell-owned-study-granted-memory                                                                                                                            
+Provider config: study-provider-config-v2-fast · locked · sha256 b549e05b6930fdacbe9dbaec09543390840a2689cd4b4ef1fa6470ca71a5f1ca                                                   
+Contexts 10 · Memories 14 · current=practice                                                                                                                                        
+Granted Contexts 9 · Granted Memories 56                                                                                                                                            
+Task-owned and granted-memory data were copied into isolated run Profiles and connected with real authority grants.                                                                 
+Operational history starts empty; no shared semantic prewarm was attached. Checkpoints, sessions, ad-hoc caches, locks, and run logs were not imported.                             
+Active Profile: shell-owned-study                                                                                                                                                   
+Study shell: opens after this initialization attempt is recorded.                                                                                                                   
+Entering isolated Study shell · exit returns to the previous shell.                                                                                                                 
+study:shell-owned-study% fc -l -10                                                                                                                                                  
+    1  fc -l -10                                                                                                                                                                    
+study:shell-owned-study% mem status --short                                                                                                                                         
+practice [OWNED] · Direct inventory empty                                                                                                                                           
+study:shell-owned-study% exit                                                                                                                                                       
+Exited Study shell · status 0.                                                                                                                                                      
+                                                                                                                                                                                    
+PARENT SHELL RESUMED                                                                                                                                                                
+PARENT HISTORY:                                                                                                                                                                     
+    1  PARENT-HISTORY-MUST-NOT-ENTER-STUDY

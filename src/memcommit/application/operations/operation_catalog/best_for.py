@@ -152,7 +152,6 @@ BEST_FOR_BY_OPERATION = {
         "Selecting or transforming Source content according to defined criteria."
     ),
     "share": "Delivering an owned Context to an authorized receiver.",
-    "shell-init": "Enabling optional shell-specific conveniences.",
     "show": "Reading the complete content of a known item or Context.",
     "status": (
         "Getting oriented to what the current Context contains, how it is "

@@ -28,7 +28,7 @@ def test_commands_root_contains_only_packages() -> None:
     entry_packages = {
         entry["owner"] for entry in PLAN["modules"] if entry["role"] == "command-entry"
     }
-    assert len(entry_packages) == 64
+    assert len(entry_packages) == 63
     command_packages = {
         path.name
         for path in COMMANDS.iterdir()
@@ -72,7 +72,7 @@ def test_former_command_imports_are_unavailable() -> None:
         for entry in PLAN["modules"]
     ]
     removed.insert(0, "memcommit.commands")
-    assert len(removed) == 154
+    assert len(removed) == 153
     program = "\n".join(
         [
             "from importlib import import_module",

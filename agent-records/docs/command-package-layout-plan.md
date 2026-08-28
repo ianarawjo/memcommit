@@ -148,7 +148,6 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.share` | `memcommit.adapters.console.commands.share.command` | command-entry | `share` |
 | `memcommit.commands.share_flow` | `memcommit.adapters.console.commands.share.flow` | command-owned-support | `share` |
 | `memcommit.commands.share_viewer` | `memcommit.adapters.console.commands.share.viewer` | command-owned-support | `share` |
-| `memcommit.commands.shell_init` | `memcommit.adapters.console.commands.shell_init.command` | command-entry | `shell_init` |
 | `memcommit.commands.show` | `memcommit.adapters.console.commands.show.command` | command-entry | `show` |
 | `memcommit.commands.status` | `memcommit.adapters.console.commands.status.command` | command-entry | `status` |
 | `memcommit.commands.study_name_dialog` | `memcommit.adapters.console.commands.init_study.name_dialog` | command-owned-support | `init_study` |

@@ -1,104 +1,52 @@
-# zsh command-prefill and Study-history isolation design rationale
+# Retired zsh prefill integration design rationale
 
-## Motivation
+## Status
 
-The interactive `mem help` inventory can identify a real command, but an
-ordinary child process cannot modify its parent shell's editable input buffer.
-Printing a selected command after the browser closes still leaves the
-participant to copy or retype it.
+The public `mem shell-init` route and its hidden Help transport were retired on
+2026-08-28. This note preserves the reason the former design existed and the
+reason it was superseded; it is not current setup guidance.
 
-The zsh integration provides an explicit shell-owned bridge:
+The former zsh wrapper solved two parent-shell problems in one generated
+function. It used zsh `print -z` to place a Help selection in the parent's edit
+buffer, and it used `fc -p` before `init-study` to hide the previous history
+list. Both mechanics required parent-shell ownership, but their product
+responsibilities were unrelated.
 
-```zsh
-eval "$(mem shell-init zsh)"
-```
+## Replacement boundaries
 
-After that opt-in, an exact `mem help` invocation opens the existing picker.
-Enter on a command opens its invocation Forms; Enter on a focused Form places
-that editable template in zsh's next edit buffer. Both navigation confirmations
-are consumed before the picker closes. The user can replace placeholders or add
-options and separately decides whether to execute the resulting command.
+Interactive `mem help` now keeps the selected operation fixed, opens a shared
+exact-command editor inside the Help process, and runs the reviewed argv as a
+separate child process after Help closes. It never passes the edited text to a
+shell, so redirection, substitution, and shell operators are not interpreted.
+The hidden selection-output option and parent-buffer prefill are gone.
 
-The same parent-shell boundary also prevents accidental cross-participant
-history disclosure. On an interactive top-level invocation of canonical
-`mem init-study` or its supported `mem initstudy` alias, the wrapper pushes the
-existing zsh history and switches to an empty, non-persisted list before the Study command starts. Up-arrow recall
-therefore contains only commands subsequently entered by the current
-participant. The previous list is not erased and can be deliberately restored
-with zsh's `fc -P`; the protection addresses accidental recall rather than a
-hostile user with access to the same operating-system account.
+Interactive `mem init-study` now schedules a disposable zsh after its own
+command attempt is finalized. The child receives a private temporary
+`HISTFILE` and `ZDOTDIR`, disables history saving, skips startup files, and
+returns to the caller when it exits. Nested Study invocations do not open
+another shell.
 
-## Data and control contract
+These responsibilities and their remaining limitations are recorded in
+[`help-init-study-shell-responsibility-design-rationale.md`](help-init-study-shell-responsibility-design-rationale.md).
 
-The generated zsh function intercepts interactive `mem help` with no
-additional arguments. It also performs one shell-owned action immediately
-before an interactive top-level `mem init-study` or `mem initstudy`: zsh's
-`fc -p` pushes the prior list and activates an empty history. The `--help` form
-of either spelling, nested shells, and non-interactive invocations do not change history. Every CLI
-invocation still delegates to the installed executable with
-`command mem "$@"`.
+## Why the former wrapper was rejected
 
-The intercepted path calls a hidden transport boundary:
+Keeping `shell-init` as a public operation made Help behavior depend on
+optional shell installation and made Study isolation depend on whether the
+same wrapper happened to intercept `init-study`. It also presented one command
+as the owner of two capabilities whose lifecycle and safety boundaries differ.
+Moving each behavior to its owning operation makes ordinary invocation the
+complete path and removes shell-specific setup from Help discovery.
 
-```text
-command mem help --emit-selection
-```
+## Preserved limitations
 
-- prompt-toolkit reads from stdin and renders the selector to stderr, which
-  remains attached to the terminal while zsh captures stdout;
-- cancel emits no stdout;
-- a successful selection emits exactly one audited editable command template;
-- the wrapper rejects output outside the bounded template character set and
-  uses zsh's `print -z` builtin to place that text, plus a trailing space, in
-  the next edit buffer. The set does not admit `#`, command substitution,
-  redirection, control operators, or newlines.
-
-No selected command callback runs during this exchange.
-
-## Safety and ownership boundaries
-
-The integration deliberately requires `eval` in the current shell because
-only the parent shell can own its edit buffer. `mem shell-init zsh` merely
-prints a static function. It does not modify `.zshrc`, install key bindings,
-inject terminal input, or change the current shell without explicit
-evaluation.
-
-The line-oriented command adapter is owned by
-`memcommit.adapters.interfaces.cli.shell_init`. The legacy
-`memcommit.adapters.console.commands.shell_init.command` path remains an import-only alias to the same
-module, command callback, and renderer objects. This ownership relocation does
-not change the generated zsh bytes, CLI registration, output streams, error
-text, or exit status.
-
-The selection is prefilled, not executed. This is important because commands
-have different argument requirements and some can change local state or call
-a provider without additional confirmation. The editable line preserves the
-normal shell and CLI parsing path and keeps execution as a separate user
-action.
-
-The wrapper uses `command mem` so its internal calls bypass the function and
-reach the packaged entry point rather than recursing.
-
-History isolation is deliberately a push, not `fc -W`, file truncation, or
-deletion. Mem neither reads nor stores shell command text, and the participant
-Profile receives no shell-history artifact. Repeating `mem init-study` pushes
-the current participant list again, which gives the next run another empty
-view without exposing the earlier one through ordinary Up-arrow navigation.
-
-## Compatibility and limitations
-
-- The first implementation supports zsh and its `print -z` buffer stack.
-- The `mem` entry point must be installed and available on `PATH`.
-- The `eval` affects only the current shell unless the user adds it to a shell
-  startup file.
-- Study-history isolation applies only when this wrapper owns the `mem`
-  invocation. `command mem init-study` deliberately bypasses it, and a person
-  can still inspect history files or use `fc -P` under the same OS account.
-- The wrapper takes effect when `mem init-study` begins. A study terminal must
-  evaluate it before participant control; it cannot prevent recall performed
-  earlier in an already shared shell.
-- Non-interactive shells delegate to the ordinary CLI, where `mem help`
-  retains its stable plain-text inventory.
-- Bash Readline and Fish require different parent-shell integrations and are
-  intentional future extensions rather than emulations through unsafe input
-  injection.
+- Help cannot edit the caller's parent-shell buffer; it edits and executes a
+  child command inside its own terminal flow.
+- Study isolation currently requires zsh to be installed.
+- The Study shell protects against accidental history recall, not a hostile
+  user with access to the same operating-system account.
+- Non-interactive `mem help` remains stable plain text, and non-interactive
+  `mem init-study` initializes Profiles without opening a shell.
+- A shell startup file that still evaluates `mem shell-init zsh` must remove
+  that obsolete line. A hidden no-op compatibility command is intentionally
+  not retained because it would keep the retired operation installed forever.

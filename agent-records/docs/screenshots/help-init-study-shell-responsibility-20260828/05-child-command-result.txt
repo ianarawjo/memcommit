@@ -1,0 +1,8 @@
+Profile: authoring                                                                                                                                                                  
+Context lineage: capture-context                                                                                                                                                    
+On context: capture-context                                                                                                                                                         
+                                                                                                                                                                                    
+Inventory · Checkpoints 1                                                                                                                                                           
+                                                                                                                                                                                    
+Recent changes · latest 1 of 1 checkpoints:                                                                                                                                         
+  6eb5f7c6  2026-08-28 15:11  init          Initialized context 'capture-context'
