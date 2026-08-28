@@ -199,6 +199,11 @@ SHARED_MODULES = {
 }
 
 
+SHARED_MODULE_TARGETS = {
+    "batch_input": "batch_input_source",
+}
+
+
 def _target_path(module: str) -> Path:
     module_path = REPOSITORY / "src" / module.replace(".", "/")
     module_file = module_path.with_suffix(".py")
@@ -257,10 +262,11 @@ def build_plan() -> dict[str, object]:
             }
         )
     for stem in sorted(SHARED_MODULES):
+        target = SHARED_MODULE_TARGETS.get(stem, stem)
         entries.append(
             {
                 "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
-                "canonical_module": f"{SHARED_NAMESPACE}.{stem}",
+                "canonical_module": f"{SHARED_NAMESPACE}.{target}",
                 "owner": "shared",
                 "role": "shared-command-mechanism",
                 "public_exports": [],

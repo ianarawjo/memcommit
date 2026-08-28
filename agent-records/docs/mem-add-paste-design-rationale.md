@@ -87,11 +87,15 @@ the same module globals. This is an ownership-only relocation: key bindings,
 paste normalization, TTY checks, cancellation and failure behavior, and the
 no-payload-echo boundary are unchanged.
 
-The shared UTF-8 file/stdin reader and line parsers are owned separately by
-`memcommit.adapters.interfaces.cli.batch_input`. The historical
-`memcommit.adapters.console.shared.batch_input` path remains an identity-preserving alias.
-This ownership-only relocation does not change newline preservation, UTF-8 or
-I/O failure handling, Add line stripping, or Edit's first-tab record grammar.
+The source contract and record grammars have different owners. The shared
+UTF-8 file/stdin reader lives in
+`memcommit.adapters.console.shared.batch_input_source`; Add's stripped,
+non-empty line grammar lives in `commands.add.input_records`, and Edit's
+first-tab grammar lives in `commands.edit.input_records`. The former
+`interfaces.cli.batch_input` owner and intermediate `console.shared.batch_input`
+facade are removed rather than retained as internal compatibility paths. This
+separation does not change newline preservation, UTF-8 or I/O failure handling,
+Add line stripping, or Edit's first-tab/content-preservation behavior.
 
 ### Relationship to `mem ls --paste`
 

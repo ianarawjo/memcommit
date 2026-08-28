@@ -21,7 +21,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.audit` | `memcommit.adapters.console.commands.audit.command` | command-entry | `audit` |
 | `memcommit.commands.audit_sessions` | `memcommit.adapters.console.commands.audit.sessions` | command-owned-support | `audit` |
 | `memcommit.commands.background_turn` | `memcommit.adapters.console.shared.background_turn` | shared-command-mechanism | `shared` |
-| `memcommit.commands.batch_input` | `memcommit.adapters.console.shared.batch_input` | shared-command-mechanism | `shared` |
+| `memcommit.commands.batch_input` | `memcommit.adapters.console.shared.batch_input_source` | shared-command-mechanism | `shared` |
 | `memcommit.commands.branch` | `memcommit.adapters.console.commands.branch.command` | command-entry | `branch` |
 | `memcommit.commands.branch_dialog` | `memcommit.adapters.console.commands.branch.setup` | command-owned-support | `branch` |
 | `memcommit.commands.check_conformance` | `memcommit.adapters.console.commands.check_conformance.command` | command-entry | `check_conformance` |

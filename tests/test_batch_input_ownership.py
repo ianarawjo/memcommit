@@ -1,92 +1,120 @@
-"""Ownership contracts for line-oriented batch input."""
+"""Ownership and behavior contracts for line-oriented batch input."""
 
 from __future__ import annotations
 
-import ast
-import importlib
 import io
 from pathlib import Path
-import subprocess
-import sys
 
 import pytest
 
+import memcommit.adapters.console.shared.batch_input_source as batch_input_source
+from memcommit.adapters.console.commands.add.input_records import (
+    parse_input_records as parse_add_input_records,
+)
+from memcommit.adapters.console.commands.edit.input_records import (
+    parse_input_records as parse_edit_input_records,
+)
+
 
 REPOSITORY_ROOT = Path(__file__).parents[1]
-LEGACY_MODULE = "memcommit.adapters.console.shared.batch_input"
-OWNER_MODULE = "memcommit.adapters.interfaces.cli.batch_input"
+
+
+def test_batch_input_has_one_source_owner_and_command_local_grammars() -> None:
+    source = REPOSITORY_ROOT / "src" / "memcommit"
+
+    assert not (source / "adapters" / "interfaces" / "cli" / "batch_input.py").exists()
+    assert not (source / "adapters" / "console" / "shared" / "batch_input.py").exists()
+    assert (
+        source / "adapters" / "console" / "shared" / "batch_input_source.py"
+    ).is_file()
+    assert (
+        source
+        / "adapters"
+        / "console"
+        / "commands"
+        / "add"
+        / "input_records.py"
+    ).is_file()
+    assert (
+        source
+        / "adapters"
+        / "console"
+        / "commands"
+        / "edit"
+        / "input_records.py"
+    ).is_file()
+
+
+def test_batch_input_source_preserves_stdin_line_endings(monkeypatch) -> None:
+    patched_sys = type("PatchedSys", (), {"stdin": io.StringIO("one\r\ntwo\n")})
+    monkeypatch.setattr(batch_input_source, "sys", patched_sys)
+
+    assert batch_input_source.read_batch_input_text("-") == "one\r\ntwo\n"
+
+
+def test_batch_input_source_reads_utf8_file_without_newline_translation(tmp_path) -> None:
+    path = tmp_path / "batch.txt"
+    path.write_bytes("하나\r\ntwo\n".encode())
+
+    assert batch_input_source.read_batch_input_text(str(path)) == "하나\r\ntwo\n"
+
+
+def test_add_input_records_strip_lines_and_ignore_empty_lines() -> None:
+    assert parse_add_input_records("  one  \r\n\r\n\ttwo\t\n") == ["one", "two"]
+
+
+def test_add_input_records_reject_an_empty_batch() -> None:
+    with pytest.raises(ValueError, match="no non-empty lines"):
+        parse_add_input_records(" \r\n\t\n")
+
+
+def test_edit_input_records_split_only_the_first_tab() -> None:
+    assert parse_edit_input_records("  abc  \t replacement\tkept \r\n\r\ndef\t") == [
+        ("abc", " replacement\tkept "),
+        ("def", ""),
+    ]
 
 
 @pytest.mark.parametrize(
-    "first_name,second_name",
-    ((LEGACY_MODULE, OWNER_MODULE), (OWNER_MODULE, LEGACY_MODULE)),
-    ids=("old-first", "new-first"),
+    "text,message",
+    (
+        ("abc replacement", "Line 1: expected UID<TAB>replacement content."),
+        (" \tcontent", "Line 1: Memory UID is empty."),
+        ("\r\n\t\n", "Input contains no edit records."),
+    ),
 )
-def test_batch_input_module_identity_is_independent_of_import_order(
-    first_name: str,
-    second_name: str,
+def test_edit_input_records_keep_the_existing_validation_contract(
+    text: str,
+    message: str,
 ) -> None:
-    source = f"""
-import importlib
-import sys
-
-first = importlib.import_module({first_name!r})
-second = importlib.import_module({second_name!r})
-legacy = importlib.import_module({LEGACY_MODULE!r})
-canonical = importlib.import_module({OWNER_MODULE!r})
-
-assert first is second
-assert legacy is canonical
-assert sys.modules[{LEGACY_MODULE!r}] is canonical
-assert sys.modules[{OWNER_MODULE!r}] is canonical
-"""
-
-    subprocess.run(
-        [sys.executable, "-c", source],
-        cwd=REPOSITORY_ROOT,
-        check=True,
-    )
+    with pytest.raises(ValueError) as raised:
+        parse_edit_input_records(text)
+    assert str(raised.value) == message
 
 
-def test_legacy_batch_input_facade_defines_no_behavior() -> None:
-    path = (
+def test_add_and_edit_commands_import_their_exact_owners() -> None:
+    command_root = (
         REPOSITORY_ROOT
         / "src"
         / "memcommit"
         / "adapters"
         / "console"
-        / "shared"
-        / "batch_input.py"
+        / "commands"
     )
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    add_source = (command_root / "add" / "command.py").read_text(encoding="utf-8")
+    edit_source = (command_root / "edit" / "command.py").read_text(encoding="utf-8")
 
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
+    assert (
+        "from memcommit.adapters.console.commands.add.input_records import "
+        "parse_input_records" in add_source
     )
-
-
-def test_legacy_monkeypatch_changes_canonical_stdin(monkeypatch) -> None:
-    legacy = importlib.import_module(LEGACY_MODULE)
-    canonical = importlib.import_module(OWNER_MODULE)
-    patched_sys = type("PatchedSys", (), {"stdin": io.StringIO("one\r\ntwo\n")})
-
-    monkeypatch.setattr(legacy, "sys", patched_sys)
-
-    assert canonical.sys is patched_sys
-    assert canonical.read_text_input("-") == "one\r\ntwo\n"
-
-
-def test_add_and_edit_commands_import_the_interface_owner() -> None:
-    for filename in ("add/command.py", "edit/command.py"):
-        source = (
-            REPOSITORY_ROOT
-            / "src"
-            / "memcommit"
-            / "adapters"
-            / "console"
-            / "commands"
-            / filename
-        ).read_text(encoding="utf-8")
-        assert "from memcommit.adapters.interfaces.cli.batch_input import" in source
-        assert "from memcommit.adapters.console.shared.batch_input import" not in source
+    assert (
+        "from memcommit.adapters.console.commands.edit.input_records import "
+        "parse_input_records" in edit_source
+    )
+    for source in (add_source, edit_source):
+        assert (
+            "from memcommit.adapters.console.shared.batch_input_source import"
+            in source
+        )
+        assert "memcommit.adapters.interfaces.cli.batch_input" not in source

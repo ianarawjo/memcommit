@@ -73,7 +73,7 @@
       "role": "shared-command-mechanism"
     },
     {
-      "canonical_module": "memcommit.adapters.console.shared.batch_input",
+      "canonical_module": "memcommit.adapters.console.shared.batch_input_source",
       "legacy_module": "memcommit.commands.batch_input",
       "owner": "shared",
       "public_exports": [],

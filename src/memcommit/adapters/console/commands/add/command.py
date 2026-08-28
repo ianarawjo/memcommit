@@ -21,10 +21,10 @@ from memcommit.application.authority.access import (
 )
 from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.core.context_targeting.operands import choose_endpoint_operand
+from memcommit.adapters.console.commands.add.input_records import parse_input_records
 from memcommit.adapters.console.commands.add.receipt import render_add_receipt
-from memcommit.adapters.interfaces.cli.batch_input import (
-    parse_add_lines,
-    read_text_input,
+from memcommit.adapters.console.shared.batch_input_source import (
+    read_batch_input_text,
 )
 from memcommit.adapters.console.errors import render_cli_error
 from memcommit.adapters.console.terminal import is_interactive_terminal
@@ -244,7 +244,7 @@ def cmd(
             except PasteCancelled:
                 typer.echo("Aborted — no changes made.")
                 return
-            contents = tuple(parse_add_lines(raw_text))
+            contents = tuple(parse_input_records(raw_text))
             count = len(contents)
             noun = "line" if count == 1 else "lines"
             typer.secho(f"[{count} {noun} pasted]", dim=True)
@@ -262,10 +262,10 @@ def cmd(
             )
         else:
             assert input_source is not None
-            raw_text = read_text_input(input_source)
+            raw_text = read_batch_input_text(input_source)
             request = AddRequest(
                 context_locator=requested_context,
-                contents=tuple(parse_add_lines(raw_text)),
+                contents=tuple(parse_input_records(raw_text)),
                 source=AddSource(
                     mode="LINES",
                     kind="stdin" if input_source == "-" else "utf-8-file",

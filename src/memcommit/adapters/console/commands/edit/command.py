@@ -17,7 +17,8 @@ from memcommit.application.operations.edit.application import (
     run_edit,
 )
 from memcommit.application.operations.edit.runtime import MemoryStoreEditPort
-from memcommit.adapters.interfaces.cli.batch_input import parse_edit_lines, read_text_input
+from memcommit.adapters.console.commands.edit.input_records import parse_input_records
+from memcommit.adapters.console.shared.batch_input_source import read_batch_input_text
 from memcommit.adapters.console.terminal import is_interactive_terminal
 from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.operations.edit import choose_edit_setup
@@ -218,7 +219,7 @@ def cmd(
 
     assert input_source is not None
     try:
-        edits = parse_edit_lines(read_text_input(input_source))
+        edits = parse_input_records(read_batch_input_text(input_source))
         changes = ops.edit_many(ctx, edits)
     except (KeyError, TypeError, ValueError) as error:
         typer.secho(
