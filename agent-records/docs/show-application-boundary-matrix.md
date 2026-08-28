@@ -19,6 +19,11 @@ Grant projection, traversal, direct-item lookup, and Store-backed freezing.
 CLI, Python, agent, MCP, and presentation adapters import those modules
 directly.
 
+The plain console projection is co-located with its command at
+`memcommit.adapters.console.commands.show.presentation`. It owns only the
+typed-result-to-terminal rendering boundary; target resolution and readable
+authority remain in the operation application and runtime.
+
 The historical `memcommit.show_application` and `memcommit.show_runtime`
 paths remain behavior-free module-identity aliases. They preserve old imports,
 monkeypatch targets, and serialized globals without creating a second

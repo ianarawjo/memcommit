@@ -70,12 +70,14 @@ content.
 
 ## Interface projections
 
-The plain CLI presenter under `memcommit.adapters.interfaces.cli.show` keeps a direct
-ordinary-Memory lookup compact as `[Memory CONTEXT:UID] CONTENT`. The owner and
-full durable identity remain visible, but the single selected object's metadata
-does not consume a separate header block. Structured detail remains appropriate
-for Memory references and query views because their relationship, state, or
-safe invocation metadata cannot be expressed by the ordinary-Memory line.
+The plain CLI presenter under
+`memcommit.adapters.console.commands.show.presentation` is co-located with the
+Show command and keeps a direct ordinary-Memory lookup compact as
+`[Memory CONTEXT:UID] CONTENT`. The owner and full durable identity remain
+visible, but the single selected object's metadata does not consume a separate
+header block. Structured detail remains appropriate for Memory references and
+query views because their relationship, state, or safe invocation metadata
+cannot be expressed by the ordinary-Memory line.
 Context and recursive output also retain their inventory structure; recursive
 output begins with aggregate direct-item counts, then renders the same full
 direct Context form once per scoped Context. Reach is shown separately from

@@ -30,7 +30,7 @@ def test_production_show_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/show.py",
         "src/memcommit/adapters/console/commands/show/command.py",
-        "src/memcommit/adapters/interfaces/cli/show.py",
+        "src/memcommit/adapters/console/commands/show/presentation.py",
         "src/memcommit/application/operations/show/runtime.py",
     )
 
@@ -38,6 +38,10 @@ def test_production_show_consumers_use_the_operation_owner() -> None:
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "from memcommit.show_application import" not in source
         assert "from memcommit.show_runtime import" not in source
+
+    assert not (
+        REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/cli/show.py"
+    ).exists()
 
 
 def test_show_owner_retains_read_only_effect_boundary() -> None:
