@@ -8,19 +8,23 @@ from memcommit.application.review_policy import (
     ownership_aware_application_review,
 )
 from memcommit.core.context_targeting.operands import choose_endpoint_operand
-from memcommit.adapters.interfaces.cli.merge import (
+from memcommit.adapters.console.commands.merge.receipt import render_merge_receipt
+from memcommit.adapters.console.commands.merge.resolution import (
     parse_merge_resolutions,
-    render_merge_conflicts_plain,
-    render_merge_plain,
+    render_merge_conflicts,
+)
+from memcommit.adapters.console.commands.merge.setup import (
+    build_merge_setup,
+    choose_merge_request,
+)
+from memcommit.adapters.console.commands.merge.workbench.conflicts import (
+    run_merge_conflict_review,
+)
+from memcommit.adapters.console.commands.merge.workbench.review import (
+    run_merge_plan_review,
 )
 from memcommit.adapters.console.terminal import is_interactive_terminal
 from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.interfaces.tui.operations.merge import (
-    build_merge_tui_setup,
-    choose_merge_setup,
-    run_merge_conflict_review,
-    run_merge_plan_review,
-)
 from memcommit.application.operations.merge.application import (
     MergeDecision,
     MergeError,
@@ -182,12 +186,12 @@ def cmd(
                     "Merge requires SOURCE outside a TTY; pass SOURCE with "
                     "--direct or --recursive."
                 )
-            setup = build_merge_tui_setup(
+            setup = build_merge_setup(
                 port,
                 initial_recursive=recursive,
                 requested_target=requested_target,
             )
-            request = choose_merge_setup(setup)
+            request = choose_merge_request(setup)
             if request is None:
                 typer.echo("Merge cancelled — no changes made.")
                 return
@@ -245,7 +249,7 @@ def cmd(
             )
             parsed = parse_merge_resolutions(plan, tuple(resolution or ()))
             if plan.conflicts and not parsed and bulk is None:
-                render_merge_conflicts_plain(plan)
+                render_merge_conflicts(plan)
                 raise MergeError(
                     "Merge has required conflicts; review the conflict IDs above "
                     "and choose one resolution for each."
@@ -272,4 +276,4 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-    render_merge_plain(result)
+    render_merge_receipt(result)

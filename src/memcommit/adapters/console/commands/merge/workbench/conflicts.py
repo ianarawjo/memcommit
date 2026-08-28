@@ -12,7 +12,7 @@ from memcommit.adapters.interfaces.tui.components.exact_command_review import (
     ExactCommandReview,
 )
 from memcommit.adapters.interfaces.tui.components.plain_text_clipboard import ClipboardWriter
-from memcommit.adapters.interfaces.tui.operations.merge.screen import (
+from memcommit.adapters.console.commands.merge.workbench.review import (
     merge_plan_exact_command_review,
     project_merge_plan,
 )

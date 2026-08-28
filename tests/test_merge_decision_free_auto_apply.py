@@ -6,11 +6,10 @@ import typer
 from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.merge.command as merge_command
+from memcommit.adapters.console.commands.merge.setup import MergeSetup, merge_setup_spec
 import memcommit.application.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory
-from memcommit.adapters.interfaces.tui.operations.merge import merge_endpoint_setup_spec
-from memcommit.adapters.interfaces.tui.operations.merge.model import MergeTuiSetup
 from memcommit.application.operations.merge.application import (
     FrozenMergePlan,
     MergeAddition,
@@ -28,8 +27,8 @@ runner = CliRunner(mix_stderr=False)
 
 
 def test_setup_discloses_conditional_auto_apply() -> None:
-    spec = merge_endpoint_setup_spec(
-        MergeTuiSetup(
+    spec = merge_setup_spec(
+        MergeSetup(
             names=("source", "target"),
             selectable_names=frozenset({"source", "target"}),
             selected_source="source",
@@ -112,12 +111,12 @@ def _invoke_bare_merge(monkeypatch, plan: FrozenMergePlan) -> tuple[object, list
     monkeypatch.setattr(merge_command, "is_interactive_terminal", lambda: True)
     monkeypatch.setattr(
         merge_command,
-        "build_merge_tui_setup",
+        "build_merge_setup",
         lambda _port, *, initial_recursive, requested_target: object(),
     )
     monkeypatch.setattr(
         merge_command,
-        "choose_merge_setup",
+        "choose_merge_request",
         lambda _setup: plan.request,
     )
     monkeypatch.setattr(
@@ -148,7 +147,7 @@ def _invoke_bare_merge(monkeypatch, plan: FrozenMergePlan) -> tuple[object, list
     )
     monkeypatch.setattr(
         merge_command,
-        "render_merge_plain",
+        "render_merge_receipt",
         lambda _result: events.append("receipt"),
     )
 

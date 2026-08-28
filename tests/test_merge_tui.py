@@ -11,22 +11,26 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
-import memcommit.adapters.interfaces.tui.operations.merge.adapter as merge_tui_adapter
-from memcommit.adapters.console.entrypoint import app
-from memcommit.core.context import Memory
-from memcommit.adapters.interfaces.tui.operations.merge import (
-    MergeTuiSetup,
-    build_merge_tui_setup,
-    choose_merge_setup,
-    merge_exact_command_review,
-    merge_endpoint_setup_spec,
-    merge_plan_exact_command_review,
+import memcommit.adapters.console.commands.merge.setup as merge_setup
+from memcommit.adapters.console.commands.merge.setup import (
+    MergeSetup,
+    build_merge_setup,
+    choose_merge_request,
+    merge_setup_spec,
+)
+from memcommit.adapters.console.commands.merge.workbench.conflicts import (
     merge_resolution_exact_review,
     merge_resolution_spec,
-    project_merge_plan,
     run_merge_conflict_review,
+)
+from memcommit.adapters.console.commands.merge.workbench.review import (
+    merge_exact_command_review,
+    merge_plan_exact_command_review,
+    project_merge_plan,
     run_merge_plan_review,
 )
+from memcommit.adapters.console.entrypoint import app
+from memcommit.core.context import Memory
 from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionOutcome
 from memcommit.adapters.interfaces.tui.workbenches.resolution.inline_shell import (
     render_inline_resolution_item,
@@ -58,8 +62,8 @@ from memcommit.persistence.store import MemoryStore
 runner = CliRunner(mix_stderr=False)
 
 
-def _setup(*, recursive: bool = False) -> MergeTuiSetup:
-    return MergeTuiSetup(
+def _setup(*, recursive: bool = False) -> MergeSetup:
+    return MergeSetup(
         names=("source", "target"),
         selectable_names=frozenset({"source", "target"}),
         selected_source="source",
@@ -619,7 +623,7 @@ def test_exact_review_names_recursive_path_and_selected_target() -> None:
 
 
 def test_meld_style_setup_projects_coupled_reach_and_selectable_target() -> None:
-    spec = merge_endpoint_setup_spec(_setup())
+    spec = merge_setup_spec(_setup())
 
     assert tuple(mode.uid for mode in spec.modes) == ("DIRECT", "DESCENDANTS")
     assert spec.roles[0].uid == "A"
@@ -632,7 +636,7 @@ def test_meld_style_setup_projects_coupled_reach_and_selectable_target() -> None
 
 
 def test_merge_same_source_and_target_is_rejected_at_continue_not_picker() -> None:
-    setup = MergeTuiSetup(
+    setup = MergeSetup(
         names=("target",),
         selectable_names=frozenset({"target"}),
         selected_source="target",
@@ -645,7 +649,7 @@ def test_merge_same_source_and_target_is_rejected_at_continue_not_picker() -> No
         # MODE -> Source -> Target -> Continue. Both rows remain selectable, while
         # Continue owns the invalid same-Context result and keeps the TUI open.
         pipe_input.send_text("\t\t\t\rq")
-        request = choose_merge_setup(
+        request = choose_merge_request(
             setup,
             app_input=pipe_input,
             app_output=DummyOutput(),
@@ -660,7 +664,7 @@ def test_meld_style_setup_returns_typed_recursive_request() -> None:
         # A multi-shape setup starts on MODE. Right selects recursive, then
         # Source, Target, and Continue are the next visible focus surfaces.
         pipe_input.send_text("\x1b[C\t\t\t\r")
-        request = choose_merge_setup(
+        request = choose_merge_request(
             _setup(),
             app_input=pipe_input,
             app_output=DummyOutput(),
@@ -679,7 +683,7 @@ def test_meld_style_setup_returns_the_selected_target() -> None:
         # MODE -> Source -> Target. Move from target to target-b, select it,
         # then continue with the reviewed draft.
         pipe_input.send_text("\t\t\x1b[B\r\t\r")
-        request = choose_merge_setup(
+        request = choose_merge_request(
             _setup(),
             app_input=pipe_input,
             app_output=DummyOutput(),
@@ -696,7 +700,7 @@ def test_meld_style_setup_returns_the_selected_target() -> None:
 def test_meld_style_setup_cancel_returns_no_request() -> None:
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("q")
-        request = choose_merge_setup(
+        request = choose_merge_request(
             _setup(),
             app_input=pipe_input,
             app_output=DummyOutput(),
@@ -714,7 +718,7 @@ def test_tui_setup_freezes_source_and_target_catalogs_with_current_default(
     store.create_context(ops.init("target"))
     store.set_current("target")
 
-    setup = build_merge_tui_setup(
+    setup = build_merge_setup(
         MemoryStoreMergePort.capture(store),
         initial_recursive=True,
     )
@@ -752,12 +756,12 @@ def test_tui_setup_uses_profile_readable_breadth_without_query_only_routes(
         )
 
     monkeypatch.setattr(
-        merge_tui_adapter,
+        merge_setup,
         "freeze_profile_context_navigation",
         freeze_profile,
     )
 
-    setup = build_merge_tui_setup(
+    setup = build_merge_setup(
         MemoryStoreMergePort.capture(store),
         initial_recursive=False,
     )
@@ -789,7 +793,7 @@ def test_tui_target_catalog_includes_only_create_authorized_grants(
     for name in ("source", "target"):
         store.create_context(ops.init(name))
     store.set_current("target")
-    real_resolve = merge_tui_adapter.resolve_context_access
+    real_resolve = merge_setup.resolve_context_access
 
     def resolve(store, operand, *, current_name, required_permission):
         if operand == "granted/create":
@@ -804,9 +808,9 @@ def test_tui_target_catalog_includes_only_create_authorized_grants(
             required_permission=required_permission,
         )
 
-    monkeypatch.setattr(merge_tui_adapter, "resolve_context_access", resolve)
+    monkeypatch.setattr(merge_setup, "resolve_context_access", resolve)
     monkeypatch.setattr(
-        merge_tui_adapter,
+        merge_setup,
         "freeze_profile_context_navigation",
         lambda _store, _selected: SimpleNamespace(
             local_names=("source", "target"),
@@ -819,7 +823,7 @@ def test_tui_target_catalog_includes_only_create_authorized_grants(
         ),
     )
 
-    setup = build_merge_tui_setup(
+    setup = build_merge_setup(
         MemoryStoreMergePort.capture(store),
         initial_recursive=False,
     )
@@ -837,7 +841,7 @@ def test_tui_setup_uses_an_explicit_target_without_switching_current(
         store.create_context(ops.init(name))
     store.set_current("target")
 
-    setup = build_merge_tui_setup(
+    setup = build_merge_setup(
         MemoryStoreMergePort.capture(store),
         initial_recursive=False,
         requested_target="target-b",

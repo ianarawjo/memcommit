@@ -68,13 +68,29 @@ serialization, terminal interaction, operation route state, or evidence
 membership. Existing ordered terminal captures therefore remain valid and are
 not refreshed for the move.
 
+On 2026-08-28 the operation-specific console adapters were also co-located
+under `memcommit.adapters.console.commands.merge`. The former
+`adapters.interfaces.cli.merge` module and
+`adapters.interfaces.tui.operations.merge` package described transport
+mechanics rather than a stable owner, even though the Merge command was their
+only production consumer. The command package now names the actual stages:
+`setup.py` freezes and selects endpoints, `resolution.py` owns the
+noninteractive conflict-decision path, `receipt.py` reports the applied result,
+and `workbench/review.py` plus `workbench/conflicts.py` own interactive review.
+No compatibility facade remains because these were internal paths. This is a
+physical ownership and vocabulary change only; the same typed request, frozen
+plan, deterministic decisions, Apply boundary, terminal text, and durable
+receipt remain authoritative.
+
 | Callable | Layer | Responsibility |
 | --- | --- | --- |
 | `MergeRequest`, `FrozenMergePlan`, `MergeConflict`, `MergeResolution`, `MergeResult` | Application contract | Typed locator/reach input, mapping-qualified conflict identity, deterministic decision, reviewed binding, and durable result without Store or terminal objects. |
 | `merge_resolution_case`, `prepare_merge`, `resolve_merge_conflicts`, `run_merge` | Application | Project the frozen structural requirements through the operation-neutral Resolution contract, validate before Store access, require complete exact decisions, and require the final receipt to match the frozen plan. |
 | `MemoryStoreMergePort` | Infrastructure/runtime | Capture current once; resolve authority; project cross-Profile input; freeze Source/Target digests; revalidate and checkpoint atomically. |
 | `execute_merge` | Internal Python runtime | Invoke the same use case with no stdout, stderr, prompt-toolkit, or provider dependency. |
-| `render_merge_plain` | Plain CLI adapter | Use the same disposition counts as the TUI receipt, so a retained equal/conflicting identity is not misreported as merely “added nothing new.” |
+| `render_merge_receipt` | Command receipt adapter | Use the same disposition counts as the interactive receipt, so a retained equal/conflicting identity is not misreported as merely “added nothing new.” |
+| `MergeSetup`, `build_merge_setup`, `choose_merge_request` | Command setup adapter | Freeze the readable/writable endpoint catalogs and return one typed request without planning or mutation. |
+| `parse_merge_resolutions`, `render_merge_conflicts` | Command resolution adapter | Expose the same deterministic conflict vocabulary outside a TTY without applying a partial decision set. |
 | Merge endpoint setup | Interactive adapter | Select a readable Source, a local or CREATE-authorized Target, and one coupled direct/recursive shape from separate frozen catalogs. The command-start current Context is only the initial Target. Either endpoint may temporarily select the same row; Continue rejects that completed draft. Returns only a typed request. |
 | Merge frozen-plan review | Interactive adapter | Project a decision-free granted-authority plan and apply only that exact plan after explicit approval. Local decision-free plans skip this duplicate approval because the complete command checkpoint supports Undo/Redo. |
 | Shared inline deterministic Resolution workbench | Interactive adapter | For conflict-bearing plans only, render complete Source/Target values in frozen order, stage Target defaults, compose row and bulk arrows with one always-visible Apply action, retain exact final review, and show a typed receipt without a Viewer or `commands.*` import. |
