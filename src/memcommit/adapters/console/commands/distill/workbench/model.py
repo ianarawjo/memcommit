@@ -1,4 +1,4 @@
-"""Typed values owned by the Distill terminal adapter."""
+"""Typed values owned by the Distill proposal workbench."""
 
 from __future__ import annotations
 

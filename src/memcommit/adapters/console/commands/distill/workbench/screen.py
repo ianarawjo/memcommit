@@ -7,17 +7,17 @@ from collections.abc import Callable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.application.operations.distill.application import DistillRequest, DistillResult
-from memcommit.adapters.console.terminal import require_interactive_terminal
-from memcommit.adapters.interfaces.tui.operations.distill.adapter import (
+from memcommit.adapters.console.commands.distill.workbench.model import DistillTuiSetup
+from memcommit.adapters.console.commands.distill.workbench.presentation import (
     project_distill_clipboard,
     project_distill_result,
 )
-from memcommit.adapters.interfaces.tui.operations.distill.model import DistillTuiSetup
+from memcommit.adapters.console.terminal import require_interactive_terminal
 from memcommit.adapters.interfaces.tui.workbenches.context_summary import (
     ContextSummaryWorkbenchView,
     run_context_summary_workbench,
 )
+from memcommit.application.operations.distill.application import DistillRequest, DistillResult
 
 
 def run_distill_tui(

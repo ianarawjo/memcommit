@@ -48,10 +48,8 @@ from memcommit.application.operations.ground.distill import (
     execute_ground_distill,
     freeze_ground_distill,
 )
-from memcommit.adapters.interfaces.cli.distill import (
-    distill_result_text,
-    render_distill_receipt,
-)
+from memcommit.adapters.console.commands.distill.proposal import distill_result_text
+from memcommit.adapters.console.commands.distill.receipt import render_distill_receipt
 from memcommit.adapters.interfaces.cli.semantic_add import render_applied_memory_preview
 from memcommit.adapters.console import (
     ConsoleMode,
@@ -60,7 +58,7 @@ from memcommit.adapters.console import (
     resolve_console_mode,
 )
 from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.interfaces.tui.operations.distill import DistillTuiSetup
+from memcommit.adapters.console.commands.distill.workbench import DistillTuiSetup
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider

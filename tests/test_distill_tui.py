@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
@@ -13,7 +15,7 @@ from memcommit.application.operations.distill.application import (
     DistillRequest,
     DistillResult,
 )
-from memcommit.adapters.interfaces.tui.operations.distill import (
+from memcommit.adapters.console.commands.distill.workbench import (
     DistillTuiSetup,
     project_distill_clipboard,
     project_distill_result,
@@ -295,3 +297,23 @@ def test_distill_tui_y_and_uppercase_y_copy_rule_then_all() -> None:
     assert copied[0].startswith("RULE 1 · Prefer a quiet setting")
     assert "WHAT MEM UNDERSTOOD" not in copied[0]
     assert "SOURCE OVERVIEW" in copied[1]
+
+
+def test_distill_console_owns_proposal_receipt_and_workbench_without_facades() -> None:
+    repository_root = Path(__file__).resolve().parents[1]
+    command_root = (
+        repository_root / "src/memcommit/adapters/console/commands/distill"
+    )
+    retired_tui_root = (
+        repository_root / "src/memcommit/adapters/interfaces/tui/operations/distill"
+    )
+
+    assert (command_root / "proposal.py").is_file()
+    assert (command_root / "receipt.py").is_file()
+    assert (command_root / "workbench/model.py").is_file()
+    assert (command_root / "workbench/presentation.py").is_file()
+    assert (command_root / "workbench/screen.py").is_file()
+    assert not tuple(retired_tui_root.glob("*.py"))
+    assert not (
+        repository_root / "src/memcommit/adapters/interfaces/cli/distill.py"
+    ).exists()

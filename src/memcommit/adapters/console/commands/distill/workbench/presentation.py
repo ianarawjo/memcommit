@@ -2,17 +2,17 @@
 
 from __future__ import annotations
 
-from memcommit.application.operations.distill.application import DistillResult
-from memcommit.adapters.interfaces.cli.distill import distill_result_text
-from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.operations.distill.model import (
+from memcommit.adapters.console.commands.distill.proposal import distill_result_text
+from memcommit.adapters.console.commands.distill.workbench.model import (
     DistillClipboardProjection,
 )
+from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.viewers.semantic import (
     SemanticViewerBlock,
     SemanticViewerDocument,
     SemanticViewerSection,
 )
+from memcommit.application.operations.distill.application import DistillResult
 
 
 def _rule_text(result: DistillResult, index: int) -> str:

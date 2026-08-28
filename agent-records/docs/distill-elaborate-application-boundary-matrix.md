@@ -20,6 +20,17 @@ or publication contracts. It changes implementation ownership and dependency
 direction only, so the existing behavior-focused PTY evidence does not require
 a screenshot refresh.
 
+Distill's console-specific adapters are co-located under
+`memcommit.adapters.console.commands.distill`: `command.py` owns orchestration,
+`proposal.py` owns the complete stable proposal text, `receipt.py` owns the
+bounded automatic-result summary, and `workbench/` owns the optional read-only
+proposal inspection flow. The former `interfaces/cli/distill.py` and
+`interfaces/tui/operations/distill` paths are removed without compatibility
+facades. Shared Viewer, clipboard, and Context-targeting mechanics retain their
+existing owners. This is an ownership relocation only; output text, execution
+timing, mutation boundaries, keyboard behavior, and existing PTY evidence are
+unchanged.
+
 | Concern | Distill | Elaborate | Evidence state |
 | --- | --- | --- | --- |
 | Meaning | Case/Example Context propositions → evidence-linked generative Rules, including common language, tone, expression, and notation; optional Goal focuses relevance and receives a non-generative whole-result Fit audit | Goal → at least one suggested Rule, or Rules → at least one suggested Case | `VERIFIED` against quoted café, lost-property, and Cloze reference families plus Goal Fit focused tests |

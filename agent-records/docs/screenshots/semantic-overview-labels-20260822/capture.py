@@ -86,7 +86,9 @@ def _distill_document():
     from memcommit.application.operations.distill.model import DistillAnalysis, DistilledRule
     from memcommit.application.operations.distill.application import DistillResult
     from memcommit.application.operations.distill.goal_fit import DistillGoalFit
-    from memcommit.adapters.interfaces.tui.operations.distill.adapter import project_distill_result
+    from memcommit.adapters.console.commands.distill.workbench.presentation import (
+        project_distill_result,
+    )
     from memcommit.application.operations.summarize.model import collect_summary_scope
     from memcommit.application.operations.summarize.application import FrozenSummarySource
 
