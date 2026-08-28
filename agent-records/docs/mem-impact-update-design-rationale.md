@@ -13,13 +13,14 @@ This document specifies only the directional A-to-B form.
 ## CLI registry ownership
 
 The typed Impact route registry is owned by
-`memcommit.adapters.interfaces.cli.impact_registry`, alongside the other non-interactive
-CLI composition interfaces. The historical
-`memcommit.adapters.console.commands.impact.registry` path remains an exact module alias so old
-imports and monkeypatches observe the same module globals and registry objects.
-This is an ownership-only relocation: route order, lifecycle values, help text,
+`memcommit.adapters.console.commands.impact.registry`. It imports Typer and
+describes only the named routes owned by the `mem impact` command, so keeping
+its implementation under the generic `interfaces.cli` namespace obscured the
+actual dependency and left the intended command path as a reverse alias. The
+interface path and alias are retired rather than preserved as facades. This is
+an ownership-only relocation: route order, lifecycle values, help text,
 validation and error behavior, and Typer command installation are unchanged.
-The active Impact command imports the interface owner directly.
+The active Impact command imports its sibling registry directly.
 
 ## Intent
 

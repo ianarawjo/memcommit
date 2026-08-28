@@ -1,52 +1,25 @@
-"""Ownership contracts for the interface-owned Impact route registry."""
+"""Ownership contracts for the command-owned Impact route registry."""
 
 from __future__ import annotations
 
-import ast
 import importlib
 from pathlib import Path
-import subprocess
-import sys
-
-import pytest
 
 
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "src" / "memcommit"
-LEGACY_MODULE = "memcommit.adapters.console.commands.impact.registry"
-OWNER_MODULE = "memcommit.adapters.interfaces.cli.impact_registry"
+OWNER_MODULE = "memcommit.adapters.console.commands.impact.registry"
 
 
-@pytest.mark.parametrize(
-    "first,second",
-    ((LEGACY_MODULE, OWNER_MODULE), (OWNER_MODULE, LEGACY_MODULE)),
-)
-def test_legacy_and_owner_imports_share_module_and_objects_in_either_order(
-    first: str,
-    second: str,
-) -> None:
-    program = (
-        "import importlib\n"
-        f"first = importlib.import_module({first!r})\n"
-        f"second = importlib.import_module({second!r})\n"
-        "assert first is second\n"
-        "for name in second.__all__:\n"
-        "    assert getattr(first, name) is getattr(second, name)\n"
-        "assert first.IMPACT_ROUTES is second.IMPACT_ROUTES\n"
+def test_registry_is_owned_only_by_the_impact_command_package() -> None:
+    owner_path = (
+        PACKAGE / "adapters" / "console" / "commands" / "impact" / "registry.py"
     )
+    retired_path = PACKAGE / "adapters" / "interfaces" / "cli" / "impact_registry.py"
 
-    subprocess.run([sys.executable, "-c", program], cwd=ROOT, check=True)
-
-
-def test_legacy_path_is_the_owner_module_object() -> None:
-    legacy = importlib.import_module(LEGACY_MODULE)
-    owner = importlib.import_module(OWNER_MODULE)
-
-    assert legacy is owner
-    assert legacy.IMPACT_ROUTES is owner.IMPACT_ROUTES
-    assert legacy.ImpactLifecycle is owner.ImpactLifecycle
-    assert legacy.ImpactRoute is owner.ImpactRoute
-    assert legacy.ImpactRouteRegistry is owner.ImpactRouteRegistry
+    assert owner_path.is_file()
+    assert not retired_path.exists()
+    assert importlib.import_module(OWNER_MODULE).__name__ == OWNER_MODULE
 
 
 def test_route_order_lifecycle_and_help_are_unchanged() -> None:
@@ -99,34 +72,24 @@ def test_route_order_lifecycle_and_help_are_unchanged() -> None:
     )
 
 
-def test_legacy_facade_contains_no_implementation() -> None:
-    path = PACKAGE / "commands" / "impact" / "registry.py"
-    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
-
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
-    )
-    assert any(
-        isinstance(node, ast.Assign)
-        and any(
-            isinstance(target, ast.Subscript)
-            and isinstance(target.value, ast.Attribute)
-            and isinstance(target.value.value, ast.Name)
-            and target.value.value.id == "sys"
-            and target.value.attr == "modules"
-            for target in node.targets
-        )
-        for node in tree.body
-    )
-
-
-def test_impact_command_imports_the_interface_owner() -> None:
-    source = (PACKAGE / "commands" / "impact" / "command.py").read_text(
-        encoding="utf-8"
-    )
+def test_impact_command_imports_its_sibling_registry() -> None:
+    source = (
+        PACKAGE / "adapters" / "console" / "commands" / "impact" / "command.py"
+    ).read_text(encoding="utf-8")
 
     assert (
-        "from memcommit.adapters.interfaces.cli.impact_registry import IMPACT_ROUTES" in source
+        "from memcommit.adapters.console.commands.impact.registry import IMPACT_ROUTES"
+        in source
     )
-    assert "from memcommit.adapters.console.commands.impact.registry import IMPACT_ROUTES" not in source
+    assert "memcommit.adapters.interfaces.cli.impact_registry" not in source
+
+
+def test_production_code_does_not_reference_the_retired_interface_path() -> None:
+    references = []
+    for path in (PACKAGE / "adapters").rglob("*.py"):
+        if "memcommit.adapters.interfaces.cli.impact_registry" in path.read_text(
+            encoding="utf-8"
+        ):
+            references.append(path.relative_to(ROOT).as_posix())
+
+    assert references == []
