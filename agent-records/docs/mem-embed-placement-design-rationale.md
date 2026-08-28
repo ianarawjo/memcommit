@@ -29,11 +29,15 @@ The implementation now enters through
 `memcommit.application.operations.embed.application`, with
 `memcommit.application.operations.embed.runtime` owning Store loading, concurrency checks,
 checkpoint creation, and persistence. The previous flat module paths are
-module-identity compatibility aliases. The plain command adapter is
-`memcommit.adapters.interfaces.cli.embed`; the interactive adapter is the
-`memcommit.adapters.interfaces.tui.operations.embed` package. The former
-`memcommit.adapters.console.commands.embed` and `memcommit.adapters.console.commands.embed_dialog` modules were
-removed instead of retained as compatibility facades.
+module-identity compatibility aliases. The plain command, successful receipt,
+and interactive workbench are co-located under
+`memcommit.adapters.console.commands.embed`. The former
+`memcommit.adapters.interfaces.cli.embed` and
+`memcommit.adapters.interfaces.tui.operations.embed` paths were removed instead
+of retained as compatibility facades. Earlier flat
+`memcommit.adapters.console.commands.embed` and
+`memcommit.adapters.console.commands.embed_dialog` modules remain historical
+only; the current owner is the Embed command package.
 
 The representative `180×52` color-PTY interaction against the actual current
 Study Participant Profile is retained under

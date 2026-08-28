@@ -22,6 +22,7 @@ from memcommit.adapters.console.commands import (
     distill,
     elaborate,
     edit,
+    embed,
     find,
     search,
     find_ambiguities,
@@ -63,7 +64,7 @@ from memcommit.adapters.console.commands import (
     write_protection,
 )
 from memcommit.adapters.console.commands.reference import command as reference
-from memcommit.adapters.interfaces.cli import embed, memory_transfer, shell_init
+from memcommit.adapters.interfaces.cli import memory_transfer, shell_init
 from memcommit.adapters.console.commands.clear.command import cmd as clear_cmd
 from memcommit.adapters.console.commands.config.command import app as config_app
 from memcommit.adapters.console.commands.dev.command import app as dev_app

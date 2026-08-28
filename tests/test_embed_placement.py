@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
@@ -23,8 +25,8 @@ from memcommit.application.operations.embed.application import (
     run_embed,
 )
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
-from memcommit.adapters.interfaces.cli import embed as embed_command
-from memcommit.adapters.interfaces.tui.operations.embed import (
+from memcommit.adapters.console.commands.embed import command as embed_command
+from memcommit.adapters.console.commands.embed.workbench import (
     choose_embed_setup,
     embed_exact_command_review,
     parse_embed_command_argv,
@@ -36,6 +38,24 @@ from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner(mix_stderr=False)
+
+
+def test_embed_console_owns_command_receipt_and_workbench_without_facades() -> None:
+    repository_root = Path(__file__).resolve().parents[1]
+    command_root = repository_root / "src/memcommit/adapters/console/commands/embed"
+    retired_tui_root = (
+        repository_root / "src/memcommit/adapters/interfaces/tui/operations/embed"
+    )
+
+    assert (command_root / "command.py").is_file()
+    assert (command_root / "receipt.py").is_file()
+    assert (command_root / "workbench/model.py").is_file()
+    assert (command_root / "workbench/setup.py").is_file()
+    assert (command_root / "workbench/screen.py").is_file()
+    assert not tuple(retired_tui_root.glob("*.py"))
+    assert not (
+        repository_root / "src/memcommit/adapters/interfaces/cli/embed.py"
+    ).exists()
 
 
 def _placement_tree_row() -> ContextTreeRow:

@@ -62,7 +62,9 @@ def test_operation_routes_cover_every_help_operation_and_cli_entry() -> None:
     assert by_operation["checkout"].cli_entry == (
         "memcommit.adapters.console.entrypoint:_checkout"
     )
-    assert by_operation["embed"].cli_entry == "memcommit.adapters.interfaces.cli.embed:cmd"
+    assert by_operation["embed"].cli_entry == (
+        "memcommit.adapters.console.commands.embed:cmd"
+    )
 
 
 def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() -> None:

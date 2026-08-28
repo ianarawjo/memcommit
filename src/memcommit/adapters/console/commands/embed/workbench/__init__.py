@@ -1,11 +1,11 @@
-"""Interactive adapter for the Embed application use case."""
+"""Interactive workbench for the Embed application use case."""
 
-from memcommit.adapters.interfaces.tui.operations.embed.adapter import (
+from memcommit.adapters.console.commands.embed.workbench.setup import (
     build_embed_tui_setup,
     choose_embed_setup,
 )
-from memcommit.adapters.interfaces.tui.operations.embed.model import EmbedTuiSetup
-from memcommit.adapters.interfaces.tui.operations.embed.screen import (
+from memcommit.adapters.console.commands.embed.workbench.model import EmbedTuiSetup
+from memcommit.adapters.console.commands.embed.workbench.screen import (
     EMBED_COMMAND_FORM,
     embed_exact_command_review,
     memory_embed_exact_command_review,

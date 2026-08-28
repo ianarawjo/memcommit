@@ -1,4 +1,4 @@
-"""Interactive Child, Into, and direct-item gap setup for ``mem embed``."""
+"""Interactive Child, Into, and direct-item gap workbench for ``mem embed``."""
 
 from __future__ import annotations
 
@@ -81,7 +81,7 @@ from memcommit.application.operations.embed.application import (
     validate_embed_request,
     validate_memory_embed_request,
 )
-from memcommit.adapters.interfaces.tui.operations.embed.model import EmbedTuiSetup
+from memcommit.adapters.console.commands.embed.workbench.model import EmbedTuiSetup
 
 
 EMBED_COMMAND_FORM = ExactCommandForm(

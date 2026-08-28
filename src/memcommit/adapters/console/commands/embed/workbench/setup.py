@@ -1,4 +1,4 @@
-"""Compose the Embed TUI with one Store-backed application port."""
+"""Compose the Embed workbench with one Store-backed application port."""
 
 from __future__ import annotations
 
@@ -13,8 +13,8 @@ from memcommit.application.operations.embed.application import (
 from memcommit.application.authority.access import resolve_context_access
 from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
-from memcommit.adapters.interfaces.tui.operations.embed.model import EmbedTuiSetup
-from memcommit.adapters.interfaces.tui.operations.embed.screen import run_embed_tui
+from memcommit.adapters.console.commands.embed.workbench.model import EmbedTuiSetup
+from memcommit.adapters.console.commands.embed.workbench.screen import run_embed_tui
 from memcommit.source_projection.presentation import (
     SourceDisplayToken,
     SourceTokenRole,

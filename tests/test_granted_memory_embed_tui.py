@@ -17,7 +17,7 @@ from memcommit.application.operations.embed.application import (
 )
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.adapters.interfaces.tui.components.direct_item_placement import DirectItemGap
-from memcommit.adapters.interfaces.tui.operations.embed import (
+from memcommit.adapters.console.commands.embed.workbench import (
     build_embed_tui_setup,
     choose_embed_setup,
     memory_embed_exact_command_review,

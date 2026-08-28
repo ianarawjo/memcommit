@@ -1,4 +1,4 @@
-"""Typed setup state for interactive Embed."""
+"""Typed setup state for the interactive Embed workbench."""
 
 from __future__ import annotations
 
