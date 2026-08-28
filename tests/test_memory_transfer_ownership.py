@@ -58,6 +58,30 @@ assert "memcommit.application.operations.memory_transfer.runtime" not in sys.mod
     )
 
 
+def test_copy_and_move_own_commands_while_transfer_mechanics_stay_shared() -> None:
+    console = REPOSITORY_ROOT / "src/memcommit/adapters/console"
+    interfaces = REPOSITORY_ROOT / "src/memcommit/adapters/interfaces"
+
+    for command in ("copy", "move"):
+        root = console / "commands" / command
+        assert (root / "__init__.py").is_file()
+        assert (root / "command.py").is_file()
+        assert (root / "setup.py").is_file()
+        assert (root / "receipt.py").is_file()
+    shared = console / "shared" / "memory_transfer"
+    assert {path.name for path in shared.glob("*.py")} == {
+        "__init__.py",
+        "arguments.py",
+        "model.py",
+        "receipt.py",
+        "workbench.py",
+    }
+    assert not (interfaces / "cli" / "memory_transfer.py").exists()
+    assert not tuple(
+        (interfaces / "tui" / "operations" / "memory_transfer").glob("*.py")
+    )
+
+
 def test_branch_remains_a_separate_context_creation_operation() -> None:
     path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/branch/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))

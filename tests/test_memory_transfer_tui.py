@@ -11,15 +11,23 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.ops as ops
+from memcommit.adapters.console.commands.copy import command as copy_command
+from memcommit.adapters.console.commands.copy.setup import (
+    build_copy_tui_setup,
+    choose_copy_setup,
+)
+from memcommit.adapters.console.commands.move import command as move_command
+from memcommit.adapters.console.commands.move.setup import (
+    build_move_tui_setup,
+    choose_move_setup,
+)
 from memcommit.adapters.console.entrypoint import app
-from memcommit.core.context import Context, Memory, MemoryRef
-from memcommit.adapters.interfaces.tui.components.direct_item_placement import DirectItemGap
-from memcommit.adapters.interfaces.tui.operations.memory_transfer import (
-    build_memory_transfer_tui_setup,
-    choose_memory_transfer_setup,
+from memcommit.adapters.console.shared.memory_transfer.workbench import (
     memory_transfer_exact_command_review,
     parse_memory_transfer_command_argv,
 )
+from memcommit.core.context import Context, Memory, MemoryRef
+from memcommit.adapters.interfaces.tui.components.direct_item_placement import DirectItemGap
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -38,7 +46,6 @@ from memcommit.application.operations.memory_transfer.application import (
 )
 from memcommit.application.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
 from memcommit.persistence.store import MemoryStore
-from memcommit.adapters.interfaces.cli import memory_transfer as transfer_command
 
 
 runner = CliRunner(mix_stderr=False)
@@ -197,9 +204,8 @@ def test_copy_tui_checks_multiple_memories_and_freezes_one_exact_gap(
         # Check both nested Memories, choose Target, stage the gap before its
         # marker, then approve the compact exact command.
         pipe_input.send_text("\x1b[B\r\x1b[B\r\t\x1b[B\r\t\x1b[A\r\t\r")
-        plan = choose_memory_transfer_setup(
+        plan = choose_copy_setup(
             port,
-            kind="COPY",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -236,9 +242,8 @@ def test_copy_editable_command_replaces_the_visible_batch_order_atomically(
         # Reach the compact command with no checked Source, then replace its
         # arguments. One complete parse moves every upper control together.
         pipe_input.send_text("\t\t\t\x15" + command + "\r")
-        plan = choose_memory_transfer_setup(
+        plan = choose_copy_setup(
             MemoryStoreMemoryTransferPort.capture(store),
-            kind="COPY",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -265,8 +270,8 @@ def test_granted_copy_tui_separates_readable_sources_from_local_roles(
         allow_granted_sources=True,
     )
 
-    copy_setup = build_memory_transfer_tui_setup(port, kind="COPY")
-    move_setup = build_memory_transfer_tui_setup(port, kind="MOVE")
+    copy_setup = build_copy_tui_setup(port)
+    move_setup = build_move_tui_setup(port)
     copy_annotations = dict(copy_setup.source_annotations)
 
     assert "shared/source" in copy_setup.source_names
@@ -297,7 +302,7 @@ def test_local_only_copy_tui_does_not_consult_active_profile_grants(
     )
     port = MemoryStoreMemoryTransferPort.capture(store)
 
-    setup = build_memory_transfer_tui_setup(port, kind="COPY")
+    setup = build_copy_tui_setup(port)
 
     assert port.allows_granted_sources is False
     assert set(setup.source_names) == {
@@ -334,9 +339,8 @@ def test_granted_copy_exact_command_requires_an_explicit_public_owner(
         # command proves the edited public owner is resolved only in the
         # frozen Copy Source role and never in the local Target role.
         pipe_input.send_text("\t\t\t\x15" + command + "\r")
-        plan = choose_memory_transfer_setup(
+        plan = choose_copy_setup(
             port,
-            kind="COPY",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -371,9 +375,8 @@ def test_granted_copy_exact_command_keeps_source_and_target_role_catalogs(
             f"{memory.uid[:7]} --from shared/source --into {target.name}"
             "\r"
         )
-        plan = choose_memory_transfer_setup(
+        plan = choose_copy_setup(
             port,
-            kind="COPY",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -392,9 +395,8 @@ def test_granted_copy_exact_command_keeps_source_and_target_role_catalogs(
             f"{local_source.name}:{local_uid[:7]} --into shared/source"
             "\r\x1b"
         )
-        rejected = choose_memory_transfer_setup(
+        rejected = choose_copy_setup(
             port,
-            kind="COPY",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -425,9 +427,8 @@ def test_granted_copy_tui_does_not_scan_grants_for_a_bare_uid(
             f"{memory.uid[:7]} --into {target.name}"
             "\r\x1b"
         )
-        plan = choose_memory_transfer_setup(
+        plan = choose_copy_setup(
             port,
-            kind="COPY",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -450,9 +451,8 @@ def test_move_tui_defaults_to_atomic_live_embed_retarget(isolated_store) -> None
     with create_pipe_input() as pipe_input:
         # Check one Source, choose Target, retain append, then approve.
         pipe_input.send_text("\x1b[B\r\t\x1b[B\r\t\t\r")
-        plan = choose_memory_transfer_setup(
+        plan = choose_move_setup(
             port,
-            kind="MOVE",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -481,9 +481,8 @@ def test_memory_transfer_tui_escape_does_not_freeze_or_apply(isolated_store) -> 
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\x1b")
-        plan = choose_memory_transfer_setup(
+        plan = choose_move_setup(
             port,
-            kind="MOVE",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -508,16 +507,16 @@ def test_bare_copy_cli_applies_only_the_tui_returned_frozen_plan(
             into_locator=target.name,
         )
     )
-    monkeypatch.setattr(transfer_command, "is_interactive_terminal", lambda: True)
+    monkeypatch.setattr(copy_command, "is_interactive_terminal", lambda: True)
     monkeypatch.setattr(
-        transfer_command.MemoryStoreMemoryTransferPort,
+        copy_command.MemoryStoreMemoryTransferPort,
         "capture",
         lambda _store, **_kwargs: port,
     )
     monkeypatch.setattr(
-        transfer_command,
-        "choose_memory_transfer_setup",
-        lambda _port, *, kind: plan,
+        copy_command,
+        "choose_copy_setup",
+        lambda _port: plan,
     )
 
     result = runner.invoke(app, ["copy"])
@@ -543,16 +542,16 @@ def test_bare_move_cli_applies_only_the_tui_returned_frozen_plan(
             into_locator=target.name,
         )
     )
-    monkeypatch.setattr(transfer_command, "is_interactive_terminal", lambda: True)
+    monkeypatch.setattr(move_command, "is_interactive_terminal", lambda: True)
     monkeypatch.setattr(
-        transfer_command.MemoryStoreMemoryTransferPort,
+        move_command.MemoryStoreMemoryTransferPort,
         "capture",
         lambda _store, **_kwargs: port,
     )
     monkeypatch.setattr(
-        transfer_command,
-        "choose_memory_transfer_setup",
-        lambda _port, *, kind: plan,
+        move_command,
+        "choose_move_setup",
+        lambda _port: plan,
     )
 
     result = runner.invoke(app, ["move"])

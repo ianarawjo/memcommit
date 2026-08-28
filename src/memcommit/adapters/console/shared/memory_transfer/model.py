@@ -1,4 +1,4 @@
-"""Typed setup state for interactive direct-Memory Copy and Move."""
+"""Shared typed setup state for interactive direct-Memory Copy and Move."""
 
 from __future__ import annotations
 

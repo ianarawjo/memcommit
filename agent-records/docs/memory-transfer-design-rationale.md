@@ -217,6 +217,17 @@ The application returns typed placements, UID mappings, plan digests, link
 counts, and per-Context checkpoints. Machine routes do not parse terminal
 output and report that no semantic provider was used.
 
+The console surface nevertheless has two command owners. Copy's grammar,
+Grant-aware setup, execution handoff, and fresh-UID receipt live under
+`adapters.console.commands.copy`; Move's grammar, local-owner setup, link
+policy, execution handoff, and mixed-effect receipt live under
+`adapters.console.commands.move`. They share only the direct-Memory selection,
+Target-gap placement, editable exact-command, common operand, and placement
+receipt mechanics under `adapters.console.shared.memory_transfer`. The former
+combined CLI module and operation-specific TUI package are removed without
+facades. This keeps Help operations navigable by their public names without
+duplicating one workbench or splitting the canonical application transaction.
+
 Copy is presented with the shared ADD color because it creates ordinary Target
 Memories. Move is deliberately not assigned one action color: it is a mixed
 REMOVE-plus-ADD effect, so its receipt colors only those two shortest typed

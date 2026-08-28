@@ -95,10 +95,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
             "memcommit.application.operations.memory_transfer.runtime"
             in route.application_modules
         )
-        assert (
-            "memcommit.adapters.interfaces.tui.operations.memory_transfer.screen"
-            in route.tui_modules
-        )
+        assert not route.tui_modules
         assert route.public_methods == (public_method,)
         assert route.agent_modules == (
             "memcommit.adapters.interfaces.agent.memory_transfer",

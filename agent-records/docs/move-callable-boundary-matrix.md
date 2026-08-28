@@ -14,8 +14,8 @@ and Store runtime.
 | --- | --- | --- |
 | Request, frozen plan, link evidence, receipt | `memcommit.application.operations.memory_transfer.application` | Nonempty unique Source set, UID preservation, distinct Target, default RETARGET or explicit BREAK policy, compatible typed BLOCK input, typed complete receipt |
 | Complete local graph and Store execution | `memcommit.application.operations.memory_transfer.runtime` | Strict direct graph freeze, inbound live-Embed classification, full-graph revalidation, Target gap, protection, exception-atomic multi-Context publication |
-| CLI | `memcommit.adapters.interfaces.cli.memory_transfer` | Positional or repeatable batch, `--from`, `--into/--to`, `--before/--after`, default live-Embed retarget, compatibility `--retarget-links`, explicit `--break-links`, mixed-effect rendering |
-| TUI | `memcommit.adapters.interfaces.tui.operations.memory_transfer` | Shared MULTIPLE direct-Memory checks, Embed-style `INTO + POSITION`, no redundant normal policy frame, compact editable exact command, frozen-plan handoff without direct publication |
+| Console command | `memcommit.adapters.console.commands.move` | Move alone owns its Typer grammar, local-owner setup, application handoff, cancellation, errors, default live-Embed retarget, compatibility `--retarget-links`, explicit `--break-links`, and mixed-effect receipt |
+| Shared console mechanics | `memcommit.adapters.console.shared.memory_transfer` | Move supplies its local catalogs and freeze callback to the common MULTIPLE direct-Memory, `INTO + POSITION`, editable exact-command, and placement-receipt mechanics; the workbench performs no direct publication |
 | Public Python | `MemCommitClient.move_memories` | Sequence and mutually exclusive policy validation with operation-specific public errors |
 | Agent | `memcommit.adapters.interfaces.agent.memory_transfer` | Strict version-2 JSON schema, public-client-only execution, typed JSON receipt, no provider |
 | MCP | registry projection | Mechanical projection of the frozen agent schema and handler |

@@ -1,4 +1,4 @@
-"""Embed-shaped interactive setup for direct-Memory Copy and Move."""
+"""Shared interactive workbench for direct-Memory Copy and Move."""
 
 from __future__ import annotations
 
@@ -71,7 +71,7 @@ from memcommit.application.operations.memory_transfer.application import (
     validate_copy_request,
     validate_move_request,
 )
-from memcommit.adapters.interfaces.tui.operations.memory_transfer.model import (
+from memcommit.adapters.console.shared.memory_transfer.model import (
     MemoryTransferTuiSetup,
 )
 
@@ -297,7 +297,7 @@ def memory_transfer_exact_command_review(
     return ExactCommandReview(argv=argv, effects=effects)
 
 
-def run_memory_transfer_tui(
+def run_memory_transfer_workbench(
     setup: MemoryTransferTuiSetup,
     *,
     kind: str,
@@ -855,5 +855,5 @@ __all__ = [
     "MOVE_COMMAND_FORM",
     "memory_transfer_exact_command_review",
     "parse_memory_transfer_command_argv",
-    "run_memory_transfer_tui",
+    "run_memory_transfer_workbench",
 ]

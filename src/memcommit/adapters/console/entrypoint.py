@@ -15,6 +15,7 @@ from memcommit.adapters.console.commands import (
     compare,
     consolidate,
     contexts,
+    copy,
     dedup,
     dedun,
     delete,
@@ -40,6 +41,7 @@ from memcommit.adapters.console.commands import (
     list_memories,
     log,
     meld,
+    move,
     pwd,
     show,
     merge,
@@ -64,7 +66,7 @@ from memcommit.adapters.console.commands import (
     write_protection,
 )
 from memcommit.adapters.console.commands.reference import command as reference
-from memcommit.adapters.interfaces.cli import memory_transfer, shell_init
+from memcommit.adapters.interfaces.cli import shell_init
 from memcommit.adapters.console.commands.clear.command import cmd as clear_cmd
 from memcommit.adapters.console.commands.config.command import app as config_app
 from memcommit.adapters.console.commands.dev.command import app as dev_app
@@ -107,7 +109,7 @@ app.command(
 app.command(
     "copy",
     help=operation_summary("copy"),
-)(memory_transfer.copy_cmd)
+)(copy.cmd)
 app.command(
     "status",
     help=operation_summary("status"),
@@ -161,7 +163,7 @@ app.command(
 app.command(
     "move",
     help=operation_summary("move"),
-)(memory_transfer.move_cmd)
+)(move.cmd)
 app.command(
     "diff",
     help=operation_summary("diff"),
