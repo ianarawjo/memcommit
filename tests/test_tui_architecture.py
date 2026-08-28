@@ -215,6 +215,25 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
         "memcommit.core.context_targeting.tui.selector",
     } <= owner_imports
 
+    reference_candidates = (
+        PACKAGE
+        / "adapters"
+        / "console"
+        / "commands"
+        / "reference"
+        / "workbench"
+        / "screen.py",
+        PACKAGE
+        / "adapters"
+        / "interfaces"
+        / "tui"
+        / "operations"
+        / "reference"
+        / "screen.py",
+    )
+    reference_screens = tuple(path for path in reference_candidates if path.is_file())
+    assert len(reference_screens) == 1
+
     consumers = (
         PACKAGE
         / "adapters"
@@ -230,13 +249,7 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
         / "embed"
         / "workbench"
         / "screen.py",
-        PACKAGE
-        / "adapters"
-        / "interfaces"
-        / "tui"
-        / "operations"
-        / "reference"
-        / "screen.py",
+        reference_screens[0],
     )
     for path in consumers:
         imports = set(_imports(path))
