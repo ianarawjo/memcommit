@@ -21,7 +21,7 @@ from memcommit.application.operations.atomize.workbench import (
     atomize_workbench_issue_projection,
     project_atomize_workbench_findings,
 )
-from memcommit.adapters.interfaces.tui.workbenches.review import (
+from memcommit.adapters.console.shared.review import (
     RESPONSE_LABEL,
 )
 from memcommit.application.review_policy import (

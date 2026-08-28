@@ -51,7 +51,7 @@ from memcommit.adapters.console.commands.atomize.sessions import (
     revalidate_saved_atomize_analysis,
 )
 from memcommit.adapters.console.shared.endpoint_setup_flows import AtomizeSetupReceipt
-from memcommit.adapters.interfaces.tui.workbenches.review import RESPONSE_LABEL
+from memcommit.adapters.console.shared.review import RESPONSE_LABEL
 from memcommit.adapters.interfaces.tui.workbenches.resolution import ResolutionDestination
 from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionNewReceipt,

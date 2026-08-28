@@ -13,11 +13,11 @@ import memcommit.application.ops as ops
 import memcommit.adapters.console.commands.review.command as review_command
 import memcommit.adapters.console.commands.review.resolution_shell as review_resolution_shell
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.interfaces.cli.review import (
+from memcommit.adapters.console.commands.review.snapshot import (
     render_review_snapshot,
 )
 from memcommit.adapters.console.text import safe_terminal_text
-from memcommit.adapters.interfaces.tui.workbenches.review import RESPONSE_LABEL
+from memcommit.adapters.console.shared.review import RESPONSE_LABEL
 from memcommit.adapters.console.commands.review.resolution_shell import (
     review_resolution_view,
     run_review_resolution_shell,

@@ -29,9 +29,16 @@ The common Resolution Session is the only live host for the older global
 ambiguity Review. The former `commands.review_shell` prompt-toolkit app had no
 production caller after that migration and was removed rather than retained as
 a second left/right and TextArea grammar. Its deterministic non-TTY projection
-now lives in `interfaces.cli.review`; moving that pure presenter does not alter
-the saved Review schema, the `REVIEW · n/total · REQUIRED/OPTIONAL` detail, the
-operation-authored choices, or the independent inline Response control.
+is now command-owned at `commands.review.snapshot`, beside the only production
+caller. The visible response label and normal-cancellation signal are shared by
+Review, Atomize, and Impact, so those operation-neutral terminal values live at
+`adapters.console.shared.review` rather than under either command or a TUI-only
+namespace. The former `interfaces.cli.review` and
+`interfaces.tui.workbenches.review` paths are removed without facades because
+they were internal owners. This relocation does not alter the saved Review
+schema, visible ordinal grammar, the `REVIEW · n/total · REQUIRED/OPTIONAL`
+detail, the operation-authored choices, or the independent inline Response
+control.
 
 This separation preserves the difference between discovery, response,
 reanalysis, and application. `find-ambiguities` reports a judgment;

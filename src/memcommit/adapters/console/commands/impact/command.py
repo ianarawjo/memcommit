@@ -54,7 +54,7 @@ from memcommit.adapters.console.commands.impact.process_local import (
     resolve_cmd as resolve_impact_cmd,
 )
 from memcommit.adapters.console.commands.impact.registry import IMPACT_ROUTES
-from memcommit.adapters.interfaces.tui.workbenches.review import ReviewCancelled
+from memcommit.adapters.console.shared.review import ReviewCancelled
 from memcommit.adapters.interfaces.tui.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,

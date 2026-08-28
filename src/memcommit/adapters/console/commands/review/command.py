@@ -26,11 +26,11 @@ from memcommit.application.retained_history.applied_review import (
 )
 from memcommit.adapters.console.shared.command_progress import CommandProgress
 from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
-from memcommit.adapters.interfaces.cli.review import (
+from memcommit.adapters.console.commands.review.snapshot import (
     render_review_snapshot,
     visible_ordinal_index,
 )
-from memcommit.adapters.interfaces.tui.workbenches.review import ReviewCancelled
+from memcommit.adapters.console.shared.review import ReviewCancelled
 from memcommit.adapters.console.commands.review.resolution_shell import (
     run_review_resolution_shell as run_review_shell,
 )
