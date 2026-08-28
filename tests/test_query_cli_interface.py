@@ -13,7 +13,7 @@ from memcommit.application.operations.search.answer_references import (
     SearchAnswerSentence,
     build_search_answer_reference_document,
 )
-from memcommit.adapters.interfaces.cli.query import (
+from memcommit.adapters.console.commands.query.presentation import (
     render_granted_query_response,
     render_ordinary_query_response,
     render_query_reference_response,
@@ -133,7 +133,10 @@ def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
     }
 
-    assert "from memcommit.adapters.interfaces.cli.query import (" in source
+    assert (
+        "from memcommit.adapters.console.commands.query.presentation import ("
+        in source
+    )
     assert (
         "from memcommit.adapters.console.terminal import is_interactive_terminal"
         in source
@@ -148,8 +151,15 @@ def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters
     }
 
 
-def test_query_cli_adapter_has_no_store_provider_or_command_dependency():
-    path = PACKAGE / "adapters" / "interfaces" / "cli" / "query.py"
+def test_query_plain_presentation_has_no_store_provider_or_command_dependency():
+    path = (
+        PACKAGE
+        / "adapters"
+        / "console"
+        / "commands"
+        / "query"
+        / "presentation.py"
+    )
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imports = {
         node.module
@@ -162,3 +172,4 @@ def test_query_cli_adapter_has_no_store_provider_or_command_dependency():
     )
     assert "memcommit.store" not in imports
     assert not any("provider" in module for module in imports)
+    assert not (PACKAGE / "adapters" / "interfaces" / "cli" / "query.py").exists()

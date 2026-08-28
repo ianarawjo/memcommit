@@ -39,7 +39,7 @@ from memcommit.adapters.console.text import (
     display_escape_text,
 )
 from memcommit.adapters.console.terminal import is_interactive_terminal
-from memcommit.adapters.interfaces.cli.query import (
+from memcommit.adapters.console.commands.query.presentation import (
     render_granted_query_response,
     render_ordinary_query_response,
     render_query_reference_response,

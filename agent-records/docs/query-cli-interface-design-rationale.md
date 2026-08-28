@@ -4,8 +4,9 @@ Last reviewed: 2026-08-26.
 
 ## Decision
 
-Non-interactive selector parsing and terminal rendering live in
-`memcommit.adapters.interfaces.cli.query`. `memcommit.adapters.console.commands.query.command` remains the Typer
+Non-interactive terminal rendering lives beside its command in
+`memcommit.adapters.console.commands.query.presentation`.
+`memcommit.adapters.console.commands.query.command` remains the Typer
 composition root: it interprets options, freezes storage/authority inputs,
 chooses ordinary, granted, or legacy-reference execution, wires concrete
 providers, and maps failures to exit codes.
@@ -15,6 +16,10 @@ It does not import `MemoryStore`, provider connectors, command modules, or
 application runtimes. It cannot open a Context, broaden a Grant, connect a
 provider, select a route, or persist a result. Memory-handle parsing and Query
 View catalog rendering were removed with that feature.
+
+The former `memcommit.adapters.interfaces.cli.query` path is removed without a
+facade because it was an internal adapter import. Keeping it would leave a
+second apparent owner for command-specific presentation.
 
 For the first positional value, the command composition resolves an accessible
 target before using the historical question fallback:

@@ -1,4 +1,4 @@
-"""Plain command-line parsing and rendering for typed Query results."""
+"""Plain command-line rendering for typed Query results."""
 
 from __future__ import annotations
 
