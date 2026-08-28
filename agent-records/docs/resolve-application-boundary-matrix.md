@@ -65,6 +65,17 @@ freshness or CAS behavior, apply-first policy, checkpoint evidence, receipts,
 or terminal interaction. Consequently the existing ordered PTY evidence
 remains valid and no screenshot refresh is required.
 
+Resolve's console-specific adapters are co-located under
+`memcommit.adapters.console.commands.resolve`: `command.py` owns orchestration,
+`analysis.py` owns compact terminal projections for proposals and terminal
+outcomes, `receipt.py` owns durable Apply receipts, and `workbench/` owns the
+Resolve-specific Viewer, exact-review, and compact-decision composition. The
+former `interfaces/cli/resolve.py` and `interfaces/tui/operations/resolve`
+paths are removed without compatibility facades. Shared Viewer, exact-command
+review, and Resolution workbench mechanics retain their existing owners. This
+is an adapter ownership relocation only; execution order, automatic Apply,
+output text, keyboard behavior, and existing PTY evidence are unchanged.
+
 ## Rule matrix
 
 | Rule | Boundary | Required behavior | Host enforcement |

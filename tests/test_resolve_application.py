@@ -26,7 +26,7 @@ from memcommit.adapters.interfaces.agent import (
     RESOLVE_AGENT_TOOL_NAME,
     build_default_agent_tool_registry,
 )
-from memcommit.adapters.interfaces.cli.resolve import render_resolve_plain
+from memcommit.adapters.console.commands.resolve.analysis import render_resolve_plain
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -36,7 +36,7 @@ from memcommit.application.operations.profile.config import (
     profile_store_dir,
 )
 from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
-from memcommit.adapters.interfaces.tui.operations.resolve import (
+from memcommit.adapters.console.commands.resolve.workbench import (
     project_resolve_analysis,
     resolve_candidate_exact_review,
     run_resolve_tui,

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from memcommit.adapters.console.clipboard import write_system_clipboard
 from memcommit.adapters.console.shared.command_progress import CommandProgress
-from memcommit.adapters.interfaces.cli.resolve import render_resolve_receipt
-from memcommit.adapters.interfaces.tui.operations.resolve import run_resolve_tui
+from memcommit.adapters.console.commands.resolve.receipt import render_resolve_receipt
+from memcommit.adapters.console.commands.resolve.workbench import run_resolve_tui
 from memcommit.application.reviewing.quality.handoff import (
     QualityFindingHandoff,
     conflict_handoff_to_resolve_request,

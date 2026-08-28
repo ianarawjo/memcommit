@@ -10,10 +10,9 @@ from memcommit.adapters.console.clipboard import write_system_clipboard
 from memcommit.adapters.console.shared.command_progress import CommandProgress
 from memcommit.adapters.console.shared.context_operand import ContextOperandSnapshot
 from memcommit.application.operations.fit.judgment import FitJudgmentError
-from memcommit.adapters.interfaces.cli.resolve import (
-    render_resolve_plain,
-    render_resolve_receipt,
-)
+from memcommit.adapters.console.commands.resolve.analysis import render_resolve_plain
+from memcommit.adapters.console.commands.resolve.receipt import render_resolve_receipt
+from memcommit.adapters.console.commands.resolve.workbench import run_resolve_tui
 from memcommit.adapters.console import (
     ConsoleMode,
     ConsoleModeError,
@@ -21,7 +20,6 @@ from memcommit.adapters.console import (
     resolve_console_mode,
 )
 from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.interfaces.tui.operations.resolve import run_resolve_tui
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider
