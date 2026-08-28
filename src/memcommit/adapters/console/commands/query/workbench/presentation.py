@@ -1,4 +1,4 @@
-"""Typed Answer projections for the Query terminal interface."""
+"""Typed Answer projections for the Query workbench."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from memcommit.application.operations.query.ordinary_application import (
 )
 from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import source_object_label
-from memcommit.adapters.interfaces.tui.operations.query.model import (
+from memcommit.adapters.console.commands.query.workbench.model import (
     QueryAnswerClipboardProjection,
     QueryWorkbenchResponse,
 )

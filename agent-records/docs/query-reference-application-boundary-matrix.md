@@ -99,7 +99,7 @@ projects it through the versioned public result/error surface recorded in
 explicit reference metadata to that public method without importing this
 runtime. The CLI still owns overloaded selector routing. Query's workbench now
 lives under
-`interfaces.tui.operations.query`, while its plain result projection lives
+`commands.query.workbench`, while its plain result projection lives
 under `commands.query.presentation`; neither interface changes this route's
 provider-before-Source contract.
 

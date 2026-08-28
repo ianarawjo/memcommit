@@ -38,7 +38,7 @@ def _verify_pty() -> None:
 
 
 def _run_query_child() -> None:
-    from memcommit.adapters.interfaces.tui.operations.query import run_query_workbench
+    from memcommit.adapters.console.commands.query.workbench import run_query_workbench
     from memcommit.application.operations.query.ordinary_application import OrdinaryQueryResponse
 
     _verify_pty()

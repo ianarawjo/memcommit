@@ -1,4 +1,4 @@
-"""Process-local values for the Query terminal interface."""
+"""Process-local values for the Query workbench."""
 
 from __future__ import annotations
 

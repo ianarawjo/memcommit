@@ -323,17 +323,20 @@ def test_production_adapters_import_ordinary_query_from_new_owner():
     root = Path(__file__).parents[1]
     command = (root / "src/memcommit/adapters/console/commands/query/command.py").read_text()
     workbench_model = (
-        root / "src/memcommit/adapters/interfaces/tui/operations/query/model.py"
+        root
+        / "src/memcommit/adapters/console/commands/query/workbench/model.py"
     ).read_text()
 
     assert (
-        "from memcommit.application.operations.query.ordinary_application import "
-        "OrdinaryQueryRequest" in command
+        "from memcommit.application.operations.query.ordinary_application import ("
+        in command
     )
+    assert "OrdinaryQueryRequest" in command
     assert (
-        "from memcommit.application.operations.query.ordinary_runtime import "
-        "execute_ordinary_query" in command
+        "from memcommit.application.operations.query.ordinary_runtime import ("
+        in command
     )
+    assert "execute_ordinary_query" in command
     assert (
         "from memcommit.application.operations.query.ordinary_application import ("
         in workbench_model

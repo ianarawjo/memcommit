@@ -70,7 +70,7 @@ from memcommit.application.operations.query.ordinary_application import (
 )
 from memcommit.source_projection.presentation import SourceDisplayValue
 
-from memcommit.adapters.interfaces.tui.operations.query.adapter import (
+from memcommit.adapters.console.commands.query.workbench.presentation import (
     QUERY_VIEW_LABEL,
     QueryAnswerFocus,
     project_query_answer_clipboard,
@@ -78,13 +78,13 @@ from memcommit.adapters.interfaces.tui.operations.query.adapter import (
     query_answer_stop_count,
     render_query_answer_fragments,
 )
-from memcommit.adapters.interfaces.tui.operations.query.model import (
+from memcommit.adapters.console.commands.query.workbench.model import (
     GrantedQueryRunner,
     OrdinaryQueryRunner,
     QueryWorkbenchResponse,
     QueryWorkbenchResult,
 )
-from memcommit.adapters.interfaces.tui.operations.query.query_view_scope import (
+from memcommit.adapters.console.commands.query.workbench.scope import (
     CompactQueryViewScopeControl,
 )
 

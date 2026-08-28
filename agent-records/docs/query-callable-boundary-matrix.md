@@ -9,6 +9,17 @@ authority-granted Query Views, and legacy local `QueryContextRef` values. This
 matrix classifies callables that cross application, authority, provider, or
 public-interface boundaries. Query has no durability boundary.
 
+Query's console-specific adapters are co-located under
+`memcommit.adapters.console.commands.query`: `command.py` owns Store/catalog
+composition and route selection, `presentation.py` owns non-interactive answer
+output, and `workbench/` owns Query-specific process-local models, typed Answer
+and clipboard projection, Query View scope, and the prompt-toolkit screen. The
+former `commands/query/workbench.py` compatibility facade and
+`interfaces/tui/operations/query` implementation paths are removed. Shared TUI
+controls retain their existing owners. This is an ownership relocation only;
+provider timing, authority, output text, focus behavior, and existing PTY
+evidence are unchanged.
+
 ## Curated callable matrix
 
 | Callable | Owner / layer | Input and result | Effects and boundary | Evidence | State |
@@ -32,8 +43,8 @@ public-interface boundaries. Query has no durability boundary.
 | `interfaces.agent.query:query_agent_tool_schema` | schema projection | none -> fresh version-3 schema | grants no authority and carries no Source data | agent tests | `VERIFIED` |
 | `commands.query.presentation:render_ordinary_query_response` | CLI | response -> stdout | terminal-safe typed answer projection | CLI tests | `VERIFIED` |
 | `commands.query.presentation:render_granted_query_response` | CLI | response -> stdout | terminal-safe answer only | CLI tests | `VERIFIED` |
-| `interfaces.tui.operations.query:run_query_workbench` | TUI | frozen catalogs + runners -> result | process-local state, one provider turn after Enter, optional plain clipboard | workbench tests and 180×52 trace | `VERIFIED` |
-| `interfaces.tui.operations.query:project_query_answer_clipboard` | TUI projection | typed answer + focus -> text | no effect until injected writer; never reparses terminal output | clipboard tests | `VERIFIED` |
+| `commands.query.workbench:run_query_workbench` | TUI | frozen catalogs + runners -> result | process-local state, one provider turn after Enter, optional plain clipboard | workbench tests and 180×52 trace | `VERIFIED` |
+| `commands.query.workbench:project_query_answer_clipboard` | TUI projection | typed answer + focus -> text | no effect until injected writer; never reparses terminal output | clipboard tests | `VERIFIED` |
 | `commands.query:_open_query_workbench` | CLI composition | Store + public options -> workbench | freezes ordinary and Query View catalogs; injects runners and Help | Query command tests | `VERIFIED IN PLACE` |
 | `commands.query:cmd` | CLI composition | argv/TTY -> explicit route or narrow question fallback | accessible ordinary/QUERY targets resolve before an unmatched single bare value can become a current-Context question; repeated roots and QUERY-only `--context` retain exact authority | CF-01 route regressions and Query CLI tests | `VERIFIED IN PLACE` |
 

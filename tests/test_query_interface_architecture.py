@@ -1,4 +1,4 @@
-"""Ownership gates for Query's CLI/TUI interface extraction."""
+"""Ownership gates for Query's command-owned workbench."""
 
 from __future__ import annotations
 
@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "src" / "memcommit"
+COMMAND_ROOT = PACKAGE / "adapters" / "console" / "commands" / "query"
 
 
 def _imports(path: Path) -> tuple[str, ...]:
@@ -22,39 +23,44 @@ def _imports(path: Path) -> tuple[str, ...]:
     return tuple(modules)
 
 
-def test_query_tui_package_has_no_command_dependency():
-    operation = PACKAGE / "adapters" / "interfaces" / "tui" / "operations" / "query"
+def test_query_workbench_has_no_foreign_command_dependency() -> None:
+    workbench = COMMAND_ROOT / "workbench"
+    owner_prefix = "memcommit.adapters.console.commands.query.workbench"
     offenders = [
         (str(path.relative_to(ROOT)), module)
-        for path in operation.rglob("*.py")
+        for path in workbench.rglob("*.py")
         for module in _imports(path)
-        if module.startswith("memcommit.adapters.console.commands")
+        if module.startswith("memcommit.adapters.console.commands.")
+        and not module.startswith(owner_prefix)
     ]
 
     assert offenders == []
 
 
-def test_query_command_imports_interface_owner_directly():
-    source = (PACKAGE / "commands" / "query" / "command.py").read_text(encoding="utf-8")
+def test_query_command_imports_workbench_owner_directly() -> None:
+    source = (COMMAND_ROOT / "command.py").read_text(encoding="utf-8")
 
-    assert "from memcommit.adapters.interfaces.tui.operations.query import (" in source
-    assert "from memcommit.adapters.console.commands.query.workbench import" not in source
-
-
-def test_query_workbench_compatibility_exports_are_object_identical():
-    compatibility = importlib.import_module("memcommit.adapters.console.commands.query.workbench")
-    owner = importlib.import_module("memcommit.adapters.interfaces.tui.operations.query")
-
-    assert compatibility.__all__ == owner.__all__
-    for name in owner.__all__:
-        assert getattr(compatibility, name) is getattr(owner, name)
+    assert "from memcommit.adapters.console.commands.query.workbench import (" in source
+    assert "memcommit.adapters.interfaces.tui.operations.query" not in source
 
 
-def test_query_workbench_compatibility_module_has_no_implementation():
-    path = PACKAGE / "commands" / "query" / "workbench.py"
-    tree = ast.parse(path.read_text(encoding="utf-8"))
+def test_query_workbench_package_replaces_the_compatibility_facade() -> None:
+    workbench = COMMAND_ROOT / "workbench"
+    retired = PACKAGE / "adapters" / "interfaces" / "tui" / "operations" / "query"
 
-    assert not any(
-        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        for node in ast.walk(tree)
+    assert not (COMMAND_ROOT / "workbench.py").exists()
+    assert (workbench / "model.py").is_file()
+    assert (workbench / "presentation.py").is_file()
+    assert (workbench / "scope.py").is_file()
+    assert (workbench / "screen.py").is_file()
+    assert not tuple(retired.glob("*.py"))
+
+
+def test_query_workbench_exports_its_owned_implementations() -> None:
+    owner = importlib.import_module("memcommit.adapters.console.commands.query.workbench")
+
+    assert owner.run_query_workbench.__module__.endswith(".workbench.screen")
+    assert owner.QueryWorkbenchResult.__module__.endswith(".workbench.model")
+    assert owner.project_query_answer_clipboard.__module__.endswith(
+        ".workbench.presentation"
     )

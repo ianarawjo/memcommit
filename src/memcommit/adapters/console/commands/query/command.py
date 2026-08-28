@@ -27,7 +27,7 @@ from memcommit.providers.operation_connections import (
     connect_ordinary_query_provider as connect_codex_chatgpt_provider,
     connect_query_route_provider as connect_query_provider,
 )
-from memcommit.adapters.interfaces.tui.operations.query import (
+from memcommit.adapters.console.commands.query.workbench import (
     run_query_workbench,
 )
 from memcommit.adapters.console.shared.session_help import bind_session_help

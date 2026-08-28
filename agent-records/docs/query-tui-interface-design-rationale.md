@@ -1,30 +1,34 @@
-# Query TUI interface-ownership rationale
+# Query workbench ownership rationale
 
-Last verified: 2026-08-20.
+Last verified: 2026-08-28.
 
 ## Problem
 
-Query execution had moved below the terminal boundary, but its 1,200-line
-workbench still lived in `memcommit.adapters.console.commands.query.workbench`. That module mixed
-process-local values, typed answer projection, and prompt-toolkit mechanics, and
-it depended on several operation-neutral helpers through command-owned paths.
-The result was callable without the CLI, but its ownership still implied that
-the command layer implemented the TUI.
+An earlier interface extraction placed Query-specific models, projections, and
+prompt-toolkit composition under `interfaces/tui/operations/query`, while
+`commands/query/workbench.py` remained as an object-identity compatibility
+facade. As the console adapters became operation packages, that arrangement
+left the command importing a generic interface owner and kept a backwards
+facade at the location that should own Query's terminal composition. The
+operation-neutral controls were already shared independently, so the extra
+operation interface layer no longer expressed a useful boundary.
 
 ## Decision
 
-The Query terminal interface now owns three explicit modules:
+The Query command package now owns four explicit workbench modules:
 
 ```text
-memcommit/adapters/interfaces/tui/operations/query/
-  model.py    process-local transcript, response, receipt, and runner types
-  adapter.py  typed answer/reference/transcript and clipboard projections
-  screen.py   prompt-toolkit layout, focus, keys, and background-turn lifecycle
+memcommit/adapters/console/commands/query/workbench/
+  model.py         process-local response, result, clipboard, and runner types
+  presentation.py  typed Answer/Reference and clipboard projections
+  scope.py         QUERY-granted View selection and federation control
+  screen.py        prompt-toolkit layout, focus, keys, and background-turn lifecycle
 ```
 
-The command imports this package directly. The former
-`memcommit.adapters.console.commands.query.workbench` path contains only object-identical
-compatibility exports.
+The command imports this package directly. The former flat workbench facade and
+`interfaces/tui/operations/query` package are removed without compatibility
+facades. `commands/query/presentation.py` remains the separate non-interactive
+answer owner.
 
 The screen also uses interface-owned background-turn, horizontal-choice,
 activity-animation, and plain-text clipboard components. Their old command
@@ -54,14 +58,15 @@ binder, and isolated screen tests may supply a deterministic fake.
 
 ## Verification
 
-Architecture tests reject command imports from the Query TUI package, require
-the production command to import the interface owner, and prove compatibility
-exports are object-identical and implementation-free. Query workbench and
-shared-component regressions cover the same direct calls through the new path.
+Architecture tests reject dependencies on foreign command implementations,
+require the production command to import its workbench owner directly, verify
+the four-module package, and prove the retired interface contains no Python
+facade. Query workbench and shared-component regressions cover the same direct
+calls through the new path.
 
 The refreshed ordered `agent-records/docs/screenshots/query-tui-interface-20260815/` 180×52
 PTY trace was generated through the Query screen. It records entry, question
 input, compact answer-body and Reference focus, focused and complete copy,
 adapter failure, close, and read-only verification. The ownership move itself
-introduced no new state; the later compact-row presentation changed only the
-typed Reference projection.
+introduced no new state or visible behavior, so the ordered images do not need
+to be regenerated; their capture scripts now import the canonical workbench.

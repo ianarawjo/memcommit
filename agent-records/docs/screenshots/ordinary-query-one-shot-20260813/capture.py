@@ -112,7 +112,7 @@ def _run_child() -> None:
         ORDINARY_QUERY_REASONING_EFFORT,
     )
     from memcommit.application.operations.query.ordinary_application import OrdinaryQueryResponse
-    from memcommit.adapters.interfaces.tui.operations.query import run_query_workbench
+    from memcommit.adapters.console.commands.query.workbench import run_query_workbench
     from memcommit.application.operations.query.answer import (
         build_ordinary_query_reference_document,
         complete_ordinary_query_answer,
