@@ -41,9 +41,17 @@ agent/MCP kind=plan/apply ----------/        plan handle --> apply_replace
 | No-op | `memcommit.application.operations.replace.application` / `runtime` | No match or identical before/after still revalidates the complete scope and returns an explicit no-op receipt without a checkpoint |
 | Recovery | command history | Per-Context checkpoints share one operation UID, so one Undo or Redo restores the complete multi-Context command unit |
 | CLI | `memcommit.adapters.console.commands.replace.command` | A complete request executes immediately in any terminal; `--plain` changes only receipt styling and does not suppress mutation |
-| TUI | `interfaces.tui.operations.replace` | The primary-screen compact form edits pattern, replacement, local target set, lexical/embedded reach, mode, and case; Enter on Replace With executes directly, closes the form, and prints one concise receipt without Review or To Do |
+| TUI | `memcommit.adapters.console.commands.replace.workbench` | The primary-screen compact form edits pattern, replacement, local target set, lexical/embedded reach, mode, and case; Enter on Replace With executes directly, closes the form, and prints one concise receipt without Review or To Do |
 | Python | `MemCommitClient.plan_replace` / `apply_replace` | A typed immutable plan carries an opaque client-local handle; Apply rejects plans from another client or modified digests |
 | Agent/MCP | `memcommit_replace` version 1 | `plan` returns JSON-safe complete changes; `apply` recomputes from exact request values and requires the previously reviewed digest; provider use is always false |
+
+Console-specific ownership is co-located under
+`memcommit.adapters.console.commands.replace`: `command.py` owns orchestration,
+`workbench/` owns interactive editing and direct execution, `proposal.py`
+retains the human-readable frozen-plan projection for the planned proposal
+workflow, and `receipt.py` owns completed-command output. The proposal renderer
+is deliberately retained without wiring a new human review step in this
+relocation.
 
 ## Verification
 

@@ -7,13 +7,17 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
-from memcommit.adapters.console.commands.shared.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.commands.shared.context_operand import (
+    ContextOperandSnapshot,
+)
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.adapters.interfaces.cli.replace import render_replace_apply_result
+from memcommit.adapters.console.commands.replace.receipt import (
+    render_replace_apply_result,
+)
 from memcommit.adapters.console import (
     ConsoleMode,
     ConsoleModeError,
@@ -21,13 +25,16 @@ from memcommit.adapters.console import (
     resolve_console_mode,
 )
 from memcommit.adapters.console.text import display_escape_text
-from memcommit.adapters.interfaces.tui.operations.replace import (
+from memcommit.adapters.console.commands.replace.workbench import (
     ReplaceTuiSetup,
     run_replace_tui,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.operations.replace.application import ReplaceError, ReplaceRequest
+from memcommit.application.operations.replace.application import (
+    ReplaceError,
+    ReplaceRequest,
+)
 from memcommit.application.operations.replace.runtime import execute_replace_with_store
 from memcommit.persistence.store import MemoryStore
 

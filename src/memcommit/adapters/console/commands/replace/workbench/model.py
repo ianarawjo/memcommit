@@ -1,4 +1,4 @@
-"""Process-local setup and result values for deterministic Replace."""
+"""Process-local setup values for the deterministic Replace workbench."""
 
 from __future__ import annotations
 

@@ -8,7 +8,14 @@ from pathlib import Path
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.adapters.interfaces.tui.operations.replace import ReplaceTuiSetup, run_replace_tui
+from memcommit.adapters.console.commands.replace.proposal import render_replace_plan
+from memcommit.adapters.console.commands.replace.receipt import (
+    render_replace_apply_result,
+)
+from memcommit.adapters.console.commands.replace.workbench import (
+    ReplaceTuiSetup,
+    run_replace_tui,
+)
 from memcommit.application.operations.replace.application import (
     FrozenReplaceContext,
     FrozenReplacePlan,
@@ -161,7 +168,7 @@ def test_replace_tui_projects_descendants_as_exact_checked_execution_set() -> No
 def test_replace_tui_uses_primary_screen_and_erases_when_done() -> None:
     path = (
         Path(__file__).parents[1]
-        / "src/memcommit/adapters/interfaces/tui/operations/replace/screen.py"
+        / "src/memcommit/adapters/console/commands/replace/workbench/screen.py"
     )
     module = ast.parse(path.read_text(encoding="utf-8"))
     application_calls = [
@@ -182,3 +189,34 @@ def test_replace_tui_uses_primary_screen_and_erases_when_done() -> None:
     assert keywords["full_screen"].value is False
     assert isinstance(keywords["erase_when_done"], ast.Constant)
     assert keywords["erase_when_done"].value is True
+
+
+def test_replace_console_owns_workbench_proposal_and_receipt_without_facades() -> None:
+    repository_root = Path(__file__).resolve().parents[1]
+    command_root = repository_root / "src/memcommit/adapters/console/commands/replace"
+
+    assert (command_root / "workbench/model.py").is_file()
+    assert (command_root / "workbench/screen.py").is_file()
+    assert (command_root / "proposal.py").is_file()
+    assert (command_root / "receipt.py").is_file()
+    assert not (
+        repository_root / "src/memcommit/adapters/interfaces/cli/replace.py"
+    ).exists()
+    assert not tuple(
+        (
+            repository_root / "src/memcommit/adapters/interfaces/tui/operations/replace"
+        ).glob("*.py")
+    )
+
+
+def test_replace_proposal_and_receipt_present_distinct_command_states() -> None:
+    port = _Port()
+    plan = plan_replace(ReplaceRequest("needle", "pin", ("alpha",)), port=port)
+
+    proposal = render_replace_plan(plan)
+    assert proposal.startswith("REPLACE PLAN · READY FOR REVIEW")
+    assert f"PLAN DIGEST · {plan.plan_digest}" in proposal
+
+    receipt = render_replace_apply_result(apply_replace(plan, port=port))
+    assert receipt.startswith("Replaced 3 occurrences in 2 Memories")
+    assert "PLAN" not in receipt

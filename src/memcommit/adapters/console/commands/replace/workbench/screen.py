@@ -1,4 +1,4 @@
-"""Compact direct-execution editor for deterministic Replace."""
+"""Compact direct-execution workbench for deterministic Replace."""
 
 from __future__ import annotations
 
@@ -19,7 +19,9 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.core.context_targeting.tui.compact_scope import CompactReadableScopeControl
+from memcommit.core.context_targeting.tui.compact_scope import (
+    CompactReadableScopeControl,
+)
 from memcommit.adapters.console.terminal import require_interactive_terminal
 from memcommit.adapters.console.text import safe_terminal_text
 from memcommit.adapters.interfaces.tui.components.focus import (
@@ -41,8 +43,11 @@ from memcommit.adapters.interfaces.tui.core.theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.adapters.interfaces.tui.operations.replace.model import ReplaceTuiSetup
-from memcommit.application.operations.replace.application import ReplaceApplyResult, ReplaceRequest
+from memcommit.adapters.console.commands.replace.workbench.model import ReplaceTuiSetup
+from memcommit.application.operations.replace.application import (
+    ReplaceApplyResult,
+    ReplaceRequest,
+)
 
 
 ReplaceRunner = Callable[[ReplaceRequest], ReplaceApplyResult]

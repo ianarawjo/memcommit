@@ -129,6 +129,13 @@ digest before Apply. The token binds one in-process Apply to the Store instance,
 all scanned Context identities and digests, and one operation UID used only to
 group checkpoints for Undo/Redo.
 
+The Replace command package retains a separate human-readable proposal
+projection for the planned proposal workflow. It is intentionally distinct
+from the completed-command receipt and is not yet wired into the direct CLI or
+compact TUI route. Preserving that projection does not expose the process-local
+token, turn the current digest into a human approval artifact, or add a second
+Apply gesture before the proposal contract is reviewed.
+
 `mem replace PATTERN REPLACEMENT` is a complete command and executes
 immediately in both interactive and noninteractive terminals. `--plain`
 changes only receipt styling; it is not a preview mode. Operand-free Replace,
