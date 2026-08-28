@@ -1,4 +1,4 @@
-"""Human-readable console renderer for a typed Context Init receipt."""
+"""Human-readable console receipt for a completed Context Init."""
 
 from __future__ import annotations
 

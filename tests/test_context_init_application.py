@@ -21,7 +21,7 @@ from memcommit.application.operations.context_init.runtime import (
     execute_context_init,
     prepare_context_init,
 )
-from memcommit.adapters.interfaces.tui.operations.context_init import (
+from memcommit.adapters.console.commands.init.setup import (
     ContextInitTuiSetup,
     run_context_init_tui,
 )
@@ -318,6 +318,24 @@ def test_context_init_tui_cancel_returns_no_request():
     )
 
     assert result is None
+
+
+def test_context_init_console_owns_setup_and_receipt_without_facades():
+    repository_root = Path(__file__).resolve().parents[1]
+    command_root = (
+        repository_root / "src/memcommit/adapters/console/commands/init"
+    )
+    retired_tui_root = (
+        repository_root
+        / "src/memcommit/adapters/interfaces/tui/operations/context_init"
+    )
+
+    assert (command_root / "setup.py").is_file()
+    assert (command_root / "receipt.py").is_file()
+    assert not tuple(retired_tui_root.glob("*.py"))
+    assert not (
+        repository_root / "src/memcommit/adapters/interfaces/cli/context_init.py"
+    ).exists()
 
 
 def test_context_init_runtime_has_no_typer_or_tui_imports():
