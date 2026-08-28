@@ -1,4 +1,4 @@
-"""Plain command-line projection for typed Status results."""
+"""Plain terminal presentation for typed Status results."""
 
 from __future__ import annotations
 

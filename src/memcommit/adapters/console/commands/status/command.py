@@ -10,7 +10,7 @@ from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.adapters.interfaces.cli.status import render_status
+from memcommit.adapters.console.commands.status.presentation import render_status
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.operations.status.application import (
