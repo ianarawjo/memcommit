@@ -292,8 +292,8 @@ def test_empty_ground_catalog_still_opens_launcher_with_new_session_action(
     assert len(seen) == 1
     entries, kwargs = seen[0]
     assert entries == ()
-    assert kwargs["title"] == "MEM GROUND · SESSIONS"
-    assert kwargs["new_receipt"].action_label == "START NEW GROUND SESSION"
+    assert kwargs["title"] == "MEM GROUND · WORKSPACES"
+    assert kwargs["new_receipt"].action_label == "START NEW GROUND WORKSPACE"
     assert "Start blank" in kwargs["new_receipt"].action_description
     assert "above the Goal" in kwargs["new_receipt"].action_description
     assert not isolated_store.exists()

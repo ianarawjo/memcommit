@@ -84,7 +84,6 @@ def isolated_store(tmp_path, monkeypatch):
     atomize_workbenches_dir = store_dir / "atomize-workbenches"
     atomize_groundings_dir = store_dir / "atomize-groundings"
     atomize_grounding_history_dir = store_dir / "atomize-grounding-history"
-    ground_sessions_dir = store_dir / "ground-sessions"
     meld_sessions_dir = store_dir / "meld-sessions"
 
     monkeypatch.setattr(store_module, "STORE_DIR", store_dir)
@@ -121,11 +120,6 @@ def isolated_store(tmp_path, monkeypatch):
         store_module,
         "ATOMIZE_GROUNDING_HISTORY_DIR",
         atomize_grounding_history_dir,
-    )
-    monkeypatch.setattr(
-        store_module,
-        "GROUND_SESSIONS_DIR",
-        ground_sessions_dir,
     )
     monkeypatch.setattr(
         store_module,

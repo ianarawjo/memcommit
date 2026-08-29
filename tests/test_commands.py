@@ -19,7 +19,10 @@ import memcommit.adapters.console.commands.help.selector as help_selector
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.branch.receipt import BranchCreationReceipt
-from memcommit.adapters.console.commands.help.command import CommandEntry, run_help_selector
+from memcommit.adapters.console.commands.help.command import (
+    CommandEntry,
+    run_help_selector,
+)
 from memcommit.persistence.store import MemoryStore
 
 runner = CliRunner(mix_stderr=False)
@@ -672,8 +675,10 @@ class TestHelp:
                 if isinstance(parameter, click.Option)
                 and "--sessions" in parameter.opts
             )
+            expected_surface = "workspace" if command_name == "ground" else "session"
             assert sessions_option.help == (
-                f"Enter the interactive {command_name.title()} session launcher"
+                f"Enter the interactive {command_name.title()} "
+                f"{expected_surface} launcher"
             )
 
         all_forms = tuple(
@@ -1193,7 +1198,8 @@ class TestInit:
             return view.value
 
         monkeypatch.setattr(
-            "memcommit.adapters.console.commands.init.command.choose_context_name", choose
+            "memcommit.adapters.console.commands.init.command.choose_context_name",
+            choose,
         )
 
         result = invoke("init")

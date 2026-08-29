@@ -19,7 +19,7 @@ described as one TUI:
 
 | Operation | Bare entry / saved-work route | Active work surface |
 | --- | --- | --- |
-| Ground | Shared `SessionPicker` when saved Grounds exist; otherwise the new-Ground flow | Dedicated blank and named Ground shells |
+| Ground | Shared operation launcher for physical workspaces and drafts | Physical workspace viewer or blank creation shell |
 | Meld | Bare role-based setup; shared `SessionPicker` only with `--sessions` | Shared `ResolutionWorkbench` through the Meld adapter |
 | Compare | Bare A/B setup; shared `SessionPicker` only with `--sessions` | Dedicated read-only Compare workbench |
 | Update | Bare Source/Target setup; shared singleton `SessionPicker` only with `--sessions` | Update adapter and shared `ResolutionWorkbench`; saved receipt rendering is currently snapshot-oriented |

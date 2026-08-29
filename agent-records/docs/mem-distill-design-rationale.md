@@ -240,11 +240,10 @@ checked before inference and again before the proposal is returned. Neither
 the Ground nor any bound Context is changed.
 
 Ground Distill intentionally rejects Context/range/Goal overrides and
-`--save-as`/`--apply`. It remains read-only by default. For a physical Ground,
-the explicit `--adopt` form revalidates the exact reviewed Ground revision and
-`/rules` pre-image, then adds the complete proposal as one Ground-local command
-unit. Legacy JSON Grounds cannot use this adoption path; a semantic proposal
-without `--adopt` is not acceptance.
+`--save-as`/`--apply`. It remains read-only by default. The explicit `--adopt`
+form revalidates the exact reviewed physical Ground revision and `/rules`
+pre-image, then adds the complete proposal as one Ground-local command unit. A
+semantic proposal without `--adopt` is not acceptance.
 
 ## Apply, provenance, and authority
 

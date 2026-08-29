@@ -1,11 +1,12 @@
 """Strict provider boundary for the first unsaved Ground dialogue turn."""
+
 from __future__ import annotations
 
 import json
 
 import pytest
 
-from memcommit.application.operations.ground.model import GROUND_TEXT_LIMIT
+from memcommit.application.operations.ground.contracts import GROUND_TEXT_LIMIT
 from memcommit.application.operations.ground.dialogue import (
     GROUND_DIALOGUE_OPERATION,
     GROUND_DIALOGUE_QUESTION_LIMIT,
@@ -41,14 +42,11 @@ class FakeProvider:
 def _proposal(**overrides):
     value = {
         "kind": "PROPOSE",
-        "understanding": (
-            "You want to inspect which Task 1 claims were represented."
-        ),
+        "understanding": ("You want to inspect which Task 1 claims were represented."),
         "question": "Should I create this Ground, or refine it first?",
         "ground_name": "task-1-report-coverage",
         "goal": (
-            "Determine which Task 1 claims are represented, missing, or "
-            "ambiguous."
+            "Determine which Task 1 claims are represented, missing, or ambiguous."
         ),
         "context_suggestions": [],
         "new_context_suggestions": [],
@@ -87,15 +85,10 @@ def test_proposal_uses_one_strict_provider_call_and_returns_typed_turn():
     )
 
     assert turn == GroundDialogueProposal(
-        understanding=(
-            "You want to inspect which Task 1 claims were represented."
-        ),
+        understanding=("You want to inspect which Task 1 claims were represented."),
         question="Should I create this Ground, or refine it first?",
         ground_name="task-1-report-coverage",
-        goal=(
-            "Determine which Task 1 claims are represented, missing, or "
-            "ambiguous."
-        ),
+        goal=("Determine which Task 1 claims are represented, missing, or ambiguous."),
     )
     assert turn.kind == "PROPOSE"
     assert len(provider.calls) == 1
@@ -116,9 +109,10 @@ def test_proposal_uses_one_strict_provider_call_and_returns_typed_turn():
     assert schema["additionalProperties"] is False
     context_schema = schema["properties"]["context_suggestions"]
     assert context_schema["maxItems"] == 4
-    assert set(
-        context_schema["items"]["properties"]["role"]["enum"]
-    ) == {"MAIN", "ALTERNATIVE"}
+    assert set(context_schema["items"]["properties"]["role"]["enum"]) == {
+        "MAIN",
+        "ALTERNATIVE",
+    }
     assert schema["properties"]["new_context_suggestions"]["maxItems"] == 1
     assert schema["properties"]["rule_drafts"]["maxItems"] == 4
     assert schema["properties"]["memory_drafts"]["maxItems"] == 3
@@ -196,9 +190,7 @@ def test_context_catalog_is_name_only_and_suggestions_resolve_local_aliases():
         ),
     )
     prompt = provider.calls[0][0]
-    payload = json.loads(
-        prompt.split("GROUND DIALOGUE PAYLOAD:\n", 1)[1]
-    )
+    payload = json.loads(prompt.split("GROUND DIALOGUE PAYLOAD:\n", 1)[1])
     assert payload == {
         "user_text": "Split Task 1 into wiki and user-facing material.",
         "context_catalog": [
@@ -294,9 +286,7 @@ def test_first_turn_can_preview_new_context_rules_and_memories_without_saving():
                 {
                     "content": "Berkshire Hathaway Class B",
                     "expected": "BRK.B",
-                    "rationale": (
-                        "Synthetic boundary example; verify before use."
-                    ),
+                    "rationale": ("Synthetic boundary example; verify before use."),
                     "case_role": "BOUNDARY",
                     "disposition": "UNRESOLVED",
                     "rule_draft_index": 1,
@@ -318,8 +308,7 @@ def test_first_turn_can_preview_new_context_rules_and_memories_without_saving():
     assert turn.rule_drafts == (
         GroundDialogueRuleDraft(
             content=(
-                "Use a short uppercase base code and preserve a "
-                "share-class suffix."
+                "Use a short uppercase base code and preserve a share-class suffix."
             ),
             rationale="An initial hypothesis to test.",
             origin="AGENT_SUGGESTED",
@@ -551,9 +540,7 @@ def test_context_catalog_rejects_more_than_one_main_candidate():
     ],
 )
 def test_invalid_context_suggestions_fail_closed(suggestions):
-    provider = FakeProvider(
-        _proposal(context_suggestions=suggestions)
-    )
+    provider = FakeProvider(_proposal(context_suggestions=suggestions))
 
     with pytest.raises(
         GroundDialogueError,
@@ -607,17 +594,11 @@ def test_invalid_context_suggestions_fail_closed(suggestions):
             "invalid question",
         ),
         (
-            _proposal(
-                understanding=(
-                    "x" * (GROUND_DIALOGUE_UNDERSTANDING_LIMIT + 1)
-                )
-            ),
+            _proposal(understanding=("x" * (GROUND_DIALOGUE_UNDERSTANDING_LIMIT + 1))),
             "invalid understanding",
         ),
         (
-            _proposal(
-                question="x" * (GROUND_DIALOGUE_QUESTION_LIMIT + 1)
-            ),
+            _proposal(question="x" * (GROUND_DIALOGUE_QUESTION_LIMIT + 1)),
             "invalid question",
         ),
         (
@@ -676,9 +657,7 @@ def test_blank_or_oversized_user_input_is_rejected_before_provider_call(
 
 
 def test_oversized_provider_response_fails_closed_after_one_call():
-    provider = FakeProvider(
-        "x" * (GROUND_DIALOGUE_RESPONSE_CHAR_LIMIT + 1)
-    )
+    provider = FakeProvider("x" * (GROUND_DIALOGUE_RESPONSE_CHAR_LIMIT + 1))
 
     with pytest.raises(GroundDialogueError, match="structured output"):
         interpret_ground_dialogue("A valid user turn.", provider)
@@ -696,9 +675,7 @@ def test_prompt_injection_is_json_data_and_never_becomes_a_command_field():
     interpret_ground_dialogue(user_text, provider)
 
     prompt, _, schema = provider.calls[0]
-    payload = json.loads(
-        prompt.split("GROUND DIALOGUE PAYLOAD:\n", 1)[1]
-    )
+    payload = json.loads(prompt.split("GROUND DIALOGUE PAYLOAD:\n", 1)[1])
     assert payload == {
         "user_text": user_text,
         "context_catalog": [],
@@ -729,9 +706,7 @@ def test_provider_connection_and_completion_failures_are_safe():
 
 def test_actionable_codex_provider_errors_cross_the_safe_boundary():
     def logged_out_factory():
-        raise QueryProviderError(
-            "Run 'codex login' and choose ChatGPT."
-        )
+        raise QueryProviderError("Run 'codex login' and choose ChatGPT.")
 
     with pytest.raises(
         GroundDialogueError,

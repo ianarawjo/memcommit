@@ -13,7 +13,9 @@ from memcommit.application.capabilities.authority.access import (
 from memcommit.bootstrap import build_distill_console_runner
 from memcommit.adapters.console.clipboard import write_system_clipboard
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
-from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
+)
 from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
@@ -26,7 +28,9 @@ from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemoryRow,
     context_memory_rows,
 )
-from memcommit.application.capabilities.semantic.goal_focus_runtime import freeze_goal_focus_operand
+from memcommit.application.capabilities.semantic.goal_focus_runtime import (
+    freeze_goal_focus_operand,
+)
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.application.operations.distill.model import DistillError
 from memcommit.application.operations.distill.application import (
@@ -42,7 +46,6 @@ from memcommit.application.operations.distill.runtime import (
 )
 from memcommit.application.operations.ground.distill import (
     FrozenGroundDistill,
-    FrozenGroundWorkspaceDistill,
     GroundDistillResult,
     apply_ground_distill_result,
     execute_ground_distill,
@@ -63,8 +66,13 @@ from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.distill.workbench import DistillTuiSetup
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider
-from memcommit.application.operations.add.semantic_runtime import resolve_semantic_add_endpoints
+from memcommit.providers.subscription import (
+    QueryProviderError,
+    connect_semantic_provider,
+)
+from memcommit.application.operations.add.semantic_runtime import (
+    resolve_semantic_add_endpoints,
+)
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.summarize.model import SummaryFrame
 
@@ -96,7 +104,7 @@ def cmd(
             help=(
                 "Existing local Context to distill by canonical name or explicit "
                 "relative locator (defaults to current)"
-            )
+            ),
         ),
     ] = None,
     source_name: Annotated[
@@ -301,7 +309,7 @@ def cmd(
             )
             typer.echo("UNDO · mem undo")
             return
-        frozen_ground: FrozenGroundDistill | FrozenGroundWorkspaceDistill | None = (
+        frozen_ground: FrozenGroundDistill | None = (
             freeze_ground_distill(store, ground_name=ground)
             if ground is not None
             else None
@@ -328,6 +336,7 @@ def cmd(
                 "preparing source",
                 total=2,
             ) as progress:
+
                 def connect_provider():
                     progress.update("distilling Rules", step=2)
                     return connect_semantic_provider()
@@ -353,16 +362,14 @@ def cmd(
                     raise DistillError(
                         "Ground Distill cannot change its frozen Source or reach."
                     )
-                ground_preview_frame = (
-                    frozen_ground.candidate_frame
-                    if isinstance(frozen_ground, FrozenGroundWorkspaceDistill)
-                    else frozen_ground.example_frame
-                )
+                ground_preview_frame = frozen_ground.candidate_frame
                 if ground_preview_frame is not None:
+
                     def memory_loader(_name: str) -> tuple[ContextMemoryRow, ...]:
                         return _summary_frame_memory_rows(ground_preview_frame)
 
                 else:
+
                     def memory_loader(
                         context_name: str,
                     ) -> tuple[ContextMemoryRow, ...]:

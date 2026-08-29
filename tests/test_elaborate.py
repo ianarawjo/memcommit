@@ -16,8 +16,9 @@ import memcommit.adapters.console.commands.elaborate.command as elaborate_comman
 import memcommit.application.operations.elaborate.application as elaborate_application
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.conformance.model import CONTEXT_CONFORMANCE_OPERATION
-from memcommit.core.context import Context, Memory
+from memcommit.application.operations.conformance.model import (
+    CONTEXT_CONFORMANCE_OPERATION,
+)
 from memcommit.application.operations.elaborate.model import (
     ELABORATE_OPERATION,
     ELABORATE_PAYLOAD_MARKER,
@@ -31,12 +32,6 @@ from memcommit.application.operations.elaborate.runtime import execute_elaborate
 from memcommit.application.operations.fit.judgment import (
     FIT_JUDGMENT_OPERATION,
     FIT_JUDGMENT_PAYLOAD_MARKER,
-)
-from memcommit.application.operations.ground.model import (
-    GroundTargetSpec,
-    bind_ground_workbench,
-    create_ground_session,
-    propose_ground_rule,
 )
 from memcommit.application.operations.ground.elaborate import (
     apply_ground_elaborate_result,
@@ -61,7 +56,7 @@ from memcommit.adapters.console.commands.elaborate.viewer import (
     project_elaborate_result,
     run_elaborate_tui,
 )
-from memcommit.persistence.store import MemoryStore, ground_session_record_digest
+from memcommit.persistence.store import MemoryStore
 from tests.elaborate_validation_support import (
     passing_elaborate_validation_response,
 )
@@ -254,9 +249,9 @@ def test_rules_elaborate_to_diverse_unverified_case_propositions() -> None:
     )
     assert provider.calls[0][1]["properties"]["cases"]["minItems"] == 3
     assert provider.calls[0][1]["properties"]["cases"]["maxItems"] == 3
-    checks_schema = provider.calls[0][1]["properties"]["cases"]["items"][
-        "properties"
-    ]["rule_checks"]
+    checks_schema = provider.calls[0][1]["properties"]["cases"]["items"]["properties"][
+        "rule_checks"
+    ]
     assert checks_schema["minItems"] == checks_schema["maxItems"] == 1
     assert "Propose exactly 3" in provider.calls[0][0]
     assert "complete input Rule set together" in provider.calls[0][0]
@@ -299,7 +294,9 @@ def test_rules_elaborate_accepts_source_absent_values_when_they_fit() -> None:
         FIT_JUDGMENT_OPERATION,
     ]
     fit_prompt = provider.semantic_calls[-1][1]
-    assert "Missing support or an unknown fact is not itself a contradiction" in fit_prompt
+    assert (
+        "Missing support or an unknown fact is not itself a contradiction" in fit_prompt
+    )
 
 
 def test_rules_elaborate_rejects_a_case_that_fails_source_rule_conformance() -> None:
@@ -350,9 +347,7 @@ def test_rules_elaborate_rejects_a_case_that_does_not_fit_the_source() -> None:
     class RejectingProvider(ElaborateProvider):
         def complete(self, prompt, *, operation, output_schema=None):
             if operation == FIT_JUDGMENT_OPERATION:
-                payload = json.loads(
-                    prompt.split(FIT_JUDGMENT_PAYLOAD_MARKER, 1)[1]
-                )
+                payload = json.loads(prompt.split(FIT_JUDGMENT_PAYLOAD_MARKER, 1)[1])
                 question = payload["questions"][0]
                 aliases = [
                     item["proposition_id"]
@@ -452,6 +447,7 @@ def test_elaborate_number_rejects_a_provider_count_mismatch() -> None:
             ElaborateRequest(goal="Make this Goal operational.", number=2),
             provider_factory=lambda: provider,
         )
+
 
 @pytest.mark.parametrize(
     "elaborate_request",
@@ -710,8 +706,7 @@ def test_rules_elaborate_accepts_collection_level_rule_applicability() -> None:
                     prompt.split("CONFORMANCE CONTEXT PAYLOAD:\n", 1)[1]
                 )
                 memory_ids = [
-                    item["memory_id"]
-                    for item in payload["target_context"]["memories"]
+                    item["memory_id"] for item in payload["target_context"]["memories"]
                 ]
                 return json.dumps(
                     {
@@ -771,13 +766,16 @@ def test_elaborate_application_imports_no_terminal_or_command_adapter() -> None:
         elif isinstance(node, ast.ImportFrom) and node.module is not None:
             imports.append(node.module)
 
-    assert tuple(
-        name
-        for name in imports
-        if name == "typer"
-        or name.startswith("prompt_toolkit")
-        or name.startswith("memcommit.adapters.console.commands")
-    ) == ()
+    assert (
+        tuple(
+            name
+            for name in imports
+            if name == "typer"
+            or name.startswith("prompt_toolkit")
+            or name.startswith("memcommit.adapters.console.commands")
+        )
+        == ()
+    )
 
 
 def test_elaborate_result_limits_follow_the_injected_config() -> None:
@@ -844,12 +842,9 @@ def test_elaborate_shared_viewer_copies_one_proposal_or_all() -> None:
 
 def test_elaborate_console_owns_proposal_viewer_and_runner_without_facades() -> None:
     repository_root = Path(__file__).resolve().parents[1]
-    command_root = (
-        repository_root / "src/memcommit/adapters/console/commands/elaborate"
-    )
+    command_root = repository_root / "src/memcommit/adapters/console/commands/elaborate"
     retired_tui_root = (
-        repository_root
-        / "src/memcommit/adapters/interfaces/tui/operations/elaborate"
+        repository_root / "src/memcommit/adapters/interfaces/tui/operations/elaborate"
     )
 
     assert (command_root / "proposal.py").is_file()
@@ -862,204 +857,10 @@ def test_elaborate_console_owns_proposal_viewer_and_runner_without_facades() -> 
         repository_root / "src/memcommit/adapters/interfaces/cli/elaborate.py"
     ).exists()
 
-    bootstrap_source = (
-        repository_root / "src/memcommit/bootstrap.py"
-    ).read_text(encoding="utf-8")
+    bootstrap_source = (repository_root / "src/memcommit/bootstrap.py").read_text(
+        encoding="utf-8"
+    )
     assert "build_elaborate_console_runner" not in bootstrap_source
-
-
-def _bound_ground(store: MemoryStore):
-    raw = Context(uid="00000000-0000-4000-8000-000000000101", name="ground/raw")
-    candidates = Context(
-        uid="00000000-0000-4000-8000-000000000102",
-        name="ground/candidates",
-    )
-    candidates.add(
-        Memory(
-            uid="00000000-0000-4000-8000-000000000104",
-            content="A person explicitly confirmed option A before it was used.",
-        )
-    )
-    target = Context(
-        uid="00000000-0000-4000-8000-000000000103",
-        name="ground/target",
-    )
-    for context in (raw, candidates, target):
-        store.create_context(context)
-    session = bind_ground_workbench(
-        create_ground_session(
-            "elaborate-ground",
-            goal="Confirm a chosen option before acting.",
-        ),
-        description="Build a reviewed confirmation behavior contract.",
-        raw_context=raw,
-        derived_context=candidates,
-        target_contexts=(target,),
-        target_requirements=(
-            GroundTargetSpec(
-                context_name=target.name,
-                description="Add one reviewed confirmation Case.",
-                role="PUBLICATION_TARGET",
-            ),
-        ),
-    )
-    store.save_ground_session(session)
-    return session, (raw, candidates, target)
-
-
-def test_ground_and_standalone_use_the_same_elaborate_application(isolated_store):
-    store = MemoryStore()
-    session, contexts = _bound_ground(store)
-    provider = ElaborateProvider()
-    frozen = freeze_ground_elaborate(
-        store,
-        ground_name=session.contract_name,
-        direction="GOAL_TO_RULES",
-    )
-
-    ground_result = execute_ground_elaborate(
-        frozen,
-        store=store,
-        provider_factory=lambda: provider,
-    )
-
-    assert ground_result.frozen.request == ElaborateRequest(goal=session.goal)
-    assert ground_result.elaborate.analysis.rules[0].content == (
-        "Confirm the selected option before acting."
-    )
-    assert store.load_ground_session(session.contract_name) == session
-    assert all(store.list_checkpoints(context.name) == [] for context in contexts)
-
-
-def test_ground_elaborate_preserves_the_exact_number(isolated_store):
-    store = MemoryStore()
-    session, _contexts = _bound_ground(store)
-    provider = ExactNumberProvider()
-    frozen = freeze_ground_elaborate(
-        store,
-        ground_name=session.contract_name,
-        direction="GOAL_TO_RULES",
-        number=2,
-    )
-
-    result = execute_ground_elaborate(
-        frozen,
-        store=store,
-        provider_factory=lambda: provider,
-    )
-
-    assert frozen.request.number == 2
-    assert result.elaborate.analysis.number == 2
-    assert len(result.elaborate.analysis.rules) == 2
-
-
-def test_ground_rules_use_the_same_rules_to_cases_application(isolated_store):
-    store = MemoryStore()
-    session, contexts = _bound_ground(store)
-    before = session
-    session = propose_ground_rule(
-        session,
-        rule="Act only after explicit confirmation.",
-        rationale="This is the Rule under review.",
-        current_contexts=contexts,
-    )
-    store.save_ground_session(
-        session,
-        expected_uid=session.uid,
-        expected_revision=0,
-        expected_digest=ground_session_record_digest(before),
-    )
-    frozen = freeze_ground_elaborate(
-        store,
-        ground_name=session.contract_name,
-        direction="RULES_TO_CASES",
-        number=1,
-    )
-
-    result = execute_ground_elaborate(
-        frozen,
-        store=store,
-        provider_factory=ElaborateProvider,
-    )
-
-    assert result.elaborate.analysis.mode is ElaborateMode.RULES_TO_CASES
-    assert len(result.elaborate.analysis.cases) == 1
-    assert store.load_ground_session(session.contract_name) == session
-
-
-def test_ground_elaborate_rejects_stale_revision_before_provider(isolated_store):
-    store = MemoryStore()
-    session, contexts = _bound_ground(store)
-    frozen = freeze_ground_elaborate(
-        store,
-        ground_name=session.contract_name,
-        direction="GOAL_TO_RULES",
-    )
-    changed = propose_ground_rule(
-        session,
-        rule="A concurrent Rule.",
-        rationale="Simulate another reviewed Ground turn.",
-        current_contexts=contexts,
-    )
-    store.save_ground_session(
-        changed,
-        expected_uid=session.uid,
-        expected_revision=session.revision,
-        expected_digest=ground_session_record_digest(session),
-    )
-    provider = ElaborateProvider()
-
-    with pytest.raises(ElaborateError, match="changed before Elaborate began"):
-        execute_ground_elaborate(
-            frozen,
-            store=store,
-            provider_factory=lambda: provider,
-        )
-
-    assert provider.calls == []
-
-
-def test_ground_elaborate_rejects_revision_change_during_provider(isolated_store):
-    store = MemoryStore()
-    session, contexts = _bound_ground(store)
-    frozen = freeze_ground_elaborate(
-        store,
-        ground_name=session.contract_name,
-        direction="GOAL_TO_RULES",
-    )
-
-    class ConcurrentProvider(ElaborateProvider):
-        def complete(self, prompt, *, operation, output_schema=None):
-            current = store.load_ground_session(session.contract_name)
-            assert current is not None
-            changed = propose_ground_rule(
-                current,
-                rule="A concurrent Rule.",
-                rationale="Simulate another reviewed Ground turn.",
-                current_contexts=contexts,
-            )
-            store.save_ground_session(
-                changed,
-                expected_uid=current.uid,
-                expected_revision=current.revision,
-                expected_digest=ground_session_record_digest(current),
-            )
-            return super().complete(
-                prompt,
-                operation=operation,
-                output_schema=output_schema,
-            )
-
-    provider = ConcurrentProvider()
-    with pytest.raises(ElaborateError, match="changed while Elaborate was running"):
-        execute_ground_elaborate(
-            frozen,
-            store=store,
-            provider_factory=lambda: provider,
-        )
-
-    assert len(provider.calls) == 1
-    assert all(store.list_checkpoints(context.name) == [] for context in contexts)
 
 
 def test_mem_elaborate_plain_uses_the_typed_application(
@@ -1122,9 +923,12 @@ def test_mem_elaborate_ground_adopt_is_an_explicit_physical_write(
     assert result.exit_code == 0, result.output
     assert "ELABORATE ADOPTED · physical-elaborate/rules" in result.output
     assert "EFFECTS · ADD 3 MEMORIES" in result.output
-    assert len(
-        tuple(load_ground_workspace(store, "physical-elaborate").rules.iter_items())
-    ) == 3
+    assert (
+        len(
+            tuple(load_ground_workspace(store, "physical-elaborate").rules.iter_items())
+        )
+        == 3
+    )
 
 
 def test_physical_ground_goal_elaborate_freezes_only_the_goal_memory(
@@ -1201,9 +1005,10 @@ def test_physical_ground_elaborate_adopts_rules_as_one_ground_command(
     ).undo
     assert unit.action == "adopt-elaborate"
     undo_ground_workspace_command(store, "physical-elaborate")
-    assert tuple(
-        load_ground_workspace(store, "physical-elaborate").rules.iter_items()
-    ) == ()
+    assert (
+        tuple(load_ground_workspace(store, "physical-elaborate").rules.iter_items())
+        == ()
+    )
 
 
 def test_physical_ground_elaborate_adoption_rejects_changed_ground_revision(

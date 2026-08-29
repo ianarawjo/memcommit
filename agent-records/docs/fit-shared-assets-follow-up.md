@@ -37,10 +37,8 @@ reuse EDIT/EMBED/REMOVE action meaning or tint the complete relationship line.
 - Ground Fit keeps its immutable receipt, revision freshness, and complete
   internal evidence. The small terminal projection does not discard those
   fields.
-- Named Ground still embeds AUTO-FIT and reuses the shared background-turn
-  owner. Its saved-Memory list/detail remain Ground-owned presentation.
-- The public marks distinguish no result (`·`), current Fit (`✓`), current
-  underdetermination (`?`), current contradiction (`!`), and stale (`◷`).
+- Physical Ground Fit is explicit and line-oriented. The removed JSON Ground
+  shell's AUTO-FIT and saved-Memory projection are historical only.
 
 ## Compatibility and evidence
 
@@ -57,4 +55,5 @@ Focused tests cover grouped two- and three-target general lines for every verdic
 the operation-wide Ground header, two-sided local Ground issues, retained typed
 split readings for `MAY`, repeated stored operands, stale suppression, the
 compatibility flag, absence of the Viewer route, immutable receipt reopening,
-and the unchanged named-Ground background-turn boundary.
+and physical Ground receipt freshness. The former named-Ground background-turn
+tests were deleted with that shell.

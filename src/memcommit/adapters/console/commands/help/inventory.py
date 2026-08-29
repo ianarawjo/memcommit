@@ -577,11 +577,11 @@ COMMAND_FORMS = {
         'mem forget "[instruction]" --context [context] (explicit direct Source)',
     ),
     "ground": (
-        "mem ground (enter the interactive Ground session)",
-        "mem ground [ground_name] (enter an interactive named Ground session)",
-        'mem ground "[request]" (enter an interactive Ground session with an initial request)',
-        'mem ground --request "[request]" (enter an interactive Ground session with an initial request)',
-        "mem ground --sessions (enter the interactive Ground session launcher; TTY required)",
+        "mem ground (enter the interactive Ground workspace launcher)",
+        "mem ground [ground_name] (create or open one physical Ground workspace)",
+        'mem ground "[request]" (start a physical Ground draft with an initial request)',
+        'mem ground --request "[request]" (start a physical Ground draft with an explicit request)',
+        "mem ground --sessions (enter the interactive Ground workspace launcher; TTY required)",
     ),
     "help": ("mem help (enter the interactive command browser)",),
     "impact": (

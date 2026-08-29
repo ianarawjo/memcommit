@@ -14,13 +14,14 @@ import time
 import pexpect
 
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[4]
 OUT = ROOT / "agent-records/docs/screenshots/ground-workspace-launch-20260816"
 COLUMNS = 180
 ROWS = 52
 
 _BASE_PATH = (
-    ROOT / "agent-records/docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
+    ROOT
+    / "agent-records/docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
 )
 _SPEC = importlib.util.spec_from_file_location("ground_launch_capture_base", _BASE_PATH)
 assert _SPEC is not None and _SPEC.loader is not None
@@ -57,11 +58,16 @@ def _isolate_store(root: Path) -> None:
 def _run_child() -> None:
     from typer.testing import CliRunner
 
-    import memcommit.adapters.console.commands.ground.command as ground_command
+    from memcommit.adapters.console.commands.ground.command.workflow import (
+        apply as ground_apply_workflow,
+        create as ground_create_workflow,
+    )
     import memcommit.application.capabilities.ops as ops
     from memcommit.adapters.console.entrypoint import app
     from memcommit.application.operations.ground.dialogue import GroundDialogueProposal
-    from memcommit.application.operations.ground.workspace_runtime import load_ground_workspace
+    from memcommit.application.operations.ground.workspace_runtime import (
+        load_ground_workspace,
+    )
     from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="memcommit-ground-launch-capture-") as temp:
@@ -87,7 +93,7 @@ def _run_child() -> None:
                 goal="Find how real US ticker symbols are assigned.",
             )
 
-        ground_command.interpret_ground_dialogue = fixed_turn
+        ground_create_workflow.interpret_ground_dialogue = fixed_turn
 
         runner = CliRunner()
 
@@ -100,7 +106,7 @@ def _run_child() -> None:
                 stderr="",
             )
 
-        ground_command._run_approved_ground_command = run_in_process
+        ground_apply_workflow._run_approved_ground_command = run_in_process
         size = os.get_terminal_size()
         assert (size.columns, size.lines) == (COLUMNS, ROWS)
         print("PTY", size.columns, size.lines)
@@ -159,27 +165,30 @@ def _snapshot(recorder: io.StringIO, stem: str) -> None:
 def _capture() -> None:
     child, recorder = _spawn()
     try:
-        child.expect("MEM GROUND · SAVED GROUNDS OR NEW CONTEXT")
+        child.expect("MEM GROUND · WORKSPACES")
         _BASE._settle(child)
         _snapshot(recorder, "01-empty-launcher")
 
         child.send("\r")
-        child.expect("NEW GROUND · SAVE LOCATION")
+        child.expect("SAVE LOCATION · NOT SET")
         _BASE._settle(child)
         _snapshot(recorder, "02-save-location")
 
+        child.send("\x1b[Z\r")
+        child.expect("NEW GROUND · SAVE LOCATION")
         child.send("\x15projects/ticker-ground")
         _BASE._settle(child)
         _snapshot(recorder, "03-exact-location-edited")
 
         child.send("\r")
-        child.expect("MEM GROUND · WORKING · NOT SAVED")
-        child.expect("WORKSPACE")
-        _BASE._settle(child)
+        # Focus styling can split the workbench title across ANSI fragments;
+        # the operation-owned Goal question is a stable visible readiness cue.
+        child.expect("OPEN QUESTION · GOAL")
+        _BASE._settle(child, seconds=0.2)
         _snapshot(recorder, "04-unsaved-workspace")
 
-        # Move from the general Chat composer into Goal, open its revision
-        # request field, and submit from that semantic owner.
+        # Returning from Location keeps that Surface focused. Move into Goal,
+        # open its revision field, and submit from that semantic owner.
         child.send("\t\rFind how real US ticker symbols are assigned.\r")
         # Focus styling inserts ANSI boundaries inside the frame title, so
         # capture by bounded provider delay rather than matching a de-styled
@@ -188,7 +197,9 @@ def _capture() -> None:
         _BASE._settle(child, seconds=0.1)
         _snapshot(recorder, "05-goal-thinking")
 
-        time.sleep(1.1)
+        # prompt-toolkit inserts cursor-forward ANSI sequences between words
+        # in this focused state, so allow those bytes inside the visible footer.
+        child.expect(r"Goal.*proposed")
         _BASE._settle(child, seconds=0.2)
         _snapshot(recorder, "06-goal-revision-proposed")
 
@@ -216,7 +227,8 @@ def main() -> None:
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     plain = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.txt"))
     assert "PTY 180 52" in raw
-    assert "CREATE NEW GROUND CONTEXT" in plain
+    assert "START NEW GROUND WORKSPACE" in plain
+    assert "SAVE LOCATION · NOT SET" in plain
     assert "NEW GROUND · SAVE LOCATION" in plain
     assert "Existing Contexts are not recommended or selected here." in plain
     assert "GOAL · THINKING" in plain

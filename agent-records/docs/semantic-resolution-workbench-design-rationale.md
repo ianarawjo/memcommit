@@ -599,8 +599,9 @@ source arity, evidence, mutation, and recovery contracts. Making Update call
 public Context Meld was rejected because the current public command combines
 two peers into a distinct result Context, while Update can traverse a writable
 Context graph, cite resolved references, remove Memories, and checkpoint
-several owners. Reusing Ground's five-pane controller was rejected because a
-named Ground records a reviewable Goal–Rules–Memories frame and exact commands,
-not a replaceable operation issue ledger. Sharing only terminal panes was also
+several owners. Reusing the historical Ground five-pane controller was rejected
+because it recorded a reviewable Goal–Rules–Memories frame and exact commands,
+not a replaceable operation issue ledger; that JSON Ground controller has since
+been retired. Sharing only terminal panes was also
 insufficient because it left list identity, nested navigation, semantic action
 addressing, and replacement behavior duplicated.

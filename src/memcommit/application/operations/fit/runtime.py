@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
 import hashlib
-from typing import Iterable, Protocol
+from typing import Protocol
 
 from memcommit.application.capabilities.authority.access import (
     ContextAccess,
@@ -35,23 +35,13 @@ from memcommit.core.context_targeting.resolution import (
 from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.application.capabilities.authority.derived_policy import authorize_combination
+from memcommit.application.capabilities.authority.derived_policy import (
+    authorize_combination,
+)
 from memcommit.application.operations.fit.ground_report import (
-    FIT_RULESET_VERSION,
-    FIT_SCHEMA_VERSION,
     FitError,
-    FitExample,
     FitProvider,
     FitReport,
-    FitRule,
-    fit_ground_examples,
-)
-from memcommit.application.operations.fit.coherence import (
-    FitCoherenceError,
-    FrozenGroundCoherence,
-    execute_ground_coherence,
-    freeze_ground_coherence,
-    prepare_ground_coherence,
 )
 from memcommit.application.operations.fit.application import (
     FitInputOrigin,
@@ -70,15 +60,10 @@ from memcommit.application.operations.fit.judgment import (
     execute_fit_judgments,
     prepare_fit_judgments,
 )
-from memcommit.application.operations.ground.model import (
-    GROUND_PROPOSITION_SCHEMA_VERSION,
-    GroundItem,
-    GroundSession,
-    is_bound_ground_schema,
+from memcommit.application.operations.ground.workspace_fit import (
+    execute_ground_workspace_fit,
 )
-from memcommit.application.operations.ground.workspace_fit import execute_ground_workspace_fit
 from memcommit.application.operations.ground.workspace_runtime import (
-    ground_workspace_exists,
     load_ground_workspace,
 )
 from memcommit.application.operations.fit.store import FitStore
@@ -86,7 +71,6 @@ from memcommit.application.operations.profile.model import authority_grant_snaps
 from memcommit.persistence.store import (
     MemoryStore,
     context_record_digest,
-    ground_session_record_digest,
 )
 from memcommit.application.operations.update.model import GrantedUpdateTarget
 
@@ -201,9 +185,7 @@ def _authorize_fit_combination(
     has_literals: bool,
 ) -> None:
     values = (
-        (*accesses, _literal_combination_access(store))
-        if has_literals
-        else accesses
+        (*accesses, _literal_combination_access(store)) if has_literals else accesses
     )
     authorize_combination(values)
 
@@ -329,9 +311,7 @@ def run_stored_source_fit(
             access=access,
             context=context,
             granted_binding=(
-                freeze_granted_context_binding(access)
-                if access.is_granted
-                else None
+                freeze_granted_context_binding(access) if access.is_granted else None
             ),
         )
         accumulators[key] = value
@@ -340,9 +320,7 @@ def run_stored_source_fit(
 
     # Resolve every named source before provider construction. Literal text is
     # a separate caller-owned domain when authority-granted content participates.
-    ordered_rows: list[FitProposition | _SelectedFitMemory] = list(
-        request.propositions
-    )
+    ordered_rows: list[FitProposition | _SelectedFitMemory] = list(request.propositions)
 
     def select_memory(memory_source: FitMemorySourceRequest) -> None:
         selected_context = source(memory_source.context_locator)
@@ -364,9 +342,7 @@ def run_stored_source_fit(
         # Repeating one stored coordinate therefore repeats that proposition;
         # source digests still collapse safely for exact revalidation.
         selected_context.selected_memory_digests[memory.uid] = _memory_digest(memory)
-        ordered_rows.append(
-            _SelectedFitMemory("MEMORY", selected_context, memory)
-        )
+        ordered_rows.append(_SelectedFitMemory("MEMORY", selected_context, memory))
 
     def select_context(locator: str) -> None:
         selected_context = source(locator)
@@ -381,16 +357,12 @@ def run_stored_source_fit(
                 "contains no direct ordinary Memories."
             )
         for memory in direct_memories:
-            ordered_rows.append(
-                _SelectedFitMemory("CONTEXT", selected_context, memory)
-            )
+            ordered_rows.append(_SelectedFitMemory("CONTEXT", selected_context, memory))
         selected_context.whole_context_digest = context_record_digest(
             selected_context.context
         )
 
-    used_aliases = {
-        item.alias for item in (*request.background, *request.propositions)
-    }
+    used_aliases = {item.alias for item in (*request.background, *request.propositions)}
     literal_alias_index = 0
 
     def add_literal(content: str) -> None:
@@ -518,191 +490,19 @@ def run_stored_source_fit(
     return replace(result, input_origins=tuple(origins))
 
 
-@dataclass(frozen=True)
-class FrozenGroundFit:
-    ground_uid: str
-    ground_name: str
-    ground_revision: int
-    ground_digest: str
-    rules: tuple[FitRule, ...]
-    examples: tuple[FitExample, ...]
-    coherence: FrozenGroundCoherence | None = None
-
-
-def freeze_ground_fit(
-    session: GroundSession,
-    *,
-    contexts: Iterable[Context] = (),
-) -> FrozenGroundFit:
-    """Project one immutable Ground revision into the public Fit contract.
-
-    Version 2 preserves its exact-output replay contract. Version 3 evaluates
-    each native Example proposition and treats optional I/O, evidence, and
-    placement metadata as non-authoritative projections. An unlinked version-3
-    Example applies to the complete active Rule set; explicit links narrow the
-    judgment to exactly those Rules.
-    """
-
-    if not is_bound_ground_schema(session.schema_version):
-        raise FitError("Fit currently requires a bound Ground workbench.")
-    active_rules = tuple(
-        item
-        for item in session.items
-        if item.kind == "RULE" and item.status in {"PROPOSED", "ACCEPTED"}
-    )
-    examples = tuple(
-        item
-        for item in session.items
-        if item.kind == "CASE"
-        and item.status in {"PROPOSED", "ACCEPTED"}
-        and item.disposition == "INCLUDE"
-        and (
-            bool(item.proposition.strip())
-            if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
-            else bool(item.expected.strip())
-        )
-    )
-    if not active_rules:
-        raise FitError("The Ground contains no active Rules to fit.")
-    if not examples:
-        raise FitError("The Ground contains no active Examples to fit.")
-    rules = tuple(
-        FitRule(item.uid, f"r{index}", item.content)
-        for index, item in enumerate(active_rules, 1)
-    )
-    rule_uids = tuple(rule.uid for rule in rules)
-    active_rule_uids = set(rule_uids)
-
-    def example_rule_uids(item: GroundItem) -> tuple[str, ...]:
-        if session.schema_version != GROUND_PROPOSITION_SCHEMA_VERSION:
-            # Exact output can depend on composed Rules beyond the Rule that
-            # originally motivated this legacy Example.
-            return rule_uids
-        if any(uid not in active_rule_uids for uid in item.related_uids):
-            raise FitError("A Ground Example links a Rule that is not active.")
-        linked = tuple(item.related_uids)
-        if linked:
-            return linked
-        return rule_uids
-
-    proposition_schema = (
-        session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
-    )
-    frozen = FrozenGroundFit(
-        ground_uid=session.uid,
-        ground_name=session.contract_name,
-        ground_revision=session.revision,
-        ground_digest=ground_session_record_digest(session),
-        rules=rules,
-        examples=tuple(
-            FitExample(
-                uid=item.uid,
-                alias=f"e{index}",
-                statement=item.proposition or f"{item.content} -> {item.expected}",
-                projection=(
-                    "PROPOSITION" if proposition_schema else "EXACT_OUTPUT"
-                ),
-                rule_uids=example_rule_uids(item),
-                input_text=None if proposition_schema else item.content,
-                expected_output=None if proposition_schema else item.expected,
-            )
-            for index, item in enumerate(examples, 1)
-        ),
-    )
-    if contexts:
-        try:
-            return replace(
-                frozen,
-                coherence=freeze_ground_coherence(session, tuple(contexts)),
-            )
-        except FitCoherenceError as error:
-            raise FitError(str(error)) from error
-    return frozen
-
-
-def _load_bound_fit_contexts(
-    store: MemoryStore,
-    session: GroundSession,
-) -> tuple[Context, ...]:
-    """Load exact direct bound frames without resolving nested references."""
-
-    contexts = []
-    for frame in session.frames:
-        try:
-            contexts.append(store.load_direct(frame.context_name))
-        except FileNotFoundError as error:
-            raise FitError(
-                f"Bound Context '{frame.context_name}' was not found."
-            ) from error
-    return tuple(contexts)
-
-
 def execute_ground_fit(
     *,
     store: MemoryStore,
     ground_name: str,
     provider_factory: FitProviderFactory,
 ) -> FitReport:
-    """Execute Fit over one exact Ground revision and detect a concurrent edit."""
+    """Execute Fit over one physical Context-rooted Ground workspace."""
 
-    if ground_workspace_exists(store, ground_name):
-        return execute_ground_workspace_fit(
-            store=store,
-            ground_name=ground_name,
-            provider_factory=provider_factory,
-        )
-
-    session = store.load_ground_session(ground_name)
-    if session is None:
-        raise FitError(f"Ground '{ground_name}' was not found.")
-    frozen = freeze_ground_fit(
-        session,
-        contexts=_load_bound_fit_contexts(store, session),
+    return execute_ground_workspace_fit(
+        store=store,
+        ground_name=ground_name,
+        provider_factory=provider_factory,
     )
-    if frozen.coherence is None:
-        raise FitError("Ground Fit did not freeze its coherence frame.")
-    provider = provider_factory()
-    report = fit_ground_examples(
-        ground_uid=frozen.ground_uid,
-        ground_name=frozen.ground_name,
-        ground_revision=frozen.ground_revision,
-        ground_digest=frozen.ground_digest,
-        rules=frozen.rules,
-        examples=frozen.examples,
-        provider=provider,
-    )
-    try:
-        coherence = execute_ground_coherence(
-            prepare_ground_coherence(frozen.coherence),
-            provider=provider,
-        )
-    except FitCoherenceError as error:
-        raise FitError(str(error)) from error
-    if (
-        report.provider_identity is not None
-        and coherence.provider_identity is not None
-        and report.provider_identity != coherence.provider_identity
-    ):
-        raise FitError("Fit provider identity changed between complete checks.")
-    report = replace(
-        report,
-        coherence=coherence,
-        provider_identity=(
-            coherence.provider_identity or report.provider_identity
-        ),
-        schema_version=FIT_SCHEMA_VERSION,
-        ruleset_version=FIT_RULESET_VERSION,
-    )
-    current = store.load_ground_session(ground_name)
-    if current is None or ground_session_record_digest(current) != frozen.ground_digest:
-        raise FitError("The Ground changed during Fit; no report was published.")
-    # Context content is a first-class Fit input. Re-freezing locally after
-    # the provider turn prevents a stale binding from publishing a report.
-    freeze_ground_fit(
-        current,
-        contexts=_load_bound_fit_contexts(store, current),
-    )
-    return report
 
 
 def execute_and_save_ground_fit(
@@ -746,27 +546,12 @@ def run_fit_with_store(
     report = fit_store.load(request.receipt_uid)
     if report.ground_name != request.ground_name:
         raise FitError("The Fit receipt belongs to a different Ground.")
-    if ground_workspace_exists(store, request.ground_name):
-        latest = fit_store.latest_for_workspace(
-            load_ground_workspace(store, request.ground_name)
-        )
-        return FitResult(
-            report,
-            current=(
-                latest is not None
-                and latest.report.uid == report.uid
-                and latest.current
-            ),
-        )
-    session = store.load_ground_session(request.ground_name)
-    if session is None:
-        raise FitError(f"Ground '{request.ground_name}' was not found.")
-    latest = fit_store.latest_for_ground(session)
+    latest = fit_store.latest_for_workspace(
+        load_ground_workspace(store, request.ground_name)
+    )
     return FitResult(
         report,
         current=(
-            latest is not None
-            and latest.report.uid == report.uid
-            and latest.current
+            latest is not None and latest.report.uid == report.uid and latest.current
         ),
     )

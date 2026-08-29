@@ -1,9 +1,9 @@
- MEM GROUND · SAVED GROUNDS OR NEW CONTEXT · RECENT FIRST · BY CONTEXT                                                                                                              
+ MEM GROUND · WORKSPACES · RECENT FIRST · BY CONTEXT                                                                                                                                
  PROFILE · (unregistered)                                                                                                                                                           
- STORE   · /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/memcommit-ground-launch-capture-4qcgm565/.mem                                                                           
+ STORE   · /var/folders/gb/k74fw7ks06x4c041g8gqgj600000gq/T/memcommit-ground-launch-capture-fqkq41wn/.mem                                                                           
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-› + CREATE NEW GROUND CONTEXT                                                                                                                                                      ^
-  No saved Grounds yet.                                                                                                                                                             
+› + START NEW GROUND WORKSPACE                                                                                                                                                     ^
+  No Ground workspaces yet.                                                                                                                                                         
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -19,8 +19,8 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- CREATE NEW GROUND CONTEXT                                                                                                                                                         ^
- Choose an exact Save Location for a new physical Ground workspace, then state its Goal before creation approval.                                                                   
+ START NEW GROUND WORKSPACE                                                                                                                                                        ^
+ Start blank, then choose or change its Context Save Location above the Goal before exact save approval.                                                                            
                                                                                                                                                                                     
                                                                                                                                                                                     
                                                                                                                                                                                     
@@ -49,4 +49,4 @@
                                                                                                                                                                                     
                                                                                                                                                                                    v
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- ↑/↓ move  PgUp/PgDn detail  Enter open Ground  S sort  G group  / filter  N CREATE NEW GROUND CONTEXT  Esc/q cancel  ·  1/1
+ ↑/↓ move  PgUp/PgDn detail  Enter open Ground  S sort  G group  / filter  N START NEW GROUND WORKSPACE  Esc/q cancel  ·  1/1

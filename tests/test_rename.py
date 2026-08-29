@@ -26,12 +26,6 @@ from memcommit.core.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.application.operations.ground.model import (
-    GroundTargetSpec,
-    bind_ground_workbench,
-    context_frame_digest,
-    create_ground_session,
-)
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.application.operations.translate.provider_catalog import (
     update_catalog_from_translation_plan,
@@ -538,40 +532,6 @@ def test_write_exception_rolls_back_namespace_records_history_and_state(
     assert store.context_exists("source")
     assert not store.context_exists("destination")
     assert store.current_context_name() == "source"
-
-
-def test_rename_migrates_fresh_ground_frames_without_revising_the_ground(
-    isolated_store,
-):
-    store = MemoryStore()
-    raw = _save_context(store, "old", "Raw evidence")
-    derived = _save_context(store, "work/derived", "Derived evidence")
-    target = _save_context(store, "work/target", "Target evidence")
-    session = bind_ground_workbench(
-        create_ground_session("rename-ground", goal="Review evidence."),
-        description="Review one rename migration.",
-        raw_context=raw,
-        derived_context=derived,
-        target_contexts=(target,),
-        target_requirements=(
-            GroundTargetSpec(
-                context_name=target.name,
-                description="Publish one reviewed result.",
-                role="PUBLICATION_TARGET",
-            ),
-        ),
-    )
-    store.save_ground_session(session)
-
-    store.rename_contexts(store.plan_context_rename("old", "new"))
-
-    migrated = store.load_ground_session("rename-ground")
-    assert migrated is not None
-    assert migrated.uid == session.uid
-    assert migrated.revision == session.revision
-    raw_frame = next(frame for frame in migrated.frames if frame.context_uid == raw.uid)
-    assert raw_frame.context_name == "new"
-    assert raw_frame.context_digest == context_frame_digest(store.load_direct("new"))
 
 
 def test_rename_migrates_translation_catalog_context_identity(

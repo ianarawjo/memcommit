@@ -57,7 +57,6 @@ ATOMIZE_WORKBENCHES_DIR = _ActiveStorePath("atomize-workbenches")
 ATOMIZE_SESSION_HISTORY_DIR = _ActiveStorePath("atomize-session-history")
 ATOMIZE_GROUNDING_SESSIONS_DIR = _ActiveStorePath("atomize-groundings")
 ATOMIZE_GROUNDING_HISTORY_DIR = _ActiveStorePath("atomize-grounding-history")
-GROUND_SESSIONS_DIR = _ActiveStorePath("ground-sessions")
 MELD_SESSIONS_DIR = _ActiveStorePath("meld-sessions")
 MELD_SESSION_HISTORY_DIR = _ActiveStorePath("meld-session-history")
 
@@ -159,10 +158,6 @@ class _StorePathsMixin:
     @property
     def atomize_grounding_history_dir(self) -> Path:
         return self.store_dir / "atomize-grounding-history"
-
-    @property
-    def ground_sessions_dir(self) -> Path:
-        return self.store_dir / "ground-sessions"
 
     @property
     def meld_sessions_dir(self) -> Path:

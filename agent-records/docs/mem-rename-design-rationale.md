@@ -153,15 +153,12 @@ command, graph, and affected Context locks, rolls exact checkpoint bytes back
 on failure, and must reconstruct the complete global Undo/Redo stacks before
 publishing success. It never changes a Context record or Memory content.
 
-## Ground, translation, and unapplied Meld continuity
+## Translation and unapplied Meld continuity
 
 Two durable derived formats have an explicit, schema-validated migration
 contract because they can contain reviewed work that should survive a
 metadata-only Context move:
 
-- **named Ground frames:** a frame bound to a changed Context UID follows the
-  Context's current name. Its stored digest advances only when it exactly
-  matched the pre-rename live record. An already-stale frame remains stale.
 - **translation catalogs and legacy translation views:** the source Context
   name follows the matching UID. A stored Context digest, where that format
   has one, advances only from an exact pre-rename match. Curated translations,
@@ -209,10 +206,9 @@ the underlying stores are distinct.
 ## Planning, concurrency, and failure behavior
 
 Planning freezes a complete graph digest over ordinary Context records,
-restorable checkpoints, current state, named Ground records, translation
-artifacts, and target-keyed Meld sessions. Application reacquires the graph,
-Context, current-state, and Ground locks; rebuilds the plan; and requires it to
-equal the reviewed plan.
+restorable checkpoints, current state, translation artifacts, and target-keyed
+Meld sessions. Application reacquires the graph, Context, and current-state
+locks; rebuilds the plan; and requires it to equal the reviewed plan.
 If any participating record, destination claim, or artifact changed after
 review, nothing is renamed and the caller must review a new plan.
 

@@ -54,7 +54,6 @@ _STORE_PATH_NAMES = (
     "ATOMIZE_WORKBENCHES_DIR",
     "ATOMIZE_GROUNDING_SESSIONS_DIR",
     "ATOMIZE_GROUNDING_HISTORY_DIR",
-    "GROUND_SESSIONS_DIR",
     "MELD_SESSIONS_DIR",
 )
 
@@ -376,7 +375,6 @@ def _store_paths(root: Path) -> dict[str, Path]:
         "ATOMIZE_WORKBENCHES_DIR": root / "atomize-workbenches",
         "ATOMIZE_GROUNDING_SESSIONS_DIR": root / "atomize-groundings",
         "ATOMIZE_GROUNDING_HISTORY_DIR": root / "atomize-grounding-history",
-        "GROUND_SESSIONS_DIR": root / "ground-sessions",
         "MELD_SESSIONS_DIR": root / "meld-sessions",
     }
 

@@ -11,7 +11,6 @@ from memcommit.persistence.store.operation_state import OperationStateStoreMixin
 from memcommit.persistence.store.operation_state import (
     atomize,
     current,
-    ground,
     meld,
     review,
     update,
@@ -41,7 +40,6 @@ EXPECTED_METHODS = {
         "atomize_session_history_dir",
         "atomize_grounding_sessions_dir",
         "atomize_grounding_history_dir",
-        "ground_sessions_dir",
         "meld_sessions_dir",
         "meld_session_history_dir",
         "meld_resolution_branches_dir",
@@ -71,7 +69,6 @@ EXPECTED_METHODS = {
         "_update_session_write_lock",
         "_atomize_session_write_lock",
         "_meld_resolution_branch_write_lock",
-        "_ground_session_write_lock",
     },
     "operation_state/current.py": {
         "_read_state",
@@ -104,12 +101,6 @@ EXPECTED_METHODS = {
         "list_review_sessions",
         "load_review_session_by_uid",
         "save_review_session",
-    },
-    "operation_state/ground.py": {
-        "_ground_session_path",
-        "load_ground_session",
-        "save_ground_session",
-        "_verify_ground_frames_locked",
     },
     "operation_state/meld.py": {
         "_meld_choice_branches_path",
@@ -175,7 +166,7 @@ def test_operation_state_methods_have_one_focused_owner() -> None:
     }
     assert actual == EXPECTED_METHODS
     all_methods = [method for methods in actual.values() for method in methods]
-    assert len(all_methods) == len(set(all_methods)) == 109
+    assert len(all_methods) == len(set(all_methods)) == 103
 
 
 def test_operation_state_surface_composes_in_dependency_order() -> None:
@@ -189,7 +180,6 @@ def test_operation_state_surface_composes_in_dependency_order() -> None:
         "current",
         "update",
         "review",
-        "ground",
         "meld",
         "atomize",
     )
@@ -214,7 +204,6 @@ def test_store_atomic_write_override_reaches_operation_modules(monkeypatch) -> N
     assert atomic_io._write_json_atomic is marker
     assert atomize._write_json_atomic is marker
     assert current._write_json_atomic is marker
-    assert ground._write_json_atomic is marker
     assert meld._write_json_atomic is marker
     assert review._write_json_atomic is marker
     assert update._write_json_atomic is marker

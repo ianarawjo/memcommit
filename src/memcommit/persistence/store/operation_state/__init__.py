@@ -73,7 +73,6 @@ from ..infrastructure.paths import (
     ATOMIZE_SESSION_HISTORY_DIR,
     ATOMIZE_WORKBENCHES_DIR,
     CONTEXTS_DIR,
-    GROUND_SESSIONS_DIR,
     IMPACT_PLAN_FILE,
     MELD_SESSIONS_DIR,
     MELD_SESSION_HISTORY_DIR,
@@ -90,17 +89,11 @@ from ..infrastructure.paths import (
 from ..infrastructure.protection import _WriteProtectionStoreMixin
 from . import atomize as _atomize_module
 from . import current as _current_module
-from . import ground as _ground_module
 from . import meld as _meld_module
 from . import review as _review_module
 from . import update as _update_module
 from .atomize import _AtomizeStateStoreMixin
 from .current import _CurrentStateStoreMixin
-from .ground import (
-    ConcurrentGroundUpdateError,
-    _GroundStateStoreMixin,
-    ground_session_record_digest,
-)
 from .meld import _MeldStateStoreMixin
 from .review import _ReviewStateStoreMixin
 from .update import _UpdateStateStoreMixin
@@ -116,7 +109,6 @@ _IMPLEMENTATION_MODULES = (
     _current_module,
     _update_module,
     _review_module,
-    _ground_module,
     _meld_module,
     _atomize_module,
 )
@@ -129,7 +121,6 @@ class OperationStateStoreMixin(
     _CurrentStateStoreMixin,
     _UpdateStateStoreMixin,
     _ReviewStateStoreMixin,
-    _GroundStateStoreMixin,
     _MeldStateStoreMixin,
     _AtomizeStateStoreMixin,
 ):
@@ -162,7 +153,6 @@ __all__ = [
     "CONTEXTS_DIR",
     "Callable",
     "ConcurrentContextUpdateError",
-    "ConcurrentGroundUpdateError",
     "ContextBranchBinding",
     "ContextBranchMemoryBinding",
     "ContextDeletionCommittedError",
@@ -173,7 +163,6 @@ __all__ = [
     "ContextRenamePlan",
     "ContextRenameResult",
     "ExitStack",
-    "GROUND_SESSIONS_DIR",
     "IMPACT_PLAN_FILE",
     "Iterable",
     "Iterator",
@@ -210,7 +199,6 @@ __all__ = [
     "datetime",
     "ensure_private_directory",
     "fcntl",
-    "ground_session_record_digest",
     "hashlib",
     "json",
     "map_restorable_checkpoint_frames",

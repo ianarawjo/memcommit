@@ -1349,7 +1349,6 @@ def migrate_context_cmd(
     typer.echo(f"  Checkpoint references: {plan.checkpoint_reference_count}")
     typer.echo(
         "  Derived bindings: "
-        f"Ground {plan.ground_frame_count}, "
         f"translation {plan.translation_artifact_count}, "
         f"Meld {plan.meld_session_count}"
     )

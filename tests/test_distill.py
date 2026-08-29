@@ -26,13 +26,14 @@ from memcommit.application.operations.distill.goal_fit import (
     DISTILL_GOAL_FIT_OPERATION,
     DISTILL_GOAL_FIT_PAYLOAD_MARKER,
 )
-from memcommit.application.operations.distill.application import DistillApplyRequest, DistillRequest
+from memcommit.application.operations.distill.application import (
+    DistillApplyRequest,
+    DistillRequest,
+)
 from memcommit.application.operations.distill.config import DistillSemanticConfig
-from memcommit.application.operations.distill.runtime import execute_distill, execute_distill_apply
-from memcommit.application.operations.ground.model import (
-    GroundTargetSpec,
-    bind_ground_workbench,
-    create_ground_session,
+from memcommit.application.operations.distill.runtime import (
+    execute_distill,
+    execute_distill_apply,
 )
 from memcommit.application.operations.ground.distill import (
     apply_ground_distill_result,
@@ -70,9 +71,7 @@ class DistillProvider:
         assert output_schema is not None
         if operation == DISTILL_GOAL_FIT_OPERATION:
             self.goal_fit_calls.append((prompt, output_schema))
-            payload = json.loads(
-                prompt.split(DISTILL_GOAL_FIT_PAYLOAD_MARKER, 1)[1]
-            )
+            payload = json.loads(prompt.split(DISTILL_GOAL_FIT_PAYLOAD_MARKER, 1)[1])
             aliases = [item["rule_id"] for item in payload["rules"]]
             response = self.goal_fit_response or {
                 "verdict": "FIT",
@@ -135,12 +134,8 @@ def test_distill_accepts_goal_and_context_evidence_as_one_rule_frame():
 
     assert len(analysis.rules) == 1
     rule = analysis.rules[0]
-    assert rule.support_memory_uids == (
-        "00000000-0000-4000-8000-000000000011",
-    )
-    assert rule.boundary_memory_uids == (
-        "00000000-0000-4000-8000-000000000012",
-    )
+    assert rule.support_memory_uids == ("00000000-0000-4000-8000-000000000011",)
+    assert rule.boundary_memory_uids == ("00000000-0000-4000-8000-000000000012",)
     assert analysis.outside_memory_uids == ()
     payload = json.loads(provider.calls[0][0].split(DISTILL_PAYLOAD_MARKER, 1)[1])
     assert payload["goal"] == "Recommend a setting for a family conversation."
@@ -148,9 +143,7 @@ def test_distill_accepts_goal_and_context_evidence_as_one_rule_frame():
     assert analysis.goal_fit.verdict == "FIT"
     assert analysis.goal_fit.considered_rule_uids == (rule.uid,)
     fit_payload = json.loads(
-        provider.goal_fit_calls[0][0].split(
-            DISTILL_GOAL_FIT_PAYLOAD_MARKER, 1
-        )[1]
+        provider.goal_fit_calls[0][0].split(DISTILL_GOAL_FIT_PAYLOAD_MARKER, 1)[1]
     )
     assert fit_payload == {
         "contract_version": 1,
@@ -199,8 +192,9 @@ def test_distill_without_goal_skips_goal_fit_audit():
     assert analysis.goal_fit is None
     assert len(provider.calls) == 1
     assert provider.goal_fit_calls == []
-    assert "complete generative-family Rule set when there is no Goal" in (
-        provider.calls[0][0]
+    assert (
+        "complete generative-family Rule set when there is no Goal"
+        in (provider.calls[0][0])
     )
 
 
@@ -651,13 +645,16 @@ def test_distill_application_imports_no_terminal_or_command_adapter():
         elif isinstance(node, ast.ImportFrom) and node.module is not None:
             imports.append(node.module)
 
-    assert tuple(
-        name
-        for name in imports
-        if name == "typer"
-        or name.startswith("prompt_toolkit")
-        or name.startswith("memcommit.adapters.console.commands")
-    ) == ()
+    assert (
+        tuple(
+            name
+            for name in imports
+            if name == "typer"
+            or name.startswith("prompt_toolkit")
+            or name.startswith("memcommit.adapters.console.commands")
+        )
+        == ()
+    )
 
 
 def test_distill_apply_fails_closed_when_source_changed(isolated_store):
@@ -696,149 +693,6 @@ def test_distill_apply_fails_closed_when_source_changed(isolated_store):
     assert not store.context_exists("distill/stale-rules")
 
 
-def _ground_with_distill_source(store: MemoryStore):
-    raw = Context(uid="00000000-0000-4000-8000-000000000201", name="distill/raw")
-    candidates = Context(
-        uid="00000000-0000-4000-8000-000000000202",
-        name="distill/candidates",
-    )
-    candidates.add(
-        Memory(
-            uid="00000000-0000-4000-8000-000000000211",
-            content="A quiet setting supported a long conversation.",
-        )
-    )
-    target = Context(
-        uid="00000000-0000-4000-8000-000000000203",
-        name="distill/target",
-    )
-    for context in (raw, candidates, target):
-        store.create_context(context)
-    session = bind_ground_workbench(
-        create_ground_session(
-            "distill-ground",
-            goal="Choose a setting that supports conversation.",
-        ),
-        description="Derive a reviewable setting Rule.",
-        raw_context=raw,
-        derived_context=candidates,
-        target_contexts=(target,),
-        target_requirements=(
-            GroundTargetSpec(
-                context_name=target.name,
-                description="Publish a reviewed Rule.",
-                role="PUBLICATION_TARGET",
-            ),
-        ),
-    )
-    store.save_ground_session(session)
-    return session, (raw, candidates, target)
-
-
-def test_ground_distill_uses_same_application_and_preserves_ground(isolated_store):
-    store = MemoryStore()
-    session, contexts = _ground_with_distill_source(store)
-    frozen = freeze_ground_distill(store, ground_name=session.contract_name)
-
-    result = execute_ground_distill(
-        frozen,
-        store=store,
-        provider_factory=DistillProvider,
-    )
-
-    assert frozen.request == DistillRequest(
-        context_locator="distill/candidates",
-        goal=session.goal,
-    )
-    assert result.distill.analysis.source.context_name == "distill/candidates"
-    assert store.load_ground_session(session.contract_name) == session
-    assert all(store.list_checkpoints(context.name) == [] for context in contexts)
-
-
-def test_ground_distill_rejects_stale_bound_candidate_before_provider(
-    isolated_store,
-):
-    store = MemoryStore()
-    session, (_raw, candidates, _target) = _ground_with_distill_source(store)
-    frozen = freeze_ground_distill(store, ground_name=session.contract_name)
-    changed = store.load_direct(candidates.name)
-    changed.add(
-        Memory(
-            uid="00000000-0000-4000-8000-000000000212",
-            content="A concurrent candidate proposition.",
-        )
-    )
-    store.save(changed)
-    provider = DistillProvider()
-
-    with pytest.raises(DistillError, match="changed after Ground binding"):
-        execute_ground_distill(
-            frozen,
-            store=store,
-            provider_factory=lambda: provider,
-        )
-
-    assert provider.calls == []
-
-
-def test_ground_distill_rejects_candidate_change_during_provider(
-    isolated_store,
-):
-    store = MemoryStore()
-    session, (_raw, candidates, _target) = _ground_with_distill_source(store)
-    frozen = freeze_ground_distill(store, ground_name=session.contract_name)
-
-    class ConcurrentProvider(DistillProvider):
-        def complete(self, prompt, *, operation, output_schema=None):
-            if operation == DISTILL_OPERATION:
-                changed = store.load_direct(candidates.name)
-                changed.add(
-                    Memory(
-                        uid="00000000-0000-4000-8000-000000000213",
-                        content="A concurrent candidate proposition.",
-                    )
-                )
-                store.save(changed)
-            return super().complete(
-                prompt,
-                operation=operation,
-                output_schema=output_schema,
-            )
-
-    provider = ConcurrentProvider()
-    with pytest.raises(DistillError, match="changed while Distill was running"):
-        execute_ground_distill(
-            frozen,
-            store=store,
-            provider_factory=lambda: provider,
-        )
-
-    assert len(provider.calls) == 1
-    assert all(
-        store.list_checkpoints(name) == []
-        for name in ("distill/raw", "distill/candidates", "distill/target")
-    )
-
-
-def test_mem_distill_ground_plain_uses_frozen_ground(monkeypatch, isolated_store):
-    store = MemoryStore()
-    session, _contexts = _ground_with_distill_source(store)
-    monkeypatch.setattr(
-        distill_command,
-        "connect_semantic_provider",
-        DistillProvider,
-    )
-
-    result = runner.invoke(
-        app,
-        ["distill", "--ground", session.contract_name, "--plain"],
-    )
-
-    assert result.exit_code == 0, result.output
-    assert "DISTILL · distill/candidates" in result.output
-    assert "GOAL · RELEVANCE FOCUS ONLY" in result.output
-
-
 def test_mem_distill_ground_adopt_is_an_explicit_physical_write(
     monkeypatch,
     isolated_store,
@@ -859,7 +713,10 @@ def test_mem_distill_ground_adopt_is_an_explicit_physical_write(
     assert result.exit_code == 0, result.output
     assert "DISTILL ADOPTED · physical-distill/rules" in result.output
     assert "EFFECTS · ADD 1 RULES" in result.output
-    assert len(tuple(load_ground_workspace(store, "physical-distill").rules.iter_items())) == 1
+    assert (
+        len(tuple(load_ground_workspace(store, "physical-distill").rules.iter_items()))
+        == 1
+    )
 
 
 def _physical_ground_with_distill_examples(store: MemoryStore) -> None:
@@ -939,9 +796,9 @@ def test_physical_ground_distill_adopts_complete_proposal_as_one_command(
     ).undo[-1]
     assert unit.action == "adopt-distill"
     undo_ground_workspace_command(store, "physical-distill")
-    assert tuple(
-        load_ground_workspace(store, "physical-distill").rules.iter_items()
-    ) == ()
+    assert (
+        tuple(load_ground_workspace(store, "physical-distill").rules.iter_items()) == ()
+    )
 
 
 def test_physical_ground_distill_adoption_rejects_changed_target_lane(

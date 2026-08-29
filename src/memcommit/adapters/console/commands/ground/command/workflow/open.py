@@ -55,11 +55,11 @@ def _run_ground_session_picker(store: MemoryStore) -> None:
                 *(entry.picker_entry for entry in workspace_catalog),
                 *(entry.picker_entry for entry in draft_catalog),
             ),
-            title="MEM GROUND · SESSIONS",
+            title="MEM GROUND · WORKSPACES",
             new_receipt=SessionNewReceipt(
                 kind="ground",
                 argv=("mem", "ground"),
-                action_label="START NEW GROUND SESSION",
+                action_label="START NEW GROUND WORKSPACE",
                 action_description=(
                     "Start blank, then choose or change its Context Save "
                     "Location above the Goal before exact save approval."

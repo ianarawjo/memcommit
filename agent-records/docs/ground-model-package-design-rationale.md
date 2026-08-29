@@ -1,43 +1,46 @@
-# Ground Model Package Design Rationale
+# Legacy Ground Model Retirement Rationale
 
 ## Motivation
 
-The Ground application model combined durable schema records, whole-session
-relationship validation, and session state transitions in one 2,440-line
-module. Those responsibilities change for different reasons: records define
-the persisted vocabulary, validation protects invariants across those records,
-and session actions produce the next reviewed state. Keeping them together
-made each responsibility harder to identify without providing a behavioral
-benefit.
+The original Ground prototype persisted a parallel JSON aggregate named
+`GroundSession`. It described Goals, bound Context frames, proposed Rules,
+Cases, review state, dialogue state, and optimistic-concurrency metadata. The
+later physical Ground design represents those same durable product concepts as
+one ordinary Context-rooted workspace with `goals`, `rules`, `examples`,
+`contexts`, and `relations` children.
+
+The repository was never distributed, the active local Store contained no
+`ground-sessions/*.json` records, and no migration or public compatibility
+contract was required. Retaining the old model would therefore preserve a
+second product identity without protecting any data.
 
 ## Selected boundary
 
-`memcommit.application.operations.ground.model` is now a package with three
-owners:
+The `memcommit.application.operations.ground.model` package and the
+Ground-session Store have been removed. Physical Ground now has these owners:
 
-- `records.py` owns constants, value types, record-local parsing, and durable
-  serialization.
-- `validation.py` owns reconstruction and invariants that require the complete
-  Ground session, such as reciprocal Rule/Memory links, frame uniqueness, and
-  revision consistency.
-- `session.py` owns pure state transitions such as binding a workbench,
-  proposing or reviewing items, and revising requirements.
+- `ground/workspace_model.py` owns the Context-rooted manifest and workspace
+  projection;
+- `ground/contracts.py` owns operation-neutral Ground text limits, validation,
+  errors, and frame digesting;
+- `ground/workspace_application.py` owns creation and editing use cases; and
+- Fit, Distill, Elaborate, and Conformance consume a frozen physical workspace
+  rather than branching on `GroundSession`.
 
-The package `__init__.py` preserves the established
-`memcommit.application.operations.ground.model` import surface. `GroundSession`
-keeps its `from_dict` entry point and delegates to whole-session validation by
-a local import. This keeps records as the foundational vocabulary without
-creating an import cycle while validation constructs the same record type.
+No compatibility facade preserves the deleted import path. A missing
+`ground-sessions/` directory is normal, and Store rename, lock,
+write-protection, profile, and study-bundle code no longer scans or rewrites it.
 
-## Compatibility and safety boundary
+## Semantic boundary
 
-This change intentionally preserves schema versions, serialized fields,
-digests, validation failures, revision behavior, and public symbol identities.
-It does not change Ground authority, persistence, provider calls, workspace
-I/O, or console/TUI presentation. Those integrations continue to consume the
-same facade, so callers do not need to migrate as part of the structural split.
+Physical Ground examples are ordinary proposition Memories, not legacy
+input/expected-output Case records. Ground Conformance therefore checks those
+example propositions against the workspace Rules through the ordinary Context
+Conformance contract; it does not fabricate an expected output. Fit, Distill,
+and Elaborate likewise project only the physical lanes they actually consume
+and revalidate those lanes around provider work.
 
-Record-local validation remains beside each record rather than being moved
-wholesale into `validation.py`; only checks that need the complete session are
-owned there. The split is therefore a responsibility boundary, not an attempt
-to redesign the Ground domain or its persisted contract.
+The removed JSON schema, review transitions, named shell, and session dialogue
+remain visible only in historical design records and screenshots. They are not
+runtime compatibility promises and must not be reintroduced as a second Ground
+model.

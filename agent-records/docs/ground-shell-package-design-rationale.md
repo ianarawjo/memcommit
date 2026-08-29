@@ -1,5 +1,11 @@
 # Ground shell package design rationale
 
+> **Retirement note (2026-08-29).** The `ground.named_shell` package and all
+> runtime parts described below were deleted with the unpublished JSON
+> `GroundSession` model. The physical blank-creation shell remains under
+> `ground.shell`; this record preserves why the earlier package split existed
+> and is not a compatibility promise for the removed named shell.
+
 ## Problem
 
 The blank-Ground terminal flow was physically owned by one 3,672-line
@@ -12,9 +18,9 @@ validation and rendering as well.
 
 ## Selected layout
 
-`memcommit.adapters.console.commands.ground.shell` and
-`memcommit.adapters.console.commands.ground.named_shell` are now packages with
-three implementation modules each:
+The historical implementation split `memcommit.adapters.console.commands.ground.shell`
+and the now-removed `memcommit.adapters.console.commands.ground.named_shell`
+into three implementation roles:
 
 - `proposal.py` owns the typed blank-Ground proposal, dialogue-response
   validation and freezing, locally constructed argv, and exact-command review

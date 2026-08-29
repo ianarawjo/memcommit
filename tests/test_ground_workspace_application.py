@@ -163,7 +163,7 @@ def test_runtime_creates_the_complete_workspace_without_switching_current(
     assert len(set(result.context_uids)) == 6
     assert result.goal_memory_uid is not None
     assert store.current_context_name() == "ordinary"
-    assert store.ground_sessions_dir.exists() is False
+    assert not (store.store_dir / "ground-sessions").exists()
     restored = load_ground_workspace(store, "project111")
     assert restored.uid == result.workspace_uid
     assert tuple(context.name for context in restored.all_contexts) == (
@@ -188,7 +188,7 @@ def test_creation_records_initial_checkpoints_but_not_a_global_session_file(
             "project111"
         )
         assert len(checkpoint["args"]["command_contexts"]) == 6
-    assert not store.ground_sessions_dir.exists()
+    assert not (store.store_dir / "ground-sessions").exists()
 
 
 def test_creation_is_all_new_and_rolls_back_every_context_on_collision(

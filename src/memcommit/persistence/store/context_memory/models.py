@@ -73,7 +73,6 @@ class ContextRenamePlan:
     changed_owner_names: tuple[str, ...]
     reference_count: int
     checkpoint_reference_count: int
-    ground_frame_count: int
     translation_artifact_count: int
     meld_session_count: int
     current_before: str | None
@@ -93,7 +92,6 @@ class ContextRenameResult:
     changed_owner_count: int
     reference_count: int
     checkpoint_reference_count: int
-    ground_frame_count: int
     translation_artifact_count: int
     meld_session_count: int
     current_context: str | None
@@ -110,8 +108,6 @@ class _PreparedContextRename:
     post_checkpoints: dict[str, dict[str, dict[str, object]]]
     state: dict[str, object]
     post_state: dict[str, object]
-    ground_records: dict[str, dict[str, object]]
-    post_ground_records: dict[str, dict[str, object]]
     translation_records: dict[str, dict[str, object]]
     post_translation_records: dict[str, dict[str, object]]
     meld_records: dict[str, dict[str, object]]

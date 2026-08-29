@@ -100,10 +100,10 @@ structural command.
 ### Interactive entry and Save Location
 
 Bare interactive `mem ground` always opens the common Operation Launcher, even
-when no saved Ground exists. The pinned action is `START NEW GROUND SESSION`.
-Physical workspaces, resumable not-yet-created drafts, and transitional legacy
-Grounds appear in that same session list as independently typed rows; there is
-no second draft launcher.
+when no saved Ground exists. The pinned action is
+`START NEW GROUND WORKSPACE`. Physical workspaces and resumable
+not-yet-created drafts appear in that same workspace list as independently
+typed rows; there is no legacy-session or second draft launcher.
 
 Choosing New opens the blank Ground workbench immediately. `LOCATION` is a
 persistent compact pane above `GOAL`. It begins `NOT SET`, may display a
@@ -271,9 +271,10 @@ version-guard options. New Ground code neither scans nor writes
 `ground-sessions/`.
 
 Keeping a dormant reader or same-name collision check was rejected because it
-would preserve two product identities without any data to protect. The
-remaining transition boundary is internal only: semantic operations are moved
-off `GroundSession` before its persistence and model packages are deleted.
+would preserve two product identities without any data to protect. Fit,
+Distill, Elaborate, and Conformance now consume only the physical workspace;
+the `GroundSession` model, persistence owner, locking path, and Store-wide
+rename/write-protection hooks have been deleted.
 
 This slice does not make a Ground-owned branch, Embed, Reference, Grant, Import,
 or Delete operation. It does not make lexical descendants equivalent to

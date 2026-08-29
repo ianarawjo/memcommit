@@ -65,7 +65,8 @@ mechanics but obscure the four lifecycle responsibilities. Keeping the live
 application in one file would minimize movement but retain the mixed change
 surface. The selected split deliberately permits dependency injection through
 the small `entrypoint.py` composition root; it does not introduce a generic
-framework or claim that blank and named Ground share one semantic controller.
+framework or claim that blank creation and the physical workspace viewer share
+one semantic controller.
 Further extraction should follow a proven reusable terminal component rather
 than a file-size target alone.
 

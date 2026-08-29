@@ -3,12 +3,10 @@
 from __future__ import annotations
 
 import copy
-from contextlib import ExitStack
 import json
 import uuid
 from datetime import datetime
 from pathlib import Path
-from typing import Iterable
 
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.naming import (
@@ -170,7 +168,6 @@ class _ContextRenameMixin:
         checkpoints: dict[str, dict[str, dict[str, object]]],
         state: dict[str, object],
         *,
-        ground_records: dict[str, dict[str, object]],
         translation_records: dict[str, dict[str, object]],
         meld_records: dict[str, dict[str, object]],
     ) -> str:
@@ -190,10 +187,6 @@ class _ContextRenameMixin:
                     for name in sorted(records)
                 ],
                 "state": state,
-                "grounds": [
-                    {"file": name, "record": record}
-                    for name, record in sorted(ground_records.items())
-                ],
                 "translations": [
                     {"file": name, "record": record}
                     for name, record in sorted(translation_records.items())
@@ -204,61 +197,6 @@ class _ContextRenameMixin:
                 ],
             }
         )
-
-    def _ground_contract_names_for_rename(self) -> tuple[str, ...]:
-        """Return every named Ground whose file must join rename freshness."""
-        if not self.ground_sessions_dir.exists():
-            if self.ground_sessions_dir.is_symlink():
-                raise ValueError("Grounding session storage is invalid.")
-            return ()
-        if (
-            not self.ground_sessions_dir.is_dir()
-            or self.ground_sessions_dir.is_symlink()
-        ):
-            raise ValueError("Grounding session storage is invalid.")
-        names: list[str] = []
-        for path in sorted(self.ground_sessions_dir.iterdir()):
-            if path.name == ".locks" and path.is_dir() and not path.is_symlink():
-                continue
-            if path.is_symlink() or not path.is_file() or path.suffix != ".json":
-                raise ValueError("Grounding session storage is invalid.")
-            names.append(path.stem)
-        return tuple(names)
-
-    def _read_ground_records_for_rename(
-        self,
-        contract_names: Iterable[str],
-    ) -> dict[str, dict[str, object]]:
-        from memcommit.application.operations.ground.model import (
-            GroundError,
-            GroundSession,
-        )
-
-        records: dict[str, dict[str, object]] = {}
-        for contract_name in contract_names:
-            path = self._ground_session_path(contract_name)
-            try:
-                with open(path, encoding="utf-8") as file:
-                    raw = json.load(
-                        file,
-                        object_pairs_hook=_reject_duplicate_json_keys,
-                    )
-                session = GroundSession.from_dict(raw)
-            except (
-                json.JSONDecodeError,
-                GroundError,
-                OSError,
-                ValueError,
-            ) as error:
-                raise ValueError(
-                    f"Saved Ground '{contract_name}' is invalid."
-                ) from error
-            if session.contract_name != contract_name:
-                raise ValueError(
-                    f"Saved Ground '{contract_name}' does not match its file."
-                )
-            records[path.name] = raw
-        return records
 
     @staticmethod
     def _read_translation_records_for_rename() -> dict[str, dict[str, object]]:
@@ -346,8 +284,6 @@ class _ContextRenameMixin:
         self,
         old_name: str,
         new_name: str,
-        *,
-        ground_contract_names: Iterable[str],
     ) -> _PreparedContextRename:
         """Build validated pre/post images while graph and item locks are held."""
         records, checkpoints = self._read_context_graph_for_rename()
@@ -505,43 +441,6 @@ class _ContextRenameMixin:
                 state=protection,
             )
 
-        ground_records = self._read_ground_records_for_rename(ground_contract_names)
-        post_ground_records: dict[str, dict[str, object]] = {}
-        ground_frame_count = 0
-        from memcommit.application.operations.ground.model import (
-            GroundError,
-            GroundSession,
-        )
-
-        for filename, record in ground_records.items():
-            post = copy.deepcopy(record)
-            frames = post.get("frames")
-            if isinstance(frames, list):
-                for frame in frames:
-                    if not isinstance(frame, dict):
-                        raise ValueError(
-                            f"Saved Ground '{filename}' has an invalid frame."
-                        )
-                    context_uid = frame.get("context_uid")
-                    if context_uid not in changed_uids:
-                        continue
-                    before_frame = copy.deepcopy(frame)
-                    frame["context_name"] = post_name_by_uid[context_uid]
-                    # Preserve prior staleness. Only a frame that matched the
-                    # exact pre-rename record may follow the metadata-only
-                    # digest change to the post-rename record.
-                    if frame.get("context_digest") == pre_digest_by_uid[context_uid]:
-                        frame["context_digest"] = post_digest_by_uid[context_uid]
-                    if frame != before_frame:
-                        ground_frame_count += 1
-            try:
-                GroundSession.from_dict(post)
-            except GroundError as error:
-                raise ValueError(
-                    f"Saved Ground '{filename}' cannot follow this rename."
-                ) from error
-            post_ground_records[filename] = post
-
         translation_records = self._read_translation_records_for_rename()
         post_translation_records: dict[str, dict[str, object]] = {}
         translation_artifact_count = 0
@@ -643,7 +542,6 @@ class _ContextRenameMixin:
             records,
             checkpoints,
             raw_state,
-            ground_records=ground_records,
             translation_records=translation_records,
             meld_records=meld_records,
         )
@@ -654,7 +552,6 @@ class _ContextRenameMixin:
             changed_owner_names=tuple(sorted(changed_owner_names)),
             reference_count=live_reference_count,
             checkpoint_reference_count=checkpoint_reference_count,
-            ground_frame_count=ground_frame_count,
             translation_artifact_count=translation_artifact_count,
             meld_session_count=meld_session_count,
             current_before=current_before,
@@ -669,8 +566,6 @@ class _ContextRenameMixin:
             post_checkpoints=post_checkpoints,
             state=raw_state,
             post_state=post_state,
-            ground_records=ground_records,
-            post_ground_records=post_ground_records,
             translation_records=translation_records,
             post_translation_records=post_translation_records,
             meld_records=meld_records,
@@ -709,19 +604,12 @@ class _ContextRenameMixin:
         with self._context_graph_lock(exclusive=True):
             records, _ = self._read_context_graph_for_rename()
             lock_names = self._rename_lock_names(records, old_name, new_name)
-            ground_names = self._ground_contract_names_for_rename()
             with self._context_write_locks(lock_names):
                 with self._state_write_lock():
-                    with ExitStack() as grounds:
-                        for contract_name in ground_names:
-                            grounds.enter_context(
-                                self._ground_session_write_lock(contract_name)
-                            )
-                        return self._prepare_context_rename_locked(
-                            old_name,
-                            new_name,
-                            ground_contract_names=ground_names,
-                        ).plan
+                    return self._prepare_context_rename_locked(
+                        old_name,
+                        new_name,
+                    ).plan
 
     def _commit_context_rename_locked(
         self,
@@ -745,7 +633,6 @@ class _ContextRenameMixin:
         restore_files: dict[Path, bytes] = {}
         changed_context_paths: list[tuple[Path, dict[str, object]]] = []
         changed_checkpoint_paths: list[tuple[Path, dict[str, object]]] = []
-        changed_ground_paths: list[tuple[Path, dict[str, object]]] = []
         changed_translation_paths: list[tuple[Path, dict[str, object]]] = []
         changed_meld_paths: list[tuple[Path, dict[str, object]]] = []
 
@@ -765,13 +652,6 @@ class _ContextRenameMixin:
                 after_path = self._checkpoints_dir(live_name(owner_name)) / filename
                 restore_files[after_path] = before_path.read_bytes()
                 changed_checkpoint_paths.append((after_path, after))
-        for filename, before in prepared.ground_records.items():
-            after = prepared.post_ground_records[filename]
-            if after == before:
-                continue
-            path = self.ground_sessions_dir / filename
-            restore_files[path] = path.read_bytes()
-            changed_ground_paths.append((path, after))
         if prepared.translation_records:
             from memcommit.persistence.store.translation_catalog import (
                 translation_catalogs_dir,
@@ -853,8 +733,6 @@ class _ContextRenameMixin:
             for path, record in changed_context_paths:
                 _write_json_atomic(path, record)
             for path, record in changed_checkpoint_paths:
-                _write_json_atomic(path, record)
-            for path, record in changed_ground_paths:
                 _write_json_atomic(path, record)
             for path, record in changed_translation_paths:
                 _write_json_atomic(path, record)
@@ -941,7 +819,6 @@ class _ContextRenameMixin:
             changed_owner_count=len(plan.changed_owner_names),
             reference_count=plan.reference_count,
             checkpoint_reference_count=plan.checkpoint_reference_count,
-            ground_frame_count=plan.ground_frame_count,
             translation_artifact_count=plan.translation_artifact_count,
             meld_session_count=plan.meld_session_count,
             current_context=plan.current_after,
@@ -972,22 +849,15 @@ class _ContextRenameMixin:
                 plan.old_name,
                 plan.new_name,
             )
-            ground_names = self._ground_contract_names_for_rename()
             with self._context_write_locks(lock_names):
                 with self._state_write_lock():
-                    with ExitStack() as grounds:
-                        for contract_name in ground_names:
-                            grounds.enter_context(
-                                self._ground_session_write_lock(contract_name)
-                            )
-                        prepared = self._prepare_context_rename_locked(
-                            plan.old_name,
-                            plan.new_name,
-                            ground_contract_names=ground_names,
+                    prepared = self._prepare_context_rename_locked(
+                        plan.old_name,
+                        plan.new_name,
+                    )
+                    if prepared.plan != plan:
+                        raise ConcurrentContextUpdateError(
+                            "The Context graph changed after the rename was "
+                            "reviewed; nothing was renamed."
                         )
-                        if prepared.plan != plan:
-                            raise ConcurrentContextUpdateError(
-                                "The Context graph changed after the rename was "
-                                "reviewed; nothing was renamed."
-                            )
-                        return self._commit_context_rename_locked(prepared)
+                    return self._commit_context_rename_locked(prepared)

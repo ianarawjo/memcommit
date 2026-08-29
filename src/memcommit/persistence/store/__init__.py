@@ -51,7 +51,6 @@ _FORWARDED_COMPATIBILITY_NAMES = frozenset(
         "ATOMIZE_SESSION_HISTORY_DIR",
         "ATOMIZE_GROUNDING_SESSIONS_DIR",
         "ATOMIZE_GROUNDING_HISTORY_DIR",
-        "GROUND_SESSIONS_DIR",
         "MELD_SESSIONS_DIR",
         "MELD_SESSION_HISTORY_DIR",
         "_write_json_atomic",
@@ -84,11 +83,7 @@ class _StoreCompatibilityModule(ModuleType):
                 setattr(module, name, value)
 
 
-__all__ = [
-    name
-    for name in globals()
-    if not name.startswith("_")
-]
+__all__ = [name for name in globals() if not name.startswith("_")]
 
 # Keep the established root-module mutation behavior during this first split.
 # This module class disappears with the MemoryStore compatibility assembly.

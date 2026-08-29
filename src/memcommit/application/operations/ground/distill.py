@@ -8,25 +8,18 @@ import hashlib
 import json
 from typing import Iterator, Literal, Protocol
 
-from memcommit.core.context import Context, Memory
+from memcommit.core.context import Context
 from memcommit.application.operations.distill.model import DistillError, DistillProvider
-from memcommit.application.operations.distill.model import ensure_distill_goal_fit_allows_add
+from memcommit.application.operations.distill.model import (
+    ensure_distill_goal_fit_allows_add,
+)
 from memcommit.application.operations.distill.application import (
     DistillRequest,
     DistillResult,
     run_distill,
 )
-from memcommit.application.operations.distill.runtime import execute_distill
-from memcommit.application.operations.ground.model import (
-    GROUND_PROPOSITION_SCHEMA_VERSION,
-    GroundFrame,
-    GroundSession,
-    context_frame_digest,
-    is_bound_ground_schema,
-)
 from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_memories_adoption,
-    ground_workspace_exists,
     load_ground_workspace,
 )
 from memcommit.application.operations.ground.workspace_application import (
@@ -37,7 +30,9 @@ from memcommit.application.operations.ground.workspace_projection import (
     GroundWorkspaceProjectionError,
     project_ordinary_memories,
 )
-from memcommit.application.capabilities.semantic.goal_focus_runtime import freeze_goal_focus_context
+from memcommit.application.capabilities.semantic.goal_focus_runtime import (
+    freeze_goal_focus_context,
+)
 from memcommit.application.operations.add.semantic_runtime import (
     FrozenSemanticAddTarget,
     freeze_semantic_add_target,
@@ -45,9 +40,11 @@ from memcommit.application.operations.add.semantic_runtime import (
 from memcommit.persistence.store import (
     MemoryStore,
     context_record_digest,
-    ground_session_record_digest,
 )
-from memcommit.application.operations.summarize.model import SummaryFrame, collect_summary_scope
+from memcommit.application.operations.summarize.model import (
+    SummaryFrame,
+    collect_summary_scope,
+)
 from memcommit.application.operations.summarize.application import (
     FrozenSummarySource,
     SummarizeRequest,
@@ -61,20 +58,6 @@ class GroundDistillProviderFactory(Protocol):
 
 @dataclass(frozen=True)
 class FrozenGroundDistill:
-    """One exact Ground and candidate frame projected into Distill."""
-
-    ground_name: str
-    ground_uid: str
-    ground_revision: int
-    ground_digest: str
-    candidate_frame: GroundFrame
-    request: DistillRequest
-    source_kind: Literal["GROUND_EXAMPLES", "LEGACY_CANDIDATE_CONTEXT"]
-    example_frame: SummaryFrame | None = None
-
-
-@dataclass(frozen=True)
-class FrozenGroundWorkspaceDistill:
     """Exact consumed Goal, Example, and Context Memories from one workspace."""
 
     ground_name: str
@@ -92,135 +75,21 @@ class FrozenGroundWorkspaceDistill:
 
 @dataclass(frozen=True)
 class GroundDistillResult:
-    frozen: FrozenGroundDistill | FrozenGroundWorkspaceDistill
+    frozen: FrozenGroundDistill
     distill: DistillResult
-
-
-def _working_frame(session) -> GroundFrame:
-    if not is_bound_ground_schema(session.schema_version):
-        raise DistillError("Ground Distill requires a bound Ground.")
-    if session.status != "OPEN":
-        raise DistillError("Ground Distill requires an open Ground.")
-    frames = tuple(
-        frame for frame in session.frames if frame.role == "WORKING_CANDIDATES"
-    )
-    if len(frames) != 1:
-        raise DistillError("Ground Distill requires one working-candidate frame.")
-    return frames[0]
-
-
-def _validate_candidate_frame(store: MemoryStore, frame: GroundFrame) -> None:
-    try:
-        context = store.load_direct(frame.context_name)
-    except FileNotFoundError as error:
-        raise DistillError(
-            f"Bound Context '{frame.context_name}' no longer exists."
-        ) from error
-    direct_items = tuple(context.iter_items())
-    if (
-        context.uid != frame.context_uid
-        or context_frame_digest(context) != frame.context_digest
-        or sum(isinstance(item, Memory) for item in direct_items)
-        != frame.direct_memory_count
-        or len(direct_items) != frame.direct_item_count
-    ):
-        raise DistillError(
-            f"Bound Context '{frame.context_name}' changed after Ground binding."
-        )
-
-
-def _included_example_frame(
-    session: GroundSession,
-    candidate_frame: GroundFrame,
-) -> SummaryFrame | None:
-    """Project active INCLUDE Examples, preserving no-Example compatibility.
-
-    A historical bound Ground may have no Ground Memory records yet; that
-    legacy shape keeps the former candidate-Context Distill path. Once any
-    Example exists, its durable USE value becomes authoritative and an empty
-    INCLUDE set must fail rather than silently falling back to the Context.
-    """
-
-    examples = tuple(item for item in session.items if item.kind == "CASE")
-    if not examples:
-        return None
-    included = tuple(
-        item
-        for item in examples
-        if item.status in {"PROPOSED", "ACCEPTED"}
-        and item.disposition == "INCLUDE"
-    )
-    if not included:
-        raise DistillError(
-            "Ground Distill has no active INCLUDE Examples. Toggle USE on at "
-            "least one Example before provider connection."
-        )
-    context = Context(
-        uid=candidate_frame.context_uid,
-        name=candidate_frame.context_name,
-    )
-    for item in included:
-        proposition = (
-            item.proposition
-            if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
-            else f"{item.content} -> {item.expected}"
-        )
-        if not proposition.strip():
-            raise DistillError(
-                "An active INCLUDE Example has no proposition to Distill."
-            )
-        # The Ground item UID, rather than its source Context Memory UID,
-        # makes citations resolve to the exact reviewed Example and USE state.
-        context.add(Memory(uid=item.uid, content=proposition))
-    return collect_summary_scope(
-        (context,),
-        root_context_uid=context.uid,
-        root_context_name=context.name,
-        include_descendants=False,
-        follow_embeds=False,
-    )
 
 
 def freeze_ground_distill(
     store: MemoryStore,
     *,
     ground_name: str,
-) -> FrozenGroundDistill | FrozenGroundWorkspaceDistill:
-    """Freeze Ground identity and its exact candidate Context before inference."""
+) -> FrozenGroundDistill:
+    """Freeze one physical Ground's exact Distill inputs."""
 
-    if ground_workspace_exists(store, ground_name):
-        return _freeze_ground_workspace_distill(store, ground_name)
-
-    session = store.load_ground_session(ground_name)
-    if session is None:
-        raise DistillError(f"Ground '{ground_name}' was not found.")
-    frame = _working_frame(session)
-    _validate_candidate_frame(store, frame)
-    example_frame = _included_example_frame(session, frame)
-    return FrozenGroundDistill(
-        ground_name=session.contract_name,
-        ground_uid=session.uid,
-        ground_revision=session.revision,
-        ground_digest=ground_session_record_digest(session),
-        candidate_frame=frame,
-        request=DistillRequest(
-            context_locator=frame.context_name,
-            goal=session.goal or None,
-        ),
-        source_kind=(
-            "GROUND_EXAMPLES"
-            if example_frame is not None
-            else "LEGACY_CANDIDATE_CONTEXT"
-        ),
-        example_frame=example_frame,
-    )
-
-
-def _freeze_ground_workspace_distill(
-    store: MemoryStore,
-    ground_name: str,
-) -> FrozenGroundWorkspaceDistill:
-    workspace = load_ground_workspace(store, ground_name)
+    try:
+        workspace = load_ground_workspace(store, ground_name)
+    except FileNotFoundError as error:
+        raise DistillError(f"Ground {ground_name!r} was not found.") from error
     try:
         goals = project_ordinary_memories(
             workspace.goals,
@@ -233,9 +102,7 @@ def _freeze_ground_workspace_distill(
     except GroundWorkspaceProjectionError as error:
         raise DistillError(str(error)) from error
     if len(goals) > 1:
-        raise DistillError(
-            "Ground workspace Distill requires zero or one Goal Memory."
-        )
+        raise DistillError("Ground workspace Distill requires zero or one Goal Memory.")
     goal_focus = (
         freeze_goal_focus_context(
             workspace.goals,
@@ -326,7 +193,7 @@ def _freeze_ground_workspace_distill(
                 )
             )
         )
-    return FrozenGroundWorkspaceDistill(
+    return FrozenGroundDistill(
         ground_name=workspace.name,
         ground_uid=workspace.uid,
         ground_revision=workspace.manifest.revision,
@@ -343,26 +210,13 @@ def _freeze_ground_workspace_distill(
     )
 
 
-def _revalidate_ground(frozen: FrozenGroundDistill, store: MemoryStore) -> None:
-    session = store.load_ground_session(frozen.ground_name)
-    if (
-        session is None
-        or session.uid != frozen.ground_uid
-        or session.revision != frozen.ground_revision
-        or ground_session_record_digest(session) != frozen.ground_digest
-        or _working_frame(session) != frozen.candidate_frame
-    ):
-        raise DistillError("The Ground changed while Distill was running.")
-    _validate_candidate_frame(store, frozen.candidate_frame)
-
-
-def _revalidate_ground_workspace(
-    frozen: FrozenGroundWorkspaceDistill,
+def _revalidate_ground(
+    frozen: FrozenGroundDistill,
     store: MemoryStore,
     *,
     adoption: bool = False,
 ) -> None:
-    current = _freeze_ground_workspace_distill(store, frozen.ground_name)
+    current = freeze_ground_distill(store, ground_name=frozen.ground_name)
     if (
         current.ground_uid != frozen.ground_uid
         or current.ground_digest != frozen.ground_digest
@@ -384,104 +238,51 @@ def _revalidate_ground_workspace(
 
 
 def execute_ground_distill(
-    frozen: FrozenGroundDistill | FrozenGroundWorkspaceDistill,
+    frozen: FrozenGroundDistill,
     *,
     store: MemoryStore,
     provider_factory: GroundDistillProviderFactory,
 ) -> GroundDistillResult:
-    """Run the shared application without mutating Ground or bound Contexts."""
+    """Run Distill without mutating the physical Ground workspace."""
 
-    if not isinstance(frozen, (FrozenGroundDistill, FrozenGroundWorkspaceDistill)):
+    if not isinstance(frozen, FrozenGroundDistill):
         raise TypeError("Ground Distill requires a frozen request.")
-    if isinstance(frozen, FrozenGroundWorkspaceDistill):
-        _revalidate_ground_workspace(frozen, store)
-
-        class _GroundWorkspaceSourcePort:
-            def freeze(self, request: SummarizeRequest) -> FrozenSummarySource:
-                if (
-                    request.context_locator != frozen.request.context_locator
-                    or request.include_descendants
-                    or request.follow_embeds
-                ):
-                    raise DistillError(
-                        "Ground workspace Distill changed its frozen inputs."
-                    )
-                _revalidate_ground_workspace(frozen, store)
-                return FrozenSummarySource(
-                    frame=frozen.candidate_frame,
-                    token=frozen.ground_digest,
-                )
-
-            def revalidate(self, source: FrozenSummarySource) -> SummaryFrame:
-                if (
-                    source.token != frozen.ground_digest
-                    or source.frame != frozen.candidate_frame
-                ):
-                    raise DistillError(
-                        "Ground workspace Distill input binding is invalid."
-                    )
-                _revalidate_ground_workspace(frozen, store)
-                return frozen.candidate_frame
-
-        @contextmanager
-        def workspace_provider_session() -> Iterator[DistillProvider]:
-            yield provider_factory()
-
-        result = run_distill(
-            frozen.request,
-            source_port=_GroundWorkspaceSourcePort(),
-            provider_session_factory=workspace_provider_session,
-        )
-        _revalidate_ground_workspace(frozen, store)
-        return GroundDistillResult(frozen=frozen, distill=result)
     _revalidate_ground(frozen, store)
-    if frozen.source_kind == "LEGACY_CANDIDATE_CONTEXT":
-        result = execute_distill(
-            frozen.request,
-            store=store,
-            provider_factory=provider_factory,
-        )
-    else:
-        if frozen.example_frame is None:  # pragma: no cover - typed invariant
-            raise DistillError("Ground Distill lost its frozen Example frame.")
 
-        class _GroundExampleSourcePort:
-            def freeze(self, request: SummarizeRequest) -> FrozenSummarySource:
-                if (
-                    request.context_locator != frozen.request.context_locator
-                    or request.include_descendants
-                    or request.follow_embeds
-                ):
-                    raise DistillError(
-                        "Ground Distill Example scope does not match its "
-                        "frozen request."
-                    )
-                _revalidate_ground(frozen, store)
-                return FrozenSummarySource(
-                    frame=frozen.example_frame,
-                    token=frozen.ground_digest,
+    class _GroundWorkspaceSourcePort:
+        def freeze(self, request: SummarizeRequest) -> FrozenSummarySource:
+            if (
+                request.context_locator != frozen.request.context_locator
+                or request.include_descendants
+                or request.follow_embeds
+            ):
+                raise DistillError(
+                    "Ground workspace Distill changed its frozen inputs."
                 )
+            _revalidate_ground(frozen, store)
+            return FrozenSummarySource(
+                frame=frozen.candidate_frame,
+                token=frozen.ground_digest,
+            )
 
-            def revalidate(self, source: FrozenSummarySource) -> SummaryFrame:
-                if (
-                    source.token != frozen.ground_digest
-                    or source.frame != frozen.example_frame
-                ):
-                    raise DistillError(
-                        "Ground Distill Example binding is invalid."
-                    )
-                _revalidate_ground(frozen, store)
-                return frozen.example_frame
+        def revalidate(self, source: FrozenSummarySource) -> SummaryFrame:
+            if (
+                source.token != frozen.ground_digest
+                or source.frame != frozen.candidate_frame
+            ):
+                raise DistillError("Ground workspace Distill input binding is invalid.")
+            _revalidate_ground(frozen, store)
+            return frozen.candidate_frame
 
-        @contextmanager
-        def provider_session() -> Iterator[DistillProvider]:
-            yield provider_factory()
+    @contextmanager
+    def workspace_provider_session() -> Iterator[DistillProvider]:
+        yield provider_factory()
 
-        result = run_distill(
-            frozen.request,
-            source_port=_GroundExampleSourcePort(),
-            provider_session_factory=provider_session,
-        )
+    result = run_distill(
+        frozen.request,
+        source_port=_GroundWorkspaceSourcePort(),
+        provider_session_factory=workspace_provider_session,
+    )
     _revalidate_ground(frozen, store)
     return GroundDistillResult(frozen=frozen, distill=result)
 
@@ -493,15 +294,12 @@ def apply_ground_distill_result(
 ) -> AdoptGroundWorkspaceMemoriesResult:
     """Explicitly adopt one unchanged physical-Ground Distill proposal."""
 
-    if not isinstance(result, GroundDistillResult) or not isinstance(
-        result.frozen,
-        FrozenGroundWorkspaceDistill,
-    ):
+    if not isinstance(result, GroundDistillResult):
         raise DistillError(
             "Distill adoption requires a physical Ground workspace result."
         )
     frozen = result.frozen
-    _revalidate_ground_workspace(frozen, store, adoption=True)
+    _revalidate_ground(frozen, store, adoption=True)
     ensure_distill_goal_fit_allows_add(result.distill.analysis)
     contents = tuple(rule.content for rule in result.distill.analysis.rules)
     if not contents:
@@ -525,7 +323,6 @@ def apply_ground_distill_result(
 
 __all__ = [
     "FrozenGroundDistill",
-    "FrozenGroundWorkspaceDistill",
     "GroundDistillResult",
     "execute_ground_distill",
     "apply_ground_distill_result",

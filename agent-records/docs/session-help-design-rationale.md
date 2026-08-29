@@ -11,8 +11,8 @@ Application lifecycle in every later session.
 
 Session Help is therefore one operation-neutral handoff implemented by
 `memcommit.adapters.console.terminal.components.session_help`. It is adopted by Query, Find search and
-chat, Compare, Result, the shared Resolution workbench, and both blank and
-named Ground shells. Resolution covers Meld, Sever, Update, Atomize, Forget,
+chat, Compare, Result, the shared Resolution workbench, and the physical blank
+Ground shell. Resolution covers Meld, Sever, Update, Atomize, Forget,
 Impact, and adaptive Review without operation-specific bindings. The common
 command-wait screen now uses the same controller while retaining its special
 result-ready behavior.

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from contextlib import ExitStack
 from dataclasses import dataclass
 import json
 import os
@@ -10,17 +9,15 @@ from pathlib import Path
 import uuid
 
 from memcommit.application.operations.fit.ground_report import FitError, FitReport
-from memcommit.application.operations.ground.model import GroundSession, context_frame_digest
 from memcommit.application.operations.ground.workspace_model import GroundWorkspace
 from memcommit.application.operations.ground.workspace_fit import (
     load_ground_workspace_fit_contexts,
     workspace_fit_report_is_current,
 )
 from memcommit.application.operations.ground.workspace_runtime import (
-    ground_workspace_exists,
     load_ground_workspace,
 )
-from memcommit.persistence.store import MemoryStore, ground_session_record_digest
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)
@@ -55,63 +52,30 @@ class FitStore:
 
         restored = FitReport.from_dict(report.to_dict())
         path = self._path(restored.uid)
-        if ground_workspace_exists(self.store, restored.ground_name):
-            with self.store._context_graph_lock(exclusive=False):  # noqa: SLF001
-                workspace = load_ground_workspace(self.store, restored.ground_name)
-                context_scope = load_ground_workspace_fit_contexts(
-                    self.store,
-                    workspace,
-                )
-                lock_names = (
-                    workspace.root.name,
-                    workspace.goals.name,
-                    workspace.rules.name,
-                    workspace.examples.name,
-                    *(context.name for context in context_scope),
-                )
-                with self.store._context_write_locks(lock_names):  # noqa: SLF001
-                    with self.store.profile_write_guard():
-                        if not workspace_fit_report_is_current(
-                            self.store,
-                            restored,
-                        ):
-                            raise FitError(
-                                "The consumed Ground workspace Memories changed "
-                                "before its Fit receipt could be saved."
-                            )
-                        self._write_new_report(restored, path)
-            return
-        # Fit publication shares the Ground lock and, for v2, every exact
-        # Context input lock so no mutation can land between freshness
-        # validation and this receipt.
-        with ExitStack() as locks:
-            if restored.coherence is not None:
-                # Context inputs are part of a v2 receipt. Preserve the Store's
-                # graph -> Context -> Ground -> profile lock order so a Context
-                # edit cannot race between revalidation and receipt publication.
-                locks.enter_context(  # noqa: SLF001
-                    self.store._context_graph_lock(exclusive=False)
-                )
-                locks.enter_context(  # noqa: SLF001
-                    self.store._context_write_locks(
-                        item.name for item in restored.coherence.contexts
-                    )
-                )
-            locks.enter_context(  # noqa: SLF001
-                self.store._ground_session_write_lock(restored.ground_name)
+        with self.store._context_graph_lock(exclusive=False):  # noqa: SLF001
+            workspace = load_ground_workspace(self.store, restored.ground_name)
+            context_scope = load_ground_workspace_fit_contexts(
+                self.store,
+                workspace,
             )
-            locks.enter_context(self.store.profile_write_guard())
-            current = self.store.load_ground_session(restored.ground_name)
-            if current is None or not _report_is_current(
-                restored,
-                current,
-                store=self.store,
-            ):
-                raise FitError(
-                    "The Ground or a bound Context changed before its Fit "
-                    "receipt could be saved."
-                )
-            self._write_new_report(restored, path)
+            lock_names = (
+                workspace.root.name,
+                workspace.goals.name,
+                workspace.rules.name,
+                workspace.examples.name,
+                *(context.name for context in context_scope),
+            )
+            with self.store._context_write_locks(lock_names):  # noqa: SLF001
+                with self.store.profile_write_guard():
+                    if not workspace_fit_report_is_current(
+                        self.store,
+                        restored,
+                    ):
+                        raise FitError(
+                            "The consumed Ground workspace Memories changed "
+                            "before its Fit receipt could be saved."
+                        )
+                    self._write_new_report(restored, path)
 
     def _write_new_report(self, report: FitReport, path: Path) -> None:
         """Create one immutable report while the caller owns freshness locks."""
@@ -169,16 +133,6 @@ class FitStore:
                 reports.append(report)
         return tuple(sorted(reports, key=lambda item: (item.created_at, item.uid)))
 
-    def latest_for_ground(self, session: GroundSession) -> GroundFitReceipt | None:
-        reports = self.list(ground_uid=session.uid)
-        if not reports:
-            return None
-        report = reports[-1]
-        return GroundFitReceipt(
-            report=report,
-            current=_report_is_current(report, session, store=self.store),
-        )
-
     def latest_for_workspace(
         self,
         workspace: GroundWorkspace,
@@ -191,44 +145,6 @@ class FitStore:
             report=report,
             current=workspace_fit_report_is_current(self.store, report),
         )
-
-
-def _report_is_current(
-    report: FitReport,
-    session: GroundSession,
-    *,
-    store: MemoryStore | None = None,
-) -> bool:
-    ground_current = (
-        report.ground_uid == session.uid
-        and report.ground_name == session.contract_name
-        and report.ground_revision == session.revision
-        and report.ground_digest == ground_session_record_digest(session)
-    )
-    if not ground_current or report.coherence is None:
-        return ground_current
-    if store is None:
-        return False
-    report_by_name = {
-        context.name: context for context in report.coherence.contexts
-    }
-    if set(report_by_name) != {frame.context_name for frame in session.frames}:
-        return False
-    frame_by_name = {frame.context_name: frame for frame in session.frames}
-    try:
-        for name, reported in report_by_name.items():
-            frame = frame_by_name[name]
-            current = store.load_direct(name)
-            if (
-                current.uid != frame.context_uid
-                or current.uid != reported.uid
-                or context_frame_digest(current) != frame.context_digest
-                or frame.context_digest != reported.digest
-            ):
-                return False
-    except (FileNotFoundError, OSError, ValueError):
-        return False
-    return True
 
 
 def _strict_json_object(pairs: list[tuple[str, object]]) -> dict[str, object]:

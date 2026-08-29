@@ -13,7 +13,6 @@ from memcommit.application.operations.conformance.model import (
     ConformanceReport,
     ConformanceRule,
     ConformanceSubject,
-    check_case_conformance,
     check_context_conformance,
 )
 from memcommit.core.context import Context, Memory
@@ -32,11 +31,17 @@ from memcommit.core.context_targeting.model import (
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.application.operations.ground.model import GroundSession, is_bound_ground_schema
+from memcommit.application.operations.ground.workspace_model import GroundWorkspace
+from memcommit.application.operations.ground.workspace_projection import (
+    GroundWorkspaceProjectionError,
+    project_ordinary_memories,
+)
+from memcommit.application.operations.ground.workspace_runtime import (
+    load_ground_workspace,
+)
 from memcommit.persistence.store import (
     MemoryStore,
     context_record_digest,
-    ground_session_record_digest,
 )
 
 
@@ -262,66 +267,53 @@ def freeze_context_conformance(
     )
 
 
-def freeze_ground_conformance(session: GroundSession) -> FrozenGroundConformance:
-    """Freeze executable Rule/Ground-Memory pairs from one saved Ground."""
+def freeze_ground_conformance(
+    workspace: GroundWorkspace,
+) -> FrozenGroundConformance:
+    """Freeze physical Rule and Example Memories for Context Conformance."""
 
-    if not is_bound_ground_schema(session.schema_version):
-        raise ConformanceError("Case Conformance requires a bound Ground workbench.")
-    active_rules = tuple(
-        item
-        for item in session.items
-        if item.kind == "RULE" and item.status in {"PROPOSED", "ACCEPTED"}
-    )
-    executable_cases = tuple(
-        item
-        for item in session.items
-        if item.kind == "CASE"
-        and item.status in {"PROPOSED", "ACCEPTED"}
-        and item.disposition == "INCLUDE"
-        and bool(item.expected.strip())
-    )
-    if not active_rules:
-        raise ConformanceError("The Ground contains no active Rules to check.")
-    if not executable_cases:
-        raise ConformanceError(
-            "The Ground contains no active INCLUDE Memories with expected outputs."
+    try:
+        rule_memories = project_ordinary_memories(
+            workspace.rules,
+            operation="Ground workspace Conformance",
         )
-    rule_alias_by_uid = {
-        item.uid: f"r{index}" for index, item in enumerate(active_rules, 1)
-    }
-    rules = tuple(
-        ConformanceRule(item.uid, rule_alias_by_uid[item.uid], item.content)
-        for item in active_rules
-    )
-    active_rule_uids = tuple(rule.uid for rule in rules)
-    subjects: list[ConformanceSubject] = []
-    for index, item in enumerate(executable_cases, 1):
-        primary_links = tuple(
-            uid for uid in item.related_uids if uid in rule_alias_by_uid
+        example_memories = project_ordinary_memories(
+            workspace.examples,
+            operation="Ground workspace Conformance",
         )
-        if primary_links != item.related_uids:
-            raise ConformanceError(
-                "An executable Ground Memory links a non-active Rule."
+    except GroundWorkspaceProjectionError as error:
+        raise ConformanceError(str(error)) from error
+    if not rule_memories:
+        raise ConformanceError("The Ground workspace contains no Rules to check.")
+    if not example_memories:
+        raise ConformanceError("The Ground workspace contains no Examples to check.")
+    rules = _rules_from_memories(rule_memories)
+    rule_uids = tuple(rule.uid for rule in rules)
+    subjects = tuple(
+        ConformanceSubject(
+            uid=memory.uid,
+            alias=f"e{index}",
+            content=memory.content,
+            role="EXAMPLE",
+            linked_rule_uids=rule_uids,
+        )
+        for index, memory in enumerate(example_memories, 1)
+    )
+    digest = hashlib.sha256(
+        "\0".join(
+            (
+                workspace.uid,
+                context_record_digest(workspace.root),
+                context_record_digest(workspace.rules),
+                context_record_digest(workspace.examples),
             )
-        subjects.append(
-            ConformanceSubject(
-                uid=item.uid,
-                alias=f"c{index}",
-                content=item.content,
-                expected=item.expected,
-                role=item.case_role,
-                # A Ground Memory has one provenance link, but an executable
-                # outcome may compose several active Rules. Freeze the whole
-                # Rule set for prediction instead of pretending the primary
-                # provenance link is the complete execution dependency.
-                linked_rule_uids=active_rule_uids,
-            )
-        )
+        ).encode("utf-8")
+    ).hexdigest()
     return FrozenGroundConformance(
-        ground_name=session.contract_name,
-        ground_digest=ground_session_record_digest(session),
+        ground_name=workspace.name,
+        ground_digest=digest,
         rules=rules,
-        subjects=tuple(subjects),
+        subjects=subjects,
     )
 
 
@@ -432,21 +424,18 @@ def execute_ground_conformance(
     ground_name: str,
     provider_factory: ConformanceProviderFactory,
 ) -> ConformanceReport:
-    """Check one exact saved Ground revision without opening its live Contexts."""
+    """Check one exact physical Ground Example lane against its Rules."""
 
-    session = store.load_ground_session(ground_name)
-    if session is None:
-        raise ConformanceError(f"Ground '{ground_name}' was not found.")
-    frozen = freeze_ground_conformance(session)
-    report = check_case_conformance(
-        source_label=f"GROUND · {ground_name}",
+    frozen = freeze_ground_conformance(load_ground_workspace(store, ground_name))
+    report = check_context_conformance(
+        source_label=f"GROUND EXAMPLES · {ground_name}",
         rules_label=f"GROUND RULES · {ground_name}",
         rules=frozen.rules,
         subjects=frozen.subjects,
         provider=provider_factory(),
     )
-    current = store.load_ground_session(ground_name)
-    if current is None or ground_session_record_digest(current) != frozen.ground_digest:
+    current = freeze_ground_conformance(load_ground_workspace(store, ground_name))
+    if current != frozen:
         raise ConformanceError(
             "The Ground changed during Conformance; no report was published."
         )

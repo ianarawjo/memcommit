@@ -106,9 +106,9 @@ to reopen their exact recorded target.
 
 The Profile/Store orientation above the launcher is also operation-neutral.
 Its command adapter matches the frozen Store root against the Profile registry
-rather than importing Ground's saved-session catalog or trusting a separately
-mutable active-Profile pointer. The legacy Ground location helper remains only
-as a compatibility projection over that neutral value.
+rather than importing an operation-owned saved-session catalog or trusting a
+separately mutable active-Profile pointer. The location formatter is now owned
+directly by the shared operation launcher component.
 
 ## Safety and compatibility boundaries
 

@@ -17,17 +17,22 @@ from memcommit.application.operations.conformance.model import (
     check_case_conformance,
     check_context_conformance,
 )
-from memcommit.application.operations.conformance.runtime import freeze_context_conformance
-from memcommit.application.operations.conformance.runtime import freeze_ground_conformance
+from memcommit.application.operations.conformance.runtime import (
+    execute_ground_conformance,
+    freeze_context_conformance,
+    freeze_ground_conformance,
+)
 from memcommit.adapters.console.entrypoint import app
 import memcommit.adapters.console.commands.check_conformance.command as check_conformance_command
 import memcommit.adapters.console.commands.audit.command as audit_command
-from memcommit.application.operations.ground.model import (
-    GroundTargetSpec,
-    bind_ground_workbench,
-    create_ground_session,
-    propose_ground_case,
-    propose_ground_rule,
+from memcommit.application.operations.ground.workspace_application import (
+    AddGroundWorkspaceMemoryRequest,
+    CreateGroundWorkspaceRequest,
+)
+from memcommit.application.operations.ground.workspace_runtime import (
+    execute_ground_workspace_creation,
+    execute_ground_workspace_memory_add,
+    load_ground_workspace,
 )
 from memcommit.providers.types import ProviderIdentity
 from memcommit.persistence.store import MemoryStore
@@ -37,7 +42,9 @@ from memcommit.application.capabilities.reviewing.quality.audit import (
     QualityAuditSession,
     quality_audit_resolution_view,
 )
-from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.application.capabilities.reviewing.quality.audit_store import (
+    QualityAuditStore,
+)
 from memcommit.persistence.store import context_record_digest
 
 
@@ -109,23 +116,38 @@ def test_case_conformance_withholds_expected_and_derives_exact_pass_fail():
 def test_case_conformance_rejects_omitted_or_duplicate_case():
     rule = _rule()
     cases = tuple(
-        ConformanceSubject(_uid(), f"c{index}", f"Case {index}", "X", "FIT", (rule.uid,))
+        ConformanceSubject(
+            _uid(), f"c{index}", f"Case {index}", "X", "FIT", (rule.uid,)
+        )
         for index in (1, 2)
     )
     provider = Provider(
         {
             "overview": "Invalid duplicate coverage.",
             "predictions": [
-                {"case_id": "c1", "disposition": "PREDICTED", "predicted": "X", "reason": "One."},
-                {"case_id": "c1", "disposition": "PREDICTED", "predicted": "X", "reason": "Again."},
+                {
+                    "case_id": "c1",
+                    "disposition": "PREDICTED",
+                    "predicted": "X",
+                    "reason": "One.",
+                },
+                {
+                    "case_id": "c1",
+                    "disposition": "PREDICTED",
+                    "predicted": "X",
+                    "reason": "Again.",
+                },
             ],
         }
     )
 
     with pytest.raises(ConformanceError, match="exactly once"):
         check_case_conformance(
-            source_label="ground", rules_label="rules", rules=(rule,),
-            subjects=cases, provider=provider,
+            source_label="ground",
+            rules_label="rules",
+            rules=(rule,),
+            subjects=cases,
+            provider=provider,
         )
 
 
@@ -133,27 +155,60 @@ def test_context_conformance_judges_each_rule_and_accounts_every_memory():
     first_rule = _rule("Use uppercase initials for multiword names.")
     second_rule = ConformanceRule(_uid(), "r2", "Append .B for Class B.")
     subjects = (
-        ConformanceSubject(_uid(), "m000001", "North Star Energy → NSE", linked_rule_uids=(first_rule.uid, second_rule.uid)),
-        ConformanceSubject(_uid(), "m000002", "North Star Energy Class B → NSE.B", linked_rule_uids=(first_rule.uid, second_rule.uid)),
-        ConformanceSubject(_uid(), "m000003", "Unrelated note", linked_rule_uids=(first_rule.uid, second_rule.uid)),
+        ConformanceSubject(
+            _uid(),
+            "m000001",
+            "North Star Energy → NSE",
+            linked_rule_uids=(first_rule.uid, second_rule.uid),
+        ),
+        ConformanceSubject(
+            _uid(),
+            "m000002",
+            "North Star Energy Class B → NSE.B",
+            linked_rule_uids=(first_rule.uid, second_rule.uid),
+        ),
+        ConformanceSubject(
+            _uid(),
+            "m000003",
+            "Unrelated note",
+            linked_rule_uids=(first_rule.uid, second_rule.uid),
+        ),
     )
     provider = Provider(
         {
             "judgments": [
-                {"rule_id": "r1", "status": "CONFORMS", "evidence_memory_ids": ["m000001", "m000002"], "nonconforming_cases": [], "reason": "Both use initials."},
-                {"rule_id": "r2", "status": "CONFORMS", "evidence_memory_ids": ["m000002"], "nonconforming_cases": [], "reason": "Class B uses .B."},
+                {
+                    "rule_id": "r1",
+                    "status": "CONFORMS",
+                    "evidence_memory_ids": ["m000001", "m000002"],
+                    "nonconforming_cases": [],
+                    "reason": "Both use initials.",
+                },
+                {
+                    "rule_id": "r2",
+                    "status": "CONFORMS",
+                    "evidence_memory_ids": ["m000002"],
+                    "nonconforming_cases": [],
+                    "reason": "Class B uses .B.",
+                },
             ],
             "outside_memory_ids": ["m000003"],
         }
     )
 
     report = check_context_conformance(
-        source_label="ticker/examples", rules_label="ticker/rules",
-        rules=(first_rule, second_rule), subjects=subjects, provider=provider,
+        source_label="ticker/examples",
+        rules_label="ticker/rules",
+        rules=(first_rule, second_rule),
+        subjects=subjects,
+        provider=provider,
     )
 
     assert provider.calls[0][1] == CONTEXT_CONFORMANCE_OPERATION
-    assert [item.status for item in report.context_judgments] == ["CONFORMS", "CONFORMS"]
+    assert [item.status for item in report.context_judgments] == [
+        "CONFORMS",
+        "CONFORMS",
+    ]
     assert [item.status for item in report.context_example_judgments] == [
         "CONFORMS",
         "CONFORMS",
@@ -226,14 +281,12 @@ def test_context_conformance_renders_rule_summary_and_exact_failing_cases():
     assert "WHAT MEM UNDERSTOOD" not in rendered
     assert (
         "CONFORMANCE · 1/2 EXAMPLES CONFORM · 1/2 RULES MET · "
-        "[EXAMPLES letters/examples] · [RULES letters/rules]"
-        in rendered
+        "[EXAMPLES letters/examples] · [RULES letters/rules]" in rendered
     )
     assert (
         "! VIOLATES · [EXAMPLE m000002] b is apple · "
         "[RULE r2] The word must begin with the initial letter. · WHY · "
-        "The word apple does not begin with b."
-        in rendered
+        "The word apple does not begin with b." in rendered
     )
     assert len(rendered.splitlines()) == 2
     assert "NONCONFORMING CASES" not in rendered
@@ -316,16 +369,12 @@ def test_context_conformance_still_reads_schema_two_case_identities():
     schema_two["ruleset_version"] = "conformance-v1"
     for judgment in schema_two["context_judgments"]:
         cases = judgment.pop("nonconforming_cases")
-        judgment["nonconforming_subject_uids"] = [
-            case["subject_uid"] for case in cases
-        ]
+        judgment["nonconforming_subject_uids"] = [case["subject_uid"] for case in cases]
 
     restored = ConformanceReport.from_dict(schema_two)
 
     assert restored.schema_version == 2
-    assert restored.context_judgments[0].nonconforming_subject_uids == (
-        subject.uid,
-    )
+    assert restored.context_judgments[0].nonconforming_subject_uids == (subject.uid,)
     assert restored.context_judgments[0].nonconforming_cases[0].reason is None
     assert restored.to_dict() == schema_two
 
@@ -376,7 +425,13 @@ def test_context_conformance_rejects_silent_target_omission():
     provider = Provider(
         {
             "judgments": [
-                {"rule_id": "r1", "status": "CONFORMS", "evidence_memory_ids": ["m000001"], "nonconforming_cases": [], "reason": "One."}
+                {
+                    "rule_id": "r1",
+                    "status": "CONFORMS",
+                    "evidence_memory_ids": ["m000001"],
+                    "nonconforming_cases": [],
+                    "reason": "One.",
+                }
             ],
             "outside_memory_ids": [],
         }
@@ -384,8 +439,11 @@ def test_context_conformance_rejects_silent_target_omission():
 
     with pytest.raises(ConformanceError, match="every target Memory"):
         check_context_conformance(
-            source_label="target", rules_label="rules", rules=(rule,),
-            subjects=subjects, provider=provider,
+            source_label="target",
+            rules_label="rules",
+            rules=(rule,),
+            subjects=subjects,
+            provider=provider,
         )
 
 
@@ -432,53 +490,65 @@ def test_freeze_context_conformance_uses_direct_memories_as_rules_and_subjects()
     assert frozen.subjects[0].linked_rule_uids == (rule_memory.uid,)
 
 
-def test_freeze_ground_conformance_uses_typed_expected_outputs():
-    raw = ops.init("ticker/raw")
-    candidates = ops.init("ticker/cases")
-    first = ops.add(candidates, "North Star Energy Inc.")
-    target = ops.init("ticker/output")
-    session = bind_ground_workbench(
-        create_ground_session("ticker-rules", goal="Generate synthetic tickers."),
-        description="Test ticker-generation Rules.",
-        raw_context=raw,
-        derived_context=candidates,
-        target_contexts=(target,),
-        target_requirements=(
-            GroundTargetSpec(
-                context_name=target.name,
-                description="Publish checked ticker outputs.",
-                role="PUBLICATION_TARGET",
-            ),
+def test_freeze_ground_conformance_uses_physical_rules_and_examples(
+    isolated_store,
+):
+    store = MemoryStore()
+    execute_ground_workspace_creation(
+        CreateGroundWorkspaceRequest(
+            name="ticker-rules",
+            goal="Generate synthetic tickers.",
         ),
+        store=store,
     )
-    contexts = (raw, candidates, target)
-    session = propose_ground_rule(
-        session,
-        rule="Use uppercase initials after removing the legal suffix.",
-        rationale="The example supplies the mapping.",
-        current_contexts=contexts,
-    )
-    rule = session.items_of_kind("RULE")[0]
-    session = propose_ground_case(
-        session,
-        rule_selector=rule.uid,
-        case=first.content,
-        source_context_uid=candidates.uid,
-        source_memory_uid=first.uid,
-        target_context_names=(target.name,),
-        expected="NSE",
-        rationale="The initials produce NSE.",
-        current_contexts=contexts,
-    )
+    for lane, content in (
+        ("rules", "Use uppercase initials after removing the legal suffix."),
+        ("examples", "North Star Energy Inc. is represented by NSE."),
+    ):
+        execute_ground_workspace_memory_add(
+            AddGroundWorkspaceMemoryRequest(
+                workspace_name="ticker-rules",
+                lane=lane,
+                content=content,
+            ),
+            store=store,
+        )
 
-    frozen = freeze_ground_conformance(session)
+    frozen = freeze_ground_conformance(load_ground_workspace(store, "ticker-rules"))
 
     assert frozen.rules[0].content.startswith("Use uppercase initials")
-    assert frozen.subjects[0].content == "North Star Energy Inc."
-    assert frozen.subjects[0].expected == "NSE"
+    assert frozen.subjects[0].content == (
+        "North Star Energy Inc. is represented by NSE."
+    )
+    assert frozen.subjects[0].expected is None
     assert frozen.subjects[0].linked_rule_uids == tuple(
         item.uid for item in frozen.rules
     )
+
+    provider = Provider(
+        {
+            "judgments": [
+                {
+                    "rule_id": "r1",
+                    "status": "CONFORMS",
+                    "evidence_memory_ids": ["e1"],
+                    "nonconforming_cases": [],
+                    "reason": "The Example follows the uppercase-initial Rule.",
+                }
+            ],
+            "outside_memory_ids": [],
+        }
+    )
+    report = execute_ground_conformance(
+        store=store,
+        ground_name="ticker-rules",
+        provider_factory=lambda: provider,
+    )
+
+    assert provider.calls[0][1] == CONTEXT_CONFORMANCE_OPERATION
+    assert report.source_label == "GROUND EXAMPLES · ticker-rules"
+    assert report.rules_label == "GROUND RULES · ticker-rules"
+    assert report.context_judgments[0].status == "CONFORMS"
 
 
 def test_check_conformance_cli_runs_the_shared_context_core(
@@ -520,8 +590,7 @@ def test_check_conformance_cli_runs_the_shared_context_core(
     assert result.exit_code == 0, result.output
     assert (
         "CONFORMANCE · 1/1 EXAMPLES CONFORM · 1/1 RULES MET · "
-        "[EXAMPLES ticker/examples] · [RULES ticker/rules]"
-        in result.output
+        "[EXAMPLES ticker/examples] · [RULES ticker/rules]" in result.output
     )
     assert "  RULE ·" not in result.output
     assert "  EVIDENCE ·" not in result.output
@@ -920,7 +989,10 @@ def test_audit_optionally_embeds_the_same_context_conformance_report():
     assert session.conformance is not None
     assert session.conformance.context_judgments[0].status == "CONFORMS"
     assert "SAVED · 4/4 CHECKS" in quality_audit_resolution_view(session).status
-    assert QualityAuditSession.from_dict(session.to_dict()).conformance == session.conformance
+    assert (
+        QualityAuditSession.from_dict(session.to_dict()).conformance
+        == session.conformance
+    )
 
 
 @pytest.mark.parametrize("rules_option", ["--against", "--rule"])

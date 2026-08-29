@@ -1,5 +1,12 @@
 # Shared TUI Chrome and Exact-Command Review
 
+> **Ground compatibility note (2026-08-29).** The named JSON Ground shell and
+> its exact-command review path described in the Ground-specific sections below
+> have been removed with `GroundSession`. The shared TUI primitives remain in
+> use by other operations, while physical Ground uses its workspace shell and
+> ordinary Context-backed commands. The old Ground detail is historical
+> rationale, not a current interface contract.
+
 ## Problem
 
 Several memcommit operations use full-screen terminal interaction, but they do

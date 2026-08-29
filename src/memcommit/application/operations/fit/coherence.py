@@ -14,13 +14,6 @@ from datetime import datetime, timezone
 import json
 from typing import Literal, Protocol
 
-from memcommit.core.context import Context, Memory
-from memcommit.application.operations.ground.model import (
-    GROUND_PROPOSITION_SCHEMA_VERSION,
-    GroundSession,
-    context_frame_digest,
-    is_bound_ground_schema,
-)
 from memcommit.providers.types import CompletionRun, ProviderIdentity
 from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
@@ -684,160 +677,6 @@ class FitCoherenceReport:
         )
 
 
-def freeze_ground_coherence(
-    session: GroundSession,
-    contexts: tuple[Context, ...],
-) -> FrozenGroundCoherence:
-    """Freeze exact bound Context content and all active Ground layers."""
-
-    if not is_bound_ground_schema(session.schema_version) or session.brief is None:
-        raise FitCoherenceError("Ground coherence requires a bound Ground workbench.")
-    context_by_name = {context.name: context for context in contexts}
-    if len(context_by_name) != len(contexts) or set(context_by_name) != {
-        frame.context_name for frame in session.frames
-    }:
-        raise FitCoherenceError("Ground coherence Context frames are incomplete.")
-
-    context_frames: list[FitContextFrame] = []
-    memory_alias_by_identity: dict[tuple[str, str], str] = {}
-    context_alias_by_uid: dict[str, str] = {}
-    for index, frame in enumerate(session.frames, 1):
-        context = context_by_name[frame.context_name]
-        if (
-            context.uid != frame.context_uid
-            or context_frame_digest(context) != frame.context_digest
-        ):
-            raise FitCoherenceError(f"Bound Context '{frame.context_name}' is stale.")
-        context_alias = f"k{index}"
-        context_alias_by_uid[context.uid] = context_alias
-        memories: list[FitContextMemory] = []
-        for memory_index, item in enumerate(
-            (item for item in context.iter_items() if isinstance(item, Memory)),
-            1,
-        ):
-            alias = f"{context_alias}m{memory_index}"
-            memories.append(FitContextMemory(item.uid, alias, item.content))
-            memory_alias_by_identity[(context.uid, item.uid)] = alias
-        context_frames.append(
-            FitContextFrame(
-                uid=context.uid,
-                alias=context_alias,
-                name=context.name,
-                role=frame.role,
-                digest=frame.context_digest,
-                memories=tuple(memories),
-            )
-        )
-
-    target_aliases = tuple(
-        context_alias_by_uid[frame.context_uid]
-        for frame in session.frames
-        if frame.role in {"PUBLICATION_TARGET", "PLACEMENT_TARGET"}
-    )
-    all_context_aliases = tuple(item.alias for item in context_frames)
-    subjects: list[FitCoherenceSubject] = [
-        FitCoherenceSubject(
-            uid=session.uid,
-            alias="g1",
-            layer="GOAL",
-            statement=session.goal,
-            context_aliases=all_context_aliases,
-        )
-    ]
-    rules = tuple(
-        item
-        for item in session.items
-        if item.kind == "RULE" and item.status in {"PROPOSED", "ACCEPTED"}
-    )
-    examples = tuple(
-        item
-        for item in session.items
-        if item.kind == "CASE"
-        and item.status in {"PROPOSED", "ACCEPTED"}
-        and item.disposition == "INCLUDE"
-        and (
-            bool(item.proposition.strip())
-            if session.schema_version == GROUND_PROPOSITION_SCHEMA_VERSION
-            else bool(item.expected.strip())
-        )
-    )
-    for index, item in enumerate(rules, 1):
-        explicit = tuple(
-            context_alias_by_uid[uid]
-            for uid in item.target_context_uids
-            if uid in context_alias_by_uid
-        )
-        subjects.append(
-            FitCoherenceSubject(
-                uid=item.uid,
-                alias=f"r{index}",
-                layer="RULE",
-                statement=item.content,
-                context_aliases=explicit or target_aliases,
-            )
-        )
-    for index, item in enumerate(examples, 1):
-        context_aliases = tuple(
-            dict.fromkeys(
-                (
-                    *(
-                        context_alias_by_uid[source.context_uid]
-                        for source in item.source_refs
-                        if source.context_uid in context_alias_by_uid
-                    ),
-                    *(
-                        context_alias_by_uid[uid]
-                        for uid in item.target_context_uids
-                        if uid in context_alias_by_uid
-                    ),
-                )
-            )
-        )
-        source_aliases = tuple(
-            memory_alias_by_identity[(source.context_uid, source.memory_uid)]
-            for source in item.source_refs
-            if (source.context_uid, source.memory_uid) in memory_alias_by_identity
-        )
-        subjects.append(
-            FitCoherenceSubject(
-                uid=item.uid,
-                alias=f"e{index}",
-                layer="EXAMPLE",
-                statement=item.proposition or f"{item.content} -> {item.expected}",
-                context_aliases=context_aliases or all_context_aliases,
-                source_memory_aliases=source_aliases,
-            )
-        )
-
-    frame_subjects = tuple(subjects)
-    frame_contexts = tuple(context_frames)
-    requirements_by_target = {
-        item.target_context_uid: item for item in session.requirements
-    }
-    requirement_lines = tuple(
-        (
-            f"{frame.context_name} · "
-            f"{requirements_by_target[frame.context_uid].description or '(not specified)'} "
-            f"· minimum {requirements_by_target[frame.context_uid].minimum_accepted_cases}"
-            + (
-                " · blocked: "
-                + requirements_by_target[frame.context_uid].blocked_reason
-                if requirements_by_target[frame.context_uid].blocked_reason
-                else ""
-            )
-        )
-        for frame in session.frames
-        if frame.context_uid in requirements_by_target
-    )
-    return FrozenGroundCoherence(
-        brief=session.brief.content,
-        requirements=requirement_lines,
-        contexts=frame_contexts,
-        subjects=frame_subjects,
-        checks=plan_coherence_checks(frame_subjects, frame_contexts),
-    )
-
-
 def _finding_schema(
     frozen: FrozenGroundCoherence,
 ) -> dict[str, object]:
@@ -1078,7 +917,6 @@ __all__ = [
     "FrozenGroundCoherence",
     "PreparedGroundCoherence",
     "execute_ground_coherence",
-    "freeze_ground_coherence",
     "plan_coherence_checks",
     "prepare_ground_coherence",
 ]

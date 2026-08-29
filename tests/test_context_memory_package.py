@@ -52,8 +52,6 @@ EXPECTED_METHODS = {
         "_read_context_graph_for_rename",
         "_assert_rename_destination_available",
         "_context_graph_digest_for_rename",
-        "_ground_contract_names_for_rename",
-        "_read_ground_records_for_rename",
         "_read_translation_records_for_rename",
         "_read_meld_records_for_rename",
         "_prepare_context_rename_locked",
@@ -125,7 +123,7 @@ def test_context_memory_methods_have_one_focused_owner() -> None:
     }
     assert actual == EXPECTED_METHODS
     all_methods = [method for methods in actual.values() for method in methods]
-    assert len(all_methods) == len(set(all_methods)) == 67
+    assert len(all_methods) == len(set(all_methods)) == 65
 
 
 def test_context_memory_surface_composes_the_focused_mixins() -> None:

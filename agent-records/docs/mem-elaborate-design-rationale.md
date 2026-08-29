@@ -351,14 +351,11 @@ revalidates the exact operation-consumed Goal or Rule frame before and after
 the provider sequence. A physical Ground uses
 `/rules` as Goal-to-Rules destination ambient context and `/examples` as
 Rules-to-Cases destination ambient context; other lanes are not included.
-The legacy record projects its active Rule or Case destination lane under the
-same typed ambient contract. Active Ground Rules are
-`PROPOSED` or `ACCEPTED` Rules; rejected/deferred material is not silently
-reused. Ground Elaborate remains proposal-only by default. For a physical
-Ground, explicit `--adopt` additionally requires the reviewed whole-Ground
+Active Ground Rules are ordinary Memories in the physical `/rules` lane.
+Ground Elaborate remains proposal-only by default. Explicit `--adopt`
+additionally requires the reviewed whole-Ground
 revision and destination pre-image, then appends the complete result to
-`/rules` or `/examples` as one revision and one Ground-local Undo unit. Legacy
-JSON Grounds remain proposal-only.
+`/rules` or `/examples` as one revision and one Ground-local Undo unit.
 
 No Elaborate route promotes or accepts a Ground Rule or Case automatically.
 The shared focus and adoption contract is documented in

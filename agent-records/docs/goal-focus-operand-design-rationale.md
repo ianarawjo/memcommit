@@ -80,7 +80,8 @@ effect boundary for a physical Ground: it adds the complete proposal to
 analysis digest, and publishes one Ground-local command unit that local Undo
 can reverse. Proposal generation revalidates only its consumed frame; adoption
 additionally requires the reviewed whole-Ground revision and destination lane
-pre-image. Legacy JSON Ground sessions remain read-only on this adoption path.
+pre-image. The retired JSON Ground session has no adoption or compatibility
+path.
 
 ## Freshness and publication
 

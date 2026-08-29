@@ -7,23 +7,23 @@ hold under materially ordinary readings of one optional frozen background.
 Automatically typed literal text, direct Memories, and the direct ordinary
 Memories of one or more readable Contexts all enter that same role-neutral
 frame; explicit source flags remain available. It changes and saves nothing.
-The Ground workflow is an explicit graph
-adapter: a successful run retains the historical Rule–Example judgments and
+The physical Ground workflow is an explicit graph adapter: a successful run
+retains Rule–Example judgments and
 exhaustively checks Context alignment, Goal–layer alignment, and same-layer
 compatibility in one immutable derived receipt. Reopening that receipt performs
-no provider call and reports whether both its Ground and bound Context inputs
+no provider call and reports whether its Ground workspace inputs
 are still current.
 
 This matrix records the boundary while Fit is added to the repository-wide
 operation ledger. Fit has no standalone workbench or Viewer: its terminal
-contract is one compact receipt, while named Ground keeps its own embedded
-AUTO-FIT projection.
+contract is one compact receipt. The retired named JSON Ground shell's embedded
+AUTO-FIT projection is historical and no longer has a runtime route.
 
 ## Operation ownership
 
 `memcommit.application.operations.fit.application` is the canonical owner of Fit's typed
 requests and results, and `memcommit.application.operations.fit.runtime` owns the
-MemoryStore/provider adapter used by the standalone command and named Ground.
+MemoryStore/provider adapter used by the standalone command and physical Ground.
 The same package also owns the supporting contracts:
 `memcommit.application.operations.fit.judgment` owns the reusable role-neutral semantic
 judgment, `memcommit.application.operations.fit.coherence` owns exhaustive Ground graph
@@ -50,8 +50,7 @@ behavior, so the recorded interactive evidence does not require regeneration.
 | Domain/application | Role-neutral propositions, typed stored-source requests and origins, frozen background, YES/MAY/NO, complete-coverage decoding; Ground Rule–Example plus Context/vertical/peer graph checks, report projection, digests, and revision identity | Terminal detection, ANSI styling, keybindings, clipboard state, repair policy |
 | Runtime/infrastructure | Whole-frame Fit planning before provider construction; exact Memory/Context locator resolution from one current-name snapshot; direct ordinary-Memory expansion; READ/DERIVE/COMBINE authorization; exact source revalidation; Ground and direct bound-Context load/freeze, immutable receipt store, current/stale lookup | CLI receipt prose, descendant/reference widening, mutation |
 | CLI receipt adapter | One `FIT · VERDICT · [TARGETS: TYPE value, value, TYPE value ...]` general summary, and a `FIT · VERDICT · [TARGETS: GROUND name] · fraction` summary plus one line for each current `MAY/NO/N/A` Rule–Example relationship; fitting details remain omitted; only typed `YES/MAY/NO` tokens use shared judgment colors | Provider calls, Ground loading, receipt freshness decisions, full receipt expansion, operation-local palette values |
-| Ground shell adapter | Process-local AUTO-FIT scheduling after durable revisions and how `·`, `✓`, `?`, `!`, and `◷` project onto Goal, Contexts, Rules, and Examples | Thread/executor lifecycle, a second Fit implementation, or automatic repair |
-| Shared background turn | Mutual exclusion, animation, ContextVar propagation, non-abandoning executor shutdown, deferred close | Ground refresh, Fit success text, provider selection, receipt semantics |
+| Ground CLI adapter | Exact physical workspace name, compact receipt output, and explicit receipt reopening | Background scheduling, a second Fit implementation, or automatic repair |
 
 ## Request and result contracts
 
@@ -130,16 +129,14 @@ retain the exact labels, order, and punctuation; there is no `--tui` route.
 6. General output is exactly one grouped target line for every verdict. Ground
    output is one operation-wide `FIT` summary plus one line per current
    Rule–Example issue; `--plain` suppresses color without changing that layout.
-7. Ground's embedded run and standalone Fit use the same application/runtime
-   execution, even though their presentations differ.
+7. Physical Ground and standalone Fit use the same application/runtime
+   execution and explicit CLI receipt boundary.
 8. Compact presentation never removes evidence from the persisted receipt or
    weakens complete-frame validation.
 9. Coherence detection never proposes, approves, or applies a repair. The
     user-decision grammar for a detected issue is a separate later design.
-10. Named-Ground AUTO-FIT is process-local. It runs only when the Ground is
-    bound and has active Rules and included Examples, waits for an in-flight
-    frozen turn before fitting a newer revision once, and leaves the prior
-    receipt stale after failure.
+10. Ground Fit runs only when explicitly requested. A later workspace change
+    leaves the immutable prior receipt stale; no background refit is implied.
 11. Stored Context sources include direct ordinary Memories only. Lexical
     descendants, embedded Contexts, Memory references, and QUERY-only routes
     never enter by implication.
@@ -160,27 +157,19 @@ retain the exact labels, order, and punctuation; there is no `--tui` route.
 
 ## Shared components and intentional limits
 
-Standalone Fit reuses only the narrow CLI text-safety adapter. Named Ground
-continues to reuse `components.background_turn` for process-local AUTO-FIT.
-Fit-specific labels and issue reasons stay in the receipt adapter; full
-observations and immutable receipt evidence stay below the presentation
-boundary.
-
-The named Ground keeps its saved-Memory list and Enter detail in the Ground
-adapter; a later presentation pass removed its redundant `V` table without
-moving Fit meaning into shared UI. The blank first-turn draft flow still owns a
-separate table projection and remains a separately characterized migration.
-Fit also does not join hidden Study prewarming in this slice: an immutable Fit
-receipt is an explicit derived artifact tied to a Ground revision, not evidence
-that the operation satisfies the prepared-analysis cache contract.
+Standalone and physical Ground Fit reuse only the narrow CLI text-safety and
+receipt adapters. Fit-specific labels and issue reasons stay in the receipt
+adapter; full observations and immutable receipt evidence stay below the
+presentation boundary. Fit does not join hidden Study prewarming: an immutable
+Fit receipt is an explicit derived artifact tied to a Ground revision, not
+evidence that the operation satisfies the prepared-analysis cache contract.
 
 ## Verification gate
 
-The slice is complete only when tests cover application execution without a
-terminal, the same receipt in TTY and non-TTY hosts, issue-only Ground detail,
-current and stale Ground/Context reopening, AUTO-FIT entry/refresh behavior,
-duplicate embedded runs, close during a running turn, and ordered terminal
-evidence.
+The active slice requires application execution without a terminal, the same
+receipt in TTY and non-TTY hosts, issue-only Ground detail, and current/stale
+physical workspace reopening. The older AUTO-FIT and embedded-shell evidence
+below records the retired JSON shell and is retained only as design history.
 
 ## Verification evidence
 

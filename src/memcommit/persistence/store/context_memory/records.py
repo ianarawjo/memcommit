@@ -90,8 +90,9 @@ def validate_context_name(name: str) -> str:
     """Return one valid canonical Context name without touching storage.
 
     Context identity is a slash-delimited namespace, so this deliberately
-    shares the storage layer's lexical validation instead of the flatter
-    naming rules used by Ground sessions.  Availability and filesystem safety
+    shares the storage layer's lexical validation. Physical Ground workspaces
+    use the same Context namespace; the flatter retired JSON-session naming
+    contract is not a storage identity. Availability and filesystem safety
     remain separate checks performed by ``assert_context_creatable``.
     """
     _context_name_parts(name)

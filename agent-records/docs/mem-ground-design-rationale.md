@@ -1,19 +1,20 @@
-# Named common-grounding sessions
+# Retired named JSON Ground sessions
 
 ## Status
 
-> **Storage migration in progress (2026-08-16).** The versioned JSON session
-> and raw/working/publication/placement frame model documented below records
-> the measured prototype that still has production consumers. It is no longer
-> the target durable architecture. The replacement is the real Context-rooted
+> **Retired (2026-08-29).** The versioned JSON session and
+> raw/working/publication/placement frame model documented below records the
+> measured prototype, not current runtime behavior. Its model, Store, CLI/TUI,
+> and semantic consumer branches have been deleted. The current architecture
+> is the real Context-rooted
 > workspace in
 > [`ground-workspace-context-model-design-rationale.md`](ground-workspace-context-model-design-rationale.md):
 > one named root, physical `goals`, `rules`, `examples`, `contexts`, and
 > `relations` children, ordinary Memories and typed Context relationships,
 > operation-local semantic input freezing, and a Ground-local command history.
-> Existing prototype JSON has no migration promise. Keep this historical flow
-> only until its remaining CLI/TUI and semantic consumers move; do not extend
-> the old frame schema.
+> Existing prototype JSON has no migration promise, and there were no local or
+> distributed records to preserve. Keep the material below only as historical
+> design evidence; do not restore its schema or treat its commands as supported.
 >
 > **Interactive-entry correction (2026-08-16).** The Context-recommendation
 > flow documented below is also historical. New production Ground entry now

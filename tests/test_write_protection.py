@@ -10,7 +10,6 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import AutoCheckpoint, Context, Memory
-from memcommit.application.operations.ground.model import create_ground_session
 from memcommit.persistence.store import MemoryStore, context_record_digest
 from memcommit.application.capabilities.authority.write_protection import (
     WriteProtectionError,
@@ -306,14 +305,9 @@ def test_profile_lock_blocks_non_context_profile_artifacts(isolated_store):
     with pytest.raises(WriteProtectionError, match="Profile is locked"):
         store.save_impact_plan(object())
     with pytest.raises(WriteProtectionError, match="Profile is locked"):
-        store.save_ground_session(
-            create_ground_session("locked-ground", goal="Keep this read-only")
-        )
-    with pytest.raises(WriteProtectionError, match="Profile is locked"):
         store.create_query_source("locked-source", "must not persist")
     # The failed guard runs before validation or storage creation.
     assert not (isolated_store / "impact-plan.json").exists()
-    assert not (isolated_store / "ground-sessions").exists()
     assert not (isolated_store / "query-sources").exists()
 
 
