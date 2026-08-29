@@ -10,7 +10,9 @@ from memcommit.adapters.console.coordination.command_review.model import Command
 
 import memcommit.adapters.console.terminal.components.resolution.session_shell as resolution_shell_package
 import memcommit.adapters.console.terminal.components.resolution.session_shell.presentation as resolution_presentation_module
-import memcommit.adapters.console.terminal.components.resolution.session_shell.runtime as resolution_runtime_module
+import memcommit.adapters.console.terminal.components.resolution.session_shell.runtime as resolution_runtime_package
+import memcommit.adapters.console.terminal.components.resolution.session_shell.runtime.keymap.navigation_bindings as resolution_navigation_bindings_module
+import memcommit.adapters.console.terminal.components.resolution.session_shell.runtime.runner as resolution_runtime_module
 from memcommit.adapters.console.terminal.components.semantic_viewer.detail import (
     semantic_detail_block_fragments,
 )
@@ -50,7 +52,9 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionResult,
     ResolutionWorkbenchView,
 )
-from memcommit.application.capabilities.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.capabilities.reviewing.session_navigation import (
+    SessionWorkbenchNavigation,
+)
 from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
 from memcommit.application.capabilities.reviewing.result_workbench import ResultRef
 
@@ -62,6 +66,7 @@ def test_session_shell_package_preserves_public_owner_identity():
     )
     assert (
         resolution_shell_package.run_resolution_workbench_shell
+        is resolution_runtime_package.run_resolution_workbench_shell
         is resolution_runtime_module.run_resolution_workbench_shell
     )
 
@@ -135,7 +140,11 @@ def test_resolution_viewer_y_and_Y_share_focused_and_complete_copy_contract(
         copied.append((text, success_message))
         return type("Receipt", (), {"message": "COPIED"})()
 
-    monkeypatch.setattr(resolution_runtime_module, "copy_plain_text", fake_copy)
+    monkeypatch.setattr(
+        resolution_navigation_bindings_module,
+        "copy_plain_text",
+        fake_copy,
+    )
 
     action = _run(_view(_item("issue-1")), "yYq")
 
