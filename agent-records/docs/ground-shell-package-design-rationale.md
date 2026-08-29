@@ -25,20 +25,48 @@ three implementation modules each:
   state, background interpreter turn, interaction grammar, and explicit Apply
   handoff.
 
-The named package applies the same boundary to a different lifecycle:
+The named package applies the same top-level boundary to a different lifecycle:
 
 - `proposal.py` owns exact command contracts, freshness bindings, and
   operation-aware effect projection for an already saved Ground.
 - `presentation.py` owns read-only Goal, Context, Rule, Memory, Fit, and review
   projections.
-- `runtime.py` owns repeated provider turns, direct edits, Fit execution,
-  command approval, application handoff, and Ground reload.
+- `runtime/` preserves the historical `ground.named_shell.runtime` import path
+  while separating the live lifecycle into its process-local state,
+  workbench view, turn controller, prompt-toolkit key bindings, background Fit
+  coordinator, and thin entry-point wiring.
+
+The named runtime package uses the following focused ownership:
+
+- `state.py` owns the process-local Ground, proposal, draft, editor, selection,
+  placement, notification, conversation, and background-turn state. It does not
+  provide another durable Ground store.
+- `workbench_view.py` owns prompt-toolkit widgets, the five-pane layout, state
+  projection, input hosting, focus movement, viewport alignment, and pane
+  synchronization. Read-only text formatting remains in the outer
+  `presentation.py`.
+- `turn_controller.py` owns reload, dialogue interpretation, direct-edit and
+  draft preparation, exact-command approval, Apply recovery, and the
+  transition back to input.
+- `keybindings.py` maps prompt-toolkit conditions and keys onto the view, turn,
+  and Fit owners without becoming another Ground mutation path.
+- `fit_coordinator.py` owns AUTO-FIT eligibility, frozen-session background
+  execution, duplicate suppression, receipt publication, follow-up scheduling,
+  and receipt-boundary close deferral.
+- `entrypoint.py` validates terminal capability, wires the owners, constructs
+  the Application, and returns the established shell result.
 
 The dependency direction is runtime toward proposal and presentation, and
-presentation toward proposal. Proposal construction does not depend on the
-live terminal runtime. Each package `__init__.py` re-exports its prior module
-surface so existing `ground.shell` and `ground.named_shell` imports continue to
-resolve.
+presentation toward proposal. Within the named runtime, state is the common
+process-local dependency; the view projects it, the turn and Fit controllers
+coordinate it through the view, key bindings route interaction to those
+owners, and the entry point performs only wiring. Proposal construction does
+not depend on the live terminal runtime. Each package `__init__.py` re-exports
+its prior module surface so existing `ground.shell`, `ground.named_shell`, and
+`ground.named_shell.runtime` imports continue to resolve. The named runtime
+also retains the former patchable widget-factory and renderer test seams at
+that compatibility surface; the workbench resolves those seams only when a
+view is constructed.
 
 ## Invariants
 
@@ -52,6 +80,10 @@ resolve.
   and Context versions supplied by the application adapter.
 - The named runtime still reloads the saved Ground after each successful
   command; moving its contract does not create an alternate persistence path.
+- The workbench view may mutate process-local selection, focus, and viewport
+  state, but Ground mutation remains exclusively behind the turn controller's
+  injected exact Apply callback. Fit receipt persistence remains behind its
+  injected Fit runner.
 - Pane text, focus topology, key bindings, background-turn behavior, and
   cancellation semantics are intentionally unchanged.
 
@@ -63,9 +95,19 @@ freezing in either a rendering module or a live terminal module, neither of
 which expresses its authority accurately.  The three-module package therefore
 uses the smallest split that names all three responsibilities.
 
-This change does not redesign either runtime state machine. The runtime modules
-remain large and closure-based; extracting explicit Ground session controllers
-or consolidating the distinct blank and named lifecycles is a separate future
-change. Moving definitions changes their introspection and pickle module path
-even though imports through the package facades and observable terminal
-behavior remain compatible.
+The first package extraction deliberately kept one named runtime module because
+it minimized movement while establishing the proposal and presentation trust
+boundaries. Once those boundaries were stable, retaining the 2,183-line
+closure made prompt-toolkit mechanics, Ground turns, and Fit concurrency share
+one change surface. The selected follow-up introduces one explicit mutable
+state object and separates those runtime responsibilities without redesigning
+their state machine.
+
+This change does not consolidate the distinct blank and named lifecycles, make
+runtime state durable, or introduce a second command/application service. The
+turn controller and workbench view remain intentionally substantial because
+they preserve the established interaction grammar; finer extraction should
+follow demonstrated reusable mechanics rather than operation-local file-size
+targets. Moving local closure definitions into named classes and functions
+changes their introspection paths even though compatibility imports and
+observable terminal behavior remain stable.
