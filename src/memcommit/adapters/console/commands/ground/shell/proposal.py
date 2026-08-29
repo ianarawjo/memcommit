@@ -11,7 +11,7 @@ from memcommit.adapters.console.coordination.command_review.model import Command
 from memcommit.adapters.console.terminal.components.exact_command_review.rendering import (
     format_exact_command,
 )
-from memcommit.application.operations.ground.model import (
+from memcommit.application.operations.ground.contracts import (
     GroundError,
     validate_ground_contract_name,
     validate_ground_goal,

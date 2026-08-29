@@ -28,7 +28,7 @@ from memcommit.application.operations.fit.coherence import (
     plan_coherence_checks,
     prepare_ground_coherence,
 )
-from memcommit.application.operations.ground.model import context_frame_digest
+from memcommit.application.operations.ground.contracts import context_frame_digest
 from memcommit.application.operations.ground.workspace_model import GroundWorkspace
 from memcommit.application.operations.ground.workspace_projection import (
     GroundWorkspaceProjectionError,

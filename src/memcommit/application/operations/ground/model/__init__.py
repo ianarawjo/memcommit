@@ -1,18 +1,24 @@
 """Durable Ground records, validation, and state transitions."""
 
+from memcommit.application.operations.ground.contracts import (
+    GROUND_GOAL_WORD_LIMIT,
+    GROUND_TEXT_LIMIT,
+    GroundError,
+    context_frame_digest,
+    validate_ground_contract_name,
+    validate_ground_goal,
+)
+
 from .records import (
     DEFAULT_COMPLETION_CRITERION,
-    GROUND_GOAL_WORD_LIMIT,
     GROUND_LEGACY_SCHEMA_VERSION,
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GROUND_SCHEMA_VERSION,
-    GROUND_TEXT_LIMIT,
     LEGACY_COMPLETION_MARKER,
     METHOD_REFERENCES,
     GroundBrief,
     GroundCaseRole,
     GroundDisposition,
-    GroundError,
     GroundFrame,
     GroundFrameRole,
     GroundItem,
@@ -27,10 +33,7 @@ from .records import (
     GroundTargetRequirement,
     GroundTargetSpec,
     GroundTargetStatus,
-    context_frame_digest,
     is_bound_ground_schema,
-    validate_ground_contract_name,
-    validate_ground_goal,
 )
 from .session import (
     accepted_ground_case_count,

@@ -26,7 +26,7 @@ from memcommit.adapters.console.terminal.components.in_frame_input import (
     classify_inline_edit_submission,
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.application.operations.ground.model import (
+from memcommit.application.operations.ground.contracts import (
     GroundError,
     validate_ground_goal,
 )

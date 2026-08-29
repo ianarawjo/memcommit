@@ -4,13 +4,17 @@ from __future__ import annotations
 
 from typing import TypeVar
 
+from memcommit.application.operations.ground.contracts import (
+    GroundError,
+    validate_ground_contract_name,
+)
+
 from .records import (
     GROUND_LEGACY_SCHEMA_VERSION,
     GROUND_PROPOSITION_SCHEMA_VERSION,
     GROUND_SCHEMA_VERSION,
     METHOD_REFERENCES,
     GroundBrief,
-    GroundError,
     GroundFrame,
     GroundItem,
     GroundReference,
@@ -22,7 +26,6 @@ from .records import (
     _integer,
     _string,
     _uuid,
-    validate_ground_contract_name,
 )
 
 _GroundSessionT = TypeVar("_GroundSessionT", bound=GroundSession)

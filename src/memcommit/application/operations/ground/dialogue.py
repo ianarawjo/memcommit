@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 import json
 from typing import Callable, Literal, Protocol, TypeAlias, cast
 
-from memcommit.application.operations.ground.model import (
+from memcommit.application.operations.ground.contracts import (
     GROUND_GOAL_WORD_LIMIT,
     GROUND_TEXT_LIMIT,
     GroundError,

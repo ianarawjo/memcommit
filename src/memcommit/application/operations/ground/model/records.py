@@ -11,20 +11,19 @@ The persisted ``CASE`` vocabulary remains a schema-compatibility boundary.
 from __future__ import annotations
 
 import hashlib
-import json
-import re
 import uuid
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.core.context import Context
+from memcommit.application.operations.ground.contracts import (
+    GROUND_TEXT_LIMIT,
+    GroundError,
+)
 
 
 GROUND_SCHEMA_VERSION = 2
 GROUND_PROPOSITION_SCHEMA_VERSION = 3
 GROUND_LEGACY_SCHEMA_VERSION = 1
-GROUND_TEXT_LIMIT = 20_000
-GROUND_GOAL_WORD_LIMIT = 40
 GroundStatus = Literal["OPEN", "GROUNDED", "DEFERRED"]
 GroundItemKind = Literal["RULE", "CASE", "ISSUE", "DECISION"]
 GroundItemStatus = Literal[
@@ -81,16 +80,6 @@ _RULE_PROVENANCE = {
     "JOINTLY_REVISED",
 }
 _REVIEW_ACTIONS = {"ACCEPT", "REFINE", "DEFER", "REJECT"}
-_CONTRACT_NAME = re.compile(r"[a-z0-9][a-z0-9._-]{0,127}\Z")
-_WINDOWS_RESERVED_NAMES = {
-    "aux",
-    "con",
-    "nul",
-    "prn",
-    *(f"com{number}" for number in range(1, 10)),
-    *(f"lpt{number}" for number in range(1, 10)),
-}
-
 LEGACY_COMPLETION_MARKER = (
     "Reserved for schema compatibility; Ground agreement is not determined "
     "by a separate completion criterion."
@@ -100,10 +89,6 @@ LEGACY_COMPLETION_MARKER = (
 DEFAULT_COMPLETION_CRITERION = LEGACY_COMPLETION_MARKER
 
 
-class GroundError(ValueError):
-    """Invalid or unsupported common-grounding state."""
-
-
 def is_bound_ground_schema(schema_version: int) -> bool:
     """Return whether a Ground has explicit immutable Context frames."""
 
@@ -111,22 +96,6 @@ def is_bound_ground_schema(schema_version: int) -> bool:
         GROUND_SCHEMA_VERSION,
         GROUND_PROPOSITION_SCHEMA_VERSION,
     }
-
-
-def validate_ground_contract_name(value: object) -> str:
-    """Return one portable Ground ID that is safe as a local filename."""
-    if (
-        not isinstance(value, str)
-        or _CONTRACT_NAME.fullmatch(value) is None
-        or value.endswith(".")
-        or value.split(".", 1)[0] in _WINDOWS_RESERVED_NAMES
-    ):
-        raise GroundError(
-            "Ground names must match "
-            "[a-z0-9][a-z0-9._-]{0,127} and must not use a reserved "
-            "Windows device name."
-        )
-    return value
 
 
 def _exact_dict(value: object, keys: set[str], label: str) -> dict:
@@ -151,26 +120,6 @@ def _string(
     return value
 
 
-def validate_ground_goal(
-    value: object,
-    *,
-    empty: bool = False,
-    label: str = "grounding goal",
-) -> str:
-    """Validate one newly authored Goal without rewriting legacy records.
-
-    The word limit is a semantic authoring boundary. Existing version 1/2
-    records remain loadable even if an older Goal exceeded it; any new or
-    revised Goal must be compact enough to remain an orienting statement.
-    """
-    goal = _string(value, label, empty=empty)
-    if len(goal.split()) > GROUND_GOAL_WORD_LIMIT:
-        raise GroundError(
-            f"{label.capitalize()} must be {GROUND_GOAL_WORD_LIMIT} words or fewer."
-        )
-    return goal
-
-
 def _integer(value: object, label: str) -> int:
     if isinstance(value, bool) or not isinstance(value, int) or value < 0:
         raise GroundError(f"Invalid {label}.")
@@ -192,16 +141,6 @@ def _sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
-def _sha256_json(value: object) -> str:
-    encoded = json.dumps(
-        value,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
-    return hashlib.sha256(encoded).hexdigest()
-
-
 def _digest(value: object, label: str) -> str:
     result = _string(value, label, limit=64)
     if len(result) != 64 or any(
@@ -209,16 +148,6 @@ def _digest(value: object, label: str) -> str:
     ):
         raise GroundError(f"Invalid {label}.")
     return result
-
-
-def context_frame_digest(ctx: Context) -> str:
-    """Fingerprint one complete ordered direct Context record.
-
-    Context and Memory references remain pointers in ``to_dict``.  This means
-    a bound frame notices pointer/order changes without reading query-only
-    content or recursively copying another Context's Memories.
-    """
-    return _sha256_json(ctx.to_dict())
 
 
 @dataclass(frozen=True)
