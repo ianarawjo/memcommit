@@ -1,25 +1,15 @@
 from __future__ import annotations
 
 from dataclasses import replace
-import os
 
-import pytest
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.ground.command as ground_command
 from memcommit.adapters.console.commands.ground.command.workflow import (
     create as ground_create_workflow,
     open as ground_open_workflow,
 )
 import memcommit.adapters.console.terminal.components.operation_launcher.location as launcher_location_module
-import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.ground.session_picker import (
-    ground_session_picker_location,
-    list_ground_session_catalog,
-    list_ground_session_entries,
-    reload_selected_ground_session,
-)
 from memcommit.adapters.console.commands.ground.workspace.catalog import (
     list_ground_workspace_draft_catalog,
     list_ground_workspace_catalog,
@@ -33,10 +23,8 @@ from memcommit.adapters.console.commands.ground.shell import (
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionOpenReceipt,
 )
-from memcommit.application.operations.ground.model import (
-    GroundTargetSpec,
-    bind_ground_workbench,
-    create_ground_session,
+from memcommit.adapters.console.terminal.components.operation_launcher.location import (
+    session_picker_location,
 )
 from memcommit.application.operations.ground.workspace_draft import GroundWorkspaceDraft
 from memcommit.application.operations.ground.workspace_draft_store import (
@@ -67,71 +55,6 @@ def _workspace_draft() -> GroundWorkspaceDraft:
         understanding="Use actual US-listed companies.",
         question="Approve this Goal?",
         submitted_turns=("I want to understand real ticker assignment.",),
-    )
-
-
-def test_ground_session_entries_are_read_only_and_carry_exact_reopen_argv(
-    isolated_store,
-):
-    store = MemoryStore(create=False)
-    older = create_ground_session("older-ground", goal="Older Goal.")
-    newer = create_ground_session("newer-ground", goal="Newer Goal.")
-    store.save_ground_session(older)
-    store.save_ground_session(newer)
-    older_path = isolated_store / "ground-sessions" / "older-ground.json"
-    newer_path = isolated_store / "ground-sessions" / "newer-ground.json"
-    os.utime(older_path, (10, 10))
-    os.utime(newer_path, (20, 20))
-    before = {path.name: path.read_bytes() for path in (older_path, newer_path)}
-
-    entries = list_ground_session_entries(store)
-
-    assert {entry.key for entry in entries} == {
-        "older-ground",
-        "newer-ground",
-    }
-    by_key = {entry.key: entry for entry in entries}
-    assert by_key["newer-ground"].sort_timestamp == 20
-    assert by_key["newer-ground"].group == "Unbound"
-    assert by_key["newer-ground"].reopen_argv == (
-        "mem",
-        "ground",
-        "newer-ground",
-    )
-    assert {path.name: path.read_bytes() for path in (older_path, newer_path)} == before
-
-
-def test_bound_ground_groups_by_raw_context_and_retains_all_contexts_in_detail(
-    isolated_store,
-):
-    store = MemoryStore()
-    raw = ops.init("temp/task-1")
-    derived = ops.init("temp/task-1-atomized")
-    target = ops.init("campus-wiki")
-    session = bind_ground_workbench(
-        create_ground_session(
-            "task-1-fixture",
-            goal="Build a traceable Task 1 fixture.",
-        ),
-        description="Use Task 1 source material to build the campus wiki.",
-        raw_context=raw,
-        derived_context=derived,
-        target_contexts=(target,),
-        target_requirements=(
-            GroundTargetSpec(
-                context_name=target.name,
-                description="Cover the campus wiki target.",
-            ),
-        ),
-    )
-    store.save_ground_session(session)
-
-    picker_entry = list_ground_session_entries(store)[0]
-
-    assert picker_entry.group == "temp/task-1"
-    assert (
-        "Contexts: temp/task-1, temp/task-1-atomized, campus-wiki"
-        in picker_entry.detail
     )
 
 
@@ -259,7 +182,7 @@ def test_ground_picker_opens_a_draft_row_without_provider_replay(
         lambda *args, **kwargs: opened.append((args, kwargs)) or "CLOSED",
     )
 
-    ground_command._run_ground_session_picker(store)
+    ground_open_workflow._run_ground_session_picker(store)
 
     assert opened == [((), {"draft": draft})]
 
@@ -284,7 +207,7 @@ def test_closing_a_goal_proposal_publishes_only_a_session_list_draft(
         ),
     )
 
-    outcome = ground_command._run_new_ground_shell()
+    outcome = ground_create_workflow._run_new_ground_shell()
 
     assert outcome == "CLOSED"
     [draft] = GroundWorkspaceDraftStore(MemoryStore(create=False)).list()
@@ -343,20 +266,13 @@ def test_relocated_draft_materializes_only_at_exact_apply_and_then_disappears(
         lambda workspace, **_kwargs: opened.append(workspace.name),
     )
 
-    outcome = ground_command._run_new_ground_shell(draft=draft)
+    outcome = ground_create_workflow._run_new_ground_shell(draft=draft)
 
     assert outcome == "CLOSED"
     assert opened == ["research/ticker-ground"]
     assert ground_workspace_exists(store, "research/ticker-ground")
     assert not ground_workspace_exists(store, draft.workspace_name)
     assert GroundWorkspaceDraftStore(store).list() == ()
-
-
-def test_ground_session_entries_do_not_create_missing_storage(isolated_store):
-    store = MemoryStore(create=False)
-
-    assert list_ground_session_entries(store) == ()
-    assert not isolated_store.exists()
 
 
 def test_empty_ground_catalog_still_opens_launcher_with_new_session_action(
@@ -371,7 +287,7 @@ def test_empty_ground_catalog_still_opens_launcher_with_new_session_action(
 
     monkeypatch.setattr(ground_open_workflow, "choose_session", choose)
 
-    ground_command._run_ground_session_picker(MemoryStore(create=False))
+    ground_open_workflow._run_ground_session_picker(MemoryStore(create=False))
 
     assert len(seen) == 1
     entries, kwargs = seen[0]
@@ -418,7 +334,7 @@ def test_ground_picker_location_matches_frozen_store_not_live_active_profile(
         lambda profile: authoring_root if profile.name == "authoring" else task_root,
     )
 
-    location = ground_session_picker_location()
+    location = session_picker_location()
 
     assert location.profile_name == "authoring"
     assert location.store_path == str(authoring_root)
@@ -448,49 +364,7 @@ def test_ground_picker_location_marks_an_isolated_store_unregistered(
         lambda _profile: isolated_store.parent / "other",
     )
 
-    location = ground_session_picker_location()
+    location = session_picker_location()
 
     assert location.profile_name == "(unregistered)"
     assert location.store_path == str(isolated_store)
-
-
-def test_ground_session_entries_reject_untrusted_storage_entry(
-    isolated_store,
-):
-    root = isolated_store / "ground-sessions"
-    root.mkdir(parents=True)
-    (root / "unexpected.txt").write_text("not a Ground", encoding="utf-8")
-
-    with pytest.raises(ValueError, match="storage is invalid"):
-        list_ground_session_entries(MemoryStore(create=False))
-
-
-def test_ground_catalog_ignores_atomic_writer_scratch_file(isolated_store):
-    store = MemoryStore(create=False)
-    session = create_ground_session("stable-ground")
-    store.save_ground_session(session)
-    scratch = (
-        isolated_store
-        / "ground-sessions"
-        / ".stable-ground.json.write-0123456789abcdef0123456789abcdef"
-    )
-    scratch.write_text("unfinished", encoding="utf-8")
-
-    catalog = list_ground_session_catalog(store)
-
-    assert [entry.picker_entry.key for entry in catalog] == ["stable-ground"]
-
-
-def test_ground_catalog_rejects_replacement_under_selected_name(isolated_store):
-    store = MemoryStore(create=False)
-    original = create_ground_session("stable-ground", goal="Original Goal.")
-    store.save_ground_session(original)
-    selected = list_ground_session_catalog(store)[0]
-    replacement = create_ground_session(
-        "stable-ground",
-        goal="Replacement Goal.",
-    )
-    store.save_ground_session(replacement, replace=True)
-
-    with pytest.raises(ValueError, match="changed while the list was open"):
-        reload_selected_ground_session(store, selected)

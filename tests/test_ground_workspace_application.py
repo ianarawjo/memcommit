@@ -683,7 +683,7 @@ def test_cli_physical_ground_edits_and_local_undo_use_revision_guards(
     assert tuple(workspace.examples.iter_items()) == ()
 
 
-def test_physical_ground_rejects_legacy_parallel_session_mutation(
+def test_physical_ground_cli_no_longer_exposes_legacy_session_mutation(
     isolated_store,
 ):
     created = runner.invoke(app, ["ground", "project111", "--snapshot"])
@@ -694,6 +694,6 @@ def test_physical_ground_rejects_legacy_parallel_session_mutation(
         ["ground", "project111", "--propose-rule", "A legacy proposal"],
     )
 
-    assert legacy.exit_code == 1
-    assert "cannot write a parallel Ground JSON record" in legacy.output
+    assert legacy.exit_code == 2
+    assert "No such option: --propose-rule" in legacy.output
     assert not (isolated_store / "ground-sessions").exists()

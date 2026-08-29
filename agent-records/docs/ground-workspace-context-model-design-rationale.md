@@ -261,14 +261,19 @@ Ground row must not write `state.json`.
 
 ## Compatibility and non-goals
 
-The earlier prototype Ground session JSON has no migration contract. Opening a
-new workspace does not scan, import, or rewrite it, and the physical workspace
-implementation creates no file under `ground-sessions/`. Legacy code is removed
-as its remaining consumers migrate rather than retained as a dual source of
-truth. During that transition, an already existing legacy name can still reach
-its historical reader, but a complete physical workspace always takes the
-physical route and legacy flags are rejected rather than creating a same-name
-JSON record.
+The earlier prototype Ground session JSON has no migration contract. The
+prototype was never distributed, the local development Store held no such
+records, and no import requirement remains. `mem ground NAME` therefore has
+one meaning: create or open the physical Context-rooted workspace. The
+launcher lists only physical workspaces and unmaterialized drafts, and the CLI
+no longer exposes JSON-session binding, proposal, review, replacement, or
+version-guard options. New Ground code neither scans nor writes
+`ground-sessions/`.
+
+Keeping a dormant reader or same-name collision check was rejected because it
+would preserve two product identities without any data to protect. The
+remaining transition boundary is internal only: semantic operations are moved
+off `GroundSession` before its persistence and model packages are deleted.
 
 This slice does not make a Ground-owned branch, Embed, Reference, Grant, Import,
 or Delete operation. It does not make lexical descendants equivalent to

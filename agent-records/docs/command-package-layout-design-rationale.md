@@ -81,33 +81,24 @@ at the former internal path.
 
 ## Ground command adapter split
 
-The later Ground-focused pass replaced its 3,965-line `command.py` with a
-same-named package. `entrypoint.py` owns the unchanged 52-parameter Typer
-surface and reduces it to one frozen `GroundCommandRequest`. The original
-3,666-line `workflow.py` proved to be only a second monolith, so `workflow/`
-now names the stable orchestration boundary while its children name the action
-they own: `command.py` routes the typed request, `create.py` owns the unsaved
-conversation and draft-to-Ground transition, `edit.py` owns physical Ground
-creation and direct edits, `open.py` owns discovery and reopening,
-`inspect.py` owns the entry and public inspection views, and `apply.py` owns
-the approved logical command primitive. Persisted JSON `GroundSession`
-behavior is grouped under `workflow/session/`: `command.py` executes its CLI
-actions, `dialogue.py` interprets and conducts saved dialogue, `review.py`
-owns version guards and reviewed application, and `inspect.py` renders its
-saved state. This grouping records the actual coexistence of physical
-`GroundWorkspace` and JSON `GroundSession` models without labeling the latter
-as disposable legacy behavior.
+The later Ground-focused pass replaced its original command monolith with a
+same-named package. After the unpublished JSON session prototype was retired,
+`entrypoint.py` reduced from 52 parameters to the 12 physical-workspace and
+draft inputs that still have product meaning. It constructs one frozen
+`GroundCommandRequest`; `command.py` routes it, `create.py` owns the unsaved
+conversation and draft-to-Ground transition, `edit.py` owns physical creation
+and direct edits, `open.py` owns workspace/draft discovery and reopening,
+`inspect.py` owns the unsaved entry view, and `apply.py` owns the approved
+logical command primitive.
 
-This remains a responsibility-only split. The command signature, route
-predicates, workflow statements, exact-command review,
-revision/digest/Context-version guards, mutation timing, and rendered output
-remain unchanged. The dependency direction runs from `command.py` toward the
-action modules, from `open.py` toward the concrete creation or saved-session
-conversation, and from saved-session dialogue and command execution toward
-its review and inspection owners. Lower modules do not import the command
-router at runtime. In particular, the entrypoint must never implement an Apply
-path or reproduce a freshness check: it constructs the typed request and
-delegates once to the workflow package.
+The former `workflow/session/`, `named_shell/`, legacy session picker, and
+saved-session dialogue interpreter are deleted. The active dependency
+direction runs from `command.py` toward those physical action modules, and
+lower modules do not import the command router at runtime. The entrypoint must
+never implement an Apply path or reproduce a freshness check: it constructs
+the typed request and delegates once. Shared launcher orientation now lives in
+the operation-neutral launcher component rather than a Ground legacy module,
+because Atomize, Review, and Impact also consume it.
 
 ## Why single-file entries are packages
 

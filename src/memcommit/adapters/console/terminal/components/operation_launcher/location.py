@@ -6,6 +6,9 @@ from pathlib import Path
 
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.terminal.components.operation_launcher import LauncherOrientation
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
+    SessionPickerLocation,
+)
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
@@ -48,4 +51,17 @@ def operation_launcher_orientation(
     )
 
 
-__all__ = ["operation_launcher_orientation"]
+def session_picker_location(
+    store: MemoryStore | None = None,
+) -> SessionPickerLocation:
+    """Project the shared launcher orientation into the session adapter."""
+
+    orientation = operation_launcher_orientation(store)
+    rows = dict(orientation.rows)
+    return SessionPickerLocation(
+        profile_name=rows["PROFILE"],
+        store_path=rows["STORE"],
+    )
+
+
+__all__ = ["operation_launcher_orientation", "session_picker_location"]

@@ -11,10 +11,6 @@ from memcommit.adapters.console.commands.ground.workspace.snapshot import (
 from memcommit.adapters.console.commands.ground.workspace.viewer.screen import (
     run_ground_workspace_viewer,
 )
-from memcommit.application.operations.ground.model import (
-    GroundError,
-    validate_ground_contract_name,
-)
 from memcommit.application.operations.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
@@ -113,16 +109,6 @@ def _run_named_ground_workspace(
         if edit_count:
             raise GroundWorkspaceError(
                 "Create the Ground workspace before applying a local edit."
-            )
-        try:
-            validate_ground_contract_name(name)
-            legacy = store.load_ground_session(name)
-        except GroundError:
-            legacy = None
-        if legacy is not None:
-            raise GroundWorkspaceError(
-                "A legacy Ground session uses this name. Legacy Ground JSON "
-                "is not imported into a physical workspace."
             )
         if goal_focus is not None:
             # Resolution is not authority to copy stale Goal content. Freeze

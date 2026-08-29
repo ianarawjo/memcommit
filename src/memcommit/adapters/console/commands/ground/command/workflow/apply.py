@@ -5,7 +5,7 @@ from __future__ import annotations
 import subprocess
 import sys
 
-from memcommit.application.operations.ground.model import GroundError
+from memcommit.application.operations.ground.contracts import GroundError
 
 
 def _run_approved_ground_command(

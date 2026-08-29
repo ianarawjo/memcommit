@@ -34,7 +34,7 @@ from memcommit.application.operations.ground.dialogue import (
     GroundDialogueProposal,
     interpret_ground_dialogue,
 )
-from memcommit.application.operations.ground.model import GroundError
+from memcommit.application.operations.ground.contracts import GroundError
 from memcommit.application.operations.ground.workspace_draft import (
     GroundWorkspaceDraft,
     GroundWorkspaceDraftError,
@@ -94,12 +94,6 @@ def _validate_ground_workspace_save_location(
         raise ValueError("Ground Save Location is too long for one dialogue turn.")
     for context_name in ground_workspace_context_names(canonical):
         store.assert_context_creatable(context_name)
-    try:
-        legacy = store.load_ground_session(canonical)
-    except GroundError:
-        legacy = None
-    if legacy is not None:
-        raise FileExistsError(f"A legacy Ground session already uses '{canonical}'.")
     existing_draft = GroundWorkspaceDraftStore(store).find_by_workspace_name(canonical)
     if existing_draft is not None and existing_draft.uid != exclude_draft_uid:
         raise FileExistsError(
@@ -196,14 +190,7 @@ def _interpret_new_ground_turn(
                 "The suggested new Context name is not currently creatable."
             ) from error
     if isinstance(turn, GroundDialogueProposal):
-        try:
-            existing_legacy = store.load_ground_session(turn.ground_name)
-        except GroundError:
-            existing_legacy = None
-        if existing_legacy is not None or ground_workspace_exists(
-            store,
-            turn.ground_name,
-        ):
+        if ground_workspace_exists(store, turn.ground_name):
             raise GroundDialogueError(
                 f"Ground '{turn.ground_name}' already exists. Refine the "
                 "Save Location or resume that Ground explicitly."
@@ -216,14 +203,7 @@ def _apply_new_ground_proposal(
 ) -> str:
     """Run the exact creation argv frozen by the approval screen."""
     store = MemoryStore(create=False)
-    try:
-        existing_legacy = store.load_ground_session(proposal.ground_name)
-    except GroundError:
-        existing_legacy = None
-    if existing_legacy is not None or ground_workspace_exists(
-        store,
-        proposal.ground_name,
-    ):
+    if ground_workspace_exists(store, proposal.ground_name):
         raise GroundError(
             f"Ground '{proposal.ground_name}' was created before approval; "
             "nothing was overwritten."

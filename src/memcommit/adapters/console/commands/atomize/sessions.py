@@ -19,7 +19,7 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.adapters.console.commands.ground.session_picker import (
+from memcommit.adapters.console.terminal.components.operation_launcher.location import (
     session_picker_location,
 )
 from memcommit.core.context import Context

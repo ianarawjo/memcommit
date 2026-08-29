@@ -8,16 +8,10 @@ from . import edit as _edit
 from . import inspect as _inspect
 from . import open as _open
 from .command import GroundCommandRequest, run_ground_command
-from .inspect import render_ground_focus, render_ground_snapshot, render_ground_start
-from .session import command as _session_command
-from .session import dialogue as _session_dialogue
-from .session import inspect as _session_inspect
-from .session import review as _session_review
+from .inspect import render_ground_start
 
 __all__ = [
     "GroundCommandRequest",
-    "render_ground_focus",
-    "render_ground_snapshot",
     "render_ground_start",
     "run_ground_command",
 ]
@@ -28,10 +22,6 @@ _COMPATIBILITY_OWNERS = (
     _edit,
     _open,
     _inspect,
-    _session_command,
-    _session_dialogue,
-    _session_inspect,
-    _session_review,
 )
 
 

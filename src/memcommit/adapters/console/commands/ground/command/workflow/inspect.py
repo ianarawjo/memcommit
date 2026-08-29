@@ -5,9 +5,7 @@ from __future__ import annotations
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 
 from . import create as create_workflow
-from .session.inspect import render_ground_focus, render_ground_snapshot
-
-__all__ = ["render_ground_focus", "render_ground_snapshot", "render_ground_start"]
+__all__ = ["render_ground_start"]
 
 
 def render_ground_start(initial_request: str = "") -> str:

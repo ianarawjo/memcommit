@@ -5,7 +5,6 @@ from __future__ import annotations
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.ground.command as ground_command
 from memcommit.adapters.console.commands.ground.command.workflow import (
     create as ground_create_workflow,
     open as ground_open_workflow,
@@ -162,7 +161,7 @@ def test_new_ground_shell_keeps_existing_contexts_out_of_the_agent_turn(
         fake_shell,
     )
 
-    ground_command._run_new_ground_shell("Split Task 1 into wiki material.")
+    ground_create_workflow._run_new_ground_shell("Split Task 1 into wiki material.")
 
     assert seen == [
         (
@@ -188,7 +187,7 @@ def test_new_ground_shell_without_store_has_no_current_snapshot(
         fake_shell,
     )
 
-    ground_command._run_new_ground_shell("Start from a blank store.")
+    ground_create_workflow._run_new_ground_shell("Start from a blank store.")
 
     assert len(seen) == 1
     assert seen[0]["current_context_name"] is None
@@ -221,7 +220,7 @@ def test_fixed_ground_shell_uses_save_location_without_context_recommendations(
 
     monkeypatch.setattr(ground_create_workflow, "run_ground_shell", fake_shell)
 
-    ground_command._run_new_ground_shell(
+    ground_create_workflow._run_new_ground_shell(
         "Find real ticker rules.",
         ground_name="projects/ticker-ground",
     )
@@ -270,7 +269,7 @@ def test_location_selected_inside_blank_shell_freezes_later_semantic_turns(
     )
     monkeypatch.setattr(ground_create_workflow, "run_ground_shell", shell)
 
-    ground_command._run_new_ground_shell()
+    ground_create_workflow._run_new_ground_shell()
 
     assert seen == [
         (
@@ -311,7 +310,7 @@ def test_new_context_suggestion_is_checked_without_creating_or_switching(
         GroundDialogueError,
         match="not currently creatable",
     ):
-        ground_command._interpret_new_ground_turn(
+        ground_create_workflow._interpret_new_ground_turn(
             "Find a reusable ticker Rule.",
             context_names=(),
         )
@@ -327,4 +326,4 @@ def test_ground_help_explains_name_or_request_entry():
     assert "[GROUND_NAME]" in result.output
     assert "natural-language" in result.output
     assert "--request" in result.output
-    assert "provider-backed chat" in result.output
+    assert "workspace launcher" in result.output
