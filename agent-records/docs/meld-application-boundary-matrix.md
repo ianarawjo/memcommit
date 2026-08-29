@@ -1,6 +1,6 @@
 # Meld application boundary matrix
 
-Last reviewed: 2026-08-25.
+Last reviewed: 2026-08-29.
 
 ## Status
 
@@ -34,6 +34,15 @@ from Restart to Start and Resolution to Session, never back through a command.
 provider/cache preparation, session CAS, Apply transactions, checkpoints, and
 recovery. API and command adapters import those operation-owned modules
 directly.
+
+`runtime/source_bindings.py` is the sole implementation owner for loading the
+exact frozen Meld Source/Target shapes and revalidating their names, UIDs, and
+digests. The console command retains its historical private helper names only
+as direct aliases to those application-runtime functions. Session-picker and
+explicit CLI resumes may perform an early recheck for prompt feedback, but
+assessment publication and Apply repeat the same canonical checks at their
+transaction boundary; the adapter does not maintain a parallel stale-binding
+rule.
 
 The historical flat `memcommit.meld_*_application`,
 `memcommit.meld_application_flow`, and `memcommit.meld_runtime` paths remain

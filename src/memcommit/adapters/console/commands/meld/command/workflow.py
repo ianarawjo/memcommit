@@ -10,7 +10,6 @@ from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
 )
 from memcommit.core.context import Context
-from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.core.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
@@ -21,30 +20,29 @@ from memcommit.core.context_targeting.operands import (
 )
 from memcommit.application.capabilities.authority.access import (
     ContextAccess,
-    GrantedReadStore,
-    revalidate_granted_context_binding,
     resolve_context_access,
 )
 from memcommit.adapters.console.terminal.components.command_wait import (
     run_command_wait,
 )
-from memcommit.application.operations.compare.ledger.granted_store import (
-    granted_artifact_contexts,
-    load_granted_comparison_artifact,
-    recursive_comparison_projection,
-)
 from memcommit.application.operations.meld.model import (
     INLINE_MELD_CONTEXT_NAME,
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
-    MELD_OWNER_AWARE_SCHEMA_VERSION,
     MELD_SCHEMA_VERSION,
-    MeldFrame,
     MeldIssue,
     MeldSession,
-    inline_meld_context,
     meld_canonical_digest,
 )
 from memcommit.application.operations.meld.restart_application import MeldRestartRequest
+from memcommit.application.operations.meld.runtime.source_bindings import (
+    assert_meld_non_target_source_bindings as _assert_non_target_source_bindings,
+    assert_meld_source_bindings as _assert_source_bindings,
+    assert_unapplied_meld_target as _assert_unapplied_target,
+    load_bound_meld_contexts as _load_bound_contexts,
+    load_local_meld_source as _load_local_meld_source,
+    load_meld_source as _load_meld_source,
+    meld_bound_frame_digest as _bound_frame_digest,
+)
 from memcommit.application.operations.meld.start_application import MeldStartRequest
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.capabilities.authority.derived_policy import (
@@ -64,10 +62,7 @@ from memcommit.providers.subscription import (
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
-from memcommit.persistence.store import (
-    MemoryStore,
-    context_record_digest,
-)
+from memcommit.persistence.store import MemoryStore
 
 from memcommit.adapters.console.commands.meld.command.errors import MeldCommandError
 from memcommit.adapters.console.commands.meld.command.presentation import (
@@ -125,99 +120,6 @@ def _issue_selector(
     raise MeldCommandError(f"Meld issue selector '{selector}' is ambiguous.")
 
 
-def _load_bound_contexts(
-    store: MemoryStore,
-    session: MeldSession,
-    *,
-    registry=None,
-) -> tuple[Context, Context, Context]:
-    if session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION:
-        left = inline_meld_context(session)
-        baseline = session.frames[1]
-        right = load_context_scope(
-            store,
-            baseline.context_name,
-            include_descendants=bool(baseline.include_descendants),
-        )
-        return left, right, right
-    if session.mode == "DIRECTIONAL" and (
-        session.granted_incoming is not None or session.granted_target is not None
-    ):
-        bindings = (session.granted_incoming, session.granted_target)
-        loaded = []
-        for frame, binding in zip(session.frames, bindings, strict=True):
-            if binding is None:
-                access = ContextAccess(
-                    store=store,
-                    context_name=frame.context_name,
-                    display_name=frame.context_name,
-                    attachment_name=None,
-                    permission="READ",
-                )
-            else:
-                access = revalidate_granted_context_binding(
-                    binding,
-                    registry=registry,
-                )
-            loaded.append(
-                _load_meld_source(
-                    access,
-                    include_descendants=bool(frame.include_descendants),
-                    project=(session.schema_version < MELD_OWNER_AWARE_SCHEMA_VERSION),
-                )
-            )
-        left, right = loaded
-        # Directional BASELINE is the target. Loading it through the frozen
-        # endpoint preserves its public identity while reading authority data.
-        return left, right, right
-    try:
-        loaded: list[Context] = []
-        for frame in session.frames:
-            if (
-                session.mode == "DIRECTIONAL"
-                and session.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION
-            ):
-                context = load_context_scope(
-                    store,
-                    frame.context_name,
-                    include_descendants=bool(frame.include_descendants),
-                )
-            else:
-                context = (
-                    recursive_comparison_projection(
-                        load_context_scope(
-                            store,
-                            frame.context_name,
-                            include_descendants=bool(frame.include_descendants),
-                        )
-                    )
-                    if frame.include_descendants
-                    else store.load_direct(frame.context_name)
-                )
-            loaded.append(context)
-        left, right = loaded
-    except FileNotFoundError:
-        if session.mode != "SYMMETRIC" or session.comparison_seed is None:
-            raise
-        artifact = load_granted_comparison_artifact(
-            store,
-            session.frames[0].context_uid,
-            session.frames[1].context_uid,
-        )
-        if artifact is None:
-            raise MeldCommandError(
-                "The granted Compare basis for this Meld is unavailable."
-            )
-        left, right = granted_artifact_contexts(store, artifact)
-    target = (
-        right
-        if session.mode == "DIRECTIONAL"
-        and session.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION
-        else store.load_direct(session.target.context_name)
-    )
-    return left, right, target
-
-
 def _resolve_meld_source(
     store: MemoryStore,
     name: str,
@@ -248,49 +150,6 @@ def _is_inline_memory_operand(
         ),
         InlineTextOperand,
     )
-
-
-def _load_meld_source(
-    access: ContextAccess,
-    *,
-    include_descendants: bool = False,
-    project: bool = True,
-) -> Context:
-    if include_descendants:
-        reader = GrantedReadStore(access) if access.is_granted else access.store
-        context = load_context_scope(
-            reader,
-            access.display_name if access.is_granted else access.context_name,
-            include_descendants=True,
-        )
-    else:
-        context = (
-            (
-                GrantedReadStore(access).load(access.display_name)
-                if project
-                else GrantedReadStore(access).load_direct(access.display_name)
-            )
-            if access.is_granted
-            else access.store.load_direct(access.context_name)
-        )
-    return recursive_comparison_projection(context) if project else context
-
-
-def _load_local_meld_source(
-    store: MemoryStore,
-    name: str,
-    *,
-    include_descendants: bool,
-    project: bool = True,
-) -> Context:
-    if not include_descendants:
-        return store.load_direct(name)
-    context = load_context_scope(
-        store,
-        name,
-        include_descendants=True,
-    )
-    return recursive_comparison_projection(context) if project else context
 
 
 def _meld_request_matches_saved_session(
@@ -344,84 +203,6 @@ def _meld_request_matches_saved_session(
             requested_uid = focus.selected_uid
         sources_match = sources_match and frame.selected_memory_uid == requested_uid
     return sources_match
-
-
-def _bound_frame_digest(frame, context: Context) -> str:
-    if frame.contexts is None:
-        return context_record_digest(context)
-    return MeldFrame.from_context(
-        context,
-        role=frame.role,
-        include_descendants=frame.include_descendants,
-        owner_aware=True,
-    ).context_digest
-
-
-def _assert_source_bindings(
-    session: MeldSession,
-    left: Context,
-    right: Context,
-) -> None:
-    for frame, context in zip(
-        session.frames,
-        (left, right),
-        strict=True,
-    ):
-        if (
-            context.uid != frame.context_uid
-            or context.name != frame.context_name
-            or _bound_frame_digest(frame, context) != frame.context_digest
-        ):
-            raise MeldCommandError(
-                f"Source Context '{frame.context_name}' changed after this "
-                "meld was analyzed."
-            )
-
-
-def _assert_non_target_source_bindings(
-    session: MeldSession,
-    left: Context,
-    right: Context,
-) -> None:
-    """Recheck read-only inputs while allowing an applied baseline to differ."""
-    for frame, context in zip(
-        session.frames,
-        (left, right),
-        strict=True,
-    ):
-        if (
-            frame.context_uid == session.target.context_uid
-            and frame.context_name == session.target.context_name
-        ):
-            continue
-        if (
-            context.uid != frame.context_uid
-            or context.name != frame.context_name
-            or _bound_frame_digest(frame, context) != frame.context_digest
-        ):
-            raise MeldCommandError(
-                f"Source Context '{frame.context_name}' changed after this "
-                "meld was analyzed."
-            )
-
-
-def _assert_unapplied_target(
-    session: MeldSession,
-    target: Context,
-) -> None:
-    target_digest = (
-        _bound_frame_digest(session.frames[1], target)
-        if session.mode == "DIRECTIONAL"
-        else context_record_digest(target)
-    )
-    if (
-        target.uid != session.target.context_uid
-        or target.name != session.target.context_name
-        or target_digest != session.target.context_digest
-    ):
-        raise MeldCommandError(
-            "The meld target changed after analysis; the proposal is stale."
-        )
 
 
 def _assess_and_save(
