@@ -102,7 +102,7 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
         "src/memcommit/application/operations/atomize/grounding_runtime.py",
         "src/memcommit/application/operations/atomize/runtime.py",
         "src/memcommit/application/capabilities/ops.py",
-        "src/memcommit/application/capabilities/retained_history/memory_history_reconstruction/retained_record_verification.py",
+        "src/memcommit/application/capabilities/retained_history/memory_history_reconstruction/retained_record_verification",
         "src/memcommit/application/capabilities/retained_history/memory_history_reconstruction/memory_history_event_derivation.py",
         "src/memcommit/application/capabilities/retained_history/memory_history_reconstruction/memory_history_construction.py",
         "src/memcommit/application/operations/review/model.py",
