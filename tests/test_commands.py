@@ -15,6 +15,7 @@ from typer.main import get_command
 from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.help.command as help_inventory
+import memcommit.adapters.console.commands.help.selector as help_selector
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.branch.receipt import BranchCreationReceipt
@@ -902,13 +903,13 @@ class TestHelp:
         monkeypatch,
     ):
         bound: list[str] = []
-        original = help_inventory.bind_focused_frame_style
+        original = help_selector.bind_focused_frame_style
 
         def record(frame, *, is_focused):
             bound.append(frame.title)
             return original(frame, is_focused=is_focused)
 
-        monkeypatch.setattr(help_inventory, "bind_focused_frame_style", record)
+        monkeypatch.setattr(help_selector, "bind_focused_frame_style", record)
         with create_pipe_input() as pipe_input:
             pipe_input.send_text("q")
             result = run_help_selector(
@@ -1120,7 +1121,7 @@ class TestHelp:
                 pass
 
         monkeypatch.setattr(
-            help_inventory,
+            help_selector,
             "NavigationAccelerator",
             FiveStepAccelerator,
         )

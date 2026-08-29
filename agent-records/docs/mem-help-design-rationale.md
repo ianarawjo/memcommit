@@ -23,6 +23,26 @@ It reports capabilities; it does not recommend a command sequence or perform
 work for the participant. Source registration order remains free to group
 related implementation code; neither Help projection depends on it.
 
+## Console module ownership
+
+The console adapter keeps Help's four responsibilities in focused sibling
+modules. `inventory.py` owns the console taxonomy, command Forms, inventory
+models, and validation against the registered CLI and application Operation
+Help catalog. `rendering.py` owns plain, lookup, and prompt-toolkit text
+projections. `selector.py` owns the interactive browser lifecycle, transient
+selection state, focus topology, and key bindings. `command.py` remains the
+thin top-level orchestration boundary for focused lookup, non-TTY dispatch,
+selected-command handoff, full syntax Help, and session-Help backend wiring.
+
+This is a physical ownership split, not a change to catalog meaning or the
+terminal interaction contract. The original `command.py` import names remain
+available as a temporary compatibility surface while production callers move
+to the narrow owner. The first extraction deliberately leaves the large Form
+catalog and the selector's closure-based state machine intact inside their new
+modules: splitting those structures further without a separate behavior need
+would increase ordering and focus-regression risk. A later change may divide
+them behind the same module contracts.
+
 ## Natural-language focused lookup
 
 Supplying one positional request changes only the discovery projection:
