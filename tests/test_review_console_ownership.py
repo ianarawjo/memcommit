@@ -34,9 +34,10 @@ def test_review_atomize_and_impact_import_the_shared_contract_directly() -> None
     relative_paths = (
         "src/memcommit/adapters/console/commands/review/command.py",
         "src/memcommit/adapters/console/commands/review/snapshot.py",
+        "src/memcommit/adapters/console/commands/atomize/review.py",
         "src/memcommit/adapters/console/commands/atomize/workbench/adapter.py",
         "src/memcommit/adapters/console/commands/atomize/workbench/screen.py",
-        "src/memcommit/adapters/console/commands/impact/command.py",
+        "src/memcommit/adapters/console/commands/atomize/impact.py",
     )
 
     for relative_path in relative_paths:

@@ -173,7 +173,7 @@ def test_exact_update_impact_materializes_hidden_receipt_without_provider(
     )
     assert store.load_impact_plan() is None
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("hidden exact Update receipt opened a provider")
         ),

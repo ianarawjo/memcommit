@@ -79,7 +79,7 @@ def test_atomize_command_delegates_to_command_owned_presenters() -> None:
 
 def test_impact_atomize_uses_the_atomize_workbench_owner() -> None:
     source = (
-        REPOSITORY / "src/memcommit/adapters/console/commands/impact/command.py"
+        REPOSITORY / "src/memcommit/adapters/console/commands/atomize/impact.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.adapters.console.commands.atomize.workbench.screen" in source

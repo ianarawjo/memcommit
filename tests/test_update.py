@@ -1410,7 +1410,7 @@ def test_impact_then_update_reuses_plan_and_materializes_local_fork(
         return provider
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
         factory,
     )
     monkeypatch.setattr(
@@ -1634,7 +1634,7 @@ def test_impact_then_update_resolve_relative_existing_target(
     _persist_pair(store)
     provider = PlanProvider(_one_edit_response)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
@@ -1677,7 +1677,7 @@ def test_impact_then_update_accept_from_with_current_target(
     store.set_current(TASK1_TARGET)
     provider = PlanProvider(_one_edit_response)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
@@ -1704,7 +1704,7 @@ def test_named_impact_and_direct_update_share_positional_endpoint_pair(
     _persist_pair(store)
     provider = PlanProvider(_one_edit_response)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
@@ -1745,7 +1745,7 @@ def test_explicit_from_and_to_work_without_current_context(
         store.save(context)
     provider = PlanProvider(_one_edit_response)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
@@ -1781,7 +1781,7 @@ def test_from_and_to_relative_locators_share_one_current_snapshot(
     store.set_current(anchor.name)
     provider = PlanProvider(_one_edit_response)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
@@ -1831,8 +1831,13 @@ def test_omitted_endpoint_requires_current_context(
     source, source_child, _, target, target_child, _ = _make_nested_pair()
     for context in (source_child, source, target_child, target):
         store.save(context)
+    provider_owner = (
+        "memcommit.adapters.console.commands.update.impact"
+        if command == "impact"
+        else "memcommit.adapters.console.commands.update.command"
+    )
     monkeypatch.setattr(
-        f"memcommit.adapters.console.commands.{command}.command.connect_codex_chatgpt_provider",
+        f"{provider_owner}.connect_codex_chatgpt_provider",
         lambda: pytest.fail("provider should not connect"),
     )
 
@@ -2099,8 +2104,13 @@ def test_directional_commands_reject_same_canonical_endpoints(
     context = ops.init("participant/source")
     store.save(context)
     store.set_current(context.name)
+    provider_owner = (
+        "memcommit.adapters.console.commands.update.impact"
+        if command == "impact"
+        else "memcommit.adapters.console.commands.update.command"
+    )
     monkeypatch.setattr(
-        f"memcommit.adapters.console.commands.{command}.command.connect_codex_chatgpt_provider",
+        f"{provider_owner}.connect_codex_chatgpt_provider",
         lambda: pytest.fail("provider should not connect"),
     )
 
@@ -2172,7 +2182,7 @@ def test_stale_impact_replans_before_applying(
     _persist_pair(store)
     provider = PlanProvider(_one_edit_response)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
@@ -2540,7 +2550,7 @@ def test_invalid_provider_output_leaves_contexts_and_sessions_unchanged(
     store = MemoryStore()
     _persist_pair(store)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
         lambda: PlanProvider("not json"),
     )
     context_bytes_before = {
@@ -2705,7 +2715,7 @@ def test_missing_target_and_same_target_fail_without_traceback(
     store.save(source)
     store.set_current("source")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
         lambda: pytest.fail("provider should not connect"),
     )
 

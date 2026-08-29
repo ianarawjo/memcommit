@@ -29,7 +29,11 @@ def test_production_review_report_consumers_use_the_shared_owner() -> None:
     relative_paths = (
         "src/memcommit/application/capabilities/retained_history/applied_review.py",
         "src/memcommit/adapters/console/commands/review/report.py",
-        "src/memcommit/application/operations/review/report_adapters.py",
+        "src/memcommit/adapters/console/commands/atomize/review.py",
+        "src/memcommit/adapters/console/commands/compare/review.py",
+        "src/memcommit/adapters/console/commands/meld/review.py",
+        "src/memcommit/adapters/console/commands/sever/review.py",
+        "src/memcommit/adapters/console/commands/update/review.py",
     )
 
     for relative_path in relative_paths:
@@ -58,3 +62,10 @@ def test_shared_review_report_does_not_own_operation_adapters() -> None:
         "memcommit.update",
     ):
         assert operation_module not in source
+
+
+def test_operation_review_projections_are_not_centralized_under_review() -> None:
+    assert not (
+        REPOSITORY_ROOT
+        / "src/memcommit/application/operations/review/report_adapters.py"
+    ).exists()

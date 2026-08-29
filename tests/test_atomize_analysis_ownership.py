@@ -31,6 +31,7 @@ def test_migrated_atomize_analysis_consumers_use_the_operation_owner() -> None:
         "src/memcommit/application/operations/atomize/workflow.py",
         "src/memcommit/adapters/python_api/_operations/atomize.py",
         "src/memcommit/adapters/console/commands/atomize/command.py",
+        "src/memcommit/adapters/console/commands/atomize/impact.py",
         "src/memcommit/adapters/console/commands/impact/command.py",
         "src/memcommit/application/operations/atomize/analysis_runtime.py",
     )

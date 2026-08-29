@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 from datetime import datetime
+import sys
 
 from memcommit.application.capabilities.retained_history.applied_review import (
     CHECKPOINT_REVIEW_OPERATIONS,
@@ -29,9 +30,53 @@ from memcommit.application.operations.sever.session_store import SeverSessionSto
 from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
+from memcommit.application.operations.review.model import ReviewError
+from memcommit.core.context_targeting.uid_locator import (
+    UidLocatorError,
+    resolve_exact_or_unique_uid,
+)
 
 
 SAVED_REVIEW_KIND = "saved-review"
+
+
+def select_report_session(
+    entries: tuple[SessionPickerEntry, ...],
+    *,
+    kind: str,
+    title: str,
+    session_uid: str | None,
+    selector_option: str = "--session",
+) -> SessionPickerEntry | None:
+    """Resolve one exact report or choose one frozen operation-owned entry."""
+
+    if session_uid is not None:
+        try:
+            return resolve_exact_or_unique_uid(
+                entries,
+                session_uid,
+                uid=lambda entry: entry.key,
+                label=f"Saved {kind} review artifact",
+            )
+        except UidLocatorError as error:
+            raise ReviewError(str(error)) from error
+    if not entries:
+        raise ReviewError(f"No saved {kind} review artifacts are available.")
+    if not sys.stdin.isatty() or not sys.stdout.isatty():
+        if len(entries) == 1:
+            return entries[0]
+        raise ReviewError(
+            f"Several saved {kind} artifacts are available; pass {selector_option} UID."
+        )
+    receipt = choose_session(entries, title=title)
+    if receipt is None:
+        return None
+    if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != kind:
+        raise ReviewError("Review session picker returned an invalid receipt.")
+    selected = next((entry for entry in entries if entry.key == receipt.key), None)
+    if selected is None or selected.reopen_argv != receipt.argv:
+        raise ReviewError("Review session picker returned a stale receipt.")
+    return selected
 
 
 def _review_detail(entry: SessionPickerEntry, *, operation: str) -> str:

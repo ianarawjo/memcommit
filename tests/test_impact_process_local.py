@@ -8,7 +8,9 @@ import pytest
 import typer
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.impact.process_local as process_local_command
+import memcommit.adapters.console.commands.distill.impact as distill_impact
+import memcommit.adapters.console.commands.forget.impact as forget_impact
+import memcommit.adapters.console.commands.resolve.impact as resolve_impact
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.impact.process_local import (
@@ -419,7 +421,7 @@ def test_forget_route_runs_the_owning_analysis_without_a_checkpoint(
     before = context_record_digest(store.load_direct(source.name))
     checkpoints = tuple(store.list_checkpoints(source.name))
     monkeypatch.setattr(
-        process_local_command,
+        forget_impact,
         "connect_forget_provider",
         _ForgetProvider,
     )
@@ -452,7 +454,7 @@ def test_distill_route_leaves_the_proposed_result_uncreated(
     store.save(source)
     before = context_record_digest(store.load_direct(source.name))
     monkeypatch.setattr(
-        process_local_command,
+        distill_impact,
         "connect_semantic_provider",
         _DistillProvider,
     )
@@ -489,7 +491,7 @@ def test_resolve_route_projects_verified_effects_without_applying(
     checkpoints = tuple(store.list_checkpoints(source.name))
     provider = _ResolveProvider()
     monkeypatch.setattr(
-        process_local_command,
+        resolve_impact,
         "connect_semantic_provider",
         lambda: provider,
     )

@@ -37,7 +37,7 @@ def test_production_resolve_consumers_use_the_operation_owner() -> None:
         "src/memcommit/adapters/console/commands/resolve/workbench/screen.py",
         "src/memcommit/adapters/console/commands/find_conflicts/resolve_handoff.py",
         "src/memcommit/adapters/console/commands/find_conflicts/command.py",
-        "src/memcommit/adapters/console/commands/impact/process_local.py",
+        "src/memcommit/adapters/console/commands/resolve/impact.py",
         "src/memcommit/application/capabilities/reviewing/quality/handoff.py",
         "src/memcommit/application/operations/resolve/semantic.py",
         "src/memcommit/application/operations/resolve/targeting.py",

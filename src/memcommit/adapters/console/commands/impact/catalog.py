@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 from datetime import datetime
+import sys
 
 from memcommit.adapters.console.commands.atomize.sessions import atomize_session_entries
 from memcommit.adapters.console.commands.ground.session_picker import session_picker_location
@@ -21,12 +22,54 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
     SessionPickerEntry,
     choose_session,
 )
+from memcommit.core.context_targeting.uid_locator import (
+    UidLocatorError,
+    resolve_exact_or_unique_uid,
+)
 from memcommit.application.operations.sever.session_store import SeverSessionStore
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
 
 
 IMPACT_SESSION_KINDS = ("atomize", "meld", "sever", "update")
+
+
+def select_saved_session(
+    entries: tuple[SessionPickerEntry, ...],
+    *,
+    kind: str,
+    title: str,
+    session_uid: str | None,
+) -> SessionPickerEntry | None:
+    """Resolve one saved UID/prefix or one frozen TTY choice."""
+
+    if session_uid is not None:
+        try:
+            return resolve_exact_or_unique_uid(
+                entries,
+                session_uid,
+                uid=lambda entry: entry.key,
+                label=f"Saved {kind.title()} Impact artifact",
+            )
+        except UidLocatorError as error:
+            raise ValueError(str(error)) from error
+    if not entries:
+        raise ValueError(f"No saved {kind.title()} Impact artifacts are available.")
+    if not sys.stdin.isatty() or not sys.stdout.isatty():
+        if len(entries) == 1:
+            return entries[0]
+        raise ValueError(
+            f"Several saved {kind.title()} artifacts are available; pass --session UID."
+        )
+    receipt = choose_session(entries, title=title)
+    if receipt is None:
+        return None
+    if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != kind:
+        raise ValueError("Impact session picker returned an invalid receipt.")
+    selected = next((entry for entry in entries if entry.key == receipt.key), None)
+    if selected is None or selected.reopen_argv != receipt.argv:
+        raise ValueError("Impact session picker returned a stale receipt.")
+    return selected
 
 
 def _artifact_timestamp(path, *, fallback: str) -> float:
@@ -232,4 +275,5 @@ __all__ = [
     "IMPACT_SESSION_KINDS",
     "choose_impact_session",
     "impact_session_entries",
+    "select_saved_session",
 ]

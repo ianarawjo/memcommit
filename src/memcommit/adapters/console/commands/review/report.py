@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+import sys
 
 import click
+import typer
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
@@ -234,3 +236,20 @@ def run_review_report_shell(
     if action.kind == "ACCEPT":
         raise ValueError("Review cannot return an Apply action.")
     return action
+
+
+def show_operation_review(
+    controller: ReviewReportController,
+    *,
+    snapshot: bool,
+) -> None:
+    """Render one operation-owned Review projection through the common host."""
+
+    report = controller.report()
+    if snapshot or not sys.stdin.isatty() or not sys.stdout.isatty():
+        if report.report_fragments:
+            echo_review_report_snapshot(report)
+        else:
+            typer.echo(render_review_report_snapshot(report))
+        return
+    run_review_report_shell(controller, interactive_actions=False)

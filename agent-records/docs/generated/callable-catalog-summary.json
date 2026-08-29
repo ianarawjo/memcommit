@@ -6,7 +6,7 @@
     "function": 8110,
     "lambda": 606
   },
-  "module_count": 1079,
+  "module_count": 1091,
   "operation_count": 65,
   "operation_curated_states": {
     "CLOSED": 37,
@@ -20,7 +20,7 @@
   },
   "visibility": {
     "local": 2108,
-    "private": 3426,
-    "public": 4962
+    "private": 3407,
+    "public": 4981
   }
 }

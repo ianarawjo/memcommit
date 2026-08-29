@@ -145,7 +145,7 @@ def run_meld_shell(
         MeldResolutionWorkbenchAdapter,
     )
     from memcommit.adapters.console.terminal.components.impact import ImpactController
-    from memcommit.application.operations.review.report_adapters import meld_review_report
+    from memcommit.adapters.console.commands.meld.review import meld_review_report
 
     snapshot_hint = (
         "Run the same 'mem meld' command outside a TTY to render its saved snapshot."

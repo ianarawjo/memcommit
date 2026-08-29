@@ -2,9 +2,14 @@
 
 from __future__ import annotations
 
+import sys
+
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
+import typer
 
+from memcommit.adapters.console.commands.audit.sessions import audit_session_entries
+from memcommit.adapters.console.commands.review.sessions import select_report_session
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.core.theme import semantic_quality_role
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_role_style
@@ -23,6 +28,9 @@ from memcommit.adapters.console.terminal.components.findings import (
 from memcommit.application.capabilities.reviewing.quality.audit import (
     QualityAuditSession,
     quality_audit_resolution_view,
+)
+from memcommit.application.capabilities.reviewing.quality.audit_store import (
+    QualityAuditStore,
 )
 from memcommit.application.capabilities.reviewing.quality.report import quality_find_category_label
 from memcommit.application.capabilities.reviewing.quality.workbench import (
@@ -266,7 +274,32 @@ def run_quality_audit_review(
     return session
 
 
+def open_audit_review(
+    store: MemoryStore,
+    *,
+    session_uid: str | None,
+    snapshot: bool,
+) -> None:
+    """Open one exact saved Audit without rerunning any finder."""
+
+    sessions = QualityAuditStore(store)
+    selected = select_report_session(
+        audit_session_entries(sessions),
+        kind="audit",
+        title="MEM REVIEW · AUDIT REPORTS",
+        session_uid=session_uid,
+    )
+    if selected is None:
+        return
+    session = sessions.load(selected.key)
+    if snapshot or not (sys.stdin.isatty() and sys.stdout.isatty()):
+        typer.echo(render_quality_audit_review_snapshot(session))
+        return
+    run_quality_audit_review(store, session)
+
+
 __all__ = [
+    "open_audit_review",
     "quality_audit_review_document",
     "render_quality_audit_review_snapshot",
     "run_quality_audit_review",

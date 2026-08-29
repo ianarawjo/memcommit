@@ -9,7 +9,9 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.impact.command as impact_command
+import memcommit.adapters.console.commands.impact.sessions as impact_sessions
 import memcommit.adapters.console.commands.update.command as update_command
+import memcommit.adapters.console.commands.update.impact as update_impact
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.help.command import COMMAND_FORMS
@@ -273,7 +275,7 @@ def test_cli_reopens_saved_update_impact_without_provider(
     session = plan_update(source, target, lambda: _UpdateProvider())
     MemoryStore().save_impact_plan(session)
     monkeypatch.setattr(
-        impact_command,
+        update_impact,
         "connect_codex_chatgpt_provider",
         lambda: pytest.fail("saved Impact inspection called a provider"),
     )
@@ -304,8 +306,8 @@ def test_saved_update_apply_handoff_reenters_owning_update_flow(
     impact_views = iter((True, False))
 
     monkeypatch.setattr(
-        impact_command,
-        "_show_saved_impact",
+        impact_sessions,
+        "show_saved_impact",
         lambda *_args, **_kwargs: next(impact_views),
     )
     monkeypatch.setattr(
@@ -338,8 +340,8 @@ def test_terminal_owning_apply_does_not_reopen_impact(monkeypatch):
     shown = []
 
     monkeypatch.setattr(
-        impact_command,
-        "_show_saved_impact",
+        impact_sessions,
+        "show_saved_impact",
         lambda presentation, *, kind: shown.append((presentation, kind)) or True,
     )
 
@@ -349,7 +351,7 @@ def test_terminal_owning_apply_does_not_reopen_impact(monkeypatch):
             handoff_available=False,
         )
 
-    impact_command._run_saved_impact_handoff_loop(
+    impact_sessions.run_saved_impact_handoff_loop(
         load_presentation=lambda: current["value"],
         open_owning_workflow=finish_apply,
         kind="update",

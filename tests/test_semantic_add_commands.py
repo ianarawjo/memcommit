@@ -8,8 +8,9 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.distill.command as distill_command
+import memcommit.adapters.console.commands.distill.impact as distill_impact
 import memcommit.adapters.console.commands.elaborate.command as elaborate_command
-import memcommit.adapters.console.commands.impact.process_local as impact_process_local
+import memcommit.adapters.console.commands.elaborate.impact as elaborate_impact
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.distill.model import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
@@ -571,7 +572,7 @@ def test_impact_endpoint_preview_never_adds(
     before_target = context_record_digest(store.load_direct(target.name))
     provider = _ElaborateProvider if operation == "elaborate" else _DistillProvider
     monkeypatch.setattr(
-        impact_process_local,
+        elaborate_impact if operation == "elaborate" else distill_impact,
         "connect_semantic_provider",
         provider,
     )

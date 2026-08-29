@@ -244,7 +244,7 @@ def _init_context(store: MemoryStore):
 
 def _patch_provider(monkeypatch, provider):
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(

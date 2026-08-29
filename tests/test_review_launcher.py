@@ -241,8 +241,7 @@ def test_applied_sever_selection_still_opens_read_only_review(
     monkeypatch,
 ):
     import memcommit.adapters.console.commands.sever.command as sever_command
-    import memcommit.adapters.console.commands.sever.sessions as sever_sessions
-    import memcommit.application.operations.review.report_adapters as adapters
+    import memcommit.adapters.console.commands.sever.review as sever_review
 
     session_uid = str(uuid.uuid4())
     picker_entry = _entry(
@@ -257,17 +256,17 @@ def test_applied_sever_selection_still_opens_read_only_review(
     shown = {}
     monkeypatch.setattr(review_command, "_interactive_terminal", lambda: True)
     monkeypatch.setattr(
-        sever_sessions,
+        sever_review,
         "list_sever_session_catalog",
         lambda _sessions: (catalog_entry,),
     )
     monkeypatch.setattr(
-        sever_sessions,
+        sever_review,
         "reload_selected_sever_session",
         lambda _sessions, _entry: applied,
     )
     monkeypatch.setattr(
-        adapters,
+        sever_review,
         "sever_review_report",
         lambda _session: controller,
     )
@@ -279,8 +278,8 @@ def test_applied_sever_selection_still_opens_read_only_review(
         ),
     )
     monkeypatch.setattr(
-        review_command,
-        "_show_operation_review",
+        sever_review,
+        "show_operation_review",
         lambda value, *, snapshot: shown.update(
             controller=value,
             snapshot=snapshot,
@@ -301,8 +300,7 @@ def test_applied_meld_selection_still_opens_read_only_review(
     monkeypatch,
 ):
     import memcommit.adapters.console.commands.meld.command as meld_command
-    import memcommit.adapters.console.commands.meld.sessions as meld_sessions
-    import memcommit.application.operations.review.report_adapters as adapters
+    import memcommit.adapters.console.commands.meld.review as meld_review
 
     session_uid = str(uuid.uuid4())
     catalog_entry = SimpleNamespace(
@@ -320,17 +318,17 @@ def test_applied_meld_selection_still_opens_read_only_review(
     shown = {}
     monkeypatch.setattr(review_command, "_interactive_terminal", lambda: True)
     monkeypatch.setattr(
-        meld_sessions,
+        meld_review,
         "list_meld_session_catalog",
         lambda _store: (catalog_entry,),
     )
     monkeypatch.setattr(
-        meld_sessions,
+        meld_review,
         "reload_selected_meld_session",
         lambda _store, _entry: applied,
     )
     monkeypatch.setattr(
-        adapters,
+        meld_review,
         "meld_review_report",
         lambda _session: controller,
     )
@@ -342,8 +340,8 @@ def test_applied_meld_selection_still_opens_read_only_review(
         ),
     )
     monkeypatch.setattr(
-        review_command,
-        "_show_operation_review",
+        meld_review,
+        "show_operation_review",
         lambda value, *, snapshot: shown.update(
             controller=value,
             snapshot=snapshot,

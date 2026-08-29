@@ -565,7 +565,7 @@ def test_impact_rejects_granted_live_embed_before_provider_connection(
     )
     assert embedded.exit_code == 0, embedded.output + embedded.stderr
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.impact.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
         lambda: pytest.fail("Impact must reject before provider connection"),
     )
 

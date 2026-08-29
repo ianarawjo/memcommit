@@ -17,7 +17,7 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionWorkbenchView,
 )
 from memcommit.application.capabilities.reviewing.report import ReviewReportController
-from memcommit.application.operations.review.report_adapters import update_review_report
+from memcommit.adapters.console.commands.update.review import update_review_report
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.model import (
     AddOperation,

@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
+import sys
+
+import typer
 
 from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     SessionTodoView,
@@ -11,6 +15,7 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell imp
     run_resolution_workbench_shell,
 )
 from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.capabilities.reviewing.memory_diff import update_operation_change
 from memcommit.application.operations.meld.model import MeldSession
 from memcommit.application.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
@@ -233,3 +238,68 @@ def run_impact_session_workbench(
     # Impact itself has no mutation action. Only the explicit handoff above
     # may leave this surface, and the owning workflow must revalidate again.
     raise ValueError("A standalone Impact view returned an invalid action.")
+
+
+def show_saved_impact(
+    presentation: ImpactSessionPresentation,
+    *,
+    kind: str,
+) -> bool:
+    """Present one saved artifact and report an explicit Apply handoff."""
+
+    if sys.stdin.isatty() and sys.stdout.isatty():
+        handoff = run_impact_session_workbench(
+            presentation,
+            terminal_label=f"Interactive saved {kind.title()} Impact",
+        )
+        if not handoff:
+            typer.echo(f"{kind.title()} Impact closed.")
+        return handoff
+    typer.echo(render_impact_session_snapshot(presentation))
+    return False
+
+
+def run_saved_impact_handoff_loop(
+    *,
+    load_presentation: Callable[[], ImpactSessionPresentation],
+    open_owning_workflow: Callable[[], None],
+    kind: str,
+) -> None:
+    """Return a cancelled final Apply to its exact saved Impact surface."""
+
+    while True:
+        presentation = load_presentation()
+        if not show_saved_impact(presentation, kind=kind):
+            return
+        open_owning_workflow()
+        refreshed = load_presentation()
+        if not refreshed.handoff_available:
+            return
+
+
+def show_process_local_impact(
+    presentation: ImpactSessionPresentation,
+    *,
+    operation: str,
+) -> None:
+    """Render a prepared artifact without manufacturing an Apply handoff."""
+
+    if sys.stdin.isatty() and sys.stdout.isatty():
+        run_impact_session_workbench(
+            presentation,
+            terminal_label=f"Interactive {operation.title()} Impact",
+        )
+        typer.echo(f"{operation.title()} Impact closed.")
+        return
+    typer.echo(render_impact_session_snapshot(presentation))
+
+
+def process_local_impact_error(operation: str, error: BaseException) -> None:
+    """Translate one operation-owned process-local failure to the CLI contract."""
+
+    typer.secho(
+        f"Impact {operation} error: {display_escape_text(str(error))}",
+        fg=typer.colors.RED,
+        err=True,
+    )
+    raise typer.Exit(1)

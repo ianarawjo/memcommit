@@ -166,7 +166,8 @@
       "agent-records/docs/mem-help-design-rationale.md"
     ],
     "impact": [
-      "agent-records/docs/context-locator-design-rationale.md"
+      "agent-records/docs/context-locator-design-rationale.md",
+      "agent-records/docs/impact-review-console-adapter-ownership-design-rationale.md"
     ],
     "import": [
       "agent-records/docs/mem-import-design-rationale.md"
@@ -265,6 +266,7 @@
     ],
     "review": [
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+      "agent-records/docs/impact-review-console-adapter-ownership-design-rationale.md",
       "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md"
     ],
     "search": [
