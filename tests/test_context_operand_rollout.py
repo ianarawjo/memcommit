@@ -14,7 +14,7 @@ from memcommit.adapters.console.commands.review import command as review_command
 from memcommit.adapters.console.commands.compare.command import (
     display_escape_text as compare_escape,
 )
-from memcommit.core.context_targeting.tui.picker import (
+from memcommit.adapters.console.terminal.components.context_picker import (
     _build_context_tree,
     _context_ancestors,
     _render_context_options,

@@ -23,7 +23,7 @@ def _child() -> None:
         build_report_loading_view,
         run_command_wait,
     )
-    from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
+    from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
     from memcommit.core.context_targeting.catalog import grant_navigation_annotation
     from memcommit.source_projection.model import SourceDisplayFacts, SourceState
     from memcommit.source_projection.presentation import combine_source_display_tokens

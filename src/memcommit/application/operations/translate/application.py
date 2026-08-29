@@ -1,4 +1,4 @@
-"""Terminal-independent orchestration for every Translate view mode."""
+"""Terminal-independent orchestration for Translate catalog workflows."""
 
 from __future__ import annotations
 
@@ -10,13 +10,19 @@ from typing import Literal
 from memcommit.core.context import Context, Memory
 from memcommit.core.context_targeting.loading import resolve_local_context_memory_target
 from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTarget
-from memcommit.application.operations.translate.catalog_application import (
+from memcommit.application.operations.translate.curate_translations import (
+    load_translation_catalog_seed,
+    save_curated_translation_catalog,
+)
+from memcommit.application.operations.translate.exchange_translations import (
     ParsedTranslationImport,
     build_translation_export,
     content_digest,
-    load_translation_catalog_seed,
     parse_translation_import,
-    save_curated_translation_catalog,
+)
+from memcommit.application.operations.translate.provider_catalog import (
+    build_translation_plan_from_catalog,
+    update_catalog_from_translation_plan,
 )
 from memcommit.application.operations.translate.runtime import (
     TranslateError,
@@ -26,16 +32,16 @@ from memcommit.application.operations.translate.runtime import (
     resolve_translation_selector,
     validate_translation_target,
 )
-from memcommit.application.operations.translate.view import (
+from memcommit.core.memory_translation import (
+    MemoryTranslationCatalog,
     TRANSLATION_ORIGIN_IMPORTED,
     TRANSLATION_ORIGIN_MANUAL,
     TRANSLATION_REVIEW_UNREVIEWED,
     TRANSLATION_REVIEW_VERIFIED,
-    TranslationCatalog,
-    TranslationViewError,
+    TranslationCatalogError,
 )
-from memcommit.application.operations.translate.view_store import (
-    load_translation_catalog_for_context,
+from memcommit.persistence.store.translation_catalog import (
+    load_translation_catalog,
     save_translation_catalog,
 )
 from memcommit.persistence.store import MemoryStore, context_record_digest
@@ -46,13 +52,11 @@ TranslateResultKind = Literal[
     "EMPTY",
     "EXPORT",
     "IMPORT",
-    "MATERIALIZE",
-    "VIEW",
+    "APPLY",
+    "CATALOG",
 ]
 ProviderFactory = Callable[[], TranslationProvider]
-ProviderFactoryScope = Callable[
-    [], AbstractContextManager[ProviderFactory]
-]
+ProviderFactoryScope = Callable[[], AbstractContextManager[ProviderFactory]]
 TranslationEditor = Callable[[str], str | None]
 TranslationImportLoader = Callable[[str], tuple[bytes, str]]
 
@@ -73,7 +77,7 @@ class TranslateRequest:
     verify: bool = False
     unverify: bool = False
     reset: bool = False
-    materialization_approved: bool = False
+    apply_approved: bool = False
 
 
 @dataclass(frozen=True)
@@ -84,7 +88,7 @@ class PreparedTranslation:
     context: Context
     target_language: str
     selected_memory_uid: str | None
-    catalog: TranslationCatalog | None = None
+    catalog: MemoryTranslationCatalog | None = None
     reused: bool = False
     export_payload: dict[str, object] | None = None
     changed_count: int = 0
@@ -93,7 +97,7 @@ class PreparedTranslation:
     export_destination: str | None = None
 
 
-def _sidecar_action_count(request: TranslateRequest) -> int:
+def _catalog_action_count(request: TranslateRequest) -> int:
     return sum(
         (
             request.edit,
@@ -112,27 +116,25 @@ def validate_translate_request(request: TranslateRequest) -> TranslateRequest:
 
     if not isinstance(request, TranslateRequest):
         raise TypeError("Translate requires a TranslateRequest.")
-    sidecar_actions = _sidecar_action_count(request)
-    if sidecar_actions > 1:
+    catalog_actions = _catalog_action_count(request)
+    if catalog_actions > 1:
         raise TranslateError(
             "Use only one of --edit, --set, --input, --export, "
             "--verify, --unverify, or --reset."
         )
-    if sidecar_actions and (
+    if catalog_actions and (
         request.refresh or request.save_as is not None or request.in_place
     ):
         raise TranslateError(
-            "Translation view editing/export cannot be combined with "
+            "Translation catalog editing/export cannot be combined with "
             "--refresh, --save-as, or --in-place."
         )
     if request.in_place and request.save_as is not None:
         raise TranslateError("--save-as and --in-place cannot be used together.")
-    if request.materialization_approved and (
-        request.save_as is None and not request.in_place
-    ):
+    if request.apply_approved and (request.save_as is None and not request.in_place):
         raise TranslateError(
             "--yes applies only with --save-as CONTEXT or --in-place. "
-            "Bare 'mem translate' saves a view without changing a Context."
+            "Bare 'mem translate' saves a catalog without changing a Context."
         )
     return request
 
@@ -145,14 +147,18 @@ def _open_or_create_catalog(
     selected_memory_uid: str | None,
     refresh: bool,
     provider_scope: ProviderFactoryScope | None,
-) -> tuple[TranslationCatalog | None, bool]:
+) -> tuple[MemoryTranslationCatalog | None, bool]:
     """Reuse effective entries or publish one provider layer with CAS."""
 
     seed = load_translation_catalog_seed(context, target_language)
     existing = seed.catalog if seed.logical_digest is not None else None
     if (
         existing is not None
-        and existing.covers(context, selected_memory_uid)
+        and existing.covers(
+            context,
+            context_record_digest(context),
+            selected_memory_uid,
+        )
         and not refresh
     ):
         if seed.requires_save:
@@ -160,13 +166,12 @@ def _open_or_create_catalog(
                 store,
                 existing,
                 expected_record_digest=seed.expected_record_digest,
-                expected_legacy_record_digest=seed.expected_legacy_record_digest,
                 expected_context_digest=context_record_digest(context),
             )
         return existing, True
 
     if provider_scope is None:
-        raise TranslateError("Translate requires a provider for this view.")
+        raise TranslateError("Translate requires a provider for this catalog.")
     with provider_scope() as provider_factory:
         plan = plan_translation(
             context,
@@ -181,16 +186,18 @@ def _open_or_create_catalog(
                 store,
                 existing,
                 expected_record_digest=seed.expected_record_digest,
-                expected_legacy_record_digest=seed.expected_legacy_record_digest,
                 expected_context_digest=context_record_digest(context),
             )
         return existing, existing is not None
-    catalog = TranslationCatalog.from_plan(plan, context, existing=existing)
+    catalog = update_catalog_from_translation_plan(
+        plan,
+        context,
+        existing=existing,
+    )
     save_translation_catalog(
         store,
         catalog,
         expected_record_digest=seed.expected_record_digest,
-        expected_legacy_record_digest=seed.expected_legacy_record_digest,
         expected_context_digest=plan.context_digest,
     )
     return catalog, False
@@ -202,7 +209,7 @@ def _apply_import(
     context: Context,
     target_language: str,
     parsed: ParsedTranslationImport,
-) -> tuple[TranslationCatalog, int]:
+) -> tuple[MemoryTranslationCatalog, int]:
     seed = load_translation_catalog_seed(context, target_language)
     if parsed.catalog_digest != seed.logical_digest:
         raise TranslateError(
@@ -214,7 +221,10 @@ def _apply_import(
     source_digests: dict[str, str] = {}
     current_effective = {
         entry.source_uid: entry
-        for entry in catalog.effective_entries(context)
+        for entry in catalog.effective_entries(
+            context,
+            context_record_digest(context),
+        )
     }
     changed_count = 0
     for (
@@ -267,7 +277,7 @@ def _apply_single_curated_action(
     selected_memory_uid: str,
     request: TranslateRequest,
     editor: TranslationEditor | None,
-) -> tuple[TranslationCatalog | None, bool]:
+) -> tuple[MemoryTranslationCatalog | None, bool]:
     seed = load_translation_catalog_seed(context, target_language)
     catalog = seed.catalog
     source_memory = context.memories[selected_memory_uid]
@@ -276,7 +286,11 @@ def _apply_single_curated_action(
     if request.edit or request.set_text is not None:
         existing = {
             entry.source_uid: entry
-            for entry in catalog.effective_entries(context, selected_memory_uid)
+            for entry in catalog.effective_entries(
+                context,
+                context_record_digest(context),
+                selected_memory_uid,
+            )
         }.get(selected_memory_uid)
         exact_text = request.set_text
         if request.edit:
@@ -300,6 +314,7 @@ def _apply_single_curated_action(
     elif request.verify or request.unverify:
         candidate = catalog.with_review_status(
             context,
+            context_record_digest(context),
             selected_memory_uid,
             (
                 TRANSLATION_REVIEW_VERIFIED
@@ -316,9 +331,7 @@ def _apply_single_curated_action(
             context=context,
             catalog=candidate,
             seed=seed,
-            source_digests={
-                selected_memory_uid: content_digest(source_memory.content)
-            },
+            source_digests={selected_memory_uid: content_digest(source_memory.content)},
         )
     return candidate, candidate == catalog
 
@@ -359,10 +372,10 @@ def prepare_translation(
     context = store.load_direct(source_name)
     target_language = validate_translation_target(request.target_language)
     selected_memory_uid = resolve_translation_selector(context, selected_operand)
-    materializing = request.save_as is not None or request.in_place
-    if materializing and current_name != context.name:
+    applying_to_context = request.save_as is not None or request.in_place
+    if applying_to_context and current_name != context.name:
         raise TranslateError(
-            "Translation materialization requires the selected Source to be "
+            "Applying translations requires the selected Source to be "
             "the current Context; switch to it first."
         )
     selector_required = any(
@@ -375,9 +388,7 @@ def prepare_translation(
         )
     )
     if selector_required and selected_memory_uid is None:
-        raise TranslateError(
-            "This translation action requires one direct Memory UID."
-        )
+        raise TranslateError("This translation action requires one direct Memory UID.")
     if request.import_source is not None and selected_memory_uid is not None:
         raise TranslateError(
             "--input carries exact source UIDs and cannot use a selector."
@@ -386,10 +397,11 @@ def prepare_translation(
         store.assert_context_creatable(request.save_as)
 
     if request.export_destination is not None:
-        catalog, _ = load_translation_catalog_for_context(
-            context,
-            target_language,
-        )
+        catalog = load_translation_catalog(context.uid, target_language)
+        if catalog is not None and catalog.context_name != context.name:
+            raise TranslateError(
+                "Saved translation catalog does not match its source Context."
+            )
         return PreparedTranslation(
             kind="EXPORT",
             context=context,
@@ -448,7 +460,7 @@ def prepare_translation(
                 selected_memory_uid=selected_memory_uid,
             )
         return PreparedTranslation(
-            kind="VIEW",
+            kind="CATALOG",
             context=context,
             target_language=target_language,
             selected_memory_uid=selected_memory_uid,
@@ -471,9 +483,9 @@ def prepare_translation(
             target_language=target_language,
             selected_memory_uid=selected_memory_uid,
         )
-    if not materializing:
+    if not applying_to_context:
         return PreparedTranslation(
-            kind="VIEW",
+            kind="CATALOG",
             context=context,
             target_language=target_language,
             selected_memory_uid=selected_memory_uid,
@@ -481,17 +493,22 @@ def prepare_translation(
             reused=reused,
         )
 
-    plan = catalog.to_translation_plan(context, selected_memory_uid)
+    plan = build_translation_plan_from_catalog(
+        catalog,
+        context,
+        selected_memory_uid,
+    )
     if plan.provider_response_sha256 is None:
-        raise TranslationViewError(
-            "Materialization currently requires one provider-generated batch. "
-            "Curated or mixed translation views remain same-UID sidecars until "
+        raise TranslationCatalogError(
+            "Context application currently requires one provider-generated "
+            "batch. Curated or mixed catalog entries remain same-UID "
+            "representations until "
             "their provenance schema is defined."
         )
     if not isinstance(plan.operation_uid, str):
         raise TranslateError("Materialization identity was not allocated.")
     return PreparedTranslation(
-        kind="MATERIALIZE",
+        kind="APPLY",
         context=context,
         target_language=target_language,
         selected_memory_uid=selected_memory_uid,

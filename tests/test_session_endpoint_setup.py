@@ -29,7 +29,7 @@ from memcommit.adapters.console.commands.meld.setup import (
     MeldEndpointSelection,
     choose_meld_setup,
 )
-from memcommit.core.context_targeting.tui.picker import ContextMemoryRow, context_memory_rows
+from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow, context_memory_rows
 from memcommit.core.context_targeting.tui.reach import ContextReachState
 from memcommit.core.context_targeting.tui.selection import ContextSelectionState
 from memcommit.core.context_targeting.tui.tree import ContextTreeState, build_context_tree

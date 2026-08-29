@@ -9,6 +9,7 @@ from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.output import Output
 
+from memcommit.adapters.console.terminal.components.context_picker import choose_context
 from memcommit.adapters.console.terminal.components.exact_command_review import (
     bind_exact_command_approval,
 )
@@ -23,7 +24,6 @@ from memcommit.adapters.console.terminal.core.keybindings import (
     dispatch_tui_back,
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.core.context_targeting.tui.picker import choose_context
 from memcommit.adapters.console.commands.ground.named_shell.presentation import (
     _aliased_items,
 )

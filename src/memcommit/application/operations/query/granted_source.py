@@ -10,12 +10,19 @@ import re
 import uuid
 
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.profile.config import GrantContextBinding, load_profile_registry
+from memcommit.core.memory_translation import (
+    MemoryTranslationCatalog,
+    TranslationCatalogError,
+)
+from memcommit.application.operations.profile.config import (
+    GrantContextBinding,
+    load_profile_registry,
+)
 from memcommit.application.operations.profile.model import GrantedContextView
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.translate.view import (
-    TranslationCatalog,
-    TranslationViewError,
+from memcommit.persistence.store.context_memory.records import context_record_digest
+from memcommit.persistence.store.translation_catalog import (
+    decode_translation_catalog_record,
 )
 
 
@@ -150,7 +157,7 @@ def _load_translation_catalog_at_root(
     authority_root: Path,
     context: Context,
     language: str,
-) -> TranslationCatalog:
+) -> MemoryTranslationCatalog:
     """Load one catalog without consulting the active Profile's global root."""
 
     directory = authority_root / "translation-views"
@@ -171,12 +178,12 @@ def _load_translation_catalog_at_root(
             )
         with open(path, encoding="utf-8") as file:
             raw = json.load(file, object_pairs_hook=_strict_json_object)
-        catalog = TranslationCatalog.from_dict(raw)
+        catalog = decode_translation_catalog_record(raw)
     except (
         OSError,
         UnicodeError,
         json.JSONDecodeError,
-        TranslationViewError,
+        TranslationCatalogError,
         ValueError,
     ) as error:
         raise GrantedQuerySourceError(
@@ -186,7 +193,7 @@ def _load_translation_catalog_at_root(
         catalog.context_uid != context.uid
         or catalog.context_name != context.name
         or catalog.target_language != language
-        or not catalog.covers(context)
+        or not catalog.covers(context, context_record_digest(context))
     ):
         raise GrantedQuerySourceError(
             "Requested authority-view translation is unavailable."
@@ -271,7 +278,10 @@ def _load_authority_query_memories(
             )
             effective = {
                 item.source_uid: item.translated_content
-                for item in catalog.effective_entries(context)
+                for item in catalog.effective_entries(
+                    context,
+                    context_record_digest(context),
+                )
             }
             if any(memory.uid not in effective for memory in memories):
                 raise GrantedQuerySourceError(

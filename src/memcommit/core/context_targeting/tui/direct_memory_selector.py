@@ -12,9 +12,11 @@ from memcommit.core.context_targeting.model import ContextSelectionMode
 from memcommit.core.context_targeting.tui.memory_selection import (
     DirectMemorySelectionState,
 )
-from memcommit.core.context_targeting.tui.picker import (
-    ContextMemoryPreviewController,
+from memcommit.adapters.console.terminal.components.context_picker.model import (
     ContextMemoryRow,
+)
+from memcommit.adapters.console.terminal.components.context_picker.preview import (
+    ContextMemoryPreviewController,
 )
 from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,

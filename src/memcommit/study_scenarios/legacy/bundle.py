@@ -31,12 +31,12 @@ from memcommit.study_scenarios.legacy.fixtures import (
 )
 from memcommit.application.operations.profile.config import GRANT_PERMISSIONS
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.translate.view import (
+from memcommit.core.memory_translation import (
+    MemoryTranslationCatalog,
     TRANSLATION_ORIGIN_IMPORTED,
     TRANSLATION_REVIEW_UNREVIEWED,
-    TranslationCatalog,
 )
-from memcommit.application.operations.translate.view_store import (
+from memcommit.persistence.store.translation_catalog import (
     save_translation_catalog,
 )
 
@@ -746,7 +746,7 @@ def _save_korean_catalogs(
 ) -> None:
     for owner_name, translations in korean_by_owner.items():
         owner = store.load_direct(owner_name)
-        catalog = TranslationCatalog.empty(owner, "ko")
+        catalog = MemoryTranslationCatalog.empty(owner, "ko")
         required: dict[str, str] = {}
         for memory, pair in translations:
             evidence = hashlib.sha256(

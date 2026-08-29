@@ -25,8 +25,14 @@ from memcommit.application.operations.profile.model.study import (
     _manifest_digest,
     _study_uuid,
 )
-from memcommit.application.operations.translate.view import TranslationCatalog
 from memcommit.core.context import Context, Memory
+from memcommit.core.memory_translation import (
+    MemoryTranslationCatalog,
+    TranslationCatalogError,
+)
+from memcommit.persistence.store.translation_catalog import (
+    decode_translation_catalog_record,
+)
 
 from .model import (
     _STUDY_BUNDLE_NAMESPACE,
@@ -267,16 +273,18 @@ def _content_digest(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
-def _study_catalogs(root: Path) -> dict[tuple[str, str], TranslationCatalog]:
-    catalogs: dict[tuple[str, str], TranslationCatalog] = {}
+def _study_catalogs(
+    root: Path,
+) -> dict[tuple[str, str], MemoryTranslationCatalog]:
+    catalogs: dict[tuple[str, str], MemoryTranslationCatalog] = {}
     directory = root / "translation-views"
     if not directory.exists():
         return catalogs
     for path in sorted(directory.glob("*--catalog.json")):
         data = _read_json(path, label="Translation catalog")
         try:
-            catalog = TranslationCatalog.from_dict(data)
-        except (TypeError, ValueError) as error:
+            catalog = decode_translation_catalog_record(data)
+        except (TranslationCatalogError, TypeError, ValueError) as error:
             raise ProfileError(f"Translation catalog is invalid: {path}") from error
         key = (catalog.context_name, catalog.target_language)
         if key in catalogs:

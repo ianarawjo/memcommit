@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from typing import Mapping
 
 from memcommit.application.operations.switch.application import SwitchContextRequest
-from memcommit.core.context_targeting.tui.picker import (
+from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemoryRow,
     ContextMemorySelection,
     ContextSubtreeSelection,

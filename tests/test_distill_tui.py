@@ -8,7 +8,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.core.context import Context, Memory
-from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
 from memcommit.application.operations.distill.model import DistillAnalysis, DistilledRule
 from memcommit.application.operations.distill.goal_fit import DistillGoalFit
 from memcommit.application.operations.distill.application import (

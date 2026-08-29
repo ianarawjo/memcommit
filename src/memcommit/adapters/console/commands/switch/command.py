@@ -2,7 +2,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.core.context_targeting.tui.picker import choose_context, context_memory_rows
+from memcommit.adapters.console.terminal.components.context_picker import choose_context, context_memory_rows
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.capabilities.authority.access import (

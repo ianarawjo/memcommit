@@ -20,7 +20,7 @@ from memcommit.core.context_targeting.tui.reach import (
     ContextReachViewState,
     render_context_reach,
 )
-from memcommit.core.context_targeting.tui.picker import (
+from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemoryPreviewController,
     memory_visibility_key_hint,
 )

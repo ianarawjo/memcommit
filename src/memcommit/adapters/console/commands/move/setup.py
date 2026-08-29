@@ -18,7 +18,7 @@ from memcommit.application.operations.memory_transfer.application import (
 from memcommit.application.operations.memory_transfer.runtime import (
     MemoryStoreMemoryTransferPort,
 )
-from memcommit.core.context_targeting.tui.picker import context_memory_rows
+from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
 
 
 def build_move_tui_setup(

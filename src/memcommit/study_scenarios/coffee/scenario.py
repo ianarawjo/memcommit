@@ -13,9 +13,9 @@ import json
 import uuid
 
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.translate.view import (
+from memcommit.core.memory_translation import (
+    MemoryTranslationCatalog,
     TRANSLATION_ORIGIN_IMPORTED,
-    TranslationCatalog,
 )
 
 
@@ -65,8 +65,8 @@ class StudyScenarioTask:
     authority_current: str
     participant_contexts: tuple[Context, ...]
     authority_contexts: tuple[Context, ...]
-    participant_catalogs: tuple[TranslationCatalog, ...]
-    authority_catalogs: tuple[TranslationCatalog, ...]
+    participant_catalogs: tuple[MemoryTranslationCatalog, ...]
+    authority_catalogs: tuple[MemoryTranslationCatalog, ...]
     grants: tuple[ScenarioGrantSpec, ...]
 
 
@@ -584,9 +584,9 @@ def _stable_uid(kind: str, *parts: object) -> str:
 def _build_contexts(
     role: str,
     specs: tuple[ContextSpec, ...],
-) -> tuple[tuple[Context, ...], tuple[TranslationCatalog, ...]]:
+) -> tuple[tuple[Context, ...], tuple[MemoryTranslationCatalog, ...]]:
     contexts: list[Context] = []
-    catalogs: list[TranslationCatalog] = []
+    catalogs: list[MemoryTranslationCatalog] = []
     for spec in specs:
         context = Context(
             uid=_stable_uid("context", role, spec.name),
@@ -608,7 +608,7 @@ def _build_contexts(
             translations.append((memory, memory_spec))
         contexts.append(context)
         if translations:
-            catalog = TranslationCatalog.empty(
+            catalog = MemoryTranslationCatalog.empty(
                 context,
                 "ko",
                 created_at=_CATALOG_TIMESTAMP,

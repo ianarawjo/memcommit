@@ -64,10 +64,14 @@ there is intentionally no profile-wide “last Scope” preference.
 Find, ordinary Query, the common endpoint setup used by
 Compare/Update/Meld/Atomize, and Sever import these controls directly. The full
 picker, receipts, Memory preview rendering, clipboard projection, and terminal
-orchestration now live in `context_targeting/tui/picker.py`.
-`commands/shared/context_picker.py` keeps its established public and test-facing names
-as behavior-free compatibility imports only; production callers import the
-neutral owner directly. Its operation-neutral preview controller is also
+orchestration live in
+`adapters/console/terminal/components/context_picker`. Core Context targeting
+retains the frozen tree, reach, selection, and typed-target contracts, but no
+longer owns the complete terminal picker application. Inside the terminal
+package, `model.py`, `projection.py`, `preview.py`, and `rendering.py` expose
+the reusable picker component contracts, while `dialog.py` alone owns the
+full-screen key bindings, layout, and application lifecycle. The picker
+preview controller is also
 composed into the common endpoint setup and Sever setup trees: it owns lazy
 caches, `m`/`M` visibility, and Memory viewport anchors. A caller must opt a
 role and mode into direct-Memory selection before one of those anchors may
@@ -75,8 +79,9 @@ produce a `DirectMemoryTarget`; otherwise the same row remains read-only and
 cannot change a Context receipt. `memcommit.context_scope` is likewise a thin
 compatibility facade; new internal callers use `context_targeting.loading`.
 The established `ContextMemorySelection` name used by Delete, Import, Trace,
-and Rationale is now a compatibility alias for that same target value, not a
-parallel receipt type.
+and Rationale is a terminal compatibility alias for that same core target
+value, not a parallel receipt type. `ContextSubtreeSelection` similarly aliases
+the operation-neutral `ContextSubtreeTarget`.
 Reference, Edit, and Memory Embed compose `DirectMemorySelectorControl` so
 their Source navigation, hover-versus-checked meaning, and rejection of
 MemoryRef/Context/query rows do not diverge. Their adapters still own snapshot,

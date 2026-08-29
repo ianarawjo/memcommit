@@ -53,7 +53,7 @@ inside that Profile. `granted` means a distinct authority-owned Context or
 direct Memory reachable through an incoming grant that includes `READ`.
 Repeated public aliases do not increase either count: the inventory
 deduplicates by authority Profile and stable Context identity. Memory refs,
-embedded Context refs, legacy query refs, checkpoints, and translation views
+embedded Context refs, legacy query refs, checkpoints, and translation catalogs
 are not counted as Memories. A query-only authority grant is listed as a view
 but does not add to the `READ`-granted cardinality. This separation prevents a
 concise inventory from silently equating storage, delegated read access, and
@@ -413,7 +413,7 @@ claims a rollback that cannot be proven.
 `mem profile import` is an archival whole-store copy. The top-level `mem
 import` instead creates a clean baseline Profile through an allowlist:
 `state.json`, ordinary `context.json` records, query-source records, and
-translation views. It deliberately excludes checkpoints, command receipts,
+translation catalogs. It deliberately excludes checkpoints, command receipts,
 sessions, semantic workbenches, caches, locks, lifecycle ledgers, clipboard
 state, and write-protection state. The baseline digest and timezone-aware
 import timestamp remain in Profile provenance instead of carrying authoring

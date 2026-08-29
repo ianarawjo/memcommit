@@ -43,6 +43,12 @@ memcommit/adapters/console/
       resolution/               Resolution workbench compositions
       endpoint_setup/           endpoint control and shared setup flows
       history/                  history picker, browser, and presentation
+      context_picker/           Context/direct-item terminal picker
+        model.py                terminal row and receipt contracts
+        projection.py           Context and clipboard projections
+        preview.py              lazy preview cache and navigation
+        rendering.py            formatted row/detail rendering
+        dialog.py               full-screen keys, layout, and lifecycle
 ```
 
 Dependencies run from command adapters and composite components toward narrow
@@ -71,6 +77,16 @@ this rename does not introduce speculative subcategories or change behavior.
 `router.py` deliberately remains at the console root. It chooses among console
 adapter routes and therefore sits beside `entrypoint.py`; it is neither a
 terminal capability nor an operation-specific command implementation.
+
+The complete Context picker is also a terminal component. Core Context
+targeting retains `ContextTreeState`, exact/subtree reach, selection state, and
+typed target values, while the prompt-toolkit application, preview rows,
+clipboard projection, and action receipts are owned by
+`terminal.components.context_picker`. The existing core
+`DirectMemorySelectorControl` still consumes the terminal preview-row contract;
+that dependency is an explicit staged-migration boundary rather than evidence
+that the full picker belongs in core. Its ownership must be resolved before a
+repository-wide core-to-adapter import prohibition is introduced.
 
 `memcommit.bootstrap` is the only module that knows both the plain Summarize
 presenter and the Summarize TUI presenter. The current Typer command asks that

@@ -42,14 +42,16 @@ def test_callable_catalog_covers_every_source_module_and_declaration() -> None:
 def test_catalog_records_private_nested_and_inbound_call_evidence() -> None:
     snapshot = _snapshot()
     by_identifier = {record.identifier: record for record in snapshot.callables}
-    operation_builder = by_identifier["memcommit.application.operations.operation_catalog.catalog:_operation"]
+    operation_builder = by_identifier[
+        "memcommit.application.operations.operation_catalog.catalog:_operation"
+    ]
 
     assert operation_builder.visibility == "private"
     assert operation_builder.export_status == "not-exported"
     assert len(operation_builder.inbound_references) == len(OPERATION_HELP_BY_NAME)
-    assert {
-        reference.caller for reference in operation_builder.inbound_references
-    } == {"memcommit.application.operations.operation_catalog.catalog:<module>"}
+    assert {reference.caller for reference in operation_builder.inbound_references} == {
+        "memcommit.application.operations.operation_catalog.catalog:<module>"
+    }
     assert any(record.visibility == "local" for record in snapshot.callables)
 
 
@@ -97,9 +99,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         )
         assert not route.tui_modules
         assert route.public_methods == (public_method,)
-        assert route.agent_modules == (
-            "memcommit.adapters.agent.memory_transfer",
-        )
+        assert route.agent_modules == ("memcommit.adapters.agent.memory_transfer",)
         assert route.curated_state == "CLOSED"
     assert by_operation["query"].curated_state == "CLOSED"
     assert by_operation["resolve"].curated_state == "CLOSED"
@@ -154,11 +154,11 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["translate"].application_modules
     )
     assert (
-        "memcommit.application.operations.translate.catalog_application"
+        "memcommit.application.operations.translate.exchange_translations"
         in by_operation["translate"].application_modules
     )
     assert (
-        "memcommit.application.operations.translate.materialization"
+        "memcommit.application.operations.translate.create_translated_context"
         in by_operation["translate"].application_modules
     )
     assert (
@@ -217,11 +217,17 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
 def test_curated_classification_covers_all_operations_conservatively() -> None:
     snapshot = _snapshot()
     states = {
-        state: {record.operation for record in snapshot.operations if record.curated_state == state}
+        state: {
+            record.operation
+            for record in snapshot.operations
+            if record.curated_state == state
+        }
         for state in {record.curated_state for record in snapshot.operations}
     }
 
-    classified = [operation for operations in states.values() for operation in operations]
+    classified = [
+        operation for operations in states.values() for operation in operations
+    ]
 
     # The authored classification registry owns route states and their totals.
     # This consumer checks coverage and representative evidence without copying
@@ -230,9 +236,7 @@ def test_curated_classification_covers_all_operations_conservatively() -> None:
     assert len(classified) == len(set(classified))
     assert {"embed", "forget", "reference"} <= states["CLOSED"]
     assert "update" in states["MIXED"]
-    assert {"branch", "chunk", "clear", "contexts", "undo", "redo"} <= states[
-        "CLOSED"
-    ]
+    assert {"branch", "chunk", "clear", "contexts", "undo", "redo"} <= states["CLOSED"]
     assert "translate" in states["CLOSED"]
     assert "update" in states["MIXED"]
 

@@ -28,7 +28,7 @@ from memcommit.adapters.console.commands.sever.sessions import (
 from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
 from memcommit.core.context_targeting.operands import choose_endpoint_operand
 from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.core.context_targeting.tui.picker import context_memory_rows
+from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
 from memcommit.adapters.console.commands.sever.setup import (
     choose_sever_setup,
 )

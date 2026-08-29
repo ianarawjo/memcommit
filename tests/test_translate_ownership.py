@@ -1,4 +1,4 @@
-"""Ownership and compatibility paths for Translate."""
+"""Ownership boundaries for Translate."""
 
 from __future__ import annotations
 
@@ -37,11 +37,14 @@ def test_production_translate_consumers_use_operation_owners() -> None:
         "src/memcommit/adapters/console/commands/translate/command.py",
         "src/memcommit/study_scenarios/legacy/bundle.py",
         "src/memcommit/application/operations/query/granted_source.py",
-        "src/memcommit/application/operations/translate/view.py",
-        "src/memcommit/application/operations/translate/view_store.py",
+        "src/memcommit/core/memory_translation",
+        "src/memcommit/persistence/store/translation_catalog",
         "src/memcommit/application/operations/translate/application.py",
-        "src/memcommit/application/operations/translate/catalog_application.py",
-        "src/memcommit/application/operations/translate/materialization.py",
+        "src/memcommit/application/operations/translate/provider_catalog.py",
+        "src/memcommit/application/operations/translate/curate_translations.py",
+        "src/memcommit/application/operations/translate/exchange_translations.py",
+        "src/memcommit/application/operations/translate/add_translations_to_current_context.py",
+        "src/memcommit/application/operations/translate/create_translated_context.py",
         "src/memcommit/application/capabilities/ops.py",
         "src/memcommit/application/operations/profile/model",
         "src/memcommit/application/capabilities/retained_history/memory_history_reconstruction/memory_history_event_derivation.py",
@@ -65,41 +68,41 @@ def test_production_translate_consumers_use_operation_owners() -> None:
             assert not [legacy for legacy in legacy_imports if legacy in source]
 
 
-def test_translate_owners_keep_the_existing_dependency_direction() -> None:
+def test_translate_owners_keep_the_layer_dependency_direction() -> None:
     runtime_source = (
         REPOSITORY_ROOT / "src/memcommit/application/operations/translate/runtime.py"
     ).read_text(encoding="utf-8")
-    view_source = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/translate/view.py"
+    catalog_source = (
+        REPOSITORY_ROOT / "src/memcommit/core/memory_translation/catalog.py"
     ).read_text(encoding="utf-8")
-    store_source = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/translate/view_store.py"
+    repository_source = (
+        REPOSITORY_ROOT
+        / "src/memcommit/persistence/store/translation_catalog/repository.py"
     ).read_text(encoding="utf-8")
     application_source = (
         REPOSITORY_ROOT
         / "src/memcommit/application/operations/translate/application.py"
     ).read_text(encoding="utf-8")
-    catalog_application_source = (
+    provider_catalog_source = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/translate/catalog_application.py"
+        / "src/memcommit/application/operations/translate/provider_catalog.py"
     ).read_text(encoding="utf-8")
-    materialization_source = (
+    context_action_source = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/translate/materialization.py"
+        / "src/memcommit/application/operations/translate/create_translated_context.py"
     ).read_text(encoding="utf-8")
 
-    assert "memcommit.application.operations.translate.view" not in runtime_source
-    assert (
-        "from memcommit.application.operations.translate.runtime import" in view_source
-    )
-    assert "from memcommit.application.operations.translate.view import" in store_source
+    assert "memcommit.application" not in catalog_source
+    assert "memcommit.persistence" not in catalog_source
+    assert "memcommit.application" not in repository_source
+    assert "memcommit.core.memory_translation" in repository_source
     operation_sources = (
         runtime_source
-        + view_source
-        + store_source
+        + catalog_source
+        + repository_source
         + application_source
-        + catalog_application_source
-        + materialization_source
+        + provider_catalog_source
+        + context_action_source
     )
     assert "memcommit.adapters.console.commands" not in operation_sources
     assert "memcommit.adapters.interfaces" not in operation_sources
@@ -119,9 +122,16 @@ def test_translate_command_is_only_an_io_and_presentation_adapter() -> None:
     }
 
     assert "memcommit.application.operations.translate.application" in imports
-    assert "memcommit.application.operations.translate.materialization" in imports
+    assert (
+        "memcommit.application.operations.translate.create_translated_context"
+        in imports
+    )
+    assert (
+        "memcommit.application.operations.translate.add_translations_to_current_context"
+        in imports
+    )
     assert "memcommit.core.context_targeting.loading" not in imports
-    assert "memcommit.application.operations.translate.view_store" not in imports
+    assert "memcommit.persistence.store.translation_catalog" not in imports
     assert "memcommit.persistence.store" in imports
     assert "import memcommit.application.capabilities.ops" not in source
     assert "AutoCheckpoint" not in source

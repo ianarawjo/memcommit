@@ -8,7 +8,7 @@ from typing import Literal
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.core.context_targeting.tui.picker import (
+from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemoryRow,
     ContextMemorySelection,
     choose_context,

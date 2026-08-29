@@ -7,7 +7,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
-from memcommit.core.context_targeting.tui.picker import (
+from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemorySelection,
     ContextPickerActionReceipt,
     choose_context,

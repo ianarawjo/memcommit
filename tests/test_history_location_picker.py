@@ -6,8 +6,8 @@ import memcommit.adapters.console.terminal.components.checkpoint_location as loc
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.core.context_targeting.tui.picker import ContextSubtreeSelection
-from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.adapters.console.terminal.components.context_picker import ContextSubtreeSelection
+from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
 
 
 def test_location_picker_keeps_real_catalog_parents_as_unavailable_tree_rows(
@@ -60,7 +60,7 @@ def test_enter_selects_all_changed_descendants_from_namespace_parent():
             require_tty=False,
         )
 
-    assert selected == ContextSubtreeSelection("task-1/campus-wiki")
+    assert selected == ContextSubtreeSelection(name="task-1/campus-wiki")
 
 
 def test_enter_on_nested_checkpoint_returns_its_exact_location():

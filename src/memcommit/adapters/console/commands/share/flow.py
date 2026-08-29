@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Sequence
 
-from memcommit.core.context_targeting.tui.picker import choose_context
+from memcommit.adapters.console.terminal.components.context_picker import choose_context
 from memcommit.application.operations.share.model import (
     ShareError,
     SharePreview,

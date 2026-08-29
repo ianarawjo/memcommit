@@ -22,22 +22,32 @@ thin public facade and four responsibility directories:
 - `context_selection/` owns typed candidate rows plus pure ordering, cursor,
   and selection rules. Its choices remain process-local hints and do not create,
   load, bind, or mutate a Context.
-- `terminal_interaction/` owns the prompt-toolkit Application, widget and key
-  grammar, Ground-specific pane activity projection, and focus-ring movement
-  while continuing to reuse shared terminal components.
+- `terminal_interaction/` owns Ground-specific pane activity and focus-ring
+  mechanics. Its former 2,236-line `application.py` is now the compatibility
+  package `application/`, whose live interaction is split into four named
+  owners:
+  - `workbench_view.py` builds and synchronizes panes, render projections,
+    focus, and local list/table cursors.
+  - `turn_controller.py` owns dialogue, direct-edit, Context-plan, exact
+    approval, refinement, and exit transitions.
+  - `keybindings.py` declares the prompt-toolkit conditions and maps terminal
+    keys to the narrow view and controller operations.
+  - `grounding_coordinator.py` owns the blocking interpreter bridge, thinking
+    animation, response freezing, and publication of a completed draft turn.
 
-`entry.py` is a thin stable import facade. `terminal_interaction/application.py`
-composes the other owners with the existing prompt-toolkit interaction grammar.
-The first extraction leaves tightly coupled widget construction and key
-callbacks together rather than introducing a large dependency object solely to
-reduce one implementation file's line count.
+`entry.py` remains the thin stable runtime facade. The nested application's
+`entrypoint.py` constructs one shared `GroundShellState`, wires the four owners,
+and runs prompt-toolkit. The historical
+`runtime.terminal_interaction.application` import therefore still resolves,
+but it no longer makes rendering, terminal grammar, application transitions,
+and background provider work share one change surface.
 
 ## Invariants
 
 - Existing imports of `ground.shell.runtime` and `run_ground_shell` continue to
   resolve to identical public objects.
 - Existing patchable prompt-toolkit test seams remain available from the
-  historical runtime facade.
+  historical runtime facade and are resolved when the workbench is built.
 - A provider response cannot directly author the approved argv; proposal
   freezing and exact-command construction remain in `proposal.py`.
 - A directly edited Goal must still be preserved exactly by the provider turn.
@@ -50,13 +60,14 @@ reduce one implementation file's line count.
 
 ## Alternatives and limitations
 
-Splitting every pane, editor, key group, and controller into its own package
-would name more mechanics but would obscure the initial four conceptual
-responsibilities. Keeping one runtime module would minimize movement but retain
-the closure-owned state and mixed change surface. The selected first step makes
-the shared state and pure boundaries explicit while retaining the established
-interaction grammar. Later extraction from `entry.py` should follow a proven
-responsibility or reusable terminal component, not a file-size target alone.
+Splitting every pane, editor, or key group into its own file would name more
+mechanics but obscure the four lifecycle responsibilities. Keeping the live
+application in one file would minimize movement but retain the mixed change
+surface. The selected split deliberately permits dependency injection through
+the small `entrypoint.py` composition root; it does not introduce a generic
+framework or claim that blank and named Ground share one semantic controller.
+Further extraction should follow a proven reusable terminal component rather
+than a file-size target alone.
 
 This record documents package ownership only. It does not classify the Ground
 operation route or replace the authored operation evidence ledger.

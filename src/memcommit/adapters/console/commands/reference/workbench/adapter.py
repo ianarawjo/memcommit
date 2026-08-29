@@ -6,7 +6,7 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
 from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
-from memcommit.core.context_targeting.tui.picker import context_memory_rows
+from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
 from memcommit.application.operations.reference.application import (
     FrozenContextReferencePlan,
     FrozenReferencePlan,

@@ -1,6 +1,6 @@
 # Interactive Context picker
 
-Last reviewed: 2026-08-20.
+Last reviewed: 2026-08-28.
 
 ## Motivation
 
@@ -199,13 +199,13 @@ The namespace tree is also available from
 `memcommit.core.context_targeting.tui.tree` as the terminal-independent
 `ContextTree` plus `ContextTreeState` component. It owns the frozen tree,
 cursor, visible-row projection, depth-wise expansion and collapse, and
-expand-all restore behavior. Optional `ContextMemoryRow` projections—the
-retained compatibility type name—add read-only direct-item leaves without
-changing the Context cursor. The component performs
-no terminal I/O and assigns no operational role to the selected name.
-`choose_context()` in `memcommit.core.context_targeting.tui.picker` is the
-full-screen, single-selection wrapper over
-that state and can also run in read-only browse mode. Larger TUIs may embed one or more
+expand-all restore behavior. Terminal `ContextMemoryRow` projections add
+read-only direct-item leaves without changing the Context cursor. The core
+tree component performs no terminal I/O and assigns no operational role to the
+selected name. `choose_context()` in
+`memcommit.adapters.console.terminal.components.context_picker` is the
+full-screen, single-selection wrapper over that state and can also run in
+read-only browse mode. Larger TUIs may embed one or more
 independent states and retain their own role, scope, validation, and receipt
 contracts. Sever setup uses one state for Source and one for Criteria while
 keeping descendant scope and the require-new Output name Sever-owned.
@@ -241,7 +241,7 @@ memcommit.adapters.console.entrypoint
     ├── MemoryStore.current_context_name()       # one command-start snapshot
     ├── when NAME is omitted
     │   ├── MemoryStore.list_context_names()
-    │   └── context_targeting.tui.picker.choose_context()
+    │   └── terminal.components.context_picker.choose_context()
     │                                           # returns a name only
     ├── when NAME is supplied
     │   └── bypass the catalog UI and use the operand directly

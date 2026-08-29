@@ -7,7 +7,7 @@ import shlex
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
 from memcommit.application.operations.edit.application import EditRequest, FrozenEditPlan
 from memcommit.adapters.console.terminal.components.exact_command_review import (
     format_exact_command,

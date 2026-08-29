@@ -5,7 +5,7 @@ from __future__ import annotations
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.core.context_targeting.tui.picker import context_memory_rows
+from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
 from memcommit.application.operations.embed.application import (
     FrozenEmbedPlan,
     FrozenMemoryEmbedPlan,

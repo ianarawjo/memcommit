@@ -32,7 +32,7 @@ from memcommit.adapters.console.terminal.components.progress import (
     CommandProgress,
     render_progress_line,
 )
-from memcommit.core.context_targeting.tui.picker import (
+from memcommit.adapters.console.terminal.components.context_picker import (
     CONTEXT_PICKER_STYLE,
     ContextMemoryRow,
     ContextPickerNavigationUnit,

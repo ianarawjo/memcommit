@@ -2,18 +2,28 @@
 
 ## Implementation ownership
 
-`memcommit.application.operations.translate` is the canonical implementation owner for
-Translate. Its `application` module owns typed request validation, Source
-targeting, saved-view reuse/refresh, provider-call timing, curation, and mode
-orchestration; `catalog_application` owns import/export and catalog mutation
-contracts; `materialization` owns both checkpointed Apply transactions.
-`runtime`, `view`, and `view_store` retain semantic planning, strict projection
-models, and deterministic sidecar CAS respectively. Production consumers
-import those narrow operation modules directly. The former
-`memcommit.translate`, `memcommit.translation_view`, and
-`memcommit.translation_view_store` paths remain behavior-free module-identity
-aliases so existing imports, monkeypatch targets, and serialized globals
-continue to resolve to the same module objects regardless of import order.
+Translate follows the repository's layer boundary instead of treating one
+operation package as the owner of every concept. The command-independent
+`MemoryTranslationCatalog`, its entries, provider/curated variants, and their
+invariants belong to `memcommit.core.memory_translation`. They describe what a
+same-UID translation catalog means without knowing how a provider, file, or
+terminal works.
+
+`memcommit.application.operations.translate` owns the Translate use cases.
+`application` validates and orchestrates typed requests;
+`provider_catalog` converts provider plans to and from the core catalog;
+`curate_translations` owns edit, verify, reset, and catalog-save workflows;
+`exchange_translations` owns import/export documents; and
+`add_translations_to_current_context` plus `create_translated_context` own the
+two explicit Context write actions. `runtime` retains provider planning and
+pure in-memory Context transformations.
+
+`memcommit.persistence.store.translation_catalog` owns only the durable JSON
+record format, path/key convention, filesystem validation, locks, atomic
+publication, source revalidation, and compare-and-swap. The console command
+owns argv, terminal/file I/O, progress, editor launch, Save Location review,
+and rendering. Persistence does not import Translate application code, and
+Core imports neither Application nor Persistence.
 
 The reviewed route is now `CLOSED`. The CLI owns only argv, terminal/file I/O,
 progress, editor launch, Save Location review, and rendering adapters; every
@@ -22,9 +32,9 @@ semantic and durable decision enters the typed operation boundary recorded in
 
 ## Status and current decision
 
-Bare `mem translate` is a persisted, read-oriented language view. It translates
+Bare `mem translate` is a persisted, read-oriented language catalog. It translates
 the selected directly owned `Memory` records, saves the validated result as a
-digest-bound same-UID sidecar catalog, renders that representation, and exits:
+digest-bound same-UID catalog, renders that representation, and exits:
 
 ```bash
 mem translate
@@ -39,7 +49,7 @@ mem translate --to English --refresh
 Context/direct-Memory grammar: a Context locator selects that direct frame, a
 bare public UUID-shaped UID or prefix finds one unique ordinary-local direct
 owner, and `CONTEXT:UID` states the owner explicitly. A Memory target narrows
-the view to one directly owned Memory. An exact stored projection is reused without
+the catalog operation to one directly owned Memory. An exact stored catalog is reused without
 contacting the provider. `--refresh` deliberately obtains and publishes a new
 provider translation even when the existing representation is an exact match.
 It never overwrites a manually edited or imported representation.
@@ -73,7 +83,7 @@ name. The translated strings are representations of existing Memories, not
 new Memory occurrences.
 
 An explicit noncurrent Context or uniquely owned Memory is valid for this
-read-oriented saved view and does not switch current. Materialization remains
+read-oriented saved catalog and does not switch current. Context Apply remains
 more restrictive: `--save-as` and `--in-place` require the selected Source to
 be the command-start current Context and reject a noncurrent target before a
 provider is connected. That preserves the existing source/current
@@ -82,8 +92,9 @@ mutation through positional auto-typing.
 
 ## Provider and curated layers
 
-There is one schema-v2 catalog for each exact `(Context UID, semantic target)`
-pair and one entry for each source Memory UID. An entry may retain two layers:
+There is one authoritative catalog for each exact
+`(Context UID, semantic target)` pair and one entry for each source Memory UID.
+An entry may retain two layers:
 
 - a provider layer bound to the complete direct Context digest, source text
   digest, provider response digest, and generation time; and
@@ -114,7 +125,7 @@ means the supplied pair was reviewed by the importing workflow; existing
 fixture-level checkboxes about source text do not automatically imply
 cross-language equivalence.
 
-Materialization remains explicit:
+Context Apply remains explicit:
 
 ```bash
 mem translate --to English --save-as task-123-en
@@ -148,10 +159,10 @@ specification semantically, but only translation-related constraints are in
 scope. A request for an unrelated action or for weakening the output contract
 must be ignored.
 
-Interpretation is semantic; persisted identity is exact. View lookup uses the
+Interpretation is semantic; persisted identity is exact. Catalog lookup uses the
 complete trimmed target string, case-sensitively, together with its source and
 scope bindings. Thus `English`, `english`, and `plain English` intentionally
-occupy different saved-view slots even when a provider might produce similar
+occupy different catalog slots even when a provider might produce similar
 text. Fuzzy reuse was rejected because two superficially similar descriptions
 can differ materially in dialect, register, audience, or terminology. Reusing
 one for the other would silently discard user intent and make cache behavior
@@ -166,15 +177,16 @@ and unquoted values registry-bound would therefore be inconsistent across
 shells and direct API calls. If a future strict registered-tag mode is needed,
 it should use an explicit option such as `--to-tag`, not quote syntax.
 
-The serialized field remains named `target_language` for translation-plan,
-sidecar, and checkpoint compatibility. Its contract is the semantic target
+The serialized field remains named `target_language` in translation plans,
+catalog records, and checkpoints. Its contract is the semantic target
 described above, not a claim that the value is a canonical language
-identifier. `translate-v1` remains the provider-only scoped-view contract;
-`translate-v2` is the one-catalog provider/curated contract. A later material
-change to prompt meaning or validation must use a new contract version rather
-than silently reusing incompatible results.
+identifier. `translate-v2` is currently the sole supported provider/curated
+catalog contract. The pre-release provider-only scoped-view implementation and
+its migration path were removed rather than retained as a second model. A
+later material change to prompt meaning or validation must use a new contract
+version rather than silently reusing incompatible results.
 
-## Persisted view contract
+## Persisted catalog contract
 
 For a direct source frame:
 
@@ -185,19 +197,19 @@ source
 └── Memory B
 ```
 
-a whole-Context English view contains translated text for A and B, anchored to
+a whole-Context English catalog contains translated text for A and B, anchored to
 their existing UIDs. P remains a visible opaque pointer record. Rendering the
 view does not make a second Context:
 
 ```text
-source · English view
+source · English catalog
 ├── Memory A UID: translated text for A
 ├── unchanged MemoryRef P
 └── Memory B UID: translated text for B
 ```
 
-The sidecar is not a `Context`, `Memory`, checkpoint, or trace event. It has no
-UID of its own and contains no translated-result UIDs. The v2 catalog records:
+The catalog is not a `Context`, `Memory`, checkpoint, or trace event. It has no
+UID of its own and contains no translated-result UIDs. Its durable record contains:
 
 - the source Context's existing UID and name;
 - the exact validated semantic target and translation-contract version;
@@ -206,26 +218,26 @@ UID of its own and contains no translated-result UIDs. The v2 catalog records:
 - optional provider and curated variants with their separate source,
   evidence, text, time, origin, and review bindings.
 
-Whole-frame and selected calls now merge into this one catalog rather than
-occupying competing scope files. Existing v1 whole/selected files remain
-readable. When no v2 catalog exists, valid v1 entries are combined in memory,
-using the newest creation time per source UID. Equal-time conflicting legacy
-entries fail closed. Read-only reuse does not rewrite the legacy files; the
-first later v2 mutation publishes the consolidated catalog with an absent-slot
-compare-and-swap.
+Whole-frame and selected calls merge into this one catalog rather than
+occupying competing scope files. Only the authoritative catalog schema is
+readable; the removed pre-release scoped-view files are neither loaded nor
+migrated. The physical store directory is still named `translation-views` so
+existing study fixture layout need not change in this refactor. That directory
+spelling is a persistence detail and a separate future storage-layout decision,
+not a second domain concept.
 
-An integrity digest over the sidecar may be used for validation and
+An integrity digest over the catalog record may be used for validation and
 compare-and-swap publication. That checksum is not an identity and must not be
-surfaced as a Memory or projection UID.
+surfaced as a Memory or catalog UID.
 
 The read-only planning path also leaves the translation operation UID unset.
 An operation UID is allocated only when `--save-as` or `--in-place` crosses
-the materialization boundary and a checkpointed graph change can occur.
+the Context Apply boundary and a checkpointed graph change can occur.
 
 Consequently ordinary identity-aware commands do not discover extra objects:
 `mem contexts` still lists one source Context, and `mem ls`, `mem find`,
 `mem merge`, and `mem trace` do not see a translated Memory until the person
-explicitly materializes it.
+explicitly applies it to a Context.
 
 ## Reuse, refresh, and staleness
 
@@ -246,13 +258,13 @@ fallback without silently deleting or relabeling stale curated work for an
 edited source.
 
 Provider work is performed outside long-lived Context locks. Before
-publication, the command reacquires the cooperative source and projection
+publication, the command reacquires the cooperative source and catalog
 locks and revalidates both the exact source identity/digest and the previously
 observed catalog checksum or absence. If the source changed during the
-provider call, the candidate is discarded and the earlier sidecar is
+provider call, the candidate is discarded and the earlier catalog is
 preserved. If another translation call published first, an older in-flight
 call cannot overwrite it. A complete catalog is published atomically, so
-readers never observe a partially written translation.
+readers never observe a partially written catalog.
 
 Manual and imported changes use the same catalog-level compare-and-swap but
 revalidate only the exact source UIDs and content digests edited in that
@@ -260,10 +272,10 @@ operation. This permits repair of one current entry even when an unrelated
 preserved entry is stale, without weakening the edited source binding. Every
 catalog entry must still have a directly owned source UID at the final locked
 write: an unrelated concurrent source removal rejects the save so stale
-caller state cannot resurrect its orphaned sidecar.
+caller state cannot resurrect its orphaned catalog entry.
 
 Provider failure, invalid output, an empty candidate set, or failed
-revalidation leaves the source and any earlier sidecar unchanged. Because the
+revalidation leaves the source and any earlier catalog unchanged. Because the
 default command has no Context application step, it needs no apply
 confirmation and never changes global current-Context state.
 
@@ -275,7 +287,7 @@ Only directly owned `Memory` records are translation candidates.
 - `QueryContextRef` source content remains opaque and is never opened.
 - Embedded Contexts are not traversed.
 - Pointer records can be represented unchanged in the rendered direct-frame
-  view, but their targets do not become projection payload.
+  catalog, but their targets do not become provider payload.
 - Selecting a pointer or embedded Context as the positional selector is an
   error.
 
@@ -284,8 +296,8 @@ recursive Context graph. A `MemoryRef` can still resolve to content in a
 different language because it remains a live pointer to its existing source,
 not because translate opened or persisted that target.
 
-The base `Memory` schema remains `uid + content`. Language and view data stay
-in the sidecar rather than adding operation-specific fields to every generic
+The base `Memory` schema remains `uid + content`. Language and catalog data stay
+in the catalog record rather than adding operation-specific fields to every generic
 Memory or treating different text as the same mutable Memory occurrence.
 
 ## Provider contract
@@ -321,7 +333,7 @@ validation rejects duplicate JSON keys, extra fields, missing, duplicate, or
 unknown candidates, blank or non-string content, oversized input/output, and
 terminal control characters. Provider order is ignored; results are rebound
 to sources in canonical source order. Any validation failure occurs before a
-sidecar or materialized result is published.
+catalog or Context result is published.
 
 Each provider payload uses the shared 1,000,000-character effective provider
 capacity and a 300-second Codex timeout. A fitting selection retains the
@@ -331,16 +343,16 @@ Memories, every global candidate alias is exposed exactly once, every batch is
 fully validated, and no plan is returned after a partial failure. One oversized
 Memory is never truncated. The final proposals retain canonical source order.
 
-## Explicit materialization and provenance
+## Explicit Context Apply and provenance
 
 `--save-as CONTEXT` is the boundary at which a read-oriented representation
 becomes a derived Memory graph. It uses an exact validated translation
-projection, creates a destination with the supplied name, replaces each
+catalog selection, creates a destination with the supplied name, replaces each
 selected source slot with a fresh-UID translated `Memory`, writes durable
 baseline and translation checkpoints, and switches to the destination only
 after the normal source and current-Context revalidation. There is no
-automatic language-suffix destination; a person must opt into both
-materialization and its name.
+automatic language-suffix destination; a person must opt into both Context
+creation and its name.
 
 Immediately after the translation preview and before Apply, interactive
 `--save-as` renders the shared `SAVE LOCATION` card. `E` opens a one-line
@@ -356,13 +368,13 @@ The current checkpoint provenance schemas retain one response digest field.
 For a staged provider-only translation this is the digest of the canonical
 ordered tuple of raw batch responses; the batch count and individual response
 digests are not yet durable metadata. They also do not describe manual/import
-evidence, reviewer identity, or a materialized mixture assembled from unrelated
+evidence, reviewer identity, or an applied mixture assembled from unrelated
 provider and curated batches. Therefore
 `--save-as` and `--in-place` currently fail closed for curated or mixed
 catalogs and for imported provider catalogs whose multiple responses were not
-produced by this planner's one frozen exactly-once execution. Those
-representations remain useful same-UID views. Materializing them later requires
-a new checkpoint schema rather than fabricating provider evidence.
+produced by this planner's one frozen exactly-once execution. Those catalogs
+remain useful same-UID representations. Applying them to a Context later
+requires a new checkpoint schema rather than fabricating provider evidence.
 
 A selector produces a partially translated derived Context: only the selected
 slot is replaced, while other directly owned Memories remain in their source
@@ -403,7 +415,7 @@ A valid mapping renders `TRANSLATED / RECORDED`. Invalid metadata falls back
 to snapshot reconstruction with a warning rather than suppressing ordinary
 created, removed, edited, or reordered events.
 
-Before contacting the provider or reusing a projection for `--save-as`, the
+Before contacting the provider or reusing a catalog for `--save-as`, the
 destination name and current storage availability are checked. Creation
 rechecks both absence and the source name/UID/digest while holding the source
 and destination cooperative write locks, so neither a concurrent owner nor a
@@ -412,7 +424,7 @@ no destination. The baseline save and its checkpoint are one atomic store
 operation. The final destination save uses the baseline digest as an
 optimistic-concurrency compare-and-swap.
 
-The source is reloaded and compared with the exact projection before
+The source is reloaded and compared with the exact catalog-derived plan before
 derivation and again before switching. Any source-frame or current-Context
 change prevents the final switch and leaves the source untouched. Once a
 baseline Context has been published, it is not automatically deleted during
@@ -420,16 +432,16 @@ error cleanup: another process could already have switched to, embedded, or
 referenced it. A later failure instead preserves the visible baseline or
 completed destination for manual inspection.
 
-`--in-place` retains the version-1 behavior for an intentionally bilingual
+`--in-place` retains the historical behavior for an intentionally bilingual
 Context: it inserts a fresh-UID translated sibling immediately after every
-selected source and writes its translation checkpoint. It is not a sidecar
-view and cannot be combined with `--save-as`.
+selected source and writes its translation checkpoint. It does not merely
+update the catalog and cannot be combined with `--save-as`.
 
 ## Why this is not `impact`
 
 An impact artifact answers what a proposed state-changing operation would do
 and exists to support review before a separate application decision. The
-translated language view is itself the requested read result. Persisting it
+translated catalog rendering is itself the requested read result. Persisting it
 makes repeated reading deterministic and avoids another provider call; it
 does not imply a pending Context mutation.
 
@@ -444,17 +456,17 @@ translated text must become independently editable or addressable.
 ## Privacy, deletion, and lifecycle
 
 Ordinary selected Memory content is sent to OpenAI and consumes the user's
-ChatGPT Codex allowance when no exact view is reused or when `--refresh` is
+ChatGPT Codex allowance when no exact catalog is reused or when `--refresh` is
 requested. Query-only source material is neither loaded nor sent. The
 translated text is persisted locally and should be treated with the same
 sensitivity and retention expectations as its source content, not as an
 ephemeral terminal preview.
 
-Sidecars are owned by the source Context lifecycle. Cooperative source
-Context deletion removes its translation projections while holding the same
+Translation catalogs are owned by the source Context lifecycle. Cooperative source
+Context deletion removes its catalogs while holding the same
 lifecycle boundary, so translated content does not survive as an
 undiscoverable orphan. A stale replacement removes the superseded payload
-only after the new projection is durable. Failure before atomic publication
+only after the new catalog is durable. Failure before atomic publication
 retains the prior payload. A provider refresh does not remove a curated
 payload; an explicit `--reset` removes only the selected curated layer.
 
@@ -465,10 +477,10 @@ command selects the concealed source language explicitly inside the query
 boundary; ordinary translate, list, show, find, and export operations still
 cannot read it.
 
-Sidecars are not copied merely because a Context is embedded or referenced,
+Catalogs are not copied merely because a Context is embedded or referenced,
 and deleting one must not touch the source Memories or a separately
-materialized Context. A materialized destination owns its fresh Memories and
-checkpoint evidence independently; later sidecar refresh or deletion cannot
+created Context. A destination owns its fresh Memories and checkpoint evidence
+independently; later catalog refresh or deletion cannot
 rewrite that history.
 
 This research provider is not a production security boundary; use only study
@@ -480,7 +492,7 @@ producing it; a read-only sandbox is not confidentiality isolation. A
 production implementation should use a tool-less translation endpoint with
 explicit access and retention policy.
 
-## Implementation history and retained compatibility
+## Implementation history and pre-release cleanup
 
 The first implementation inserted translated siblings into the current
 Context. A live 54-Memory Korean-to-English pilot proved the provider,
@@ -491,18 +503,15 @@ derived Context the default. That avoided the bilingual list, established the
 version-2 baseline/provenance model, and preserved the source, but still
 created durable identity and changed navigation for a read-oriented request.
 
-The persisted UID-less view became the default because it keeps the useful
+The persisted UID-less catalog became the default because it keeps the useful
 provider result and exact source binding without enlarging the Memory graph.
-The v2 catalog adds person-controlled text and review state without changing
-that identity decision. Legacy v1 scoped projections remain read-compatible
-and are migrated lazily only when a v2 write is requested. The first v2 write
-recomposes and hashes the legacy records while holding the same Context writer
-lock used by v1 publication; a newer legacy write therefore fails the
-migration CAS instead of being silently shadowed.
-After a v2 catalog exists, legacy v1 publication is rejected under the same
-Context lock; otherwise a late valid-looking v1 write would succeed but remain
-permanently hidden behind the authoritative catalog.
-The two earlier materialization behaviors remain explicit as `--in-place` and
+The current catalog adds person-controlled text and review state without changing
+that identity decision. Because the prototype has not been released, the
+earlier provider-only scoped-view model, its files, compatibility aliases, and
+lazy migration/CAS branches were removed. Supporting two models would obscure
+the actual domain concept without protecting deployed data.
+
+The two earlier Context write behaviors remain explicit as `--in-place` and
 `--save-as`; their checkpoint schemas and trace validation remain readable.
 The live pilot establishes end-to-end execution, not automated translation
 quality. Human assessment of terminology, dialect, and semantic equivalence
@@ -518,15 +527,15 @@ remains separate.
 - One saved catalog covers one exact semantic target for one direct Context;
   it is a same-UID representation registry, not a multilingual base-Memory
   schema.
-- Curated or mixed catalogs are intentionally not materializable until their
+- Curated or mixed catalogs cannot yet be applied to a Context until their
   checkpoint provenance contract is defined. Verifying provider text creates
   a curated layer, so its historical `PROVIDER` origin does not make it an
-  untouched materializable provider batch.
-- A partially translated materialized Context intentionally contains more
+  untouched applicable provider batch.
+- A partially translated derived Context intentionally contains more
   than one language.
-- `mem merge` remains a structural fresh-UID union. Merging a materialized
-  translated Context into its source deliberately creates a bilingual
-  Context; sidecar views do not participate.
+- `mem merge` remains a structural fresh-UID union. Merging a translated
+  Context into its source deliberately creates a bilingual
+  Context; same-UID catalogs do not participate.
 - Semantic targets are interpreted by the provider but reused only by their
   exact trimmed, case-sensitive strings. They do not claim language detection,
   fuzzy equivalence, or BCP 47 canonicalization.
@@ -534,6 +543,6 @@ remains separate.
   or interface language for Mem as a whole. That broader multilingual policy
   remains the deferred research TODO in
   [`multilingual-memory-and-explanation-language-design-rationale.md`](multilingual-memory-and-explanation-language-design-rationale.md).
-- Translate's projection publication, Context creation/save, final
+- Translate's catalog publication, Context creation/save, final
   state-switch, and Context deletion paths use cooperative locks. Unsupported
   direct JSON edits do not participate in those guarantees.

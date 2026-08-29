@@ -16,7 +16,9 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 import memcommit.persistence.store as store_module
-from memcommit.application.capabilities.retained_history.command_history import build_command_stacks
+from memcommit.application.capabilities.retained_history.command_history import (
+    build_command_stacks,
+)
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import (
     AutoCheckpoint,
@@ -31,9 +33,11 @@ from memcommit.application.operations.ground.model import (
     create_ground_session,
 )
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.application.operations.translate.provider_catalog import (
+    update_catalog_from_translation_plan,
+)
 from memcommit.application.operations.translate.runtime import plan_translation
-from memcommit.application.operations.translate.view import TranslationCatalog, TranslationView
-from memcommit.application.operations.translate.view_store import (
+from memcommit.persistence.store.translation_catalog import (
     load_translation_catalog,
     save_translation_catalog,
 )
@@ -272,9 +276,7 @@ def test_rename_migrates_ordinary_context_and_memory_refs_by_target_uid(
     resolved_context = resolved.memories[source.uid]
     resolved_memory_ref = resolved.memories[memory_ref.uid]
     assert isinstance(resolved_context, Context)
-    assert [item.content for item in resolved_context.iter_items()] == [
-        "live target"
-    ]
+    assert [item.content for item in resolved_context.iter_items()] == ["live target"]
     assert isinstance(resolved_memory_ref, MemoryRef)
     assert resolved_memory_ref.target is not None
     assert resolved_memory_ref.target.content == "live target"
@@ -358,24 +360,18 @@ def test_renamed_checkpoint_pointers_restore_against_the_new_locator(
         for checkpoint in store.list_checkpoints("observer")
         if checkpoint["uid"] == pointer_checkpoint.uid
     )
-    assert migrated_checkpoint["snapshot"]["memories"][source.uid]["name"] == (
-        "new"
-    )
+    assert migrated_checkpoint["snapshot"]["memories"][source.uid]["name"] == ("new")
     assert migrated_checkpoint["snapshot"]["memories"][memory_ref.uid][
         "target_context"
     ] == {"uid": source.uid, "name": "new"}
     # Free text and command evidence are historical records, not locators.
-    assert migrated_checkpoint["args"]["historical_note"] == (
-        "the old locator was old"
-    )
+    assert migrated_checkpoint["args"]["historical_note"] == ("the old locator was old")
     migrated_remove = next(
         checkpoint
         for checkpoint in store.list_checkpoints("observer")
         if checkpoint["uid"] == removed_checkpoint.uid
     )
-    assert migrated_remove["command_before"]["memories"][source.uid]["name"] == (
-        "new"
-    )
+    assert migrated_remove["command_before"]["memories"][source.uid]["name"] == ("new")
     assert migrated_remove["command_before"]["memories"][memory_ref.uid][
         "target_context"
     ] == {"uid": source.uid, "name": "new"}
@@ -573,13 +569,9 @@ def test_rename_migrates_fresh_ground_frames_without_revising_the_ground(
     assert migrated is not None
     assert migrated.uid == session.uid
     assert migrated.revision == session.revision
-    raw_frame = next(
-        frame for frame in migrated.frames if frame.context_uid == raw.uid
-    )
+    raw_frame = next(frame for frame in migrated.frames if frame.context_uid == raw.uid)
     assert raw_frame.context_name == "new"
-    assert raw_frame.context_digest == context_frame_digest(
-        store.load_direct("new")
-    )
+    assert raw_frame.context_digest == context_frame_digest(store.load_direct("new"))
 
 
 def test_rename_migrates_translation_catalog_context_identity(
@@ -609,13 +601,10 @@ def test_rename_migrates_translation_catalog_context_identity(
         Provider,
         allocate_operation_uid=False,
     )
-    view = TranslationView.from_translation_plan(translation_plan, source)
-    catalog = TranslationCatalog.from_legacy_views(
+    catalog = update_catalog_from_translation_plan(
+        translation_plan,
         source,
-        "English",
-        (view,),
     )
-    assert catalog is not None
     save_translation_catalog(
         store,
         catalog,
@@ -628,4 +617,9 @@ def test_rename_migrates_translation_catalog_context_identity(
     assert migrated is not None
     assert migrated.context_uid == source.uid
     assert migrated.context_name == "new"
-    assert migrated.entries == catalog.entries
+    assert migrated.entries != catalog.entries
+    provider = migrated.entries[0].provider
+    original_provider = catalog.entries[0].provider
+    assert provider is not None
+    assert original_provider is not None
+    assert provider.context_digest != original_provider.context_digest

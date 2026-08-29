@@ -6,7 +6,7 @@ from collections.abc import Callable
 from typing import Literal
 
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.core.context_targeting.tui.picker import (
+from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemoryRow,
     ContextMemorySelection,
     ContextPickerActionReceipt,

@@ -10,7 +10,7 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
 from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
 from memcommit.adapters.console.coordination.command_review import (
     sever as sever_command_review,
 )

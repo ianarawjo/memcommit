@@ -10,31 +10,59 @@ session state, key bindings, layout construction, and application lifecycle.
 
 ## Chosen boundary
 
-`memcommit.adapters.console.terminal.components.resolution.session_shell`
-keeps pure presentation separate from a responsibility-oriented interactive
-runtime:
+`memcommit.adapters.console.terminal.components.resolution.session_shell` keeps
+the interactive entry point separate from a responsibility-oriented
+`presentation` package:
 
-- `presentation.py` derives To Do guidance and renders reports, Viewer detail,
-  Impact, review, and noninteractive snapshots.
+- `presentation.inspection` renders the Workbench list, individual issue
+  Viewer, and noninteractive snapshot.
+- `presentation.reporting` renders whole reports, seeded Compare/Meld reports,
+  Impact, and Memory diffs.
+- `presentation.progression` derives To Do guidance and renders the final
+  review or Apply confirmation.
+- `presentation.formatting` contains only pure text and display-cell formatting
+  shared by more than one presentation responsibility.
 - `controller.py` owns process-local response, destination, review, and status
   state together with validated semantic action construction.
-- `runtime.controls` creates live prompt-toolkit controls and their semantic
-  navigation sections.
-- `runtime.editors` owns response-draft and Save Location editor behavior.
-- `runtime.review_flow` owns Items preview, final-review transitions, and
-  semantic submission handoff.
-- `runtime.keymap` contains responsibility-specific keyboard adapters:
-  `keyboard_hints`, `focus_surfaces`, `navigation_bindings`,
-  `surface_activation`, response and destination bindings, action shortcuts,
-  and layered back navigation.
-- `runtime.layout` constructs the peer-frame prompt-toolkit Application.
-- `runtime.runner` validates configuration, composes the collaborators,
-  delegates the compact shell, and owns the application lifecycle.
+- `runtime.controls` creates the live prompt-toolkit controls and projects the
+  semantic sections those controls render and navigate.
+- `runtime.editors` owns response-draft and Save Location editor behavior,
+  including validation, persistence callbacks, and focus entry.
+- `runtime.review_flow` owns Items preview, review entry and return, final
+  action reconstruction, and submission handoff.
+- `runtime.keymap.bindings` assembles the responsibility-specific binding
+  groups without owning their operation semantics.
+- `runtime.keymap.keyboard_hints` projects the keyboard interactions available
+  from the current Surface, focus, and editing state.
+- `runtime.keymap.focus_surfaces` owns dynamic Surface topology and boundary
+  movement; `navigation_bindings` and `surface_activation` own movement keys
+  and Enter activation respectively.
+- `runtime.keymap.response_bindings`, `destination_bindings`, and
+  `input_focus` adapt writable controls to their existing editor owners, while
+  `action_shortcuts` and `back_navigation` own direct action and retreat keys.
+- `runtime.layout` owns peer-frame stacking, focused-frame styling, and
+  construction of the prompt-toolkit `Application` from prepared controls.
+- `runtime.runner` is the interactive entry point. It validates configuration,
+  composes the collaborators, delegates the compact shell, and owns the final
+  application lifecycle.
 
-The shell and `runtime` package `__init__.py` files preserve the former module
-import path by re-exporting the exact callable implemented by
-`runtime.runner`. Runtime depends on presentation; presentation does not
-depend on runtime or a live prompt-toolkit Application.
+The shell, `presentation`, and `runtime` package `__init__.py` files preserve
+their former import surfaces by re-exporting the same callable and presentation
+objects. In particular, both `session_shell.run_resolution_workbench_shell`
+and `session_shell.runtime.run_resolution_workbench_shell` are the exact object
+implemented by `runtime.runner`; neither facade wraps it. Runtime depends on
+presentation; presentation does not depend on runtime or a live prompt-toolkit
+Application. Reporting may consume the read-only progression projection so the
+Report and To Do panes describe the same next action; progression never imports
+reporting.
+
+The live-shell dependency direction starts at `runtime.runner`, which composes
+the controller and the runtime collaborators. Controls depend on the controller
+and pure presentation projections; editors depend on controls; review flow
+depends on controls and editors; keymap binds those existing behaviors; layout
+only receives prepared controls. The package facade continues to expose the
+runtime entry point rather than exposing these internal collaborators as a
+second public API.
 
 ## Invariants
 
@@ -47,12 +75,16 @@ depend on runtime or a live prompt-toolkit Application.
   console or interface facade remains.
 - There is one implementation of every moved function. The package facade
   re-exports objects rather than wrapping or duplicating their behavior.
-- Keymap modules adapt keys to the controller, editors, controls, and review
-  flow; they do not duplicate editing, review, validation, or Apply meaning.
-- `keyboard_hints` projects only available keyboard guidance. Status-message
-  precedence remains part of the runner's footer composition.
-- Moving state or event binding must not change visible text, focus order,
-  draft durability, validation, decision-free policy, or returned actions.
+- Presentation dependency direction is formatting toward the responsibility
+  modules, with reporting allowed to depend on progression's read-only action
+  projection. Inspection and progression do not depend on reporting.
+- `formatting.py` must not become a generic helper drawer. Navigation,
+  response state, Impact semantics, and Apply policy remain with their owning
+  responsibility even when they use common text-layout functions.
+- Moving state or composition must not change visible text, focus order, draft
+  durability, validation, decision-free policy, or returned actions. The
+  controller never calls a provider or applies a mutation; it only validates
+  and returns the same typed `ResolutionWorkbenchAction` boundary.
 - `compact_shell.py` remains a sibling implementation and is still entered
   only through the existing runtime decision.
 
@@ -63,11 +95,25 @@ preserve the same behavior but retain two physical concepts for one public
 surface. Replacing the module with a package gives the public concept one
 location without forcing caller migration.
 
-Keeping mutable state, controls, editors, review transitions, key bindings, and
-layout in one runtime closure was rejected because prompt-toolkit mechanics
-appeared to own review and action policy. Splitting by individual key was also
-rejected: each keymap module instead owns one coherent interaction
-responsibility. A frozen binding-state value shares existing owners between
-those adapters without creating a second semantic state machine. Private
-rendering helpers remain re-exported because current shell collaborators and
-tests import them; narrowing that surface is a separate migration.
+Splitting every renderer or helper into its own file was rejected because it
+would replace one large module with a navigation burden while obscuring the
+three user-facing responsibilities: inspecting one item, reading the complete
+report, and progressing toward a reviewed action. The remaining large render
+functions may be decomposed within their owning module later, but this change
+intentionally preserves their behavior before changing their internals.
+
+Keeping every mutable cell, semantic projection, editor, review transition,
+key binding, and layout decision inside one runtime closure was rejected
+because it made prompt-toolkit mechanics appear to own review and action
+policy. Replacing the shell wholesale with a new state machine was also
+rejected: the controller and runtime collaborators retain the established event
+ordering while giving each responsibility one physical owner. The keymap is a
+package because focus topology, navigation, activation, writable inputs,
+shortcuts, retreat behavior, and keyboard guidance change for different
+reasons. It is not split by individual key: each module owns one coherent
+interaction responsibility and delegates editing, review, and action meaning
+to the existing runtime owner. Keyboard status messages remain in the runner's
+footer composition; `keyboard_hints` emits only available keyboard guidance.
+Private rendering helpers remain re-exported because current shell
+collaborators and tests import them; narrowing that surface is a separate
+migration.

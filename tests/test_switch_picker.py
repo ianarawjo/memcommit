@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.clipboard import ClipboardError
-from memcommit.core.context_targeting.tui.picker import (
+from memcommit.adapters.console.terminal.components.context_picker import (
     ContextPickerActionReceipt,
     ContextMemorySelection,
     _CONTEXT_NAVIGATION_HINT,
@@ -30,7 +30,7 @@ from memcommit.core.context_targeting.tui.picker import (
 )
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.core.context_targeting.catalog import grant_navigation_annotation
-from memcommit.core.context_targeting.tui.picker import (
+from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemoryBadge,
     ContextMemoryDetail,
     memory_visibility_key_hint,

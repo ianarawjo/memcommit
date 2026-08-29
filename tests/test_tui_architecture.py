@@ -224,7 +224,8 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
 
     assert {
         "memcommit.core.context_targeting.tui.memory_selection",
-        "memcommit.core.context_targeting.tui.picker",
+        "memcommit.adapters.console.terminal.components.context_picker.model",
+        "memcommit.adapters.console.terminal.components.context_picker.preview",
         "memcommit.core.context_targeting.tui.selector",
     } <= owner_imports
 
@@ -262,3 +263,49 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
         assert "memcommit.core.context_targeting.tui.direct_memory_selector" in imports
         assert "ContextMemoryPreviewController(" not in source
         assert "DirectMemorySelectionState(" not in source
+
+
+def test_context_picker_is_owned_by_the_terminal_adapter() -> None:
+    legacy_owner = PACKAGE / "core" / "context_targeting" / "tui" / "picker.py"
+    package = (
+        PACKAGE
+        / "adapters"
+        / "console"
+        / "terminal"
+        / "components"
+        / "context_picker"
+    )
+    public_api = package / "__init__.py"
+    model = package / "model.py"
+    preview = package / "preview.py"
+    projection = package / "projection.py"
+    rendering = package / "rendering.py"
+    dialog = package / "dialog.py"
+
+    assert not legacy_owner.exists()
+    assert public_api.is_file()
+    assert model.is_file()
+    assert preview.is_file()
+    assert projection.is_file()
+    assert rendering.is_file()
+    assert dialog.is_file()
+    assert "def choose_context(" not in public_api.read_text()
+    assert "def choose_context(" not in rendering.read_text()
+    assert "def choose_context(" in dialog.read_text()
+    assert "class ContextMemoryRow" in model.read_text()
+    assert "def context_memory_rows(" in projection.read_text()
+    assert "class ContextMemoryPreviewController" in preview.read_text()
+    assert "def render_context_options(" in rendering.read_text()
+    assert "Application(" not in model.read_text()
+    assert "Application(" not in projection.read_text()
+    assert "Application(" not in preview.read_text()
+    assert "Application(" not in rendering.read_text()
+    assert "Application(" in dialog.read_text()
+
+    legacy_import = "memcommit.core.context_targeting.tui.picker"
+    offenders = tuple(
+        str(path.relative_to(ROOT))
+        for path in (*PACKAGE.rglob("*.py"), *(ROOT / "tests").rglob("*.py"))
+        if path != Path(__file__) and legacy_import in path.read_text()
+    )
+    assert offenders == ()

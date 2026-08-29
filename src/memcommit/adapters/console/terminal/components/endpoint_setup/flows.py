@@ -22,7 +22,7 @@ from memcommit.adapters.console.terminal.components.endpoint_setup.session impor
     EndpointSetupDraft,
     choose_session_endpoints,
 )
-from memcommit.core.context_targeting.tui.picker import context_memory_rows
+from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
 from memcommit.core.context import Memory
 from memcommit.source_projection.model import SourceDisplayFacts
 from memcommit.persistence.store import MemoryStore

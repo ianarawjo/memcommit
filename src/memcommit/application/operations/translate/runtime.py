@@ -1,4 +1,5 @@
-"""Operation-owned translation planning and in-memory materialization."""
+"""Translation planning and pure in-memory Context transformations."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -9,6 +10,10 @@ import unicodedata
 import uuid
 
 from memcommit.core.context import Context, Memory
+from memcommit.core.memory_translation import (
+    TRANSLATED_CONTENT_CHAR_LIMIT,
+    TRANSLATION_TARGET_CHAR_LIMIT,
+)
 from memcommit.providers.subscription import CodexChatGPTProvider
 from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
@@ -29,8 +34,6 @@ from memcommit.persistence.store import context_record_digest
 
 TRANSLATE_CORPUS_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 TRANSLATE_RESPONSE_CHAR_LIMIT = 1_000_000
-TRANSLATED_CONTENT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
-TRANSLATION_TARGET_CHAR_LIMIT = 500
 TRANSLATE_TIMEOUT_SECONDS = 300
 
 TRANSLATE_EXECUTION_POLICY = SemanticExecutionPolicy(
@@ -69,7 +72,7 @@ class TranslationProposal:
 class TranslationPlan:
     """A non-mutating, stale-detectable translation proposal."""
 
-    # Read-only views deliberately leave this unset. Materialization allocates
+    # Catalog-only work deliberately leaves this unset. Context Apply allocates
     # the operation identity at the exact boundary where new Memories can exist.
     operation_uid: str | None
     context_uid: str
@@ -120,12 +123,8 @@ class TranslationApplyResult:
                 {
                     "source_uid": translation.source_uid,
                     "result_uid": translation.result.uid,
-                    "source_sha256": _content_digest(
-                        translation.source_content
-                    ),
-                    "result_sha256": _content_digest(
-                        translation.result.content
-                    ),
+                    "source_sha256": _content_digest(translation.source_content),
+                    "result_sha256": _content_digest(translation.result.content),
                 }
                 for translation in self.translations
             ],
@@ -169,12 +168,8 @@ class DerivedTranslationApplyResult:
                 {
                     "source_uid": translation.source_uid,
                     "result_uid": translation.result.uid,
-                    "source_sha256": _content_digest(
-                        translation.source_content
-                    ),
-                    "result_sha256": _content_digest(
-                        translation.result.content
-                    ),
+                    "source_sha256": _content_digest(translation.source_content),
+                    "result_sha256": _content_digest(translation.result.content),
                 }
                 for translation in self.translations
             ],
@@ -202,7 +197,7 @@ def _strict_json_object(
 
 
 def validate_translation_target(value: str) -> str:
-    """Return the exact semantic translation target used as a view key."""
+    """Return the exact semantic translation target used as a catalog key."""
     if not isinstance(value, str):
         raise TranslateError("Translation target must be text.")
     target = value.strip()
@@ -214,9 +209,7 @@ def validate_translation_target(value: str) -> str:
             f"{TRANSLATION_TARGET_CHAR_LIMIT} characters."
         )
     if any(not character.isprintable() for character in target):
-        raise TranslateError(
-            "Translation target must be one printable line."
-        )
+        raise TranslateError("Translation target must be one printable line.")
     return target
 
 
@@ -260,8 +253,7 @@ def default_translation_context_name(
         suffix = "".join(pieces).strip("-")
         if not suffix:
             suffix = (
-                "translated-"
-                + hashlib.sha256(language.encode("utf-8")).hexdigest()[:8]
+                "translated-" + hashlib.sha256(language.encode("utf-8")).hexdigest()[:8]
             )
     return f"{source_name}-{suffix}"
 
@@ -272,23 +264,13 @@ def _selected_memories(
 ) -> tuple[list[Memory], str | None]:
     if selector is None:
         return (
-            [
-                item
-                for item in ctx.iter_items()
-                if isinstance(item, Memory)
-            ],
+            [item for item in ctx.iter_items() if isinstance(item, Memory)],
             None,
         )
 
-    matches = [
-        uid
-        for uid in ctx.ordered_uids()
-        if uid.startswith(selector)
-    ]
+    matches = [uid for uid in ctx.ordered_uids() if uid.startswith(selector)]
     if not matches:
-        raise TranslateError(
-            f"No direct item has a uid starting with '{selector}'."
-        )
+        raise TranslateError(f"No direct item has a uid starting with '{selector}'.")
     if len(matches) > 1:
         raise TranslateError(
             f"Ambiguous prefix '{selector}' matches {len(matches)} items: "
@@ -406,8 +388,7 @@ def _translation_prompt(
         "may remain unchanged.\n"
         "Copy each candidate_id exactly. Put only translated Memory text in "
         "translated_content, with no commentary or language label.\n\n"
-        "TRANSLATE PAYLOAD:\n"
-        + payload
+        "TRANSLATE PAYLOAD:\n" + payload
     )
 
 
@@ -430,9 +411,7 @@ def _parse_translations(
     candidates: list[tuple[str, Memory]],
 ) -> tuple[TranslationProposal, ...]:
     if not isinstance(raw, str) or len(raw) > TRANSLATE_RESPONSE_CHAR_LIMIT:
-        raise TranslateError(
-            "Codex translate returned invalid structured output."
-        )
+        raise TranslateError("Codex translate returned invalid structured output.")
     try:
         data = json.loads(raw, object_pairs_hook=_strict_json_object)
     except (json.JSONDecodeError, ValueError) as error:
@@ -445,39 +424,22 @@ def _parse_translations(
         or not isinstance(data.get("translations"), list)
         or len(data["translations"]) != len(candidates)
     ):
-        raise TranslateError(
-            "Codex translate returned invalid structured output."
-        )
+        raise TranslateError("Codex translate returned invalid structured output.")
 
-    by_candidate_id = {
-        candidate_id: memory
-        for candidate_id, memory in candidates
-    }
+    by_candidate_id = {candidate_id: memory for candidate_id, memory in candidates}
     translated_by_id: dict[str, str] = {}
     for record in data["translations"]:
-        if (
-            not isinstance(record, dict)
-            or set(record) != {
-                "candidate_id",
-                "translated_content",
-            }
-        ):
-            raise TranslateError(
-                "Codex translate returned invalid structured output."
-            )
+        if not isinstance(record, dict) or set(record) != {
+            "candidate_id",
+            "translated_content",
+        }:
+            raise TranslateError("Codex translate returned invalid structured output.")
         candidate_id = record.get("candidate_id")
         content = record.get("translated_content")
-        if (
-            not isinstance(candidate_id, str)
-            or candidate_id not in by_candidate_id
-        ):
-            raise TranslateError(
-                "Codex translate selected an unknown candidate."
-            )
+        if not isinstance(candidate_id, str) or candidate_id not in by_candidate_id:
+            raise TranslateError("Codex translate selected an unknown candidate.")
         if candidate_id in translated_by_id:
-            raise TranslateError(
-                "Codex translate returned a duplicate candidate."
-            )
+            raise TranslateError("Codex translate returned a duplicate candidate.")
         if (
             not isinstance(content, str)
             or not content.strip()
@@ -488,15 +450,11 @@ def _parse_translations(
                 for character in content
             )
         ):
-            raise TranslateError(
-                "Codex translate returned invalid translated content."
-            )
+            raise TranslateError("Codex translate returned invalid translated content.")
         translated_by_id[candidate_id] = content
 
     if set(translated_by_id) != set(by_candidate_id):
-        raise TranslateError(
-            "Codex translate omitted one or more selected Memories."
-        )
+        raise TranslateError("Codex translate omitted one or more selected Memories.")
     return tuple(
         TranslationProposal(
             source_uid=memory.uid,
@@ -518,17 +476,11 @@ def plan_translation(
 ) -> TranslationPlan:
     """Create one validated plan without mutating the Context."""
     if not isinstance(allocate_operation_uid, bool):
-        raise TranslateError(
-            "Translation operation identity setting must be boolean."
-        )
+        raise TranslateError("Translation operation identity setting must be boolean.")
     language = validate_translation_target(target_language)
     memories, selected_memory_uid = _selected_memories(ctx, selector)
     digest = context_digest(ctx)
-    operation_uid = (
-        str(uuid.uuid4())
-        if allocate_operation_uid
-        else None
-    )
+    operation_uid = str(uuid.uuid4()) if allocate_operation_uid else None
     if not memories:
         return TranslationPlan(
             operation_uid=operation_uid,
@@ -541,10 +493,7 @@ def plan_translation(
             provider_response_sha256=None,
         )
 
-    candidates = [
-        (f"m{index:06d}", memory)
-        for index, memory in enumerate(memories, 1)
-    ]
+    candidates = [(f"m{index:06d}", memory) for index, memory in enumerate(memories, 1)]
     execution_plan = plan_semantic_execution(
         TRANSLATE_EXECUTION_POLICY,
         _translation_workload(language, candidates),
@@ -639,7 +588,7 @@ def apply_translation(
     """Insert each translated copy immediately after its unchanged source."""
     if not isinstance(plan.operation_uid, str) or not plan.operation_uid:
         raise TranslateError(
-            "Translation materialization requires an operation identity."
+            "Translation Context Apply requires an operation identity."
         )
     if not translation_plan_matches_context(plan, ctx):
         raise TranslateError(
@@ -651,10 +600,7 @@ def apply_translation(
     # cannot partially apply.
     for proposal in plan.proposals:
         source = ctx.memories.get(proposal.source_uid)
-        if (
-            not isinstance(source, Memory)
-            or source.content != proposal.source_content
-        ):
+        if not isinstance(source, Memory) or source.content != proposal.source_content:
             raise TranslateError(
                 "The translation plan no longer matches its source Memories."
             )
@@ -691,14 +637,12 @@ def derive_translation_context(
     """Replace selected sources with translations in a fresh derived Context."""
     if not isinstance(plan.operation_uid, str) or not plan.operation_uid:
         raise TranslateError(
-            "Translation materialization requires an operation identity."
+            "Translation Context Apply requires an operation identity."
         )
     if not isinstance(destination_name, str) or not destination_name:
         raise TranslateError("Destination Context name must be non-empty.")
     if destination_name == source.name:
-        raise TranslateError(
-            "Destination Context must differ from the source Context."
-        )
+        raise TranslateError("Destination Context must differ from the source Context.")
     if not translation_plan_matches_context(plan, source):
         raise TranslateError(
             "The translation plan is stale because the source Context "
@@ -737,9 +681,7 @@ def derive_translation_context(
             uid=result_uid,
             content=proposal.translated_content,
         )
-        source_position = translated.ordered_uids().index(
-            proposal.source_uid
-        )
+        source_position = translated.ordered_uids().index(proposal.source_uid)
         translated.remove(proposal.source_uid)
         translated.add(result, position=source_position)
         applied.append(

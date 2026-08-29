@@ -27,7 +27,7 @@ from memcommit.core.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.core.context_targeting.tui.picker import context_memory_rows
+from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
 from memcommit.core.context_targeting.tui.reach import ContextReachViewMode
 from memcommit.adapters.console import (
     ConsoleMode,

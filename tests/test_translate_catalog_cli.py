@@ -14,13 +14,13 @@ from memcommit.application.capabilities.retained_history.memory_history_reconstr
     reconstruct_memory_history,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.translate.view import (
+from memcommit.core.memory_translation import (
     TRANSLATION_ORIGIN_IMPORTED,
     TRANSLATION_ORIGIN_MANUAL,
     TRANSLATION_REVIEW_UNREVIEWED,
     TRANSLATION_REVIEW_VERIFIED,
 )
-from memcommit.application.operations.translate.view_store import load_translation_catalog
+from memcommit.persistence.store.translation_catalog import load_translation_catalog
 
 
 runner = CliRunner(mix_stderr=False)
@@ -99,14 +99,20 @@ def test_provider_refresh_never_overwrites_verified_curated_text(
 ):
     store = MemoryStore()
     context, memory = _source(store)
-    assert runner.invoke(
-        app,
-        ["translate", memory.uid, "--to", "ko", "--set", "검수 번역"],
-    ).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["translate", memory.uid, "--to", "ko", "--verify"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["translate", memory.uid, "--to", "ko", "--set", "검수 번역"],
+        ).exit_code
+        == 0
+    )
+    assert (
+        runner.invoke(
+            app,
+            ["translate", memory.uid, "--to", "ko", "--verify"],
+        ).exit_code
+        == 0
+    )
     provider = _Provider("PROVIDER: ")
     monkeypatch.setattr(
         "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
@@ -166,9 +172,10 @@ def test_export_edit_import_is_source_hash_bound_and_atomic(
     assert entry.curated.translated_content == "가져온 번역"
     assert entry.curated.origin == TRANSLATION_ORIGIN_IMPORTED
     assert entry.curated.review_status == TRANSLATION_REVIEW_VERIFIED
-    assert payload["translations"][0]["source_sha256"] == hashlib.sha256(
-        memory.content.encode("utf-8")
-    ).hexdigest()
+    assert (
+        payload["translations"][0]["source_sha256"]
+        == hashlib.sha256(memory.content.encode("utf-8")).hexdigest()
+    )
 
     stale_payload = json.loads(imported.read_text(encoding="utf-8"))
     stale_payload["translations"][0]["source_sha256"] = "0" * 64
@@ -195,10 +202,13 @@ def test_reset_reveals_provider_layer_without_changing_memory(
         lambda: provider,
     )
     assert runner.invoke(app, ["translate", "--to", "ko"]).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["translate", memory.uid, "--to", "ko", "--set", "수동"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["translate", memory.uid, "--to", "ko", "--set", "수동"],
+        ).exit_code
+        == 0
+    )
 
     reset = runner.invoke(
         app,
@@ -217,15 +227,18 @@ def test_reset_reveals_provider_layer_without_changing_memory(
     )
 
 
-def test_curated_view_is_not_materialized_without_provenance_contract(
+def test_curated_catalog_is_not_applied_without_provenance_contract(
     isolated_store,
 ):
     store = MemoryStore()
     _, memory = _source(store)
-    assert runner.invoke(
-        app,
-        ["translate", memory.uid, "--to", "ko", "--set", "수동"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["translate", memory.uid, "--to", "ko", "--set", "수동"],
+        ).exit_code
+        == 0
+    )
 
     result = runner.invoke(
         app,
@@ -237,7 +250,7 @@ def test_curated_view_is_not_materialized_without_provenance_contract(
     assert not store.context_exists("derived")
 
 
-def test_verified_provider_view_is_not_materialized_as_untouched_batch(
+def test_verified_provider_catalog_is_not_applied_as_untouched_batch(
     isolated_store,
     monkeypatch,
 ):
@@ -249,10 +262,13 @@ def test_verified_provider_view_is_not_materialized_as_untouched_batch(
         lambda: provider,
     )
     assert runner.invoke(app, ["translate", "--to", "ko"]).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["translate", memory.uid, "--to", "ko", "--verify"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["translate", memory.uid, "--to", "ko", "--verify"],
+        ).exit_code
+        == 0
+    )
 
     result = runner.invoke(
         app,
@@ -280,10 +296,13 @@ def test_unchanged_export_import_preserves_provider_provenance(
     before = load_translation_catalog(context.uid, "ko")
     assert before is not None
     exported = tmp_path / "unchanged.json"
-    assert runner.invoke(
-        app,
-        ["translate", "--to", "ko", "--export", str(exported)],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["translate", "--to", "ko", "--export", str(exported)],
+        ).exit_code
+        == 0
+    )
 
     result = runner.invoke(
         app,
@@ -312,14 +331,20 @@ def test_import_rejects_a_stale_exported_catalog_revision(
     )
     assert runner.invoke(app, ["translate", "--to", "ko"]).exit_code == 0
     exported = tmp_path / "stale-catalog.json"
-    assert runner.invoke(
-        app,
-        ["translate", "--to", "ko", "--export", str(exported)],
-    ).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["translate", memory.uid, "--to", "ko", "--verify"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["translate", "--to", "ko", "--export", str(exported)],
+        ).exit_code
+        == 0
+    )
+    assert (
+        runner.invoke(
+            app,
+            ["translate", memory.uid, "--to", "ko", "--verify"],
+        ).exit_code
+        == 0
+    )
 
     result = runner.invoke(
         app,
@@ -336,10 +361,13 @@ def test_import_rejects_non_integer_schema_and_non_string_review_status(
 ):
     _source(MemoryStore())
     exported = tmp_path / "base.json"
-    assert runner.invoke(
-        app,
-        ["translate", "--to", "ko", "--export", str(exported)],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["translate", "--to", "ko", "--export", str(exported)],
+        ).exit_code
+        == 0
+    )
     payload = json.loads(exported.read_text(encoding="utf-8"))
 
     payload["schema_version"] = True
@@ -369,14 +397,20 @@ def test_unverify_rebinds_review_status_to_current_text(
 ):
     store = MemoryStore()
     context, memory = _source(store)
-    assert runner.invoke(
-        app,
-        ["translate", memory.uid, "--to", "ko", "--set", "번역"],
-    ).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["translate", memory.uid, "--to", "ko", "--verify"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["translate", memory.uid, "--to", "ko", "--set", "번역"],
+        ).exit_code
+        == 0
+    )
+    assert (
+        runner.invoke(
+            app,
+            ["translate", memory.uid, "--to", "ko", "--verify"],
+        ).exit_code
+        == 0
+    )
 
     result = runner.invoke(
         app,
@@ -392,7 +426,7 @@ def test_unverify_rebinds_review_status_to_current_text(
     assert entry.curated.reviewed_content_sha256 is None
 
 
-def test_long_semantic_target_remains_recorded_in_materialized_trace(
+def test_long_semantic_target_remains_recorded_in_applied_trace(
     isolated_store,
     monkeypatch,
 ):
@@ -416,9 +450,7 @@ def test_long_semantic_target_remains_recorded_in_materialized_trace(
 
     assert result.exit_code == 0
     loaded = store.load_direct(context.name)
-    result_uid = next(
-        uid for uid in loaded.ordered_uids() if uid != memory.uid
-    )
+    result_uid = next(uid for uid in loaded.ordered_uids() if uid != memory.uid)
     trace = reconstruct_memory_history(store, loaded, result_uid)
     translated = [event for event in trace.events if event.kind == "TRANSLATED"]
     assert len(translated) == 1

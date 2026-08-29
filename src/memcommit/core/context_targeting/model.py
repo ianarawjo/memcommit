@@ -53,6 +53,28 @@ class ContextTarget:
 
 
 @dataclass(frozen=True, slots=True)
+class ContextSubtreeTarget:
+    """One lexical Context subtree selected from a frozen target catalog.
+
+    The value records semantic reach without retaining picker expansion,
+    cursor, or presentation state. The calling operation remains responsible
+    for expanding the canonical name against its frozen catalog.
+    """
+
+    name: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.name, str) or not self.name:
+            raise ValueError("A Context subtree target requires a canonical name.")
+
+    @property
+    def context_name(self) -> str:
+        """Expose the target through the canonical Context-coordinate spelling."""
+
+        return self.name
+
+
+@dataclass(frozen=True, slots=True)
 class CheckpointTarget:
     """One exact retained checkpoint plus its canonical ordinary-local owner."""
 

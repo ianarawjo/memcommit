@@ -15,7 +15,7 @@ from memcommit.adapters.console.terminal.components.memory_report_picker import 
     choose_memory,
     choose_memory_report_target,
 )
-import memcommit.core.context_targeting.tui.picker as context_picker
+import memcommit.adapters.console.terminal.components.context_picker.dialog as context_picker
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     MemoryHistoryCandidate,

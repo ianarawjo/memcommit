@@ -230,11 +230,11 @@
       "role": "shared-command-mechanism"
     },
     {
-      "canonical_module": "memcommit.core.context_targeting.tui.picker",
+      "canonical_module": "memcommit.adapters.console.terminal.components.context_picker",
       "legacy_module": "memcommit.commands.context_picker",
-      "owner": "context_targeting",
+      "owner": "terminal",
       "public_exports": [],
-      "role": "shared-context-targeting"
+      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.terminal.components.context_reach_dialog",

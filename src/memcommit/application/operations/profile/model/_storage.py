@@ -30,7 +30,10 @@ from memcommit.application.capabilities.authority.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
 )
-from memcommit.application.operations.translate.view import TranslationCatalog
+from memcommit.core.memory_translation import TranslationCatalogError
+from memcommit.persistence.store.translation_catalog import (
+    decode_translation_catalog_record,
+)
 
 
 class ProfileError(RuntimeError):
@@ -217,8 +220,13 @@ def _translation_catalogs(
     for path in sorted(directory.glob("*--catalog.json")):
         data = _read_json(path, label="Translation catalog")
         try:
-            catalog = TranslationCatalog.from_dict(data)
-        except (ProfileConfigError, TypeError, ValueError) as error:
+            catalog = decode_translation_catalog_record(data)
+        except (
+            ProfileConfigError,
+            TranslationCatalogError,
+            TypeError,
+            ValueError,
+        ) as error:
             raise ProfileError(f"Translation catalog is invalid: {path}") from error
         context = by_uid.get(catalog.context_uid)
         if context is None or context.name != catalog.context_name:

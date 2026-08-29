@@ -15,7 +15,7 @@ from memcommit.application.capabilities.authority.access import (
 from memcommit.adapters.console.coordination.command_review import (
     meld as meld_command_review,
 )
-from memcommit.core.context_targeting.tui.picker import context_memory_rows
+from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
 from memcommit.adapters.console.commands.meld.target_picker import eligible_meld_targets
 from memcommit.core.context_targeting.readable_catalog import (
     ReadableContextCatalog,

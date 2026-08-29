@@ -531,8 +531,8 @@ question may therefore ask only about the Goal and portable Ground name, not
 treat any selected or planned Context name as part of creation approval.
 
 The Context pane now places `DIRECT SELECT · P` below provider-ranked
-suggestions. `P` opens the same neutral
-`context_targeting.tui.picker` namespace tree as `mem switch`; it does not
+suggestions. `P` opens the same terminal
+`terminal.components.context_picker` namespace tree as `mem switch`; it does not
 invoke the Switch command or application. Its direct
 choice is process-local and still `NOT BOUND`. In the continuing named-Ground
 view, the Contexts, Rules, and Memories panes each expose `P · placement`.

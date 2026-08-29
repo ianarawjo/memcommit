@@ -7,7 +7,7 @@ from types import SimpleNamespace
 import pytest
 
 import memcommit.adapters.console.terminal.components.history.browser as diff_browser
-from memcommit.core.context_targeting.tui.picker import ContextSubtreeSelection
+from memcommit.adapters.console.terminal.components.context_picker import ContextSubtreeSelection
 from memcommit.adapters.console.terminal.components.history.picker import HISTORY_BACK
 
 

@@ -22,7 +22,7 @@ from memcommit.core.context_targeting.tui.direct_memory_selector import (
     DirectMemorySelectorControl,
     DirectMemorySelectorView,
 )
-from memcommit.core.context_targeting.tui.picker import ContextMemoryRow
+from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
 from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,

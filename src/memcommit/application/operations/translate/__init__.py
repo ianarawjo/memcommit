@@ -1,1 +1,1 @@
-"""Operation-owned Translate runtime, view, and persistence boundaries."""
+"""Translate provider, curation, exchange, and Context-action workflows."""

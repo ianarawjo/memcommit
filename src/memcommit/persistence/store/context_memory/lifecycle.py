@@ -312,9 +312,9 @@ class _ContextLifecycleMixin:
             comparison_paths_for_context,
             delete_comparison_paths,
         )
-        from memcommit.application.operations.translate.view_store import (
-            delete_translation_view_paths,
-            translation_view_paths_for_context,
+        from memcommit.persistence.store.translation_catalog import (
+            delete_translation_catalog_paths,
+            translation_catalog_paths_for_context,
         )
         from memcommit.application.operations.rationale.cache import (
             delete_rationale_inference_paths,
@@ -329,8 +329,8 @@ class _ContextLifecycleMixin:
             if canonical_context_uid == context_uid
             else ()
         )
-        translation_view_paths = (
-            translation_view_paths_for_context(context_uid)
+        translation_catalog_paths = (
+            translation_catalog_paths_for_context(context_uid)
             if canonical_context_uid == context_uid
             else ()
         )
@@ -550,11 +550,11 @@ class _ContextLifecycleMixin:
             "Compare analyses",
             lambda: delete_comparison_paths(comparison_paths),
         )
-        # Translation views retain provider-derived copies of source content.
+        # Translation catalogs retain provider-derived copies of source content.
         # Their privacy and validity lifetime therefore ends with the source.
         attempt_cleanup(
-            "translation views",
-            lambda: delete_translation_view_paths(translation_view_paths),
+            "translation catalogs",
+            lambda: delete_translation_catalog_paths(translation_catalog_paths),
         )
         # A contextual explanation is derived from the deleted direct frame,
         # so its cache shares that Context's privacy lifetime.

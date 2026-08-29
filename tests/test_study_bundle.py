@@ -17,7 +17,7 @@ from memcommit.study_scenarios.legacy.bundle import (
     build_study_bundle,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.translate.view_store import (
+from memcommit.persistence.store.translation_catalog import (
     load_translation_catalog,
 )
 

@@ -9,8 +9,12 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.terminal.components.progress import progressing_provider_factory
-from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.terminal.components.progress import (
+    progressing_provider_factory,
+)
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
+)
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.application.operations.translate.application import (
@@ -18,17 +22,25 @@ from memcommit.application.operations.translate.application import (
     TranslateRequest,
     prepare_translation,
 )
-from memcommit.application.operations.translate.catalog_application import (
+from memcommit.application.operations.translate.add_translations_to_current_context import (
+    add_translations_to_current_context,
+)
+from memcommit.application.operations.translate.context_translation_result import (
+    ContextTranslationResult,
+)
+from memcommit.application.operations.translate.create_translated_context import (
+    create_translated_context,
+)
+from memcommit.application.operations.translate.exchange_translations import (
     TRANSLATION_IMPORT_SIZE_LIMIT,
 )
-from memcommit.application.operations.translate.materialization import (
-    TranslationMaterializationResult,
-    apply_translation_materialization,
+from memcommit.application.operations.translate.runtime import (
+    TranslateError,
+    TranslationPlan,
 )
-from memcommit.application.operations.translate.runtime import TranslateError, TranslationPlan
-from memcommit.application.operations.translate.view import (
-    TranslationCatalog,
-    TranslationViewError,
+from memcommit.core.memory_translation import (
+    MemoryTranslationCatalog,
+    TranslationCatalogError,
 )
 from memcommit.providers.subscription import (
     QueryProviderError,
@@ -44,7 +56,7 @@ from memcommit.source_projection.presentation import (
     source_annotation_text,
     source_object_label,
 )
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 def _render_text(prefix: str, value: str) -> None:
@@ -87,19 +99,22 @@ def _render_preview(
 
 def _render_catalog(
     context: Context,
-    catalog: TranslationCatalog,
+    catalog: MemoryTranslationCatalog,
     *,
     selector: str | None,
     reused: bool,
 ) -> None:
-    """Render current same-UID representations and explicit review state."""
+    """Render current same-UID translations and explicit review state."""
 
-    effective = catalog.effective_entries(context, selector)
+    effective = catalog.effective_entries(
+        context,
+        context_record_digest(context),
+        selector,
+    )
     by_source_uid = {entry.source_uid: entry for entry in effective}
     typer.echo()
     typer.secho(
-        f"Translation view: '{catalog.context_name}' → "
-        f"{catalog.target_language}",
+        f"Translation catalog: '{catalog.context_name}' → {catalog.target_language}",
         bold=True,
     )
     typer.echo(
@@ -117,9 +132,9 @@ def _render_catalog(
                 f"{entry.origin} · {entry.review_status}",
                 fg=typer.colors.CYAN,
             )
-            for line in (
-                safe_terminal_text(entry.translated_content).splitlines() or [""]
-            ):
+            for line in safe_terminal_text(entry.translated_content).splitlines() or [
+                ""
+            ]:
                 typer.echo(f"  {line}")
             continue
         if selector is not None:
@@ -163,14 +178,12 @@ def _render_catalog(
         )
     if reused:
         typer.secho(
-            "Reused saved translation view; the provider was not called.",
+            "Reused saved translation catalog; the provider was not called.",
             fg=typer.colors.CYAN,
         )
     else:
-        typer.secho("Saved translation view.", fg=typer.colors.GREEN, bold=True)
-    typer.echo(
-        "No Context or Memory changes; source Memory UIDs remain the anchors."
-    )
+        typer.secho("Saved translation catalog.", fg=typer.colors.GREEN, bold=True)
+    typer.echo("No Context or Memory changes; source Memory UIDs remain the anchors.")
 
 
 def _read_import_payload(source: str) -> tuple[bytes, str]:
@@ -220,12 +233,12 @@ def _provider_scope():
     )
 
 
-def _render_prepared_nonmaterialization(
+def _render_prepared_without_context_write(
     prepared: PreparedTranslation,
     *,
     export_file: str | None,
 ) -> bool:
-    """Render a completed nonmaterializing result; return whether handled."""
+    """Render a completed result that does not write a Context."""
 
     if prepared.kind == "CANCELLED":
         typer.echo("Translation edit cancelled.")
@@ -269,7 +282,7 @@ def _render_prepared_nonmaterialization(
             reused=False,
         )
         return True
-    if prepared.kind == "VIEW":
+    if prepared.kind == "CATALOG":
         assert prepared.catalog is not None
         _render_catalog(
             prepared.context,
@@ -281,8 +294,8 @@ def _render_prepared_nonmaterialization(
     return False
 
 
-def _render_materialization_receipt(
-    result: TranslationMaterializationResult,
+def _render_context_write_receipt(
+    result: ContextTranslationResult,
 ) -> None:
     plan = result.plan
     if result.created_context:
@@ -301,8 +314,7 @@ def _render_materialization_receipt(
     typer.secho(message, fg=typer.colors.GREEN, bold=True)
     for translation in result.translations:
         typer.echo(
-            f"  [{translation.source_uid[:8]}] -> "
-            f"[{translation.result.uid[:8]}]"
+            f"  [{translation.source_uid[:8]}] -> [{translation.result.uid[:8]}]"
         )
 
 
@@ -333,10 +345,7 @@ def cmd(
         typer.Option(
             "--save-as",
             metavar="CONTEXT",
-            help=(
-                "Materialize the translation view as a new Context and "
-                "switch to it"
-            ),
+            help=("Apply the translation catalog to a new Context and switch to it"),
         ),
     ] = None,
     in_place: Annotated[
@@ -351,7 +360,7 @@ def cmd(
         typer.Option(
             "--refresh",
             help=(
-                "Generate and replace the saved view even when an exact one "
+                "Generate and replace the saved catalog even when an exact one "
                 "can be reused"
             ),
         ),
@@ -380,8 +389,7 @@ def cmd(
             "--input",
             metavar="JSON",
             help=(
-                "Import a strict source-hash-bound translation batch; "
-                "use - for stdin"
+                "Import a strict source-hash-bound translation batch; use - for stdin"
             ),
         ),
     ] = None,
@@ -447,29 +455,29 @@ def cmd(
                 verify=verify,
                 unverify=unverify,
                 reset=reset,
-                materialization_approved=yes,
+                apply_approved=yes,
             ),
             current_name=snapshot.current_name,
             provider_scope=_provider_scope,
             editor=lambda text: typer.edit(text=text),
             import_loader=_read_import_payload,
         )
-        if _render_prepared_nonmaterialization(
+        if _render_prepared_without_context_write(
             prepared,
             export_file=export_file,
         ):
             return
-        assert prepared.kind == "MATERIALIZE"
+        assert prepared.kind == "APPLY"
         assert prepared.plan is not None
         destination_name = prepared.destination_name
         if prepared.reused:
             typer.secho(
-                "Reusing the saved translation view; the provider was not called.",
+                "Reusing the saved translation catalog; the provider was not called.",
                 fg=typer.colors.CYAN,
             )
         else:
             typer.secho(
-                "Saved the translation view for materialization.",
+                "Saved the translation catalog before Context application.",
                 fg=typer.colors.CYAN,
             )
         _render_preview(prepared.plan, destination_name=destination_name)
@@ -485,25 +493,29 @@ def cmd(
             )
             if reviewed_destination is None:
                 typer.echo(
-                    "Aborted — the translation view remains saved; "
+                    "Aborted — the translation catalog remains saved; "
                     "no Context changes made."
                 )
                 return
             destination_name = reviewed_destination
-        result = apply_translation_materialization(
-            store,
-            prepared.plan,
-            destination_name=destination_name,
+        result = (
+            add_translations_to_current_context(store, prepared.plan)
+            if destination_name is None
+            else create_translated_context(
+                store,
+                prepared.plan,
+                destination_name,
+            )
         )
     except (
         OSError,
         QueryProviderError,
         RuntimeError,
-        TranslationViewError,
+        TranslationCatalogError,
         TranslateError,
         TypeError,
         ValueError,
     ) as error:
         typer.secho(f"Translate error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
-    _render_materialization_receipt(result)
+    _render_context_write_receipt(result)

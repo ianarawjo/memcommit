@@ -26,7 +26,7 @@ from memcommit.application.operations.memory_transfer.runtime import (
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
-from memcommit.core.context_targeting.tui.picker import context_memory_rows
+from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
 from memcommit.source_projection.presentation import (
     SourceDisplayToken,
     SourceDisplayValue,

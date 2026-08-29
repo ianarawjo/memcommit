@@ -1,4 +1,4 @@
-"""Typed catalog import, export, and curation support for Translate."""
+"""Editable import and export documents for Memory translations."""
 
 from __future__ import annotations
 
@@ -7,33 +7,21 @@ import hashlib
 import json
 
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.translate.runtime import TranslateError
-from memcommit.application.operations.translate.view import (
+from memcommit.core.memory_translation import (
+    MemoryTranslationCatalog,
     TRANSLATION_REVIEW_UNREVIEWED,
     TRANSLATION_REVIEW_VERIFIED,
-    TranslationCatalog,
+    translation_content_digest,
+)
+from memcommit.application.operations.translate.runtime import TranslateError
+from memcommit.persistence.store import context_record_digest
+from memcommit.persistence.store.translation_catalog import (
     translation_catalog_record_digest,
 )
-from memcommit.application.operations.translate.view_store import (
-    load_translation_catalog_for_context,
-    save_translation_catalog,
-)
-from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 TRANSLATION_IMPORT_SCHEMA_VERSION = 2
 TRANSLATION_IMPORT_SIZE_LIMIT = 5_000_000
-
-
-@dataclass(frozen=True)
-class TranslationCatalogSeed:
-    """Current logical catalog plus exact legacy/current CAS expectations."""
-
-    catalog: TranslationCatalog
-    logical_digest: str | None
-    expected_record_digest: str | None
-    expected_legacy_record_digest: str | None
-    requires_save: bool
 
 
 @dataclass(frozen=True)
@@ -46,7 +34,7 @@ class ParsedTranslationImport:
 
 
 def content_digest(content: str) -> str:
-    return hashlib.sha256(content.encode("utf-8")).hexdigest()
+    return translation_content_digest(content)
 
 
 def _strict_json_object(
@@ -58,59 +46,6 @@ def _strict_json_object(
             raise TranslateError(f"Duplicate JSON key: {key}")
         result[key] = value
     return result
-
-
-def load_translation_catalog_seed(
-    context: Context,
-    target_language: str,
-) -> TranslationCatalogSeed:
-    """Load, consolidate, and prune one catalog without publishing it."""
-
-    existing, migrated_from_v1 = load_translation_catalog_for_context(
-        context,
-        target_language,
-    )
-    if existing is None:
-        return TranslationCatalogSeed(
-            catalog=TranslationCatalog.empty(context, target_language),
-            logical_digest=None,
-            expected_record_digest=None,
-            expected_legacy_record_digest=None,
-            requires_save=False,
-        )
-    logical_digest = translation_catalog_record_digest(existing)
-    pruned = existing.without_removed_sources(context)
-    return TranslationCatalogSeed(
-        catalog=pruned,
-        logical_digest=logical_digest,
-        expected_record_digest=(None if migrated_from_v1 else logical_digest),
-        expected_legacy_record_digest=(
-            logical_digest if migrated_from_v1 else None
-        ),
-        requires_save=migrated_from_v1 or pruned != existing,
-    )
-
-
-def save_curated_translation_catalog(
-    *,
-    store: MemoryStore,
-    context: Context,
-    catalog: TranslationCatalog,
-    seed: TranslationCatalogSeed,
-    source_digests: dict[str, str],
-) -> None:
-    """Publish one curated candidate against its exact source and slot seed."""
-
-    save_translation_catalog(
-        store,
-        catalog,
-        expected_record_digest=seed.expected_record_digest,
-        expected_legacy_record_digest=seed.expected_legacy_record_digest,
-        expected_context_digest=(
-            context_record_digest(context) if seed.requires_save else None
-        ),
-        required_source_digests=source_digests,
-    )
 
 
 def parse_translation_import(
@@ -177,10 +112,7 @@ def parse_translation_import(
             or source_uid in seen
             or not isinstance(source_sha256, str)
             or len(source_sha256) != 64
-            or any(
-                character not in "0123456789abcdef"
-                for character in source_sha256
-            )
+            or any(character not in "0123456789abcdef" for character in source_sha256)
             or not isinstance(translated_content, str)
             or not isinstance(review_status, str)
             or review_status
@@ -220,7 +152,7 @@ def parse_translation_import(
 
 def build_translation_export(
     context: Context,
-    catalog: TranslationCatalog | None,
+    catalog: MemoryTranslationCatalog | None,
     *,
     target_language: str,
     selector: str | None,
@@ -232,21 +164,22 @@ def build_translation_export(
         if catalog is None
         else {
             entry.source_uid: entry
-            for entry in catalog.effective_entries(context, selector)
+            for entry in catalog.effective_entries(
+                context,
+                context_record_digest(context),
+                selector,
+            )
         }
     )
     memories = tuple(
         item
         for item in context.iter_items()
-        if isinstance(item, Memory)
-        and (selector is None or item.uid == selector)
+        if isinstance(item, Memory) and (selector is None or item.uid == selector)
     )
     return {
         "schema_version": TRANSLATION_IMPORT_SCHEMA_VERSION,
         "catalog_digest": (
-            translation_catalog_record_digest(catalog)
-            if catalog is not None
-            else None
+            translation_catalog_record_digest(catalog) if catalog is not None else None
         ),
         "context_uid": context.uid,
         "context_name": context.name,

@@ -20,12 +20,18 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant, delete_authority_grant
+from memcommit.application.operations.profile.model import (
+    create_authority_grant,
+    delete_authority_grant,
+)
 from memcommit.providers.subscription import QueryProviderError
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.translate.view import (
+from memcommit.core.memory_translation import (
+    MemoryTranslationCatalog,
     TRANSLATION_ORIGIN_IMPORTED,
-    TranslationCatalog,
+)
+from memcommit.persistence.store.translation_catalog import (
+    encode_translation_catalog_record,
 )
 
 
@@ -829,7 +835,7 @@ def test_granted_query_uses_complete_root_bound_translation_catalog(
         tmp_path,
         monkeypatch,
     )
-    catalog = TranslationCatalog.empty(source_context, "ko").with_curated(
+    catalog = MemoryTranslationCatalog.empty(source_context, "ko").with_curated(
         source_context,
         source_memory.uid,
         "북쪽 설비 터널은 오후 6시 이후에만 열린다.",
@@ -841,7 +847,12 @@ def test_granted_query_uses_complete_root_bound_translation_catalog(
     language_digest = hashlib.sha256(b"ko").hexdigest()
     path = translations / f"{source_context.uid}--{language_digest}--catalog.json"
     path.write_text(
-        json.dumps(catalog.to_dict(), ensure_ascii=False, indent=2) + "\n",
+        json.dumps(
+            encode_translation_catalog_record(catalog),
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
         encoding="utf-8",
     )
     calls: list[tuple[str, str, str]] = []

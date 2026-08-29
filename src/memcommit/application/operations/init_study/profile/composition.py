@@ -20,8 +20,11 @@ from memcommit.application.operations.profile.model._storage import (
     inspect_store,
 )
 from memcommit.application.operations.profile.model.study import _STUDY_TASKS
-from memcommit.application.operations.translate.view import TranslationCatalog
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.core.memory_translation import MemoryTranslationCatalog
+from memcommit.persistence.store.translation_catalog import (
+    encode_translation_catalog_record,
+)
 
 from .model import (
     _STUDY_BUNDLE_NAMESPACE,
@@ -347,9 +350,9 @@ def _remap_context_records(
 def _remap_translation_catalogs(
     root: Path,
     mapping: dict[str, str],
-) -> tuple[TranslationCatalog, ...]:
+) -> tuple[MemoryTranslationCatalog, ...]:
     catalogs = _study_catalogs(root)
-    result: list[TranslationCatalog] = []
+    result: list[MemoryTranslationCatalog] = []
     for (context_name, _language), catalog in sorted(catalogs.items()):
         target_name = mapping.get(context_name)
         if target_name is None:
@@ -404,7 +407,7 @@ def _write_mapped_study_store(
     destination: Path,
     *,
     contexts: tuple[Context, ...],
-    catalogs: tuple[TranslationCatalog, ...],
+    catalogs: tuple[MemoryTranslationCatalog, ...],
     current_context: str,
 ) -> StoreInspection:
     """Write one already validated clean store without operational artifacts."""
@@ -442,7 +445,7 @@ def _write_mapped_study_store(
             )
             if path.exists():
                 raise ProfileError("Study translation catalog identity is duplicated.")
-            _write_json_atomic(path, catalog.to_dict())
+            _write_json_atomic(path, encode_translation_catalog_record(catalog))
     return inspect_store(destination)
 
 
@@ -470,7 +473,7 @@ def _compose_legacy_scenario_store(
         for name in structural_names
     ]
     contexts.extend(_study_practice_contexts())
-    catalogs: list[TranslationCatalog] = []
+    catalogs: list[MemoryTranslationCatalog] = []
     seen_context_uids = {context.uid for context in contexts}
     for task in _STUDY_TASKS:
         package = packages[task]
@@ -958,8 +961,8 @@ def _compose_study_run_pair(
 
     participant_contexts: list[Context] = []
     authority_contexts: list[Context] = []
-    participant_catalogs: list[TranslationCatalog] = []
-    authority_catalogs: list[TranslationCatalog] = []
+    participant_catalogs: list[MemoryTranslationCatalog] = []
+    authority_catalogs: list[MemoryTranslationCatalog] = []
 
     for task in _STUDY_TASKS:
         package = packages[task]

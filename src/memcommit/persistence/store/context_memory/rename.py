@@ -262,28 +262,24 @@ class _ContextRenameMixin:
 
     @staticmethod
     def _read_translation_records_for_rename() -> dict[str, dict[str, object]]:
-        from memcommit.application.operations.translate.view import (
-            TranslationCatalog,
-            TranslationView,
-            TranslationViewError,
-        )
-        from memcommit.application.operations.translate.view_store import (
+        from memcommit.core.memory_translation import TranslationCatalogError
+        from memcommit.persistence.store.translation_catalog import (
+            decode_translation_catalog_record,
             translation_catalog_path,
-            translation_view_path,
-            translation_views_dir,
+            translation_catalogs_dir,
         )
 
-        root = translation_views_dir()
+        root = translation_catalogs_dir()
         if not root.exists():
             if root.is_symlink():
-                raise ValueError("Translation view storage is invalid.")
+                raise ValueError("Translation catalog storage is invalid.")
             return {}
         if not root.is_dir() or root.is_symlink():
-            raise ValueError("Translation view storage is invalid.")
+            raise ValueError("Translation catalog storage is invalid.")
         records: dict[str, dict[str, object]] = {}
         for path in sorted(root.iterdir()):
             if path.is_symlink() or not path.is_file() or path.suffix != ".json":
-                raise ValueError("Translation view storage is invalid.")
+                raise ValueError("Translation catalog storage is invalid.")
             try:
                 with open(path, encoding="utf-8") as file:
                     raw = json.load(
@@ -291,31 +287,23 @@ class _ContextRenameMixin:
                         object_pairs_hook=_reject_duplicate_json_keys,
                     )
                 if not isinstance(raw, dict):
-                    raise ValueError("Translation artifact must be an object.")
-                if "revision" in raw:
-                    artifact = TranslationCatalog.from_dict(raw)
-                    expected_path = translation_catalog_path(
-                        artifact.context_uid,
-                        artifact.target_language,
-                    )
-                else:
-                    artifact = TranslationView.from_dict(raw)
-                    expected_path = translation_view_path(
-                        artifact.context_uid,
-                        artifact.target_language,
-                        artifact.selected_memory_uid,
-                    )
+                    raise ValueError("Translation catalog must be an object.")
+                catalog = decode_translation_catalog_record(raw)
+                expected_path = translation_catalog_path(
+                    catalog.context_uid,
+                    catalog.target_language,
+                )
                 if expected_path != path:
                     raise ValueError(
-                        "Translation artifact does not match its storage key."
+                        "Translation catalog does not match its storage key."
                     )
             except (
                 json.JSONDecodeError,
-                TranslationViewError,
+                TranslationCatalogError,
                 ValueError,
             ) as error:
                 raise ValueError(
-                    f"Saved translation artifact '{path.name}' is invalid."
+                    f"Saved translation catalog '{path.name}' is invalid."
                 ) from error
             records[path.name] = raw
         return records
@@ -557,10 +545,9 @@ class _ContextRenameMixin:
         translation_records = self._read_translation_records_for_rename()
         post_translation_records: dict[str, dict[str, object]] = {}
         translation_artifact_count = 0
-        from memcommit.application.operations.translate.view import (
-            TranslationCatalog,
-            TranslationView,
-            TranslationViewError,
+        from memcommit.core.memory_translation import TranslationCatalogError
+        from memcommit.persistence.store.translation_catalog import (
+            decode_translation_catalog_record,
         )
 
         for filename, record in translation_records.items():
@@ -569,22 +556,28 @@ class _ContextRenameMixin:
             if isinstance(context_uid, str) and context_uid in changed_uids:
                 before_artifact = copy.deepcopy(post)
                 post["context_name"] = post_name_by_uid[context_uid]
-                if (
-                    "context_digest" in post
-                    and post.get("context_digest") == pre_digest_by_uid[context_uid]
-                ):
-                    post["context_digest"] = post_digest_by_uid[context_uid]
+                entries = post.get("entries")
+                if not isinstance(entries, list):
+                    raise ValueError(
+                        f"Saved translation catalog '{filename}' is invalid."
+                    )
+                for entry in entries:
+                    provider = (
+                        entry.get("provider") if isinstance(entry, dict) else None
+                    )
+                    if (
+                        isinstance(provider, dict)
+                        and provider.get("context_digest")
+                        == pre_digest_by_uid[context_uid]
+                    ):
+                        provider["context_digest"] = post_digest_by_uid[context_uid]
                 if post != before_artifact:
                     translation_artifact_count += 1
             try:
-                if "revision" in post:
-                    TranslationCatalog.from_dict(post)
-                else:
-                    TranslationView.from_dict(post)
-            except TranslationViewError as error:
+                decode_translation_catalog_record(post)
+            except TranslationCatalogError as error:
                 raise ValueError(
-                    f"Saved translation artifact '{filename}' cannot follow "
-                    "this rename."
+                    f"Saved translation catalog '{filename}' cannot follow this rename."
                 ) from error
             post_translation_records[filename] = post
 
@@ -780,11 +773,11 @@ class _ContextRenameMixin:
             restore_files[path] = path.read_bytes()
             changed_ground_paths.append((path, after))
         if prepared.translation_records:
-            from memcommit.application.operations.translate.view_store import (
-                translation_views_dir,
+            from memcommit.persistence.store.translation_catalog import (
+                translation_catalogs_dir,
             )
 
-            translation_root = translation_views_dir()
+            translation_root = translation_catalogs_dir()
             for filename, before in prepared.translation_records.items():
                 after = prepared.post_translation_records[filename]
                 if after == before:

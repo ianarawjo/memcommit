@@ -332,7 +332,7 @@
           "agent-records/docs/mem-translate-design-rationale.md",
           "agent-records/docs/translate-application-boundary-matrix.md"
         ],
-        "reason": "CLI and historical in-memory routes share typed targeting, saved-view reuse and refresh, curation, strict import/export, provider orchestration, sidecar CAS, and both checkpointed materialization boundaries under the Translate operation package."
+        "reason": "The CLI enters one typed Translate application family for targeting, catalog reuse/refresh, curation, strict import/export, provider orchestration, and both checkpointed Context actions; command-independent catalog meaning lives in Core and durable record/CAS mechanics live in Persistence."
       }
     },
     "MIXED": {

@@ -1,74 +1,34 @@
-"""Checkpointed in-place and require-new materialization for Translate."""
+"""Checkpointed creation and selection of a translated derived Context."""
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from memcommit.core.context import AutoCheckpoint, Memory
+from memcommit.persistence.store import MemoryStore
 
-from memcommit.core.context import AutoCheckpoint, Context, Memory
-from memcommit.application.operations.translate.runtime import (
-    AppliedTranslation,
+from .context_translation_result import ContextTranslationResult
+from .runtime import (
     TranslateError,
     TranslationPlan,
-    apply_translation,
     derive_translation_context,
     translation_plan_matches_context,
 )
-from memcommit.persistence.store import MemoryStore
 
 
-@dataclass(frozen=True)
-class TranslationMaterializationResult:
-    """Exact destination and Source-to-result mappings published by Apply."""
-
-    plan: TranslationPlan
-    destination: Context
-    translations: tuple[AppliedTranslation, ...]
-    created_context: bool
-
-
-def apply_translation_materialization(
+def create_translated_context(
     store: MemoryStore,
     plan: TranslationPlan,
-    *,
-    destination_name: str | None,
-) -> TranslationMaterializationResult:
-    """Publish one prepared provider-backed plan with final source/current CAS."""
-
+    destination_name: str,
+) -> ContextTranslationResult:
+    """Create one translated Context and select it after final Source CAS."""
     operation_uid = plan.operation_uid
     if not isinstance(operation_uid, str) or not operation_uid:
-        raise TranslateError("Materialization identity was not allocated.")
+        raise TranslateError("Translation Apply identity was not allocated.")
     if store.current_context_name() != plan.context_name:
         raise TranslateError(
             "The current Context changed while translations were being "
-            "prepared; no translations were added."
+            "prepared; no translated Context was created."
         )
     source = store.load_direct(plan.context_name)
-    if destination_name is None:
-        result = apply_translation(source, plan)
-        store.save(
-            source,
-            AutoCheckpoint(
-                command="translate",
-                args=result.checkpoint_args(),
-                description=(
-                    f"Added {len(result.translations)} "
-                    + (
-                        "translation"
-                        if len(result.translations) == 1
-                        else "translations"
-                    )
-                    + f" to {plan.target_language}"
-                ),
-            ),
-            expected_context_digest=plan.context_digest,
-        )
-        return TranslationMaterializationResult(
-            plan=plan,
-            destination=source,
-            translations=result.translations,
-            created_context=False,
-        )
-
     result = derive_translation_context(source, plan, destination_name)
     created = False
     try:
@@ -106,8 +66,8 @@ def apply_translation_materialization(
             ),
         )
         created = True
-        # The final frame was built from this exact baseline. Carry its just-
-        # persisted digest so a concurrent destination writer cannot be lost.
+        # Carry the just-persisted baseline digest so a concurrent destination
+        # writer cannot be lost between create and replacement.
         result.context._store_digest = result.baseline._store_digest
         store.save(
             result.context,
@@ -116,11 +76,7 @@ def apply_translation_materialization(
                 args=result.checkpoint_args(),
                 description=(
                     f"Replaced {len(result.translations)} source "
-                    + (
-                        "Memory"
-                        if len(result.translations) == 1
-                        else "Memories"
-                    )
+                    + ("Memory" if len(result.translations) == 1 else "Memories")
                     + f" with translations to {plan.target_language}"
                 ),
             ),
@@ -145,15 +101,15 @@ def apply_translation_materialization(
         )
     except Exception as error:
         if created:
-            # Once published, another process may have switched to or referenced
-            # the destination. Deleting it could create a dangling pointer.
+            # The destination may already be referenced after publication;
+            # deleting it could create a dangling pointer.
             raise TranslateError(
                 f"Translation failed ({error}); destination "
                 f"'{destination_name}' was preserved for manual inspection "
                 "and the source was not changed."
             ) from error
         raise
-    return TranslationMaterializationResult(
+    return ContextTranslationResult(
         plan=plan,
         destination=result.context,
         translations=result.translations,
