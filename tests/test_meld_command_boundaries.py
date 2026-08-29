@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import memcommit.adapters.console.commands.meld.command as command
-from memcommit.adapters.console.commands.meld.command import entrypoint
-from memcommit.adapters.console.commands.meld.command import presentation
-from memcommit.adapters.console.commands.meld.command import workflow
+import memcommit.adapters.console.commands.meld as command
+from memcommit.adapters.console.commands.meld import entrypoint
+from memcommit.adapters.console.commands.meld import presentation
+from memcommit.adapters.console.commands.meld.workflow import workflow
 from memcommit.application.operations.meld.runtime import source_bindings
 
 

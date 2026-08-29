@@ -68,7 +68,9 @@ def open_saved_meld_impact(
     def open_owning_workflow() -> None:
         # The owning resume route reloads the catalog identity and enforces its
         # source/target binding checks before presenting the real Apply action.
-        from memcommit.adapters.console.commands.meld.command import _resume_picked_meld
+        from memcommit.adapters.console.commands.meld.workflow import (
+            _resume_picked_meld,
+        )
 
         _resume_picked_meld(
             store=store,

@@ -27,7 +27,7 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
     SessionPickerEntry,
 )
 
-from memcommit.adapters.console.commands.meld.command.errors import MeldCommandError
+from memcommit.adapters.console.commands.meld.errors import MeldCommandError
 
 
 def _session_command(session: MeldSession) -> str:

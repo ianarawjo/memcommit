@@ -46,11 +46,11 @@ from memcommit.persistence.store import (
 )
 from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
 
-from memcommit.adapters.console.commands.meld.command.errors import MeldCommandError
-from memcommit.adapters.console.commands.meld.command.presentation import (
+from memcommit.adapters.console.commands.meld.errors import MeldCommandError
+from memcommit.adapters.console.commands.meld.presentation import (
     _meld_picker_entry,
 )
-from memcommit.adapters.console.commands.meld.command.workflow import (
+from memcommit.adapters.console.commands.meld.workflow import (
     _resume_picked_meld,
     MeldCommandRequest,
     execute_meld_command,

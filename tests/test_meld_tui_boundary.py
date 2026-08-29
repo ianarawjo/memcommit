@@ -5,10 +5,10 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
-import memcommit.adapters.console.commands.meld.command as meld_command
+import memcommit.adapters.console.commands.meld as meld_command
 import memcommit.adapters.console.commands.compare.command as compare_command
 from memcommit.adapters.console.commands.compare.presentation import render_comparison
-import memcommit.adapters.console.commands.meld.workbench as meld_workbench
+import memcommit.adapters.console.commands.meld.workbench.workbench as meld_workbench
 
 
 def test_meld_command_enters_the_operation_tui_directly() -> None:
@@ -46,8 +46,9 @@ def test_meld_workbench_has_one_live_host() -> None:
 
 def test_meld_has_no_legacy_tui_or_shell_facade() -> None:
     package = Path(meld_workbench.__file__).parent
+    meld_package = package.parent
     legacy_package = (
-        package.parents[2] / "interfaces" / "tui" / "operations" / "meld"
+        meld_package.parents[2] / "interfaces" / "tui" / "operations" / "meld"
     )
 
     assert not (package / "shell.py").exists()

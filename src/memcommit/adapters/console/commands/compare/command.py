@@ -180,9 +180,11 @@ def _start_meld_from_compare(
     analysis: ComparisonAnalysis,
 ) -> None:
     """Collect one result target, then hand authority back to Meld."""
-    from memcommit.adapters.console.commands.meld.command import (
-        MeldCommandError,
+    from memcommit.adapters.console.commands.meld.errors import MeldCommandError
+    from memcommit.adapters.console.commands.meld.presentation import (
         render_meld_session,
+    )
+    from memcommit.adapters.console.commands.meld.workflow.workflow import (
         start_reviewed_symmetric_meld,
     )
     from memcommit.adapters.console.commands.meld.target_picker import choose_meld_target

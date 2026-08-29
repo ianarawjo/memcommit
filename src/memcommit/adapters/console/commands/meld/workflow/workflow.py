@@ -64,8 +64,8 @@ from memcommit.core.context_targeting.naming import validate_portable_context_na
 from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
 from memcommit.persistence.store import MemoryStore
 
-from memcommit.adapters.console.commands.meld.command.errors import MeldCommandError
-from memcommit.adapters.console.commands.meld.command.presentation import (
+from memcommit.adapters.console.commands.meld.errors import MeldCommandError
+from memcommit.adapters.console.commands.meld.presentation import (
     _meld_wait_view,
     _meld_wait_context_view,
     present_accepted_meld,
