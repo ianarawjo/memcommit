@@ -1,9 +1,8 @@
 """Operation-owned durable Memory quality Audit model and validation.
 
-Audit freezes one direct Context frame and retains independently typed quality
-checks with their exact provider provenance. Version-1/2 records remain
-readable, while historical response fields remain annotations that the current
-read-only Review route never edits.
+Audit freezes one direct Context frame and retains independently typed issue
+checks with their exact provider provenance. The completed record is immutable:
+Audit Review reads this evidence but never adds responses or dispositions.
 """
 
 from __future__ import annotations
@@ -11,7 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Literal
 
@@ -27,18 +26,12 @@ from memcommit.application.capabilities.reviewing.memory_issue_finding.findings 
     QUALITY_RULESET_VERSIONS,
 )
 from memcommit.providers.types import ProviderIdentity
-from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
-    QualityFindResponse,
-)
-from memcommit.application.operations.review.model import (
-    REVIEW_RESPONSE_CHAR_LIMIT,
-    direct_context_digest,
-)
+from memcommit.application.operations.review.model import direct_context_digest
 
 
-QUALITY_AUDIT_SCHEMA_VERSION = 3
-QUALITY_AUDIT_LEGACY_SCHEMA_VERSION = 1
-QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION = 2
+# Audit was not distributed while its response-bearing draft schemas existed,
+# so the read-only record starts at version 1 without a runtime legacy decoder.
+QUALITY_AUDIT_SCHEMA_VERSION = 1
 QUALITY_AUDIT_KINDS = ("duplicates", "ambiguities", "conflicts")
 QUALITY_AUDIT_RULESETS = {
     "duplicates": QUALITY_RULESET_VERSIONS["find_duplicates"],
@@ -348,8 +341,6 @@ def _report_from_dict(
     kind: QualityAuditKind,
     value: object,
     source_by_uid: dict[str, Memory],
-    *,
-    schema_version: int,
 ) -> QualityAuditReport:
     keys = {"memory_count", "findings"}
     if kind == "conflicts":
@@ -441,33 +432,20 @@ def _report_from_dict(
 
     conflict_findings: list[ConflictFinding] = []
     for raw in raw_findings:
-        item_keys = {
-            "left_uid",
-            "right_uid",
-            "conflict",
-            "reason",
-            "question",
-        }
-        if schema_version <= QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION:
-            item_keys.add("scope_dimensions")
         item = _exact_dict(
             raw,
-            item_keys,
+            {
+                "left_uid",
+                "right_uid",
+                "conflict",
+                "reason",
+                "question",
+            },
             "Conflict Audit finding",
         )
         conflict = item["conflict"]
         if conflict not in {"YES", "MAY"}:
             raise QualityAuditError("Invalid Conflict Audit finding.")
-        if schema_version <= QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION:
-            # Old records retain these tags as historical bytes only. They did
-            # not affect Resolve and do not re-enter the version-3 model.
-            dimensions = item["scope_dimensions"]
-            if not isinstance(dimensions, list):
-                raise QualityAuditError("Invalid Conflict Audit finding.")
-            tuple(
-                _string(dimension, "legacy Audit scope dimension", limit=100)
-                for dimension in dimensions
-            )
         conflict_findings.append(
             ConflictFinding(
                 left=memory(item["left_uid"]),
@@ -511,8 +489,6 @@ class QualityAuditCheck:
         cls,
         value: object,
         source_by_uid: dict[str, Memory],
-        *,
-        schema_version: int,
     ) -> "QualityAuditCheck":
         data = _exact_dict(
             value,
@@ -531,50 +507,24 @@ class QualityAuditCheck:
                 kind,
                 data["report"],
                 source_by_uid,
-                schema_version=schema_version,
             ),
             provenance=QualityAuditProvenance.from_dict(data["provenance"]),
         )
 
 
-def _finding_item_uids(check: QualityAuditCheck) -> tuple[str, ...]:
-    report = check.report
-    if isinstance(report, AmbiguityReport):
-        return tuple(f"ambiguity:{item.memory.uid}" for item in report.findings)
-    prefix = "duplicate" if isinstance(report, DuplicateReport) else "conflict"
-    return tuple(
-        f"{prefix}:{item.left.uid}:{item.right.uid}" for item in report.findings
-    )
-
-
-@dataclass
+@dataclass(frozen=True)
 class QualityAuditSession:
-    """One immutable Audit plus legacy durable review annotations."""
+    """One completed immutable Audit record."""
 
     uid: str
     created_at: str
     source: QualityAuditSource
     checks: tuple[QualityAuditCheck, ...]
     conformance: ConformanceReport | None = None
-    responses: dict[str, QualityFindResponse] = field(default_factory=dict)
 
     @property
     def finding_count(self) -> int:
         return sum(len(check.report.findings) for check in self.checks)
-
-    @property
-    def answered_count(self) -> int:
-        return sum(response.answered for response in self.responses.values())
-
-    def response_for(self, item_uid: str) -> QualityFindResponse:
-        valid_uids = {uid for check in self.checks for uid in _finding_item_uids(check)}
-        if item_uid not in valid_uids:
-            raise QualityAuditError("Unknown Audit response target.")
-        response = self.responses.get(item_uid)
-        if response is None:
-            response = QualityFindResponse()
-            self.responses[item_uid] = response
-        return response
 
     def snapshot_dict(self) -> dict[str, object]:
         return {
@@ -595,54 +545,27 @@ class QualityAuditSession:
         return {
             "schema_version": QUALITY_AUDIT_SCHEMA_VERSION,
             **self.snapshot_dict(),
-            "responses": {
-                uid: {
-                    "selected_option_uid": response.selected_option_uid,
-                    "text": response.text,
-                }
-                for uid, response in self.responses.items()
-            },
         }
 
     @classmethod
     def from_dict(cls, value: object) -> "QualityAuditSession":
         if not isinstance(value, dict):
             raise QualityAuditError("Invalid Audit session.")
-        schema_version = value.get("schema_version")
-        if schema_version == QUALITY_AUDIT_LEGACY_SCHEMA_VERSION:
-            data = _exact_dict(
-                value,
-                {
-                    "schema_version",
-                    "uid",
-                    "created_at",
-                    "source",
-                    "checks",
-                    "responses",
-                },
-                "legacy Audit session",
-            )
-            raw_conformance = None
-        elif schema_version in {
-            QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION,
-            QUALITY_AUDIT_SCHEMA_VERSION,
-        }:
-            data = _exact_dict(
-                value,
-                {
-                    "schema_version",
-                    "uid",
-                    "created_at",
-                    "source",
-                    "checks",
-                    "conformance",
-                    "responses",
-                },
-                "Audit session",
-            )
-            raw_conformance = data["conformance"]
-        else:
+        if value.get("schema_version") != QUALITY_AUDIT_SCHEMA_VERSION:
             raise QualityAuditError("Unsupported Audit session schema version.")
+        data = _exact_dict(
+            value,
+            {
+                "schema_version",
+                "uid",
+                "created_at",
+                "source",
+                "checks",
+                "conformance",
+            },
+            "Audit session",
+        )
+        raw_conformance = data["conformance"]
         source = QualityAuditSource.from_dict(data["source"])
         source_by_uid = {
             memory.uid: memory
@@ -656,7 +579,6 @@ class QualityAuditSession:
             QualityAuditCheck.from_dict(
                 check,
                 source_by_uid,
-                schema_version=schema_version,
             )
             for check in raw_checks
         )
@@ -669,21 +591,7 @@ class QualityAuditSession:
             if check.report.memory_count != expected_memory_count:
                 raise QualityAuditError("Audit check does not match its frozen Source.")
             expected_ruleset = QUALITY_AUDIT_RULESETS[check.kind]
-            if (
-                schema_version <= QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION
-                and check.kind == "conflicts"
-            ):
-                expected_ruleset = "conflict-v1-draft"
-            valid_rulesets = {expected_ruleset}
-            if (
-                schema_version == QUALITY_AUDIT_SCHEMA_VERSION
-                and check.kind == "conflicts"
-            ):
-                # Normalized historical records retain truthful v1 provenance
-                # even though their discarded display-only tags are not
-                # rewritten into the version-3 body.
-                valid_rulesets.add("conflict-v1-draft")
-            if check.ruleset_version not in valid_rulesets:
+            if check.ruleset_version != expected_ruleset:
                 raise QualityAuditError("Unsupported Audit finder ruleset.")
             if check.provenance.operation != f"find_{check.kind}":
                 raise QualityAuditError(
@@ -723,59 +631,21 @@ class QualityAuditSession:
                 "Conflict Audit does not cover its frozen pair frame."
             )
 
-        raw_responses = data["responses"]
-        if not isinstance(raw_responses, dict):
-            raise QualityAuditError("Invalid Audit responses.")
-        valid_uids = {uid for check in checks for uid in _finding_item_uids(check)}
-        responses: dict[str, QualityFindResponse] = {}
-        for item_uid, raw_response in raw_responses.items():
-            if not isinstance(item_uid, str) or item_uid not in valid_uids:
-                raise QualityAuditError("Invalid Audit response target.")
-            response_data = _exact_dict(
-                raw_response,
-                {"selected_option_uid", "text"},
-                "Audit response",
-            )
-            selected = response_data["selected_option_uid"]
-            if selected is not None and (not isinstance(selected, str) or not selected):
-                raise QualityAuditError("Invalid selected Audit option.")
-            responses[item_uid] = QualityFindResponse(
-                selected_option_uid=selected,
-                text=_string(
-                    response_data["text"],
-                    "Audit response text",
-                    empty=True,
-                    limit=REVIEW_RESPONSE_CHAR_LIMIT,
-                ),
-            )
         session = cls(
             uid=_canonical_uuid(data["uid"], "Audit session uid"),
             created_at=_string(data["created_at"], "Audit creation time", limit=100),
             source=source,
             checks=checks,
             conformance=conformance,
-            responses=responses,
         )
         try:
             datetime.fromisoformat(session.created_at)
         except ValueError as error:
             raise QualityAuditError("Invalid Audit creation time.") from error
-        # The legacy option grammar is owned by the operation adapter. Import it
-        # only while decoding retained annotations so the durable model does not
-        # depend on that projection during ordinary module initialization.
-        from memcommit.application.operations.audit.resolution_adapter import (
-            quality_audit_resolution_view,
-        )
-
-        view = quality_audit_resolution_view(session)
-        for item_uid, response in responses.items():
-            item = view.item(item_uid)
-            if response.selected_option_uid is not None:
-                item.option(response.selected_option_uid)
         return session
 
 
 def quality_audit_record_digest(session: QualityAuditSession) -> str:
-    """Fingerprint the complete mutable Audit record for CAS persistence."""
+    """Fingerprint the complete immutable Audit record."""
 
     return _digest(session.to_dict())

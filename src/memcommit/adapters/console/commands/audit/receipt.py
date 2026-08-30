@@ -76,7 +76,6 @@ def render_quality_audit_receipt(session: QualityAuditSession) -> None:
                 kind=check.kind,
                 source=source_frame,
                 report=check.report,
-                responses=session.responses,
             ),
             source_frame,
             operation_label=f"AUDIT · {label}",

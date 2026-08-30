@@ -205,9 +205,6 @@ def _new_audit_uid(before: set[str]) -> str:
 
 
 def main() -> None:
-    from memcommit.application.operations.audit.resolution_adapter import (
-        quality_audit_resolution_view,
-    )
     from memcommit.application.operations.audit.session_store import QualityAuditStore
     from memcommit.persistence.store import MemoryStore
 
@@ -304,7 +301,15 @@ def main() -> None:
 
     audit_uid = _new_audit_uid(existing)
     saved = QualityAuditStore(MemoryStore()).load(audit_uid)
-    view = quality_audit_resolution_view(saved)
+    item_kinds = tuple(
+        (
+            ("EXACT DUPLICATE" if finding.relation == "EXACT" else "SEMANTIC DUN")
+            if check.kind == "duplicates"
+            else check.kind[:-1].upper()
+        )
+        for check in saved.checks
+        for finding in check.report.findings
+    )
     print(f"AUDIT UID · {audit_uid}", flush=True)
     print(
         "RESULTS · "
@@ -315,26 +320,26 @@ def main() -> None:
         flush=True,
     )
 
-    if view.items:
+    if item_kinds:
         # Viewer → Items. Enter opens the checked item and returns focus to
         # Viewer; subsequent opened details add Responses before Items.
         audit.send(b"\t\x1b[B\r")
         time.sleep(0.5)
         while _drain(audit, audit_raw, timeout=0.02):
             pass
-        for index, item in enumerate(view.items, start=1):
+        for index, item_kind in enumerate(item_kinds, start=1):
             if index > 1:
                 audit.send(b"\t\t\x1b[B\r")
                 time.sleep(0.5)
                 while _drain(audit, audit_raw, timeout=0.02):
                     pass
             detail_plain = _render_snapshot(
-                f"{5 + index:02d}-review-{item.kind.casefold()}-{index}",
+                f"{5 + index:02d}-review-{item_kind.casefold()}-{index}",
                 bytes(audit_raw),
             )
-            if item.kind not in detail_plain:
+            if item_kind not in detail_plain:
                 raise RuntimeError(
-                    f"Audit item capture {index} did not show {item.kind}."
+                    f"Audit item capture {index} did not show {item_kind}."
                 )
 
     audit.send(b"\x1b")

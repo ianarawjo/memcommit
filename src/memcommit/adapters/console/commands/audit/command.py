@@ -272,7 +272,7 @@ def cmd(
 
         # Publish the complete snapshot before printing its receipt. Review is
         # a separate command, so a terminal disconnect cannot lose the result.
-        QualityAuditStore(store).save(session, expected_digest=None)
+        QualityAuditStore(store).save(session)
     except (
         ConcurrentContextUpdateError,
         ConformanceError,

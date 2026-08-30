@@ -46,7 +46,7 @@ operation route-state classification:
 | --- | --- | --- |
 | Requested singleton artifact | Summarize | Render the paragraph directly below the Summary identity and status. Do not repeat an understanding heading in the terminal or clipboard. |
 | Source, proposal, or assessment overview | Distill, Elaborate, Forget, Sever, Check Conformance | Use `SOURCE OVERVIEW`, `PROPOSAL OVERVIEW`, `ASSESSMENT`, or `ASSESSMENT OVERVIEW` according to what the paragraph actually describes. |
-| Shared Resolution report with heterogeneous sections | Audit, Dedun, Find Duplicates, Find Redundancies, Find Ambiguities, Find Conflicts, Update, Resolve, Impact, Review | Render adapter-declared sections such as Scope, Findings, Plan, Provenance, Verification, or Summary as peers. Do not wrap them in one comprehension group. |
+| Structured semantic report with heterogeneous sections | Audit, Dedun, Find Duplicates, Find Redundancies, Find Ambiguities, Find Conflicts, Update, Resolve, Impact, Review | Render adapter-declared sections such as Scope, Findings, Plan, Provenance, Verification, or Summary as peers. Do not wrap them in one comprehension group. |
 | Genuine multi-dimensional semantic review | Compare, Atomize, Meld | Retain an understanding dimension where it is independently reviewable beside differences, changes, unresolved work, or accounting. The common shell still does not add an extra outer group. |
 | No affected generic comprehension wrapper | The other 45 canonical operations, including Query, Translate, Rationale, deterministic changes, navigation, history, sharing, and system tools | Keep their existing answer, translation, reason, result, receipt, or deterministic report grammar. Do not add a heading merely for cross-operation visual uniformity. |
 

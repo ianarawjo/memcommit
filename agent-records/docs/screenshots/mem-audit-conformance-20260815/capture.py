@@ -25,19 +25,16 @@ def _demo_child() -> None:
     from memcommit.application.capabilities import ops
     from memcommit.adapters.console.commands.audit.command import (
         _run_quality_audit_checks,
+    )
+    from memcommit.adapters.console.commands.audit.review import (
+        render_quality_audit_review_snapshot,
         run_quality_audit_review,
     )
     from memcommit.application.operations.conformance.model import (
         CONTEXT_CONFORMANCE_OPERATION,
     )
     from memcommit.providers.types import ProviderIdentity
-    from memcommit.application.operations.audit.resolution_adapter import (
-        quality_audit_resolution_view,
-    )
     from memcommit.application.operations.audit.session_store import QualityAuditStore
-    from memcommit.adapters.console.terminal.components.resolution.session_shell import (
-        render_resolution_workbench_snapshot,
-    )
     from memcommit.application.operations.review.model import direct_context_digest
     from memcommit.persistence.store import MemoryStore
 
@@ -98,7 +95,7 @@ def _demo_child() -> None:
             interactive=True,
             interval=0.08,
         )
-        QualityAuditStore(store).save(session, expected_digest=None)
+        QualityAuditStore(store).save(session)
         run_quality_audit_review(store, session)
 
         restored = QualityAuditStore(store).load(session.uid)
@@ -110,9 +107,7 @@ def _demo_child() -> None:
         ) and not store.list_checkpoints(rules.name)
         print("\nREAD-ONLY VERIFICATION", flush=True)
         print(
-            render_resolution_workbench_snapshot(
-                quality_audit_resolution_view(restored)
-            ),
+            render_quality_audit_review_snapshot(restored),
             flush=True,
         )
         print(

@@ -46,9 +46,6 @@ def _session(*, empty: bool):
         QualityAuditCheck,
         QualityAuditProvenance,
     )
-    from memcommit.application.operations.audit.resolution_adapter import (
-        quality_audit_resolution_view,
-    )
 
     context = Context(
         uid="00000000-0000-4000-8000-000000000801",
@@ -170,11 +167,6 @@ def _session(*, empty: bool):
         uid="00000000-0000-4000-8000-000000000899",
         created_at="2026-08-22T12:00:00+00:00",
     )
-    if not empty:
-        item = quality_audit_resolution_view(session).items[0]
-        response = session.response_for(item.uid)
-        response.selected_option_uid = item.options[0].uid
-        response.text = "Earlier reviewer retained this evidence for follow-up."
     return session
 
 

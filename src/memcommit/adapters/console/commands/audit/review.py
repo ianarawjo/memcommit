@@ -30,12 +30,11 @@ from memcommit.adapters.console.terminal.components.findings import (
     quality_find_report_header_text,
 )
 from memcommit.application.operations.audit.model import QualityAuditSession
-from memcommit.application.operations.audit.resolution_adapter import (
-    quality_audit_resolution_view,
-)
 from memcommit.application.operations.audit.session_store import QualityAuditStore
 from memcommit.application.capabilities.reviewing.memory_issue_finding.report import (
+    QualityFindReportView,
     quality_find_category_label,
+    quality_find_report_summary_text,
 )
 from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
     QualityFindSourceFrame,
@@ -85,11 +84,49 @@ def quality_audit_review_document(
 
     if not isinstance(session, QualityAuditSession):
         raise TypeError("Audit Review requires one typed saved Audit.")
-    compatibility_view = quality_audit_resolution_view(session)
-    overview_by_uid = {
-        section.uid: section for section in compatibility_view.overview_sections
-    }
+    context = session.source.context()
+    source_frame = QualityFindSourceFrame.create((context,))
+    report_views: dict[str, QualityFindReportView] = {}
+    for check in session.checks:
+        label = quality_find_category_label(check.kind)
+        report_views[check.kind] = quality_find_report_view(
+            QualityFindWorkbenchSession(
+                uid=session.uid,
+                kind=check.kind,
+                source=source_frame,
+                report=check.report,
+            ),
+            context,
+            operation_label=f"AUDIT · {label}",
+        )
+
     check_total = 4 if session.conformance is not None else 3
+    summary_text = (
+        "All Memory-issue finders completed over the same saved direct Context "
+        "snapshot. Each section retains its own Memory, pair, group, or "
+        "absorption unit."
+    )
+    if session.conformance is not None:
+        summary_text += (
+            " Conformance evaluated the same Source against "
+            f"{len(session.conformance.rules)} frozen Rules."
+        )
+    checks_text = "\n".join(
+        f"{quality_find_category_label(check.kind)} · FINISHED · "
+        f"{quality_find_report_summary_text(report_views[check.kind])}"
+        for check in session.checks
+    )
+    if session.conformance is not None:
+        checks_text += (
+            "\nCONFORMANCE · FINISHED · "
+            f"{len(session.conformance.context_judgments)} Rules · "
+            f"{session.conformance.issue_count} issues"
+        )
+    source_text = (
+        f"{session.source.context_name} · {len(session.source.memories)} direct "
+        "Memories as captured when this Audit ran. Descendants and embedded "
+        "Contexts were not analyzed."
+    )
     overview_fragments: list[tuple[str, str]] = [
         ("class:report-label", " MEM AUDIT\n"),
         (
@@ -102,14 +139,11 @@ def quality_audit_review_document(
             f"CREATED {safe_terminal_text(session.created_at)}\n",
         ),
         ("class:report-label", " SUMMARY · "),
-        ("class:viewer-body", _inline(overview_by_uid["summary"].text) + "\n"),
+        ("class:viewer-body", _inline(summary_text) + "\n"),
         ("class:report-label", " CHECKS · "),
-        (
-            "class:viewer-body",
-            _inline_lines(overview_by_uid["checks"].text) + "\n",
-        ),
+        ("class:viewer-body", _inline_lines(checks_text) + "\n"),
         ("class:report-label", " SOURCE · "),
-        ("class:viewer-body", _inline(overview_by_uid["scope"].text) + "\n"),
+        ("class:viewer-body", _inline(source_text) + "\n"),
         ("class:report-label", " SNAPSHOT · "),
     ]
     for ordinal, memory in enumerate(session.source.memories):
@@ -134,22 +168,9 @@ def quality_audit_review_document(
         )
     ]
 
-    context = session.source.context()
-    source_frame = QualityFindSourceFrame.create((context,))
     for check in session.checks:
         header_label = quality_find_category_label(check.kind)
-        sub_session = QualityFindWorkbenchSession(
-            uid=session.uid,
-            kind=check.kind,
-            source=source_frame,
-            report=check.report,
-            responses=session.responses,
-        )
-        report_view = quality_find_report_view(
-            sub_session,
-            context,
-            operation_label=f"AUDIT · {header_label}",
-        )
+        report_view = report_views[check.kind]
         count = len(check.report.findings)
         header_text = quality_find_report_header_text(
             report_view,
@@ -206,36 +227,50 @@ def quality_audit_review_document(
                 )
             )
 
-    if "conformance" in overview_by_uid:
-        overview = overview_by_uid["conformance"]
+    conformance = session.conformance
+    if conformance is not None:
+        rule_by_uid = {rule.uid: rule for rule in conformance.rules}
         sections.append(
             _report_section(
                 "AUDIT:CONFORMANCE",
                 "CONFORMANCE",
-                overview.heading,
-                overview.text,
+                "CONFORMANCE",
+                "\n".join(
+                    f"{rule_by_uid[item.rule_uid].alias} · {item.status} · {item.reason}"
+                    for item in conformance.context_judgments
+                ),
             )
         )
-    provenance = overview_by_uid["provenance"]
+    provenance_lines = [
+        f"{quality_find_category_label(check.kind)} · {check.ruleset_version} · "
+        f"{check.provenance.display_name()}"
+        for check in session.checks
+    ]
+    if conformance is not None:
+        identity = conformance.provider_identity
+        assert identity is not None
+        provenance_lines.append(
+            f"CONFORMANCE · {conformance.ruleset_version} · {identity.display_name()}"
+        )
     sections.append(
         _report_section(
             "AUDIT:PROVENANCE",
             "PROVENANCE",
-            provenance.heading,
-            provenance.text,
+            "PROVENANCE",
+            "\n".join(provenance_lines),
         )
     )
 
-    boundary = overview_by_uid["boundary"]
     sections.append(
         _report_section(
             "AUDIT:BOUNDARY",
             "BOUNDARY",
-            boundary.heading,
+            "BOUNDARY",
             (
-                boundary.text
-                + " This Viewer cannot select a reading, write a response, rerun a "
-                "finder, or apply a Memory change."
+                "This saved Audit is a model-assisted finding record, not proof "
+                "that the Source is free of Memory issues. This Viewer cannot "
+                "select a reading, write a response, rerun a finder, or apply a "
+                "Memory change."
             ),
             anchor="end",
         )

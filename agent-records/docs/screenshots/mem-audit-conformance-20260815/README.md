@@ -1,7 +1,7 @@
 # Audit with optional Rule Conformance
 
 This ordered capture verifies the optional fourth `mem audit --against RULES`
-check through the real shared Audit wait and Resolution workbench shells. The
+check through the real shared Audit wait and read-only semantic Viewer. The
 provider is deterministic so the capture tests presentation and persistence
 without spending another external inference turn; the separate ticker
 Conformance capture records the real configured-provider behavior.

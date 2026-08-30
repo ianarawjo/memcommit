@@ -1,4 +1,4 @@
-"""Operation-owned private CAS persistence for completed Audit sessions."""
+"""Operation-owned private persistence for immutable completed Audit records."""
 
 from __future__ import annotations
 
@@ -13,9 +13,8 @@ from typing import Iterator
 from memcommit.application.operations.audit.model import (
     QualityAuditError,
     QualityAuditSession,
-    quality_audit_record_digest,
 )
-from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 class QualityAuditStore:
@@ -58,13 +57,8 @@ class QualityAuditStore:
             fcntl.flock(descriptor, fcntl.LOCK_UN)
             os.close(descriptor)
 
-    def save(
-        self,
-        session: QualityAuditSession,
-        *,
-        expected_digest: str | None,
-    ) -> None:
-        """Create or CAS-update one response ledger without replacing its snapshot."""
+    def save(self, session: QualityAuditSession) -> None:
+        """Create one immutable UID-addressed Audit record."""
 
         restored = QualityAuditSession.from_dict(session.to_dict())
         path = self._path(restored.uid)
@@ -79,32 +73,8 @@ class QualityAuditStore:
                 if path.exists() and (not path.is_file() or path.is_symlink()):
                     raise QualityAuditError("Audit session storage is invalid.")
                 if path.exists():
-                    try:
-                        with open(path, encoding="utf-8") as handle:
-                            current = QualityAuditSession.from_dict(
-                                json.load(handle, object_pairs_hook=_strict_json_object)
-                            )
-                    except (OSError, ValueError, json.JSONDecodeError) as error:
-                        raise QualityAuditError(
-                            "Saved Audit session is invalid."
-                        ) from error
-                    if expected_digest is None:
-                        raise ConcurrentContextUpdateError(
-                            "An Audit session with this uid already exists."
-                        )
-                    if quality_audit_record_digest(current) != expected_digest:
-                        raise ConcurrentContextUpdateError(
-                            "The Audit review changed before it could be saved."
-                        )
-                    # Responses may change, but a review save can never replace
-                    # the provider result it claims to annotate.
-                    if current.snapshot_digest != restored.snapshot_digest:
-                        raise ConcurrentContextUpdateError(
-                            "The immutable Audit snapshot cannot be replaced."
-                        )
-                elif expected_digest is not None:
-                    raise ConcurrentContextUpdateError(
-                        "The Audit session no longer exists."
+                    raise QualityAuditError(
+                        "An Audit record with this uid already exists."
                     )
                 temporary = self.directory / f".{path.name}.write-{uuid.uuid4().hex}"
                 try:

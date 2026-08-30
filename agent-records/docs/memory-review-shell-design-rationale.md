@@ -87,8 +87,8 @@ merely because a row was selected. Every retained operation state remains
 visible; this is not a completed-only history view.
 
 TTY bare `mem review` now opens the aggregate saved-session launcher. Choosing
-an Audit row resumes the exact saved three-finder snapshot and its response
-ledger without rerunning a provider. Choosing an Atomize row resumes its exact
+an Audit row opens the exact immutable three-finder record without rerunning a
+provider. Choosing an Atomize row resumes its exact
 analysis/workbench, while choosing the older global ambiguity Review resumes
 that singleton in this shell. Non-TTY and explicit snapshot/response
 compatibility forms retain the prior precedence: the global Review slot first,

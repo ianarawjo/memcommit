@@ -45,8 +45,8 @@ def audit_session_entries(
                 key=session.uid,
                 title=session.source.context_name,
                 status=(
-                    f"{check_total}/{check_total} CHECKS · {session.answered_count}/"
-                    f"{session.finding_count} ANSWERED"
+                    f"{check_total}/{check_total} CHECKS · "
+                    f"{session.finding_count} FINDINGS · READ-ONLY"
                 ),
                 subtitle=(
                     f"DUP {counts['duplicates']} · AMB {counts['ambiguities']} · "

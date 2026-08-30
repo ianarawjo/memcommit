@@ -91,15 +91,15 @@ setup module.
 
 ## Application ownership
 
-Audit's application-specific model, execution, session persistence, and legacy
-Resolution projection live under `memcommit.application.operations.audit`.
+Audit's application-specific model, execution, and record persistence live
+under `memcommit.application.operations.audit`.
 `model.py` owns the durable Source, Check, Session, schema validation, and record
 digest; `application.py` freezes one Source and runs the three quality finders
-plus optional Conformance as one complete operation; `session_store.py` owns the
-private UID-addressed CAS records; and `resolution_adapter.py` retains only the
-typed compatibility shape needed by historical responses and the current
-read-only document projector. The reusable finder, report, and workbench
-contracts remain under
+plus optional Conformance as one complete operation; and `session_store.py`
+owns private immutable UID-addressed records. The read-only console projector
+composes the shared Memory-issue report views directly; Audit has no Resolution
+projection, response model, option grammar, or CAS update route. The reusable
+finder, report, and workbench contracts remain under
 `application.capabilities.reviewing.memory_issue_finding`.
 
 Optional Conformance is preflighted inside the Audit application before any
@@ -113,21 +113,22 @@ owners, not supported import surfaces. The remaining shared capability was
 then named `reviewing.memory_issue_finding`: its outputs are model-assisted
 issue candidates for review, not proof of a generalized quality judgment.
 
-Audit schema versions 1 and 2 may contain response records written by the
-earlier UI. Version 2 Conflict records also contain the retired
-`scope_dimensions` classifier. Removing those fields without a migration would
-make saved research artifacts unreadable, so strict legacy decoding remains;
-the current version 3 form discards only that unused classifier while retaining
-reason and question verbatim. The compact default Viewer does
-not show those old dispositions or notes: they are neither current Audit
-findings nor instructions for a downstream operation. The new Review route
-never creates, edits, or saves one. A future explicit historical-record export
-may expose them without putting answer-like annotation back into this report.
+The response-bearing draft was never distributed. On 2026-08-30 its runtime
+compatibility was removed instead of turning an unreleased shape into a durable
+contract: the sole read-only schema starts at version 1, strict decoding rejects
+the discarded drafts, and no migration or compatibility facade is provided.
+`QualityAuditSession` is frozen, `QualityAuditStore.save` is create-only, and an
+existing UID cannot be replaced. Historical screenshots remain evidence of the
+prototype's earlier UI; they do not define a supported record or Python API.
 
-The legacy `quality_audit_resolution_view` remains as a typed compatibility
-projection for stored option validation and callers that still consume its
-report shape. It advertises no submit capability and labels itself read-only.
-New terminal code must use `quality_audit_review_document` instead.
+`session_store.py` still contains the physical JSON, locking, and atomic-write
+adapter beside the application model as a provisional ownership boundary. A
+later behavior-preserving relocation may place it under
+`persistence.operations.audit` while the application package retains the
+record and repository contract. Mutable operation sessions should remain
+distinct from immutable records, receipts, and the cross-operation command
+ledger; this change deliberately does not perform that broader persistence
+layout migration.
 
 ## Safety and limitations
 
@@ -136,6 +137,4 @@ New terminal code must use `quality_audit_review_document` instead.
   Contexts, Memories, checkpoints, or provider state.
 - The Viewer reports the saved model judgments; it does not claim that an
   absent finding proves quality.
-- Historical notes remain retained verbatim in the stored record but are not
-  projected into the default Viewer. There is no migration that interprets
-  them as Resolve, Dedun, or clarification guidance.
+- Audit records contain no response or disposition fields.

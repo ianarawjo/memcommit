@@ -302,12 +302,11 @@ Ambiguity, Conflict. A zero-finding check remains visible; every positive
 result uses the same one-line issue projection as its one-shot finder.
 Questions are retained as report evidence beside Ambiguity and Conflict
 reasons, but they are plain read-only prose rather than response controls.
-Labelled alternatives, redundancy reasons, and historical response notes are
-not part of the default review document because they either look selectable or
-repeat information already conveyed by the compact result. The immutable typed
-reports and legacy response map remain decodable; this is a presentation
-reduction, not a stored-data migration. No `REQUIRED` or `OPTIONAL` answer
-obligation is created.
+Labelled alternatives and repeated redundancy reasons are not part of the
+default review document because they either look selectable or repeat
+information already conveyed by the compact result. The immutable Audit record
+contains only typed reports and provenance; it has no response map or legacy
+decoder. No `REQUIRED` or `OPTIONAL` answer obligation is created.
 
 Saved Audits appear in the aggregate `mem review` launcher and reopen exactly
 through `mem review audit --session UID`. Review renders the saved audited

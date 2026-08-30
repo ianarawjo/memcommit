@@ -58,19 +58,16 @@ from memcommit.application.operations.audit.application import (
     run_quality_audit,
 )
 from memcommit.application.operations.audit.model import (
-    QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION,
     QUALITY_AUDIT_RULESETS,
     QUALITY_AUDIT_SCHEMA_VERSION,
     QualityAuditCheck,
+    QualityAuditError,
     QualityAuditProvenance,
     QualityAuditSession,
     quality_audit_record_digest,
 )
-from memcommit.application.operations.audit.resolution_adapter import (
-    quality_audit_resolution_view,
-)
 from memcommit.application.operations.audit.session_store import QualityAuditStore
-from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()
@@ -170,29 +167,26 @@ def _finding_session(ctx, first, second):
     )
 
 
-def test_version_two_audit_drops_legacy_conflict_scope_tags_on_read():
+def test_audit_record_schema_contains_no_response_contract():
+    ctx, first, second = _context()
+    session = _finding_session(ctx, first, second)
+
+    value = session.to_dict()
+
+    assert value["schema_version"] == QUALITY_AUDIT_SCHEMA_VERSION == 1
+    assert "responses" not in value
+    assert not hasattr(session, "responses")
+
+
+@pytest.mark.parametrize("schema_version", [2, 3])
+def test_audit_rejects_undistributed_draft_schemas(schema_version):
     ctx, first, second = _context()
     value = _finding_session(ctx, first, second).to_dict()
-    value["schema_version"] = QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION
-    for check in value["checks"]:
-        if check["kind"] != "conflicts":
-            continue
-        check["ruleset_version"] = "conflict-v1-draft"
-        for finding in check["report"]["findings"]:
-            finding["scope_dimensions"] = ["TIME"]
+    value["schema_version"] = schema_version
+    value["responses"] = {}
 
-    restored = QualityAuditSession.from_dict(value)
-    rewritten = restored.to_dict()
-
-    assert rewritten["schema_version"] == QUALITY_AUDIT_SCHEMA_VERSION
-    conflict_check = next(
-        check for check in rewritten["checks"] if check["kind"] == "conflicts"
-    )
-    assert all(
-        "scope_dimensions" not in finding
-        for finding in conflict_check["report"]["findings"]
-    )
-    assert QualityAuditSession.from_dict(rewritten).to_dict() == rewritten
+    with pytest.raises(QualityAuditError, match="Unsupported Audit session schema"):
+        QualityAuditSession.from_dict(value)
 
 
 def test_audit_setup_is_one_context_and_one_run_action():
@@ -295,47 +289,9 @@ def test_audit_initial_checks_never_supply_a_full_screen_return_view(monkeypatch
     ]
 
 
-def test_audit_report_keeps_three_sections_and_type_specific_items():
-    ctx, first, second = _context()
-    session = _finding_session(ctx, first, second)
-
-    view = quality_audit_resolution_view(session)
-
-    assert [metric.label for metric in view.metrics] == [
-        "SOURCE MEMORIES",
-        "REDUNDANCIES",
-        "AMBIGUITIES",
-        "CONFLICTS",
-    ]
-    assert [metric.value for metric in view.metrics] == ["2", "1", "1", "1"]
-    assert [item.kind for item in view.items] == [
-        "SEMANTIC DUN",
-        "AMBIGUITY",
-        "CONFLICT",
-    ]
-    assert (
-        "REDUNDANCIES · FINISHED · 2 MEMORIES CHECKED · 1 GROUP · 1 PROPOSED ABSORPTION"
-    ) in view.overview
-    assert "AMBIGUITIES · FINISHED · 1/2 MEMORIES FLAGGED" in view.overview
-    assert (
-        "CONFLICTS · FINISHED · 2/2 MEMORIES INVOLVED · 1/1 PAIRS FLAGGED"
-        in view.overview
-    )
-    assert "AUDITED SOURCE" in view.overview
-    assert "FROZEN SOURCE" not in view.overview
-    assert [location.role for location in view.context_locations] == ["AUDITED SOURCE"]
-    assert "not proof" in view.overview
-    assert view.capabilities == frozenset()
-    assert view.status.endswith("READ-ONLY REPORT")
-
-
 def test_audit_review_is_one_complete_answer_free_document():
     ctx, first, second = _context()
     session = _finding_session(ctx, first, second)
-    legacy_item = quality_audit_resolution_view(session).items[0]
-    response = session.response_for(legacy_item.uid)
-    response.selected_option_uid = legacy_item.options[0].uid
-    response.text = "Retained from an earlier review version."
 
     document = quality_audit_review_document(session)
     rendered = semantic_document_plain_text(
@@ -354,8 +310,6 @@ def test_audit_review_is_one_complete_answer_free_document():
     assert "≈ REDUNDANT · SEMANTIC EQUIVALENT" in rendered
     assert "? UNDERSPECIFIED" in rendered
     assert "! CONFLICT" in rendered
-    assert "SAVED REVIEW NOTE · HISTORICAL" not in rendered
-    assert "Retained from an earlier review version." not in rendered
     assert (
         "REDUNDANCIES · 2 MEMORIES CHECKED · 1 GROUP · 1 PROPOSED ABSORPTION"
     ) in rendered
@@ -436,16 +390,19 @@ def test_audit_review_scrolls_each_finding_in_one_check_independently():
         "The affected audience is not explicit.",
         "Which audience is affected?",
     )
-    session.checks = (
-        session.checks[0],
-        replace(
-            ambiguity_check,
-            report=replace(
-                ambiguity_check.report,
-                findings=ambiguity_check.report.findings + (second_finding,),
+    session = replace(
+        session,
+        checks=(
+            session.checks[0],
+            replace(
+                ambiguity_check,
+                report=replace(
+                    ambiguity_check.report,
+                    findings=ambiguity_check.report.findings + (second_finding,),
+                ),
             ),
+            session.checks[2],
         ),
-        session.checks[2],
     )
 
     document = quality_audit_review_document(session)
@@ -473,16 +430,12 @@ def test_audit_review_scrolls_each_finding_in_one_check_independently():
     assert sum(style == "[SetCursorPosition]" for style, _text in focused) == 1
 
 
-def test_audit_review_close_cannot_persist_or_change_a_saved_annotation(
-    isolated_store,
-):
+def test_audit_review_close_cannot_change_the_saved_record(isolated_store):
     ctx, first, second = _context()
     store = MemoryStore()
     session = _finding_session(ctx, first, second)
-    item = quality_audit_resolution_view(session).items[0]
-    session.response_for(item.uid).text = "Historical note."
     sessions = QualityAuditStore(store)
-    sessions.save(session, expected_digest=None)
+    sessions.save(session)
     before = quality_audit_record_digest(sessions.load(session.uid))
 
     with create_pipe_input() as pipe_input:
@@ -495,52 +448,22 @@ def test_audit_review_close_cannot_persist_or_change_a_saved_annotation(
             require_tty=False,
         )
 
-    assert returned.responses[item.uid].text == "Historical note."
+    assert quality_audit_record_digest(returned) == before
     assert quality_audit_record_digest(sessions.load(session.uid)) == before
     assert "RESPONSES" not in render_quality_audit_review_snapshot(returned)
 
 
-def test_audit_store_preserves_snapshot_while_saving_review_response(isolated_store):
+def test_audit_store_rejects_replacing_an_immutable_record(isolated_store):
     ctx, first, second = _context()
     session = _finding_session(ctx, first, second)
     sessions = QualityAuditStore(MemoryStore())
-    sessions.save(session, expected_digest=None)
-    original_snapshot = session.snapshot_digest
-    expected = quality_audit_record_digest(session)
-    item = quality_audit_resolution_view(session).items[0]
-    response = session.response_for(item.uid)
-    response.selected_option_uid = item.options[0].uid
-    response.text = "Keep this duplicate evidence."
+    sessions.save(session)
+    before = quality_audit_record_digest(sessions.load(session.uid))
 
-    sessions.save(session, expected_digest=expected)
-    restored = sessions.load(session.uid)
+    with pytest.raises(QualityAuditError, match="already exists"):
+        sessions.save(session)
 
-    assert restored.snapshot_digest == original_snapshot
-    assert restored.response_for(item.uid).text == "Keep this duplicate evidence."
-
-    ambiguity_report = session.checks[1].report
-    assert isinstance(ambiguity_report, AmbiguityReport)
-    altered_check = replace(
-        session.checks[1],
-        report=replace(
-            ambiguity_report,
-            findings=(
-                replace(
-                    ambiguity_report.findings[0],
-                    reason="A replaced provider result.",
-                ),
-            ),
-        ),
-    )
-    session.checks = (session.checks[0], altered_check, session.checks[2])
-    with pytest.raises(
-        ConcurrentContextUpdateError,
-        match="immutable Audit snapshot",
-    ):
-        sessions.save(
-            session,
-            expected_digest=quality_audit_record_digest(restored),
-        )
+    assert quality_audit_record_digest(sessions.load(session.uid)) == before
 
 
 def test_saved_audit_is_in_audit_and_aggregate_review_catalogs(isolated_store):
@@ -548,7 +471,7 @@ def test_saved_audit_is_in_audit_and_aggregate_review_catalogs(isolated_store):
     store = MemoryStore()
     session = _finding_session(ctx, first, second)
     sessions = QualityAuditStore(store)
-    sessions.save(session, expected_digest=None)
+    sessions.save(session)
 
     audit_entries = audit_session_entries(sessions)
     review_entries = review_session_entries(store)
@@ -564,7 +487,7 @@ def test_saved_audit_is_in_audit_and_aggregate_review_catalogs(isolated_store):
 def test_review_audit_snapshot_reopens_exact_saved_report(isolated_store):
     ctx, first, second = _context()
     session = _finding_session(ctx, first, second)
-    QualityAuditStore(MemoryStore()).save(session, expected_digest=None)
+    QualityAuditStore(MemoryStore()).save(session)
 
     result = runner.invoke(
         app,
@@ -582,7 +505,7 @@ def test_review_audit_snapshot_reopens_exact_saved_report(isolated_store):
 def test_review_audit_snapshot_accepts_displayed_session_prefix(isolated_store):
     ctx, first, second = _context()
     session = _finding_session(ctx, first, second)
-    QualityAuditStore(MemoryStore()).save(session, expected_digest=None)
+    QualityAuditStore(MemoryStore()).save(session)
 
     result = runner.invoke(
         app,
@@ -598,14 +521,8 @@ def test_review_audit_rejects_an_ambiguous_session_prefix(isolated_store):
     ctx, first, second = _context()
     original = _finding_session(ctx, first, second)
     sessions = QualityAuditStore(MemoryStore())
-    sessions.save(
-        replace(original, uid="aaaaaaaa-0000-4000-8000-000000000000"),
-        expected_digest=None,
-    )
-    sessions.save(
-        replace(original, uid="aaaaaaaa-1111-4000-8000-000000000000"),
-        expected_digest=None,
-    )
+    sessions.save(replace(original, uid="aaaaaaaa-0000-4000-8000-000000000000"))
+    sessions.save(replace(original, uid="aaaaaaaa-1111-4000-8000-000000000000"))
 
     result = runner.invoke(
         app,

@@ -1,8 +1,8 @@
 """Frozen quality-finder reports and their presentation projections.
 
-Ordinary Find routes are read-only reports.  The response-bearing Resolution
-projection remains only for durable legacy Audit records until that persisted
-schema is migrated; it must not make a one-shot finder look answerable.
+Ordinary Find and Audit routes are read-only reports. Response state exists
+only for explicit repair-handoff adapters; Audit never persists or projects it,
+and a one-shot finder must not look answerable.
 """
 
 from __future__ import annotations

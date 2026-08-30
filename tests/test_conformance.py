@@ -37,13 +37,10 @@ from memcommit.application.operations.ground.workspace_runtime import (
 from memcommit.providers.types import ProviderIdentity
 from memcommit.persistence.store import MemoryStore
 from memcommit.adapters.console.commands.audit.command import _run_quality_audit_checks
-from memcommit.application.operations.audit.model import (
-    QUALITY_AUDIT_LEGACY_SCHEMA_VERSION,
-    QualityAuditSession,
+from memcommit.adapters.console.commands.audit.review import (
+    render_quality_audit_review_snapshot,
 )
-from memcommit.application.operations.audit.resolution_adapter import (
-    quality_audit_resolution_view,
-)
+from memcommit.application.operations.audit.model import QualityAuditSession
 from memcommit.application.operations.audit.session_store import QualityAuditStore
 from memcommit.persistence.store import context_record_digest
 
@@ -988,7 +985,7 @@ def test_audit_optionally_embeds_the_same_context_conformance_report():
     ]
     assert session.conformance is not None
     assert session.conformance.context_judgments[0].status == "CONFORMS"
-    assert "SAVED · 4/4 CHECKS" in quality_audit_resolution_view(session).status
+    assert "SAVED · 4/4 CHECKS" in render_quality_audit_review_snapshot(session)
     assert (
         QualityAuditSession.from_dict(session.to_dict()).conformance
         == session.conformance
@@ -1040,26 +1037,3 @@ def test_audit_cli_rules_alias_saves_one_read_only_four_check_report(
     assert context_record_digest(store.load_direct(rules.name)) == rules_before
     assert store.list_checkpoints(target.name) == []
     assert store.list_checkpoints(rules.name) == []
-
-
-def test_audit_still_reads_legacy_three_check_records_without_conformance():
-    target = ops.init("audit/legacy")
-    ops.add(target, "One Memory.")
-    AuditProvider.calls = []
-    session = _run_quality_audit_checks(
-        target,
-        AuditProvider,
-        interactive=False,
-        interval=0.001,
-    )
-    legacy = session.to_dict()
-    legacy["schema_version"] = QUALITY_AUDIT_LEGACY_SCHEMA_VERSION
-    legacy.pop("conformance")
-    for check in legacy["checks"]:
-        if check["kind"] == "conflicts":
-            check["ruleset_version"] = "conflict-v1-draft"
-
-    restored = QualityAuditSession.from_dict(legacy)
-
-    assert restored.conformance is None
-    assert "SAVED · 3/3 CHECKS" in quality_audit_resolution_view(restored).status
