@@ -126,7 +126,6 @@ class ResolutionSessionController:
                     SelectionOption(
                         "APPLY",
                         "APPLY",
-                        "Apply the exact proposal · Press Esc to cancel",
                     ),
                 ),
                 cursor_uid="APPLY",

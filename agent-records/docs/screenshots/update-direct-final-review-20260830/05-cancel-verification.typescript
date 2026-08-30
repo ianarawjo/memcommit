@@ -19,7 +19,7 @@ PROFILE · local capture · CURRENT · capture/update-review/new-guidance
 [0;38;2;139;213;255;1m┃[0m IMPACT · UPDATE                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m These exact target changes are staged. Apply accepts this proposal; Escape cancels without changing the Target.                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mcapture/update-review/campus-guide [56589852][0m                                                                                                                  [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mcapture/update-review/campus-guide [5f95e21e][0m                                                                                                                  [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - The south entrance closes at [0;38;2;237;135;150;4m17:00.[0m                                                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             + The south entrance closes at [0;38;2;166;218;149;4m18:00 during the study period.[0m                                                                                                       [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m APPLY                                                                                                                                                                           [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
@@ -36,11 +36,13 @@ PROFILE · local capture · CURRENT · capture/update-review/new-guidance
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[0;1m› REPORT         Complete Update report[0m                                                                                                                                          [0;1m^[179C[0m│[0m
-[0m│  EDIT           capture/update-review/campus-guide Memory [56589852-3f77-44fd-8acf-f0c1e8e79b10]                                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  EDIT           capture/update-review/campus-guide Memory [5f95e21e-65d4-4ee5-9166-5f539cf68650]                                                                                [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
@@ -50,10 +52,8 @@ PROFILE · local capture · CURRENT · capture/update-review/new-guidance
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────────| APPLY |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[0;38;2;16;36;47;48;2;139;213;255m✓ APPLY[0m                                                                                                                                                                           [179C│[0m
-[0m│[0;38;2;16;36;47;48;2;139;213;255m  Apply the exact proposal · Press Esc to cancel[0m                                                                                                                                  [179C│[0m
-[0m│                                                                                                                                                                                  [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close A apply  H Help  y/Y copy  Q close[137D[44A[C[0m[?25l[7A[0m┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close A apply exact proposal  H Help  y/Y copy  Q close[152D[44A[C[0m[?25l[7A[0m┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│ Staged update: capture/update-review/new-guidance -> capture/update-review/campus-guide                                                                                         [0;1m^[179C[0m│[0m
 [0m│ CONTEXT LOCATIONS                                                                                                                                                               [0;48;2;68;68;68m [179C[0m│[0m
 [0m│   SOURCE · capture/update-review/new-guidance                                                                                                                                   [0;48;2;68;68;68m [179C[0m│[0m
@@ -70,11 +70,13 @@ PROFILE · local capture · CURRENT · capture/update-review/new-guidance
 [0m│ IMPACT · UPDATE                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│ These exact target changes are staged. Apply accepts this proposal; Escape cancels without changing the Target.                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     [0;48;2;68;68;68m [179C[0m│[0m
-[0m│[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mcapture/update-review/campus-guide [56589852][0m                                                                                                                  [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mcapture/update-review/campus-guide [5f95e21e][0m                                                                                                                  [0;48;2;68;68;68m [179C[0m│[0m
 [0m│[0;38;2;255;255;255m             - The south entrance closes at [0;38;2;237;135;150;4m17:00.[0m                                                                                                                               [0;48;2;68;68;68m [179C[0m│[0m
 [0m│[0;38;2;255;255;255m             + The south entrance closes at [0;38;2;166;218;149;4m18:00 during the study period.[0m                                                                                                       [0;48;2;68;68;68m [179C[0m│[0m
 [0m│ APPLY                                                                                                                                                                           [0;48;2;68;68;68m [179C[0m│[0m
 [0m│[0;38;2;244;245;247m Press Enter on APPLY to apply the exact proposal. Press Esc to cancel.[0m                                                                                                          [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
@@ -101,11 +103,9 @@ PROFILE · local capture · CURRENT · capture/update-review/new-guidance
 
 [0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ APPLY ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
 [0;38;2;139;213;255;1m┃[0;38;2;16;36;47;48;2;139;213;255;1m✓ APPLY[0m                                                                                                                                                                           [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0;38;2;16;36;47;48;2;139;213;255m  Apply the exact proposal · Press Esc to cancel[0m                                                                                                                                  [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                  [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[C[0mEnter apply  Tab switch  E[Cc[Ccancel A ap[Cly [CH Help  Q[Cclose[0m[K[51A[61D[0m[J[0m[?7h[?1049l[?2004lUPDATE CANCELLED · capture/update-review/new-guidance → capture/update-review/campus-guide
-SESSION · 9a8fd04f-0df3-44c7-9a65-f1a683443a67
+[C[0mEnter apply exact proposal  Tab switch [CEsc cancel A apply exac[C proposal[C H Help  Q clo[Ce[0m[K[2A[90D[0m[49A[J[0m[?7h[?1049l[?2004lUPDATE CANCELLED · capture/update-review/new-guidance → capture/update-review/campus-guide
+SESSION · b9cf6e2b-bd6d-47ac-81dc-5f8041bd5c6a
 NO TARGET CHANGES · staged proposal retained · Resume with mem update.
 CAPTURE GATE · PRESS V FOR READ-ONLY TARGET VERIFICATION
 v
@@ -115,4 +115,4 @@ READ-ONLY VERIFICATION · UPDATE
   PROVIDER CALLS · 1
   TARGET MEMORIES · 1
   CHECKPOINTS · 0
-  [56589852] The south entrance closes at 17:00.
+  [5f95e21e] The south entrance closes at 17:00.

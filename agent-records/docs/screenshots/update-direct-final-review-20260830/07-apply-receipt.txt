@@ -1,7 +1,7 @@
 UPDATE APPLIED · capture/update-review/new-guidance → capture/update-review/campus-guide
 EFFECTS · ADD 0 · EDIT 1 · REMOVE 0
-RECEIPT · e7a8f4d0-1d19-44bd-92b9-ea0562891185
-CHECKPOINTS · capture/update-review/campus-guide [907acd21-3dca-4f64-802c-a04d577141fa]
-REVIEW · mem review update --session e7a8f4d0-1d19-44bd-92b9-ea0562891185
+RECEIPT · 06a15e85-58e0-4fbe-9969-f003eaae9f50
+CHECKPOINTS · capture/update-review/campus-guide [cb3b8064-ff92-4a6d-a709-454015b0f3c5]
+REVIEW · mem review update --session 06a15e85-58e0-4fbe-9969-f003eaae9f50
 RECOVERY · mem undo
 CAPTURE GATE · PRESS V FOR READ-ONLY TARGET VERIFICATION

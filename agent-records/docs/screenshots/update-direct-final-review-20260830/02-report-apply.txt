@@ -15,7 +15,7 @@
 ┃ IMPACT · UPDATE                                                                                                                                                                  ┃
 ┃ These exact target changes are staged. Apply accepts this proposal; Escape cancels without changing the Target.                                                                  ┃
 ┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
-┃       ▸ ~ [EDIT] capture/update-review/campus-guide [56589852]                                                                                                                   ┃
+┃       ▸ ~ [EDIT] capture/update-review/campus-guide [5f95e21e]                                                                                                                   ┃
 ┃             - The south entrance closes at 17:00.                                                                                                                                ┃
 ┃             + The south entrance closes at 18:00 during the study period.                                                                                                        ┃
 ┃ APPLY                                                                                                                                                                            ┃
@@ -32,11 +32,13 @@
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                 v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
 │› REPORT         Complete Update report                                                                                                                                          ^│
-│  EDIT           capture/update-review/campus-guide Memory [56589852-3f77-44fd-8acf-f0c1e8e79b10]                                                                                 │
+│  EDIT           capture/update-review/campus-guide Memory [5f95e21e-65d4-4ee5-9166-5f539cf68650]                                                                                 │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -46,7 +48,5 @@
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────────────────────────────────────────| APPLY |─────────────────────────────────────────────────────────────────────────────────────┐
 │✓ APPLY                                                                                                                                                                           │
-│  Apply the exact proposal · Press Esc to cancel                                                                                                                                  │
-│                                                                                                                                                                                  │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close A apply  H Help  y/Y copy  Q close
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close A apply exact proposal  H Help  y/Y copy  Q close

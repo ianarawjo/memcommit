@@ -23,13 +23,13 @@ are retained together.
    - Durable mutation: none.
 2. `02-report-apply.png`
    - Preceding input: provider planning completed.
-   - Visible state: the exact report, its single `APPLY` action, and the
-     `Press Esc to cancel` guidance.
+   - Visible state: the exact report and its single-line `APPLY` action; Apply
+     and Esc-cancel guidance is kept in the footer.
    - Durable mutation: none; the staged record exists.
 3. `03-apply-focused-before-cancel.png`
    - Preceding input: `Shift-Tab`.
-   - Visible state: the `APPLY` frame and its only action own focus; Esc remains
-     the visible cancellation path.
+   - Visible state: the compact one-line `APPLY` frame owns focus; Esc remains
+     the visible cancellation path in the footer.
    - Durable mutation: none.
 4. `04-cancelled.png`
    - Preceding input: `Esc` from the focused `APPLY` frame.

@@ -357,9 +357,7 @@ class ResolutionShellControls:
         )
         self.todo_window = Window(
             self.todo_control,
-            # The focused-row cursor anchor follows the description. Keep one
-            # spare line so the single APPLY label never scrolls out of view.
-            height=Dimension.exact(3 if config.report_apply else 1),
+            height=Dimension.exact(1),
             dont_extend_height=True,
             wrap_lines=False,
         )
@@ -707,6 +705,7 @@ class ResolutionShellControls:
                 focused=focused,
                 content_width=self.pane_content_width(),
                 numbered=False,
+                anchor_cursor=False,
                 blank_between=False,
             )
         display_kind = (

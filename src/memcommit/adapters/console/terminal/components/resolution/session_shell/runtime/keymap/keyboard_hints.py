@@ -87,7 +87,7 @@ def resolution_keyboard_hint_text(context: ResolutionKeyboardHintState) -> str:
     elif context.split_viewer_items and context.split_kind() == "TODO":
         todo = controller.displayed_todo()
         if controller.report_apply:
-            navigation_help = " Enter apply  Tab switch  Esc cancel "
+            navigation_help = " Enter apply exact proposal  Tab switch  Esc cancel "
         elif controller.viewer_content["kind"] == "REVIEW":
             final_action = controller.review_action()
             navigation_help = (
@@ -185,7 +185,7 @@ def resolution_keyboard_hint_text(context: ResolutionKeyboardHintState) -> str:
         actions.append(
             "A review & apply"
             if context.review_and_apply
-            else "A apply"
+            else "A apply exact proposal"
             if controller.report_apply
             else "A accept"
         )
