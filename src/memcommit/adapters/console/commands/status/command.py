@@ -6,7 +6,7 @@ from typing import Annotated
 
 import typer
 
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_scope_preset,
 )

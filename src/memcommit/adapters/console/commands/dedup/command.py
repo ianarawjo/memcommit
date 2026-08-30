@@ -6,9 +6,13 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
-from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
-from memcommit.core.context_targeting.presets import (
+from memcommit.application.capabilities.authority.context_access import (
+    resolve_context_access,
+)
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
+)
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_scope_preset,
 )
@@ -122,9 +126,7 @@ def cmd(
         fg=typer.colors.GREEN,
     )
     assert direct_receipt.checkpoint_uid is not None
-    typer.echo(
-        f"Checkpoint [{direct_receipt.checkpoint_uid[:8]}] · recovery: mem undo"
-    )
+    typer.echo(f"Checkpoint [{direct_receipt.checkpoint_uid[:8]}] · recovery: mem undo")
 
 
 __all__ = ["cmd"]

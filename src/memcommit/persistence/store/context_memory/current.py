@@ -3,7 +3,7 @@
 from __future__ import annotations
 import json
 from typing import Optional
-from memcommit.core.context_targeting.navigation import (
+from memcommit.core.context_navigation import (
     ContextNavigationDirection,
     apply_context_navigation,
     context_navigation_target,

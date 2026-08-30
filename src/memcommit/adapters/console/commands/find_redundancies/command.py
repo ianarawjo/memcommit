@@ -10,7 +10,9 @@ from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.capabilities.authority.context_access import (
+    resolve_context_access,
+)
 from memcommit.adapters.console.terminal.components.quality_find.rendering import (
     render_cleanup_member,
     render_heading,
@@ -26,7 +28,7 @@ from memcommit.adapters.console.terminal.core.identity import (
     collision_safe_uid_prefixes,
 )
 from memcommit.core.context import Memory
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_scope_preset,
 )

@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from memcommit.core.context_targeting.context_catalog import (
+from memcommit.persistence.store.context_memory.catalog_model import (
     ContextCatalogDiagnostic,
     ContextCatalogDiagnosticCode,
     ContextCatalogScan,
@@ -50,7 +50,9 @@ class _ContextCatalogScanMixin:
         while pending:
             directory = pending.pop()
             try:
-                entries = tuple(sorted(directory.iterdir(), key=lambda entry: entry.name))
+                entries = tuple(
+                    sorted(directory.iterdir(), key=lambda entry: entry.name)
+                )
             except OSError as error:
                 diagnostics.append(
                     self._catalog_diagnostic(

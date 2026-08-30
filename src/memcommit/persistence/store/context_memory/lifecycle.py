@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Callable, Iterator
 
 from memcommit.core.context import Context
-from memcommit.core.context_targeting.navigation import (
+from memcommit.core.context_navigation import (
     record_current_context_transition,
 )
 from memcommit.application.capabilities.retained_history.context_lifecycle import (

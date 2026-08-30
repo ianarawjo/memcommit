@@ -13,7 +13,7 @@ from memcommit.adapters.console.commands.find_redundancies import (
 from memcommit.adapters.console.coordination.context_operand import (
     choose_context_operand,
 )
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_scope_preset,
 )

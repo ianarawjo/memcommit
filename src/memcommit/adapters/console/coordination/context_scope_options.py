@@ -1,4 +1,4 @@
-"""Operation-neutral DIRECT and RECURSIVE Context-scope presets.
+"""Console DIRECT and RECURSIVE Context-scope option presets.
 
 The presets are interface conveniences, not a replacement for an operation's
 precise scope fields. A command or TUI may expose role-specific descendant or

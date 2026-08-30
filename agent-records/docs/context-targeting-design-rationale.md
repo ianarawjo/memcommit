@@ -28,6 +28,16 @@ there is intentionally no profile-wide “last Scope” preference.
   `UID` / `CONTEXT:UID` direct-Memory locator grammar. It also owns the pure
   storage-independent classifier for an overloaded `Context | Memory`
   positional operand.
+- `core.context_navigation` owns bounded previous/next current-Context history
+  as pure state transitions. It is a peer Context concept rather than a target
+  locator or scope resolver.
+- `application.operations.diff.context_checkpoint_lookup` freezes and searches
+  the ordinary-local Context/checkpoint namespace used only by Diff operands.
+- `persistence.store.context_memory.catalog_model` owns typed ordinary-record
+  scan results and physical omission diagnostics used by catalog persistence.
+- `adapters.console.coordination.context_scope_options` owns the shared
+  DIRECT/RECURSIVE flag vocabulary, legacy Click aliases, and translation into
+  descendant/embed option values.
 - `application.capabilities.context_scope_loading` loads one root and merges
   its lexical descendants for Compare, Update, Meld, and related application
   paths. The Store-facing composition belongs to application rather than the

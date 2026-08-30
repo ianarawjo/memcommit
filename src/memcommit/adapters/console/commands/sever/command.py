@@ -20,7 +20,9 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
     choose_session,
 )
 from memcommit.adapters.console.terminal.components.command_wait import run_command_wait
-from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
+)
 from memcommit.adapters.console.commands.sever.sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
@@ -30,7 +32,9 @@ from memcommit.application.capabilities.authority.granted_context_navigation imp
 )
 from memcommit.core.context_targeting.operands import choose_endpoint_operand
 from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
+from memcommit.adapters.console.terminal.components.context_picker import (
+    context_memory_rows,
+)
 from memcommit.adapters.console.commands.sever.endpoint_setup import (
     choose_sever_setup,
 )
@@ -38,7 +42,7 @@ from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     legacy_root_only_option_alias,
     resolve_descendant_scopes,
@@ -54,7 +58,9 @@ from memcommit.application.operations.sever.model import (
     SeverSelection,
     SeverSession,
 )
-from memcommit.adapters.console.commands.sever import command_codec as sever_command_review
+from memcommit.adapters.console.commands.sever import (
+    command_codec as sever_command_review,
+)
 from memcommit.application.operations.sever.application import (
     SeverAnalysisProgress,
     SeverAnalysisRequest,
@@ -106,8 +112,7 @@ def _start_progress(progress, event: SeverAnalysisProgress) -> None:
         progress.update("connecting provider", step=2)
     elif event.stage == "ANALYZING":
         progress.update(
-            f"analyzing {event.source_count} source x "
-            f"{event.criteria_count} criteria",
+            f"analyzing {event.source_count} source x {event.criteria_count} criteria",
             step=3,
         )
 
@@ -145,6 +150,7 @@ def _start_analysis(
         source_include_descendants=source_descendants,
         criteria_include_descendants=criteria_descendants,
     )
+
     def freeze_and_analyze(progress) -> SeverAnalysisResult:
         return execute_sever_analysis(
             request,
@@ -190,8 +196,7 @@ def _start(
 def render_sever(session: SeverSession) -> str:
     self_save = session.save_mode == "SELF_SAVE"
     lines = [
-        f"SEVER · {session.state} · "
-        + ("SELF-SAVE" if self_save else "OTHER-SAVE"),
+        f"SEVER · {session.state} · " + ("SELF-SAVE" if self_save else "OTHER-SAVE"),
         f"SOURCE · {safe_terminal_text(session.source.root_name)} · "
         f"{'INCLUDE DESCENDANTS' if session.source.include_descendants else 'THIS CONTEXT ONLY'} · "
         f"{len(session.source.memories)} Memories",
@@ -304,14 +309,11 @@ def render_sever_incomplete_receipt(session: SeverSession) -> str:
 
     view = SeverResolutionWorkbenchAdapter(session).view()
     required = sum(
-        item.effective_obligation == "REQUIRED"
-        and item.response_state != "ANSWERED"
+        item.effective_obligation == "REQUIRED" and item.response_state != "ANSWERED"
         for item in view.items
     )
     output_state = (
-        "WILL UPDATE SOURCE"
-        if session.save_mode == "SELF_SAVE"
-        else "READY TO CREATE"
+        "WILL UPDATE SOURCE" if session.save_mode == "SELF_SAVE" else "READY TO CREATE"
     )
     return "\n".join(
         [
@@ -348,9 +350,7 @@ def _interactive_setup(store: MemoryStore) -> tuple[str, str, str, bool, bool] |
             current_name=current_name,
             required_permission="READ",
         )
-        return context_memory_rows(
-            GrantedReadStore(access).load(access.display_name)
-        )
+        return context_memory_rows(GrantedReadStore(access).load(access.display_name))
 
     receipt = choose_sever_setup(
         names,
@@ -515,8 +515,7 @@ def _run_workbench(
                     comment=proposed.comment.strip(),
                     expected_session=snapshot.version_token,
                 )
-                if proposed.kind == "SUBMIT_ITEM"
-                and proposed.item_uid is not None
+                if proposed.kind == "SUBMIT_ITEM" and proposed.item_uid is not None
                 else None
             ),
             compact_decisions=allow_apply,
@@ -932,10 +931,7 @@ def cmd(
                 raise SeverCommandError(
                     "A scripted decision requires --candidate and --choice."
                 )
-            if (
-                expect_session is not None
-                and expect_session != snapshot.version_token
-            ):
+            if expect_session is not None and expect_session != snapshot.version_token:
                 raise SeverCommandError(
                     "The saved Sever session changed after this command was reviewed. "
                     "Reopen it and rebuild the decision command."

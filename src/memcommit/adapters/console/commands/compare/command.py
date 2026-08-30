@@ -41,15 +41,21 @@ from memcommit.adapters.console.commands.compare.execution import (
     ensure_comparison_analysis,
     load_comparison_context,
 )
-from memcommit.application.capabilities.authority.source_use_policy import AnalysisRetention
+from memcommit.application.capabilities.authority.source_use_policy import (
+    AnalysisRetention,
+)
 from memcommit.adapters.console.commands.compare.sessions import (
     choose_comparison_session,
     load_saved_comparison,
     revalidate_saved_comparison,
 )
 from memcommit.adapters.console.terminal.components.command_wait import run_command_wait
-from memcommit.adapters.console.commands.compare.endpoint_setup import choose_compare_setup
-from memcommit.adapters.console.commands.compare.targeting import resolve_compare_cli_targets
+from memcommit.adapters.console.commands.compare.endpoint_setup import (
+    choose_compare_setup,
+)
+from memcommit.adapters.console.commands.compare.targeting import (
+    resolve_compare_cli_targets,
+)
 from memcommit.adapters.console.commands.rationale.command import render_rationale
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionNewReceipt,
@@ -57,7 +63,7 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     legacy_root_only_option_alias,
     resolve_descendant_scopes,

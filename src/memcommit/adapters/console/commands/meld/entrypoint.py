@@ -8,7 +8,7 @@ import typer
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
     ComparisonProviderError,
 )
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     legacy_root_only_option_alias,
 )
 from memcommit.adapters.console.commands.meld.endpoint_setup import choose_meld_setup

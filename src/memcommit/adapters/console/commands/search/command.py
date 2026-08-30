@@ -15,7 +15,9 @@ from memcommit.application.capabilities.authority.context_access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import (
+    CommandReview,
+)
 from memcommit.adapters.console.terminal.components.command_editor.rendering import (
     format_exact_command,
 )
@@ -47,12 +49,14 @@ from memcommit.application.operations.search.corpus import (
     collect_readable_search_candidates,
     load_readable_search_roots,
 )
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.application.capabilities.authority.source_use_policy import authorize_combination
+from memcommit.application.capabilities.authority.source_use_policy import (
+    authorize_combination,
+)
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,

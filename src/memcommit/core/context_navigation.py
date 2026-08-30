@@ -1,4 +1,4 @@
-"""Pure state transitions for bounded current-Context navigation history."""
+"""Core state transitions for bounded current-Context navigation history."""
 
 from __future__ import annotations
 
@@ -30,8 +30,7 @@ def _history(value: object, *, field: str) -> list[str]:
             f"Context navigation {field} exceeds its retained-history limit."
         )
     return [
-        _context_name(item, field=f"Context navigation {field} entry")
-        for item in value
+        _context_name(item, field=f"Context navigation {field} entry") for item in value
     ]
 
 

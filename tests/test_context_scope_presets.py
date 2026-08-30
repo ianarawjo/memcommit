@@ -8,14 +8,16 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.query.command as query_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     ContextTraversal,
     resolve_context_traversal,
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.application.operations.query.ordinary_application import OrdinaryQueryResponse
+from memcommit.application.operations.query.ordinary_application import (
+    OrdinaryQueryResponse,
+)
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
@@ -237,9 +239,7 @@ def test_recursive_preset_and_one_role_override_are_order_independent(
         )
         resolved = resolve_descendant_scopes(
             preset=preset,
-            explicit=tuple(
-                context.params[f"{role}_descendants"] for role in roles
-            ),
+            explicit=tuple(context.params[f"{role}_descendants"] for role in roles),
         )
 
         assert resolved == tuple(role != root_only_role for role in roles)
@@ -293,7 +293,9 @@ def test_query_all_and_short_alias_freeze_every_readable_context(
         )
 
     monkeypatch.setattr(query_command, "execute_ordinary_query", execute)
-    monkeypatch.setattr(query_command, "render_ordinary_query_response", lambda _r: None)
+    monkeypatch.setattr(
+        query_command, "render_ordinary_query_response", lambda _r: None
+    )
     monkeypatch.setattr(
         query_command,
         "authorize_combination",

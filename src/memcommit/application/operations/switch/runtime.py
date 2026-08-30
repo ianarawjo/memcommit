@@ -12,7 +12,7 @@ from memcommit.application.capabilities.authority.granted_context_navigation imp
     GrantedContextNavigation,
     freeze_granted_context_navigation,
 )
-from memcommit.core.context_targeting.navigation import ContextNavigationDirection
+from memcommit.core.context_navigation import ContextNavigationDirection
 from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.switch.application import (

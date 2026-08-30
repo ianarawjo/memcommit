@@ -17,7 +17,7 @@ from memcommit.adapters.console.coordination.context_operand import (
 from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_context_traversal,
     resolve_scope_preset,

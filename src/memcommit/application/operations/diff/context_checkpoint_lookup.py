@@ -1,4 +1,4 @@
-"""Typed ordinary-local Context-or-checkpoint operand resolution."""
+"""Look up one Diff Context-or-checkpoint operand without guessing."""
 
 from __future__ import annotations
 
@@ -30,8 +30,10 @@ def freeze_local_checkpoint_targets(
 ) -> tuple[CheckpointTarget, ...]:
     """Freeze exact checkpoint coordinates without loading Context contents."""
 
-    names = tuple(context_names) if context_names is not None else tuple(
-        store.list_context_names()
+    names = (
+        tuple(context_names)
+        if context_names is not None
+        else tuple(store.list_context_names())
     )
     targets: list[CheckpointTarget] = []
     for name in names:
@@ -113,6 +115,5 @@ def resolve_local_context_checkpoint_target(
     )
     raise ValueError(
         f"Diff target '{operand}' is neither an existing Context nor an "
-        "available checkpoint UID."
-        + did_you_mean_suffix(suggestions)
+        "available checkpoint UID." + did_you_mean_suffix(suggestions)
     )

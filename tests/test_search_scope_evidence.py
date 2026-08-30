@@ -1,11 +1,12 @@
 """Three-scope local evidence collection contracts."""
+
 from __future__ import annotations
 
 import pytest
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import QueryContextRef
-from memcommit.core.context_targeting.context_catalog import ContextCatalogScan
+from memcommit.persistence.store.context_memory.catalog_model import ContextCatalogScan
 from memcommit.application.operations.search.scope_evidence import (
     candidate_logical_identity,
     collect_outside_context_evidence,
@@ -41,9 +42,8 @@ def test_branch_copies_with_distinct_context_identity_remain_distinct():
     candidates = collect_candidates(root)
 
     assert len(candidates) == 2
-    assert (
-        candidate_logical_identity(candidates[0])
-        != candidate_logical_identity(candidates[1])
+    assert candidate_logical_identity(candidates[0]) != candidate_logical_identity(
+        candidates[1]
     )
 
 

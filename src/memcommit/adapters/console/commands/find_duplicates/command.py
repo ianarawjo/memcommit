@@ -16,7 +16,7 @@ from memcommit.adapters.console.terminal.components.quality_find.rendering impor
     render_cleanup_member,
     render_heading,
 )
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_scope_preset,
 )
@@ -27,7 +27,9 @@ from memcommit.application.operations.find_duplicates.application import (
     FindDuplicatesRequest,
     find_duplicates,
 )
-from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.terminal.core.identity import (
+    collision_safe_uid_prefixes,
+)
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
@@ -104,9 +106,7 @@ def cmd(
         annotate_read_report_attempt(
             ReadReportTarget(
                 operation="find-duplicates",
-                context_names=tuple(
-                    frame.context_name for frame in scope.contexts
-                ),
+                context_names=tuple(frame.context_name for frame in scope.contexts),
                 target_names=(scope.root_name,),
                 selection_mode="SINGLE",
                 ranges=("RECURSIVE" if scope.include_descendants else "DIRECT",),

@@ -1,4 +1,4 @@
-"""Typed results for ordinary Context catalog discovery.
+"""Typed persistence results for ordinary Context catalog discovery.
 
 Catalog discovery is intentionally weaker than loading a Context: interactive
 navigation needs to keep showing every header-valid record even when another
@@ -6,6 +6,7 @@ storage entry is malformed.  Diagnostics preserve what that tolerant view had
 to omit so callers that make completeness claims can fail closed or report a
 partial scan instead of treating absence as proof.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass

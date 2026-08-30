@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_scope_preset,
 )
@@ -14,7 +14,10 @@ from memcommit.adapters.console.commands.show.presentation import render_show
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.operations.show.application import ShowDirectItemScopeError, ShowError
+from memcommit.application.operations.show.application import (
+    ShowDirectItemScopeError,
+    ShowError,
+)
 from memcommit.application.operations.show.runtime import execute_show_cli_operand
 from memcommit.persistence.store import MemoryStore
 

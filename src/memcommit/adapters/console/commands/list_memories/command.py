@@ -18,8 +18,10 @@ from memcommit.core.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
-from memcommit.core.context_targeting.presets import (
+from memcommit.application.capabilities.retained_history.context_snapshot import (
+    ContextSnapshotRef,
+)
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_scope_preset,
 )
@@ -37,15 +39,22 @@ from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
     freeze_readable_context_catalog,
 )
-from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.terminal.core.identity import (
+    collision_safe_uid_prefixes,
+)
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.application.operations.profile.config import AuthorityGrant, ProfileConfigError
+from memcommit.application.operations.profile.config import (
+    AuthorityGrant,
+    ProfileConfigError,
+)
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.model import GrantedUpdateTarget
-from memcommit.application.capabilities.authority.study_operation_policy import analysis_boundary_label
+from memcommit.application.capabilities.authority.study_operation_policy import (
+    analysis_boundary_label,
+)
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,
@@ -251,9 +260,7 @@ def _snapshot_item(
         }
     if isinstance(item, MemoryRef):
         return {
-            "kind": (
-                "memory_snapshot_ref" if item.is_snapshot else "memory_ref"
-            ),
+            "kind": ("memory_snapshot_ref" if item.is_snapshot else "memory_ref"),
             "uid": item.uid,
             "target_context_uid": item.target_context_uid,
             "target_context_name": item.target_context_name,
@@ -292,9 +299,7 @@ def _snapshot_visible_items(
     ):
         try:
             child = (
-                store.load(child_name)
-                if recursive
-                else store.load_direct(child_name)
+                store.load(child_name) if recursive else store.load_direct(child_name)
             )
         except (OSError, ValueError):
             # The catalog and child read are separate filesystem snapshots. A
@@ -342,9 +347,7 @@ def _snapshot_visible_items(
                 ancestors=ancestors,
             )
             for item in direct_items
-            if not (
-                isinstance(item, Context) and item.uid in listed_embed_uids
-            )
+            if not (isinstance(item, Context) and item.uid in listed_embed_uids)
         ],
     ]
 
@@ -516,9 +519,10 @@ def _graph_contains_granted_context(
         for item in current.iter_items():
             if not isinstance(item, Context):
                 continue
-            if catalog.context_exists(item.name) and catalog.access_for(
-                item.name
-            ).is_granted:
+            if (
+                catalog.context_exists(item.name)
+                and catalog.access_for(item.name).is_granted
+            ):
                 return True
             if visit(item):
                 return True
@@ -935,11 +939,7 @@ def _snapshot_source_digest(snapshot: dict[str, object]) -> str:
     """Digest source state without treating a display-prefix change as content."""
 
     return selection_digest(
-        {
-            key: value
-            for key, value in snapshot.items()
-            if key != "uid_prefixes"
-        }
+        {key: value for key, value in snapshot.items() if key != "uid_prefixes"}
     )
 
 
@@ -1010,14 +1010,18 @@ def _restore_granted_list_receipt(
             recursive=recursive,
             readable_uids=readable_uids,
         )
-    except (FileNotFoundError, OSError, ProfileConfigError, ProfileError, ValueError) as error:
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        ValueError,
+    ) as error:
         raise ClipboardError(
             "The granted list source is no longer available under its exact grant."
         ) from error
     if _snapshot_source_digest(snapshot) != expected_digest:
-        raise ClipboardError(
-            "The granted list source changed after it was copied."
-        )
+        raise ClipboardError("The granted list source changed after it was copied.")
     return snapshot, with_ids
 
 
@@ -1176,9 +1180,7 @@ def cmd(
             "-R",
             "--recursive",
             "--expand",
-            help=(
-                "Expand every descendant namespace and embedded Context."
-            ),
+            help=("Expand every descendant namespace and embedded Context."),
         ),
     ] = False,
     direct: Annotated[
@@ -1203,9 +1205,7 @@ def cmd(
         bool,
         typer.Option(
             "--with-ids",
-            help=(
-                "Include [kind uid] annotations in text copied by --copy."
-            ),
+            help=("Include [kind uid] annotations in text copied by --copy."),
         ),
     ] = False,
     paste_result: Annotated[
@@ -1213,8 +1213,7 @@ def cmd(
         typer.Option(
             "--paste",
             help=(
-                "List the structured result currently paired with the system "
-                "clipboard."
+                "List the structured result currently paired with the system clipboard."
             ),
         ),
     ] = False,

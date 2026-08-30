@@ -542,8 +542,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.core.context_targeting.context_catalog",
-      "canonical_target_path": "memcommit/core/context_targeting/context_catalog.py",
+      "canonical_target": "memcommit.persistence.store.context_memory.catalog_model",
+      "canonical_target_path": "memcommit/persistence/store/context_memory/catalog_model.py",
       "inbound_package_importers": 1,
       "lines": 43,
       "module": "memcommit.context_catalog",
@@ -663,8 +663,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.core.context_targeting.navigation",
-      "canonical_target_path": "memcommit/core/context_targeting/navigation.py",
+      "canonical_target": "memcommit.core.context_navigation",
+      "canonical_target_path": "memcommit/core/context_navigation.py",
       "inbound_package_importers": 3,
       "lines": 153,
       "module": "memcommit.current_context_navigation",

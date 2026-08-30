@@ -47,7 +47,7 @@ from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,
     revalidate_goal_focus,
 )
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     legacy_root_only_option_alias,
     resolve_descendant_scopes,

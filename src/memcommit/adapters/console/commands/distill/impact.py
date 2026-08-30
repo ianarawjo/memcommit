@@ -42,7 +42,7 @@ from memcommit.application.operations.distill.runtime import (
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_context_traversal,
     resolve_scope_preset,

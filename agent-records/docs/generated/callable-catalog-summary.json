@@ -15,8 +15,8 @@
   },
   "operation_observed_shapes": {
     "BOUNDED_INTERNAL": 39,
-    "COMMAND_ONLY": 14,
-    "PARTIAL_SURFACE": 12
+    "COMMAND_ONLY": 13,
+    "PARTIAL_SURFACE": 13
   },
   "visibility": {
     "local": 1783,

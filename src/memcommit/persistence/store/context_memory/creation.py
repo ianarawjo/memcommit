@@ -11,7 +11,7 @@ from memcommit.core.context import AutoCheckpoint, Checkpoint, Context, Memory
 from memcommit.core.context_targeting.naming import (
     validate_portable_context_name,
 )
-from memcommit.core.context_targeting.navigation import (
+from memcommit.core.context_navigation import (
     record_current_context_transition,
 )
 from memcommit.application.capabilities.retained_history.memory_lineage import (

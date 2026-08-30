@@ -1,4 +1,5 @@
 """Render the active staged or locally applied update without a model."""
+
 from __future__ import annotations
 
 import difflib
@@ -7,23 +8,31 @@ from typing import Annotated
 
 import typer
 
-from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.terminal.core.identity import (
+    collision_safe_uid_prefixes,
+)
 from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.update.granted_target import inspect_granted_update
+from memcommit.application.operations.update.granted_target import (
+    inspect_granted_update,
+)
 from memcommit.application.capabilities.reviewing.memory_diff import (
     MemoryChange,
     memory_diff_lines,
     update_operation_change,
 )
-from memcommit.adapters.console.terminal.components.history.checkpoint_diff import render_checkpoint_revision_cli
-from memcommit.adapters.console.terminal.components.history.presentation import checkpoint_picker_entries
+from memcommit.adapters.console.terminal.components.history.checkpoint_diff import (
+    render_checkpoint_revision_cli,
+)
+from memcommit.adapters.console.terminal.components.history.presentation import (
+    checkpoint_picker_entries,
+)
 from memcommit.adapters.console.commands.update.render import render_plan
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.core.context_targeting.checkpoint import (
+from memcommit.application.operations.diff.context_checkpoint_lookup import (
     resolve_local_checkpoint_target,
     resolve_local_context_checkpoint_target,
 )
@@ -42,10 +51,7 @@ from memcommit.application.operations.update.model import (
 
 def _short_uid_map(session: UpdateSession) -> dict[str, str]:
     """Return collision-safe UID prefixes, using at least eight characters."""
-    uids = {
-        operation.memory_uid
-        for operation in session.operations
-    }
+    uids = {operation.memory_uid for operation in session.operations}
     uids.update(
         source.memory_uid
         for operation in session.operations
@@ -77,8 +83,7 @@ def _render_header(session: UpdateSession, *, verbose: bool) -> None:
         (
             "Applied granted update"
             if (
-                session.granted_source is not None
-                or session.granted_target is not None
+                session.granted_source is not None or session.granted_target is not None
             )
             else "Applied local update"
         )
@@ -105,8 +110,7 @@ def _render_header(session: UpdateSession, *, verbose: bool) -> None:
         )
         if session.application is not None:
             typer.secho(
-                f"Result  {session.target_uid}  "
-                f"{session.application.target_digest}",
+                f"Result  {session.target_uid}  {session.application.target_digest}",
                 dim=True,
             )
             for checkpoint in session.application.checkpoints:
@@ -330,17 +334,12 @@ def _render_raw_operation(
     elif isinstance(operation, RemoveOperation):
         typer.secho("removed memory", dim=True)
     for line in _unified_lines(operation):
-        if (
-            line.startswith("--- ")
-            or line.startswith("+++ ")
-            or line.startswith("@@")
-        ):
+        if line.startswith("--- ") or line.startswith("+++ ") or line.startswith("@@"):
             _render_raw_line(line)
         else:
             _render_encoded_raw_line(line)
     sources = ", ".join(
-        f"{source.context_name}#{source.memory_uid}"
-        for source in operation.source_refs
+        f"{source.context_name}#{source.memory_uid}" for source in operation.source_refs
     )
     typer.secho(f"Sources: {sources}", dim=True)
     typer.secho(f"Reason: {operation.reason}", dim=True)
@@ -394,9 +393,7 @@ def cmd(
     target: Annotated[
         str | None,
         typer.Argument(
-            help=(
-                "Existing Context, or CHECKPOINT when --context is supplied"
-            )
+            help=("Existing Context, or CHECKPOINT when --context is supplied")
         ),
     ] = None,
     context_name: Annotated[
@@ -513,9 +510,7 @@ def cmd(
             checkpoints = store.list_checkpoints(canonical_context)
             entries = checkpoint_picker_entries(checkpoints)
             if not entries:
-                raise ValueError(
-                    f"Context '{canonical_context}' has no checkpoints."
-                )
+                raise ValueError(f"Context '{canonical_context}' has no checkpoints.")
             entry = (
                 entries[0]
                 if checkpoint_selector is None
@@ -548,8 +543,7 @@ def cmd(
         raise typer.Exit(1)
     if session is None:
         typer.secho(
-            "Diff error: no local update. Run 'mem update --to <context>' "
-            "first.",
+            "Diff error: no local update. Run 'mem update --to <context>' first.",
             fg=typer.colors.RED,
             err=True,
         )
@@ -609,13 +603,9 @@ def cmd(
             "as a current applied result. Re-run impact/update only after "
             "access and endpoints are current."
             if (
-                session.granted_source is not None
-                or session.granted_target is not None
+                session.granted_source is not None or session.granted_target is not None
             )
-            else (
-                "Review the local fork and re-run impact/update before "
-                "contributing."
-            )
+            else ("Review the local fork and re-run impact/update before contributing.")
         )
         typer.secho(
             guidance,

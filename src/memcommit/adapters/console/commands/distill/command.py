@@ -10,7 +10,7 @@ from memcommit.adapters.console.terminal.components.progress import CommandProgr
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_context_traversal,
     resolve_scope_preset,

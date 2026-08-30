@@ -3,7 +3,7 @@
 from __future__ import annotations
 import uuid
 from memcommit.core.context import AutoCheckpoint, Checkpoint
-from memcommit.core.context_targeting.navigation import (
+from memcommit.core.context_navigation import (
     record_current_context_transition,
 )
 from ...context_memory.models import ConcurrentContextUpdateError

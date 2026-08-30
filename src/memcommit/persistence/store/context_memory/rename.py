@@ -12,7 +12,7 @@ from memcommit.core.context import Context
 from memcommit.core.context_targeting.naming import (
     validate_portable_context_name,
 )
-from memcommit.core.context_targeting.navigation import (
+from memcommit.core.context_navigation import (
     rewrite_context_navigation_names,
 )
 

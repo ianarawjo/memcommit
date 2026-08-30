@@ -9,7 +9,7 @@ from memcommit.application.capabilities.context_locator import (
     is_relative_context_locator,
     resolve_context_locator,
 )
-from memcommit.core.context_targeting.navigation import ContextNavigationDirection
+from memcommit.core.context_navigation import ContextNavigationDirection
 
 
 class SwitchContextError(RuntimeError):
@@ -36,8 +36,7 @@ class SwitchContextRequest:
         if self.direction not in {None, "PREVIOUS", "NEXT"}:
             raise SwitchContextError("Context navigation direction is invalid.")
         if self.expected_current is not None and (
-            not isinstance(self.expected_current, str)
-            or not self.expected_current
+            not isinstance(self.expected_current, str) or not self.expected_current
         ):
             raise SwitchContextError("Expected current Context is invalid.")
 
@@ -106,9 +105,7 @@ def resolve_switch_context_name(request: SwitchContextRequest) -> str:
             f"cannot switch to '{selector}': no current context is set."
         )
     if selector == ".." and "/" not in current:
-        raise SwitchContextError(
-            f"context '{current}' has no namespace parent."
-        )
+        raise SwitchContextError(f"context '{current}' has no namespace parent.")
     try:
         return resolve_context_locator(selector, current=current)
     except ValueError as error:

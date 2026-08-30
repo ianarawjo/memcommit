@@ -12,7 +12,7 @@ from memcommit.core.context_targeting.model import InlineTextOperand
 from memcommit.core.context_targeting.operands import (
     classify_context_or_inline_text_operand,
 )
-from memcommit.core.context_targeting.presets import (
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_descendant_scopes,
     resolve_scope_preset,

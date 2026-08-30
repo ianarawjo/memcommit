@@ -66,7 +66,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.conformance_runtime | operation-implementation | relocate-without-alias | memcommit.application.operations.conformance.runtime | 2 |
 | memcommit.console_invocation | retired-prototype | retire | none (retired) | 0 |
 | memcommit.context | shared-concept-implementation | relocate-without-alias | memcommit.core.context | 279 |
-| memcommit.context_catalog | shared-concept-implementation | relocate-without-alias | memcommit.core.context_targeting.context_catalog | 1 |
+| memcommit.context_catalog | shared-concept-implementation | relocate-without-alias | memcommit.persistence.store.context_memory.catalog_model | 1 |
 | memcommit.context_history | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.retained_history.context_history | 4 |
 | memcommit.context_init_application | historical-compatibility-facade | remove | memcommit.application.operations.init.application | 0 |
 | memcommit.context_init_runtime | historical-compatibility-facade | remove | memcommit.application.operations.init.runtime | 0 |
@@ -77,7 +77,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.context_scope | historical-compatibility-facade | remove | memcommit.application.capabilities.context_scope_loading | 0 |
 | memcommit.context_snapshot | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.retained_history.context_snapshot | 12 |
 | memcommit.current_context_application | historical-compatibility-facade | remove | memcommit.application.operations.pwd.application | 0 |
-| memcommit.current_context_navigation | shared-concept-implementation | relocate-without-alias | memcommit.core.context_targeting.navigation | 3 |
+| memcommit.current_context_navigation | shared-concept-implementation | relocate-without-alias | memcommit.core.context_navigation | 3 |
 | memcommit.current_context_runtime | historical-compatibility-facade | remove | memcommit.application.operations.pwd.runtime | 0 |
 | memcommit.dedun_scope | operation-implementation | relocate-without-alias | memcommit.application.operations.dedun.scope | 1 |
 | memcommit.dedup_application | historical-compatibility-facade | remove | memcommit.application.operations.dedup.application | 0 |

@@ -30,7 +30,9 @@ from memcommit.providers.operation_connections import (
 from memcommit.adapters.console.commands.query.workbench import (
     run_query_workbench,
 )
-from memcommit.adapters.console.terminal.components.session_help import bind_session_help
+from memcommit.adapters.console.terminal.components.session_help import (
+    bind_session_help,
+)
 from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
@@ -38,21 +40,27 @@ from memcommit.application.capabilities.authority.readable_contexts import (
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.adapters.console.terminal.core.capabilities import is_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import (
+    is_interactive_terminal,
+)
 from memcommit.adapters.console.commands.query.presentation import (
     render_granted_query_response,
     render_ordinary_query_response,
     render_query_reference_response,
 )
 from memcommit.core.context import QueryContextRef
-from memcommit.application.capabilities.context_locator import is_relative_context_locator
-from memcommit.core.context_targeting.presets import (
+from memcommit.application.capabilities.context_locator import (
+    is_relative_context_locator,
+)
+from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     ContextTraversal,
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.application.capabilities.authority.source_use_policy import authorize_combination
+from memcommit.application.capabilities.authority.source_use_policy import (
+    authorize_combination,
+)
 from memcommit.application.operations.search.answer_dialogue import (
     SearchAnswerCorpusTooLarge,
 )
