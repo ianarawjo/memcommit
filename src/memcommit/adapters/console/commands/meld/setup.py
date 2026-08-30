@@ -16,7 +16,6 @@ from memcommit.adapters.console.coordination.command_review import (
     meld as meld_command_review,
 )
 from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
-from memcommit.adapters.console.commands.meld.target_picker import eligible_meld_targets
 from memcommit.core.context_targeting.readable_catalog import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
@@ -330,6 +329,26 @@ def build_meld_tui_setup(store: MemoryStore) -> MeldTuiSetup:
     return setup
 
 
+def _eligible_local_result_targets(store: MemoryStore) -> tuple[str, ...]:
+    """Return empty local Contexts without a bound Meld session."""
+
+    result: list[str] = []
+    for name in store.list_context_names():
+        context = store.load_direct(name)
+        if tuple(context.iter_items()):
+            continue
+        if store.load_meld_session(context.uid) is not None:
+            continue
+        result.append(name)
+    current = store.current_context_name()
+    return tuple(
+        sorted(
+            result,
+            key=lambda name: (name != current, name.casefold(), name),
+        )
+    )
+
+
 def _freeze_meld_tui_setup(
     store: MemoryStore,
 ) -> tuple[MeldTuiSetup, ReadableContextCatalog]:
@@ -361,9 +380,7 @@ def _freeze_meld_tui_setup(
         for name in names
         if catalog.access_for(name).is_granted
     )
-    eligible_targets = frozenset(
-        eligible_meld_targets(store, source_names=("", ""))
-    )
+    eligible_targets = frozenset(_eligible_local_result_targets(store))
 
     return (
         MeldTuiSetup(

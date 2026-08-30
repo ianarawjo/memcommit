@@ -103,6 +103,15 @@ ENTRY_TARGETS = {
 
 
 RETIRED_BASELINE_MODULES = {
+    "ground_named_shell": (
+        "retired with the unpublished named Ground session interface"
+    ),
+    "ground_session_picker": (
+        "retired when Ground session discovery moved into its open workflow"
+    ),
+    "meld_target_picker": (
+        "retired after Meld adopted the shared endpoint setup for Result selection"
+    ),
     "shell_init": (
         "retired after Help and init-study took ownership of their distinct "
         "shell responsibilities"
@@ -127,8 +136,6 @@ OWNED_SUPPORT_TARGETS = {
     "find_materialization": "search.materialization",
     "find_search_workbench": "search.search_workbench",
     "forget_setup_workbench": "forget.setup",
-    "ground_named_shell": "ground.named_shell",
-    "ground_session_picker": "ground.session_picker",
     "ground_shell": "ground.shell",
     "ground_workspace_picker": "ground.workspace.catalog",
     "impact_catalog": "impact.catalog",
@@ -139,7 +146,6 @@ OWNED_SUPPORT_TARGETS = {
     "meld_sessions": "meld.sessions",
     "meld_setup": "meld.setup",
     "meld_shell": "meld.command",
-    "meld_target_picker": "meld.target_picker",
     "ordinary_query_provider_policy": "query.provider_policy",
     "profile_group": "profile.group",
     "profile_picker": "profile.picker",
@@ -175,14 +181,11 @@ SPECIAL_SUPPORT_TARGETS = {
 
 
 MODULE_TARGET_PATH_OVERRIDES = {
-    "memcommit.adapters.console.commands.ground.named_shell": (
-        "src/memcommit/adapters/console/commands/ground/named_shell/__init__.py"
-    ),
     "memcommit.adapters.console.commands.ground.shell": (
         "src/memcommit/adapters/console/commands/ground/shell/__init__.py"
     ),
     "memcommit.adapters.console.commands.meld.command": (
-        "src/memcommit/adapters/console/commands/meld/command/__init__.py"
+        "src/memcommit/adapters/console/commands/meld/command.py"
     ),
 }
 
@@ -244,7 +247,7 @@ RELOCATED_SHARED_TARGETS = {
     "checkpoint_diff": "memcommit.adapters.console.terminal.components.history.checkpoint_diff",
     "command_progress": "memcommit.adapters.console.terminal.components.progress",
     "command_wait": "memcommit.adapters.console.terminal.components.command_wait",
-    "context_picker": "memcommit.core.context_targeting.tui.picker",
+    "context_picker": "memcommit.adapters.console.terminal.components.context_picker",
     "context_reach_dialog": "memcommit.adapters.console.terminal.components.context_reach_dialog",
     "diff_browser": "memcommit.adapters.console.terminal.components.history.browser",
     "direct_item_placement": "memcommit.adapters.console.terminal.components.direct_item_placement",
@@ -365,14 +368,14 @@ def build_plan() -> dict[str, object]:
                 "canonical_module": relocated or f"{COORDINATION_NAMESPACE}.{target}",
                 "owner": (
                     "context_targeting"
-                    if stem in {"context_picker", "readable_context_catalog"}
+                    if stem == "readable_context_catalog"
                     else "terminal"
                     if relocated
                     else "coordination"
                 ),
                 "role": (
                     "shared-context-targeting"
-                    if stem in {"context_picker", "readable_context_catalog"}
+                    if stem == "readable_context_catalog"
                     else "shared-terminal-component"
                     if relocated
                     else "shared-command-mechanism"
@@ -381,8 +384,8 @@ def build_plan() -> dict[str, object]:
             }
         )
     legacy = [str(entry["legacy_module"]).rsplit(".", 1)[-1] for entry in entries]
-    if len(entries) != 152 or len(set(legacy)) != 152:
-        raise RuntimeError("command layout must map 152 active baseline modules")
+    if len(entries) != 149 or len(set(legacy)) != 149:
+        raise RuntimeError("command layout must map 149 active baseline modules")
     baseline = _baseline_modules()
     classified = set(legacy) | set(RETIRED_BASELINE_MODULES)
     if classified != baseline:

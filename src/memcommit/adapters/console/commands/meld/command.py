@@ -51,7 +51,6 @@ from memcommit.adapters.console.commands.meld.workflow.workflow import (
     _run_interactive,
     execute_meld_command,
     run_meld_review,
-    start_reviewed_symmetric_meld,
 )
 from memcommit.adapters.console.commands.meld.entrypoint import (
     _browse_saved_meld_sessions,
@@ -101,7 +100,6 @@ __all__ = [
     "_complete_default_terminal_execution",
     "_run_interactive",
     "run_meld_review",
-    "start_reviewed_symmetric_meld",
     "_resume_picked_meld",
     "InterpretedMeldCommand",
     "MeldCommandInterpretationError",

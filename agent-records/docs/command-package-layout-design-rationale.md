@@ -48,10 +48,12 @@ The exact baseline classification is authored mechanically by
 `scripts/render_command_package_layout.py` and rendered in
 `agent-records/docs/command-package-layout-plan.json` and
 `agent-records/docs/command-package-layout-plan.md`. The baseline contains 153 non-package
-modules. Its active mappings comprise 63 entry packages, 47 entry-owned support
+modules. Its active mappings comprise 63 entry packages, 44 entry-owned support
 modules, and 42 shared command-support or terminal-component modules;
-`shell_init` is retained only in the retired-baseline inventory after Help and
-init-study took ownership of their distinct shell responsibilities.
+`shell_init`, the unpublished named-Ground/session-picker adapters, and Meld's
+superseded target picker remain only in the retired-baseline inventory after
+their active responsibilities moved to their current operation or shared
+component owners.
 
 On 2026-08-27 the complete, already packaged command tree moved unchanged from
 `memcommit.commands` to `memcommit.adapters.console.commands`. Its dominant

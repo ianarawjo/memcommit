@@ -174,41 +174,6 @@ def _start_new_comparison_from_setup(
     cmd(**start_kwargs)
 
 
-def _start_meld_from_compare(
-    *,
-    store: MemoryStore,
-    analysis: ComparisonAnalysis,
-) -> None:
-    """Collect one result target, then hand authority back to Meld."""
-    from memcommit.adapters.console.commands.meld.errors import MeldCommandError
-    from memcommit.adapters.console.commands.meld.presentation import (
-        render_meld_session,
-    )
-    from memcommit.adapters.console.commands.meld.workflow.workflow import (
-        start_reviewed_symmetric_meld,
-    )
-    from memcommit.adapters.console.commands.meld.target_picker import choose_meld_target
-
-    reference, compared = analysis.frames
-    receipt = choose_meld_target(
-        store,
-        source_names=(reference.context_name, compared.context_name),
-    )
-    if receipt is None:
-        typer.echo("Meld target selection cancelled.")
-        return
-    try:
-        session = start_reviewed_symmetric_meld(
-            store=store,
-            analysis=analysis,
-            target_name=receipt.context_name,
-            create_target=receipt.create,
-        )
-    except (MeldCommandError, OSError, RuntimeError, ValueError) as error:
-        raise CompareCommandError(str(error)) from error
-    typer.echo(render_meld_session(session))
-
-
 def _render_selected_rationale(
     *,
     store: MemoryStore,

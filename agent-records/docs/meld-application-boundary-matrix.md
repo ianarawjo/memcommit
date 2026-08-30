@@ -175,7 +175,7 @@ validation.
 - Public and agent adapters: `test_meld_public_api.py`,
   `test_meld_agent_adapter.py`, and `test_agent_tool_registry.py`.
 - CLI, saved sessions, and review UI compatibility: `test_meld.py`,
-  `test_meld_sessions.py`, `test_meld_target_picker.py`, and
+  `test_meld_sessions.py`, `test_meld_endpoint_setup.py`, and
   `test_meld_shell_directional.py`.
 - Study exact/equivalent/projected reuse: `test_study_compare_graph_prewarm.py`
   and `test_study_meld_directional_exact_registry.py`.

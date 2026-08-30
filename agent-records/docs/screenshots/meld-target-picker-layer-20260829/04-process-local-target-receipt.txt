@@ -1,7 +1,0 @@
-                                                                                                                                                                                    
-COMPARE → MELD HANDOFF RECEIPT                                                                                                                                                      
-  LAYER · PRE-SESSION MELD SETUP                                                                                                                                                    
-  RESULT CONTEXT · capture/new-result                                                                                                                                               
-  CREATE ON START · True                                                                                                                                                            
-  MELD SESSION CREATED · False                                                                                                                                                      
-CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION

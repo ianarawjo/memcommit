@@ -77,16 +77,14 @@ be explicit but would make the common directional primitive less direct.
 The selected arity makes the authority shape visible before execution:
 one or two operands are directional; three operands are symmetric.
 
-## Compare handoff
+## Operation independence
 
-A durable Compare report can offer either symmetric spelling while preserving
-the displayed peer order:
+Compare ends at its own analysis and report. It does not open Meld, collect a
+Result name, or offer a Meld-specific continuation because comparison may be
+followed by several different operations or no mutation at all. A person
+starts Meld explicitly through its own CLI, TUI, Python, or agent adapter, and
+that Meld invocation alone selects or creates `RESULT_C`.
 
-```bash
-mem meld PEER_A PEER_B RESULT_C
-```
-
-Compare leaves `RESULT_C` as an explicit naming placeholder because it has no
-authority to choose a durable ordinary Context name for the person. An unsaved
-Compare omits the handoff because Meld cannot consume a non-durable analysis as
-its exact basis.
+Symmetric Meld may still reuse or refresh an exact ordered Compare basis inside
+its operation-owned runtime. That semantic prerequisite is not a UI handoff and
+does not give Compare authority over Meld setup, persistence, or execution.

@@ -277,10 +277,12 @@ exact pair. This makes two momentarily identical projections with different
 future scope contracts distinct analyses and prevents a new descendant from
 silently entering an unchecked analysis.
 
-## Compare-to-Meld handoff
+## Meld basis reuse
 
-A new symmetric Meld always consumes the exact current ordered Compare slot
-for its two sources and the exact same descendant-scope pair. `mem meld LEFT
+Compare never starts Meld, chooses a Result, or presents a Meld-specific
+handoff. When a person separately starts a new symmetric Meld, Meld consumes
+the exact current ordered Compare slot for its two sources and the exact same
+descendant-scope pair. `mem meld LEFT
 RIGHT` loads only `LEFT → RIGHT`; it never silently substitutes `RIGHT →
 LEFT`, because the two saved slots deliberately retain observable
 presentation-order effects. A fresh slot is reused provider-free. A missing,
@@ -288,7 +290,7 @@ stale, differently scoped, or older-ruleset slot is regenerated and saved
 through the same shared Compare execution path before the Meld session is
 created. An invalid stored artifact still fails closed.
 
-The fresh-slot handoff is provider-free. The new Meld session embeds the
+Fresh-slot reuse is provider-free. The new Meld session embeds the
 complete `ComparisonAnalysis`, its canonical digest, and the same frame,
 relation, issue, and option identities. Its initial assessment is the
 inspected Compare overview, ledger, and grounding candidates with no target

@@ -1,5 +1,5 @@
 {
-  "active_module_count": 152,
+  "active_module_count": 149,
   "baseline_commit": "f8c54a56",
   "baseline_module_count": 153,
   "entry_package_count": 63,
@@ -502,20 +502,6 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.ground.named_shell",
-      "legacy_module": "memcommit.commands.ground_named_shell",
-      "owner": "ground",
-      "public_exports": [],
-      "role": "command-owned-support"
-    },
-    {
-      "canonical_module": "memcommit.adapters.console.commands.ground.session_picker",
-      "legacy_module": "memcommit.commands.ground_session_picker",
-      "owner": "ground",
-      "public_exports": [],
-      "role": "command-owned-support"
-    },
-    {
       "canonical_module": "memcommit.adapters.console.commands.ground.shell",
       "legacy_module": "memcommit.commands.ground_shell",
       "owner": "ground",
@@ -698,13 +684,6 @@
     {
       "canonical_module": "memcommit.adapters.console.commands.meld.command",
       "legacy_module": "memcommit.commands.meld_shell",
-      "owner": "meld",
-      "public_exports": [],
-      "role": "command-owned-support"
-    },
-    {
-      "canonical_module": "memcommit.adapters.console.commands.meld.target_picker",
-      "legacy_module": "memcommit.commands.meld_target_picker",
       "owner": "meld",
       "public_exports": [],
       "role": "command-owned-support"
@@ -1199,6 +1178,9 @@
   ],
   "purpose": "Give every CLI entry a predictable package and place multi-file support beside its owning entry while keeping multi-command console mechanics outside the command-entry tree, without changing behavior.",
   "retired_legacy_modules": [
+    "memcommit.commands.ground_named_shell",
+    "memcommit.commands.ground_session_picker",
+    "memcommit.commands.meld_target_picker",
     "memcommit.commands.shell_init"
   ],
   "schema_version": 1,

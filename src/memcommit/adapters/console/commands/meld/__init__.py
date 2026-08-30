@@ -1,4 +1,4 @@
-"""Lazy public CLI surface for the Meld command package."""
+"""Lazy public CLI surface for the meld command package."""
 
 from memcommit.adapters.console.commands import _load_entrypoint_attribute
 

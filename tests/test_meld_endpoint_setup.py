@@ -11,6 +11,7 @@ from memcommit.adapters.console.terminal.components.endpoint_setup import Endpoi
 from memcommit.adapters.console.commands.meld.setup import (
     MeldEndpointSelection,
     MeldTuiSetup,
+    build_meld_tui_setup,
     choose_meld_endpoint_setup,
     meld_endpoint_setup_spec,
 )
@@ -63,6 +64,25 @@ def test_meld_setup_projects_mode_dependent_shared_roles() -> None:
     assert spec.roles[2].prefer_new is True
     assert spec.roles[2].existing_label == "EMPTY · EXISTING"
     assert spec.action_label == "START MELD"
+
+
+def test_meld_setup_offers_only_empty_session_free_local_results(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    left = ops.init("meld/catalog/a")
+    ops.add(left, "Source A.")
+    right = ops.init("meld/catalog/b")
+    ops.add(right, "Source B.")
+    empty = ops.init("meld/catalog/empty")
+    occupied = ops.init("meld/catalog/occupied")
+    ops.add(occupied, "Existing result content.")
+    for context in (left, right, empty, occupied):
+        store.save(context)
+
+    setup = build_meld_tui_setup(store)
+
+    assert setup.eligible_target_names == frozenset({empty.name})
 
 
 def test_meld_setup_returns_an_existing_symmetric_result() -> None:

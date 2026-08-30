@@ -58,9 +58,6 @@ def _request(**overrides) -> interpretation.MeldCommandRequest:
 def test_meld_command_facade_preserves_existing_imports() -> None:
     assert command.cmd is entrypoint.cmd
     assert command.render_meld_session is presentation.render_meld_session
-    assert (
-        command.start_reviewed_symmetric_meld is workflow.start_reviewed_symmetric_meld
-    )
     assert command._resume_picked_meld is workflow._resume_picked_meld
 
 

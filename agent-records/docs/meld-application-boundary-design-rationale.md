@@ -37,9 +37,10 @@ Meld now separates its terminal-independent contracts:
   observe the old session before provider construction and replace it by CAS.
 
 The command remains responsible for argument and TUI presentation, progress
-text, exact approval, and rendering. Both direct CLI setup and the
-Compare-to-Meld handoff now construct `MeldStartRequest` and enter the same
-runtime used by Python and agent adapters. The runtime returns one frozen
+text, exact approval, and rendering. Direct CLI setup constructs
+`MeldStartRequest` and enters the same runtime used by Python and agent
+adapters. Compare ends at its own analysis/report boundary; a person starts
+Meld separately, and Meld alone selects or creates its Result. The runtime returns one frozen
 `PreparedMeldExecution`; the CLI uses only its provider requirement and
 read-only provisional view to choose a progress surface, then executes that
 same value. It neither constructs a competing session nor repeats cache

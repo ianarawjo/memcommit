@@ -8,8 +8,8 @@ This is the exact path-only classification of the formerly flat
 route closure remains solely in the operation evidence ledger.
 
 - Baseline modules: 153
-- Active canonical mappings: 152
-- Retired baseline modules: 1
+- Active canonical mappings: 149
+- Retired baseline modules: 4
 - Command entry packages: 63
 - Shared command mechanisms: 42
 
@@ -78,8 +78,6 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.forget` | `memcommit.adapters.console.commands.forget.command` | command-entry | `forget` |
 | `memcommit.commands.forget_setup_workbench` | `memcommit.adapters.console.commands.forget.setup` | command-owned-support | `forget` |
 | `memcommit.commands.ground` | `memcommit.adapters.console.commands.ground.command` | command-entry | `ground` |
-| `memcommit.commands.ground_named_shell` | `memcommit.adapters.console.commands.ground.named_shell` | command-owned-support | `ground` |
-| `memcommit.commands.ground_session_picker` | `memcommit.adapters.console.commands.ground.session_picker` | command-owned-support | `ground` |
 | `memcommit.commands.ground_shell` | `memcommit.adapters.console.commands.ground.shell` | command-owned-support | `ground` |
 | `memcommit.commands.ground_workspace_picker` | `memcommit.adapters.console.commands.ground.workspace.catalog` | command-owned-support | `ground` |
 | `memcommit.commands.help_inventory` | `memcommit.adapters.console.commands.help.command` | command-entry | `help` |
@@ -104,7 +102,6 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.meld_sessions` | `memcommit.adapters.console.commands.meld.sessions` | command-owned-support | `meld` |
 | `memcommit.commands.meld_setup` | `memcommit.adapters.console.commands.meld.setup` | command-owned-support | `meld` |
 | `memcommit.commands.meld_shell` | `memcommit.adapters.console.commands.meld.command` | command-owned-support | `meld` |
-| `memcommit.commands.meld_target_picker` | `memcommit.adapters.console.commands.meld.target_picker` | command-owned-support | `meld` |
 | `memcommit.commands.memory_history` | `memcommit.adapters.console.coordination.memory_history` | shared-command-mechanism | `coordination` |
 | `memcommit.commands.memory_picker` | `memcommit.adapters.console.terminal.components.memory_report_picker` | shared-terminal-component | `terminal` |
 | `memcommit.commands.memory_report_recents` | `memcommit.adapters.console.coordination.memory_report_recents` | shared-command-mechanism | `coordination` |

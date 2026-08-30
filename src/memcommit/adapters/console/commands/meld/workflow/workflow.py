@@ -4,9 +4,6 @@ from __future__ import annotations
 
 import sys
 
-from memcommit.application.operations.compare.ledger.model import (
-    ComparisonAnalysis,
-)
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.core.context_targeting.memory_focus import (
@@ -718,50 +715,6 @@ def run_meld_review(
         provider_factory=provider_factory,
         allow_apply=False,
     )
-
-
-def start_reviewed_symmetric_meld(
-    *,
-    store: MemoryStore,
-    analysis: ComparisonAnalysis,
-    target_name: str,
-    create_target: bool,
-    provider_factory=connect_codex_chatgpt_provider,
-) -> MeldSession:
-    """Create and open a target-bound Meld from one exact Compare analysis.
-
-    Compare may collect the target choice, but Meld repeats every source,
-    grant, transfer, target, and saved-analysis check before it creates state.
-    This keeps the picker a presentation convenience rather than a new
-    mutation authority.
-    """
-    left_name, right_name = (
-        analysis.frames[0].context_name,
-        analysis.frames[1].context_name,
-    )
-    if target_name in {left_name, right_name}:
-        raise MeldCommandError(
-            "The symmetric Meld result must differ from both source Contexts."
-        )
-    from memcommit.application.operations.meld.runtime import execute_meld_start
-
-    session = execute_meld_start(
-        MeldStartRequest(
-            mode="SYMMETRIC",
-            left_name=left_name,
-            right_name=right_name,
-            target_name=target_name,
-            left_descendants=analysis.include_descendants[0],
-            right_descendants=analysis.include_descendants[1],
-            create_target=create_target,
-            comparison=analysis,
-        ),
-        store=store,
-        provider_factory=lambda: (_ for _ in ()).throw(
-            AssertionError("Symmetric Meld start connected a provider.")
-        ),
-    ).session
-    return _complete_default_terminal_execution(store=store, session=session)
 
 
 def _resume_picked_meld(
