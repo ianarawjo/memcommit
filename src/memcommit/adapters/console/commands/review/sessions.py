@@ -35,7 +35,7 @@ from memcommit.adapters.console.commands.sever.sessions import (
     list_sever_session_catalog,
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.application.operations.audit.session_store import QualityAuditStore
+from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
 from memcommit.application.operations.review.model import ReviewError
@@ -318,7 +318,7 @@ def review_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]
     entries.extend(_checkpoint_review_entries(store))
     entries.extend(
         _review_entry(entry)
-        for entry in audit_session_entries(QualityAuditStore(store))
+        for entry in audit_session_entries(JsonAuditRecordRepository(store))
     )
     entries.extend(
         _review_entry(entry)

@@ -30,7 +30,7 @@ from memcommit.adapters.console.terminal.components.findings import (
     quality_find_report_header_text,
 )
 from memcommit.application.operations.audit.model import QualityAuditSession
-from memcommit.application.operations.audit.session_store import QualityAuditStore
+from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.application.capabilities.reviewing.memory_issue_finding.report import (
     QualityFindReportView,
     quality_find_category_label,
@@ -321,7 +321,7 @@ def open_audit_review(
 ) -> None:
     """Open one exact saved Audit without rerunning any finder."""
 
-    sessions = QualityAuditStore(store)
+    sessions = JsonAuditRecordRepository(store)
     selected = select_report_session(
         audit_session_entries(sessions),
         kind="audit",

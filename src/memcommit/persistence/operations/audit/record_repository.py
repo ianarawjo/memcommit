@@ -1,4 +1,4 @@
-"""Operation-owned private persistence for immutable completed Audit records."""
+"""JSON persistence adapter for immutable completed Audit records."""
 
 from __future__ import annotations
 
@@ -17,8 +17,8 @@ from memcommit.application.operations.audit.model import (
 from memcommit.persistence.store import MemoryStore
 
 
-class QualityAuditStore:
-    """Store every completed Audit by UID without a mutable latest slot."""
+class JsonAuditRecordRepository:
+    """Store every completed Audit as one private UID-addressed JSON record."""
 
     def __init__(self, store: MemoryStore):
         self.store = store
@@ -33,10 +33,16 @@ class QualityAuditStore:
             raise QualityAuditError("Invalid Audit session uid.")
         return self.directory / f"{uid}.json"
 
-    def path(self, uid: str) -> Path:
-        """Return the validated exact record path for presentation metadata."""
+    def modified_at(self, uid: str) -> float | None:
+        """Return one validated record's modification time when it exists."""
 
-        return self._path(uid)
+        path = self._path(uid)
+        try:
+            if path.is_file() and not path.is_symlink():
+                return path.stat().st_mtime
+        except FileNotFoundError:
+            pass
+        return None
 
     @contextmanager
     def _write_lock(self, uid: str) -> Iterator[None]:
@@ -57,7 +63,7 @@ class QualityAuditStore:
             fcntl.flock(descriptor, fcntl.LOCK_UN)
             os.close(descriptor)
 
-    def save(self, session: QualityAuditSession) -> None:
+    def create(self, session: QualityAuditSession) -> None:
         """Create one immutable UID-addressed Audit record."""
 
         restored = QualityAuditSession.from_dict(session.to_dict())

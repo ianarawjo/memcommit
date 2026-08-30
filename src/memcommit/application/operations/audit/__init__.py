@@ -1,1 +1,1 @@
-"""Operation-owned Audit model, execution, persistence, and review projection."""
+"""Operation-owned Audit model, execution, persistence port, and review projection."""

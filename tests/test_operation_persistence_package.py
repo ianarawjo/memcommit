@@ -1,4 +1,4 @@
-"""Ownership and compatibility contracts for Store operation state."""
+"""Ownership and composition contracts for operation persistence."""
 
 from __future__ import annotations
 
@@ -6,24 +6,22 @@ import ast
 from pathlib import Path
 
 import memcommit.persistence.store as store_module
+from memcommit.persistence.operations.atomize import state_repository as atomize
+from memcommit.persistence.operations.meld import state_repository as meld
+from memcommit.persistence.operations.review import state_repository as review
+from memcommit.persistence.operations.update import state_repository as update
+from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store.context_memory import current
 from memcommit.persistence.store.infrastructure import atomic_io
-from memcommit.persistence.store.operation_state import OperationStateStoreMixin
-from memcommit.persistence.store.operation_state import (
-    atomize,
-    current,
-    meld,
-    review,
-    update,
-)
 
 
 REPOSITORY_ROOT = Path(__file__).parents[1]
 STORE_ROOT = REPOSITORY_ROOT / "src/memcommit/persistence/store"
-PACKAGE_ROOT = STORE_ROOT / "operation_state"
+OPERATIONS_ROOT = REPOSITORY_ROOT / "src/memcommit/persistence/operations"
 INFRASTRUCTURE_ROOT = STORE_ROOT / "infrastructure"
 
 EXPECTED_METHODS = {
-    "infrastructure/paths.py": {
+    "store/infrastructure/paths.py": {
         "__init__",
         "store_dir",
         "contexts_dir",
@@ -43,7 +41,7 @@ EXPECTED_METHODS = {
         "meld_resolution_branches_dir",
         "meld_choice_branches_dir",
     },
-    "infrastructure/protection.py": {
+    "store/infrastructure/protection.py": {
         "write_protection_registry",
         "write_protection_state",
         "profile_write_guard",
@@ -58,7 +56,7 @@ EXPECTED_METHODS = {
         "set_profile_write_protection",
         "set_memory_write_protection",
     },
-    "infrastructure/locking.py": {
+    "store/infrastructure/locking.py": {
         "_context_graph_lock",
         "_context_write_lock",
         "_context_write_locks",
@@ -68,7 +66,7 @@ EXPECTED_METHODS = {
         "_atomize_session_write_lock",
         "_meld_resolution_branch_write_lock",
     },
-    "operation_state/current.py": {
+    "store/context_memory/current.py": {
         "_read_state",
         "_write_state",
         "current_context_name",
@@ -77,7 +75,7 @@ EXPECTED_METHODS = {
         "set_current_context_if",
         "set_current_virtual_context_if",
     },
-    "operation_state/update.py": {
+    "operations/update/state_repository.py": {
         "_load_update_session",
         "_save_update_session",
         "load_impact_plan",
@@ -88,7 +86,7 @@ EXPECTED_METHODS = {
         "apply_staged_update",
         "_apply_staged_update_command_locked",
     },
-    "operation_state/review.py": {
+    "operations/review/state_repository.py": {
         "_load_review_session",
         "load_review_session",
         "_review_session_history_path",
@@ -100,7 +98,7 @@ EXPECTED_METHODS = {
         "load_review_session_by_uid",
         "save_review_session",
     },
-    "operation_state/meld.py": {
+    "operations/meld/state_repository.py": {
         "_meld_choice_branches_path",
         "load_meld_choice_branches",
         "save_meld_choice_branches",
@@ -117,7 +115,7 @@ EXPECTED_METHODS = {
         "create_meld_target_with_session",
         "delete_meld_session",
     },
-    "operation_state/atomize.py": {
+    "operations/atomize/state_repository.py": {
         "_atomize_analysis_path",
         "load_atomize_analysis",
         "save_atomize_analysis",
@@ -148,36 +146,45 @@ def _mixin_methods(path: Path) -> set[str]:
     }
 
 
-def test_operation_state_methods_have_one_focused_owner() -> None:
-    assert not PACKAGE_ROOT.with_suffix(".py").exists()
+def test_operation_persistence_methods_have_one_focused_owner() -> None:
+    assert not (STORE_ROOT / "operation_state").exists()
+    paths = (
+        tuple(
+            path
+            for path in INFRASTRUCTURE_ROOT.glob("*.py")
+            if path.name not in {"__init__.py", "atomic_io.py"}
+        )
+        + (STORE_ROOT / "context_memory/current.py",)
+        + tuple(OPERATIONS_ROOT.glob("*/state_repository.py"))
+    )
     actual = {
-        str(path.relative_to(STORE_ROOT)): _mixin_methods(path)
-        for root in (INFRASTRUCTURE_ROOT, PACKAGE_ROOT)
-        for path in root.glob("*.py")
-        if path.name not in {"__init__.py", "atomic_io.py"}
+        str(path.relative_to(REPOSITORY_ROOT / "src/memcommit/persistence")): (
+            _mixin_methods(path)
+        )
+        for path in paths
     }
     assert actual == EXPECTED_METHODS
     all_methods = [method for methods in actual.values() for method in methods]
     assert len(all_methods) == len(set(all_methods)) == 95
 
 
-def test_operation_state_surface_composes_in_dependency_order() -> None:
+def test_memory_store_composes_operation_repositories_in_dependency_order() -> None:
     assert tuple(
-        base.__module__.rsplit(".", 1)[-1]
-        for base in OperationStateStoreMixin.__bases__
+        base.__module__.rsplit(".", 1)[-1] for base in MemoryStore.__bases__
     ) == (
         "paths",
         "protection",
         "locking",
-        "current",
-        "update",
-        "review",
-        "meld",
-        "atomize",
+        "context_memory",
+        "state_repository",
+        "state_repository",
+        "state_repository",
+        "state_repository",
+        "record_restore_checkpoint",
     )
 
 
-def test_context_persistence_no_longer_depends_on_operation_state() -> None:
+def test_context_persistence_does_not_depend_on_operation_repositories() -> None:
     paths = (
         tuple((STORE_ROOT / "context_memory").glob("*.py"))
         + tuple((STORE_ROOT / "checkpoint").rglob("*.py"))
@@ -186,7 +193,7 @@ def test_context_persistence_no_longer_depends_on_operation_state() -> None:
     )
     for path in paths:
         source = path.read_text(encoding="utf-8")
-        assert "operation_state import" not in source
+        assert "persistence.operations" not in source
 
 
 def test_store_atomic_write_override_reaches_operation_modules(monkeypatch) -> None:

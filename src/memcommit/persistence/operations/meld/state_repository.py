@@ -7,21 +7,21 @@ from pathlib import Path
 from memcommit.core.context import AutoCheckpoint, Context
 
 
-from ..context_memory.models import (
+from ...store.context_memory.models import (
     ConcurrentContextUpdateError,
 )
-from ..context_memory.records import (
+from ...store.context_memory.records import (
     context_record_digest,
 )
-from ..infrastructure.atomic_io import (
+from ...store.infrastructure.atomic_io import (
     _reject_duplicate_json_keys,
     _write_json_atomic,
 )
-from ..infrastructure.protection import _profile_write_guarded
+from ...store.infrastructure.protection import _profile_write_guarded
 
 
 class _MeldStateStoreMixin:
-    """Focused slice of the temporary Store assembly."""
+    """Own Meld-specific persisted working state."""
 
     def _meld_choice_branches_path(self, session_uid: str) -> Path:
         try:

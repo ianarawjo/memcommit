@@ -1917,8 +1917,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.operations.audit.session_store",
-      "canonical_target_path": "memcommit/application/operations/audit/session_store.py",
+      "canonical_target": "memcommit.persistence.operations.audit.record_repository",
+      "canonical_target_path": "memcommit/persistence/operations/audit/record_repository.py",
       "inbound_package_importers": 4,
       "lines": 162,
       "module": "memcommit.quality_audit_store",

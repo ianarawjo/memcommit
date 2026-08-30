@@ -7,6 +7,7 @@ from types import ModuleType
 
 from . import models as _models_module
 from . import records as _records_module
+from . import current as _current_module
 from . import discovery as _discovery_module
 from . import loading as _loading_module
 from . import rename as _rename_module
@@ -21,11 +22,13 @@ from .saving import _ContextSavingMixin
 from .creation import _ContextCreationMixin
 from .lifecycle import _ContextLifecycleMixin
 from .query_source import _QuerySourceStoreMixin
+from .current import _CurrentContextStoreMixin
 
 
 _IMPLEMENTATION_MODULES = (
     _models_module,
     _records_module,
+    _current_module,
     _discovery_module,
     _loading_module,
     _rename_module,
@@ -37,6 +40,7 @@ _IMPLEMENTATION_MODULES = (
 
 
 class ContextMemoryStoreMixin(
+    _CurrentContextStoreMixin,
     _ContextDiscoveryMixin,
     _ContextLoadingMixin,
     _ContextRenameMixin,

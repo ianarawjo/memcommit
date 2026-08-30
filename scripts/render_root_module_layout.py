@@ -95,7 +95,7 @@ MODULE_TARGET_PATH_OVERRIDES = {
 
 OPERATION_TARGETS = {
     "quality_audit": "memcommit.application.operations.audit.model",
-    "quality_audit_store": "memcommit.application.operations.audit.session_store",
+    "quality_audit_store": "memcommit.persistence.operations.audit.record_repository",
     "comparison": "memcommit.application.operations.compare.ledger.model",
     "comparison_evidence": "memcommit.application.operations.compare.ledger.evidence",
     "comparison_execution": "memcommit.application.operations.compare.ledger.execution",

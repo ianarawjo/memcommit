@@ -191,7 +191,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.provenance | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.retained_history.memory_history_reconstruction | 13 |
 | memcommit.provider_types | shared-concept-implementation | relocate-without-alias | memcommit.providers.types | 45 |
 | memcommit.quality_audit | operation-implementation | relocate-without-alias | memcommit.application.operations.audit.model | 6 |
-| memcommit.quality_audit_store | operation-implementation | relocate-without-alias | memcommit.application.operations.audit.session_store | 4 |
+| memcommit.quality_audit_store | operation-implementation | relocate-without-alias | memcommit.persistence.operations.audit.record_repository | 4 |
 | memcommit.quality_find_report | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue_finding.report | 6 |
 | memcommit.quality_find_workbench | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue_finding.workbench | 11 |
 | memcommit.quality_finding_handoff | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue_finding.handoff | 21 |

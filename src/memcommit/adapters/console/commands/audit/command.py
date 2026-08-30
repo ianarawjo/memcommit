@@ -49,13 +49,16 @@ from memcommit.application.capabilities.reviewing.memory_issue_finding.findings 
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.operations.audit.application import run_quality_audit
+from memcommit.application.operations.audit.application import (
+    record_quality_audit,
+    run_quality_audit,
+)
 from memcommit.application.operations.audit.model import (
     QualityAuditError,
     QualityAuditKind,
     QualityAuditSession,
 )
-from memcommit.application.operations.audit.session_store import QualityAuditStore
+from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.application.capabilities.reviewing.memory_issue_finding.report import (
     quality_find_category_label,
 )
@@ -272,7 +275,7 @@ def cmd(
 
         # Publish the complete snapshot before printing its receipt. Review is
         # a separate command, so a terminal disconnect cannot lose the result.
-        QualityAuditStore(store).save(session)
+        record_quality_audit(JsonAuditRecordRepository(store), session)
     except (
         ConcurrentContextUpdateError,
         ConformanceError,

@@ -11,10 +11,10 @@ from memcommit.core.context_targeting.navigation import (
 )
 
 
-from ..context_memory.models import (
+from .models import (
     ConcurrentContextUpdateError,
 )
-from ..context_memory.records import (
+from .records import (
     _context_name_parts,
     context_record_digest,
 )
@@ -23,8 +23,8 @@ from ..infrastructure.atomic_io import (
 )
 
 
-class _CurrentStateStoreMixin:
-    """Focused slice of the temporary Store assembly."""
+class _CurrentContextStoreMixin:
+    """Persist the process-visible current Context pointer."""
 
     def _read_state(self) -> dict:
         with open(self.state_file) as f:

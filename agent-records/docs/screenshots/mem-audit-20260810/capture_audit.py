@@ -189,12 +189,12 @@ def _spawn(environment: dict[str, str], *arguments: str):
 
 
 def _new_audit_uid(before: set[str]) -> str:
-    from memcommit.application.operations.audit.session_store import QualityAuditStore
+    from memcommit.persistence.operations.audit import JsonAuditRecordRepository
     from memcommit.persistence.store import MemoryStore
 
     sessions = [
         session
-        for session in QualityAuditStore(MemoryStore()).list()
+        for session in JsonAuditRecordRepository(MemoryStore()).list()
         if session.uid not in before and session.source.context_name == TARGET
     ]
     if len(sessions) != 1:
@@ -205,7 +205,7 @@ def _new_audit_uid(before: set[str]) -> str:
 
 
 def main() -> None:
-    from memcommit.application.operations.audit.session_store import QualityAuditStore
+    from memcommit.persistence.operations.audit import JsonAuditRecordRepository
     from memcommit.persistence.store import MemoryStore
 
     environment = dict(os.environ)
@@ -219,7 +219,9 @@ def main() -> None:
     )
     print(f"CAPTURE PTY · {COLUMNS} columns × {ROWS} rows", flush=True)
     print(f"TARGET · {TARGET}", flush=True)
-    existing = {session.uid for session in QualityAuditStore(MemoryStore()).list()}
+    existing = {
+        session.uid for session in JsonAuditRecordRepository(MemoryStore()).list()
+    }
 
     setup_raw = bytearray()
     setup = _spawn(environment, "audit")
@@ -300,7 +302,7 @@ def main() -> None:
         raise RuntimeError("Complete Audit report omitted a finder section.")
 
     audit_uid = _new_audit_uid(existing)
-    saved = QualityAuditStore(MemoryStore()).load(audit_uid)
+    saved = JsonAuditRecordRepository(MemoryStore()).load(audit_uid)
     item_kinds = tuple(
         (
             ("EXACT DUPLICATE" if finding.relation == "EXACT" else "SEMANTIC DUN")

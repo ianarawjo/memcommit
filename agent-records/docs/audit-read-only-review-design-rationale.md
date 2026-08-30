@@ -91,12 +91,14 @@ setup module.
 
 ## Application ownership
 
-Audit's application-specific model, execution, and record persistence live
-under `memcommit.application.operations.audit`.
+Audit's application-specific model, execution, and persistence port live under
+`memcommit.application.operations.audit`.
 `model.py` owns the durable Source, Check, Session, schema validation, and record
-digest; `application.py` freezes one Source and runs the three quality finders
-plus optional Conformance as one complete operation; and `session_store.py`
-owns private immutable UID-addressed records. The read-only console projector
+digest; `application.py` freezes one Source, runs the three quality finders plus
+optional Conformance as one complete operation, and publishes only a validated
+record through `repository.py`'s `AuditRecordRepository` port. The concrete
+`persistence.operations.audit.record_repository.JsonAuditRecordRepository`
+owns private immutable UID-addressed JSON records. The read-only console projector
 composes the shared Memory-issue report views directly; Audit has no Resolution
 projection, response model, option grammar, or CAS update route. The reusable
 finder, report, and workbench contracts remain under
@@ -117,18 +119,16 @@ The response-bearing draft was never distributed. On 2026-08-30 its runtime
 compatibility was removed instead of turning an unreleased shape into a durable
 contract: the sole read-only schema starts at version 1, strict decoding rejects
 the discarded drafts, and no migration or compatibility facade is provided.
-`QualityAuditSession` is frozen, `QualityAuditStore.save` is create-only, and an
-existing UID cannot be replaced. Historical screenshots remain evidence of the
+`QualityAuditSession` is frozen,
+`JsonAuditRecordRepository.create` is create-only, and an existing UID cannot
+be replaced. Historical screenshots remain evidence of the
 prototype's earlier UI; they do not define a supported record or Python API.
 
-`session_store.py` still contains the physical JSON, locking, and atomic-write
-adapter beside the application model as a provisional ownership boundary. A
-later behavior-preserving relocation may place it under
-`persistence.operations.audit` while the application package retains the
-record and repository contract. Mutable operation sessions should remain
-distinct from immutable records, receipts, and the cross-operation command
-ledger; this change deliberately does not perform that broader persistence
-layout migration.
+The application contract deliberately exposes `create`, `load`, `list`, and
+record modification metadata without exposing a filesystem `Path`. JSON
+encoding, private directories, per-UID locks, and atomic replacement remain
+physical persistence concerns. Mutable operation sessions remain distinct from
+immutable records, receipts, and the cross-operation command ledger.
 
 ## Safety and limitations
 

@@ -66,7 +66,7 @@ from memcommit.application.operations.audit.model import (
     QualityAuditSession,
     quality_audit_record_digest,
 )
-from memcommit.application.operations.audit.session_store import QualityAuditStore
+from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.persistence.store import MemoryStore
 
 
@@ -434,8 +434,8 @@ def test_audit_review_close_cannot_change_the_saved_record(isolated_store):
     ctx, first, second = _context()
     store = MemoryStore()
     session = _finding_session(ctx, first, second)
-    sessions = QualityAuditStore(store)
-    sessions.save(session)
+    sessions = JsonAuditRecordRepository(store)
+    sessions.create(session)
     before = quality_audit_record_digest(sessions.load(session.uid))
 
     with create_pipe_input() as pipe_input:
@@ -456,12 +456,12 @@ def test_audit_review_close_cannot_change_the_saved_record(isolated_store):
 def test_audit_store_rejects_replacing_an_immutable_record(isolated_store):
     ctx, first, second = _context()
     session = _finding_session(ctx, first, second)
-    sessions = QualityAuditStore(MemoryStore())
-    sessions.save(session)
+    sessions = JsonAuditRecordRepository(MemoryStore())
+    sessions.create(session)
     before = quality_audit_record_digest(sessions.load(session.uid))
 
     with pytest.raises(QualityAuditError, match="already exists"):
-        sessions.save(session)
+        sessions.create(session)
 
     assert quality_audit_record_digest(sessions.load(session.uid)) == before
 
@@ -470,8 +470,8 @@ def test_saved_audit_is_in_audit_and_aggregate_review_catalogs(isolated_store):
     ctx, first, second = _context()
     store = MemoryStore()
     session = _finding_session(ctx, first, second)
-    sessions = QualityAuditStore(store)
-    sessions.save(session)
+    sessions = JsonAuditRecordRepository(store)
+    sessions.create(session)
 
     audit_entries = audit_session_entries(sessions)
     review_entries = review_session_entries(store)
@@ -487,7 +487,7 @@ def test_saved_audit_is_in_audit_and_aggregate_review_catalogs(isolated_store):
 def test_review_audit_snapshot_reopens_exact_saved_report(isolated_store):
     ctx, first, second = _context()
     session = _finding_session(ctx, first, second)
-    QualityAuditStore(MemoryStore()).save(session)
+    JsonAuditRecordRepository(MemoryStore()).create(session)
 
     result = runner.invoke(
         app,
@@ -505,7 +505,7 @@ def test_review_audit_snapshot_reopens_exact_saved_report(isolated_store):
 def test_review_audit_snapshot_accepts_displayed_session_prefix(isolated_store):
     ctx, first, second = _context()
     session = _finding_session(ctx, first, second)
-    QualityAuditStore(MemoryStore()).save(session)
+    JsonAuditRecordRepository(MemoryStore()).create(session)
 
     result = runner.invoke(
         app,
@@ -520,9 +520,9 @@ def test_review_audit_snapshot_accepts_displayed_session_prefix(isolated_store):
 def test_review_audit_rejects_an_ambiguous_session_prefix(isolated_store):
     ctx, first, second = _context()
     original = _finding_session(ctx, first, second)
-    sessions = QualityAuditStore(MemoryStore())
-    sessions.save(replace(original, uid="aaaaaaaa-0000-4000-8000-000000000000"))
-    sessions.save(replace(original, uid="aaaaaaaa-1111-4000-8000-000000000000"))
+    sessions = JsonAuditRecordRepository(MemoryStore())
+    sessions.create(replace(original, uid="aaaaaaaa-0000-4000-8000-000000000000"))
+    sessions.create(replace(original, uid="aaaaaaaa-1111-4000-8000-000000000000"))
 
     result = runner.invoke(
         app,
@@ -716,7 +716,7 @@ def test_audit_command_runs_all_three_and_saves_before_snapshot(
         "find_ambiguities",
         "find_conflicts",
     ]
-    saved = QualityAuditStore(store).list()
+    saved = JsonAuditRecordRepository(store).list()
     assert len(saved) == 1
     assert saved[0].source.context_name == ctx.name
     assert "SAVED · 3/3 CHECKS" in result.stdout
@@ -760,6 +760,6 @@ def test_flagless_audit_uses_current_context_and_prints_saved_session_receipt(
     assert "CONFLICTS      0/2 MEMORIES INVOLVED · 0/1 PAIRS FLAGGED" in result.output
     assert "Review full audit:\nmem review audit --session" in result.output
     assert "Source unchanged. No checkpoint created." not in result.output
-    saved = QualityAuditStore(store).list()
+    saved = JsonAuditRecordRepository(store).list()
     assert len(saved) == 1
     assert saved[0].source.context_name == ctx.name

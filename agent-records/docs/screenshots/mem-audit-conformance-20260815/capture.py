@@ -34,7 +34,7 @@ def _demo_child() -> None:
         CONTEXT_CONFORMANCE_OPERATION,
     )
     from memcommit.providers.types import ProviderIdentity
-    from memcommit.application.operations.audit.session_store import QualityAuditStore
+    from memcommit.persistence.operations.audit import JsonAuditRecordRepository
     from memcommit.application.operations.review.model import direct_context_digest
     from memcommit.persistence.store import MemoryStore
 
@@ -95,10 +95,10 @@ def _demo_child() -> None:
             interactive=True,
             interval=0.08,
         )
-        QualityAuditStore(store).save(session)
+        JsonAuditRecordRepository(store).create(session)
         run_quality_audit_review(store, session)
 
-        restored = QualityAuditStore(store).load(session.uid)
+        restored = JsonAuditRecordRepository(store).load(session.uid)
         target_after = direct_context_digest(store.load_direct(target.name))
         rules_after = direct_context_digest(store.load_direct(rules.name))
         unchanged = target_before == target_after and rules_before == rules_after

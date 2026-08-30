@@ -91,7 +91,7 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
         "src/memcommit/application/capabilities/retained_history/memory_history_reconstruction/memory_history_event_derivation.py",
         "src/memcommit/application/capabilities/retained_history/memory_history_reconstruction/memory_history_construction.py",
         "src/memcommit/application/operations/review/model.py",
-        "src/memcommit/persistence/store/operation_state",
+        "src/memcommit/persistence/operations/atomize",
         "src/memcommit/persistence/store/context_memory",
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
         "src/memcommit/persistence/store/checkpoint",

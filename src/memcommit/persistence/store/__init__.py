@@ -1,39 +1,113 @@
-"""Public persistence boundary assembled from three transitional Store slices."""
+"""Public persistence surface composed from focused physical owners."""
 
 # ruff: noqa: F401
 
 import sys
 from types import ModuleType
 
+from memcommit.core.context import AutoCheckpoint
+
 from . import context_memory as _context_memory_module
-from . import operation_state as _operation_state_module
 from . import record_restore_checkpoint as _checkpoint_module
-from .operation_state import *  # noqa: F403
-from .operation_state import (
+from .context_memory import ContextMemoryStoreMixin
+from .context_memory.models import (
+    ConcurrentContextUpdateError,
+    ContextBranchBinding,
+    ContextBranchMemoryBinding,
+    ContextDeletionCommittedError,
+    ContextRenameBinding,
+    ContextRenamePlan,
+    ContextRenameResult,
+)
+from .context_memory.query_source import QuerySource, QuerySourceEntry
+from .context_memory.records import (
+    _rewrite_checkpoint_record,
+    canonical_context_record,
+    checkpoint_history_digest,
+    context_record_digest,
+    validate_context_name,
+)
+from .infrastructure import atomic_io as _atomic_io_module
+from .infrastructure import locking as _locking_module
+from .infrastructure import paths as _paths_module
+from .infrastructure import protection as _protection_module
+from .infrastructure.atomic_io import (
     _canonical_json_digest,
     _fsync_directory,
     _reject_duplicate_json_keys,
-    _rewrite_checkpoint_record,
     _write_bytes_atomic,
     _write_json_atomic,
 )
-from .context_memory import ContextMemoryStoreMixin
-from .operation_state import OperationStateStoreMixin
+from .infrastructure.locking import _StoreLockingMixin
+from .infrastructure.paths import (
+    ATOMIZE_ANALYSES_DIR,
+    ATOMIZE_SESSION_HISTORY_DIR,
+    ATOMIZE_WORKBENCHES_DIR,
+    CONTEXTS_DIR,
+    IMPACT_PLAN_FILE,
+    MELD_SESSIONS_DIR,
+    MELD_SESSION_HISTORY_DIR,
+    QUERY_SOURCES_DIR,
+    REVIEW_SESSION_FILE,
+    REVIEW_SESSION_HISTORY_DIR,
+    REVIEW_SESSION_SOURCES_DIR,
+    STAGED_UPDATE_FILE,
+    STATE_FILE,
+    STORE_DIR,
+    _StorePathsMixin,
+    resolve_active_store_dir,
+)
+from .infrastructure.protection import _WriteProtectionStoreMixin
 from .record_restore_checkpoint import RecordRestoreCheckpointStoreMixin
+
+from memcommit.persistence.operations.atomize import (
+    state_repository as _atomize_state_module,
+)
+from memcommit.persistence.operations.atomize.state_repository import (
+    _AtomizeStateStoreMixin,
+)
+from memcommit.persistence.operations.meld import state_repository as _meld_state_module
+from memcommit.persistence.operations.meld.state_repository import _MeldStateStoreMixin
+from memcommit.persistence.operations.review import (
+    state_repository as _review_state_module,
+)
+from memcommit.persistence.operations.review.state_repository import (
+    _ReviewStateStoreMixin,
+)
+from memcommit.persistence.operations.update import (
+    state_repository as _update_state_module,
+)
+from memcommit.persistence.operations.update.state_repository import (
+    _UpdateStateStoreMixin,
+)
 
 
 class MemoryStore(
-    OperationStateStoreMixin,
+    _StorePathsMixin,
+    _WriteProtectionStoreMixin,
+    _StoreLockingMixin,
     ContextMemoryStoreMixin,
+    _UpdateStateStoreMixin,
+    _ReviewStateStoreMixin,
+    _MeldStateStoreMixin,
+    _AtomizeStateStoreMixin,
     RecordRestoreCheckpointStoreMixin,
 ):
-    """Compatibility Store surface while callers migrate to narrower owners.
+    """Compose Context persistence and operation-owned repositories."""
 
-    The three bases preserve the established cross-slice ``self`` calls during
-    the first mechanical extraction. New persistence behavior must not be added
-    here; this assembly is deleted after callers depend on the final components.
-    """
 
+_IMPLEMENTATION_MODULES = (
+    _atomic_io_module,
+    _paths_module,
+    _protection_module,
+    _locking_module,
+    _update_state_module,
+    _review_state_module,
+    _meld_state_module,
+    _atomize_state_module,
+    _context_memory_module,
+    _checkpoint_module,
+)
 
 _FORWARDED_COMPATIBILITY_NAMES = frozenset(
     {
@@ -60,29 +134,17 @@ _FORWARDED_COMPATIBILITY_NAMES = frozenset(
 
 
 class _StoreCompatibilityModule(ModuleType):
-    """Forward legacy test/configuration overrides to each extracted owner.
-
-    Existing callers historically replaced a few module globals on
-    ``memcommit.persistence.store``. Methods now resolve globals in their defining slice,
-    so the temporary compatibility boundary must keep those overrides atomic
-    across all three modules until callers stop mutating the root surface.
-    """
+    """Keep established root-level configuration and failure injection atomic."""
 
     def __setattr__(self, name: str, value: object) -> None:
         super().__setattr__(name, value)
         if name not in _FORWARDED_COMPATIBILITY_NAMES:
             return
-        for module in (
-            _operation_state_module,
-            _context_memory_module,
-            _checkpoint_module,
-        ):
+        for module in _IMPLEMENTATION_MODULES:
             if hasattr(module, name):
                 setattr(module, name, value)
 
 
 __all__ = [name for name in globals() if not name.startswith("_")]
 
-# Keep the established root-module mutation behavior during this first split.
-# This module class disappears with the MemoryStore compatibility assembly.
 sys.modules[__name__].__class__ = _StoreCompatibilityModule

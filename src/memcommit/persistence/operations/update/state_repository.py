@@ -7,24 +7,24 @@ from pathlib import Path
 from memcommit.core.context import AutoCheckpoint
 
 
-from ..context_memory.models import (
+from ...store.context_memory.models import (
     ConcurrentContextUpdateError,
 )
-from ..context_memory.records import (
+from ...store.context_memory.records import (
     context_record_digest,
 )
-from ..infrastructure.atomic_io import (
+from ...store.infrastructure.atomic_io import (
     _reject_duplicate_json_keys,
     _write_json_atomic,
 )
-from ..infrastructure.protection import _profile_write_guarded
+from ...store.infrastructure.protection import _profile_write_guarded
 
 
 _NO_UPDATE_SESSION_EXPECTATION = object()
 
 
 class _UpdateStateStoreMixin:
-    """Focused slice of the temporary Store assembly."""
+    """Own Update-specific persisted working state."""
 
     @staticmethod
     def _load_update_session(path: Path):
@@ -164,7 +164,9 @@ class _UpdateStateStoreMixin:
             prepare_update_application,
         )
         from memcommit.core.context_targeting.loading import load_context_scope
-        from memcommit.application.capabilities.semantic.goal_focus import GoalFocusError
+        from memcommit.application.capabilities.semantic.goal_focus import (
+            GoalFocusError,
+        )
         from memcommit.application.capabilities.semantic.goal_focus_runtime import (
             revalidate_goal_focus,
         )

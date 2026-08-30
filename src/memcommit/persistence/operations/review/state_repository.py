@@ -7,15 +7,15 @@ from pathlib import Path
 from memcommit.core.context import Context
 
 
-from ..infrastructure.atomic_io import (
+from ...store.infrastructure.atomic_io import (
     _reject_duplicate_json_keys,
     _write_json_atomic,
 )
-from ..infrastructure.protection import _profile_write_guarded
+from ...store.infrastructure.protection import _profile_write_guarded
 
 
 class _ReviewStateStoreMixin:
-    """Focused slice of the temporary Store assembly."""
+    """Own Review-specific persisted working state."""
 
     @staticmethod
     def _load_review_session(path: Path):

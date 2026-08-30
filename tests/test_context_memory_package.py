@@ -19,6 +19,15 @@ REPOSITORY_ROOT = Path(__file__).parents[1]
 PACKAGE_ROOT = REPOSITORY_ROOT / "src/memcommit/persistence/store/context_memory"
 
 EXPECTED_METHODS = {
+    "current.py": {
+        "_read_state",
+        "_write_state",
+        "current_context_name",
+        "context_navigation_target",
+        "set_current",
+        "set_current_context_if",
+        "set_current_virtual_context_if",
+    },
     "models.py": set(),
     "records.py": set(),
     "discovery.py": {
@@ -123,13 +132,14 @@ def test_context_memory_methods_have_one_focused_owner() -> None:
     }
     assert actual == EXPECTED_METHODS
     all_methods = [method for methods in actual.values() for method in methods]
-    assert len(all_methods) == len(set(all_methods)) == 65
+    assert len(all_methods) == len(set(all_methods)) == 72
 
 
 def test_context_memory_surface_composes_the_focused_mixins() -> None:
     assert tuple(
         base.__module__.rsplit(".", 1)[-1] for base in ContextMemoryStoreMixin.__bases__
     ) == (
+        "current",
         "discovery",
         "loading",
         "rename",

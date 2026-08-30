@@ -48,7 +48,7 @@ def test_production_translate_consumers_use_operation_owners() -> None:
         "src/memcommit/application/capabilities/ops.py",
         "src/memcommit/application/operations/profile/model",
         "src/memcommit/application/capabilities/retained_history/memory_history_reconstruction/memory_history_event_derivation.py",
-        "src/memcommit/persistence/store/operation_state",
+        "src/memcommit/persistence/operations",
         "src/memcommit/persistence/store/context_memory",
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
         "src/memcommit/persistence/store/checkpoint",

@@ -22,6 +22,7 @@ from memcommit.application.operations.audit.model import (
     QualityAuditSession,
     QualityAuditSource,
 )
+from memcommit.application.operations.audit.repository import AuditRecordRepository
 from memcommit.application.operations.conformance.model import (
     ConformanceReport,
     check_context_conformance,
@@ -100,6 +101,15 @@ def create_quality_audit(
     return QualityAuditSession.from_dict(session.to_dict())
 
 
+def record_quality_audit(
+    repository: AuditRecordRepository,
+    session: QualityAuditSession,
+) -> None:
+    """Publish one fully validated completed Audit through its persistence port."""
+
+    repository.create(QualityAuditSession.from_dict(session.to_dict()))
+
+
 def run_quality_audit(
     ctx: Context,
     provider_factory: Callable[[], FindingsProvider],
@@ -163,4 +173,4 @@ def run_quality_audit(
     )
 
 
-__all__ = ["create_quality_audit", "run_quality_audit"]
+__all__ = ["create_quality_audit", "record_quality_audit", "run_quality_audit"]

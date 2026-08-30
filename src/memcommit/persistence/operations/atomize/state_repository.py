@@ -6,15 +6,15 @@ import uuid
 from pathlib import Path
 
 
-from ..infrastructure.atomic_io import (
+from ...store.infrastructure.atomic_io import (
     _reject_duplicate_json_keys,
     _write_json_atomic,
 )
-from ..infrastructure.protection import _profile_write_guarded
+from ...store.infrastructure.protection import _profile_write_guarded
 
 
 class _AtomizeStateStoreMixin:
-    """Focused slice of the temporary Store assembly."""
+    """Own Atomize-specific persisted working state."""
 
     def _atomize_analysis_path(self, context_uid: str) -> Path:
         try:

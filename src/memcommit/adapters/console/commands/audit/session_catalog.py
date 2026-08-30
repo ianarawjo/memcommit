@@ -8,25 +8,23 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
     SessionPickerEntry,
 )
 from memcommit.application.operations.audit.model import QualityAuditSession
-from memcommit.application.operations.audit.session_store import QualityAuditStore
+from memcommit.application.operations.audit.repository import AuditRecordRepository
 
 
-def _timestamp(session: QualityAuditSession, sessions: QualityAuditStore) -> float:
+def _timestamp(
+    session: QualityAuditSession,
+    sessions: AuditRecordRepository,
+) -> float:
     try:
         created = datetime.fromisoformat(session.created_at).timestamp()
     except (TypeError, ValueError) as error:
         raise ValueError("Saved Audit has an invalid creation time.") from error
-    path = sessions.path(session.uid)
-    try:
-        if path.is_file() and not path.is_symlink():
-            return max(created, path.stat().st_mtime)
-    except FileNotFoundError:
-        pass
-    return created
+    modified = sessions.modified_at(session.uid)
+    return created if modified is None else max(created, modified)
 
 
 def audit_session_entries(
-    sessions: QualityAuditStore,
+    sessions: AuditRecordRepository,
 ) -> tuple[SessionPickerEntry, ...]:
     """Project every validated completed Audit into the common picker."""
 

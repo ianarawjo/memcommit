@@ -1,15 +1,14 @@
-# Store three-slice extraction rationale
+# Persistence ownership design rationale
 
 ## Status
 
-The flat `memcommit/persistence/store.py` implementation was mechanically divided into
-three coarse slices under `memcommit.persistence.store`. The live Context/Memory and
-operation-state slices have since been divided into focused packages, while shared
-Store paths, atomic I/O, locking, and protection are exposed under `infrastructure`.
-`memcommit.persistence.store.MemoryStore` remains a temporary compatibility
-assembly while callers still depend on the original combined method surface.
-It is not the target architecture and must be deleted after callers move to
-narrower persistence owners.
+The flat `memcommit/persistence/store.py` implementation was first divided into
+coarse slices. Its physical owners are now explicit: shared mechanics and the
+Context/Memory graph live under `memcommit.persistence.store`, while persisted
+state belonging to Audit, Atomize, Meld, Review, and Update lives under
+`memcommit.persistence.operations.<operation>`. `MemoryStore` remains the public
+composition surface for existing callers, but it no longer gives operation state
+one false shared physical owner.
 
 ## Motivating problem
 
@@ -23,8 +22,12 @@ The first extraction therefore preserves method bodies and established call
 ordering while making those three axes physically visible:
 
 - `persistence/store/infrastructure/` owns shared paths, atomic-write primitives,
-  protection, and lock mechanics, while `persistence/store/operation_state/` owns
-  Current, Update, Review, Ground, Meld, and Atomize working-state persistence;
+  protection, and lock mechanics;
+- `persistence/store/context_memory/current.py` owns the current Context pointer,
+  and `persistence/store/context_memory/` owns the rest of the live Context/Memory
+  graph;
+- `persistence/operations/{audit,atomize,meld,review,update}/` owns persistence
+  whose schema and lifecycle belong to that exact operation;
 - `persistence/store/context_memory/` owns the former lines 3,597-7,026: discovery,
   loading, rename, saving, creation, lifecycle, and query-source behavior for the
   current Context/Memory graph; and
@@ -63,7 +66,7 @@ calls into services, or alter record formats. Its purpose is to expose cohesive 
 axes first, so a later extraction can introduce narrower actors without again moving a
 3,500-line source file at the same time.
 
-## Operation-state and infrastructure decomposition
+## Operation persistence and infrastructure decomposition
 
 The former `operation_state.py` combined three dependency levels. Its second-stage
 split assigns them as follows:
@@ -73,14 +76,20 @@ split assigns them as follows:
 - `context_memory/models.py` and `records.py` own Context transaction values, record
   validation, pointer rewriting, and canonical digests, while `query_source.py` now
   owns its own value objects and parsers; and
-- `operation_state/current.py`, `update.py`, `review.py`, `ground.py`, `meld.py`, and
-  `atomize.py` own only the corresponding persisted working state.
+- `context_memory/current.py` owns navigation and the active Context pointer;
+- `operations/update/state_repository.py`,
+  `operations/review/state_repository.py`,
+  `operations/meld/state_repository.py`, and
+  `operations/atomize/state_repository.py` own their corresponding persisted
+  working state; and
+- `operations/audit/record_repository.py` owns immutable completed Audit records,
+  while `application.operations.audit.repository` owns the repository port.
 
-`operation_state/__init__.py` composes those method owners as the existing
-`OperationStateStoreMixin` and re-exports the established Store symbols. This preserves
-the temporary `MemoryStore` method-resolution order and the root Store module's legacy
-failure-injection overrides. The extraction preserves every moved method and helper
-body; it does not change record schemas, lock acquisition order, or transaction meaning.
+`MemoryStore` composes the common infrastructure, Context/Memory owner, operation
+repository mixins, and checkpoint/restoration owner directly. There is no
+`operation_state` package or `OperationStateStoreMixin`. The move preserves record
+schemas, lock acquisition order, transaction meaning, and the established root
+failure-injection surface.
 
 The important dependency correction is that Context/Memory and checkpoint persistence
 no longer import their record models, validators, and digests from a module named after
@@ -119,10 +128,10 @@ check, archive format, checkpoint record, and rollback order remains unchanged.
 
 ## Compatibility boundary
 
-`persistence/store/__init__.py` assembles the three method slices through inheritance so
+`persistence/store/__init__.py` assembles the physical owners through inheritance so
 existing `MemoryStore` callers retain their established `self` call graph.
-New persistence behavior must not be added to that assembly. A small temporary
-module adapter forwards legacy overrides of Store paths and atomic-write
+New operation persistence belongs under `persistence/operations/<operation>` rather
+than in that assembly. A small module adapter forwards established overrides of Store paths and atomic-write
 helpers to the defining slices because the existing safety tests use those
 overrides for isolated Profile roots and failure injection.
 
@@ -146,11 +155,11 @@ removed together with `MemoryStore`; it is not a general module-proxy pattern.
 
 ## Follow-up decomposition
 
-After these mechanical splits are stable, replace mixin-to-mixin `self` calls with
-narrow persistence actors or ports one transaction family at a time. Context-aware
-locking and protection should receive an explicit record contract rather than reaching
-through the combined Store, and operation adapters should depend on their own session
-store rather than the full `MemoryStore` surface.
+The remaining architectural task is to replace mixin-to-mixin `self` calls with
+narrow persistence actors or ports. Context-aware locking and protection should
+receive an explicit record contract rather than reaching through the combined Store,
+and operation adapters should depend on their operation repository rather than the
+full `MemoryStore` surface.
 
 Completion requires all callers to stop importing or constructing
 `MemoryStore`, removal of the compatibility forwarding adapter and inheritance

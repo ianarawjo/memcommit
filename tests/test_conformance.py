@@ -41,7 +41,7 @@ from memcommit.adapters.console.commands.audit.review import (
     render_quality_audit_review_snapshot,
 )
 from memcommit.application.operations.audit.model import QualityAuditSession
-from memcommit.application.operations.audit.session_store import QualityAuditStore
+from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.persistence.store import context_record_digest
 
 
@@ -1030,7 +1030,7 @@ def test_audit_cli_rules_alias_saves_one_read_only_four_check_report(
     assert result.exit_code == 0, result.output
     assert "SAVED · 4/4 CHECKS" in result.output
     assert "CONFORMANCE · FINISHED" in result.output
-    saved = QualityAuditStore(store).list()
+    saved = JsonAuditRecordRepository(store).list()
     assert len(saved) == 1
     assert saved[0].conformance is not None
     assert context_record_digest(store.load_direct(target.name)) == target_before

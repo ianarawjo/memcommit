@@ -47,7 +47,7 @@ def test_production_sever_consumers_use_the_operation_owner() -> None:
         "src/memcommit/study_scenarios/legacy/prewarm/sever.py",
         "src/memcommit/application/operations/sever/session_store.py",
         "src/memcommit/application/operations/sever/runtime.py",
-        "src/memcommit/persistence/store/operation_state",
+        "src/memcommit/persistence/operations",
         "src/memcommit/persistence/store/context_memory",
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
         "src/memcommit/persistence/store/checkpoint",

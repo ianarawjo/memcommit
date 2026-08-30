@@ -28,7 +28,7 @@ assert "memcommit.application.operations.update.application" not in sys.modules
 
 def test_production_update_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/persistence/store/operation_state",
+        "src/memcommit/persistence/operations/update",
         "src/memcommit/persistence/store/context_memory",
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
         "src/memcommit/persistence/store/checkpoint",

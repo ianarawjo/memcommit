@@ -319,7 +319,7 @@ def _run_find_exact_child() -> None:
 
 def _run_audit_child() -> None:
     import memcommit.adapters.console.commands.audit.command as audit_command
-    from memcommit.application.operations.audit.session_store import QualityAuditStore
+    from memcommit.persistence.operations.audit import JsonAuditRecordRepository
     from memcommit.persistence.store import MemoryStore
 
     context_name = "quality/direct-audit"
@@ -336,7 +336,7 @@ def _run_audit_child() -> None:
         exit_code = _run_app(["audit"])
         print(f"COMMAND EXIT · {exit_code}")
         print(_verification(context_name, provider))
-        session = QualityAuditStore(MemoryStore()).list()[0]
+        session = JsonAuditRecordRepository(MemoryStore()).list()[0]
         _pause("AUDIT RECEIPT READY")
         review_exit = _run_app(
             ["review", "audit", "--session", session.uid, "--snapshot"]
