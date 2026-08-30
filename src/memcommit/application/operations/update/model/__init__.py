@@ -42,6 +42,8 @@ from .receipts import (
     UpdateApplicationReceipt,
     UpdateCheckpointReceipt,
 )
+from .plan import UpdatePlan
+from .result import AppliedOwner, UpdateResult
 from .session import (
     UPDATE_GOAL_FOCUS_SCHEMA_VERSION,
     UPDATE_INLINE_GOAL_FOCUS_SCHEMA_VERSION,
@@ -69,6 +71,7 @@ __all__ = (
     "UPDATE_SCHEMA_VERSION",
     "INLINE_UPDATE_CONTEXT_NAME",
     "AddOperation",
+    "AppliedOwner",
     "ContextFingerprint",
     "EditOperation",
     "GrantedUpdateTarget",
@@ -82,7 +85,9 @@ __all__ = (
     "UpdateError",
     "UpdateInputs",
     "UpdateOperation",
+    "UpdatePlan",
     "UpdateProvider",
+    "UpdateResult",
     "UpdateSession",
     "UpdateStatus",
     "applied_session_matches",

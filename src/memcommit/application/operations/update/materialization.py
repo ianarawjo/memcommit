@@ -1,7 +1,5 @@
-"""Operation-owned deterministic application of one staged Update plan."""
+"""Operation-owned deterministic application of exact Update plans."""
 from __future__ import annotations
-
-from dataclasses import dataclass
 
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.update.model import (
@@ -9,7 +7,10 @@ from memcommit.application.operations.update.model import (
     EditOperation,
     RemoveOperation,
     UpdateError,
+    UpdatePlan,
+    UpdateResult,
     UpdateSession,
+    AppliedOwner,
 )
 
 
@@ -17,28 +18,9 @@ class UpdateApplicationError(UpdateError):
     """A staged update cannot be applied to the supplied target graph."""
 
 
-@dataclass(frozen=True)
-class AppliedOwner:
-    """One affected direct owner and its detached post-update record."""
-
-    owner_context_uid: str
-    owner_context_name: str
-    post_image: Context
-
-
-@dataclass(frozen=True)
-class UpdateApplicationResult:
-    """Detached post-images in canonical target-graph order."""
-
-    session_uid: str
-    target_uid: str
-    target_name: str
-    affected_owners: tuple[AppliedOwner, ...]
-
-    @property
-    def post_images(self) -> tuple[Context, ...]:
-        """Return just the detached Context records in save order."""
-        return tuple(owner.post_image for owner in self.affected_owners)
+# Historical imports remain valid while callers migrate to the application
+# boundary and its session-independent name.
+UpdateApplicationResult = UpdateResult
 
 
 def _walk_target_contexts(root: Context) -> tuple[Context, ...]:
@@ -78,35 +60,31 @@ def _read_only_type(item: object) -> str:
     return type(item).__name__
 
 
-def prepare_update_application(
-    session: UpdateSession,
+def materialize_update_plan(
+    plan: UpdatePlan,
     target: Context,
-) -> UpdateApplicationResult:
-    """Preflight a staged plan and return detached affected-owner post-images.
+) -> UpdateResult:
+    """Preflight one exact plan and return detached owner post-images.
 
-    The caller is responsible for proving that the session's recorded source
-    and target base fingerprints are fresh. This helper still binds the plan
-    to the supplied target root and validates every operation against the
-    complete in-memory target graph before constructing any post-image.
+    The caller is responsible for freshness and publication. This function
+    binds the plan to the supplied Target root and validates every operation
+    against the complete in-memory Target graph before constructing any
+    post-image.
 
     Neither success nor failure mutates ``target`` or any embedded Context.
     Persistence, multi-owner locking, checkpoints, and application receipts
     belong to the caller's transaction boundary.
     """
-    if not isinstance(session, UpdateSession):
-        raise TypeError("Expected an UpdateSession.")
+    if not isinstance(plan, UpdatePlan):
+        raise TypeError("Expected an UpdatePlan.")
     if not isinstance(target, Context):
         raise TypeError("Expected a target Context.")
-    if session.status != "staged":
-        raise UpdateApplicationError(
-            "Update application requires a staged update session."
-        )
     if (
-        session.target_uid != target.uid
-        or session.target_name != target.name
+        plan.target_uid != target.uid
+        or plan.target_name != target.name
     ):
         raise UpdateApplicationError(
-            "The staged update target does not match the supplied Context."
+            "The Update plan Target does not match the supplied Context."
         )
 
     target_contexts = _walk_target_contexts(target)
@@ -120,7 +98,7 @@ def prepare_update_application(
     # Validate the whole plan against the unchanged graph first. In
     # particular, a later invalid operation must not leave an earlier owner
     # partially updated.
-    for operation in session.operations:
+    for operation in plan.operations:
         if not isinstance(
             operation,
             (EditOperation, AddOperation, RemoveOperation),
@@ -222,9 +200,41 @@ def prepare_update_application(
             )
         )
 
-    return UpdateApplicationResult(
-        session_uid=session.uid,
+    return UpdateResult(
+        plan_uid=plan.uid,
         target_uid=target.uid,
         target_name=target.name,
         affected_owners=tuple(affected),
     )
+
+
+def prepare_update_application(
+    session: UpdateSession,
+    target: Context,
+) -> UpdateApplicationResult:
+    """Compatibility adapter for the persisted direct-Update workflow."""
+
+    if not isinstance(session, UpdateSession):
+        raise TypeError("Expected an UpdateSession.")
+    if session.status != "staged":
+        raise UpdateApplicationError(
+            "Update application requires a staged update session."
+        )
+    return materialize_update_plan(
+        UpdatePlan(
+            uid=session.uid,
+            target_uid=session.target_uid,
+            target_name=session.target_name,
+            operations=session.operations,
+        ),
+        target,
+    )
+
+
+__all__ = [
+    "AppliedOwner",
+    "UpdateApplicationError",
+    "UpdateApplicationResult",
+    "materialize_update_plan",
+    "prepare_update_application",
+]

@@ -7,6 +7,8 @@ import pytest
 
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.update.model import AddOperation, EditOperation, UpdateSession
+from memcommit.application.operations.update.application import apply_update
+from memcommit.application.operations.update.model import UpdatePlan
 from memcommit.application.operations.update.materialization import (
     UpdateApplicationError,
     prepare_update_application,
@@ -110,6 +112,26 @@ def test_applies_edits_and_additions_to_detached_owner_post_images():
 
     child_post.memories[child_memory.uid].content = "mutated result"
     assert child.memories[child_memory.uid].content == "old child"
+
+
+def test_application_boundary_applies_a_session_independent_plan():
+    target = Context(uid="target", name="campus-wiki")
+    memory = Memory(uid="memory", content="old")
+    target.add(memory)
+    plan = UpdatePlan(
+        uid=str(uuid.uuid4()),
+        target_uid=target.uid,
+        target_name=target.name,
+        operations=(_edit(target, memory, "new"),),
+    )
+
+    result = apply_update(plan, target)
+
+    assert result.plan_uid == plan.uid
+    assert result.session_uid == plan.uid
+    assert result.post_image_for(target.uid) is not None
+    assert result.post_image_for(target.uid).memories[memory.uid].content == "new"
+    assert target.memories[memory.uid].content == "old"
 
 
 def test_additions_append_in_session_order_and_edits_preserve_item_order():

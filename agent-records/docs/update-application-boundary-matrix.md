@@ -12,13 +12,20 @@ presence of any Grant in the session and not the ownership of the Source.
 
 ## Operation ownership
 
-`memcommit.application.operations.update.materialization` is the canonical owner of the
-deterministic, non-persisting plan application contract. The Store and the
-local-, granted-Target-, and granted-Source application paths consume that
-contract but retain their own freshness, authority, multi-owner transaction,
-checkpoint, and receipt responsibilities. Update has no independent operation
-runtime module, so this relocation does not create one or absorb those
-consumers into the package.
+`memcommit.application.operations.update.application` is the callable
+application boundary for deterministic, non-persisting local Update. It
+accepts an exact session-independent `UpdatePlan` and returns detached Target
+owner post-images as an `UpdateResult`. A composing operation can therefore
+apply Update to its own working Target without constructing a terminal
+`UpdateSession`, opening an Update review, or publishing durable state.
+
+`materialization.py` retains the exact preflight and detached-copy mechanics.
+Its historical `prepare_update_application(UpdateSession, Context)` entry
+remains a compatibility adapter for direct `mem update`, while new operation
+composition enters through `application.apply_update`. The Store and the
+local-, granted-Target-, and granted-Source publication paths retain freshness,
+authority, multi-owner transaction, checkpoint, and durable receipt
+responsibilities.
 
 The remaining terminal-independent modules are named by responsibility:
 `execution.py` sequences review to Apply, `granted_target.py` owns a Target
@@ -26,10 +33,11 @@ whose authority Store is mutated, and `granted_source.py` owns a granted
 read-only Source feeding a local Target. These are mechanical renames only;
 they do not add Memory Issue verification or change source/target authority.
 
-The former `memcommit.update_application` path retains its existing
-compatibility policy. This ownership-only relocation changes no semantic plan,
-preflight, CAS, authority, checkpoint, or zero-operation behavior and requires
-no terminal screenshot refresh.
+This first composition boundary changes no semantic plan, preflight, CAS,
+authority, checkpoint, review, or zero-operation behavior. It is intentionally
+non-persisting so a Meld, Sever, Resolve, Forget, or Atomize session can own
+the meaning and ordering of its local Update steps. Direct console review and
+durable publication remain a separate adapter/application path.
 
 ### Memory Issue Analysis boundary review
 
@@ -60,7 +68,10 @@ concepts:
   receipts;
 - `inputs.py` owns inline Source identity, Grant bindings, Source/Target
   candidates, focused-Memory selection, and exhaustive input collection;
-- `session.py` owns persisted session serialization, lifecycle transitions,
+- `plan.py` owns the session-independent exact Target and operation contract;
+- `result.py` owns detached affected-owner post-images returned to composing
+  application operations;
+- `session.py` owns persisted direct-command serialization, lifecycle transitions,
   inline reconstruction, and stale/applied input matching;
 - `planning.py` owns the provider contract, semantic budget, prompts, output
   schema, response validation, initial planning, and reviewed revision.
