@@ -43,9 +43,7 @@ memcommit/adapters/console/
       resolution/               Resolution workbench compositions
       endpoint_setup/           endpoint control and shared setup flows
       history/                  history picker, browser, and presentation
-      command_editor/           exact-command projection and editing family
-        command_review/         immutable review plus operation projections
-        exact_command_review/   form, rendering, interaction, approval shell
+      command_editor/           model, form, live control, rendering, approval
       operation_context_scope_editor/
                                 selectors and editors for operation scope
       context_picker/           Context/direct-item terminal picker

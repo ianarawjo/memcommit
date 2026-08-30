@@ -346,14 +346,14 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.terminal.components.command_editor.command_review",
+      "canonical_module": "memcommit.adapters.console.terminal.components.command_editor",
       "legacy_module": "memcommit.commands.exact_command_review",
       "owner": "terminal",
       "public_exports": [],
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.terminal.components.command_editor.exact_command_review.shell",
+      "canonical_module": "memcommit.adapters.console.terminal.components.command_editor.approval",
       "legacy_module": "memcommit.commands.exact_command_review_shell",
       "owner": "terminal",
       "public_exports": [],

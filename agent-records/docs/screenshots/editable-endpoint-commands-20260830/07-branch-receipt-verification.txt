@@ -1,0 +1,4 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+                                                                                                                                                                                    
+SETUP RECEIPT · BRANCH · BranchCreationReceipt(source_name='capture/beta', target_name='capture/beta/new-branch', include_descendants=True)                                         
+CONTEXTS CREATED · 0 · CURRENT CONTEXT · UNCHANGED

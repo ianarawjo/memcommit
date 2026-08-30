@@ -22,13 +22,13 @@ has already run.
 
 ## Shared component contract
 
-`memcommit.adapters.console.terminal.components.command_editor.exact_command_review` owns three new
+`memcommit.adapters.console.terminal.components.command_editor` owns three new
 operation-neutral pieces beside the existing immutable review and renderer:
 
-- `ExactCommandForm` and `ExactCommandFormField` describe one operation prefix
+- `CommandForm` and `CommandFormField` describe one operation prefix
   and its operation-owned grammar metadata.
-- `ExactCommandDraft` owns shell-like one-line parsing and live validity.
-- `EditableExactCommandControl` owns the always-visible writable field, fixed
+- `CommandDraft` owns shell-like one-line parsing and live validity.
+- `CommandEditorControl` owns the always-visible writable field, fixed
   operation prompt, bidirectional argument synchronization hooks, compact
   validity-colored frame, and writable-input protection.
 
@@ -55,9 +55,9 @@ opening and saving an unchanged command cannot require rendering unsafe text.
 
 Synchronization is not approval: it changes only process-local setup state.
 The compact title says `COMMAND · RUNNABLE` when the synchronized command can
-be approved and `COMMAND · INVALID` otherwise. In Embed, the same field is also
-the final approval surface, so one Enter on a runnable line freezes the exact
-plan. Enter is blocked while the box is red. Escape cancels the
+be approved and `COMMAND · INVALID` otherwise. The same field is the final
+approval surface, so one Enter on a runnable line freezes the exact request.
+Enter is blocked while the box is red. Escape cancels the
 operation. Backspace remains normal text deletion inside the argument buffer;
 it and other destructive editing keys cannot change the fixed operation
 prefix.
@@ -116,11 +116,35 @@ cosmetic replacement applied after shell quoting. The frozen plan still keeps
 and revalidates the full canonical UID. The frozen typed review retains the
 complete effects even though the compact command box does not repeat them.
 
-## Rollout boundary
+## Endpoint Setup rollout
 
-This change makes the model reusable across TUI operations and enables
-bidirectional argument editing for Embed and Edit. A setup flow may adopt it
-when its complete explicit argv can be mapped back into visible process-local
+Branch, Meld, Update, and Sever now use the same editor at the bottom of their
+unchanged upper setup interfaces. `EndpointCommandBinding` couples one
+operation-owned `CommandForm`, canonical review projection, and complete argv
+decoder. The common Endpoint Setup shell resolves decoded Context spellings
+against its frozen role catalogs, infers existing-versus-new placement,
+validates operation rules and direct-Memory identity, and only then replaces
+mode, endpoint, reach, Memory, and new-name controls together.
+
+The command editor tracks the last canonical review signature. A valid buffer
+edit may therefore update upper controls without the next repaint rewriting
+the person's still-focused spelling or argument order. Invalid text retains
+that signature and remains visible in red. A later retained upper-control
+change produces a new signature and intentionally replaces the stale command.
+Entering the command surface also performs this conditional synchronization,
+so queued terminal keys cannot approve an older command before a repaint.
+
+Approval reparses the visible buffer and returns the resulting typed Endpoint
+Setup draft. It does not rebuild a different request from stale upper fields,
+spawn a child shell, connect a provider, or publish durable state. Branch,
+Meld, Update, and Sever own codecs beside their command adapters; the shared
+terminal component no longer contains operation-named projection modules.
+
+## Remaining rollout boundary
+
+The model also enables bidirectional argument editing for Embed, Edit, Memory
+Transfer, and retained-history selection. Another setup flow may adopt it when
+its complete explicit argv can be mapped back into visible process-local
 controls without provider work, hidden persistence, or semantic loss.
 
 Frozen-plan reviews such as Merge and Replace cannot safely adopt the editor by
@@ -145,3 +169,7 @@ The ordered Edit record under
 [`screenshots/direct-memory-selector-actions-20260820/`](screenshots/direct-memory-selector-actions-20260820/edit-interaction-log.md)
 additionally captures an attempted cross-operation argument paste while the
 fixed `mem edit` prompt remains intact, followed by a valid bidirectional edit.
+The ordered Endpoint Setup record under
+[`screenshots/editable-endpoint-commands-20260830/`](screenshots/editable-endpoint-commands-20260830/README.md)
+captures upper-to-command projection, a direct command edit, the resulting
+upper-field reprojection, exact Enter approval, and the returned setup receipt.

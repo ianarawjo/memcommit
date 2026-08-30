@@ -1,0 +1,9 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+ MEM BRANCH · CHOOSE SOURCE AND NEW CONTEXT                                                                                                                                         
+› FROM › capture/alpha                           [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]                                                             
+  TO   › capture/alpha/branch                    [ BROWSE PARENT ] NEW · CREATE ON START                                                                                            
+┌───────────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND |───────────────────────────────────────────────────────────────────────────────┐
+│› mem branch capture/alpha/branch --from capture/alpha --source-root-only                                                                                                         │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                                                                                    
+ Type exact Context · ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel

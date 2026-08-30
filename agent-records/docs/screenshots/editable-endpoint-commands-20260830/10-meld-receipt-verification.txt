@@ -1,0 +1,5 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+                                                                                                                                                                                    
+SETUP RECEIPT · MELD · MeldEndpointSelection(mode='directional', left_name='capture/baseline', right_name='capture/incoming', target_name=None, create_target=False, left_descendant
+s=True, right_descendants=False, left_memory_uid=None, right_memory_uid=None)                                                                                                       
+PROVIDER CALLS · 0 · SESSION · NOT STARTED · DURABLE STATE · UNCHANGED

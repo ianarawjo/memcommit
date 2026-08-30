@@ -200,7 +200,7 @@ plan. Escape cancels, and Backspace remains ordinary text deletion.
 operation-neutral row projection, gap model, separate hover/selection state,
 and single moving-line renderer. The neighboring exact-command receipt is a
 separate component whose form/draft/editor mechanics are shared under
-`console.terminal.components.command_editor.exact_command_review`; Embed owns the argv grammar
+`console.terminal.components.command_editor`; Embed owns the argv grammar
 and its all-or-none mapping back to controls. The common
 `ContextSelectorControl` exposes a narrow
 nested-row projection hook so Embed can compose the order under the selected

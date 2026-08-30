@@ -46,18 +46,15 @@ The neutral layer contains:
    `shlex.join`.
 
 `CommandReview` is owned by
-`memcommit.adapters.console.terminal.components.command_editor.command_review.model`.
-The sibling `meld`, `update`, and `sever` modules project operation-specific
-START and TURN state to that one value through consistently named builders.
-`command_editor.exact_command_review` owns form, rendering, and interaction
-mechanics. Both subpackages now sit under the same terminal component family
-because they are the two directions of one eventual editor: controls project
-an exact command, and an edited exact command projects back into controls.
-They remain separate subpackages for this relocation so moving ownership does
-not silently combine their models or enlarge Meld's behavior. This placement
-matters even though the value is small: every command screen must approve the
-same immutable identity rather than accepting structurally similar ad hoc
-tuples.
+`memcommit.adapters.console.terminal.components.command_editor.model`.
+The same flat `command_editor` package owns form, control, rendering,
+interaction, and standalone approval mechanics. Controls project an exact
+command, and a complete edited command projects atomically back into controls.
+Operation-specific START and TURN builders and endpoint decoders live beside
+Meld, Update, Sever, and Branch because only those adapters know their public
+grammar and upper-field meaning. This placement matters even though the value
+is small: every command screen must approve the same immutable identity
+without making the neutral terminal component import operation code.
 
 The focused final-review action uses `Enter` as its canonical approval key.
 The shared interaction helper binds that gesture and retains case-insensitive

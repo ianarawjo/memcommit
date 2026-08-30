@@ -86,9 +86,8 @@ COMPATIBILITY_TARGET_OVERRIDES = {
 
 # A relocated canonical owner may be a package rather than one module file.
 MODULE_TARGET_PATH_OVERRIDES = {
-    "memcommit.adapters.console.terminal.components.command_editor.command_review": (
-        "memcommit/adapters/console/terminal/components/command_editor/"
-        "command_review/__init__.py"
+    "memcommit.adapters.console.terminal.components.command_editor": (
+        "memcommit/adapters/console/terminal/components/command_editor/__init__.py"
     ),
     "memcommit.persistence.store": "memcommit/persistence/store/__init__.py",
 }
@@ -199,14 +198,14 @@ CONCEPT_TARGETS = {
     "direct_item_duplicates": "memcommit.application.capabilities.reviewing.direct_item_duplicates",
     "distill_elaborate_reference": "memcommit.application.capabilities.semantic.generative_reduction_reference",
     "duplicate_pipeline": "memcommit.application.capabilities.semantic.classification.duplicates",
-    "exact_command_review": "memcommit.adapters.console.terminal.components.command_editor.command_review.model",
+    "exact_command_review": "memcommit.adapters.console.terminal.components.command_editor.model",
     "findings": "memcommit.application.capabilities.reviewing.memory_issue.finding.detection",
     "goal_focus": "memcommit.application.capabilities.semantic.goal_focus",
     "goal_focus_runtime": "memcommit.application.capabilities.semantic.goal_focus_runtime",
     "granted_provenance": "memcommit.application.capabilities.retained_history.granted_provenance",
     "history": "memcommit.application.capabilities.retained_history.reconstruction",
     "history_display": "memcommit.application.capabilities.retained_history.display",
-    "interactive_command_review": "memcommit.adapters.console.terminal.components.command_editor.command_review",
+    "interactive_command_review": "memcommit.adapters.console.terminal.components.command_editor",
     "memory_diff": "memcommit.application.capabilities.reviewing.memory_diff",
     "memory_lineage": "memcommit.application.capabilities.retained_history.memory_lineage",
     "name_suggestions": "memcommit.core.context_targeting.name_suggestions",

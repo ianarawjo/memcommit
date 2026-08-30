@@ -1,0 +1,10 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+ NEW SEVER · SOURCE × CRITERIA → RESULT · CHOOSE TWO READABLE INPUTS AND ONE LOCAL SAVE LOCATION                                                                                    
+  SOURCE · ALL READABLE CONTEXTS       › capture/criteria                        [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
+  CRITERIA · ALL READABLE CONTEXTS     › capture/source                          [ BROWSE ] CURRENT                           [ ✓ INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
+  RESULT · SOURCE OR NEW LOCAL CONTEXT › capture/result                          [ BROWSE ] NEW · CREATE ON START                                                                   
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ PROPOSED COMMAND ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› mem sever capture/criteria capture/source capture/result --criteria-descendants                                                                                                 ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+                                                                                                                                                                                    
+ Enter run exact START command · ↑ previous · Esc cancel

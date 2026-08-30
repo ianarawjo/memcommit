@@ -1,0 +1,10 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+ NEW MELD · CHOOSE MODE AND ENDPOINTS                                                                                                                                               
+  MODE · [   SYMMETRIC · CREATE SEPARATE RESULT ]  [ ✓ DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT                                                                              
+  FROM › capture/baseline                        [ BROWSE ]                                   [ ✓ INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE SUBTREE ]                                 
+  TO   › capture/incoming                        [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]                                 
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ PROPOSED COMMAND ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› mem meld capture/baseline capture/incoming --left-descendants                                                                                                                   ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+                                                                                                                                                                                    
+ Enter run exact START command · ↑ previous · Esc cancel

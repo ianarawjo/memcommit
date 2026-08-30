@@ -1,0 +1,5 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+                                                                                                                                                                                    
+SETUP RECEIPT · SEVER · SeverSetupReceipt(source_name='capture/criteria', criteria_name='capture/source', output_name='capture/result', source_descendants=False, criteria_descendan
+ts=True)                                                                                                                                                                            
+PROVIDER CALLS · 0 · SESSION · NOT STARTED · DURABLE STATE · UNCHANGED

@@ -1,0 +1,19 @@
+PTY · 180 columns × 52 rows
+[?2004h[?1l[?25l[0m[?7l[0m[J[0m NEW SEVER · SOURCE × CRITERIA → RESULT · CHOOSE TWO READABLE INPUTS AND ONE LOCAL SAVE LOCATION[0m
+[0;1m› SOURCE · ALL READABLE CONTEXTS[0m       › capture/source                          [ BROWSE ] [0;38;2;139;213;202;1mCURRENT[0m                           [[0;38;2;16;36;47;48;2;139;213;255m ✓ INCLUDE DESCENDANTS [0m]  [ MEMORY · READ ONLY ][0m
+[0m  CRITERIA · ALL READABLE CONTEXTS     › capture/criteria                        [ BROWSE ]                                   [[0;38;2;16;36;47;48;2;139;213;255m ✓ INCLUDE DESCENDANTS [0m]  [ MEMORY · READ ONLY ][0m
+[0m  RESULT · SOURCE OR NEW LOCAL CONTEXT › severed                                 [ BROWSE ] [0;38;2;245;169;127;1mNEW · CREATE ON START[0m
+[0;38;2;139;213;255;1m┌───────────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND |───────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0;38;2;139;213;255;1m│[0m› mem sever capture/source capture/criteria severed --source-descendants --criteria-descendants                                                                                   [179C[0;38;2;139;213;255;1m│[0m
+[0;38;2;139;213;255;1m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m [0m
+[0m Type exact Context · ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel[122D[7A[55C[?7h[0m[?12l[?25h[?25l[?7l[55D[0m  SOURCE · ALL READABLE CONTEXTS[17Ccriteria [34C       [28C   INCLUDE DESCENDANTS [0m
+[49C[0msource   [34C[0;38;2;139;213;202;1mCURRENT[0m
+[41C[0mcapture/result [0m
+[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃[18C┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[20C[0mcriteria capture/sou[Cce[Ccapture/re[Cult -[Ccrit[Cri[C-descendants               [82C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+
+[C[0mEnt[Cr run exac[C START comm[Cnd · ↑ previous · Es[C cancel[0m[K[3A[26C[?7h[0m[?12l[?25h[82D[5A[J[0m[?7h[?2004l
+SETUP RECEIPT · SEVER · SeverSetupReceipt(source_name='capture/criteria', criteria_name='capture/source', output_name='capture/result', source_descendants=False, criteria_descendants=True)
+PROVIDER CALLS · 0 · SESSION · NOT STARTED · DURABLE STATE · UNCHANGED

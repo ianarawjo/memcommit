@@ -26,15 +26,14 @@ identity adjacent to a typed frozen request, plan, or action and must validate
 that identity again at its mutation or dispatch boundary.
 
 The standalone full-screen approval surface is owned by
-`memcommit.adapters.console.terminal.components.command_editor.exact_command_review.shell`. The former
+`memcommit.adapters.console.terminal.components.command_editor.approval`. The former
 `memcommit.adapters.console.coordination.exact_command_review_shell` facade is removed;
 callers and monkeypatches use the canonical component directly.
 The former `console.coordination.command_review` and sibling
 `terminal.components.exact_command_review` physical owners are also removed;
-their two deliberately separate packages now share the `command_editor`
-parent. This is an ownership-only relocation: key bindings, rendering,
-validation, approval, cancellation, and terminal behavior are unchanged, so
-the existing interaction captures remain representative.
+their immutable value, editable form, control, rendering, and approval
+mechanics now form one flat `command_editor` component. Operation-specific
+Meld, Update, Sever, and Branch codecs remain in their command packages.
 
 The optional editable proposed-command layer is an always-visible,
 non-executing setup state. It owns one-line parsing and form presentation,
@@ -60,7 +59,7 @@ typing or synchronization alone never applies work. See the
 | Merge | Focused `Enter` through the plan review or common Resolution workbench | Applies the same `FrozenMergePlan` and, for conflicts, the reviewed resolution set |
 | Replace | Focused `Enter` on the exact digest-bound replacement plan | Applies the same complete frozen multi-Context plan |
 | Dedup | Focused `Enter` through the deterministic Resolution workbench | Applies the reviewed frozen case without introducing a semantic turn |
-| Meld, Update, and Sever setup | Focused `Enter` on a rebuilt `START` command | Returns the same typed setup receipt to the owning application boundary; analysis/session start occurs in process and final Apply remains separate |
+| Branch, Meld, Update, and Sever setup | Focused `Enter` on the editable `PROPOSED COMMAND`; a valid buffer atomically reprojects every upper field | Reparses the visible command and returns that typed setup receipt to the owning application boundary; creation or analysis starts in process and semantic final Apply remains separate |
 | Meld, Update, and Sever semantic/session turns | Focused `Enter` on a rebuilt `TURN` command | Executes the same typed response against the displayed `--expect-session` revision; it rebuilds review state and never performs final Apply |
 | Find SHOW | None: this is a receipt for the read-only action authorized by the submitted Find turn | Immediately dispatches only `mem show UID --context NAME` without a shell and leaves Find results and durable Context state unchanged |
 
@@ -105,9 +104,11 @@ Summarize, Distill, and Atomize remain explicitly outside that command layer.
 - A real Task 1 Find SHOW receipt ran the exact allowlisted `mem show` command;
   every Context record, checkpoint list, current Context, and Find result stayed
   unchanged.
-- Meld, Update, and Sever rebuild START argv from every setup change. Their
-  TURN argv includes the exact saved-session revision, is rebuilt at approval,
-  rejects stale revisions, and cannot apply the final Context effect.
+- Branch, Meld, Update, and Sever rebuild START argv from every setup change.
+  Editing the command reprojects mode, endpoints, ranges, Memory focus, and new
+  location together; invalid text changes none of them. Meld, Update, and
+  Sever TURN argv still includes the exact saved-session revision, rejects
+  stale revisions, and cannot apply the final Context effect.
 
 ## Boundaries and non-goals
 

@@ -1,0 +1,9 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+ MEM BRANCH · CHOOSE SOURCE AND NEW CONTEXT                                                                                                                                         
+  FROM › capture/beta                            [ BROWSE ]                                   [ ✓ INCLUDE DESCENDANTS ]                                                             
+  TO   › capture/beta/new-branch                 [ BROWSE PARENT ] NEW · CREATE ON START                                                                                            
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ PROPOSED COMMAND ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› mem branch capture/beta/new-branch --from capture/beta --source-descendants                                                                                                     ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+                                                                                                                                                                                    
+ Enter run exact APPLY command · ↑ previous · Esc cancel

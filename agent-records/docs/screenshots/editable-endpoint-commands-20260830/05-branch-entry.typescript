@@ -1,0 +1,9 @@
+PTY · 180 columns × 52 rows
+[?2004h[?1l[?25l[0m[?7l[0m[J[0m MEM BRANCH · CHOOSE SOURCE AND NEW CONTEXT[0m
+[0;1m› FROM[0m › capture/alpha                           [ BROWSE ] [0;38;2;139;213;202;1mCURRENT[0m                           [   INCLUDE DESCENDANTS ][0m
+[0m  TO   › capture/alpha/branch                    [ BROWSE PARENT ] [0;38;2;245;169;127;1mNEW · CREATE ON START[0m
+[0;38;2;139;213;255;1m┌───────────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND |───────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0;38;2;139;213;255;1m│[0m› mem branch capture/alpha/branch --from capture/alpha --source-root-only                                                                                                         [179C[0;38;2;139;213;255;1m│[0m
+[0;38;2;139;213;255;1m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m [0m
+[0m Type exact Context · ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel[122D[6A[22C[?7h[0m[?12l[?25h
