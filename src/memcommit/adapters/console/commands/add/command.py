@@ -22,7 +22,9 @@ from memcommit.application.capabilities.authority.context_access import (
 from memcommit.application.capabilities.authority.granted_context_navigation import (
     freeze_granted_context_navigation,
 )
-from memcommit.core.context_targeting.operands import choose_endpoint_operand
+from memcommit.adapters.console.coordination.endpoint_operand import (
+    choose_endpoint_operand,
+)
 from memcommit.adapters.console.commands.add.input_records import parse_input_records
 from memcommit.adapters.console.commands.add.receipt import render_add_receipt
 from memcommit.adapters.console.coordination.batch_input_source import (

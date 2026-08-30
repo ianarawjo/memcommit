@@ -8,9 +8,13 @@ from memcommit.adapters.console.commands.compare.command import (
     _resolve_endpoint_syntax,
 )
 from memcommit.adapters.console.coordination.context_operand import choose_context_operand
-from memcommit.core.context_targeting.operands import choose_endpoint_operand
+from memcommit.adapters.console.coordination.endpoint_operand import (
+    choose_endpoint_operand,
+)
+from memcommit.application.capabilities.context_operand_classification import (
+    classify_context_or_inline_text_operand,
+)
 from memcommit.core.context_targeting.model import ExistingContextOperand, InlineTextOperand
-from memcommit.core.context_targeting.operands import classify_context_or_inline_text_operand
 from memcommit.application.operations.update.endpoints import choose_update_endpoint_operands
 
 

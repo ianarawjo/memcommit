@@ -14,7 +14,9 @@ from memcommit.core.context_targeting.model import (
     DirectMemoryLocator,
     DirectMemoryTarget,
 )
-from memcommit.core.context_targeting.operands import choose_endpoint_operand
+from memcommit.adapters.console.coordination.endpoint_operand import (
+    choose_endpoint_operand,
+)
 from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_scope_preset,

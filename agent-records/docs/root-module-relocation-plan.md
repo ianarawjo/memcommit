@@ -182,7 +182,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.merge_runtime | historical-compatibility-facade | remove | memcommit.application.operations.merge.runtime | 0 |
 | memcommit.merge_tree | operation-implementation | relocate-without-alias | memcommit.application.operations.merge.tree | 1 |
 | memcommit.merge_tree_persistence | operation-implementation | relocate-without-alias | memcommit.application.operations.merge.tree_persistence | 1 |
-| memcommit.name_suggestions | shared-concept-implementation | relocate-without-alias | memcommit.core.context_targeting.name_suggestions | 3 |
+| memcommit.name_suggestions | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.name_suggestions | 3 |
 | memcommit.operation_gate_pipeline | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.semantic.classification.gates | 1 |
 | memcommit.ops | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.ops | 25 |
 | memcommit.ordinary_query_answer | operation-implementation | relocate-without-alias | memcommit.application.operations.query.answer | 3 |

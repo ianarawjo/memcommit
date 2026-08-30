@@ -7,7 +7,9 @@ import typer
 from memcommit.application.capabilities.review_policy import (
     ownership_aware_application_review,
 )
-from memcommit.core.context_targeting.operands import choose_endpoint_operand
+from memcommit.adapters.console.coordination.endpoint_operand import (
+    choose_endpoint_operand,
+)
 from memcommit.adapters.console.commands.merge.receipt import render_merge_receipt
 from memcommit.adapters.console.commands.merge.resolution import (
     parse_merge_resolutions,

@@ -9,7 +9,7 @@ from memcommit.application.capabilities.context_locator import (
     resolve_context_locator,
     suggest_context_locators,
 )
-from memcommit.core.context_targeting.name_suggestions import did_you_mean_suffix
+from memcommit.application.capabilities.name_suggestions import did_you_mean_suffix
 from memcommit.core.context_targeting.memory_focus import is_memory_uid_selector
 from memcommit.core.context_targeting.model import CheckpointTarget, ContextTarget
 from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique_uid

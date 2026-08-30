@@ -14,7 +14,7 @@ from memcommit.core.context_targeting.model import (
     DirectMemoryLocator,
     InlineTextOperand,
 )
-from memcommit.core.context_targeting.operands import (
+from memcommit.application.capabilities.context_operand_classification import (
     classify_context_or_inline_text_operand,
 )
 from memcommit.core.context_targeting.resolution import (

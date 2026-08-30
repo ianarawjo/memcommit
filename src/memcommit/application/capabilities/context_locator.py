@@ -3,7 +3,9 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-from memcommit.core.context_targeting.name_suggestions import canonical_name_suggestions
+from memcommit.application.capabilities.name_suggestions import (
+    canonical_name_suggestions,
+)
 
 
 def is_relative_context_locator(locator: str) -> bool:

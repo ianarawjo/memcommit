@@ -1818,8 +1818,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.core.context_targeting.name_suggestions",
-      "canonical_target_path": "memcommit/core/context_targeting/name_suggestions.py",
+      "canonical_target": "memcommit.application.capabilities.name_suggestions",
+      "canonical_target_path": "memcommit/application/capabilities/name_suggestions.py",
       "inbound_package_importers": 3,
       "lines": 53,
       "module": "memcommit.name_suggestions",

@@ -44,9 +44,11 @@ def did_you_mean_suffix(suggestions: tuple[str, ...]) -> str:
     if len(suggestions) == 1:
         return f" Did you mean {suggestions[0]!r}?"
     if suggestions:
-        return " Did you mean one of: " + ", ".join(
-            repr(suggestion) for suggestion in suggestions
-        ) + "?"
+        return (
+            " Did you mean one of: "
+            + ", ".join(repr(suggestion) for suggestion in suggestions)
+            + "?"
+        )
     return ""
 
 

@@ -255,7 +255,7 @@ CONCEPT_TARGETS = {
     "interactive_command_review": "memcommit.adapters.console.terminal.components.command_editor",
     "memory_diff": "memcommit.application.capabilities.reviewing.memory_diff",
     "memory_lineage": "memcommit.application.capabilities.retained_history.memory_lineage",
-    "name_suggestions": "memcommit.core.context_targeting.name_suggestions",
+    "name_suggestions": "memcommit.application.capabilities.name_suggestions",
     "ops": "memcommit.application.capabilities.ops",
     "operation_gate_pipeline": "memcommit.application.capabilities.semantic.classification.gates",
     "profile_config": "memcommit.application.operations.profile.config",

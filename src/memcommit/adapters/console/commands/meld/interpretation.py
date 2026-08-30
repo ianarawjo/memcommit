@@ -6,12 +6,12 @@ import shlex
 from dataclasses import dataclass
 from typing import Literal
 
+from memcommit.application.capabilities.context_operand_classification import (
+    classify_context_or_inline_text_operand,
+)
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.meld.model import INLINE_MELD_CONTEXT_NAME
 from memcommit.core.context_targeting.model import InlineTextOperand
-from memcommit.core.context_targeting.operands import (
-    classify_context_or_inline_text_operand,
-)
 from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_descendant_scopes,

@@ -37,11 +37,11 @@ from memcommit.adapters.console.commands.update.render import (
 )
 from memcommit.core.context import Context
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.core.context_targeting.model import InlineTextOperand
-from memcommit.core.context_targeting.operands import (
+from memcommit.application.capabilities.context_operand_classification import (
     classify_context_or_inline_text_operand,
 )
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
+from memcommit.core.context_targeting.model import InlineTextOperand
 from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
 from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,

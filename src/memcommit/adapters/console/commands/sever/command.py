@@ -30,7 +30,9 @@ from memcommit.adapters.console.commands.sever.sessions import (
 from memcommit.application.capabilities.authority.granted_context_navigation import (
     freeze_granted_context_navigation,
 )
-from memcommit.core.context_targeting.operands import choose_endpoint_operand
+from memcommit.adapters.console.coordination.endpoint_operand import (
+    choose_endpoint_operand,
+)
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.adapters.console.terminal.components.context_picker import (
     context_memory_rows,

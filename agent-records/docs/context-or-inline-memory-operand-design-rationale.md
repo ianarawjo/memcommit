@@ -3,9 +3,13 @@
 ## Status
 
 Update and Meld accept an unambiguously non-Context string as one exact,
-process-local Source Memory. The shared classifier lives in
-`memcommit.core.context_targeting.operands`; each operation retains its own frame,
-session, authority, provider, review, and Apply semantics.
+process-local Source Memory. The shared application classifier lives in
+`memcommit.application.capabilities.context_operand_classification`; each
+operation retains its own frame, session, authority, provider, review, and
+Apply semantics. Console-only arbitration between positional and named
+endpoint spellings lives separately in
+`memcommit.adapters.console.coordination.endpoint_operand`, so application
+code does not depend on CLI grammar.
 
 The same low-level classifier and direct-Memory resolver now back `--goal`
 without making Goal a Source. The separate typed projection and role contract
