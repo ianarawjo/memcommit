@@ -72,14 +72,12 @@ def test_atomize_support_imports_follow_the_canonical_dependency_direction() -> 
 def test_atomize_production_consumers_use_canonical_support_modules() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/atomize.py",
-        "src/memcommit/application/operations/atomize/workflow.py",
         "src/memcommit/adapters/console/commands/atomize/command.py",
         "src/memcommit/adapters/console/commands/atomize/impact.py",
         "src/memcommit/adapters/console/commands/atomize/review.py",
         "src/memcommit/adapters/console/commands/atomize/sessions.py",
         "src/memcommit/adapters/console/commands/impact/command.py",
         "src/memcommit/adapters/console/commands/review/command.py",
-        "src/memcommit/adapters/console/commands/atomize/render.py",
         "src/memcommit/adapters/console/commands/atomize/workbench/adapter.py",
         "src/memcommit/adapters/console/commands/atomize/workbench/screen.py",
         "src/memcommit/application/operations/atomize/analysis_application.py",

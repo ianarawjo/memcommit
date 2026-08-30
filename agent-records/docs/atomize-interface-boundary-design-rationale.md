@@ -4,14 +4,12 @@ Last reviewed: 2026-08-29.
 
 ## Selected boundary
 
-Atomize's console adapter owns three distinct projections over the same typed
+Atomize's console adapter owns two distinct projections over the same typed
 operation evidence:
 
 ```text
 Atomize domain/application/runtime
         |
-        +-- commands/atomize/render.py
-        |      analysis-only plain projection
         +-- commands/atomize/workbench/
         |      interactive or snapshot analysis projection
         +-- commands/atomize/receipt.py
@@ -25,9 +23,10 @@ or Grounding action. Before Apply, the operation command may use the shell for
 its own exact Output/Apply workflow; after Apply, `mem review atomize` forces
 the same evidence into a provider-free read-only view.
 
-`commands/atomize/render.py` owns only analysis text. Apply receipt rendering
-lives in `commands/atomize/receipt.py` so analysis presentation cannot silently
-acquire checkpoint or materialization semantics. The receipt receives a typed
+The workbench screen is the single analysis presenter for both interactive and
+plain snapshot routes. Apply receipt rendering lives in
+`commands/atomize/receipt.py` so analysis presentation cannot silently acquire
+checkpoint or materialization semantics. The receipt receives a typed
 `AtomizeApplicationAudit`, not an unstructured count dictionary.
 
 Every unresolved receipt item uses the shared
@@ -59,6 +58,8 @@ remains, as described in
 
 Keeping Apply receipt code in the analysis renderer was rejected because the
 typed application audit and checkpoint handoff are a separate lifecycle.
+Keeping a second plain analysis renderer was rejected because it had no caller
+and duplicated the workbench screen's snapshot responsibility.
 Keeping a Responses frame disabled by policy was rejected because it would
 continue to advertise response semantics that Atomize no longer owns.
 

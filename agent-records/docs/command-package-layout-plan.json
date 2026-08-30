@@ -1,5 +1,5 @@
 {
-  "active_module_count": 148,
+  "active_module_count": 147,
   "baseline_commit": "f8c54a56",
   "baseline_module_count": 153,
   "entry_package_count": 63,
@@ -21,13 +21,6 @@
         "cmd"
       ],
       "role": "command-entry"
-    },
-    {
-      "canonical_module": "memcommit.adapters.console.commands.atomize.render",
-      "legacy_module": "memcommit.commands.atomize_render",
-      "owner": "atomize",
-      "public_exports": [],
-      "role": "command-owned-support"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.atomize.sessions",
@@ -1172,6 +1165,7 @@
   "purpose": "Give every CLI entry a predictable package and place multi-file support beside its owning entry while keeping multi-command console mechanics outside the command-entry tree, without changing behavior.",
   "retired_legacy_modules": [
     "memcommit.commands.atomize_grounding",
+    "memcommit.commands.atomize_render",
     "memcommit.commands.ground_named_shell",
     "memcommit.commands.ground_session_picker",
     "memcommit.commands.meld_target_picker",
