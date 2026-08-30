@@ -19,8 +19,10 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     SEMANTIC_VIEWER_STYLE,
 )
 from memcommit.adapters.console.terminal.components.findings.document import (
-    quality_finding_compact_fragments,
     quality_find_report_header_text,
+)
+from memcommit.adapters.console.terminal.components.findings.issue_one_line_presentation import (
+    issue_one_line_fragments,
 )
 from memcommit.application.capabilities.reviewing.quality.report import (
     QualityFindBrowserReceipt,
@@ -79,7 +81,7 @@ def run_quality_find_browser(
                 )
             )
             fragments.extend(
-                quality_finding_compact_fragments(
+                issue_one_line_fragments(
                     item,
                     focused=focused,
                     show_context=view.source_count > 1,

@@ -20,9 +20,11 @@ from memcommit.application.capabilities.reviewing.quality.findings import (
     DuplicateReport,
 )
 from memcommit.adapters.console.terminal.components.findings.document import (
-    quality_finding_compact_fragments,
-    quality_finding_compact_text,
     quality_find_report_header_text,
+)
+from memcommit.adapters.console.terminal.components.findings.issue_one_line_presentation import (
+    issue_one_line_fragments,
+    issue_one_line_text,
 )
 from memcommit.adapters.console.terminal.core.theme import SemanticColorRole
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_role_style
@@ -81,7 +83,7 @@ def test_ambiguity_report_exposes_readings_without_answer_contract() -> None:
     assert not hasattr(item, "response_state")
     assert session.responses == {}
 
-    paragraph = quality_finding_compact_text(item)
+    paragraph = issue_one_line_text(item)
     assert "? AMBIGUOUS" in paragraph
     assert "[CONTEXT quality/report]" in paragraph
     assert f"[MEMORY {first.uid[:8]}]" in paragraph
@@ -93,7 +95,7 @@ def test_ambiguity_report_exposes_readings_without_answer_contract() -> None:
     assert "@" not in paragraph
     assert paragraph.count("\n") == 1
 
-    fragments = quality_finding_compact_fragments(item)
+    fragments = issue_one_line_fragments(item)
     assert (
         semantic_role_style(SemanticColorRole.QUALITY_AMBIGUITY),
         "AMBIGUOUS",
@@ -126,7 +128,7 @@ def test_duplicate_issue_line_uses_typed_refs_and_omits_rationale() -> None:
     )
 
     view = quality_find_report_view(session, context)
-    paragraph = quality_finding_compact_text(view.items[0], show_context=False)
+    paragraph = issue_one_line_text(view.items[0], show_context=False)
 
     assert paragraph.startswith("= DUPLICATE · EXACT · [MEMORY ")
     assert " ↔ [MEMORY " in paragraph
@@ -152,7 +154,7 @@ def test_pair_issue_refs_expand_colliding_uid_prefixes() -> None:
         ),
     )
 
-    paragraph = quality_finding_compact_text(
+    paragraph = issue_one_line_text(
         quality_find_report_view(session, context).items[0]
     )
 

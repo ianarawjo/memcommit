@@ -26,7 +26,7 @@ from memcommit.adapters.console.terminal.components.semantic_viewer import (
     semantic_document_plain_text,
 )
 from memcommit.adapters.console.terminal.components.findings import (
-    quality_finding_compact_fragments,
+    issue_one_line_fragments,
     quality_find_report_header_text,
 )
 from memcommit.application.capabilities.reviewing.quality.audit import (
@@ -181,7 +181,7 @@ def quality_audit_review_document(
             # paragraph as one semantic stop so one large category cannot
             # become an indivisible Viewer scroll block.
             finding_fragments = [("class:report-neutral", " ")]
-            compact_fragments = quality_finding_compact_fragments(
+            compact_fragments = issue_one_line_fragments(
                 item,
                 show_context=report_view.source_count > 1,
             )

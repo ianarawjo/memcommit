@@ -53,21 +53,23 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
 from memcommit.adapters.console.terminal.components.semantic_viewer import (
     semantic_document_plain_text,
 )
-from memcommit.application.capabilities.reviewing.quality.audit import (
+from memcommit.application.operations.audit.application import (
+    create_quality_audit,
+    run_quality_audit,
+)
+from memcommit.application.operations.audit.model import (
     QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION,
     QUALITY_AUDIT_RULESETS,
     QUALITY_AUDIT_SCHEMA_VERSION,
     QualityAuditCheck,
     QualityAuditProvenance,
     QualityAuditSession,
-    create_quality_audit,
     quality_audit_record_digest,
+)
+from memcommit.application.operations.audit.resolution_adapter import (
     quality_audit_resolution_view,
-    run_quality_audit,
 )
-from memcommit.application.capabilities.reviewing.quality.audit_store import (
-    QualityAuditStore,
-)
+from memcommit.application.operations.audit.session_store import QualityAuditStore
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
@@ -654,10 +656,14 @@ def test_audit_receipt_colors_only_quality_labels_and_preserves_plain_text():
         f"[MEMORY {first.uid[:8]}] “{first.content}” ↔ "
         f"[MEMORY {second.uid[:8]}] “{second.content}”\n"
         "AMBIGUITIES    1/2 MEMORIES FLAGGED\n"
-        f"  ? UNDERSPECIFIED · [MEMORY {first.uid[:8]}] “{first.content}”\n"
+        f"  ? UNDERSPECIFIED · [MEMORY {first.uid[:8]}] “{first.content}” · "
+        "WHY · The audience is not explicit. — The public entrance opens at 8:00. · "
+        "QUESTION · Which audience uses this schedule?\n"
         "CONFLICTS      2/2 MEMORIES INVOLVED · 1/1 PAIRS FLAGGED\n"
         f"  ! CONFLICT · [MEMORY {first.uid[:8]}] “{first.content}” ↔ "
-        f"[MEMORY {second.uid[:8]}] “{second.content}”\n"
+        f"[MEMORY {second.uid[:8]}] “{second.content}” · "
+        "WHY · The opening states cannot both hold. · "
+        "QUESTION · Which time is authoritative?\n"
         "\n"
         "Review full audit:\n"
         f"mem review audit --session {session.uid}\n"
