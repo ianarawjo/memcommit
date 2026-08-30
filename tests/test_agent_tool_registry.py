@@ -12,9 +12,6 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.adapters.agent.add import ADD_AGENT_TOOL_NAME
 from memcommit.adapters.agent.atomize import ATOMIZE_AGENT_TOOL_NAME
-from memcommit.adapters.agent.atomize_grounding import (
-    ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
-)
 from memcommit.adapters.agent.compare import COMPARE_AGENT_TOOL_NAME
 from memcommit.adapters.agent.dedup import DEDUP_AGENT_TOOL_NAME
 from memcommit.adapters.agent.delete import (
@@ -117,7 +114,6 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
         COMPARE_AGENT_TOOL_NAME,
         MELD_AGENT_TOOL_NAME,
         ATOMIZE_AGENT_TOOL_NAME,
-        ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
         DISTILL_AGENT_TOOL_NAME,
         ELABORATE_AGENT_TOOL_NAME,
         FIT_AGENT_TOOL_NAME,
@@ -463,7 +459,7 @@ def test_registry_depends_only_on_public_client_and_agent_adapters():
     assert "memcommit.adapters.python_api" in imported
     assert "memcommit.adapters.agent.add" in imported
     assert "memcommit.adapters.agent.atomize" in imported
-    assert "memcommit.adapters.agent.atomize_grounding" in imported
+    assert "memcommit.adapters.agent.atomize_grounding" not in imported
     assert "memcommit.adapters.agent.query" in imported
     assert "memcommit.adapters.agent.forget" in imported
     assert "memcommit.adapters.agent.resolve" in imported

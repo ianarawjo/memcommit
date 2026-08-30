@@ -60,12 +60,7 @@ def _artifact_timestamp(
     timestamp = _created_timestamp(analysis.created_at)
     paths = [analysis_path]
     if analysis_path.parent == store.atomize_analyses_dir:
-        paths.extend(
-            (
-                store._atomize_workbench_path(analysis.context_uid),
-                store._atomize_grounding_session_path(analysis.context_uid),
-            )
-        )
+        paths.append(store._atomize_workbench_path(analysis.context_uid))
     for path in paths:
         try:
             if path.is_file() and not path.is_symlink():
@@ -354,7 +349,6 @@ def atomize_session_entries(
         except (FileNotFoundError, OSError, ValueError):
             status = "STALE"
         workbench = store.load_atomize_workbench(analysis)
-        grounding = store.load_atomize_grounding_session(analysis.context_uid)
         output_name = (
             workbench.output_context_name
             if workbench is not None
@@ -374,16 +368,6 @@ def atomize_session_entries(
                 status = "STALE OUTPUT"
         if status == "CURRENT" and applied:
             status = "APPLIED"
-        elif (
-            status == "CURRENT"
-            and grounding is not None
-            and grounding.state
-            in {
-                "AWAITING_REPLY",
-                "READY_TO_APPLY",
-            }
-        ):
-            status = grounding.state
         elif status == "CURRENT" and workbench is None:
             status = "ANALYSIS ONLY"
         issue_count = len(workbench.issues) if workbench is not None else 0

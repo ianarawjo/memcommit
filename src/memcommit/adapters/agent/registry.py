@@ -13,11 +13,6 @@ from memcommit.adapters.agent.add import (
     AddAgentAdapter,
     add_agent_tool_schema,
 )
-from memcommit.adapters.agent.atomize_grounding import (
-    ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
-    AtomizeGroundingAgentAdapter,
-    atomize_grounding_agent_tool_schema,
-)
 from memcommit.adapters.agent.atomize import (
     ATOMIZE_AGENT_TOOL_NAME,
     AtomizeAgentAdapter,
@@ -433,7 +428,6 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
     compare = CompareAgentAdapter(client)
     meld = MeldAgentAdapter(client)
     atomize = AtomizeAgentAdapter(client)
-    atomize_grounding = AtomizeGroundingAgentAdapter(client)
     distill = DistillAgentAdapter(client)
     elaborate = ElaborateAgentAdapter(client)
     fit = FitAgentAdapter(client)
@@ -577,15 +571,6 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 name=ATOMIZE_AGENT_TOOL_NAME,
                 schema_factory=atomize_agent_tool_schema,
                 handler=atomize.invoke,
-            ),
-            AgentToolBinding(
-                name=ATOMIZE_GROUNDING_AGENT_TOOL_NAME,
-                schema_factory=atomize_grounding_agent_tool_schema,
-                handler=atomize_grounding.invoke,
-                use_when=(
-                    "Discussing or resolving one saved Atomize issue through "
-                    "reviewed conversational turns."
-                ),
             ),
             operation_binding(
                 "distill",

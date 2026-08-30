@@ -15,9 +15,8 @@ from memcommit.adapters.python_api.atomize import (
     AtomizeItemResult,
     AtomizeOverviewResult,
     AtomizeOverviewSectionResult,
+    AtomizePlanUpdateResult,
     AtomizeReadingResult,
-    AtomizeReviewUpdateResult,
-    AtomizeReviewedApplyResult,
     AtomizeSaveAsApplyResult,
     AtomizeStructuralApplyResult,
 )
@@ -41,7 +40,6 @@ from memcommit.application.operations.atomize.application import (
     AtomizeApplicationError,
     AtomizeOutputPlanRequest,
     AtomizePersistedApplyRequest,
-    AtomizeResponseUpdateRequest,
     AtomizeSaveAsRequest,
     AtomizeSessionSnapshot,
 )
@@ -50,15 +48,11 @@ from memcommit.application.operations.atomize.runtime import (
     capture_atomize_session_snapshot,
     capture_atomize_session_snapshot_at_version,
     execute_atomize_output_plan_update,
-    execute_atomize_response_update,
     execute_atomize_save_as,
     execute_atomize_session_apply,
 )
 from memcommit.application.operations.atomize.workbench import (
-    ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT,
     AtomizeWorkbenchError,
-    atomize_workbench_declared_frames,
-    atomize_workbench_response_digest,
     project_atomize_workbench_findings,
 )
 from memcommit.application.capabilities.context_locator import resolve_context_locator
@@ -141,24 +135,6 @@ def _project(opened, snapshot) -> AtomizeAnalysisResult:
     workbench = opened.workbench
     findings = project_atomize_workbench_findings(analysis)
 
-    def response_for(issue_uid):
-        return workbench.responses.get(issue_uid)
-
-    review_edit_allowed = workbench.application is None
-    response_reanalysis_allowed = False
-    if review_edit_allowed:
-        try:
-            declared_frames, _declared_origins = atomize_workbench_declared_frames(
-                workbench,
-                analysis,
-            )
-        except AtomizeWorkbenchError:
-            # Readiness is a projection, not an alternate validator. The exact
-            # reanalysis use case retains the actionable failure explanation.
-            pass
-        else:
-            response_reanalysis_allowed = bool(declared_frames)
-
     return AtomizeAnalysisResult(
         analysis_uid=analysis.uid,
         version=snapshot.version_token,
@@ -209,27 +185,11 @@ def _project(opened, snapshot) -> AtomizeAnalysisResult:
                     )
                     for reading in finding.readings
                 ),
-                answered=(
-                    finding.uid in workbench.responses
-                    and workbench.responses[finding.uid].answered
-                ),
-                selected_reading_uid=(
-                    None
-                    if response_for(finding.uid) is None
-                    else response_for(finding.uid).selected_choice_uid
-                ),
-                response_text=(
-                    ""
-                    if response_for(finding.uid) is None
-                    else response_for(finding.uid).text
-                ),
             )
             for finding in findings
         ),
         workbench_uid=workbench.uid,
         output_context_name=workbench.output_context_name,
-        review_edit_allowed=review_edit_allowed,
-        response_reanalysis_allowed=response_reanalysis_allowed,
         application_completed=workbench.application is not None,
         in_place_apply_allowed=(
             workbench.output_context_name == analysis.context_name
@@ -533,74 +493,13 @@ def apply_atomize_as_is(
     )
 
 
-def update_atomize_response(
-    runtime: ClientRuntime,
-    context_name: str | None = None,
-    *,
-    expected_version: str,
-    issue_uid: str,
-    option_uid: str | None,
-    comment: str,
-) -> AtomizeReviewUpdateResult:
-    """Replace or clear one exact saved issue response without a provider."""
-
-    if not isinstance(issue_uid, str) or not issue_uid.strip():
-        raise AtomizeInputError("issue_uid must be nonblank text.")
-    if option_uid is not None and (
-        not isinstance(option_uid, str) or not option_uid.strip()
-    ):
-        raise AtomizeInputError("option_uid must be nonblank text when supplied.")
-    if not isinstance(comment, str):
-        raise AtomizeInputError("comment must be text.")
-    if len(comment) > ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT:
-        raise AtomizeInputError(
-            "comment exceeds the Atomize workbench character limit."
-        )
-    _context, snapshot = _saved_snapshot(
-        runtime,
-        context_name,
-        expected_version=expected_version,
-    )
-    workbench = snapshot.workbench
-    assert workbench is not None
-    issue = next(
-        (candidate for candidate in workbench.issues if candidate.uid == issue_uid),
-        None,
-    )
-    if issue is None:
-        raise AtomizeInputError("issue_uid is not present in this Atomize review.")
-    if option_uid is not None and option_uid not in issue.choice_uids:
-        raise AtomizeInputError("option_uid does not belong to the selected issue.")
-    try:
-        updated = execute_atomize_response_update(
-            AtomizeResponseUpdateRequest(
-                snapshot=snapshot,
-                issue_uid=issue_uid,
-                option_uid=option_uid,
-                comment=comment,
-            ),
-            store=runtime.store,
-        )
-        return AtomizeReviewUpdateResult(
-            kind="RESPONSE",
-            changed=updated.changed,
-            proposal=_saved_proposal(updated.snapshot),
-        )
-    except OSError as error:
-        raise_public(AtomizeStorageError, error)
-    except (AtomizeApplicationError, AtomizeWorkbenchError) as error:
-        _raise_execution(error)
-    except (RuntimeError, TypeError, ValueError) as error:
-        raise_public(AtomizeExecutionError, error)
-
-
 def plan_atomize_output(
     runtime: ClientRuntime,
     context_name: str | None = None,
     *,
     expected_version: str,
     output_context_name: str,
-) -> AtomizeReviewUpdateResult:
+) -> AtomizePlanUpdateResult:
     """Set one exact in-place or require-new Output plan without a provider."""
 
     if not isinstance(output_context_name, str) or not output_context_name.strip():
@@ -627,8 +526,7 @@ def plan_atomize_output(
             ),
             store=runtime.store,
         )
-        return AtomizeReviewUpdateResult(
-            kind="OUTPUT",
+        return AtomizePlanUpdateResult(
             changed=updated.changed,
             proposal=_saved_proposal(updated.snapshot),
         )
@@ -638,78 +536,6 @@ def plan_atomize_output(
         _raise_execution(error)
     except (RuntimeError, TypeError, ValueError) as error:
         raise_public(AtomizeExecutionError, error)
-
-
-def reanalyze_atomize_responses(
-    runtime: ClientRuntime,
-    context_name: str | None = None,
-    *,
-    expected_version: str,
-) -> AtomizeAnalysisResult:
-    """Incorporate exact saved unary responses through one provider turn."""
-
-    context, snapshot = _saved_snapshot(
-        runtime,
-        context_name,
-        expected_version=expected_version,
-    )
-    workbench = snapshot.workbench
-    assert workbench is not None
-    if workbench.application is not None:
-        raise AtomizeInputError("An applied Atomize review cannot be reanalyzed.")
-    try:
-        declared_frames, declared_origins = atomize_workbench_declared_frames(
-            workbench,
-            snapshot.analysis,
-        )
-    except AtomizeWorkbenchError as error:
-        raise_public(AtomizeInputError, error)
-    if not declared_frames:
-        raise AtomizeInputError(
-            "The Atomize review has no answered unary response to incorporate."
-        )
-    source_review_digest = atomize_workbench_response_digest(workbench)
-
-    try:
-        opened = execute_atomize_analysis_open(
-            AtomizeAnalysisOpenRequest(
-                context=context,
-                refresh=True,
-                declared_frames=declared_frames,
-                declared_frame_origins=declared_origins,
-                source_review_uid=workbench.uid,
-                source_review_digest=source_review_digest,
-                output_context_name=workbench.output_context_name,
-                allow_prepared=False,
-            ),
-            store=runtime.store,
-            provider_factory=lambda: _provider(runtime),
-            expected_session=snapshot,
-        )
-        committed = capture_atomize_session_snapshot(
-            store=runtime.store,
-            analysis=opened.analysis,
-            expected_workbench=opened.workbench,
-        )
-        return _project(opened, committed)
-    except AtomizeProviderFailure:
-        raise
-    except QueryProviderError as error:
-        raise_public(AtomizeProviderFailure, error)
-    except ConcurrentContextUpdateError as error:
-        raise_public(AtomizeConflictError, error)
-    except OSError as error:
-        raise_public(AtomizeStorageError, error)
-    except (
-        AtomizeAnalysisApplicationError,
-        AtomizeApplicationError,
-        AtomizeImpactError,
-        AtomizeWorkbenchError,
-        RuntimeError,
-        TypeError,
-        ValueError,
-    ) as error:
-        _raise_execution(error)
 
 
 def save_saved_atomize_as(
@@ -787,33 +613,6 @@ def save_saved_atomize_as(
         raise_public(AtomizeExecutionError, error)
 
 
-def incorporate_and_apply_atomize(
-    runtime: ClientRuntime,
-    context_name: str | None = None,
-    *,
-    expected_version: str,
-) -> AtomizeReviewedApplyResult:
-    """Reanalyze exact responses and immediately apply the resulting plan."""
-
-    proposal = reanalyze_atomize_responses(
-        runtime,
-        context_name,
-        expected_version=expected_version,
-    )
-    if proposal.in_place_apply_allowed:
-        application = apply_atomize_as_is(runtime, proposal)
-    else:
-        application = save_saved_atomize_as(
-            runtime,
-            proposal.context_name,
-            expected_version=proposal.version,
-        )
-    return AtomizeReviewedApplyResult(
-        proposal=proposal,
-        application=application,
-    )
-
-
 def apply_saved_atomize_as_is(
     runtime: ClientRuntime,
     context_name: str | None = None,
@@ -835,10 +634,7 @@ def apply_saved_atomize_as_is(
 __all__ = [
     "apply_atomize_as_is",
     "apply_saved_atomize_as_is",
-    "incorporate_and_apply_atomize",
     "open_atomize_analysis",
     "plan_atomize_output",
-    "reanalyze_atomize_responses",
     "save_saved_atomize_as",
-    "update_atomize_response",
 ]

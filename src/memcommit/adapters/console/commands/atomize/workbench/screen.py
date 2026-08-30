@@ -15,14 +15,10 @@ from memcommit.application.operations.atomize.resolution_adapter import (
 )
 from memcommit.application.operations.atomize.result_adapter import AtomizeResultWorkbenchAdapter
 from memcommit.application.operations.atomize.workbench import (
-    ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT,
     AtomizeWorkbenchFinding,
     AtomizeWorkbenchSession,
     atomize_workbench_issue_projection,
     project_atomize_workbench_findings,
-)
-from memcommit.adapters.console.coordination.review import (
-    RESPONSE_LABEL,
 )
 from memcommit.application.capabilities.review_policy import (
     ownership_aware_application_review,
@@ -44,8 +40,6 @@ from memcommit.application.capabilities.resolution.workbench import (
 from memcommit.application.capabilities.reviewing.result_workbench import (
     ResultWorkbenchView,
 )
-from memcommit.adapters.console.terminal.components.selection import choice_marker
-
 if TYPE_CHECKING:
     from memcommit.adapters.console.terminal.components.resolution import ResolutionDestination
 
@@ -90,7 +84,7 @@ def _issue_label(finding: AtomizeWorkbenchFinding) -> str:
         "AMBIGUITY": "AMBIGUITY",
         "CONFLICT": "CONFLICT",
         "ATOMIZE_SPLIT": "SUGGESTED SPLIT",
-        "ATOMIZE_UNCERTAINTY": "ATOMIZE UNCERTAINTY",
+        "ATOMIZE_UNCERTAINTY": "AMBIGUITY",
     }[finding.kind]
 
 
@@ -153,7 +147,7 @@ def _overview_text(
                 f"INPUT {analysis.context_name} → OUTPUT "
                 f"{session.output_context_name or analysis.context_name} · "
                 f"ORDER: {session.sort_mode} · "
-                f"{session.answered_count}/{len(findings)} answered"
+                f"{len(findings)} findings"
             ),
         ]
     )
@@ -166,7 +160,6 @@ def _list_text(
     sources: dict[str, str],
     *,
     expanded_issue_uid: str | None = None,
-    reading_index: int = 0,
     cursor_token: str = "",
     result_view: ResultWorkbenchView | None = None,
 ) -> str:
@@ -179,14 +172,13 @@ def _list_text(
             result_view=result_view,
         ),
         "",
-        "ACTIONABLE ISSUES",
+        "ATOMIZE FINDINGS",
     ]
     for index, descriptor in enumerate(
         session.ordered_issues(),
         start=1,
     ):
         finding = findings[descriptor.uid]
-        response = session.responses.get(descriptor.uid)
         is_current = current is not None and current.uid == descriptor.uid
         is_expanded = is_current and expanded_issue_uid == descriptor.uid
         pointer = "▾" if is_expanded else ("›" if is_current else " ")
@@ -195,10 +187,9 @@ def _list_text(
             if is_current and (not is_expanded or not finding.readings)
             else ""
         )
-        status = "✓" if response is not None and response.answered else "·"
         source = sources.get(finding.source_uids[0], "")
         lines.append(
-            f"{marker}{pointer} {index:>2}. {status} "
+            f"{marker}{pointer} {index:>2}. · "
             f"{_issue_label(finding)} · "
             f"{finding.classification}  “{_single_line(source, limit=48)}”"
         )
@@ -210,14 +201,12 @@ def _list_text(
                     analysis,
                     findings,
                     sources,
-                    reading_cursor_index=(reading_index if finding.readings else None),
-                    reading_cursor_token=cursor_token,
                 ).splitlines()
             )
         else:
             lines.extend(_reading_preview_lines(finding))
     if not findings:
-        lines.append("  (no actionable atomize, ambiguity, or conflict issues)")
+        lines.append("  (no Atomize findings)")
     return "\n".join(lines)
 
 
@@ -238,14 +227,11 @@ def _detail_text(
     analysis: AtomizeAnalysisSession,
     findings: dict[str, AtomizeWorkbenchFinding],
     sources: dict[str, str],
-    *,
-    reading_cursor_index: int | None = None,
-    reading_cursor_token: str = "",
 ) -> str:
     descriptor = session.current_issue()
     if descriptor is None:
         return (
-            "NO ACTIONABLE ISSUES\n\n"
+            "NO ATOMIZE FINDINGS\n\n"
             "The overview and complete atomize analysis remain saved."
         )
     finding = findings[descriptor.uid]
@@ -293,20 +279,10 @@ def _detail_text(
             ]
         )
     if finding.readings:
-        selected = session.selected_choice_index(descriptor)
-        lines.extend(["", "READING OPTIONS"])
+        lines.extend(["", "POSSIBLE READINGS"])
         for index, reading in enumerate(finding.readings, start=1):
-            if reading_cursor_index is None:
-                pointer = "›" if selected == index - 1 else " "
-                marker = ""
-            else:
-                pointer = "›" if reading_cursor_index == index - 1 else " "
-                marker = f"{choice_marker(selected=selected == index - 1)} "
-            cursor_marker = (
-                reading_cursor_token if reading_cursor_index == index - 1 else ""
-            )
             lines.append(
-                f"{cursor_marker}{pointer} {marker}{index}. "
+                f"  {index}. "
                 f"[{safe_terminal_text(reading.role)}] "
                 f"{safe_terminal_text(reading.label)}"
             )
@@ -336,12 +312,6 @@ def render_atomize_workbench_snapshot(
     findings = _finding_map(analysis)
     sources = _source_map(analysis)
     result_view = AtomizeResultWorkbenchAdapter(analysis).view()
-    current = session.current_issue()
-    response_text = ""
-    if current is not None:
-        response = session.responses.get(current.uid)
-        if response is not None:
-            response_text = safe_terminal_text(response.text)
     lines = [
         _list_text(
             session,
@@ -352,9 +322,6 @@ def render_atomize_workbench_snapshot(
         ),
         "",
         _detail_text(session, analysis, findings, sources),
-        "",
-        RESPONSE_LABEL,
-        f"> {response_text}",
     ]
     if show_all:
         lines.extend(["", "ALL ATOMIZE RESULTS"])
@@ -391,7 +358,6 @@ def run_atomize_workbench_shell(
 ) -> AtomizeWorkbenchSession | ResolutionWorkbenchAction:
     """Review Atomize findings through the shared resolution workbench."""
     from memcommit.adapters.console.terminal.components.resolution import (
-        ResolutionGlobalStrategy,
         run_resolution_workbench_shell,
     )
 
@@ -404,55 +370,22 @@ def run_atomize_workbench_shell(
         projected = AtomizeResolutionWorkbenchAdapter(analysis, session).view()
         if workflow_actions:
             return projected
-        # Review-only and terminal sessions may still edit saved comments, but
-        # they must not leak the adapter's Apply or whole-set materialization
-        # capabilities through keyboard shortcuts in the common shell.
+        # A completed Atomize report has no mutation or response capability.
         return replace(
             projected,
             status="APPLIED" if application_complete else projected.status,
-            capabilities=frozenset({"SUBMIT_ITEM"}),
+            capabilities=frozenset(),
             accept_enabled=False,
             accept_mode="CHANGES",
             unresolved_at_apply_count=0,
         )
 
-    def load_draft(issue_uid: str) -> tuple[str | None, str]:
-        response = session.responses.get(issue_uid)
-        if response is None:
-            return None, ""
-        return response.selected_choice_uid, response.text
-
-    saved_in_round = {"value": False}
-
-    def validate_response(comment: str) -> None:
-        if len(comment) > ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT:
-            raise ValueError(
-                "Response is too long to save "
-                f"({len(comment):,}/"
-                f"{ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT:,} characters)."
-            )
-
-    def save_draft(
-        issue_uid: str,
-        option_uid: str | None,
-        comment: str,
-    ) -> None:
-        validate_response(comment)
-        response = session.response_for(issue_uid)
-        response.selected_choice_uid = option_uid
-        response.text = comment
-        session.cursor_uid = issue_uid
-        save(session)
-        saved_in_round["value"] = True
-
     def toggle_sort() -> None:
         session.toggle_sort()
         save(session)
-        saved_in_round["value"] = True
 
     first_round = True
     while True:
-        saved_in_round["value"] = False
         action = run_resolution_workbench_shell(
             view,
             navigation=navigation,
@@ -463,10 +396,6 @@ def run_atomize_workbench_shell(
             snapshot_hint=(
                 "Run 'mem impact atomize' outside a TTY to render the saved snapshot."
             ),
-            draft_loader=load_draft,
-            draft_saver=save_draft,
-            response_validator=validate_response,
-            save_draft_on_close=True,
             toggle_sort=toggle_sort,
             split_viewer_items=True,
             review_and_apply=workflow_actions,
@@ -479,43 +408,19 @@ def run_atomize_workbench_shell(
                 else "REPORT_FIRST"
             ),
             destination=destination,
-            global_strategies=(
-                ResolutionGlobalStrategy(
-                    label="Keep unanswered optional findings as analyzed",
-                    action_kind="SUBMIT_ALL",
-                    comment=(
-                        "Keep unanswered optional findings as analyzed while "
-                        "incorporating every saved Atomize response into the "
-                        "revised proposal."
-                    ),
-                ),
-            )
-            if workflow_actions
-            else (),
-            compact_decisions=workflow_actions,
+            read_only=not workflow_actions,
         )
         first_round = False
         session.cursor_uid = navigation.selected_item_uid
         if action.kind == "CLOSE":
-            if not saved_in_round["value"]:
+            if workflow_actions:
                 save(session)
             return session
         if workflow_actions and action.kind in {
-            "SUBMIT_ALL",
-            "INCORPORATE_AND_APPLY",
             "ACCEPT",
             "CHANGE_DESTINATION",
         }:
             return action
-        if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
-            raise ValueError(
-                f"Unsupported resolution action '{action.kind}' for Atomize."
-            )
-        save_draft(
-            action.item_uid,
-            action.option_uid,
-            action.comment,
+        raise ValueError(
+            f"Unsupported resolution action '{action.kind}' for Atomize."
         )
-        session.move(1)
-        navigation.selected_item_uid = session.cursor_uid
-        navigation.close_detail()

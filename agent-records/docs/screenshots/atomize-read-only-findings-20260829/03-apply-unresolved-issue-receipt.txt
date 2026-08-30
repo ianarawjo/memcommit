@@ -1,0 +1,15 @@
+52 180                                                                                                                                                                              
+ATOMIZE APPLIED · atomize/read-only-findings                                                                                                                                        
+EFFECTS · SPLIT 0 · CHILDREN 0 · KEEP 2 · DEDUN GROUPS 0 · ABSORBED 0                                                                                                               
+NORMAL FORM · SEMANTIC CHUNK + DEDUN · VERIFIED                                                                                                                                     
+UNRESOLVED ISSUES · 3 · APPLIED AS-IS                                                                                                                                               
+  ? AMBIGUOUS · [MEMORY 3f81440f] “Use the same NFC credential for the staff entrance.” · WHY · ‘same NFC’ can denote a mechanism or a credential, so the accepted access method can
+not be determined.                                                                                                                                                                  
+  ! POSSIBLE CONFLICT · [MEMORY 3f81440f] “Use the same NFC credential for the staff entrance.” ↔ [MEMORY 42603e91] “Mobile credentials are not accepted at the main entrance.” · WH
+Y · The place scope determines whether the physical-card rule conflicts with the mobile-credential restriction.                                                                     
+  ? AMBIGUOUS · [MEMORY 3f81440f] “Use the same NFC credential for the staff entrance.” · WHY · The NFC antecedent is unavailable in the Source frame.                              
+RECEIPT · f6005cf1-afdb-4f87-9e33-c42e9b783c6c                                                                                                                                      
+CHECKPOINT · eda8597d-b960-462c-bb28-4b77a704afef                                                                                                                                   
+REVIEW · mem review atomize --context atomize/read-only-findings                                                                                                                    
+RECOVERY · mem undo                                                                                                                                                                 
+APPLY VERIFIED · MEMORIES 2 · CHECKPOINTS 1

@@ -1,5 +1,23 @@
 # `mem atomize` workbench design rationale
 
+## 2026-08-29 responsibility revision
+
+Atomize findings are now read-only operation evidence. The workbench no longer
+accepts comments or reading selections, creates declared frames from responses,
+reanalyzes responses, or incorporates them into Apply. `mem review atomize` is
+provider-free and read-only after Apply; it has no Responses frame.
+
+The current flow is analysis → exact structural Apply/Save As → complete
+one-line unresolved-issue receipt → read-only Review. Atomize Grounding and its
+console, Python, agent, provider, runtime, and Meld adapter routes are retired.
+Legacy response and Grounding records remain decodable only for history and
+restoration compatibility.
+
+The detailed response, `--with-review`, and Grounding sections below are
+retained as a historical implementation record. They are not current behavior
+or callable routes. The authoritative current rationale is
+[`atomize-read-only-findings-design-rationale.md`](atomize-read-only-findings-design-rationale.md).
+
 ## Exact Study tutorial prewarm
 
 For the fixed user-study tutorial only, `init-study` may validate a declared

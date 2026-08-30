@@ -1,45 +1,60 @@
 # Atomize application-boundary matrix
 
+## 2026-08-29 responsibility revision
+
+The current Atomize application boundary includes analysis open/reuse, exact
+Output planning, in-place structural Apply, require-new Save As, complete
+unresolved-issue receipt, and provider-free read-only Review. Response edits,
+response reanalysis, compound incorporation, and executable Atomize Grounding
+are removed. Findings remain immutable evidence and
+`ATOMIZE_UNCERTAINTY` is presented externally as `AMBIGUITY`.
+
+Legacy workbench response fields, Grounding models, Store paths, retained
+history validation, and Undo/Redo restoration remain read/restore-only
+compatibility. They are not current routes.
+
+The response/reanalysis/Grounding rows later in this document are retained as
+historical extraction evidence and are superseded by
+[`atomize-read-only-findings-design-rationale.md`](atomize-read-only-findings-design-rationale.md).
+Current callable-boundary tests and the operation catalog must contain only
+open, Output planning, Apply as-is, and Save As.
+
 ## Status
 
-`VERIFIED` for analysis open/create/reuse, exact review edits, unary
-reanalysis, local in-place Apply, require-new Save As, and their complete public
-Python/agent projection; reviewed 2026-08-15.
+`VERIFIED` for analysis open/create/reuse, exact Output planning, local in-place
+Apply, require-new Save As, complete unresolved receipt, read-only Review, and
+their public Python/agent projection; reviewed 2026-08-29.
 
-Analysis, review edits, reanalysis, and both materialization directions now
-cross typed, interface-independent boundaries. They preserve Atomize prompts,
+Analysis, Output planning, and both materialization directions cross typed,
+interface-independent boundaries. They preserve Atomize prompts,
 classifications, Study fixtures, saved schemas, and ordinary TUI navigation.
-The stable public projection exposes the same exact-version lifecycle rather
-than asking Python or agent adapters to reconstruct command-owned policy.
+The stable public projection exposes the same exact-version lifecycle without
+making issue resolution an Atomize capability.
 
 ## Support-module ownership
 
-The semantic records and pure projections that make those application slices
-possible now live beside them under `memcommit.application.operations.atomize`.  The
-canonical modules are `domain`, `workbench`, `grounding`,
-`grounding_provider`, `grounding_meld_adapter`, `normal_form`,
-`result_adapter`, and `resolution_adapter`.  This keeps the complete Atomize
-concept family under one owner while preserving distinct responsibilities:
-the domain and persisted interaction records remain independent of Store,
-provider decoding remains non-mutating, normal-form planning publishes no
-state, and the result and resolution adapters remain read-only projections.
+The active semantic records and projections live under
+`memcommit.application.operations.atomize`. The canonical active modules are
+`domain`, `workbench`, `normal_form`, `result_adapter`, and
+`resolution_adapter`, together with the typed analysis/application runtimes.
+Domain and saved analysis records remain independent of Store, provider
+decoding remains non-mutating, normal-form planning publishes no partial
+state, and both presentation adapters remain read-only projections.
 
-The former flat module names remain identity-preserving compatibility aliases.
-Importing an old or canonical path first therefore reaches the same module
-globals, so historical monkeypatches and serialized Python globals do not
-split from production imports.  The historical `atomize_workflow` facade and
-command/interface adapters are deliberately outside this relocation: the
-workflow only preserves an older calling shape over the existing analysis
-application/runtime boundary, while commands and interfaces retain composition
-and presentation rather than semantic ownership.
+The `grounding` package remains only as the canonical decoder and validator
+for previously persisted Grounding schemas. The executable
+`grounding_application`, `grounding_provider`, `grounding_runtime`, and
+`grounding_meld_adapter` modules and their console/Python/agent adapters are
+removed rather than retained as callable compatibility aliases. Structural
+legacy facades that are unrelated to Grounding continue to preserve their
+existing import identity.
 
-This is an ownership-only relocation.  It does not change analysis,
-workbench, or grounding schema versions; `MAP_PLUS_GLOBAL` or
-`BLOCK_RELATIONS` planning; the prohibition on staged execution; complete
-frame exposure; strict provider alias decoding; review digests; CAS and
-checkpoint behavior; Dedun-backed normal-form validation; public command
-signatures; or any rendered terminal state.  Existing screenshots therefore
-remain valid and are not refreshed for this change.
+The responsibility revision does not change analysis, workbench, or legacy
+Grounding schema versions; semantic planning bounds; complete-frame exposure;
+strict provider decoding; CAS and checkpoint behavior; or Dedun-backed
+normal-form validation. It changes which saved fields are actionable: legacy
+response and Grounding data can still be decoded and restored, but cannot
+initiate new Atomize execution.
 
 ## Current execution junction
 
@@ -67,8 +82,7 @@ durable analysis/workbench pair + typed origin
         v
 exact opaque session revision
         |
-        +-- response or Output edit --> provider-free CAS replacement
-        +-- unary reanalysis --> provider turn + atomic pair replacement
+        +-- Output plan edit --> provider-free CAS replacement
         |
         +-- in place --> recover/create one Source checkpoint
         |                + CAS-save terminal receipt
@@ -81,12 +95,12 @@ exact opaque session revision
 typed Apply result or retained save-as state
         |
         v
-render compact command receipt (effect counts + typed unresolved-judgment
-count + receipt/checkpoint identities + `mem review atomize` handoff)
+render compact command receipt (effect counts + every unresolved issue on one
+logical line + receipt/checkpoint identities + `mem review atomize` handoff)
 ```
 
-`memcommit.application.operations.atomize.application` owns provider-free response/Output
-edits and both application lifecycles, and imports no terminal adapter or
+`memcommit.application.operations.atomize.application` owns provider-free Output
+planning and both application lifecycles, and imports no terminal adapter or
 Store. `memcommit.application.operations.atomize.runtime` owns the Store session
 repository, strict graph preflight, checkpoint reconstruction,
 materialization, and compensation. The
@@ -101,9 +115,9 @@ request/result, origin contract, and result validation without importing
 Store, commands, Typer, or prompt-toolkit.
 `memcommit.application.operations.atomize.analysis_runtime` owns saved-pair lookup,
 hidden-prewarm lookup, lazy provider connection, Context freshness recheck,
-pair publication, exact reanalysis pair-CAS, and synchronous restoration path.
-The legacy `atomize_workflow` module is now a compatibility facade over that
-boundary.
+pair publication, and the synchronous restoration path. The legacy
+`atomize_workflow` module remains a compatibility facade over structural
+analysis only.
 
 ## Operation-owned decisions to preserve
 
@@ -111,12 +125,11 @@ boundary.
   once. Undo, later edits, or loss of a derived Output do not rearm it.
 - `COMPOSITE` replaces one source occurrence in place with fresh child UIDs.
   `ATOMIC`, `UNCERTAIN`, and `NON_PROPOSITIONAL` preserve source UID and text.
-- Open optional Ambiguity, Atomize Uncertainty, and Conflict findings do not
-  become implicit answers. Applying the exact proposal records `AS_IS` and a
-  bounded unresolved-finding audit in the checkpoint.
-- A saved eligible unary response must be incorporated through one complete
-  semantic turn before structural Apply. Pair-shaped conflict responses remain
-  review evidence and are not converted to unary source frames.
+- Ambiguity, Atomize Uncertainty, and Conflict findings never become implicit
+  answers or semantic input. Applying the exact proposal records `AS_IS` and
+  the complete unresolved issue audit in the checkpoint.
+- Previously saved workbench responses remain part of the opaque record and
+  stale-state digest, but Atomize neither edits nor incorporates them.
 - An all-preserved analysis is a deliberate recorded completion: it creates an
   Atomize checkpoint and terminal receipt even though Context Memory bytes do
   not change. This differs from Update's zero-operation receipt-only no-op and
@@ -139,8 +152,8 @@ boundary.
   exact ordinary Context, opens the complete whole-Context analysis scope, and
   immediately requests in-place Apply. It
   does not grant a launcher, workbench, or saved Output plan authority to
-  redirect that ordinary route. `--sessions`, `--output`, `--memory`, and the
-  grounding actions retain the advanced workflow.
+  redirect that ordinary route. `--sessions`, `--output`, and `--memory`
+  retain the advanced structural workflow; there is no Grounding action.
 - An applied terminal workbench plus its recognized checkpoint is sufficient
   to reopen the complete analysis in read-only Review after the live Context
   digest changed. It is not sufficient to edit a response or reapply the
@@ -152,15 +165,12 @@ boundary.
 | --- | --- | --- | --- |
 | Preview or workbench open | Analysis/workbench artifacts only; no Context checkpoint | existing preview, workbench, and Study-prewarm tests | typed analysis result must remain non-applying |
 | Ordinary exact-Context command | compatible complete analysis is created/reused and immediately applied in place; no launcher or workbench is opened | bare and explicit-Context execution tests | freeze exact name, complete scope, and in-place Output before ordinary Apply |
-| Compact direct receipt | split/child/keep counts and unresolved-judgment count accompany up to three exact source-to-child effect groups; additional splits hand off explicitly to exact post-application Review; a first-use prepared hit also states `ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED` | compact receipt, prepared auto-Apply, and applied Review tests | changed Memory content is bounded proof rather than a second report; presentation must name omitted splits, preserve durable evidence, retain prepared provenance, and never imply findings were resolved |
+| Compact direct receipt | split/child/keep counts and every unresolved issue on one logical line accompany up to three exact source-to-child effect groups; additional splits hand off explicitly to exact post-application Review; a first-use prepared hit also states `ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED` | compact receipt, prepared auto-Apply, and applied Review tests | changed Memory content is bounded proof rather than a second report; unresolved evidence is complete, while omitted split proofs are named explicitly |
 | Applied Review reopen | complete analysis remains read-only and provider-free despite the post-split Context digest; each item title pairs source UID with its content preview, while applied children render as `APPLIED CHILD MEMORIES` with explicit `MEMORY n` rows | direct receipt/review and adapter tests | accept only exact terminal receipt/checkpoint evidence; reject response edits; retain source-span evidence without repeating it in the default snapshot |
 | Close/cancel before final action | Saved review may remain; no Context effect | shared Resolution CLOSE and workbench persistence tests | application port must never be called |
 | Local current analysis, one or more splits | one in-place Context checkpoint, complete SPLIT/KEEP/PRESERVE trace | `test_saved_atomize_analysis_applies_once_with_recorded_lineage` | consume exact analysis and workbench revision |
 | Every item preserved | one no-change Atomize checkpoint and terminal receipt | `test_all_atomic_apply_records_a_deliberate_no_change_checkpoint` | preserve this explicit Atomize no-op variant |
-| Open optional findings | exact current proposal applies; checkpoint records `AS_IS` and open findings | `test_unanswered_atomize_findings_apply_as_is_and_are_checkpointed` | silence must remain `OPEN`, never an inferred choice |
-| Eligible unary response not incorporated | fail before Context mutation | workbench response/save-gate tests | retain exact response-digest gate |
-| Compound incorporate-and-apply | one provider reanalysis, then ordinary Apply path | compound workbench action test | one typed request must carry both reviewed revision and apply intent |
-| Pair-shaped conflict response | cannot enter unary reanalysis; current structural proposal remains independently applicable | mixed pairwise-response tests | keep conflict semantics outside Atomize transformation |
+| Unresolved findings | exact current proposal applies; checkpoint records `AS_IS` and the complete unresolved issue set | unresolved receipt and Apply-audit tests | no response or missing response may alter the structural proposal |
 | Source Context changed after analysis | fail stale before Apply | stale analysis tests | revalidate exact local identity, digest, direct order, and content |
 | Embedded Context unavailable | fail before saving parent | embedded-Context safety test | mutating load must stay complete |
 | Inbound reference to split source | fail before mutation | inbound-reference test | strict graph scan remains a preflight |
@@ -185,7 +195,7 @@ boundary.
 | Save-as structural Apply | new Context, one Atomize creation checkpoint, copied analysis, current-pointer CAS, Source terminal receipt | one Undo/Redo removes/restores the complete created Context and Source receipt | verified as one command unit for new histories |
 | Save-as failure after publication | exact inspectable new Context in its last durable phase; Source unchanged | exact retry completes missing receipt/selection without a second checkpoint | verified retained-publication recovery |
 | Structural Apply receipt failure | synchronous pre-commit failure exposes no Context effect; a prior exact checkpoint is recoverable without replay | checkpoint/receipt pair remains one application outcome | verified for local in-place Apply |
-| Grounding proposal Apply | separate edit/add transaction and grounding receipt/history | already has exact checkpoint recovery and mixed-write rollback tests | do not merge its schema with structural Atomize; reuse only the application/recovery mechanics |
+| Legacy Grounding checkpoint | no new route writes one; retained history can still be restored | legacy Undo/Redo and decoder tests | preserve historical bytes without reviving Grounding execution |
 
 ## Hidden prewarm and visible-session boundary
 
@@ -262,16 +272,18 @@ schema, semantic budgets, or reconciliation.
 
 The package groups related ownership without merging slice contracts. Primary
 structural application remains in `application` / `runtime`; analysis open,
-reuse, reanalysis, provider/cache, and pair-publication policy remains in
-`analysis_application` / `analysis_runtime`; and `atomize_grounding_*` remains
-in the sibling `grounding_application` / `grounding_runtime` modules as the
-owner of grounding dialogue and mixed edit/add Apply. No slice may acquire
-another slice's authority merely from their shared package location.
+reuse, refresh, provider/cache, and pair-publication policy remains in
+`analysis_application` / `analysis_runtime`. Grounding executable siblings no
+longer exist; only the `grounding` schema package remains for legacy
+load/history/restoration. No shared package location creates resolution or
+mutation authority.
 
 The opaque session revision binds the immutable analysis record and complete
-workbench record, including response state, Output plan, and any application
-receipt. Every ordinary analysis/workbench writer shares one Context-scoped
-session lock; the repository rechecks the token before terminal publication.
+workbench record, including legacy response bytes, Output plan, and any
+application receipt. Legacy bytes participate only in stale-state safety; they
+are not an editable capability. Every ordinary analysis/workbench writer
+shares one Context-scoped session lock, and the repository rechecks the token
+before terminal publication.
 
 ## Ordered implementation gates
 
@@ -287,9 +299,9 @@ session lock; the repository rechecks the token before terminal publication.
 5. **Done:** route save-as through a typed request/result, publish one final
    creation checkpoint, retain exact post-publication failures for idempotent
    retry, and restore Context/analysis/receipt as one Undo/Redo lifecycle.
-6. **Done:** expose exact response/Output edits, unary reanalysis, in-place
-   Apply, require-new Save As, and the explicit compound action through stable
-   Python and agent contracts without moving policy into adapters.
+6. **Done:** expose exact Output planning, in-place Apply, and require-new Save
+   As through stable Python and agent contracts; retire response, reanalysis,
+   compound, and Grounding routes.
 7. **Done:** make new save-as histories one Atomize creation unit; leave
    pre-release legacy `init + atomize` histories uninterpreted.
 
@@ -297,9 +309,9 @@ session lock; the repository rechecks the token before terminal publication.
 
 Focused public/application/agent tests cover provider creation, provider-free
 saved resume, exact hidden-prewarm materialization, focused Memory open,
-response replacement and clearing, Output plan validation, atomic unary
-reanalysis, concurrent-response preservation, in-place and Save As receipts,
-exact recovery, lineage, stale rejection, and adapter dependency direction.
+read-only issue projection, Output plan validation, in-place and Save As
+receipts, exact recovery, lineage, stale rejection, absent response/Grounding
+routes, and adapter dependency direction.
 The complete regression and installed-wheel gates are rerun with every change;
 the current recorded commands live in the public and agent rationale notes.
 
@@ -331,11 +343,11 @@ explicit refresh, stale rejection, and analysis/workbench pair restoration.
 - no provider-prompt or Atomize classification change;
 - no change to `APPLY`, `APPLY AS IS`, or ownership-aware presentation policy;
 - no deletion or cleanup of a published save-as destination;
-- no unification of structural Atomize and grounding-proposal schemas;
+- no migration or deletion of legacy Grounding schemas;
 - no conversion of pair-shaped conflicts into unary provider guidance; and
 - no expansion from local ordinary Contexts to Grant-authorized mutation.
 
-## 2026-08-20 execution-receipt migration
+## Historical 2026-08-20 execution-receipt migration (superseded)
 
 Atomize execution ends with effect counts, a bounded proof of up to three exact
 source-to-child split groups, analysis/session receipt, checkpoint,

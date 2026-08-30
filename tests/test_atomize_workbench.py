@@ -19,17 +19,12 @@ from memcommit.application.operations.atomize.domain import (
     ATOMIZE_LEGACY_RULESET_VERSION,
     AtomizeAnalysisSession,
     AtomizeImpactError,
-    AtomizeQualityIssue,
     AtomizeReading,
     create_atomize_analysis,
     impact_atomize,
 )
-from memcommit.application.operations.atomize.resolution_adapter import AtomizeResolutionWorkbenchAdapter
 from memcommit.application.operations.atomize.workbench import (
-    atomize_workbench_declared_frames,
-    atomize_workbench_response_digest,
     create_atomize_workbench,
-    project_atomize_workbench_findings,
 )
 from memcommit.application.operations.atomize.workflow import (
     ATOMIZE_AGGREGATE_TIMEOUT_SECONDS,
@@ -37,7 +32,6 @@ from memcommit.application.operations.atomize.workflow import (
     open_or_create_atomize_workbench,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.atomize.command import _materialize_reviewed_workbench
 from memcommit.adapters.console.commands.atomize.workbench.screen import (
     _finding_map,
     _list_text,
@@ -51,8 +45,6 @@ from memcommit.adapters.console.commands.atomize.sessions import (
     revalidate_saved_atomize_analysis,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.flows import AtomizeSetupReceipt
-from memcommit.adapters.console.coordination.review import RESPONSE_LABEL
-from memcommit.adapters.console.terminal.components.resolution import ResolutionDestination
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
@@ -515,13 +507,13 @@ def test_cli_reuses_one_analysis_then_bare_atomize_applies_and_review_reopens(
         assert "WHAT HAPPENED" in output
         assert "WHAT REMAINS UNRESOLVED" in output
         assert "REPRESENTATIVE / BOUNDARY CASES" in output
-    assert "ISSUES" in first.output
-    assert "REVIEW ITEMS" in review.output
-    assert RESPONSE_LABEL in first.output
+    assert "ATOMIZE FINDINGS" in first.output
+    assert "AMBIGUITY" in review.output
     # Atomize keeps exact proposed children beside their source finding. The
     # empty generic Resolution result slot must not read as zero projection.
     assert "EXACT RESULTS" not in review.output
-    assert RESPONSE_LABEL not in review.output
+    assert "RESPONSES" not in first.output
+    assert "RESPONSES" not in review.output
     resumed = store.load_atomize_workbench(analysis)
     assert resumed is not None
     assert resumed.uid == workbench.uid
@@ -618,7 +610,7 @@ def test_bare_interactive_atomize_applies_the_current_context_without_a_session(
 
     assert result.exit_code == 0, result.output
     assert "ATOMIZE APPLIED" in result.output
-    assert "JUDGMENTS · 2 unresolved findings recorded as applied-as-is" in result.output
+    assert "UNRESOLVED ISSUES · 2 · APPLIED AS-IS" in result.output
     assert "REVIEW · mem review atomize" in result.output
     assert len(provider.payloads) == 1
     assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
@@ -1208,61 +1200,6 @@ def test_refresh_is_explicit_and_stale_analysis_fails_closed(
     assert store.load_atomize_analysis(ctx.uid).uid == second.uid
 
 
-def test_workbench_response_reanalysis_and_save_gate_keep_provenance(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx, memory = _init_context(store)
-    provider = AggregateProvider()
-    _patch_provider(monkeypatch, provider)
-    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    source_analysis = store.load_atomize_analysis(ctx.uid)
-    assert source_analysis is not None
-    source_workbench = store.load_atomize_workbench(source_analysis)
-    assert source_workbench is not None
-    checkpoints_before = store.list_checkpoints(ctx.name)
-
-    comment = "'same NFC' means the staff-door NFC credential."
-    finding = next(
-        item
-        for item in project_atomize_workbench_findings(source_analysis)
-        if memory.uid in item.source_uids
-    )
-    source_workbench.response_for(finding.uid).text = comment
-    store.save_atomize_workbench(source_workbench)
-    responded = runner.invoke(
-        app,
-        [
-            "review",
-            "atomize",
-            "--respond-to",
-            f"atomize:{memory.uid[:8]}",
-            "--response",
-            comment,
-        ],
-    )
-    blocked = runner.invoke(app, ["atomize", "--save"])
-
-    assert responded.exit_code == 1
-    assert "execution is not complete" in responded.output
-    assert blocked.exit_code == 1
-    assert "have not been incorporated" in blocked.output
-    assert len(provider.payloads) == 1
-    assert store.list_checkpoints(ctx.name) == checkpoints_before
-
-    reanalyzed = runner.invoke(
-        app,
-        ["impact", "atomize", "--with-review"],
-    )
-    current = store.load_atomize_analysis(ctx.uid)
-
-    assert reanalyzed.exit_code == 0, reanalyzed.output
-    assert current is not None and current.uid != source_analysis.uid
-    assert provider.payloads[-1]["memories"][0]["declared_frame"] == comment
-    assert current.source_review_uid == source_workbench.uid
-    assert current.declared_frames[0].review_item_uid.endswith(memory.uid)
-    assert store.list_checkpoints(ctx.name) == checkpoints_before
 
 
 def test_atomize_session_catalog_isolated_to_supplied_profile_store(tmp_path):
@@ -1298,226 +1235,12 @@ def test_atomize_session_catalog_isolated_to_supplied_profile_store(tmp_path):
     ]
 
 
-def test_reviewed_reanalysis_preserves_mixed_pairwise_responses_by_failing_closed(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx, first = _init_context(store)
-    second = ops.add(ctx, "The entrance closes at 5 p.m.")
-    store.save(ctx)
-    report = impact_atomize(ctx, lambda: AggregateProvider())
-    conflict = AtomizeQualityIssue(
-        uid=f"conflict:{first.uid}:{second.uid}",
-        kind="CONFLICT",
-        source_uids=(first.uid, second.uid),
-        conflict="MAY",
-        readings=(
-            AtomizeReading(
-                uid=f"conflict:{first.uid}:{second.uid}:reading:1",
-                role="COMPETING",
-                label="This entrance",
-                text="The NFC rule concerns this entrance.",
-            ),
-            AtomizeReading(
-                uid=f"conflict:{first.uid}:{second.uid}:reading:2",
-                role="COMPETING",
-                label="Another entrance",
-                text="The NFC rule concerns another entrance.",
-            ),
-        ),
-        scope_dimensions=("PLACE",),
-        reason=(
-            "The place scope changes whether the access rule conflicts with "
-            "the closing time."
-        ),
-        question="Which entrance does the NFC rule use?",
-    )
-    analysis = create_atomize_analysis(
-        ctx,
-        replace(
-            report,
-            quality_issues=report.quality_issues + (conflict,),
-        ),
-    )
-    workbench = create_atomize_workbench(analysis)
-    workbench.response_for(
-        f"ambiguity:{first.uid}"
-    ).text = "Use the staff-door NFC credential."
-    workbench.response_for(
-        conflict.uid
-    ).text = "The closing time applies to that same staff door."
-    store.save_atomize_analysis(analysis)
-    store.save_atomize_workbench(workbench)
-    original_digest = atomize_workbench_response_digest(workbench)
-
-    class NeverCalled:
-        calls = 0
-
-        def complete(self, prompt, *, operation, output_schema=None):
-            self.calls += 1
-            raise AssertionError("provider must not be called")
-
-    provider = NeverCalled()
-    _patch_provider(monkeypatch, provider)
-    result = runner.invoke(
-        app,
-        ["impact", "atomize", "--with-review"],
-    )
-
-    assert result.exit_code == 1
-    assert "Pairwise conflict responses" in result.output
-    assert provider.calls == 0
-    current_analysis = store.load_atomize_analysis(ctx.uid)
-    assert current_analysis is not None
-    assert current_analysis.uid == analysis.uid
-    current_workbench = store.load_atomize_workbench(current_analysis)
-    assert current_workbench is not None
-    assert atomize_workbench_response_digest(current_workbench) == original_digest
 
 
-def test_reviewed_reanalysis_rejects_two_unary_origins_for_one_memory(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx, memory = _init_context(store)
-    report = impact_atomize(ctx, lambda: AggregateProvider())
-    analysis = create_atomize_analysis(ctx, report)
-    workbench = create_atomize_workbench(analysis)
-    workbench.response_for(
-        f"ambiguity:{memory.uid}"
-    ).text = "The antecedent is the staff-door credential."
-    workbench.response_for(
-        f"atomize:{memory.uid}"
-    ).text = "Retain the staff-only scope."
-    store.save_atomize_analysis(analysis)
-    store.save_atomize_workbench(workbench)
-    original_digest = atomize_workbench_response_digest(workbench)
-
-    class NeverCalled:
-        calls = 0
-
-        def complete(self, prompt, *, operation, output_schema=None):
-            self.calls += 1
-            raise AssertionError("provider must not be called")
-
-    provider = NeverCalled()
-    _patch_provider(monkeypatch, provider)
-    result = runner.invoke(
-        app,
-        ["impact", "atomize", "--with-review"],
-    )
-
-    assert result.exit_code == 1
-    assert "More than one answered unary issue" in result.output
-    assert provider.calls == 0
-    current_analysis = store.load_atomize_analysis(ctx.uid)
-    assert current_analysis is not None
-    assert current_analysis.uid == analysis.uid
-    current_workbench = store.load_atomize_workbench(current_analysis)
-    assert current_workbench is not None
-    assert atomize_workbench_response_digest(current_workbench) == original_digest
 
 
-def test_snapshot_and_tui_keep_typed_detail_and_combined_response():
-    ctx = ops.init("workbench/ui")
-    ops.add(ctx, "Use the same NFC.")
-    provider = AggregateProvider()
-    report = impact_atomize(ctx, lambda: provider)
-    analysis = create_atomize_analysis(ctx, report)
-    workbench = create_atomize_workbench(analysis)
-
-    snapshot = render_atomize_workbench_snapshot(workbench, analysis)
-    assert "AMBIGUITY" in snapshot
-    assert "ATOMIZE UNCERTAINTY" in snapshot
-    assert "[DOMINANT]" in snapshot
-    assert "[ALTERNATIVE]" in snapshot
-    assert snapshot.count(RESPONSE_LABEL) == 1
-    assert "WHY THIS IS UNCLEAR" in snapshot
-    issue_list = snapshot.split("\n\nAMBIGUITY 1/", 1)[0]
-    assert "WHY · “same NFC” can denote a mechanism or credential" in issue_list
-    assert "↳ R1 · Use the prior NFC mechanism" in issue_list
-    assert "↳ R2 · Use the prior NFC credential" in issue_list
-    assert "It uses the previously described NFC mechanism." not in issue_list
-    assert "It uses the previously described NFC mechanism." in snapshot
-    assert issue_list.count("↳ R") == 2
-    assert "READING OPTIONS" not in issue_list
-
-    saved: list[dict] = []
-    with create_pipe_input() as pipe_input:
-        # Open issue 1 from Items, Tab into RESPONSES, choose reading 2,
-        # then move to the separate Response box and save its text.
-        pipe_input.send_text(
-            "\t\x1b[B\r\t\x1b[B\r\x1b[B\rNeeds the staff-only qualifier.\x13q"
-        )
-        run_atomize_workbench_shell(
-            workbench,
-            analysis,
-            save=lambda session: saved.append(session.to_dict()),
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-    first_issue = workbench.ordered_issues()[0]
-    response = workbench.response_for(first_issue.uid)
-    assert response.selected_choice_uid.endswith(":reading:2")
-    assert response.text == "Needs the staff-only qualifier."
-    frames, _ = atomize_workbench_declared_frames(workbench, analysis)
-    assert (
-        "Selected ordinary reading: It accepts the previously described credential."
-    ) in frames[next(iter(frames))]
-    assert (
-        "Selected ordinary reading: Use the prior NFC credential"
-        not in (frames[next(iter(frames))])
-    )
-    assert saved
 
 
-def test_enter_drills_into_readings_and_toggles_the_selected_choice():
-    ctx = ops.init("workbench/reading-drilldown")
-    ops.add(ctx, "Use the same NFC.")
-    report = impact_atomize(ctx, lambda: AggregateProvider())
-    analysis = create_atomize_analysis(ctx, report)
-    workbench = create_atomize_workbench(analysis)
-    first = workbench.ordered_issues()[0]
-
-    expanded = _list_text(
-        workbench,
-        analysis,
-        _finding_map(analysis),
-        _source_map(analysis),
-        expanded_issue_uid=first.uid,
-        reading_index=1,
-    )
-    assert "It accepts the previously described credential." in expanded
-    assert "›   2. [ALTERNATIVE]" in expanded
-    assert not any(marker in expanded for marker in ("○", "●", "◇"))
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\x1b[B\r\t\x1b[B\rq")
-        run_atomize_workbench_shell(
-            workbench,
-            analysis,
-            save=lambda session: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-    assert workbench.response_for(first.uid).selected_choice_uid.endswith(":reading:2")
-
-    # Reopening starts on the selected reading. Entering it again clears the
-    # selection, so a separate numeric "clear" command is unnecessary.
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\x1b[B\r\t\rq")
-        run_atomize_workbench_shell(
-            workbench,
-            analysis,
-            save=lambda session: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-    assert workbench.response_for(first.uid).selected_choice_uid is None
 
 
 def test_atomize_shell_embeds_read_only_result_case_navigation() -> None:
@@ -1546,8 +1269,7 @@ def test_atomize_shell_embeds_read_only_result_case_navigation() -> None:
     assert workbench.answered_count == 0
     assert workbench.cursor_uid == before["cursor_uid"]
     assert all(not response.answered for response in workbench.responses.values())
-    assert saved
-    assert saved[-1]["analysis_uid"] == before["analysis_uid"]
+    assert saved == []
 
 
 def test_drilldown_back_and_numeric_keys_do_not_change_a_reading():
@@ -1574,29 +1296,9 @@ def test_drilldown_back_and_numeric_keys_do_not_change_a_reading():
 
     assert workbench.cursor_uid == first.uid
     assert workbench.response_for(first.uid).selected_choice_uid is None
-    assert len(saved) == 1
+    assert saved == []
 
 
-def test_response_backspace_still_edits_text_instead_of_navigating_up():
-    ctx = ops.init("workbench/response-backspace")
-    ops.add(ctx, "Use the same NFC.")
-    report = impact_atomize(ctx, lambda: AggregateProvider())
-    analysis = create_atomize_analysis(ctx, report)
-    workbench = create_atomize_workbench(analysis)
-    first = workbench.ordered_issues()[0]
-
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\x1b[B\r\t\x1b[B\x1b[B\rab\x7f\rq")
-        run_atomize_workbench_shell(
-            workbench,
-            analysis,
-            save=lambda session: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert workbench.response_for(first.uid).text == "a"
 
 
 def test_enter_expands_and_closes_an_issue_without_readings():
@@ -1617,7 +1319,7 @@ def test_enter_expands_and_closes_an_issue_without_readings():
         _source_map(analysis),
         expanded_issue_uid=issue.uid,
     )
-    assert "ATOMIZE UNCERTAINTY 2/2" in expanded
+    assert "AMBIGUITY 2/2" in expanded
     assert "Which local reading or scope should govern this source?" in (expanded)
 
     saved: list[dict] = []
@@ -1632,7 +1334,7 @@ def test_enter_expands_and_closes_an_issue_without_readings():
             require_tty=False,
         )
     assert workbench.cursor_uid == issue.uid
-    assert len(saved) == 1
+    assert saved == []
 
 
 def test_tui_up_and_down_follow_the_vertical_issue_list():
@@ -1672,7 +1374,7 @@ def test_tui_up_and_down_follow_the_vertical_issue_list():
             require_tty=False,
         )
     assert workbench.cursor_uid == ordered[0].uid
-    assert saved
+    assert saved == []
 
 
 def test_shared_atomize_shell_preserves_durable_sort_toggle():
@@ -1697,228 +1399,16 @@ def test_shared_atomize_shell_preserves_durable_sort_toggle():
     assert workbench.sort_mode == "PRIORITY"
 
 
-def test_shared_atomize_review_can_incorporate_and_apply_in_one_action():
-    ctx = ops.init("workbench/materialize-todo")
-    ops.add(ctx, "Use the same NFC.")
-    analysis = create_atomize_analysis(ctx, impact_atomize(ctx, AggregateProvider))
-    workbench = create_atomize_workbench(analysis)
-    for issue in workbench.ordered_issues():
-        if issue.priority == 4:
-            workbench.response_for(issue.uid).text = "Use the reviewed local meaning."
-
-    with create_pipe_input() as pipe_input:
-        # Execution decisions skip the retained report and expose one compact
-        # Apply row for the already reviewed responses.
-        pipe_input.send_text("\x1b[B" * 99 + "\r")
-        action = run_atomize_workbench_shell(
-            workbench,
-            analysis,
-            save=lambda session: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-            workflow_actions=True,
-        )
-
-    assert action.kind == "INCORPORATE_AND_APPLY"
 
 
-def test_applied_atomize_workbench_keeps_comments_but_removes_reapply_actions(
-    monkeypatch,
-):
-    ctx = ops.init("workbench/already-applied")
-    ops.add(ctx, "Use the same NFC.")
-    analysis = create_atomize_analysis(ctx, impact_atomize(ctx, AggregateProvider))
-    workbench = create_atomize_workbench(analysis)
-    captured = []
-
-    def inspect_view(view_supplier, **kwargs):
-        captured.append((view_supplier(), kwargs))
-        return ResolutionWorkbenchAction(kind="CLOSE")
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.terminal.components.resolution."
-        "run_resolution_workbench_shell",
-        inspect_view,
-    )
-
-    returned = run_atomize_workbench_shell(
-        workbench,
-        analysis,
-        save=lambda _session: None,
-        require_tty=False,
-        workflow_actions=False,
-        application_complete=True,
-    )
-
-    assert returned is workbench
-    view, kwargs = captured[0]
-    assert view.status == "APPLIED"
-    assert view.capabilities == frozenset({"SUBMIT_ITEM"})
-    assert view.accept_enabled is False
-    assert kwargs["review_and_apply"] is False
-    assert kwargs["compact_decisions"] is False
-    assert kwargs["decision_free_behavior"] == "REPORT_FIRST"
-    assert kwargs["global_strategies"] == ()
 
 
-def test_actionable_atomize_auto_accepts_when_no_response_is_required(
-    monkeypatch,
-):
-    ctx = ops.init("workbench/direct-final-review")
-    ops.add(ctx, "Use the same NFC.")
-    analysis = create_atomize_analysis(ctx, impact_atomize(ctx, AggregateProvider))
-    workbench = create_atomize_workbench(analysis)
-    captured = []
-
-    def inspect_view(view_supplier, **kwargs):
-        captured.append((view_supplier(), kwargs))
-        return ResolutionWorkbenchAction(kind="CLOSE")
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.terminal.components.resolution."
-        "run_resolution_workbench_shell",
-        inspect_view,
-    )
-
-    run_atomize_workbench_shell(
-        workbench,
-        analysis,
-        save=lambda _session: None,
-        require_tty=False,
-        workflow_actions=True,
-    )
-
-    view, kwargs = captured[0]
-    assert all(item.effective_obligation == "OPTIONAL" for item in view.items)
-    assert view.accept_enabled is True
-    assert kwargs["review_and_apply"] is True
-    assert kwargs["compact_decisions"] is True
-    assert kwargs["decision_free_behavior"] == "AUTO_ACCEPT"
 
 
-def test_atomize_uses_shared_save_location_frame_before_final_review():
-    ctx = ops.init("workbench/destination-source")
-    ops.add(ctx, "First fact. Second fact.")
-    analysis = create_atomize_analysis(ctx, impact_atomize(ctx, AggregateProvider))
-    workbench = create_atomize_workbench(
-        analysis,
-        output_context_name="workbench/destination-draft",
-    )
-    # A saved unary response requires incorporation, so this case remains in
-    # the workbench and can exercise destination editing instead of taking the
-    # decision-free local auto-apply path.
-    issue = workbench.ordered_issues()[0]
-    workbench.response_for(issue.uid).selected_choice_uid = issue.choice_uids[0]
-
-    with create_pipe_input() as pipe_input:
-        # Location is an ordinary Enter-activated row after the issue choices;
-        # no operation-specific shortcut restores the retained report shell.
-        pipe_input.send_text(
-            "\x1b[B" * (len(issue.choice_uids) + 1)
-            + "\r\x15workbench/destination-final\r"
-        )
-        action = run_atomize_workbench_shell(
-            workbench,
-            analysis,
-            save=lambda _session: None,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-            workflow_actions=True,
-            destination=ResolutionDestination(
-                value="workbench/destination-draft",
-                state="NOT CREATED",
-            ),
-        )
-
-    assert action.kind == "CHANGE_DESTINATION"
-    assert action.destination == "workbench/destination-final"
 
 
-def test_atomize_todo_materialization_creates_an_apply_ready_proposal(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx, _memory = _init_context(store)
-    provider = AggregateProvider()
-    _patch_provider(monkeypatch, provider)
-    opened = open_or_create_atomize_workbench(
-        store=store,
-        ctx=ctx,
-        provider_factory=AggregateProvider,
-    )
-    findings = _finding_map(opened.analysis)
-    unary = next(
-        issue
-        for issue in opened.workbench.ordered_issues()
-        if len(findings[issue.uid].source_uids) == 1
-    )
-    opened.workbench.response_for(unary.uid).text = "Use this local meaning."
-    store.save_atomize_workbench(opened.workbench)
-
-    reviewed = _materialize_reviewed_workbench(
-        store=store,
-        context=store.load_direct(ctx.name),
-        analysis=opened.analysis,
-        workbench=opened.workbench,
-    )
-    assert reviewed.analysis.source_review_uid == opened.workbench.uid
-    view = AtomizeResolutionWorkbenchAdapter(
-        reviewed.analysis,
-        reviewed.workbench,
-    ).view()
-
-    assert reviewed.analysis.uid != opened.analysis.uid
-    assert reviewed.analysis.source_review_uid == opened.workbench.uid
-    assert view.status == "READY_TO_APPLY"
-    assert view.accept_enabled is True
 
 
-def test_shared_atomize_apply_action_uses_the_normal_save_boundary(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx, _memory = _init_context(store)
-    _patch_provider(monkeypatch, AggregateProvider())
-    opened = open_or_create_atomize_workbench(
-        store=store,
-        ctx=ctx,
-        provider_factory=AggregateProvider,
-    )
-    findings = _finding_map(opened.analysis)
-    unary = next(
-        issue
-        for issue in opened.workbench.ordered_issues()
-        if len(findings[issue.uid].source_uids) == 1
-    )
-    opened.workbench.response_for(unary.uid).text = "Use this local meaning."
-    store.save_atomize_workbench(opened.workbench)
-    reviewed = _materialize_reviewed_workbench(
-        store=store,
-        context=store.load_direct(ctx.name),
-        analysis=opened.analysis,
-        workbench=opened.workbench,
-    )
-    assert reviewed.analysis.source_review_uid == opened.workbench.uid
-    checkpoints_before = store.list_checkpoints(ctx.name)
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.present_atomize_workbench",
-        lambda **_kwargs: ResolutionWorkbenchAction(kind="ACCEPT"),
-    )
-
-    result = runner.invoke(
-        app,
-        ["atomize", "--context", ctx.name, "--output", ctx.name],
-    )
-
-    assert result.exit_code == 0, result.output
-    assert "ATOMIZE APPLIED" in result.output
-    assert "RECOVERY · mem undo" in result.output
-    assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
-    assert store.load_direct(ctx.name).uid == ctx.uid
 
 
 def test_atomize_persists_shared_destination_change_before_final_apply(
@@ -2034,47 +1524,6 @@ def test_applied_output_preview_does_not_become_a_second_session_owner(
     assert entries[0].status == "APPLIED"
 
 
-def test_compound_atomize_action_incorporates_then_uses_normal_apply_boundary(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx, _memory = _init_context(store)
-    _patch_provider(monkeypatch, AggregateProvider())
-    opened = open_or_create_atomize_workbench(
-        store=store,
-        ctx=ctx,
-        provider_factory=AggregateProvider,
-    )
-    findings = _finding_map(opened.analysis)
-    unary = next(
-        issue
-        for issue in opened.workbench.ordered_issues()
-        if len(findings[issue.uid].source_uids) == 1
-    )
-    opened.workbench.response_for(unary.uid).text = "Use this local meaning."
-    store.save_atomize_workbench(opened.workbench)
-    checkpoints_before = store.list_checkpoints(ctx.name)
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.present_atomize_workbench",
-        lambda **_kwargs: ResolutionWorkbenchAction(
-            kind="INCORPORATE_AND_APPLY",
-            comment="Incorporate every saved Atomize response and apply.",
-        ),
-    )
-
-    result = runner.invoke(
-        app,
-        ["atomize", "--context", ctx.name, "--output", ctx.name],
-    )
-
-    assert result.exit_code == 0, result.output
-    assert "ATOMIZE APPLIED" in result.output
-    assert "RECOVERY · mem undo" in result.output
-    assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
-    checkpoint = store.list_checkpoints(ctx.name)[-1]
-    assert checkpoint["args"]["source_review_uid"] == opened.workbench.uid
-    assert store.load_direct(ctx.name).uid == ctx.uid
 
 
 def test_unanswered_atomize_findings_apply_as_is_and_are_checkpointed(
@@ -2091,7 +1540,7 @@ def test_unanswered_atomize_findings_apply_as_is_and_are_checkpointed(
     result = runner.invoke(app, ["atomize", "--context", ctx.name, "--save"])
 
     assert result.exit_code == 0, result.output
-    assert "JUDGMENTS · 2 unresolved findings recorded as applied-as-is" in result.output
+    assert "UNRESOLVED ISSUES · 2 · APPLIED AS-IS" in result.output
     checkpoint = store.list_checkpoints(ctx.name)[0]
     args = checkpoint["args"]
     assert args["application_mode"] == "AS_IS"

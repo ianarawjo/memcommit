@@ -11,8 +11,6 @@ from memcommit.application.operations.atomize.domain import (
     AtomizeApplyResult,
 )
 from memcommit.application.operations.atomize.workbench import (
-    ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT,
-    AtomizeWorkbenchResponse,
     AtomizeWorkbenchSession,
     atomize_workbench_response_digest,
     project_atomize_workbench_findings,
@@ -102,16 +100,6 @@ class AtomizeSaveAsResult:
     materialization: AtomizeMaterialization
     audit: AtomizeApplicationAudit
     recovered: bool
-
-
-@dataclass(frozen=True)
-class AtomizeResponseUpdateRequest:
-    """Replace one exact issue response in an accepted workbench revision."""
-
-    snapshot: AtomizeSessionSnapshot
-    issue_uid: str
-    option_uid: str | None
-    comment: str
 
 
 @dataclass(frozen=True)
@@ -225,63 +213,6 @@ def _accepted_workbench(
             "The accepted Atomize analysis has no editable workbench."
         )
     return current, current.workbench
-
-
-def run_atomize_response_update(
-    request: AtomizeResponseUpdateRequest,
-    *,
-    repository: AtomizeSessionRepository,
-) -> AtomizeWorkbenchUpdateResult:
-    """Replace or clear one response under the complete session revision."""
-
-    if not isinstance(request, AtomizeResponseUpdateRequest):
-        raise TypeError("Atomize response update requires a typed request.")
-    if not isinstance(request.issue_uid, str) or not request.issue_uid:
-        raise AtomizeApplicationError("Atomize response issue uid must be nonempty.")
-    if request.option_uid is not None and (
-        not isinstance(request.option_uid, str) or not request.option_uid
-    ):
-        raise AtomizeApplicationError("Atomize response option uid must be nonempty.")
-    if not isinstance(request.comment, str):
-        raise AtomizeApplicationError("Atomize response comment must be text.")
-    if len(request.comment) > ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT:
-        raise AtomizeApplicationError(
-            "Atomize response comment exceeds the workbench character limit."
-        )
-
-    current, workbench = _accepted_workbench(request.snapshot, repository)
-    if workbench.application is not None:
-        raise AtomizeApplicationError(
-            "An applied Atomize workbench cannot change its responses."
-        )
-    issue = next(
-        (candidate for candidate in workbench.issues if candidate.uid == request.issue_uid),
-        None,
-    )
-    if issue is None:
-        raise AtomizeApplicationError("The Atomize response issue is unavailable.")
-    if request.option_uid is not None and request.option_uid not in issue.choice_uids:
-        raise AtomizeApplicationError(
-            "The Atomize response option does not belong to this issue."
-        )
-    updated = copy.deepcopy(workbench)
-    response = AtomizeWorkbenchResponse(
-        selected_choice_uid=request.option_uid,
-        text=request.comment,
-    )
-    if response.answered:
-        updated.responses[request.issue_uid] = response
-    else:
-        updated.responses.pop(request.issue_uid, None)
-    updated.cursor_uid = request.issue_uid
-    if updated == workbench:
-        return AtomizeWorkbenchUpdateResult(snapshot=current, changed=False)
-    committed = repository.replace_workbench(
-        updated,
-        analysis=current.analysis,
-        expected_version=current.version_token,
-    )
-    return AtomizeWorkbenchUpdateResult(snapshot=committed, changed=True)
 
 
 def run_atomize_output_plan_update(

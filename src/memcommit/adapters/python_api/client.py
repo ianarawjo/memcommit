@@ -13,14 +13,9 @@ from memcommit.adapters.python_api._support.providers import (
     connect_route_provider,
 )
 from memcommit.adapters.python_api.add import AddMemoriesResult
-from memcommit.adapters.python_api.atomize_grounding import (
-    AtomizeGroundingApplyResult,
-    AtomizeGroundingSessionResult,
-)
 from memcommit.adapters.python_api.atomize import (
     AtomizeAnalysisResult,
-    AtomizeReviewUpdateResult,
-    AtomizeReviewedApplyResult,
+    AtomizePlanUpdateResult,
     AtomizeSaveAsApplyResult,
     AtomizeStructuralApplyResult,
 )
@@ -889,18 +884,6 @@ class MemCommitClient:
             expected_version=expected_version,
         )
 
-    def open_atomize_grounding(
-        self,
-        context_name: str | None = None,
-    ) -> AtomizeGroundingSessionResult:
-        """Open one saved Grounding dialogue without provider access."""
-
-        from memcommit.adapters.python_api._operations.atomize_grounding import (
-            open_atomize_grounding,
-        )
-
-        return open_atomize_grounding(self._runtime, context_name)
-
     def open_atomize_analysis(
         self,
         context_name: str | None = None,
@@ -921,35 +904,13 @@ class MemCommitClient:
             memory_selector=memory_selector,
         )
 
-    def update_atomize_response(
-        self,
-        context_name: str | None = None,
-        *,
-        expected_version: str,
-        issue_uid: str,
-        option_uid: str | None,
-        comment: str,
-    ) -> AtomizeReviewUpdateResult:
-        """Replace or clear one response in an exact saved review."""
-
-        from memcommit.adapters.python_api._operations.atomize import update_atomize_response
-
-        return update_atomize_response(
-            self._runtime,
-            context_name,
-            expected_version=expected_version,
-            issue_uid=issue_uid,
-            option_uid=option_uid,
-            comment=comment,
-        )
-
     def plan_atomize_output(
         self,
         context_name: str | None = None,
         *,
         expected_version: str,
         output_context_name: str,
-    ) -> AtomizeReviewUpdateResult:
+    ) -> AtomizePlanUpdateResult:
         """Set one exact in-place or require-new structural Output plan."""
 
         from memcommit.adapters.python_api._operations.atomize import plan_atomize_output
@@ -959,22 +920,6 @@ class MemCommitClient:
             context_name,
             expected_version=expected_version,
             output_context_name=output_context_name,
-        )
-
-    def reanalyze_atomize_responses(
-        self,
-        context_name: str | None = None,
-        *,
-        expected_version: str,
-    ) -> AtomizeAnalysisResult:
-        """Incorporate exact saved unary responses through the provider."""
-
-        from memcommit.adapters.python_api._operations.atomize import reanalyze_atomize_responses
-
-        return reanalyze_atomize_responses(
-            self._runtime,
-            context_name,
-            expected_version=expected_version,
         )
 
     def save_saved_atomize_as(
@@ -988,24 +933,6 @@ class MemCommitClient:
         from memcommit.adapters.python_api._operations.atomize import save_saved_atomize_as
 
         return save_saved_atomize_as(
-            self._runtime,
-            context_name,
-            expected_version=expected_version,
-        )
-
-    def incorporate_and_apply_atomize(
-        self,
-        context_name: str | None = None,
-        *,
-        expected_version: str,
-    ) -> AtomizeReviewedApplyResult:
-        """Incorporate exact responses and immediately apply their Output plan."""
-
-        from memcommit.adapters.python_api._operations.atomize import (
-            incorporate_and_apply_atomize,
-        )
-
-        return incorporate_and_apply_atomize(
             self._runtime,
             context_name,
             expected_version=expected_version,
@@ -1036,70 +963,6 @@ class MemCommitClient:
             context_name,
             expected_version=expected_version,
         )
-
-    def start_atomize_grounding(
-        self,
-        selector: str,
-        comment: str,
-        *,
-        context_name: str | None = None,
-    ) -> AtomizeGroundingSessionResult:
-        """Start and assess one issue-scoped Grounding dialogue."""
-
-        from memcommit.adapters.python_api._operations.atomize_grounding import (
-            start_atomize_grounding,
-        )
-
-        return start_atomize_grounding(
-            self._runtime,
-            selector,
-            comment,
-            context_name=context_name,
-        )
-
-    def reply_atomize_grounding(
-        self,
-        reply: str,
-        *,
-        context_name: str | None = None,
-        revision: str = "EXTEND",
-    ) -> AtomizeGroundingSessionResult:
-        """Append and assess one explicit revision to the saved dialogue."""
-
-        from memcommit.adapters.python_api._operations.atomize_grounding import (
-            reply_atomize_grounding,
-        )
-
-        return reply_atomize_grounding(
-            self._runtime,
-            reply,
-            context_name=context_name,
-            revision=revision,
-        )
-
-    def keep_atomize_grounding(
-        self,
-        context_name: str | None = None,
-    ) -> AtomizeGroundingSessionResult:
-        """Close one Grounding dialogue as review-only without mutation."""
-
-        from memcommit.adapters.python_api._operations.atomize_grounding import (
-            keep_atomize_grounding,
-        )
-
-        return keep_atomize_grounding(self._runtime, context_name)
-
-    def apply_atomize_grounding(
-        self,
-        context_name: str | None = None,
-    ) -> AtomizeGroundingApplyResult:
-        """Apply or recover one exact ready Grounding proposal."""
-
-        from memcommit.adapters.python_api._operations.atomize_grounding import (
-            apply_atomize_grounding,
-        )
-
-        return apply_atomize_grounding(self._runtime, context_name)
 
     def add_memories(
         self,

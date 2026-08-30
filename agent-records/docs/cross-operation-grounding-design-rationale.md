@@ -1,5 +1,19 @@
 # 오퍼레이션 전반의 Grounding과 향후 Update 해소 과정
 
+## 2026-08-29 Atomize 경계 수정
+
+이 문서의 공통 Grounding 구상은 향후 오퍼레이션 설계를 위한 연구
+맥락으로 남긴다. 그러나 Atomize는 더 이상 그 구상의 실행 주체가
+아니다. Atomize는 ambiguity/conflict를 finding과 적용 receipt로 기록할
+뿐, 대화를 시작하거나 reading을 선택하거나 resolution을 적용하지
+않는다. 기존 Atomize Grounding 실행 경로와 Atomize-to-Meld projection은
+제거되었으며, 과거 record model과 복구 경로만 호환성 용도로 남는다.
+
+따라서 아래의 Atomize 다회차 clarification 설명은 역사적 설계 기록이며
+현재 callable contract가 아니다. 현재 경계는
+[`atomize-read-only-findings-design-rationale.md`](atomize-read-only-findings-design-rationale.md)에
+정리되어 있다.
+
 ## 상태와 범위
 
 이 문서는 여러 semantic memory 오퍼레이션에 반복해서 나타나는
@@ -26,7 +40,7 @@
 | Context-to-Context directional Meld | direct `INCOMING → BASELINE`의 `EDIT`/`ADD` 및 zero-change acceptance 구현 |
 | 독립적인 `compare` 명령 | 읽기 전용 peer comparison으로 구현 |
 | 독립적인 `reconcile` 명령 | **미구현 TODO** |
-| atomize의 다회차 clarification | 별도 atomize grounding session으로 구현 |
+| atomize의 다회차 clarification | **현재 Atomize 범위 밖**; 과거 record만 읽기/복구 호환 |
 | local working-copy 적용 | **구현**; 다중 Context 예외 rollback은 제공하지만 crash journal은 없음 |
 | `push`/PR와 원격 publication | **미구현 TODO** |
 
@@ -110,16 +124,12 @@ source grounding, scope attachment, 정보 보존과 같은 경계를 정의한�
 구체적인 source Memories, 제안된 readings, 예상되는 split 결과는
 candidate Cases가 된다.
 
-사용자의 clarification은 하나의 ambiguity를 해소하거나, 선택된
-Memory의 예상 결과를 바꾸거나, 동일한 reading에 의존하는 다른
-Memories를 드러낼 수 있다. 기존 atomicity Rule이나 적용 범위가
-잘못되었음을 보여줄 수도 있다. 현재 구현은 이 중 한 issue에 대한
-다회차 대화를 별도의 atomize grounding session으로 제공한다.
-
-그러나 이 세션은 named Ground가 아니다. 승인된 atomize clarification은
-자동으로 named Ground의 Rule이나 golden Ground Memory가 되지 않으며, named
-Ground 역시 자동으로 atomize evidence가 되지 않는다. 이 분리는 현재의
-의도적인 provenance 경계다.
+사용자의 clarification은 하나의 ambiguity를 해소하거나 예상 결과를
+바꿀 수 있지만, 그 처리는 Atomize의 책임이 아니다. 현재 Atomize는
+Source Memories, proposed readings, split 결과, ambiguity/conflict를
+불변 evidence로 보존하고 적용 receipt에 모두 표시한다. 대화, resolution,
+Memory update는 별도의 후속 오퍼레이션이 자기 계약으로 맡아야 하며,
+Atomize는 그 소비자를 자동 호출하거나 handoff schema를 만들지 않는다.
 
 ### Compare와 reconcile
 

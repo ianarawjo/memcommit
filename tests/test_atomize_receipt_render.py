@@ -2,7 +2,18 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from memcommit.adapters.console.commands.atomize.render import render_atomize_apply_result
+from memcommit.adapters.console.commands.atomize.receipt import render_atomize_apply_result
+from memcommit.application.operations.atomize.application import (
+    AtomizeApplicationAudit,
+)
+
+
+_EMPTY_AUDIT = AtomizeApplicationAudit(
+    application_mode="REVIEWED",
+    unresolved_at_apply=(),
+    workbench_uid=None,
+    workbench_response_digest=None,
+)
 
 
 def _split(index: int) -> tuple[SimpleNamespace, SimpleNamespace]:
@@ -36,7 +47,7 @@ def test_atomize_receipt_shows_exact_split_effects(capsys) -> None:
         result=result,
         checkpoint_uid="checkpoint-uid",
         created=False,
-        unresolved_at_apply_count=0,
+        audit=_EMPTY_AUDIT,
     )
 
     assert capsys.readouterr().out == (
@@ -75,7 +86,7 @@ def test_atomize_receipt_bounds_split_proof_and_names_review(capsys) -> None:
         result=result,
         checkpoint_uid="checkpoint-uid",
         created=False,
-        unresolved_at_apply_count=0,
+        audit=_EMPTY_AUDIT,
     )
 
     output = capsys.readouterr().out
@@ -84,3 +95,76 @@ def test_atomize_receipt_bounds_split_proof_and_names_review(capsys) -> None:
     assert "Source 4, first claim." not in output
     assert "… 1 MORE SPLIT · see REVIEW" in output
     assert "REVIEW · mem review atomize --context practice/greetings" in output
+
+
+def test_atomize_receipt_presents_each_unresolved_issue_as_one_logical_line(
+    capsys,
+) -> None:
+    first = SimpleNamespace(
+        memory_uid="memory-0001",
+        content="The access window may begin at eight.\nLocal time is unstated.",
+        position=0,
+    )
+    second = SimpleNamespace(
+        memory_uid="memory-0002",
+        content="The access window begins at nine.",
+        position=1,
+    )
+    session = SimpleNamespace(
+        uid="analysis-uid",
+        context_name="practice/greetings",
+        items=(first, second),
+    )
+    result = SimpleNamespace(
+        split_count=0,
+        child_count=0,
+        preserved_count=2,
+        items=(),
+    )
+    audit = AtomizeApplicationAudit(
+        application_mode="AS_IS",
+        unresolved_at_apply=(
+            {
+                "issue_uid": "uncertainty-1",
+                "kind": "ATOMIZE_UNCERTAINTY",
+                "source_uids": [first.memory_uid],
+                "classification": "UNCERTAIN · REQUIRES CONTEXT",
+                "reason": "The time zone is not explicit.\nNo split was inferred.",
+                "response_state": "OPEN",
+            },
+            {
+                "issue_uid": "conflict-1",
+                "kind": "CONFLICT",
+                "source_uids": [first.memory_uid, second.memory_uid],
+                "classification": "YES",
+                "reason": "Both opening times cannot govern the same window.",
+                "response_state": "OPEN",
+            },
+        ),
+        workbench_uid="workbench-uid",
+        workbench_response_digest="response-digest",
+    )
+
+    render_atomize_apply_result(
+        session=session,
+        context_name=session.context_name,
+        result=result,
+        checkpoint_uid="checkpoint-uid",
+        created=False,
+        audit=audit,
+    )
+
+    output = capsys.readouterr().out
+    assert "UNRESOLVED ISSUES · 2 · APPLIED AS-IS" in output
+    assert (
+        "? AMBIGUOUS · [MEMORY memory-0001] “The access window may begin at eight. "
+        "Local time is unstated.” · WHY · The time zone is not explicit. "
+        "No split was inferred."
+    ) in output
+    assert (
+        "! CONFLICT · [MEMORY memory-0001] “The access window may begin at eight. "
+        "Local time is unstated.” ↔ [MEMORY memory-0002] "
+        "“The access window begins at nine.” · WHY · Both opening times cannot "
+        "govern the same window."
+    ) in output
+    assert "JUDGMENTS ·" not in output

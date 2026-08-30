@@ -51,6 +51,7 @@ def test_atomize_legacy_interface_and_facade_paths_are_removed() -> None:
     removed = (
         REPOSITORY / "src/memcommit/adapters/interfaces/cli/atomize.py",
         REPOSITORY / "src/memcommit/adapters/interfaces/cli/atomize_grounding.py",
+        REPOSITORY / "src/memcommit/adapters/console/commands/atomize/grounding.py",
         REPOSITORY
         / "src/memcommit/adapters/interfaces/tui/operations/atomize/__init__.py",
         REPOSITORY
@@ -70,8 +71,8 @@ def test_atomize_command_delegates_to_command_owned_presenters() -> None:
     ).read_text(encoding="utf-8")
 
     assert "memcommit.adapters.console.commands.atomize.workbench.adapter" in source
-    assert "memcommit.adapters.console.commands.atomize.render" in source
-    assert "memcommit.adapters.console.commands.atomize.grounding" in source
+    assert "memcommit.adapters.console.commands.atomize.receipt" in source
+    assert "memcommit.adapters.console.commands.atomize.grounding" not in source
     assert "memcommit.adapters.interfaces.tui.operations.atomize" not in source
     assert "memcommit.adapters.interfaces.cli.atomize" not in source
     assert "prompt_toolkit" not in source

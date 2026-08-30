@@ -19,7 +19,6 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionItem,
     ResolutionMemoryRow,
     ResolutionMetric,
-    ResolutionOption,
     ResolutionOverviewSection,
     ResolutionWorkbenchView,
     resolution_overview_text,
@@ -74,7 +73,7 @@ def _memory_preview(content: str, *, limit: int = 180) -> str:
 
 
 class AtomizeResolutionWorkbenchAdapter:
-    """Join immutable findings with their exact durable response state."""
+    """Project immutable Atomize findings into a read-only issue surface."""
 
     def __init__(
         self,
@@ -113,7 +112,6 @@ class AtomizeResolutionWorkbenchAdapter:
         projected: list[ResolutionItem] = []
         for descriptor in workbench.ordered_issues():
             finding = findings[descriptor.uid]
-            response = workbench.responses.get(finding.uid)
             source_refs = tuple(
                 ResultRef(
                     "context-memory",
@@ -139,10 +137,10 @@ class AtomizeResolutionWorkbenchAdapter:
                 "AMBIGUITY": "WHY THIS IS UNCLEAR",
                 "CONFLICT": "WHY THESE MEMORIES CONFLICT",
                 "ATOMIZE_SPLIT": "WHY THIS MEMORY SPLIT",
-                "ATOMIZE_UNCERTAINTY": "WHY ATOMIZE IS BLOCKED",
+                "ATOMIZE_UNCERTAINTY": "WHY THIS IS UNCLEAR",
             }[finding.kind]
             conflict = finding.kind == "CONFLICT"
-            ambiguity = finding.kind == "AMBIGUITY"
+            ambiguity = finding.kind in {"AMBIGUITY", "ATOMIZE_UNCERTAINTY"}
             issue_presentation = ResolutionIssuePresentation(
                 evidence=(
                     ResolutionIssueEvidence(
@@ -186,6 +184,16 @@ class AtomizeResolutionWorkbenchAdapter:
                 ),
             )
             blocks: list[ResolutionDetailBlock] = []
+            if finding.readings:
+                blocks.append(
+                    ResolutionDetailBlock(
+                        heading="POSSIBLE READINGS",
+                        text="\n".join(
+                            f"[{reading.role}] {reading.label} — {reading.text}"
+                            for reading in finding.readings
+                        ),
+                    )
+                )
             if finding.children:
                 child_rows = tuple(
                     ResolutionMemoryRow(
@@ -213,12 +221,12 @@ class AtomizeResolutionWorkbenchAdapter:
             projected.append(
                 ResolutionItem(
                     uid=finding.uid,
-                    kind=finding.kind,
-                    status=(
-                        "ANSWERED"
-                        if response is not None and response.answered
-                        else "OPEN"
+                    kind=(
+                        "AMBIGUITY"
+                        if finding.kind == "ATOMIZE_UNCERTAINTY"
+                        else finding.kind
                     ),
+                    status="RECORDED",
                     priority=_priority_label(finding),
                     # Memory has no separate display name. Pair the stable
                     # identity with the content preview so Review never makes
@@ -229,37 +237,17 @@ class AtomizeResolutionWorkbenchAdapter:
                         for source_uid in finding.source_uids
                     ),
                     summary=finding.reason,
-                    role=(
-                        "OPTIONAL_REVIEW"
-                        if finding.kind == "ATOMIZE_SPLIT"
-                        else "DECISION"
-                    ),
-                    # Atomize findings remain answerable, but none requires a
-                    # per-item response before the current proposal can apply.
-                    obligation="OPTIONAL",
-                    response_state=(
-                        "ANSWERED"
-                        if response is not None and response.answered
-                        else "OPEN"
-                    ),
-                    response_text=(response.text if response is not None else ""),
+                    role="OPTIONAL_REVIEW",
+                    # Atomize records what it could not settle, but it does not
+                    # turn those findings into a conversational sub-operation.
+                    obligation="NONE",
+                    response_state="NOT_APPLICABLE",
                     kind_label=(
                         "SUGGESTED SPLIT" if finding.kind == "ATOMIZE_SPLIT" else None
                     ),
                     question=finding.question,
-                    options=tuple(
-                        ResolutionOption(
-                            uid=reading.uid,
-                            label=f"[{reading.role}] {reading.label}",
-                            text=reading.text,
-                        )
-                        for reading in finding.readings
-                    ),
                     blocks=tuple(blocks),
                     decision_block_index=0,
-                    selected_option_uid=(
-                        response.selected_choice_uid if response is not None else None
-                    ),
                     evidence_refs=source_refs,
                     judgment_refs=(judgment_ref,),
                     outcome_refs=tuple(
@@ -271,21 +259,9 @@ class AtomizeResolutionWorkbenchAdapter:
                     ),
                     unresolved_refs=(ResultRef("atomize-finding", finding.uid),),
                     issue_presentation=issue_presentation,
-                    commentable=True,
+                    commentable=False,
                 )
             )
-        # Unary responses can change the atomization proposal and therefore
-        # require one batch incorporation turn. An unanswered finding does
-        # not imply deferment and does not gate applying the exact proposal.
-        # Pairwise Conflict responses remain non-atomizing review evidence;
-        # they cannot become a single-Memory declared frame.
-        incorporable_response_open = any(
-            response is not None
-            and response.answered
-            and len(findings[issue_uid].source_uids) == 1
-            for issue_uid, response in workbench.responses.items()
-        )
-        ready_to_apply = not incorporable_response_open
         unresolved_at_apply_count = sum(
             finding.kind
             in {
@@ -295,28 +271,14 @@ class AtomizeResolutionWorkbenchAdapter:
             }
             for finding in findings.values()
         )
-        open_optional_review = any(
-            item.effective_obligation == "OPTIONAL" and item.response_state == "OPEN"
-            for item in projected
-        )
-        unresolved_at_apply = unresolved_at_apply_count > 0 or open_optional_review
-        capabilities: set[str] = set()
-        if not application_complete:
-            capabilities.update({"SUBMIT_ITEM", "SUBMIT_ALL"})
-        if ready_to_apply and not application_complete:
-            capabilities.add("ACCEPT")
-        elif not application_complete:
-            # Atomize can honor one reviewed compound boundary: incorporate
-            # the saved unary response frame, revalidate the new proposal,
-            # and apply it without forcing a second approval screen.
-            capabilities.add("INCORPORATE_AND_APPLY")
+        unresolved_at_apply = unresolved_at_apply_count > 0
+        capabilities = frozenset({"ACCEPT"}) if not application_complete else frozenset()
         overview_sections = _overview_sections(analysis)
         return ResolutionWorkbenchView(
             operation="ATOMIZE",
             artifact_uid=workbench.uid,
-            # A durable answer edits the current issue; it does not replace
-            # the list.  Keep the common navigation revision pinned to the
-            # analysis and issue projection so detail/option focus survives.
+            # Review navigation is presentation state only; no response can
+            # revise this analysis from inside Atomize.
             revision=f"{analysis.uid}:{workbench.issue_digest}",
             title="MEM ATOMIZE",
             route=(
@@ -327,10 +289,8 @@ class AtomizeResolutionWorkbenchAdapter:
                 "APPLIED"
                 if application_complete
                 else "READY_TO_APPLY_AS_IS"
-                if ready_to_apply and unresolved_at_apply
+                if unresolved_at_apply
                 else "READY_TO_APPLY"
-                if ready_to_apply
-                else "REVIEWING"
             ),
             metrics=(
                 ResolutionMetric("SOURCE MEMORIES", str(analysis.memory_count)),
@@ -339,7 +299,7 @@ class AtomizeResolutionWorkbenchAdapter:
                     str(analysis.projected_memory_count),
                 ),
                 ResolutionMetric("FINDINGS", str(len(projected))),
-                ResolutionMetric("ANSWERED", str(workbench.answered_count)),
+                ResolutionMetric("UNRESOLVED", str(unresolved_at_apply_count)),
             ),
             context_locations=(
                 ResolutionContextLocation("SOURCE", analysis.context_name),
@@ -356,9 +316,9 @@ class AtomizeResolutionWorkbenchAdapter:
             ),
             overview=resolution_overview_text(overview_sections),
             overview_sections=overview_sections,
-            list_label="ACTIONABLE FINDINGS",
+            list_label="ATOMIZE FINDINGS",
             items=tuple(projected),
-            empty_message="No actionable Atomize findings in this analysis.",
+            empty_message="No Atomize findings in this analysis.",
             results_label="EXACT RESULTS",
             # Split children remain source-linked analysis evidence until the
             # separate Apply Changes boundary mutates the Context.
@@ -368,16 +328,16 @@ class AtomizeResolutionWorkbenchAdapter:
             # source finding, so an empty generic list must not imply that the
             # saved analysis projects zero Memories.
             show_results=False,
-            capabilities=frozenset(capabilities),
-            accept_enabled=ready_to_apply and not application_complete,
+            capabilities=capabilities,
+            accept_enabled=not application_complete,
             accept_mode=(
                 "AS_IS"
-                if ready_to_apply and unresolved_at_apply and not application_complete
+                if unresolved_at_apply and not application_complete
                 else "CHANGES"
             ),
             unresolved_at_apply_count=(
                 unresolved_at_apply_count
-                if ready_to_apply and not application_complete
+                if not application_complete
                 else 0
             ),
             input_locked=application_complete,

@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ RESULT · atomize · atomize/read-only-findings                                                                                                                                   ^┃
+┃                                                                                                                                                                                  ┃
+┃CONTEXT LOCATIONS                                                                                                                                                                 ┃
+┃  SOURCE · atomize/read-only-findings                                                                                                                                             ┃
+┃  OUTPUT · atomize/read-only-findings · IN PLACE                                                                                                                                  ┃
+┃ STATUS · APPLIED ANALYSIS · sources=2 · projected=2 · splits=0 · children=0 · review issues=3                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
+┃ The Source records two entrance-access rules.                                                                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT HAPPENED                                                                                                                                                                    ┃
+┃ Both Source Memories remain intact in this Atomize result.                                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT REMAINS UNRESOLVED                                                                                                                                                          ┃
+┃ The NFC antecedent and entrance scope remain unresolved.                                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃ REPRESENTATIVE / BOUNDARY CASES                                                                                                                                                  ┃
+┃ ›  1. [REPRESENTATIVE] ATOMIC · KEEP                                                                                                                                             ┃
+┃       KEEP: Mobile credentials are not accepted at the main entrance.                                                                                                            ┃
+┃    2. [BOUNDARY] AMBIGUITY · DOMINANT / REQUIRED                                                                                                                                 ┃
+┃       ‘same NFC’ can denote a mechanism or a credential, so the accepted access method cannot be determined.                                                                     ┃
+┃    3. [BOUNDARY] CONFLICT · MAY                                                                                                                                                  ┃
+┃       The place scope determines whether the physical-card rule conflicts with the mobile-credential restriction.                                                                ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Atomize report                                                                                                                                         ^│
+│  AMBIGUITY      [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                   │
+│  CONFLICT       [3f81440f] Use the same NFC credential for the staff entrance. ↔ [42603e91] Mobile credentials are not accepted at the main entrance.                            │
+│  AMBIGUITY      [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                   │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ READ ONLY · APPLIED · REVIEW · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  y/Y copy  Q close

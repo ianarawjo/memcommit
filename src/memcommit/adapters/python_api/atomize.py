@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from memcommit.application.operations.atomize.application import AtomizeSessionSnapshot
@@ -62,7 +62,7 @@ class AtomizeReadingResult:
 
 @dataclass(frozen=True)
 class AtomizeIssueResult:
-    """One traceable review finding projected from the saved analysis."""
+    """One traceable read-only issue projected from the saved analysis."""
 
     uid: str
     kind: str
@@ -72,9 +72,6 @@ class AtomizeIssueResult:
     reason: str
     question: str
     readings: tuple[AtomizeReadingResult, ...]
-    answered: bool
-    selected_reading_uid: str | None = None
-    response_text: str = ""
 
 
 @dataclass(frozen=True)
@@ -101,8 +98,6 @@ class AtomizeAnalysisResult:
     issues: tuple[AtomizeIssueResult, ...]
     workbench_uid: str
     output_context_name: str
-    review_edit_allowed: bool
-    response_reanalysis_allowed: bool
     application_completed: bool
     in_place_apply_allowed: bool
     _snapshot: AtomizeSessionSnapshot = field(repr=False, compare=False)
@@ -141,10 +136,9 @@ class AtomizeStructuralApplyResult:
 
 
 @dataclass(frozen=True)
-class AtomizeReviewUpdateResult:
-    """One provider-free exact workbench edit and its new proposal token."""
+class AtomizePlanUpdateResult:
+    """One provider-free exact Output-plan edit and its new proposal token."""
 
-    kind: Literal["RESPONSE", "OUTPUT"]
     changed: bool
     proposal: AtomizeAnalysisResult
 
@@ -172,14 +166,6 @@ class AtomizeSaveAsApplyResult:
     current_context_name: str
 
 
-@dataclass(frozen=True)
-class AtomizeReviewedApplyResult:
-    """One response-incorporating reanalysis followed by its exact effect."""
-
-    proposal: AtomizeAnalysisResult
-    application: AtomizeStructuralApplyResult | AtomizeSaveAsApplyResult
-
-
 __all__ = [
     "AtomizeAnalysisResult",
     "AtomizeAppliedItemResult",
@@ -189,8 +175,7 @@ __all__ = [
     "AtomizeOverviewResult",
     "AtomizeOverviewSectionResult",
     "AtomizeReadingResult",
-    "AtomizeReviewUpdateResult",
-    "AtomizeReviewedApplyResult",
+    "AtomizePlanUpdateResult",
     "AtomizeSaveAsApplyResult",
     "AtomizeStructuralApplyResult",
 ]

@@ -1,0 +1,13 @@
+52 180
+MEM ATOMIZE · 1/2 · CONNECTING PROVIDER . · 0sMEM ATOMIZE · 2/2 · NORMALIZING ATOMIZED OUTPUT . · 0sMEM ATOMIZE · 2/2 · NORMALIZING ATOMIZED OUTPUT . · 0sMEM ATOMIZE · 2/2 · NORMALIZING ATOMIZED OUTPUT . · 0s                                                      [1mATOMIZE APPLIED · atomize/read-only-findings[0m
+EFFECTS · SPLIT 0 · CHILDREN 0 · KEEP 2 · DEDUN GROUPS 0 · ABSORBED 0
+NORMAL FORM · SEMANTIC CHUNK + DEDUN · VERIFIED
+[33m[1mUNRESOLVED ISSUES · 3 · APPLIED AS-IS[0m
+  ? [38;2;238;212;159m[1mAMBIGUOUS[0m · [1m[MEMORY 3f81440f] [0m[38;2;202;211;245m“Use the same NFC credential for the staff entrance.”[0m · [38;2;145;215;227m[1mWHY[0m · ‘same NFC’ can denote a mechanism or a credential, so the accepted access method cannot be determined.
+  ! [38;2;237;135;150m[1mPOSSIBLE CONFLICT[0m · [1m[MEMORY 3f81440f] [0m[38;2;202;211;245m“Use the same NFC credential for the staff entrance.”[0m ↔ [1m[MEMORY 42603e91] [0m[38;2;202;211;245m“Mobile credentials are not accepted at the main entrance.”[0m · [38;2;145;215;227m[1mWHY[0m · The place scope determines whether the physical-card rule conflicts with the mobile-credential restriction.
+  ? [38;2;238;212;159m[1mAMBIGUOUS[0m · [1m[MEMORY 3f81440f] [0m[38;2;202;211;245m“Use the same NFC credential for the staff entrance.”[0m · [38;2;145;215;227m[1mWHY[0m · The NFC antecedent is unavailable in the Source frame.
+RECEIPT · f6005cf1-afdb-4f87-9e33-c42e9b783c6c
+CHECKPOINT · eda8597d-b960-462c-bb28-4b77a704afef
+REVIEW · mem review atomize --context atomize/read-only-findings
+RECOVERY · mem undo
+APPLY VERIFIED · MEMORIES 2 · CHECKPOINTS 1

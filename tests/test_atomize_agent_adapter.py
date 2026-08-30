@@ -18,8 +18,7 @@ from memcommit.adapters.python_api import (
     AtomizeOverviewResult,
     AtomizeOverviewSectionResult,
     AtomizeProviderFailure,
-    AtomizeReviewUpdateResult,
-    AtomizeReviewedApplyResult,
+    AtomizePlanUpdateResult,
     AtomizeSaveAsApplyResult,
     AtomizeStructuralApplyResult,
     MemCommitClient,
@@ -146,8 +145,6 @@ def _proposal() -> AtomizeAnalysisResult:
         issues=(),
         workbench_uid="workbench-1",
         output_context_name="task/source",
-        review_edit_allowed=True,
-        response_reanalysis_allowed=False,
         application_completed=False,
         in_place_apply_allowed=True,
         _snapshot=object(),  # type: ignore[arg-type]
@@ -166,7 +163,7 @@ def _receipt(*, recovered: bool = False) -> AtomizeStructuralApplyResult:
         dedun_group_count=1,
         absorbed_count=1,
         normal_form_verified=True,
-        application_mode="REVIEWED",
+        application_mode="AS_IS",
         unresolved_at_apply_count=0,
         items=(
             AtomizeAppliedItemResult(
@@ -293,40 +290,15 @@ def test_apply_calls_only_version_bound_public_method_and_projects_receipt(
     ("kind", "method_name", "extra", "public_result"),
     [
         (
-            "respond",
-            "update_atomize_response",
-            {
-                "issue_uid": "issue-1",
-                "option_uid": None,
-                "comment": "Keep both facts independent.",
-            },
-            AtomizeReviewUpdateResult(
-                kind="RESPONSE",
-                changed=True,
-                proposal=_proposal(),
-            ),
-        ),
-        (
             "plan_output",
             "plan_atomize_output",
             {"output_context_name": "task/output"},
-            AtomizeReviewUpdateResult(
-                kind="OUTPUT",
+            AtomizePlanUpdateResult(
                 changed=True,
                 proposal=_proposal(),
             ),
         ),
-        ("reanalyze", "reanalyze_atomize_responses", {}, _proposal()),
         ("save_as", "save_saved_atomize_as", {}, _save_as_receipt()),
-        (
-            "incorporate_and_apply",
-            "incorporate_and_apply_atomize",
-            {},
-            AtomizeReviewedApplyResult(
-                proposal=_proposal(),
-                application=_receipt(),
-            ),
-        ),
     ],
 )
 def test_each_review_action_calls_one_public_method(
@@ -458,18 +430,14 @@ def test_schema_is_fresh_strict_and_names_both_effect_boundaries():
     assert schema["name"] == ATOMIZE_AGENT_TOOL_NAME
     assert [branch["properties"]["kind"]["const"] for branch in branches] == [
         "open",
-        "respond",
         "plan_output",
-        "reanalyze",
         "apply_as_is",
         "save_as",
-        "incorporate_and_apply",
     ]
     assert all(branch["additionalProperties"] is False for branch in branches)
     assert branches[1]["properties"]["expected_version"]["pattern"] == (
         "^[0-9a-f]{64}$"
     )
-    assert "Reanalysis uses the provider" in schema["description"]
     assert "final application runs normal-form verification" in schema["description"]
 
 
@@ -531,7 +499,7 @@ def test_real_registry_open_saved_apply_and_retry_use_one_provider_and_checkpoin
     ]
 
 
-def test_real_registry_review_reanalysis_save_as_and_retry_are_exact(
+def test_real_registry_plan_output_save_as_and_retry_are_exact(
     isolated_store,
 ):
     store = MemoryStore(root=isolated_store)
@@ -551,35 +519,13 @@ def test_real_registry_review_reanalysis_save_as_and_retry_are_exact(
         ATOMIZE_AGENT_TOOL_NAME,
         {"version": 1, "kind": "open", "context_name": context.name},
     )
-    issue_uid = opened["result"]["issues"][0]["uid"]
-    responded = registry.invoke(
-        ATOMIZE_AGENT_TOOL_NAME,
-        {
-            "version": 1,
-            "kind": "respond",
-            "context_name": context.name,
-            "expected_version": opened["result"]["version"],
-            "issue_uid": issue_uid,
-            "option_uid": None,
-            "comment": "Treat the closing times as independent facts.",
-        },
-    )
-    reanalyzed = registry.invoke(
-        ATOMIZE_AGENT_TOOL_NAME,
-        {
-            "version": 1,
-            "kind": "reanalyze",
-            "context_name": context.name,
-            "expected_version": responded["result"]["proposal"]["version"],
-        },
-    )
     planned = registry.invoke(
         ATOMIZE_AGENT_TOOL_NAME,
         {
             "version": 1,
             "kind": "plan_output",
             "context_name": context.name,
-            "expected_version": reanalyzed["result"]["version"],
+            "expected_version": opened["result"]["version"],
             "output_context_name": "atomize/agent-output",
         },
     )
@@ -602,8 +548,6 @@ def test_real_registry_review_reanalysis_save_as_and_retry_are_exact(
         },
     )
 
-    assert responded["result"]["proposal"]["issues"][0]["answered"] is True
-    assert reanalyzed["result"]["provider_used"] is True
     assert planned["result"]["proposal"]["output_context_name"] == (
         "atomize/agent-output"
     )
@@ -612,7 +556,7 @@ def test_real_registry_review_reanalysis_save_as_and_retry_are_exact(
     assert saved["result"]["recovered"] is False
     assert retried["result"]["recovered"] is True
     assert retried["result"]["checkpoint_uid"] == saved["result"]["checkpoint_uid"]
-    assert provider.calls == 5
+    assert provider.calls == 4
     assert len(store.list_checkpoints("atomize/agent-output")) == 1
 
 
@@ -704,7 +648,7 @@ def test_adapter_imports_only_public_api_and_shared_agent_contract():
     )
 
 
-def test_companion_skill_preserves_review_cache_and_exact_apply_boundaries():
+def test_companion_skill_preserves_read_only_issue_and_exact_apply_boundaries():
     root = Path(__file__).parents[1]
     skill = (root / "skills" / "memcommit-atomize" / "SKILL.md").read_text(
         encoding="utf-8"
@@ -720,9 +664,9 @@ def test_companion_skill_preserves_review_cache_and_exact_apply_boundaries():
     assert "Send `version: 1` and `kind: open`" in normalized
     assert "`EXACT_PREWARM` is cached" in normalized
     assert "Use the newest proposal version" in normalized
-    assert "This replaces the prior response" in normalized
+    assert "does not collect or incorporate responses" in normalized
     assert "it must not already exist" in normalized
-    assert "pairwise conflict responses" in normalized
+    assert "exposes no response or Grounding action" in normalized
     assert "only after explicit approval" in normalized
     assert "repeat the exact same" in normalized
     assert "On `stale_state`, reopen" in normalized

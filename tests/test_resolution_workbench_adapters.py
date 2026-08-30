@@ -331,7 +331,7 @@ def _atomize_fixture() -> tuple[AtomizeAnalysisSession, str, str]:
     return analysis, conflict_uid, second_uid
 
 
-def test_atomize_adapter_joins_findings_sources_children_and_saved_response() -> None:
+def test_atomize_adapter_joins_read_only_findings_and_ignores_legacy_response() -> None:
     analysis, conflict_uid, composite_uid = _atomize_fixture()
     workbench = create_atomize_workbench(analysis)
     response = workbench.response_for(conflict_uid)
@@ -340,13 +340,13 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
 
     view = AtomizeResolutionWorkbenchAdapter(analysis, workbench).view()
 
-    assert view.list_label == "ACTIONABLE FINDINGS"
-    assert view.capabilities == frozenset({"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"})
+    assert view.list_label == "ATOMIZE FINDINGS"
+    assert view.capabilities == frozenset({"ACCEPT"})
     assert view.accept_enabled is True
     assert view.accept_mode == "AS_IS"
     assert view.unresolved_at_apply_count == 1
     assert view.status == "READY_TO_APPLY_AS_IS"
-    assert all(item.commentable for item in view.items)
+    assert all(not item.commentable for item in view.items)
     assert view.results == ()
     assert [section.heading for section in view.overview_sections] == [
         "UNDERSTOOD",
@@ -362,13 +362,10 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
         ("OUTPUT", "participant/construction-updates", "IN PLACE"),
     ]
     conflict = view.item(conflict_uid)
-    assert conflict.status == "ANSWERED"
-    assert conflict.selected_option_uid == "reading:different-doors"
+    assert conflict.status == "RECORDED"
+    assert conflict.selected_option_uid is None
     assert conflict.question == "Do both rules concern the north door?"
-    assert [option.uid for option in conflict.options] == [
-        "reading:same-door",
-        "reading:different-doors",
-    ]
+    assert conflict.options == ()
     blocks = {block.heading: block.text for block in conflict.blocks}
     assert conflict.issue_presentation is not None
     evidence = conflict.issue_presentation.evidence[0]
@@ -382,12 +379,10 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     assert conflict.issue_presentation.options_heading == "PROPOSED RESOLUTIONS"
     assert "SAVED RESPONSE" not in blocks
     response_target = response_target_from_item(view, conflict, read_only=False)
-    assert response_target is not None
-    assert response_target.prompt_heading == "RESOLUTION QUESTION"
-    assert response_target.choices_heading == "PROPOSED RESOLUTIONS"
+    assert response_target is None
     response_draft = response_draft_from_item(conflict)
-    assert response_draft.selected_choice_uid == "reading:different-doors"
-    assert response_draft.text == response.text
+    assert response_draft.selected_choice_uid is None
+    assert response_draft.text == ""
     assert conflict.decision_block_index == 0
     assert len(conflict.evidence_refs) == 2
     assert conflict.judgment_refs[0].key == conflict_uid
@@ -397,18 +392,18 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
         for _style, text in resolution_viewer_fragments(
             view,
             ResolutionNavigation(selected_item_uid=conflict_uid),
+            include_response_sections=False,
         )
     )
-    assert rendered.index("SOURCE MEMORIES") < rendered.index("RESOLUTION QUESTION")
     assert rendered.index("CLASSIFICATION") < rendered.index("SOURCE 1 · FROM")
     assert rendered.index("CLASSIFICATION") < rendered.index("SOURCE MEMORIES")
     assert rendered.index("SOURCE MEMORIES") < rendered.index("SOURCE 1 · FROM")
     assert rendered.index("SOURCE 2 · FROM") < rendered.index(
         "WHY THESE MEMORIES CONFLICT"
     )
-    assert rendered.index("RESOLUTION QUESTION") < rendered.index(
-        "PROPOSED RESOLUTIONS"
-    )
+    assert "RESOLUTION QUESTION" not in rendered
+    assert "RESPONSE" not in rendered
+    assert "POSSIBLE READINGS" in rendered
     assert "TRACE" not in rendered
 
     split = view.item(f"atomize:{composite_uid}")
@@ -428,6 +423,7 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     split_fragments = resolution_viewer_fragments(
         view,
         ResolutionNavigation(selected_item_uid=split.uid),
+        include_response_sections=False,
     )
     split_rendered = "".join(text for _style, text in split_fragments)
     assert "atomize-child:" not in split_rendered
@@ -438,7 +434,7 @@ def test_atomize_adapter_joins_findings_sources_children_and_saved_response() ->
     )
 
 
-def test_atomize_adapter_exposes_apply_only_for_an_unedited_reviewed_proposal() -> None:
+def test_atomize_adapter_legacy_response_does_not_change_structural_apply() -> None:
     analysis, _conflict_uid, _composite_uid = _atomize_fixture()
     reviewed = replace(
         analysis,
@@ -450,21 +446,21 @@ def test_atomize_adapter_exposes_apply_only_for_an_unedited_reviewed_proposal() 
 
     ready = AtomizeResolutionWorkbenchAdapter(reviewed, workbench).view()
 
-    assert ready.status == "READY_TO_APPLY_AS_IS"
+    assert ready.status == "READY_TO_APPLY"
     assert ready.accept_enabled is True
-    assert ready.capabilities == frozenset({"SUBMIT_ITEM", "SUBMIT_ALL", "ACCEPT"})
+    assert ready.capabilities == frozenset({"ACCEPT"})
 
     workbench.response_for(workbench.ordered_issues()[0].uid).text = "Revise it."
     edited = AtomizeResolutionWorkbenchAdapter(reviewed, workbench).view()
 
-    assert edited.status == "REVIEWING"
-    assert edited.accept_enabled is False
-    assert "ACCEPT" not in edited.capabilities
-    assert "INCORPORATE_AND_APPLY" in edited.capabilities
-    assert (
-        session_review_action_view(edited, {}, whole_set_available=True).kind
-        == "INCORPORATE AND APPLY"
-    )
+    assert edited.status == "READY_TO_APPLY"
+    assert edited.accept_enabled is True
+    assert edited.capabilities == frozenset({"ACCEPT"})
+    assert session_review_action_view(
+        edited,
+        {},
+        whole_set_available=True,
+    ).kind == "APPLY"
 
 
 def test_applied_atomize_adapter_is_read_only_review_evidence() -> None:
@@ -501,7 +497,7 @@ def test_unanswered_atomize_quality_finding_advances_to_apply_as_is() -> None:
     )
 
     assert view.item(conflict_uid).priority == "HIGH"
-    assert view.item(conflict_uid).effective_obligation == "OPTIONAL"
+    assert view.item(conflict_uid).effective_obligation == "NONE"
     assert view.accept_enabled is True
     assert view.accept_mode == "AS_IS"
     assert view.unresolved_at_apply_count == 1
@@ -514,8 +510,7 @@ def test_unanswered_atomize_quality_finding_advances_to_apply_as_is() -> None:
     assert todo.label == "Confirm final Atomize Apply"
     final_action = session_review_action_view(view, {}, whole_set_available=True)
     assert final_action.detail.startswith(
-        "1 unresolved finding will be recorded at apply. "
-        "1 optional review remains open."
+        "1 unresolved finding will be recorded at apply."
     )
     assert final_action.detail.endswith("Recovery: mem undo.")
 
@@ -542,10 +537,10 @@ def test_reviewed_atomize_split_advances_shared_todo_to_apply() -> None:
     assert todo.kind == "REVIEW AND APPLY"
     assert (
         session_review_action_view(view, {}, whole_set_available=True).kind
-        == "APPLY AS IS"
+        == "APPLY"
     )
     assert todo.label == "Confirm final Atomize Apply"
-    assert "APPLY AS IS is available" in todo.detail
+    assert "APPLY is available" in todo.detail
 
 
 def test_initial_atomize_optional_split_is_already_ready_to_apply() -> None:
@@ -566,12 +561,12 @@ def test_initial_atomize_optional_split_is_already_ready_to_apply() -> None:
         read_only=False,
     )
 
-    assert view.status == "READY_TO_APPLY_AS_IS"
+    assert view.status == "READY_TO_APPLY"
     assert view.accept_enabled is True
     assert todo.kind == "REVIEW AND APPLY"
     assert (
         session_review_action_view(view, {}, whole_set_available=True).kind
-        == "APPLY AS IS"
+        == "APPLY"
     )
 
 

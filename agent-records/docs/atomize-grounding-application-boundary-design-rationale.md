@@ -1,99 +1,71 @@
-# Atomize Grounding application boundary
+# Retired Atomize Grounding application boundary
 
-## Motivation
+Last reviewed: 2026-08-29.
 
-Atomize Grounding began as one command module that selected a finding, opened
-and revised provider-backed dialogue, checked durable freshness, applied Memory
-changes, created a checkpoint, recovered interrupted receipts, and rendered the
-CLI transcript. That made `mem atomize` the only practical entry point even
-though none of those semantics inherently require a terminal. It also made the
-one-checkpoint application and retry boundary difficult to review separately
-from presentation code.
+## Current status
 
-The extraction keeps the existing operation behavior while making the same
-Grounding lifecycle callable by a future Python API, TUI adapter, or agent tool
-adapter without importing `memcommit.adapters.console.commands`.
+Atomize Grounding is no longer an executable operation. The former console,
+Python, agent, application, runtime, provider, and Atomize-to-Meld adapter
+routes were removed. `mem atomize` no longer accepts `--evaluate`, `--reply`,
+`--revision`, `--accept-grounding`, or `--keep-review-only`, and no registered
+agent tool can start or advance such a dialogue.
 
-## Boundary
+This retirement follows the operation-responsibility decision recorded in
+[`atomize-read-only-findings-design-rationale.md`](atomize-read-only-findings-design-rationale.md):
+Atomize records structural ambiguity or conflict but does not resolve it.
+Resolution or disambiguation belongs to a later independent operation, not to
+an Atomize sub-workflow.
 
-The Grounding slice is now divided into four responsibilities:
+## Preserved compatibility boundary
 
-- `memcommit.application.operations.atomize.grounding_application` owns typed Start, Reply,
-  Keep, and Accept requests, the port contract, application receipts, and
-  result checks.
-- `memcommit.application.operations.atomize.grounding_runtime` adapts that contract to
-  `MemoryStore`, the semantic provider, CAS-style freshness checks, Context
-  mutation, checkpoint recovery, and durable dialogue receipts.
-- `memcommit.adapters.console.commands.atomize.grounding` renders a saved
-  dialogue without provider or Store access.
-- `memcommit.adapters.console.commands.atomize.command` uses the typed
-  application/runtime boundary directly and delegates only transcript
-  projection to the command-owned renderer.
+The model package at
+`memcommit.application.operations.atomize.grounding` remains solely to decode
+and validate records written by earlier versions. Store paths and methods for
+the latest session and retained session history also remain. They are used by:
 
-The former flat `memcommit.atomize_grounding_application` and
-`memcommit.atomize_grounding_runtime` paths remain behavior-free
-module-identity aliases for old imports, monkeypatch targets, and serialized
-globals. Production consumers use the canonical operation package directly.
-Co-location under `operations.atomize` does not merge Grounding with primary
-Atomize application/materialization or with the Analysis open/cache slice:
-each keeps its existing request, provider, authority, Apply, and receipt
-contract. Consolidating those distinct contracts is an explicit non-goal of
-this ownership-only relocation.
+- retained-history and checkpoint verification;
+- Undo/Redo restoration of historical Atomize Grounding checkpoints;
+- Context deletion cleanup; and
+- tests that prove old serialized records still round-trip and fail closed
+  when malformed.
 
-The CLI supplies its transient provider-progress wrapper when it constructs the
-runtime port. Consequently the runtime can use progress in `mem atomize` while
-remaining independent of terminal modules and command code.
+No active Atomize command, Python facade, agent adapter, provider path, or Meld
+path imports this package to start new work. Compatibility code may restore the
+bytes belonging to an old command unit, but it cannot reassess a turn or apply
+a new Grounding proposal.
 
 ## Invariants
 
-1. Start and Reply each perform exactly one semantic assessment and publish no
-   saved turn if the Context, analysis, workbench, saved response, or dialogue
-   revision changes during that call.
-2. Keep Review Only persists dialogue evidence but never changes a Context or
-   creates a checkpoint.
-3. Accept validates the complete accepted change set before mutating its
-   in-memory Context and commits all grounded edits/additions in one Context
-   save and one checkpoint.
-4. A retry after the Context/checkpoint save but before the small dialogue
-   receipt save recovers the exact checkpoint by session and change-set digest;
-   it does not apply the changes twice.
-5. Grounding opens only directly owned Memories for mutation. Child Context and
-   `MemoryRef` target content do not enter this transaction.
-6. The CLI transcript is a provider-free projection of durable state. Opening
-   or rendering it cannot silently reassess the dialogue.
-7. The console renderer exposes no parallel Start, Reply, Keep, or Accept
-   wrappers; executable callers use typed requests and the runtime port.
+1. New Atomize execution never authors a Grounding session, turn, response,
+   decision, proposal, or history record.
+2. Loading or restoring legacy Grounding data performs no provider call and
+   grants no new mutation authority.
+3. Existing Grounding checkpoint payloads remain verifiable; Context deletion
+   still removes only the matching Context's legacy artifacts.
+4. The absence of a current resolution route is explicit. Atomize does not
+   manufacture a handoff schema or silently reinterpret a finding.
+5. Historical data is not rewritten or deleted merely because a newer
+   Atomize analysis runs.
 
 ## Alternatives considered
 
-Keeping the 900-line command module and exposing it as the Python API was
-rejected because it would make command progress, Typer-era naming, Store
-details, and rendering part of the public application contract.
+Keeping a dormant public Grounding facade was rejected because a callable
+Start or Reply method would still advertise issue resolution as an Atomize
+responsibility. Keeping only the data model draws a testable line between
+historical compatibility and current capability.
 
-Moving the entire module to a differently named file without typed requests was
-also rejected. That would change import paths without creating an enforceable
-boundary for future adapters.
+Automatically translating legacy dialogues into a new resolution record was
+also rejected. There is no independently specified consumer contract yet, and
+translation could invent provenance or resolution semantics.
 
-Putting provider progress inside the runtime was rejected because progress is a
-terminal presentation concern. Injecting the progress wrapper retains the
-current CLI feedback without making non-terminal callers emulate a TTY.
+Deleting every Grounding type and Store path was rejected because old
+checkpoints and research records would become unreadable and restoration could
+no longer validate their exact command unit.
 
-## Compatibility and limitations
+## Verification
 
-This change deliberately does not alter provider prompts, saved Grounding
-schema, session selection, proposal semantics, checkpoint payloads, error text,
-or CLI transcript content. The unused command-level Grounding wrappers and the
-former `adapters.interfaces.cli.atomize_grounding` path were deliberately
-removed rather than kept as compatibility facades. This changes internal
-import compatibility but not provider prompts, saved schemas, CLI options, or
-transcript content.
-
-The Store adapter still contains the existing transaction mechanics as one
-focused runtime module. A later repository abstraction may split dialogue CAS
-from Context materialization, but doing so here would widen the behavioral
-change beyond an interface extraction.
-
-The pre-existing Atomize workbench screen fixture currently describes older
-classification wording. That golden-screen mismatch is not caused or repaired
-by this boundary change; the underlying Grounding lifecycle tests remain the
-behavioral authority until that presentation fixture is updated separately.
+Ownership tests assert that every executable Grounding module and adapter is
+absent while the legacy model remains lazy and concept-owned. Model,
+retained-history, Store lifecycle, and restoration suites retain coverage for
+old records. Public Python and agent tests assert that no Grounding route is
+exported or registered.

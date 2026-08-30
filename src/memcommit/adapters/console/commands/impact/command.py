@@ -279,13 +279,6 @@ def _dispatch_impact(
             help="Include unchanged ATOMIC Memories in atomize output",
         ),
     ] = False,
-    with_review: Annotated[
-        bool,
-        typer.Option(
-            "--with-review",
-            help="Reanalyze using saved unary atomize workbench responses",
-        ),
-    ] = False,
     refresh: Annotated[
         bool,
         typer.Option(
@@ -337,7 +330,6 @@ def _dispatch_impact(
                 or auto_context_memory_operand is not None
                 or source_memory is not None
                 or target_memory is not None
-                or with_review
                 or refresh
             ):
                 _usage_error(
@@ -401,7 +393,6 @@ def _dispatch_impact(
             store=store,
             context_name=canonical_context_name,
             show_all=show_all,
-            with_review=with_review,
             refresh=refresh,
             memory_selector=memory_selector,
         )
@@ -416,7 +407,6 @@ def _dispatch_impact(
             or source_memory is not None
             or target_memory is not None
             or show_all
-            or with_review
             or refresh
             or sessions
             or scope_flags_supplied
@@ -443,12 +433,11 @@ def _dispatch_impact(
         or context_name is not None
         or memory_selector is not None
         or show_all
-        or with_review
         or refresh
     ):
         _usage_error(
             "'--session' and '--sessions' require a saved-session operation; "
-            "'--context', '--memory', '--all', '--with-review', and '--refresh' are only "
+            "'--context', '--memory', '--all', and '--refresh' are only "
             "valid with 'mem impact atomize'."
         )
     try:
@@ -618,13 +607,6 @@ def atomize_impact_cmd(
         bool,
         typer.Option("--all", help="Include unchanged ATOMIC Memories"),
     ] = False,
-    with_review: Annotated[
-        bool,
-        typer.Option(
-            "--with-review",
-            help="Reanalyze using saved unary workbench responses",
-        ),
-    ] = False,
     refresh: Annotated[
         bool,
         typer.Option(
@@ -713,7 +695,6 @@ def atomize_impact_cmd(
         memory_selector=memory_selector,
         auto_context_memory_operand=context_operand,
         show_all=show_all,
-        with_review=with_review,
         refresh=refresh,
     )
 

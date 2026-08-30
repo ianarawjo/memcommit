@@ -19,8 +19,7 @@ from memcommit import (
     AtomizeContextError,
     AtomizeInputError,
     AtomizeProviderFailure,
-    AtomizeReviewUpdateResult,
-    AtomizeReviewedApplyResult,
+    AtomizePlanUpdateResult,
     AtomizeSaveAsApplyResult,
     AtomizeStructuralApplyResult,
     MemCommitClient,
@@ -157,12 +156,7 @@ def _client_and_context(
 
 def test_root_exports_structural_atomize_contract():
     assert AtomizeAnalysisResult.__module__ == "memcommit.adapters.python_api.atomize"
-    assert (
-        AtomizeReviewUpdateResult.__module__ == "memcommit.adapters.python_api.atomize"
-    )
-    assert (
-        AtomizeReviewedApplyResult.__module__ == "memcommit.adapters.python_api.atomize"
-    )
+    assert AtomizePlanUpdateResult.__module__ == "memcommit.adapters.python_api.atomize"
     assert (
         AtomizeSaveAsApplyResult.__module__ == "memcommit.adapters.python_api.atomize"
     )
@@ -198,7 +192,6 @@ def test_open_projects_provider_analysis_then_resumes_without_provider(
     assert created.items[0].action == "SPLIT"
     assert len(created.items[0].children) == 2
     assert created.issues[0].kind == "ATOMIZE_SPLIT"
-    assert created.issues[0].answered is False
     assert created.overview.understood.source_memory_uids == (memory.uid,)
     assert created.in_place_apply_allowed is True
     assert provider.calls == 1
@@ -354,49 +347,24 @@ def test_open_can_focus_one_memory_without_reusing_whole_prepared_state(
     assert provider.calls == 1
 
 
-def test_response_update_is_exact_provider_free_and_clearable(isolated_store):
+def test_atomize_issues_are_read_only_evidence(isolated_store):
     client, _store, context, memory, provider = _client_and_context(composite=True)
+
     opened = client.open_atomize_analysis(context.name)
-    issue_uid = f"atomize:{memory.uid}"
+    issue = opened.issues[0]
 
-    updated = client.update_atomize_response(
-        context.name,
-        expected_version=opened.version,
-        issue_uid=issue_uid,
-        option_uid=None,
-        comment="Treat the closing times as independent facts.",
-    )
-
-    assert updated.kind == "RESPONSE"
-    assert updated.changed is True
-    assert updated.proposal.version != opened.version
-    assert updated.proposal.issues[0].answered is True
-    assert updated.proposal.issues[0].response_text.startswith("Treat the")
-    assert provider.calls == 1
-    with pytest.raises(AtomizeConflictError, match="version changed"):
-        client.update_atomize_response(
-            context.name,
-            expected_version=opened.version,
-            issue_uid=issue_uid,
-            option_uid=None,
-            comment="A stale overwrite.",
-        )
-
-    cleared = client.update_atomize_response(
-        context.name,
-        expected_version=updated.proposal.version,
-        issue_uid=issue_uid,
-        option_uid=None,
-        comment="",
-    )
-    assert cleared.changed is True
-    assert cleared.proposal.issues[0].answered is False
-    assert cleared.proposal.issues[0].response_text == ""
+    assert issue.uid == f"atomize:{memory.uid}"
+    assert issue.kind == "ATOMIZE_SPLIT"
+    assert not hasattr(issue, "answered")
+    assert not hasattr(issue, "response_text")
+    assert not hasattr(client, "update_atomize_response")
+    assert not hasattr(client, "reanalyze_atomize_responses")
+    assert not hasattr(client, "incorporate_and_apply_atomize")
     assert provider.calls == 1
 
 
-def test_terminal_review_cannot_be_edited(isolated_store):
-    client, store, context, memory, _provider = _client_and_context(
+def test_terminal_review_output_plan_cannot_be_edited(isolated_store):
+    client, store, context, _memory, _provider = _client_and_context(
         composite=True,
         name="atomize/terminal-review",
     )
@@ -413,14 +381,6 @@ def test_terminal_review_cannot_be_edited(isolated_store):
     )
 
     assert applied.recovered is False
-    with pytest.raises(AtomizeExecutionError, match="cannot change its responses"):
-        client.update_atomize_response(
-            context.name,
-            expected_version=terminal.version_token,
-            issue_uid=f"atomize:{memory.uid}",
-            option_uid=None,
-            comment="Late edit.",
-        )
     with pytest.raises(AtomizeExecutionError, match="cannot change its Output"):
         client.plan_atomize_output(
             context.name,
@@ -439,7 +399,6 @@ def test_output_plan_is_exact_provider_free_and_require_new(isolated_store):
         output_context_name="atomize/public-output",
     )
 
-    assert planned.kind == "OUTPUT"
     assert planned.changed is True
     assert planned.proposal.output_context_name == "atomize/public-output"
     assert planned.proposal.in_place_apply_allowed is False
@@ -456,70 +415,6 @@ def test_output_plan_is_exact_provider_free_and_require_new(isolated_store):
         )
     assert client.open_atomize_analysis(context.name).output_context_name == (
         "atomize/public-output"
-    )
-
-
-def test_reviewed_reanalysis_preserves_output_and_replaces_responses(
-    isolated_store,
-):
-    client, _store, context, memory, provider = _client_and_context(composite=True)
-    opened = client.open_atomize_analysis(context.name)
-    planned = client.plan_atomize_output(
-        context.name,
-        expected_version=opened.version,
-        output_context_name="atomize/reanalyzed-output",
-    )
-    responded = client.update_atomize_response(
-        context.name,
-        expected_version=planned.proposal.version,
-        issue_uid=f"atomize:{memory.uid}",
-        option_uid=None,
-        comment="Keep the two closing times independent.",
-    )
-
-    reanalyzed = client.reanalyze_atomize_responses(
-        context.name,
-        expected_version=responded.proposal.version,
-    )
-
-    assert reanalyzed.origin == "PROVIDER"
-    assert reanalyzed.analysis_uid != opened.analysis_uid
-    assert reanalyzed.output_context_name == "atomize/reanalyzed-output"
-    assert all(not issue.answered for issue in reanalyzed.issues)
-    assert reanalyzed._snapshot.analysis.source_review_uid == opened.workbench_uid
-    assert len(reanalyzed._snapshot.analysis.declared_frames) == 1
-    assert provider.calls == 2
-
-
-def test_reviewed_reanalysis_cas_preserves_concurrent_response(isolated_store):
-    client, store, context, memory, provider = _client_and_context(composite=True)
-    opened = client.open_atomize_analysis(context.name)
-    responded = client.update_atomize_response(
-        context.name,
-        expected_version=opened.version,
-        issue_uid=f"atomize:{memory.uid}",
-        option_uid=None,
-        comment="Original response.",
-    )
-    original_analysis = store.load_atomize_analysis(context.uid)
-
-    def concurrent_edit():
-        analysis = store.load_atomize_analysis(context.uid)
-        workbench = store.load_atomize_workbench(analysis)
-        workbench.response_for(f"atomize:{memory.uid}").text = "Concurrent response."
-        store.save_atomize_workbench(workbench)
-
-    provider.hook = concurrent_edit
-    with pytest.raises(AtomizeConflictError, match="changed"):
-        client.reanalyze_atomize_responses(
-            context.name,
-            expected_version=responded.proposal.version,
-        )
-
-    assert store.load_atomize_analysis(context.uid) == original_analysis
-    current_workbench = store.load_atomize_workbench(original_analysis)
-    assert current_workbench.response_for(f"atomize:{memory.uid}").text == (
-        "Concurrent response."
     )
 
 
@@ -556,63 +451,6 @@ def test_save_as_uses_reviewed_plan_and_exact_retry(isolated_store):
     assert provider.calls == 4
 
 
-def test_compound_response_apply_supports_in_place_and_save_as(isolated_store):
-    client, store, context, memory, provider = _client_and_context(
-        composite=True,
-        name="atomize/compound",
-    )
-    opened = client.open_atomize_analysis(context.name)
-    responded = client.update_atomize_response(
-        context.name,
-        expected_version=opened.version,
-        issue_uid=f"atomize:{memory.uid}",
-        option_uid=None,
-        comment="Use the independent-facts reading.",
-    )
-
-    in_place = client.incorporate_and_apply_atomize(
-        context.name,
-        expected_version=responded.proposal.version,
-    )
-
-    assert in_place.proposal.origin == "PROVIDER"
-    assert in_place.application.context_name == context.name
-    assert len(store.list_checkpoints(context.name)) == 1
-    assert provider.calls == 5
-
-    save_client, save_store, save_source, save_memory, save_provider = (
-        _client_and_context(
-            composite=True,
-            name="atomize/compound-save-source",
-        )
-    )
-    source_before = save_store.load_direct(save_source.name).to_dict()
-    save_opened = save_client.open_atomize_analysis(save_source.name)
-    save_planned = save_client.plan_atomize_output(
-        save_source.name,
-        expected_version=save_opened.version,
-        output_context_name="atomize/compound-save-output",
-    )
-    save_responded = save_client.update_atomize_response(
-        save_source.name,
-        expected_version=save_planned.proposal.version,
-        issue_uid=f"atomize:{save_memory.uid}",
-        option_uid=None,
-        comment="Use the independent-facts reading.",
-    )
-
-    save_as = save_client.incorporate_and_apply_atomize(
-        save_source.name,
-        expected_version=save_responded.proposal.version,
-    )
-
-    assert save_as.proposal.output_context_name == "atomize/compound-save-output"
-    assert save_as.application.context_name == "atomize/compound-save-output"
-    assert save_store.load_direct(save_source.name).to_dict() == source_before
-    assert len(save_store.list_checkpoints("atomize/compound-save-output")) == 1
-    assert save_provider.calls == 5
-
-
 def test_all_preserved_apply_still_records_deliberate_completion(
     isolated_store,
 ):
@@ -634,7 +472,6 @@ def test_open_uncertainty_is_preserved_and_audited_as_is(isolated_store):
     result = client.apply_atomize_as_is(proposal)
 
     assert proposal.issues[0].kind == "ATOMIZE_UNCERTAINTY"
-    assert proposal.issues[0].answered is False
     assert result.application_mode == "AS_IS"
     assert result.unresolved_at_apply_count == 1
     assert result.items[0].result_memory_uids == (memory.uid,)

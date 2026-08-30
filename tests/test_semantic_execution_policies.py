@@ -3,9 +3,6 @@
 from __future__ import annotations
 
 from memcommit.application.operations.atomize.domain import _atomize_execution_policy
-from memcommit.application.operations.atomize.grounding_provider import (
-    ATOMIZE_GROUNDING_EXECUTION_POLICY,
-)
 from memcommit.application.operations.compare.ledger.provider import (
     COMPARISON_EXECUTION_POLICY,
 )
@@ -57,7 +54,6 @@ def test_only_implemented_find_and_translate_policies_advertise_staging():
         HISTORY_SEARCH_EXECUTION_POLICY,
         _search_answer_execution_policy(),
         RATIONALE_EXECUTION_POLICY,
-        ATOMIZE_GROUNDING_EXECUTION_POLICY,
     )
     assert all(policy.staged_supported is False for policy in guarded)
     assert {policy.strategy for policy in guarded} == {
@@ -81,7 +77,6 @@ def test_aggregate_policies_share_provider_capacity_without_count_gates():
         HISTORY_SEARCH_EXECUTION_POLICY,
         _search_answer_execution_policy(),
         RATIONALE_EXECUTION_POLICY,
-        ATOMIZE_GROUNDING_EXECUTION_POLICY,
         SEARCH_EXECUTION_POLICY,
         TRANSLATE_EXECUTION_POLICY,
         SELECTIVE_CURATION_EXECUTION_POLICY,

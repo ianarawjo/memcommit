@@ -1,5 +1,16 @@
 # Atomize domain package design rationale
 
+## 2026-08-29 responsibility revision
+
+The structural `domain` package described below remains current. The later
+Grounding package description is retained as schema-ownership history only:
+its model package still decodes and validates persisted records, but the
+provider, runtime, application, Meld adapter, console, Python, and agent routes
+were removed. New Atomize execution cannot create or consume a Grounding turn.
+See
+[`atomize-read-only-findings-design-rationale.md`](atomize-read-only-findings-design-rationale.md)
+for the current operation boundary.
+
 ## Motivation
 
 The Atomize domain implementation had grown to 3,241 lines in one
@@ -28,7 +39,7 @@ The package `__init__.py` remains a thin compatibility facade. Existing imports
 from `memcommit.application.operations.atomize.domain` keep the same callable
 and value surface while new implementation code can import its narrow owner.
 
-## Conversational Grounding model boundary
+## Historical conversational Grounding model boundary
 
 Atomize Grounding is a separate durable dialogue contract rather than part of
 the one-shot analysis model, but its former `grounding.py` had accumulated
@@ -44,11 +55,11 @@ receipts, and aggregate validation. It is now a concept-owned package:
 - `session.py` owns lifecycle transitions, cross-record validation, accepted-
   proposal materialization, and application-state reconciliation.
 
-The dependency direction is `session -> changes -> review -> bindings`.
-`memcommit.application.operations.atomize.grounding` remains an explicit
-compatibility facade, so persisted schemas and existing caller imports do not
-change. The split deliberately keeps Context mutation in `grounding_runtime.py`;
-the model package remains non-mutating and can only prepare an exact change set.
+The dependency direction remains `session -> changes -> review -> bindings` for
+legacy record decoding. `memcommit.application.operations.atomize.grounding`
+is the schema facade used by Store history and restoration. The former Context
+mutation owner, `grounding_runtime.py`, no longer exists; no active caller may
+prepare or apply a new Grounding change set.
 
 ## Invariants
 

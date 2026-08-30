@@ -15,18 +15,6 @@ MODULE_PAIRS = (
         "memcommit.application.operations.atomize.workbench",
     ),
     (
-        "memcommit.atomize_grounding",
-        "memcommit.application.operations.atomize.grounding",
-    ),
-    (
-        "memcommit.atomize_grounding_provider",
-        "memcommit.application.operations.atomize.grounding_provider",
-    ),
-    (
-        "memcommit.atomize_meld_adapter",
-        "memcommit.application.operations.atomize.grounding_meld_adapter",
-    ),
-    (
         "memcommit.atomize_normal_form",
         "memcommit.application.operations.atomize.normal_form",
     ),
@@ -84,24 +72,19 @@ def test_atomize_support_imports_follow_the_canonical_dependency_direction() -> 
 def test_atomize_production_consumers_use_canonical_support_modules() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/atomize.py",
-        "src/memcommit/adapters/python_api/_operations/atomize_grounding.py",
         "src/memcommit/application/operations/atomize/workflow.py",
         "src/memcommit/adapters/console/commands/atomize/command.py",
         "src/memcommit/adapters/console/commands/atomize/impact.py",
         "src/memcommit/adapters/console/commands/atomize/review.py",
-        "src/memcommit/adapters/console/commands/atomize/grounding.py",
         "src/memcommit/adapters/console/commands/atomize/sessions.py",
         "src/memcommit/adapters/console/commands/impact/command.py",
         "src/memcommit/adapters/console/commands/review/command.py",
         "src/memcommit/adapters/console/commands/atomize/render.py",
-        "src/memcommit/adapters/console/commands/atomize/grounding.py",
         "src/memcommit/adapters/console/commands/atomize/workbench/adapter.py",
         "src/memcommit/adapters/console/commands/atomize/workbench/screen.py",
         "src/memcommit/application/operations/atomize/analysis_application.py",
         "src/memcommit/application/operations/atomize/analysis_runtime.py",
         "src/memcommit/application/operations/atomize/application.py",
-        "src/memcommit/application/operations/atomize/grounding_application.py",
-        "src/memcommit/application/operations/atomize/grounding_runtime.py",
         "src/memcommit/application/operations/atomize/runtime.py",
         "src/memcommit/application/capabilities/ops.py",
         "src/memcommit/application/capabilities/retained_history/memory_history_reconstruction/retained_record_verification",

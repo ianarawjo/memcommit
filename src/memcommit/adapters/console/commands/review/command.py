@@ -345,14 +345,16 @@ def cmd(
                     "Atomize Review is Context-bound; use --context instead of "
                     "--session."
                 )
+            if replace_review or respond_to is not None or response is not None:
+                raise ReviewError(
+                    "Atomize Review is read-only and does not accept --new, "
+                    "--respond-to, or --response."
+                )
             _run_atomize_workbench(
                 store=store,
                 context_name=canonical_context_name,
                 current_name=context_snapshot.current_name,
                 snapshot=snapshot,
-                replace=replace_review,
-                respond_to=respond_to,
-                response=response,
                 expected_analysis_uid=(
                     selected_session_uid if launcher_receipt is not None else None
                 ),
@@ -386,14 +388,16 @@ def cmd(
                 )
             session = store.load_review_session()
             if session is None:
+                if respond_to is not None or response is not None:
+                    raise ReviewError(
+                        "No active response-capable Review exists; Atomize "
+                        "Review is read-only."
+                    )
                 _run_atomize_workbench(
                     store=store,
                     context_name=canonical_context_name,
                     current_name=context_snapshot.current_name,
                     snapshot=snapshot,
-                    replace=False,
-                    respond_to=respond_to,
-                    response=response,
                 )
                 return
             if (

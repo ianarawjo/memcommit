@@ -1,87 +1,75 @@
 # Atomize console presentation ownership
 
-## Problem
-
-Atomize's analysis and Apply semantics have typed application/runtime entry
-points, while every current presentation consumer is a console command. The
-plain receipt, Grounding transcript, and saved-session workbench had been split
-between `adapters.interfaces.cli`, `adapters.interfaces.tui.operations`, and
-thin modules under `commands.atomize`. That split obscured the single console
-owner and required compatibility facades even though there was only one live
-implementation of each presentation.
+Last reviewed: 2026-08-29.
 
 ## Selected boundary
 
-The dependency direction is now:
+Atomize's console adapter owns three distinct projections over the same typed
+operation evidence:
 
 ```text
-atomize domain/application/runtime
-              ↑
-interfaces/tui/workbenches/{review,result,resolution}
-              ↑
-commands/atomize/{render,grounding,workbench}
-              ↑
-commands/atomize/command and commands/impact/command
+Atomize domain/application/runtime
+        |
+        +-- commands/atomize/render.py
+        |      analysis-only plain projection
+        +-- commands/atomize/workbench/
+        |      interactive or snapshot analysis projection
+        +-- commands/atomize/receipt.py
+               post-Apply effect and unresolved-evidence receipt
 ```
 
-- `commands/atomize/workbench/screen.py` owns the saved workbench's
-  prompt-toolkit composition and operation-specific projection.
-- `commands/atomize/workbench/adapter.py` converts a saved analysis, workbench,
-  and `MemoryStore` orientation into that screen. It may save a draft through
-  the supplied Store method, but it does not create analyses, call a provider,
-  apply Memories, or bypass the typed application boundary.
-- `interfaces/tui/workbenches/result` owns the shared read-only Result viewer
-  used by Atomize. `interfaces/tui/workbenches/review` and `resolution` own the
-  operation-neutral response and session mechanics.
-- `commands/atomize/render.py` owns plain impact and Apply-result rendering,
-  and `commands/atomize/grounding.py` owns the provider-free Grounding
-  transcript. The command owns option parsing and orchestration, then
-  delegates presentation.
+`commands/atomize/workbench/screen.py` projects the saved analysis through the
+shared Result and Resolution shells. Atomize findings are read-only: the screen
+has no choice selection, response composer, response persistence, reanalysis,
+or Grounding action. Before Apply, the operation command may use the shell for
+its own exact Output/Apply workflow; after Apply, `mem review atomize` forces
+the same evidence into a provider-free read-only view.
 
-`impact atomize` imports the Atomize workbench screen from its operation owner.
-That reuse does not make the screen operation-neutral: Impact is presenting a
-saved Atomize analysis and its Atomize-specific findings. Shared Result,
-Review, and Resolution mechanics remain under `interfaces/tui/workbenches`.
+`commands/atomize/render.py` owns only analysis text. Apply receipt rendering
+lives in `commands/atomize/receipt.py` so analysis presentation cannot silently
+acquire checkpoint or materialization semantics. The receipt receives a typed
+`AtomizeApplicationAudit`, not an unstructured count dictionary.
 
-The former Atomize-specific interface paths and
-`commands/atomize/workbench_shell.py` were removed rather than retained as
-facades. Function names, screen behavior, and persisted models remain
-unchanged, but callers must import the one command-owned implementation.
+Every unresolved receipt item uses the shared
+`terminal.components.findings.issue_one_line_presentation` component. That
+component owns the one-logical-line text and semantic token styling, while
+Atomize owns classification and projection of its audit records.
+
+There is no `commands/atomize/grounding.py`. The removed interface and facade
+paths are not compatibility shims; only legacy data models and Store handlers
+remain, as described in
+[`atomize-grounding-application-boundary-design-rationale.md`](atomize-grounding-application-boundary-design-rationale.md).
 
 ## Invariants
 
-1. Atomize workbench modules do not reach through unrelated command packages;
-   operation-neutral workbench mechanics remain shared interface modules.
-2. Moving the presenters does not change saved analysis/workbench schemas,
-   application receipts, checkpoints, Save As behavior, focus topology,
-   keyboard actions, or non-TTY snapshots.
-3. The adapter never treats screen completion as permission to mutate a
-   Context. Apply returns an operation action to `commands.atomize`, which
-   invokes the typed application/runtime use case.
-4. The Result viewer remains read-only and operation-neutral. Atomize owns only
-   its projection into the common Result model.
-5. There is one implementation path for each Atomize presenter and no
-   Atomize-specific compatibility facade that could drift from it.
+1. Presentation modules do not call the provider or mutate a Context.
+2. A read-only Review navigation turn never saves a workbench draft.
+3. The command invokes typed application/runtime use cases for Apply and Save
+   As; a screen action is not itself mutation authority.
+4. `ATOMIZE_UNCERTAINTY` is shown as `AMBIGUITY` without rewriting durable
+   analysis data.
+5. The Apply receipt prints every unresolved item, in saved order, on exactly
+   one untruncated logical line.
+6. TTY color and plain output retain identical labels, ordering, identities,
+   and issue boundaries.
+7. No Atomize presenter imports or depends on a later resolution/update
+   operation.
 
 ## Alternatives considered
 
-Keeping `interfaces/cli/atomize` and `interfaces/tui/operations/atomize` as
-canonical owners would preserve the prior import direction, but every live
-consumer is a console command and the extra boundary required Atomize-specific
-facades. Moving the workbench to an operation-neutral shared package was also
-rejected: its finding projection, destination rules, and actions remain
-Atomize-specific. The selected move co-locates presentation only; Grounding
-semantics, provider work, Store transactions, and Apply policy remain in the
-application/runtime boundary.
+Keeping Apply receipt code in the analysis renderer was rejected because the
+typed application audit and checkpoint handoff are a separate lifecycle.
+Keeping a Responses frame disabled by policy was rejected because it would
+continue to advertise response semantics that Atomize no longer owns.
+
+A structured resolution handoff was not added. The receipt is durable evidence
+without defining the schema or lifecycle of a future consumer.
 
 ## Verification
 
-Boundary tests prove that the removed paths are absent, the Atomize and Impact
-commands import the command-owned presenters, and the workbench does not reach
-through unrelated commands. Atomize workbench, receipt, Grounding, Impact, Save
-As, Undo/Redo, and application-boundary suites exercise snapshot, interactive,
-application, failure, and recovery behavior. The existing ordered 180×52
-replay under
-`agent-records/docs/screenshots/atomize-apply-boundaries-20260815/` imports the
-new screen path; no visible interaction changed, so its captured frames remain
-valid.
+Boundary tests assert the removed Grounding presenter is absent and that the
+Atomize command delegates to its workbench and receipt owners. Snapshot and PTY
+tests prove the analysis/detail/review surfaces have no Responses frame.
+Receipt tests prove all unresolved audit items use the shared one-line
+presentation. The ordered 180×52 record is stored under
+`agent-records/docs/screenshots/atomize-read-only-findings-20260829/`.

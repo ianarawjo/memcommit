@@ -392,7 +392,6 @@ COMMAND_FORMS = {
         "mem atomize [target] (auto-type one Context or direct Memory)",
         "mem atomize --context [context] (compatibility alias)",
         "mem atomize --sessions (enter the interactive Atomize session launcher)",
-        'mem atomize --evaluate "[issue]" (directional atomic review)',
     ),
     "branch": (
         "mem branch (choose a local Source, parent location, and fresh target)",

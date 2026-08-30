@@ -209,7 +209,8 @@ def test_bare_tty_review_passes_exact_atomize_analysis_identity(
     assert result.exit_code == 0, result.output
     assert captured["expected_analysis_uid"] == analysis_uid
     assert captured["context_name"] is None
-    assert captured["replace"] is False
+    assert captured["snapshot"] is False
+    assert "replace" not in captured
 
 
 def test_empty_or_cancelled_tty_launcher_does_not_fall_back_to_atomize(

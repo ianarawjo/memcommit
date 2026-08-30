@@ -40,7 +40,7 @@ def test_primary_atomize_consumers_use_the_operation_owner() -> None:
         assert "memcommit.atomize_runtime" not in source
 
 
-def test_analysis_and_grounding_remain_separate_atomize_slices() -> None:
+def test_primary_atomize_has_no_grounding_execution_dependency() -> None:
     primary = "\n".join(
         (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         for relative_path in (
@@ -52,12 +52,10 @@ def test_analysis_and_grounding_remain_separate_atomize_slices() -> None:
         REPOSITORY_ROOT
         / "src/memcommit/application/operations/atomize/analysis_application.py"
     ).read_text(encoding="utf-8")
-    grounding_application = (
-        REPOSITORY_ROOT
-        / "src/memcommit/application/operations/atomize/grounding_application.py"
-    ).read_text(encoding="utf-8")
-
     assert "memcommit.atomize_analysis_application" not in primary
     assert "memcommit.atomize_grounding_application" not in primary
     assert "class AtomizeAnalysisOpenRequest" in analysis_application
-    assert "class GroundingAcceptRequest" in grounding_application
+    assert not (
+        REPOSITORY_ROOT
+        / "src/memcommit/application/operations/atomize/grounding_application.py"
+    ).exists()

@@ -517,15 +517,15 @@ class TestHelp:
         ]
         assert command_names == sorted(command_names, key=str.casefold)
 
-    def test_meld_help_distinguishes_atomic_and_context_entry_points(self):
+    def test_atomize_help_does_not_route_issue_resolution_into_meld(self):
         atomize = invoke("atomize", "--help")
         meld = invoke("meld", "--help")
 
         assert atomize.exit_code == 0
         atomize_help = " ".join(atomize.output.split())
-        assert "--evaluate ISSUE" in atomize_help
-        assert "issue-scoped directional" in atomize_help
-        assert "informally, atomic" in atomize_help
+        assert "--evaluate" not in atomize_help
+        assert "issue-scoped directional" not in atomize_help
+        assert "independently reviewable Memories" in atomize_help
 
         assert meld.exit_code == 0
         meld_help = " ".join(meld.output.split())

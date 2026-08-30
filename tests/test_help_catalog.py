@@ -846,14 +846,13 @@ def test_search_and_explain_copy_distinguishes_exact_and_llm_based_routes():
 
 
 def test_semantic_transform_and_review_details_preserve_reviewed_boundaries():
-    [atomize_routes] = operation_help("atomize").details
+    atomize = operation_help("atomize")
     [translation_routes] = operation_help("translate").details
     [impact_invocation] = operation_help("impact").details
     [fit_verdicts] = operation_help("fit").details
     [conformance_comparison] = operation_help("check-conformance").details
 
-    assert atomize_routes.title == "ATOMIZE ROUTES"
-    assert "directional Meld" in atomize_routes.options[1].guidance
+    assert atomize.details == ()
     assert translation_routes.title == "MATERIALIZATION ROUTES"
     assert [option.label for option in translation_routes.options] == [
         "VIEW",

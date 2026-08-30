@@ -13,7 +13,6 @@ from memcommit.adapters.python_api import (
     AtomizeExecutionError,
     AtomizeInputError,
     AtomizeProviderFailure,
-    AtomizeReviewedApplyResult,
     AtomizeSaveAsApplyResult,
     AtomizeStorageError,
     AtomizeStructuralApplyResult,
@@ -33,21 +32,15 @@ ATOMIZE_AGENT_CONTRACT_VERSION = 1
 ATOMIZE_AGENT_TOOL_NAME = "memcommit_atomize"
 AtomizeAgentKind = Literal[
     "open",
-    "respond",
     "plan_output",
-    "reanalyze",
     "apply_as_is",
     "save_as",
-    "incorporate_and_apply",
 ]
 _KINDS = {
     "open",
-    "respond",
     "plan_output",
-    "reanalyze",
     "apply_as_is",
     "save_as",
-    "incorporate_and_apply",
 }
 
 
@@ -70,8 +63,7 @@ def _kind(value: Mapping[str, object]) -> AtomizeAgentKind:
     kind = value.get("kind")
     if kind not in _KINDS:
         raise AgentRequestError(
-            "kind must be one of: open, respond, plan_output, reanalyze, "
-            "apply_as_is, save_as, incorporate_and_apply."
+            "kind must be one of: open, plan_output, apply_as_is, save_as."
         )
     return kind  # type: ignore[return-value]
 
@@ -93,14 +85,6 @@ def _expected_version(value: object) -> str:
             "expected_version must be a 64-character lowercase hexadecimal token."
         )
     return version
-
-
-def _comment(value: object) -> str:
-    if not isinstance(value, str):
-        raise AgentRequestError("comment must be text, including empty text to clear.")
-    if len(value) > 20_000:
-        raise AgentRequestError("comment exceeds the 20000-character limit.")
-    return value
 
 
 def _versioned_arguments(value: Mapping[str, object]) -> dict[str, object]:
@@ -134,30 +118,6 @@ def _parse_request(payload: object) -> tuple[AtomizeAgentKind, dict[str, object]
                 field="memory_selector",
                 optional=True,
             ),
-        }
-    if kind == "respond":
-        exact_fields(
-            value,
-            required={
-                "version",
-                "kind",
-                "expected_version",
-                "issue_uid",
-                "option_uid",
-                "comment",
-            },
-            optional=frozenset({"context_name"}),
-            label="Atomize respond request",
-        )
-        return kind, {
-            **_versioned_arguments(value),
-            "issue_uid": text_value(value["issue_uid"], field="issue_uid"),
-            "option_uid": text_value(
-                value["option_uid"],
-                field="option_uid",
-                optional=True,
-            ),
-            "comment": _comment(value["comment"]),
         }
     if kind == "plan_output":
         exact_fields(
@@ -263,36 +223,19 @@ def _analysis_result(
                     }
                     for reading in issue.readings
                 ],
-                "answered": issue.answered,
-                "selected_reading_uid": issue.selected_reading_uid,
-                "response_text": issue.response_text,
             }
             for issue in result.issues
         ],
         "workbench_uid": result.workbench_uid,
         "output_context_name": result.output_context_name,
-        "review_edit_allowed": result.review_edit_allowed,
-        "response_reanalysis_allowed": result.response_reanalysis_allowed,
         "application_completed": result.application_completed,
         "in_place_apply_allowed": result.in_place_apply_allowed,
     }
     projected["actions"] = {
-        "respond": {
-            "allowed": result.review_edit_allowed,
-            "expected_version": result.version,
-            "provider_used": False,
-            "effect": "DERIVED_SESSION",
-        },
         "plan_output": {
-            "allowed": result.review_edit_allowed,
+            "allowed": not result.application_completed,
             "expected_version": result.version,
             "provider_used": False,
-            "effect": "DERIVED_SESSION",
-        },
-        "reanalyze": {
-            "allowed": result.response_reanalysis_allowed,
-            "expected_version": result.version,
-            "provider_used": True,
             "effect": "DERIVED_SESSION",
         },
         "apply_as_is": {
@@ -307,12 +250,6 @@ def _analysis_result(
             "allowed": (
                 not result.in_place_apply_allowed and not result.application_completed
             ),
-            "expected_version": result.version,
-            "provider_used": True,
-            "effect": "CONTEXT_CHECKPOINT",
-        },
-        "incorporate_and_apply": {
-            "allowed": result.response_reanalysis_allowed,
             "expected_version": result.version,
             "provider_used": True,
             "effect": "CONTEXT_CHECKPOINT",
@@ -424,30 +361,16 @@ class AtomizeAgentAdapter:
                 projected = _analysis_result(
                     self._client.open_atomize_analysis(**arguments)
                 )
-            elif kind == "respond":
-                update = self._client.update_atomize_response(**arguments)
-                projected = {
-                    "update_kind": update.kind,
-                    "changed": update.changed,
-                    "proposal": _analysis_result(
-                        update.proposal,
-                        effect="DERIVED_SESSION" if update.changed else "NONE",
-                    ),
-                }
             elif kind == "plan_output":
                 update = self._client.plan_atomize_output(**arguments)
                 projected = {
-                    "update_kind": update.kind,
+                    "update_kind": "OUTPUT",
                     "changed": update.changed,
                     "proposal": _analysis_result(
                         update.proposal,
                         effect="DERIVED_SESSION" if update.changed else "NONE",
                     ),
                 }
-            elif kind == "reanalyze":
-                projected = _analysis_result(
-                    self._client.reanalyze_atomize_responses(**arguments)
-                )
             elif kind == "apply_as_is":
                 projected = _apply_result(
                     self._client.apply_saved_atomize_as_is(**arguments)
@@ -456,16 +379,6 @@ class AtomizeAgentAdapter:
                 projected = _apply_result(
                     self._client.save_saved_atomize_as(**arguments)
                 )
-            else:
-                reviewed: AtomizeReviewedApplyResult = (
-                    self._client.incorporate_and_apply_atomize(**arguments)
-                )
-                projected = {
-                    "proposal": _analysis_result(reviewed.proposal),
-                    "application": _apply_result(reviewed.application),
-                    "provider_used": True,
-                    "effect": "CONTEXT_CHECKPOINT",
-                }
         except AtomizeError as error:
             for error_type, code, message, retryable in _PUBLIC_ERRORS:
                 if isinstance(error, error_type):
@@ -541,21 +454,6 @@ def atomize_agent_tool_schema() -> JsonObject:
             "use_prepared": {"type": "boolean", "default": True},
         },
     }
-    respond = base("respond")
-    respond["required"] = [
-        "version",
-        "kind",
-        "expected_version",
-        "issue_uid",
-        "option_uid",
-        "comment",
-    ]
-    respond["properties"] = {
-        **respond["properties"],
-        "issue_uid": text,
-        "option_uid": nullable_text,
-        "comment": {"type": "string", "maxLength": 20_000},
-    }
     plan_output = base("plan_output")
     plan_output["required"] = [
         "version",
@@ -570,23 +468,19 @@ def atomize_agent_tool_schema() -> JsonObject:
     return {
         "name": ATOMIZE_AGENT_TOOL_NAME,
         "description": (
-            "Open a whole-Context or focused structural Atomize review; edit "
-            "exact responses and Output plans; incorporate unary responses; "
-            "then apply in place or publish the reviewed require-new Save As. "
-            "Every saved action is version-bound. Reanalysis uses the provider; "
-            "review edits do not, while final application runs normal-form "
+            "Open a whole-Context or focused structural Atomize analysis, "
+            "plan its Output, then apply in place or publish a require-new "
+            "Save As. Findings are read-only receipt evidence; every saved "
+            "action is version-bound and final application runs normal-form "
             "verification before publication."
         ),
         "parameters": {
             "type": "object",
             "oneOf": [
                 open_request,
-                respond,
                 plan_output,
-                base("reanalyze"),
                 base("apply_as_is"),
                 base("save_as"),
-                base("incorporate_and_apply"),
             ],
         },
     }

@@ -21,7 +21,7 @@ from memcommit.application.operations.atomize.workbench import (
     project_atomize_workbench_findings,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.core.context import AutoCheckpoint, Memory
+from memcommit.core.context import AutoCheckpoint
 from memcommit.persistence.store import MemoryStore
 
 
@@ -204,12 +204,12 @@ def _stage_operation_response(
     return workbench
 
 
-def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
+def test_atomize_findings_are_read_only_until_apply_completes(
     isolated_store,
     monkeypatch,
 ):
     store = MemoryStore()
-    ctx, memory = _init_uncertain_context(store)
+    ctx, _memory = _init_uncertain_context(store)
     provider = ReviewedAtomizeProvider()
     monkeypatch.setattr(
         "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
@@ -219,180 +219,26 @@ def test_atomize_review_comment_is_persisted_reanalyzed_and_applied(
         "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
-    context_before = store._context_file(ctx.name).read_bytes()
-    checkpoints_before = store.list_checkpoints(ctx.name)
 
     preview = runner.invoke(app, ["impact", "atomize"])
+    incomplete = runner.invoke(app, ["review", "atomize", "--snapshot"])
+    applied = runner.invoke(app, ["atomize", "--save"])
     review = runner.invoke(app, ["review", "atomize", "--snapshot"])
 
     assert preview.exit_code == 0, preview.output
-    assert "UNCERTAIN" in preview.output
-    assert "ISSUES" in preview.output
-    assert "ATOMIZE UNCERTAINTY" in preview.output
-    assert review.exit_code == 1, review.output
-    assert "execution is not complete" in review.output
+    assert "ATOMIZE FINDINGS" in preview.output
+    assert "AMBIGUITY" in preview.output
+    assert "RESPONSES" not in preview.output
+    assert incomplete.exit_code == 1
+    assert "execution is not complete" in incomplete.output
+    assert applied.exit_code == 0, applied.output
+    assert "UNRESOLVED ISSUES · 1 · APPLIED AS-IS" in applied.output
+    assert review.exit_code == 0, review.output
+    assert "APPLIED ANALYSIS" in review.output
+    assert "RESPONSES" not in review.output
     assert len(provider.payloads) == 1
 
-    comment = (
-        "'the same NFC' means the staff-door NFC credential."
-    )
-    source_analysis = store.load_atomize_analysis(ctx.uid)
-    assert source_analysis is not None
-    saved_workbench = _stage_operation_response(
-        store,
-        source_analysis,
-        memory.uid,
-        comment,
-    )
-    assert saved_workbench.answered_count == 1
 
-    refused = runner.invoke(app, ["atomize", "--save"])
-    assert refused.exit_code == 1
-    assert "workbench responses have not been incorporated" in refused.output
-    assert store._context_file(ctx.name).read_bytes() == context_before
-    assert store.list_checkpoints(ctx.name) == checkpoints_before
-
-    reanalyzed = runner.invoke(
-        app,
-        ["impact", "atomize", "--with-review"],
-    )
-    assert reanalyzed.exit_code == 0, reanalyzed.output
-    assert "Incorporated 1 reviewed declared frame" in reanalyzed.output
-    assert len(provider.payloads) == 2
-    assert (
-        provider.payloads[-1]["context"]["declared_frame"]
-        == "PER_MEMORY_USER_REVIEW"
-    )
-    assert provider.payloads[-1]["memories"][0]["declared_frame"] == comment
-    framed_examples = {
-        case["id"]: case
-        for case in provider.payloads[-1]["calibration_cases"]
-        if case["declared_frame"] is not None
-    }
-    assert "declared-frame-grounds-shared-scope" in framed_examples
-    assert "해당 기간은" in framed_examples[
-        "declared-frame-grounds-shared-scope"
-    ]["declared_frame"]
-
-    analysis = store.load_atomize_analysis(ctx.uid)
-    assert analysis is not None
-    assert analysis.source_review_uid == saved_workbench.uid
-    assert len(analysis.declared_frames) == 1
-    assert analysis.declared_frames[0].text == comment
-    assert analysis.declared_frames[0].review_item_uid == (
-        f"atomize:{memory.uid}"
-    )
-    assert analysis.declared_frames[0].source_analysis_uid == (
-        source_analysis.uid
-    )
-    assert analysis.items[0].classification == "COMPOSITE"
-    assert analysis.items[0].children[0].source_spans == (
-        "staff can enter",
-    )
-    assert analysis.items[0].children[0].frame_spans == (
-        "staff-door NFC credential",
-    )
-
-    # Reanalysis creates a fresh workbench for the new immutable analysis.
-    # Both entry points resume it without another provider call.
-    resumed_review = runner.invoke(app, ["review", "atomize", "--snapshot"])
-    assert resumed_review.exit_code == 1, resumed_review.output
-    assert "execution is not complete" in resumed_review.output
-    resumed_preview = runner.invoke(app, ["impact", "atomize"])
-    assert resumed_preview.exit_code == 0, resumed_preview.output
-    assert "Resumed saved analysis" in resumed_preview.output
-    assert len(provider.payloads) == 2
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command._interactive_terminal",
-        lambda: True,
-    )
-    applied = runner.invoke(
-        app,
-        ["atomize", "--save-as", "atomize/draft"],
-        input="e\natomize/resolved\ny\n",
-    )
-    assert applied.exit_code == 0, applied.output
-    assert "SAVE LOCATION" in applied.output
-    assert store.current_context_name() == "atomize/resolved"
-    assert not store.context_exists("atomize/draft")
-    assert store._context_file(ctx.name).read_bytes() == context_before
-    resolved = store.load_direct("atomize/resolved")
-    resolved_memories = [
-        item for item in resolved.iter_items() if isinstance(item, Memory)
-    ]
-    assert [
-        item.content for item in resolved_memories
-    ] == [
-        "Staff can enter using the staff-door NFC credential.",
-        "Students cannot enter using the staff-door NFC credential.",
-    ]
-    checkpoint = store.list_checkpoints("atomize/resolved")[0]
-    assert checkpoint["args"]["source_review_uid"] == saved_workbench.uid
-    assert checkpoint["args"]["declared_frame_count"] == 1
-    terminal_review = runner.invoke(
-        app,
-        ["review", "atomize", "--context", "atomize/resolved", "--snapshot"],
-    )
-    assert terminal_review.exit_code == 0, terminal_review.output
-    assert "APPLIED" in terminal_review.output
-
-    # A later preview replaces the latest per-Context analysis. Applied
-    # review evidence must therefore remain reconstructible from the
-    # checkpoint rather than only from that replaceable preview artifact.
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
-        AllAtomicProvider,
-    )
-    later_preview = runner.invoke(
-        app,
-        ["impact", "atomize", "--refresh"],
-    )
-    assert later_preview.exit_code == 0, later_preview.output
-
-    trace = runner.invoke(
-        app,
-        [
-            "trace",
-            f"{ctx.name}:{memory.uid[:8]}",
-            "--verbose",
-            "--plain",
-        ],
-    )
-    assert trace.exit_code == 0, trace.output
-    assert "Reviewed declared context/comment" in trace.output
-    assert comment in trace.output
-    assert "Requested because:" in trace.output
-    assert "Source spans:" in trace.output
-    assert "Declared-frame spans: staff-door NFC credential" in trace.output
-
-    rationale = runner.invoke(
-        app,
-        [
-            "rationale",
-            f"atomize/resolved:{resolved_memories[0].uid[:8]}",
-        ],
-    )
-    rationale_json = runner.invoke(
-        app,
-        [
-            "rationale",
-            f"atomize/resolved:{resolved_memories[0].uid[:8]}",
-            "--json",
-        ],
-    )
-    assert rationale.exit_code == 0, rationale.output
-    assert "PROVENANCE" in rationale.output
-    assert "Reviewed declared context/comment" not in rationale.output
-    assert "Reviewer response:" not in rationale.output
-    assert rationale_json.exit_code == 0, rationale_json.output
-    rationale_payload = json.loads(rationale_json.output)
-    recorded = rationale_payload["recorded_reason_events"][0]
-    assert recorded["declared_frame"] == comment
-    assert recorded["uncertainty_reason"]
-    assert recorded["child_evidence"][0]["frame_spans"] == [
-        "staff-door NFC credential"
-    ]
 
 
 def test_reviewed_frame_may_not_replace_source_memory_evidence():
@@ -476,27 +322,6 @@ def test_legacy_atomize_analysis_loads_with_empty_review_provenance(
     assert restored.to_dict()["schema_version"] == 4
 
 
-def test_atomize_with_review_requires_a_nonempty_comment_without_provider_call(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    _init_uncertain_context(store)
-    provider = ReviewedAtomizeProvider()
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
-        lambda: provider,
-    )
-
-    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    refused = runner.invoke(
-        app,
-        ["impact", "atomize", "--with-review"],
-    )
-
-    assert refused.exit_code == 1
-    assert "No current atomize workbench response matches" in refused.output
-    assert len(provider.payloads) == 1
 
 
 def test_plain_impact_resumes_without_incorporating_saved_comments(
@@ -640,7 +465,7 @@ def test_atomize_analysis_rejects_forged_frame_content_and_positions(
     monkeypatch,
 ):
     store = MemoryStore()
-    _, memory = _init_uncertain_context(store)
+    _, _memory = _init_uncertain_context(store)
     provider = ReviewedAtomizeProvider()
     monkeypatch.setattr(
         "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
@@ -660,35 +485,6 @@ def test_atomize_analysis_rejects_forged_frame_content_and_positions(
     with pytest.raises(AtomizeImpactError):
         AtomizeAnalysisSession.from_dict(forged_position)
 
-    _stage_operation_response(
-        store,
-        analysis,
-        memory.uid,
-        "'the same NFC' means the staff-door NFC credential.",
-    )
-    assert runner.invoke(
-        app,
-        ["impact", "atomize", "--with-review"],
-    ).exit_code == 0
-    reviewed = store.load_atomize_analysis(store.load_current_direct().uid)
-    assert reviewed is not None
-    forged_review_target = reviewed.to_dict()
-    forged_review_target["declared_frames"][0]["review_item_uid"] = ""
-    with pytest.raises(AtomizeImpactError):
-        AtomizeAnalysisSession.from_dict(forged_review_target)
-
-    forged_legacy_ruleset = reviewed.to_dict()
-    forged_legacy_ruleset["ruleset_version"] = "atomize-v1-draft"
-    with pytest.raises(AtomizeImpactError):
-        AtomizeAnalysisSession.from_dict(forged_legacy_ruleset)
-
-    forged_self_origin = reviewed.to_dict()
-    forged_self_origin["declared_frames"][0]["source_analysis_uid"] = (
-        reviewed.uid
-    )
-    with pytest.raises(AtomizeImpactError):
-        AtomizeAnalysisSession.from_dict(forged_self_origin)
-
     forged_legacy_schema = analysis.to_dict()
     forged_legacy_schema["schema_version"] = 1
     forged_legacy_schema.pop("declared_frames")
@@ -696,212 +492,3 @@ def test_atomize_analysis_rejects_forged_frame_content_and_positions(
     forged_legacy_schema.pop("source_review_digest")
     with pytest.raises(AtomizeImpactError):
         AtomizeAnalysisSession.from_dict(forged_legacy_schema)
-
-
-def test_multiple_atomize_comments_share_one_source_analysis_and_stay_per_memory(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx = ops.init("atomize/multiple-comments")
-    # A valid UUID prefix may contain only decimal digits. It must still be
-    # resolved as a source prefix rather than an out-of-range issue ordinal.
-    first = Memory(
-        uid="12345678-1234-4234-8234-123456789abc",
-        content="Use that door for staff.",
-    )
-    ctx.add(first)
-    second = ops.add(ctx, "Use that entrance after hours.")
-    store.save(
-        ctx,
-        AutoCheckpoint(
-            command="init",
-            args={"name": ctx.name},
-            description=f"Initialized context '{ctx.name}'",
-        ),
-    )
-    store.set_current(ctx.name)
-    calls: list[dict] = []
-
-    class Provider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            if operation == "find_duplicates":
-                return json.dumps({"findings": []})
-            payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
-            validating = payload.get("phase") == "normal_form_validation"
-            if not validating:
-                calls.append(payload)
-            reviewed = all(
-                memory["declared_frame"] is not None
-                for memory in payload["memories"]
-            ) or validating
-            return json.dumps(
-                _aggregate_response(payload, {
-                    "items": [
-                        {
-                            "candidate_id": memory["candidate_id"],
-                            "classification": (
-                                "ATOMIC" if reviewed else "UNCERTAIN"
-                            ),
-                            "reason_codes": [
-                                (
-                                    "A01_ONE_FOCUS"
-                                    if reviewed
-                                    else "A06_NO_HIDDEN_CONTEXT"
-                                )
-                            ],
-                            "children": [],
-                            "reason": (
-                                "The reviewed frame resolves the referent."
-                                if reviewed
-                                else "The referent has no declared antecedent."
-                            ),
-                        }
-                        for memory in payload["memories"]
-                    ]
-                })
-            )
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
-        Provider,
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
-        Provider,
-    )
-    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    source_analysis = store.load_atomize_analysis(ctx.uid)
-    assert source_analysis is not None
-    comments = {
-        first.uid: "'that door' means the staff entrance.",
-        second.uid: "'that entrance' means the main entrance.",
-    }
-    for memory_uid, comment in comments.items():
-        _stage_operation_response(
-            store,
-            source_analysis,
-            memory_uid,
-            comment,
-        )
-
-    reanalyzed = runner.invoke(app, ["impact", "atomize", "--with-review"])
-    assert reanalyzed.exit_code == 0, reanalyzed.output
-    analysis = store.load_atomize_analysis(ctx.uid)
-    assert analysis is not None
-    assert len(analysis.declared_frames) == 2
-    assert {
-        frame.memory_uid: frame.text
-        for frame in analysis.declared_frames
-    } == comments
-    assert {
-        frame.source_analysis_uid
-        for frame in analysis.declared_frames
-    } == {source_analysis.uid}
-
-    forged_mixed_origin = analysis.to_dict()
-    forged_mixed_origin["declared_frames"][1]["source_analysis_uid"] = (
-        "10000000-0000-4000-8000-000000000001"
-    )
-    with pytest.raises(AtomizeImpactError):
-        AtomizeAnalysisSession.from_dict(forged_mixed_origin)
-
-    applied = runner.invoke(app, ["atomize", "--save"])
-    assert applied.exit_code == 0, applied.output
-    checkpoint = next(
-        entry
-        for entry in store.list_checkpoints(ctx.name)
-        if entry["command"] == "atomize"
-    )
-    evidence_by_source = {
-        change["source_uids"][0]: change["review_evidence"]["text"]
-        for change in checkpoint["args"]["trace"]["changes"]
-    }
-    assert evidence_by_source == comments
-    assert len(calls) == 2
-
-
-def test_partial_atomize_review_isolated_to_answered_memory(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx = ops.init("atomize/partial-comments")
-    first = ops.add(ctx, "Use that door for staff.")
-    second = ops.add(ctx, "Use that entrance after hours.")
-    store.save(ctx)
-    store.set_current(ctx.name)
-    calls: list[dict] = []
-
-    class Provider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
-            calls.append(payload)
-            return json.dumps(
-                _aggregate_response(payload, {
-                    "items": [
-                        {
-                            "candidate_id": memory["candidate_id"],
-                            "classification": (
-                                "ATOMIC"
-                                if memory["declared_frame"] is not None
-                                else "UNCERTAIN"
-                            ),
-                            "reason_codes": [
-                                (
-                                    "A01_ONE_FOCUS"
-                                    if memory["declared_frame"] is not None
-                                    else "A06_NO_HIDDEN_CONTEXT"
-                                )
-                            ],
-                            "children": [],
-                            "reason": (
-                                "The local frame resolves this referent."
-                                if memory["declared_frame"] is not None
-                                else "This referent remains unresolved."
-                            ),
-                        }
-                        for memory in payload["memories"]
-                    ]
-                })
-            )
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
-        Provider,
-    )
-    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    source_analysis = store.load_atomize_analysis(ctx.uid)
-    assert source_analysis is not None
-    comment = "'that door' means the staff entrance."
-    _stage_operation_response(
-        store,
-        source_analysis,
-        first.uid,
-        comment,
-    )
-
-    reanalyzed = runner.invoke(app, ["impact", "atomize", "--with-review"])
-
-    assert reanalyzed.exit_code == 0, reanalyzed.output
-    assert [
-        memory["candidate_id"]
-        for memory in calls[-1]["memories"]
-    ] == ["m000001", "m000002"]
-    assert calls[-1]["memories"][0]["declared_frame"] == comment
-    assert calls[-1]["memories"][1]["declared_frame"] is None
-    analysis = store.load_atomize_analysis(ctx.uid)
-    assert analysis is not None
-    assert [item.classification for item in analysis.items] == [
-        "ATOMIC",
-        "UNCERTAIN",
-    ]
-    assert [frame.memory_uid for frame in analysis.declared_frames] == [
-        first.uid
-    ]
-    assert analysis.declared_frames[0].source_analysis_uid == (
-        source_analysis.uid
-    )
-    assert second.uid not in {
-        frame.memory_uid for frame in analysis.declared_frames
-    }

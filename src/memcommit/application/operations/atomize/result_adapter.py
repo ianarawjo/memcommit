@@ -1,7 +1,7 @@
 """Operation-owned projection for the shared semantic result workbench.
 
 Atomize remains authoritative for classifications, quality findings, source
-grounding, persistence, and application.  This adapter only translates one
+linkage, persistence, and application.  This adapter only translates one
 already validated analysis into the operation-neutral inspection contract.
 It never calls a provider and never mutates either the analysis or a Context.
 """

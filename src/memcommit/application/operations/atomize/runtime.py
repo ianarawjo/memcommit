@@ -24,13 +24,11 @@ from memcommit.application.operations.atomize.application import (
     AtomizePersistedApplyRequest,
     AtomizePersistedApplyResult,
     AtomizeOutputPlanRequest,
-    AtomizeResponseUpdateRequest,
     AtomizeSaveAsRequest,
     AtomizeSaveAsResult,
     AtomizeSessionSnapshot,
     AtomizeWorkbenchUpdateResult,
     run_atomize_output_plan_update,
-    run_atomize_response_update,
     run_atomize_session_apply,
     run_atomize_save_as,
 )
@@ -1125,19 +1123,6 @@ def capture_current_atomize_session_snapshot_at_version(
             "The accepted Atomize version changed. Reopen the review."
         )
     return snapshot
-
-
-def execute_atomize_response_update(
-    request: AtomizeResponseUpdateRequest,
-    *,
-    store: MemoryStore,
-) -> AtomizeWorkbenchUpdateResult:
-    """Persist one exact response update through the production repository."""
-
-    return run_atomize_response_update(
-        request,
-        repository=MemoryStoreAtomizeSessionRepository(store),
-    )
 
 
 def execute_atomize_output_plan_update(

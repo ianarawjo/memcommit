@@ -211,7 +211,6 @@ def test_schema_is_json_safe_and_bounds_describe_names_to_the_catalog():
         "invocation",
         "management-actions",
         "materialization-routes",
-        "operation-routes",
         "parent-contexts",
         "partial-overlap",
         "query-only-access",
