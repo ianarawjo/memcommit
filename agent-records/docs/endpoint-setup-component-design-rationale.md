@@ -76,8 +76,9 @@ plans enter their deterministic Resolution workbench instead.
 
 ## Dependency boundary
 
-The Profile-readable Context catalog is operation-neutral targeting logic, so
-its implementation lives in `context_targeting/readable_catalog.py`.
+The Profile-readable Context catalog is shared authority-aware application
+logic, so its implementation lives in
+`application/capabilities/authority/readable_contexts.py`.
 `commands/shared/readable_context_catalog.py` remains a compatibility import for
 unmigrated command adapters, while new internal code imports the owning module
 directly.

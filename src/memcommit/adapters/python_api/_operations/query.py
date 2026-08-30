@@ -23,7 +23,7 @@ from memcommit.adapters.python_api.query import (
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.core.context import QueryContextRef
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.core.context_targeting.readable_catalog import (
+from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.application.operations.search.answer_dialogue import (

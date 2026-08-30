@@ -20,7 +20,7 @@ import threading
 import time
 
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
-from memcommit.core.context_targeting.readable_catalog import (
+from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.configuration.config import Config

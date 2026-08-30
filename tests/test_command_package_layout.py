@@ -47,6 +47,7 @@ def test_multi_command_mechanisms_are_console_siblings() -> None:
         if entry["role"]
         in {
             "shared-command-mechanism",
+            "shared-application-capability",
             "shared-context-targeting",
             "shared-terminal-component",
         }
@@ -60,6 +61,7 @@ def test_multi_command_mechanisms_are_console_siblings() -> None:
             (
                 "memcommit.adapters.console.coordination.",
                 "memcommit.adapters.console.terminal.components.",
+                "memcommit.application.capabilities.",
                 "memcommit.core.context_targeting.",
             )
         )

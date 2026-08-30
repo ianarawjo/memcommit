@@ -1,5 +1,5 @@
 {
-  "active_module_count": 147,
+  "active_module_count": 144,
   "baseline_commit": "f8c54a56",
   "baseline_module_count": 153,
   "entry_package_count": 63,
@@ -23,15 +23,8 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.atomize.sessions",
+      "canonical_module": "memcommit.adapters.console.commands.atomize.records",
       "legacy_module": "memcommit.commands.atomize_sessions",
-      "owner": "atomize",
-      "public_exports": [],
-      "role": "command-owned-support"
-    },
-    {
-      "canonical_module": "memcommit.adapters.console.commands.atomize.workbench.screen",
-      "legacy_module": "memcommit.commands.atomize_workbench_shell",
       "owner": "atomize",
       "public_exports": [],
       "role": "command-owned-support"
@@ -337,13 +330,6 @@
         "cmd"
       ],
       "role": "command-entry"
-    },
-    {
-      "canonical_module": "memcommit.adapters.console.terminal.components.endpoint_setup.flows",
-      "legacy_module": "memcommit.commands.endpoint_setup_flows",
-      "owner": "terminal",
-      "public_exports": [],
-      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.terminal.components.command_editor",
@@ -799,11 +785,11 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.core.context_targeting.readable_catalog",
+      "canonical_module": "memcommit.application.capabilities.authority.readable_contexts",
       "legacy_module": "memcommit.commands.readable_context_catalog",
-      "owner": "context_targeting",
+      "owner": "authority",
       "public_exports": [],
-      "role": "shared-context-targeting"
+      "role": "shared-application-capability"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.redo.command",
@@ -962,13 +948,6 @@
         "app"
       ],
       "role": "command-entry"
-    },
-    {
-      "canonical_module": "memcommit.adapters.console.terminal.components.endpoint_setup.session",
-      "legacy_module": "memcommit.commands.session_endpoint_setup",
-      "owner": "terminal",
-      "public_exports": [],
-      "role": "shared-terminal-component"
     },
     {
       "canonical_module": "memcommit.adapters.console.terminal.components.session_help",
@@ -1166,11 +1145,14 @@
   "retired_legacy_modules": [
     "memcommit.commands.atomize_grounding",
     "memcommit.commands.atomize_render",
+    "memcommit.commands.atomize_workbench_shell",
+    "memcommit.commands.endpoint_setup_flows",
     "memcommit.commands.ground_named_shell",
     "memcommit.commands.ground_session_picker",
     "memcommit.commands.meld_target_picker",
+    "memcommit.commands.session_endpoint_setup",
     "memcommit.commands.shell_init"
   ],
   "schema_version": 1,
-  "shared_module_count": 42
+  "shared_module_count": 40
 }

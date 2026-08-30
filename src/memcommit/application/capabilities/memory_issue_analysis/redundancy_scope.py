@@ -10,7 +10,7 @@ from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
 )
 from memcommit.core.context_targeting.model import ContextScope
-from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
+from memcommit.application.capabilities.authority.readable_contexts import ReadableContextCatalog
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_combination,

@@ -16,7 +16,7 @@ from memcommit.adapters.console.terminal.components.endpoint_setup import (
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.application.operations.merge.application import MergeReach, MergeRequest
 from memcommit.application.operations.merge.runtime import MemoryStoreMergePort
-from memcommit.core.context_targeting.readable_catalog import (
+from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_context_navigation,
 )
 from memcommit.source_projection.presentation import SourceDisplayValue

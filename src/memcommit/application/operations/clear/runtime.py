@@ -12,7 +12,7 @@ from memcommit.application.capabilities.authority.context_access import (
 )
 from memcommit.core.context import AutoCheckpoint
 from memcommit.core.context_targeting.model import ContextScope
-from memcommit.core.context_targeting.readable_catalog import (
+from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_readable_context_catalog,
 )
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names

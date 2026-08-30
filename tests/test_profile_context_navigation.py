@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from memcommit.core.context_targeting.readable_catalog import (
+from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_context_navigation,
 )
 from memcommit.application.capabilities.authority.granted_context_navigation import (
@@ -35,7 +35,7 @@ def test_profile_navigation_merges_readable_and_opaque_switch_rows(monkeypatch):
         selectable_names=frozenset({"shared", "shared/child"}),
     )
     monkeypatch.setattr(
-        "memcommit.core.context_targeting.readable_catalog."
+        "memcommit.application.capabilities.authority.readable_contexts."
         "freeze_profile_readable_context_catalog",
         lambda *_args, **_kwargs: catalog,
     )

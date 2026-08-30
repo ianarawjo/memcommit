@@ -13,7 +13,7 @@ from typing import Literal
 from memcommit.application.capabilities.authority.context_access import ContextAccess, resolve_context_access
 from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.core.context_targeting.readable_catalog import (
+from memcommit.application.capabilities.authority.readable_contexts import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )

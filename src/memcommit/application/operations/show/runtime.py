@@ -32,7 +32,7 @@ from memcommit.core.context_targeting.model import (
     DirectMemoryLocator,
     ExistingContextOperand,
 )
-from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
+from memcommit.application.capabilities.authority.readable_contexts import ReadableContextCatalog
 from memcommit.core.context_targeting.resolution import (
     expand_lexical_context_names,
     parse_auto_typed_context_memory_operand,

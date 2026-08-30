@@ -8,17 +8,16 @@ This is the exact path-only classification of the formerly flat
 route closure remains solely in the operation evidence ledger.
 
 - Baseline modules: 153
-- Active canonical mappings: 147
-- Retired baseline modules: 6
+- Active canonical mappings: 144
+- Retired baseline modules: 9
 - Command entry packages: 63
-- Shared command mechanisms: 42
+- Shared command mechanisms: 40
 
 | Legacy module | Canonical module | Role | Owner |
 | --- | --- | --- | --- |
 | `memcommit.commands.add` | `memcommit.adapters.console.commands.add.command` | command-entry | `add` |
 | `memcommit.commands.atomize` | `memcommit.adapters.console.commands.atomize.command` | command-entry | `atomize` |
-| `memcommit.commands.atomize_sessions` | `memcommit.adapters.console.commands.atomize.sessions` | command-owned-support | `atomize` |
-| `memcommit.commands.atomize_workbench_shell` | `memcommit.adapters.console.commands.atomize.workbench.screen` | command-owned-support | `atomize` |
+| `memcommit.commands.atomize_sessions` | `memcommit.adapters.console.commands.atomize.records` | command-owned-support | `atomize` |
 | `memcommit.commands.audit` | `memcommit.adapters.console.commands.audit.command` | command-entry | `audit` |
 | `memcommit.commands.audit_sessions` | `memcommit.adapters.console.commands.audit.session_catalog` | command-owned-support | `audit` |
 | `memcommit.commands.background_turn` | `memcommit.adapters.console.terminal.components.background_turn` | shared-terminal-component | `terminal` |
@@ -57,7 +56,6 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.duplicate_dedup_handoff` | `memcommit.adapters.console.commands.find_redundancies.dedup_handoff` | command-owned-support | `find_redundancies` |
 | `memcommit.commands.edit` | `memcommit.adapters.console.commands.edit.command` | command-entry | `edit` |
 | `memcommit.commands.elaborate` | `memcommit.adapters.console.commands.elaborate.command` | command-entry | `elaborate` |
-| `memcommit.commands.endpoint_setup_flows` | `memcommit.adapters.console.terminal.components.endpoint_setup.flows` | shared-terminal-component | `terminal` |
 | `memcommit.commands.exact_command_review` | `memcommit.adapters.console.terminal.components.command_editor` | shared-terminal-component | `terminal` |
 | `memcommit.commands.exact_command_review_shell` | `memcommit.adapters.console.terminal.components.command_editor.approval` | shared-terminal-component | `terminal` |
 | `memcommit.commands.exact_name_dialog` | `memcommit.adapters.console.terminal.components.exact_name_dialog` | shared-terminal-component | `terminal` |
@@ -116,7 +114,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.query` | `memcommit.adapters.console.commands.query.command` | command-entry | `query` |
 | `memcommit.commands.query_workbench` | `memcommit.adapters.console.commands.query.workbench` | command-owned-support | `query` |
 | `memcommit.commands.rationale` | `memcommit.adapters.console.commands.rationale.command` | command-entry | `rationale` |
-| `memcommit.commands.readable_context_catalog` | `memcommit.core.context_targeting.readable_catalog` | shared-context-targeting | `context_targeting` |
+| `memcommit.commands.readable_context_catalog` | `memcommit.application.capabilities.authority.readable_contexts` | shared-application-capability | `authority` |
 | `memcommit.commands.redo` | `memcommit.adapters.console.commands.redo.command` | command-entry | `redo` |
 | `memcommit.commands.reference` | `memcommit.adapters.console.commands.reference.command` | command-entry | `reference` |
 | `memcommit.commands.remove` | `memcommit.adapters.console.commands.remove.command` | command-entry | `remove` |
@@ -137,7 +135,6 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.semantic_clipboard` | `memcommit.adapters.console.terminal.components.plain_text_clipboard` | shared-terminal-component | `terminal` |
 | `memcommit.commands.semantic_detail_renderer` | `memcommit.adapters.console.terminal.components.semantic_viewer.detail` | shared-terminal-component | `terminal` |
 | `memcommit.commands.semantic_eval` | `memcommit.adapters.console.commands.eval.command` | command-entry | `eval` |
-| `memcommit.commands.session_endpoint_setup` | `memcommit.adapters.console.terminal.components.endpoint_setup.session` | shared-terminal-component | `terminal` |
 | `memcommit.commands.session_help` | `memcommit.adapters.console.terminal.components.session_help` | shared-terminal-component | `terminal` |
 | `memcommit.commands.session_picker` | `memcommit.adapters.console.terminal.components.operation_launcher.session` | shared-terminal-component | `terminal` |
 | `memcommit.commands.sever` | `memcommit.adapters.console.commands.sever.command` | command-entry | `sever` |

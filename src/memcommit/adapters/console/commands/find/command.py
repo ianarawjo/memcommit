@@ -14,7 +14,7 @@ from memcommit.adapters.console.clipboard import ClipboardError, write_system_cl
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
-from memcommit.core.context_targeting.readable_catalog import (
+from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context_targeting.presets import (

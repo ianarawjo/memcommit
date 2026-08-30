@@ -15,7 +15,7 @@ from memcommit.application.capabilities.authority.context_access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
+from memcommit.application.capabilities.authority.readable_contexts import ReadableContextCatalog
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names

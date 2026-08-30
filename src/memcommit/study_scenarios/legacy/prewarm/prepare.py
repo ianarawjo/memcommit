@@ -18,7 +18,7 @@ from memcommit.application.operations.compare.ledger.provider import (
     SUPPORTED_COMPARISON_PROVIDER_CONTRACT_VERSIONS,
 )
 from memcommit.configuration.config import Config
-from memcommit.core.context_targeting.readable_catalog import (
+from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.study_scenarios.legacy.prewarm.generation.compare_exact_matrix import (

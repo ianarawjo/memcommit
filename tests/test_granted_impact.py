@@ -36,7 +36,7 @@ from memcommit.adapters.console.terminal.components.endpoint_setup.flows import 
 )
 from memcommit.adapters.console.commands.meld.endpoint_setup import MeldSetupReceipt
 from memcommit.core.context import AutoCheckpoint, Context, Memory
-from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
+from memcommit.application.capabilities.authority.readable_contexts import ReadableContextCatalog
 from memcommit.application.capabilities.authority.source_use_policy import (
     analysis_retention,
     authorize_analysis_save,

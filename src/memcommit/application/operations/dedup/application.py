@@ -13,7 +13,7 @@ from memcommit.application.capabilities.authority.context_access import (
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.core.context_targeting.model import ContextScope
-from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
+from memcommit.application.capabilities.authority.readable_contexts import ReadableContextCatalog
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,

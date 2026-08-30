@@ -1,4 +1,4 @@
-"""One frozen public Context namespace across local and granted storage."""
+"""Unify readable Contexts into one Store-like namespace."""
 
 from __future__ import annotations
 

@@ -36,6 +36,10 @@ there is intentionally no profile-wide “last Scope” preference.
 - `search.py` loads one or more searchable roots and independently controls
   embedded-Context traversal and authorized activity artifacts for Find and
   ordinary Query.
+- `application.capabilities.authority.readable_contexts` owns the Store-backed
+  read facade that unifies ordinary local and effectively READ-granted public
+  Contexts. It remains outside core because it reads Profile and persistence
+  state, resolves exact authority, and projects process-local readable edges.
 - `application.capabilities.authority.granted_context_navigation` freezes
   public Grant rows from the active Profile and Store while keeping the
   READ-authorized subset separate from opaque QUERY and other non-READ roots.

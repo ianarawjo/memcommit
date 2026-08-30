@@ -113,6 +113,12 @@ RETIRED_BASELINE_MODULES = {
     "atomize_render": (
         "retired after Atomize analysis presentation converged on the workbench screen"
     ),
+    "atomize_workbench_shell": (
+        "retired when Impact and Review took ownership of Atomize presentation"
+    ),
+    "endpoint_setup_flows": (
+        "retired after every remaining operation acquired a command-owned setup adapter"
+    ),
     "ground_named_shell": (
         "retired with the unpublished named Ground session interface"
     ),
@@ -126,12 +132,14 @@ RETIRED_BASELINE_MODULES = {
         "retired after Help and init-study took ownership of their distinct "
         "shell responsibilities"
     ),
+    "session_endpoint_setup": (
+        "retired with the obsolete multi-stage Atomize setup flow"
+    ),
 }
 
 
 OWNED_SUPPORT_TARGETS = {
-    "atomize_sessions": "atomize.sessions",
-    "atomize_workbench_shell": "atomize.workbench.screen",
+    "atomize_sessions": "atomize.records",
     "audit_sessions": "audit.session_catalog",
     "branch_dialog": "branch.endpoint_setup",
     "compare_sessions": "compare.sessions",
@@ -210,7 +218,6 @@ SHARED_MODULES = {
     "context_reach_dialog",
     "diff_browser",
     "direct_item_placement",
-    "endpoint_setup_flows",
     "exact_command_review",
     "exact_command_review_shell",
     "exact_name_dialog",
@@ -235,7 +242,6 @@ SHARED_MODULES = {
     "save_location_review",
     "semantic_clipboard",
     "semantic_detail_renderer",
-    "session_endpoint_setup",
     "session_help",
     "session_picker",
     "tui_primitives",
@@ -258,7 +264,6 @@ RELOCATED_SHARED_TARGETS = {
     "context_reach_dialog": "memcommit.adapters.console.terminal.components.context_reach_dialog",
     "diff_browser": "memcommit.adapters.console.terminal.components.history.browser",
     "direct_item_placement": "memcommit.adapters.console.terminal.components.direct_item_placement",
-    "endpoint_setup_flows": "memcommit.adapters.console.terminal.components.endpoint_setup.flows",
     "exact_command_review": "memcommit.adapters.console.terminal.components.command_editor",
     "exact_command_review_shell": "memcommit.adapters.console.terminal.components.command_editor.approval",
     "exact_name_dialog": "memcommit.adapters.console.terminal.components.exact_name_dialog",
@@ -272,14 +277,13 @@ RELOCATED_SHARED_TARGETS = {
     "operation_launcher_location": "memcommit.adapters.console.terminal.components.operation_launcher.location",
     "paste_input": "memcommit.adapters.console.terminal.components.paste_input",
     "quality_find_workbench": "memcommit.adapters.console.terminal.components.quality_find.workbench",
-    "readable_context_catalog": "memcommit.core.context_targeting.readable_catalog",
+    "readable_context_catalog": "memcommit.application.capabilities.authority.readable_contexts",
     "resolution_workbench_shell": "memcommit.adapters.console.terminal.components.resolution.session_shell",
     "restoration_present": "memcommit.adapters.console.terminal.components.restoration_receipt",
     "save_location_control": "memcommit.adapters.console.terminal.components.save_location",
     "save_location_review": "memcommit.adapters.console.terminal.components.save_location_review",
     "semantic_clipboard": "memcommit.adapters.console.terminal.components.plain_text_clipboard",
     "semantic_detail_renderer": "memcommit.adapters.console.terminal.components.semantic_viewer.detail",
-    "session_endpoint_setup": "memcommit.adapters.console.terminal.components.endpoint_setup.session",
     "session_help": "memcommit.adapters.console.terminal.components.session_help",
     "session_picker": "memcommit.adapters.console.terminal.components.operation_launcher.session",
     "tui_primitives": "memcommit.adapters.console.terminal.components.primitives",
@@ -375,14 +379,14 @@ def build_plan() -> dict[str, object]:
                 "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
                 "canonical_module": relocated or f"{COORDINATION_NAMESPACE}.{target}",
                 "owner": (
-                    "context_targeting"
+                    "authority"
                     if stem == "readable_context_catalog"
                     else "terminal"
                     if relocated
                     else "coordination"
                 ),
                 "role": (
-                    "shared-context-targeting"
+                    "shared-application-capability"
                     if stem == "readable_context_catalog"
                     else "shared-terminal-component"
                     if relocated
@@ -392,8 +396,8 @@ def build_plan() -> dict[str, object]:
             }
         )
     legacy = [str(entry["legacy_module"]).rsplit(".", 1)[-1] for entry in entries]
-    if len(entries) != 147 or len(set(legacy)) != 147:
-        raise RuntimeError("command layout must map 147 active baseline modules")
+    if len(entries) != 144 or len(set(legacy)) != 144:
+        raise RuntimeError("command layout must map 144 active baseline modules")
     baseline = _baseline_modules()
     classified = set(legacy) | set(RETIRED_BASELINE_MODULES)
     if classified != baseline:

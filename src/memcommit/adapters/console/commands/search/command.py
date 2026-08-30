@@ -38,7 +38,7 @@ from memcommit.application.operations.search.materialization_runtime import (
     execute_search_materialization,
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
-from memcommit.core.context_targeting.readable_catalog import (
+from memcommit.application.capabilities.authority.readable_contexts import (
     ReadableContextCatalog,
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,

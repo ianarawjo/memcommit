@@ -14,7 +14,7 @@ from memcommit.application.capabilities.authority.context_access import (
 )
 from memcommit.adapters.console.commands.meld import command_codec as meld_command_review
 from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
-from memcommit.core.context_targeting.readable_catalog import (
+from memcommit.application.capabilities.authority.readable_contexts import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )
