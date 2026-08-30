@@ -23,8 +23,8 @@ from memcommit.application.operations.distill.config import (
     DistillSemanticConfig,
 )
 from memcommit.application.capabilities.semantic.generative_reduction_reference import (
-    distill_elaborate_reference_payload,
-    render_distill_elaborate_reference_examples,
+    distill_makemore_reference_payload,
+    render_distill_makemore_reference_examples,
 )
 from memcommit.application.operations.distill.goal_fit import (
     DistillGoalFit,
@@ -418,7 +418,7 @@ def validate_distill_provider_plan(
     schema = _schema(frame, config=config)
     prompt_policy = resolve_semantic_prompt_policy()
     plan_payload: dict[str, object] = {
-        "reference_examples": distill_elaborate_reference_payload(
+        "reference_examples": distill_makemore_reference_payload(
             include_examples=prompt_policy.include_authored_examples,
         ),
         "request": payload,
@@ -474,7 +474,7 @@ def analyze_distill(
         "memory_id aliases from the current Source in support_memory_ids and "
         "boundary_memory_ids, and derive the output language and domain from "
         "the current Source rather than copying a reference family.\n\n"
-        + render_distill_elaborate_reference_examples(include_examples=True)
+        + render_distill_makemore_reference_examples(include_examples=True)
         + "\n\n"
         if prompt_policy.include_authored_examples
         else (
@@ -524,7 +524,7 @@ def analyze_distill(
         "select evidence-supported operational criteria only when the Source already "
         "supplies the relevant preference, obligation, failure, or success evidence; "
         "do not invent a concrete Task that is merely one possible top-down response. "
-        "Generated or hypothetical evidence remains the responsibility of Elaborate, "
+        "Generated or hypothetical evidence remains the responsibility of Makemore, "
         "not Distill.\n\n"
         "Read the complete Source before deciding which parent-child relationships "
         "it supports. Do not require every Rule to govern every Source Memory. One "

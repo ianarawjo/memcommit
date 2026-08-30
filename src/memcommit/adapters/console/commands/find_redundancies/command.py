@@ -52,11 +52,14 @@ from memcommit.application.operations.dedun.application import (
     recommended_dedun_selections,
 )
 from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
-from memcommit.application.operations.dedun.scope import (
+from memcommit.application.operations.dedun.runtime import (
     DedunScopeReceipt,
     apply_recursive_dedun_scope,
     freeze_recursive_dedun_scope,
     prepare_recursive_dedun_scope,
+)
+from memcommit.application.capabilities.semantic_execution.relations import (
+    connected_relation_components,
 )
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingSource,
@@ -96,46 +99,24 @@ def _connected_redundancy_groups(
 ) -> tuple[tuple[tuple[Memory, ...], tuple[DuplicateFinding, ...]], ...]:
     """Group the evidence forest without repeating shared member Memories."""
 
-    parent: dict[str, str] = {}
     memory_by_uid: dict[str, Memory] = {}
-    order_by_uid: dict[str, int] = {}
-
-    def add(memory: Memory) -> None:
-        if memory.uid not in parent:
-            parent[memory.uid] = memory.uid
-            memory_by_uid[memory.uid] = memory
-            order_by_uid[memory.uid] = len(order_by_uid)
-
-    def root(uid: str) -> str:
-        while parent[uid] != uid:
-            parent[uid] = parent[parent[uid]]
-            uid = parent[uid]
-        return uid
-
     for finding in findings:
-        add(finding.left)
-        add(finding.right)
-        left_root = root(finding.left.uid)
-        right_root = root(finding.right.uid)
-        if left_root != right_root:
-            parent[right_root] = left_root
-
-    members_by_root: dict[str, list[Memory]] = {}
-    evidence_by_root: dict[str, list[DuplicateFinding]] = {}
-    for uid in sorted(order_by_uid, key=order_by_uid.__getitem__):
-        members_by_root.setdefault(root(uid), []).append(memory_by_uid[uid])
-    for finding in findings:
-        evidence_by_root.setdefault(root(finding.left.uid), []).append(finding)
-
-    roots = sorted(
-        members_by_root,
-        key=lambda group_root: min(
-            order_by_uid[memory.uid] for memory in members_by_root[group_root]
-        ),
+        memory_by_uid.setdefault(finding.left.uid, finding.left)
+        memory_by_uid.setdefault(finding.right.uid, finding.right)
+    components = connected_relation_components(
+        tuple(memory_by_uid),
+        ((finding.left.uid, finding.right.uid) for finding in findings),
     )
     return tuple(
-        (tuple(members_by_root[group_root]), tuple(evidence_by_root[group_root]))
-        for group_root in roots
+        (
+            tuple(memory_by_uid[uid] for uid in component),
+            tuple(
+                finding
+                for finding in findings
+                if {finding.left.uid, finding.right.uid}.issubset(component)
+            ),
+        )
+        for component in components
     )
 
 

@@ -80,6 +80,10 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Corriger ou remplacer directement le contenu de Memories existantes précises.",
     ),
     "elaborate": _copy(
+        "Ajouter une explication étayée après une Memory existante sans modifier son texte original.",
+        "Rendre une Memory existante plus explicite en poursuivant après son texte original inchangé.",
+    ),
+    "makemore": _copy(
         "Développer un Goal, une Rule ou une condition abstraite en plusieurs propositions candidates plus précises.",
         "Produire plusieurs Rules ou Cases candidats plus concrets à partir d’un concept ou d’une condition abstraite.",
     ),

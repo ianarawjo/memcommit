@@ -1,12 +1,11 @@
 """Strict state for bounded conversational semantic melding.
 
-The package preserves the historical ``meld.model`` API while assigning frozen
-sources, relation review, exact changes, and session lifecycle to explicit
-Meld-owned modules.
+The package preserves the ``meld.model`` API while assigning Source snapshots,
+integration proposals, proposal sessions, and Apply effects to explicit owners.
 """
 
-from .changes import MeldApplication, MeldChangeSet, MeldCheckpointReceipt
-from .relation_review import (
+from .apply_effects import MeldApplication, MeldChangeSet, MeldCheckpointReceipt
+from .integration_proposal import (
     MeldAssessment,
     MeldIssue,
     MeldMember,
@@ -16,20 +15,23 @@ from .relation_review import (
     MeldTurn,
     default_meld_revision,
     directional_comparison_basis_assessment,
+    directional_relation_basis_assessment,
     meld_turn_evidence_payload,
     validate_meld_turn_lineage,
 )
-from .session import (
+from .proposal_session import (
     MeldAccounting,
     MeldSession,
     inline_meld_context,
     materialize_preservation_assessment,
     meld_accounting,
 )
-from .source_frames import (
+from .source_snapshot import (
     INLINE_MELD_CONTEXT_NAME,
     MELD_COMPARISON_SCHEMA_VERSION,
     MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
+    MELD_RELATION_ANALYSIS_SCHEMA_VERSION,
+    MELD_DIRECTIONAL_RELATION_SCHEMA_VERSION,
     MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
     MELD_GRANTED_SCHEMA_VERSION,
     MELD_ID_LIMIT,
@@ -40,6 +42,7 @@ from .source_frames import (
     MELD_OWNER_AWARE_SCHEMA_VERSION,
     MELD_SCHEMA_VERSION,
     MELD_TEXT_LIMIT,
+    MeldRelationAnalysisSeed,
     MeldComparisonSeed,
     MeldDisposition,
     MeldError,
@@ -63,6 +66,8 @@ __all__ = (
     "INLINE_MELD_CONTEXT_NAME",
     "MELD_COMPARISON_SCHEMA_VERSION",
     "MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION",
+    "MELD_RELATION_ANALYSIS_SCHEMA_VERSION",
+    "MELD_DIRECTIONAL_RELATION_SCHEMA_VERSION",
     "MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION",
     "MELD_GRANTED_SCHEMA_VERSION",
     "MELD_ID_LIMIT",
@@ -78,6 +83,7 @@ __all__ = (
     "MeldAssessment",
     "MeldChangeSet",
     "MeldCheckpointReceipt",
+    "MeldRelationAnalysisSeed",
     "MeldComparisonSeed",
     "MeldDisposition",
     "MeldError",
@@ -103,6 +109,7 @@ __all__ = (
     "MeldTurnScope",
     "default_meld_revision",
     "directional_comparison_basis_assessment",
+    "directional_relation_basis_assessment",
     "inline_meld_context",
     "materialize_preservation_assessment",
     "meld_accounting",

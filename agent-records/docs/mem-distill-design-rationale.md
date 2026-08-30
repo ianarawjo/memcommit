@@ -28,7 +28,7 @@ The optional Goal cannot support a Rule. It selects the intended use,
 abstraction hierarchy, quantity, exclusions, and modality of the
 evidence-supported parent set. Every proposed Rule must still cite at least one
 Source Memory, and an empty Source fails before provider connection even when a
-Goal exists. Top-down Example generation remains owned by Elaborate: a Goal may
+Goal exists. Top-down Example generation remains owned by Makemore: a Goal may
 suggest Rules, and Rules may suggest Case propositions, but those outputs
 remain explicitly unverified.
 
@@ -49,7 +49,7 @@ This separates neighboring operations:
 - Summarize produces process-local comprehension.
 - Distill proposes evidence-linked abstractions and adds them to an existing
   Target; explicit Impact previews the exact would-add set.
-- Elaborate proposes top-down hypotheses and may store them while retaining
+- Makemore proposes top-down hypotheses and may store them while retaining
   their suggested, unverified status.
 - Atomize restructures existing meaning and may change its Source after Apply.
 

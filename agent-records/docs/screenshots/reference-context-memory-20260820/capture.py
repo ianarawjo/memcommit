@@ -101,7 +101,7 @@ def _contents(context) -> tuple[str, ...]:
 def _run_child(kind: str) -> None:
     from memcommit.adapters.console.entrypoint import app
     from memcommit.core.context import MemoryRef
-    from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+    from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
     from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="mem-reference-capture-") as directory:

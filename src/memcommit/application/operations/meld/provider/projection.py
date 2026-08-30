@@ -5,12 +5,12 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 
 from memcommit.application.operations.meld.model import (
-    MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
+    MELD_DIRECTIONAL_RELATION_SCHEMA_VERSION,
     MeldAssessment,
     MeldMember,
     MeldProposal,
     MeldSession,
-    directional_comparison_basis_assessment,
+    directional_relation_basis_assessment,
 )
 
 from .contract import MeldProviderError
@@ -479,12 +479,12 @@ def _provider_view(session: MeldSession) -> _ProviderView:
     )
     if (
         session.mode == "DIRECTIONAL"
-        and session.schema_version >= MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION
-        and session.comparison_seed is not None
+        and session.schema_version >= MELD_DIRECTIONAL_RELATION_SCHEMA_VERSION
+        and session.relation_analysis_seed is not None
         and current.sequence == 0
     ):
-        basis = directional_comparison_basis_assessment(
-            session.comparison_seed.analysis,
+        basis = directional_relation_basis_assessment(
+            session.relation_analysis_seed.analysis,
             (session.frames[0], session.frames[1]),
         )
         (
@@ -493,10 +493,12 @@ def _provider_view(session: MeldSession) -> _ProviderView:
             basis_issues,
             _basis_proposals,
         ) = _assessment_provider_payload(session, basis, view)
+        # Keep the provider field stable for cached completions and Study
+        # prewarms; its Python owner is now the peer-relation capability.
         payload["comparison_basis"] = basis_payload
         view = replace(
             view,
-            # Stable aliases let the decoder retain the exact reviewed Compare
+            # Stable aliases let the decoder retain the exact reviewed relation
             # identities while still requiring a complete returned ledger.
             prior_relation_by_id=basis_relations,
             prior_relation_records={},

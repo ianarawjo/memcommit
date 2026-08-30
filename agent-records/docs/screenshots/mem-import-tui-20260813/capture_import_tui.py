@@ -27,7 +27,7 @@ def _child(root: Path, *, branch: str) -> None:
     os.environ["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"
 
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.adapters.console.commands.list_memories.command import render_index
+    from memcommit.adapters.console.commands.list.command import render_index
     from memcommit.core.context import Context, Memory
     from memcommit.persistence.store import MemoryStore
     from tests.test_resource_import import _write_source_store

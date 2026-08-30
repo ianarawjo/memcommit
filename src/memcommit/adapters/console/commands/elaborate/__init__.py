@@ -1,4 +1,4 @@
-"""Lazy public CLI surface for the elaborate command package."""
+"""Lazy public CLI surface for append-only Elaborate."""
 
 from memcommit.adapters.console.commands import _load_entrypoint_attribute
 

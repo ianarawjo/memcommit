@@ -8,7 +8,7 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-from memcommit.application.capabilities.retained_history.checkpoint_catalog import (
+from memcommit.application.capabilities.checkpoint_catalog import (
     CheckpointCatalogError,
     resolve_checkpoint_unit,
 )

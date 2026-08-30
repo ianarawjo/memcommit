@@ -10,13 +10,13 @@ hid what the selected revision itself had done and made Diff and Revert tell
 different stories about the same checkpoint.
 
 The motivating `practice/2` history contained retained `a`, `b`, and `c`
-Memories, one Elaborate revision that added three cases, and several later
+Memories, one Makemore revision that added three cases, and several later
 changes. A current-to-target Revert list correctly described mechanical writes
-needed today, but it did not explain the Elaborate revision or display the
+needed today, but it did not explain the Makemore revision or display the
 complete six-Memory result that would be restored.
 
-Elaborate memorizes its semantic result by appending proposals and recording
-`effect: ADD`; it cannot edit or remove an existing Memory. Elaborate evidence
+Makemore memorizes its semantic result by appending proposals and recording
+`effect: ADD`; it cannot edit or remove an existing Memory. Makemore evidence
 therefore uses that production memorization capability and can classify only
 prior Memories as `KEEP` and generated Cases as `ADD`. The mixed-effect Viewer
 evidence uses a production Update application, whose contract actually permits

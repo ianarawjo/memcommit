@@ -46,14 +46,14 @@
         "evidence": [
           "agent-records/docs/copy-callable-boundary-matrix.md",
           "agent-records/docs/granted-derived-ownership-design-rationale.md",
-          "agent-records/docs/memory-transfer-design-rationale.md"
+          "agent-records/docs/copy-and-move-design-rationale.md"
         ],
         "reason": "CLI, Embed-shaped multi-Memory TUI, Python, and agent routes share one provider-free ordered direct-Memory plan, including explicit export-and-retain Grant bindings, local-only Target placement, mandatory fresh output UIDs, atomic checkpoint, and Undo/Redo boundary."
       },
-      "distill": {
-        "evidence": [
-          "agent-records/docs/distill-elaborate-generative-reduction-design-rationale.md",
-          "agent-records/docs/distill-elaborate-application-boundary-matrix.md",
+            "distill": {
+                "evidence": [
+                    "agent-records/docs/distill-makemore-generative-reduction-design-rationale.md",
+                    "agent-records/docs/distill-makemore-application-boundary-matrix.md",
           "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
           "agent-records/docs/goal-focus-operand-design-rationale.md",
           "agent-records/docs/semantic-result-memorization-design-rationale.md",
@@ -61,20 +61,21 @@
         ],
         "reason": "CLI, TUI, public, agent, Ground, provider, and prepared-result routes share the reviewed Distill application contract."
       },
-      "elaborate": {
-        "evidence": [
-          "agent-records/docs/distill-elaborate-generative-reduction-design-rationale.md",
-          "agent-records/docs/distill-elaborate-application-boundary-matrix.md",
-          "agent-records/docs/elaborate-model-responsibility-design-rationale.md",
-          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
-          "agent-records/docs/fit-general-judgment-design-rationale.md",
-          "agent-records/docs/goal-focus-operand-design-rationale.md",
-          "agent-records/docs/mem-elaborate-design-rationale.md",
-          "agent-records/docs/semantic-result-memorization-design-rationale.md",
-          "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
-        ],
-        "reason": "CLI, TUI, public, agent, Ground, provider, and prepared-result routes share the reviewed Elaborate application contract, including the best-effort default, explicit strict gate, and quality-bound receipt projection."
-      },
+            "makemore": {
+                "evidence": [
+                    "agent-records/docs/distill-makemore-generative-reduction-design-rationale.md",
+                    "agent-records/docs/distill-makemore-application-boundary-matrix.md",
+                    "agent-records/docs/makemore-model-responsibility-design-rationale.md",
+                    "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+                    "agent-records/docs/fit-general-judgment-design-rationale.md",
+                    "agent-records/docs/goal-focus-operand-design-rationale.md",
+                    "agent-records/docs/makemore-rename-design-rationale.md",
+                    "agent-records/docs/mem-makemore-design-rationale.md",
+                    "agent-records/docs/semantic-result-memorization-design-rationale.md",
+                    "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
+                ],
+                "reason": "CLI, TUI, public, agent, Ground, provider, and prepared-result routes share the reviewed Makemore application contract, including the best-effort default, explicit strict gate, quality-bound receipt projection, and read-only compatibility for former Elaborate checkpoints."
+            },
       "embed": {
         "evidence": [
           "agent-records/docs/embed-application-boundary-matrix.md",
@@ -161,13 +162,14 @@
         "evidence": [
           "agent-records/docs/granted-derived-ownership-design-rationale.md",
           "agent-records/docs/move-callable-boundary-matrix.md",
-          "agent-records/docs/memory-transfer-design-rationale.md"
+          "agent-records/docs/copy-and-move-design-rationale.md"
         ],
         "reason": "CLI, Embed-shaped multi-Memory TUI, Python, and agent routes share one provider-free local ownership-transfer plan, complete inbound-link freeze, default atomic live-Embed retargeting with explicit Break, and one-unit Undo/Redo boundary; explicit granted Sources fail with the Copy-then-local-Move boundary."
       },
       "meld": {
         "evidence": [
           "agent-records/docs/meld-application-boundary-matrix.md",
+          "agent-records/docs/meld-application-boundary-design-rationale.md",
           "agent-records/docs/meld-session-lifecycle-design-rationale.md",
           "agent-records/docs/context-or-inline-memory-operand-design-rationale.md",
           "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
@@ -176,7 +178,8 @@
           "agent-records/docs/peer-relation-analysis-design-rationale.md",
           "agent-records/docs/session-endpoint-setup-design-rationale.md",
           "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md",
-          "agent-records/docs/meld-command-interpretation-design-rationale.md"
+          "agent-records/docs/meld-command-interpretation-design-rationale.md",
+          "agent-records/docs/mem-meld-design-rationale.md"
         ],
         "reason": "CLI, TUI, Python, and agent routes share typed Start, Restart, saved-turn, cache/provider, CAS, and Apply lifecycles with exact/equivalent/projected reuse and one reviewed-session version contract."
       },
@@ -319,6 +322,17 @@
         ],
         "reason": "Explicit CLI, interactive picker, checkout-compatible selection, and bounded previous/next traversal share one typed global/relative/history target, READ authorization, target validation, and current-pointer/history CAS boundary."
       },
+      "trace": {
+        "evidence": [
+          "agent-records/docs/trace-application-boundary-matrix.md",
+          "agent-records/docs/trace-application-boundary-design-rationale.md",
+          "agent-records/docs/trace-lineage-normal-form-design-rationale.md",
+          "agent-records/docs/retained-history-application-ownership-design-rationale.md",
+          "agent-records/docs/read-report-lifecycle-design-rationale.md",
+          "agent-records/docs/mem-trace-rationale-design-rationale.md"
+        ],
+        "reason": "Explicit Context, current or historical Memory, MemoryRef, granted-current, interactive catalog, recent, JSON, and bounded text routes share one typed target catalog and terminal-independent Trace request/result boundary."
+      },
       "branch": {
         "evidence": [
           "agent-records/docs/branch-application-boundary-matrix.md",
@@ -405,6 +419,7 @@
       "config",
       "diff",
       "edit",
+      "elaborate",
       "eval",
       "ground",
       "impact",
@@ -420,7 +435,6 @@
       "revert",
       "review",
       "share",
-      "trace",
       "unlock"
     ]
   }

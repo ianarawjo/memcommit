@@ -23,7 +23,7 @@ contract. Importing `memcommit.adapters.console` must not assemble the Typer
 entry point or command registry.
 
 The generated-Memory completion preview is one concrete shared-console
-component. Distill and Elaborate both publish operation-owned semantic results
+component. Distill and Makemore both publish operation-owned semantic results
 as ordinary Memories, then pass the exact applied UID/content pairs to
 `adapters.console.terminal.components.applied_memory_preview`. The component owns only
 escaping, the twenty-row display bound, remainder disclosure, and Memory

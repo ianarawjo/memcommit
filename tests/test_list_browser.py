@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.contexts import command as contexts
-from memcommit.adapters.console.commands.list_memories import command as list_memories
+from memcommit.adapters.console.commands.list import command as list_command
 
 
 runner = CliRunner()
@@ -54,7 +54,7 @@ def test_recursive_ls_prints_the_resolved_subtree_not_profile_siblings(
 
 
 def test_orientation_commands_do_not_depend_on_the_context_tui():
-    for module in (contexts, list_memories):
+    for module in (contexts, list_command):
         source = inspect.getsource(module)
         assert "context_targeting.tui" not in source
         assert "_interactive_terminal" not in source

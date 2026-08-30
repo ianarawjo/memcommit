@@ -7,7 +7,7 @@ ordinary Memory, or only as text entered for the current command. These forms
 must have the same semantic role:
 
 ```text
-mem elaborate --from coffee-advice --to coffee-advice \
+mem makemore --from coffee-advice --to coffee-advice \
   --goal coffee-advice/goal
 mem distill --from coffee-advice --to coffee-advice \
   --goal coffee-advice/goal:<memory-uid>
@@ -18,7 +18,7 @@ mem update --from new-advice --to coffee-advice \
 Previously, `--from` used the migrating Context/Memory/text operand family,
 while operation-specific `--goal` parameters were plain strings or rejected a
 Context supplied beside `--from`. That made an existing name such as
-`coffee-advice/goal` ambiguous at the wrong layer and caused Elaborate to reject
+`coffee-advice/goal` ambiguous at the wrong layer and caused Makemore to reject
 the motivating command as if the Goal were a second generative Source.
 
 ## Contract
@@ -49,14 +49,14 @@ item and continue enforcing the 40-word durable Goal limit.
 ## Semantic invariant: focus is not Source
 
 A Goal focus selects, constrains, and helps assess supported output. It cannot
-support a Distill Rule, satisfy an Elaborate Rule check, serve as an Update
+support a Distill Rule, satisfy a Makemore Rule check, serve as an Update
 `source_id`, or authorize a fact absent from the operation's Source frame.
 Consequently `--from SOURCE --goal FOCUS` is valid: Source and focus are
 different roles even when both operands happen to locate ordinary Contexts.
 
 - Distill retains its exhaustive post-generation Goal Fit judgment and carries
   the exact focus frame into proposal and publication receipts.
-- Elaborate includes the focus frame in generation identity for both
+- Makemore includes the focus frame in generation identity for both
   Goal-to-Rules and Rules-to-Cases. In the standalone `--goal`-only form, the
   one Goal item is also the generative Goal Source for compatibility; beside
   `--rule` or `--from`, it is only auxiliary focus.
@@ -73,8 +73,8 @@ semantic projection of that lane. Creation and `--set-goal` may copy one
 Context/Memory/text operand into that lane and record the operand provenance in
 the Ground checkpoint.
 
-Distill, Elaborate, and Fit consume the same physical Goal Memory. Distill and
-Elaborate remain proposal-only by default. `--adopt` is the separate explicit
+Distill, Makemore, and Fit consume the same physical Goal Memory. Distill and
+Makemore remain proposal-only by default. `--adopt` is the separate explicit
 effect boundary for a physical Ground: it adds the complete proposal to
 `/rules` or `/examples`, advances the manifest once, records the semantic
 analysis digest, and publishes one Ground-local command unit that local Undo
@@ -100,7 +100,7 @@ link.
 
 ## Compatibility and limitations
 
-Legacy application calls that pass a plain Distill or Elaborate Goal remain
+Legacy application calls that pass a plain Distill or Makemore Goal remain
 readable and are normalized to an inline focus internally. Existing Update
 session schemas remain readable; the Goal-aware schemas are used only when a
 focus is present. Public Python adapters have not yet added a polymorphic

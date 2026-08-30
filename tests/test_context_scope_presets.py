@@ -166,8 +166,8 @@ def test_r_short_alias_is_reserved_for_recursive_scope() -> None:
                 option.name,
             )
 
-    elaborate_options = _command_options(("elaborate",))
-    rule = next(option for option in elaborate_options if option.name == "rule")
+    makemore_options = _command_options(("makemore",))
+    rule = next(option for option in makemore_options if option.name == "rule")
     assert rule.opts == ["--rule"]
 
 

@@ -7,13 +7,17 @@ import uuid
 import pytest
 
 import memcommit.application.capabilities.ops as ops
+import memcommit.application.operations.find_duplicates.application as find_duplicates_application
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
-from memcommit.application.capabilities.retained_history.command_history import build_command_stacks
+from memcommit.application.capabilities.command_recovery import build_command_stacks
 from memcommit.core.context import MemoryRef
 from memcommit.application.operations.dedup.application import (
     ExactDedupError,
     apply_exact_dedup_scope,
+)
+from memcommit.application.operations.find_duplicates.application import (
+    analyze_exact_duplicate_scope,
 )
 from memcommit.persistence.store import MemoryStore
 
@@ -132,6 +136,60 @@ def test_public_dedup_recursive_is_one_atomic_undoable_command(isolated_store):
     )
 
 
+def test_public_dedup_analyzes_each_context_exactly_once(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    root, *_middle, child, _child_first, _child_later, _sibling, _sibling_memory = (
+        _recursive_fixture(store)
+    )
+    analyzed_names: list[str] = []
+    original = find_duplicates_application.find_exact_duplicate_groups
+
+    def counted(context):
+        analyzed_names.append(context.name)
+        return original(context)
+
+    monkeypatch.setattr(
+        find_duplicates_application,
+        "find_exact_duplicate_groups",
+        counted,
+    )
+
+    MemCommitClient(root=isolated_store, create=False).dedup(
+        root.name,
+        include_descendants=True,
+    )
+
+    assert analyzed_names == [root.name, child.name]
+
+
+def test_exact_dedup_rejects_a_stale_find_duplicates_analysis(isolated_store):
+    store = MemoryStore()
+    root, *_rest = _recursive_fixture(store)
+    access = resolve_context_access(
+        store,
+        root.name,
+        current_name=root.name,
+        required_permission="READ",
+    )
+    analysis = analyze_exact_duplicate_scope(
+        store,
+        access,
+        include_descendants=False,
+    )
+    changed = store.load_direct(root.name)
+    ops.add(changed, "new after analysis")
+    store.save(changed)
+
+    with pytest.raises(ExactDedupError, match="changed after analysis"):
+        apply_exact_dedup_scope(store, access, analysis)
+
+    assert len(store.load_direct(root.name).memories) == 3
+    assert store.list_checkpoints(root.name) == []
+
+
 def test_recursive_exact_dedup_rolls_back_every_context_after_write_failure(
     isolated_store,
     monkeypatch,
@@ -159,12 +217,17 @@ def test_recursive_exact_dedup_rolls_back_every_context_after_write_failure(
         return original_save(*args, **kwargs)
 
     monkeypatch.setattr(store, "_save_locked", fail_second_write)
+    analysis = analyze_exact_duplicate_scope(
+        store,
+        access,
+        include_descendants=True,
+    )
 
     with pytest.raises(OSError, match="simulated second Context failure"):
         apply_exact_dedup_scope(
             store,
             access,
-            include_descendants=True,
+            analysis,
         )
 
     assert {
@@ -205,12 +268,17 @@ def test_recursive_exact_dedup_blocks_inbound_reference_before_any_write(
         current_name=root.name,
         required_permission="READ",
     )
+    analysis = analyze_exact_duplicate_scope(
+        store,
+        access,
+        include_descendants=True,
+    )
 
     with pytest.raises(ExactDedupError, match="inbound reference"):
         apply_exact_dedup_scope(
             store,
             access,
-            include_descendants=True,
+            analysis,
         )
 
     assert tuple(store.load_direct(root.name).memories) == (

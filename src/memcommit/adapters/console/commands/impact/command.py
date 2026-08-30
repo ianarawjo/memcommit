@@ -25,6 +25,9 @@ from memcommit.adapters.console.commands.distill.impact import (
 from memcommit.adapters.console.commands.elaborate.impact import (
     elaborate_cmd as elaborate_impact_cmd,
 )
+from memcommit.adapters.console.commands.makemore.impact import (
+    makemore_cmd as makemore_impact_cmd,
+)
 from memcommit.adapters.console.commands.forget.impact import (
     forget_cmd as forget_impact_cmd,
 )
@@ -848,6 +851,7 @@ IMPACT_ROUTES.install(
         "forget": forget_impact_cmd,
         "distill": distill_impact_cmd,
         "elaborate": elaborate_impact_cmd,
+        "makemore": makemore_impact_cmd,
         "resolve": resolve_impact_cmd,
         "meld": meld_impact_cmd,
         "sever": sever_impact_cmd,

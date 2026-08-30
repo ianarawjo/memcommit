@@ -5,8 +5,8 @@ import json
 import pytest
 
 from memcommit.core.context import AutoCheckpoint, Memory
-from memcommit.application.capabilities.retained_history.reconstruction import build_history
-from memcommit.application.operations.log.search import (
+from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import build_history
+from memcommit.application.capabilities.history.query.semantic_history_query import (
     HistorySearchError,
     search_history,
 )

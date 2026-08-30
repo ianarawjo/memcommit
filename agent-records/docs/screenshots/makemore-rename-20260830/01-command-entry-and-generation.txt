@@ -1,0 +1,3 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+$ mem makemore --goal Make careful changes and leave a clear trace. --number 2                                                                                                      
+MEM MAKEMORE · 1/1 · GENERATING REVIEW PROPOSALS . · 0s

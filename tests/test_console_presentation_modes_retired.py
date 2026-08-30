@@ -11,10 +11,9 @@ from memcommit.adapters.console.entrypoint import app
 @pytest.mark.parametrize(
     "command",
     (
-        "consolidate",
         "dedun",
         "distill",
-        "elaborate",
+        "makemore",
         "find",
         "fit",
         "log",

@@ -175,7 +175,7 @@ def test_help_request_reports_provider_failure_without_partial_rows(monkeypatch)
 
 def test_study_help_rejects_copied_description_before_provider(monkeypatch):
     provider = _Provider(
-        '{"operations":["query","search","elaborate"]}'
+        '{"operations":["query","search","makemore"]}'
     )
     monkeypatch.setattr(inventory, "active_profile_is_study", lambda: True)
     monkeypatch.setattr(inventory, "connect_help_provider", lambda: provider)
@@ -197,7 +197,7 @@ def test_study_help_rejects_copied_description_before_provider(monkeypatch):
 
 def test_same_description_is_allowed_outside_study(monkeypatch):
     provider = _Provider(
-        '{"operations":["query","search","elaborate"]}'
+        '{"operations":["query","search","makemore"]}'
     )
     monkeypatch.setattr(inventory, "connect_help_provider", lambda: provider)
 

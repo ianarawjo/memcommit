@@ -20,6 +20,7 @@ from memcommit.application.operations.find_conflicts.application import (
     analyze_find_conflicts,
 )
 from memcommit.application.operations.find_duplicates.application import (
+    ExactDuplicateReport,
     FindDuplicatesRequest,
     find_duplicates,
 )
@@ -81,6 +82,22 @@ def test_find_duplicates_application_owns_readable_scope_resolution(tmp_path) ->
     assert report.root_name == context.name
     assert report.group_count == 1
     assert store.current_context_name() == context.name
+    assert ExactDuplicateReport.__module__.endswith("find_duplicates.application")
+
+
+def test_dedup_consumes_find_duplicates_analysis_without_rediscovery() -> None:
+    find_source = (
+        REPOSITORY_ROOT
+        / "src/memcommit/application/operations/find_duplicates/application.py"
+    ).read_text(encoding="utf-8")
+    dedup_source = (
+        REPOSITORY_ROOT
+        / "src/memcommit/application/operations/dedup/application.py"
+    ).read_text(encoding="utf-8")
+
+    assert "memcommit.application.operations.dedup" not in find_source
+    assert "memcommit.application.operations.find_duplicates" in dedup_source
+    assert "find_exact_duplicate_groups" not in dedup_source
 
 
 def test_console_find_routes_import_named_application_boundaries() -> None:

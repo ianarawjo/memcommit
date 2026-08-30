@@ -1,10 +1,10 @@
 """MemoryStore, Grant, checkpoint, recovery, and provider adapters for Meld.
 
-The package preserves the historical ``meld.runtime`` API while assigning
-source binding, launch, review, and Apply infrastructure to explicit owners.
+The package preserves the ``meld.runtime`` API while assigning Source access,
+preparation, proposal iteration, and Apply transactions to explicit owners.
 """
 
-from .apply import (
+from .apply_transaction import (
     MemoryStoreMeldApplyPort,
     affected_meld_owners as affected_meld_owners,
     apply_owner_proposals as apply_owner_proposals,
@@ -18,7 +18,7 @@ from .apply import (
     required_directional_target_permissions as required_directional_target_permissions,
     validate_owner_aware_grant_permissions as validate_owner_aware_grant_permissions,
 )
-from .session_launch import (
+from .preparation import (
     MemoryStoreMeldRestartPort as MemoryStoreMeldRestartPort,
     MemoryStoreMeldStartPort,
     PreparedMeldExecution,
@@ -28,27 +28,29 @@ from .session_launch import (
     prepare_meld_restart,
     prepare_meld_start,
 )
-from .session_review import (
+from .proposal_iteration import (
     MELD_AGGREGATE_TIMEOUT_SECONDS,
     MemoryStoreMeldAssessmentPort,
-    MemoryStoreMeldDestinationPort,
-    MemoryStoreMeldPreservationPort,
-    MemoryStoreMeldSessionRepository,
     PreparedMeldTurnExecution,
     connect_meld_provider,
     execute_meld_assessment,
-    execute_meld_destination_change,
-    execute_meld_initial_preservation,
-    execute_meld_preservation,
-    execute_meld_session_defer,
-    execute_meld_session_open,
     execute_meld_turn,
     execute_prepared_meld_turn,
     prepare_meld_assessment,
     prepare_meld_turn_execution,
     prepare_pending_meld_turn,
 )
-from .source_bindings import (
+from .session_repository import (
+    MemoryStoreMeldDestinationPort,
+    MemoryStoreMeldPreservationPort,
+    MemoryStoreMeldSessionRepository,
+    execute_meld_destination_change,
+    execute_meld_initial_preservation,
+    execute_meld_preservation,
+    execute_meld_session_defer,
+    execute_meld_session_open,
+)
+from .source_access import (
     assert_meld_non_target_source_bindings,
     assert_meld_source_bindings,
     assert_unapplied_meld_target,

@@ -80,6 +80,10 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "특정 기존 Memory의 내용을 직접 바로잡거나 교체할 때.",
     ),
     "elaborate": _copy(
+        "기존 Memory의 원문을 그대로 둔 채 근거 있는 설명을 뒤에 이어 붙입니다.",
+        "원문을 고치지 않고 하나의 기존 Memory를 더 명시적으로 풀어쓸 때.",
+    ),
+    "makemore": _copy(
         "추상적인 Goal, Rule 또는 조건을 더 구체적인 여러 후보 명제로 확장합니다.",
         "추상적인 개념이나 조건에서 더 구체적인 여러 후보 Rule 또는 Case를 만들 때.",
     ),

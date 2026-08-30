@@ -198,7 +198,7 @@ language knowledge.
 
 This section instantiates the shared case-to-rule method in
 `agent-records/docs/operation-example-contract-design-rationale.md`. It follows the
-repository's Distill/Elaborate calibration practice without invoking either
+repository's Distill/Makemore calibration practice without invoking either
 command or treating generated text as evidence.
 
 ### 1. Hold the corpus constant

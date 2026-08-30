@@ -1,8 +1,8 @@
 {
-  "active_module_count": 144,
+  "active_module_count": 140,
   "baseline_commit": "f8c54a56",
   "baseline_module_count": 153,
-  "entry_package_count": 63,
+  "entry_package_count": 61,
   "modules": [
     {
       "canonical_module": "memcommit.adapters.console.commands.add.command",
@@ -193,15 +193,6 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.consolidate.command",
-      "legacy_module": "memcommit.commands.consolidate",
-      "owner": "consolidate",
-      "public_exports": [
-        "cmd"
-      ],
-      "role": "command-entry"
-    },
-    {
       "canonical_module": "memcommit.adapters.console.coordination.context_operand",
       "legacy_module": "memcommit.commands.context_operand",
       "owner": "coordination",
@@ -307,13 +298,6 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find_redundancies.dedup_handoff",
-      "legacy_module": "memcommit.commands.duplicate_dedup_handoff",
-      "owner": "find_redundancies",
-      "public_exports": [],
-      "role": "command-owned-support"
-    },
-    {
       "canonical_module": "memcommit.adapters.console.commands.edit.command",
       "legacy_module": "memcommit.commands.edit",
       "owner": "edit",
@@ -323,9 +307,9 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.elaborate.command",
+      "canonical_module": "memcommit.adapters.console.commands.makemore.command",
       "legacy_module": "memcommit.commands.elaborate",
-      "owner": "elaborate",
+      "owner": "makemore",
       "public_exports": [
         "cmd"
       ],
@@ -369,13 +353,6 @@
         "cmd"
       ],
       "role": "command-entry"
-    },
-    {
-      "canonical_module": "memcommit.adapters.console.commands.search.chat_shell",
-      "legacy_module": "memcommit.commands.find_chat_shell",
-      "owner": "search",
-      "public_exports": [],
-      "role": "command-owned-support"
     },
     {
       "canonical_module": "memcommit.adapters.console.commands.find_conflicts.command",
@@ -604,9 +581,9 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.list_memories.command",
+      "canonical_module": "memcommit.adapters.console.commands.list.command",
       "legacy_module": "memcommit.commands.list_memories",
-      "owner": "list_memories",
+      "owner": "list",
       "public_exports": [
         "cmd"
       ],
@@ -1129,16 +1106,6 @@
       "owner": "update",
       "public_exports": [],
       "role": "command-owned-support"
-    },
-    {
-      "canonical_module": "memcommit.adapters.console.commands.write_protection.command",
-      "legacy_module": "memcommit.commands.write_protection",
-      "owner": "write_protection",
-      "public_exports": [
-        "lock_app",
-        "unlock_app"
-      ],
-      "role": "command-entry"
     }
   ],
   "purpose": "Give every CLI entry a predictable package and place multi-file support beside its owning entry while keeping multi-command console mechanics outside the command-entry tree, without changing behavior.",
@@ -1146,12 +1113,16 @@
     "memcommit.commands.atomize_grounding",
     "memcommit.commands.atomize_render",
     "memcommit.commands.atomize_workbench_shell",
+    "memcommit.commands.consolidate",
+    "memcommit.commands.duplicate_dedup_handoff",
     "memcommit.commands.endpoint_setup_flows",
+    "memcommit.commands.find_chat_shell",
     "memcommit.commands.ground_named_shell",
     "memcommit.commands.ground_session_picker",
     "memcommit.commands.meld_target_picker",
     "memcommit.commands.session_endpoint_setup",
-    "memcommit.commands.shell_init"
+    "memcommit.commands.shell_init",
+    "memcommit.commands.write_protection"
   ],
   "schema_version": 1,
   "shared_module_count": 40

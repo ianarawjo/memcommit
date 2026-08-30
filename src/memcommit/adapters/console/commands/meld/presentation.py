@@ -105,8 +105,8 @@ def render_meld_session(
         _session_route(session),
         _session_scope(session),
     ]
-    if session.comparison_seed is not None:
-        lines.append(f"Compare: {session.comparison_seed.analysis.uid[:8]} · IMPORTED")
+    if session.relation_analysis_seed is not None:
+        lines.append(f"Compare: {session.relation_analysis_seed.analysis.uid[:8]} · IMPORTED")
     lines.append(f"State: {session.state} · Round: {len(session.turns)}")
     assessment = session.current_assessment
     if assessment is None:

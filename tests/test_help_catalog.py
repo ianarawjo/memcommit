@@ -276,16 +276,16 @@ def test_distill_help_separates_case_propositions_from_goal_focus():
     assert "optional Goal focuses" in comparison.explanation
 
 
-def test_elaborate_help_separates_candidate_rules_from_concrete_cases():
-    assert operation_help("elaborate").summary == (
+def test_makemore_help_separates_candidate_rules_from_concrete_cases():
+    assert operation_help("makemore").summary == (
         "Expand an abstract Goal, Rule, or condition into multiple more specific "
         "candidate propositions."
     )
-    assert BEST_FOR_BY_OPERATION["elaborate"] == (
+    assert BEST_FOR_BY_OPERATION["makemore"] == (
         "Generating several more concrete candidate Rules or Cases from an "
         "abstract concept or condition."
     )
-    assert operation_help("elaborate").flow == (
+    assert operation_help("makemore").flow == (
         "Goal -> added Rules; Rules -> added Case propositions -> receipt"
     )
 

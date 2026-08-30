@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 import memcommit.configuration.config as config_module
 import memcommit.adapters.python_api._operations.compare as compare_operation
-import memcommit.application.operations.meld.runtime.session_launch as meld_session_launch
+import memcommit.application.operations.meld.runtime.preparation as meld_session_launch
 import memcommit.application.capabilities.ops as ops
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
@@ -35,7 +35,7 @@ from memcommit.application.capabilities.context_scope_loading import load_contex
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     recursive_comparison_projection,
 )
-from memcommit.application.operations.meld.start import MeldStartRequest
+from memcommit.application.operations.meld.preparation import MeldStartRequest
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,

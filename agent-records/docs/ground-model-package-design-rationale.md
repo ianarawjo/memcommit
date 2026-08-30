@@ -24,7 +24,7 @@ Ground-session Store have been removed. Physical Ground now has these owners:
 - `ground/contracts.py` owns operation-neutral Ground text limits, validation,
   errors, and frame digesting;
 - `ground/workspace_application.py` owns creation and editing use cases; and
-- Fit, Distill, Elaborate, and Conformance consume a frozen physical workspace
+- Fit, Distill, Makemore, and Conformance consume a frozen physical workspace
   rather than branching on `GroundSession`.
 
 No compatibility facade preserves the deleted import path. A missing
@@ -37,7 +37,7 @@ Physical Ground examples are ordinary proposition Memories, not legacy
 input/expected-output Case records. Ground Conformance therefore checks those
 example propositions against the workspace Rules through the ordinary Context
 Conformance contract; it does not fabricate an expected output. Fit, Distill,
-and Elaborate likewise project only the physical lanes they actually consume
+and Makemore likewise project only the physical lanes they actually consume
 and revalidate those lanes around provider work.
 
 The removed JSON schema, review transitions, named shell, and session dialogue

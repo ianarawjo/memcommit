@@ -81,7 +81,7 @@ from memcommit.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.history.verification import (
     MemoryHistoryReconstructionError,
 )
 from memcommit.application.operations.profile.model import (
@@ -115,8 +115,8 @@ from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegist
 
 # A full Task 1 subtree Compare is one intentionally indivisible relation
 # frame. The subscription-backed xhigh run can remain healthy beyond the
-# configured ten-minute default, so match Meld's documented aggregate window
-# instead of timing out a complete provider turn just before materialization.
+# configured ten-minute default, so use the shared peer-relation aggregate
+# window instead of timing out one complete provider turn.
 COMPARE_AGGREGATE_TIMEOUT_SECONDS = SHARED_COMPARISON_TIMEOUT_SECONDS
 
 
@@ -311,7 +311,7 @@ def cmd(
         bool,
         typer.Option(
             "--ledger",
-            help=("Run, save, and show the exhaustive relation ledger used by Meld"),
+            help="Run, save, and show the shared exhaustive relation ledger",
         ),
     ] = False,
     snapshot: Annotated[

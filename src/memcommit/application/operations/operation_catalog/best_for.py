@@ -51,6 +51,10 @@ BEST_FOR_BY_OPERATION = {
         "concrete cases or examples."
     ),
     "elaborate": (
+        "Making one existing Memory more explicit by continuing after its "
+        "unchanged original text."
+    ),
+    "makemore": (
         "Generating several more concrete candidate Rules or Cases from an "
         "abstract concept or condition."
     ),

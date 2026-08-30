@@ -57,6 +57,15 @@ history is a separate capability.
 
 ## Scope and persistence contract
 
+The public operation boundary is now
+`memcommit.application.operations.checkpoint`. The console adapter owns only
+the compatibility operand grammar and receipt rendering: it captures the
+current Context once, constructs `CheckpointRequest`, and calls the runtime.
+The application owns DIRECT/RECURSIVE planning and result validation; the
+runtime owns canonical locator resolution, lexical catalog freeze, physical
+checkpoint UID planning, and the Store call. This keeps Checkpoint navigable
+by its Help name without copying retained-history mechanics into the adapter.
+
 Direct is the default; `--direct` makes that choice explicit. It appends one
 ordinary manual checkpoint to the selected Context without changing Context
 content.

@@ -5,29 +5,29 @@ import json
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.commands.impact.process_local import (
     distill_impact_presentation,
-    elaborate_impact_presentation,
+    makemore_impact_presentation,
 )
 from memcommit.adapters.console.commands.impact.sessions import render_impact_session_snapshot
 from memcommit.application.operations.distill.model import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
 from memcommit.application.operations.distill.application import DistillRequest
 from memcommit.application.operations.distill.runtime import execute_distill
-from memcommit.application.operations.elaborate.model import (
-    ELABORATE_OPERATION,
-    ELABORATE_PAYLOAD_MARKER,
-    ElaborateTargetContext,
-    ElaborateTargetContextItem,
+from memcommit.application.operations.makemore.model import (
+    MAKEMORE_OPERATION,
+    MAKEMORE_PAYLOAD_MARKER,
+    MakemoreTargetContext,
+    MakemoreTargetContextItem,
 )
-from memcommit.application.operations.elaborate.application import ElaborateRequest
-from memcommit.application.operations.elaborate.runtime import execute_elaborate
+from memcommit.application.operations.makemore.application import MakemoreRequest
+from memcommit.application.operations.makemore.runtime import execute_makemore
 from memcommit.adapters.console.commands.distill.proposal import distill_result_text
-from memcommit.adapters.console.commands.elaborate.proposal import elaborate_result_text
+from memcommit.adapters.console.commands.makemore.proposal import makemore_result_text
 from memcommit.adapters.console.commands.distill.workbench import (
     project_distill_clipboard,
 )
-from memcommit.adapters.console.commands.elaborate.viewer import project_elaborate_clipboard
+from memcommit.adapters.console.commands.makemore.viewer import project_makemore_clipboard
 from memcommit.persistence.store import MemoryStore
-from tests.elaborate_validation_support import (
-    passing_elaborate_validation_response,
+from tests.makemore_validation_support import (
+    passing_makemore_validation_response,
 )
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
@@ -65,12 +65,12 @@ class _LongDistillProvider:
         )
 
 
-class _LongElaborateProvider:
+class _LongMakemoreProvider:
     def complete(self, prompt, *, operation, output_schema=None):
-        assert operation == ELABORATE_OPERATION
+        assert operation == MAKEMORE_OPERATION
         return json.dumps(
             {
-                "overview": "One complete Rule elaborates the Goal.",
+                "overview": "One complete Rule makemores the Goal.",
                 "rules": [
                     {
                         "content": LONG_RULE,
@@ -81,13 +81,13 @@ class _LongElaborateProvider:
         )
 
 
-class _CaseElaborateProvider:
+class _CaseMakemoreProvider:
     def complete(self, prompt, *, operation, output_schema=None):
-        validation = passing_elaborate_validation_response(prompt, operation)
+        validation = passing_makemore_validation_response(prompt, operation)
         if validation is not None:
             return validation
-        assert operation == ELABORATE_OPERATION
-        payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
+        assert operation == MAKEMORE_OPERATION
+        payload = json.loads(prompt.split(MAKEMORE_PAYLOAD_MARKER, 1)[1])
         target = payload.get("target_context")
         target_refs = (
             [item["target_id"] for item in target["items"]]
@@ -175,13 +175,13 @@ def test_distill_impact_rule_row_is_compact_without_losing_detail(
     assert "BOUNDARY ·" in presentation.view.items[0].blocks[0].text
 
 
-def test_elaborate_rule_rows_keep_complete_unverified_content() -> None:
-    result = execute_elaborate(
-        ElaborateRequest(goal="Generate a qualified ticker Rule.", number=1),
-        provider_factory=_LongElaborateProvider,
+def test_makemore_rule_rows_keep_complete_unverified_content() -> None:
+    result = execute_makemore(
+        MakemoreRequest(goal="Generate a qualified ticker Rule.", number=1),
+        provider_factory=_LongMakemoreProvider,
     )
-    plain = elaborate_result_text(result)
-    presentation = elaborate_impact_presentation(
+    plain = makemore_result_text(result)
+    presentation = makemore_impact_presentation(
         result,
         source_name="compact-rules/goal",
         target_name="compact-rules/target",
@@ -198,29 +198,29 @@ def test_elaborate_rule_rows_keep_complete_unverified_content() -> None:
     assert "…" not in expected
     assert impact.count(LONG_RULE) == 1
     assert "PROPOSED RULES · 1" in impact
-    assert "IMPACT · ELABORATE ADD" not in impact
+    assert "IMPACT · MAKEMORE ADD" not in impact
     assert "[ADD]" not in impact
     assert presentation.view.show_results is False
     assert presentation.show_impact_ledger is False
     assert presentation.view.items[0].summary == (
         "The full unverified rationale remains in detail."
     )
-    complete_copy = project_elaborate_clipboard(result, whole_document=True).text
+    complete_copy = project_makemore_clipboard(result, whole_document=True).text
     assert "PROPOSAL DETAILS" in complete_copy
     assert "WHY ·" in complete_copy
 
 
-def test_elaborate_case_impact_uses_one_compact_proposal_catalog() -> None:
-    result = execute_elaborate(
-        ElaborateRequest(
+def test_makemore_case_impact_uses_one_compact_proposal_catalog() -> None:
+    result = execute_makemore(
+        MakemoreRequest(
             rules=("Preserve an exact security class.",),
             number=1,
         ),
-        provider_factory=_CaseElaborateProvider,
-        target_context=ElaborateTargetContext(
+        provider_factory=_CaseMakemoreProvider,
+        target_context=MakemoreTargetContext(
             context_name="compact-rules/target",
             items=(
-                ElaborateTargetContextItem(
+                MakemoreTargetContextItem(
                     alias="t1",
                     kind="MEMORY",
                     context_name="compact-rules/target",
@@ -230,7 +230,7 @@ def test_elaborate_case_impact_uses_one_compact_proposal_catalog() -> None:
             ),
         ),
     )
-    presentation = elaborate_impact_presentation(
+    presentation = makemore_impact_presentation(
         result,
         source_name="compact-rules/rules",
         target_name="compact-rules/target",
@@ -251,7 +251,7 @@ def test_elaborate_case_impact_uses_one_compact_proposal_catalog() -> None:
     assert "This complete ambient Memory stays off the default canvas." not in rendered
     assert presentation.view.show_results is False
     assert presentation.show_impact_ledger is False
-    assert "IMPACT · ELABORATE ADD · ENDPOINTS UNCHANGED" not in rendered
+    assert "IMPACT · MAKEMORE ADD · ENDPOINTS UNCHANGED" not in rendered
     assert "[ADD]" not in rendered
     assert "[CHANGE]" not in rendered
     assert "PROPOSAL DETAIL" not in rendered

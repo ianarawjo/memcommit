@@ -24,7 +24,7 @@ A command now derives its route from input completeness and operation meaning:
   editor only in an interactive terminal. A supplied Find pattern or complete
   Replace pair executes immediately and prints the same bounded result or
   receipt in every terminal.
-- Resolve, Summarize, Distill, Elaborate, Fit, Log, Trace, and the internal
+- Resolve, Summarize, Distill, Makemore, Fit, Log, Trace, and the internal
   exact Dedun replay have one result route. Complete execution commands apply
   or return their operation receipt; read-only commands print their typed
   document. Impact and Review remain the explicit homes for non-applying

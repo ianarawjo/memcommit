@@ -5,7 +5,9 @@ from __future__ import annotations
 import json
 from collections.abc import Callable
 
-from memcommit.application.capabilities.retained_history.context_history import ContextTraceReport
+from memcommit.application.capabilities.history.query.context_history_slicing import (
+    ContextHistorySlice,
+)
 from memcommit.application.operations.rationale.rules import (
     DEFAULT_RATIONALE_PROVENANCE_LIMIT,
     RationaleLimitUnit,
@@ -42,7 +44,7 @@ CONTEXT_RATIONALE_POLICY = SemanticExecutionPolicy(
 )
 
 
-def _aliases(report: ContextTraceReport) -> dict[str, str]:
+def _aliases(report: ContextHistorySlice) -> dict[str, str]:
     aliases: dict[str, str] = {}
     for state in report.current:
         aliases.setdefault(state.uid, f"m{len(aliases) + 1:06d}")
@@ -53,7 +55,7 @@ def _aliases(report: ContextTraceReport) -> dict[str, str]:
 
 
 def context_rationale_payload(
-    report: ContextTraceReport,
+    report: ContextHistorySlice,
     *,
     limit: int = DEFAULT_RATIONALE_PROVENANCE_LIMIT,
     unit: RationaleLimitUnit = RationaleLimitUnit.WORDS,
@@ -137,7 +139,7 @@ def _prompt(payload: dict[str, object]) -> str:
 
 
 def synthesize_context_rationale(
-    report: ContextTraceReport,
+    report: ContextHistorySlice,
     *,
     provider_factory: Callable[[], RationaleSemanticProvider],
     history_available: bool = True,

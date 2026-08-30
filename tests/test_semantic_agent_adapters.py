@@ -1,4 +1,4 @@
-"""Agent registry coverage over public Distill and Elaborate calls."""
+"""Agent registry coverage over public Distill and Makemore calls."""
 
 from __future__ import annotations
 
@@ -7,25 +7,25 @@ import json
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER
-from memcommit.application.operations.elaborate.model import ELABORATE_PAYLOAD_MARKER
+from memcommit.application.operations.makemore.model import MAKEMORE_PAYLOAD_MARKER
 from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.adapters.agent.distill import DISTILL_AGENT_TOOL_NAME
-from memcommit.adapters.agent.elaborate import (
-    ELABORATE_AGENT_CONTRACT_VERSION,
-    ELABORATE_AGENT_TOOL_NAME,
+from memcommit.adapters.agent.makemore import (
+    MAKEMORE_AGENT_CONTRACT_VERSION,
+    MAKEMORE_AGENT_TOOL_NAME,
 )
 from memcommit.adapters.agent.fit import FIT_AGENT_TOOL_NAME
 from memcommit.adapters.agent.registry import build_default_agent_tool_registry
 from memcommit.persistence.store import MemoryStore
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
-from tests.elaborate_validation_support import (
-    passing_elaborate_validation_response,
+from tests.makemore_validation_support import (
+    passing_makemore_validation_response,
 )
 
 
 class AgentSemanticProvider:
     def complete(self, prompt, *, operation, output_schema=None):
-        validation = passing_elaborate_validation_response(prompt, operation)
+        validation = passing_makemore_validation_response(prompt, operation)
         if validation is not None:
             return validation
         validation = passing_distill_goal_fit_response(prompt, operation)
@@ -71,7 +71,7 @@ class AgentSemanticProvider:
                     "outside_memory_ids": [],
                 }
             )
-        payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
+        payload = json.loads(prompt.split(MAKEMORE_PAYLOAD_MARKER, 1)[1])
         number = payload["number"]
         if payload["mode"] == "RULES_TO_CASES":
             return json.dumps(
@@ -132,10 +132,10 @@ def test_default_registry_exposes_read_only_semantic_tools(isolated_store):
             "context_name": context.name,
         },
     )
-    elaborate = registry.invoke(
-        ELABORATE_AGENT_TOOL_NAME,
+    makemore = registry.invoke(
+        MAKEMORE_AGENT_TOOL_NAME,
         {
-            "version": ELABORATE_AGENT_CONTRACT_VERSION,
+            "version": MAKEMORE_AGENT_CONTRACT_VERSION,
             "kind": "goal_to_rules",
             "goal": "Confirm before acting.",
             "number": 1,
@@ -155,19 +155,19 @@ def test_default_registry_exposes_read_only_semantic_tools(isolated_store):
 
     assert distill["ok"] is True
     assert distill["result"]["effect"] == "NONE"
-    assert elaborate["ok"] is True
-    assert elaborate["result"]["verification"] == "UNVERIFIED"
-    assert len(elaborate["result"]["rules"]) == 1
+    assert makemore["ok"] is True
+    assert makemore["result"]["verification"] == "UNVERIFIED"
+    assert len(makemore["result"]["rules"]) == 1
     assert fit["ok"] is True
     assert fit["result"]["verdict"] == "YES"
     assert fit["result"]["effect"] == "NONE"
     assert DISTILL_AGENT_TOOL_NAME in tool_names
-    assert ELABORATE_AGENT_TOOL_NAME in tool_names
+    assert MAKEMORE_AGENT_TOOL_NAME in tool_names
     assert FIT_AGENT_TOOL_NAME in tool_names
     assert not store.context_exists("agent/rules")
 
 
-def test_semantic_agent_elaborate_accepts_an_exact_number(isolated_store):
+def test_semantic_agent_makemore_accepts_an_exact_number(isolated_store):
     client = MemCommitClient(
         root=isolated_store,
         semantic_provider_factory=AgentSemanticProvider,
@@ -175,9 +175,9 @@ def test_semantic_agent_elaborate_accepts_an_exact_number(isolated_store):
     registry = build_default_agent_tool_registry(client)
 
     result = registry.invoke(
-        ELABORATE_AGENT_TOOL_NAME,
+        MAKEMORE_AGENT_TOOL_NAME,
         {
-            "version": ELABORATE_AGENT_CONTRACT_VERSION,
+            "version": MAKEMORE_AGENT_CONTRACT_VERSION,
             "kind": "goal_to_rules",
             "goal": "Confirm before acting.",
             "number": 5,
@@ -189,7 +189,7 @@ def test_semantic_agent_elaborate_accepts_an_exact_number(isolated_store):
     schema = next(
         item
         for item in registry.tool_schemas()
-        if item["name"] == ELABORATE_AGENT_TOOL_NAME
+        if item["name"] == MAKEMORE_AGENT_TOOL_NAME
     )
     assert all(
         "maximum" not in branch["properties"]["number"]
@@ -197,7 +197,7 @@ def test_semantic_agent_elaborate_accepts_an_exact_number(isolated_store):
     )
 
 
-def test_semantic_agent_elaborate_exposes_case_validation(isolated_store):
+def test_semantic_agent_makemore_exposes_case_validation(isolated_store):
     client = MemCommitClient(
         root=isolated_store,
         semantic_provider_factory=AgentSemanticProvider,
@@ -205,18 +205,18 @@ def test_semantic_agent_elaborate_exposes_case_validation(isolated_store):
     registry = build_default_agent_tool_registry(client)
 
     best_effort = registry.invoke(
-        ELABORATE_AGENT_TOOL_NAME,
+        MAKEMORE_AGENT_TOOL_NAME,
         {
-            "version": ELABORATE_AGENT_CONTRACT_VERSION,
+            "version": MAKEMORE_AGENT_CONTRACT_VERSION,
             "kind": "rules_to_cases",
             "rules": ["Act only after explicit confirmation."],
             "number": 1,
         },
     )
     result = registry.invoke(
-        ELABORATE_AGENT_TOOL_NAME,
+        MAKEMORE_AGENT_TOOL_NAME,
         {
-            "version": ELABORATE_AGENT_CONTRACT_VERSION,
+            "version": MAKEMORE_AGENT_CONTRACT_VERSION,
             "kind": "rules_to_cases",
             "rules": ["Act only after explicit confirmation."],
             "number": 1,
@@ -239,9 +239,9 @@ def test_semantic_agent_rejects_unknown_fields_before_provider(tmp_path):
     registry = build_default_agent_tool_registry(MemCommitClient(root=root))
 
     result = registry.invoke(
-        ELABORATE_AGENT_TOOL_NAME,
+        MAKEMORE_AGENT_TOOL_NAME,
         {
-            "version": ELABORATE_AGENT_CONTRACT_VERSION,
+            "version": MAKEMORE_AGENT_CONTRACT_VERSION,
             "kind": "goal_to_rules",
             "goal": "A Goal",
             "save": True,
@@ -265,14 +265,14 @@ def test_semantic_agent_ground_routes_preserve_context_error_category(
         DISTILL_AGENT_TOOL_NAME,
         {"version": 1, "kind": "ground", "ground_name": "missing-ground"},
     )
-    elaborate = registry.invoke(
-        ELABORATE_AGENT_TOOL_NAME,
+    makemore = registry.invoke(
+        MAKEMORE_AGENT_TOOL_NAME,
         {
-            "version": ELABORATE_AGENT_CONTRACT_VERSION,
+            "version": MAKEMORE_AGENT_CONTRACT_VERSION,
             "kind": "ground_goal_to_rules",
             "ground_name": "missing-ground",
         },
     )
 
     assert distill["error"]["code"] == "context_unavailable"
-    assert elaborate["error"]["code"] == "context_unavailable"
+    assert makemore["error"]["code"] == "context_unavailable"

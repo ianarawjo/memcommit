@@ -79,7 +79,38 @@ DETAIL_SECRET = "Concealed construction sequence must not enter impact planning.
 
 
 class _GrantedDirectionalMeldProvider:
+    def __init__(self):
+        self.relation_payloads = []
+
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "compare_contexts":
+            payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+            self.relation_payloads.append(payload)
+            incoming = payload["frames"][0]["memories"][0]
+            baseline = payload["frames"][1]["memories"][0]
+            return json.dumps(
+                {
+                    "overview": "The service-desk claims describe different reviewed scopes.",
+                    "reports": {
+                        "both": "",
+                        "differences": "The service-desk locations differ.",
+                        "reference_only": "",
+                        "compared_only": "",
+                    },
+                    "relations": [
+                        {
+                            "relation_key": "location",
+                            "reference_memory_ids": [incoming["memory_id"]],
+                            "compared_memory_ids": [baseline["memory_id"]],
+                            "kind": "SCOPED",
+                            "status": "RESOLVED",
+                            "summary": "The service-desk locations differ.",
+                            "reason": "The incoming Memory is the reviewed correction.",
+                        }
+                    ],
+                    "issues": [],
+                }
+            )
         assert operation == "meld_contexts"
         payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
         incoming = payload["frames"][0]["memories"][0]
@@ -87,18 +118,7 @@ class _GrantedDirectionalMeldProvider:
         return json.dumps(
             {
                 "overview": "The incoming correction replaces the baseline claim.",
-                "relations": [
-                    {
-                        "relation_key": "location",
-                        "left_memory_ids": [incoming["memory_id"]],
-                        "right_memory_ids": [baseline["memory_id"]],
-                        "kind": "CONFLICT",
-                        "status": "RESOLVED",
-                        "summary": "The service-desk locations conflict.",
-                        "reason": "The incoming Memory is the reviewed correction.",
-                    }
-                ],
-                "issues": [],
+                "additional_issues": [],
                 "results": [
                     {
                         "result_key": "location_edit",
@@ -107,7 +127,7 @@ class _GrantedDirectionalMeldProvider:
                         "disposition": "SYNTHESIZE",
                         "content": incoming["content"],
                         "reason": "Apply the incoming correction to baseline.",
-                        "relation_keys": ["location"],
+                        "relation_keys": ["r000001"],
                         "source_memory_ids": [
                             incoming["memory_id"],
                             baseline["memory_id"],
@@ -121,7 +141,40 @@ class _GrantedDirectionalMeldProvider:
 
 
 class _GrantedSubtreeDirectionalMeldProvider:
+    def __init__(self):
+        self.relation_payloads = []
+
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "compare_contexts":
+            payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+            self.relation_payloads.append(payload)
+            incoming = payload["frames"][0]["memories"][0]
+            baseline = payload["frames"][1]["memories"]
+            return json.dumps(
+                {
+                    "overview": "One reviewed correction applies to two baseline owners.",
+                    "reports": {
+                        "both": "",
+                        "differences": "The baseline guidance has an older scope.",
+                        "reference_only": "",
+                        "compared_only": "",
+                    },
+                    "relations": [
+                        {
+                            "relation_key": "coverage",
+                            "reference_memory_ids": [incoming["memory_id"]],
+                            "compared_memory_ids": [
+                                memory["memory_id"] for memory in baseline
+                            ],
+                            "kind": "SCOPED",
+                            "status": "RESOLVED",
+                            "summary": "The baseline guidance is outdated.",
+                            "reason": "The reviewed correction governs both owners.",
+                        }
+                    ],
+                    "issues": [],
+                }
+            )
         assert operation == "meld_contexts"
         payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
         incoming = payload["frames"][0]["memories"][0]
@@ -152,7 +205,7 @@ class _GrantedSubtreeDirectionalMeldProvider:
                     "disposition": "SYNTHESIZE",
                     "content": suffix,
                     "reason": "Apply the incoming reviewed correction in place.",
-                    "relation_keys": ["coverage"],
+                    "relation_keys": ["r000001"],
                     "source_memory_ids": [
                         incoming["memory_id"],
                         target["memory_id"],
@@ -163,21 +216,7 @@ class _GrantedSubtreeDirectionalMeldProvider:
         return json.dumps(
             {
                 "overview": "The correction updates both selected owners in place.",
-                "paired_relations": [
-                    {
-                        "relation_key": "coverage",
-                        "left_memory_ids": [incoming["memory_id"]],
-                        "right_memory_ids": [
-                            memory["memory_id"] for memory in baseline_by_owner.values()
-                        ],
-                        "kind": "CONFLICT",
-                        "status": "RESOLVED",
-                        "summary": "The selected baseline guidance is outdated.",
-                        "reason": "The incoming reviewed correction governs both owners.",
-                    }
-                ],
-                "distinct_relations": [],
-                "issues": [],
+                "additional_issues": [],
                 "results": results,
                 "ready_to_apply": True,
             }

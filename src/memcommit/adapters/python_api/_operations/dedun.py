@@ -212,17 +212,13 @@ def apply_dedun(
 
 
 # Compatibility aliases for the pre-Dedun public Python surface.
-plan_consolidation = plan_dedun
-apply_consolidation = apply_dedun
 plan_dedup = plan_dedun
 apply_dedup = apply_dedun
 
 
 __all__ = [
-    "apply_consolidation",
     "apply_dedun",
     "apply_dedup",
-    "plan_consolidation",
     "plan_dedun",
     "plan_dedup",
 ]

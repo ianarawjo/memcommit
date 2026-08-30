@@ -196,14 +196,16 @@ def _child_apply(store_root: Path) -> None:
 
 
 def _child_verify(store_root: Path) -> None:
-    from memcommit.application.capabilities.retained_history.memory_history_reconstruction import build_trace
+    from memcommit.application.capabilities.history.query.memory_history_slicing import (
+        reconstruct_memory_history,
+    )
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=store_root, create=False)
     source = store.load_direct("atomize/source")
     output = store.load_direct("atomize/output")
     memory_uid = next(iter(output.memories))
-    trace = build_trace(store, output, memory_uid)
+    trace = reconstruct_memory_history(store, output, memory_uid)
     print("READ-ONLY OUTPUT")
     print("  SOURCE UID", source.uid)
     print("  OUTPUT UID", output.uid)

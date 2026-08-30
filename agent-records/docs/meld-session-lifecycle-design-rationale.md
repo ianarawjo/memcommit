@@ -91,22 +91,25 @@ rollback. Interfaces do not compute or interpret versions.
 The public `memcommit.application.operations.meld.model` import remains a
 compatibility facade, but its implementation is split by responsibility:
 
-- `source_frames.py` freezes source Memories, Context identities, roles,
+- `source_snapshot.py` freezes source Memories, Context identities, roles,
   digests, and the strict shared value primitives used by later records;
-- `relation_review.py` owns the relation ledger, issues, proposals,
+- `integration_proposal.py` owns the relation ledger, issues, proposals,
   assessments, dialogue turns, and Compare/preservation projections;
-- `changes.py` owns the exact change set and durable Apply/checkpoint receipts;
-- `session.py` composes those records into construction, lifecycle transitions,
-  cross-record validation, and exhaustive source/result accounting.
+- `apply_effects.py` owns the exact change set and durable Apply/checkpoint receipts;
+- `proposal_session.py` composes those records into construction, lifecycle
+  transitions, cross-record validation, and exhaustive source/result
+  accounting.
 
-The dependency direction is `session -> changes -> relation_review ->
-source_frames`. `relation_review` uses a type-only session reference for its
+The dependency direction is `proposal_session -> apply_effects ->
+integration_proposal -> source_snapshot`. `integration_proposal` uses a
+type-only proposal-session reference for its
 provider-free preservation projection, so importing the lower-level records
 does not construct the session aggregate. This keeps names tied to Meld's
-actual domain language while preserving existing serialized schemas and import
-paths. The facade explicitly re-exports the former public names, so caller
-imports remain unchanged while implementation classes have narrower physical
-`__module__` paths.
+pipeline language while preserving existing serialized schemas and the public
+`meld.model` facade. The currently stored aggregate does not yet expose a
+separate candidate-context or integration-plan record; those types belong to
+the subsequent semantic pipeline change and are not represented by empty
+placeholder modules in this ownership-only relocation.
 
 ## Physical runtime ownership
 
@@ -114,23 +117,26 @@ The public `memcommit.application.operations.meld.runtime` import remains a
 compatibility facade, but its Store, Grant, provider, and checkpoint adapters
 are split into four Meld-specific owners:
 
-- `source_bindings.py` owns authorized source loading, exact frozen-frame
+- `source_access.py` owns authorized source loading, exact frozen-frame
   revalidation, target traversal, and the bindings saved in checkpoints;
-- `session_launch.py` owns Compare-basis reuse, prewarm selection, and the
-  provider-free/provider-required preparation of Start and Restart;
-- `session_review.py` owns the provider timeout policy, saved-session
-  repository, preservation and destination ports, assessment caching, and
-  follow-up turns;
-- `apply.py` owns proposal permission checks, checkpoint records, interrupted
+- `preparation.py` owns shared relation-basis reuse or live creation,
+  prewarm selection, and the provider-free/provider-required preparation of
+  Start and Restart;
+- `session_repository.py` owns saved-session CAS plus preservation and
+  destination persistence ports;
+- `proposal_iteration.py` owns the provider timeout policy, assessment cache,
+  and follow-up execution;
+- `apply_transaction.py` owns proposal permission checks, checkpoint records, interrupted
   Apply recovery, post-image verification, locking, rollback, and mutation.
 
-The dependency direction is `session_launch -> session_review -> apply ->
-source_bindings`, with launch and review importing lower owners directly where
-needed. The facade contains re-exports only and preserves the former explicit
-`__all__`; tests patch dependencies at their physical owner rather than
-requiring mutable proxy behavior from the facade.
+The dependency direction is `preparation -> proposal_iteration ->
+session_repository -> apply_transaction -> source_access`, with the phase
+adapters importing lower owners directly where needed. The facade contains
+re-exports only and preserves the former explicit `__all__`; tests patch
+dependencies at their physical owner rather than requiring mutable proxy
+behavior from the facade.
 
-`apply.py` remains the largest module intentionally. Its local target,
+`apply_transaction.py` remains the largest module intentionally. Its local target,
 local-owner subtree, granted-owner subtree, and granted-target paths differ in
 lock ownership, authority revalidation, checkpoint placement, and rollback.
 Keeping those transactions beside their recovery evidence makes partial
@@ -158,9 +164,12 @@ compatibility facade. Its package initializer imports and exports nothing;
 production consumers use the narrow owning module directly. This is a
 forward-only internal boundary: retaining the old aggregate imports would hide
 ownership and allow new callers to rebuild the same monolith through a
-convenient package root. The split does not change prompts, schemas, aliases,
-request digests, one-shot limits, repair rules, or the number of provider
-calls.
+convenient package root. The physical split itself did not change prompts,
+schemas, aliases, request digests, one-shot limits, repair rules, or provider-
+call count. The later relation-first Start correction does: a Directional
+cache miss now performs one shared relation-analysis call before its separate
+materialization call, and the latter uses a schema that cannot return relation
+fields.
 
 ## Deliberate non-goals
 

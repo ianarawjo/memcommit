@@ -17,7 +17,7 @@ from memcommit.adapters.console.terminal.components.memory_report_picker import 
 )
 import memcommit.adapters.console.terminal.components.context_picker.dialog as context_picker
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistoryCandidate,
     collect_memory_history_candidates,
 )

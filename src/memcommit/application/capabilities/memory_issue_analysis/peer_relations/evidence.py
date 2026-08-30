@@ -1,6 +1,6 @@
-"""Content-preserving evidence projection for Compare source Context graphs.
+"""Content-preserving evidence projection for peer-relation Context graphs.
 
-Compare judges every readable content-bearing item as an ordinary semantic
+Peer-relation analysis judges every readable content-bearing item as semantic
 claim.  This module keeps the item's placement and ownership beside that
 content so cache freshness and later consumers do not mistake an Embed or
 Reference for a directly owned writable Memory.
@@ -19,7 +19,7 @@ from memcommit.application.capabilities.semantic.disclosure import (
 )
 
 
-ComparisonSourceForm = Literal[
+MemoryRelationSourceForm = Literal[
     "OWNED",
     "LIVE_MEMORY_EMBED",
     "MEMORY_REFERENCE",
@@ -38,32 +38,32 @@ _SOURCE_FORMS = {
 }
 
 
-class ComparisonEvidenceError(ValueError):
-    """A Context item cannot safely become ordinary Compare evidence."""
+class MemoryRelationEvidenceError(ValueError):
+    """A Context item cannot safely become peer-relation evidence."""
 
 
 def _canonical_uuid(value: object, label: str) -> str:
     try:
         canonical = str(uuid.UUID(value))  # type: ignore[arg-type]
     except (AttributeError, TypeError, ValueError) as error:
-        raise ComparisonEvidenceError(f"Invalid {label}.") from error
+        raise MemoryRelationEvidenceError(f"Invalid {label}.") from error
     if canonical != value:
-        raise ComparisonEvidenceError(f"Invalid {label}.")
+        raise MemoryRelationEvidenceError(f"Invalid {label}.")
     return canonical
 
 
 def _text(value: object, label: str) -> str:
     if not isinstance(value, str) or not value:
-        raise ComparisonEvidenceError(f"Invalid {label}.")
+        raise MemoryRelationEvidenceError(f"Invalid {label}.")
     return value
 
 
 @dataclass(frozen=True)
-class ComparisonEvidenceSource:
+class MemoryRelationEvidenceSource:
     """Stable placement and provenance for one semantic evidence occurrence."""
 
     evidence_uid: str
-    source_form: ComparisonSourceForm
+    source_form: MemoryRelationSourceForm
     owner_context_uid: str
     owner_context_name: str
     source_memory_uid: str
@@ -72,12 +72,12 @@ class ComparisonEvidenceSource:
     def __post_init__(self) -> None:
         _canonical_uuid(self.evidence_uid, "comparison evidence uid")
         if self.source_form not in _SOURCE_FORMS:
-            raise ComparisonEvidenceError("Invalid comparison evidence source form.")
+            raise MemoryRelationEvidenceError("Invalid comparison evidence source form.")
         _canonical_uuid(self.owner_context_uid, "comparison evidence owner Context uid")
         _text(self.owner_context_name, "comparison evidence owner Context name")
         _canonical_uuid(self.source_memory_uid, "comparison evidence Source Memory uid")
         if not self.placement_path:
-            raise ComparisonEvidenceError(
+            raise MemoryRelationEvidenceError(
                 "Comparison evidence placement path cannot be empty."
             )
         for item_uid in self.placement_path:
@@ -94,7 +94,7 @@ class ComparisonEvidenceSource:
         }
 
     @classmethod
-    def from_dict(cls, value: object) -> "ComparisonEvidenceSource":
+    def from_dict(cls, value: object) -> "MemoryRelationEvidenceSource":
         if not isinstance(value, dict) or set(value) != {
             "evidence_uid",
             "source_form",
@@ -103,12 +103,12 @@ class ComparisonEvidenceSource:
             "source_memory_uid",
             "placement_path",
         }:
-            raise ComparisonEvidenceError("Invalid comparison evidence source.")
+            raise MemoryRelationEvidenceError("Invalid comparison evidence source.")
         raw_path = value["placement_path"]
         if not isinstance(raw_path, list) or any(
             not isinstance(item, str) for item in raw_path
         ):
-            raise ComparisonEvidenceError(
+            raise MemoryRelationEvidenceError(
                 "Invalid comparison evidence placement path."
             )
         return cls(
@@ -145,28 +145,34 @@ class ComparisonEvidenceSource:
         }
 
 
-class ProjectedComparisonMemory(Memory):
-    """Ordinary provider content carrying host-only Compare provenance."""
+class ProjectedMemoryRelationMemory(Memory):
+    """Ordinary provider content carrying host-only relation provenance."""
 
     def __init__(
         self,
         *,
         uid: str,
         content: str,
-        source: ComparisonEvidenceSource,
+        source: MemoryRelationEvidenceSource,
     ) -> None:
         super().__init__(uid=uid, content=content)
         if source.evidence_uid != uid:
-            raise ComparisonEvidenceError(
+            raise MemoryRelationEvidenceError(
                 "Comparison evidence identity does not match projected Memory."
             )
-        self.comparison_source = source
+        self.relation_source = source
+
+    @property
+    def comparison_source(self) -> MemoryRelationEvidenceSource:
+        """Return the legacy attribute without giving it implementation ownership."""
+
+        return self.relation_source
 
 
-def _context_source_form(context: Context) -> ComparisonSourceForm:
+def _context_source_form(context: Context) -> MemoryRelationSourceForm:
     # Import lazily so the core Context model remains independent from the
     # immutable Context snapshot package.
-    from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+    from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 
     if isinstance(context, ContextSnapshotRef):
         return "CONTEXT_REFERENCE"
@@ -175,20 +181,20 @@ def _context_source_form(context: Context) -> ComparisonSourceForm:
     return "CONTEXT_GRAPH"
 
 
-def _root_source_form(context: Context) -> ComparisonSourceForm:
+def _root_source_form(context: Context) -> MemoryRelationSourceForm:
     source_form = _context_source_form(context)
     return "OWNED" if source_form == "CONTEXT_GRAPH" else source_form
 
 
 def _context_owner(context: Context) -> tuple[str, str]:
-    from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+    from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 
     if isinstance(context, ContextSnapshotRef):
         return context.target_context_uid, context.target_context_name
     return context.uid, context.name
 
 
-def project_comparison_context(root: Context) -> Context:
+def project_memory_relation_context(root: Context) -> Context:
     """Flatten all readable content evidence without changing its text.
 
     A direct Memory keeps its public UID. A Memory Embed keeps the placement
@@ -200,11 +206,11 @@ def project_comparison_context(root: Context) -> Context:
     """
 
     if not isinstance(root, Context):
-        raise ComparisonEvidenceError("Compare source must be a Context.")
+        raise MemoryRelationEvidenceError("Compare source must be a Context.")
     try:
         require_semantic_disclosure_authority((root,), operation="Compare")
     except SemanticDisclosureError as error:
-        raise ComparisonEvidenceError(str(error)) from error
+        raise MemoryRelationEvidenceError(str(error)) from error
     projected = Context(uid=root.uid, name=root.name)
     seen_contexts: set[str] = set()
 
@@ -212,7 +218,7 @@ def project_comparison_context(root: Context) -> Context:
         memory: Memory,
         *,
         context: Context,
-        source_form: ComparisonSourceForm,
+        source_form: MemoryRelationSourceForm,
         placement_path: tuple[str, ...],
         evidence_uid: str | None = None,
         owner_context_uid: str | None = None,
@@ -221,12 +227,12 @@ def project_comparison_context(root: Context) -> Context:
     ) -> None:
         uid = evidence_uid or memory.uid
         if uid in projected.memories:
-            raise ComparisonEvidenceError(
+            raise MemoryRelationEvidenceError(
                 "Compare found the same evidence identity through more than one "
                 f"Context path: [{uid[:8]}]."
             )
         owner_uid, owner_name = _context_owner(context)
-        source = ComparisonEvidenceSource(
+        source = MemoryRelationEvidenceSource(
             evidence_uid=uid,
             source_form=source_form,
             owner_context_uid=owner_context_uid or owner_uid,
@@ -235,7 +241,7 @@ def project_comparison_context(root: Context) -> Context:
             placement_path=placement_path,
         )
         projected.add(
-            ProjectedComparisonMemory(
+            ProjectedMemoryRelationMemory(
                 uid=uid,
                 content=memory.content,
                 source=source,
@@ -246,24 +252,24 @@ def project_comparison_context(root: Context) -> Context:
         context: Context,
         *,
         placement_path: tuple[str, ...],
-        source_form: ComparisonSourceForm,
+        source_form: MemoryRelationSourceForm,
     ) -> None:
         if context.uid in seen_contexts:
             return
         seen_contexts.add(context.uid)
         for item in context.iter_items():
             item_path = (*placement_path, item.uid)
-            if isinstance(item, ProjectedComparisonMemory):
+            if isinstance(item, ProjectedMemoryRelationMemory):
                 if item.uid in projected.memories:
-                    raise ComparisonEvidenceError(
+                    raise MemoryRelationEvidenceError(
                         "Compare found duplicate projected evidence "
                         f"[{item.uid[:8]}]."
                     )
                 projected.add(
-                    ProjectedComparisonMemory(
+                    ProjectedMemoryRelationMemory(
                         uid=item.uid,
                         content=item.content,
-                        source=item.comparison_source,
+                        source=item.relation_source,
                     )
                 )
             elif isinstance(item, Memory):
@@ -276,7 +282,7 @@ def project_comparison_context(root: Context) -> Context:
             elif isinstance(item, MemoryRef):
                 if item.target is None:
                     kind = "Memory Embed" if item.is_live else "Memory Reference"
-                    raise ComparisonEvidenceError(
+                    raise MemoryRelationEvidenceError(
                         f"Compare cannot read {kind} [{item.uid[:8]}] in "
                         f"Context {context.name!r}: Source "
                         f"{item.target_context_name!r}:"
@@ -304,7 +310,7 @@ def project_comparison_context(root: Context) -> Context:
                     # Context hierarchy edge, so Compare must neither open it
                     # nor treat it as a missing claim.
                     continue
-                raise ComparisonEvidenceError(
+                raise MemoryRelationEvidenceError(
                     "Compare cannot open query-only Context "
                     f"{item.name!r} [{item.uid[:8]}] as ordinary Memory content."
                 )
@@ -328,10 +334,11 @@ def project_comparison_context(root: Context) -> Context:
     return projected
 
 
-MemoryRelationEvidenceError = ComparisonEvidenceError
-MemoryRelationEvidenceSource = ComparisonEvidenceSource
-ProjectedMemoryRelationMemory = ProjectedComparisonMemory
-project_memory_relation_context = project_comparison_context
+ComparisonSourceForm = MemoryRelationSourceForm
+ComparisonEvidenceError = MemoryRelationEvidenceError
+ComparisonEvidenceSource = MemoryRelationEvidenceSource
+ProjectedComparisonMemory = ProjectedMemoryRelationMemory
+project_comparison_context = project_memory_relation_context
 
 
 __all__ = [
@@ -340,6 +347,7 @@ __all__ = [
     "ComparisonSourceForm",
     "MemoryRelationEvidenceError",
     "MemoryRelationEvidenceSource",
+    "MemoryRelationSourceForm",
     "ProjectedMemoryRelationMemory",
     "ProjectedComparisonMemory",
     "project_memory_relation_context",

@@ -6,8 +6,11 @@ from types import SimpleNamespace
 
 import pytest
 
-from memcommit.application.operations.meld.model import INLINE_MELD_CONTEXT_NAME, MELD_INLINE_MEMORY_SCHEMA_VERSION
-from memcommit.application.operations.meld.start import (
+from memcommit.application.operations.meld.model import (
+    INLINE_MELD_CONTEXT_NAME,
+    MELD_INLINE_MEMORY_SCHEMA_VERSION,
+)
+from memcommit.application.operations.meld.preparation import (
     MeldStartError,
     MeldStartRequest,
     MeldStartResult,
@@ -108,11 +111,14 @@ def test_run_meld_start_validates_the_complete_port_result():
     )
     port = _Port(result)
 
-    assert run_meld_start(
-        request,
-        port=port,
-        provider_factory=provider_factory,
-    ) is result
+    assert (
+        run_meld_start(
+            request,
+            port=port,
+            provider_factory=provider_factory,
+        )
+        is result
+    )
     assert port.calls == [(request, provider_factory)]
 
 

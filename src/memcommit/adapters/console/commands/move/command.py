@@ -9,7 +9,7 @@ import typer
 from memcommit.adapters.console.commands.move.receipt import render_move_receipt
 from memcommit.adapters.console.commands.move.setup import choose_move_setup
 from memcommit.adapters.console.terminal.components.errors import render_cli_error
-from memcommit.adapters.console.coordination.memory_transfer.arguments import (
+from memcommit.adapters.console.coordination.copy_and_move.arguments import (
     selected_memory_locators,
     target_context_option,
 )
@@ -17,14 +17,12 @@ from memcommit.adapters.console.terminal.core.capabilities import is_interactive
 from memcommit.application.capabilities.authority.write_protection import (
     WriteProtectionError,
 )
-from memcommit.application.operations.memory_transfer.application import (
+from memcommit.application.operations.copy_and_move.application import (
     MemoryTransferError,
     MoveMemoriesRequest,
-    run_move,
 )
-from memcommit.application.operations.memory_transfer.runtime import (
-    MemoryStoreMemoryTransferPort,
-)
+from memcommit.application.operations.move.application import run_move
+from memcommit.application.operations.move.runtime import MemoryStoreMovePort
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
@@ -116,7 +114,7 @@ def cmd(
         store = MemoryStore()
         # Move recognizes Grants only so it can explain why an authority-owned
         # public Source cannot enter this local ownership mutation.
-        port = MemoryStoreMemoryTransferPort.capture(
+        port = MemoryStoreMovePort.capture(
             store,
             allow_granted_sources=True,
         )

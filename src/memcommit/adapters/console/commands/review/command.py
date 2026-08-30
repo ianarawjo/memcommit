@@ -28,11 +28,13 @@ from memcommit.adapters.console.commands.sever.review import (
 from memcommit.adapters.console.commands.update.review import (
     open_update_review as _run_update_report,
 )
-from memcommit.application.capabilities.retained_history.applied_review import (
+from memcommit.application.operations.review.applied_checkpoint import (
     CHECKPOINT_REVIEW_OPERATIONS,
-    applied_checkpoint_review_controller,
     list_applied_checkpoint_reviews,
     select_applied_checkpoint_review,
+)
+from memcommit.adapters.console.commands.review.applied_checkpoint_report import (
+    applied_checkpoint_review_controller,
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.coordination.context_operand import (
@@ -188,7 +190,7 @@ def cmd(
         typer.Argument(
             help=(
                 "Open a review report (audit, compare, meld, sever, update, "
-                "atomize, dedun, distill, elaborate, forget, resolve, or "
+                "atomize, dedun, distill, makemore, forget, resolve, or "
                 "ambiguities); "
                 "omit to enter the interactive Review session"
             )
@@ -416,7 +418,7 @@ def cmd(
                 raise ReviewError(
                     "Unsupported review adapter. "
                     "Implemented adapters are 'ambiguities', 'atomize', "
-                    "'audit', 'compare', 'dedun', 'distill', 'elaborate', "
+                    "'audit', 'compare', 'dedun', 'distill', 'makemore', "
                     "'forget', 'meld', 'resolve', 'sever', and 'update'."
                 )
             if session_uid is not None:

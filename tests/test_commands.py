@@ -765,7 +765,7 @@ class TestHelp:
     def test_meaningful_bare_callbacks_have_a_bare_form(self):
         root = get_command(app)
         context = click.Context(root)
-        semantic_usage_errors = {"add", "elaborate", "impact"}
+        semantic_usage_errors = {"add", "makemore", "impact"}
 
         for command_name in root.list_commands(context):
             command = root.get_command(context, command_name)

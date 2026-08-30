@@ -181,7 +181,7 @@ _PUBLIC_ERRORS: tuple[tuple[type[SemanticError], str, str], ...] = (
 
 
 class DedupAgentAdapter:
-    """Expose semantic redundancy planning and stateless exact replay."""
+    """Expose typed Dedun analysis and revision-bound application."""
 
     def __init__(self, client: MemCommitClient) -> None:
         if not isinstance(client, MemCommitClient):

@@ -39,7 +39,7 @@ CANONICAL_CONSUMERS = (
     "commands/profile/group.py",
     "commands/provider/command.py",
     "commands/eval/command.py",
-    "commands/write_protection/command.py",
+    "coordination/write_protection.py",
     "coordination/root_group.py",
 )
 

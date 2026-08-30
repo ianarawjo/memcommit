@@ -59,7 +59,7 @@ the omission primer already carry that grammar.
 
 Page-bottom `DISTINCTIONS` panels replace repeated syntax with contrasts that can
 change operation choice: Reference versus Embed, Find versus Search, Chunk
-versus Atomize, Merge versus Meld, Dedup versus Dedun, Distill versus Elaborate,
+versus Atomize, Merge versus Meld, Dedup versus Dedun, Distill versus Makemore,
 Audit's combined checks, Fit versus Conformance, and Trace versus Rationale.
 Each page reserves the panel's full height before catalog content is placed.
 One comparison occupies one row; several comparisons on the same page stack as
@@ -81,7 +81,7 @@ The reserved bottom panels make the handout 12 pages while preserving 11-point
 body text and established spacing.
 The Dedup/Dedun box says `exact matches` rather than only `duplicates` so the
 participant-facing contrast is explicit: Dedup stops at exact same-role
-matching, while Dedun adds semantic redundancy review.
+matching, while Dedun adds semantic redundancy analysis and immediate cleanup.
 
 Update versus Meld uses the same two-sided treatment in the bottom panel of
 their shared semantic page. Update is a one-way revision of an existing Target,

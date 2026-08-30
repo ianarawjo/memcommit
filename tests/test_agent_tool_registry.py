@@ -20,14 +20,14 @@ from memcommit.adapters.agent.delete import (
     REMOVE_ITEM_AGENT_TOOL_NAME,
 )
 from memcommit.adapters.agent.distill import DISTILL_AGENT_TOOL_NAME
-from memcommit.adapters.agent.elaborate import ELABORATE_AGENT_TOOL_NAME
+from memcommit.adapters.agent.makemore import MAKEMORE_AGENT_TOOL_NAME
 from memcommit.adapters.agent.embed import EMBED_AGENT_TOOL_NAME
 from memcommit.adapters.agent.find import FIND_AGENT_TOOL_NAME
 from memcommit.adapters.agent.fit import FIT_AGENT_TOOL_NAME
 from memcommit.adapters.agent.forget import FORGET_AGENT_TOOL_NAME
 from memcommit.adapters.agent.help import HELP_AGENT_TOOL_NAME
 from memcommit.adapters.agent.meld import MELD_AGENT_TOOL_NAME
-from memcommit.adapters.agent.memory_transfer import (
+from memcommit.adapters.agent.copy_and_move import (
     COPY_MEMORIES_AGENT_TOOL_NAME,
     MOVE_MEMORIES_AGENT_TOOL_NAME,
 )
@@ -115,7 +115,7 @@ def test_default_registry_discovers_fresh_frozen_shipped_schemas(tmp_path):
         MELD_AGENT_TOOL_NAME,
         ATOMIZE_AGENT_TOOL_NAME,
         DISTILL_AGENT_TOOL_NAME,
-        ELABORATE_AGENT_TOOL_NAME,
+        MAKEMORE_AGENT_TOOL_NAME,
         FIT_AGENT_TOOL_NAME,
         FORGET_AGENT_TOOL_NAME,
         RESOLVE_AGENT_TOOL_NAME,

@@ -1,4 +1,4 @@
-"""Provider-free exact Dedup discovery and Apply."""
+"""Apply one frozen Find Duplicates analysis as exact Dedup."""
 
 from __future__ import annotations
 
@@ -7,20 +7,23 @@ from dataclasses import dataclass
 
 from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
-    GrantedReadStore,
     authorized_context_mutation,
     grant_checkpoint_args,
 )
-from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
-from memcommit.core.context_targeting.model import ContextScope
-from memcommit.application.capabilities.authority.readable_contexts import ReadableContextCatalog
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.application.capabilities.authority.readable_contexts import (
+    ReadableContextCatalog,
+)
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,
-    ExactDuplicateKind,
-    find_exact_duplicate_groups,
+)
+from memcommit.application.operations.find_duplicates.application import (
+    ExactDuplicateContextReport,
+    ExactDuplicateScopeReport,
 )
 from memcommit.application.operations.profile.config import ProfileRegistry
+from memcommit.core.context import AutoCheckpoint, MemoryRef
+from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
@@ -31,17 +34,8 @@ class ExactDedupError(RuntimeError):
     """The exact duplicate frame cannot be applied safely."""
 
 
-@dataclass(frozen=True)
-class ExactDuplicateReport:
-    """Complete provider-free role-aware exact discovery for one Context."""
-
-    memory_count: int
-    groups: tuple[ExactDuplicateGroup, ...]
-    item_count: int = 0
-
-    @property
-    def duplicate_count(self) -> int:
-        return sum(len(group.absorbed_uids) for group in self.groups)
+class ExactDedupConflictError(ExactDedupError):
+    """The frozen Find Duplicates analysis no longer matches storage."""
 
 
 @dataclass(frozen=True)
@@ -55,40 +49,6 @@ class ExactDedupReceipt:
     @property
     def removed_count(self) -> int:
         return sum(len(group.absorbed_uids) for group in self.groups)
-
-
-@dataclass(frozen=True)
-class ExactDuplicateContextReport:
-    """One independently judged direct Context inside a lexical scope."""
-
-    context_name: str
-    context_uid: str
-    report: ExactDuplicateReport
-
-
-@dataclass(frozen=True)
-class ExactDuplicateScopeReport:
-    """Complete exact-DUP discovery for one direct or lexical Context scope."""
-
-    root_name: str
-    include_descendants: bool
-    contexts: tuple[ExactDuplicateContextReport, ...]
-
-    @property
-    def item_count(self) -> int:
-        return sum(frame.report.item_count for frame in self.contexts)
-
-    @property
-    def memory_count(self) -> int:
-        return sum(frame.report.memory_count for frame in self.contexts)
-
-    @property
-    def group_count(self) -> int:
-        return sum(len(frame.report.groups) for frame in self.contexts)
-
-    @property
-    def duplicate_count(self) -> int:
-        return sum(frame.report.duplicate_count for frame in self.contexts)
 
 
 @dataclass(frozen=True)
@@ -117,79 +77,6 @@ class ExactDedupScopeReceipt:
         )
 
 
-def find_exact_duplicates(context: Context) -> ExactDuplicateReport:
-    """Return every same-role exact group without provider access or mutation."""
-
-    if not isinstance(context, Context):
-        raise TypeError("Find Duplicates requires one Context.")
-    memory_count = sum(1 for item in context.iter_items() if isinstance(item, Memory))
-    return ExactDuplicateReport(
-        memory_count=memory_count,
-        groups=find_exact_duplicate_groups(context),
-        item_count=len(context.ordered_uids()),
-    )
-
-
-def find_exact_duplicate_scope(
-    active_store: MemoryStore,
-    access: ContextAccess,
-    *,
-    include_descendants: bool,
-    registry: ProfileRegistry | None = None,
-) -> ExactDuplicateScopeReport:
-    """Freeze and inspect each readable lexical Context as an independent frame."""
-
-    if not isinstance(active_store, MemoryStore) or not isinstance(
-        access,
-        ContextAccess,
-    ):
-        raise TypeError("Find Duplicates requires a Store and Context access.")
-    if type(include_descendants) is not bool:
-        raise TypeError("Find Duplicates descendant reach must be a boolean.")
-
-    if not include_descendants:
-        context = (
-            GrantedReadStore(access, registry=registry).load_direct(access.display_name)
-            if access.is_granted
-            else access.store.load_direct(access.context_name)
-        )
-        return ExactDuplicateScopeReport(
-            root_name=access.display_name,
-            include_descendants=False,
-            contexts=(
-                ExactDuplicateContextReport(
-                    context_name=access.display_name,
-                    context_uid=context.uid,
-                    report=find_exact_duplicates(context),
-                ),
-            ),
-        )
-
-    catalog = ReadableContextCatalog(
-        active_store,
-        access,
-        registry=registry,
-        include_query_routes=False,
-    )
-    names = expand_lexical_context_names(
-        ContextScope.create((access.display_name,), include_descendants=True),
-        catalog.list_context_names(),
-    )
-    return ExactDuplicateScopeReport(
-        root_name=access.display_name,
-        include_descendants=True,
-        contexts=tuple(
-            ExactDuplicateContextReport(
-                context_name=name,
-                context_uid=context.uid,
-                report=find_exact_duplicates(context),
-            )
-            for name in names
-            for context in (catalog.load_direct(name),)
-        ),
-    )
-
-
 def _inbound_references(
     store: MemoryStore,
     *,
@@ -210,17 +97,30 @@ def _inbound_references(
 
 def apply_exact_dedup(
     access: ContextAccess,
-    context: Context,
+    analysis: ExactDuplicateContextReport,
 ) -> ExactDedupReceipt:
-    """Remove every later same-role exact occurrence atomically."""
+    """Apply one frozen direct Find Duplicates analysis atomically."""
 
-    if not isinstance(access, ContextAccess) or not isinstance(context, Context):
-        raise TypeError("Exact Dedup requires frozen Context access and content.")
-    groups = find_exact_duplicate_groups(context)
+    if not isinstance(access, ContextAccess) or not isinstance(
+        analysis,
+        ExactDuplicateContextReport,
+    ):
+        raise TypeError("Exact Dedup requires Context access and frozen analysis.")
+    if analysis.context_name != access.display_name:
+        raise ExactDedupError("The exact Dedup analysis targets another Context.")
+    groups = analysis.report.groups
     if not groups:
+        current = access.store.load_direct(access.context_name)
+        if (
+            current.uid != analysis.context_uid
+            or context_record_digest(current) != analysis.context_digest
+        ):
+            raise ExactDedupConflictError(
+                "The exact Dedup Context changed after analysis; nothing was written."
+            )
         return ExactDedupReceipt(access.display_name, (), None)
 
-    expected_digest = context_record_digest(context)
+    expected_digest = analysis.context_digest
     absorbed_uids = tuple(uid for group in groups for uid in group.absorbed_uids)
     absorbed_memory_uids = {
         uid
@@ -237,15 +137,16 @@ def apply_exact_dedup(
         with access.store._command_write_lock():  # noqa: SLF001
             current = access.store.load_for_update(access.context_name)
             if (
-                current.uid != context.uid
+                current.uid != analysis.context_uid
                 or context_record_digest(current) != expected_digest
-            ):
-                raise ExactDedupError(
-                    "The exact Dedup Context changed before removal; nothing was written."
-                )
+                ):
+                    raise ExactDedupConflictError(
+                        "The exact Dedup Context changed after analysis; "
+                        "nothing was written."
+                    )
             inbound = _inbound_references(
                 access.store,
-                context_uid=context.uid,
+                context_uid=analysis.context_uid,
                 absorbed_uids=absorbed_memory_uids,
             )
             if inbound:
@@ -292,22 +193,26 @@ def apply_exact_dedup(
 def apply_exact_dedup_scope(
     active_store: MemoryStore,
     access: ContextAccess,
+    analysis: ExactDuplicateScopeReport,
     *,
-    include_descendants: bool,
     registry: ProfileRegistry | None = None,
 ) -> ExactDedupScopeReceipt:
-    """Apply exact Dedup per Context, publishing a recursive scope atomically."""
+    """Apply one frozen Find Duplicates scope without rediscovering groups."""
 
     if not isinstance(active_store, MemoryStore) or not isinstance(
         access,
         ContextAccess,
+    ) or not isinstance(
+        analysis,
+        ExactDuplicateScopeReport,
     ):
-        raise TypeError("Exact Dedup requires a Store and Context access.")
-    if type(include_descendants) is not bool:
-        raise TypeError("Exact Dedup descendant reach must be a boolean.")
-    if not include_descendants:
-        context = access.store.load_direct(access.context_name)
-        receipt = apply_exact_dedup(access, context)
+        raise TypeError("Exact Dedup requires a Store, access, and frozen analysis.")
+    if analysis.root_name != access.display_name:
+        raise ExactDedupError("The exact Dedup analysis targets another scope.")
+    if not analysis.include_descendants:
+        if len(analysis.contexts) != 1:
+            raise ExactDedupError("Direct exact Dedup requires one analyzed Context.")
+        receipt = apply_exact_dedup(access, analysis.contexts[0])
         return ExactDedupScopeReceipt(
             root_name=access.display_name,
             include_descendants=False,
@@ -337,20 +242,38 @@ def apply_exact_dedup_scope(
         )
 
     store = access.store
-    catalog_names = tuple(store.list_context_names())
+    catalog_names = analysis.context_catalog
+    if tuple(store.list_context_names()) != catalog_names:
+        raise ExactDedupConflictError(
+            "The Context namespace changed after Find Duplicates; nothing was written."
+        )
     context_names = expand_lexical_context_names(
         ContextScope.create((access.context_name,), include_descendants=True),
         catalog_names,
     )
+    if tuple(frame.context_name for frame in analysis.contexts) != context_names:
+        raise ExactDedupError(
+            "The recursive exact Dedup analysis no longer matches its local scope."
+        )
     frames = tuple(
         (
             context,
-            context_record_digest(context),
-            find_exact_duplicate_groups(context),
+            frame.context_digest,
+            frame.report.groups,
         )
-        for name in context_names
-        for context in (store.load_direct(name),)
+        for frame in analysis.contexts
+        for context in (store.load_for_update(frame.context_name),)
     )
+    for frame, (context, digest, _groups) in zip(
+        analysis.contexts,
+        frames,
+        strict=True,
+    ):
+        if context.uid != frame.context_uid or context_record_digest(context) != digest:
+            raise ExactDedupConflictError(
+                f"Exact Dedup Context '{frame.context_name}' changed after analysis; "
+                "nothing was written."
+            )
     changed = tuple(frame for frame in frames if frame[2])
     if not changed:
         return ExactDedupScopeReceipt(
@@ -491,17 +414,10 @@ def apply_exact_dedup_scope(
 
 __all__ = [
     "EXACT_DEDUP_CONTRACT_VERSION",
+    "ExactDedupConflictError",
     "ExactDedupError",
     "ExactDedupReceipt",
     "ExactDedupScopeReceipt",
-    "ExactDuplicateGroup",
-    "ExactDuplicateKind",
-    "ExactDuplicateContextReport",
-    "ExactDuplicateReport",
-    "ExactDuplicateScopeReport",
     "apply_exact_dedup",
     "apply_exact_dedup_scope",
-    "find_exact_duplicate_scope",
-    "find_exact_duplicate_groups",
-    "find_exact_duplicates",
 ]

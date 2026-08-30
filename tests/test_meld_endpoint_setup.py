@@ -7,7 +7,9 @@ import pytest
 from memcommit.adapters.console.commands.meld import command as meld_command
 import memcommit.adapters.console.commands.meld.endpoint_setup as meld_setup_command
 import memcommit.application.capabilities.ops as ops
-from memcommit.adapters.console.terminal.components.endpoint_setup import EndpointSetupMemory
+from memcommit.adapters.console.terminal.components.endpoint_setup import (
+    EndpointSetupMemory,
+)
 from memcommit.adapters.console.commands.meld.endpoint_setup import (
     MeldEndpointSelection,
     MeldTuiSetup,

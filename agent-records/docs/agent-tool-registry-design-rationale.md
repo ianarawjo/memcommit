@@ -6,7 +6,7 @@ Last verified: 2026-08-27.
 
 Query and Add first supplied strict schemas and adapters, but a host still had
 to assemble them independently. Compare, Update, Meld, structural Atomize,
-Atomize Grounding, Distill, Elaborate, Fit, Forget, and Resolve now use that
+Atomize Grounding, Distill, Makemore, Fit, Forget, and Resolve now use that
 same path rather than introducing host-specific operation handlers. The
 integration path covers tool
 discovery, name dispatch, shared client ownership, JSON-safe output, and the
@@ -97,7 +97,7 @@ checkpoint evidence while leaving the post-Add Store byte-for-byte unchanged.
 
 Grounding integration tests exercise all five lifecycle actions through the
 registry and preserve typed issue, question, proposal, and Apply receipt data.
-Separate semantic integration tests invoke Distill and Elaborate through the
+Separate semantic integration tests invoke Distill and Makemore through the
 same registry, verify typed evidence and verification fields, and prove that
 neither read-only tool creates a Context or accepts a proposal.
 

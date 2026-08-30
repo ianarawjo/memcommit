@@ -9,10 +9,11 @@ checkpoint-producing command unit and returns the existing typed
 
 | Concern | Owner | Boundary |
 | --- | --- | --- |
-| Granted-versus-local stack selection | `memcommit.application.operations.restoration.runtime` | Shared fail-closed restoration mechanic |
+| Command-unit model and stack reconstruction | `memcommit.application.capabilities.command_recovery.model`, `stack_reconstruction` | Recover one safe Profile-global LIFO order from retained checkpoint evidence |
+| Granted-versus-local stack selection | `memcommit.application.capabilities.command_recovery.execution` | Shared fail-closed restoration capability |
 | Undo direction | `memcommit.application.operations.undo.runtime` | Fixed `undo` adapter |
 | Redo direction | `memcommit.application.operations.redo.runtime` | Fixed `redo` adapter |
-| Receipt rendering | `memcommit.adapters.console.coordination.restoration_present` | Shared presentation only |
+| Receipt rendering | `memcommit.adapters.console.terminal.components.restoration_receipt` | Shared presentation only |
 | CLI errors and syntax | `memcommit.adapters.console.commands.undo.command`, `memcommit.adapters.console.commands.redo.command` | Typer adapters |
 
 ## Invariants
@@ -27,10 +28,14 @@ checkpoint-producing command unit and returns the existing typed
   remain fail-closed.
 - Undo and Redo retain distinct operation identities in checkpoints, History,
   Trace, and terminal receipts even though route selection is shared.
+- Revert owns its typed request, Store binding, and direct/recursive
+  checkpoint-unit execution under `memcommit.application.operations.revert`.
+  It does not join the command-stack direction selector used by Undo/Redo.
 
 ## Deliberate boundary
 
-The shared core selects a restoration authority; it does not merge the two
-operations or invent a generic user-facing command. The Store and granted
-Update application continue to own checkpoint reconstruction, locks, CAS,
-rollback, and companion-artifact restoration.
+The shared capability reconstructs command units and selects an Undo/Redo
+restoration authority; it does not execute Revert or invent a generic
+user-facing command. Each operation retains its own application package. The
+Store and granted Update application continue to own locks, CAS, rollback, and
+companion-artifact restoration.

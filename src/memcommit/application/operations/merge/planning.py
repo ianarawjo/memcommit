@@ -9,7 +9,7 @@ from typing import Mapping
 import uuid
 
 from memcommit.core.context import Context, Information, Memory, MemoryRef, QueryContextRef
-from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 from memcommit.application.operations.merge.application import (
     MergeAddition,
     MergeConflict,

@@ -19,6 +19,13 @@ mem unlock --memory SELECTOR [--context CONTEXT]
 mem lock --profile | mem unlock --profile
 ```
 
+Lock and Unlock have separate console packages and separate application
+operation packages because they are independently discoverable Help
+operations with opposite requested states. Their shared typed target model and
+Store port live in `application.capabilities.write_protection`; shared console
+operand classification and receipt wording live in console coordination.
+Neither shared layer owns a third user-facing `write-protection` command.
+
 Bare lock and unlock target the current Context. A positional `TARGET` uses the
 shared direct-Memory locator grammar: an eight-or-more-character UUID-shaped
 operand or `CONTEXT:UID` selects Memory without storage-dependent typing. A

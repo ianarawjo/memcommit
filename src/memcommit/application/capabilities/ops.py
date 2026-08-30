@@ -45,7 +45,9 @@ if TYPE_CHECKING:
         DuplicateReport,
         FindingsProvider,
     )
-    from memcommit.application.operations.dedup.application import ExactDuplicateReport
+    from memcommit.application.operations.find_duplicates.application import (
+        ExactDuplicateReport,
+    )
     from memcommit.application.operations.search.model import (
         PromptProvider,
         SearchMatch,
@@ -273,7 +275,7 @@ def reference_context(
     and self-reference checks without importing Store or CLI concerns.
     """
 
-    from memcommit.application.capabilities.retained_history.context_snapshot import (
+    from memcommit.application.capabilities.context_snapshot import (
         ContextSnapshotRef,
     )
 
@@ -472,7 +474,7 @@ def _copy_context_for_branch(
         uid=str(uuid.uuid4()),
         name=validate_portable_context_name(new_name),
     )
-    from memcommit.application.capabilities.retained_history.context_snapshot import (
+    from memcommit.application.capabilities.context_snapshot import (
         ContextSnapshotRef,
     )
 
@@ -591,7 +593,7 @@ def branch_subtree(
         )
         for source in sources
     }
-    from memcommit.application.capabilities.retained_history.context_snapshot import (
+    from memcommit.application.capabilities.context_snapshot import (
         ContextSnapshotRef,
     )
 
@@ -977,9 +979,11 @@ def find_duplicates(
     ctx: Context,
 ) -> "ExactDuplicateReport":
     """Find byte-identical direct-Memory groups without provider inference."""
-    from memcommit.application.operations.dedup.application import find_exact_duplicates
+    from memcommit.application.operations.find_duplicates.application import (
+        analyze_exact_duplicates,
+    )
 
-    return find_exact_duplicates(ctx)
+    return analyze_exact_duplicates(ctx)
 
 
 def find_ambiguities(

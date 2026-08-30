@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 from memcommit.adapters.python_api._runtime import ClientRuntime
+from memcommit.adapters.python_api._support.active_profile import (
+    active_profile_registry,
+)
 from memcommit.adapters.python_api._support.errors import raise_public
 from memcommit.adapters.python_api.dedup import (
     ExactDedupContextResult,
@@ -20,34 +23,16 @@ from memcommit.adapters.python_api.errors import (
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.dedup.application import (
+    ExactDedupConflictError,
     ExactDedupError,
     apply_exact_dedup_scope,
 )
-from memcommit.application.operations.profile.config import (
-    ProfileConfigError,
-    load_profile_registry,
-    profile_store_dir,
+from memcommit.application.operations.find_duplicates.application import (
+    analyze_exact_duplicate_scope,
 )
+from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError
-
-
-def _active_registry(runtime: ClientRuntime):
-    if runtime.registry is None or runtime.profile is None:
-        return None
-    try:
-        registry = load_profile_registry()
-        if (
-            runtime.profile.uid == registry.active.uid
-            and runtime.store_root == profile_store_dir(registry.active).resolve()
-        ):
-            return registry
-        return None
-    except (ProfileConfigError, ProfileError) as error:
-        raise_public(SemanticAuthorityError, error)
-    except OSError as error:
-        raise_public(SemanticStorageError, error)
-
 
 def dedup(
     runtime: ClientRuntime,
@@ -67,7 +52,7 @@ def dedup(
             canonical = current_name
         else:
             canonical = resolve_context_locator(context_name, current=current_name)
-        registry = _active_registry(runtime)
+        registry = active_profile_registry(runtime)
         access = resolve_context_access(
             runtime.store,
             canonical,
@@ -75,17 +60,23 @@ def dedup(
             required_permission="READ",
             registry=registry,
         )
-        receipt = apply_exact_dedup_scope(
+        analysis = analyze_exact_duplicate_scope(
             runtime.store,
             access,
             include_descendants=include_descendants,
+            registry=registry,
+        )
+        receipt = apply_exact_dedup_scope(
+            runtime.store,
+            access,
+            analysis,
             registry=registry,
         )
     except (FileNotFoundError, KeyError) as error:
         raise_public(SemanticContextError, error)
     except (ProfileConfigError, ProfileError) as error:
         raise_public(SemanticAuthorityError, error)
-    except ConcurrentContextUpdateError as error:
+    except (ConcurrentContextUpdateError, ExactDedupConflictError) as error:
         raise_public(SemanticConflictError, error)
     except OSError as error:
         raise_public(SemanticStorageError, error)

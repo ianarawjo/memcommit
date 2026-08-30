@@ -10,7 +10,7 @@ from click.testing import CliRunner as ClickCliRunner
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.capabilities.retained_history.command_history import (
+from memcommit.application.capabilities.command_recovery import (
     CommandContextChange,
     ContextCommandUnit,
 )

@@ -9,7 +9,7 @@ from typing import Any
 
 import typer
 
-from memcommit.application.capabilities.retained_history.command_history import (
+from memcommit.application.capabilities.command_recovery import (
     CommandRestoreResult,
     ContextCommandUnit,
 )

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import uuid
 from dataclasses import dataclass
 from typing import Annotated, Optional
 
@@ -9,14 +8,14 @@ import typer
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
-from memcommit.core.context_targeting.model import ContextScope
 from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.application.operations.checkpoint.application import CheckpointRequest
+from memcommit.application.operations.checkpoint.runtime import execute_checkpoint
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)
@@ -141,79 +140,16 @@ def cmd(
         raise typer.Exit(2)
 
     store = MemoryStore()
-    snapshot = ContextOperandSnapshot.capture(store)
     try:
-        context_name = snapshot.resolve_or_current(operands.context_locator)
-        if context_name is None:
-            raise RuntimeError("No current context. Run 'mem init <name>' first.")
-        root = store.load_direct(context_name)
-        if preset is ContextScopePreset.DIRECT:
-            checkpoint = store.checkpoint(root, operands.message or "")
-            ts = checkpoint.timestamp.strftime("%Y-%m-%d %H:%M:%S")
-            typer.secho(
-                f"[{checkpoint.uid[:8]}] {ts}  "
-                f"Context '{display_escape_text(context_name)}'  "
-                f"{_label(operands.message)}",
-                fg=typer.colors.GREEN,
-            )
-            return
-
-        catalog_names = tuple(store.list_context_names())
-        context_names = expand_lexical_context_names(
-            ContextScope.create(
-                (context_name,),
-                include_descendants=True,
+        snapshot = ContextOperandSnapshot.capture(store)
+        result = execute_checkpoint(
+            store,
+            CheckpointRequest(
+                context_locator=operands.context_locator,
+                current_context_name=snapshot.current_name,
+                message=operands.message or "",
+                recursive=preset is ContextScopePreset.RECURSIVE,
             ),
-            catalog_names,
-        )
-        contexts = tuple(
-            root if name == context_name else store.load_direct(name)
-            for name in context_names
-        )
-        membership = [
-            {"uid": context.uid, "name": context.name} for context in contexts
-        ]
-        checkpoint_uids = tuple(str(uuid.uuid4()) for _context in contexts)
-        checkpoint_uid_by_name = {
-            context.name: checkpoint_uid
-            for context, checkpoint_uid in zip(contexts, checkpoint_uids)
-        }
-        root_checkpoint_uid = checkpoint_uid_by_name[context_name]
-        checkpoint_set = {
-            "version": 2,
-            # A recursive recovery unit must be reachable through the same
-            # globally searchable identity as an ordinary checkpoint.  The
-            # root's physical checkpoint is therefore the canonical handle;
-            # no receipt-only UID is minted beside the checkpoint catalog.
-            "uid": root_checkpoint_uid,
-            "root": {"uid": root.uid, "name": root.name},
-            "include_descendants": True,
-            "members": [
-                {
-                    "context_uid": context.uid,
-                    "context_name": context.name,
-                    "checkpoint_uid": checkpoint_uid_by_name[context.name],
-                }
-                for context in contexts
-            ],
-        }
-        checkpoints = store.checkpoint_context_batch(
-            ((context, context_record_digest(context)) for context in contexts),
-            message=operands.message or "",
-            command="checkpoint",
-            args={
-                "checkpoint_set": checkpoint_set,
-                "command_contexts": membership,
-            },
-            description=(
-                operands.message
-                or (
-                    f"Manual checkpoint set for {len(contexts)} Context(s) "
-                    f"under '{context_name}'"
-                )
-            ),
-            expected_context_catalog=catalog_names,
-            checkpoint_uids=checkpoint_uids,
         )
     except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
         typer.secho(
@@ -223,11 +159,20 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    ts = checkpoints[0].timestamp.strftime("%Y-%m-%d %H:%M:%S")
+    ts = result.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+    if not result.recursive:
+        typer.secho(
+            f"[{result.root_checkpoint_uid[:8]}] {ts}  "
+            f"Context '{display_escape_text(result.root_context_name)}'  "
+            f"{_label(result.message)}",
+            fg=typer.colors.GREEN,
+        )
+        return
     typer.secho(
-        f"[{root_checkpoint_uid[:8]}] {ts}  Checkpoint set · "
-        f"{len(checkpoints)} Context(s) under "
-        f"'{display_escape_text(context_name)}'  {_label(operands.message)}",
+        f"[{result.root_checkpoint_uid[:8]}] {ts}  Checkpoint set · "
+        f"{result.member_count} Context(s) under "
+        f"'{display_escape_text(result.root_context_name)}'  "
+        f"{_label(result.message)}",
         fg=typer.colors.GREEN,
     )
-    typer.echo(f"Revert: mem revert {root_checkpoint_uid} --keep")
+    typer.echo(f"Revert: mem revert {result.root_checkpoint_uid} --keep")

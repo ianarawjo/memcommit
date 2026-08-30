@@ -3,6 +3,7 @@
 from .workbench import (
     MeldShellAction,
     _comparison_issue_resolution_badges,
+    _relation_issue_resolution_badges,
     _line,
     run_meld_shell,
 )
@@ -10,6 +11,7 @@ from .workbench import (
 __all__ = [
     "MeldShellAction",
     "_comparison_issue_resolution_badges",
+    "_relation_issue_resolution_badges",
     "_line",
     "run_meld_shell",
 ]

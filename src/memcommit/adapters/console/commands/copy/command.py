@@ -9,7 +9,7 @@ import typer
 from memcommit.adapters.console.commands.copy.receipt import render_copy_receipt
 from memcommit.adapters.console.commands.copy.setup import choose_copy_setup
 from memcommit.adapters.console.terminal.components.errors import render_cli_error
-from memcommit.adapters.console.coordination.memory_transfer.arguments import (
+from memcommit.adapters.console.coordination.copy_and_move.arguments import (
     selected_memory_locators,
     target_context_option,
 )
@@ -17,14 +17,12 @@ from memcommit.adapters.console.terminal.core.capabilities import is_interactive
 from memcommit.application.capabilities.authority.write_protection import (
     WriteProtectionError,
 )
-from memcommit.application.operations.memory_transfer.application import (
+from memcommit.application.operations.copy_and_move.application import (
     CopyMemoriesRequest,
     MemoryTransferError,
-    run_copy,
 )
-from memcommit.application.operations.memory_transfer.runtime import (
-    MemoryStoreMemoryTransferPort,
-)
+from memcommit.application.operations.copy.application import run_copy
+from memcommit.application.operations.copy.runtime import MemoryStoreCopyPort
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
@@ -95,7 +93,7 @@ def cmd(
         store = MemoryStore()
         # Explicit public Source owners may resolve through the active
         # Profile's Grants. Bare UID lookup and every Target stay local.
-        port = MemoryStoreMemoryTransferPort.capture(
+        port = MemoryStoreCopyPort.capture(
             store,
             allow_granted_sources=True,
         )

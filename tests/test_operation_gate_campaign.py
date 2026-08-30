@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from memcommit.application.capabilities.evaluation.operation_gate_campaign import (
+from memcommit.application.operations.eval.operation_gate_campaign import (
     DEFAULT_OPERATION_GATE_FIXTURE,
     DEFAULT_OPERATION_GATE_V2_FIXTURE,
     load_operation_gate_corpus,
@@ -13,7 +13,7 @@ from memcommit.application.capabilities.evaluation.operation_gate_campaign impor
     load_operation_gate_lock,
     run_operation_gate_campaign,
 )
-from memcommit.application.capabilities.evaluation.semantic_campaign import SemanticCampaignError
+from memcommit.application.operations.eval.semantic_campaign import SemanticCampaignError
 from memcommit.providers.types import ProviderIdentity
 from memcommit.application.capabilities.semantic.classification.gates import classify_operation_gate
 from memcommit.application.capabilities.semantic.classification.gates import OperationGateError

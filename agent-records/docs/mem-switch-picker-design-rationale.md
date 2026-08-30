@@ -231,11 +231,14 @@ listing commands depend on their own renderers:
 
 ```text
 memcommit.adapters.console.entrypoint
+├── mem checkout -> commands.checkout.cmd
+│   ├── `-b` delegates to the Branch console operation
+│   └── an existing target delegates to the Switch console operation
 ├── mem contexts -> commands.contexts.cmd
 │   ├── MemoryStore.list_context_names()
 │   ├── MemoryStore.current_context_name()
 │   └── render the read-only list and current `*` marker
-├── mem list -> commands.list_memories.cmd
+├── mem list -> commands.list.cmd
 │   └── render the resolved direct/recursive snapshot
 └── mem switch -> commands.switch.cmd
     ├── MemoryStore.current_context_name()       # one command-start snapshot
@@ -257,6 +260,11 @@ and browse-only behavior for consumers that need them. The Switch
 application/runtime owns relative resolution, target validation, and mutation.
 Static commands neither import the picker nor invoke Switch, avoiding both a
 hidden input wait and a human-output dependency.
+
+Checkout deliberately owns only this console composition boundary. It has no
+third application semantics beyond selecting Branch or Switch, but its own
+command package keeps the Help operation visible and prevents root-entrypoint
+argument parsing from becoming an unowned operation implementation.
 
 `choose_context()` accepts caller-owned title and acceptance labels so a
 Compare, Update, Ground, or Switch flow does not mislabel selection as another

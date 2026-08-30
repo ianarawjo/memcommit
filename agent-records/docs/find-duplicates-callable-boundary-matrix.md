@@ -14,10 +14,11 @@ the applying Dedup boundary.
 | CLI | `mem find-duplicates [--context CONTEXT] [-d\|-r]` | `operations.find_duplicates.application.find_duplicates` | complete Context-labelled exact groups; no mutation |
 | Public Python | `MemCommitClient.find_duplicates(context_name, include_descendants=...)` | the same `FindDuplicatesRequest` and application callable | aggregate `ExactDuplicateFindResult` plus per-Context results; no mutation |
 
-Both routes converge first on the operation-aligned
+Both routes converge on the operation-aligned
 `memcommit.application.operations.find_duplicates.application` boundary, which
-then delegates exact scope analysis to `dedup.application` and its pure
-`reviewing.direct_item_duplicates` detector. Adapters do not construct a
+owns the exact report and direct-or-lexical analysis while reusing the pure
+`reviewing.direct_item_duplicates` detector. Applying Dedup consumes this same
+frozen analysis once rather than rediscovering groups. Adapters do not construct a
 provider, normalize content, open a semantic workbench, create a checkpoint,
 or modify the global current Context. Recursive reach uses public lexical
 names, may include READ-granted descendants, and never follows Embed edges.
@@ -25,10 +26,10 @@ Their Read Report
 operation identity is exactly `find-duplicates`; metadata from
 `find-redundancies` is rejected instead of canonicalized as an alias.
 
-This shared detector does not merge Find Duplicates with applying
-Dedup. Find Duplicates exposes only the frozen provider-free report, while
-Dedup alone invokes the authority, reference, checkpoint, and atomic
-publication portion of the same exact operation boundary.
+This shared analysis does not merge Find Duplicates with applying Dedup. Find
+Duplicates exposes only the frozen provider-free report, while Dedup alone
+invokes authority, freshness, reference, checkpoint, and atomic publication
+over that report.
 
 ## Relationship to DUN
 

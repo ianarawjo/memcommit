@@ -15,7 +15,7 @@ from memcommit.application.capabilities.authority.context_access import (
 )
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, Memory
-from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.adapters.console.commands.embed.workbench import build_embed_tui_setup
 from memcommit.application.operations.profile.config import (

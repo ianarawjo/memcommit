@@ -26,9 +26,6 @@ from memcommit.application.capabilities.context_locator import resolve_context_l
 from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.application.operations.search.answer_dialogue import (
-    SearchAnswerCorpusTooLarge,
-)
 from memcommit.application.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryTarget,
@@ -181,7 +178,6 @@ def query_ordinary(
     except OSError as error:
         raise_public(QueryStorageError, error)
     except (
-        SearchAnswerCorpusTooLarge,
         OrdinaryQueryCorpusTooLarge,
         SearchError,
         RuntimeError,

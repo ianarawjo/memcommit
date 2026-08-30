@@ -1,4 +1,5 @@
 """Saved-session catalog and picker contracts for Context Meld."""
+
 from __future__ import annotations
 
 import os
@@ -14,7 +15,10 @@ from memcommit.adapters.console.commands.meld.sessions import (
     list_meld_session_catalog,
     reload_selected_meld_session,
 )
-from memcommit.adapters.console.terminal.components.operation_launcher.session import SessionNewReceipt, SessionOpenReceipt
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
+    SessionNewReceipt,
+    SessionOpenReceipt,
+)
 from memcommit.application.operations.meld.model import MeldSession
 from memcommit.persistence.store import MemoryStore
 
@@ -57,13 +61,9 @@ def test_meld_catalog_is_recently_modified_and_grouped_by_target(
     ]
     newest = entries[0]
     assert newest.group == "catalog/newer/baseline"
-    assert newest.title == (
-        "catalog/newer/incoming → catalog/newer/baseline"
-    )
+    assert newest.title == ("catalog/newer/incoming → catalog/newer/baseline")
     assert newest.status == "PENDING_ANALYSIS"
-    assert "Directional · INCOMING → BASELINE / TARGET" in (
-        newest.subtitle
-    )
+    assert "Directional · INCOMING → BASELINE / TARGET" in (newest.subtitle)
     assert "from file metadata" in newest.detail
     assert newest.reopen_argv == (
         "mem",
@@ -213,8 +213,7 @@ def test_meld_session_picker_reopens_without_provider_or_mutation(
     assert "Resumed without calling the semantic provider" in result.output
     assert session_path.read_bytes() == session_before
     assert {
-        name: store._context_file(name).read_bytes()
-        for name in contexts_before
+        name: store._context_file(name).read_bytes() for name in contexts_before
     } == contexts_before
     assert store.list_checkpoints(session.target.context_name) == []
 

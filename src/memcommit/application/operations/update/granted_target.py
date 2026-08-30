@@ -16,7 +16,7 @@ from memcommit.application.capabilities.authority.context_access import (
 )
 from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.application.capabilities.retained_history.command_history import (
+from memcommit.application.capabilities.command_recovery import (
     CommandRestoreResult,
 )
 from memcommit.application.operations.profile.config import ProfileRegistry

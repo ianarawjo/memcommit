@@ -16,7 +16,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 import memcommit.persistence.store as store_module
-from memcommit.application.capabilities.retained_history.command_history import (
+from memcommit.application.capabilities.command_recovery import (
     build_command_stacks,
 )
 from memcommit.adapters.console.entrypoint import app

@@ -110,7 +110,7 @@ def _legacy_artifacts(monkeypatch):
     with monkeypatch.context() as patch:
         patch.setattr(
             comparison_module,
-            "COMPARISON_RULESET_VERSION",
+            "MEMORY_RELATION_RULESET_VERSION",
             "peer-relations-v3",
         )
         patch.setattr(

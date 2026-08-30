@@ -1,1 +1,1 @@
-"""Semantic Dedun planning, review, and atomic application."""
+"""Semantic Dedun analysis and atomic direct-or-recursive application."""

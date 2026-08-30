@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from memcommit.application.operations.meld.restart import (
+from memcommit.application.operations.meld.preparation import (
     MeldRestartError,
     MeldRestartRequest,
     MeldRestartResult,
@@ -74,11 +74,14 @@ def test_run_meld_restart_validates_the_complete_port_result():
     result = MeldRestartResult(session=_session(), origin="PROVIDER")
     port = _Port(result)
 
-    assert run_meld_restart(
-        request,
-        port=port,
-        provider_factory=provider_factory,
-    ) is result
+    assert (
+        run_meld_restart(
+            request,
+            port=port,
+            provider_factory=provider_factory,
+        )
+        is result
+    )
     assert port.calls == [(request, provider_factory)]
 
 

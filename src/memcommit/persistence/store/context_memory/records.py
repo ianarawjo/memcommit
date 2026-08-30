@@ -4,7 +4,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
-from memcommit.application.capabilities.retained_history.checkpoint_frames import (
+from memcommit.persistence.store.context_memory.checkpoint_frame_mapping import (
     map_restorable_checkpoint_frames,
 )
 from memcommit.core.context import Context, MemoryRef
@@ -181,7 +181,7 @@ def _rewrite_context_pointers(
                 collisions.add(target_name)
             selector_names[target_name] = "context_ref"
         elif kind == "context_snapshot_ref":
-            from memcommit.application.capabilities.retained_history.context_snapshot import (
+            from memcommit.application.capabilities.context_snapshot import (
                 ContextSnapshotRef,
             )
 
@@ -328,7 +328,7 @@ def _rewrite_branched_context_pointers(
             # external to the local subtree UID remapping.
             ordinary_names.add(name)
         elif kind == "context_snapshot_ref":
-            from memcommit.application.capabilities.retained_history.context_snapshot import (
+            from memcommit.application.capabilities.context_snapshot import (
                 ContextSnapshotRef,
             )
 

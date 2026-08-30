@@ -757,12 +757,12 @@ def _parse_assessment(
         raise MeldProviderError(str(error)) from error
 
 
-def _expand_directional_comparison_response(
+def _expand_directional_relation_basis_response(
     raw: object,
     *,
     view: _ProviderView,
 ) -> str:
-    """Reattach the trusted Compare ledger to one compact Directional result."""
+    """Reattach the trusted relation ledger to one compact Directional result."""
 
     if (
         not isinstance(raw, str)
@@ -779,7 +779,7 @@ def _expand_directional_comparison_response(
     compact = _exact_dict(
         value,
         {"overview", "additional_issues", "results", "ready_to_apply"},
-        "directional comparison meld response",
+        "directional relation-analysis Meld response",
     )
     basis = _exact_dict(
         view.payload.get("comparison_basis"),
@@ -791,7 +791,7 @@ def _expand_directional_comparison_response(
             "results",
             "ready_to_apply",
         },
-        "directional comparison basis",
+        "directional relation-analysis basis",
     )
     additional_issues = _array(
         compact["additional_issues"],

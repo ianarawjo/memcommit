@@ -193,6 +193,7 @@ HELP_CATEGORY_GROUPS = (
             "atomize",
             "distill",
             "elaborate",
+            "makemore",
             "translate",
             "forget",
             "resolve",
@@ -474,23 +475,29 @@ COMMAND_FORMS = {
         "mem distill --ground [name] --adopt "
         "(atomically add the complete proposal to the physical /rules lane)",
     ),
-    "elaborate": (
-        "mem elaborate (elaborate current direct Memories as Rules and add Cases to current)",
-        "mem elaborate --from [source] --to [target] (explicit existing endpoints)",
-        "mem elaborate --from [source] --as goal (treat its one direct Memory as a Goal)",
-        "mem elaborate --goal [context|memory|text] "
+    "makemore": (
+        "mem makemore (treat current direct Memories as Rules and add Cases to current)",
+        "mem makemore --from [source] --to [target] (explicit existing endpoints)",
+        "mem makemore --from [source] --as goal (treat its one direct Memory as a Goal)",
+        "mem makemore --goal [context|memory|text] "
         "(use it as Goal Source and add candidate Rules to current)",
-        'mem elaborate --rule "[rule]" --to [target] (add concrete Cases)',
-        'mem elaborate --rule "[rule1]" --rule "[rule2]" '
+        'mem makemore --rule "[rule]" --to [target] (add concrete Cases)',
+        'mem makemore --rule "[rule1]" --rule "[rule2]" '
         "(add concrete Cases across explicit Rules to current)",
-        "mem elaborate --ground [name] --from-goal "
+        "mem makemore --ground [name] --from-goal "
         "(use the exact Ground Goal through the same application)",
-        "mem elaborate --ground [name] --from-rules "
+        "mem makemore --ground [name] --from-rules "
         "(use the exact active Ground Rules through the same application)",
-        "mem elaborate --ground [name] --from-goal --adopt "
+        "mem makemore --ground [name] --from-goal --adopt "
         "(atomically add the complete proposal to physical /rules)",
-        "mem elaborate --ground [name] --from-rules --adopt "
+        "mem makemore --ground [name] --from-rules --adopt "
         "(atomically add the complete proposal to physical /examples)",
+    ),
+    "elaborate": (
+        "mem elaborate [UID_or_CONTEXT:UID] "
+        "(append supported detail after one directly owned Memory)",
+        "mem elaborate [UID] --context [context] "
+        "(append within one explicit existing owner)",
     ),
     "edit": (
         'mem edit [UID_or_CONTEXT:UID] "[new_content]" (replace one direct Memory)',
@@ -593,7 +600,8 @@ COMMAND_FORMS = {
         'mem impact forget "[instruction]" (preview complete in-place decisions)',
         'mem impact forget "[instruction]" --context [context] (preview one exact direct Source)',
         "mem impact distill --from [source] --to [target] (preview the Rules Distill would add)",
-        "mem impact elaborate --from [source] --to [target] (preview the Memories Elaborate would add)",
+        "mem impact elaborate [UID_or_CONTEXT:UID] (preview one append-only same-UID revision)",
+        "mem impact makemore --from [source] --to [target] (preview the Memories Makemore would add)",
         "mem impact resolve --context [context] (preview one automatic full-frame interpretation plan)",
         "mem impact resolve --context [context] --candidate [full_id] (preview its exact effect set)",
         "mem impact meld (inspect a saved Meld Impact; APPLY? opens its Apply flow)",
@@ -791,7 +799,7 @@ COMMAND_FORMS = {
         "mem review [kind] --session [uid] (exact Audit, Compare, Meld, Sever, or Update artifact)",
         "mem review atomize (open the current Context's applied Atomize evidence)",
         "mem review atomize --context [context] (Context-bound applied Atomize evidence)",
-        "mem review dedun|distill|elaborate|forget|resolve --receipt [uid] (open exact applied checkpoint evidence)",
+        "mem review dedun|distill|makemore|forget|resolve --receipt [uid] (open exact applied checkpoint evidence)",
         "mem review ambiguities (analyze current-Context ambiguities)",
         "mem review ambiguities --context [context] (Context-bound Ambiguity review)",
     ),

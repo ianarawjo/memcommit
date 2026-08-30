@@ -11,7 +11,7 @@ from dataclasses import replace
 from datetime import datetime
 import sys
 
-from memcommit.application.capabilities.retained_history.applied_review import (
+from memcommit.application.operations.review.applied_checkpoint import (
     CHECKPOINT_REVIEW_OPERATIONS,
     list_applied_checkpoint_reviews,
 )

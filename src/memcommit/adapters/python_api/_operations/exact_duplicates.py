@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.python_api._operations.dedup import _active_registry
 from memcommit.adapters.python_api._runtime import ClientRuntime
+from memcommit.adapters.python_api._support.active_profile import (
+    active_profile_registry,
+)
 from memcommit.adapters.python_api._support.errors import raise_public
 from memcommit.adapters.python_api.dedup import (
     ExactDedupGroupResult,
@@ -43,7 +45,7 @@ def find_duplicates_exact(
             canonical = current_name
         else:
             canonical = resolve_context_locator(context_name, current=current_name)
-        registry = _active_registry(runtime)
+        registry = active_profile_registry(runtime)
         scope = find_duplicates(
             runtime.store,
             FindDuplicatesRequest(

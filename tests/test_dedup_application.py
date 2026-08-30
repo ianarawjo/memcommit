@@ -6,20 +6,20 @@ import hashlib
 import json
 import uuid
 
-import click
 import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
+from memcommit.adapters.python_api._operations import dedun as dedun_operations
 from memcommit.adapters.python_api import DedunPlanResult, MemCommitClient
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     run_quality_find_resolution_workbench,
 )
 from memcommit.core.context import Context, MemoryRef, QueryContextRef
-from memcommit.application.capabilities.retained_history.context_snapshot import (
+from memcommit.application.capabilities.context_snapshot import (
     CONTEXT_SNAPSHOT_SCHEMA_VERSION,
     ContextSnapshotRef,
     context_snapshot_digest,
@@ -44,16 +44,6 @@ from memcommit.application.capabilities.memory_issue_analysis.model import (
 )
 from memcommit.adapters.agent.dedup import DEDUP_AGENT_TOOL_NAME
 from memcommit.adapters.agent.registry import build_default_agent_tool_registry
-from memcommit.adapters.console.terminal.core.theme import (
-    SemanticColorRole,
-    semantic_color_rgb,
-)
-from memcommit.adapters.console.commands.dedun.workbench import (
-    dedun_exact_review,
-    dedun_resolution_spec,
-    run_dedun_workbench,
-)
-from memcommit.adapters.console.terminal.components.resolution import ResolutionOutcome
 from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     create_quality_find_workbench,
 )
@@ -67,7 +57,6 @@ from memcommit.application.capabilities.memory_issue_analysis.handoff import (
 from memcommit.application.capabilities.semantic.redundancy_evidence import (
     redundancy_evidence_dict,
     redundancy_evidence_from_dict,
-    redundancy_evidence_json,
 )
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
@@ -387,65 +376,6 @@ def test_dedup_requires_one_survivor_for_every_component(isolated_store):
         )
 
 
-def test_dedup_tui_uses_common_required_resolution_order(isolated_store):
-    store = MemoryStore()
-    context, first, second, _third, _unrelated = _context(store)
-    handoff = _strict_handoffs(
-        context,
-        DuplicateFinding(
-            first,
-            second,
-            "SEMANTIC_EQUIVALENT",
-            "The claims are substitutable.",
-        ),
-    )[0]
-    port = MemoryStoreDedunPort(store, current_name=context.name)
-    plan = prepare_dedun(DedunRequest((handoff,)), port=port)
-    spec = dedun_resolution_spec(plan)
-
-    assert spec.detail_title.startswith("VIEWER")
-    assert spec.responses_title.startswith("RESPONSES")
-    assert spec.items_title.startswith("ITEMS")
-    report_styles = {
-        style
-        for section in spec.report.sections
-        for style, _text in section.block.fragments
-    }
-    assert "class:impact.add" in report_styles
-    assert "class:impact.keep" not in report_styles
-    review = dedun_exact_review(
-        plan,
-        ResolutionOutcome(
-            ((plan.components[0].uid, plan.components[0].recommended_survivor_uid),)
-        ),
-    )
-    assert review.argv[:2] == ("mem", "dedun")
-    assert "--evidence" in review.argv
-    assert "redundancy-evidence-v2" in review.argv[3]
-    assert "--finding-handoff" not in review.argv
-    assert review.argv[-1] == "--apply"
-
-    with create_pipe_input() as pipe_input:
-        # Viewer -> Items/open -> Viewer detail -> Responses/select -> Items ->
-        # To Do/final review -> exact Apply -> close receipt.
-        pipe_input.send_text("\t\r\t\r\t\t\r\r\r")
-        receipt = run_dedun_workbench(
-            plan,
-            apply_selections=lambda selections: apply_dedun(
-                plan,
-                selections,
-                port=port,
-            ),
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert receipt is not None
-    assert receipt.survivor_uids == (first.uid,)
-    assert second.uid not in store.load_direct(context.name).memories
-
-
 def test_reported_finder_links_enter_dedup_as_one_typed_batch(isolated_store):
     store = MemoryStore()
     context, first, second, _third, _unrelated = _context(store)
@@ -485,7 +415,7 @@ def test_reported_finder_links_enter_dedup_as_one_typed_batch(isolated_store):
     assert session.responses == {}
 
 
-def test_cli_and_public_api_share_semantic_dedun_application(isolated_store):
+def test_public_api_semantic_dedun_plan_can_choose_a_survivor(isolated_store):
     store = MemoryStore()
     context, first, second, _third, _unrelated = _context(store)
     handoff = _strict_handoffs(
@@ -501,27 +431,6 @@ def test_cli_and_public_api_share_semantic_dedun_application(isolated_store):
     public_plan = client.plan_dedun((handoff,))
     assert isinstance(public_plan, DedunPlanResult)
     assert public_plan.components[0].recommended_survivor_uid == first.uid
-
-    result = runner.invoke(
-        app,
-        [
-            "dedun",
-            "--evidence",
-            redundancy_evidence_json(handoff),
-        ],
-        color=True,
-    )
-    assert result.exit_code == 0
-    assert public_plan.revision in click.unstyle(result.stdout)
-    assert "RECOMMENDED SURVIVOR" in click.unstyle(result.stdout)
-    assert (
-        click.style(
-            "RECOMMENDED SURVIVOR",
-            fg=semantic_color_rgb(SemanticColorRole.ADD),
-            bold=True,
-        )
-        in result.stdout
-    )
 
     receipt = client.apply_dedun(
         public_plan,
@@ -653,44 +562,6 @@ def test_legacy_semantic_evidence_decodes_but_cannot_claim_exact_dup(
     legacy["classification"] = "EXACT"
     with pytest.raises(QualityFindingHandoffError, match="classification"):
         redundancy_evidence_from_dict(legacy)
-
-
-def test_cli_dedun_replay_applies_the_reviewed_survivor(isolated_store):
-    store = MemoryStore()
-    context, first, second, _third, _unrelated = _context(store)
-    handoff = _strict_handoffs(
-        context,
-        DuplicateFinding(
-            first,
-            second,
-            "SEMANTIC_EQUIVALENT",
-            "The claims are substitutable.",
-        ),
-    )[0]
-    plan = prepare_dedun(
-        DedunRequest((handoff,)),
-        port=MemoryStoreDedunPort(store, current_name=context.name),
-    )
-
-    result = runner.invoke(
-        app,
-        [
-            "dedun",
-            "--evidence",
-            redundancy_evidence_json(handoff),
-            "--survivor",
-            f"{plan.components[0].uid}={second.uid}",
-            "--expected-revision",
-            plan.revision,
-            "--apply",
-        ],
-    )
-
-    assert result.exit_code == 0
-    assert "DEDUN APPLIED" in result.stdout
-    current = store.load_direct(context.name)
-    assert first.uid not in current.memories
-    assert second.uid in current.memories
 
 
 def test_exact_discovery_groups_only_same_role_and_exact_provenance(isolated_store):
@@ -903,6 +774,31 @@ def test_help_teaches_exact_dedup_read_only_redundancy_and_applying_dedun():
     assert "--context" in dedun_help.stdout
     assert "--evidence" not in dedun_help.stdout
     assert "--survivor" not in dedun_help.stdout
+
+
+@pytest.mark.parametrize(
+    "retired_option",
+    ("--evidence", "--survivor", "--expected-revision", "--apply"),
+)
+def test_cli_dedun_has_no_exact_replay_surface(retired_option):
+    result = runner.invoke(app, ["dedun", retired_option])
+
+    assert result.exit_code == 2
+    assert f"No such option: {retired_option}" in result.stderr
+
+
+def test_consolidate_command_is_retired():
+    result = runner.invoke(app, ["consolidate"])
+
+    assert result.exit_code == 2
+    assert "No such command 'consolidate'" in result.stderr
+
+
+def test_consolidation_python_aliases_are_retired():
+    assert not hasattr(MemCommitClient, "plan_consolidation")
+    assert not hasattr(MemCommitClient, "apply_consolidation")
+    assert not hasattr(dedun_operations, "plan_consolidation")
+    assert not hasattr(dedun_operations, "apply_consolidation")
 
 
 def test_public_dedup_uses_the_same_exact_application(isolated_store):

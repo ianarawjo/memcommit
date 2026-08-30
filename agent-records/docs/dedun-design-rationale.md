@@ -58,26 +58,27 @@ person wants to inspect evidence without accepting Apply intent.
 `find-redundancies` reports the complete exact-plus-semantic DUN relation. There
 is no separate singular operation: `find-redundancy` is an input alias for the
 canonical `find-redundancies` identity. The exact-review `consolidate` spelling
-remains hidden for existing stateless receipts; it is a Dedun Apply adapter,
-not another discovery operation.
+is retired rather than retained as a second execution surface; the `dedun`
+invocation itself is the console Apply boundary.
 
 ## Canonical ownership
 
 The public split is reflected in the implementation layout. Provider-free
 exact cleanup is owned by `memcommit.application.operations.dedup`, while the
-complete DUN request, planning, Store runtime, and recursive scope are owned by
-`memcommit.application.operations.dedun`. Dedun's plain presentation and
-optional exact-review workbench live beside its command under
-`memcommit.adapters.console.commands.dedun`; the old operation-specific
+complete DUN request and typed effect contract are owned by
+`memcommit.application.operations.dedun.application`, confirmed relations are
+grouped in `analysis` through the shared semantic-execution relation capability,
+and `runtime` owns both direct and recursive Store publication. The console
+package contains only the immediate command adapter; the old operation-specific
 `interfaces/cli/dedup.py` and `interfaces/tui/operations/dedup` paths are
 removed without facades. Public Python assembly follows the same split through
 `_operations.dedup` and `_operations.dedun`.
 
-This is an ownership and vocabulary correction, not a new command contract.
-Checkpoint contracts, evidence wire values, exact replay arguments, receipts,
-authority checks, and survivor behavior remain unchanged. In particular, the
+The checkpoint contracts, evidence wire values, receipts, authority checks, and
+survivor behavior remain unchanged. The obsolete console replay arguments are
+retired rather than preserved as a second execution surface. In particular, the
 historical `dedup-component-*` prefix is retained because those component UIDs
-are embedded in exact replay commands and durable checkpoints. The established
+remain embedded in durable checkpoints and public plan results. The established
 public Python `Dedup*Result`, `plan_dedup`, and `apply_dedup` compatibility
 aliases remain thin projections onto canonical Dedun types and functions.
 
@@ -160,8 +161,8 @@ survivor-choice workbench during ordinary execution. It analyzes the exact
 current or explicit Context, applies the deterministic earliest-existing-UID
 rule, and stores groups, selections, contents, and reasons in the checkpoint.
 Success is compact; `mem review dedun --receipt UID` renders the immutable
-terminal evidence. The hidden exact replay remains for compatibility and for
-external adapters that already possess a separately reviewed survivor set.
+terminal evidence. Public Python and agent adapters may still submit typed
+survivor mappings through the application contract, without a hidden CLI.
 
 The direct route additionally stores deterministic `exact_item_groups` for
 same-role Embed and Reference occurrences. These groups need no semantic
@@ -198,3 +199,21 @@ These values cannot always be added as group counts because one exact edge and
 one semantic edge may belong to the same connected cleanup group. Keeping the
 link equation and connected-group count separate makes the report complete
 without presenting contradictory arithmetic.
+
+## 2026-08-30 console replay and ownership cleanup
+
+The hidden `consolidate` command, hidden Dedun evidence/survivor/revision flags,
+and the unreachable survivor workbench were retired. They preserved a
+pre-immediate-Apply interaction that no public console flow still used and made
+Dedun appear to have a choice boundary absent from its actual command. The
+direct command now has the same visible lifecycle as exact Dedup: analyze,
+apply the deterministic earliest existing UID, print a receipt, and retain full
+evidence for post-application Review.
+
+The former `planning` module was renamed `analysis` because it classifies no
+future user choice: it turns confirmed relation edges into stable cleanup
+components and a Source-bound revision. Its local union-find was replaced by
+the shared semantic-execution connected-component capability. Recursive scope
+publication moved into `runtime`, where its Store, authority, graph-freshness,
+and atomic batch responsibilities belong; the separate `scope` module no
+longer implied another application phase.

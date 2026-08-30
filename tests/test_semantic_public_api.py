@@ -1,4 +1,4 @@
-"""Public Python facade contracts for Distill and Elaborate."""
+"""Public Python facade contracts for Distill and Makemore."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import (
     DistillApplyResult,
     DistillProposal,
-    ElaborateProposal,
+    MakemoreProposal,
     FitJudgmentResult,
     FitPropositionInput,
     MemCommitClient,
@@ -17,11 +17,11 @@ from memcommit.adapters.python_api import (
     SemanticProviderFailure,
 )
 from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER
-from memcommit.application.operations.elaborate.model import ELABORATE_PAYLOAD_MARKER
+from memcommit.application.operations.makemore.model import MAKEMORE_PAYLOAD_MARKER
 from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.persistence.store import MemoryStore
-from tests.elaborate_validation_support import (
-    passing_elaborate_validation_response,
+from tests.makemore_validation_support import (
+    passing_makemore_validation_response,
 )
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
@@ -32,7 +32,7 @@ class SemanticProvider:
         distill_validation = passing_distill_goal_fit_response(prompt, operation)
         if distill_validation is not None:
             return distill_validation
-        validation = passing_elaborate_validation_response(prompt, operation)
+        validation = passing_makemore_validation_response(prompt, operation)
         if validation is not None:
             return validation
         if operation == "fit_propositions":
@@ -75,7 +75,7 @@ class SemanticProvider:
                     "outside_memory_ids": [],
                 }
             )
-        payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
+        payload = json.loads(prompt.split(MAKEMORE_PAYLOAD_MARKER, 1)[1])
         if payload["mode"] == "GOAL_TO_RULES":
             return json.dumps(
                 {
@@ -136,24 +136,24 @@ def test_public_distill_returns_typed_proposal_and_exact_apply(isolated_store):
     assert store.load_direct(source.name).to_dict() == source.to_dict()
 
 
-def test_public_elaborate_uses_one_typed_entry_for_both_directions(isolated_store):
+def test_public_makemore_uses_one_typed_entry_for_both_directions(isolated_store):
     client = MemCommitClient(
         root=isolated_store,
         semantic_provider_factory=SemanticProvider,
     )
 
-    goal = client.elaborate(goal="Confirm before acting.", number=1)
-    rules = client.elaborate(
+    goal = client.makemore(goal="Confirm before acting.", number=1)
+    rules = client.makemore(
         rules=("Confirm the option before acting.",),
         number=1,
     )
-    strict_rules = client.elaborate(
+    strict_rules = client.makemore(
         rules=("Confirm the option before acting.",),
         number=1,
         strict=True,
     )
 
-    assert isinstance(goal, ElaborateProposal)
+    assert isinstance(goal, MakemoreProposal)
     assert goal.mode == "GOAL_TO_RULES"
     assert goal.verification == "UNVERIFIED"
     assert len(goal.rules) == 1
@@ -189,7 +189,7 @@ def test_public_fit_accepts_role_typed_propositions_without_store_effect(
     assert result.propositions[0].role == "GOAL"
 
 
-def test_public_elaborate_rejects_ambiguous_direction_without_provider(
+def test_public_makemore_rejects_ambiguous_direction_without_provider(
     isolated_store,
 ):
     calls = 0
@@ -205,11 +205,11 @@ def test_public_elaborate_rejects_ambiguous_direction_without_provider(
     )
 
     try:
-        client.elaborate(goal="A Goal", rules=("A Rule",))
+        client.makemore(goal="A Goal", rules=("A Rule",))
     except SemanticInputError:
         pass
     else:
-        raise AssertionError("ambiguous Elaborate input must fail")
+        raise AssertionError("ambiguous Makemore input must fail")
     assert calls == 0
 
 
@@ -224,7 +224,7 @@ def test_public_semantic_provider_failure_uses_stable_error(isolated_store):
     )
 
     try:
-        client.elaborate(goal="Confirm before acting.")
+        client.makemore(goal="Confirm before acting.")
     except SemanticProviderFailure as error:
         assert "provider transport failed" in str(error)
     else:
@@ -241,7 +241,7 @@ def test_public_ground_semantics_classify_missing_ground_as_context_error(
 
     for invoke in (
         lambda: client.distill_ground("missing-ground"),
-        lambda: client.elaborate_ground(
+        lambda: client.makemore_ground(
             "missing-ground",
             direction="GOAL_TO_RULES",
         ),

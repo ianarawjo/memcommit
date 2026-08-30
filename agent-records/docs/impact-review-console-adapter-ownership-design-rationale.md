@@ -6,7 +6,7 @@
 cross-operation catalogs, and common terminal presentation belong under their
 own command packages. Their former command modules had also accumulated the
 operation-specific work needed to open Update, Meld, Sever, Atomize, Compare,
-Audit, Forget, Distill, Elaborate, and Resolve artifacts. That work included
+Audit, Forget, Distill, Makemore, and Resolve artifacts. That work included
 provider connection, operation session lookup and revalidation, application
 model projection, and handoff to the operation's owning workflow. As a result,
 finding one operation's complete console adapter required reading the central

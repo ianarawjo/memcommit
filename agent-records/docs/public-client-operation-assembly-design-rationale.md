@@ -38,7 +38,7 @@ authority, request validation, and result projection remain in the operation
 adapter rather than a generic engine.
 
 Ground-specific paths remain separate adapters. A standalone Distill or
-Elaborate adapter must not import its Ground adapter; the Ground adapter may
+Makemore adapter must not import its Ground adapter; the Ground adapter may
 depend inward on the same standalone application/runtime.
 
 ## Migration and compatibility
@@ -88,15 +88,15 @@ Context formerly reused a client helper that raised `QueryStorageError`. The
 Meld adapter projects that failure as `MeldStorageError`, matching every other
 Meld storage failure.
 
-Fit, Distill, and Elaborate follow the same boundary without being collapsed
+Fit, Distill, and Makemore follow the same boundary without being collapsed
 into one generic semantic operation. Fit owns a proposition-only, Store-free
 adapter. Standalone Distill owns Context freezing and exact reviewed Apply;
 Ground Distill owns the separately frozen Ground revision and cannot Apply.
-Standalone Elaborate owns explicit Goal-or-Rules input, while Ground Elaborate
+Standalone Makemore owns explicit Goal-or-Rules input, while Ground Makemore
 owns its exact Ground Goal-or-active-Rules projection. The standalone adapters
 never import either Ground adapter.
 
-The two Distill routes and two Elaborate routes share only bounded provider
+The two Distill routes and two Makemore routes share only bounded provider
 failure handling and public DTO projection under `api/_support/semantic.py`.
 They do not import sibling operation adapters, infer Ground state, or share
 mutation authority. This keeps their common application meaning reusable
@@ -124,22 +124,22 @@ The prior extracted surface passed 194 focused tests after the Atomize
 Grounding and shared-interface changes were integrated. The structural
 Atomize rollout then passed 284 focused regressions with one skipped platform
 case. Together the sets cover the QualityFind
-source frame, Distill and Elaborate core/CLI/TUI behavior, Add, every Query
+source frame, Distill and Makemore core/CLI/TUI behavior, Add, every Query
 route, the complete Meld and Atomize Grounding public lifecycles, structural
 Atomize open and exact-version Apply, all eight agent adapters, MCP projection,
 and fresh-process import isolation. Ruff passed for
 every Python file changed by this rollout, the package compiled, and the
-canonical console entry point loaded the Fit, Distill, and Elaborate commands.
+canonical console entry point loaded the Fit, Distill, and Makemore commands.
 
 An isolated `uv build` wheel was installed with the `mcp` extra under Python
 3.13. From that `site-packages` origin, constructing the client loaded no
-operation adapter. An invalid standalone Elaborate request then loaded only
-`api._operations.elaborate`, not Ground Elaborate or Distill. The installed
+operation adapter. An invalid standalone Makemore request then loaded only
+`api._operations.makemore`, not Ground Makemore or Distill. The installed
 Ground Distill route loaded only `api._operations.ground_distill`, not the
-standalone Distill or Ground Elaborate adapter. The installed
-`mem` entry point listed Fit, Distill, and Elaborate. The installed `mem-mcp`
+standalone Distill or Ground Makemore adapter. The installed
+`mem` entry point listed Fit, Distill, and Makemore. The installed `mem-mcp`
 stdio entry point initialized and listed Query, Add, Meld, structural Atomize,
-Atomize Grounding, Distill, Elaborate, and Fit. It opened one saved Grounding
+Atomize Grounding, Distill, Makemore, and Fit. It opened one saved Grounding
 session, applied one two-Memory Add with exactly one checkpoint, ran saved
 structural Atomize in-place Apply/retry plus response edit, Output planning,
 Save As/retry, and returned the typed unknown-tool error.
@@ -153,7 +153,7 @@ focused tests and the installed CLI gate.
 
 Add, Query, the complete Meld lifecycle, the complete structural Atomize
 lifecycle, Atomize Grounding, Fit, standalone Distill, Ground Distill, standalone
-Elaborate, and Ground Elaborate are now operation-owned assemblies. Their
+Makemore, and Ground Makemore are now operation-owned assemblies. Their
 public facade methods contain delegation and shared runtime construction only.
 New public operations must add a sibling adapter and fresh-process import
 contract rather than restoring client-owned loaders or assembly. The CLI and

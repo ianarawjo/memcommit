@@ -52,7 +52,7 @@ from memcommit.adapters.python_api.meld import (
     MeldApplyResult as PublicMeldApplyResult,
     MeldSessionResult,
 )
-from memcommit.adapters.python_api.memory_transfer import (
+from memcommit.adapters.python_api.copy_and_move import (
     CopyMemoriesReceipt,
     MoveMemoriesReceipt,
 )
@@ -77,7 +77,7 @@ from memcommit.adapters.python_api.show import ShowResult
 from memcommit.adapters.python_api.semantic import (
     DistillApplyResult,
     DistillProposal,
-    ElaborateProposal,
+    MakemoreProposal,
     FitJudgmentResult,
     FitPropositionInput,
 )
@@ -656,29 +656,6 @@ class MemCommitClient:
 
         return apply_dedun(self._runtime, plan, survivors=survivors)
 
-    def plan_consolidation(
-        self,
-        handoffs: Sequence[QualityFindingHandoff],
-        *,
-        expected_revision: str | None = None,
-    ) -> DedunPlanResult:
-        """Compatibility alias for :meth:`plan_dedun`."""
-
-        return self.plan_dedun(
-            handoffs,
-            expected_revision=expected_revision,
-        )
-
-    def apply_consolidation(
-        self,
-        plan: DedunPlanResult,
-        *,
-        survivors: Mapping[str, str],
-    ) -> DedunApplyResult:
-        """Compatibility alias for :meth:`apply_dedun`."""
-
-        return self.apply_dedun(plan, survivors=survivors)
-
     def plan_dedup(
         self,
         handoffs: Sequence[QualityFindingHandoff],
@@ -743,19 +720,19 @@ class MemCommitClient:
 
         return apply_distill(self._runtime, proposal, output_name=output_name)
 
-    def elaborate(
+    def makemore(
         self,
         *,
         goal: str | None = None,
         rules: Sequence[str] | None = None,
         number: int | None = None,
         strict: bool = False,
-    ) -> ElaborateProposal:
+    ) -> MakemoreProposal:
         """Propose unverified Rules from a Goal or Cases from Rules."""
 
-        from memcommit.adapters.python_api._operations.elaborate import elaborate
+        from memcommit.adapters.python_api._operations.makemore import makemore
 
-        return elaborate(
+        return makemore(
             self._runtime,
             goal=goal,
             rules=rules,
@@ -763,21 +740,21 @@ class MemCommitClient:
             strict=strict,
         )
 
-    def elaborate_ground(
+    def makemore_ground(
         self,
         ground_name: str,
         *,
         direction: str,
         number: int | None = None,
         strict: bool = False,
-    ) -> ElaborateProposal:
-        """Project one exact Ground Goal or Rule set through Elaborate."""
+    ) -> MakemoreProposal:
+        """Project one exact Ground Goal or Rule set through Makemore."""
 
-        from memcommit.adapters.python_api._operations.ground_elaborate import (
-            elaborate_ground,
+        from memcommit.adapters.python_api._operations.ground_makemore import (
+            makemore_ground,
         )
 
-        return elaborate_ground(
+        return makemore_ground(
             self._runtime,
             ground_name,
             direction=direction,

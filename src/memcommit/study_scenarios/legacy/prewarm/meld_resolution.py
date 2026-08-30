@@ -16,7 +16,7 @@ from memcommit.application.operations.meld.provider.execution import (
 from memcommit.application.operations.meld.provider.request import (
     meld_turn_request_digest,
 )
-from memcommit.application.operations.meld.resolution_cache import (
+from memcommit.application.operations.meld.proposal_cache import (
     MeldResolutionBranch,
     MeldResolutionCacheError,
     configured_meld_cache_identity,

@@ -1,6 +1,6 @@
 # Search application-boundary matrix
 
-Last reviewed: 2026-08-25.
+Last reviewed: 2026-08-30.
 
 ## Purpose
 
@@ -9,11 +9,11 @@ tests whether one application use case can serve the plain CLI and interactive
 search workbench while preserving readable Context targeting, local-only
 activity artifacts, query-view privacy, and the current-state-only contract.
 
-Search and result materialization remain two separate use cases. The
-conversational Search controller, answer synthesis, and broader-scope
-confirmation remain outside both. Public Python and the versioned agent
-adapter now enter the same typed Search application rather than invoking the
-CLI or reconstructing its semantics.
+Search and result materialization remain two separate use cases. The retired
+conversational Search controller, follow-up interpreter, and three-scope answer
+synthesis are removed rather than retained as uncalled application or console
+code. Public Python and the versioned agent adapter enter the same typed Search
+application rather than invoking the CLI or reconstructing its semantics.
 
 ## Intended call path
 
@@ -179,7 +179,7 @@ expects those two policies in the reverse order.
 
 The exact isolated commit tree also passed Ruff, the four application/runtime
 module type checks, and 146 Search application, materialization, workbench,
-history-search, dialogue, and projection tests. CLI-importing tests in that
+history-search, and projection tests. CLI-importing tests in that
 isolated tree remain gated by a pre-existing repository mismatch: committed
 Summarize code imports `declared_artifact_available`, while its implementation
 is still outside `HEAD`. The larger workspace runs above included that existing
@@ -197,9 +197,10 @@ commit self-contained.
 3. The interactive workbench and result presenter are physically hosted under
    `memcommit.adapters.console.commands.search`; application data and execution
    remain outside that adapter owner.
-4. Conversational refinement, answer generation, and outside-Context
-   confirmation retain their existing controllers and must be extracted as
-   separate use cases.
+4. Conversational refinement, Search-owned answer generation, and
+   outside-Context confirmation are retired. Ordinary Query retains its own
+   one-shot grounded-answer use case and the minimal evidence projection it
+   requires.
 5. The version-1 agent contract exposes bounded semantic Search only. It
-   does not expose the conversational refinement shell or materialization
-   controls; those remain separate reviewed operations.
+   does not expose conversational refinement or materialization controls;
+   Save As remains a separate reviewed operation.

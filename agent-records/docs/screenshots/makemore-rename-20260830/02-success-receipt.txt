@@ -1,0 +1,13 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+$ mem makemore --goal Make careful changes and leave a clear trace. --number 2                                                                                                      
+MAKEMORE APPLIED · capture/makemore-target                                                                                                                                          
+MODE · GOAL_TO_RULES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT                                                                                                            
+SOURCE · INLINE · TARGET · capture/makemore-target                                                                                                                                  
+EFFECTS · ADD 2 MEMORIES                                                                                                                                                            
+                                                                                                                                                                                    
+  [memory eabaa625] Confirm the exact target before making a change.                                                                                                                
+  [memory 02a2cd67] Record what changed after the action completes.                                                                                                                 
+                                                                                                                                                                                    
+REVIEW · mem review makemore --receipt 8cecd43b-d17c-4702-b9da-5a5c8f8af0fb                                                                                                         
+UNDO · mem undo                                                                                                                                                                     
+CAPTURE GATE · PRESS R FOR READ-ONLY REVIEW

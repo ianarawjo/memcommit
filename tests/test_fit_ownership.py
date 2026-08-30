@@ -38,7 +38,7 @@ def test_production_fit_consumers_use_the_operation_owner() -> None:
         "src/memcommit/adapters/console/commands/find_conflicts/command.py",
         "src/memcommit/adapters/console/commands/resolve/impact.py",
         "src/memcommit/adapters/console/commands/resolve/command.py",
-        "src/memcommit/application/operations/elaborate/model.py",
+        "src/memcommit/application/operations/makemore/model.py",
         "src/memcommit/application/operations/ground/workspace_fit.py",
         "src/memcommit/application/operations/fit/application.py",
         "src/memcommit/application/operations/fit/runtime.py",

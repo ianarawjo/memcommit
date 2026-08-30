@@ -20,6 +20,9 @@ from memcommit.application.operations.dedup.application import (
     ExactDedupError,
     apply_exact_dedup_scope,
 )
+from memcommit.application.operations.find_duplicates.application import (
+    analyze_exact_duplicate_scope,
+)
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
@@ -76,10 +79,15 @@ def cmd(
             current_name=snapshot.current_name,
             required_permission="READ",
         )
-        receipt = apply_exact_dedup_scope(
+        analysis = analyze_exact_duplicate_scope(
             active_store,
             access,
             include_descendants=preset is ContextScopePreset.RECURSIVE,
+        )
+        receipt = apply_exact_dedup_scope(
+            active_store,
+            access,
+            analysis,
         )
     except (
         ConcurrentContextUpdateError,

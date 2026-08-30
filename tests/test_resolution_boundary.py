@@ -5,9 +5,6 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
-import pytest
-
-
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "src" / "memcommit"
 
@@ -36,9 +33,9 @@ def test_resolution_core_imports_no_operation_interface_or_infrastructure():
     )
     offenders = [
         (str(path.relative_to(ROOT)), module)
-        for path in (
-            PACKAGE / "application" / "capabilities" / "resolution"
-        ).glob("*.py")
+        for path in (PACKAGE / "application" / "capabilities" / "resolution").glob(
+            "*.py"
+        )
         for module in _imports(path)
         if any(
             module == prefix or module.startswith(f"{prefix}.") for prefix in forbidden
@@ -76,11 +73,7 @@ def test_meld_resolution_does_not_import_runtime_or_interfaces():
         "typer",
     )
     imports = _imports(
-        PACKAGE
-        / "application"
-        / "operations"
-        / "meld"
-        / "resolution.py"
+        PACKAGE / "application" / "operations" / "meld" / "proposal_iteration.py"
     )
 
     assert not any(
@@ -105,8 +98,8 @@ def test_meld_interfaces_enter_the_operation_owned_resolution_boundary():
     )
     agent_imports = _imports(PACKAGE / "adapters" / "agent" / "meld.py")
 
-    assert "memcommit.application.operations.meld.resolution" in command_imports
-    assert "memcommit.application.operations.meld.resolution" in public_imports
+    assert "memcommit.application.operations.meld.proposal_iteration" in command_imports
+    assert "memcommit.application.operations.meld.proposal_iteration" in public_imports
     assert "memcommit.adapters.python_api" in agent_imports
 
 
@@ -133,35 +126,22 @@ def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
     )
 
 
-@pytest.mark.parametrize(
-    ("application_name", "tui_path", "cli_path", "public_path", "agent_path"),
-    (
-        (
-            "memcommit.application.operations.dedun.application",
-            PACKAGE / "adapters" / "console" / "commands" / "dedun" / "workbench.py",
-            PACKAGE / "adapters" / "console" / "commands" / "dedun" / "presentation.py",
-            PACKAGE / "adapters" / "python_api" / "_operations" / "dedun.py",
-            PACKAGE / "adapters" / "agent" / "dedup.py",
-        ),
-        (
-            "memcommit.application.operations.resolve.application",
-            PACKAGE / "adapters" / "console" / "commands" / "resolve" / "workbench" / "screen.py",
-            PACKAGE / "adapters" / "console" / "commands" / "resolve" / "command.py",
-            PACKAGE / "adapters" / "python_api" / "_operations" / "resolve.py",
-            PACKAGE / "adapters" / "agent" / "resolve.py",
-        ),
-    ),
-)
-def test_deterministic_resolution_adapters_keep_one_application_owner(
-    application_name: str,
-    tui_path: Path,
-    cli_path: Path,
-    public_path: Path,
-    agent_path: Path,
-):
-    application_path = (
+def test_resolve_adapters_keep_one_application_owner():
+    application_name = "memcommit.application.operations.resolve.application"
+    tui_path = (
         PACKAGE
-        / Path(*application_name.removeprefix("memcommit.").split("."))
+        / "adapters"
+        / "console"
+        / "commands"
+        / "resolve"
+        / "workbench"
+        / "screen.py"
+    )
+    cli_path = PACKAGE / "adapters" / "console" / "commands" / "resolve" / "command.py"
+    public_path = PACKAGE / "adapters" / "python_api" / "_operations" / "resolve.py"
+    agent_path = PACKAGE / "adapters" / "agent" / "resolve.py"
+    application_path = (
+        PACKAGE / Path(*application_name.removeprefix("memcommit.").split("."))
     ).with_suffix(".py")
     forbidden_application_imports = (
         "memcommit.adapters.console.commands",
@@ -191,7 +171,10 @@ def test_deterministic_resolution_adapters_keep_one_application_owner(
         )
         for module in tui_imports
     )
-    assert not any(module.startswith("memcommit.adapters.console.commands") for module in public_imports)
+    assert not any(
+        module.startswith("memcommit.adapters.console.commands")
+        for module in public_imports
+    )
     assert "memcommit.adapters.python_api" in agent_imports
     assert application_name not in agent_imports
     assert not any(
@@ -201,13 +184,46 @@ def test_deterministic_resolution_adapters_keep_one_application_owner(
     )
 
 
+def test_dedun_is_immediate_not_a_resolution_adapter():
+    application_name = "memcommit.application.operations.dedun.application"
+    application_path = (
+        PACKAGE / Path(*application_name.removeprefix("memcommit.").split("."))
+    ).with_suffix(".py")
+    command_package = PACKAGE / "adapters" / "console" / "commands" / "dedun"
+    execution_imports = _imports(
+        PACKAGE
+        / "adapters"
+        / "console"
+        / "commands"
+        / "find_redundancies"
+        / "command.py"
+    )
+    public_imports = _imports(
+        PACKAGE / "adapters" / "python_api" / "_operations" / "dedun.py"
+    )
+    agent_imports = _imports(PACKAGE / "adapters" / "agent" / "dedup.py")
+
+    assert not (command_package / "workbench.py").exists()
+    assert not (command_package / "presentation.py").exists()
+    assert application_name in execution_imports
+    assert application_name in public_imports
+    assert not any(
+        module.startswith("memcommit.adapters.console.commands")
+        or module.startswith("prompt_toolkit")
+        or module == "typer"
+        for module in _imports(application_path)
+    )
+    assert not any(
+        module.startswith("memcommit.adapters.console.commands")
+        for module in public_imports
+    )
+    assert "memcommit.adapters.python_api" in agent_imports
+    assert application_name not in agent_imports
+
+
 def test_read_report_identity_and_launcher_keep_runtime_and_ui_ownership_separate():
     identity_imports = _imports(
-        PACKAGE
-        / "application"
-        / "capabilities"
-        / "reviewing"
-        / "read_report.py"
+        PACKAGE / "application" / "capabilities" / "reviewing" / "read_report.py"
     )
     launcher_imports = _imports(
         PACKAGE
@@ -226,5 +242,10 @@ def test_read_report_identity_and_launcher_keep_runtime_and_ui_ownership_separat
         or module.startswith("prompt_toolkit.")
         for module in identity_imports
     )
-    assert "memcommit.application.capabilities.reviewing.read_report" in launcher_imports
-    assert not any(module.startswith("memcommit.adapters.console.commands") for module in launcher_imports)
+    assert (
+        "memcommit.application.capabilities.reviewing.read_report" in launcher_imports
+    )
+    assert not any(
+        module.startswith("memcommit.adapters.console.commands")
+        for module in launcher_imports
+    )

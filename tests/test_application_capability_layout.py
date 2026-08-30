@@ -15,21 +15,27 @@ CAPABILITIES = APPLICATION / "capabilities"
 CAPABILITY_ENTRIES = {
     "__init__.py",
     "authority",
+    "checkpoint_catalog.py",
+    "command_recovery",
     "context_locator.py",
+    "context_operand_classification.py",
     "context_scope_loading.py",
+    "context_snapshot.py",
     "evaluation",
     "flow.py",
+    "history",
     "memory_issue_analysis",
     "memory_report_targeting.py",
+    "name_suggestions.py",
     "local_target_lookup.py",
     "ops.py",
     "resolution",
-    "retained_history",
     "review_policy.py",
     "reviewing",
     "semantic",
     "semantic_execution",
     "semantic_result_memorization.py",
+    "write_protection",
 }
 
 LEGACY_APPLICATION_MODULES = (

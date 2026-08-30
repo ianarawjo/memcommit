@@ -1,4 +1,4 @@
-"""Directional Add contracts for standalone Distill and Elaborate."""
+"""Directional Add contracts for standalone Distill and Makemore."""
 
 from __future__ import annotations
 
@@ -9,8 +9,8 @@ from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.distill.command as distill_command
 import memcommit.adapters.console.commands.distill.impact as distill_impact
-import memcommit.adapters.console.commands.elaborate.command as elaborate_command
-import memcommit.adapters.console.commands.elaborate.impact as elaborate_impact
+import memcommit.adapters.console.commands.makemore.command as makemore_command
+import memcommit.adapters.console.commands.makemore.impact as makemore_impact
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.distill.model import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
@@ -18,11 +18,11 @@ from memcommit.application.operations.distill.goal_fit import (
     DISTILL_GOAL_FIT_OPERATION,
     DISTILL_GOAL_FIT_PAYLOAD_MARKER,
 )
-from memcommit.application.operations.elaborate.model import ELABORATE_OPERATION, ELABORATE_PAYLOAD_MARKER
+from memcommit.application.operations.makemore.model import MAKEMORE_OPERATION, MAKEMORE_PAYLOAD_MARKER
 from memcommit.persistence.store import MemoryStore, context_record_digest
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
-from tests.elaborate_validation_support import (
-    passing_elaborate_validation_response,
+from tests.makemore_validation_support import (
+    passing_makemore_validation_response,
 )
 
 
@@ -41,15 +41,15 @@ def _create(
     return context
 
 
-class _ElaborateProvider:
+class _MakemoreProvider:
     calls: list[dict[str, object]] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
-        validation = passing_elaborate_validation_response(prompt, operation)
+        validation = passing_makemore_validation_response(prompt, operation)
         if validation is not None:
             return validation
-        assert operation == ELABORATE_OPERATION
-        payload = json.loads(prompt.split(ELABORATE_PAYLOAD_MARKER, 1)[1])
+        assert operation == MAKEMORE_OPERATION
+        payload = json.loads(prompt.split(MAKEMORE_PAYLOAD_MARKER, 1)[1])
         type(self).calls.append(payload)
         number = payload["number"]
         target_refs = (
@@ -193,7 +193,7 @@ class _DistillProvider:
         ),
     ),
 )
-def test_elaborate_endpoint_matrix_adds_atomically(
+def test_makemore_endpoint_matrix_adds_atomically(
     isolated_store,
     monkeypatch,
     argv,
@@ -209,17 +209,17 @@ def test_elaborate_endpoint_matrix_adds_atomically(
         name: len(store.load_direct(name).order)
         for name in ("matrix/source", "matrix/target", "matrix/current")
     }
-    _ElaborateProvider.calls = []
+    _MakemoreProvider.calls = []
     monkeypatch.setattr(
-        elaborate_command,
+        makemore_command,
         "connect_semantic_provider",
-        _ElaborateProvider,
+        _MakemoreProvider,
     )
 
-    result = runner.invoke(app, ["elaborate", *argv])
+    result = runner.invoke(app, ["makemore", *argv])
 
     assert result.exit_code == 0, result.output
-    assert f"ELABORATE APPLIED · {expected_target}" in result.output
+    assert f"MAKEMORE APPLIED · {expected_target}" in result.output
     assert f"SOURCE · {expected_source} · TARGET · {expected_target}" in result.output
     assert "EFFECTS · ADD 3 MEMORIES" in result.output
     for name, count in before.items():
@@ -230,23 +230,23 @@ def test_elaborate_endpoint_matrix_adds_atomically(
         memory = target.memories[uid]
         assert f"  [memory {uid[:8]}] {memory.content}" in result.output
     checkpoint = store.list_checkpoints(expected_target)[0]
-    assert checkpoint["command"] == "elaborate"
-    assert checkpoint["args"]["elaborate"]["effect"] == "ADD"
-    assert checkpoint["args"]["elaborate"]["quality_policy"] == "BEST_EFFORT"
-    assert checkpoint["args"]["elaborate"]["case_validation"] == "NOT_RUN"
-    assert len(checkpoint["args"]["elaborate"]["result_memory_uids"]) == 3
+    assert checkpoint["command"] == "makemore"
+    assert checkpoint["args"]["makemore"]["effect"] == "ADD"
+    assert checkpoint["args"]["makemore"]["quality_policy"] == "BEST_EFFORT"
+    assert checkpoint["args"]["makemore"]["case_validation"] == "NOT_RUN"
+    assert len(checkpoint["args"]["makemore"]["result_memory_uids"]) == 3
     assert (
-        f"REVIEW · mem review elaborate --receipt {checkpoint['uid']}" in result.output
+        f"REVIEW · mem review makemore --receipt {checkpoint['uid']}" in result.output
     )
     assert "UNDO · mem undo" in result.output
     assert not any(
         line.startswith(("RECEIPT ·", "CHECKPOINT ·", "RECOVERY ·"))
         for line in result.output.splitlines()
     )
-    assert len(_ElaborateProvider.calls[0]["inputs"]) == 1
+    assert len(_MakemoreProvider.calls[0]["inputs"]) == 1
 
 
-def test_mem_elaborate_number_is_an_exact_cli_and_checkpoint_contract(
+def test_mem_makemore_number_is_an_exact_cli_and_checkpoint_contract(
     isolated_store,
     monkeypatch,
 ) -> None:
@@ -254,17 +254,17 @@ def test_mem_elaborate_number_is_an_exact_cli_and_checkpoint_contract(
     target = _create(store, "number/target", "Existing destination language.")
     source = _create(store, "number/source", "Confirm a ticker before acting.")
     store.set_current(target.name)
-    _ElaborateProvider.calls = []
+    _MakemoreProvider.calls = []
     monkeypatch.setattr(
-        elaborate_command,
+        makemore_command,
         "connect_semantic_provider",
-        _ElaborateProvider,
+        _MakemoreProvider,
     )
 
     result = runner.invoke(
         app,
         [
-            "elaborate",
+            "makemore",
             "--from",
             source.name,
             "--n",
@@ -276,13 +276,13 @@ def test_mem_elaborate_number_is_an_exact_cli_and_checkpoint_contract(
     assert result.exit_code == 0, result.output
     assert "EFFECTS · ADD 5 MEMORIES" in result.output
     assert "QUALITY · STRICT" in result.output
-    assert _ElaborateProvider.calls[0]["number"] == 5
+    assert _MakemoreProvider.calls[0]["number"] == 5
     checkpoint = store.list_checkpoints(target.name)[0]
-    assert checkpoint["args"]["elaborate"]["number"] == 5
-    assert checkpoint["args"]["elaborate"]["quality_policy"] == "STRICT"
+    assert checkpoint["args"]["makemore"]["number"] == 5
+    assert checkpoint["args"]["makemore"]["quality_policy"] == "STRICT"
 
 
-def test_elaborate_context_role_is_explicit_and_not_name_based(
+def test_makemore_context_role_is_explicit_and_not_name_based(
     isolated_store,
     monkeypatch,
 ) -> None:
@@ -291,15 +291,15 @@ def test_elaborate_context_role_is_explicit_and_not_name_based(
     _create(store, "ordinary-output", "Existing target content.")
     store.set_current("ordinary-output")
     monkeypatch.setattr(
-        elaborate_command,
+        makemore_command,
         "connect_semantic_provider",
-        _ElaborateProvider,
+        _MakemoreProvider,
     )
 
     result = runner.invoke(
         app,
         [
-            "elaborate",
+            "makemore",
             "--from",
             "not-a-goal-name",
             "--to",
@@ -316,7 +316,7 @@ def test_elaborate_context_role_is_explicit_and_not_name_based(
     )
 
 
-def test_elaborate_combines_rule_source_with_context_goal_focus(
+def test_makemore_combines_rule_source_with_context_goal_focus(
     isolated_store,
     monkeypatch,
 ) -> None:
@@ -333,17 +333,17 @@ def test_elaborate_combines_rule_source_with_context_goal_focus(
         "coffee-advice/goal",
         "Give practical advice to a friend who owns a cafe.",
     )
-    _ElaborateProvider.calls = []
+    _MakemoreProvider.calls = []
     monkeypatch.setattr(
-        elaborate_command,
+        makemore_command,
         "connect_semantic_provider",
-        _ElaborateProvider,
+        _MakemoreProvider,
     )
 
     result = runner.invoke(
         app,
         [
-            "elaborate",
+            "makemore",
             "--from",
             source.name,
             "--to",
@@ -354,14 +354,14 @@ def test_elaborate_combines_rule_source_with_context_goal_focus(
     )
 
     assert result.exit_code == 0, result.output
-    payload = _ElaborateProvider.calls[0]
+    payload = _MakemoreProvider.calls[0]
     assert payload["mode"] == "RULES_TO_CASES"
     assert payload["goal_focus"]["kind"] == "CONTEXT"
     assert payload["goal_focus"]["items"][0]["content"] == (
         "Give practical advice to a friend who owns a cafe."
     )
     checkpoint = store.list_checkpoints(source.name)[0]
-    assert checkpoint["args"]["elaborate"]["goal_focus"]["kind"] == "CONTEXT"
+    assert checkpoint["args"]["makemore"]["goal_focus"]["kind"] == "CONTEXT"
 
 
 @pytest.mark.parametrize(
@@ -553,7 +553,7 @@ def test_distill_goal_not_fit_blocks_direct_add(
     assert store.list_checkpoints(target.name) == []
 
 
-@pytest.mark.parametrize("operation", ("elaborate", "distill"))
+@pytest.mark.parametrize("operation", ("makemore", "distill"))
 def test_impact_endpoint_preview_never_adds(
     isolated_store,
     monkeypatch,
@@ -570,9 +570,9 @@ def test_impact_endpoint_preview_never_adds(
     store.set_current(target.name)
     before_source = context_record_digest(store.load_direct(source.name))
     before_target = context_record_digest(store.load_direct(target.name))
-    provider = _ElaborateProvider if operation == "elaborate" else _DistillProvider
+    provider = _MakemoreProvider if operation == "makemore" else _DistillProvider
     monkeypatch.setattr(
-        elaborate_impact if operation == "elaborate" else distill_impact,
+        makemore_impact if operation == "makemore" else distill_impact,
         "connect_semantic_provider",
         provider,
     )
@@ -586,7 +586,7 @@ def test_impact_endpoint_preview_never_adds(
             source.name,
             "--to",
             target.name,
-            *(["--number", "2"] if operation == "elaborate" else []),
+            *(["--number", "2"] if operation == "makemore" else []),
         ],
     )
 
@@ -600,13 +600,13 @@ def test_impact_endpoint_preview_never_adds(
         assert "PROPOSED CASES" in result.output
         assert "ENDPOINTS UNCHANGED" not in result.output
         assert "[ADD]" not in result.output
-        assert _ElaborateProvider.calls[-1]["number"] == 2
+        assert _MakemoreProvider.calls[-1]["number"] == 2
     assert context_record_digest(store.load_direct(source.name)) == before_source
     assert context_record_digest(store.load_direct(target.name)) == before_target
     assert store.list_checkpoints(target.name) == []
 
 
-@pytest.mark.parametrize("operation", ("elaborate", "distill"))
+@pytest.mark.parametrize("operation", ("makemore", "distill"))
 def test_missing_target_fails_before_provider_construction(
     isolated_store,
     monkeypatch,
@@ -619,7 +619,7 @@ def test_missing_target_fails_before_provider_construction(
     def unexpected_provider():
         raise AssertionError("provider must not be constructed")
 
-    command = elaborate_command if operation == "elaborate" else distill_command
+    command = makemore_command if operation == "makemore" else distill_command
     monkeypatch.setattr(command, "connect_semantic_provider", unexpected_provider)
 
     result = runner.invoke(
@@ -632,7 +632,7 @@ def test_missing_target_fails_before_provider_construction(
     assert store.list_checkpoints(source.name) == []
 
 
-def test_elaborate_target_drift_publishes_no_generated_memory(
+def test_makemore_target_drift_publishes_no_generated_memory(
     isolated_store,
     monkeypatch,
 ) -> None:
@@ -641,9 +641,9 @@ def test_elaborate_target_drift_publishes_no_generated_memory(
     target = _create(store, "drift/target", "Existing target content.")
     store.set_current(target.name)
 
-    class _DriftingProvider(_ElaborateProvider):
+    class _DriftingProvider(_MakemoreProvider):
         def complete(self, prompt, *, operation, output_schema=None):
-            if operation == ELABORATE_OPERATION:
+            if operation == MAKEMORE_OPERATION:
                 changed = store.load_for_update(target.name)
                 ops.add(changed, "Concurrent target change.")
                 store.save(changed)
@@ -654,14 +654,14 @@ def test_elaborate_target_drift_publishes_no_generated_memory(
             )
 
     monkeypatch.setattr(
-        elaborate_command,
+        makemore_command,
         "connect_semantic_provider",
         _DriftingProvider,
     )
 
     result = runner.invoke(
         app,
-        ["elaborate", "--from", source.name, "--to", target.name],
+        ["makemore", "--from", source.name, "--to", target.name],
     )
 
     assert result.exit_code == 1
@@ -742,7 +742,7 @@ def test_relative_endpoints_share_one_current_snapshot(
     assert len(store.load_direct(target.name).order) == 2
 
 
-@pytest.mark.parametrize("operation", ("elaborate", "distill"))
+@pytest.mark.parametrize("operation", ("makemore", "distill"))
 def test_bare_command_without_current_fails_before_provider(
     isolated_store,
     monkeypatch,
@@ -753,7 +753,7 @@ def test_bare_command_without_current_fails_before_provider(
     def unexpected_provider():
         raise AssertionError("provider must not be constructed")
 
-    command = elaborate_command if operation == "elaborate" else distill_command
+    command = makemore_command if operation == "makemore" else distill_command
     monkeypatch.setattr(command, "connect_semantic_provider", unexpected_provider)
 
     result = runner.invoke(app, [operation])
@@ -762,23 +762,23 @@ def test_bare_command_without_current_fails_before_provider(
     assert "No current Source Context" in result.output
 
 
-def test_repeated_same_context_elaborate_sees_prior_output_only_later(
+def test_repeated_same_context_makemore_sees_prior_output_only_later(
     isolated_store,
     monkeypatch,
 ) -> None:
     store = MemoryStore()
     current = _create(store, "repeat/current", "Confirm a ticker before acting.")
     store.set_current(current.name)
-    _ElaborateProvider.calls = []
+    _MakemoreProvider.calls = []
     monkeypatch.setattr(
-        elaborate_command,
+        makemore_command,
         "connect_semantic_provider",
-        _ElaborateProvider,
+        _MakemoreProvider,
     )
 
-    first = runner.invoke(app, ["elaborate"])
-    second = runner.invoke(app, ["elaborate"])
+    first = runner.invoke(app, ["makemore"])
+    second = runner.invoke(app, ["makemore"])
 
     assert first.exit_code == second.exit_code == 0
-    assert [len(call["inputs"]) for call in _ElaborateProvider.calls] == [1, 4]
+    assert [len(call["inputs"]) for call in _MakemoreProvider.calls] == [1, 4]
     assert len(store.load_direct(current.name).order) == 7

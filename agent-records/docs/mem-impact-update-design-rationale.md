@@ -248,7 +248,7 @@ The root launcher aggregates only durable artifacts that these Impact routes
 can reopen.  It includes the singleton Update/Impact plan together with saved
 Atomize, Meld, and Sever artifacts, then redispatches a selected kind and exact
 UID through the same operation-owned loader used by the explicit command.
-Process-local Forget, Distill, Elaborate, and Resolve previews are not shown.
+Process-local Forget, Distill, Makemore, and Resolve previews are not shown.
 This is an inspectable-artifact catalog rather than a log claiming which CLI
 spelling originally created a shared operation session.
 

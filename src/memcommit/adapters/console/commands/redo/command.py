@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import typer
 
-from memcommit.application.capabilities.retained_history.command_history import CommandHistoryError
+from memcommit.application.capabilities.command_recovery import CommandHistoryError
 from memcommit.adapters.console.terminal.components.restoration_receipt import (
     render_command_restore_receipt,
 )

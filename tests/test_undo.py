@@ -5,14 +5,14 @@ from __future__ import annotations
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.retained_history.command_history import (
+from memcommit.application.capabilities.command_recovery import (
     CommandHistoryError,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.capabilities.retained_history.reconstruction import (
+from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import (
     build_history,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.history.query.memory_history_slicing import (
     reconstruct_memory_history,
 )
 from memcommit.persistence.store import MemoryStore
@@ -279,7 +279,7 @@ def test_empty_stale_granted_receipt_does_not_mask_local_undo(
     )()
     monkeypatch.setattr(MemoryStore, "load_staged_update", lambda _store: staged)
     monkeypatch.setattr(
-        "memcommit.application.operations.restoration.runtime.restore_granted_update",
+        "memcommit.application.operations.undo.runtime.restore_granted_update",
         lambda *_args: (_ for _ in ()).throw(
             CommandHistoryError("There is no recorded Context command to undo.")
         ),
@@ -305,7 +305,7 @@ def test_empty_stale_granted_receipt_does_not_mask_local_redo(
     )()
     monkeypatch.setattr(MemoryStore, "load_staged_update", lambda _store: staged)
     monkeypatch.setattr(
-        "memcommit.application.operations.restoration.runtime.restore_granted_update",
+        "memcommit.application.operations.redo.runtime.restore_granted_update",
         lambda *_args: (_ for _ in ()).throw(
             CommandHistoryError("There is no recorded Context command to redo.")
         ),

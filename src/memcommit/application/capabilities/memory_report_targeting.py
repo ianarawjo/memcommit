@@ -19,10 +19,12 @@ from memcommit.application.capabilities.authority.readable_contexts import (
 )
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.operations.trace.application import (
     collect_memory_history_candidates,
 )
-from memcommit.application.operations.reference.provenance import collect_reference_candidates
+from memcommit.application.capabilities.history.reconstruction.reference_occurrence_derivation import (
+    collect_reference_candidates,
+)
 from memcommit.persistence.store import MemoryStore
 
 

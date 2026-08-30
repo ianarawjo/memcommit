@@ -7,10 +7,12 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.retained_history.applied_review import (
-    applied_checkpoint_review_controller,
+from memcommit.application.operations.review.applied_checkpoint import (
     list_applied_checkpoint_reviews,
     select_applied_checkpoint_review,
+)
+from memcommit.adapters.console.commands.review.applied_checkpoint_report import (
+    applied_checkpoint_review_controller,
 )
 from memcommit.core.context import AutoCheckpoint
 from memcommit.adapters.console.entrypoint import app
@@ -107,15 +109,15 @@ def test_review_command_opens_exact_applied_checkpoint_without_a_provider(
     assert "AFTER · The grounded reading." in result.output
 
 
-def test_elaborate_review_exposes_best_effort_quality_boundary(isolated_store):
+def test_makemore_review_exposes_best_effort_quality_boundary(isolated_store):
     store = MemoryStore()
-    context = ops.init("review/elaborate")
+    context = ops.init("review/makemore")
     checkpoint = store.create_context(
         context,
         AutoCheckpoint(
-            command="elaborate",
+            command="makemore",
             args={
-                "elaborate": {
+                "makemore": {
                     "mode": "RULES_TO_CASES",
                     "target_context": context.name,
                     "verification": "UNVERIFIED",
@@ -130,20 +132,56 @@ def test_elaborate_review_exposes_best_effort_quality_boundary(isolated_store):
                     ],
                 }
             },
-            description="Added one best-effort Elaborate Case",
+            description="Added one best-effort Makemore Case",
         ),
     )
     assert checkpoint is not None
 
     result = runner.invoke(
         app,
-        ["review", "elaborate", "--receipt", checkpoint.uid[:8], "--snapshot"],
+        ["review", "makemore", "--receipt", checkpoint.uid[:8], "--snapshot"],
     )
 
     assert result.exit_code == 0, result.output
     assert "QUALITY · BEST_EFFORT" in result.output
     assert "CASE VALIDATION · NOT_RUN" in result.output
     assert "1. a is apple" in result.output
+
+
+def test_makemore_review_reads_legacy_elaborate_checkpoint(isolated_store):
+    store = MemoryStore()
+    context = ops.init("review/legacy-makemore")
+    checkpoint = store.create_context(
+        context,
+        AutoCheckpoint(
+            command="elaborate",
+            args={
+                "elaborate": {
+                    "mode": "GOAL_TO_RULES",
+                    "target_context": context.name,
+                    "verification": "UNVERIFIED",
+                    "quality_policy": "BEST_EFFORT",
+                    "proposals": [
+                        {
+                            "content": "Confirm the exact target before acting.",
+                            "rationale": "A suggested Rule from the Goal.",
+                        }
+                    ],
+                }
+            },
+            description="Added one legacy Elaborate Rule",
+        ),
+    )
+    assert checkpoint is not None
+
+    result = runner.invoke(
+        app,
+        ["review", "makemore", "--receipt", checkpoint.uid[:8], "--snapshot"],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "MEM REVIEW · MAKEMORE" in result.output
+    assert "1. Confirm the exact target before acting." in result.output
 
 
 def test_dedun_review_combines_survivor_identity_and_content_without_keep_row(

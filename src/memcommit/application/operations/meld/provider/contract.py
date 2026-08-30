@@ -267,12 +267,12 @@ def meld_output_schema(
     }
 
 
-def _directional_comparison_output_schema(
+def _directional_relation_basis_output_schema(
     source_memory_ids: tuple[str, ...],
     *,
     target_context_count: int,
 ) -> dict[str, object]:
-    """Return only Directional decisions when Compare already owns the ledger."""
+    """Return only Directional decisions when relation analysis owns the ledger."""
 
     complete = meld_output_schema(
         source_memory_ids,
@@ -283,7 +283,7 @@ def _directional_comparison_output_schema(
     assert isinstance(properties, dict)
     # Relations, source assignments, and imported issues are deterministic
     # host input. Making those fields unrepresentable prevents a stochastic
-    # completion from rewriting the reviewed Compare basis.
+    # completion from rewriting the reviewed relation basis.
     return {
         "type": "object",
         "properties": {

@@ -30,7 +30,7 @@ judgment, `memcommit.application.operations.fit.coherence` owns exhaustive Groun
 checks, `memcommit.application.operations.fit.ground_report` owns the historical
 Rule–Example report and its public compatibility exports, and
 `memcommit.application.operations.fit.store` owns immutable receipt persistence. Resolve,
-Conflict, Impact, Elaborate, Ground, API, CLI, and presentation consumers
+Conflict, Impact, Makemore, Ground, API, CLI, and presentation consumers
 import these operation-owned modules directly. Cross-operation reuse does not
 make those consumers co-owners of Fit's YES/MAY/NO meaning.
 

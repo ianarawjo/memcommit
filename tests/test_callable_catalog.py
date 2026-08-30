@@ -62,7 +62,7 @@ def test_operation_routes_cover_every_help_operation_and_cli_entry() -> None:
     assert set(by_operation) == set(OPERATION_HELP_BY_NAME)
     assert all(record.cli_entry != "MISSING" for record in snapshot.operations)
     assert by_operation["checkout"].cli_entry == (
-        "memcommit.adapters.console.entrypoint:_checkout"
+        "memcommit.adapters.console.commands.checkout:cmd"
     )
     assert by_operation["embed"].cli_entry == (
         "memcommit.adapters.console.commands.embed:cmd"
@@ -90,16 +90,24 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     ):
         route = by_operation[operation]
         assert (
-            "memcommit.application.operations.memory_transfer.application"
+            f"memcommit.application.operations.{operation}.application"
             in route.application_modules
         )
         assert (
-            "memcommit.application.operations.memory_transfer.runtime"
+            f"memcommit.application.operations.{operation}.runtime"
+            in route.application_modules
+        )
+        assert (
+            "memcommit.application.operations.copy_and_move.application"
+            in route.application_modules
+        )
+        assert (
+            "memcommit.application.operations.copy_and_move.runtime"
             in route.application_modules
         )
         assert not route.tui_modules
         assert route.public_methods == (public_method,)
-        assert route.agent_modules == ("memcommit.adapters.agent.memory_transfer",)
+        assert route.agent_modules == ("memcommit.adapters.agent.copy_and_move",)
         assert route.curated_state == "CLOSED"
     assert by_operation["query"].curated_state == "CLOSED"
     assert by_operation["resolve"].curated_state == "CLOSED"
@@ -110,6 +118,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert by_operation["compare"].curated_state == "CLOSED"
     assert by_operation["help"].curated_state == "CLOSED"
     assert by_operation["switch"].curated_state == "CLOSED"
+    assert by_operation["trace"].curated_state == "CLOSED"
     assert (
         "memcommit.application.operations.atomize.domain"
         in by_operation["atomize"].application_modules
@@ -118,11 +127,22 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         "memcommit.application.operations.compare.application"
         in by_operation["compare"].application_modules
     )
-    for operation in ("dedup", "find-duplicates"):
-        assert (
-            "memcommit.application.operations.dedup.application"
-            in by_operation[operation].application_modules
-        )
+    assert (
+        "memcommit.application.operations.dedup.application"
+        in by_operation["dedup"].application_modules
+    )
+    assert (
+        "memcommit.application.operations.find_duplicates.application"
+        in by_operation["dedup"].application_modules
+    )
+    assert (
+        "memcommit.application.operations.find_duplicates.application"
+        in by_operation["find-duplicates"].application_modules
+    )
+    assert (
+        "memcommit.application.operations.dedup.application"
+        not in by_operation["find-duplicates"].application_modules
+    )
     assert by_operation["dedup"].public_methods == ("dedup",)
     assert by_operation["find-duplicates"].public_methods == ("find_duplicates",)
     assert (
@@ -134,7 +154,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["help"].application_modules
     )
     assert (
-        "memcommit.application.operations.meld.sessions"
+        "memcommit.application.operations.meld.proposal_iteration"
         in by_operation["meld"].application_modules
     )
     assert (
@@ -160,6 +180,30 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert (
         "memcommit.application.operations.translate.create_translated_context"
         in by_operation["translate"].application_modules
+    )
+    assert (
+        "memcommit.application.operations.trace.application"
+        in by_operation["trace"].application_modules
+    )
+    assert (
+        "memcommit.application.operations.trace.runtime"
+        in by_operation["trace"].application_modules
+    )
+    assert (
+        "memcommit.application.capabilities.history.query.context_history_slicing"
+        in by_operation["trace"].application_modules
+    )
+    assert (
+        "memcommit.application.capabilities.history.query.memory_history_slicing"
+        in by_operation["trace"].application_modules
+    )
+    assert (
+        "memcommit.application.capabilities.history.reconstruction.history_graph_reconstruction"
+        in by_operation["trace"].application_modules
+    )
+    assert (
+        "memcommit.application.capabilities.history.model.topology"
+        in by_operation["trace"].application_modules
     )
     assert (
         "memcommit.application.operations.chunk.application"
@@ -190,12 +234,12 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["distill"].application_modules
     )
     assert (
-        "memcommit.application.operations.elaborate.application"
-        in by_operation["elaborate"].application_modules
+        "memcommit.application.operations.makemore.application"
+        in by_operation["makemore"].application_modules
     )
     assert (
-        "memcommit.application.operations.elaborate.add_runtime"
-        in by_operation["elaborate"].application_modules
+        "memcommit.application.operations.makemore.add_runtime"
+        in by_operation["makemore"].application_modules
     )
     assert (
         "memcommit.application.operations.show.application"

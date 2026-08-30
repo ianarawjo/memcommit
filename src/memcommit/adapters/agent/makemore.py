@@ -1,0 +1,317 @@
+"""Versioned read-only agent adapter for Makemore."""
+
+from __future__ import annotations
+
+from collections.abc import Mapping
+from typing import Literal
+
+from memcommit.adapters.python_api import (
+    MakemoreProposal,
+    MemCommitClient,
+    SemanticConflictError,
+    SemanticContextError,
+    SemanticError,
+    SemanticExecutionError,
+    SemanticInputError,
+    SemanticProviderFailure,
+    SemanticStorageError,
+)
+from memcommit.adapters.agent.contract import (
+    AgentRequestError,
+    JsonObject,
+    error_response,
+    exact_fields,
+    object_value,
+    text_value,
+)
+
+
+MAKEMORE_AGENT_CONTRACT_VERSION = 5
+MAKEMORE_AGENT_TOOL_NAME = "memcommit_makemore"
+MakemoreAgentKind = Literal[
+    "goal_to_rules",
+    "rules_to_cases",
+    "ground_goal_to_rules",
+    "ground_rules_to_cases",
+]
+
+
+def _parse_request(payload: object) -> tuple[MakemoreAgentKind, dict[str, object]]:
+    value = object_value(payload, label="Makemore request")
+    if value.get("version") != MAKEMORE_AGENT_CONTRACT_VERSION or isinstance(
+        value.get("version"), bool
+    ):
+        raise AgentRequestError(
+            f"version must be exactly {MAKEMORE_AGENT_CONTRACT_VERSION}."
+        )
+    kind = value.get("kind")
+    if kind == "goal_to_rules":
+        exact_fields(
+            value,
+            required={"version", "kind", "goal"},
+            optional=frozenset({"number", "strict"}),
+            label="Goal Makemore request",
+        )
+        return kind, {
+            "goal": text_value(value["goal"], field="goal"),
+            "number": _number_value(value.get("number")),
+            "strict": _strict_value(value.get("strict")),
+        }
+    if kind == "rules_to_cases":
+        exact_fields(
+            value,
+            required={"version", "kind", "rules"},
+            optional=frozenset({"number", "strict"}),
+            label="Rules Makemore request",
+        )
+        raw = value["rules"]
+        if not isinstance(raw, list) or not raw:
+            raise AgentRequestError("rules must be a nonempty list of Rule texts.")
+        return kind, {
+            "rules": tuple(text_value(item, field="rules item") for item in raw),
+            "number": _number_value(value.get("number")),
+            "strict": _strict_value(value.get("strict")),
+        }
+    if kind in {"ground_goal_to_rules", "ground_rules_to_cases"}:
+        exact_fields(
+            value,
+            required={"version", "kind", "ground_name"},
+            optional=frozenset({"number", "strict"}),
+            label="Ground Makemore request",
+        )
+        return kind, {
+            "ground_name": text_value(value["ground_name"], field="ground_name"),
+            "direction": "GOAL_TO_RULES" if kind == "ground_goal_to_rules" else "RULES_TO_CASES",
+            "number": _number_value(value.get("number")),
+            "strict": _strict_value(value.get("strict")),
+        }
+    raise AgentRequestError(
+        "kind must be one of: goal_to_rules, rules_to_cases, "
+        "ground_goal_to_rules, ground_rules_to_cases."
+    )
+
+
+def _number_value(value: object) -> int | None:
+    if value is None:
+        return None
+    if type(value) is not int or value <= 0:
+        raise AgentRequestError("number must be a positive integer.")
+    return value
+
+
+def _strict_value(value: object) -> bool:
+    if value is None:
+        return False
+    if type(value) is not bool:
+        raise AgentRequestError("strict must be boolean.")
+    return value
+
+
+def _serialize(result: MakemoreProposal) -> JsonObject:
+    target_items: list[JsonObject] = []
+    for item in result.target_context_items:
+        record: JsonObject = {
+            "target_id": item.alias,
+            "kind": item.kind,
+            "context": item.context_name,
+        }
+        if item.kind == "MEMORY":
+            record["memory_uid"] = item.memory_uid
+            record["content"] = item.content
+        target_items.append(record)
+    return {
+        "analysis_uid": result.analysis_uid,
+        "mode": result.mode,
+        "inputs": list(result.inputs),
+        "overview": result.overview,
+        "rules": [
+            {
+                "uid": item.uid,
+                "content": item.content,
+                "rationale": item.rationale,
+                "target_context_refs": list(item.target_context_refs),
+            }
+            for item in result.rules
+        ],
+        "cases": [
+            {
+                "uid": item.uid,
+                "proposition": item.proposition,
+                "expected": item.expected,
+                "rationale": item.rationale,
+                "case_role": item.case_role,
+                "rule_checks": [
+                    {
+                        "source_rule_index": check.source_rule_index,
+                        "evidence": check.evidence,
+                    }
+                    for check in item.rule_checks
+                ],
+                "validation": (
+                    None
+                    if item.validation is None
+                    else {
+                        "source_fit": item.validation.source_fit,
+                        "source_fit_reason": item.validation.source_fit_reason,
+                        "rule_conformance": item.validation.rule_conformance,
+                        "conforming_source_rule_indexes": list(
+                            item.validation.conforming_source_rule_indexes
+                        ),
+                    }
+                ),
+                "target_context_refs": list(item.target_context_refs),
+            }
+            for item in result.cases
+        ],
+        "origin": result.origin,
+        "verification": result.verification,
+        "quality_policy": result.quality_policy,
+        "target_context": (
+            None
+            if result.target_context_name is None
+            else {
+                "name": result.target_context_name,
+                "items": target_items,
+            }
+        ),
+        "effect": "NONE",
+    }
+
+
+class MakemoreAgentAdapter:
+    def __init__(self, client: MemCommitClient) -> None:
+        if not isinstance(client, MemCommitClient):
+            raise TypeError("MakemoreAgentAdapter requires a MemCommitClient.")
+        self._client = client
+
+    def invoke(self, payload: object) -> JsonObject:
+        kind: MakemoreAgentKind | None = None
+        valid = {
+            "goal_to_rules",
+            "rules_to_cases",
+            "ground_goal_to_rules",
+            "ground_rules_to_cases",
+        }
+        if isinstance(payload, Mapping) and payload.get("kind") in valid:
+            kind = payload["kind"]  # type: ignore[assignment]
+        try:
+            kind, arguments = _parse_request(payload)
+        except AgentRequestError as error:
+            return error_response(
+                version=MAKEMORE_AGENT_CONTRACT_VERSION,
+                kind=kind,
+                code="invalid_request",
+                message=str(error),
+                retryable=False,
+            )
+        try:
+            result = (
+                self._client.makemore(**arguments)  # type: ignore[arg-type]
+                if kind in {"goal_to_rules", "rules_to_cases"}
+                else self._client.makemore_ground(**arguments)  # type: ignore[arg-type]
+            )
+        except SemanticError as error:
+            if isinstance(error, SemanticInputError):
+                code, message, retryable = "invalid_request", str(error), False
+            elif isinstance(error, SemanticContextError):
+                code, message, retryable = "context_unavailable", str(error), False
+            elif isinstance(error, SemanticConflictError):
+                code, message, retryable = (
+                    "stale_state",
+                    "The Makemore Ground changed.",
+                    False,
+                )
+            elif isinstance(error, SemanticProviderFailure):
+                code, message, retryable = "provider_failure", "The Makemore provider failed.", True
+            elif isinstance(error, SemanticStorageError):
+                code, message, retryable = "storage_failure", "Makemore could not access local state.", False
+            elif isinstance(error, SemanticExecutionError):
+                code, message, retryable = "execution_failed", "Makemore failed before publishing proposals.", False
+            else:
+                code, message, retryable = "makemore_failed", "Makemore failed.", False
+            return error_response(
+                version=MAKEMORE_AGENT_CONTRACT_VERSION,
+                kind=kind,
+                code=code,
+                message=message,
+                retryable=retryable,
+            )
+        except Exception:
+            return error_response(
+                version=MAKEMORE_AGENT_CONTRACT_VERSION,
+                kind=kind,
+                code="internal_error",
+                message="The Makemore tool failed internally.",
+                retryable=False,
+            )
+        return {
+            "version": MAKEMORE_AGENT_CONTRACT_VERSION,
+            "ok": True,
+            "kind": kind,
+            "result": _serialize(result),
+        }
+
+
+def makemore_agent_tool_schema() -> JsonObject:
+    text = {"type": "string", "minLength": 1, "pattern": r".*\S.*"}
+    version = {"type": "integer", "const": MAKEMORE_AGENT_CONTRACT_VERSION}
+    branches = []
+    for kind, field in (("goal_to_rules", "goal"), ("rules_to_cases", "rules")):
+        value_schema: JsonObject = text if field == "goal" else {
+            "type": "array", "minItems": 1, "uniqueItems": True, "items": text
+        }
+        branches.append(
+            {
+                "type": "object",
+                "additionalProperties": False,
+                "required": ["version", "kind", field],
+                "properties": {
+                    "version": version,
+                    "kind": {"type": "string", "const": kind},
+                    field: value_schema,
+                    "number": {
+                        "type": "integer",
+                        "minimum": 1,
+                    },
+                    "strict": {"type": "boolean"},
+                },
+            }
+        )
+    for kind in ("ground_goal_to_rules", "ground_rules_to_cases"):
+        branches.append(
+            {
+                "type": "object",
+                "additionalProperties": False,
+                "required": ["version", "kind", "ground_name"],
+                "properties": {
+                    "version": version,
+                    "kind": {"type": "string", "const": kind},
+                    "ground_name": text,
+                    "number": {
+                        "type": "integer",
+                        "minimum": 1,
+                    },
+                    "strict": {"type": "boolean"},
+                },
+            }
+        )
+    return {
+        "name": MAKEMORE_AGENT_TOOL_NAME,
+        "description": (
+            "Propose unverified Rules from a Goal or Cases from Rules, using "
+            "inline input or one exact Ground; omission of number requests exactly "
+            "3 proposals, any supplied number must be a positive exact count with "
+            "no fixed maximum, strict defaults false and gates generated Cases "
+            "through independent Conformance/Fit when true, and nothing is saved "
+            "or accepted."
+        ),
+        "parameters": {"type": "object", "oneOf": branches},
+    }
+
+
+__all__ = [
+    "MAKEMORE_AGENT_CONTRACT_VERSION",
+    "MAKEMORE_AGENT_TOOL_NAME",
+    "MakemoreAgentAdapter",
+    "makemore_agent_tool_schema",
+]

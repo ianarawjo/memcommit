@@ -6,9 +6,9 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.search.command import (
-    _collect_search_frame_candidates,
-    _load_search_frame_roots,
+from memcommit.application.operations.search.corpus import (
+    collect_readable_search_candidates,
+    load_readable_search_roots,
 )
 from memcommit.core.context import AutoCheckpoint
 from memcommit.application.operations.meld.model import MeldSession
@@ -64,18 +64,19 @@ def _saved_meld_trace(store: MemoryStore):
 def test_search_frame_includes_checkpoint_trace_artifacts(isolated_store):
     store = MemoryStore()
     ctx = _saved_meld_trace(store)
-    roots = _load_search_frame_roots(
+    roots = load_readable_search_roots(
         store,
-        store.load(ctx.name),
-        recursive=True,
-        resolve_embeds=True,
+        (ctx.name,),
+        include_descendants=True,
+        follow_embeds=True,
+        include_attached_reads=False,
     )
 
-    candidates = _collect_search_frame_candidates(
+    candidates = collect_readable_search_candidates(
         store,
         roots,
-        recursive=True,
-        include_artifacts=True,
+        follow_embeds=True,
+        artifact_roots=roots,
     )
 
     artifacts = [
@@ -144,17 +145,18 @@ def test_search_frame_includes_retained_meld_and_rationale_artifacts(
         ),
     )
 
-    roots = _load_search_frame_roots(
+    roots = load_readable_search_roots(
         store,
-        store.load(target.name),
-        recursive=True,
-        resolve_embeds=True,
+        (target.name,),
+        include_descendants=True,
+        follow_embeds=True,
+        include_attached_reads=False,
     )
-    candidates = _collect_search_frame_candidates(
+    candidates = collect_readable_search_candidates(
         store,
         roots,
-        recursive=True,
-        include_artifacts=True,
+        follow_embeds=True,
+        artifact_roots=roots,
     )
     kinds = {
         candidate.item.artifact_kind
@@ -178,17 +180,18 @@ def test_unrelated_invalid_meld_session_does_not_block_search_artifacts(
     store._meld_session_path(unrelated.uid).parent.mkdir(parents=True, exist_ok=True)
     store._meld_session_path(unrelated.uid).write_text("{", encoding="utf-8")
 
-    roots = _load_search_frame_roots(
+    roots = load_readable_search_roots(
         store,
-        store.load(selected.name),
-        recursive=True,
-        resolve_embeds=True,
+        (selected.name,),
+        include_descendants=True,
+        follow_embeds=True,
+        include_attached_reads=False,
     )
-    candidates = _collect_search_frame_candidates(
+    candidates = collect_readable_search_candidates(
         store,
         roots,
-        recursive=True,
-        include_artifacts=True,
+        follow_embeds=True,
+        artifact_roots=roots,
     )
 
     assert any(

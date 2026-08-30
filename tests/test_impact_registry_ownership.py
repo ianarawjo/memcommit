@@ -47,7 +47,12 @@ def test_route_order_lifecycle_and_help_are_unchanged() -> None:
         (
             "elaborate",
             "PREPARE_PROCESS_LOCAL",
-            "Preview the unverified Memories Elaborate would add.",
+            "Preview one append-only same-UID Memory revision.",
+        ),
+        (
+            "makemore",
+            "PREPARE_PROCESS_LOCAL",
+            "Preview the unverified Memories Makemore would add.",
         ),
         (
             "resolve",

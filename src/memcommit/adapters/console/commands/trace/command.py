@@ -7,17 +7,9 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.capabilities.authority.context_access import (
-    resolve_context_access,
-)
 from memcommit.persistence.command_ledger.attempts import annotate_memory_report_attempt
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
-)
-from memcommit.adapters.console.coordination.memory_history import (
-    build_memory_history,
-    load_retained_history_context,
-    load_retained_history_scope,
 )
 from memcommit.adapters.console.terminal.components.memory_report_picker import (
     ScopedMemoryPickerItem,
@@ -46,32 +38,24 @@ from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.application.capabilities.retained_history.granted_provenance import (
-    GrantedMemoryTraceReport,
-    build_granted_memory_trace,
-)
-from memcommit.application.capabilities.retained_history.context_history import (
-    ContextTraceReport,
-    build_context_trace,
-)
 from memcommit.core.context_targeting.model import ContextTarget
-from memcommit.application.capabilities.memory_report_targeting import (
-    ReadableMemoryTargetNotFoundError,
-    freeze_memory_report_readable_catalog,
-    parse_memory_report_locator,
-    resolve_local_memory_report_target,
-    resolve_readable_memory_target,
-)
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.history.verification import (
     MemoryHistoryReconstructionError,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.operations.trace.application import (
+    ContextHistorySlice,
+    GrantedMemoryTraceReport,
     MemoryHistory,
-    collect_memory_history_candidates,
-)
-from memcommit.application.operations.reference.provenance import (
     MemoryReferenceTraceReport,
-    build_reference_trace,
+    TraceContextTarget,
+    TraceMemoryTarget,
+    TraceReport,
+    TraceRequest,
+    TraceTargetCatalogRequest,
+)
+from memcommit.application.operations.trace.runtime import (
+    execute_trace,
+    load_trace_target_catalog,
 )
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.profile.config import ProfileConfigError
@@ -96,7 +80,7 @@ def render_trace(
 
 
 def _present_context_trace(
-    report: ContextTraceReport,
+    report: ContextHistorySlice,
     *,
     as_json: bool,
     verbose: bool,
@@ -290,15 +274,16 @@ def cmd(
                 available_context_names=store.list_context_names(),
             )
             if isinstance(explicit_target, ContextTarget):
-                history_context = load_retained_history_context(
-                    store,
-                    context_locator=explicit_target.context_name,
-                    current_name=context_snapshot.current_name,
+                trace_result = execute_trace(
+                    TraceRequest(
+                        target=TraceContextTarget(explicit_target.context_name),
+                        current_context_name=context_snapshot.current_name,
+                    ),
+                    store=store,
                 )
-                context_report = build_context_trace(
-                    store,
-                    history_context.storage_name,
-                )
+                context_report = trace_result.report
+                if not isinstance(context_report, ContextHistorySlice):
+                    raise RuntimeError("Context Trace returned an invalid report.")
                 _present_context_trace(
                     context_report,
                     as_json=as_json,
@@ -328,29 +313,27 @@ def cmd(
             # The current or explicit Context is already the useful default.
             # Freeze its descendants for the range control, but do not force a
             # second location decision before the person can see its Memories.
-            history_scope = load_retained_history_scope(
-                store,
-                context_locator=name,
-                current_name=context_snapshot.current_name,
-                # Freeze every descendant before the shared RANGE control
-                # narrows or broadens what can actually be selected.
-                include_descendants=True,
+            target_catalog = load_trace_target_catalog(
+                TraceTargetCatalogRequest(
+                    context_locator=name,
+                    current_context_name=context_snapshot.current_name,
+                    # Freeze every descendant before the shared RANGE control
+                    # narrows or broadens what can actually be selected.
+                    include_descendants=True,
+                ),
+                store=store,
             )
-            catalog_names = tuple(item.display_name for item in history_scope)
+            catalog_names = target_catalog.context_names
             candidate_items = tuple(
                 ScopedMemoryPickerItem(
-                    context_name=context.display_name,
+                    context_name=candidate.context_name,
                     uid=candidate.uid,
                     content=candidate.content,
                     status=candidate.status,
                     catalog_context_names=catalog_names,
                     change_count=candidate.change_count,
                 )
-                for context in history_scope
-                for candidate in collect_memory_history_candidates(
-                    store,
-                    context.context,
-                )
+                for candidate in target_catalog.candidates
             )
             selected = choose_memory_report_target(
                 candidate_items,
@@ -368,104 +351,31 @@ def cmd(
             # the Context while they were open. Re-read before resolving the
             # exact UID so the report never mixes old live state with new history.
         assert selector is not None
-        owner_locator, item_selector = parse_memory_report_locator(
-            selector,
-            explicit_context=context_name,
+        trace_result = execute_trace(
+            TraceRequest(
+                target=TraceMemoryTarget(
+                    selector=selector,
+                    context_locator=context_name,
+                ),
+                current_context_name=context_snapshot.current_name,
+            ),
+            store=store,
         )
-        report: MemoryHistory | MemoryReferenceTraceReport | GrantedMemoryTraceReport
-        granted_access = None
-        if owner_locator is not None:
-            access = resolve_context_access(
-                store,
-                owner_locator,
-                current_name=context_snapshot.current_name,
-                required_permission="READ",
-            )
-            if access.is_granted:
-                granted_access = access
-                resolved_target = None
-            else:
-                resolved_target = resolve_local_memory_report_target(
-                    store,
-                    item_selector,
-                    current=context_snapshot.current_name,
-                    context_locator=access.context_name,
-                )
-        else:
-            # Read-only report UIDs round-trip from Profile-wide Find/List/Search
-            # results. Current local and READ-granted Memories therefore share
-            # one ambiguity-preserving catalog. Retained local history and
-            # Memory references remain a fallback only when no current row
-            # matches anywhere in that readable namespace.
-            readable_catalog = freeze_memory_report_readable_catalog(
-                store,
-                current=context_snapshot.current_name,
-            )
-            try:
-                readable_target = (
-                    resolve_readable_memory_target(
-                        readable_catalog,
-                        item_selector,
-                    )
-                    if readable_catalog is not None
-                    else None
-                )
-            except ReadableMemoryTargetNotFoundError:
-                readable_target = None
-            if readable_target is not None:
-                if readable_target.access.is_granted:
-                    granted_access = readable_target.access
-                    resolved_target = None
-                    item_selector = readable_target.uid
-                else:
-                    resolved_target = resolve_local_memory_report_target(
-                        store,
-                        readable_target.uid,
-                        current=context_snapshot.current_name,
-                        context_locator=readable_target.context_name,
-                    )
-            else:
-                resolved_target = resolve_local_memory_report_target(
-                    store,
-                    item_selector,
-                    current=context_snapshot.current_name,
-                    context_locator=None,
-                )
-
-        if granted_access is not None:
-            report = build_granted_memory_trace(granted_access, item_selector)
+        report: TraceReport = trace_result.report
+        if isinstance(report, GrantedMemoryTraceReport):
             annotate_memory_report_attempt(
                 operation="trace",
                 context_name=report.context_name,
                 memory_uid=report.selected_uid,
                 include_descendants=False,
             )
-        else:
-            assert resolved_target is not None
-            if resolved_target.kind == "MEMORY_REFERENCE":
-                owner = store.load_direct(resolved_target.context_name)
-                report = build_reference_trace(
-                    store,
-                    owner,
-                    resolved_target.uid,
-                )
-            else:
-                history_context = load_retained_history_context(
-                    store,
-                    context_locator=resolved_target.context_name,
-                    current_name=context_snapshot.current_name,
-                )
-                report = build_memory_history(
-                    store,
-                    history_context,
-                    resolved_target.uid,
-                )
-                annotate_memory_report_attempt(
-                    operation="trace",
-                    context_name=history_context.display_name,
-                    memory_uid=report.selected_uid,
-                    include_descendants=False,
-                )
+        elif isinstance(report, MemoryHistory):
+            annotate_memory_report_attempt(
+                operation="trace",
+                context_name=report.context_name,
+                memory_uid=report.selected_uid,
+                include_descendants=False,
+            )
     except (
         FileNotFoundError,
         OSError,

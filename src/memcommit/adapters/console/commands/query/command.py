@@ -61,9 +61,6 @@ from memcommit.adapters.console.coordination.context_scope_options import (
 from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_combination,
 )
-from memcommit.application.operations.search.answer_dialogue import (
-    SearchAnswerCorpusTooLarge,
-)
 from memcommit.application.operations.query.answer import OrdinaryQueryCorpusTooLarge
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
@@ -503,7 +500,6 @@ def cmd(
             )
         except (
             FileNotFoundError,
-            SearchAnswerCorpusTooLarge,
             OrdinaryQueryCorpusTooLarge,
             SearchError,
             OSError,
@@ -549,7 +545,6 @@ def cmd(
             )
         except (
             FileNotFoundError,
-            SearchAnswerCorpusTooLarge,
             OrdinaryQueryCorpusTooLarge,
             SearchError,
             OSError,
@@ -678,7 +673,6 @@ def cmd(
                 return
     except (
         FileNotFoundError,
-        SearchAnswerCorpusTooLarge,
         OrdinaryQueryCorpusTooLarge,
         SearchError,
         OSError,

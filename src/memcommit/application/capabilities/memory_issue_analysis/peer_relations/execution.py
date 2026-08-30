@@ -1,4 +1,4 @@
-"""Shared execution boundary for exact ordered Compare analyses."""
+"""Shared execution boundary for exact ordered peer-relation analyses."""
 
 from __future__ import annotations
 
@@ -7,17 +7,17 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
-    COMPARISON_RULESET_VERSION,
-    ComparisonAnalysis,
-    ComparisonError,
-    ComparisonInput,
-    comparison_canonical_digest,
-    comparison_analysis_matches_input,
+    MEMORY_RELATION_RULESET_VERSION,
+    MemoryRelationAnalysis,
+    MemoryRelationError,
+    MemoryRelationInput,
+    memory_relation_canonical_digest,
+    memory_relation_analysis_matches_input,
 )
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
-    ConcurrentComparisonUpdateError,
-    load_comparison_analysis,
-    save_comparison_analysis,
+    ConcurrentMemoryRelationUpdateError,
+    load_memory_relation_analysis,
+    save_memory_relation_analysis,
 )
 from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
@@ -28,7 +28,7 @@ from memcommit.application.capabilities.authority.context_access import (
 )
 from memcommit.core.context import Context
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
-    project_comparison_context,
+    project_memory_relation_context as _project_memory_relation_context,
 )
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.application.capabilities.authority.source_use_policy import (
@@ -38,8 +38,8 @@ from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_combination,
 )
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
-    load_granted_comparison_artifact,
-    save_granted_comparison_artifact,
+    load_granted_memory_relation_artifact,
+    save_granted_memory_relation_artifact,
 )
 from memcommit.application.operations.profile.model import (
     ProfileError,
@@ -55,47 +55,47 @@ if TYPE_CHECKING:
     from memcommit.application.operations.profile.config import ProfileRegistry
 
 
-COMPARISON_AGGREGATE_TIMEOUT_SECONDS = int(
+MEMORY_RELATION_AGGREGATE_TIMEOUT_SECONDS = int(
     COMPARE_LEDGER_PROVIDER_POLICY.timeout_floor_seconds or 900
 )
 
 
 @dataclass(frozen=True)
-class ComparisonExecutionResult:
-    """One saved, projected, or newly analyzed ordered comparison."""
+class MemoryRelationExecutionResult:
+    """One saved, projected, or newly analyzed ordered relation ledger."""
 
-    analysis: ComparisonAnalysis
+    analysis: MemoryRelationAnalysis
     reused: bool
     durable: bool
     retention: AnalysisRetention | None
     origin: str
 
 
-def connect_comparison_provider(provider_factory):
-    """Connect one provider with Compare's whole-ledger timeout boundary."""
+def connect_memory_relation_provider(provider_factory):
+    """Connect one provider with the whole-ledger timeout boundary."""
 
     provider = provider_factory()
     if isinstance(provider, CodexChatGPTProvider):
         provider.timeout = max(
             provider.timeout,
-            COMPARISON_AGGREGATE_TIMEOUT_SECONDS,
+            MEMORY_RELATION_AGGREGATE_TIMEOUT_SECONDS,
         )
     return provider
 
 
-def recursive_comparison_projection(root: Context) -> Context:
-    """Compatibility facade for Compare's typed content evidence projection."""
+def project_memory_relation_context(root: Context) -> Context:
+    """Project one readable Context through the capability-owned evidence model."""
 
-    return project_comparison_context(root)
+    return _project_memory_relation_context(root)
 
 
-def load_comparison_context(
+def load_memory_relation_context(
     access: ContextAccess,
     *,
     include_descendants: bool = False,
     registry: ProfileRegistry | None = None,
 ) -> Context:
-    """Load one local or granted source using Compare's exact projection."""
+    """Load one local or granted source using the exact relation projection."""
 
     reader = (
         GrantedReadStore(access, registry=registry)
@@ -107,7 +107,7 @@ def load_comparison_context(
         access.display_name if access.is_granted else access.context_name,
         include_descendants=include_descendants,
     )
-    return recursive_comparison_projection(context)
+    return project_memory_relation_context(context)
 
 
 def _missing_durable_analysis_error() -> ProfileError:
@@ -117,7 +117,7 @@ def _missing_durable_analysis_error() -> ProfileError:
     )
 
 
-def ensure_comparison_analysis(
+def ensure_memory_relation_analysis(
     *,
     store: MemoryStore,
     reference_access: ContextAccess,
@@ -130,10 +130,10 @@ def ensure_comparison_analysis(
     refresh: bool = False,
     expected_version: str | None = None,
     require_durable: bool = False,
-    analyze: Callable[[ComparisonInput], ComparisonAnalysis],
-    equivalent: Callable[[ComparisonInput], ComparisonAnalysis | None] | None = None,
-    project: Callable[[ComparisonInput], ComparisonAnalysis | None] | None = None,
-) -> ComparisonExecutionResult:
+    analyze: Callable[[MemoryRelationInput], MemoryRelationAnalysis],
+    equivalent: Callable[[MemoryRelationInput], MemoryRelationAnalysis | None] | None = None,
+    project: Callable[[MemoryRelationInput], MemoryRelationAnalysis | None] | None = None,
+) -> MemoryRelationExecutionResult:
     """Reuse or create the exact ordered basis without changing current state.
 
     The caller freezes the public endpoint meaning once, then supplies the
@@ -151,7 +151,7 @@ def ensure_comparison_analysis(
         freeze_granted_context_binding(access) if access.is_granted else None
         for access in accesses
     )
-    comparison_input = ComparisonInput.from_contexts(
+    comparison_input = MemoryRelationInput.from_contexts(
         reference,
         compared,
         reference_descendants=include_descendants[0],
@@ -160,14 +160,14 @@ def ensure_comparison_analysis(
         compared_memory_selector=memory_selectors[1],
     )
     granted_artifact = (
-        load_granted_comparison_artifact(store, reference.uid, compared.uid)
+        load_granted_memory_relation_artifact(store, reference.uid, compared.uid)
         if granted
         else None
     )
     if granted:
         existing = granted_artifact.analysis if granted_artifact is not None else None
     else:
-        existing = load_comparison_analysis(
+        existing = load_memory_relation_analysis(
             reference.uid,
             compared.uid,
             store=store,
@@ -180,32 +180,32 @@ def ensure_comparison_analysis(
                 character not in "0123456789abcdef" for character in expected_version
             )
         ):
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Compare refresh requires a valid opaque saved version."
             )
         if (
             existing is None
-            or comparison_canonical_digest(existing.to_dict()) != expected_version
+            or memory_relation_canonical_digest(existing.to_dict()) != expected_version
         ):
             # This check intentionally precedes every prewarm/provider hook.
             # An external refresh is an action on a reviewed artifact, not an
             # instruction to replace whichever pair revision is latest.
-            raise ConcurrentComparisonUpdateError(
+            raise ConcurrentMemoryRelationUpdateError(
                 "The saved comparison changed after this refresh was reviewed."
             )
     existing_version = (
-        comparison_canonical_digest(existing.to_dict())
+        memory_relation_canonical_digest(existing.to_dict())
         if existing is not None
         else None
     )
     if (
         existing is not None
-        and comparison_analysis_matches_input(existing, comparison_input)
+        and memory_relation_analysis_matches_input(existing, comparison_input)
         and existing.matches(reference, compared)
-        and existing.ruleset_version == COMPARISON_RULESET_VERSION
+        and existing.ruleset_version == MEMORY_RELATION_RULESET_VERSION
         and not refresh
     ):
-        return ComparisonExecutionResult(
+        return MemoryRelationExecutionResult(
             analysis=existing,
             reused=True,
             durable=True,
@@ -227,14 +227,14 @@ def ensure_comparison_analysis(
         equivalent(comparison_input) if equivalent is not None and not refresh else None
     )
     if equivalent_analysis is not None and (
-        equivalent_analysis.ruleset_version != COMPARISON_RULESET_VERSION
-        or not comparison_analysis_matches_input(
+        equivalent_analysis.ruleset_version != MEMORY_RELATION_RULESET_VERSION
+        or not memory_relation_analysis_matches_input(
             equivalent_analysis,
             comparison_input,
         )
         or not equivalent_analysis.matches(reference, compared)
     ):
-        raise ComparisonError(
+        raise MemoryRelationError(
             "Equivalent Compare prewarm does not match the current frames, "
             "scope, or ruleset."
         )
@@ -250,14 +250,14 @@ def ensure_comparison_analysis(
     )
     if projected is not None:
         if (
-            projected.ruleset_version != COMPARISON_RULESET_VERSION
-            or not comparison_analysis_matches_input(
+            projected.ruleset_version != MEMORY_RELATION_RULESET_VERSION
+            or not memory_relation_analysis_matches_input(
                 projected,
                 comparison_input,
             )
             or not projected.matches(reference, compared)
         ):
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Projected Compare result does not match the current frames, "
                 "scope, or ruleset."
             )
@@ -285,20 +285,20 @@ def ensure_comparison_analysis(
                         )
                     )
                 authorize_combination(current_accesses)
-                current_reference = load_comparison_context(
+                current_reference = load_memory_relation_context(
                     current_accesses[0],
                     include_descendants=include_descendants[0],
                 )
-                current_compared = load_comparison_context(
+                current_compared = load_memory_relation_context(
                     current_accesses[1],
                     include_descendants=include_descendants[1],
                 )
                 if not projected.matches(current_reference, current_compared):
-                    raise ConcurrentComparisonUpdateError(
+                    raise ConcurrentMemoryRelationUpdateError(
                         "A granted comparison source changed while Compare was "
                         "projecting it; no result was published."
                     )
-        return ComparisonExecutionResult(
+        return MemoryRelationExecutionResult(
             analysis=projected,
             reused=True,
             durable=False,
@@ -306,8 +306,8 @@ def ensure_comparison_analysis(
             origin="PROJECTED",
         )
     analysis = equivalent_analysis or analyze(comparison_input)
-    if not comparison_analysis_matches_input(analysis, comparison_input):
-        raise ComparisonError(
+    if not memory_relation_analysis_matches_input(analysis, comparison_input):
+        raise MemoryRelationError(
             "Compare analysis does not match the requested Memory scope."
         )
     analysis_origin = (
@@ -333,16 +333,16 @@ def ensure_comparison_analysis(
                         registry=registry,
                     )
                 )
-            current_reference = load_comparison_context(
+            current_reference = load_memory_relation_context(
                 current_accesses[0],
                 include_descendants=include_descendants[0],
             )
-            current_compared = load_comparison_context(
+            current_compared = load_memory_relation_context(
                 current_accesses[1],
                 include_descendants=include_descendants[1],
             )
             if not analysis.matches(current_reference, current_compared):
-                raise ConcurrentComparisonUpdateError(
+                raise ConcurrentMemoryRelationUpdateError(
                     "A granted comparison source changed while Compare was "
                     "analyzing it; no result was published."
                 )
@@ -350,7 +350,7 @@ def ensure_comparison_analysis(
             if require_durable and current_retention is None:
                 raise _missing_durable_analysis_error()
             if current_retention is not None:
-                save_granted_comparison_artifact(
+                save_granted_memory_relation_artifact(
                     store,
                     analysis,
                     current_accesses,
@@ -360,7 +360,7 @@ def ensure_comparison_analysis(
                     ),
                     expected_analysis_version=existing_version,
                 )
-        return ComparisonExecutionResult(
+        return MemoryRelationExecutionResult(
             analysis=analysis,
             reused=equivalent_analysis is not None,
             durable=current_retention is not None,
@@ -368,13 +368,13 @@ def ensure_comparison_analysis(
             origin=analysis_origin,
         )
 
-    save_comparison_analysis(
+    save_memory_relation_analysis(
         store,
         analysis,
         expected_analysis_uid=(existing.uid if existing is not None else None),
         expected_analysis_version=existing_version,
     )
-    return ComparisonExecutionResult(
+    return MemoryRelationExecutionResult(
         analysis=analysis,
         reused=equivalent_analysis is not None,
         durable=True,
@@ -383,7 +383,7 @@ def ensure_comparison_analysis(
     )
 
 
-def install_prepared_comparison_analysis(
+def install_prepared_memory_relation_analysis(
     *,
     store: MemoryStore,
     reference_access: ContextAccess,
@@ -392,8 +392,9 @@ def install_prepared_comparison_analysis(
     compared: Context,
     current_name: str | None,
     include_descendants: tuple[bool, bool],
-    analysis: ComparisonAnalysis,
-) -> ComparisonExecutionResult:
+    analysis: MemoryRelationAnalysis,
+    memory_selectors: tuple[str | None, str | None] = (None, None),
+) -> MemoryRelationExecutionResult:
     """Install one exact portable seed through Compare's production boundary.
 
     A prepared semantic payload is portable across Study runs cloned from the
@@ -403,19 +404,19 @@ def install_prepared_comparison_analysis(
     No provider is connected by this prepared-materialization path.
     """
 
-    if not isinstance(analysis, ComparisonAnalysis):
-        raise TypeError("Prepared Compare seed must be a ComparisonAnalysis.")
+    if not isinstance(analysis, MemoryRelationAnalysis):
+        raise TypeError("Prepared Compare seed must be a MemoryRelationAnalysis.")
     if (
-        analysis.ruleset_version != COMPARISON_RULESET_VERSION
+        analysis.ruleset_version != MEMORY_RELATION_RULESET_VERSION
         or analysis.include_descendants != include_descendants
         or not analysis.matches(reference, compared)
     ):
-        raise ComparisonError(
+        raise MemoryRelationError(
             "Prepared Compare seed does not match the exact current frames, "
             "scope, or ruleset."
         )
 
-    def prepared(comparison_input: ComparisonInput) -> ComparisonAnalysis:
+    def prepared(comparison_input: MemoryRelationInput) -> MemoryRelationAnalysis:
         # Recheck the freshly constructed request too. This prevents a caller
         # from validating one scope and publishing the seed under another.
         if comparison_input.include_descendants != include_descendants or tuple(
@@ -425,12 +426,12 @@ def install_prepared_comparison_analysis(
             (frame.context_uid, frame.context_name, frame.context_digest)
             for frame in analysis.frames
         ):
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Prepared Compare seed changed at the installation boundary."
             )
         return analysis
 
-    result = ensure_comparison_analysis(
+    result = ensure_memory_relation_analysis(
         store=store,
         reference_access=reference_access,
         compared_access=compared_access,
@@ -438,13 +439,14 @@ def install_prepared_comparison_analysis(
         compared=compared,
         current_name=current_name,
         include_descendants=include_descendants,
+        memory_selectors=memory_selectors,
         # Setup installation intentionally replaces a stale slot, but the
         # production CAS still observes its exact previous analysis UID.
         refresh=True,
         require_durable=True,
         analyze=prepared,
     )
-    return ComparisonExecutionResult(
+    return MemoryRelationExecutionResult(
         analysis=result.analysis,
         reused=True,
         durable=result.durable,
@@ -454,10 +456,11 @@ def install_prepared_comparison_analysis(
 
 
 # Persisted Compare artifacts keep their established schema and storage keys;
-# new consumers address the same capability through operation-neutral names.
-MemoryRelationExecutionResult = ComparisonExecutionResult
-connect_memory_relation_provider = connect_comparison_provider
-project_memory_relation_context = recursive_comparison_projection
-load_memory_relation_context = load_comparison_context
-ensure_memory_relation_analysis = ensure_comparison_analysis
-install_prepared_memory_relation_analysis = install_prepared_comparison_analysis
+# old imports remain aliases while capability-neutral names own production.
+ComparisonExecutionResult = MemoryRelationExecutionResult
+COMPARISON_AGGREGATE_TIMEOUT_SECONDS = MEMORY_RELATION_AGGREGATE_TIMEOUT_SECONDS
+connect_comparison_provider = connect_memory_relation_provider
+recursive_comparison_projection = project_memory_relation_context
+load_comparison_context = load_memory_relation_context
+ensure_comparison_analysis = ensure_memory_relation_analysis
+install_prepared_comparison_analysis = install_prepared_memory_relation_analysis

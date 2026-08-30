@@ -5,24 +5,22 @@ from __future__ import annotations
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.coordination.memory_transfer.model import (
-    MemoryTransferTuiSetup,
+from memcommit.adapters.console.coordination.copy_and_move.model import (
+    CopyAndMoveTuiSetup,
 )
-from memcommit.adapters.console.terminal.components.memory_transfer import (
-    run_memory_transfer_workbench,
+from memcommit.adapters.console.terminal.components.copy_and_move import (
+    run_copy_and_move_workbench,
 )
 from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.application.operations.memory_transfer.application import (
+from memcommit.application.operations.copy_and_move.application import (
     FrozenCopyMemoriesPlan,
-    prepare_copy,
 )
-from memcommit.application.operations.memory_transfer.runtime import (
-    MemoryStoreMemoryTransferPort,
-)
+from memcommit.application.operations.copy.application import prepare_copy
+from memcommit.application.operations.copy.runtime import MemoryStoreCopyPort
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.core.context import Context
 from memcommit.application.capabilities.authority.granted_context_navigation import (
@@ -43,7 +41,7 @@ _RETAINED_COPY_PERMISSIONS = frozenset(
 
 
 def _copy_granted_sources(
-    port: MemoryStoreMemoryTransferPort,
+    port: MemoryStoreCopyPort,
 ) -> tuple[
     tuple[str, ...],
     dict[str, ContextAccess],
@@ -87,15 +85,15 @@ def _copy_granted_sources(
 
 
 def _copy_setup_and_granted_sources(
-    port: MemoryStoreMemoryTransferPort,
-) -> tuple[MemoryTransferTuiSetup, dict[str, ContextAccess]]:
+    port: MemoryStoreCopyPort,
+) -> tuple[CopyAndMoveTuiSetup, dict[str, ContextAccess]]:
     local_names = port.local_context_names
     if not local_names:
-        raise ValueError("Interactive Memory transfer requires a local Context.")
+        raise ValueError("Interactive Copy/Move requires a local Context.")
     granted_names, granted_accesses, annotations = _copy_granted_sources(port)
     source_names = tuple(sorted({*local_names, *granted_names}, key=str.casefold))
     return (
-        MemoryTransferTuiSetup(
+        CopyAndMoveTuiSetup(
             source_names=source_names,
             local_source_names=local_names,
             into_names=local_names,
@@ -111,8 +109,8 @@ def _copy_setup_and_granted_sources(
 
 
 def build_copy_tui_setup(
-    port: MemoryStoreMemoryTransferPort,
-) -> MemoryTransferTuiSetup:
+    port: MemoryStoreCopyPort,
+) -> CopyAndMoveTuiSetup:
     """Freeze Copy's local and retained-Grant role catalogs."""
 
     setup, _accesses = _copy_setup_and_granted_sources(port)
@@ -120,7 +118,7 @@ def build_copy_tui_setup(
 
 
 def choose_copy_setup(
-    port: MemoryStoreMemoryTransferPort,
+    port: MemoryStoreCopyPort,
     *,
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -136,7 +134,7 @@ def choose_copy_setup(
             return port.inspect_local_context(name)
         return GrantedReadStore(access).load_direct(name)
 
-    result = run_memory_transfer_workbench(
+    result = run_copy_and_move_workbench(
         setup,
         kind="COPY",
         inspect_source_context=inspect_source,

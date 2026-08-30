@@ -1,7 +1,6 @@
 """Semantic search traversal, validation, privacy, and CLI contracts."""
 
 import json
-import subprocess
 import uuid
 
 import pytest
@@ -10,23 +9,12 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.search.command import (
-    SEARCH_OUTSIDE_CANCELLATION,
-    SEARCH_OUTSIDE_CONFIRMATION,
-    _apply_show_result,
-    _handle_search_turn,
-    _initial_chat_state,
-    _load_search_scope_roots,
     _run_search_request,
-    _run_read_only_search_command,
-    _show_result_proposal,
-    _supplement_namespace_branch_coverage,
 )
+from memcommit.application.operations.search.corpus import load_readable_search_roots
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_readable_context_catalog,
-)
-from memcommit.adapters.console.commands.search.chat_shell import (
-    SearchChatMessage,
 )
 from memcommit.adapters.console.commands.search.search_workbench import (
     SearchRequest,
@@ -40,7 +28,9 @@ from memcommit.core.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.application.operations.search.turn_dialogue import SearchTurnAction
+from memcommit.application.operations.search.application import (
+    supplement_namespace_branch_coverage,
+)
 from memcommit.application.operations.search.model import (
     SearchError,
     SearchCandidate,
@@ -148,19 +138,19 @@ def test_interactive_scope_separates_namespace_descendants_from_embeds(
     )
     catalog = freeze_readable_context_catalog(store, access)
 
-    exact_roots = _load_search_scope_roots(
+    exact_roots = load_readable_search_roots(
         catalog,
         (root.name,),
         include_descendants=False,
         follow_embeds=False,
     )
-    below_roots = _load_search_scope_roots(
+    below_roots = load_readable_search_roots(
         catalog,
         (root.name,),
         include_descendants=True,
         follow_embeds=False,
     )
-    embedded_roots = _load_search_scope_roots(
+    embedded_roots = load_readable_search_roots(
         catalog,
         (root.name,),
         include_descendants=False,
@@ -690,7 +680,7 @@ def test_recursive_search_reserves_room_for_material_omitted_namespace_branch():
         )
     initial = [SearchMatch(candidate=candidate) for candidate in candidates[:5]]
 
-    matches = _supplement_namespace_branch_coverage(
+    matches = supplement_namespace_branch_coverage(
         "opening hours",
         candidates,
         initial,
@@ -967,26 +957,6 @@ def test_search_cli_labels_related_fallback_when_primary_matches_are_empty(
     )
 
 
-def test_initial_chat_state_preserves_related_tier_and_broader_query():
-    candidate = _candidate(content="clinic appointment")
-    state = _initial_chat_state(
-        "task-3",
-        "health insurance memories",
-        [
-            SearchMatch(
-                candidate=candidate,
-                relevance="related",
-                related_query="health and healthcare memories",
-            )
-        ],
-    )
-
-    assert state.related_query == "health and healthcare memories"
-    assert state.results[0].relevance == "related"
-    assert state.status == "NO PRIMARY MATCHES · SHOWING RELATED RESULTS"
-    assert "I found no primary matches" in state.messages[-1].text
-
-
 def test_search_cli_tty_prints_static_results_without_opening_chat(
     isolated_store,
     monkeypatch,
@@ -1005,13 +975,6 @@ def test_search_cli_tty_prints_static_results_without_opening_chat(
         "memcommit.adapters.console.commands.search.command._interactive_terminal",
         lambda: True,
     )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.run_search_chat_session",
-        lambda *args, **kwargs: (_ for _ in ()).throw(
-            AssertionError("ordinary Search must not open the chat shell")
-        ),
-    )
-
     result = runner.invoke(app, ["search", "cafe"])
 
     assert result.exit_code == 0, result.output
@@ -1125,501 +1088,12 @@ def test_search_cli_tty_static_results_include_namespace_descendants(
         lambda: True,
     )
 
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.run_search_chat_session",
-        lambda *args, **kwargs: (_ for _ in ()).throw(
-            AssertionError("ordinary Search must not open the chat shell")
-        ),
-    )
-
     result = runner.invoke(app, ["search", "-r", "healthcare"])
 
     assert result.exit_code == 0, result.output
     assert child.name in result.output
     assert f"[memory {memory.uid[:8]}]" in result.output
     assert "Search dialogue closed" not in result.output
-
-
-def test_zero_result_follow_up_refines_and_replaces_search_results(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    root = ops.init("task-3")
-    store.save(root)
-    child = ops.init("task-3/personal-memory")
-    healthcare = ops.add(
-        child,
-        "The user checks medication instructions after a clinic visit.",
-    )
-    ops.add(child, "The parking permit expires next month.")
-    store.save(child)
-    state = _initial_chat_state(
-        root.name,
-        "건강보험 관련 메모리",
-        [],
-    )
-
-    class RefineProvider:
-        def __init__(self):
-            self.operations = []
-
-        def complete(self, prompt, *, operation, output_schema=None):
-            self.operations.append(operation)
-            if operation == "search turn":
-                assert output_schema["properties"]["kind"]["enum"] == [
-                    "ASK",
-                    "REFINE",
-                ]
-                return json.dumps(
-                    {
-                        "kind": "REFINE",
-                        "understanding": (
-                            "You broadened the search to healthcare and medicine."
-                        ),
-                        "question": "",
-                        "query": "healthcare medicine medication clinic",
-                        "selector": "",
-                        "scope": "CONTEXT",
-                    }
-                )
-            assert operation == "search"
-            payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
-            selected = next(
-                candidate["candidate_id"]
-                for candidate in payload["candidates"]
-                if "medication" in candidate.get("content", "").casefold()
-            )
-            return json.dumps(
-                {
-                    "matches": [{"candidate_id": selected}],
-                    "related_query": "",
-                    "related_matches": [],
-                }
-            )
-
-    provider = RefineProvider()
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_search_provider",
-        lambda: provider,
-    )
-
-    updated = _handle_search_turn(
-        state,
-        "related to health/healthcare/medicine",
-    )
-
-    assert updated.current_query == "healthcare medicine medication clinic"
-    assert [result.uid for result in updated.results] == [healthcare.uid]
-    assert updated.results[0].context_name == child.name
-    assert updated.status == "RESULTS READY · REFINED"
-    assert updated.messages[-2] == SearchChatMessage(
-        role="USER",
-        text="related to health/healthcare/medicine",
-    )
-    assert "I found 1 matching Memory" in updated.messages[-1].text
-    assert provider.operations == ["search turn", "search"]
-
-
-def test_refine_can_replace_zero_results_with_a_labeled_related_fallback(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    root = ops.init("task-3")
-    clinic = ops.add(root, "The user checks medication instructions.")
-    store.save(root)
-    state = _initial_chat_state(root.name, "insurance paperwork", [])
-
-    class Provider:
-        def complete(self, prompt, *, operation, output_schema=None):
-            if operation == "search turn":
-                return json.dumps(
-                    {
-                        "kind": "REFINE",
-                        "understanding": "You asked for health insurance memories.",
-                        "question": "",
-                        "query": "health insurance memories",
-                        "selector": "",
-                        "scope": "CONTEXT",
-                    }
-                )
-            payload = json.loads(prompt.split("SEARCH PAYLOAD:\n", 1)[1])
-            selected = next(
-                candidate["candidate_id"]
-                for candidate in payload["candidates"]
-                if "medication" in candidate.get("content", "").casefold()
-            )
-            return json.dumps(
-                {
-                    "matches": [],
-                    "related_query": "health and healthcare memories",
-                    "related_matches": [{"candidate_id": selected}],
-                }
-            )
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_search_provider",
-        lambda: Provider(),
-    )
-
-    updated = _handle_search_turn(state, "health insurance memories")
-
-    assert [result.uid for result in updated.results] == [clinic.uid]
-    assert updated.results[0].relevance == "related"
-    assert updated.related_query == "health and healthcare memories"
-    assert updated.status == "NO PRIMARY MATCHES · SHOWING RELATED RESULTS · REFINED"
-    assert "I found no primary matches" in updated.messages[-1].text
-
-
-def test_show_result_proposal_runs_exact_read_only_cli_and_preserves_results(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx = ops.init("task-1")
-    memory = ops.add(ctx, "There is a coffee machine on the first floor.")
-    store.save(ctx)
-    candidate = SearchCandidate(
-        candidate_id="c000001",
-        kind="memory",
-        context_uid=ctx.uid,
-        context_names=(ctx.name,),
-        item=memory,
-        search_text=memory.content,
-    )
-    state = _initial_chat_state(
-        ctx.name,
-        "coffee",
-        [SearchMatch(candidate=candidate)],
-    )
-    action = SearchTurnAction(
-        understanding="You want the first result in full.",
-        question="What would you like to inspect next?",
-        selector="m1",
-    )
-    proposal = _show_result_proposal(state, action, "show m1")
-
-    assert proposal.review.argv == (
-        "mem",
-        "show",
-        memory.uid,
-        "--context",
-        ctx.name,
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command._run_read_only_search_command",
-        lambda argv: subprocess.CompletedProcess(
-            args=argv,
-            returncode=0,
-            stdout=(f"Memory: {memory.uid}\nContext: {ctx.name}\n\n{memory.content}\n"),
-            stderr="",
-        ),
-    )
-    updated = _apply_show_result(state, proposal)
-
-    assert updated.results == state.results
-    assert updated.status == "SHOWED m1"
-    receipt = updated.messages[-1].text
-    assert "RESULT SHOWN" in receipt
-    assert "mem show" in receipt
-    assert memory.uid in receipt
-    assert "ACTUAL OUTPUT" in receipt
-    assert memory.content in receipt
-    assert store.list_checkpoints(ctx.name) == []
-
-
-def test_general_parking_question_gets_a_grounded_answer_without_a_command(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx = ops.init("temp/task-1-atomized-en")
-    visible = ops.add(
-        ctx,
-        "The parking area will reopen immediately after construction ends.",
-    )
-    supplemental = ops.add(
-        ctx,
-        "Construction runs from June xx through August xx.",
-    )
-    store.save(ctx)
-    candidates = collect_candidates(ctx)
-    state = _initial_chat_state(
-        ctx.name,
-        "related to parking",
-        [SearchMatch(candidate=candidates[0])],
-    )
-
-    class AnswerProvider:
-        def __init__(self):
-            self.operations = []
-
-        def complete(self, _prompt, *, operation, output_schema=None):
-            self.operations.append(operation)
-            if operation == "search turn":
-                return json.dumps(
-                    {
-                        "kind": "ANSWER",
-                        "understanding": (
-                            "You are asking how long the garage will be closed."
-                        ),
-                        "question": "",
-                        "query": "",
-                        "selector": "",
-                        "scope": "CONTEXT",
-                    }
-                )
-            assert operation == "search answer"
-            return json.dumps(
-                {
-                    "visible_text": (
-                        "The current results say it reopens after construction."
-                    ),
-                    "visible_sources": ["m1"],
-                    "context_text": (
-                        "Another Memory places construction between June and August."
-                    ),
-                    "context_sources": ["c1"],
-                    "outside_text": "Other Contexts were not checked.",
-                    "outside_sources": [],
-                }
-            )
-
-    provider = AnswerProvider()
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_search_provider",
-        lambda: provider,
-    )
-
-    def refuse_command(_argv):
-        raise AssertionError("An ANSWER turn must not execute a command.")
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command._run_read_only_search_command",
-        refuse_command,
-    )
-
-    updated = _handle_search_turn(
-        state,
-        "garage will 언제까지 closed?",
-    )
-
-    assert updated.results == state.results
-    assert updated.status == ("ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS NOT CHECKED")
-    assert updated.messages[-2] == SearchChatMessage(
-        role="USER",
-        text="garage will 언제까지 closed?",
-    )
-    answer_text = updated.messages[-1].text
-    assert "after construction. [1]" in answer_text
-    assert "between June and August. [2]" in answer_text
-    assert "다른 Context는 확인하지 않았습니다." in answer_text
-    assert "References" in answer_text
-    assert visible.content in answer_text
-    assert supplemental.content in answer_text
-    assert f"[1] {visible.content} — {visible.uid[:8]}, {ctx.name}, m1" in answer_text
-    assert (
-        f"[2] {supplemental.content} — {supplemental.uid[:8]}, {ctx.name}, c1"
-        in answer_text
-    )
-    assert provider.operations == ["search turn", "search answer"]
-
-
-def test_explicit_other_context_answer_collects_and_references_outside_memory(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    root = ops.init("task-1")
-    visible = ops.add(root, "The garage is closed during construction.")
-    store.save(root)
-    other = ops.init("facilities-calendar")
-    outside = ops.add(
-        other,
-        "The construction completion review is scheduled for August 28.",
-    )
-    store.save(other)
-    candidates = collect_candidates(root)
-    state = _initial_chat_state(
-        root.name,
-        "garage closure",
-        [SearchMatch(candidate=candidates[0])],
-    )
-
-    class AnswerProvider:
-        def __init__(self):
-            self.operations = []
-
-        def complete(self, prompt, *, operation, output_schema=None):
-            self.operations.append(operation)
-            if operation == "search turn":
-                return json.dumps(
-                    {
-                        "kind": "ANSWER",
-                        "understanding": (
-                            "You want the other Contexts checked as well."
-                        ),
-                        "question": "",
-                        "query": "",
-                        "selector": "",
-                        "scope": "ALL_CONTEXTS",
-                    }
-                )
-            assert "facilities-calendar" in prompt
-            assert outside.content in prompt
-            return json.dumps(
-                {
-                    "visible_text": (
-                        "The visible result confirms a construction closure."
-                    ),
-                    "visible_sources": ["m1"],
-                    "context_text": (
-                        "No additional evidence was found in the same Context."
-                    ),
-                    "context_sources": [],
-                    "outside_text": (
-                        "Another Context schedules a completion review for August 28."
-                    ),
-                    "outside_sources": ["x1"],
-                }
-            )
-
-    provider = AnswerProvider()
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_search_provider",
-        lambda: provider,
-    )
-
-    pending = _handle_search_turn(
-        state,
-        "Check the other contexts too: when does it end?",
-    )
-
-    assert pending.status == "WAITING FOR OTHER CONTEXTS CONFIRMATION"
-    assert pending.pending_answer is not None
-    assert SEARCH_OUTSIDE_CONFIRMATION in pending.messages[-1].text
-    assert outside.content not in pending.messages[-1].text
-    assert provider.operations == ["search turn"]
-
-    updated = _handle_search_turn(
-        pending,
-        SEARCH_OUTSIDE_CONFIRMATION,
-    )
-
-    assert updated.status == ("ANSWERED · CONTEXT CHECKED · OTHER CONTEXTS CHECKED")
-    assert updated.pending_answer is None
-    answer_text = updated.messages[-1].text
-    assert "closure. [1]" in answer_text
-    assert "August 28. [2]" in answer_text
-    assert f"[1] {visible.content} — {visible.uid[:8]}, task-1, m1" in answer_text
-    assert (
-        f"[2] {outside.content} — {outside.uid[:8]}, facilities-calendar, x1"
-    ) in answer_text
-    assert outside.content in answer_text
-    assert provider.operations == ["search turn", "search answer"]
-
-
-def test_provider_cannot_expand_to_other_contexts_without_user_request(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    root = ops.init("task-1")
-    ops.add(root, "The garage is closed.")
-    store.save(root)
-    candidates = collect_candidates(root)
-    state = _initial_chat_state(
-        root.name,
-        "garage",
-        [SearchMatch(candidate=candidates[0])],
-    )
-
-    class OverbroadProvider:
-        def __init__(self):
-            self.operations = []
-
-        def complete(self, _prompt, *, operation, output_schema=None):
-            self.operations.append(operation)
-            return json.dumps(
-                {
-                    "kind": "ANSWER",
-                    "understanding": "Check every stored Context.",
-                    "question": "",
-                    "query": "",
-                    "selector": "",
-                    "scope": "ALL_CONTEXTS",
-                }
-            )
-
-    provider = OverbroadProvider()
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_search_provider",
-        lambda: provider,
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.collect_outside_context_evidence",
-        lambda *_args, **_kwargs: pytest.fail("outside Contexts must not be collected"),
-    )
-
-    pending = _handle_search_turn(state, "When does it reopen?")
-
-    assert pending.status == "WAITING FOR OTHER CONTEXTS CONFIRMATION"
-    assert pending.pending_answer is not None
-    assert provider.operations == ["search turn"]
-
-    still_pending = _handle_search_turn(pending, "yes")
-    assert still_pending.status == "WAITING FOR OTHER CONTEXTS CONFIRMATION"
-    assert still_pending.pending_answer == pending.pending_answer
-    assert "not confirmed" in still_pending.messages[-1].text
-    assert provider.operations == ["search turn"]
-
-    cancelled = _handle_search_turn(
-        still_pending,
-        SEARCH_OUTSIDE_CANCELLATION,
-    )
-    assert cancelled.pending_answer is None
-    assert cancelled.status == "OTHER CONTEXTS CANCELLED"
-
-    assert provider.operations == ["search turn"]
-
-
-def test_read_only_search_runner_rejects_every_non_show_shape():
-    with pytest.raises(SearchError, match="non-show"):
-        _run_read_only_search_command(
-            ("mem", "delete", "memory-one", "--context", "task-1")
-        )
-
-
-def test_show_result_failure_does_not_claim_success(monkeypatch):
-    candidate = _candidate()
-    state = _initial_chat_state(
-        "owner",
-        "canonical",
-        [SearchMatch(candidate=candidate)],
-    )
-    proposal = _show_result_proposal(
-        state,
-        SearchTurnAction(
-            understanding="Inspect it.",
-            question="Next?",
-            selector="m1",
-        ),
-        "show it",
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command._run_read_only_search_command",
-        lambda _argv: subprocess.CompletedProcess(
-            args=[],
-            returncode=1,
-            stdout="",
-            stderr="injected failure",
-        ),
-    )
-
-    with pytest.raises(SearchError, match="injected failure"):
-        _apply_show_result(state, proposal)
-    assert state.status == "RESULTS READY"
 
 
 def test_search_cli_groups_contexts_and_aligns_multiline_content(

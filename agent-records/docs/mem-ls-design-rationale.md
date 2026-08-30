@@ -574,9 +574,18 @@ The implementation is covered by tests for:
 
 Implementation:
 
-- [`memcommit/adapters/console/commands/list_memories/command.py`](../../src/memcommit/adapters/console/commands/list_memories/command.py)
+- [`memcommit/application/operations/list/application.py`](../../src/memcommit/application/operations/list/application.py)
+- [`memcommit/application/operations/list/runtime.py`](../../src/memcommit/application/operations/list/runtime.py)
+- [`memcommit/adapters/console/commands/list/command.py`](../../src/memcommit/adapters/console/commands/list/command.py)
 - [`memcommit/adapters/console/clipboard.py`](../../src/memcommit/adapters/console/clipboard.py)
 - [`memcommit/persistence/store/context_memory/`](../../src/memcommit/persistence/store/context_memory/)
 - [`tests/test_commands.py`](../../tests/test_commands.py)
 - [`tests/test_list_clipboard.py`](../../tests/test_list_clipboard.py)
 - [`Root Context design rationale`](root-context-design-rationale.md)
+
+The console package owns command grammar, interactive browsing, clipboard I/O,
+and rendering. `application.operations.list` owns readable-source authority,
+command-start-stable scope freezing, recursive materialization, and the mixed
+local/granted copyability guard. This keeps `list` as the canonical Help
+operation name instead of retaining the former implementation-only
+`list_memories` package name.

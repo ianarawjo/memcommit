@@ -11,11 +11,11 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.capabilities.retained_history.command_history import (
+from memcommit.application.capabilities.command_recovery import (
     build_command_stacks,
 )
 from memcommit.core.context import MemoryRef
-from memcommit.application.operations.dedun.scope import (
+from memcommit.application.operations.dedun.runtime import (
     apply_recursive_dedun_scope,
     freeze_recursive_dedun_scope,
     prepare_recursive_dedun_scope,

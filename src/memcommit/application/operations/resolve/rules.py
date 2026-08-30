@@ -4,8 +4,9 @@ from __future__ import annotations
 
 from copy import deepcopy
 from functools import lru_cache
-from importlib import resources
 import json
+
+from memcommit.application.capabilities.evaluation.resources import fixture_resource
 
 
 RESOLVE_RULESET_VERSION = "resolve-exact-cases-v1"
@@ -235,9 +236,7 @@ def _validate_case(raw: object, *, rule_ids: set[str]) -> None:
 @lru_cache(maxsize=1)
 def _loaded_ruleset() -> dict[str, object]:
     try:
-        resource = resources.files("memcommit.application.capabilities.evaluation").joinpath(
-            "fixtures", RESOLVE_RULESET_FIXTURE
-        )
+        resource = fixture_resource(RESOLVE_RULESET_FIXTURE)
         raw = json.loads(
             resource.read_text(encoding="utf-8"),
             object_pairs_hook=_strict_object,

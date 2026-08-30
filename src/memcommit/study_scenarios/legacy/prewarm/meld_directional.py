@@ -534,7 +534,7 @@ def _rebind_prepared_session(
                 prepared,
                 frames=current.frames,
                 target=current.target,
-                comparison_seed=current.comparison_seed,
+                relation_analysis_seed=current.relation_analysis_seed,
                 granted_incoming=current.granted_incoming,
                 granted_target=current.granted_target,
                 turns=(rebound_turn,),

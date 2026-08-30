@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from memcommit.application.capabilities.retained_history.temporal import direct_memory_deltas
+from memcommit.application.capabilities.history.reconstruction.memory_state_delta import direct_memory_deltas
 
 
 @dataclass(frozen=True)

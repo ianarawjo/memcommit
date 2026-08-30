@@ -35,7 +35,6 @@ ENTRY_EXPORTS = {
     "clear": ("cmd",),
     "compare": ("cmd",),
     "config": ("app",),
-    "consolidate": ("cmd",),
     "contexts": ("cmd",),
     "dedun": ("cmd",),
     "dedup": ("cmd",),
@@ -87,11 +86,13 @@ ENTRY_EXPORTS = {
     "translate": ("cmd",),
     "undo": ("cmd",),
     "update": ("cmd",),
-    "write_protection": ("lock_app", "unlock_app"),
 }
 
 
 ENTRY_TARGETS = {
+    # The baseline module keeps the former operation name; only its canonical
+    # destination advances to the renamed command package.
+    "elaborate": "makemore",
     # The former semantic Find entry became Search, while provider-free
     # Literal Find became the canonical Find command.
     "find": "search",
@@ -101,12 +102,19 @@ ENTRY_TARGETS = {
     "find_duplicates": "find_redundancies",
     "find_exact_duplicates": "find_duplicates",
     "help_inventory": "help",
+    "list_memories": "list",
     "literal_find": "find",
     "semantic_eval": "eval",
 }
 
 
 RETIRED_BASELINE_MODULES = {
+    "consolidate": (
+        "retired with Dedun's obsolete exact-review console replay"
+    ),
+    "duplicate_dedup_handoff": (
+        "retired when Dedun adopted deterministic immediate Apply"
+    ),
     "atomize_grounding": (
         "retired when Atomize findings became read-only operation evidence"
     ),
@@ -118,6 +126,9 @@ RETIRED_BASELINE_MODULES = {
     ),
     "endpoint_setup_flows": (
         "retired after every remaining operation acquired a command-owned setup adapter"
+    ),
+    "find_chat_shell": (
+        "retired with the uncalled conversational Search prototype"
     ),
     "ground_named_shell": (
         "retired with the unpublished named Ground session interface"
@@ -135,6 +146,9 @@ RETIRED_BASELINE_MODULES = {
     "session_endpoint_setup": (
         "retired with the obsolete multi-stage Atomize setup flow"
     ),
+    "write_protection": (
+        "split into the independently discoverable lock and unlock command packages"
+    ),
 }
 
 
@@ -147,8 +161,6 @@ OWNED_SUPPORT_TARGETS = {
     "compare_targeting": "compare.targeting",
     "comparison_execution": "compare.execution",
     "conflict_resolve_handoff": "resolve.finding_handoff",
-    "duplicate_dedup_handoff": "find_redundancies.dedup_handoff",
-    "find_chat_shell": "search.chat_shell",
     "find_materialization": "search.materialization",
     "find_search_workbench": "search.search_workbench",
     "forget_setup_workbench": "forget.setup",
@@ -396,9 +408,12 @@ def build_plan() -> dict[str, object]:
             }
         )
     legacy = [str(entry["legacy_module"]).rsplit(".", 1)[-1] for entry in entries]
-    if len(entries) != 144 or len(set(legacy)) != 144:
-        raise RuntimeError("command layout must map 144 active baseline modules")
     baseline = _baseline_modules()
+    expected_active = len(baseline) - len(RETIRED_BASELINE_MODULES)
+    if len(entries) != expected_active or len(set(legacy)) != expected_active:
+        raise RuntimeError(
+            f"command layout must map {expected_active} active baseline modules"
+        )
     classified = set(legacy) | set(RETIRED_BASELINE_MODULES)
     if classified != baseline:
         missing = sorted(baseline - classified)

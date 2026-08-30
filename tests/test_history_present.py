@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 from memcommit.adapters.console.terminal.components.history.presentation import checkpoint_picker_entries
-from memcommit.application.capabilities.retained_history.reconstruction import HistoryState, MemoryTransition, MemoryVersion
-from memcommit.application.operations.log.search import HistorySearchResult
+from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import HistoryState, MemoryTransition, MemoryVersion
+from memcommit.application.capabilities.history.query.semantic_history_query import HistorySearchResult
 
 
 def checkpoint(

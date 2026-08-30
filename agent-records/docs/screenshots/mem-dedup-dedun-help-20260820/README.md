@@ -1,4 +1,4 @@
-# Dedup / Dedun Help distinction
+# Historical Dedup / Dedun Help distinction
 
 This ordered capture set verifies the public vocabulary boundary:
 
@@ -6,9 +6,10 @@ This ordered capture set verifies the public vocabulary boundary:
   and applies immediately;
 - `find-redundancies` owns read-only semantic analysis and review, with the old
   `find-duplicates` spelling folded into its Help row; and
-- `dun` means semantic redundancy Apply, so `mem dedun` reuses that analysis
-  before survivor review and exact Apply. Hidden `consolidate` remains only an
-  exact-review replay route.
+- at capture time, `dun` meant semantic redundancy Apply and `mem dedun`
+  entered survivor review before exact Apply. That workbench and its hidden
+  `consolidate` replay route were retired on 2026-08-30; current Dedun applies
+  its deterministic survivor immediately and retains the evidence for Review.
 
 Every image comes from the actual installed `mem help` command in a
 color-capable `180×52` PTY with `NO_COLOR` removed, `TERM=xterm-256color`, and

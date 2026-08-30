@@ -15,10 +15,19 @@ def test_dedup_and_dedun_use_command_aligned_canonical_paths() -> None:
 
     assert (source_root / "application/operations/dedup/application.py").is_file()
     assert (source_root / "application/operations/dedun/application.py").is_file()
-    assert (source_root / "application/operations/dedun/planning.py").is_file()
+    assert (source_root / "application/operations/dedun/analysis.py").is_file()
     assert (source_root / "application/operations/dedun/runtime.py").is_file()
-    assert (source_root / "adapters/console/commands/dedun/presentation.py").is_file()
-    assert (source_root / "adapters/console/commands/dedun/workbench.py").is_file()
+    assert not (source_root / "application/operations/dedun/planning.py").exists()
+    assert not (source_root / "application/operations/dedun/scope.py").exists()
+    assert not (source_root / "adapters/console/commands/dedun/presentation.py").exists()
+    assert not (source_root / "adapters/console/commands/dedun/workbench.py").exists()
+    assert not (
+        source_root / "adapters/console/commands/consolidate/command.py"
+    ).exists()
+    assert not (
+        source_root
+        / "adapters/console/commands/find_redundancies/dedup_handoff.py"
+    ).exists()
     assert (source_root / "adapters/python_api/_operations/dedup.py").is_file()
     assert (source_root / "adapters/python_api/_operations/dedun.py").is_file()
 
@@ -69,13 +78,9 @@ def test_production_dedun_consumers_use_the_operation_owner() -> None:
         "src/memcommit/application/operations/atomize/normal_form.py",
         "src/memcommit/adapters/python_api/dedun.py",
         "src/memcommit/adapters/python_api/_operations/dedun.py",
-        "src/memcommit/adapters/console/commands/consolidate/command.py",
         "src/memcommit/adapters/console/commands/find_duplicates/command.py",
         "src/memcommit/adapters/console/terminal/components/quality_find/workbench.py",
-        "src/memcommit/application/operations/dedun/planning.py",
-        "src/memcommit/application/operations/dedun/scope.py",
-        "src/memcommit/adapters/console/commands/dedun/presentation.py",
-        "src/memcommit/adapters/console/commands/dedun/workbench.py",
+        "src/memcommit/application/operations/dedun/analysis.py",
         "src/memcommit/application/operations/dedun/runtime.py",
     )
 
@@ -95,10 +100,10 @@ def test_dedun_and_exact_dedup_remain_separate_owners() -> None:
     exact = (
         REPOSITORY_ROOT / "src/memcommit/application/operations/dedup/application.py"
     ).read_text(encoding="utf-8")
-    dedun_scope = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/dedun/scope.py"
+    analysis = (
+        REPOSITORY_ROOT / "src/memcommit/application/operations/dedun/analysis.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.dedun_scope" not in application + runtime
     assert "memcommit.application.operations.dedun" not in exact
-    assert "memcommit.application.operations.dedun" in dedun_scope
+    assert "connected_relation_components" in analysis

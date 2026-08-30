@@ -6,7 +6,7 @@ import sys
 from typing import Annotated, Optional
 import typer
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
-    ComparisonProviderError,
+    MemoryRelationProviderError,
 )
 from memcommit.adapters.console.coordination.context_scope_options import (
     legacy_root_only_option_alias,
@@ -410,7 +410,7 @@ def cmd(
         RuntimeError,
         TypeError,
         ValueError,
-        ComparisonProviderError,
+        MemoryRelationProviderError,
         ConcurrentContextUpdateError,
         MeldError,
         MeldProviderError,

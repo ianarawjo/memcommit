@@ -16,19 +16,20 @@ from memcommit.adapters.console.commands.trace.projection import (
 from memcommit.adapters.console.terminal.components.plain_text_clipboard import (
     plain_text_from_fragments,
 )
-from memcommit.application.capabilities.memory_report_targeting import (
-    ResolvedMemoryReportTarget,
-)
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.history.verification import (
     MemoryHistoryCommandContext,
     MemoryHistoryContextTransition,
     MemoryState,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+from memcommit.application.capabilities.history.reconstruction.memory_effect_derivation import (
     MemoryHistoryEvent,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistory,
+)
+from memcommit.application.operations.trace.application import (
+    FrozenTraceSubject,
+    TraceResult,
 )
 
 
@@ -503,15 +504,18 @@ def test_cli_limit_and_all_control_only_the_human_operation_projection(
             for index in range(3)
         ),
     )
-    monkeypatch.setattr(trace_command, "build_memory_history", lambda *_args: report)
     monkeypatch.setattr(
         trace_command,
-        "resolve_local_memory_report_target",
-        lambda *_args, **_kwargs: ResolvedMemoryReportTarget(
-            context_name="bounded-trace",
-            uid=SELECTED_UID,
-            kind="MEMORY",
-            status="CURRENT",
+        "execute_trace",
+        lambda *_args, **_kwargs: TraceResult(
+            subject=FrozenTraceSubject(
+                kind="MEMORY",
+                context_uid=CONTEXT_UID,
+                context_name=report.context_name,
+                selected_uid=SELECTED_UID,
+                token=object(),
+            ),
+            report=report,
         ),
     )
 
@@ -561,17 +565,16 @@ def test_json_keeps_structured_events_in_chronological_order(
 
     monkeypatch.setattr(
         trace_command,
-        "build_memory_history",
-        lambda *_args: report,
-    )
-    monkeypatch.setattr(
-        trace_command,
-        "resolve_local_memory_report_target",
-        lambda *_args, **_kwargs: ResolvedMemoryReportTarget(
-            context_name="json-trace",
-            uid=SELECTED_UID,
-            kind="MEMORY",
-            status="CURRENT",
+        "execute_trace",
+        lambda *_args, **_kwargs: TraceResult(
+            subject=FrozenTraceSubject(
+                kind="MEMORY",
+                context_uid=CONTEXT_UID,
+                context_name=report.context_name,
+                selected_uid=SELECTED_UID,
+                token=object(),
+            ),
+            report=report,
         ),
     )
 

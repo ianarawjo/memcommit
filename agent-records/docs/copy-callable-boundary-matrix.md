@@ -12,12 +12,12 @@ the same typed application and Store runtime.
 
 | Route or concern | Owner | Verified invariant |
 | --- | --- | --- |
-| Request, frozen plan, placement, receipt | `memcommit.application.operations.memory_transfer.application` | Nonempty unique Source set, typed local-or-granted Source bindings, exact Target binding, store-wide fresh output UID uniqueness, typed durable receipt |
-| Locator, authority, and Store execution | `memcommit.application.operations.memory_transfer.runtime` | One command-start current snapshot, exact direct Source binding, Grant and authority-Source revalidation when applicable, Target CAS, write protection, exception-atomic publication |
+| Copy application | `memcommit.application.operations.copy.application` | Copy alone owns preparation, application ordering, fresh-output validation, and receipt validation |
+| Shared values and Store kernel | `memcommit.application.operations.copy_and_move` | Typed Source/Target/placement values plus one command-start current snapshot, exact direct Source binding, Grant and authority-Source revalidation, Target CAS, write protection, and exception-atomic publication |
 | Console command | `memcommit.adapters.console.commands.copy` | Copy alone owns its Typer grammar, Grant-aware setup, application handoff, cancellation, errors, and fresh-UID receipt; a granted Memory requires an explicit public owner and the removed `--preserve-uids` spelling is rejected |
-| Shared console mechanics | `memcommit.adapters.console.coordination.memory_transfer` | Copy supplies its authority-specific catalogs and freeze callback to the common MULTIPLE direct-Memory, `INTO + POSITION`, editable exact-command, and placement-receipt mechanics; the workbench performs no direct publication |
+| Shared console mechanics | `memcommit.adapters.console.coordination.copy_and_move` | Copy supplies its authority-specific catalogs and freeze callback to the common MULTIPLE direct-Memory, `INTO + POSITION`, editable exact-command, and placement-receipt mechanics; the workbench performs no direct publication |
 | Public Python | `MemCommitClient.copy_memories` | Sequence validation and operation-specific public errors over the same application/runtime; active-Profile clients may use explicit Grants while explicitly rooted clients remain local-only |
-| Agent | `memcommit.adapters.agent.memory_transfer` | Strict version-2 JSON schema accepts the same local or public Grant Source names without exposing a second authority policy input; public-client-only execution, typed JSON receipt, no provider |
+| Agent | `memcommit.adapters.agent.copy_and_move` | Strict version-2 JSON schema accepts the same local or public Grant Source names without exposing a second authority policy input; public-client-only execution, typed JSON receipt, no provider |
 | History | `memcommit.command_history` | Shared Copy operation UID and complete checkpoint membership form one Undo/Redo unit |
 
 ## Authority and effects
@@ -68,5 +68,5 @@ retained value required live authority.
   operation-specific errors.
 - `tests/test_memory_transfer_agent_adapter.py`, agent registry tests, and MCP
   projection tests cover strict machine schemas and the shared route.
-- `agent-records/docs/memory-transfer-design-rationale.md` records identity, placement,
+- `agent-records/docs/copy-and-move-design-rationale.md` records identity, placement,
   authority, history, and intentional non-goals.

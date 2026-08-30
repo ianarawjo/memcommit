@@ -78,7 +78,7 @@ def _closed_import_contexts(
     reference and avoids silently transferring query-only authority.
     """
 
-    from memcommit.application.capabilities.retained_history.context_snapshot import (
+    from memcommit.application.capabilities.context_snapshot import (
         ContextSnapshotRef,
     )
 

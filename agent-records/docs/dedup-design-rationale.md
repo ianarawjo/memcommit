@@ -20,7 +20,7 @@ boundary.
 ```text
 direct Context or frozen local lexical subtree
   -> independent direct frame per Context
-  -> same-role exact identity groups
+  -> Find Duplicates same-role exact analysis, once
   -> first-in-Context survivor per group
   -> complete graph reference and freshness validation
   -> one atomic command unit, with one checkpoint per changed Context
@@ -64,26 +64,26 @@ with one operation UID, so `mem undo` restores the command as one unit.
 
 ## Operation ownership
 
-The reviewed provider-free implementation has one canonical home at
-`memcommit.application.operations.dedup.application`. This matches the public
-`mem dedup` identity instead of preserving the temporary `exact_dedup` package
-name introduced when semantic Dedun first split away. The internal
-`memcommit.application.operations.exact_dedup` path was removed without a
-facade; production imports use the command-aligned owner directly.
+The provider-free read-only analysis is owned by
+`memcommit.application.operations.find_duplicates.application`; it freezes
+Context identity and complete record digests beside the exact groups. The
+applying boundary at `memcommit.application.operations.dedup.application`
+consumes that typed analysis and owns only authority, freshness, inbound
+Reference validation, mutation, checkpoints, and receipts. Both CLI and public
+Python therefore follow `Find Duplicates analysis → Dedup Apply`, matching the
+existing `Find Redundancies analysis → Dedun Apply` relationship.
 
-This move deliberately retains the complete exact discovery and Apply
-implementation in one application module. Splitting new ports or a runtime
-adapter while moving it would make authority and transaction design changes
-indistinguishable from the ownership relocation. Such a split may be reviewed
-separately; it is not evidence of this location-only change. The pure
-role-aware key detector remains in `memcommit.direct_item_duplicates` because
-semantic Dedun and quality-finding routes also consume it.
+Apply does not run exact detection again. It verifies the frozen Context UID,
+full digest, recursive membership, and namespace under the normal mutation
+boundary; any mismatch fails closed and requires a new command. The pure
+role-aware detector remains in `reviewing.direct_item_duplicates` because Find
+Duplicates, semantic Dedun, and quality-finding routes share that mechanic.
 
 ## Semantic redundancy finder and Dedun
 
 Semantic redundancy planning and Apply now live entirely under
 `memcommit.application.operations.dedun`. The package owns its application,
-planning, runtime, and recursive scope modules; it no longer borrows the
+relation analysis and direct-or-recursive runtime modules; it no longer borrows the
 `operations.dedup` name. This naming relocation does not make semantic
 inference part of exact Dedup or change either operation's evidence, Apply, or
 recovery boundary.
@@ -95,7 +95,8 @@ analysis before applying the earliest-existing-UID survivor rule to all
 role-aware exact groups and eligible Memory `EXACT`, `SURFACE_EQUIVALENT`, and
 `SEMANTIC_EQUIVALENT` evidence. There is no separate singular operation:
 `find-redundancy` resolves to the canonical `find-redundancies` operation.
-Hidden `consolidate` remains only the exact Dedun review replay route.
+Dedun has no hidden console replay route; typed two-phase application remains
+available only through its public Python and agent adapters.
 
 ## Alternatives and limits
 

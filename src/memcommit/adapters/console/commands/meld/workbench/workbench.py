@@ -21,6 +21,9 @@ from memcommit.adapters.console.terminal.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
+from memcommit.adapters.console.terminal.components.peer_relations.presentation import (
+    render_peer_relation_analysis,
+)
 from memcommit.application.operations.meld.model import (
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MeldSession,
@@ -44,9 +47,9 @@ def _line(value: str, limit: int = 100) -> str:
     return elide_terminal_text(normalized, limit)
 
 
-def _comparison_issue_resolution_badges(session: MeldSession) -> tuple[str, ...]:
-    """Project durable Compare-issue outcomes without inventing a selection."""
-    if session.comparison_seed is None or session.current_assessment is None:
+def _relation_issue_resolution_badges(session: MeldSession) -> tuple[str, ...]:
+    """Project durable relation-issue outcomes without inventing a selection."""
+    if session.relation_analysis_seed is None or session.current_assessment is None:
         return ()
     assessment = session.current_assessment
     open_issue_uids = {issue.uid for issue in assessment.issues}
@@ -56,11 +59,11 @@ def _comparison_issue_resolution_badges(session: MeldSession) -> tuple[str, ...]
             for proposal in assessment.proposals
             if relation_uid in proposal.relation_uids
         )
-        for issue in session.comparison_seed.analysis.issues
+        for issue in session.relation_analysis_seed.analysis.issues
         for relation_uid in issue.relation_uids
     }
     badges: list[str] = []
-    for issue in session.comparison_seed.analysis.issues:
+    for issue in session.relation_analysis_seed.analysis.issues:
         if issue.uid in open_issue_uids:
             badges.append("")
             continue
@@ -139,7 +142,7 @@ def run_meld_shell(
         ResolutionGlobalStrategy,
         run_resolution_workbench_shell,
     )
-    from memcommit.application.operations.meld.resolution_projection import (
+    from memcommit.application.operations.meld.proposal_projection import (
         MeldResolutionWorkbenchAdapter,
     )
     from memcommit.adapters.console.terminal.components.impact import ImpactController
@@ -173,20 +176,19 @@ def run_meld_shell(
         review_view = meld_review_report(session).report().view
         if review_view is None:
             raise ValueError("Meld Review report has no interactive view.")
-    compare_report: str | None = None
-    if session.mode == "SYMMETRIC" and session.comparison_seed is not None:
-        # The Compare analysis is already copied into the Meld seed. Re-render
+    relation_report: str | None = None
+    if session.mode == "SYMMETRIC" and session.relation_analysis_seed is not None:
+        # The relation analysis is already copied into the Meld seed. Re-render
         # that exact artifact instead of maintaining a second summary dialect.
         # Navigation hints are omitted because this target-bound Meld already
         # supplies the next interaction below the shared report.
-        from memcommit.adapters.console.commands.compare.presentation import render_comparison
-
-        compare_report = (
-            render_comparison(
-                session.comparison_seed.analysis,
+        relation_report = (
+            render_peer_relation_analysis(
+                session.relation_analysis_seed.analysis,
                 reused=True,
                 origin=analysis_origin or "SAVED_REUSE",
                 durable=True,
+                heading="MEM COMPARE · SYMMETRIC PEERS",
             )
             .partition("\nThe complete source-linked relation ledger")[0]
             .rstrip()
@@ -197,14 +199,14 @@ def run_meld_shell(
                 if analysis_origin == "EXACT_PREWARM"
                 else "EQUIVALENT SCOPE PREWARM"
             )
-            first_line, separator, remainder = compare_report.partition("\n")
-            compare_report = (
+            first_line, separator, remainder = relation_report.partition("\n")
+            relation_report = (
                 first_line
                 + separator
                 + f"ANALYSIS ORIGIN · {label} · PROVIDER NOT CALLED\n"
                 + remainder
             )
-    report_badges = _comparison_issue_resolution_badges(session)
+    report_badges = _relation_issue_resolution_badges(session)
     report_conflicts_remaining = sum(not badge for badge in report_badges)
     global_strategies = (
         ResolutionGlobalStrategy(
@@ -279,9 +281,9 @@ def run_meld_shell(
                 "This saved Compare analysis is the symmetric Meld impact. "
                 "It remains read-only until the reviewed Meld is applied."
             ),
-            detail=compare_report,
+            detail=relation_report,
         )
-        if compare_report is not None
+        if relation_report is not None
         else ImpactController.from_resolution(
             current_view,
             title="IMPACT · DIRECTIONAL MELD",
@@ -351,7 +353,7 @@ def run_meld_shell(
         snapshot_hint=snapshot_hint,
         split_viewer_items=True,
         global_strategies=global_strategies,
-        split_report_text=compare_report,
+        split_report_text=relation_report,
         split_report_item_badges=report_badges,
         split_report_conflicts_remaining=report_conflicts_remaining,
         review_and_apply=not read_only and not review_only,
@@ -395,3 +397,7 @@ def run_meld_shell(
         option_uid=action.option_uid,
         comment=action.comment,
     )
+
+
+# Historical tests and callers may still import the private Compare-era helper.
+_comparison_issue_resolution_badges = _relation_issue_resolution_badges

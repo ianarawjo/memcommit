@@ -619,15 +619,15 @@ def _client_methods(repository: Path) -> dict[str, set[str]]:
 
 _OPERATION_DISCOVERY_TOKENS = {
     "checkout": ("checkout", "branch", "switch"),
-    # Copy and Move deliberately share one direct-Memory transfer application,
-    # runtime, and machine adapter. Their public client entry modules remain
-    # operation-specific so the generated catalog does not attribute both
+    # Copy and Move own distinct application entrypoints and share only their
+    # paired data/Store kernel and machine adapter. Their public client entry
+    # modules remain operation-specific so discovery does not attribute both
     # methods to each Help operation.
-    "copy": ("copy", "memory_transfer"),
+    "copy": ("copy", "copy_and_move"),
     # Complete Dedun composes the exact Dedup layer in addition to its own
     # semantic packages. Keeping the mapping authored makes that dependency
     # visible without conflating the two public operation identities.
-    "dedun": ("dedun", "consolidate", "find_duplicates", "dedup"),
+    "dedun": ("dedun", "find_duplicates", "dedup"),
     "dedup": ("dedup",),
     "eval": ("eval",),
     "find-duplicates": (
@@ -643,19 +643,32 @@ _OPERATION_DISCOVERY_TOKENS = {
     "init": ("init", "context_init"),
     "list": ("list", "list_memories"),
     "lock": ("lock", "write_protection"),
-    "move": ("move", "memory_transfer"),
+    "move": ("move", "copy_and_move"),
     "pwd": ("pwd", "current_context"),
     "unlock": ("unlock", "write_protection"),
 }
 
-# Find Duplicates executes the exact Dedup application read-only, but its
-# Python surface remains find_duplicates rather than inheriting dedup merely
-# because both operations share that application package.
+# Exact Dedup consumes Find Duplicates analysis, while their Python surfaces
+# remain distinct. Application discovery records the dependency without
+# attributing both public client methods to either operation.
 _APPLICATION_DISCOVERY_TOKENS = {
-    "find-duplicates": ("find_duplicates", "exact_duplicates", "dedup"),
+    "dedup": ("dedup", "find_duplicates"),
+    "find-duplicates": ("find_duplicates",),
     # The boundary record retains its Context-specific historical filename,
     # while the canonical application operation now matches public `mem init`.
     "init": ("init",),
+}
+
+# Include shared capabilities only when they are part of a reviewed operation
+# boundary. This makes History visible as Trace's source without attributing
+# every transitively imported capability to the operation.
+_APPLICATION_CAPABILITY_MODULES = {
+    "trace": (
+        "memcommit.application.capabilities.history.model.topology",
+        "memcommit.application.capabilities.history.query.context_history_slicing",
+        "memcommit.application.capabilities.history.query.memory_history_slicing",
+        "memcommit.application.capabilities.history.reconstruction.history_graph_reconstruction",
+    ),
 }
 
 
@@ -698,7 +711,7 @@ def _matrix_matches(path: Path, operation: str, tokens: tuple[str, ...]) -> bool
     if any(stem == token or stem.startswith(token + "_") for token in tokens):
         return True
     # This is the one current matrix that deliberately owns two operations.
-    return operation == "elaborate" and stem.startswith("distill_elaborate_")
+    return operation == "makemore" and stem.startswith("distill_makemore_")
 
 
 _CURATED_STATES = {"CLOSED", "MIXED", "LEGACY", "N/A", "UNREVIEWED"}
@@ -793,22 +806,25 @@ def _operation_routes(
         application_tokens = _APPLICATION_DISCOVERY_TOKENS.get(operation, tokens)
         application_modules = tuple(
             sorted(
-                module
-                for module in module_names
-                if (
-                    (
-                        module.count(".") == 1
-                        and _module_owner_matches(module, application_tokens)
+                set(_APPLICATION_CAPABILITY_MODULES.get(operation, ()))
+                | {
+                    module
+                    for module in module_names
+                    if (
+                        (
+                            module.count(".") == 1
+                            and _module_owner_matches(module, application_tokens)
+                        )
+                        or _operation_package_matches(module, application_tokens)
                     )
-                    or _operation_package_matches(module, application_tokens)
-                )
-                and (
-                    "application" in module.split(".")[-1]
-                    or "runtime" in module.split(".")[-1]
-                    or _operation_package_matches(module, application_tokens)
-                )
-                and not module.startswith("memcommit.adapters.python_api.")
-                and not module.startswith("memcommit.adapters.interfaces.")
+                    and (
+                        "application" in module.split(".")[-1]
+                        or "runtime" in module.split(".")[-1]
+                        or _operation_package_matches(module, application_tokens)
+                    )
+                    and not module.startswith("memcommit.adapters.python_api.")
+                    and not module.startswith("memcommit.adapters.interfaces.")
+                }
             )
         )
         tui_modules = tuple(

@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "corpus_role": "HOLDOUT",
+  "independent_holdout": true,
+  "prompt_reference": false,
+  "cases": [
+    {
+      "id": "mixed-subfamilies",
+      "distill_source_memories": [
+        "a is apple",
+        "b is banana",
+        "c is cat",
+        "가는 가위",
+        "나는 나비",
+        "다는 다람쥐"
+      ],
+      "distill_required_readings": [
+        "An English surface-form parent applies to the English subset.",
+        "A Korean surface-form parent applies to the Korean subset.",
+        "Each right-hand expression begins with the letter or syllable named on the left.",
+        "No Rule is falsely required to govern both language-specific subsets."
+      ],
+      "makemore_parent_memories": [
+        "English members use exactly `<single lowercase ASCII letter> is <lowercase English noun>` with single spaces and no terminal punctuation.",
+        "Korean members use exactly `<한글 음절>는 <그 음절로 시작하는 한국어 명사>` with one space and no terminal punctuation.",
+        "In every member, the expression on the right begins with the letter or syllable named on the left.",
+        "The complete family contains at least one English member and at least one Korean member."
+      ],
+      "makemore_target_prefix": [
+        "a is apple",
+        "b is banana",
+        "c is cat",
+        "가는 가위",
+        "나는 나비",
+        "다는 다람쥐"
+      ],
+      "makemore_number": 6,
+      "makemore_required_readings": [
+        "The proposed collection contains both English and Korean children.",
+        "Each child conforms only to its applicable language branch and the shared initial relation.",
+        "No proposed child restates a Target-prefix Memory."
+      ]
+    },
+    {
+      "id": "ordered-fibonacci-continuation",
+      "distill_source_memories": [
+        "0",
+        "1",
+        "1",
+        "2",
+        "3",
+        "5",
+        "8",
+        "13",
+        "21",
+        "34"
+      ],
+      "distill_required_readings": [
+        "The ordered family begins with 0 and 1.",
+        "Each later member is the sum of the immediately preceding two members.",
+        "Each child is rendered as one unsigned base-10 integer without surrounding syntax."
+      ],
+      "makemore_parent_memories": [
+        "The family begins with the ordered seed values 0, 1.",
+        "After the two seeds, each value equals the sum of the immediately preceding two values.",
+        "Each proposition is presented solely as one nonnegative base-10 integer written with ASCII digits, without a sign, leading zero, label, delimiter, markup, whitespace-separated companion value, or terminal punctuation."
+      ],
+      "makemore_target_prefix": [
+        "0",
+        "1",
+        "1",
+        "2",
+        "3",
+        "5",
+        "8",
+        "13",
+        "21",
+        "34"
+      ],
+      "makemore_number": 5,
+      "makemore_exact_children": [
+        "55",
+        "89",
+        "144",
+        "233",
+        "377"
+      ],
+      "makemore_required_readings": [
+        "The Target Memories are an ordered existing prefix rather than unrelated ambient examples.",
+        "The proposed suffix continues after 34 and does not replay the seeds.",
+        "Seed, recurrence, and surface Rules conform over the complete prefix-plus-suffix collection."
+      ]
+    },
+    {
+      "id": "cleanliness-operational-hierarchy",
+      "distill_source_memories": [
+        "그릇은 눈에 보이는 자국 없이 깨끗해야 한다.",
+        "비치된 휴지는 오염되지 않은 상태여야 한다.",
+        "쓰레기통은 가득 차기 전에 비워야 한다."
+      ],
+      "distill_required_readings": [
+        "The three independently useful criteria remain recoverable.",
+        "One higher parent expresses the hygiene or cleanliness objective collectively maintained by all three criteria.",
+        "The higher parent is an operational objective rather than a bare topic label."
+      ],
+      "makemore_parent_memories": [
+        "그릇은 눈에 보이는 자국 없이 깨끗해야 한다.",
+        "비치된 휴지는 오염되지 않은 상태여야 한다.",
+        "쓰레기통은 가득 차기 전에 비워야 한다."
+      ],
+      "makemore_target_prefix": [],
+      "makemore_number": 3,
+      "makemore_required_readings": [
+        "The result contains focused children for dish cleanliness, uncontaminated tissues, and pre-full waste-bin emptying.",
+        "Coverage is distributed across sibling criteria instead of inserting every criterion into every child.",
+        "Every child conforms to each applicable parent and no child violates another parent."
+      ]
+    },
+    {
+      "id": "cleanliness-diagnostic-hierarchy",
+      "distill_source_memories": [
+        "제공된 그릇에 말라붙은 음식물 자국이 있었다.",
+        "매장 안에서 벌레가 관찰되었다."
+      ],
+      "distill_required_readings": [
+        "Dish residue and an observed insect remain distinct diagnostic indicators.",
+        "One higher diagnostic parent states that either indicator supports an inadequate-cleanliness judgment."
+      ],
+      "makemore_parent_memories": [
+        "식기에 자국이 있거나 매장에 벌레가 관찰되면 청결하지 않은 것으로 판단한다."
+      ],
+      "makemore_target_prefix": [],
+      "makemore_number": 3,
+      "makemore_required_readings": [
+        "At least one child instantiates the dish-mark condition.",
+        "At least one child instantiates the insect-observation condition.",
+        "An undesirable observation is still a positive conforming child of the diagnostic parent."
+      ]
+    }
+  ]
+}

@@ -26,7 +26,7 @@ class _SeverRestorationMixin:
         restore the same identity and history, including every restoration
         receipt, without copying Memory text into lifecycle metadata.
         """
-        from memcommit.application.capabilities.retained_history.command_history import (
+        from memcommit.application.capabilities.command_recovery import (
             CommandRestoreResult,
             command_restore_metadata,
         )

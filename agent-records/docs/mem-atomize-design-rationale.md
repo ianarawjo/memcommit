@@ -874,7 +874,7 @@ reviewed semantic chunk → typed Dedun projection → final semantic/redundancy
 
 It deliberately does not call the standalone Dedun Store adapter, because
 that would expose a second checkpoint and make one user invocation require two
-Undo operations. The reused boundary is Dedun's request, component planning,
+Undo operations. The reused boundary is Dedun's request, component analysis,
 survivor validation, and pure projection policy; the outer Atomize command owns
 publication, receipt, recovery, and Undo. The checkpoint records the shared
 operation ID and:

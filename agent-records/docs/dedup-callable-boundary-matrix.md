@@ -9,12 +9,15 @@ separately under Find Duplicates, Find Redundancies, and Dedun.
 
 | Route | Public input | Application entry | Result/effect |
 | --- | --- | --- | --- |
-| CLI | `mem dedup [CONTEXT] [-d\|-r]` | shared locator/scope freeze, then direct or batch `apply_exact_dedup_scope` | short no-op or one atomic command receipt |
+| CLI | `mem dedup [CONTEXT] [-d\|-r]` | one `find_duplicates.analyze_exact_duplicate_scope`, then direct or batch `apply_exact_dedup_scope` over that frozen result | short no-op or one atomic command receipt |
 | Public Python | `MemCommitClient.dedup(context_name, include_descendants=...)` | `adapters.python_api._operations.dedup.dedup`, then the same scope boundary | typed aggregate `ExactDedupResult` with per-Context effects |
 
-Both routes converge on the pure role-aware detector in
-`memcommit.direct_item_duplicates` and the Apply boundary in
-`memcommit.application.operations.dedup.application`. The temporary internal
+Both routes enter the same read-only analysis owned by
+`memcommit.application.operations.find_duplicates.application`, whose pure
+role-aware detector remains in `reviewing.direct_item_duplicates`. Dedup then
+passes that exact typed result to the Apply-only boundary in
+`memcommit.application.operations.dedup.application`; Apply never rediscovers
+the groups. The temporary internal
 `memcommit.application.operations.exact_dedup` path is removed without a
 facade so the canonical package matches `mem dedup`. Recursive reach enumerates lexical names only,
 keeps groups Context-local, and publishes changed records through
@@ -48,21 +51,19 @@ second application implementations.
 
 ## Ownership relocation boundary
 
-`memcommit.application.operations.dedup.application` is the canonical owner of the
-provider-free exact discovery, scope, receipt, and Apply implementation shared
-by exact Dedup and read-only Find Duplicates. Production consumers import the
-operation package directly. Keeping this reviewed implementation together
-is intentional for this ownership-only relocation; introducing a new port or
-runtime split would change more than its implementation home.
+`memcommit.application.operations.find_duplicates.application` owns the
+provider-free exact report and direct-or-lexical analysis. Applying Dedup owns
+only mutation validation, receipts, checkpoints, and atomic publication under
+`memcommit.application.operations.dedup.application`. CLI and public Python
+compose those owners explicitly in that order.
 
 Semantic redundancy contracts consumed by Dedun and composite operations are
 owned separately by `memcommit.application.operations.dedun.application`,
-`.planning`, `.runtime`, and `.scope`.
+`.analysis`, and `.runtime`.
 
-This ownership-only relocation does not reclassify exact Dedup, merge it with
-Find Duplicates, or absorb Dedun. Provider-free exact-key detection remains a
-shared primitive in `direct_item_duplicates`, while exact discovery and Apply
-are owned by `operations.dedup`; Dedun's analysis, lexical-scope
-publication, command, adapters, and evidence remain separate consumers of the
-reviewed redundancy core. No relation, survivor, authority, reference,
-checkpoint, transaction, interface, or route-state behavior changes.
+This split does not make Find Duplicates and Dedup aliases. Find Duplicates is
+read-only and complete after analysis; Dedup consumes that frozen analysis as
+Apply intent. A Context UID, complete record digest, lexical membership, or
+namespace mismatch fails instead of silently running the detector again.
+Authority, inbound-Reference, checkpoint, transaction, and Undo behavior stay
+with Dedup.

@@ -177,6 +177,15 @@ _OPERATIONS = (
     ),
     _operation(
         "elaborate",
+        "Append a supported continuation after one existing Memory without "
+        "rewriting its original content.",
+        "One direct Memory + its direct Context -> same-UID appended revision",
+        ExecutionKind.SEMANTIC,
+        "Standalone applies one append-only revision; Impact previews it without changing the Memory",
+        "One directly owned Memory in an exact UPDATE+DERIVE Context",
+    ),
+    _operation(
+        "makemore",
         "Expand an abstract Goal, Rule, or condition into multiple more specific "
         "candidate propositions.",
         "Goal -> added Rules; Rules -> added Case propositions -> receipt",

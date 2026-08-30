@@ -6,13 +6,10 @@ from memcommit.application.operations.atomize.domain import _atomize_execution_p
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
     COMPARISON_EXECUTION_POLICY,
 )
-from memcommit.application.operations.search.answer_dialogue import (
-    _search_answer_execution_policy,
-)
 from memcommit.application.capabilities.memory_issue_analysis.provider_contract import (
     _findings_execution_policy,
 )
-from memcommit.application.operations.log.search import HISTORY_SEARCH_EXECUTION_POLICY
+from memcommit.application.capabilities.history.query.semantic_history_query import HISTORY_SEARCH_EXECUTION_POLICY
 from memcommit.application.operations.meld.provider.contract import (
     MELD_EXECUTION_POLICY,
 )
@@ -54,7 +51,6 @@ def test_only_implemented_find_and_translate_policies_advertise_staging():
         _findings_execution_policy("find_ambiguities"),
         _findings_execution_policy("find_conflicts"),
         HISTORY_SEARCH_EXECUTION_POLICY,
-        _search_answer_execution_policy(),
         RATIONALE_EXECUTION_POLICY,
     )
     assert all(policy.staged_supported is False for policy in guarded)
@@ -77,7 +73,6 @@ def test_aggregate_policies_share_provider_capacity_without_count_gates():
         _findings_execution_policy("find_ambiguities"),
         _findings_execution_policy("find_conflicts"),
         HISTORY_SEARCH_EXECUTION_POLICY,
-        _search_answer_execution_policy(),
         RATIONALE_EXECUTION_POLICY,
         SEARCH_EXECUTION_POLICY,
         TRANSLATE_EXECUTION_POLICY,

@@ -15,7 +15,7 @@ invocation (Apply intent)
 
 `Proposal` remains an internal value used to validate provider output, bind
 choices, calculate an exact post-image, and revalidate freshness. It is not the
-primary outcome of `mem atomize`, `mem dedun`, `mem distill`, `mem elaborate`,
+primary outcome of `mem atomize`, `mem dedun`, `mem distill`, `mem makemore`,
 `mem forget`, `mem meld`, `mem resolve`, `mem sever`, or `mem update`.
 
 ## Motivation
@@ -88,7 +88,7 @@ before every choice or reopen it after terminal success.
 
 ## Evidence ownership
 
-Distill, Elaborate, Forget, Dedun, and Resolve use immutable checkpoint-backed
+Distill, Makemore, Forget, Dedun, and Resolve use immutable checkpoint-backed
 Review records. Their checkpoint payloads retain the exact applied content,
 pre/post image, selected survivor, or verified candidate reasoning needed by
 the operation's report. Update, Meld, Sever, and Atomize already have durable
@@ -138,7 +138,7 @@ authority to mutate.
 - Required ambiguity/conflict decisions use the compact Resolution projection
   by default. Explicit Impact and Review retain the source-linked report and
   the full shared Viewer when inspection is requested.
-- Ground-owned Distill/Elaborate proposal adapters remain read-only where their
+- Ground-owned Distill/Makemore proposal adapters remain read-only where their
   workspace application authority has not been implemented. This does not
   change the standalone Add lifecycle.
 - Granted-authority receipts may not be discoverable from the participant's

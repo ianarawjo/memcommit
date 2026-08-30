@@ -13,7 +13,7 @@ from memcommit.application.capabilities.authority.context_access import (
     top_level_grants,
 )
 from memcommit.core.context import Context, QueryContextRef
-from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 from memcommit.application.capabilities.authority.granted_context_navigation import (
     GrantedContextNavigation,
     freeze_granted_context_navigation,

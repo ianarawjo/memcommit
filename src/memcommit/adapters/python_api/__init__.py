@@ -175,12 +175,12 @@ __all__ = [
     "DistillApplyResult",
     "DistillProposal",
     "DistillRuleProposal",
-    "ElaborateCaseProposal",
-    "ElaborateCaseValidationProposal",
-    "ElaborateProposal",
-    "ElaborateRuleCheckProposal",
-    "ElaborateRuleProposal",
-    "ElaborateTargetContextItemProposal",
+    "MakemoreCaseProposal",
+    "MakemoreCaseValidationProposal",
+    "MakemoreProposal",
+    "MakemoreRuleCheckProposal",
+    "MakemoreRuleProposal",
+    "MakemoreTargetContextItemProposal",
     "FitJudgmentResult",
     "FitPropositionInput",
     "ForgetApplyResult",
@@ -252,7 +252,7 @@ _LAZY_EXPORTS = {
         "ContextReferenceResult",
     ),
     **{
-        name: ("memcommit.adapters.python_api.memory_transfer", name)
+        name: ("memcommit.adapters.python_api.copy_and_move", name)
         for name in (
             "CopyMemoriesReceipt",
             "MemoryTransferCheckpointResult",
@@ -448,29 +448,29 @@ _LAZY_EXPORTS = {
         "memcommit.adapters.python_api.semantic",
         "DistillRuleProposal",
     ),
-    "ElaborateCaseProposal": (
+    "MakemoreCaseProposal": (
         "memcommit.adapters.python_api.semantic",
-        "ElaborateCaseProposal",
+        "MakemoreCaseProposal",
     ),
-    "ElaborateCaseValidationProposal": (
+    "MakemoreCaseValidationProposal": (
         "memcommit.adapters.python_api.semantic",
-        "ElaborateCaseValidationProposal",
+        "MakemoreCaseValidationProposal",
     ),
-    "ElaborateProposal": (
+    "MakemoreProposal": (
         "memcommit.adapters.python_api.semantic",
-        "ElaborateProposal",
+        "MakemoreProposal",
     ),
-    "ElaborateRuleCheckProposal": (
+    "MakemoreRuleCheckProposal": (
         "memcommit.adapters.python_api.semantic",
-        "ElaborateRuleCheckProposal",
+        "MakemoreRuleCheckProposal",
     ),
-    "ElaborateRuleProposal": (
+    "MakemoreRuleProposal": (
         "memcommit.adapters.python_api.semantic",
-        "ElaborateRuleProposal",
+        "MakemoreRuleProposal",
     ),
-    "ElaborateTargetContextItemProposal": (
+    "MakemoreTargetContextItemProposal": (
         "memcommit.adapters.python_api.semantic",
-        "ElaborateTargetContextItemProposal",
+        "MakemoreTargetContextItemProposal",
     ),
     "FitJudgmentResult": (
         "memcommit.adapters.python_api.semantic",

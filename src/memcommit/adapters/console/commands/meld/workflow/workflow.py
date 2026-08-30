@@ -21,8 +21,8 @@ from memcommit.adapters.console.terminal.components.command_wait import (
 )
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     granted_artifact_contexts,
-    load_granted_comparison_artifact,
-    recursive_comparison_projection,
+    load_granted_memory_relation_artifact,
+    project_memory_relation_context,
 )
 from memcommit.application.operations.meld.model import (
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
@@ -34,8 +34,8 @@ from memcommit.application.operations.meld.model import (
     inline_meld_context,
     meld_canonical_digest,
 )
-from memcommit.application.operations.meld.restart import MeldRestartRequest
-from memcommit.application.operations.meld.start import MeldStartRequest
+from memcommit.application.operations.meld.preparation import MeldRestartRequest
+from memcommit.application.operations.meld.preparation import MeldStartRequest
 from memcommit.application.capabilities.authority.source_use_policy import (
     analysis_retention,
     authorize_analysis_save,
@@ -176,7 +176,7 @@ def _load_bound_contexts(
                 )
             else:
                 context = (
-                    recursive_comparison_projection(
+                    project_memory_relation_context(
                         load_context_scope(
                             store,
                             frame.context_name,
@@ -189,16 +189,16 @@ def _load_bound_contexts(
             loaded.append(context)
         left, right = loaded
     except FileNotFoundError:
-        if session.mode != "SYMMETRIC" or session.comparison_seed is None:
+        if session.mode != "SYMMETRIC" or session.relation_analysis_seed is None:
             raise
-        artifact = load_granted_comparison_artifact(
+        artifact = load_granted_memory_relation_artifact(
             store,
             session.frames[0].context_uid,
             session.frames[1].context_uid,
         )
         if artifact is None:
             raise MeldCommandError(
-                "The granted Compare basis for this Meld is unavailable."
+                "The granted relation-analysis basis for this Meld is unavailable."
             )
         left, right = granted_artifact_contexts(store, artifact)
     target = (
@@ -247,7 +247,7 @@ def _load_meld_source(
             if access.is_granted
             else access.store.load_direct(access.context_name)
         )
-    return recursive_comparison_projection(context) if project else context
+    return project_memory_relation_context(context) if project else context
 
 
 def _load_local_meld_source(
@@ -264,7 +264,7 @@ def _load_local_meld_source(
         name,
         include_descendants=True,
     )
-    return recursive_comparison_projection(context) if project else context
+    return project_memory_relation_context(context) if project else context
 
 
 def _meld_request_matches_saved_session(
@@ -279,7 +279,7 @@ def _meld_request_matches_saved_session(
     incoming_memory: str | None,
     baseline_memory: str | None,
 ) -> bool:
-    """Compare one explicit start frame with the target's current work slot."""
+    """Analyze one explicit start frame against the target's current work slot."""
 
     if session.mode != requested_mode:
         return False
@@ -409,7 +409,7 @@ def _assess_and_save(
         execute_prepared_meld_turn,
         prepare_pending_meld_turn,
     )
-    from memcommit.application.operations.meld.sessions import (
+    from memcommit.application.operations.meld.proposal_iteration import (
         PendingMeldTurn,
     )
 
@@ -490,7 +490,7 @@ def _complete_default_terminal_execution(
 ) -> MeldSession:
     """Finish a normal terminal Meld without opening a response turn.
 
-    Symmetric Compare already supplies an exhaustive relation ledger.  Meld
+    Symmetric peer analysis already supplies an exhaustive relation ledger. Meld
     materializes that ledger conservatively in the same initial turn, then
     applies any decision-complete local result.  Granted-target writes retain
     their explicit authority approval boundary, and unresolved directional
@@ -503,7 +503,7 @@ def _complete_default_terminal_execution(
         from memcommit.application.operations.meld.runtime import (
             execute_meld_initial_preservation,
         )
-        from memcommit.application.operations.meld.sessions import (
+        from memcommit.application.operations.meld.proposal_iteration import (
             MeldSessionSnapshot,
         )
 
@@ -544,24 +544,24 @@ def _run_interactive(
         execute_meld_preservation,
         execute_meld_session_defer,
     )
-    from memcommit.application.operations.meld.sessions import (
+    from memcommit.application.operations.meld.proposal_iteration import (
         MeldDestinationRequest,
         MeldSessionSnapshot,
         prepare_meld_preservation_turn,
     )
-    from memcommit.application.operations.meld.resolution import (
+    from memcommit.application.operations.meld.proposal_iteration import (
         MeldResolutionTurnRequest,
         prepare_meld_resolution_turn,
     )
 
-    if analysis_origin is None and session.comparison_seed is not None:
-        from memcommit.study_scenarios.legacy.prewarm.compare import (
-            installed_compare_prewarm_origin,
+    if analysis_origin is None and session.relation_analysis_seed is not None:
+        from memcommit.study_scenarios.legacy.prewarm.peer_relations import (
+            installed_memory_relation_prewarm_origin,
         )
 
-        analysis_origin = installed_compare_prewarm_origin(
+        analysis_origin = installed_memory_relation_prewarm_origin(
             store,
-            session.comparison_seed.analysis,
+            session.relation_analysis_seed.analysis,
         )
     navigation = ResolutionNavigation()
     while session.state not in {"APPLIED", "KEPT_REVIEW_ONLY"}:
@@ -824,7 +824,7 @@ def execute_meld_command(
     if create_target:
         # The runtime allocates and publishes the real Context atomically
         # with its session. This placeholder carries only the reviewed name
-        # through the CLI's provider-free Compare prerequisite flow.
+        # through the CLI's provider-free relation-analysis prerequisite flow.
         target = Context(uid="", name=target_name)
         session = None
     else:
@@ -933,7 +933,7 @@ def execute_meld_command(
             stage = (
                 "connecting provider"
                 if requested_mode == "DIRECTIONAL"
-                else "preparing ordered Compare basis"
+                else "preparing ordered relation basis"
             )
             started = run_command_wait(
                 "MELD",
@@ -1006,7 +1006,7 @@ def execute_meld_command(
             stage = (
                 "connecting provider"
                 if requested_mode == "DIRECTIONAL"
-                else "preparing ordered Compare basis"
+                else "preparing ordered relation basis"
             )
             restarted = run_command_wait(
                 "MELD",
@@ -1054,11 +1054,11 @@ def execute_meld_command(
         execute_meld_preservation,
         execute_meld_session_defer,
     )
-    from memcommit.application.operations.meld.sessions import (
+    from memcommit.application.operations.meld.proposal_iteration import (
         MeldSessionSnapshot,
         prepare_meld_preservation_turn,
     )
-    from memcommit.application.operations.meld.resolution import (
+    from memcommit.application.operations.meld.proposal_iteration import (
         MeldResolutionTurnRequest,
         prepare_meld_resolution_turn,
     )

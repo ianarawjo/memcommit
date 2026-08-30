@@ -11,15 +11,15 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory, MemoryRef
-from memcommit.application.operations.memory_transfer.application import (
+from memcommit.application.operations.copy_and_move.application import (
     CopyMemoriesRequest,
     MemoryTransferError,
     MemoryTransferStalePlanError,
     MoveMemoriesRequest,
-    run_copy,
-    run_move,
 )
-from memcommit.application.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
+from memcommit.application.operations.copy.application import run_copy
+from memcommit.application.operations.copy_and_move.runtime import MemoryStoreCopyAndMovePort
+from memcommit.application.operations.move.application import run_move
 from memcommit.persistence.store import MemoryStore
 
 
@@ -138,7 +138,7 @@ def test_fresh_copy_uid_is_new_across_the_complete_local_store(
             return original_uuid4()
 
     monkeypatch.setattr(
-        "memcommit.application.operations.memory_transfer.runtime.uuid.uuid4",
+        "memcommit.application.operations.copy_and_move.runtime.uuid.uuid4",
         controlled_uuid4,
     )
 
@@ -147,7 +147,7 @@ def test_fresh_copy_uid_is_new_across_the_complete_local_store(
             (f"source:{memory.uid}",),
             into_locator=target.name,
         ),
-        port=MemoryStoreMemoryTransferPort.capture(store),
+        port=MemoryStoreCopyAndMovePort.capture(store),
     )
 
     assert copied.items[0].into_memory_uid == fresh_uid
@@ -380,7 +380,7 @@ def test_move_retains_explicit_internal_block_policy_without_partial_change(
                 into_locator=target.name,
                 link_policy="BLOCK",
             ),
-            port=MemoryStoreMemoryTransferPort.capture(store),
+            port=MemoryStoreCopyAndMovePort.capture(store),
         )
 
     assert ref.uid in store.load_direct(watcher.name).memories
@@ -572,7 +572,7 @@ def test_copy_rejects_source_drift_without_target_publication(isolated_store):
     store = MemoryStore()
     source, (memory,) = _context(store, "source", "version one")
     target, _ = _context(store, "target")
-    port = MemoryStoreMemoryTransferPort.capture(store)
+    port = MemoryStoreCopyAndMovePort.capture(store)
     request = CopyMemoriesRequest(
         (f"source:{memory.uid[:8]}",),
         into_locator="target",
@@ -593,7 +593,7 @@ def test_copy_rejects_a_modified_frozen_plan_without_target_publication(
     store = MemoryStore()
     source, (memory,) = _context(store, "source", "exact value")
     target, _ = _context(store, "target")
-    port = MemoryStoreMemoryTransferPort.capture(store)
+    port = MemoryStoreCopyAndMovePort.capture(store)
     request = CopyMemoriesRequest(
         (f"source:{memory.uid[:8]}",),
         into_locator="target",
@@ -616,7 +616,7 @@ def test_move_rejects_graph_drift_without_partial_publication(isolated_store):
     source, (memory,) = _context(store, "source", "value")
     target, _ = _context(store, "target")
     watcher, _ = _context(store, "watcher")
-    port = MemoryStoreMemoryTransferPort.capture(store)
+    port = MemoryStoreCopyAndMovePort.capture(store)
     request = MoveMemoriesRequest(
         (f"source:{memory.uid[:8]}",),
         into_locator="target",
@@ -657,7 +657,7 @@ def test_move_rolls_back_an_intermediate_store_failure_and_checkpoint(
                 (f"source:{memory.uid}",),
                 into_locator=target.name,
             ),
-            port=MemoryStoreMemoryTransferPort.capture(store),
+            port=MemoryStoreCopyAndMovePort.capture(store),
         )
 
     assert list(store.load_direct(source.name).memories) == [memory.uid]

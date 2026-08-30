@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 from memcommit.application.capabilities.semantic.generative_reduction_reference import (
-    render_distill_elaborate_reference_examples,
+    render_distill_makemore_reference_examples,
 )
 
 
@@ -47,7 +47,7 @@ def test_distill_goal_holdout_freezes_all_accumulated_goal_modes() -> None:
 
 def test_distill_goal_holdout_answers_never_enter_prompt_reference() -> None:
     fixture = _fixture()
-    prompt_reference = render_distill_elaborate_reference_examples()
+    prompt_reference = render_distill_makemore_reference_examples()
 
     for case in fixture["cases"]:
         assert case["id"] not in prompt_reference

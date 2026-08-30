@@ -24,6 +24,14 @@ Profile UID and graph digest printed by the preview. The naming policy and
 rollout boundary are specified in
 [`context-name-portability-design-rationale.md`](context-name-portability-design-rationale.md).
 
+Top-level Rename enters a typed request/plan/result boundary at
+`memcommit.application.operations.rename`. The console adapter owns syntax,
+confirmation, and receipt text; the application runtime resolves the existing
+source once, freezes the Store plan, and applies only that opaque reviewed
+plan. Persistence remains the owner of graph locks, CAS, rollback, and the
+physical namespace rewrite. The profile migration compatibility route remains
+separate because it admits a deliberately broader legacy-source grammar.
+
 The motivating Task 1 case is migration from provisional fixture names such as
 `construction-updates` to participant-scoped names such as
 `participant/construction-updates`. The same operation is useful whenever a

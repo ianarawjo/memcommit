@@ -8,7 +8,7 @@ from typing import Literal, Protocol
 from memcommit.application.operations.search.answer_references import (
     SearchAnswerReferenceDocument,
 )
-from memcommit.application.operations.search.scope_evidence import (
+from memcommit.application.operations.query.evidence import (
     compact_artifact_references,
     compact_reference_content,
     visible_result_evidence,

@@ -21,7 +21,7 @@ from memcommit.providers.policy import (
     ProviderPolicyOverride,
     resolve_operation_provider_policy,
 )
-from memcommit.application.capabilities.evaluation.semantic_campaign import (
+from memcommit.application.operations.eval.semantic_campaign import (
     CORPUS_CHOICES,
     LEDGER_KIND,
     PIPELINE_CHOICES,
@@ -30,7 +30,7 @@ from memcommit.application.capabilities.evaluation.semantic_campaign import (
     run_ambiguity_campaign,
     run_duplicate_campaign,
 )
-from memcommit.application.capabilities.evaluation.operation_gate_campaign import run_operation_gate_campaign
+from memcommit.application.operations.eval.operation_gate_campaign import run_operation_gate_campaign
 from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_LUNA_LOW_PRESET,

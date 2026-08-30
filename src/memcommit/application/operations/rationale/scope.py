@@ -15,10 +15,10 @@ from memcommit.application.capabilities.authority.readable_contexts import (
 )
 from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.authority.source_use_policy import authorize_combination
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.history.verification import (
     MemoryState,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistoryCandidate,
     MemoryHistory,
     reconstruct_memory_history,

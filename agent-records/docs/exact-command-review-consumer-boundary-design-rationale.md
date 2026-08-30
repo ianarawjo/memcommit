@@ -58,7 +58,6 @@ typing or synchronization alone never applies work. See the
 | Reference | Focused `Enter` on the reviewed immutable copy command | Applies the adjacent frozen Source/Target snapshot |
 | Merge | Focused `Enter` through the plan review or common Resolution workbench | Applies the same `FrozenMergePlan` and, for conflicts, the reviewed resolution set |
 | Replace | Focused `Enter` on the exact digest-bound replacement plan | Applies the same complete frozen multi-Context plan |
-| Dedup | Focused `Enter` through the deterministic Resolution workbench | Applies the reviewed frozen case without introducing a semantic turn |
 | Branch, Meld, Update, and Sever setup | Focused `Enter` on the editable `PROPOSED COMMAND`; a valid buffer atomically reprojects every upper field | Reparses the visible command and returns that typed setup receipt to the owning application boundary; creation or analysis starts in process and semantic final Apply remains separate |
 | Meld, Update, and Sever semantic/session turns | Focused `Enter` on a rebuilt `TURN` command | Executes the same typed response against the displayed `--expect-session` revision; it rebuilds review state and never performs final Apply |
 | Find SHOW | None: this is a receipt for the read-only action authorized by the submitted Find turn | Immediately dispatches only `mem show UID --context NAME` without a shell and leaves Find results and durable Context state unchanged |

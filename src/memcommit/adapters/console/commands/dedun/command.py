@@ -6,7 +6,6 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.commands.consolidate import command as consolidate
 from memcommit.adapters.console.commands.find_redundancies import (
     command as find_redundancies,
 )
@@ -36,26 +35,6 @@ def cmd(
             help="Context to dedun (defaults to current)",
         ),
     ] = None,
-    evidence_json: Annotated[
-        bool,
-        typer.Option("--evidence-json", hidden=True),
-    ] = False,
-    evidence: Annotated[
-        Optional[list[str]],
-        typer.Option("--evidence", hidden=True),
-    ] = None,
-    survivors: Annotated[
-        Optional[list[str]],
-        typer.Option("--survivor", hidden=True),
-    ] = None,
-    expected_revision: Annotated[
-        Optional[str],
-        typer.Option("--expected-revision", hidden=True),
-    ] = None,
-    apply_now: Annotated[
-        bool,
-        typer.Option("--apply", hidden=True),
-    ] = False,
     direct: Annotated[
         bool,
         typer.Option(
@@ -93,29 +72,10 @@ def cmd(
         )
         raise typer.Exit(2)
 
-    replay_requested = bool(
-        evidence or survivors or expected_revision is not None or apply_now
-    )
-    if replay_requested:
-        if context_name is not None or evidence_json or direct or recursive:
-            typer.secho(
-                "Dedun error: discovery options cannot be combined with an exact "
-                "review replay.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        consolidate.cmd(
-            evidence=evidence,
-            survivors=survivors,
-            expected_revision=expected_revision,
-            apply_now=apply_now,
-        )
-        return
     try:
         find_redundancies.run_dedun(
             context_name=context_name,
-            evidence_json=evidence_json,
+            evidence_json=False,
             include_descendants=preset is ContextScopePreset.RECURSIVE,
         )
     except typer.Exit:

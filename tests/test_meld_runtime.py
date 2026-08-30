@@ -9,30 +9,28 @@ from types import SimpleNamespace
 import pytest
 
 import memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution as relation_execution
-import memcommit.application.operations.meld.assessment as meld_assessment_application
+import memcommit.application.operations.meld.planning as meld_assessment_application
 import memcommit.application.operations.meld.provider.contract as meld_provider_contract
 import memcommit.application.operations.meld.provider.decoder as meld_provider_decoder
 import memcommit.application.operations.meld.provider.execution as meld_provider_execution
 import memcommit.application.operations.meld.provider.projection as meld_provider_projection
 import memcommit.application.operations.meld.provider.request as meld_provider_request
-import memcommit.application.operations.meld.restart as meld_restart_application
+import memcommit.application.operations.meld.preparation as meld_restart_application
 import memcommit.application.operations.meld.runtime as meld_runtime
-import memcommit.application.operations.meld.runtime.apply as meld_runtime_apply
-import memcommit.application.operations.meld.runtime.session_launch as meld_session_launch
-import memcommit.application.operations.meld.runtime.session_review as meld_session_review
-import memcommit.application.operations.meld.runtime.source_bindings as meld_source_bindings
-import memcommit.application.operations.meld.sessions as meld_session_application
-import memcommit.application.operations.meld.start as meld_start_application
+import memcommit.application.operations.meld.runtime.apply_transaction as meld_runtime_apply
+import memcommit.application.operations.meld.runtime.preparation as meld_session_launch
+import memcommit.application.operations.meld.runtime.proposal_iteration as meld_session_review
+import memcommit.application.operations.meld.runtime.source_access as meld_source_bindings
+import memcommit.application.operations.meld.proposal_iteration as meld_session_application
+import memcommit.application.operations.meld.preparation as meld_start_application
 from memcommit.application.capabilities.authority.context_access import ContextAccess
 from memcommit.core.context import Context, Memory
 from memcommit.application.operations.meld.model import meld_canonical_digest
-from memcommit.application.operations.meld.restart import MeldRestartRequest
+from memcommit.application.operations.meld.preparation import MeldRestartRequest
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[1] / "src" / "memcommit"
-MELD_COMMAND_ROOT = (
-    PACKAGE_ROOT / "adapters" / "console" / "commands" / "meld"
-)
+MELD_COMMAND_ROOT = PACKAGE_ROOT / "adapters" / "console" / "commands" / "meld"
 
 
 def _meld_command_source() -> str:
@@ -85,17 +83,18 @@ def test_meld_execution_modules_have_no_terminal_or_command_dependencies(module)
 
 
 def test_meld_runtime_facade_preserves_concept_owned_execution_api():
-    assert meld_runtime.load_meld_source.__module__.endswith(
-        ".runtime.source_bindings"
-    )
+    assert meld_runtime.load_meld_source.__module__.endswith(".runtime.source_access")
     assert meld_runtime.PreparedMeldExecution.__module__.endswith(
-        ".runtime.session_launch"
+        ".runtime.preparation"
     )
     assert meld_runtime.MemoryStoreMeldAssessmentPort.__module__.endswith(
-        ".runtime.session_review"
+        ".runtime.proposal_iteration"
+    )
+    assert meld_runtime.MemoryStoreMeldSessionRepository.__module__.endswith(
+        ".runtime.session_repository"
     )
     assert meld_runtime.MemoryStoreMeldApplyPort.__module__.endswith(
-        ".runtime.apply"
+        ".runtime.apply_transaction"
     )
 
 
@@ -121,9 +120,9 @@ def test_meld_command_contains_no_initial_cache_or_provisional_session_logic():
         primitive not in source
         for primitive in (
             "find_installed_directional_meld_prewarm",
-            "find_installed_equivalent_directional_comparison",
+            "find_installed_equivalent_directional_relation_analysis",
             "ensure_memory_relation_analysis",
-            "install_prepared_comparison_analysis",
+            "install_prepared_memory_relation_analysis",
             "MeldSession.create_directional",
             "prepare_meld_assessment",
             "execute_meld_assessment",
@@ -239,12 +238,12 @@ def test_symmetric_subset_projection_is_resolved_and_recorded_in_runtime(
     monkeypatch.setattr(meld_session_launch, "load_profile_registry", lambda: None)
     monkeypatch.setattr(
         meld_session_launch,
-        "find_declared_equivalent_compare_analysis",
+        "find_declared_equivalent_memory_relation_analysis",
         lambda **kwargs: None,
     )
     monkeypatch.setattr(
         meld_session_launch,
-        "find_declared_projected_compare_analysis",
+        "find_declared_projected_memory_relation_analysis",
         lambda **kwargs: match,
     )
 
@@ -263,7 +262,7 @@ def test_symmetric_subset_projection_is_resolved_and_recorded_in_runtime(
     monkeypatch.setattr(meld_session_launch, "ensure_memory_relation_analysis", ensure)
     monkeypatch.setattr(
         meld_session_launch,
-        "record_projected_compare_prewarm",
+        "record_projected_memory_relation_prewarm",
         lambda *args, **kwargs: recorded.append((args, kwargs)),
     )
 
@@ -404,12 +403,30 @@ def test_memory_focused_directional_restart_reuses_prewarm_and_cas_replaces_with
         ),
     )
     comparison_calls = []
+    relation_basis = object()
 
     def resolve_comparison(*args, **kwargs):
         comparison_calls.append((args, kwargs))
-        return None
+        return relation_basis
 
-    monkeypatch.setattr(meld_session_launch, "_start_relation_analysis", resolve_comparison)
+    monkeypatch.setattr(
+        meld_session_launch, "_start_relation_analysis", resolve_comparison
+    )
+    monkeypatch.setattr(
+        meld_session_launch.MeldSession,
+        "create_directional_from_relation_analysis",
+        classmethod(
+            lambda cls, analysis, incoming_context, baseline_context, **kwargs: (
+                cls.create_directional(
+                    incoming_context,
+                    baseline_context,
+                    incoming_memory_selector=incoming_memory_uid,
+                )
+                if analysis is relation_basis
+                else pytest.fail("Meld ignored its frozen relation basis")
+            )
+        ),
+    )
     monkeypatch.setattr(
         meld_session_launch,
         "find_installed_directional_meld_prewarm",

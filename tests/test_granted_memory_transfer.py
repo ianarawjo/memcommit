@@ -16,17 +16,17 @@ from memcommit.adapters.python_api import (
 )
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory
-from memcommit.adapters.agent.memory_transfer import MemoryTransferAgentAdapter
-from memcommit.application.operations.memory_transfer.application import (
+from memcommit.adapters.agent.copy_and_move import MemoryTransferAgentAdapter
+from memcommit.application.operations.copy_and_move.application import (
     CopyMemoriesRequest,
     MemoryTransferAuthorityError,
     MemoryTransferError,
     MemoryTransferStalePlanError,
     MoveMemoriesRequest,
-    run_copy,
-    run_move,
 )
-from memcommit.application.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
+from memcommit.application.operations.copy.application import run_copy
+from memcommit.application.operations.copy_and_move.runtime import MemoryStoreCopyAndMovePort
+from memcommit.application.operations.move.application import run_move
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -110,8 +110,8 @@ def _grant_fixture(
     )
 
 
-def _granted_port(store: MemoryStore) -> MemoryStoreMemoryTransferPort:
-    return MemoryStoreMemoryTransferPort.capture(
+def _granted_port(store: MemoryStore) -> MemoryStoreCopyAndMovePort:
+    return MemoryStoreCopyAndMovePort.capture(
         store,
         allow_granted_sources=True,
     )
@@ -426,7 +426,7 @@ def test_granted_copy_survives_revocation_and_its_local_result_can_move(
             (f"{target.name}:{copied_uid}",),
             into_locator=destination.name,
         ),
-        port=MemoryStoreMemoryTransferPort.capture(store),
+        port=MemoryStoreCopyAndMovePort.capture(store),
     )
 
     assert moved.items[0].into_memory_uid == copied_uid

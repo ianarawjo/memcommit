@@ -1,4 +1,4 @@
-"""Durable Compare artifacts whose retention is authorized by grants."""
+"""Durable peer-relation artifacts whose retention is authorized by grants."""
 
 from __future__ import annotations
 
@@ -15,14 +15,14 @@ from memcommit.application.capabilities.authority.context_access import (
     revalidate_granted_context_binding,
 )
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
-    ComparisonAnalysis,
-    ComparisonError,
-    comparison_canonical_digest,
+    MemoryRelationAnalysis,
+    MemoryRelationError,
+    memory_relation_canonical_digest,
 )
 from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
-    ProjectedComparisonMemory,
-    project_comparison_context,
+    ProjectedMemoryRelationMemory,
+    project_memory_relation_context as _project_memory_relation_context,
 )
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.application.capabilities.authority.source_use_policy import (
@@ -55,11 +55,11 @@ def _uuid(value: str, label: str) -> str:
     return canonical
 
 
-def granted_comparison_analyses_dir(store: MemoryStore) -> Path:
+def granted_memory_relation_analyses_dir(store: MemoryStore) -> Path:
     return store.store_dir / "granted-comparison-analyses"
 
 
-def granted_comparison_analysis_path(
+def granted_memory_relation_analysis_path(
     store: MemoryStore,
     reference_uid: str,
     compared_uid: str,
@@ -68,13 +68,13 @@ def granted_comparison_analysis_path(
     compared = _uuid(compared_uid, "comparison compared Context uid")
     if reference == compared:
         raise ValueError("Comparison analysis requires distinct Context uids.")
-    return granted_comparison_analyses_dir(store) / f"{reference}--{compared}.json"
+    return granted_memory_relation_analyses_dir(store) / f"{reference}--{compared}.json"
 
 
 @dataclass(frozen=True)
-class GrantedComparisonArtifact:
+class GrantedMemoryRelationArtifact:
     retention: AnalysisRetention
-    analysis: ComparisonAnalysis
+    analysis: MemoryRelationAnalysis
     bindings: tuple[GrantedUpdateTarget | None, GrantedUpdateTarget | None]
 
     def to_dict(self) -> dict[str, object]:
@@ -90,7 +90,7 @@ class GrantedComparisonArtifact:
         }
 
     @classmethod
-    def from_dict(cls, value: object) -> "GrantedComparisonArtifact":
+    def from_dict(cls, value: object) -> "GrantedMemoryRelationArtifact":
         if not isinstance(value, dict) or set(value) != {
             "kind",
             "schema_version",
@@ -115,8 +115,8 @@ class GrantedComparisonArtifact:
         if all(binding is None for binding in bindings):
             raise ValueError("A granted comparison must bind a granted source.")
         try:
-            analysis = ComparisonAnalysis.from_dict(value.get("analysis"))
-        except ComparisonError as error:
+            analysis = MemoryRelationAnalysis.from_dict(value.get("analysis"))
+        except MemoryRelationError as error:
             raise ValueError("Invalid granted comparison analysis.") from error
         for frame, binding in zip(analysis.frames, bindings, strict=True):
             if binding is not None and binding.public_name != frame.context_name:
@@ -128,12 +128,12 @@ class GrantedComparisonArtifact:
         )
 
 
-def load_granted_comparison_artifact(
+def load_granted_memory_relation_artifact(
     store: MemoryStore,
     reference_uid: str,
     compared_uid: str,
-) -> GrantedComparisonArtifact | None:
-    path = granted_comparison_analysis_path(store, reference_uid, compared_uid)
+) -> GrantedMemoryRelationArtifact | None:
+    path = granted_memory_relation_analysis_path(store, reference_uid, compared_uid)
     if not path.exists():
         return None
     if not path.is_file() or path.is_symlink():
@@ -141,7 +141,7 @@ def load_granted_comparison_artifact(
     try:
         with open(path, encoding="utf-8") as file:
             value = json.load(file, object_pairs_hook=_strict_object)
-        artifact = GrantedComparisonArtifact.from_dict(value)
+        artifact = GrantedMemoryRelationArtifact.from_dict(value)
     except (json.JSONDecodeError, ValueError) as error:
         raise ValueError("Saved granted comparison is invalid.") from error
     frames = artifact.analysis.frames
@@ -150,36 +150,36 @@ def load_granted_comparison_artifact(
     return artifact
 
 
-def iter_granted_comparison_artifacts(
+def iter_granted_memory_relation_artifacts(
     store: MemoryStore,
-) -> tuple[tuple[GrantedComparisonArtifact, Path], ...]:
-    root = granted_comparison_analyses_dir(store)
+) -> tuple[tuple[GrantedMemoryRelationArtifact, Path], ...]:
+    root = granted_memory_relation_analyses_dir(store)
     if not root.exists():
         return ()
     if not root.is_dir() or root.is_symlink():
         raise ValueError("Granted comparison storage is invalid.")
-    records: list[tuple[GrantedComparisonArtifact, Path]] = []
+    records: list[tuple[GrantedMemoryRelationArtifact, Path]] = []
     for path in root.iterdir():
         if path.is_symlink() or not path.is_file() or not path.name.endswith(".json"):
             raise ValueError("Granted comparison storage is invalid.")
         parts = path.stem.split("--")
         if len(parts) != 2:
             raise ValueError("Granted comparison storage is invalid.")
-        artifact = load_granted_comparison_artifact(store, parts[0], parts[1])
+        artifact = load_granted_memory_relation_artifact(store, parts[0], parts[1])
         assert artifact is not None
         records.append((artifact, path))
     return tuple(sorted(records, key=lambda record: record[0].analysis.uid))
 
 
-def save_granted_comparison_artifact(
+def save_granted_memory_relation_artifact(
     store: MemoryStore,
-    analysis: ComparisonAnalysis,
+    analysis: MemoryRelationAnalysis,
     accesses: Iterable[ContextAccess],
     *,
     retention: AnalysisRetention,
     expected_analysis_uid: str | None,
     expected_analysis_version: str | None = None,
-) -> GrantedComparisonArtifact:
+) -> GrantedMemoryRelationArtifact:
     values = tuple(accesses)
     if len(values) != 2:
         raise ValueError("Compare persistence requires two source accesses.")
@@ -188,12 +188,12 @@ def save_granted_comparison_artifact(
         freeze_granted_context_binding(access) if access.is_granted else None
         for access in values
     )
-    artifact = GrantedComparisonArtifact(
+    artifact = GrantedMemoryRelationArtifact(
         retention=retention,
         analysis=analysis,
         bindings=bindings,  # type: ignore[arg-type]
     )
-    restored = GrantedComparisonArtifact.from_dict(artifact.to_dict())
+    restored = GrantedMemoryRelationArtifact.from_dict(artifact.to_dict())
     if expected_analysis_version is not None and (
         not isinstance(expected_analysis_version, str)
         or len(expected_analysis_version) != 64
@@ -203,7 +203,7 @@ def save_granted_comparison_artifact(
         )
     ):
         raise ValueError("Invalid expected comparison analysis version.")
-    path = granted_comparison_analysis_path(
+    path = granted_memory_relation_analysis_path(
         store,
         analysis.frames[0].context_uid,
         analysis.frames[1].context_uid,
@@ -216,14 +216,14 @@ def save_granted_comparison_artifact(
             root.mkdir(parents=True, exist_ok=True)
             if path.exists() and (not path.is_file() or path.is_symlink()):
                 raise ValueError("Granted comparison storage is invalid.")
-            current = load_granted_comparison_artifact(
+            current = load_granted_memory_relation_artifact(
                 store,
                 analysis.frames[0].context_uid,
                 analysis.frames[1].context_uid,
             )
             current_uid = current.analysis.uid if current is not None else None
             current_version = (
-                comparison_canonical_digest(current.analysis.to_dict())
+                memory_relation_canonical_digest(current.analysis.to_dict())
                 if current is not None
                 else None
             )
@@ -239,9 +239,9 @@ def save_granted_comparison_artifact(
     return restored
 
 
-def granted_artifact_contexts(
+def memory_relation_artifact_contexts(
     store: MemoryStore,
-    artifact: GrantedComparisonArtifact,
+    artifact: GrantedMemoryRelationArtifact,
 ) -> tuple[Context, Context]:
     """Open live bound sources or reconstruct explicitly retained snapshots."""
 
@@ -257,7 +257,7 @@ def granted_artifact_contexts(
                 key=lambda item: item.position,
             ):
                 context.add(
-                    ProjectedComparisonMemory(
+                    ProjectedMemoryRelationMemory(
                         uid=memory.uid,
                         content=memory.content,
                         source=memory.source,
@@ -276,7 +276,7 @@ def granted_artifact_contexts(
         strict=True,
     ):
         if binding is None:
-            context = recursive_comparison_projection(
+            context = _project_memory_relation_context(
                 load_context_scope(
                     store,
                     frame.context_name,
@@ -285,7 +285,7 @@ def granted_artifact_contexts(
             )
         else:
             access = revalidate_granted_context_binding(binding)
-            context = recursive_comparison_projection(
+            context = _project_memory_relation_context(
                 load_context_scope(
                     GrantedReadStore(access),
                     binding.public_name,
@@ -300,17 +300,17 @@ def granted_artifact_contexts(
     return contexts[0], contexts[1]
 
 
-def recursive_comparison_projection(root: Context) -> Context:
-    return project_comparison_context(root)
+def project_memory_relation_context(root: Context) -> Context:
+    return _project_memory_relation_context(root)
 
 
 # Grant-bound storage keeps its established file contract while exposing the
 # same operation-neutral capability vocabulary used by Meld.
-GrantedMemoryRelationArtifact = GrantedComparisonArtifact
-granted_memory_relation_analyses_dir = granted_comparison_analyses_dir
-granted_memory_relation_analysis_path = granted_comparison_analysis_path
-load_granted_memory_relation_artifact = load_granted_comparison_artifact
-iter_granted_memory_relation_artifacts = iter_granted_comparison_artifacts
-save_granted_memory_relation_artifact = save_granted_comparison_artifact
-memory_relation_artifact_contexts = granted_artifact_contexts
-project_memory_relation_context = recursive_comparison_projection
+GrantedComparisonArtifact = GrantedMemoryRelationArtifact
+granted_comparison_analyses_dir = granted_memory_relation_analyses_dir
+granted_comparison_analysis_path = granted_memory_relation_analysis_path
+load_granted_comparison_artifact = load_granted_memory_relation_artifact
+iter_granted_comparison_artifacts = iter_granted_memory_relation_artifacts
+save_granted_comparison_artifact = save_granted_memory_relation_artifact
+granted_artifact_contexts = memory_relation_artifact_contexts
+recursive_comparison_projection = project_memory_relation_context

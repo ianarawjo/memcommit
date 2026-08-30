@@ -231,11 +231,12 @@ are not added to the full-screen generic picker or exposed to those operations.
 The one-shot `--context` option is repeatable, but its two scope choices apply
 uniformly to every supplied root. Per-root mixtures such as subtree A plus
 exact B, and TUI-only independent descendant exclusions, are intentionally not
-encoded in the one-shot flag grammar. Result inspection and conversational
-follow-up remain separate from this Google-like search surface; the retained
-legacy Find chat shell is not silently reactivated. The result action is
-explicit curation only: it does not save the provider's ranking explanation or
-turn selected rows into proof that the query was answered. Query-only routes
+encoded in the one-shot flag grammar. Result inspection remains separate from
+this Google-like search surface; the uncalled legacy conversational Search
+shell, follow-up interpreter, and three-scope answer path are retired. The
+result action is explicit curation only: it does not save the provider's ranking
+explanation or turn selected rows into proof that the query was answered.
+Query-only routes
 remain a separate authorized interface and never become selectable ordinary
 roots.
 

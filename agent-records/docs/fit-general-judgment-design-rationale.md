@@ -143,7 +143,7 @@ and what additional contract they add:
 | Ambiguity | Uses ordinary readings to determine whether materially different interpretations remain; it does not make a compatibility judgment by itself. |
 | Compare, Meld, Update | May use the same ordinary-reading prior to judge relations, but must additionally preserve exhaustive disposition, provenance, direction, authority, and operation-specific review. |
 | Distill | Uses generative reduction, so its Rules remain unverified. Goal-focused Distill composes one whole-result Fit audit; an unfocused result may receive a later Fit judgment. Neither establishes truth or evidential support. |
-| Elaborate | Uses generative expansion, so its proposals remain unverified. Default Rules-to-Cases is best-effort and does not invoke Fit; explicit strict mode composes general Fit after independent Rule Conformance and accepts only Source-compatible Cases. Fit still cannot establish truth, factual grounding, or evidential support. |
+| Makemore | Uses generative expansion, so its proposals remain unverified. Default Rules-to-Cases is best-effort and does not invoke Fit; explicit strict mode composes general Fit after independent Rule Conformance and accepts only Source-compatible Cases. Fit still cannot establish truth, factual grounding, or evidential support. |
 | Find, Query | Use interpretation and relevance rather than compatibility; ordinary common sense can assist retrieval, but Fit labels are not relevance scores. |
 | Ground | Projects selected Rules and proposition-shaped Examples into a Fit frame. Rule Conformance separately checks the complete Example Context against the Rules; neither operation reconstructs an exact-output replay contract. |
 

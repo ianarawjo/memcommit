@@ -21,10 +21,10 @@ from typing import Iterable, Literal
 
 from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
-    ComparisonEvidenceError,
-    ComparisonEvidenceSource,
-    ProjectedComparisonMemory,
-    project_comparison_context,
+    MemoryRelationEvidenceError,
+    MemoryRelationEvidenceSource,
+    ProjectedMemoryRelationMemory,
+    project_memory_relation_context,
 )
 from memcommit.application.capabilities.semantic.memory_scope import (
     MemoryScopeError,
@@ -36,23 +36,23 @@ from memcommit.application.capabilities.semantic.understanding import (
 )
 
 
-COMPARISON_SCHEMA_VERSION = 4
-COMPARISON_DESCENDANT_SCHEMA_VERSION = 3
-COMPARISON_REPORTS_SCHEMA_VERSION = 2
-COMPARISON_LEGACY_SCHEMA_VERSION = 1
-COMPARISON_RULESET_VERSION = "peer-relations-v4"
-SUPPORTED_COMPARISON_RULESET_VERSIONS = {
+MEMORY_RELATION_SCHEMA_VERSION = 4
+MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION = 3
+MEMORY_RELATION_REPORTS_SCHEMA_VERSION = 2
+MEMORY_RELATION_LEGACY_SCHEMA_VERSION = 1
+MEMORY_RELATION_RULESET_VERSION = "peer-relations-v4"
+SUPPORTED_MEMORY_RELATION_RULESET_VERSIONS = {
     "peer-relations-v1",
     "peer-relations-v2",
     "peer-relations-v3",
-    COMPARISON_RULESET_VERSION,
+    MEMORY_RELATION_RULESET_VERSION,
 }
-COMPARISON_TEXT_LIMIT = 20_000
-COMPARISON_NAME_LIMIT = COMPARISON_TEXT_LIMIT
-COMPARISON_ID_LIMIT = 240
+MEMORY_RELATION_TEXT_LIMIT = 20_000
+MEMORY_RELATION_NAME_LIMIT = MEMORY_RELATION_TEXT_LIMIT
+MEMORY_RELATION_ID_LIMIT = 240
 
-ComparisonSide = Literal["REFERENCE", "COMPARED"]
-ComparisonRelationKind = Literal[
+MemoryRelationSide = Literal["REFERENCE", "COMPARED"]
+MemoryRelationKind = Literal[
     "EQUIVALENT",
     "COMPATIBLE",
     "SCOPED",
@@ -60,8 +60,8 @@ ComparisonRelationKind = Literal[
     "DISTINCT",
     "UNCLEAR",
 ]
-ComparisonRelationStatus = Literal["RESOLVED", "UNRESOLVED"]
-ComparisonIssuePriority = Literal["REQUIRED", "HELPFUL"]
+MemoryRelationStatus = Literal["RESOLVED", "UNRESOLVED"]
+MemoryRelationIssuePriority = Literal["REQUIRED", "HELPFUL"]
 
 _SIDES = {"REFERENCE", "COMPARED"}
 _RELATIONS = {
@@ -76,12 +76,12 @@ _STATUSES = {"RESOLVED", "UNRESOLVED"}
 _PRIORITIES = {"REQUIRED", "HELPFUL"}
 
 
-class ComparisonError(ValueError):
-    """Invalid, unsupported, or internally inconsistent comparison state."""
+class MemoryRelationError(ValueError):
+    """Invalid, unsupported, or inconsistent peer-relation state."""
 
 
-def comparison_canonical_digest(value: object) -> str:
-    """Return one deterministic digest for an exact comparison artifact."""
+def memory_relation_canonical_digest(value: object) -> str:
+    """Return one deterministic digest for an exact relation artifact."""
     try:
         encoded = json.dumps(
             value,
@@ -90,7 +90,7 @@ def comparison_canonical_digest(value: object) -> str:
             sort_keys=True,
         ).encode("utf-8")
     except (TypeError, ValueError) as error:
-        raise ComparisonError("Invalid comparison digest payload.") from error
+        raise MemoryRelationError("Invalid comparison digest payload.") from error
     return hashlib.sha256(encoded).hexdigest()
 
 
@@ -100,13 +100,13 @@ def _exact_dict(
     label: str,
 ) -> dict[str, object]:
     if not isinstance(value, dict) or set(value) != keys:
-        raise ComparisonError(f"Invalid {label}.")
+        raise MemoryRelationError(f"Invalid {label}.")
     return value
 
 
 def _array(value: object, label: str) -> list[object]:
     if not isinstance(value, list):
-        raise ComparisonError(f"Invalid {label}.")
+        raise MemoryRelationError(f"Invalid {label}.")
     return value
 
 
@@ -115,19 +115,19 @@ def _string(
     label: str,
     *,
     empty: bool = False,
-    limit: int = COMPARISON_TEXT_LIMIT,
+    limit: int = MEMORY_RELATION_TEXT_LIMIT,
 ) -> str:
     if (
         not isinstance(value, str)
         or (not empty and not value.strip())
         or len(value) > limit
     ):
-        raise ComparisonError(f"Invalid {label}.")
+        raise MemoryRelationError(f"Invalid {label}.")
     return value
 
 
 def _identifier(value: object, label: str) -> str:
-    return _string(value, label, limit=COMPARISON_ID_LIMIT)
+    return _string(value, label, limit=MEMORY_RELATION_ID_LIMIT)
 
 
 def _canonical_uuid(value: object, label: str) -> str:
@@ -135,9 +135,9 @@ def _canonical_uuid(value: object, label: str) -> str:
     try:
         canonical = str(uuid.UUID(text))
     except (AttributeError, TypeError, ValueError) as error:
-        raise ComparisonError(f"Invalid {label}.") from error
+        raise MemoryRelationError(f"Invalid {label}.") from error
     if canonical != text:
-        raise ComparisonError(f"Invalid {label}.")
+        raise MemoryRelationError(f"Invalid {label}.")
     return text
 
 
@@ -146,19 +146,19 @@ def _digest(value: object, label: str) -> str:
     if len(text) != 64 or any(
         character not in "0123456789abcdef" for character in text
     ):
-        raise ComparisonError(f"Invalid {label}.")
+        raise MemoryRelationError(f"Invalid {label}.")
     return text
 
 
 def _integer(value: object, label: str) -> int:
     if isinstance(value, bool) or not isinstance(value, int) or value < 0:
-        raise ComparisonError(f"Invalid {label}.")
+        raise MemoryRelationError(f"Invalid {label}.")
     return value
 
 
 def _literal(value: object, allowed: set[str], label: str) -> str:
     if not isinstance(value, str) or value not in allowed:
-        raise ComparisonError(f"Invalid {label}.")
+        raise MemoryRelationError(f"Invalid {label}.")
     return value
 
 
@@ -170,10 +170,10 @@ def _unique_uuid_tuple(
 ) -> tuple[str, ...]:
     values = _array(value, label)
     if not empty and not values:
-        raise ComparisonError(f"Invalid {label}.")
+        raise MemoryRelationError(f"Invalid {label}.")
     result = tuple(_canonical_uuid(item, label) for item in values)
     if len(result) != len(set(result)):
-        raise ComparisonError(f"Duplicate {label}.")
+        raise MemoryRelationError(f"Duplicate {label}.")
     return result
 
 
@@ -182,26 +182,26 @@ def _timestamp(value: object, label: str) -> str:
     try:
         parsed = datetime.fromisoformat(text)
     except ValueError as error:
-        raise ComparisonError(f"Invalid {label}.") from error
+        raise MemoryRelationError(f"Invalid {label}.") from error
     if parsed.tzinfo is None:
-        raise ComparisonError(f"Invalid {label}.")
+        raise MemoryRelationError(f"Invalid {label}.")
     return text
 
 
 @dataclass(frozen=True)
-class ComparisonMemory:
+class MemoryRelationMemory:
     uid: str
     content: str
     position: int
     content_digest: str
-    source: ComparisonEvidenceSource | None = None
+    source: MemoryRelationEvidenceSource | None = None
 
     @classmethod
     def create(
         cls,
         memory: Memory,
         position: int,
-    ) -> "ComparisonMemory":
+    ) -> "MemoryRelationMemory":
         value: dict[str, object] = {
             "uid": memory.uid,
             "content": memory.content,
@@ -210,8 +210,8 @@ class ComparisonMemory:
                 memory.content.encode("utf-8")
             ).hexdigest(),
         }
-        if isinstance(memory, ProjectedComparisonMemory):
-            value["source"] = memory.comparison_source.to_dict()
+        if isinstance(memory, ProjectedMemoryRelationMemory):
+            value["source"] = memory.relation_source.to_dict()
         return cls.from_dict(value)
 
     def to_dict(self) -> dict[str, object]:
@@ -226,7 +226,7 @@ class ComparisonMemory:
         return result
 
     @classmethod
-    def from_dict(cls, value: object) -> "ComparisonMemory":
+    def from_dict(cls, value: object) -> "MemoryRelationMemory":
         keys = {"uid", "content", "position", "content_digest"}
         if isinstance(value, dict) and "source" in value:
             keys.add("source")
@@ -237,12 +237,12 @@ class ComparisonMemory:
         )
         try:
             source = (
-                ComparisonEvidenceSource.from_dict(data["source"])
+                MemoryRelationEvidenceSource.from_dict(data["source"])
                 if "source" in data
                 else None
             )
-        except ComparisonEvidenceError as error:
-            raise ComparisonError(str(error)) from error
+        except MemoryRelationEvidenceError as error:
+            raise MemoryRelationError(str(error)) from error
         uid = _canonical_uuid(data["uid"], "comparison Memory uid")
         result = cls(
             uid=uid,
@@ -258,27 +258,27 @@ class ComparisonMemory:
             source=source,
         )
         if source is not None and source.evidence_uid != uid:
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Comparison Memory source identity does not match its evidence uid."
             )
         if result.content_digest != hashlib.sha256(
             result.content.encode("utf-8")
         ).hexdigest():
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Comparison Memory content digest does not match."
             )
         return result
 
 
 @dataclass(frozen=True)
-class ComparisonFrame:
+class MemoryRelationFrame:
     uid: str
     context_uid: str
     context_name: str
     context_digest: str
-    side: ComparisonSide
-    memories: tuple[ComparisonMemory, ...]
-    context_evidence: tuple[ComparisonMemory, ...] = ()
+    side: MemoryRelationSide
+    memories: tuple[MemoryRelationMemory, ...]
+    context_evidence: tuple[MemoryRelationMemory, ...] = ()
     selected_memory_uid: str | None = None
 
     @classmethod
@@ -286,21 +286,21 @@ class ComparisonFrame:
         cls,
         context: Context,
         *,
-        side: ComparisonSide,
-    ) -> "ComparisonFrame":
+        side: MemoryRelationSide,
+    ) -> "MemoryRelationFrame":
         if not isinstance(context, Context):
-            raise ComparisonError("Compare source must be a Context.")
+            raise MemoryRelationError("Compare source must be a Context.")
         try:
-            context = project_comparison_context(context)
-        except ComparisonEvidenceError as error:
-            raise ComparisonError(str(error)) from error
+            context = project_memory_relation_context(context)
+        except MemoryRelationEvidenceError as error:
+            raise MemoryRelationError(str(error)) from error
         memories = tuple(
-            ComparisonMemory.create(item, position)
+            MemoryRelationMemory.create(item, position)
             for position, item in enumerate(context.iter_items())
             if isinstance(item, Memory)
         )
         if not memories:
-            raise ComparisonError(
+            raise MemoryRelationError(
                 f"Source Context '{context.name}' has no readable Memory content."
             )
         return cls.from_dict(
@@ -319,9 +319,9 @@ class ComparisonFrame:
         cls,
         context: Context,
         *,
-        side: ComparisonSide,
+        side: MemoryRelationSide,
         memory_selector: str | None,
-    ) -> tuple["ComparisonFrame", tuple[ComparisonMemory, ...]]:
+    ) -> tuple["MemoryRelationFrame", tuple[MemoryRelationMemory, ...]]:
         """Build one actionable frame plus non-actionable Context evidence."""
 
         complete = cls.from_context(context, side=side)
@@ -332,7 +332,7 @@ class ComparisonFrame:
                 label=f"{side} Memory",
             )
         except MemoryScopeError as error:
-            raise ComparisonError(str(error)) from error
+            raise MemoryRelationError(str(error)) from error
         if scope.selected_uid is None:
             return complete, ()
         actionable = scope.actionable
@@ -376,7 +376,7 @@ class ComparisonFrame:
     ) -> tuple[object, ...]:
         """Return the exact source state without the call-local frame UID."""
 
-        def memory_state(memory: ComparisonMemory) -> tuple[object, ...]:
+        def memory_state(memory: MemoryRelationMemory) -> tuple[object, ...]:
             return (
                 memory.uid,
                 memory.content,
@@ -403,12 +403,12 @@ class ComparisonFrame:
         """Check current content plus live provenance against this frozen frame."""
 
         try:
-            current, _evidence = ComparisonFrame.focused_from_context(
+            current, _evidence = MemoryRelationFrame.focused_from_context(
                 context,
                 side=self.side,
                 memory_selector=self.selected_memory_uid,
             )
-        except ComparisonError:
+        except MemoryRelationError:
             return False
         # Older artifacts did not retain provenance. Preserve their direct
         # owned-Memory readability while current-rule artifacts bind every
@@ -424,7 +424,7 @@ class ComparisonFrame:
         )
 
     @classmethod
-    def from_dict(cls, value: object) -> "ComparisonFrame":
+    def from_dict(cls, value: object) -> "MemoryRelationFrame":
         keys = {
             "uid",
             "context_uid",
@@ -443,14 +443,14 @@ class ComparisonFrame:
             "comparison frame",
         )
         memories = tuple(
-            ComparisonMemory.from_dict(item)
+            MemoryRelationMemory.from_dict(item)
             for item in _array(
                 data["memories"],
                 "comparison frame Memories",
             )
         )
         context_evidence = tuple(
-            ComparisonMemory.from_dict(item)
+            MemoryRelationMemory.from_dict(item)
             for item in _array(
                 data.get("context_evidence", []),
                 "comparison Context evidence",
@@ -484,14 +484,14 @@ class ComparisonFrame:
                 != list(range(len(memories)))
             )
         ):
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Invalid comparison frame Memory order."
             )
         if selected_memory_uid is not None and (
             len(memories) != 1
             or memories[0].uid != selected_memory_uid
         ):
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Selected comparison Memory does not match its frame."
             )
         result = cls(
@@ -503,7 +503,7 @@ class ComparisonFrame:
             context_name=_string(
                 data["context_name"],
                 "comparison frame Context name",
-                limit=COMPARISON_NAME_LIMIT,
+                limit=MEMORY_RELATION_NAME_LIMIT,
             ),
             context_digest=_digest(
                 data["context_digest"],
@@ -530,14 +530,14 @@ class ComparisonFrame:
                 )
             )
         if context_record_digest(snapshot) != result.context_digest:
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Comparison frame snapshot does not match its Context digest."
             )
         return result
 
 
 @dataclass(frozen=True)
-class ComparisonMember:
+class MemoryRelationMember:
     frame_uid: str
     memory_uid: str
 
@@ -548,7 +548,7 @@ class ComparisonMember:
         }
 
     @classmethod
-    def from_dict(cls, value: object) -> "ComparisonMember":
+    def from_dict(cls, value: object) -> "MemoryRelationMember":
         data = _exact_dict(
             value,
             {"frame_uid", "memory_uid"},
@@ -567,11 +567,11 @@ class ComparisonMember:
 
 
 @dataclass(frozen=True)
-class ComparisonRelation:
+class MemoryRelation:
     uid: str
-    kind: ComparisonRelationKind
-    status: ComparisonRelationStatus
-    members: tuple[ComparisonMember, ...]
+    kind: MemoryRelationKind
+    status: MemoryRelationStatus
+    members: tuple[MemoryRelationMember, ...]
     summary: str
     reason: str
 
@@ -586,14 +586,14 @@ class ComparisonRelation:
         }
 
     @classmethod
-    def from_dict(cls, value: object) -> "ComparisonRelation":
+    def from_dict(cls, value: object) -> "MemoryRelation":
         data = _exact_dict(
             value,
             {"uid", "kind", "status", "members", "summary", "reason"},
             "comparison relation",
         )
         members = tuple(
-            ComparisonMember.from_dict(item)
+            MemoryRelationMember.from_dict(item)
             for item in _array(
                 data["members"],
                 "comparison relation members",
@@ -602,7 +602,7 @@ class ComparisonRelation:
         if not members or len(
             {(member.frame_uid, member.memory_uid) for member in members}
         ) != len(members):
-            raise ComparisonError("Invalid comparison relation members.")
+            raise MemoryRelationError("Invalid comparison relation members.")
         kind = _literal(  # type: ignore[assignment]
             data["kind"],
             _RELATIONS,
@@ -619,7 +619,7 @@ class ComparisonRelation:
             else "RESOLVED"
         )
         if status != expected_status:
-            raise ComparisonError(
+            raise MemoryRelationError(
                 f"Comparison relation {kind} must be {expected_status}."
             )
         return cls(
@@ -639,7 +639,7 @@ class ComparisonRelation:
 
 
 @dataclass(frozen=True)
-class ComparisonOption:
+class MemoryRelationOption:
     uid: str
     label: str
     text: str
@@ -652,7 +652,7 @@ class ComparisonOption:
         }
 
     @classmethod
-    def from_dict(cls, value: object) -> "ComparisonOption":
+    def from_dict(cls, value: object) -> "MemoryRelationOption":
         data = _exact_dict(
             value,
             {"uid", "label", "text"},
@@ -666,14 +666,14 @@ class ComparisonOption:
 
 
 @dataclass(frozen=True)
-class ComparisonIssue:
+class MemoryRelationIssue:
     uid: str
     relation_uids: tuple[str, ...]
-    priority: ComparisonIssuePriority
+    priority: MemoryRelationIssuePriority
     title: str
     question: str
     why_it_matters: str
-    options: tuple[ComparisonOption, ...]
+    options: tuple[MemoryRelationOption, ...]
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -687,7 +687,7 @@ class ComparisonIssue:
         }
 
     @classmethod
-    def from_dict(cls, value: object) -> "ComparisonIssue":
+    def from_dict(cls, value: object) -> "MemoryRelationIssue":
         data = _exact_dict(
             value,
             {
@@ -702,14 +702,14 @@ class ComparisonIssue:
             "comparison issue",
         )
         options = tuple(
-            ComparisonOption.from_dict(item)
+            MemoryRelationOption.from_dict(item)
             for item in _array(
                 data["options"],
                 "comparison issue options",
             )
         )
         if len({option.uid for option in options}) != len(options):
-            raise ComparisonError("Duplicate comparison issue option.")
+            raise MemoryRelationError("Duplicate comparison issue option.")
         return cls(
             uid=_canonical_uuid(data["uid"], "comparison issue uid"),
             relation_uids=_unique_uuid_tuple(
@@ -735,7 +735,7 @@ class ComparisonIssue:
 
 
 @dataclass(frozen=True)
-class ComparisonReports:
+class MemoryRelationReports:
     """Compact semantic reports backed by the exhaustive relation ledger."""
 
     both: str
@@ -752,7 +752,7 @@ class ComparisonReports:
         }
 
     @classmethod
-    def from_dict(cls, value: object) -> "ComparisonReports":
+    def from_dict(cls, value: object) -> "MemoryRelationReports":
         data = _exact_dict(
             value,
             {
@@ -788,15 +788,15 @@ class ComparisonReports:
 
 
 @dataclass(frozen=True)
-class ComparisonInput:
+class MemoryRelationInput:
     uid: str
     created_at: str
     ruleset_version: str
-    frames: tuple[ComparisonFrame, ComparisonFrame]
+    frames: tuple[MemoryRelationFrame, MemoryRelationFrame]
     include_descendants: tuple[bool, bool] = (False, False)
     context_evidence: tuple[
-        tuple[ComparisonMemory, ...],
-        tuple[ComparisonMemory, ...],
+        tuple[MemoryRelationMemory, ...],
+        tuple[MemoryRelationMemory, ...],
     ] = ((), ())
 
     @classmethod
@@ -809,20 +809,20 @@ class ComparisonInput:
         compared_descendants: bool = False,
         reference_memory_selector: str | None = None,
         compared_memory_selector: str | None = None,
-    ) -> "ComparisonInput":
+    ) -> "MemoryRelationInput":
         if (
             reference.uid == compared.uid
             or reference.name == compared.name
         ):
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Compare requires two distinct Contexts."
             )
-        reference_frame, reference_evidence = ComparisonFrame.focused_from_context(
+        reference_frame, reference_evidence = MemoryRelationFrame.focused_from_context(
             reference,
             side="REFERENCE",
             memory_selector=reference_memory_selector,
         )
-        compared_frame, compared_evidence = ComparisonFrame.focused_from_context(
+        compared_frame, compared_evidence = MemoryRelationFrame.focused_from_context(
             compared,
             side="COMPARED",
             memory_selector=compared_memory_selector,
@@ -830,7 +830,7 @@ class ComparisonInput:
         result = cls(
             uid=str(uuid.uuid4()),
             created_at=datetime.now(timezone.utc).isoformat(),
-            ruleset_version=COMPARISON_RULESET_VERSION,
+            ruleset_version=MEMORY_RELATION_RULESET_VERSION,
             frames=(
                 reference_frame,
                 compared_frame,
@@ -851,12 +851,12 @@ class ComparisonInput:
             len(self.include_descendants) != 2
             or any(type(value) is not bool for value in self.include_descendants)
         ):
-            raise ComparisonError("Invalid comparison descendant scopes.")
+            raise MemoryRelationError("Invalid comparison descendant scopes.")
         if (
             self.ruleset_version
-            not in SUPPORTED_COMPARISON_RULESET_VERSIONS
+            not in SUPPORTED_MEMORY_RELATION_RULESET_VERSIONS
         ):
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Unsupported comparison ruleset version."
             )
         if (
@@ -867,7 +867,7 @@ class ComparisonInput:
             or len({frame.context_uid for frame in self.frames}) != 2
             or len({frame.context_name for frame in self.frames}) != 2
         ):
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Compare requires ordered distinct REFERENCE and COMPARED "
                 "frames."
             )
@@ -887,12 +887,12 @@ class ComparisonInput:
                 )
             )
         ):
-            raise ComparisonError("Invalid comparison Context evidence.")
+            raise MemoryRelationError("Invalid comparison Context evidence.")
 
 
-def comparison_analysis_matches_input(
-    analysis: "ComparisonAnalysis",
-    comparison_input: ComparisonInput,
+def memory_relation_analysis_matches_input(
+    analysis: "MemoryRelationAnalysis",
+    comparison_input: MemoryRelationInput,
 ) -> bool:
     """Return whether a saved result has the exact requested actionable scope."""
 
@@ -908,28 +908,28 @@ def comparison_analysis_matches_input(
         )
     )
 @dataclass(frozen=True)
-class ComparisonAnalysis:
+class MemoryRelationAnalysis:
     uid: str
     created_at: str
     ruleset_version: str
-    frames: tuple[ComparisonFrame, ComparisonFrame]
+    frames: tuple[MemoryRelationFrame, MemoryRelationFrame]
     understanding: UnderstandingSummary
-    reports: ComparisonReports | None
-    relations: tuple[ComparisonRelation, ...]
-    issues: tuple[ComparisonIssue, ...]
+    reports: MemoryRelationReports | None
+    relations: tuple[MemoryRelation, ...]
+    issues: tuple[MemoryRelationIssue, ...]
     include_descendants: tuple[bool, bool] = (False, False)
-    schema_version: int = COMPARISON_SCHEMA_VERSION
+    schema_version: int = MEMORY_RELATION_SCHEMA_VERSION
 
     @classmethod
     def create(
         cls,
-        comparison_input: ComparisonInput,
+        comparison_input: MemoryRelationInput,
         *,
         overview: str,
-        reports: ComparisonReports,
-        relations: Iterable[ComparisonRelation],
-        issues: Iterable[ComparisonIssue],
-    ) -> "ComparisonAnalysis":
+        reports: MemoryRelationReports,
+        relations: Iterable[MemoryRelation],
+        issues: Iterable[MemoryRelationIssue],
+    ) -> "MemoryRelationAnalysis":
         result = cls(
             uid=comparison_input.uid,
             created_at=comparison_input.created_at,
@@ -953,7 +953,7 @@ class ComparisonAnalysis:
             relations=tuple(relations),
             issues=tuple(issues),
             include_descendants=comparison_input.include_descendants,
-            schema_version=COMPARISON_SCHEMA_VERSION,
+            schema_version=MEMORY_RELATION_SCHEMA_VERSION,
         )
         return cls.from_dict(result.to_dict())
 
@@ -963,7 +963,7 @@ class ComparisonAnalysis:
         schema_version = (
             self.schema_version
             if self.reports is not None
-            else COMPARISON_LEGACY_SCHEMA_VERSION
+            else MEMORY_RELATION_LEGACY_SCHEMA_VERSION
         )
         result: dict[str, object] = {
             "schema_version": schema_version,
@@ -979,26 +979,26 @@ class ComparisonAnalysis:
         }
         if self.reports is not None:
             result["reports"] = self.reports.to_dict()
-        if schema_version >= COMPARISON_DESCENDANT_SCHEMA_VERSION:
+        if schema_version >= MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION:
             result["include_descendants"] = list(self.include_descendants)
         return result
 
     @classmethod
-    def from_dict(cls, value: object) -> "ComparisonAnalysis":
+    def from_dict(cls, value: object) -> "MemoryRelationAnalysis":
         if not isinstance(value, dict):
-            raise ComparisonError("Invalid comparison analysis.")
+            raise MemoryRelationError("Invalid comparison analysis.")
         schema_version = value.get("schema_version")
         if (
             isinstance(schema_version, bool)
             or schema_version
             not in {
-                COMPARISON_LEGACY_SCHEMA_VERSION,
-                COMPARISON_REPORTS_SCHEMA_VERSION,
-                COMPARISON_DESCENDANT_SCHEMA_VERSION,
-                COMPARISON_SCHEMA_VERSION,
+                MEMORY_RELATION_LEGACY_SCHEMA_VERSION,
+                MEMORY_RELATION_REPORTS_SCHEMA_VERSION,
+                MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION,
+                MEMORY_RELATION_SCHEMA_VERSION,
             }
         ):
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Unsupported comparison analysis schema version."
             )
         keys = {
@@ -1011,9 +1011,9 @@ class ComparisonAnalysis:
             "relations",
             "issues",
         }
-        if schema_version >= COMPARISON_REPORTS_SCHEMA_VERSION:
+        if schema_version >= MEMORY_RELATION_REPORTS_SCHEMA_VERSION:
             keys.add("reports")
-        if schema_version >= COMPARISON_DESCENDANT_SCHEMA_VERSION:
+        if schema_version >= MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION:
             keys.add("include_descendants")
         data = _exact_dict(
             value,
@@ -1021,27 +1021,27 @@ class ComparisonAnalysis:
             "comparison analysis",
         )
         frames = tuple(
-            ComparisonFrame.from_dict(item)
+            MemoryRelationFrame.from_dict(item)
             for item in _array(data["frames"], "comparison frames")
         )
         if len(frames) != 2:
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Comparison analysis requires exactly two frames."
             )
         relations = tuple(
-            ComparisonRelation.from_dict(item)
+            MemoryRelation.from_dict(item)
             for item in _array(
                 data["relations"],
                 "comparison relations",
             )
         )
         issues = tuple(
-            ComparisonIssue.from_dict(item)
+            MemoryRelationIssue.from_dict(item)
             for item in _array(data["issues"], "comparison issues")
         )
         raw_descendant_scopes = (
             data["include_descendants"]
-            if schema_version >= COMPARISON_DESCENDANT_SCHEMA_VERSION
+            if schema_version >= MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION
             else [False, False]
         )
         if (
@@ -1049,7 +1049,7 @@ class ComparisonAnalysis:
             or len(raw_descendant_scopes) != 2
             or any(type(value) is not bool for value in raw_descendant_scopes)
         ):
-            raise ComparisonError("Invalid comparison descendant scopes.")
+            raise MemoryRelationError("Invalid comparison descendant scopes.")
         result = cls(
             uid=_canonical_uuid(data["uid"], "comparison uid"),
             created_at=_timestamp(
@@ -1072,8 +1072,8 @@ class ComparisonAnalysis:
                 ),
             ),
             reports=(
-                ComparisonReports.from_dict(data["reports"])
-                if schema_version >= COMPARISON_REPORTS_SCHEMA_VERSION
+                MemoryRelationReports.from_dict(data["reports"])
+                if schema_version >= MEMORY_RELATION_REPORTS_SCHEMA_VERSION
                 else None
             ),
             relations=relations,
@@ -1104,7 +1104,7 @@ class ComparisonAnalysis:
         )
 
     def _validate(self) -> None:
-        ComparisonInput(
+        MemoryRelationInput(
             uid=self.uid,
             created_at=self.created_at,
             ruleset_version=self.ruleset_version,
@@ -1112,17 +1112,17 @@ class ComparisonAnalysis:
             include_descendants=self.include_descendants,
         ).validate()
         if self.schema_version not in {
-            COMPARISON_LEGACY_SCHEMA_VERSION,
-            COMPARISON_REPORTS_SCHEMA_VERSION,
-            COMPARISON_DESCENDANT_SCHEMA_VERSION,
-            COMPARISON_SCHEMA_VERSION,
+            MEMORY_RELATION_LEGACY_SCHEMA_VERSION,
+            MEMORY_RELATION_REPORTS_SCHEMA_VERSION,
+            MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION,
+            MEMORY_RELATION_SCHEMA_VERSION,
         }:
-            raise ComparisonError("Unsupported comparison analysis schema version.")
+            raise MemoryRelationError("Unsupported comparison analysis schema version.")
         if (
-            self.schema_version < COMPARISON_DESCENDANT_SCHEMA_VERSION
+            self.schema_version < MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION
             and any(self.include_descendants)
         ):
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Legacy comparison analysis cannot include descendant scopes."
             )
         if (
@@ -1131,7 +1131,7 @@ class ComparisonAnalysis:
             != len(self.relations)
             or len({issue.uid for issue in self.issues}) != len(self.issues)
         ):
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Invalid comparison relation or issue collection."
             )
         expected_source_uids = {
@@ -1142,12 +1142,12 @@ class ComparisonAnalysis:
             or not self.understanding.text.strip()
             or set(self.understanding.source_uids) != expected_source_uids
         ):
-            raise ComparisonError("Invalid comparison understanding summary.")
+            raise MemoryRelationError("Invalid comparison understanding summary.")
         if (
-            self.ruleset_version == COMPARISON_RULESET_VERSION
+            self.ruleset_version == MEMORY_RELATION_RULESET_VERSION
             and self.reports is None
         ):
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "The current comparison ruleset requires semantic reports."
             )
 
@@ -1168,7 +1168,7 @@ class ComparisonAnalysis:
                 if frame is None or member.memory_uid not in {
                     memory.uid for memory in frame.memories
                 }:
-                    raise ComparisonError(
+                    raise MemoryRelationError(
                         "Comparison relation references an unknown source "
                         "Memory."
                     )
@@ -1178,12 +1178,12 @@ class ComparisonAnalysis:
                 relation_sides.add(frame.side)
             if relation.kind == "DISTINCT":
                 if len(relation_sides) != 1:
-                    raise ComparisonError(
+                    raise MemoryRelationError(
                         "DISTINCT comparison relation must contain exactly "
                         "one source side."
                     )
             elif relation_sides != {"REFERENCE", "COMPARED"}:
-                raise ComparisonError(
+                raise MemoryRelationError(
                     "Cross-source comparison relation must contain both "
                     "source sides."
                 )
@@ -1191,7 +1191,7 @@ class ComparisonAnalysis:
             set(observed_members) != expected_members
             or len(observed_members) != len(expected_members)
         ):
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Every source Memory must appear in exactly one primary "
                 "comparison relation."
             )
@@ -1233,7 +1233,7 @@ class ComparisonAnalysis:
                 if (present and not report.strip()) or (
                     not present and report != ""
                 ):
-                    raise ComparisonError(
+                    raise MemoryRelationError(
                         f"Comparison {name.replace('_', '-')} report does "
                         "not match its relation group."
                     )
@@ -1247,30 +1247,43 @@ class ComparisonAnalysis:
         for issue in self.issues:
             unknown = set(issue.relation_uids) - relation_by_uid.keys()
             if unknown:
-                raise ComparisonError(
+                raise MemoryRelationError(
                     "Comparison issue references an unknown relation."
                 )
             if issue.priority == "REQUIRED":
                 required_issue_relations.update(issue.relation_uids)
         if not unresolved_uids <= required_issue_relations:
-            raise ComparisonError(
+            raise MemoryRelationError(
                 "Every unresolved comparison relation must appear in a "
                 "visible REQUIRED issue."
             )
 
 
-# ``Comparison*`` is retained as the serialized compatibility vocabulary.
-# These aliases are the capability-owned names for new consumers such as Meld.
-MemoryRelationError = ComparisonError
-MemoryRelationMemory = ComparisonMemory
-MemoryRelationFrame = ComparisonFrame
-MemoryRelationMember = ComparisonMember
-MemoryRelation = ComparisonRelation
-MemoryRelationOption = ComparisonOption
-MemoryRelationIssue = ComparisonIssue
-MemoryRelationReports = ComparisonReports
-MemoryRelationInput = ComparisonInput
-MemoryRelationAnalysis = ComparisonAnalysis
-MEMORY_RELATION_RULESET_VERSION = COMPARISON_RULESET_VERSION
-memory_relation_canonical_digest = comparison_canonical_digest
-memory_relation_analysis_matches_input = comparison_analysis_matches_input
+# The capability owns the Python model under MemoryRelation names. The old
+# Compare vocabulary remains an identity-preserving compatibility surface for
+# persisted artifacts and external callers; no schema migration is implied.
+ComparisonSide = MemoryRelationSide
+ComparisonRelationKind = MemoryRelationKind
+ComparisonRelationStatus = MemoryRelationStatus
+ComparisonIssuePriority = MemoryRelationIssuePriority
+ComparisonError = MemoryRelationError
+ComparisonMemory = MemoryRelationMemory
+ComparisonFrame = MemoryRelationFrame
+ComparisonMember = MemoryRelationMember
+ComparisonRelation = MemoryRelation
+ComparisonOption = MemoryRelationOption
+ComparisonIssue = MemoryRelationIssue
+ComparisonReports = MemoryRelationReports
+ComparisonInput = MemoryRelationInput
+ComparisonAnalysis = MemoryRelationAnalysis
+COMPARISON_SCHEMA_VERSION = MEMORY_RELATION_SCHEMA_VERSION
+COMPARISON_DESCENDANT_SCHEMA_VERSION = MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION
+COMPARISON_REPORTS_SCHEMA_VERSION = MEMORY_RELATION_REPORTS_SCHEMA_VERSION
+COMPARISON_LEGACY_SCHEMA_VERSION = MEMORY_RELATION_LEGACY_SCHEMA_VERSION
+COMPARISON_RULESET_VERSION = MEMORY_RELATION_RULESET_VERSION
+SUPPORTED_COMPARISON_RULESET_VERSIONS = SUPPORTED_MEMORY_RELATION_RULESET_VERSIONS
+COMPARISON_TEXT_LIMIT = MEMORY_RELATION_TEXT_LIMIT
+COMPARISON_NAME_LIMIT = MEMORY_RELATION_NAME_LIMIT
+COMPARISON_ID_LIMIT = MEMORY_RELATION_ID_LIMIT
+comparison_canonical_digest = memory_relation_canonical_digest
+comparison_analysis_matches_input = memory_relation_analysis_matches_input

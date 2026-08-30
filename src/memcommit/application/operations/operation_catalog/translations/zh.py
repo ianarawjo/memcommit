@@ -79,6 +79,10 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "直接纠正或替换特定现有 Memory 的内容时。",
     ),
     "elaborate": _copy(
+        "在不改动现有 Memory 原文的情况下，在其后追加有依据的说明。",
+        "通过在未改动的原文后继续书写，使一个现有 Memory 更明确时。",
+    ),
+    "makemore": _copy(
         "将抽象 Goal、Rule 或条件展开为多个更具体的候选命题。",
         "从抽象概念或条件生成若干更具体的候选 Rule 或 Case 时。",
     ),

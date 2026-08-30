@@ -14,7 +14,7 @@ from memcommit.adapters.python_api import (
     MeldStorageError,
     MemCommitClient,
 )
-from memcommit.application.operations.meld.sessions import MeldSessionSnapshot
+from memcommit.application.operations.meld.proposal_iteration import MeldSessionSnapshot
 
 
 def _review_session():
@@ -153,14 +153,8 @@ def test_remaining_meld_lifecycle_methods_delegate_to_the_operation_owner(
         client.preserve_meld("result", expected_version="saved-version")
         == "preserve_meld"
     )
-    assert (
-        client.defer_meld("result", expected_version="saved-version")
-        == "defer_meld"
-    )
-    assert (
-        client.apply_meld("result", expected_version="saved-version")
-        == "apply_meld"
-    )
+    assert client.defer_meld("result", expected_version="saved-version") == "defer_meld"
+    assert client.apply_meld("result", expected_version="saved-version") == "apply_meld"
 
     assert calls[0][1][0] is client._runtime
     assert calls[0][1][1:] == ("result", "Keep both.")

@@ -28,7 +28,7 @@ from memcommit.application.operations.dedun.application import (
     dedun_projection_record,
     project_dedun,
 )
-from memcommit.application.operations.dedun.planning import freeze_dedun_plan
+from memcommit.application.operations.dedun.analysis import freeze_dedun_analysis
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     DuplicateFinding,
     DuplicateReport,
@@ -100,7 +100,7 @@ def _dedun_projection(
     memories = tuple(
         item for item in projected.iter_items() if isinstance(item, Memory)
     )
-    plan = freeze_dedun_plan(
+    plan = freeze_dedun_analysis(
         request,
         memories,
         context_uid=projected.uid,

@@ -50,7 +50,7 @@ with multiple roles or independent traversal axes.
 - Existing `-R` remains an alias for recursive `mem list`/`mem ls` behavior
   because it is an established Unix-style spelling.
 - Lowercase `-r` is reserved across the public CLI for the recursive scope
-  preset. Elaborate therefore exposes repeatable rules as `--rule` only; a
+  preset. Makemore therefore exposes repeatable rules as `--rule` only; a
   short alias there would make the same token mean unrelated concepts.
 - Commands whose semantic invariant is intentionally direct-only—Atomize,
   whole-frame Forget, and the semantic quality operations (`dedun`,

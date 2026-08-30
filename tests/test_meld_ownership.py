@@ -20,27 +20,27 @@ MODULE_PAIRS = (
     ),
     (
         "memcommit.meld_application_flow",
-        "memcommit.application.operations.meld.execution",
+        "memcommit.application.operations.meld.application",
     ),
     (
         "memcommit.meld_session_application",
-        "memcommit.application.operations.meld.sessions",
+        "memcommit.application.operations.meld.proposal_iteration",
     ),
     (
         "memcommit.meld_start_application",
-        "memcommit.application.operations.meld.start",
+        "memcommit.application.operations.meld.preparation",
     ),
     (
         "memcommit.meld_restart_application",
-        "memcommit.application.operations.meld.restart",
+        "memcommit.application.operations.meld.preparation",
     ),
     (
         "memcommit.meld_assessment_application",
-        "memcommit.application.operations.meld.assessment",
+        "memcommit.application.operations.meld.planning",
     ),
     (
         "memcommit.meld_resolution_application",
-        "memcommit.application.operations.meld.resolution",
+        "memcommit.application.operations.meld.proposal_iteration",
     ),
 )
 
@@ -52,12 +52,10 @@ import memcommit.application.operations.meld
 
 assert "memcommit.application.operations.meld.apply" not in sys.modules
 assert "memcommit.application.operations.meld.runtime" not in sys.modules
-assert "memcommit.application.operations.meld.execution" not in sys.modules
-assert "memcommit.application.operations.meld.sessions" not in sys.modules
-assert "memcommit.application.operations.meld.start" not in sys.modules
-assert "memcommit.application.operations.meld.restart" not in sys.modules
-assert "memcommit.application.operations.meld.assessment" not in sys.modules
-assert "memcommit.application.operations.meld.resolution" not in sys.modules
+assert "memcommit.application.operations.meld.application" not in sys.modules
+assert "memcommit.application.operations.meld.proposal_iteration" not in sys.modules
+assert "memcommit.application.operations.meld.preparation" not in sys.modules
+assert "memcommit.application.operations.meld.planning" not in sys.modules
 """
 
     subprocess.run(
@@ -68,32 +66,34 @@ assert "memcommit.application.operations.meld.resolution" not in sys.modules
 
 
 def test_production_meld_consumers_use_the_operation_owner() -> None:
-    paths = tuple(
-        REPOSITORY_ROOT / relative_path
-        for relative_path in (
-        "src/memcommit/adapters/python_api/_operations/meld.py",
-        "src/memcommit/application/operations/meld/restart.py",
-        "src/memcommit/application/operations/meld/resolution.py",
+    paths = (
+        tuple(
+            REPOSITORY_ROOT / relative_path
+            for relative_path in (
+                "src/memcommit/adapters/python_api/_operations/meld.py",
+                "src/memcommit/application/operations/meld/preparation.py",
+                "src/memcommit/application/operations/meld/proposal_iteration.py",
+            )
         )
-    ) + tuple(
-        sorted(
-            (
-                REPOSITORY_ROOT
-                / "src/memcommit/adapters/console/commands/meld/command"
-            ).glob("*.py")
+        + tuple(
+            sorted(
+                (
+                    REPOSITORY_ROOT
+                    / "src/memcommit/adapters/console/commands/meld/command"
+                ).glob("*.py")
+            )
         )
-    ) + tuple(
-        sorted(
-            (
-                REPOSITORY_ROOT
-                / "src/memcommit/application/operations/meld/runtime"
-            ).glob("*.py")
+        + tuple(
+            sorted(
+                (
+                    REPOSITORY_ROOT
+                    / "src/memcommit/application/operations/meld/runtime"
+                ).glob("*.py")
+            )
         )
     )
 
-    legacy_modules = tuple(
-        legacy_name for legacy_name, _canonical_name in MODULE_PAIRS
-    )
+    legacy_modules = tuple(legacy_name for legacy_name, _canonical_name in MODULE_PAIRS)
 
     for path in paths:
         source = path.read_text(encoding="utf-8")
@@ -106,12 +106,32 @@ def test_meld_model_facade_preserves_api_with_concept_owned_modules() -> None:
         MeldChangeSet,
         MeldFrame,
         MeldSession,
+        MeldTurn,
     )
 
-    assert MeldFrame.__module__.endswith(".model.source_frames")
-    assert MeldAssessment.__module__.endswith(".model.relation_review")
-    assert MeldChangeSet.__module__.endswith(".model.changes")
-    assert MeldSession.__module__.endswith(".model.session")
+    assert MeldFrame.__module__.endswith(".model.source_snapshot")
+    assert MeldAssessment.__module__.endswith(".model.integration_proposal")
+    assert MeldChangeSet.__module__.endswith(".model.apply_effects")
+    assert MeldSession.__module__.endswith(".model.proposal_session")
+    assert MeldTurn.__module__.endswith(".model.integration_proposal")
+
+
+def test_meld_compare_era_model_names_are_thin_compatibility_aliases() -> None:
+    from memcommit.application.operations.meld.model import (
+        MELD_COMPARISON_SCHEMA_VERSION,
+        MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
+        MELD_DIRECTIONAL_RELATION_SCHEMA_VERSION,
+        MELD_RELATION_ANALYSIS_SCHEMA_VERSION,
+        MeldComparisonSeed,
+        MeldRelationAnalysisSeed,
+    )
+
+    assert MeldComparisonSeed is MeldRelationAnalysisSeed
+    assert MELD_COMPARISON_SCHEMA_VERSION == MELD_RELATION_ANALYSIS_SCHEMA_VERSION
+    assert (
+        MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION
+        == MELD_DIRECTIONAL_RELATION_SCHEMA_VERSION
+    )
 
 
 def test_meld_provider_package_is_lazy_and_has_no_compatibility_facade() -> None:

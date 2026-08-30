@@ -8,7 +8,7 @@ from memcommit.application.operations.meld.model import (
     MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
     MeldAssessment,
     MeldSession,
-    directional_comparison_basis_assessment,
+    directional_relation_basis_assessment,
 )
 from memcommit.application.capabilities.semantic_execution import (
     ExecutionMode,
@@ -22,7 +22,7 @@ from .contract import (
     MeldProviderError,
     meld_output_schema,
 )
-from .decoder import _expand_directional_comparison_response, _parse_assessment
+from .decoder import _expand_directional_relation_basis_response, _parse_assessment
 from .projection import _assessment_provider_payload, _provider_view
 from .request import _meld_turn_request, _prompt
 
@@ -38,8 +38,8 @@ def assess_meld_turn(
         operation="meld_contexts",
         output_schema=request.output_schema,
     )
-    if request.directional_comparison:
-        response = _expand_directional_comparison_response(
+    if request.directional_relation_basis:
+        response = _expand_directional_relation_basis_response(
             response,
             view=request.view,
         )
@@ -48,14 +48,14 @@ def assess_meld_turn(
         session=session,
         view=request.view,
     )
-    if request.directional_comparison:
+    if request.directional_relation_basis:
         # The wire format separates relation members into left/right alias
         # arrays and separates paired/one-sided records. Decoding therefore
         # canonicalizes side grouping and can lose the typed basis's original
         # cross-side member interleaving (as well as relation presentation
-        # order). The reviewed Compare objects remain the authority.
-        basis = directional_comparison_basis_assessment(
-            session.comparison_seed.analysis,
+        # order). The reviewed relation objects remain the authority.
+        basis = directional_relation_basis_assessment(
+            session.relation_analysis_seed.analysis,
             (session.frames[0], session.frames[1]),
         )
         imported_issue_uids = {issue.uid for issue in basis.issues}

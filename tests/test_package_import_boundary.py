@@ -93,13 +93,13 @@ blocked = (
     'memcommit.adapters.python_api._operations.add',
     'memcommit.adapters.python_api._operations.compare',
     'memcommit.adapters.python_api._operations.distill',
-    'memcommit.adapters.python_api._operations.elaborate',
+    'memcommit.adapters.python_api._operations.makemore',
     'memcommit.adapters.python_api._operations.embed',
     'memcommit.adapters.python_api._operations.fit',
     'memcommit.adapters.python_api._operations.help',
     'memcommit.adapters.python_api._operations.forget',
     'memcommit.adapters.python_api._operations.ground_distill',
-    'memcommit.adapters.python_api._operations.ground_elaborate',
+    'memcommit.adapters.python_api._operations.ground_makemore',
     'memcommit.adapters.python_api._operations.meld',
     'memcommit.adapters.python_api._operations.query',
     'memcommit.adapters.python_api._operations.reference',
@@ -126,9 +126,9 @@ blocked = (
     'memcommit.comparison_summary_rules',
     'memcommit.distill_application',
     'memcommit.distill_runtime',
-    'memcommit.elaborate_application',
-    'memcommit.elaborate_runtime',
-    'memcommit.elaborate_add_runtime',
+    'memcommit.makemore_application',
+    'memcommit.makemore_runtime',
+    'memcommit.makemore_add_runtime',
     'memcommit.embed_application',
     'memcommit.fit_application',
     'memcommit.fit_runtime',
@@ -145,7 +145,7 @@ blocked = (
     'memcommit.forget_application',
     'memcommit.forget_runtime',
     'memcommit.ground_distill',
-    'memcommit.ground_elaborate',
+    'memcommit.ground_makemore',
     'memcommit.meld_application',
     'memcommit.meld_runtime',
     'memcommit.meld_application_flow',
@@ -200,9 +200,9 @@ blocked = (
     'memcommit.application.operations.dedup.application',
     'memcommit.application.operations.distill.application',
     'memcommit.application.operations.distill.runtime',
-    'memcommit.application.operations.elaborate.application',
-    'memcommit.application.operations.elaborate.runtime',
-    'memcommit.application.operations.elaborate.add_runtime',
+    'memcommit.application.operations.makemore.application',
+    'memcommit.application.operations.makemore.runtime',
+    'memcommit.application.operations.makemore.add_runtime',
     'memcommit.application.operations.contexts.application',
     'memcommit.application.operations.contexts.runtime',
     'memcommit.application.operations.query.ordinary_application',
@@ -219,12 +219,10 @@ blocked = (
     'memcommit.application.operations.find.runtime',
     'memcommit.application.operations.meld.apply',
     'memcommit.application.operations.meld.runtime',
-    'memcommit.application.operations.meld.execution',
-    'memcommit.application.operations.meld.assessment',
-    'memcommit.application.operations.meld.resolution',
-    'memcommit.application.operations.meld.restart',
-    'memcommit.application.operations.meld.sessions',
-    'memcommit.application.operations.meld.start',
+    'memcommit.application.operations.meld.application',
+    'memcommit.application.operations.meld.planning',
+    'memcommit.application.operations.meld.proposal_iteration',
+    'memcommit.application.operations.meld.preparation',
     'memcommit.application.operations.help.application',
     'memcommit.application.operations.help.lookup_application',
     'memcommit.application.operations.query.granted_application',
@@ -234,7 +232,8 @@ blocked = (
     'memcommit.application.operations.query.reference_runtime',
     'memcommit.application.operations.redo.runtime',
     'memcommit.application.operations.reference.application',
-    'memcommit.application.operations.restoration.runtime',
+    'memcommit.application.operations.revert.application',
+    'memcommit.application.operations.revert.runtime',
     'memcommit.application.operations.reference.runtime',
     'memcommit.application.operations.sever.application',
     'memcommit.application.operations.sever.runtime',
@@ -258,6 +257,15 @@ blocked = (
     'memcommit.application.operations.translate.materialization',
     'memcommit.application.operations.translate.view',
     'memcommit.application.operations.translate.view_store',
+    'memcommit.application.operations.trace.application',
+    'memcommit.application.operations.trace.runtime',
+    'memcommit.application.capabilities.history.query.context_history_slicing',
+    'memcommit.application.operations.trace.granted_view',
+    'memcommit.application.operations.trace.reference_lineage',
+    'memcommit.application.capabilities.history.reconstruction.history_graph_reconstruction',
+    'memcommit.application.capabilities.history.model.topology',
+    'memcommit.application.capabilities.history.reconstruction.memory_effect_derivation',
+    'memcommit.application.capabilities.history.query.memory_history_slicing',
     'memcommit.application.capabilities.reviewing.report',
     'memcommit.reference_application',
     'memcommit.sever_application',
@@ -285,13 +293,13 @@ for name in (
     'memcommit.adapters.python_api._operations.add',
     'memcommit.adapters.python_api._operations.compare',
     'memcommit.adapters.python_api._operations.distill',
-    'memcommit.adapters.python_api._operations.elaborate',
+    'memcommit.adapters.python_api._operations.makemore',
     'memcommit.adapters.python_api._operations.embed',
     'memcommit.adapters.python_api._operations.fit',
     'memcommit.adapters.python_api._operations.help',
     'memcommit.adapters.python_api._operations.forget',
     'memcommit.adapters.python_api._operations.ground_distill',
-    'memcommit.adapters.python_api._operations.ground_elaborate',
+    'memcommit.adapters.python_api._operations.ground_makemore',
     'memcommit.adapters.python_api._operations.meld',
     'memcommit.adapters.python_api._operations.query',
     'memcommit.adapters.python_api._operations.reference',
@@ -401,10 +409,10 @@ for name in (
     'memcommit.application.operations.distill.model',
     'memcommit.application.operations.distill.application',
     'memcommit.application.operations.distill.runtime',
-    'memcommit.application.operations.elaborate.model',
-    'memcommit.application.operations.elaborate.application',
-    'memcommit.application.operations.elaborate.runtime',
-    'memcommit.application.operations.elaborate.add_runtime',
+    'memcommit.application.operations.makemore.model',
+    'memcommit.application.operations.makemore.application',
+    'memcommit.application.operations.makemore.runtime',
+    'memcommit.application.operations.makemore.add_runtime',
 ):
     importlib.import_module(name)
 from memcommit.adapters.python_api import MemCommitClient
@@ -444,7 +452,7 @@ assert 'memcommit.adapters.python_api._operations.meld' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.compare' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.fit' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.distill' not in sys.modules
-assert 'memcommit.adapters.python_api._operations.elaborate' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.makemore' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.meld_runtime' not in sys.modules
 assert 'memcommit.application.operations.meld.apply' not in sys.modules
@@ -489,7 +497,7 @@ assert 'memcommit.adapters.python_api._operations.meld' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.compare' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.fit' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.distill' not in sys.modules
-assert 'memcommit.adapters.python_api._operations.elaborate' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.makemore' not in sys.modules
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.meld_runtime' not in sys.modules
 assert 'memcommit.application.operations.meld.apply' not in sys.modules
@@ -661,11 +669,11 @@ assert 'memcommit.fit_coherence' not in sys.modules
 assert 'memcommit.fit_judgment' not in sys.modules
 assert 'memcommit.fit_store' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.distill' not in sys.modules
-assert 'memcommit.adapters.python_api._operations.elaborate' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.makemore' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.ground_distill' not in sys.modules
-assert 'memcommit.adapters.python_api._operations.ground_elaborate' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.ground_makemore' not in sys.modules
 assert 'memcommit.ground_distill' not in sys.modules
-assert 'memcommit.ground_elaborate' not in sys.modules
+assert 'memcommit.ground_makemore' not in sys.modules
 """,
         environment=environment,
     )
@@ -673,7 +681,7 @@ assert 'memcommit.ground_elaborate' not in sys.modules
     assert completed.returncode == 0, completed.stderr
 
 
-def test_selected_standalone_elaborate_does_not_load_ground(tmp_path):
+def test_selected_standalone_makemore_does_not_load_ground(tmp_path):
     environment = os.environ.copy()
     environment["MEMCOMMIT_IMPORT_TEST_ROOT"] = str(tmp_path / "store")
     completed = _run_fresh(
@@ -686,7 +694,7 @@ from memcommit.adapters.python_api import MemCommitClient
 
 class Provider:
     def complete(self, prompt, *, operation, output_schema=None):
-        assert operation == 'elaborate'
+        assert operation == 'makemore'
         return json.dumps({
             'overview': 'One Rule makes the Goal reviewable.',
             'rules': [{
@@ -700,18 +708,18 @@ client = MemCommitClient(
     create=True,
     semantic_provider_factory=Provider,
 )
-result = client.elaborate(goal='Confirm before acting.', number=1)
+result = client.makemore(goal='Confirm before acting.', number=1)
 assert result.rules[0].content == 'Confirm the option before acting.'
-assert 'memcommit.adapters.python_api._operations.elaborate' in sys.modules
-assert 'memcommit.application.operations.elaborate.application' in sys.modules
-assert 'memcommit.application.operations.elaborate.runtime' in sys.modules
-assert 'memcommit.application.operations.elaborate.add_runtime' not in sys.modules
-assert 'memcommit.elaborate_application' not in sys.modules
-assert 'memcommit.elaborate_runtime' not in sys.modules
-assert 'memcommit.elaborate_add_runtime' not in sys.modules
-assert 'memcommit.adapters.python_api._operations.ground_elaborate' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.makemore' in sys.modules
+assert 'memcommit.application.operations.makemore.application' in sys.modules
+assert 'memcommit.application.operations.makemore.runtime' in sys.modules
+assert 'memcommit.application.operations.makemore.add_runtime' not in sys.modules
+assert 'memcommit.makemore_application' not in sys.modules
+assert 'memcommit.makemore_runtime' not in sys.modules
+assert 'memcommit.makemore_add_runtime' not in sys.modules
+assert 'memcommit.adapters.python_api._operations.ground_makemore' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.ground_distill' not in sys.modules
-assert 'memcommit.ground_elaborate' not in sys.modules
+assert 'memcommit.ground_makemore' not in sys.modules
 assert 'memcommit.ground_distill' not in sys.modules
 assert 'memcommit.distill_application' not in sys.modules
 assert 'memcommit.distill_runtime' not in sys.modules

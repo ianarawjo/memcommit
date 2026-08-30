@@ -4,7 +4,7 @@
 
 Physical creation, loading, typed Memory editing, the unified saved/draft
 session launcher, in-session exact Save Location control, the read-only
-workspace TUI, Ground-local Undo, and the Distill, Elaborate, and Fit semantic
+workspace TUI, Ground-local Undo, and the Distill, Makemore, and Fit semantic
 projections are implemented. The CLI
 retains a transitional legacy-session route only for an already existing
 legacy name; a physical workspace never reads or writes that parallel JSON.
@@ -166,7 +166,7 @@ export, or provider-disclosure permission.
 Semantic adapters consume directly owned ordinary Memories and
 local lexical descendants under `/contexts`. If a consumed lane contains a
 `memory_ref`, embedded Context, query-only route, or granted link, Distill,
-Elaborate, and Fit fail before provider construction. This is intentional:
+Makemore, and Fit fail before provider construction. This is intentional:
 durable membership is already supported, but semantic disclosure requires an
 authority-aware projection that revalidates the referenced source and the
 operation's DERIVE/EXPORT/retention permissions. Silently omitting such an item
@@ -190,10 +190,10 @@ The selected boundaries are:
   changes;
 - one Ground-local command advances the workspace revision and records the
   complete affected Context set; and
-- Fit, Distill, Elaborate, and other semantic operations freeze only the exact
+- Fit, Distill, Makemore, and other semantic operations freeze only the exact
   Memory and reference inputs they actually disclose or consume.
 
-Distill and Elaborate proposals do not mutate the workspace by default. Their
+Distill and Makemore proposals do not mutate the workspace by default. Their
 explicit `--adopt` forms add the complete reviewed proposal to `/rules` or
 `/examples` all-or-none, advance the manifest once, retain the semantic
 analysis digest, and create one Ground-local command unit. Proposal generation
@@ -272,13 +272,13 @@ version-guard options. New Ground code neither scans nor writes
 
 Keeping a dormant reader or same-name collision check was rejected because it
 would preserve two product identities without any data to protect. Fit,
-Distill, Elaborate, and Conformance now consume only the physical workspace;
+Distill, Makemore, and Conformance now consume only the physical workspace;
 the `GroundSession` model, persistence owner, locking path, and Store-wide
 rename/write-protection hooks have been deleted.
 
 This slice does not make a Ground-owned branch, Embed, Reference, Grant, Import,
 or Delete operation. It does not make lexical descendants equivalent to
 embedded traversal. It does not make all workspace Contexts provider-readable
-or mutable merely because they appear in one navigator. Distill and Elaborate
+or mutable merely because they appear in one navigator. Distill and Makemore
 still have no durable hidden receipt/cache; their existing prepared-lookup
 ports are not a claim that the Ground adapters persist or reuse one.

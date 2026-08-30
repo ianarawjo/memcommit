@@ -7,11 +7,11 @@ import json
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.retained_history.checkpoint_migration import (
+from memcommit.application.operations.rename.history_repair import (
     apply_rename_history_repair,
     plan_rename_history_repair,
 )
-from memcommit.application.capabilities.retained_history.command_history import CommandHistoryError, build_command_stacks
+from memcommit.application.capabilities.command_recovery import CommandHistoryError, build_command_stacks
 from memcommit.core.context import AutoCheckpoint
 from memcommit.persistence.store import MemoryStore
 

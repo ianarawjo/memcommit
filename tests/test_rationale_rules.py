@@ -11,15 +11,15 @@ from typer.testing import CliRunner
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory
 from memcommit.application.capabilities import ops
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.history.verification import (
     MemoryHistoryCommandContext,
     MemoryHistoryContextTransition,
     MemoryState,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_event_derivation import (
+from memcommit.application.capabilities.history.reconstruction.memory_effect_derivation import (
     MemoryHistoryEvent,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistory,
 )
 from memcommit.application.operations.rationale.rules import (

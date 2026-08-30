@@ -18,8 +18,9 @@ def test_operation_adapters_preserve_distinct_directions(monkeypatch) -> None:
     calls: list[tuple[object, str]] = []
     token = object()
 
-    def restore(store, direction):
+    def restore(store, direction, *, restore_granted):
         calls.append((store, direction))
+        assert callable(restore_granted)
         return token
 
     undo_store = object()
@@ -47,7 +48,10 @@ def test_commands_do_not_own_restoration_route_selection() -> None:
 
 def test_restoration_modules_have_no_terminal_dependency() -> None:
     for relative_path in (
-        "src/memcommit/application/operations/restoration/runtime.py",
+        "src/memcommit/application/capabilities/command_recovery/execution.py",
+        "src/memcommit/application/operations/revert/application.py",
+        "src/memcommit/application/operations/revert/restoration.py",
+        "src/memcommit/application/operations/revert/runtime.py",
         "src/memcommit/application/operations/undo/runtime.py",
         "src/memcommit/application/operations/redo/runtime.py",
     ):
@@ -57,7 +61,7 @@ def test_restoration_modules_have_no_terminal_dependency() -> None:
 
 
 def test_operation_packages_import_lazily() -> None:
-    for package in ("restoration", "undo", "redo"):
+    for package in ("revert", "undo", "redo"):
         program = f"""
 import sys
 import memcommit.application.operations.{package}

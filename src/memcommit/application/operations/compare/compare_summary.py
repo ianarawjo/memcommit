@@ -1,9 +1,9 @@
 """Lightweight read-only synthesis for two peer Context frames.
 
 This model intentionally has no exhaustive relation ledger, grounding issues,
-Meld readiness, or persistence contract.  Those belong to the deep
-``ComparisonAnalysis`` used when a person explicitly requests a ledger or
-starts Meld.
+Meld readiness, or persistence contract. Those belong to the shared
+``MemoryRelationAnalysis`` capability used when a caller explicitly requests
+the exhaustive ledger.
 """
 
 from __future__ import annotations

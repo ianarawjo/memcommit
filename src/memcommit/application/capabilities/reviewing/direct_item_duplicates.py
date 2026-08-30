@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 
 
 ExactDuplicateKind = Literal[

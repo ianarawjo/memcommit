@@ -25,8 +25,8 @@ from memcommit.application.operations.search.application import (
     SearchResponse,
 )
 from memcommit.application.operations.search.runtime import execute_search
-from memcommit.application.capabilities.retained_history.reconstruction import HistoryError
-from memcommit.application.operations.log.search import HistorySearchError
+from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import HistoryError
+from memcommit.application.capabilities.history.query.semantic_history_query import HistorySearchError
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.operations.search.model import SearchError

@@ -67,7 +67,7 @@ values rather than interpreting the operation again.
 
 ## Verification and next boundary
 
-Focused tests prove exact Query/Add/Meld/Atomize Grounding/Distill/Elaborate/Fit
+Focused tests prove exact Query/Add/Meld/Atomize Grounding/Distill/Makemore/Fit
 schema translation, use-when and typed-detail description/metadata preservation
 through both the SDK-independent projection and an official-v2 in-memory
 client, selective Add/Query summary exposure, discovery isolation, successful

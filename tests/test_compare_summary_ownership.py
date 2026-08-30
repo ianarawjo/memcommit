@@ -95,6 +95,32 @@ def test_deep_relation_judgment_is_not_owned_by_compare_operation() -> None:
     }
 
 
+def test_compare_vocabulary_is_an_identity_preserving_capability_alias() -> None:
+    from memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution import (
+        ComparisonExecutionResult,
+        MemoryRelationExecutionResult,
+        ensure_comparison_analysis,
+        ensure_memory_relation_analysis,
+    )
+    from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
+        ComparisonAnalysis,
+        ComparisonInput,
+        MemoryRelationAnalysis,
+        MemoryRelationInput,
+    )
+    from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
+        analyze_comparison,
+        analyze_memory_relations,
+    )
+
+    assert ComparisonAnalysis is MemoryRelationAnalysis
+    assert ComparisonInput is MemoryRelationInput
+    assert ComparisonExecutionResult is MemoryRelationExecutionResult
+    assert ensure_comparison_analysis is ensure_memory_relation_analysis
+    assert analyze_comparison is analyze_memory_relations
+    assert MemoryRelationAnalysis.__name__ == "MemoryRelationAnalysis"
+
+
 def test_meld_and_update_do_not_depend_on_compare_operation() -> None:
     operations_root = REPOSITORY_ROOT / "src/memcommit/application/operations"
     source_by_operation = {
@@ -113,3 +139,20 @@ def test_meld_and_update_do_not_depend_on_compare_operation() -> None:
         "memcommit.application.capabilities.memory_issue_analysis.peer_relations"
         in source_by_operation["meld"]
     )
+
+
+def test_meld_has_no_compare_operation_presentation_or_prewarm_dependency() -> None:
+    meld_roots = (
+        REPOSITORY_ROOT / "src/memcommit/application/operations/meld",
+        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/meld",
+    )
+    source = "\n".join(
+        path.read_text(encoding="utf-8")
+        for root in meld_roots
+        for path in sorted(root.rglob("*.py"))
+    )
+
+    assert "memcommit.application.operations.compare" not in source
+    assert "memcommit.adapters.console.commands.compare" not in source
+    assert "study_scenarios.legacy.prewarm.compare" not in source
+    assert "study_scenarios.legacy.prewarm.peer_relations" in source

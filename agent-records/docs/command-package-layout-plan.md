@@ -8,9 +8,9 @@ This is the exact path-only classification of the formerly flat
 route closure remains solely in the operation evidence ledger.
 
 - Baseline modules: 153
-- Active canonical mappings: 144
-- Retired baseline modules: 9
-- Command entry packages: 63
+- Active canonical mappings: 140
+- Retired baseline modules: 13
+- Command entry packages: 61
 - Shared command mechanisms: 40
 
 | Legacy module | Canonical module | Role | Owner |
@@ -39,7 +39,6 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.comparison_execution` | `memcommit.adapters.console.commands.compare.execution` | command-owned-support | `compare` |
 | `memcommit.commands.config` | `memcommit.adapters.console.commands.config.command` | command-entry | `config` |
 | `memcommit.commands.conflict_resolve_handoff` | `memcommit.adapters.console.commands.resolve.finding_handoff` | command-owned-support | `resolve` |
-| `memcommit.commands.consolidate` | `memcommit.adapters.console.commands.consolidate.command` | command-entry | `consolidate` |
 | `memcommit.commands.context_operand` | `memcommit.adapters.console.coordination.context_operand` | shared-command-mechanism | `coordination` |
 | `memcommit.commands.context_picker` | `memcommit.adapters.console.terminal.components.context_picker` | shared-terminal-component | `terminal` |
 | `memcommit.commands.context_reach_dialog` | `memcommit.adapters.console.terminal.components.context_reach_dialog` | shared-terminal-component | `terminal` |
@@ -53,15 +52,13 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.diff_browser` | `memcommit.adapters.console.terminal.components.history.browser` | shared-terminal-component | `terminal` |
 | `memcommit.commands.direct_item_placement` | `memcommit.adapters.console.terminal.components.direct_item_placement` | shared-terminal-component | `terminal` |
 | `memcommit.commands.distill` | `memcommit.adapters.console.commands.distill.command` | command-entry | `distill` |
-| `memcommit.commands.duplicate_dedup_handoff` | `memcommit.adapters.console.commands.find_redundancies.dedup_handoff` | command-owned-support | `find_redundancies` |
 | `memcommit.commands.edit` | `memcommit.adapters.console.commands.edit.command` | command-entry | `edit` |
-| `memcommit.commands.elaborate` | `memcommit.adapters.console.commands.elaborate.command` | command-entry | `elaborate` |
+| `memcommit.commands.elaborate` | `memcommit.adapters.console.commands.makemore.command` | command-entry | `makemore` |
 | `memcommit.commands.exact_command_review` | `memcommit.adapters.console.terminal.components.command_editor` | shared-terminal-component | `terminal` |
 | `memcommit.commands.exact_command_review_shell` | `memcommit.adapters.console.terminal.components.command_editor.approval` | shared-terminal-component | `terminal` |
 | `memcommit.commands.exact_name_dialog` | `memcommit.adapters.console.terminal.components.exact_name_dialog` | shared-terminal-component | `terminal` |
 | `memcommit.commands.find` | `memcommit.adapters.console.commands.search.command` | command-entry | `search` |
 | `memcommit.commands.find_ambiguities` | `memcommit.adapters.console.commands.find_ambiguities.command` | command-entry | `find_ambiguities` |
-| `memcommit.commands.find_chat_shell` | `memcommit.adapters.console.commands.search.chat_shell` | command-owned-support | `search` |
 | `memcommit.commands.find_conflicts` | `memcommit.adapters.console.commands.find_conflicts.command` | command-entry | `find_conflicts` |
 | `memcommit.commands.find_duplicates` | `memcommit.adapters.console.commands.find_redundancies.command` | command-entry | `find_redundancies` |
 | `memcommit.commands.find_exact_duplicates` | `memcommit.adapters.console.commands.find_duplicates.command` | command-entry | `find_duplicates` |
@@ -91,7 +88,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.import_workbench` | `memcommit.adapters.console.commands.import_profile.workbench` | command-owned-support | `import_profile` |
 | `memcommit.commands.init` | `memcommit.adapters.console.commands.init.command` | command-entry | `init` |
 | `memcommit.commands.init_study` | `memcommit.adapters.console.commands.init_study.command` | command-entry | `init_study` |
-| `memcommit.commands.list_memories` | `memcommit.adapters.console.commands.list_memories.command` | command-entry | `list_memories` |
+| `memcommit.commands.list_memories` | `memcommit.adapters.console.commands.list.command` | command-entry | `list` |
 | `memcommit.commands.literal_find` | `memcommit.adapters.console.commands.find.command` | command-entry | `find` |
 | `memcommit.commands.log` | `memcommit.adapters.console.commands.log.command` | command-entry | `log` |
 | `memcommit.commands.meld` | `memcommit.adapters.console.commands.meld.command` | command-entry | `meld` |
@@ -158,4 +155,3 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.update_checkpoint_history` | `memcommit.adapters.console.terminal.components.history.update_checkpoint` | shared-terminal-component | `terminal` |
 | `memcommit.commands.update_render` | `memcommit.adapters.console.commands.update.render` | command-owned-support | `update` |
 | `memcommit.commands.update_setup` | `memcommit.adapters.console.commands.update.endpoint_setup` | command-owned-support | `update` |
-| `memcommit.commands.write_protection` | `memcommit.adapters.console.commands.write_protection.command` | command-entry | `write_protection` |

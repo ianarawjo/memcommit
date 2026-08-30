@@ -28,15 +28,24 @@ from memcommit.adapters.console.terminal.components.restoration_receipt import (
     render_checkpoint_unit_revert_receipt,
     render_revert_receipt,
 )
-from memcommit.application.capabilities.retained_history.checkpoint_catalog import (
+from memcommit.application.capabilities.checkpoint_catalog import (
     CheckpointCatalogError,
     CheckpointNotFoundError,
     ResolvedCheckpointUnit,
     freeze_checkpoint_catalog,
 )
+from memcommit.application.operations.revert.restoration import (
+    RecursiveCheckpointRestoration,
+    SingleCheckpointRestoration,
+)
+from memcommit.application.operations.revert.application import RevertRequest
+from memcommit.application.operations.revert.runtime import (
+    execute_revert,
+    resolve_revert_unit,
+)
 from memcommit.core.context import Memory
-from memcommit.application.capabilities.retained_history.reconstruction import HistoryError, build_history
-from memcommit.application.operations.log.search import HistorySearchError, search_history
+from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import HistoryError, build_history
+from memcommit.application.capabilities.history.query.semantic_history_query import HistorySearchError, search_history
 from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -250,42 +259,6 @@ def _resolved_memory_ref_contents(
     return result
 
 
-def _apply_revert(
-    store: MemoryStore,
-    name: str,
-    uid: str,
-    *,
-    keep: bool,
-    expected_context_uid: str | None = None,
-    expected_context_digest: str | None = None,
-    expected_history_digest: str | None = None,
-) -> None:
-    try:
-        pre_checkpoint, target = store.revert(
-            name,
-            uid,
-            keep_history=keep,
-            expected_context_uid=expected_context_uid,
-            expected_context_digest=expected_context_digest,
-            expected_history_digest=expected_history_digest,
-        )
-    except (KeyError, OSError, RuntimeError, ValueError) as error:
-        typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
-        raise typer.Exit(1)
-
-    render_revert_receipt(
-        context_name=name,
-        before_snapshot=pre_checkpoint.snapshot,
-        target=target,
-        recovery=pre_checkpoint,
-        resolved_memory_ref_contents=_resolved_memory_ref_contents(
-            store,
-            pre_checkpoint.snapshot,
-            target.snapshot,
-        ),
-    )
-
-
 def _apply_resolved_checkpoint_unit(
     store: MemoryStore,
     unit: ResolvedCheckpointUnit,
@@ -294,23 +267,30 @@ def _apply_resolved_checkpoint_unit(
 ) -> None:
     """Apply one globally resolved direct or recursive recovery unit."""
 
-    if not unit.is_recursive_set:
-        member = unit.members[0]
-        _apply_revert(
-            store,
-            member.context_name,
-            member.checkpoint_uid,
-            keep=keep,
-            expected_context_uid=member.context_uid,
-            expected_context_digest=member.expected_context_digest,
-            expected_history_digest=member.expected_history_digest,
-        )
-        return
     try:
-        result = store.revert_checkpoint_unit(unit, keep_history=keep)
+        restoration = execute_revert(
+            store,
+            RevertRequest(unit=unit, keep_history=keep),
+        )
     except (KeyError, OSError, RuntimeError, TypeError, ValueError) as error:
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
+    if isinstance(restoration, SingleCheckpointRestoration):
+        render_revert_receipt(
+            context_name=restoration.context_name,
+            before_snapshot=restoration.recovery.snapshot,
+            target=restoration.target,
+            recovery=restoration.recovery,
+            resolved_memory_ref_contents=_resolved_memory_ref_contents(
+                store,
+                restoration.recovery.snapshot,
+                restoration.target.snapshot,
+            ),
+        )
+        return
+    if not isinstance(restoration, RecursiveCheckpointRestoration):
+        raise AssertionError("Revert returned an unsupported restoration result.")
+    result = restoration.result
     resolved_by_context = {
         member.context_name: _resolved_memory_ref_contents(
             store,
@@ -461,15 +441,20 @@ def cmd(
             typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)
         if exact is not None:
-            _apply_revert(
-                store,
-                name,
-                exact["uid"],
-                keep=keep,
-                expected_context_uid=expected_context_uid,
-                expected_context_digest=expected_context_digest,
-                expected_history_digest=expected_history_digest,
-            )
+            try:
+                unit = resolve_revert_unit(
+                    store,
+                    exact["uid"],
+                    context_name=name,
+                    expected_context_uid=expected_context_uid,
+                    expected_context_digest=expected_context_digest,
+                    expected_history_digest=expected_history_digest,
+                    expected_checkpoint=exact,
+                )
+            except (CheckpointCatalogError, RuntimeError, ValueError) as error:
+                typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+                raise typer.Exit(1)
+            _apply_resolved_checkpoint_unit(store, unit, keep=keep)
             return
         if _looks_like_missing_uid(selector):
             typer.secho(
@@ -516,8 +501,15 @@ def cmd(
         raise typer.Exit(1)
 
     try:
-        unit = freeze_checkpoint_catalog(store).resolve(uid, context_name=name)
-    except CheckpointCatalogError as error:
+        unit = resolve_revert_unit(
+            store,
+            uid,
+            context_name=name,
+            expected_context_uid=expected_context_uid,
+            expected_context_digest=expected_context_digest,
+            expected_history_digest=expected_history_digest,
+        )
+    except (CheckpointCatalogError, RuntimeError, ValueError) as error:
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
     _apply_resolved_checkpoint_unit(

@@ -13,7 +13,7 @@ from memcommit.adapters.console.terminal.components.memory_report_picker import 
     MemoryReportTargetSelection,
 )
 from memcommit.core.context import Memory, MemoryRef, QueryContextRef
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.history.query.memory_history_slicing import (
     collect_memory_history_candidates,
 )
 from memcommit.persistence.store import MemoryStore

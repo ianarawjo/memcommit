@@ -1,32 +1,27 @@
-"""Physical ownership contracts for retained-record verification."""
+"""Physical ownership contracts for canonical History verification."""
 
 from pathlib import Path
 
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction import (
-    retained_record_verification as verification,
-)
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification.frame import (
+import memcommit.application.capabilities.history.verification as verification
+from memcommit.application.capabilities.history.verification.frame import (
     _Frame,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification.model import (
+from memcommit.application.capabilities.history.verification.model import (
     MemoryState,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification.validators.branch import (
+from memcommit.application.capabilities.history.verification.validators.branch import (
     _recorded_branch_transition,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification.validators.meld import (
+from memcommit.application.capabilities.history.verification.validators.meld import (
     _meld_change_evidence,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification.validators.merge import (
+from memcommit.application.capabilities.history.verification.validators.merge import (
     _recorded_merge_transition,
 )
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-VERIFICATION_ROOT = REPOSITORY_ROOT / (
-    "src/memcommit/application/capabilities/retained_history/"
-    "memory_history_reconstruction/retained_record_verification"
-)
+VERIFICATION_ROOT = REPOSITORY_ROOT / "src/memcommit/application/capabilities/history/verification"
 
 
 def test_retained_record_verification_has_focused_physical_owners() -> None:
@@ -51,7 +46,7 @@ def test_retained_record_verification_has_focused_physical_owners() -> None:
     } == expected
 
 
-def test_retained_record_verification_facade_preserves_existing_imports() -> None:
+def test_history_verification_facade_preserves_narrow_owner_identity() -> None:
     assert verification.MemoryState is MemoryState
     assert verification._Frame is _Frame
     assert verification._recorded_branch_transition is _recorded_branch_transition

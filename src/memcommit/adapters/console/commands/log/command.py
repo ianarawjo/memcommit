@@ -5,12 +5,15 @@ from typing import Annotated, Any, Optional
 import typer
 
 from memcommit.persistence.command_ledger.attempts import (
-    CommandAttempt,
-    CommandAttemptError,
-    CommandAttemptLedger,
     current_command_attempt_uid,
     annotate_memory_report_attempt,
 )
+from memcommit.application.operations.log.application import (
+    LogEntry,
+    LogError,
+    LogRequest,
+)
+from memcommit.application.operations.log.runtime import execute_log
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
@@ -35,17 +38,17 @@ from memcommit.adapters.console.terminal.core.theme import (
     semantic_action_role,
     semantic_color_rgb,
 )
-from memcommit.application.capabilities.retained_history.display import (
+from memcommit.adapters.console.terminal.components.history.display import (
     HistoryDisplayRow,
     HistoryRowSegment,
     history_display_row_segments,
     project_history_display_rows,
 )
-from memcommit.application.capabilities.retained_history.reconstruction import (
+from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import (
     HistoryError,
     build_history,
 )
-from memcommit.application.operations.log.search import (
+from memcommit.application.capabilities.history.query.semantic_history_query import (
     HistorySearchError,
     HistorySearchResult,
     search_history,
@@ -54,7 +57,7 @@ from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.history.verification import (
     MemoryHistoryReconstructionError,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
@@ -172,7 +175,7 @@ def _render_history_results(
         )
 
 
-def _render_operation_attempts(attempts: Sequence[CommandAttempt]) -> None:
+def _render_operation_attempts(attempts: Sequence[LogEntry]) -> None:
     typer.secho("Operation attempts · recent first", bold=True)
     if not attempts:
         typer.echo("  (no earlier command attempts)")
@@ -430,20 +433,21 @@ def cmd(
             raise typer.Exit(1)
         store = MemoryStore(create=False)
         try:
-            current_uid = current_command_attempt_uid()
-            attempts = tuple(
-                attempt
-                for attempt in CommandAttemptLedger(store.store_dir).list()
-                if attempt.uid != current_uid
-            )[:limit]
-        except CommandAttemptError as error:
+            result = execute_log(
+                store,
+                LogRequest(
+                    limit=limit,
+                    exclude_attempt_uid=current_command_attempt_uid(),
+                ),
+            )
+        except LogError as error:
             typer.secho(
                 f"Operation log error: {display_escape_text(str(error))}",
                 fg=typer.colors.RED,
                 err=True,
             )
             raise typer.Exit(1)
-        _render_operation_attempts(attempts)
+        _render_operation_attempts(result.entries)
         return
 
     store = MemoryStore()

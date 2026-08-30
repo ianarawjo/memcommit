@@ -1,36 +1,69 @@
-# Evaluation application ownership
+# Eval operation and authored fixture ownership
 
 ## Decision
 
-The evaluation package is owned by `memcommit.application.capabilities.evaluation`. The
-relocation preserves its existing modules, fixtures, command behavior, study
-prewarm integration, and evaluation result contracts without attempting to
-redesign the package internally.
+Executable campaign behavior belongs to the displayed Eval operation under
+`memcommit.application.operations.eval`. `semantic_campaign.py` owns replayable
+ambiguity and duplicate campaigns, `operation_gate_campaign.py` owns the
+operation-gate campaign, and the older developer-only Forget/Integrate runner
+and deterministic scoring code live beside those engines.
 
-## Motivation
+The package `memcommit.application.capabilities.evaluation` now owns only the
+authored JSON resources and the narrow `fixture_path`/`fixture_resource`
+accessors. It is not a second executable Eval implementation. This split makes
+`mem help` navigation direct without pretending that all JSON files are used
+only by Eval.
 
-The former top-level `memcommit.eval` package combined executable evaluation
-campaigns, scoring, study bundle preparation, prewarm tooling, and packaged
-fixtures. Although those responsibilities may later deserve smaller owners,
-they all coordinate application use cases rather than define a peer
-architectural layer beside `application`, `adapters`, or persistence.
+## Why the fixtures do not all belong to Eval
 
-Moving the package as one unit establishes that coarse ownership before making
-finer judgments about individual study tools. This keeps the current
-reorganization mechanical and makes a later split reviewable independently.
+The directory contains three materially different resource roles:
 
-## Compatibility boundary
+- Eval-only campaign corpora: `operation_gates*.json` and their locks,
+  `ambiguity_holdout.json` and its lock, plus the ambiguity/duplicates
+  calibration corpus when replayed by `mem eval run`.
+- Production prompt/rule resources: `atomize.json`, `duplicates.json`,
+  `ambiguity.json`, `conflict.json`, `comparison_summary.json`,
+  `rationale.json`, `resolve.json`, and `distill_makemore.json`.
+- Research or contract-only resources currently read only by tests:
+  `distill_goal_holdout.json`, `distill_makemore_holdout.json`, and
+  `update.json`. The old developer Eval runner additionally reads
+  `forget.json` and `integrate.json`.
 
-There is no `memcommit.eval` compatibility facade. Internal callers, tests,
-packaged-resource lookups, and maintained study scripts use the canonical
-`memcommit.application.capabilities.evaluation` path directly. Published command behavior
-and fixture contents are unchanged; the Python import path is intentionally
-not retained as a second source of ownership.
+Production prompt consumers use these resources at request construction, not
+after a command merely for scoring. Atomize validates its authored profile and
+adds Atomize plus ambiguity/conflict calibration cases. Find Duplicates,
+Ambiguities, and Conflicts add their corresponding cases. Compare, Rationale,
+and Resolve add normative rules and optionally authored cases. Distill and
+Makemore render the reviewed bidirectional example families into their provider
+instructions. The shared semantic prompt policy omits authored examples in
+Study turns while retaining the normative rules where applicable.
 
-## Deferred work
+Because those files influence real provider input, moving the whole fixture
+directory into `operations.eval` would make production operations depend on a
+peer operation. The resource-only capability is the temporary honest owner.
+A future split may give each operation its own rules and cases, with only true
+cross-operation corpora remaining shared, but that requires coordinated
+packaging and prompt-version migration rather than a directory rename.
 
-This change does not decide whether individual `study_*` modules should remain
-in the distributable application package or move to repository-only research
-tooling. It also does not separate fixtures by operation. Those decisions need
-their own dependency review because runtime rules and study prewarm preparation
-currently consume some of these resources and types.
+## Boundaries
+
+The Eval console imports campaign engines only from
+`memcommit.application.operations.eval`; the hidden legacy developer command
+imports its runner there as well. Production operations import only the
+resource accessor, never an Eval campaign engine. Engine defaults resolve
+packaged fixture paths through that accessor, while callers may still pass an
+explicit fixture path for a campaign run.
+
+There is no compatibility facade for the former
+`memcommit.application.capabilities.evaluation.semantic_campaign`,
+`operation_gate_campaign`, `runner`, or `scoring` paths. Retaining them would
+leave two apparent owners. Fixture bytes and package-data location are
+unchanged, so retained fixture digests and calibration locks stay valid.
+
+## Limitations
+
+The name `capabilities.evaluation` remains broader than its new resource-only
+role. Renaming or splitting that package is deferred until every production
+fixture receives an operation-specific ownership decision. The legacy
+Forget/Integrate runner is kept operational but is not evidence that those
+fixtures define the current Forget or Meld/Integrate application contracts.

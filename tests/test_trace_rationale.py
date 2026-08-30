@@ -17,7 +17,7 @@ from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityFinding,
     AmbiguityReport,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.history.query.memory_history_slicing import (
     reconstruct_memory_history,
 )
 from memcommit.application.operations.rationale.model import build_rationale

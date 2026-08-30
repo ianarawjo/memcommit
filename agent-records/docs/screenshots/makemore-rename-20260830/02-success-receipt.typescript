@@ -1,0 +1,13 @@
+PTY · 180 columns × 52 rows
+$ mem makemore --goal Make careful changes and leave a clear trace. --number 2
+MEM MAKEMORE · 1/1 · GENERATING REVIEW PROPOSALS . · 0sMEM MAKEMORE · 1/1 · GENERATING REVIEW PROPOSALS .. · 0sMEM MAKEMORE · 1/1 · GENERATING REVIEW PROPOSALS … · 0s MEM MAKEMORE · 1/1 · GENERATING REVIEW PROPOSALS . · 1sMEM MAKEMORE · 1/1 · PROPOSAL READY . · 1s                                                       [32m[1mMAKEMORE APPLIED · capture/makemore-target[0m
+MODE · GOAL_TO_RULES · VERIFICATION · UNVERIFIED · QUALITY · BEST_EFFORT
+SOURCE · INLINE · TARGET · capture/makemore-target
+EFFECTS · ADD 2 MEMORIES
+
+[38;2;202;211;245m  [memory eabaa625] Confirm the exact target before making a change.[0m
+[38;2;202;211;245m  [memory 02a2cd67] Record what changed after the action completes.[0m
+
+REVIEW · mem review makemore --receipt 8cecd43b-d17c-4702-b9da-5a5c8f8af0fb
+UNDO · mem undo
+CAPTURE GATE · PRESS R FOR READ-ONLY REVIEW

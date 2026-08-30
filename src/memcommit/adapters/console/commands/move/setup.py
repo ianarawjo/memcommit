@@ -5,31 +5,29 @@ from __future__ import annotations
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.coordination.memory_transfer.model import (
-    MemoryTransferTuiSetup,
+from memcommit.adapters.console.coordination.copy_and_move.model import (
+    CopyAndMoveTuiSetup,
 )
-from memcommit.adapters.console.terminal.components.memory_transfer import (
-    run_memory_transfer_workbench,
+from memcommit.adapters.console.terminal.components.copy_and_move import (
+    run_copy_and_move_workbench,
 )
-from memcommit.application.operations.memory_transfer.application import (
+from memcommit.application.operations.copy_and_move.application import (
     FrozenMoveMemoriesPlan,
-    prepare_move,
 )
-from memcommit.application.operations.memory_transfer.runtime import (
-    MemoryStoreMemoryTransferPort,
-)
+from memcommit.application.operations.move.application import prepare_move
+from memcommit.application.operations.move.runtime import MemoryStoreMovePort
 from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
 
 
 def build_move_tui_setup(
-    port: MemoryStoreMemoryTransferPort,
-) -> MemoryTransferTuiSetup:
+    port: MemoryStoreMovePort,
+) -> CopyAndMoveTuiSetup:
     """Freeze Move's ordinary-local Source and Target catalogs."""
 
     local_names = port.local_context_names
     if not local_names:
-        raise ValueError("Interactive Memory transfer requires a local Context.")
-    return MemoryTransferTuiSetup(
+        raise ValueError("Interactive Copy/Move requires a local Context.")
+    return CopyAndMoveTuiSetup(
         source_names=local_names,
         local_source_names=local_names,
         into_names=local_names,
@@ -42,7 +40,7 @@ def build_move_tui_setup(
 
 
 def choose_move_setup(
-    port: MemoryStoreMemoryTransferPort,
+    port: MemoryStoreMovePort,
     *,
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -51,7 +49,7 @@ def choose_move_setup(
     """Review and freeze Move without letting the workbench publish it."""
 
     setup = build_move_tui_setup(port)
-    result = run_memory_transfer_workbench(
+    result = run_copy_and_move_workbench(
         setup,
         kind="MOVE",
         inspect_source_context=port.inspect_local_context,

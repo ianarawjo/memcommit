@@ -5,9 +5,12 @@ from typing import Annotated
 
 import typer
 
-from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+from memcommit.application.operations.rename.application import RenameRequest
+from memcommit.application.operations.rename.runtime import (
+    execute_rename,
+    prepare_rename,
+)
+from memcommit.persistence.store import MemoryStore
 
 
 def cmd(
@@ -47,16 +50,14 @@ def cmd(
     # reinterpret it if global current state changes while approval is open.
     current = store.current_context_name()
     try:
-        old_name = resolve_context_locator(old, current=current)
-        try:
-            validate_portable_context_name(old_name)
-        except ValueError as error:
-            raise ValueError(
-                "General Context rename requires a portable existing Context "
-                "name; use 'mem profile migrate-context' for a nonportable "
-                "legacy source."
-            ) from error
-        plan = store.plan_context_rename(old_name, new)
+        plan = prepare_rename(
+            store,
+            RenameRequest(
+                old_locator=old,
+                new_name=new,
+                current_context_name=current,
+            ),
+        )
     except (
         FileExistsError,
         FileNotFoundError,
@@ -86,9 +87,8 @@ def cmd(
             return
 
     try:
-        result = store.rename_contexts(plan)
+        result = execute_rename(store, plan)
     except (
-        ConcurrentContextUpdateError,
         FileExistsError,
         FileNotFoundError,
         OSError,

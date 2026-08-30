@@ -131,7 +131,7 @@ explicit Apply handoff after the saved artifact has been reopened.
 The aggregate is a catalog of *Impact-inspectable saved artifacts*, not an
 invocation log.  Current schemas do not record whether an Atomize, Meld,
 Sever, or Update artifact was first produced by an `impact` spelling or its
-owning operation.  Forget, Distill, Elaborate, and Resolve are absent because
+owning operation.  Forget, Distill, Makemore, and Resolve are absent because
 their Impact proposals are intentionally process-local; listing them would
 fabricate durable history that does not exist.
 

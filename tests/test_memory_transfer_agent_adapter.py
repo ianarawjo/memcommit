@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.adapters.agent.memory_transfer import (
+from memcommit.adapters.agent.copy_and_move import (
     COPY_MEMORIES_AGENT_TOOL_NAME,
     MOVE_MEMORIES_AGENT_TOOL_NAME,
     MemoryTransferAgentAdapter,

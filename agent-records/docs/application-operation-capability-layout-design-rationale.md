@@ -86,3 +86,13 @@ review should decompose `semantic`, identify adapter and persistence leakage,
 and decide whether evaluation support leaves the application package entirely.
 Command-review identity and operation projections have since moved to their
 console owner.
+
+## Follow-up: History decomposition
+
+The staged `retained_history` package has since been fully decomposed. Shared
+read-only reconstruction is now the `history` capability; Context snapshots
+and checkpoint catalogs remain independent capabilities; command restoration
+is `command_recovery`; Review and Revert logic returned to their operations;
+and checkpoint codecs, lifecycle schemas, and terminal display moved to their
+persistence or console owners. No `retained_history` compatibility facade is
+kept, so the original staging name cannot become a second architecture.

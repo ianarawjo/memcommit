@@ -11,7 +11,7 @@ from memcommit.application.capabilities.authority.context_access import (
     resolve_context_access,
 )
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.application.capabilities.authority.readable_contexts import ReadableContextCatalog
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names

@@ -26,7 +26,7 @@ from .contract import (
     MELD_PAYLOAD_MARKER,
     MELD_RESOLUTION_REQUEST_CONTRACT_VERSION,
     MeldProviderError,
-    _directional_comparison_output_schema,
+    _directional_relation_basis_output_schema,
     meld_output_schema,
 )
 from .projection import _ProviderView, _provider_view
@@ -37,7 +37,7 @@ class _MeldTurnRequest:
     view: _ProviderView
     prompt: str
     output_schema: dict[str, object]
-    directional_comparison: bool
+    directional_relation_basis: bool
 
 def _prompt(
     payload: dict[str, object],
@@ -62,7 +62,7 @@ def _prompt(
             "truncated or split into hidden calls."
         )
     directional = payload.get("mode") == "DIRECTIONAL"
-    directional_comparison = directional and "comparison_basis" in payload
+    directional_relation_basis = directional and "comparison_basis" in payload
     frames = payload.get("frames")
     focused = (
         isinstance(frames, list)
@@ -149,10 +149,10 @@ def _prompt(
         if directional and directional_preservation
         else ""
     )
-    directional_comparison_contract = (
+    directional_relation_basis_contract = (
         (
             "The payload comparison_basis is the exact reviewed ordered "
-            "INCOMING-to-BASELINE Compare result. It is host-owned, read-only "
+            "INCOMING-to-BASELINE relation analysis. It is host-owned, read-only "
             "input and will be attached to your decisions after this turn. Do "
             "not copy, summarize, restate, reclassify, split, combine, or omit "
             "its relations, source assignments, or imported issues in your "
@@ -162,7 +162,7 @@ def _prompt(
             "Use the frozen relation ledger to produce the exact Directional "
             "results; comparison_basis itself has no mutation authority. "
         )
-        if directional_comparison
+        if directional_relation_basis
         else ""
     )
     repair_contract = (
@@ -191,7 +191,7 @@ def _prompt(
             "the supplied relation_key values from comparison_basis when a "
             "Directional issue or result needs relation evidence.\n"
         )
-        if directional_comparison
+        if directional_relation_basis
         else (
             "In source_assignments, return exactly one row for every supplied "
             "source Memory and assign it to exactly one returned relation_key. "
@@ -206,7 +206,7 @@ def _prompt(
         repair_contract
         + authority_contract
         + focus_contract
-        + directional_comparison_contract
+        + directional_relation_basis_contract
         + "\n"
         + relation_response_contract
         + "EQUIVALENT means the same "
@@ -289,18 +289,18 @@ def _meld_turn_request(session: MeldSession) -> _MeldTurnRequest:
         session.mode == "DIRECTIONAL"
         and session.frames[1].selected_memory_uid is not None
     )
-    directional_comparison = (
+    directional_relation_basis = (
         session.mode == "DIRECTIONAL"
-        and session.comparison_seed is not None
+        and session.relation_analysis_seed is not None
         and session.current_turn.sequence == 0
         and "comparison_basis" in view.payload
     )
     output_schema = (
-        _directional_comparison_output_schema(
+        _directional_relation_basis_output_schema(
             source_memory_ids,
             target_context_count=len(view.target_context_by_id) or 1,
         )
-        if directional_comparison
+        if directional_relation_basis
         else meld_output_schema(
             source_memory_ids,
             mode=session.mode,
@@ -336,7 +336,7 @@ def _meld_turn_request(session: MeldSession) -> _MeldTurnRequest:
             ),
         ),
         output_schema=output_schema,
-        directional_comparison=directional_comparison,
+        directional_relation_basis=directional_relation_basis,
     )
 
 

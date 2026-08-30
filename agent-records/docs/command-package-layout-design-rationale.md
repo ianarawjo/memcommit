@@ -128,11 +128,12 @@ Each displayed Help operation now has its own `commands/copy` or
 `commands/move` package containing its grammar, operation-specific setup,
 application handoff, and receipt. Their common direct-Memory selection,
 Target-gap placement, editable exact-command, operand, and placement-receipt
-mechanics live in the sibling `adapters/console/coordination/memory_transfer`
-package. A `commands/memory_transfer` package was rejected because it would
-look like a third executable command, while `copy_and_move` would name current
-consumers rather than the shared concept. The application transaction remains
-under `application.operations.memory_transfer`.
+mechanics live in the sibling `adapters/console/coordination/copy_and_move`
+package. A `commands/copy_and_move` package is unnecessary because it would
+look like a third executable command. At the application layer, Copy and Move
+each own their public preparation/execution boundary while the paired
+`application.operations.copy_and_move` package owns only shared typed values
+and Store mechanics.
 
 ## Compatibility boundary
 

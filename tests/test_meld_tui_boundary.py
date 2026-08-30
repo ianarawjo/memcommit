@@ -5,27 +5,32 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
-from memcommit.adapters.console.commands.meld import command as meld_command
-import memcommit.adapters.console.commands.compare.command as compare_command
-from memcommit.adapters.console.commands.compare.presentation import render_comparison
 import memcommit.adapters.console.commands.meld.workbench.workbench as meld_workbench
+from memcommit.adapters.console.commands.meld import command as meld_command
+from memcommit.adapters.console.terminal.components.peer_relations.presentation import (
+    render_peer_relation_analysis,
+)
 
 
 def test_meld_command_enters_the_operation_tui_directly() -> None:
     assert meld_command.run_meld_shell is meld_workbench.run_meld_shell
 
 
-def test_meld_uses_compare_owned_console_presentation() -> None:
-    """Meld reuses Compare's console projection without importing its entrypoint."""
-    assert compare_command.render_comparison is render_comparison
-
+def test_meld_uses_operation_neutral_peer_relation_presentation() -> None:
+    """Meld renders the shared ledger without importing the Compare operation."""
     module = ast.parse(Path(meld_workbench.__file__).read_text(encoding="utf-8"))
     imported_modules = {
-        node.module
-        for node in ast.walk(module)
-        if isinstance(node, ast.ImportFrom)
+        node.module for node in ast.walk(module) if isinstance(node, ast.ImportFrom)
     }
-    assert "memcommit.adapters.console.commands.compare.presentation" in imported_modules
+    assert render_peer_relation_analysis is not None
+    assert (
+        "memcommit.adapters.console.terminal.components.peer_relations.presentation"
+        in imported_modules
+    )
+    assert (
+        "memcommit.adapters.console.commands.compare.presentation"
+        not in imported_modules
+    )
     assert "memcommit.adapters.console.commands.compare.command" not in imported_modules
 
 

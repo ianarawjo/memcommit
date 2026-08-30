@@ -43,10 +43,10 @@ from memcommit.adapters.agent.dedup import (
     DedupAgentAdapter,
     dedup_agent_tool_schema,
 )
-from memcommit.adapters.agent.elaborate import (
-    ELABORATE_AGENT_TOOL_NAME,
-    ElaborateAgentAdapter,
-    elaborate_agent_tool_schema,
+from memcommit.adapters.agent.makemore import (
+    MAKEMORE_AGENT_TOOL_NAME,
+    MakemoreAgentAdapter,
+    makemore_agent_tool_schema,
 )
 from memcommit.adapters.agent.embed import (
     EMBED_AGENT_TOOL_NAME,
@@ -113,7 +113,7 @@ from memcommit.adapters.agent.meld import (
     MeldAgentAdapter,
     meld_agent_tool_schema,
 )
-from memcommit.adapters.agent.memory_transfer import (
+from memcommit.adapters.agent.copy_and_move import (
     COPY_MEMORIES_AGENT_TOOL_NAME,
     MOVE_MEMORIES_AGENT_TOOL_NAME,
     MemoryTransferAgentAdapter,
@@ -422,14 +422,14 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
     query = QueryAgentAdapter(client)
     quality_find = QualityFindAgentAdapter(client)
     add = AddAgentAdapter(client)
-    memory_transfer = MemoryTransferAgentAdapter(client)
+    copy_and_move = MemoryTransferAgentAdapter(client)
     reference = ReferenceAgentAdapter(client)
     embed = EmbedAgentAdapter(client)
     compare = CompareAgentAdapter(client)
     meld = MeldAgentAdapter(client)
     atomize = AtomizeAgentAdapter(client)
     distill = DistillAgentAdapter(client)
-    elaborate = ElaborateAgentAdapter(client)
+    makemore = MakemoreAgentAdapter(client)
     fit = FitAgentAdapter(client)
     forget = ForgetAgentAdapter(client)
     resolve = ResolveAgentAdapter(client)
@@ -524,7 +524,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 "copy",
                 name=COPY_MEMORIES_AGENT_TOOL_NAME,
                 schema_factory=copy_memories_agent_tool_schema,
-                handler=memory_transfer.copy,
+                handler=copy_and_move.copy,
                 effect=AgentToolEffect(
                     read_only=False,
                     destructive=False,
@@ -535,7 +535,7 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 "move",
                 name=MOVE_MEMORIES_AGENT_TOOL_NAME,
                 schema_factory=move_memories_agent_tool_schema,
-                handler=memory_transfer.move,
+                handler=copy_and_move.move,
                 effect=AgentToolEffect(
                     read_only=False,
                     destructive=False,
@@ -579,10 +579,10 @@ def build_default_agent_tool_registry(client: MemCommitClient) -> AgentToolRegis
                 handler=distill.invoke,
             ),
             operation_binding(
-                "elaborate",
-                name=ELABORATE_AGENT_TOOL_NAME,
-                schema_factory=elaborate_agent_tool_schema,
-                handler=elaborate.invoke,
+                "makemore",
+                name=MAKEMORE_AGENT_TOOL_NAME,
+                schema_factory=makemore_agent_tool_schema,
+                handler=makemore.invoke,
             ),
             operation_binding(
                 "fit",

@@ -28,7 +28,7 @@ from memcommit.application.capabilities.semantic.goal_focus import inline_goal_f
 from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.capabilities.history.query.memory_history_slicing import (
     reconstruct_memory_history,
 )
 from memcommit.application.capabilities.resolution.workbench import (

@@ -59,7 +59,7 @@ A new final operation matrix uses either
 or `<operation>-callable-boundary-matrix.md` for a reviewed vertical package
 that includes its exposed adapters. A joint matrix may name multiple
 operations when it deliberately owns one shared implementation, as with
-Distill and Elaborate; every operation still registers that same evidence
+Distill and Makemore; every operation still registers that same evidence
 explicitly.
 
 ## Enforced invariants

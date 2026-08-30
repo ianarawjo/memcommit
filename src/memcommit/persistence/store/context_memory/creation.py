@@ -14,7 +14,7 @@ from memcommit.core.context_targeting.naming import (
 from memcommit.core.context_navigation import (
     record_current_context_transition,
 )
-from memcommit.application.capabilities.retained_history.memory_lineage import (
+from memcommit.application.capabilities.history.reconstruction.memory_lineage_relations import (
     MemoryLineageEdge,
     memory_content_sha256,
     memory_lineage_record,

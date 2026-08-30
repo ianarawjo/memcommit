@@ -10,10 +10,10 @@ from memcommit.adapters.console.commands.trace.projection import (
     DEFAULT_TRACE_OPERATION_LIMIT,
     MAX_TRACE_OPERATION_LIMIT,
 )
-from memcommit.application.capabilities.retained_history.context_history import (
-    ContextTraceChange,
-    ContextTraceEvent,
-    ContextTraceReport,
+from memcommit.application.capabilities.history.query.context_history_slicing import (
+    ContextHistoryChange,
+    ContextHistoryEvent,
+    ContextHistorySlice,
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.terminal.components.plain_text_clipboard import (
@@ -34,7 +34,7 @@ def _short_uid(value: str, verbose: bool) -> str:
 
 def _append_change(
     fragments: StyleAndTextTuples,
-    change: ContextTraceChange,
+    change: ContextHistoryChange,
     *,
     verbose: bool,
 ) -> None:
@@ -95,7 +95,7 @@ def _append_change(
 
 def _append_event(
     fragments: StyleAndTextTuples,
-    event: ContextTraceEvent,
+    event: ContextHistoryEvent,
     *,
     verbose: bool,
 ) -> None:
@@ -144,7 +144,7 @@ def _append_event(
 
 
 def context_trace_document_fragments(
-    report: ContextTraceReport,
+    report: ContextHistorySlice,
     *,
     verbose: bool = False,
     limit: int | None = DEFAULT_TRACE_OPERATION_LIMIT,
@@ -204,7 +204,7 @@ def context_trace_document_fragments(
 
 
 def format_context_trace_report(
-    report: ContextTraceReport,
+    report: ContextHistorySlice,
     *,
     verbose: bool = False,
     limit: int | None = DEFAULT_TRACE_OPERATION_LIMIT,
@@ -216,7 +216,7 @@ def format_context_trace_report(
 
 
 def open_context_trace_viewer(
-    report: ContextTraceReport,
+    report: ContextHistorySlice,
     *,
     verbose: bool = False,
     limit: int | None = DEFAULT_TRACE_OPERATION_LIMIT,

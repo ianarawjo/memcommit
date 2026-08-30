@@ -132,15 +132,21 @@ def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters
         for node in tree.body
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
     }
+    imports = {
+        (node.module, alias.name)
+        for node in tree.body
+        if isinstance(node, ast.ImportFrom)
+        for alias in node.names
+    }
 
     assert (
         "from memcommit.adapters.console.commands.query.presentation import ("
         in source
     )
     assert (
-        "from memcommit.adapters.console.terminal.core.capabilities import is_interactive_terminal"
-        in source
-    )
+        "memcommit.adapters.console.terminal.core.capabilities",
+        "is_interactive_terminal",
+    ) in imports
     assert "_interactive_terminal" not in local_functions
     assert local_functions == {
         "_open_query_workbench",

@@ -1,7 +1,5 @@
 """Console entry point for the ``mem`` executable."""
 
-from typing import Annotated, Optional
-
 import typer
 
 from memcommit.adapters.console.commands import (
@@ -11,11 +9,11 @@ from memcommit.adapters.console.commands import (
     branch,
     checkpoint,
     check_conformance,
+    checkout,
     chunk,
     clear,
     compare,
     config,
-    consolidate,
     contexts,
     copy,
     dedup,
@@ -25,6 +23,7 @@ from memcommit.adapters.console.commands import (
     diff,
     distill,
     elaborate,
+    makemore,
     edit,
     embed,
     eval,
@@ -41,7 +40,8 @@ from memcommit.adapters.console.commands import (
     import_profile,
     init,
     init_study,
-    list_memories,
+    list as list_command,
+    lock,
     log,
     meld,
     move,
@@ -69,8 +69,8 @@ from memcommit.adapters.console.commands import (
     trace,
     translate,
     undo,
+    unlock,
     update,
-    write_protection,
 )
 from memcommit.adapters.console.coordination.root_group import MemCommandGroup
 from memcommit.application.operations.operation_catalog import operation_summary
@@ -124,10 +124,10 @@ app.command(
 app.command(
     "list",
     help=operation_summary("list"),
-)(list_memories.cmd)
+)(list_command.cmd)
 # Keep the compact spelling executable without presenting it as a second
 # operation in command discovery.
-app.command("ls", hidden=True)(list_memories.cmd)
+app.command("ls", hidden=True)(list_command.cmd)
 app.command(
     "show",
     help=operation_summary("show"),
@@ -142,12 +142,12 @@ app.command(
     help=operation_summary("contexts"),
 )(contexts.cmd)
 app.add_typer(
-    write_protection.lock_app,
+    lock.app,
     name="lock",
     help=operation_summary("lock"),
 )
 app.add_typer(
-    write_protection.unlock_app,
+    unlock.app,
     name="unlock",
     help=operation_summary("unlock"),
 )
@@ -261,6 +261,10 @@ app.command(
     help=operation_summary("elaborate"),
 )(elaborate.cmd)
 app.command(
+    "makemore",
+    help=operation_summary("makemore"),
+)(makemore.cmd)
+app.command(
     "check-conformance",
     help=operation_summary("check-conformance"),
 )(check_conformance.cmd)
@@ -284,9 +288,6 @@ app.command(
         "current Context; --context remains a compatibility alias."
     ),
 )(dedun.cmd)
-# The exact-review spelling remains executable for old receipts; ordinary
-# discovery and applying intent stay under the canonical Dedun operation.
-app.command("consolidate", hidden=True)(consolidate.cmd)
 app.command(
     "checkpoint",
     help=operation_summary("checkpoint"),
@@ -440,58 +441,10 @@ app.command(
 )(help.cmd)
 
 
-# checkout preserves Git-style navigation syntax across two distinct operations.
-@app.command(
+app.command(
     "checkout",
     help=operation_summary("checkout"),
-)
-def _checkout(
-    name: Annotated[
-        Optional[str],
-        typer.Argument(
-            help=(
-                "Context to switch to; omit to enter the switch picker, or "
-                "with -b omit to choose a branch Source and name"
-            )
-        ),
-    ] = None,
-    b: Annotated[
-        bool,
-        typer.Option(
-            "-b",
-            "--branch",
-            help="Create a branch; without NAME choose its local Source and name",
-        ),
-    ] = False,
-    direct: Annotated[
-        bool,
-        typer.Option(
-            "-d",
-            "--direct",
-            help="With -b, branch only the selected Source root",
-        ),
-    ] = False,
-    recursive: Annotated[
-        bool,
-        typer.Option(
-            "-r",
-            "--recursive",
-            help="With -b, branch the Source root and lexical descendants",
-        ),
-    ] = False,
-) -> None:
-    """Route Git-style checkout syntax to Switch or, with ``-b``, Branch."""
-    if b:
-        branch.cmd(
-            name,
-            source_descendants=None,
-            direct=direct,
-            recursive=recursive,
-        )
-    else:
-        if direct or recursive:
-            raise typer.BadParameter("-d/-r require -b/--branch.")
-        switch.cmd(name)
+)(checkout.cmd)
 
 
 if __name__ == "__main__":

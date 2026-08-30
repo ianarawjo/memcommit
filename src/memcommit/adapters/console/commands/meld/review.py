@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.console.commands.compare.presentation import render_comparison
 from memcommit.adapters.console.commands.meld.sessions import (
     list_meld_session_catalog,
     reload_selected_meld_session,
@@ -12,9 +11,12 @@ from memcommit.adapters.console.commands.review.sessions import select_report_se
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionPickerEntry,
 )
+from memcommit.adapters.console.terminal.components.peer_relations.presentation import (
+    render_peer_relation_analysis,
+)
 from memcommit.application.capabilities.reviewing.report import ReviewReportController
 from memcommit.application.operations.meld.model import MeldSession
-from memcommit.application.operations.meld.resolution_projection import (
+from memcommit.application.operations.meld.proposal_projection import (
     MeldResolutionWorkbenchAdapter,
 )
 from memcommit.application.operations.review.model import ReviewError
@@ -25,12 +27,13 @@ def meld_review_report(session: MeldSession) -> ReviewReportController:
     """Expose Meld analysis, issues, and proposals without its Apply capability."""
 
     compare_text = ""
-    if session.mode == "SYMMETRIC" and session.comparison_seed is not None:
+    if session.mode == "SYMMETRIC" and session.relation_analysis_seed is not None:
         compare_text = (
-            render_comparison(
-                session.comparison_seed.analysis,
+            render_peer_relation_analysis(
+                session.relation_analysis_seed.analysis,
                 reused=True,
                 durable=True,
+                heading="MEM COMPARE · SYMMETRIC PEERS",
             )
             .partition("\nThe complete source-linked relation ledger")[0]
             .rstrip()

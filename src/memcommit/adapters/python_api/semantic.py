@@ -1,4 +1,4 @@
-"""Stable public values for Fit, Distill, and Elaborate."""
+"""Stable public values for Fit, Distill, and Makemore."""
 
 from __future__ import annotations
 
@@ -70,7 +70,7 @@ class DistillApplyResult:
 
 
 @dataclass(frozen=True)
-class ElaborateRuleProposal:
+class MakemoreRuleProposal:
     uid: str
     content: str
     rationale: str
@@ -78,13 +78,13 @@ class ElaborateRuleProposal:
 
 
 @dataclass(frozen=True)
-class ElaborateRuleCheckProposal:
+class MakemoreRuleCheckProposal:
     source_rule_index: int
     evidence: str
 
 
 @dataclass(frozen=True)
-class ElaborateCaseValidationProposal:
+class MakemoreCaseValidationProposal:
     source_fit: str
     source_fit_reason: str
     rule_conformance: str
@@ -92,19 +92,19 @@ class ElaborateCaseValidationProposal:
 
 
 @dataclass(frozen=True)
-class ElaborateCaseProposal:
+class MakemoreCaseProposal:
     uid: str
     proposition: str
     expected: str
     rationale: str
     case_role: str
-    rule_checks: tuple[ElaborateRuleCheckProposal, ...]
-    validation: ElaborateCaseValidationProposal | None
+    rule_checks: tuple[MakemoreRuleCheckProposal, ...]
+    validation: MakemoreCaseValidationProposal | None
     target_context_refs: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
-class ElaborateTargetContextItemProposal:
+class MakemoreTargetContextItemProposal:
     alias: str
     kind: str
     context_name: str
@@ -113,30 +113,30 @@ class ElaborateTargetContextItemProposal:
 
 
 @dataclass(frozen=True)
-class ElaborateProposal:
+class MakemoreProposal:
     analysis_uid: str
     mode: str
     inputs: tuple[str, ...]
     overview: str
-    rules: tuple[ElaborateRuleProposal, ...]
-    cases: tuple[ElaborateCaseProposal, ...]
+    rules: tuple[MakemoreRuleProposal, ...]
+    cases: tuple[MakemoreCaseProposal, ...]
     origin: str
     verification: str = "UNVERIFIED"
     quality_policy: str = "BEST_EFFORT"
     target_context_name: str | None = None
-    target_context_items: tuple[ElaborateTargetContextItemProposal, ...] = ()
+    target_context_items: tuple[MakemoreTargetContextItemProposal, ...] = ()
 
 
 __all__ = [
     "DistillApplyResult",
     "DistillProposal",
     "DistillRuleProposal",
-    "ElaborateCaseProposal",
-    "ElaborateCaseValidationProposal",
-    "ElaborateProposal",
-    "ElaborateRuleCheckProposal",
-    "ElaborateRuleProposal",
-    "ElaborateTargetContextItemProposal",
+    "MakemoreCaseProposal",
+    "MakemoreCaseValidationProposal",
+    "MakemoreProposal",
+    "MakemoreRuleCheckProposal",
+    "MakemoreRuleProposal",
+    "MakemoreTargetContextItemProposal",
     "FitJudgmentResult",
     "FitPropositionInput",
 ]

@@ -22,9 +22,9 @@ from memcommit.adapters.console.commands.move.setup import (
     choose_move_setup,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.terminal.components.memory_transfer import (
-    memory_transfer_exact_command_review,
-    parse_memory_transfer_command_argv,
+from memcommit.adapters.console.terminal.components.copy_and_move import (
+    copy_and_move_exact_command_review,
+    parse_copy_and_move_command_argv,
 )
 from memcommit.core.context import Context, Memory, MemoryRef
 from memcommit.adapters.console.terminal.components.direct_item_placement import DirectItemGap
@@ -38,13 +38,13 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model import create_authority_grant
 from memcommit.source_projection.presentation import source_display_text
-from memcommit.application.operations.memory_transfer.application import (
+from memcommit.application.operations.copy_and_move.application import (
     CopyMemoriesRequest,
     MoveMemoriesRequest,
-    run_copy,
-    run_move,
 )
-from memcommit.application.operations.memory_transfer.runtime import MemoryStoreMemoryTransferPort
+from memcommit.application.operations.copy.application import run_copy
+from memcommit.application.operations.copy_and_move.runtime import MemoryStoreCopyAndMovePort
+from memcommit.application.operations.move.application import run_move
 from memcommit.persistence.store import MemoryStore
 
 
@@ -113,7 +113,7 @@ def _granted_copy_fixture(isolated_store, tmp_path, monkeypatch):
 
 
 def test_editable_memory_transfer_parser_keeps_copy_simple_and_move_explicit() -> None:
-    assert parse_memory_transfer_command_argv(
+    assert parse_copy_and_move_command_argv(
         (
             "mem",
             "copy",
@@ -131,7 +131,7 @@ def test_editable_memory_transfer_parser_keeps_copy_simple_and_move_explicit() -
         before="ccccccc",
     )
     with pytest.raises(ValueError, match="Unknown Copy flag '--preserve-uids'"):
-        parse_memory_transfer_command_argv(
+        parse_copy_and_move_command_argv(
             (
                 "mem",
                 "copy",
@@ -142,7 +142,7 @@ def test_editable_memory_transfer_parser_keeps_copy_simple_and_move_explicit() -
             ),
             kind="COPY",
         )
-    assert parse_memory_transfer_command_argv(
+    assert parse_copy_and_move_command_argv(
         ("mem", "move", "aaaaaaa", "--from", "source", "--into", "target"),
         kind="MOVE",
     ) == MoveMemoriesRequest(
@@ -151,7 +151,7 @@ def test_editable_memory_transfer_parser_keeps_copy_simple_and_move_explicit() -
         "source",
         link_policy="RETARGET",
     )
-    assert parse_memory_transfer_command_argv(
+    assert parse_copy_and_move_command_argv(
         (
             "mem",
             "move",
@@ -167,7 +167,7 @@ def test_editable_memory_transfer_parser_keeps_copy_simple_and_move_explicit() -
 def test_move_review_states_live_follow_and_snapshot_boundary() -> None:
     request = MoveMemoriesRequest(("source:aaaaaaa",), "target")
 
-    review = memory_transfer_exact_command_review(
+    review = copy_and_move_exact_command_review(
         request,
         DirectItemGap(0, None, "bbbbbbbb-0000-0000-0000-000000000000"),
         item_count=1,
@@ -194,7 +194,7 @@ def test_copy_tui_checks_multiple_memories_and_freezes_one_exact_gap(
     source, (first, second) = _context(store, "source", "first", "second")
     target, (marker,) = _context(store, "target", "target marker")
     store.set_current(source.name)
-    port = MemoryStoreMemoryTransferPort.capture(store)
+    port = MemoryStoreCopyAndMovePort.capture(store)
     before = {
         source.name: store.load_direct(source.name).to_dict(),
         target.name: store.load_direct(target.name).to_dict(),
@@ -243,7 +243,7 @@ def test_copy_editable_command_replaces_the_visible_batch_order_atomically(
         # arguments. One complete parse moves every upper control together.
         pipe_input.send_text("\t\t\t\x15" + command + "\r")
         plan = choose_copy_setup(
-            MemoryStoreMemoryTransferPort.capture(store),
+            MemoryStoreCopyAndMovePort.capture(store),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -265,7 +265,7 @@ def test_granted_copy_tui_separates_readable_sources_from_local_roles(
     store, _source, _memory, target, _marker, local_source = (
         _granted_copy_fixture(isolated_store, tmp_path, monkeypatch)
     )
-    port = MemoryStoreMemoryTransferPort.capture(
+    port = MemoryStoreCopyAndMovePort.capture(
         store,
         allow_granted_sources=True,
     )
@@ -300,7 +300,7 @@ def test_local_only_copy_tui_does_not_consult_active_profile_grants(
     store, _source, _memory, target, _marker, local_source = (
         _granted_copy_fixture(isolated_store, tmp_path, monkeypatch)
     )
-    port = MemoryStoreMemoryTransferPort.capture(store)
+    port = MemoryStoreCopyAndMovePort.capture(store)
 
     setup = build_copy_tui_setup(port)
 
@@ -325,7 +325,7 @@ def test_granted_copy_exact_command_requires_an_explicit_public_owner(
     store, source, memory, target, marker, _local_source = (
         _granted_copy_fixture(isolated_store, tmp_path, monkeypatch)
     )
-    port = MemoryStoreMemoryTransferPort.capture(
+    port = MemoryStoreCopyAndMovePort.capture(
         store,
         allow_granted_sources=True,
     )
@@ -364,7 +364,7 @@ def test_granted_copy_exact_command_keeps_source_and_target_role_catalogs(
     store, source, memory, target, _marker, local_source = (
         _granted_copy_fixture(isolated_store, tmp_path, monkeypatch)
     )
-    port = MemoryStoreMemoryTransferPort.capture(
+    port = MemoryStoreCopyAndMovePort.capture(
         store,
         allow_granted_sources=True,
     )
@@ -416,7 +416,7 @@ def test_granted_copy_tui_does_not_scan_grants_for_a_bare_uid(
     store, _source, memory, target, _marker, _local_source = (
         _granted_copy_fixture(isolated_store, tmp_path, monkeypatch)
     )
-    port = MemoryStoreMemoryTransferPort.capture(
+    port = MemoryStoreCopyAndMovePort.capture(
         store,
         allow_granted_sources=True,
     )
@@ -446,7 +446,7 @@ def test_move_tui_defaults_to_atomic_live_embed_retarget(isolated_store) -> None
     reference = ops.embed_memory(memory, source, watcher)
     store.save(watcher)
     store.set_current(source.name)
-    port = MemoryStoreMemoryTransferPort.capture(store)
+    port = MemoryStoreCopyAndMovePort.capture(store)
 
     with create_pipe_input() as pipe_input:
         # Check one Source, choose Target, retain append, then approve.
@@ -477,7 +477,7 @@ def test_memory_transfer_tui_escape_does_not_freeze_or_apply(isolated_store) -> 
     source, _ = _context(store, "source", "leave me")
     _context(store, "target")
     store.set_current(source.name)
-    port = MemoryStoreMemoryTransferPort.capture(store)
+    port = MemoryStoreCopyAndMovePort.capture(store)
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\x1b")
@@ -500,7 +500,7 @@ def test_bare_copy_cli_applies_only_the_tui_returned_frozen_plan(
     source, (memory,) = _context(store, "source", "copy me")
     target, _ = _context(store, "target")
     store.set_current(source.name)
-    port = MemoryStoreMemoryTransferPort.capture(store)
+    port = MemoryStoreCopyAndMovePort.capture(store)
     plan = port.freeze_copy(
         CopyMemoriesRequest(
             (f"{source.name}:{memory.uid[:8]}",),
@@ -509,7 +509,7 @@ def test_bare_copy_cli_applies_only_the_tui_returned_frozen_plan(
     )
     monkeypatch.setattr(copy_command, "is_interactive_terminal", lambda: True)
     monkeypatch.setattr(
-        copy_command.MemoryStoreMemoryTransferPort,
+        copy_command.MemoryStoreCopyPort,
         "capture",
         lambda _store, **_kwargs: port,
     )
@@ -535,7 +535,7 @@ def test_bare_move_cli_applies_only_the_tui_returned_frozen_plan(
     source, (memory,) = _context(store, "source", "move me")
     target, _ = _context(store, "target")
     store.set_current(source.name)
-    port = MemoryStoreMemoryTransferPort.capture(store)
+    port = MemoryStoreCopyAndMovePort.capture(store)
     plan = port.freeze_move(
         MoveMemoriesRequest(
             (f"{source.name}:{memory.uid[:8]}",),
@@ -544,7 +544,7 @@ def test_bare_move_cli_applies_only_the_tui_returned_frozen_plan(
     )
     monkeypatch.setattr(move_command, "is_interactive_terminal", lambda: True)
     monkeypatch.setattr(
-        move_command.MemoryStoreMemoryTransferPort,
+        move_command.MemoryStoreMovePort,
         "capture",
         lambda _store, **_kwargs: port,
     )

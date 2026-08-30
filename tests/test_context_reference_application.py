@@ -9,7 +9,7 @@ import memcommit.application.capabilities.ops as ops
 import memcommit.application.operations.reference.runtime as reference_runtime
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, Memory, MemoryRef
-from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 from memcommit.application.operations.reference.application import (
     ContextReferenceRequest,
     ReferenceError,

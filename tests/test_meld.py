@@ -54,14 +54,14 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell imp
 )
 from memcommit.application.operations.meld.model import (
     INLINE_MELD_CONTEXT_NAME,
-    MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
+    MELD_DIRECTIONAL_RELATION_SCHEMA_VERSION,
     MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MELD_MEMORY_FOCUS_SCHEMA_VERSION,
     MeldCheckpointReceipt,
     MeldError,
     MeldSession,
-    directional_comparison_basis_assessment,
+    directional_relation_basis_assessment,
     meld_canonical_digest,
     meld_accounting,
 )
@@ -77,12 +77,14 @@ from memcommit.application.operations.meld.provider.request import (
     meld_turn_request_digest,
 )
 from memcommit.application.operations.meld.runtime import prepare_meld_start
-from memcommit.application.operations.meld.start import MeldStartRequest
+from memcommit.application.operations.meld.preparation import MeldStartRequest
 from memcommit.application.operations.update.model import GrantedUpdateTarget
-from memcommit.application.operations.meld.choice_branches import MeldChoiceBranchSet
+from memcommit.application.operations.meld.proposal_choices import MeldChoiceBranchSet
 from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
-from memcommit.application.operations.meld.resolution_projection import MeldResolutionWorkbenchAdapter
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
+from memcommit.application.operations.meld.proposal_projection import (
+    MeldResolutionWorkbenchAdapter,
+)
+from memcommit.application.capabilities.history.query.memory_history_slicing import (
     reconstruct_memory_history,
 )
 from memcommit.application.operations.profile.config import (
@@ -575,11 +577,11 @@ def test_symmetric_meld_reuses_scoped_compare_descendants(isolated_store):
     )
     reviewed = prepared.relation_analysis
     assert reviewed is not None
-    session = MeldSession.create_symmetric_from_comparison(reviewed, target)
+    session = MeldSession.create_symmetric_from_relation_analysis(reviewed, target)
     restored = MeldSession.from_dict(session.to_dict())
 
-    assert restored.comparison_seed is not None
-    assert restored.comparison_seed.analysis.include_descendants == (True, True)
+    assert restored.relation_analysis_seed is not None
+    assert restored.relation_analysis_seed.analysis.include_descendants == (True, True)
     assert tuple(frame.include_descendants for frame in restored.frames) == (
         True,
         True,
@@ -722,16 +724,16 @@ def test_directional_compare_seed_maps_projected_descendants_to_exact_owners(
         project=False,
     )
 
-    session = MeldSession.create_directional_from_comparison(
+    session = MeldSession.create_directional_from_relation_analysis(
         comparison,
         raw_incoming,
         raw_baseline,
     )
     restored = MeldSession.from_dict(session.to_dict())
 
-    assert restored.schema_version == MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION
-    assert restored.comparison_seed is not None
-    assert restored.comparison_seed.analysis.uid == comparison.uid
+    assert restored.schema_version == MELD_DIRECTIONAL_RELATION_SCHEMA_VERSION
+    assert restored.relation_analysis_seed is not None
+    assert restored.relation_analysis_seed.analysis.uid == comparison.uid
     assert [memory.content for memory in restored.frames[0].memories] == [
         incoming_memory.content
     ]
@@ -830,7 +832,7 @@ def test_default_tty_symmetric_meld_applies_without_a_response_turn(
     left, right, target = _task2_contexts(store)
     comparison = load_comparison_analysis(left.uid, right.uid, store=store)
     assert comparison is not None
-    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    session = MeldSession.create_symmetric_from_relation_analysis(comparison, target)
     store.save_meld_session(session)
     monkeypatch.setattr(meld_command, "_interactive_terminal", lambda: True)
     monkeypatch.setattr(
@@ -923,13 +925,67 @@ class DirectionalProvider:
 
     def __init__(self):
         self.payloads: list[dict] = []
+        self.relation_payloads: list[dict] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "compare_contexts":
+            payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+            self.relation_payloads.append(payload)
+            incoming = payload["frames"][0]["memories"]
+            baseline = payload["frames"][1]["memories"]
+            return json.dumps(
+                {
+                    "overview": "The incoming facts require one correction and one addition.",
+                    "reports": {
+                        "both": "",
+                        "differences": "The parking access claims conflict.",
+                        "reference_only": "The incoming ATM direction is new.",
+                        "compared_only": "The baseline store policy is unaffected.",
+                    },
+                    "relations": [
+                        {
+                            "relation_key": "parking",
+                            "reference_memory_ids": [incoming[0]["memory_id"]],
+                            "compared_memory_ids": [baseline[0]["memory_id"]],
+                            "kind": "SCOPED",
+                            "status": "RESOLVED",
+                            "summary": "The parking access claims conflict.",
+                            "reason": "Incoming evidence limits the closure.",
+                        },
+                        {
+                            "relation_key": "atm",
+                            "reference_memory_ids": [incoming[1]["memory_id"]],
+                            "compared_memory_ids": [],
+                            "kind": "DISTINCT",
+                            "status": "RESOLVED",
+                            "summary": "The incoming ATM direction is novel.",
+                            "reason": "No baseline Memory contains this direction.",
+                        },
+                        {
+                            "relation_key": "store",
+                            "reference_memory_ids": [],
+                            "compared_memory_ids": [baseline[1]["memory_id"]],
+                            "kind": "DISTINCT",
+                            "status": "RESOLVED",
+                            "summary": "The store policy is baseline-only.",
+                            "reason": "Incoming evidence does not affect it.",
+                        },
+                    ],
+                    "issues": [],
+                }
+            )
         assert operation == "meld_contexts"
+        assert set(output_schema["properties"]) == {
+            "overview",
+            "additional_issues",
+            "results",
+            "ready_to_apply",
+        }
         result_schema = output_schema["properties"]["results"]["items"]
         assert {"operation", "target_memory_ids"} <= set(result_schema["required"])
         payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
         self.payloads.append(payload)
+        assert "comparison_basis" in payload
         assert payload["mode"] == "DIRECTIONAL"
         assert [frame["role"] for frame in payload["frames"]] == [
             "INCOMING",
@@ -951,7 +1007,6 @@ class DirectionalProvider:
         incoming_edit = incoming[0]["memory_id"]
         incoming_add = incoming[1]["memory_id"]
         baseline_edit = baseline[0]["memory_id"]
-        baseline_untouched = baseline[1]["memory_id"]
         return json.dumps(
             {
                 "overview": (
@@ -959,39 +1014,7 @@ class DirectionalProvider:
                     "claim, one ATM direction is added, and the unrelated "
                     "store policy remains unchanged."
                 ),
-                "relations": [
-                    {
-                        "relation_key": "parking",
-                        "left_memory_ids": [incoming_edit],
-                        "right_memory_ids": [baseline_edit],
-                        "kind": "CONFLICT",
-                        "status": "RESOLVED",
-                        "summary": "The parking access claims conflict.",
-                        "reason": (
-                            "Incoming evidence limits closure to the vehicle "
-                            "entrance and exit."
-                        ),
-                    },
-                    {
-                        "relation_key": "atm",
-                        "left_memory_ids": [incoming_add],
-                        "right_memory_ids": [],
-                        "kind": "DISTINCT",
-                        "status": "RESOLVED",
-                        "summary": "The incoming ATM direction is novel.",
-                        "reason": "No baseline Memory contains this direction.",
-                    },
-                    {
-                        "relation_key": "store",
-                        "left_memory_ids": [],
-                        "right_memory_ids": [baseline_untouched],
-                        "kind": "DISTINCT",
-                        "status": "RESOLVED",
-                        "summary": "The store policy is baseline-only.",
-                        "reason": "Incoming evidence does not affect it.",
-                    },
-                ],
-                "issues": [],
+                "additional_issues": [],
                 "results": [
                     {
                         "result_key": "parking_edit",
@@ -1006,7 +1029,7 @@ class DirectionalProvider:
                             "The incoming correction narrows the closure while "
                             "retaining the baseline subject."
                         ),
-                        "relation_keys": ["parking"],
+                        "relation_keys": ["r000001"],
                         "source_memory_ids": [
                             incoming_edit,
                             baseline_edit,
@@ -1023,7 +1046,7 @@ class DirectionalProvider:
                             "Bank Annex ATM."
                         ),
                         "reason": "The incoming Context supplies a novel route.",
-                        "relation_keys": ["atm"],
+                        "relation_keys": ["r000002"],
                         "source_memory_ids": [incoming_add],
                         "grounded_turn_ids": [],
                     },
@@ -1038,11 +1061,47 @@ class InlineMemoryProvider:
 
     def __init__(self):
         self.payloads: list[dict] = []
+        self.relation_payloads: list[dict] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "compare_contexts":
+            payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+            self.relation_payloads.append(payload)
+            incoming = payload["frames"][0]["memories"][0]["memory_id"]
+            baseline = payload["frames"][1]["memories"][0]["memory_id"]
+            return json.dumps(
+                {
+                    "overview": "The inline rule conflicts with the existing greeting policy.",
+                    "reports": {
+                        "both": "",
+                        "differences": "The two greeting rules conflict.",
+                        "reference_only": "",
+                        "compared_only": "",
+                    },
+                    "relations": [
+                        {
+                            "relation_key": "inline_rule",
+                            "reference_memory_ids": [incoming],
+                            "compared_memory_ids": [baseline],
+                            "kind": "SCOPED",
+                            "status": "RESOLVED",
+                            "summary": "The inline rule replaces the prior policy.",
+                            "reason": "The new exact punctuation rule is authoritative.",
+                        }
+                    ],
+                    "issues": [],
+                }
+            )
         assert operation == "meld_contexts"
+        assert set(output_schema["properties"]) == {
+            "overview",
+            "additional_issues",
+            "results",
+            "ready_to_apply",
+        }
         payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
         self.payloads.append(payload)
+        assert "comparison_basis" in payload
         incoming = payload["frames"][0]["memories"][0]
         baseline = payload["frames"][1]["memories"][0]
         return json.dumps(
@@ -1051,18 +1110,7 @@ class InlineMemoryProvider:
                     "The inline greeting rule is a new distinction and the "
                     "existing baseline Memory remains unchanged."
                 ),
-                "relations": [
-                    {
-                        "relation_key": "inline_rule",
-                        "left_memory_ids": [incoming["memory_id"]],
-                        "right_memory_ids": [baseline["memory_id"]],
-                        "kind": "CONFLICT",
-                        "status": "RESOLVED",
-                        "summary": "The inline rule replaces the prior policy.",
-                        "reason": "The new exact punctuation rule is authoritative.",
-                    }
-                ],
-                "issues": [],
+                "additional_issues": [],
                 "results": [
                     {
                         "result_key": "inline_add",
@@ -1071,7 +1119,7 @@ class InlineMemoryProvider:
                         "disposition": "SYNTHESIZE",
                         "content": incoming["content"],
                         "reason": "Preserves the exact new greeting distinction.",
-                        "relation_keys": ["inline_rule"],
+                        "relation_keys": ["r000001"],
                         "source_memory_ids": [
                             incoming["memory_id"],
                             baseline["memory_id"],
@@ -1107,6 +1155,8 @@ def test_inline_memory_meld_preserves_punctuation_without_creating_source_contex
     session = store.load_meld_session(baseline.uid)
     assert session is not None
     assert session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION
+    assert session.relation_analysis_seed is not None
+    assert len(provider.relation_payloads) == 1
     assert session.frames[0].memories[0].content == content
     assert shlex.split(meld_command._session_command(session)) == [
         "mem",
@@ -1472,18 +1522,103 @@ def test_focused_directional_meld_keeps_focus_without_neighbor_evidence():
     assert MeldSession.from_dict(session.to_dict()).to_dict() == session.to_dict()
 
 
+def test_focused_directional_relation_basis_retains_exact_memory_scope():
+    incoming = ops.init("focused/relation-basis/incoming")
+    incoming_focus = ops.add(incoming, "Pay participants in cash.")
+    ops.add(incoming, "The library remains open.")
+    baseline = ops.init("focused/relation-basis/baseline")
+    baseline_focus = ops.add(baseline, "Pay participants by e-transfer.")
+    ops.add(baseline, "The store remains open.")
+    analysis = analyze_comparison(
+        ComparisonInput.from_contexts(
+            incoming,
+            baseline,
+            reference_memory_selector=incoming_focus.uid,
+            compared_memory_selector=baseline_focus.uid,
+        ),
+        Task2CompareProvider(),
+    )
+
+    session = MeldSession.create_directional_from_relation_analysis(
+        analysis,
+        incoming,
+        baseline,
+    )
+    restored = MeldSession.from_dict(session.to_dict())
+
+    assert restored.schema_version == MELD_MEMORY_FOCUS_SCHEMA_VERSION
+    assert restored.relation_analysis_seed is not None
+    assert restored.frames[0].selected_memory_uid == incoming_focus.uid
+    assert restored.frames[1].selected_memory_uid == baseline_focus.uid
+    assert tuple(len(frame.memories) for frame in restored.frames) == (1, 1)
+
+
 class DirectionalSubtreeProvider:
     """Place one edit and one addition under exact BASELINE owners."""
 
     def __init__(self):
         self.payloads: list[dict] = []
+        self.relation_payloads: list[dict] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "compare_contexts":
+            payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+            self.relation_payloads.append(payload)
+            incoming = payload["frames"][0]["memories"]
+            baseline = payload["frames"][1]["memories"]
+            return json.dumps(
+                {
+                    "overview": "One access rule is scoped, one ATM rule is new, and store hours are unchanged.",
+                    "reports": {
+                        "both": "",
+                        "differences": "The access rules have different scopes.",
+                        "reference_only": "The ATM guidance is incoming-only.",
+                        "compared_only": "The hours guidance is baseline-only.",
+                    },
+                    "relations": [
+                        {
+                            "relation_key": "access",
+                            "reference_memory_ids": [incoming[0]["memory_id"]],
+                            "compared_memory_ids": [baseline[0]["memory_id"]],
+                            "kind": "SCOPED",
+                            "status": "RESOLVED",
+                            "summary": "The access rules have different scopes.",
+                            "reason": "Incoming evidence narrows the closure.",
+                        },
+                        {
+                            "relation_key": "atm",
+                            "reference_memory_ids": [incoming[1]["memory_id"]],
+                            "compared_memory_ids": [],
+                            "kind": "DISTINCT",
+                            "status": "RESOLVED",
+                            "summary": "The ATM guidance is new.",
+                            "reason": "No baseline Memory contains it.",
+                        },
+                        {
+                            "relation_key": "hours",
+                            "reference_memory_ids": [],
+                            "compared_memory_ids": [baseline[1]["memory_id"]],
+                            "kind": "DISTINCT",
+                            "status": "RESOLVED",
+                            "summary": "The hours guidance is unaffected.",
+                            "reason": "No incoming Memory changes it.",
+                        },
+                    ],
+                    "issues": [],
+                }
+            )
         assert operation == "meld_contexts"
+        assert set(output_schema["properties"]) == {
+            "overview",
+            "additional_issues",
+            "results",
+            "ready_to_apply",
+        }
         required = output_schema["properties"]["results"]["items"]["required"]
         assert "target_context_id" in required
         payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
         self.payloads.append(payload)
+        assert "comparison_basis" in payload
         incoming = payload["frames"][0]["memories"]
         baseline = payload["frames"][1]["memories"]
         target_ids = {
@@ -1498,38 +1633,7 @@ class DirectionalSubtreeProvider:
                     "One child-owned baseline rule is corrected and one novel "
                     "incoming rule is added under another explicit child owner."
                 ),
-                "paired_relations": [
-                    {
-                        "relation_key": "access",
-                        "left_memory_ids": [incoming_edit["memory_id"]],
-                        "right_memory_ids": [baseline_edit["memory_id"]],
-                        "kind": "CONFLICT",
-                        "status": "RESOLVED",
-                        "summary": "The access rules conflict.",
-                        "reason": "Incoming evidence narrows the closure.",
-                    }
-                ],
-                "distinct_relations": [
-                    {
-                        "relation_key": "atm",
-                        "side": "LEFT",
-                        "memory_ids": [incoming_add["memory_id"]],
-                        "kind": "DISTINCT",
-                        "status": "RESOLVED",
-                        "summary": "The ATM guidance is new.",
-                        "reason": "No baseline Memory contains it.",
-                    },
-                    {
-                        "relation_key": "hours",
-                        "side": "RIGHT",
-                        "memory_ids": [baseline_untouched["memory_id"]],
-                        "kind": "DISTINCT",
-                        "status": "RESOLVED",
-                        "summary": "The hours guidance is unaffected.",
-                        "reason": "No incoming Memory changes it.",
-                    },
-                ],
-                "issues": [],
+                "additional_issues": [],
                 "results": [
                     {
                         "result_key": "access_edit",
@@ -1541,7 +1645,7 @@ class DirectionalSubtreeProvider:
                         "disposition": "SYNTHESIZE",
                         "content": "Only the vehicle entrance is closed.",
                         "reason": "Applies the narrower supported access scope.",
-                        "relation_keys": ["access"],
+                        "relation_keys": ["r000001"],
                         "source_memory_ids": [incoming_edit["memory_id"]],
                         "grounded_turn_ids": [],
                     },
@@ -1555,7 +1659,7 @@ class DirectionalSubtreeProvider:
                         "disposition": "PRESERVE",
                         "content": "Use the Annex ATM during construction.",
                         "reason": "Preserves novel incoming ATM guidance.",
-                        "relation_keys": ["atm"],
+                        "relation_keys": ["r000002"],
                         "source_memory_ids": [incoming_add["memory_id"]],
                         "grounded_turn_ids": [],
                     },
@@ -1570,31 +1674,72 @@ class ZeroChangeDirectionalProvider:
 
     def __init__(self):
         self.payloads: list[dict] = []
+        self.relation_payloads: list[dict] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "compare_contexts":
+            payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+            self.relation_payloads.append(payload)
+            incoming = payload["frames"][0]["memories"][0]["memory_id"]
+            baseline = payload["frames"][1]["memories"][0]["memory_id"]
+            return json.dumps(
+                {
+                    "overview": "The incoming Memory is already represented by the baseline.",
+                    "reports": {
+                        "both": "Both Memories state the same policy.",
+                        "differences": "",
+                        "reference_only": "",
+                        "compared_only": "",
+                    },
+                    "relations": [
+                        {
+                            "relation_key": "same",
+                            "reference_memory_ids": [incoming],
+                            "compared_memory_ids": [baseline],
+                            "kind": "EQUIVALENT",
+                            "status": "RESOLVED",
+                            "summary": "The two Memories express the same policy.",
+                            "reason": "Their operational content is identical.",
+                        }
+                    ],
+                    "issues": [],
+                }
+            )
         assert operation == "meld_contexts"
         payload = json.loads(prompt.split(MELD_PAYLOAD_MARKER, 1)[1])
         self.payloads.append(payload)
         incoming = payload["frames"][0]["memories"][0]["memory_id"]
         baseline = payload["frames"][1]["memories"][0]["memory_id"]
+        if "comparison_basis" not in payload:
+            return json.dumps(
+                {
+                    "overview": (
+                        "The incoming Memory is already represented exactly by "
+                        "the baseline, so no material baseline change is needed."
+                    ),
+                    "relations": [
+                        {
+                            "relation_key": "same",
+                            "left_memory_ids": [incoming],
+                            "right_memory_ids": [baseline],
+                            "kind": "EQUIVALENT",
+                            "status": "RESOLVED",
+                            "summary": "The two Memories express the same policy.",
+                            "reason": "Their operational content is identical.",
+                        }
+                    ],
+                    "issues": [],
+                    "results": [],
+                    "ready_to_apply": True,
+                }
+            )
         return json.dumps(
             {
                 "overview": (
                     "The incoming Memory is already represented exactly by "
                     "the baseline, so no material baseline change is needed."
                 ),
-                "relations": [
-                    {
-                        "relation_key": "same",
-                        "left_memory_ids": [incoming],
-                        "right_memory_ids": [baseline],
-                        "kind": "EQUIVALENT",
-                        "status": "RESOLVED",
-                        "summary": "The two Memories express the same policy.",
-                        "reason": "Their operational content is identical.",
-                    }
-                ],
-                "issues": [],
+                "additional_issues": [],
                 "results": [],
                 "ready_to_apply": True,
             }
@@ -1642,14 +1787,14 @@ def _zero_change_directional_contexts(store: MemoryStore):
 
 
 class DirectionalCompareEchoProvider:
-    """Materialize only from the frozen ordered Compare basis."""
+    """Materialize only from the frozen ordered relation-analysis basis."""
 
     def __init__(self):
         self.payloads: list[dict] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "meld_contexts"
-        assert "exact reviewed ordered INCOMING-to-BASELINE Compare" in prompt
+        assert "exact reviewed ordered INCOMING-to-BASELINE relation analysis" in prompt
         assert set(output_schema["properties"]) == {
             "overview",
             "additional_issues",
@@ -1663,7 +1808,7 @@ class DirectionalCompareEchoProvider:
         return json.dumps(
             {
                 "overview": (
-                    "The reviewed Compare ledger is retained while the "
+                    "The reviewed relation ledger is retained while the "
                     "directional target remains unresolved."
                 ),
                 "additional_issues": [],
@@ -1698,9 +1843,9 @@ def test_directional_command_uses_exact_saved_compare_basis(
     assert provider.payloads[0]["comparison_basis"]["paired_relations"]
     session = store.load_meld_session(baseline.uid)
     assert session is not None
-    assert session.schema_version == MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION
-    assert session.comparison_seed is not None
-    assert session.comparison_seed.analysis.uid == comparison.uid
+    assert session.schema_version == MELD_DIRECTIONAL_RELATION_SCHEMA_VERSION
+    assert session.relation_analysis_seed is not None
+    assert session.relation_analysis_seed.analysis.uid == comparison.uid
     assert [relation.uid for relation in session.current_assessment.relations] == [
         relation.uid for relation in comparison.relations
     ]
@@ -1717,7 +1862,7 @@ def test_directional_compare_seed_output_cannot_restate_relation_drift():
         ComparisonInput.from_contexts(incoming, baseline),
         Task2CompareProvider(),
     )
-    session = MeldSession.create_directional_from_comparison(
+    session = MeldSession.create_directional_from_relation_analysis(
         comparison,
         incoming,
         baseline,
@@ -1738,7 +1883,7 @@ def test_directional_compare_seed_output_cannot_restate_relation_drift():
 
     with pytest.raises(
         MeldProviderError,
-        match="directional comparison meld response",
+        match="directional relation-analysis Meld response",
     ):
         assess_meld_turn(session, DriftedCompareProvider())
 
@@ -1803,7 +1948,7 @@ def test_directional_compare_seed_restores_mixed_relation_order():
         ComparisonInput.from_contexts(incoming, baseline),
         MixedOrderCompareProvider(),
     )
-    session = MeldSession.create_directional_from_comparison(
+    session = MeldSession.create_directional_from_relation_analysis(
         comparison,
         incoming,
         baseline,
@@ -1811,7 +1956,7 @@ def test_directional_compare_seed_restores_mixed_relation_order():
     session.start_initial_analysis()
 
     assessment = assess_meld_turn(session, DirectionalCompareEchoProvider())
-    basis = directional_comparison_basis_assessment(
+    basis = directional_relation_basis_assessment(
         comparison,
         (session.frames[0], session.frames[1]),
     )
@@ -1848,11 +1993,11 @@ def test_compare_seed_adds_stable_helpful_materialization_after_required():
         PriorityCompareProvider(),
     )
 
-    first = MeldSession.create_symmetric_from_comparison(
+    first = MeldSession.create_symmetric_from_relation_analysis(
         comparison,
         ops.init("target/priorities-one"),
     )
-    second = MeldSession.create_symmetric_from_comparison(
+    second = MeldSession.create_symmetric_from_relation_analysis(
         comparison,
         ops.init("target/priorities-two"),
     )
@@ -1893,7 +2038,7 @@ def test_seeded_meld_report_uses_nested_cards_and_blue_selection_badges():
         ComparisonInput.from_contexts(left, right),
         Task2CompareProvider(),
     )
-    session = MeldSession.create_symmetric_from_comparison(
+    session = MeldSession.create_symmetric_from_relation_analysis(
         comparison,
         ops.init("target/report-cards"),
     )
@@ -1982,7 +2127,7 @@ def test_resolution_badges_show_direct_and_synthesized_content():
             ComparisonInput.from_contexts(left, right),
             Task2CompareProvider(),
         )
-        session = MeldSession.create_symmetric_from_comparison(
+        session = MeldSession.create_symmetric_from_relation_analysis(
             comparison,
             ops.init(f"target/badge-{len(comment)}"),
         )
@@ -2023,7 +2168,7 @@ def test_result_rows_share_tree_prefix_and_keep_apply_card_fully_anchored():
         ComparisonInput.from_contexts(left, right),
         Task2CompareProvider(),
     )
-    session = MeldSession.create_symmetric_from_comparison(
+    session = MeldSession.create_symmetric_from_relation_analysis(
         comparison,
         ops.init("target/result-tree-row"),
     )
@@ -2145,7 +2290,7 @@ def test_v3_rejects_cross_relation_thematic_compression():
         ComparisonInput.from_contexts(left, right),
         PriorityCompareProvider(),
     )
-    session = MeldSession.create_symmetric_from_comparison(
+    session = MeldSession.create_symmetric_from_relation_analysis(
         comparison,
         ops.init("target/no-compression"),
     )
@@ -2237,9 +2382,9 @@ def test_context_meld_one_shot_reply_resume_and_provider_free_apply(
     session = store.load_meld_session(target.uid)
     assert comparison is not None
     assert session is not None
-    assert session.comparison_seed is not None
-    assert session.comparison_seed.analysis.uid == comparison.uid
-    assert session.comparison_seed.analysis_digest == (
+    assert session.relation_analysis_seed is not None
+    assert session.relation_analysis_seed.analysis.uid == comparison.uid
+    assert session.relation_analysis_seed.analysis_digest == (
         comparison_canonical_digest(comparison.to_dict())
     )
     impact = runner.invoke(app, ["impact", "meld", "--session", session.uid])
@@ -2446,8 +2591,8 @@ def test_symmetric_meld_creates_missing_compare_without_switching_current(
     assert analysis is not None
     session = store.load_meld_session(target.uid)
     assert session is not None
-    assert session.comparison_seed is not None
-    assert session.comparison_seed.analysis.uid == analysis.uid
+    assert session.relation_analysis_seed is not None
+    assert session.relation_analysis_seed.analysis.uid == analysis.uid
     assert store.current_context_name() == current_before
 
 
@@ -2483,8 +2628,8 @@ def test_symmetric_meld_refreshes_stale_compare(
     assert refreshed.uid != prior.uid
     session = store.load_meld_session(target.uid)
     assert session is not None
-    assert session.comparison_seed is not None
-    assert session.comparison_seed.analysis.uid == refreshed.uid
+    assert session.relation_analysis_seed is not None
+    assert session.relation_analysis_seed.analysis.uid == refreshed.uid
 
 
 def test_symmetric_meld_creates_exact_order_when_only_reverse_exists(
@@ -2510,8 +2655,8 @@ def test_symmetric_meld_creates_exact_order_when_only_reverse_exists(
     assert load_comparison_analysis(right.uid, left.uid).uid == reverse.uid
     session = store.load_meld_session(target.uid)
     assert session is not None
-    assert session.comparison_seed is not None
-    assert session.comparison_seed.analysis.uid == forward.uid
+    assert session.relation_analysis_seed is not None
+    assert session.relation_analysis_seed.analysis.uid == forward.uid
 
 
 def test_seeded_meld_schema_round_trips_and_rejects_tampering(
@@ -2521,7 +2666,7 @@ def test_seeded_meld_schema_round_trips_and_rejects_tampering(
     left, right, target = _task2_contexts(store)
     comparison = load_comparison_analysis(left.uid, right.uid)
     assert comparison is not None
-    session = MeldSession.create_symmetric_from_comparison(
+    session = MeldSession.create_symmetric_from_relation_analysis(
         comparison,
         target,
     )
@@ -2578,6 +2723,8 @@ def test_directional_meld_uses_current_incoming_and_relative_baseline(
     session = store.load_meld_session(baseline.uid)
     assert session is not None
     assert session.mode == "DIRECTIONAL"
+    assert session.relation_analysis_seed is not None
+    assert len(provider.relation_payloads) == 1
     assert [frame.role for frame in session.frames] == [
         "INCOMING",
         "BASELINE",
@@ -3138,8 +3285,8 @@ def test_symmetric_meld_to_creates_missing_basis_and_result_without_switching(
     created = store.load_direct(result_name)
     session = store.load_meld_session(created.uid)
     assert session is not None
-    assert session.comparison_seed is not None
-    assert session.comparison_seed.analysis.uid == analysis.uid
+    assert session.relation_analysis_seed is not None
+    assert session.relation_analysis_seed.analysis.uid == analysis.uid
 
 
 def test_symmetric_meld_explicit_result_adopts_only_empty_or_exact_session(
@@ -3308,8 +3455,8 @@ def test_deferred_session_restart_creates_exact_ordered_compare_basis(
     assert replacement is not None
     assert replacement.uid != deferred.uid
     assert replacement.state == "AWAITING_REPLY"
-    assert replacement.comparison_seed is not None
-    assert replacement.comparison_seed.analysis.uid == reverse.uid
+    assert replacement.relation_analysis_seed is not None
+    assert replacement.relation_analysis_seed.analysis.uid == reverse.uid
     assert [frame.context_name for frame in replacement.frames] == [
         right.name,
         left.name,
@@ -3831,16 +3978,16 @@ def test_context_rename_rebinds_an_unapplied_meld_compare_seed(isolated_store):
         ComparisonInput.from_contexts(left, right),
         Task2CompareProvider(),
     )
-    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    session = MeldSession.create_symmetric_from_relation_analysis(comparison, target)
     store.save_meld_session(session)
 
     store.rename_contexts(store.plan_context_rename(left.name, "task-2/renamed-left"))
 
     rebound = store.load_meld_session(target.uid)
-    assert rebound is not None and rebound.comparison_seed is not None
+    assert rebound is not None and rebound.relation_analysis_seed is not None
     assert rebound.frames[0].context_name == "task-2/renamed-left"
     assert (
-        rebound.comparison_seed.analysis.frames[0].context_name == "task-2/renamed-left"
+        rebound.relation_analysis_seed.analysis.frames[0].context_name == "task-2/renamed-left"
     )
 
 
@@ -4422,7 +4569,7 @@ def test_followup_meld_turn_uses_shared_interactive_wait(
         ComparisonInput.from_contexts(left, right),
         Task2CompareProvider(),
     )
-    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    session = MeldSession.create_symmetric_from_relation_analysis(comparison, target)
     store.save_meld_session(session, expected_session_digest=None)
     expected = meld_canonical_digest(session.to_dict())
     issue_uid = session.current_assessment.issues[0].uid
@@ -4486,7 +4633,7 @@ def test_followup_meld_turn_reuses_exact_saved_resolution_branch_without_provide
         ComparisonInput.from_contexts(left, right),
         Task2CompareProvider(),
     )
-    base = MeldSession.create_symmetric_from_comparison(comparison, target)
+    base = MeldSession.create_symmetric_from_relation_analysis(comparison, target)
     base.start_turn(
         "Keep all supported compensation details.",
         scope=scope,
@@ -4513,7 +4660,7 @@ def test_followup_meld_turn_reuses_exact_saved_resolution_branch_without_provide
     # Recreate the exact frozen semantic base with new session and turn UUIDs.
     # Study runs may regenerate those graph identities even when the reviewed
     # strategy, source evidence, and target contract are unchanged.
-    pending = MeldSession.create_symmetric_from_comparison(comparison, target)
+    pending = MeldSession.create_symmetric_from_relation_analysis(comparison, target)
     pending.start_turn(
         "Keep all supported compensation details.",
         scope=scope,
@@ -4572,7 +4719,7 @@ def test_meld_choice_branches_persist_only_the_selected_local_option(
         ComparisonInput.from_contexts(left, right),
         Task2CompareProvider(),
     )
-    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    session = MeldSession.create_symmetric_from_relation_analysis(comparison, target)
     store.save_meld_session(session, expected_session_digest=None)
     issue = session.current_assessment.issues[0]
     option = issue.options[1]
@@ -4618,7 +4765,7 @@ def test_meld_workbench_restores_local_choice_without_calling_provider(
         ComparisonInput.from_contexts(left, right),
         Task2CompareProvider(),
     )
-    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    session = MeldSession.create_symmetric_from_relation_analysis(comparison, target)
     store.save_meld_session(session, expected_session_digest=None)
     issue = session.current_assessment.issues[0]
     option = issue.options[0]
@@ -4666,7 +4813,7 @@ def test_completed_meld_reconciliation_does_not_reapply_stale_local_choices(
         ComparisonInput.from_contexts(left, right),
         Task2CompareProvider(),
     )
-    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    session = MeldSession.create_symmetric_from_relation_analysis(comparison, target)
     store.save_meld_session(session, expected_session_digest=None)
     initial_digest = meld_canonical_digest(session.to_dict())
     issue = session.current_assessment.issues[0]
@@ -4711,7 +4858,7 @@ def test_issue_scoped_meld_turn_does_not_publish_a_semantic_outcome_branch(
         ComparisonInput.from_contexts(left, right),
         Task2CompareProvider(),
     )
-    session = MeldSession.create_symmetric_from_comparison(comparison, target)
+    session = MeldSession.create_symmetric_from_relation_analysis(comparison, target)
     issue = session.current_assessment.issues[0]
     session.start_turn(
         "Keep all supported compensation details.",
@@ -4757,7 +4904,7 @@ def test_declared_study_meld_branch_is_available_in_a_fresh_profile(
         ComparisonInput.from_contexts(left, right),
         Task2CompareProvider(),
     )
-    prepared = MeldSession.create_symmetric_from_comparison(comparison, target)
+    prepared = MeldSession.create_symmetric_from_relation_analysis(comparison, target)
     prepared.start_turn(
         "Keep all supported compensation details.",
         scope="ALL",
@@ -4823,7 +4970,7 @@ def test_declared_study_meld_branch_is_available_in_a_fresh_profile(
 
     # A new Study run has different Meld graph identities and no ad-hoc cache.
     branch_path.unlink()
-    pending = MeldSession.create_symmetric_from_comparison(comparison, target)
+    pending = MeldSession.create_symmetric_from_relation_analysis(comparison, target)
     pending.start_turn(
         "Keep all supported compensation details.",
         scope="ALL",
@@ -4870,7 +5017,7 @@ def test_each_meld_option_has_a_distinct_exact_request_digest():
     )
     keys = []
     for option_index in (0, 1):
-        session = MeldSession.create_symmetric_from_comparison(comparison, target)
+        session = MeldSession.create_symmetric_from_relation_analysis(comparison, target)
         issue = session.current_assessment.issues[0]
         session.start_turn(
             f"Choose this reading: {issue.options[option_index].text}",
@@ -5195,7 +5342,7 @@ def test_meld_shell_selects_one_issue_reading_from_the_compact_surface():
         ComparisonInput.from_contexts(left, right),
         Task2CompareProvider(),
     )
-    session = MeldSession.create_symmetric_from_comparison(
+    session = MeldSession.create_symmetric_from_relation_analysis(
         comparison,
         target,
     )

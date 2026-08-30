@@ -6,6 +6,9 @@ from collections.abc import Sequence
 from dataclasses import replace
 
 from memcommit.adapters.python_api._runtime import ClientRuntime
+from memcommit.adapters.python_api._support.active_profile import (
+    active_profile_registry,
+)
 from memcommit.adapters.python_api._support.errors import raise_public
 from memcommit.adapters.python_api._support.semantic import safe_semantic_provider
 from memcommit.adapters.python_api.errors import (
@@ -35,11 +38,7 @@ from memcommit.application.capabilities.memory_issue_analysis.model import (
     ConflictReport,
     FindingsError,
 )
-from memcommit.application.operations.profile.config import (
-    ProfileConfigError,
-    load_profile_registry,
-    profile_store_dir,
-)
+from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindKind,
@@ -74,23 +73,6 @@ def _current_name(runtime: ClientRuntime) -> str | None:
         raise_public(SemanticStorageError, error)
 
 
-def _active_registry(runtime: ClientRuntime):
-    if runtime.registry is None or runtime.profile is None:
-        return None
-    try:
-        registry = load_profile_registry()
-        if (
-            registry.active.uid != runtime.profile.uid
-            or runtime.store_root != profile_store_dir(registry.active).resolve()
-        ):
-            return None
-        return registry
-    except (ProfileConfigError, ProfileError) as error:
-        raise_public(SemanticAuthorityError, error)
-    except OSError as error:
-        raise_public(SemanticStorageError, error)
-
-
 def _source(
     runtime: ClientRuntime,
     context_names: Sequence[str],
@@ -110,7 +92,7 @@ def _source(
     )
     if len(set(canonical)) != len(canonical):
         raise ValueError("Quality finder Context names must not repeat.")
-    registry = _active_registry(runtime)
+    registry = active_profile_registry(runtime)
     accesses = tuple(
         resolve_context_access(
             runtime.store,
@@ -177,7 +159,7 @@ def find_quality(
                         "Quality finder Context names must be nonblank text."
                     )
                 root_name = resolve_context_locator(root_name, current=current_name)
-            registry = _active_registry(runtime)
+            registry = active_profile_registry(runtime)
             access = resolve_context_access(
                 runtime.store,
                 root_name,

@@ -17,7 +17,7 @@ import memcommit.adapters.console.clipboard as clipboard
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.clipboard import ClipboardError, ClipboardPayload
 from memcommit.core.context import Context, Memory, QueryContextRef
-from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef, context_snapshot_digest
+from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef, context_snapshot_digest
 from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,

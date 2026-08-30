@@ -19,6 +19,8 @@ REPOSITORY_ROOT = Path(__file__).parents[1]
 PACKAGE_ROOT = REPOSITORY_ROOT / "src/memcommit/persistence/store/context_memory"
 
 EXPECTED_METHODS = {
+    "catalog_model.py": set(),
+    "checkpoint_frame_mapping.py": set(),
     "current.py": {
         "_read_state",
         "_write_state",
@@ -104,6 +106,7 @@ EXPECTED_METHODS = {
         "delete_context_if",
         "_delete_locked",
     },
+    "lifecycle_model.py": set(),
     "query_source.py": {
         "_canonical_query_source_uid",
         "_query_source_dir",

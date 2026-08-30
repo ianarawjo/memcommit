@@ -1,27 +1,27 @@
-"""Authored bidirectional examples quoted by every Distill and Elaborate prompt."""
+"""Authored bidirectional examples quoted by every Distill and Makemore prompt."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import lru_cache
-from importlib import resources
 import json
 
+from memcommit.application.capabilities.evaluation.resources import fixture_resource
 
-REFERENCE_EXAMPLES_MARKER = "DISTILL / ELABORATE REFERENCE EXAMPLES:\n"
-REFERENCE_FIXTURE_PACKAGE = "memcommit.application.capabilities.evaluation"
-REFERENCE_FIXTURE_NAME = "fixtures/distill_elaborate.json"
+
+REFERENCE_EXAMPLES_MARKER = "DISTILL / MAKEMORE REFERENCE EXAMPLES:\n"
+REFERENCE_FIXTURE_NAME = "distill_makemore.json"
 REFERENCE_SCHEMA_VERSION = 2
 REFERENCE_RULESET_VERSION = 3
 REFERENCE_FAMILY_IDS = ("cafe-order", "lost-property", "cloze")
 
 
-class DistillElaborateReferenceError(ValueError):
+class DistillMakemoreReferenceError(ValueError):
     """The packaged prompt-reference corpus is missing or malformed."""
 
 
 @dataclass(frozen=True)
-class DistillElaborateReferenceFamily:
+class DistillMakemoreReferenceFamily:
     """One complete Example-Memory and Rule-Memory correspondence."""
 
     family_id: str
@@ -33,8 +33,8 @@ def _strict_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
     result: dict[str, object] = {}
     for key, value in pairs:
         if key in result:
-            raise DistillElaborateReferenceError(
-                f"Duplicate Distill/Elaborate reference key: {key}."
+            raise DistillMakemoreReferenceError(
+                f"Duplicate Distill/Makemore reference key: {key}."
             )
         result[key] = value
     return result
@@ -46,32 +46,28 @@ def _texts(value: object, *, label: str) -> tuple[str, ...]:
         or not value
         or any(not isinstance(item, str) or not item.strip() for item in value)
     ):
-        raise DistillElaborateReferenceError(
-            f"Distill/Elaborate reference {label} must be nonempty texts."
+        raise DistillMakemoreReferenceError(
+            f"Distill/Makemore reference {label} must be nonempty texts."
         )
     normalized = tuple(item.strip() for item in value)
     if len(normalized) != len(set(normalized)):
-        raise DistillElaborateReferenceError(
-            f"Distill/Elaborate reference {label} contains duplicates."
+        raise DistillMakemoreReferenceError(
+            f"Distill/Makemore reference {label} contains duplicates."
         )
     return normalized
 
 
 @lru_cache(maxsize=1)
-def load_distill_elaborate_reference_families(
-) -> tuple[DistillElaborateReferenceFamily, ...]:
+def load_distill_makemore_reference_families(
+) -> tuple[DistillMakemoreReferenceFamily, ...]:
     """Load and strictly validate the packaged prompt-visible examples once."""
 
     try:
-        raw = (
-            resources.files(REFERENCE_FIXTURE_PACKAGE)
-            .joinpath(REFERENCE_FIXTURE_NAME)
-            .read_text(encoding="utf-8")
-        )
+        raw = fixture_resource(REFERENCE_FIXTURE_NAME).read_text(encoding="utf-8")
         value = json.loads(raw, object_pairs_hook=_strict_object)
     except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError) as error:
-        raise DistillElaborateReferenceError(
-            "The packaged Distill/Elaborate reference corpus is invalid."
+        raise DistillMakemoreReferenceError(
+            "The packaged Distill/Makemore reference corpus is invalid."
         ) from error
     expected_keys = {
         "schema_version",
@@ -82,11 +78,11 @@ def load_distill_elaborate_reference_families(
         "operation_rules",
         "reference_families",
         "distill_cases",
-        "elaborate_cases",
+        "makemore_cases",
     }
     if not isinstance(value, dict) or set(value) != expected_keys:
-        raise DistillElaborateReferenceError(
-            "The Distill/Elaborate reference corpus has an invalid field set."
+        raise DistillMakemoreReferenceError(
+            "The Distill/Makemore reference corpus has an invalid field set."
         )
     if (
         type(value["schema_version"]) is not int
@@ -97,31 +93,31 @@ def load_distill_elaborate_reference_families(
         or value["independent_holdout"] is not False
         or value["prompt_reference"] is not True
     ):
-        raise DistillElaborateReferenceError(
-            "The Distill/Elaborate reference corpus identity is unsupported."
+        raise DistillMakemoreReferenceError(
+            "The Distill/Makemore reference corpus identity is unsupported."
         )
     raw_families = value["reference_families"]
     if not isinstance(raw_families, list):
-        raise DistillElaborateReferenceError(
-            "Distill/Elaborate reference families must be an array."
+        raise DistillMakemoreReferenceError(
+            "Distill/Makemore reference families must be an array."
         )
-    families: list[DistillElaborateReferenceFamily] = []
+    families: list[DistillMakemoreReferenceFamily] = []
     for index, item in enumerate(raw_families, 1):
         if not isinstance(item, dict) or set(item) != {
             "id",
             "rule_memories",
             "example_memories",
         }:
-            raise DistillElaborateReferenceError(
-                f"Distill/Elaborate reference family {index} is invalid."
+            raise DistillMakemoreReferenceError(
+                f"Distill/Makemore reference family {index} is invalid."
             )
         family_id = item["id"]
         if not isinstance(family_id, str) or not family_id.strip():
-            raise DistillElaborateReferenceError(
-                f"Distill/Elaborate reference family {index} needs an id."
+            raise DistillMakemoreReferenceError(
+                f"Distill/Makemore reference family {index} needs an id."
             )
         families.append(
-            DistillElaborateReferenceFamily(
+            DistillMakemoreReferenceFamily(
                 family_id=family_id.strip(),
                 rule_memories=_texts(
                     item["rule_memories"],
@@ -134,18 +130,18 @@ def load_distill_elaborate_reference_families(
             )
         )
     if tuple(family.family_id for family in families) != REFERENCE_FAMILY_IDS:
-        raise DistillElaborateReferenceError(
-            "Distill/Elaborate reference families must be cafe-order, "
+        raise DistillMakemoreReferenceError(
+            "Distill/Makemore reference families must be cafe-order, "
             "lost-property, and cloze in that order."
         )
     if any(len(family.example_memories) != 3 for family in families):
-        raise DistillElaborateReferenceError(
-            "Every Distill/Elaborate reference family must contain three Examples."
+        raise DistillMakemoreReferenceError(
+            "Every Distill/Makemore reference family must contain three Examples."
         )
     return tuple(families)
 
 
-def distill_elaborate_reference_payload(
+def distill_makemore_reference_payload(
     *,
     include_examples: bool = True,
 ) -> dict[str, object]:
@@ -164,7 +160,7 @@ def distill_elaborate_reference_payload(
                 "rule_memories": list(family.rule_memories),
             }
             for family in (
-                load_distill_elaborate_reference_families()
+                load_distill_makemore_reference_families()
                 if include_examples
                 else ()
             )
@@ -173,7 +169,7 @@ def distill_elaborate_reference_payload(
 
 
 @lru_cache(maxsize=2)
-def render_distill_elaborate_reference_examples(
+def render_distill_makemore_reference_examples(
     *,
     include_examples: bool = True,
 ) -> str:
@@ -183,20 +179,20 @@ def render_distill_elaborate_reference_examples(
         return ""
 
     return REFERENCE_EXAMPLES_MARKER + json.dumps(
-        distill_elaborate_reference_payload(include_examples=True),
+        distill_makemore_reference_payload(include_examples=True),
         ensure_ascii=False,
         separators=(",", ":"),
     )
 
 
 __all__ = [
-    "DistillElaborateReferenceError",
-    "DistillElaborateReferenceFamily",
+    "DistillMakemoreReferenceError",
+    "DistillMakemoreReferenceFamily",
     "REFERENCE_EXAMPLES_MARKER",
     "REFERENCE_FAMILY_IDS",
     "REFERENCE_RULESET_VERSION",
     "REFERENCE_SCHEMA_VERSION",
-    "distill_elaborate_reference_payload",
-    "load_distill_elaborate_reference_families",
-    "render_distill_elaborate_reference_examples",
+    "distill_makemore_reference_payload",
+    "load_distill_makemore_reference_families",
+    "render_distill_makemore_reference_examples",
 ]

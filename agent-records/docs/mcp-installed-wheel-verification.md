@@ -27,7 +27,7 @@ environment's `site-packages`, and discovered this exact registry order:
 11. `memcommit_atomize`
 12. `memcommit_atomize_grounding`
 13. `memcommit_distill`
-14. `memcommit_elaborate`
+14. `memcommit_makemore`
 15. `memcommit_fit`
 16. `memcommit_forget`
 17. `memcommit_resolve`
@@ -57,7 +57,7 @@ and changed-Apply paths remain covered in-process.
 
 From a second process whose working directory was outside the checkout,
 `import memcommit` did not load `memcommit.adapters.python_api`; resolving the real public
-client loaded no Add, Fit, Distill, Elaborate, Forget, Ground, Meld, or Query
+client loaded no Add, Fit, Distill, Makemore, Forget, Ground, Meld, or Query
 application implementation. The resolved root/API client objects retained
 identity and the module origin remained under `site-packages`.
 

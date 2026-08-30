@@ -32,7 +32,7 @@ required before it can safely consume issue findings.
 
 | Operation | Current routes | Application owner | Result/effect |
 | --- | --- | --- | --- |
-| Find Duplicates | CLI and public Python | `operations.find_duplicates.application.find_duplicates` | resolves readable authority and returns one provider-free direct or lexical exact-DUP scope; no mutation |
+| Find Duplicates | CLI, public Python, and Dedup's shared analysis phase | `operations.find_duplicates.application` | resolves readable authority and returns one provider-free direct or lexical exact-DUP scope; Find remains read-only and Dedup consumes the same frozen result without rediscovery |
 | Find Redundancies | CLI, public Python, agent, and Dedun's shared analysis phase | `operations.find_redundancies.application` | prepares an exact/lexical Source and executes combined or independent complete-DUN analysis; Find remains read-only and Dedun retains its separate Apply boundary |
 | Find Ambiguities | direct, `--all`, `--select`, public Python, and agent | `operations.find_ambiguities.application` | prepares an authorized frozen Source or accepts the setup-approved Source, then returns a typed report and process-local review projection |
 | Find Conflicts | direct, `--all`, `--select`, `--handoff-json`, public Python, and agent | `operations.find_conflicts.application` | returns the same typed Source/report/session boundary; Resolve conversion remains a subsequent operation-owned handoff |

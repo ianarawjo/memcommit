@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import hashlib
-from importlib import resources
 import json
 import re
 
+from memcommit.application.capabilities.evaluation.resources import fixture_resource
 from memcommit.application.capabilities.reviewing.result_workbench import (
     RESULT_REPORT_SECTION_SOFT_MAX_WORDS,
     RESULT_REPORT_SECTION_TARGET_MIN_WORDS,
@@ -97,12 +97,7 @@ def _load_calibration(
 ) -> tuple[dict[str, object], list[dict[str, object]]]:
     """Load human-reviewed examples valid for the active evidence mode."""
     try:
-        resource = resources.files(
-            "memcommit.application.capabilities.evaluation"
-        ).joinpath(
-            "fixtures",
-            "atomize.json",
-        )
+        resource = fixture_resource("atomize.json")
         fixture = json.loads(
             resource.read_text(encoding="utf-8"),
             object_pairs_hook=_reject_duplicate_json_keys,

@@ -9,10 +9,10 @@ cases and sibling CLI, TUI, Python, and agent projections. That dependency
 direction did not by itself define Python package loading. The root package
 eagerly re-exported the public API, and the public client eagerly imported each
 operation integration. Consequently, importing an unrelated submodule first
-loaded the complete public client and, after the Distill and Elaborate public
+loaded the complete public client and, after the Distill and Makemore public
 slice was assembled, the Ground adapters as well.
 
-This is not a semantic dependency from Distill, Elaborate, Update, or Atomize
+This is not a semantic dependency from Distill, Makemore, Update, or Atomize
 to Ground. Their application modules do not import Ground. It is a package
 assembly dependency created before an operation has been selected. In the
 single complete wheel it normally remains invisible, but an import failure in
@@ -101,7 +101,7 @@ isolation.
 2. Importing one operation's domain, application, or runtime module does not
    require an unrelated operation adapter.
 3. Importing or constructing `MemCommitClient` does not import Ground,
-   Distill, Elaborate, Add, Meld, or Query implementation modules merely
+   Distill, Makemore, Add, Meld, or Query implementation modules merely
    because their methods exist.
 4. Calling an operation method may load that operation's application/runtime
    integration. A Ground-specific method may additionally load its exact
@@ -125,7 +125,7 @@ operation assembly; it does not require one wheel per operation.
 
 ## Completed-slice audit
 
-The first strict audit covers Query, Add, Meld, Distill, and Elaborate because
+The first strict audit covers Query, Add, Meld, Distill, and Makemore because
 they are the completed public Python/agent slices. Summarize, Atomize, Update,
 and other internal slices receive the common package-root and application
 import checks, but this change does not publish a new Python or agent contract
@@ -174,14 +174,14 @@ entrypoint migration described above.
 `IMPORT-01` passed its first strict gate on 2026-08-15. Five fresh-process tests
 prove lazy root/API exports, public object identity, Ground-blocked standalone
 imports, operation implementation absence after client import, and selected
-Elaborate loading without Ground, Distill, or Meld assembly. The earlier
+Makemore loading without Ground, Distill, or Meld assembly. The earlier
 invalid-HOME explicit-root test continues to prove absence of import-time
 Profile resolution. A focused public API and agent registry
 run passed 112 tests.
 
 A fresh `0.0.1` wheel was then installed with its former MCP extra into a new
 Python 3.13.5 environment. From outside the checkout, official MCP 2.0.0 stdio
-discovered Query, Add, Meld, Distill, Elaborate, and Fit, executed Add, and
+discovered Query, Add, Meld, Distill, Makemore, and Fit, executed Add, and
 returned the typed unknown-tool failure. A second installed-process check
 proved the same lazy import graph from `site-packages`. This closes the first
 public-slice import gate; the Typer console registry remains a separately

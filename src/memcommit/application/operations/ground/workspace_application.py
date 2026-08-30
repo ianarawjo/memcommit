@@ -204,7 +204,10 @@ class AdoptGroundWorkspaceMemoriesRequest:
             )
         ):
             raise GroundWorkspaceError("Semantic Ground adoption digest is invalid.")
-        if self.source_operation not in {"distill", "elaborate"}:
+        # Older retained Makemore proposals recorded the operation as
+        # ``elaborate``.  Accept that stored identifier only at this adoption
+        # boundary; new callers and receipts use ``makemore``.
+        if self.source_operation not in {"distill", "makemore", "elaborate"}:
             raise GroundWorkspaceError("Semantic Ground adoption operation is invalid.")
         names = tuple(binding[0] for binding in self.source_bindings)
         if len(names) != len(set(names)) or any(

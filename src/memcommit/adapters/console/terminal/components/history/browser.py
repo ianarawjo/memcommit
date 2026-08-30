@@ -33,11 +33,11 @@ from memcommit.adapters.console.terminal.components.history.update_checkpoint im
     choose_update_checkpoint_subtree,
 )
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.capabilities.retained_history.checkpoint_catalog import (
+from memcommit.application.capabilities.checkpoint_catalog import (
     ResolvedCheckpointUnit,
     freeze_checkpoint_catalog,
 )
-from memcommit.application.capabilities.retained_history.display import (
+from memcommit.adapters.console.terminal.components.history.display import (
     HistoryDisplayRow,
     checkpoint_command_identity,
     checkpoint_inherited_from,

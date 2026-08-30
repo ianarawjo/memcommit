@@ -1,4 +1,4 @@
-"""One-shot provider contract for a targetless peer-Context comparison."""
+"""One-shot provider contract for targetless peer-Context relation analysis."""
 
 from __future__ import annotations
 
@@ -8,15 +8,15 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
-    COMPARISON_TEXT_LIMIT,
-    ComparisonAnalysis,
-    ComparisonError,
-    ComparisonInput,
-    ComparisonIssue,
-    ComparisonMember,
-    ComparisonOption,
-    ComparisonRelation,
-    ComparisonReports,
+    MEMORY_RELATION_TEXT_LIMIT,
+    MemoryRelationAnalysis,
+    MemoryRelationError,
+    MemoryRelationInput,
+    MemoryRelationIssue,
+    MemoryRelationMember,
+    MemoryRelationOption,
+    MemoryRelation,
+    MemoryRelationReports,
 )
 from memcommit.application.capabilities.reviewing.result_workbench import (
     RESULT_REPORT_FRAME_SOFT_MAX_WORDS,
@@ -51,7 +51,7 @@ COMPARISON_RESPONSE_CHAR_LIMIT = 1_000_000
 COMPARISON_KEY_LIMIT = 100
 COMPARISON_OPTION_LIMIT = 5
 
-COMPARISON_EXECUTION_POLICY = SemanticExecutionPolicy(
+MEMORY_RELATION_EXECUTION_POLICY = SemanticExecutionPolicy(
     operation="compare_contexts",
     strategy=ExecutionStrategy.BLOCK_RELATIONS,
     one_shot_limits=BudgetLimits(max_input_chars=COMPARISON_INPUT_CHAR_LIMIT),
@@ -72,11 +72,11 @@ _STATUSES = {"RESOLVED", "UNRESOLVED"}
 _PRIORITIES = {"REQUIRED", "HELPFUL"}
 
 
-class ComparisonProviderError(ComparisonError):
-    """Safe failure from one semantic comparison call."""
+class MemoryRelationProviderError(MemoryRelationError):
+    """Safe failure from one semantic peer-relation call."""
 
 
-class ComparisonProvider(Protocol):
+class MemoryRelationProvider(Protocol):
     def complete(
         self,
         prompt: str,
@@ -89,7 +89,7 @@ class ComparisonProvider(Protocol):
 
 @dataclass(frozen=True)
 class _ProviderView:
-    memory_by_id: dict[str, ComparisonMember]
+    memory_by_id: dict[str, MemoryRelationMember]
     frame_ids: tuple[str, str]
     payload: dict[str, object]
 
@@ -111,13 +111,13 @@ def _exact_dict(
     label: str,
 ) -> dict[str, object]:
     if not isinstance(value, dict) or set(value) != keys:
-        raise ComparisonProviderError(f"Codex compare returned an invalid {label}.")
+        raise MemoryRelationProviderError(f"Codex compare returned an invalid {label}.")
     return value
 
 
 def _array(value: object, label: str) -> list[object]:
     if not isinstance(value, list):
-        raise ComparisonProviderError(f"Codex compare returned an invalid {label}.")
+        raise MemoryRelationProviderError(f"Codex compare returned an invalid {label}.")
     return value
 
 
@@ -126,14 +126,14 @@ def _string(
     label: str,
     *,
     empty: bool = False,
-    limit: int = COMPARISON_TEXT_LIMIT,
+    limit: int = MEMORY_RELATION_TEXT_LIMIT,
 ) -> str:
     if (
         not isinstance(value, str)
         or (not empty and not value.strip())
         or len(value) > limit
     ):
-        raise ComparisonProviderError(f"Codex compare returned an invalid {label}.")
+        raise MemoryRelationProviderError(f"Codex compare returned an invalid {label}.")
     return value
 
 
@@ -143,7 +143,7 @@ def _key(value: object, label: str) -> str:
 
 def _literal(value: object, allowed: set[str], label: str) -> str:
     if not isinstance(value, str) or value not in allowed:
-        raise ComparisonProviderError(f"Codex compare returned an invalid {label}.")
+        raise MemoryRelationProviderError(f"Codex compare returned an invalid {label}.")
     return value
 
 
@@ -155,19 +155,19 @@ def _keys(
 ) -> tuple[str, ...]:
     values = _array(value, label)
     if not empty and not values:
-        raise ComparisonProviderError(f"Codex compare returned an invalid {label}.")
+        raise MemoryRelationProviderError(f"Codex compare returned an invalid {label}.")
     result = tuple(_key(item, label) for item in values)
     if len(result) != len(set(result)):
-        raise ComparisonProviderError(f"Codex compare returned duplicate {label}.")
+        raise MemoryRelationProviderError(f"Codex compare returned duplicate {label}.")
     return result
 
 
 def _provider_view(
-    comparison_input: ComparisonInput,
+    comparison_input: MemoryRelationInput,
 ) -> _ProviderView:
     comparison_input.validate()
     frame_ids = ("reference", "compared")
-    memory_by_id: dict[str, ComparisonMember] = {}
+    memory_by_id: dict[str, MemoryRelationMember] = {}
     frame_payloads: list[dict[str, object]] = []
     for frame_index, (frame, frame_id) in enumerate(
         zip(comparison_input.frames, frame_ids, strict=True),
@@ -176,7 +176,7 @@ def _provider_view(
         memories: list[dict[str, object]] = []
         for memory_index, memory in enumerate(frame.memories, start=1):
             memory_id = f"m{frame_index}_{memory_index:06d}"
-            memory_by_id[memory_id] = ComparisonMember(
+            memory_by_id[memory_id] = MemoryRelationMember(
                 frame_uid=frame.uid,
                 memory_uid=memory.uid,
             )
@@ -223,12 +223,12 @@ def _provider_view(
     )
 
 
-def comparison_output_schema(
+def memory_relation_output_schema(
     source_memory_ids: tuple[str, ...],
 ) -> dict[str, object]:
     source_count = len(source_memory_ids)
-    text = {"type": "string", "minLength": 1, "maxLength": COMPARISON_TEXT_LIMIT}
-    overview_text = understanding_text_schema(limit=COMPARISON_TEXT_LIMIT)
+    text = {"type": "string", "minLength": 1, "maxLength": MEMORY_RELATION_TEXT_LIMIT}
+    overview_text = understanding_text_schema(limit=MEMORY_RELATION_TEXT_LIMIT)
     overview_text["description"] = (
         "One short English natural-language report paragraph using complete "
         "sentences, normally no more than roughly "
@@ -240,7 +240,7 @@ def comparison_output_schema(
     # know that through JSON Schema, so the analysis validator proves it.
     optional_text = {
         "type": "string",
-        "maxLength": COMPARISON_TEXT_LIMIT,
+        "maxLength": MEMORY_RELATION_TEXT_LIMIT,
         "description": (
             "One concise English natural-language report paragraph, or the "
             "exact empty string when its relation group is absent. The four "
@@ -406,11 +406,11 @@ def _prompt(payload: dict[str, object], *, repair: bool = False) -> str:
         sort_keys=True,
     )
     plan = plan_semantic_execution(
-        COMPARISON_EXECUTION_POLICY,
+        MEMORY_RELATION_EXECUTION_POLICY,
         json_budget(payload),
     )
     if plan.mode is not ExecutionMode.ONE_SHOT:
-        raise ComparisonProviderError(
+        raise MemoryRelationProviderError(
             "This Context pair exceeds the one-shot compare input limit of "
             f"{COMPARISON_INPUT_CHAR_LIMIT} characters. Input is never "
             "truncated or split into hidden calls."
@@ -532,15 +532,15 @@ def _stable_uid(
 def _parse_analysis(
     response: object,
     *,
-    comparison_input: ComparisonInput,
+    comparison_input: MemoryRelationInput,
     view: _ProviderView,
-) -> ComparisonAnalysis:
+) -> MemoryRelationAnalysis:
     if (
         not isinstance(response, str)
         or not response.strip()
         or len(response) > COMPARISON_RESPONSE_CHAR_LIMIT
     ):
-        raise ComparisonProviderError(
+        raise MemoryRelationProviderError(
             "Codex compare returned invalid structured output."
         )
     try:
@@ -549,7 +549,7 @@ def _parse_analysis(
             object_pairs_hook=_strict_json_object,
         )
     except (json.JSONDecodeError, ValueError) as error:
-        raise ComparisonProviderError(
+        raise MemoryRelationProviderError(
             "Codex compare returned invalid structured output."
         ) from error
     legacy_relation_shape = isinstance(value, dict) and "relations" in value
@@ -557,7 +557,7 @@ def _parse_analysis(
         "paired_relations" in value or "distinct_relations" in value
     )
     if legacy_relation_shape and split_relation_shape:
-        raise ComparisonProviderError("Codex compare returned mixed relation formats.")
+        raise MemoryRelationProviderError("Codex compare returned mixed relation formats.")
     source_assignment_shape = isinstance(value, dict) and "source_assignments" in value
     response_keys = {"overview", "reports", "issues"}
     response_keys.update(
@@ -583,7 +583,7 @@ def _parse_analysis(
         "comparison reports",
     )
     try:
-        reports = ComparisonReports.from_dict(
+        reports = MemoryRelationReports.from_dict(
             {
                 "both": _string(
                     report_record["both"],
@@ -607,8 +607,8 @@ def _parse_analysis(
                 ),
             }
         )
-    except ComparisonError as error:
-        raise ComparisonProviderError(str(error)) from error
+    except MemoryRelationError as error:
+        raise MemoryRelationProviderError(str(error)) from error
 
     if legacy_relation_shape:
         raw_paired_relations = _array(data["relations"], "comparison relations")
@@ -639,7 +639,7 @@ def _parse_analysis(
             "comparison relation",
         )
         if not legacy_relation_shape and record["kind"] == "DISTINCT":
-            raise ComparisonProviderError(
+            raise MemoryRelationProviderError(
                 "Codex compare returned DISTINCT in paired_relations."
             )
         relation_records.append(
@@ -653,7 +653,7 @@ def _parse_analysis(
         )
     for item in raw_distinct_relations:
         if not source_assignment_shape:
-            raise ComparisonProviderError(
+            raise MemoryRelationProviderError(
                 "Codex compare returned a distinct relation without source "
                 "assignments."
             )
@@ -675,7 +675,7 @@ def _parse_analysis(
             "distinct comparison relation side",
         )
         if record["kind"] != "DISTINCT":
-            raise ComparisonProviderError(
+            raise MemoryRelationProviderError(
                 "Codex compare returned a non-DISTINCT one-sided relation."
             )
         relation_records.append(
@@ -689,7 +689,7 @@ def _parse_analysis(
         )
     relation_keys = [key for key, _ in relation_records]
     if not relation_records or len(relation_keys) != len(set(relation_keys)):
-        raise ComparisonProviderError(
+        raise MemoryRelationProviderError(
             "Codex compare returned duplicate or empty relations."
         )
 
@@ -700,7 +700,7 @@ def _parse_analysis(
                 tuple(view.memory_by_id),
             )
         except CoverageError as error:
-            raise ComparisonProviderError(
+            raise MemoryRelationProviderError(
                 "Codex compare source assignments must cover every source "
                 "Memory exactly once."
             ) from error
@@ -712,7 +712,7 @@ def _parse_analysis(
                 "comparison source assignment relation key",
             )
             if relation_key not in relation_key_set:
-                raise ComparisonProviderError(
+                raise MemoryRelationProviderError(
                     "Codex compare assigned a source Memory to an unknown " "relation."
                 )
             assignment_by_source[source_id] = relation_key
@@ -738,7 +738,7 @@ def _parse_analysis(
                     else "COMPARED" if compared_ids and not reference_ids else None
                 )
                 if actual_side != record["side"]:
-                    raise ComparisonProviderError(
+                    raise MemoryRelationProviderError(
                         "Codex compare assigned a DISTINCT relation to invalid "
                         "PEER sides."
                     )
@@ -768,7 +768,7 @@ def _parse_analysis(
     }
     reference_frame_uid = comparison_input.frames[0].uid
     compared_frame_uid = comparison_input.frames[1].uid
-    relations: list[ComparisonRelation] = []
+    relations: list[MemoryRelation] = []
     covered_ids: list[str] = []
     for key, record in relation_records:
         reference_ids = _keys(
@@ -790,7 +790,7 @@ def _parse_analysis(
         if not memory_ids or any(
             memory_id not in view.memory_by_id for memory_id in memory_ids
         ):
-            raise ComparisonProviderError(
+            raise MemoryRelationProviderError(
                 "Codex compare returned an unknown or empty relation " "member."
             )
         if any(
@@ -800,24 +800,24 @@ def _parse_analysis(
             view.memory_by_id[memory_id].frame_uid != compared_frame_uid
             for memory_id in compared_ids
         ):
-            raise ComparisonProviderError(
+            raise MemoryRelationProviderError(
                 "Codex compare placed a source Memory on the wrong side."
             )
         if kind == "DISTINCT":
             if bool(reference_ids) == bool(compared_ids):
-                raise ComparisonProviderError(
+                raise MemoryRelationProviderError(
                     "Codex compare returned a DISTINCT relation with "
                     "invalid source sides."
                 )
         elif not reference_ids or not compared_ids:
-            raise ComparisonProviderError(
+            raise MemoryRelationProviderError(
                 "Codex compare returned a cross-source relation without "
                 "both PEER sides."
             )
         covered_ids.extend(memory_ids)
         try:
             relations.append(
-                ComparisonRelation.from_dict(
+                MemoryRelation.from_dict(
                     {
                         "uid": relation_uid_by_key[key],
                         "kind": kind,
@@ -841,12 +841,12 @@ def _parse_analysis(
                     }
                 )
             )
-        except ComparisonError as error:
-            raise ComparisonProviderError(str(error)) from error
+        except MemoryRelationError as error:
+            raise MemoryRelationProviderError(str(error)) from error
     if set(covered_ids) != set(view.memory_by_id) or len(covered_ids) != len(
         view.memory_by_id
     ):
-        raise ComparisonProviderError(
+        raise MemoryRelationProviderError(
             "Codex compare must cover every source Memory exactly once."
         )
 
@@ -875,11 +875,11 @@ def _parse_analysis(
     if len(issue_records) > len(view.memory_by_id) or len(issue_keys) != len(
         set(issue_keys)
     ):
-        raise ComparisonProviderError(
+        raise MemoryRelationProviderError(
             "Codex compare returned duplicate or excessive issues."
         )
 
-    issues: list[ComparisonIssue] = []
+    issues: list[MemoryRelationIssue] = []
     for key, record in issue_records:
         relation_refs = _keys(
             record["relation_keys"],
@@ -888,7 +888,7 @@ def _parse_analysis(
         if any(
             relation_key not in relation_uid_by_key for relation_key in relation_refs
         ):
-            raise ComparisonProviderError(
+            raise MemoryRelationProviderError(
                 "Codex compare returned an unknown issue relation key."
             )
         issue_uid = _stable_uid(
@@ -901,10 +901,10 @@ def _parse_analysis(
             "comparison issue options",
         )
         if len(raw_options) > COMPARISON_OPTION_LIMIT:
-            raise ComparisonProviderError(
+            raise MemoryRelationProviderError(
                 "Codex compare returned too many issue options."
             )
-        options: list[ComparisonOption] = []
+        options: list[MemoryRelationOption] = []
         for index, item in enumerate(raw_options, start=1):
             option = _exact_dict(
                 item,
@@ -912,7 +912,7 @@ def _parse_analysis(
                 "comparison issue option",
             )
             options.append(
-                ComparisonOption.from_dict(
+                MemoryRelationOption.from_dict(
                     {
                         "uid": str(
                             uuid.uuid5(
@@ -932,7 +932,7 @@ def _parse_analysis(
                 )
             )
         issues.append(
-            ComparisonIssue.from_dict(
+            MemoryRelationIssue.from_dict(
                 {
                     "uid": issue_uid,
                     "relation_uids": [
@@ -962,7 +962,7 @@ def _parse_analysis(
         )
 
     try:
-        return ComparisonAnalysis.create(
+        return MemoryRelationAnalysis.create(
             comparison_input,
             overview=_string(
                 data["overview"],
@@ -972,17 +972,17 @@ def _parse_analysis(
             relations=relations,
             issues=issues,
         )
-    except ComparisonError as error:
-        raise ComparisonProviderError(str(error)) from error
+    except MemoryRelationError as error:
+        raise MemoryRelationProviderError(str(error)) from error
 
 
-def analyze_comparison(
-    comparison_input: ComparisonInput,
-    provider: ComparisonProvider,
-) -> ComparisonAnalysis:
-    """Run one complete comparison plus at most one bounded validation repair."""
-    if not isinstance(comparison_input, ComparisonInput):
-        raise ComparisonProviderError("Expected a comparison input.")
+def analyze_memory_relations(
+    comparison_input: MemoryRelationInput,
+    provider: MemoryRelationProvider,
+) -> MemoryRelationAnalysis:
+    """Run one complete relation analysis plus one bounded validation repair."""
+    if not isinstance(comparison_input, MemoryRelationInput):
+        raise MemoryRelationProviderError("Expected a comparison input.")
     view = _provider_view(comparison_input)
     source_count = len(view.memory_by_id)
     context_count = sum(len(evidence) for evidence in comparison_input.context_evidence)
@@ -990,23 +990,23 @@ def analyze_comparison(
     left_count = len(comparison_input.frames[0].memories)
     right_count = len(comparison_input.frames[1].memories)
     plan = plan_semantic_execution(
-        COMPARISON_EXECUTION_POLICY,
+        MEMORY_RELATION_EXECUTION_POLICY,
         json_budget(
             view.payload,
             item_count=source_count + context_count,
-            output_schema=comparison_output_schema(source_memory_ids),
+            output_schema=memory_relation_output_schema(source_memory_ids),
             expected_output_items=source_count,
             relation_edges=left_count * right_count,
         ),
     )
     if plan.mode is not ExecutionMode.ONE_SHOT:
         axes = ", ".join(plan.exceeded_axes)
-        raise ComparisonProviderError(
+        raise MemoryRelationProviderError(
             "This Context pair exceeds the bounded Compare execution plan "
             f"({axes}). Input is never truncated; staged block reconciliation "
             "is not yet enabled for this exhaustive ledger."
         )
-    schema = comparison_output_schema(source_memory_ids)
+    schema = memory_relation_output_schema(source_memory_ids)
     response = provider.complete(
         _prompt(view.payload),
         operation="compare_contexts",
@@ -1018,14 +1018,14 @@ def analyze_comparison(
             comparison_input=comparison_input,
             view=view,
         )
-    except ComparisonProviderError as rejected_error:
+    except MemoryRelationProviderError as rejected_error:
         repair_payload = {
             **view.payload,
             "rejected_response": response,
             "validation_error": str(rejected_error),
         }
         repair_plan = plan_semantic_execution(
-            COMPARISON_EXECUTION_POLICY,
+            MEMORY_RELATION_EXECUTION_POLICY,
             json_budget(
                 repair_payload,
                 item_count=source_count + context_count,
@@ -1036,7 +1036,7 @@ def analyze_comparison(
         )
         if repair_plan.mode is not ExecutionMode.ONE_SHOT:
             axes = ", ".join(repair_plan.exceeded_axes)
-            raise ComparisonProviderError(
+            raise MemoryRelationProviderError(
                 "The rejected Compare response exceeds the bounded repair "
                 f"plan ({axes}). It was not truncated or partially repaired."
             ) from rejected_error
@@ -1056,14 +1056,16 @@ def analyze_comparison(
                 comparison_input=comparison_input,
                 view=repair_view,
             )
-        except ComparisonProviderError as repair_error:
-            raise ComparisonProviderError(
+        except MemoryRelationProviderError as repair_error:
+            raise MemoryRelationProviderError(
                 f"Codex compare repair remained invalid: {repair_error}"
             ) from repair_error
 
 
-# Keep provider operation names and serialized errors stable while exposing an
-# operation-neutral semantic entry point to capability consumers.
-analyze_memory_relations = analyze_comparison
-MemoryRelationProvider = ComparisonProvider
-MemoryRelationProviderError = ComparisonProviderError
+# Provider operation names remain stable so existing prewarms and cache
+# evidence keep matching, while Python ownership is capability-neutral.
+ComparisonProvider = MemoryRelationProvider
+ComparisonProviderError = MemoryRelationProviderError
+COMPARISON_EXECUTION_POLICY = MEMORY_RELATION_EXECUTION_POLICY
+comparison_output_schema = memory_relation_output_schema
+analyze_comparison = analyze_memory_relations

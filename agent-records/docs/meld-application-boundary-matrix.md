@@ -20,23 +20,22 @@ independent source of provider, cache, session, or Apply behavior.
 ## Package ownership
 
 The canonical terminal-independent owners now live together under
-`memcommit.application.operations.meld`. `apply.py` owns the exact reviewed
-Apply request, route classification, port, result, and receipt validation;
-`execution.py` owns the adapter to the shared phase flow; `sessions.py` owns
-saved snapshots, pending turns, preservation, defer, and destination changes;
-`start.py` and `restart.py` own their distinct typed construction and CAS
-replacement contracts; `assessment.py` owns one frozen cached or
-provider-backed semantic turn; and `resolution.py` owns the exact saved
-issue/option projection into a pending turn. These modules depend inward
-from Restart to Start and Resolution to Session, never back through a command.
-`runtime.py` owns Store and Grant access, complete block/reconciliation work,
-provider/cache preparation, session CAS, Apply transactions, checkpoints, and
-recovery. API and command adapters import those operation-owned modules
-directly.
+`memcommit.application.operations.meld`. `preparation.py` owns the shared
+Start/Restart request boundary; `planning.py` owns one frozen cached or
+provider-backed semantic planning turn; `proposal_iteration.py` owns saved
+snapshots, exact issue/option responses, preservation, defer, and destination
+changes; `proposal_projection.py` supplies the read-only workbench model; and
+`apply.py` owns exact reviewed Apply routing and receipt validation.
+`application.py` remains the current final-phase adapter while the later
+candidate/Audit/Update loop is introduced. This relocation names the intended
+pipeline without claiming that the later semantic pipeline is already built.
 
-`runtime/source_bindings.py` is the sole implementation owner for loading the
+`runtime/source_access.py` is the sole implementation owner for loading the
 exact frozen Meld Source/Target shapes and revalidating their names, UIDs, and
-digests. The console command retains its historical private helper names only
+digests. `runtime/session_repository.py` owns durable proposal-session CAS,
+preservation, defer, and destination relocation; provider/cache continuation
+remains in `runtime/proposal_iteration.py`. The console command retains its
+historical private helper names only
 as direct aliases to those application-runtime functions. Session-picker and
 explicit CLI resumes may perform an early recheck for prompt feedback, but
 assessment publication and Apply repeat the same canonical checks at their
@@ -58,15 +57,34 @@ their existing compatibility policy. Importing
 consumers use the responsibility-named canonical paths; compatibility aliases
 are not alternate implementation owners.
 
-This relocation changes physical ownership only. It does not change block
-planning or reconciliation, authority, saved-session schemas or CAS,
-provider/cache behavior, Apply transactions, checkpoint and recovery evidence,
-receipts, command grammar, or TUI interaction. Existing Meld PTY evidence
-therefore remains valid without a screenshot refresh.
+The 2026-08-30 pipeline-naming relocation removes the internal Start,
+Restart, Assessment, Session, and Resolution file taxonomy. It does not change
+request values, serialized session schemas, provider prompts, cache keys,
+review interaction, or Apply behavior. `candidate_context` and
+`integration_plan` become real model owners only when the later virtual
+Context/Audit/Update loop supplies those values; empty predictive modules are
+an intentional non-goal of this physical move.
+
+The original relocation changed physical ownership only. The 2026-08-30
+relation-first completion subsequently changed Start semantics: every new Meld
+now consumes one shared Memory Relation Analysis before mode-specific
+materialization. It leaves command grammar, TUI interaction, Apply,
+checkpoints, recovery, and receipt presentation unchanged, so existing PTY
+interaction evidence remains representative.
 Provider decoding, resolution-cache persistence, saved choice branches, and
 TUI presentation are intentionally unchanged. The pure common-Resolution
 projection is now named `resolution_projection.py`; this is a mechanical name
 change, not a new resolution workflow.
+
+The subsequent relation-ownership pass makes `MemoryRelation*` the concrete
+Python model/execution/repository definitions and leaves `Comparison*` as
+identity aliases. Meld has no import edge to the Compare operation, its console
+presentation, or its legacy prewarm module. Compare supplies only its own thin
+presentation wrapper and command lifecycle; the shared detailed presenter
+lives under `terminal.components.peer_relations`. Persisted directories,
+provider operation labels, Study artifact keys, and Meld's JSON
+`comparison_seed` remain unchanged. This pass does not add the deferred
+Audit–Resolve–Update loop.
 
 ## Post-TUI completion audit (2026-08-15)
 
@@ -88,8 +106,9 @@ Progress: all four audited Start boundaries are now closed. Direct-Memory
 scope is typed; ordered relation resolution is runtime-owned; and Start/Restart
 first return a `PreparedMeldExecution` whose `provider_required` flag and
 provisional read-only view come from the same frozen cache decision that is
-later executed. `comparison_execution` is terminal-neutral; its old command
-path is only a wait-view compatibility facade.
+later executed. Shared relation execution lives under the operation-neutral
+Memory Issue Analysis capability; historical Compare vocabulary remains only
+where persisted compatibility requires it.
 
 The completion pass preserved the already extracted session and Apply services,
 removed only the start-time parallel decisions, and proved that command code
@@ -100,9 +119,9 @@ provider decoder, session publication, or Apply transaction.
 
 | Route | Application contract | Production runtime | Public Python | Agent action | CLI |
 | --- | --- | --- | --- | --- | --- |
-| New directional review | `MeldStartRequest` | source/Grant checks, ordered Compare reuse, directional prewarm or provider, session publication | `start_meld(mode="directional")` | `start` | positional/`--into`/`--from` normalize to the same request |
-| New symmetric review | `MeldStartRequest` | source/transfer checks, exact ordered Compare, empty Result, atomic new target plus session when requested | `start_meld(mode="symmetric")` | `start` | current Result or `--to`; Compare handoff uses the same runtime |
-| Replace saved review | `MeldRestartRequest` with opaque expected version | fail stale before provider, then share start authorization/Compare/cache construction and CAS-replace the session | `restart_meld` | `restart` | `--restart` |
+| New directional review | `MeldStartRequest` | source/Grant checks, required peer-relation reuse or creation, relation-bound directional prewarm/materialization, session publication | `start_meld(mode="directional")` | `start` | positional/`--into`/`--from` normalize to the same request |
+| New symmetric review | `MeldStartRequest` | source/transfer checks, exact ordered relation analysis, empty Result, atomic new target plus session when requested | `start_meld(mode="symmetric")` | `start` | current Result or `--to`; a prior Compare artifact may supply the shared relation basis |
+| Replace saved review | `MeldRestartRequest` with opaque expected version | fail stale before provider, then share relation analysis, materialization/cache construction, and CAS-replace the session | `restart_meld` | `restart` | `--restart` |
 | Open saved review | `MeldSessionRepository.load` | target UID lookup and canonical-digest version | `open_meld` | `open` | direct resume or saved-session picker |
 | Semantic follow-up | `MeldResolutionTurnRequest`, common `ResolutionCase`, then `FrozenMeldAssessment` | exact saved version and issue/option UID validation, operation-owned guidance composition, cache replay or provider/repair, source/target revalidation, session CAS | `comment_meld(..., expected_version=...)` | `comment` requires version returned by `open` | visible issue ordinal is translated once to exact UID; TUI response actions already emit UID |
 | Preserve remaining distinctions | `MeldPreservationRequest` | exact saved version; provider-free current symmetric schema; legacy/directional sessions use the ordinary assessment boundary | `preserve_meld(..., expected_version=...)` | `preserve` requires version | `--preserve-all` or TUI action |
@@ -131,12 +150,12 @@ validation.
 
 - Directional source order is always `INCOMING, BASELINE`; the BASELINE is the
   target and remains authoritative.
-- Symmetric source order is the exact saved Compare order; the Result is
+- Symmetric source order is the exact saved relation-analysis order; the Result is
   distinct, local, empty, and session-free when starting.
 - Source/target authority and frozen digests are rechecked before provider
   construction and again before durable publication where the operation spans
   a semantic turn.
-- Ordered Compare and Meld source projection exclude only process-local
+- Ordered relation-analysis and Meld source projection exclude only process-local
   `authority-grant` QUERY navigation rows. Those rows carry no readable Memory
   content and do not widen descendant reach; persisted query references remain
   rejected rather than silently changing a source frame.
@@ -150,10 +169,12 @@ validation.
   progress and public result projection do not assemble the lifecycle again.
 - Meld's complete-ledger provider timeout is runtime-owned. CLI, Python, and
   agent calls therefore receive the same bound, including follow-up turns.
-- Ordered Compare lookup and installation execute in `meld_runtime`: exact,
-  equivalent-scope, and safe projected hits are resolved before a provider is
-  constructed. Symmetric misses alone invoke live Compare and save the durable
-  ordered basis; directional misses retain their compatible Meld-only path.
+- Ordered peer-relation lookup and installation execute in `meld_runtime`:
+  exact, equivalent-scope, and safe projected hits are resolved before a
+  provider is constructed. Every Context-source miss invokes the shared live
+  analysis and saves its durable ordered basis. Inline input retains the same
+  typed basis only in its target-bound session because it has no source
+  artifact locator. Directional materialization cannot return relation fields.
 - Restart observes one opaque saved version before expensive work and replaces
   that exact version; it never deletes the prior review or creates a target.
 - Every nonterminal saved-session mutation requires the version returned by
@@ -169,7 +190,7 @@ validation.
   the operation boundary.
 - `commands.meld` contains no target/session publication primitive. The CLI
   retains locator grammar, progress, rendering, and TUI orchestration. It also
-  contains no ordered-Compare cache lookup, directional prewarm lookup, or
+  contains no ordered-relation cache lookup, directional prewarm lookup, or
   provisional `MeldSession` construction.
 
 ## Verification map

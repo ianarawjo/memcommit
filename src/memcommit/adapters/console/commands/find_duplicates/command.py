@@ -20,10 +20,8 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.application.operations.dedup.application import (
-    ExactDuplicateContextReport,
-)
 from memcommit.application.operations.find_duplicates.application import (
+    ExactDuplicateContextReport,
     FindDuplicatesRequest,
     find_duplicates,
 )

@@ -4,7 +4,7 @@ Last reviewed: 2026-08-29.
 
 ## Motivating problem
 
-Distill and Elaborate can turn one provider result into several durable
+Distill and Makemore can turn one provider result into several durable
 Memories in an existing Context. The shared implementation was historically
 named `semantic_add_runtime` and later placed under `operations.add` because
 its final effect was `ADD`. Exact user-supplied Add never called that module.

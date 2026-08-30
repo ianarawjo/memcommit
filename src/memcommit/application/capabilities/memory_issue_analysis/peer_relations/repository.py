@@ -1,4 +1,4 @@
-"""Persistence for latest ordered peer-comparison analyses."""
+"""Persistence for latest ordered peer-relation analyses."""
 
 from __future__ import annotations
 
@@ -10,21 +10,21 @@ import uuid
 
 import memcommit.persistence.store as store_module
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
-    ComparisonAnalysis,
-    ComparisonError,
-    comparison_canonical_digest,
+    MemoryRelationAnalysis,
+    MemoryRelationError,
+    memory_relation_canonical_digest,
 )
 from memcommit.core.context import Context
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
-    project_comparison_context,
+    project_memory_relation_context,
 )
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 
 
-class ConcurrentComparisonUpdateError(RuntimeError):
-    """A source or ordered comparison slot changed during analysis."""
+class ConcurrentMemoryRelationUpdateError(RuntimeError):
+    """A source or ordered relation slot changed during analysis."""
 
 
 _FINAL_ANALYSIS_NAME = re.compile(r"^([0-9a-f-]{36})--([0-9a-f-]{36})\.json$")
@@ -34,7 +34,7 @@ _ATOMIC_TEMP_NAME = re.compile(
 )
 
 
-def comparison_analyses_dir(store: store_module.MemoryStore | None = None) -> Path:
+def memory_relation_analyses_dir(store: store_module.MemoryStore | None = None) -> Path:
     """Resolve against the store root at call time for isolated tests."""
     root = store.store_dir if store is not None else store_module.STORE_DIR
     return root / "comparison-analyses"
@@ -50,7 +50,7 @@ def _canonical_uuid(value: str, label: str) -> str:
     return canonical
 
 
-def comparison_analysis_path(
+def memory_relation_analysis_path(
     reference_context_uid: str,
     compared_context_uid: str,
     *,
@@ -66,7 +66,7 @@ def comparison_analysis_path(
     )
     if reference == compared:
         raise ValueError("Comparison analysis requires distinct Context uids.")
-    root = comparison_analyses_dir(store)
+    root = memory_relation_analyses_dir(store)
     if root.is_symlink():
         raise ValueError("Comparison analysis storage cannot be a symbolic link.")
     if root.exists() and not root.is_dir():
@@ -85,14 +85,14 @@ def _strict_json_object(
     return result
 
 
-def load_comparison_analysis(
+def load_memory_relation_analysis(
     reference_context_uid: str,
     compared_context_uid: str,
     *,
     store: store_module.MemoryStore | None = None,
-) -> ComparisonAnalysis | None:
+) -> MemoryRelationAnalysis | None:
     """Load one ordered latest slot without creating store state."""
-    path = comparison_analysis_path(
+    path = memory_relation_analysis_path(
         reference_context_uid,
         compared_context_uid,
         store=store,
@@ -107,9 +107,9 @@ def load_comparison_analysis(
                 file,
                 object_pairs_hook=_strict_json_object,
             )
-        analysis = ComparisonAnalysis.from_dict(value)
+        analysis = MemoryRelationAnalysis.from_dict(value)
     except (
-        ComparisonError,
+        MemoryRelationError,
         json.JSONDecodeError,
         ValueError,
     ) as error:
@@ -124,9 +124,9 @@ def load_comparison_analysis(
     return analysis
 
 
-def save_comparison_analysis(
+def save_memory_relation_analysis(
     store: store_module.MemoryStore,
-    analysis: ComparisonAnalysis,
+    analysis: MemoryRelationAnalysis,
     *,
     expected_analysis_uid: str | None,
     expected_analysis_version: str | None = None,
@@ -134,9 +134,9 @@ def save_comparison_analysis(
     """CAS-save one analysis while every frozen local source stays locked."""
     if not isinstance(store, store_module.MemoryStore):
         raise TypeError("Expected a MemoryStore.")
-    if not isinstance(analysis, ComparisonAnalysis):
-        raise TypeError("Expected a ComparisonAnalysis.")
-    restored = ComparisonAnalysis.from_dict(analysis.to_dict())
+    if not isinstance(analysis, MemoryRelationAnalysis):
+        raise TypeError("Expected a MemoryRelationAnalysis.")
+    restored = MemoryRelationAnalysis.from_dict(analysis.to_dict())
     if restored.uid != analysis.uid:
         raise ValueError("Comparison analysis identity changed during save.")
     if expected_analysis_uid is not None:
@@ -155,7 +155,7 @@ def save_comparison_analysis(
         raise ValueError("Invalid expected comparison analysis version.")
 
     reference_frame, compared_frame = analysis.frames
-    path = comparison_analysis_path(
+    path = memory_relation_analysis_path(
         reference_frame.context_uid,
         compared_frame.context_uid,
         store=store,
@@ -196,14 +196,14 @@ def save_comparison_analysis(
         locks.enter_context(store.profile_write_guard())
 
         try:
-            reference = _comparison_projection(
+            reference = _memory_relation_projection(
                 load_context_scope(
                     store,
                     reference_frame.context_name,
                     include_descendants=analysis.include_descendants[0],
                 )
             )
-            compared = _comparison_projection(
+            compared = _memory_relation_projection(
                 load_context_scope(
                     store,
                     compared_frame.context_name,
@@ -211,23 +211,23 @@ def save_comparison_analysis(
                 )
             )
         except FileNotFoundError as error:
-            raise ConcurrentComparisonUpdateError(
+            raise ConcurrentMemoryRelationUpdateError(
                 "A comparison source Context no longer exists."
             ) from error
         if not analysis.matches(reference, compared):
-            raise ConcurrentComparisonUpdateError(
+            raise ConcurrentMemoryRelationUpdateError(
                 "A source Context changed while Compare was analyzing it; "
                 "the new analysis was not saved."
             )
 
-        current = load_comparison_analysis(
+        current = load_memory_relation_analysis(
             reference_frame.context_uid,
             compared_frame.context_uid,
             store=store,
         )
         current_uid = current.uid if current is not None else None
         current_version = (
-            comparison_canonical_digest(current.to_dict())
+            memory_relation_canonical_digest(current.to_dict())
             if current is not None
             else None
         )
@@ -235,12 +235,12 @@ def save_comparison_analysis(
             expected_analysis_version is not None
             and current_version != expected_analysis_version
         ):
-            raise ConcurrentComparisonUpdateError(
+            raise ConcurrentMemoryRelationUpdateError(
                 "The ordered comparison slot changed before this analysis "
                 "could be saved."
             )
 
-        root = comparison_analyses_dir(store)
+        root = memory_relation_analyses_dir(store)
         if root.exists() and (not root.is_dir() or root.is_symlink()):
             raise ValueError("Comparison analysis storage is invalid.")
         root.mkdir(parents=True, exist_ok=True)
@@ -249,19 +249,19 @@ def save_comparison_analysis(
         store_module._write_json_atomic(path, analysis.to_dict())
 
 
-def _comparison_projection(root: Context) -> Context:
-    """Mirror Compare's recursive projection at the locked save boundary."""
+def _memory_relation_projection(root: Context) -> Context:
+    """Mirror relation evidence projection at the locked save boundary."""
 
-    return project_comparison_context(root)
+    return project_memory_relation_context(root)
 
 
-def comparison_paths_for_context(context_uid: str) -> tuple[Path, ...]:
+def memory_relation_paths_for_context(context_uid: str) -> tuple[Path, ...]:
     """Preflight and return ordered-pair artifacts containing one Context."""
     canonical = _canonical_uuid(
         context_uid,
         "comparison source Context uid",
     )
-    root = comparison_analyses_dir()
+    root = memory_relation_analyses_dir()
     if not root.exists():
         return ()
     if not root.is_dir() or root.is_symlink():
@@ -288,9 +288,9 @@ def comparison_paths_for_context(context_uid: str) -> tuple[Path, ...]:
     return tuple(sorted(matches))
 
 
-def delete_comparison_paths(paths: tuple[Path, ...]) -> None:
+def delete_memory_relation_paths(paths: tuple[Path, ...]) -> None:
     """Delete an exact preflighted set and prune an empty analysis root."""
-    root = comparison_analyses_dir()
+    root = memory_relation_analyses_dir()
     if root.is_symlink() or (root.exists() and not root.is_dir()):
         raise ValueError("Comparison analysis storage is invalid.")
     for path in paths:
@@ -315,12 +315,12 @@ def delete_comparison_paths(paths: tuple[Path, ...]) -> None:
             pass
 
 
-# The on-disk directory and filenames are a compatibility contract. These
-# names expose their capability meaning without migrating durable artifacts.
-ConcurrentMemoryRelationUpdateError = ConcurrentComparisonUpdateError
-memory_relation_analyses_dir = comparison_analyses_dir
-memory_relation_analysis_path = comparison_analysis_path
-load_memory_relation_analysis = load_comparison_analysis
-save_memory_relation_analysis = save_comparison_analysis
-memory_relation_paths_for_context = comparison_paths_for_context
-delete_memory_relation_paths = delete_comparison_paths
+# The on-disk directory and filenames are a compatibility contract. Compare
+# names remain aliases, while all production ownership is relation-neutral.
+ConcurrentComparisonUpdateError = ConcurrentMemoryRelationUpdateError
+comparison_analyses_dir = memory_relation_analyses_dir
+comparison_analysis_path = memory_relation_analysis_path
+load_comparison_analysis = load_memory_relation_analysis
+save_comparison_analysis = save_memory_relation_analysis
+comparison_paths_for_context = memory_relation_paths_for_context
+delete_comparison_paths = delete_memory_relation_paths

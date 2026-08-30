@@ -29,7 +29,7 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell imp
     session_todo_view,
 )
 from memcommit.application.operations.meld.model import MeldAssessment, MeldSession
-from memcommit.application.operations.meld.resolution_projection import (
+from memcommit.application.operations.meld.proposal_projection import (
     MeldResolutionWorkbenchAdapter,
 )
 from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation

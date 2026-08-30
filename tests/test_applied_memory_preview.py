@@ -26,10 +26,10 @@ def _imports(path: Path) -> set[str]:
     }
 
 
-def test_distill_and_elaborate_import_the_shared_preview_owner() -> None:
+def test_distill_and_makemore_import_the_shared_preview_owner() -> None:
     commands = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands"
 
-    for operation in ("distill", "elaborate"):
+    for operation in ("distill", "makemore"):
         imported = _imports(commands / operation / "command.py")
         assert SHARED_MODULE in imported
         assert FORMER_MODULE not in imported

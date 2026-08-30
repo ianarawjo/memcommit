@@ -120,7 +120,7 @@ than becoming hidden presentation state.
 
 ## Resolution lower-component boundary
 
-The deterministic Merge/Dedup/Resolve workbench and the richer saved-session
+The deterministic Merge/Resolve workbench and the richer saved-session
 Resolution shell intentionally retain different semantic models. They already
 share frame chrome, surface focus, flat choice state, response-row rendering,
 exact command review, and scrollbar mechanics. The remaining duplicated
@@ -216,11 +216,12 @@ application behavior.
 - The exact commit tree's repository-wide run reached 2,931 passes; its 38
   failures and 39 errors are the separately recorded Task 2 lock, Atomize
   capture, and obsolete Find-test baseline, with no failure in this slice.
-- The Resolution lower-component migration passes 287 focused tests across
-  fragment/section projection, both workbench shells, Merge, Dedup, Resolve,
+- The Resolution lower-component migration passed 287 focused tests across
+  fragment/section projection, both workbench shells, Merge, the historical
+  Dedup reviewer, Resolve,
   Meld, Forget, and Sever. Existing operation captures remain semantically
-  unchanged because valid focus, choice, review, and Apply topology did not
-  change.
+  unchanged for that migration. The historical Dedup reviewer was later
+  retired when canonical Dedun became an immediate deterministic operation.
 - The completed physical ownership move passes 250 focused architecture,
   Help-session, endpoint, history, selection/response, Viewer/Workbench,
   ownership, and generated-catalog tests. Mechanical gates reject the old

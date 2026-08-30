@@ -29,14 +29,14 @@ from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.application.capabilities.retained_history.granted_provenance import (
+from memcommit.application.operations.trace.application import (
+    ContextHistorySlice,
     GrantedMemoryTraceReport,
+    MemoryReferenceTraceReport,
+    build_context_history_slice,
     build_granted_memory_trace,
-)
-from memcommit.application.capabilities.retained_history.context_history import (
-    ContextTraceReport,
-    build_context_trace,
-    current_context_trace,
+    build_reference_trace,
+    current_context_history_slice,
 )
 from memcommit.application.operations.rationale.context import synthesize_context_rationale
 from memcommit.core.context_targeting.model import ContextTarget
@@ -47,12 +47,8 @@ from memcommit.application.capabilities.memory_report_targeting import (
     resolve_local_memory_report_target,
     resolve_readable_memory_target,
 )
-from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
+from memcommit.application.capabilities.history.verification import (
     MemoryHistoryReconstructionError,
-)
-from memcommit.application.operations.reference.provenance import (
-    MemoryReferenceTraceReport,
-    build_reference_trace,
 )
 from memcommit.application.operations.rationale.model import (
     RationaleError,
@@ -216,7 +212,7 @@ def render_reference_rationale(
 
 
 def render_context_rationale(
-    report: ContextTraceReport,
+    report: ContextHistorySlice,
     projection: RationaleNarrativeProjection,
     *,
     verbose: bool = False,
@@ -329,14 +325,14 @@ def cmd(
                     required_permission="READ",
                 )
                 context_report = (
-                    current_context_trace(
+                    current_context_history_slice(
                         access.store.load_direct(access.context_name),
                         warnings=(
                             "Authority history is outside this granted READ view.",
                         ),
                     )
                     if access.is_granted
-                    else build_context_trace(access.store, access.context_name)
+                    else build_context_history_slice(access.store, access.context_name)
                 )
                 with progressing_provider_factory(
                     "RATIONALE",

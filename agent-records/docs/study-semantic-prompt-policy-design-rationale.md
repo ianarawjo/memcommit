@@ -31,7 +31,7 @@ semantic operations:
 
 - Atomize classification plus Ambiguity and Conflict quality scans;
 - Compare's compact summary;
-- Distill and Elaborate's bidirectional reference families;
+- Distill and Makemore's bidirectional reference families;
 - semantic redundancy, Ambiguity, and Conflict finders;
 - ordinary Query answer synthesis;
 - Resolve generation and verification.
@@ -43,7 +43,7 @@ they are measurement tools rather than ordinary Study task turns.
 
 “Authored examples” has a narrow meaning here. It does not include a person's
 Ground or Fit Example Memories, Cases supplied as Distill input, Rules supplied
-to Elaborate, a request asking for examples, or evidence whose content happens
+to Makemore, a request asking for examples, or evidence whose content happens
 to contain the word “example”. Those are user-owned semantic input and removing
 them would change the task rather than reduce prompt scaffolding.
 

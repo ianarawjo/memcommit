@@ -40,7 +40,7 @@ class _MeldStateStoreMixin:
     def load_meld_choice_branches(self, session):
         """Restore sparse local choices for the exact current assessment."""
         from memcommit.application.operations.meld.model import MeldSession
-        from memcommit.application.operations.meld.choice_branches import (
+        from memcommit.application.operations.meld.proposal_choices import (
             MeldChoiceBranchError,
             MeldChoiceBranchSet,
         )
@@ -80,7 +80,7 @@ class _MeldStateStoreMixin:
             MeldSession,
             meld_canonical_digest,
         )
-        from memcommit.application.operations.meld.choice_branches import (
+        from memcommit.application.operations.meld.proposal_choices import (
             MeldChoiceBranchError,
             MeldChoiceBranchSet,
         )
@@ -137,7 +137,7 @@ class _MeldStateStoreMixin:
 
     def load_meld_resolution_branch(self, key: str):
         """Return one exact validated follow-up branch, if it is saved."""
-        from memcommit.application.operations.meld.resolution_cache import (
+        from memcommit.application.operations.meld.proposal_cache import (
             MeldResolutionBranch,
             MeldResolutionCacheError,
         )
@@ -168,7 +168,7 @@ class _MeldStateStoreMixin:
 
     def save_meld_resolution_branch(self, branch) -> None:
         """Publish one immutable exact branch without replacing a peer result."""
-        from memcommit.application.operations.meld.resolution_cache import (
+        from memcommit.application.operations.meld.proposal_cache import (
             MeldResolutionBranch,
             MeldResolutionCacheError,
         )

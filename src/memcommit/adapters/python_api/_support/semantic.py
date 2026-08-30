@@ -14,12 +14,12 @@ from memcommit.adapters.python_api.errors import (
 from memcommit.adapters.python_api.semantic import (
     DistillProposal,
     DistillRuleProposal,
-    ElaborateCaseProposal,
-    ElaborateCaseValidationProposal,
-    ElaborateProposal,
-    ElaborateRuleCheckProposal,
-    ElaborateRuleProposal,
-    ElaborateTargetContextItemProposal,
+    MakemoreCaseProposal,
+    MakemoreCaseValidationProposal,
+    MakemoreProposal,
+    MakemoreRuleCheckProposal,
+    MakemoreRuleProposal,
+    MakemoreTargetContextItemProposal,
 )
 
 
@@ -90,15 +90,15 @@ def project_distill(result, *, apply_allowed: bool) -> DistillProposal:
     )
 
 
-def project_elaborate(result) -> ElaborateProposal:
+def project_makemore(result) -> MakemoreProposal:
     analysis = result.analysis
-    return ElaborateProposal(
+    return MakemoreProposal(
         analysis_uid=analysis.uid,
         mode=analysis.mode.value,
         inputs=analysis.inputs,
         overview=analysis.overview,
         rules=tuple(
-            ElaborateRuleProposal(
+            MakemoreRuleProposal(
                 uid=rule.uid,
                 content=rule.content,
                 rationale=rule.rationale,
@@ -107,14 +107,14 @@ def project_elaborate(result) -> ElaborateProposal:
             for rule in analysis.rules
         ),
         cases=tuple(
-            ElaborateCaseProposal(
+            MakemoreCaseProposal(
                 uid=case.uid,
                 proposition=case.proposition,
                 expected=case.expected,
                 rationale=case.rationale,
                 case_role=case.case_role,
                 rule_checks=tuple(
-                    ElaborateRuleCheckProposal(
+                    MakemoreRuleCheckProposal(
                         source_rule_index=check.source_rule_index,
                         evidence=check.evidence,
                     )
@@ -123,7 +123,7 @@ def project_elaborate(result) -> ElaborateProposal:
                 validation=(
                     None
                     if case.validation is None
-                    else ElaborateCaseValidationProposal(
+                    else MakemoreCaseValidationProposal(
                         source_fit=case.validation.source_fit,
                         source_fit_reason=case.validation.source_fit_reason,
                         rule_conformance=case.validation.rule_conformance,
@@ -145,7 +145,7 @@ def project_elaborate(result) -> ElaborateProposal:
         ),
         target_context_items=(
             tuple(
-                ElaborateTargetContextItemProposal(
+                MakemoreTargetContextItemProposal(
                     alias=item.alias,
                     kind=item.kind,
                     context_name=item.context_name,
@@ -162,7 +162,7 @@ def project_elaborate(result) -> ElaborateProposal:
 
 __all__ = [
     "project_distill",
-    "project_elaborate",
+    "project_makemore",
     "raise_semantic_execution_error",
     "safe_semantic_provider",
 ]
