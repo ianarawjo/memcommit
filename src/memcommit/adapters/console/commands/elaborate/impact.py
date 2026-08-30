@@ -28,9 +28,9 @@ from memcommit.application.capabilities.resolution.workbench import (
 from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,
 )
-from memcommit.application.operations.add.semantic_runtime import (
-    resolve_semantic_add_endpoints,
-    resolve_semantic_add_target,
+from memcommit.application.capabilities.semantic_result_memorization import (
+    resolve_memorization_target,
+    resolve_semantic_result_endpoints,
 )
 from memcommit.application.operations.elaborate.add_runtime import (
     freeze_elaborate_context_source,
@@ -285,12 +285,12 @@ def elaborate_cmd(
                     strict=strict,
                 )
             resolved_source = None
-            resolved_target = resolve_semantic_add_target(
+            resolved_target = resolve_memorization_target(
                 target_locator=target_name,
                 current=snapshot.current_name,
             )
         else:
-            endpoints = resolve_semantic_add_endpoints(
+            endpoints = resolve_semantic_result_endpoints(
                 source_locator=source_name,
                 target_locator=target_name,
                 current=snapshot.current_name,

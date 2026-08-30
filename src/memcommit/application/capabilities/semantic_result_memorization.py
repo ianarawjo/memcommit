@@ -1,4 +1,4 @@
-"""Shared exact-target publication for semantic operations that add Memories."""
+"""Turn one semantic operation result into durable Memories."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 @dataclass(frozen=True)
-class SemanticAddEndpoints:
+class SemanticResultEndpoints:
     """Canonical Source and Target names resolved from one Current snapshot."""
 
     source_name: str
@@ -20,7 +20,7 @@ class SemanticAddEndpoints:
 
 
 @dataclass(frozen=True)
-class FrozenSemanticAddTarget:
+class FrozenMemorizationTarget:
     """One existing local Target frozen before semantic inference begins."""
 
     context_name: str
@@ -29,8 +29,8 @@ class FrozenSemanticAddTarget:
 
 
 @dataclass(frozen=True)
-class SemanticAddReceipt:
-    """Complete receipt for one atomic generated-Memory append."""
+class SemanticResultMemorizationReceipt:
+    """Complete receipt for one atomic semantic-result memorization."""
 
     operation: str
     source_name: str | None
@@ -44,12 +44,12 @@ class SemanticAddReceipt:
         return len(self.memory_uids)
 
 
-def resolve_semantic_add_endpoints(
+def resolve_semantic_result_endpoints(
     *,
     source_locator: str | None,
     target_locator: str | None,
     current: str | None,
-) -> SemanticAddEndpoints:
+) -> SemanticResultEndpoints:
     """Fill either omitted endpoint from the same frozen Current value.
 
     Source and Target may intentionally be the same Context. The caller must
@@ -59,22 +59,22 @@ def resolve_semantic_add_endpoints(
 
     if source_locator is None:
         if current is None:
-            raise ValueError("No current Source Context. Supply '--from SOURCE'.")
+            raise ValueError("No current Source Context.")
         source_name = current
     else:
         source_name = resolve_context_locator(source_locator, current=current)
 
     if target_locator is None:
         if current is None:
-            raise ValueError("No current Target Context. Supply '--to TARGET'.")
+            raise ValueError("No current Target Context.")
         target_name = current
     else:
         target_name = resolve_context_locator(target_locator, current=current)
 
-    return SemanticAddEndpoints(source_name=source_name, target_name=target_name)
+    return SemanticResultEndpoints(source_name=source_name, target_name=target_name)
 
 
-def resolve_semantic_add_target(
+def resolve_memorization_target(
     *,
     target_locator: str | None,
     current: str | None,
@@ -83,39 +83,39 @@ def resolve_semantic_add_target(
 
     if target_locator is None:
         if current is None:
-            raise ValueError("No current Target Context. Supply '--to TARGET'.")
+            raise ValueError("No current Target Context.")
         return current
     return resolve_context_locator(target_locator, current=current)
 
 
-def freeze_semantic_add_target(
+def freeze_memorization_target(
     store: MemoryStore,
     context_name: str,
-) -> FrozenSemanticAddTarget:
+) -> FrozenMemorizationTarget:
     """Freeze one existing local Target before provider construction."""
 
     if not store.context_exists(context_name):
         raise FileNotFoundError(f"Context {context_name!r} not found.")
     context = store.load_direct(context_name)
-    return FrozenSemanticAddTarget(
+    return FrozenMemorizationTarget(
         context_name=context.name,
         context_uid=context.uid,
         context_digest=context_record_digest(context),
     )
 
 
-def append_semantic_memories(
+def memorize_semantic_result(
     *,
     store: MemoryStore,
     operation: str,
     source_name: str | None,
-    target: FrozenSemanticAddTarget,
+    target: FrozenMemorizationTarget,
     contents: tuple[str, ...],
     source_bindings: Iterable[tuple[str, str, str]],
     operation_args: dict[str, object],
     description: str,
-) -> SemanticAddReceipt:
-    """Append every generated Memory or publish none of them.
+) -> SemanticResultMemorizationReceipt:
+    """Memorize every result item or publish none of them.
 
     A separate Source remains locked and exact through the Target write. When
     Source and Target are the same, Target CAS protects the consumed pre-image
@@ -123,7 +123,9 @@ def append_semantic_memories(
     """
 
     if not operation or not contents or any(not value.strip() for value in contents):
-        raise ValueError("Semantic Add requires nonblank generated Memories.")
+        raise ValueError(
+            "Semantic result memorization requires nonblank Memory contents."
+        )
     current = store.load_direct(target.context_name)
     if (
         current.uid != target.context_uid
@@ -168,8 +170,10 @@ def append_semantic_memories(
             expected_context_digest=target.context_digest,
         )
     if checkpoint is None:
-        raise RuntimeError(f"{operation.title()} Add created no checkpoint.")
-    return SemanticAddReceipt(
+        raise RuntimeError(
+            f"{operation.title()} result memorization created no checkpoint."
+        )
+    return SemanticResultMemorizationReceipt(
         operation=operation,
         source_name=source_name,
         target_name=target.context_name,
@@ -180,11 +184,11 @@ def append_semantic_memories(
 
 
 __all__ = [
-    "FrozenSemanticAddTarget",
-    "SemanticAddEndpoints",
-    "SemanticAddReceipt",
-    "append_semantic_memories",
-    "freeze_semantic_add_target",
-    "resolve_semantic_add_endpoints",
-    "resolve_semantic_add_target",
+    "FrozenMemorizationTarget",
+    "SemanticResultEndpoints",
+    "SemanticResultMemorizationReceipt",
+    "freeze_memorization_target",
+    "memorize_semantic_result",
+    "resolve_memorization_target",
+    "resolve_semantic_result_endpoints",
 ]

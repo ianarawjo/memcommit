@@ -28,8 +28,8 @@ from memcommit.application.capabilities.resolution.workbench import (
 from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,
 )
-from memcommit.application.operations.add.semantic_runtime import (
-    resolve_semantic_add_endpoints,
+from memcommit.application.capabilities.semantic_result_memorization import (
+    resolve_semantic_result_endpoints,
 )
 from memcommit.application.operations.distill.application import (
     DistillRequest,
@@ -265,7 +265,7 @@ def distill_cmd(
                 )
                 resolved_target = None
             else:
-                endpoints = resolve_semantic_add_endpoints(
+                endpoints = resolve_semantic_result_endpoints(
                     source_locator=source_name
                     if source_name is not None
                     else context_name,

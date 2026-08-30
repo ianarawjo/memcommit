@@ -17,8 +17,9 @@ both a revision's dispositions and its complete resulting direct-item state.
   separate Update-session browser; the applied Context and checkpoint remain
   unchanged
 - Profile/current Context: temporary default Profile; current `practice/2`
-- Fixture: Init; one three-Memory Add; one Elaborate semantic Add that appends
-  `e`, `f`, and `g` through the production `append_semantic_memories` primitive;
+- Fixture: Init; one three-Memory Add; one Elaborate result memorization that
+  records `e`, `f`, and `g` through the production
+  `memorize_semantic_result` capability;
   one production Update application that edits `b`, removes `f`, and adds `j`;
   then one later two-Memory Add
 - PTY: `180` columns × `52` rows, set and printed by every child before launch

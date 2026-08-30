@@ -53,6 +53,7 @@
           "agent-records/docs/distill-elaborate-application-boundary-matrix.md",
           "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
           "agent-records/docs/goal-focus-operand-design-rationale.md",
+          "agent-records/docs/semantic-result-memorization-design-rationale.md",
           "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
         ],
         "reason": "CLI, TUI, public, agent, Ground, provider, and prepared-result routes share the reviewed Distill application contract."
@@ -66,6 +67,7 @@
           "agent-records/docs/fit-general-judgment-design-rationale.md",
           "agent-records/docs/goal-focus-operand-design-rationale.md",
           "agent-records/docs/mem-elaborate-design-rationale.md",
+          "agent-records/docs/semantic-result-memorization-design-rationale.md",
           "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
         ],
         "reason": "CLI, TUI, public, agent, Ground, provider, and prepared-result routes share the reviewed Elaborate application contract, including the best-effort default, explicit strict gate, and quality-bound receipt projection."

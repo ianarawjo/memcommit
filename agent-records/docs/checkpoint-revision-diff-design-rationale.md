@@ -15,9 +15,9 @@ changes. A current-to-target Revert list correctly described mechanical writes
 needed today, but it did not explain the Elaborate revision or display the
 complete six-Memory result that would be restored.
 
-Elaborate is itself a semantic Add: its publication path appends proposals and
-records `effect: ADD`; it cannot edit or remove an existing Memory. Elaborate
-evidence therefore uses that production Add primitive and can classify only
+Elaborate memorizes its semantic result by appending proposals and recording
+`effect: ADD`; it cannot edit or remove an existing Memory. Elaborate evidence
+therefore uses that production memorization capability and can classify only
 prior Memories as `KEEP` and generated Cases as `ADD`. The mixed-effect Viewer
 evidence uses a production Update application, whose contract actually permits
 `EDIT`, `REMOVE`, and `ADD` together.

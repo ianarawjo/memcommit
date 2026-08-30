@@ -1,6 +1,6 @@
 # Distill and Elaborate application boundary matrix
 
-Last reviewed: 2026-08-25.
+Last reviewed: 2026-08-29.
 
 ## Implementation ownership
 
@@ -13,6 +13,12 @@ separate from `add_runtime`, so proposal-only public adapters do not acquire a
 storage dependency merely because the standalone CLI can publish. The former
 flat modules remain identity-preserving compatibility aliases for imported and
 pickled names, but production code imports the operation owners directly.
+
+The shared result-to-Memory transition is owned separately by
+`memcommit.application.capabilities.semantic_result_memorization`. Distill and
+Elaborate retain their own provider, validation, Source, and receipt policies;
+the shared capability only freezes the existing Target and memorizes the
+complete decided result with one originating-operation checkpoint.
 
 This relocation intentionally does not merge the operations or change their
 whole-frame planning, exact prepared-result matching, authority, validation,
@@ -97,8 +103,9 @@ or accepted as evidence. Ground Elaborate remains proposal-only.
 
 ## 2026-08-20 execution-receipt migration
 
-Standalone Distill and Elaborate are direct semantic Adds. They freeze,
-decode, decide the complete generated set, append atomically, and return a
+Standalone Distill and Elaborate memorize their semantic results directly.
+They freeze, decode, decide the complete generated set, record it atomically as
+ordinary Memories, and return a
 human-first completion summary; they do not render the proposal Viewer before
 reporting success. The summary pairs each result Memory's short UID with its
 complete single-line content for sets of up to 20, then reports the remaining

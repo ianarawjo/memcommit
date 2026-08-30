@@ -1,7 +1,8 @@
-# Semantic Add endpoints · 2026-08-20
+# Semantic result memorization endpoints · 2026-08-20
 
 This ordered capture set records Distill and Elaborate's default existing-
-Context Add routes and their explicit process-local Impact previews. Each path
+Context memorization routes and their explicit process-local Impact previews.
+Each path
 uses an isolated store and a deterministic provider so the screenshots are
 reproducible.
 

@@ -87,6 +87,7 @@
       "agent-records/docs/distill-elaborate-application-boundary-matrix.md",
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
       "agent-records/docs/goal-focus-operand-design-rationale.md",
+      "agent-records/docs/semantic-result-memorization-design-rationale.md",
       "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
     ],
     "edit": [
@@ -100,6 +101,7 @@
       "agent-records/docs/fit-general-judgment-design-rationale.md",
       "agent-records/docs/goal-focus-operand-design-rationale.md",
       "agent-records/docs/mem-elaborate-design-rationale.md",
+      "agent-records/docs/semantic-result-memorization-design-rationale.md",
       "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
     ],
     "embed": [
@@ -158,7 +160,8 @@
       "agent-records/docs/command-package-layout-design-rationale.md",
       "agent-records/docs/goal-focus-operand-design-rationale.md",
       "agent-records/docs/ground-workspace-application-boundary-matrix.md",
-      "agent-records/docs/ground-workspace-context-model-design-rationale.md"
+      "agent-records/docs/ground-workspace-context-model-design-rationale.md",
+      "agent-records/docs/semantic-result-memorization-design-rationale.md"
     ],
     "help": [
       "agent-records/docs/help-application-boundary-matrix.md",

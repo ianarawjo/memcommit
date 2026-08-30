@@ -31,11 +31,11 @@ from memcommit.application.operations.distill.config import (
 )
 from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
 from memcommit.application.capabilities.semantic.goal_focus_runtime import revalidate_goal_focus
-from memcommit.application.operations.add.semantic_runtime import (
-    FrozenSemanticAddTarget,
-    SemanticAddReceipt,
-    append_semantic_memories,
-    freeze_semantic_add_target,
+from memcommit.application.capabilities.semantic_result_memorization import (
+    FrozenMemorizationTarget,
+    SemanticResultMemorizationReceipt,
+    freeze_memorization_target,
+    memorize_semantic_result,
 )
 from memcommit.persistence.store import MemoryStore, context_record_digest
 from memcommit.application.operations.summarize.application import (
@@ -131,7 +131,7 @@ class PreparedDistillAdd:
     """Exact Distill result paired with its pre-provider Target snapshot."""
 
     result: DistillResult
-    target: FrozenSemanticAddTarget
+    target: FrozenMemorizationTarget
     source_port: LocalMemoryStoreDistillSourcePort
 
 
@@ -174,7 +174,7 @@ def prepare_distill_add(
     # Target is captured before Source disclosure/provider construction. This
     # makes a successful publication refer to the exact destination the person
     # selected at command entry, including Source == Target.
-    target = freeze_semantic_add_target(store, target_name)
+    target = freeze_memorization_target(store, target_name)
 
     @contextmanager
     def provider_session() -> Iterator[DistillProvider]:
@@ -202,7 +202,7 @@ def apply_prepared_distill_add(
     prepared: PreparedDistillAdd,
     *,
     store: MemoryStore,
-) -> SemanticAddReceipt:
+) -> SemanticResultMemorizationReceipt:
     """Append the complete supported Rule set to one existing Context."""
 
     if not isinstance(prepared, PreparedDistillAdd):
@@ -236,7 +236,7 @@ def apply_prepared_distill_add(
         if analysis.goal is not None
         else None
     )
-    return append_semantic_memories(
+    return memorize_semantic_result(
         store=store,
         operation="distill",
         source_name=analysis.source.context_name,

@@ -61,9 +61,9 @@ def _prepare_store(
     _configure_store(store_dir)
     import memcommit.application.capabilities.ops as ops
     from memcommit.core.context import AutoCheckpoint
-    from memcommit.application.operations.add.semantic_runtime import (
-        append_semantic_memories,
-        freeze_semantic_add_target,
+    from memcommit.application.capabilities.semantic_result_memorization import (
+        freeze_memorization_target,
+        memorize_semantic_result,
     )
     from memcommit.persistence.store import MemoryStore
     from memcommit.application.operations.update.model import plan_update
@@ -93,12 +93,12 @@ def _prepare_store(
     )
 
     # Use Elaborate's actual publication primitive so this evidence cannot
-    # accidentally attribute Edit or Remove authority to the semantic Add.
-    append_semantic_memories(
+    # accidentally attribute Edit or Remove authority to result memorization.
+    memorize_semantic_result(
         store=store,
         operation="elaborate",
         source_name=CONTEXT,
-        target=freeze_semantic_add_target(store, CONTEXT),
+        target=freeze_memorization_target(store, CONTEXT),
         contents=("e is elm", "f is fig", "g is grape"),
         source_bindings=(),
         operation_args={

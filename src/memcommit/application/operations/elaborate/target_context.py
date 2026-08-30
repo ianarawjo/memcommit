@@ -20,7 +20,9 @@ from memcommit.application.operations.elaborate.model import (
     ElaborateTargetContext,
     ElaborateTargetContextItem,
 )
-from memcommit.application.operations.add.semantic_runtime import FrozenSemanticAddTarget
+from memcommit.application.capabilities.semantic_result_memorization import (
+    FrozenMemorizationTarget,
+)
 from memcommit.persistence.store import MemoryStore, context_record_digest
 from memcommit.application.operations.update.model import GrantedUpdateTarget
 
@@ -60,7 +62,7 @@ class FrozenElaborateGrantedContext:
 class FrozenElaborateTargetContext:
     """Target ambient frame plus every local and granted pre-image it consumed."""
 
-    target: FrozenSemanticAddTarget
+    target: FrozenMemorizationTarget
     semantic: ElaborateTargetContext
     local_contexts: tuple[FrozenElaborateLocalContext, ...]
     granted_contexts: tuple[FrozenElaborateGrantedContext, ...]
@@ -121,7 +123,7 @@ def _assert_link_matches_access(
 def freeze_elaborate_target_context(
     store: MemoryStore,
     *,
-    target: FrozenSemanticAddTarget,
+    target: FrozenMemorizationTarget,
     excluded_root_memory_uids: tuple[str, ...] = (),
     required_granted_permissions: tuple[str, ...] = (
         GRANTED_ELABORATE_AMBIENT_PERMISSIONS
@@ -131,7 +133,7 @@ def freeze_elaborate_target_context(
 
     if not isinstance(store, MemoryStore):
         raise TypeError("Elaborate Target freezing requires a MemoryStore.")
-    if not isinstance(target, FrozenSemanticAddTarget):
+    if not isinstance(target, FrozenMemorizationTarget):
         raise TypeError("Elaborate Target freezing requires a frozen Target.")
     if len(set(excluded_root_memory_uids)) != len(excluded_root_memory_uids):
         raise ElaborateError("Elaborate Source exclusions must be distinct.")

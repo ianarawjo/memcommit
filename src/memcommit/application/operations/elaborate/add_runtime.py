@@ -28,11 +28,11 @@ from memcommit.application.operations.elaborate.target_context import (
     authorized_frozen_elaborate_target,
     freeze_elaborate_target_context,
 )
-from memcommit.application.operations.add.semantic_runtime import (
-    FrozenSemanticAddTarget,
-    SemanticAddReceipt,
-    append_semantic_memories,
-    freeze_semantic_add_target,
+from memcommit.application.capabilities.semantic_result_memorization import (
+    FrozenMemorizationTarget,
+    SemanticResultMemorizationReceipt,
+    freeze_memorization_target,
+    memorize_semantic_result,
 )
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
@@ -57,7 +57,7 @@ class PreparedElaborateAdd:
     """Exact provider result paired with its already-frozen Add Target."""
 
     result: ElaborateResult
-    target: FrozenSemanticAddTarget
+    target: FrozenMemorizationTarget
     target_context: FrozenElaborateTargetContext
     source: FrozenElaborateSource | None = None
 
@@ -145,7 +145,7 @@ def prepare_elaborate_add(
         raise ElaborateError("Elaborate Source does not match its request.")
     if request.goal_focus is not None:
         revalidate_goal_focus(store, request.goal_focus)
-    target = freeze_semantic_add_target(store, target_name)
+    target = freeze_memorization_target(store, target_name)
     excluded_root_memory_uids = (
         source.memory_uids
         if source is not None and source.context_uid == target.context_uid
@@ -189,7 +189,7 @@ def apply_prepared_elaborate_add(
     prepared: PreparedElaborateAdd,
     *,
     store: MemoryStore,
-) -> SemanticAddReceipt:
+) -> SemanticResultMemorizationReceipt:
     """Append the complete generated proposal set as one Context checkpoint."""
 
     if not isinstance(prepared, PreparedElaborateAdd):
@@ -271,7 +271,7 @@ def apply_prepared_elaborate_add(
         revalidate_after=False,
         required_granted_permissions=GRANTED_ELABORATE_ADD_PERMISSIONS,
     ):
-        return append_semantic_memories(
+        return memorize_semantic_result(
             store=store,
             operation="elaborate",
             source_name=source.context_name if source is not None else None,

@@ -206,11 +206,12 @@ policy, and Target ambient frame match. A strict Rules-to-Cases result must
 contain validation evidence; a best-effort result must not claim it. There is
 no persisted Elaborate cache artifact yet and no subset/projection reuse claim.
 
-## Standalone Add and endpoint contract
+## Standalone memorization and endpoint contract
 
-Standalone Elaborate is a semantic Add. It generates a complete proposal set
-and appends every generated proposition to one existing ordinary Context in a
-single checkpoint; there is no `--apply` gate. Best-effort is the default, while
+Standalone Elaborate memorizes one semantic result. It generates a complete
+proposal set and records every generated proposition as an ordinary Memory in
+one existing Context and one checkpoint; there is no `--apply` gate.
+Best-effort is the default, while
 `--strict` adds the independent pre-publication gates for Rules-to-Cases. The
 two endpoint options fill
 from one Current snapshot:

@@ -42,9 +42,9 @@ from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider
-from memcommit.application.operations.add.semantic_runtime import (
-    resolve_semantic_add_endpoints,
-    resolve_semantic_add_target,
+from memcommit.application.capabilities.semantic_result_memorization import (
+    resolve_memorization_target,
+    resolve_semantic_result_endpoints,
 )
 from memcommit.persistence.store import MemoryStore
 
@@ -244,12 +244,12 @@ def cmd(
                         number=number,
                         strict=strict,
                     )
-                ordinary_target = resolve_semantic_add_target(
+                ordinary_target = resolve_memorization_target(
                     target_locator=target_name,
                     current=snapshot.current_name,
                 )
             else:
-                endpoints = resolve_semantic_add_endpoints(
+                endpoints = resolve_semantic_result_endpoints(
                     source_locator=source_name,
                     target_locator=target_name,
                     current=snapshot.current_name,

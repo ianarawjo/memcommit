@@ -73,12 +73,16 @@ def test_add_presenters_are_colocated_with_their_command() -> None:
     )
 
 
-def test_exact_add_does_not_absorb_semantic_materialization_helpers() -> None:
+def test_exact_add_does_not_absorb_semantic_result_memorization() -> None:
+    operation_root = REPOSITORY_ROOT / "src/memcommit/application/operations/add"
+    assert not (operation_root / "semantic_runtime.py").exists()
+
     for relative_path in (
         "src/memcommit/application/operations/add/application.py",
         "src/memcommit/application/operations/add/runtime.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "memcommit.semantic_add_runtime" not in source
+        assert "semantic_result_memorization" not in source
         assert "memcommit.elaborate_add_runtime" not in source
         assert "memcommit.application.operations.elaborate.add_runtime" not in source

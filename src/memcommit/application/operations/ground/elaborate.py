@@ -38,8 +38,8 @@ from memcommit.application.operations.ground.workspace_projection import (
 from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_context,
 )
-from memcommit.application.operations.add.semantic_runtime import (
-    freeze_semantic_add_target,
+from memcommit.application.capabilities.semantic_result_memorization import (
+    freeze_memorization_target,
 )
 from memcommit.persistence.store import (
     MemoryStore,
@@ -103,7 +103,7 @@ def freeze_ground_elaborate(
     )
     target_context = freeze_elaborate_target_context(
         store,
-        target=freeze_semantic_add_target(store, target_lane.name),
+        target=freeze_memorization_target(store, target_lane.name),
     )
     source_lane = workspace.goals if direction == "GOAL_TO_RULES" else workspace.rules
     source_bindings = [

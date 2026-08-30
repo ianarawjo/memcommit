@@ -70,8 +70,8 @@ from memcommit.providers.subscription import (
     QueryProviderError,
     connect_semantic_provider,
 )
-from memcommit.application.operations.add.semantic_runtime import (
-    resolve_semantic_add_endpoints,
+from memcommit.application.capabilities.semantic_result_memorization import (
+    resolve_semantic_result_endpoints,
 )
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.summarize.model import SummaryFrame
@@ -256,7 +256,7 @@ def cmd(
                     "Direct Distill Add is non-interactive; use "
                     "'mem impact distill' to inspect without saving."
                 )
-            endpoints = resolve_semantic_add_endpoints(
+            endpoints = resolve_semantic_result_endpoints(
                 source_locator=(
                     source_name if source_name is not None else context_name
                 ),

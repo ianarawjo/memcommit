@@ -33,9 +33,9 @@ from memcommit.application.operations.ground.workspace_projection import (
 from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_context,
 )
-from memcommit.application.operations.add.semantic_runtime import (
-    FrozenSemanticAddTarget,
-    freeze_semantic_add_target,
+from memcommit.application.capabilities.semantic_result_memorization import (
+    FrozenMemorizationTarget,
+    freeze_memorization_target,
 )
 from memcommit.persistence.store import (
     MemoryStore,
@@ -67,7 +67,7 @@ class FrozenGroundDistill:
     candidate_frame: SummaryFrame
     request: DistillRequest
     root_digest: str
-    target: FrozenSemanticAddTarget
+    target: FrozenMemorizationTarget
     source_bindings: tuple[tuple[str, str, str], ...]
     source_kind: Literal["GROUND_WORKSPACE_INPUTS"] = "GROUND_WORKSPACE_INPUTS"
     example_frame: SummaryFrame | None = None
@@ -204,7 +204,7 @@ def freeze_ground_distill(
             goal_focus=goal_focus,
         ),
         root_digest=context_record_digest(workspace.root),
-        target=freeze_semantic_add_target(store, workspace.rules.name),
+        target=freeze_memorization_target(store, workspace.rules.name),
         source_bindings=source_bindings,
         example_frame=frame,
     )

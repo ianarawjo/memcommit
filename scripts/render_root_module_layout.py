@@ -164,7 +164,6 @@ OPERATION_TARGETS = {
     "review_report_adapters": "memcommit.application.operations.review.report_adapters",
     "search": "memcommit.application.operations.search.model",
     "search_artifacts": "memcommit.application.operations.search.artifacts",
-    "semantic_add_runtime": "memcommit.application.operations.add.semantic_runtime",
     "share": "memcommit.application.operations.share.model",
     "summarize": "memcommit.application.operations.summarize.model",
     "update": "memcommit.application.operations.update.model",
@@ -231,6 +230,9 @@ CONCEPT_TARGETS = {
     "result_workbench": "memcommit.application.capabilities.reviewing.result_workbench",
     "selective_curation": "memcommit.application.capabilities.semantic.selective_curation",
     "semantic_disclosure": "memcommit.application.capabilities.semantic.disclosure",
+    "semantic_add_runtime": (
+        "memcommit.application.capabilities.semantic_result_memorization"
+    ),
     "semantic_prompt_policy": "memcommit.application.capabilities.semantic.prompt_policy",
     "semantic_provider": "memcommit.providers.semantic",
     "semantic_redundancy_evidence": "memcommit.application.capabilities.semantic.redundancy_evidence",

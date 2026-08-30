@@ -22,9 +22,10 @@ The former flat `memcommit.add_application` and `memcommit.add_runtime` paths
 remain module-identity aliases for import-order, monkeypatch, and serialized-
 global compatibility; new production consumers import the operation package.
 This ownership-only relocation does not change Add's request, authority,
-checkpoint, target-CAS, interface, or receipt contracts. Semantic Add helpers
-used to materialize provider-derived work remain separate because they do not
-implement this exact user-supplied Add operation.
+checkpoint, target-CAS, interface, or receipt contracts. The separate
+`application.capabilities.semantic_result_memorization` capability records
+provider-derived operation results as Memories because that ADD-shaped effect
+does not implement this exact user-supplied Add operation.
 
 `AddRequest` contains an ordered tuple of exact Memory contents, one intake
 provenance record, and an optional existing-Context locator. `AddResult`

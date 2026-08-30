@@ -1,6 +1,6 @@
 # Add callable and effect boundary matrix
 
-Last verified: 2026-08-25.
+Last verified: 2026-08-29.
 
 This matrix records ownership and effects for the first writable operation
 exposed through several adapters. A callable's layer determines where it may be
@@ -48,8 +48,9 @@ adapter. The historical `memcommit.add_application` and
 so either import order, existing monkeypatches, and serialized globals resolve
 to the same canonical module objects. Production adapters import the operation
 package directly. This relocation changes no intake, authority, checkpoint,
-CAS, output, or TUI behavior and does not absorb the separate semantic Add
-materialization helpers used by generative operations.
+CAS, output, or TUI behavior. Semantic result memorization is separately owned
+by `application.capabilities.semantic_result_memorization`; generated-result
+ADD effects do not make their originating operations part of exact Add.
 
 ## CLI Target spelling
 

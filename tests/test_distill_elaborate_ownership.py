@@ -85,10 +85,15 @@ def test_distill_and_elaborate_keep_distinct_execution_contracts() -> None:
     assert "memcommit.application.operations.distill" not in (
         elaborate_application + elaborate_runtime + elaborate_add_runtime
     )
-    assert "append_semantic_memories" not in elaborate_runtime
+    assert "memorize_semantic_result" not in elaborate_runtime
     assert "MemoryStore" not in elaborate_runtime
     assert "from memcommit.application.operations.elaborate.runtime import" in elaborate_add_runtime
-    assert "append_semantic_memories" in elaborate_add_runtime
+    assert "memorize_semantic_result" in elaborate_add_runtime
+    assert "memcommit.application.operations.add" not in elaborate_add_runtime
+    assert (
+        "memcommit.application.capabilities.semantic_result_memorization"
+        in elaborate_add_runtime
+    )
     assert "prepare_distill_add" in distill_source
     assert "apply_prepared_distill_add" in distill_source
 
@@ -104,3 +109,15 @@ def test_operation_owners_do_not_depend_on_command_or_interface_adapters() -> No
 
     assert "memcommit.adapters.console.commands" not in package_source
     assert "memcommit.adapters.interfaces" not in package_source
+
+
+def test_semantic_result_memorization_is_not_owned_by_add() -> None:
+    source = REPOSITORY_ROOT / "src/memcommit/application"
+    capability = source / "capabilities/semantic_result_memorization.py"
+    retired = source / "operations/add/semantic_runtime.py"
+
+    assert capability.is_file()
+    assert not retired.exists()
+    capability_source = capability.read_text(encoding="utf-8")
+    assert "def memorize_semantic_result(" in capability_source
+    assert "def append_semantic_memories(" not in capability_source
