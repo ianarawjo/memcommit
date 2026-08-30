@@ -14,17 +14,20 @@ from memcommit.adapters.console.commands import (
     chunk,
     clear,
     compare,
+    config,
     consolidate,
     contexts,
     copy,
     dedup,
     dedun,
     delete,
+    dev,
     diff,
     distill,
     elaborate,
     edit,
     embed,
+    eval,
     find,
     find_ambiguities,
     find_conflicts,
@@ -42,6 +45,8 @@ from memcommit.adapters.console.commands import (
     log,
     meld,
     move,
+    profile,
+    provider,
     pwd,
     show,
     merge,
@@ -67,11 +72,6 @@ from memcommit.adapters.console.commands import (
     update,
     write_protection,
 )
-from memcommit.adapters.console.commands.config.command import app as config_app
-from memcommit.adapters.console.commands.dev.command import app as dev_app
-from memcommit.adapters.console.commands.semantic_eval.command import eval_app
-from memcommit.adapters.console.commands.profile.command import app as profile_app
-from memcommit.adapters.console.commands.provider.command import app as provider_app
 from memcommit.adapters.console.coordination.root_group import MemCommandGroup
 from memcommit.application.operations.operation_catalog import operation_summary
 
@@ -413,23 +413,23 @@ app.add_typer(
     help=operation_summary("impact"),
 )
 app.add_typer(
-    eval_app,
+    eval.app,
     name="eval",
     help=operation_summary("eval"),
 )
-app.add_typer(config_app, name="config", help=operation_summary("config"))
+app.add_typer(config.app, name="config", help=operation_summary("config"))
 app.add_typer(
-    provider_app,
+    provider.app,
     name="provider",
     help=operation_summary("provider"),
 )
 app.add_typer(
-    profile_app,
+    profile.app,
     name="profile",
     help=operation_summary("profile"),
 )
 app.add_typer(
-    dev_app, name="dev", help="Developer tools (eval, diagnostics).", hidden=True
+    dev.app, name="dev", help="Developer tools (eval, diagnostics).", hidden=True
 )
 
 

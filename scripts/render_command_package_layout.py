@@ -76,7 +76,7 @@ ENTRY_EXPORTS = {
     "resolve": ("cmd",),
     "revert": ("cmd",),
     "review": ("cmd",),
-    "semantic_eval": ("eval_app",),
+    "semantic_eval": ("app",),
     "sever": ("cmd",),
     "share": ("cmd",),
     "show": ("cmd",),
@@ -102,6 +102,7 @@ ENTRY_TARGETS = {
     "find_exact_duplicates": "find_duplicates",
     "help_inventory": "help",
     "literal_find": "find",
+    "semantic_eval": "eval",
 }
 
 

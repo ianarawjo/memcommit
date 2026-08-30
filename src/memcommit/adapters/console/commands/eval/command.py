@@ -79,7 +79,7 @@ _SECRET_ENV_NAMES = (
 )
 
 
-eval_app = typer.Typer(
+app = typer.Typer(
     cls=CanonicalCommandGroup,
     no_args_is_help=True,
     help="Run and inspect reproducible semantic evaluation campaigns.",
@@ -94,7 +94,7 @@ run_app = typer.Typer(
     no_args_is_help=True,
     help="Run one frozen semantic evaluation campaign.",
 )
-eval_app.add_typer(semantic_app, name="semantic")
+app.add_typer(semantic_app, name="semantic")
 semantic_app.add_typer(run_app, name="run")
 
 

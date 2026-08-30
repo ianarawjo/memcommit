@@ -136,7 +136,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.search_result_present` | `memcommit.adapters.console.commands.search.result_present` | command-owned-support | `search` |
 | `memcommit.commands.semantic_clipboard` | `memcommit.adapters.console.terminal.components.plain_text_clipboard` | shared-terminal-component | `terminal` |
 | `memcommit.commands.semantic_detail_renderer` | `memcommit.adapters.console.terminal.components.semantic_viewer.detail` | shared-terminal-component | `terminal` |
-| `memcommit.commands.semantic_eval` | `memcommit.adapters.console.commands.semantic_eval.command` | command-entry | `semantic_eval` |
+| `memcommit.commands.semantic_eval` | `memcommit.adapters.console.commands.eval.command` | command-entry | `eval` |
 | `memcommit.commands.session_endpoint_setup` | `memcommit.adapters.console.terminal.components.endpoint_setup.session` | shared-terminal-component | `terminal` |
 | `memcommit.commands.session_help` | `memcommit.adapters.console.terminal.components.session_help` | shared-terminal-component | `terminal` |
 | `memcommit.commands.session_picker` | `memcommit.adapters.console.terminal.components.operation_launcher.session` | shared-terminal-component | `terminal` |

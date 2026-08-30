@@ -8,7 +8,7 @@ import pytest
 import typer
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.semantic_eval.command as command
+import memcommit.adapters.console.commands.eval.command as command
 from memcommit.providers.types import ProviderIdentity
 from memcommit.providers.subscription import QueryProviderError
 
@@ -157,18 +157,18 @@ def _run_record(
 
 
 def test_nested_cli_exposes_run_and_status_options():
-    run_help = runner.invoke(command.eval_app, ["semantic", "run", "--help"])
+    run_help = runner.invoke(command.app, ["semantic", "run", "--help"])
     assert run_help.exit_code == 0, run_help.output
     for name in ("ambiguity", "duplicate", "gates"):
         assert name in run_help.output
     assert "task2-" not in run_help.output
 
-    semantic_help = runner.invoke(command.eval_app, ["semantic", "--help"])
+    semantic_help = runner.invoke(command.app, ["semantic", "--help"])
     assert semantic_help.exit_code == 0, semantic_help.output
     assert "task2-" not in semantic_help.output
 
     result = runner.invoke(
-        command.eval_app,
+        command.app,
         ["semantic", "run", "ambiguity", "--help"],
     )
 
@@ -188,12 +188,12 @@ def test_nested_cli_exposes_run_and_status_options():
     ):
         assert option in help_text
 
-    status = runner.invoke(command.eval_app, ["semantic", "status", "--help"])
+    status = runner.invoke(command.app, ["semantic", "status", "--help"])
     assert status.exit_code == 0, status.output
     assert "--ledger-dir" in status.output
 
     duplicate = runner.invoke(
-        command.eval_app,
+        command.app,
         ["semantic", "run", "duplicate", "--help"],
     )
     assert duplicate.exit_code == 0, duplicate.output
@@ -233,7 +233,7 @@ def test_run_uses_transient_selection_and_passes_frozen_campaign_arguments(
     monkeypatch.setattr(command, "run_ambiguity_campaign", run_campaign)
 
     result = runner.invoke(
-        command.eval_app,
+        command.app,
         [
             "semantic",
             "run",
@@ -306,7 +306,7 @@ def test_failed_cases_return_nonzero_after_rendering_saved_ledger(
     )
 
     result = runner.invoke(
-        command.eval_app,
+        command.app,
         ["semantic", "run", "ambiguity", "--ledger-dir", str(tmp_path)],
     )
 
@@ -334,7 +334,7 @@ def test_run_selects_and_labels_the_frozen_holdout(monkeypatch, tmp_path):
     monkeypatch.setattr(command, "run_ambiguity_campaign", run_campaign)
 
     result = runner.invoke(
-        command.eval_app,
+        command.app,
         [
             "semantic",
             "run",
@@ -371,7 +371,7 @@ def test_run_duplicate_uses_the_host_first_campaign(monkeypatch, tmp_path):
     monkeypatch.setattr(command, "run_duplicate_campaign", run_campaign)
 
     result = runner.invoke(
-        command.eval_app,
+        command.app,
         [
             "semantic",
             "run",
@@ -517,7 +517,7 @@ def test_connection_error_never_exposes_environment_credential(
     monkeypatch.setattr(command, "_connect_transient_provider", fail)
 
     result = runner.invoke(
-        command.eval_app,
+        command.app,
         [
             "semantic",
             "run",
@@ -586,7 +586,7 @@ def test_status_is_provider_free_and_shows_latest_per_provider_model_pipeline(
     )
 
     result = runner.invoke(
-        command.eval_app,
+        command.app,
         ["semantic", "status", "--ledger-dir", str(tmp_path)],
     )
 
@@ -639,7 +639,7 @@ def test_scoreboard_separates_thinking_and_prefers_full_corpus_over_newer_subset
 
 def test_status_with_no_runs_is_a_normal_read_only_state(tmp_path):
     result = runner.invoke(
-        command.eval_app,
+        command.app,
         ["semantic", "status", "--ledger-dir", str(tmp_path)],
     )
 
@@ -669,7 +669,7 @@ def test_status_fails_closed_on_corrupt_or_unknown_run_schema(tmp_path, raw):
     (runs / "bad.json").write_text(raw, encoding="utf-8")
 
     result = runner.invoke(
-        command.eval_app,
+        command.app,
         ["semantic", "status", "--ledger-dir", str(tmp_path)],
     )
 
@@ -685,7 +685,7 @@ def test_runs_option_is_bounded_before_provider_connection(monkeypatch, tmp_path
     )
 
     result = runner.invoke(
-        command.eval_app,
+        command.app,
         [
             "semantic",
             "run",

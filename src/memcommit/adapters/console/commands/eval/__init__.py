@@ -1,9 +1,9 @@
-"""Lazy public CLI surface for the semantic_eval command package."""
+"""Lazy public CLI surface for the eval command package."""
 
 from memcommit.adapters.console.commands import _load_entrypoint_attribute
 
 
-__all__ = ["eval_app"]
+__all__ = ["app"]
 
 
 def __getattr__(name: str):

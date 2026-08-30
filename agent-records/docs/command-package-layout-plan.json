@@ -955,11 +955,11 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.semantic_eval.command",
+      "canonical_module": "memcommit.adapters.console.commands.eval.command",
       "legacy_module": "memcommit.commands.semantic_eval",
-      "owner": "semantic_eval",
+      "owner": "eval",
       "public_exports": [
-        "eval_app"
+        "app"
       ],
       "role": "command-entry"
     },

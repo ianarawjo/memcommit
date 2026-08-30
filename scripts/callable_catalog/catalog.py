@@ -629,7 +629,7 @@ _OPERATION_DISCOVERY_TOKENS = {
     # visible without conflating the two public operation identities.
     "dedun": ("dedun", "consolidate", "find_duplicates", "dedup"),
     "dedup": ("dedup",),
-    "eval": ("eval", "semantic_eval"),
+    "eval": ("eval",),
     "find-duplicates": (
         "find_duplicates",
         "exact_duplicates",
