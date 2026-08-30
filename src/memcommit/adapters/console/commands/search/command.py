@@ -43,7 +43,7 @@ from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.application.operations.search.source import (
+from memcommit.application.operations.search.corpus import (
     collect_readable_search_candidates,
     load_readable_search_roots,
 )

@@ -33,7 +33,7 @@ there is intentionally no profile-wide “last Scope” preference.
   direct-Memory locator against a strict complete ordinary-local direct graph,
   completes a local auto-typed Context/Memory target, and offers the sibling
   all-direct-item owner lookup needed by Show.
-- `application.operations.search.source` loads one or more searchable roots
+- `application.operations.search.corpus` loads one or more searchable roots
   and independently controls embedded-Context traversal and authorized
   activity artifacts for Search, Find, and ordinary Query. It belongs to the
   Search operation because those roots are immediately projected into

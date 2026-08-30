@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from typing import Protocol
 
 from memcommit.core.context import Context, Memory, MemoryRef
-from memcommit.application.operations.search.source import load_readable_search_roots
+from memcommit.application.operations.search.corpus import load_readable_search_roots
 from memcommit.application.operations.find.application import (
     FrozenFindSource,
     FindRequest,

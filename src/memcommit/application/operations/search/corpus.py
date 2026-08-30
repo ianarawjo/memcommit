@@ -1,4 +1,4 @@
-"""Freeze readable Source roots and candidates for Search-family operations."""
+"""Build the readable corpus used by Search-family operations."""
 
 from __future__ import annotations
 

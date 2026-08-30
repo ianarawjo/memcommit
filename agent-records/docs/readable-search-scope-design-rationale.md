@@ -11,7 +11,7 @@ to change disclosure scope accidentally while refactoring another.
 
 ## Decision
 
-`memcommit.application.operations.search.source` owns two Search Source
+`memcommit.application.operations.search.corpus` owns two searchable-corpus
 preparation steps shared by Search, Find, and ordinary Query:
 
 1. `load_readable_search_roots` validates ordinary roots, optionally expands
@@ -55,7 +55,7 @@ operation must retain its own permission checks and exact access bindings.
 
 Compatibility adapters remain temporarily in `find.py` for tests and retained
 internal callers that referenced the former private helpers. New cross-command
-code must import the Search Source module rather than those aliases. Canonical
+code must import the Search corpus module rather than those aliases. Canonical
 lexical name expansion itself remains in `context_targeting.resolution`, shared
 with the merged Context loader without making Search artifacts part of core
 targeting.
