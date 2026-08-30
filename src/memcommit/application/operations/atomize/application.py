@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import copy
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Literal, Protocol
 
 from memcommit.application.operations.atomize.domain import (
     AtomizeAnalysisSession,
@@ -15,10 +15,33 @@ from memcommit.application.operations.atomize.workbench import (
     atomize_workbench_response_digest,
     project_atomize_workbench_findings,
 )
+from memcommit.core.context import Context
 
 
 class AtomizeApplicationError(RuntimeError):
     """The accepted structural Atomize application could not commit safely."""
+
+
+@dataclass(frozen=True)
+class AtomizeInPlaceRequest:
+    """Analyze one exact local scope and materialize it in its owning Context."""
+
+    context: Context
+    memory_selector: str | None = None
+    refresh: bool = False
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.context, Context):
+            raise TypeError("In-place Atomize requires a Context.")
+        if self.memory_selector is not None and (
+            not isinstance(self.memory_selector, str)
+            or not self.memory_selector.strip()
+        ):
+            raise AtomizeApplicationError(
+                "In-place Atomize Memory selector must be nonempty text."
+            )
+        if not isinstance(self.refresh, bool):
+            raise TypeError("In-place Atomize refresh must be a boolean.")
 
 
 @dataclass(frozen=True)
@@ -80,6 +103,15 @@ class AtomizePersistedApplyResult:
     materialization: AtomizeMaterialization
     audit: AtomizeApplicationAudit
     recovered: bool
+
+
+@dataclass(frozen=True)
+class AtomizeInPlaceResult:
+    """One complete analysis-to-checkpoint outcome for an exact target scope."""
+
+    analysis: AtomizeAnalysisSession
+    application: AtomizePersistedApplyResult
+    analysis_origin: Literal["SAVED", "EXACT_PREWARM", "PROVIDER"]
 
 
 @dataclass(frozen=True)

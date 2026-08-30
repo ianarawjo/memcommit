@@ -16,11 +16,15 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.operations.atomize.application import atomize_application_audit
+from memcommit.application.operations.atomize.application import (
+    AtomizeInPlaceRequest,
+    atomize_application_audit,
+)
 from memcommit.application.operations.atomize.runtime import (
     MemoryStoreAtomizeSessionRepository,
     MemoryStoreAtomizeOutputPort,
     capture_atomize_session_snapshot,
+    execute_atomize_in_place,
 )
 from tests.atomize_analysis_support import open_or_create_atomize_workbench
 from memcommit.adapters.console.commands.atomize.command import cmd as atomize_command
@@ -136,6 +140,11 @@ class _OneCompositeProvider:
         )
 
 
+class _ForbiddenProvider:
+    def __init__(self) -> None:
+        raise AssertionError("an exact applied Atomize result must be provider-free")
+
+
 def _open_all_atomic_session(store: MemoryStore):
     context = ops.init("atomize/apply-boundary")
     memory = ops.add(context, "The library entrance closes at five.")
@@ -147,6 +156,73 @@ def _open_all_atomic_session(store: MemoryStore):
         provider_factory=_AllAtomicProvider,
     )
     return context, memory, opened
+
+
+def test_in_place_execution_atomizes_only_the_selected_memory(isolated_store):
+    store = MemoryStore()
+    context = ops.init("atomize/in-place-focused")
+    before = ops.add(context, "The lobby closes at four.")
+    selected = ops.add(
+        context,
+        "The library closes at five. Security remains on site.",
+    )
+    after = ops.add(context, "The garage remains open.")
+    store.save(context)
+
+    executed = execute_atomize_in_place(
+        AtomizeInPlaceRequest(
+            context=context,
+            memory_selector=selected.uid[:8],
+        ),
+        store=store,
+        provider_factory=_OneCompositeProvider,
+    )
+
+    current = store.load_direct(context.name)
+    memories = [item for item in current.iter_items() if isinstance(item, Memory)]
+    assert [(item.uid, item.content) for item in memories] == [
+        (before.uid, before.content),
+        (executed.application.materialization.result.items[0].result_uids[0],
+         "The library closes at five."),
+        (executed.application.materialization.result.items[0].result_uids[1],
+         "Security remains on site."),
+        (after.uid, after.content),
+    ]
+    assert executed.analysis.evidence_digest is not None
+    assert executed.application.materialization.result.split_count == 1
+    assert len(store.list_checkpoints(context.name)) == 1
+
+
+def test_in_place_execution_reuses_an_applied_scope_unless_refreshed(isolated_store):
+    store = MemoryStore()
+    context = ops.init("atomize/in-place-refresh")
+    ops.add(context, "The library entrance closes at five.")
+    store.save(context)
+
+    first = execute_atomize_in_place(
+        AtomizeInPlaceRequest(context=context),
+        store=store,
+        provider_factory=_AllAtomicProvider,
+    )
+    reused = execute_atomize_in_place(
+        AtomizeInPlaceRequest(context=store.load_direct(context.name)),
+        store=store,
+        provider_factory=_ForbiddenProvider,
+    )
+    refreshed = execute_atomize_in_place(
+        AtomizeInPlaceRequest(
+            context=store.load_direct(context.name),
+            refresh=True,
+        ),
+        store=store,
+        provider_factory=_AllAtomicProvider,
+    )
+
+    assert reused.analysis.uid == first.analysis.uid
+    assert reused.application.recovered is True
+    assert refreshed.analysis.uid != first.analysis.uid
+    assert refreshed.analysis_origin == "PROVIDER"
+    assert len(store.list_checkpoints(context.name)) == 2
 
 
 @pytest.fixture(autouse=True)

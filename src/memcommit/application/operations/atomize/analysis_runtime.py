@@ -76,10 +76,11 @@ def _connect_aggregate_atomize_provider(
     return provider
 
 
-def _requested_memory_uids(
+def requested_atomize_memory_uids(
     context: Context,
     memory_selector: str | None,
 ) -> tuple[str, ...]:
+    """Resolve the exact actionable Memory identities for one Atomize scope."""
     if memory_selector is None:
         return tuple(
             candidate.memory.uid for candidate in collect_atomize_candidates(context)
@@ -284,7 +285,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
         context = request.context
         prompt_policy_id = resolve_semantic_prompt_policy().policy_id
         existing = self.store.load_atomize_analysis(context.uid)
-        requested_uids = _requested_memory_uids(
+        requested_uids = requested_atomize_memory_uids(
             context,
             request.memory_selector,
         )
@@ -487,4 +488,5 @@ __all__ = [
     "ATOMIZE_AGGREGATE_TIMEOUT_SECONDS",
     "MemoryStoreAtomizeAnalysisOpenPort",
     "execute_atomize_analysis_open",
+    "requested_atomize_memory_uids",
 ]

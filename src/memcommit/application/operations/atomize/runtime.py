@@ -20,6 +20,8 @@ from memcommit.application.operations.atomize.normal_form import project_atomize
 from memcommit.application.operations.atomize.application import (
     AtomizeApplicationAudit,
     AtomizeApplicationError,
+    AtomizeInPlaceRequest,
+    AtomizeInPlaceResult,
     AtomizeMaterialization,
     AtomizePersistedApplyRequest,
     AtomizePersistedApplyResult,
@@ -31,6 +33,13 @@ from memcommit.application.operations.atomize.application import (
     run_atomize_output_plan_update,
     run_atomize_session_apply,
     run_atomize_save_as,
+)
+from memcommit.application.operations.atomize.analysis_application import (
+    AtomizeAnalysisOpenRequest,
+)
+from memcommit.application.operations.atomize.analysis_runtime import (
+    execute_atomize_analysis_open,
+    requested_atomize_memory_uids,
 )
 from memcommit.application.operations.atomize.workbench import (
     AtomizeWorkbenchSession,
@@ -1070,6 +1079,128 @@ def capture_atomize_session_snapshot(
     return MemoryStoreAtomizeSessionRepository(store).capture(
         analysis,
         expected_workbench,
+    )
+
+
+def atomize_application_checkpoint_uid(
+    store: MemoryStore,
+    context: Context,
+    analysis_uid: str,
+) -> str | None:
+    """Return the exact in-place checkpoint belonging to one Atomize analysis."""
+
+    for checkpoint in store.list_checkpoints(context.name):
+        args = checkpoint.get("args")
+        trace = args.get("trace") if isinstance(args, dict) else None
+        if not (
+            checkpoint.get("command") == "atomize"
+            and isinstance(trace, dict)
+            and args.get("analysis_uid") == analysis_uid
+            and trace.get("operation_id") == analysis_uid
+        ):
+            continue
+        snapshot = checkpoint.get("snapshot")
+        if not isinstance(snapshot, dict):
+            continue
+        try:
+            checkpoint_context = Context.from_dict(snapshot)
+        except (KeyError, TypeError):
+            continue
+        if (
+            checkpoint_context.uid == context.uid
+            and checkpoint_context.name == context.name
+            and isinstance(checkpoint.get("uid"), str)
+        ):
+            return checkpoint["uid"]
+    return None
+
+
+def atomize_analysis_was_applied(
+    store: MemoryStore,
+    context: Context,
+    analysis_uid: str,
+) -> bool:
+    """Return whether one analysis identity already crossed its Apply boundary."""
+
+    return atomize_application_checkpoint_uid(store, context, analysis_uid) is not None
+
+
+def _analysis_scope_matches_request(
+    analysis: AtomizeAnalysisSession,
+    request: AtomizeInPlaceRequest,
+) -> bool:
+    """Compare scope shape without mistaking an applied preimage for current input."""
+
+    if request.memory_selector is None:
+        return analysis.evidence_digest is None
+    requested_uids = requested_atomize_memory_uids(
+        request.context,
+        request.memory_selector,
+    )
+    return (
+        analysis.evidence_digest is not None
+        and tuple(item.memory_uid for item in analysis.items) == requested_uids
+    )
+
+
+def execute_atomize_in_place(
+    request: AtomizeInPlaceRequest,
+    *,
+    store: MemoryStore,
+    provider_factory: Callable[[], AtomizeProvider],
+) -> AtomizeInPlaceResult:
+    """Analyze or reuse one exact scope and apply it as one in-place outcome."""
+
+    if not isinstance(request, AtomizeInPlaceRequest):
+        raise TypeError("In-place Atomize requires a typed request.")
+
+    existing = store.load_atomize_analysis(request.context.uid)
+    if (
+        existing is not None
+        and not request.refresh
+        and _analysis_scope_matches_request(existing, request)
+        and atomize_analysis_was_applied(store, request.context, existing.uid)
+    ):
+        snapshot = capture_atomize_session_snapshot(
+            store=store,
+            analysis=existing,
+            expected_workbench=store.load_atomize_workbench(existing),
+        )
+        applied = execute_atomize_session_apply(
+            AtomizePersistedApplyRequest(snapshot=snapshot),
+            store=store,
+            provider_factory=provider_factory,
+        )
+        return AtomizeInPlaceResult(
+            analysis=existing,
+            application=applied,
+            analysis_origin="SAVED",
+        )
+
+    opened = execute_atomize_analysis_open(
+        AtomizeAnalysisOpenRequest(
+            context=request.context,
+            refresh=request.refresh,
+            memory_selector=request.memory_selector,
+            allow_prepared=not request.refresh and request.memory_selector is None,
+        ),
+        store=store,
+        provider_factory=provider_factory,
+    )
+    snapshot = capture_atomize_session_snapshot(
+        store=store,
+        analysis=opened.analysis,
+        expected_workbench=opened.workbench,
+    )
+    applied = execute_atomize_session_apply(
+        AtomizePersistedApplyRequest(snapshot=snapshot),
+        store=store,
+        provider_factory=provider_factory,
+    )
+    return AtomizeInPlaceResult(
+        analysis=opened.analysis,
+        application=applied,
+        analysis_origin=opened.origin,
     )
 
 
