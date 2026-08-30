@@ -12,7 +12,7 @@ from memcommit.application.capabilities.authority.context_access import (
     resolve_context_access,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory
-from memcommit.core.context_targeting.loading import (
+from memcommit.application.capabilities.local_target_lookup import (
     resolve_local_direct_memory_locator,
 )
 from memcommit.application.operations.edit.application import (

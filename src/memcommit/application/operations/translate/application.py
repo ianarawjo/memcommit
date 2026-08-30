@@ -8,7 +8,9 @@ from dataclasses import dataclass
 from typing import Literal
 
 from memcommit.core.context import Context, Memory
-from memcommit.core.context_targeting.loading import resolve_local_context_memory_target
+from memcommit.application.capabilities.local_target_lookup import (
+    resolve_local_context_memory_target,
+)
 from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTarget
 from memcommit.application.operations.translate.curate_translations import (
     load_translation_catalog_seed,

@@ -27,8 +27,10 @@ from memcommit.application.capabilities.authority.context_access import (
     revalidate_granted_context_binding,
 )
 from memcommit.core.context import Context
-from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import project_comparison_context
-from memcommit.core.context_targeting.loading import load_context_scope
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
+    project_comparison_context,
+)
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.application.capabilities.authority.source_use_policy import (
     AnalysisRetention,
     analysis_retention,
@@ -39,7 +41,10 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.gra
     load_granted_comparison_artifact,
     save_granted_comparison_artifact,
 )
-from memcommit.application.operations.profile.model import ProfileError, authority_grant_snapshot_lock
+from memcommit.application.operations.profile.model import (
+    ProfileError,
+    authority_grant_snapshot_lock,
+)
 from memcommit.providers.policy import (
     COMPARE_LEDGER_PROVIDER_POLICY,
 )
@@ -160,11 +165,7 @@ def ensure_comparison_analysis(
         else None
     )
     if granted:
-        existing = (
-            granted_artifact.analysis
-            if granted_artifact is not None
-            else None
-        )
+        existing = granted_artifact.analysis if granted_artifact is not None else None
     else:
         existing = load_comparison_analysis(
             reference.uid,
@@ -176,16 +177,16 @@ def ensure_comparison_analysis(
             not isinstance(expected_version, str)
             or len(expected_version) != 64
             or any(
-                character not in "0123456789abcdef"
-                for character in expected_version
+                character not in "0123456789abcdef" for character in expected_version
             )
         ):
             raise ComparisonError(
                 "Compare refresh requires a valid opaque saved version."
             )
-        if existing is None or comparison_canonical_digest(
-            existing.to_dict()
-        ) != expected_version:
+        if (
+            existing is None
+            or comparison_canonical_digest(existing.to_dict()) != expected_version
+        ):
             # This check intentionally precedes every prewarm/provider hook.
             # An external refresh is an action on a reviewed artifact, not an
             # instruction to replace whichever pair revision is latest.
@@ -209,9 +210,7 @@ def ensure_comparison_analysis(
             reused=True,
             durable=True,
             retention=(
-                granted_artifact.retention
-                if granted_artifact is not None
-                else None
+                granted_artifact.retention if granted_artifact is not None else None
             ),
             origin="SAVED_REUSE",
         )
@@ -225,9 +224,7 @@ def ensure_comparison_analysis(
         authorize_analysis_save(accesses, retention=retention)
 
     equivalent_analysis = (
-        equivalent(comparison_input)
-        if equivalent is not None and not refresh
-        else None
+        equivalent(comparison_input) if equivalent is not None and not refresh else None
     )
     if equivalent_analysis is not None and (
         equivalent_analysis.ruleset_version != COMPARISON_RULESET_VERSION
@@ -314,9 +311,7 @@ def ensure_comparison_analysis(
             "Compare analysis does not match the requested Memory scope."
         )
     analysis_origin = (
-        "EQUIVALENT_SCOPE_PREWARM"
-        if equivalent_analysis is not None
-        else "LIVE"
+        "EQUIVALENT_SCOPE_PREWARM" if equivalent_analysis is not None else "LIVE"
     )
 
     if granted:
@@ -423,16 +418,12 @@ def install_prepared_comparison_analysis(
     def prepared(comparison_input: ComparisonInput) -> ComparisonAnalysis:
         # Recheck the freshly constructed request too. This prevents a caller
         # from validating one scope and publishing the seed under another.
-        if (
-            comparison_input.include_descendants != include_descendants
-            or tuple(
-                (frame.context_uid, frame.context_name, frame.context_digest)
-                for frame in comparison_input.frames
-            )
-            != tuple(
-                (frame.context_uid, frame.context_name, frame.context_digest)
-                for frame in analysis.frames
-            )
+        if comparison_input.include_descendants != include_descendants or tuple(
+            (frame.context_uid, frame.context_name, frame.context_digest)
+            for frame in comparison_input.frames
+        ) != tuple(
+            (frame.context_uid, frame.context_name, frame.context_digest)
+            for frame in analysis.frames
         ):
             raise ComparisonError(
                 "Prepared Compare seed changed at the installation boundary."

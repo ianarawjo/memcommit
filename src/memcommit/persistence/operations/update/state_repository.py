@@ -163,7 +163,9 @@ class _UpdateStateStoreMixin:
         from memcommit.application.operations.update.materialization import (
             prepare_update_application,
         )
-        from memcommit.core.context_targeting.loading import load_context_scope
+        from memcommit.application.capabilities.context_scope_loading import (
+            load_context_scope,
+        )
         from memcommit.application.capabilities.semantic.goal_focus import (
             GoalFocusError,
         )

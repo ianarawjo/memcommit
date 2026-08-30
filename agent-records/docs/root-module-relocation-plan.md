@@ -74,7 +74,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.context_locator | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.context_locator | 44 |
 | memcommit.context_naming | shared-concept-implementation | relocate-without-alias | memcommit.core.context_targeting.naming | 26 |
 | memcommit.context_rationale | operation-implementation | relocate-without-alias | memcommit.application.operations.rationale.context | 1 |
-| memcommit.context_scope | historical-compatibility-facade | remove | memcommit.core.context_targeting.loading | 0 |
+| memcommit.context_scope | historical-compatibility-facade | remove | memcommit.application.capabilities.context_scope_loading | 0 |
 | memcommit.context_snapshot | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.retained_history.context_snapshot | 12 |
 | memcommit.current_context_application | historical-compatibility-facade | remove | memcommit.application.operations.pwd.application | 0 |
 | memcommit.current_context_navigation | shared-concept-implementation | relocate-without-alias | memcommit.core.context_targeting.navigation | 3 |

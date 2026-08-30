@@ -22,7 +22,7 @@ from memcommit.core.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )
-from memcommit.core.context_targeting.loading import (
+from memcommit.application.capabilities.local_target_lookup import (
     try_resolve_short_local_direct_memory_locator,
 )
 from memcommit.core.context_targeting.model import (

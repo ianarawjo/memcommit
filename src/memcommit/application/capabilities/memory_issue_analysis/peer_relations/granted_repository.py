@@ -24,8 +24,11 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evi
     ProjectedComparisonMemory,
     project_comparison_context,
 )
-from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.application.capabilities.authority.source_use_policy import AnalysisRetention, authorize_analysis_save
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
+from memcommit.application.capabilities.authority.source_use_policy import (
+    AnalysisRetention,
+    authorize_analysis_save,
+)
 from memcommit.persistence.store import MemoryStore, _write_json_atomic
 from memcommit.application.operations.update.model import GrantedUpdateTarget
 
@@ -142,10 +145,7 @@ def load_granted_comparison_artifact(
     except (json.JSONDecodeError, ValueError) as error:
         raise ValueError("Saved granted comparison is invalid.") from error
     frames = artifact.analysis.frames
-    if (
-        frames[0].context_uid != reference_uid
-        or frames[1].context_uid != compared_uid
-    ):
+    if frames[0].context_uid != reference_uid or frames[1].context_uid != compared_uid:
         raise ValueError("Granted comparison does not match its storage key.")
     return artifact
 
@@ -221,9 +221,7 @@ def save_granted_comparison_artifact(
                 analysis.frames[0].context_uid,
                 analysis.frames[1].context_uid,
             )
-            current_uid = (
-                current.analysis.uid if current is not None else None
-            )
+            current_uid = current.analysis.uid if current is not None else None
             current_version = (
                 comparison_canonical_digest(current.analysis.to_dict())
                 if current is not None

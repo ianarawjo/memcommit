@@ -5,10 +5,12 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.capabilities.authority.context_access import (
+    resolve_context_access,
+)
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
-from memcommit.core.context_targeting.loading import (
+from memcommit.application.capabilities.local_target_lookup import (
     LocalDirectMemoryLocatorStore,
     resolve_local_direct_memory_locator,
     try_resolve_short_local_direct_memory_locator,
@@ -120,9 +122,7 @@ def normalize_resolve_cli_targets(
         )
     )
     if canonical_contexts:
-        selectors = tuple(
-            locator.memory_selector for locator in memory_locators
-        )
+        selectors = tuple(locator.memory_selector for locator in memory_locators)
     else:
         # A bare Memory operand carries enough stable UUID shape to find its
         # directly owned local Context without giving the current Context
@@ -150,9 +150,7 @@ def normalize_resolve_cli_targets(
 
     return ResolveCliTargets(
         context_name=(
-            canonical_contexts[0]
-            if canonical_contexts
-            else current_context_name
+            canonical_contexts[0] if canonical_contexts else current_context_name
         ),
         memory_selectors=selectors,
     )

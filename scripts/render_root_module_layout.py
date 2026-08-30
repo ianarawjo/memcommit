@@ -108,7 +108,7 @@ COMPATIBILITY_TARGET_OVERRIDES = {
     "comparison_summary_application": "memcommit.application.operations.compare.application",
     "comparison_summary_provider": "memcommit.application.operations.compare.provider_contract",
     "comparison_summary_rules": "memcommit.application.operations.compare.compare_rules",
-    "context_scope": "memcommit.core.context_targeting.loading",
+    "context_scope": "memcommit.application.capabilities.context_scope_loading",
     "context_init_application": "memcommit.application.operations.init.application",
     "context_init_runtime": "memcommit.application.operations.init.runtime",
     "forget_resolution_adapter": (

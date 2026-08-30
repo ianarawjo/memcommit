@@ -11,9 +11,14 @@ from memcommit.application.capabilities.authority.context_access import (
 )
 from memcommit.core.context import Memory
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.core.context_targeting.loading import resolve_local_direct_memory_locator
+from memcommit.application.capabilities.local_target_lookup import (
+    resolve_local_direct_memory_locator,
+)
 from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
-from memcommit.core.context_targeting.model import DirectMemoryLocator, ExistingContextOperand
+from memcommit.core.context_targeting.model import (
+    DirectMemoryLocator,
+    ExistingContextOperand,
+)
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
     parse_direct_memory_locator,
@@ -280,8 +285,7 @@ def resolve_compare_cli_targets(
         compared_operand_is_memory = compared_memory_uid is not None
         if compared_operand_is_memory and compared_memory_selector is not None:
             raise CompareTargetingError(
-                "PEER Memory was supplied both positionally and with "
-                "--compared-memory."
+                "PEER Memory was supplied both positionally and with --compared-memory."
             )
         if not compared_operand_is_memory:
             compared_memory_uid = compared_memory_selector

@@ -20,7 +20,7 @@ from memcommit.application.capabilities.context_locator import (
     is_relative_context_locator,
     resolve_context_locator,
 )
-from memcommit.core.context_targeting.loading import (
+from memcommit.application.capabilities.local_target_lookup import (
     resolve_local_direct_memory_locator,
     try_resolve_short_local_direct_memory_locator,
 )

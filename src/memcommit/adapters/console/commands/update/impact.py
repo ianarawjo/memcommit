@@ -36,7 +36,7 @@ from memcommit.application.operations.update.model import (
     plan_update,
     session_matches,
 )
-from memcommit.core.context_targeting.loading import load_context_scope
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique_uid
 from memcommit.persistence.store import MemoryStore
 from memcommit.providers.subscription import (

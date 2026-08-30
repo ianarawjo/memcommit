@@ -15,8 +15,10 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.mod
     comparison_canonical_digest,
 )
 from memcommit.core.context import Context
-from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import project_comparison_context
-from memcommit.core.context_targeting.loading import load_context_scope
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
+    project_comparison_context,
+)
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 

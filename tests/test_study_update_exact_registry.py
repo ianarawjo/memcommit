@@ -12,7 +12,7 @@ from memcommit.adapters.console.commands.update import command as update_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.configuration.config import Config
 from memcommit.core.context import Context, Memory
-from memcommit.core.context_targeting.loading import load_context_scope
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
@@ -32,7 +32,11 @@ from memcommit.study_scenarios.legacy.prewarm.update import (
     is_installed_update_prewarm,
     record_equivalent_update_prewarm,
 )
-from memcommit.application.operations.update.model import AddOperation, UpdateSession, collect_update_inputs
+from memcommit.application.operations.update.model import (
+    AddOperation,
+    UpdateSession,
+    collect_update_inputs,
+)
 
 
 runner = CliRunner()

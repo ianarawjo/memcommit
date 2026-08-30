@@ -32,7 +32,9 @@ def _metric_files() -> tuple[Path, ...]:
 
 def main() -> None:
     sys.path.insert(0, str(ROOT / "src"))
-    from memcommit.core.context_targeting.loading import load_context_scope
+    from memcommit.application.capabilities.context_scope_loading import (
+        load_context_scope,
+    )
     from memcommit.application.operations.profile.config import load_profile_registry
     from memcommit.application.operations.sever.session_store import SeverSessionStore
     from memcommit.persistence.store import MemoryStore
@@ -87,7 +89,9 @@ def main() -> None:
         "task3_sever_result": "task-3/participant/subtractive-first",
     }
     final_counts = {
-        "tutorial_atomized": len(tuple(store.load_direct("practice/source-atomized").iter_items())),
+        "tutorial_atomized": len(
+            tuple(store.load_direct("practice/source-atomized").iter_items())
+        ),
         "task1_incoming": _memory_count(task1_incoming),
         "task1_baseline_after_directional_meld": _memory_count(task1_baseline),
         "task1_symmetric_result": _memory_count(
@@ -119,9 +123,7 @@ def main() -> None:
         "task3_sever_result": 0,
     }
     if final_counts != expected_counts:
-        raise RuntimeError(
-            f"Fresh replay final counts differ: {final_counts!r}."
-        )
+        raise RuntimeError(f"Fresh replay final counts differ: {final_counts!r}.")
 
     metric_files = _metric_files()
     if len(metric_files) != 11:
@@ -152,7 +154,9 @@ def main() -> None:
         if session.output_name == "task-3/participant/subtractive-first"
     ]
     if len(sever_sessions) != 1 or sever_sessions[0].state != "APPLIED":
-        raise RuntimeError("Task 3 Sever did not retain one applied participant session.")
+        raise RuntimeError(
+            "Task 3 Sever did not retain one applied participant session."
+        )
 
     expected_numbers = set(range(1, 117))
     capture_numbers = {

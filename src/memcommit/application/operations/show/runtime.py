@@ -13,9 +13,11 @@ from memcommit.application.capabilities.authority.context_access import (
     top_level_grants,
 )
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+from memcommit.application.capabilities.retained_history.context_snapshot import (
+    ContextSnapshotRef,
+)
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.core.context_targeting.loading import (
+from memcommit.application.capabilities.local_target_lookup import (
     DirectItemAmbiguityError,
     DirectItemNotFoundError,
     resolve_local_direct_item_locator,
@@ -32,7 +34,9 @@ from memcommit.core.context_targeting.model import (
     DirectMemoryLocator,
     ExistingContextOperand,
 )
-from memcommit.application.capabilities.authority.readable_contexts import ReadableContextCatalog
+from memcommit.application.capabilities.authority.readable_contexts import (
+    ReadableContextCatalog,
+)
 from memcommit.core.context_targeting.resolution import (
     expand_lexical_context_names,
     parse_auto_typed_context_memory_operand,

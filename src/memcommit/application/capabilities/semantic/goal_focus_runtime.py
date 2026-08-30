@@ -6,11 +6,14 @@ import hashlib
 
 from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.core.context_targeting.loading import (
+from memcommit.application.capabilities.local_target_lookup import (
     resolve_local_direct_memory_locator,
     try_resolve_short_local_direct_memory_locator,
 )
-from memcommit.core.context_targeting.model import DirectMemoryLocator, InlineTextOperand
+from memcommit.core.context_targeting.model import (
+    DirectMemoryLocator,
+    InlineTextOperand,
+)
 from memcommit.core.context_targeting.operands import (
     classify_context_or_inline_text_operand,
 )
@@ -166,9 +169,7 @@ def revalidate_goal_focus(store: MemoryStore, focus: FrozenGoalFocus) -> None:
         return
     assert focus.context_name is not None
     if not store.context_exists(focus.context_name):
-        raise GoalFocusError(
-            f"Goal Context {focus.context_name!r} no longer exists."
-        )
+        raise GoalFocusError(f"Goal Context {focus.context_name!r} no longer exists.")
     current = store.load_direct(focus.context_name)
     if (
         current.uid != focus.context_uid

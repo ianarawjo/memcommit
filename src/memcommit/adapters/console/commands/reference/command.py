@@ -6,11 +6,14 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.core.context_targeting.loading import (
+from memcommit.application.capabilities.local_target_lookup import (
     resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
 )
-from memcommit.core.context_targeting.model import DirectMemoryLocator, DirectMemoryTarget
+from memcommit.core.context_targeting.model import (
+    DirectMemoryLocator,
+    DirectMemoryTarget,
+)
 from memcommit.core.context_targeting.operands import choose_endpoint_operand
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
@@ -19,8 +22,13 @@ from memcommit.core.context_targeting.presets import (
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.adapters.console.terminal.core.text import display_escape_text, safe_terminal_text
-from memcommit.adapters.console.terminal.core.capabilities import is_interactive_terminal
+from memcommit.adapters.console.terminal.core.text import (
+    display_escape_text,
+    safe_terminal_text,
+)
+from memcommit.adapters.console.terminal.core.capabilities import (
+    is_interactive_terminal,
+)
 from memcommit.adapters.console.commands.reference.workbench import (
     choose_reference_setup,
 )
@@ -200,9 +208,8 @@ def cmd(
                 else None
             )
             auto_target = None
-            if (
-                parsed_source is not None
-                and not isinstance(parsed_source, DirectMemoryLocator)
+            if parsed_source is not None and not isinstance(
+                parsed_source, DirectMemoryLocator
             ):
                 try:
                     auto_target = resolve_local_context_memory_target(
@@ -279,9 +286,7 @@ def cmd(
             recursive_scope = scope is ContextScopePreset.RECURSIVE
             request = ContextReferenceRequest(
                 source_locator=(
-                    auto_target.context_name
-                    if auto_target is not None
-                    else source_item
+                    auto_target.context_name if auto_target is not None else source_item
                 ),
                 into_locator=target_option,
                 include_descendants=recursive_scope,

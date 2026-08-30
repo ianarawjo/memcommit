@@ -6,13 +6,17 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
+)
 from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemorySelection,
     ContextPickerActionReceipt,
     choose_context,
 )
-from memcommit.core.context_targeting.loading import DirectItemAmbiguityError
+from memcommit.application.capabilities.local_target_lookup import (
+    DirectItemAmbiguityError,
+)
 from memcommit.core.context_targeting.model import DirectItemTarget
 from memcommit.application.operations.delete.application import (
     DeleteError,
@@ -78,11 +82,11 @@ def _next_item_target(
     context = store.load_direct(target.context_name)
     rows_before = delete_picker_rows(context)
     removed_index = next(
-        index for index, row in enumerate(rows_before) if row.selector == target.item.uid
+        index
+        for index, row in enumerate(rows_before)
+        if row.selector == target.item.uid
     )
-    rows_after = tuple(
-        row for row in rows_before if row.selector != target.item.uid
-    )
+    rows_after = tuple(row for row in rows_before if row.selector != target.item.uid)
     if not rows_after:
         return None
     next_row = rows_after[min(removed_index, len(rows_after) - 1)]

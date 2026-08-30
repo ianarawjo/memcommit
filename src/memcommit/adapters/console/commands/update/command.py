@@ -11,7 +11,9 @@ from memcommit.adapters.console.terminal.components.command_wait import (
     CommandWaitView,
     run_command_wait,
 )
-from memcommit.adapters.console.commands.update.endpoint_setup import choose_update_setup
+from memcommit.adapters.console.commands.update.endpoint_setup import (
+    choose_update_setup,
+)
 from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     freeze_granted_context_binding,
@@ -35,7 +37,7 @@ from memcommit.adapters.console.commands.update.render import (
 )
 from memcommit.core.context import Context
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.core.context_targeting.loading import load_context_scope
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.core.context_targeting.model import InlineTextOperand
 from memcommit.core.context_targeting.operands import (
     classify_context_or_inline_text_operand,
@@ -51,7 +53,9 @@ from memcommit.core.context_targeting.presets import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.application.capabilities.authority.source_use_policy import authorize_derived_transfer
+from memcommit.application.capabilities.authority.source_use_policy import (
+    authorize_derived_transfer,
+)
 from memcommit.application.operations.update.granted_source import (
     apply_granted_source_staged_update,
 )

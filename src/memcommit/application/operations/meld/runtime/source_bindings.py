@@ -23,7 +23,7 @@ from memcommit.application.operations.meld.model import (
     inline_meld_context,
 )
 from memcommit.core.context import Context
-from memcommit.core.context_targeting.loading import load_context_scope
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.persistence.store import (
     MemoryStore,
     context_record_digest,

@@ -15,7 +15,9 @@ import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.adapters.console.commands.compare.command import render_comparison
-from memcommit.adapters.console.commands.compare.execution import ensure_comparison_analysis
+from memcommit.adapters.console.commands.compare.execution import (
+    ensure_comparison_analysis,
+)
 from memcommit.application.capabilities.authority.context_access import ContextAccess
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonAnalysis,
@@ -24,11 +26,15 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.mod
     ComparisonRelation,
     ComparisonReports,
 )
-from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import load_comparison_analysis
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
+    load_comparison_analysis,
+)
 from memcommit.configuration.config import Config
 from memcommit.core.context import Context, Memory
-from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import recursive_comparison_projection
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
+    recursive_comparison_projection,
+)
 from memcommit.application.operations.meld.start import MeldStartRequest
 from memcommit.application.operations.profile.config import (
     ProfileEntry,

@@ -34,7 +34,7 @@ from memcommit.providers.policy import (
     resolve_operation_provider_policy,
 )
 from memcommit.core.context import Context
-from memcommit.core.context_targeting.loading import load_context_scope
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.application.capabilities.authority.source_use_policy import (
     analysis_retention,
     authorize_analysis_save,
@@ -74,7 +74,9 @@ from memcommit.study_scenarios.legacy.prewarm.scope_equivalence import (
 )
 
 if TYPE_CHECKING:
-    from memcommit.application.capabilities.authority.context_access import ContextAccess
+    from memcommit.application.capabilities.authority.context_access import (
+        ContextAccess,
+    )
 
 
 COMPARE_ARTIFACT_KIND = "STUDY_COMPARE_EXACT_PREWARM"

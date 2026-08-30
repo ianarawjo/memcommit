@@ -28,11 +28,14 @@ there is intentionally no profile-wide “last Scope” preference.
   `UID` / `CONTEXT:UID` direct-Memory locator grammar. It also owns the pure
   storage-independent classifier for an overloaded `Context | Memory`
   positional operand.
-- `loading.py` loads one root and merges its lexical descendants for existing
-  Compare, Update, Meld, and related application paths. It also resolves a
-  direct-Memory locator against a strict complete ordinary-local direct graph,
-  completes a local auto-typed Context/Memory target, and offers the sibling
-  all-direct-item owner lookup needed by Show.
+- `application.capabilities.context_scope_loading` loads one root and merges
+  its lexical descendants for Compare, Update, Meld, and related application
+  paths. The Store-facing composition belongs to application rather than the
+  pure targeting model.
+- `application.capabilities.local_target_lookup` searches a strict complete
+  ordinary-local direct graph for Memory or item coordinates, completes a
+  local auto-typed Context/Memory target, and offers the all-direct-item owner
+  lookup needed by Show. Pure locator grammar remains in core `resolution.py`.
 - `application.operations.search.corpus` loads one or more searchable roots
   and independently controls embedded-Context traversal and authorized
   activity artifacts for Search, Find, and ordinary Query. It belongs to the

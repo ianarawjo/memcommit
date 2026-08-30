@@ -16,10 +16,12 @@ CAPABILITY_ENTRIES = {
     "__init__.py",
     "authority",
     "context_locator.py",
+    "context_scope_loading.py",
     "evaluation",
     "flow.py",
     "memory_issue_analysis",
     "memory_report_targeting.py",
+    "local_target_lookup.py",
     "ops.py",
     "resolution",
     "retained_history",
@@ -55,15 +57,13 @@ LEGACY_APPLICATION_MEMBERS = {
 
 def test_application_root_has_only_operations_and_capabilities() -> None:
     visible = {
-        path.name
-        for path in APPLICATION.iterdir()
-        if path.name != "__pycache__"
+        path.name for path in APPLICATION.iterdir() if path.name != "__pycache__"
     }
 
     assert visible == {"__init__.py", "capabilities", "operations"}
-    assert {path.name for path in CAPABILITIES.iterdir() if path.name != "__pycache__"} == (
-        CAPABILITY_ENTRIES
-    )
+    assert {
+        path.name for path in CAPABILITIES.iterdir() if path.name != "__pycache__"
+    } == (CAPABILITY_ENTRIES)
 
 
 def test_production_source_uses_no_pre_capability_application_paths() -> None:

@@ -23,7 +23,7 @@ from memcommit.core.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.core.context_targeting.loading import load_context_scope
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.application.capabilities.semantic.goal_focus import inline_goal_focus
 from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,

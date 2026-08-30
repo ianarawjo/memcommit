@@ -5,7 +5,7 @@ from __future__ import annotations
 import sys
 
 from memcommit.core.context import Context
-from memcommit.core.context_targeting.loading import load_context_scope
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.core.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,

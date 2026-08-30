@@ -18,8 +18,10 @@ from memcommit.providers.policy import (
     resolve_operation_provider_policy,
 )
 from memcommit.core.context import Context
-from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.application.capabilities.authority.source_use_policy import authorize_derived_transfer
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
+from memcommit.application.capabilities.authority.source_use_policy import (
+    authorize_derived_transfer,
+)
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,

@@ -9,8 +9,11 @@ from memcommit.application.capabilities.authority.context_access import (
     revalidate_granted_context_binding,
 )
 from memcommit.core.context import AutoCheckpoint
-from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.application.operations.update.granted_target import _authority_name, _remove_checkpoint
+from memcommit.application.capabilities.context_scope_loading import load_context_scope
+from memcommit.application.operations.update.granted_target import (
+    _authority_name,
+    _remove_checkpoint,
+)
 from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
@@ -28,7 +31,9 @@ from memcommit.application.operations.update.model import (
     operation_digest,
     session_matches,
 )
-from memcommit.application.operations.update.materialization import prepare_update_application
+from memcommit.application.operations.update.materialization import (
+    prepare_update_application,
+)
 
 
 def apply_granted_source_staged_update(
@@ -45,8 +50,7 @@ def apply_granted_source_staged_update(
         raise ValueError("Expected a granted-source, local-target update.")
     binding = session.granted_source
     authority_source_names = {
-        _authority_name(binding, context.name)
-        for context in session.source_contexts
+        _authority_name(binding, context.name) for context in session.source_contexts
     }
     target_lock_names = {context.name for context in session.target_contexts}
 
@@ -80,9 +84,7 @@ def apply_granted_source_staged_update(
                         target = load_context_scope(
                             active_store,
                             session.target_name,
-                            include_descendants=(
-                                session.target_include_descendants
-                            ),
+                            include_descendants=(session.target_include_descendants),
                         )
                         if not session_matches(
                             session,
@@ -118,7 +120,9 @@ def apply_granted_source_staged_update(
                                     f"Local target Context "
                                     f"'{owner.owner_context_name}' changed."
                                 )
-                            original_records[owner.owner_context_name] = direct.to_dict()
+                            original_records[owner.owner_context_name] = (
+                                direct.to_dict()
+                            )
                             expected_digests[owner.owner_context_name] = base.digest
 
                         created_checkpoints = []

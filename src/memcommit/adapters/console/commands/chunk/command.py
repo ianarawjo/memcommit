@@ -11,9 +11,11 @@ from memcommit.application.capabilities.authority.context_access import (
 from memcommit.application.operations.chunk.application import chunk
 from memcommit.application.operations.chunk.domain import ChunkMethod, chunk_content
 from memcommit.application.operations.chunk.runtime import apply_chunk_proposals
-from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
+)
 from memcommit.core.context import Memory
-from memcommit.core.context_targeting.loading import (
+from memcommit.application.capabilities.local_target_lookup import (
     resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
 )
@@ -74,8 +76,7 @@ def cmd(
             "--method",
             "-m",
             help=(
-                "Chunking strategy: markdown_headers | paragraphs | sentences "
-                "| clauses"
+                "Chunking strategy: markdown_headers | paragraphs | sentences | clauses"
             ),
             show_default=True,
         ),

@@ -45,7 +45,7 @@ from memcommit.adapters.console.commands.update.impact import (
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.core.context_targeting.loading import (
+from memcommit.application.capabilities.local_target_lookup import (
     DirectMemoryAmbiguityError,
     resolve_local_context_memory_target,
 )

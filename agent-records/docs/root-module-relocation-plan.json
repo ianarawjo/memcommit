@@ -630,8 +630,8 @@
     },
     {
       "action": "remove",
-      "canonical_target": "memcommit.core.context_targeting.loading",
-      "canonical_target_path": "memcommit/core/context_targeting/loading.py",
+      "canonical_target": "memcommit.application.capabilities.context_scope_loading",
+      "canonical_target_path": "memcommit/application/capabilities/context_scope_loading.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.context_scope",
