@@ -1,7 +1,7 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
 ┃                                                                                                                                                                                 ^┃
 ┃ AMBIGUITY 1/3                                                                                                                                                                    ┃
-┃ [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                                   ┃
+┃ [ee1fe351] Use the same NFC credential for the staff entrance.                                                                                                                   ┃
 ┃ [HIGH] RECORDED                                                                                                                                                                  ┃
 ┃ REVIEW SET · REQUIRED 0 · OPTIONAL 0                                                                                                                                             ┃
 ┃ CLASSIFICATION                                                                                                                                                                   ┃
@@ -11,7 +11,7 @@
 ┃ SOURCE MEMORY                                                                                                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃ SOURCE 1 · FROM atomize/read-only-findings                                                                                                                                       ┃
-┃   [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                                 ┃
+┃   [ee1fe351] Use the same NFC credential for the staff entrance.                                                                                                                 ┃
 ┃                                                                                                                                                                                  ┃
 ┃ WHY THIS IS UNCLEAR                                                                                                                                                              ┃
 ┃ ‘same NFC’ can denote a mechanism or a credential, so the accepted access method cannot be determined.                                                                           ┃
@@ -38,9 +38,9 @@
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
 │  REPORT         Complete Atomize report                                                                                                                                         ^│
-│› AMBIGUITY      [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                   │
-│  CONFLICT       [3f81440f] Use the same NFC credential for the staff entrance. ↔ [42603e91] Mobile credentials are not accepted at the main entrance.                            │
-│  AMBIGUITY      [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                   │
+│› AMBIGUITY      [ee1fe351] Use the same NFC credential for the staff entrance.                                                                                                   │
+│  CONFLICT       [ee1fe351] Use the same NFC credential for the staff entrance. ↔ [5bbfd392] Mobile credentials are not accepted at the main entrance.                            │
+│  AMBIGUITY      [ee1fe351] Use the same NFC credential for the staff entrance.                                                                                                   │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -49,4 +49,4 @@
 ┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
 │[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- READ ONLY · READY_TO_APPLY_AS_IS · ↑/↓ section/item  Tab switch  Enter inspect  Esc/Backspace report S sort  H Help  y/Y copy  Q close
+ READ ONLY · ANALYSIS · NON-APPLYING · ↑/↓ section/item  Tab switch  Enter inspect  Esc/Backspace report S sort  H Help  y/Y copy  Q close

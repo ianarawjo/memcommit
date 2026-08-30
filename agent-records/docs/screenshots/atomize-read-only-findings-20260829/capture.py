@@ -192,6 +192,68 @@ class _Provider:
         )
 
 
+class _FocusedProvider:
+    """Split only the selected Memory; treat its neighbor as evidence."""
+
+    def complete(self, prompt, *, operation, output_schema=None):
+        if operation == "find_duplicates":
+            return json.dumps({"findings": []})
+        if operation != "impact_atomize" or output_schema is None:
+            raise AssertionError(operation)
+        payload = json.loads(prompt.split("ATOMIZE IMPACT PAYLOAD:\n", 1)[1])
+        memories = payload["memories"]
+        validating = payload.get("phase") == "normal_form_validation"
+        items = []
+        for memory in memories:
+            if validating:
+                items.append(
+                    {
+                        "candidate_id": memory["candidate_id"],
+                        "classification": "ATOMIC",
+                        "reason_codes": ["A01_ONE_FOCUS"],
+                        "children": [],
+                        "reason": "The result has one independent focus.",
+                    }
+                )
+                continue
+            items.append(
+                {
+                    "candidate_id": memory["candidate_id"],
+                    "classification": "COMPOSITE",
+                    "reason_codes": ["A01_ONE_FOCUS"],
+                    "children": [
+                        {
+                            "content": "The north entrance opens at 08:00.",
+                            "source_spans": ["The north entrance opens at 08:00."],
+                        },
+                        {
+                            "content": "The south entrance opens at 09:00.",
+                            "source_spans": ["The south entrance opens at 09:00."],
+                        },
+                    ],
+                    "reason": "The source contains two independently reviewable rules.",
+                }
+            )
+        source_ids = [memory["candidate_id"] for memory in memories]
+        return json.dumps(
+            {
+                "overview": {
+                    "understood": {
+                        "text": "The selected Memory contains entrance schedules.",
+                        "source_ids": source_ids,
+                    },
+                    "changed": {
+                        "text": "One selected Memory becomes two atomic Memories.",
+                        "source_ids": source_ids,
+                    },
+                    "unresolved": {"text": "", "source_ids": []},
+                },
+                "items": items,
+                "quality_issues": [],
+            }
+        )
+
+
 def _initialize(store) -> None:
     import memcommit.application.capabilities.ops as ops
 
@@ -204,7 +266,22 @@ def _initialize(store) -> None:
     store.set_current(context.name)
 
 
-def _invoke(store, argv: list[str]) -> None:
+def _initialize_focused(store) -> None:
+    import memcommit.application.capabilities.ops as ops
+
+    if store.context_exists("atomize/focused-target"):
+        return
+    context = ops.init("atomize/focused-target")
+    ops.add(
+        context,
+        "The north entrance opens at 08:00. The south entrance opens at 09:00.",
+    )
+    ops.add(context, "The reception desk remains staffed all day.")
+    store.save(context)
+    store.set_current(context.name)
+
+
+def _invoke(store, argv: list[str], *, provider_type=_Provider) -> None:
     import memcommit.adapters.console.commands.atomize.command as atomize_command
     import memcommit.adapters.console.commands.atomize.impact as atomize_impact
     import memcommit.adapters.console.commands.impact.command as impact_command
@@ -216,8 +293,8 @@ def _invoke(store, argv: list[str]) -> None:
     atomize_impact.MemoryStore = lambda *args, **kwargs: store
     impact_command.MemoryStore = lambda *args, **kwargs: store
     review_command.MemoryStore = lambda *args, **kwargs: store
-    atomize_command.connect_codex_chatgpt_provider = lambda: _Provider()
-    atomize_impact.connect_codex_chatgpt_provider = lambda: _Provider()
+    atomize_command.connect_codex_chatgpt_provider = lambda: provider_type()
+    atomize_impact.connect_codex_chatgpt_provider = lambda: provider_type()
     command_wait.current_help_entries = lambda: ()
     session_help.current_help_entries = lambda: ()
 
@@ -287,8 +364,55 @@ def _child_verify(store_root: Path) -> None:
     _invoke(store, ["review", "atomize", "--snapshot"])
     after = store._atomize_workbench_path(analysis.context_uid).read_bytes()
     print(
-        "READ-ONLY VERIFICATION · WORKBENCH UNCHANGED",
+        "READ-ONLY VERIFICATION · REVIEW RECORD UNCHANGED",
         before == after,
+        "· CHECKPOINTS",
+        len(store.list_checkpoints(context.name)),
+    )
+
+
+def _child_focused_before(store_root: Path) -> None:
+    from memcommit.persistence.store import MemoryStore
+
+    store = MemoryStore(root=store_root)
+    _initialize_focused(store)
+    context = store.load_direct("atomize/focused-target")
+    print("FOCUSED TARGET · BEFORE")
+    for index, memory in enumerate(context.memories.values(), start=1):
+        print(f"MEMORY {index} · {memory.uid} · {memory.content}")
+    print("CHECKPOINTS", len(store.list_checkpoints(context.name)))
+
+
+def _child_focused_apply(store_root: Path) -> None:
+    from memcommit.persistence.store import MemoryStore
+
+    store = MemoryStore(root=store_root, create=False)
+    context = store.load_direct("atomize/focused-target")
+    selected = next(iter(context.memories.values()))
+    _invoke(
+        store,
+        ["atomize", f"{context.name}:{selected.uid[:8]}"],
+        provider_type=_FocusedProvider,
+    )
+    print("FOCUSED TARGET · APPLIED", selected.uid[:8])
+
+
+def _child_focused_verify(store_root: Path) -> None:
+    from memcommit.persistence.store import MemoryStore
+
+    store = MemoryStore(root=store_root, create=False)
+    context = store.load_direct("atomize/focused-target")
+    neighbor = next(
+        memory
+        for memory in context.memories.values()
+        if memory.content == "The reception desk remains staffed all day."
+    )
+    print("FOCUSED TARGET · READ-ONLY VERIFICATION")
+    for index, memory in enumerate(context.memories.values(), start=1):
+        print(f"MEMORY {index} · {memory.uid} · {memory.content}")
+    print(
+        "UNSELECTED NEIGHBOR PRESERVED",
+        neighbor.content == "The reception desk remains staffed all day.",
         "· CHECKPOINTS",
         len(store.list_checkpoints(context.name)),
     )
@@ -300,6 +424,9 @@ def _run_child(mode: str, store_root: Path) -> None:
         "apply": _child_apply,
         "review": _child_review,
         "verify": _child_verify,
+        "focused-before": _child_focused_before,
+        "focused-apply": _child_focused_apply,
+        "focused-verify": _child_focused_verify,
     }[mode](store_root)
 
 
@@ -320,7 +447,8 @@ def main() -> None:
         _wait(
             child,
             recorder,
-            "MEM ATOMIZE",
+            "MEM IMPACT · ATOMIZE",
+            "ANALYSIS · NON-APPLYING",
             "ATOMIZE FINDINGS",
         )
         if "RESPONSES" in HELPERS._visible_text(recorder):
@@ -354,7 +482,7 @@ def main() -> None:
             child,
             recorder,
             "RESULT · atomize · atomize/read-only-findings",
-            "READ ONLY · APPLIED",
+            "APPLIED RECORD · READ ONLY",
         )
         if "RESPONSES" in HELPERS._visible_text(recorder):
             raise RuntimeError("Applied Review unexpectedly rendered RESPONSES.")
@@ -377,7 +505,37 @@ def main() -> None:
             "verify",
             root,
             "06-read-only-verification",
-            "READ-ONLY VERIFICATION · WORKBENCH UNCHANGED True · CHECKPOINTS 1",
+            "READ-ONLY VERIFICATION · REVIEW RECORD UNCHANGED True · CHECKPOINTS 1",
+        )
+
+        focused_root = Path(directory) / ".mem-focused"
+        _capture_finished(
+            "focused-before",
+            focused_root,
+            "07-focused-target-before",
+            "FOCUSED TARGET · BEFORE",
+        )
+        _capture_finished(
+            "focused-apply",
+            focused_root,
+            "08-focused-target-application",
+            "FOCUSED TARGET · APPLIED",
+        )
+        _capture_finished(
+            "focused-verify",
+            focused_root,
+            "09-focused-target-verification",
+            "UNSELECTED NEIGHBOR PRESERVED True · CHECKPOINTS 1",
+        )
+
+    # The text projection is a reading aid rather than a fixed-width terminal
+    # byte stream. Keep its semantic text while dropping canvas padding; the
+    # exact color/control bytes remain untouched in the binary typescript.
+    for path in OUT.glob("*.txt"):
+        lines = path.read_text(encoding="utf-8").splitlines()
+        path.write_text(
+            "\n".join(line.rstrip() for line in lines).rstrip() + "\n",
+            encoding="utf-8",
         )
 
     raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))

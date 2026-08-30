@@ -3,7 +3,6 @@
 ┃                                                                                                                                                                                  ┃
 ┃CONTEXT LOCATIONS                                                                                                                                                                 ┃
 ┃  SOURCE · atomize/read-only-findings                                                                                                                                             ┃
-┃  OUTPUT · atomize/read-only-findings · IN PLACE                                                                                                                                  ┃
 ┃ STATUS · APPLIED ANALYSIS · sources=2 · projected=2 · splits=0 · children=0 · review issues=3                                                                                    ┃
 ┃                                                                                                                                                                                  ┃
 ┃ WHAT MEM UNDERSTOOD                                                                                                                                                              ┃
@@ -34,13 +33,14 @@
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                 v┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
 │› REPORT         Complete Atomize report                                                                                                                                         ^│
-│  AMBIGUITY      [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                   │
-│  CONFLICT       [3f81440f] Use the same NFC credential for the staff entrance. ↔ [42603e91] Mobile credentials are not accepted at the main entrance.                            │
-│  AMBIGUITY      [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                   │
+│  AMBIGUITY      [ee1fe351] Use the same NFC credential for the staff entrance.                                                                                                   │
+│  CONFLICT       [ee1fe351] Use the same NFC credential for the staff entrance. ↔ [5bbfd392] Mobile credentials are not accepted at the main entrance.                            │
+│  AMBIGUITY      [ee1fe351] Use the same NFC credential for the staff entrance.                                                                                                   │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -49,4 +49,4 @@
 ┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
 │[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- READ ONLY · APPLIED · REVIEW · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  y/Y copy  Q close
+ READ ONLY · APPLIED RECORD · READ ONLY · REVIEW · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  y/Y copy  Q close

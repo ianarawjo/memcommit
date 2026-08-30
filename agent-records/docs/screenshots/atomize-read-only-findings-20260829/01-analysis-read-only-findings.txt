@@ -1,9 +1,8 @@
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ MEM ATOMIZE                                                                                                                                                                     ^┃
+┃ MEM IMPACT · ATOMIZE                                                                                                                                                            ^┃
 ┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
 ┃   SOURCE · atomize/read-only-findings                                                                                                                                            ┃
-┃   OUTPUT · atomize/read-only-findings · IN PLACE                                                                                                                                 ┃
-┃ READY_TO_APPLY_AS_IS · 2 SOURCE MEMORIES · 2 PROJECTED MEMORIES · 3 FINDINGS · 3 UNRESOLVED                                                                                      ┃
+┃ ANALYSIS · NON-APPLYING · 2 SOURCE MEMORIES · 2 PROJECTED MEMORIES · 3 FINDINGS · 3 UNRESOLVED                                                                                   ┃
 ┃                                                                                                                                                                                  ┃
 ┃ UNDERSTOOD                                                                                                                                                                       ┃
 ┃ The Source records two entrance-access rules.                                                                                                                                    ┃
@@ -15,17 +14,18 @@
 ┃ The NFC antecedent and entrance scope remain unresolved.                                                                                                                         ┃
 ┃                                                                                                                                                                                  ┃
 ┃ ATOMIZE FINDINGS · 3                                                                                                                                                             ┃
-┃ AMBIGUITY 1 · [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                     ┃
+┃ AMBIGUITY 1 · [ee1fe351] Use the same NFC credential for the staff entrance.                                                                                                     ┃
 ┃ [HIGH] ‘same NFC’ can denote a mechanism or a credential, so the accepted access method cannot be determined.                                                                    ┃
 ┃ QUESTION · Does ‘same NFC’ mean the mechanism or the credential?                                                                                                                 ┃
 ┃                                                                                                                                                                                  ┃
-┃ CONFLICT 2 · [3f81440f] Use the same NFC credential for the staff entrance. ↔ [42603e91] Mobile credentials are not accepted at the main entrance.                               ┃
+┃ CONFLICT 2 · [ee1fe351] Use the same NFC credential for the staff entrance. ↔ [5bbfd392] Mobile credentials are not accepted at the main entrance.                               ┃
 ┃ [HIGH] The place scope determines whether the physical-card rule conflicts with the mobile-credential restriction.                                                               ┃
 ┃ QUESTION · Do both access rules govern the same entrance?                                                                                                                        ┃
 ┃                                                                                                                                                                                  ┃
-┃ AMBIGUITY 3 · [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                     ┃
+┃ AMBIGUITY 3 · [ee1fe351] Use the same NFC credential for the staff entrance.                                                                                                     ┃
 ┃ [HIGH] The NFC antecedent is unavailable in the Source frame.                                                                                                                    ┃
 ┃ QUESTION · Which local reading or scope should govern this source?                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
@@ -38,9 +38,9 @@
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
 │› REPORT         Complete Atomize report                                                                                                                                         ^│
-│  AMBIGUITY      [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                   │
-│  CONFLICT       [3f81440f] Use the same NFC credential for the staff entrance. ↔ [42603e91] Mobile credentials are not accepted at the main entrance.                            │
-│  AMBIGUITY      [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                   │
+│  AMBIGUITY      [ee1fe351] Use the same NFC credential for the staff entrance.                                                                                                   │
+│  CONFLICT       [ee1fe351] Use the same NFC credential for the staff entrance. ↔ [5bbfd392] Mobile credentials are not accepted at the main entrance.                            │
+│  AMBIGUITY      [ee1fe351] Use the same NFC credential for the staff entrance.                                                                                                   │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -49,4 +49,4 @@
 ┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
 │[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
- READ ONLY · READY_TO_APPLY_AS_IS · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close S sort  H Help  y/Y copy  Q close
+ READ ONLY · ANALYSIS · NON-APPLYING · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close S sort  H Help  y/Y copy  Q close

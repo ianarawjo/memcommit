@@ -1,0 +1,15 @@
+52 180
+MEM ATOMIZE · 1/2 · CONNECTING PROVIDER . · 0sMEM ATOMIZE · 2/2 · ANALYZING AND NORMALIZING MEMORY STRUCTURE . · 0sMEM ATOMIZE · 2/2 · ANALYZING AND NORMALIZING MEMORY STRUCTURE . · 0sMEM ATOMIZE · 2/2 · ANALYZING AND NORMALIZING MEMORY STRUCTURE . · 0sMEM ATOMIZE · 2/2 · ANALYZING AND NORMALIZING MEMORY STRUCTURE . · 0s                                                                     [1mATOMIZE APPLIED · atomize/focused-target[0m
+EFFECTS · SPLIT 1 · CHILDREN 2 · KEEP 0 · DEDUN GROUPS 0 · ABSORBED 0
+NORMAL FORM · SEMANTIC CHUNK + DEDUN · VERIFIED
+
+SPLIT 1
+  [38;2;237;135;150m[1mREMOVE[0m · [19a7c0fd] [38;2;202;211;245mThe north entrance opens at 08:00. The south entrance opens at 09:00.[0m
+  [38;2;138;173;244m[1mADD   [0m · [63723da6] [38;2;202;211;245mThe north entrance opens at 08:00.[0m
+  [38;2;138;173;244m[1mADD   [0m · [dd2871c0] [38;2;202;211;245mThe south entrance opens at 09:00.[0m
+
+RECEIPT · 8d19fcc7-db3a-4f8f-bda9-cc9a0ec1e203
+CHECKPOINT · 37b3e0db-d8e7-4fbd-a780-6dc5b227e92f
+REVIEW · mem review atomize --context atomize/focused-target
+RECOVERY · mem undo
+FOCUSED TARGET · APPLIED 19a7c0fd

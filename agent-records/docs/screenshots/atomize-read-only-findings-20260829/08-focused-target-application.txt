@@ -1,0 +1,15 @@
+52 180
+ATOMIZE APPLIED · atomize/focused-target
+EFFECTS · SPLIT 1 · CHILDREN 2 · KEEP 0 · DEDUN GROUPS 0 · ABSORBED 0
+NORMAL FORM · SEMANTIC CHUNK + DEDUN · VERIFIED
+
+SPLIT 1
+  REMOVE · [19a7c0fd] The north entrance opens at 08:00. The south entrance opens at 09:00.
+  ADD    · [63723da6] The north entrance opens at 08:00.
+  ADD    · [dd2871c0] The south entrance opens at 09:00.
+
+RECEIPT · 8d19fcc7-db3a-4f8f-bda9-cc9a0ec1e203
+CHECKPOINT · 37b3e0db-d8e7-4fbd-a780-6dc5b227e92f
+REVIEW · mem review atomize --context atomize/focused-target
+RECOVERY · mem undo
+FOCUSED TARGET · APPLIED 19a7c0fd

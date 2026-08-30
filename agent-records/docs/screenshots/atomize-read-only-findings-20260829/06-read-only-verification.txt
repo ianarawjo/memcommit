@@ -1,51 +1,51 @@
-                                                                                                                                                                                    
- UNRESOLVED                                                                                                                                                                         
- The NFC antecedent and entrance scope remain unresolved.                                                                                                                           
-                                                                                                                                                                                    
- REVIEW ITEMS · 3                                                                                                                                                                   
- AMBIGUITY 1 · [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                       
- [HIGH] ‘same NFC’ can denote a mechanism or a credential, so the accepted access method cannot be determined.                                                                      
- QUESTION · Does ‘same NFC’ mean the mechanism or the credential?                                                                                                                   
-                                                                                                                                                                                    
- CONFLICT 2 · [3f81440f] Use the same NFC credential for the staff entrance. ↔ [42603e91] Mobile credentials are not accepted at the main entrance.                                 
- [HIGH] The place scope determines whether the physical-card rule conflicts with the mobile-credential restriction.                                                                 
- QUESTION · Do both access rules govern the same entrance?                                                                                                                          
-                                                                                                                                                                                    
- AMBIGUITY 3 · [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                       
- [HIGH] The NFC antecedent is unavailable in the Source frame.                                                                                                                      
- QUESTION · Which local reading or scope should govern this source?                                                                                                                 
-                                                                                                                                                                                    
-[3f81440f] Use the same NFC credential for the staff entrance.                                                                                                                      
-  CLASSIFICATION                                                                                                                                                                    
-    INTERPRETATION · DOMINANT                                                                                                                                                       
-    CLARIFICATION · REQUIRED                                                                                                                                                        
-  SOURCE MEMORY                                                                                                                                                                     
-    SOURCE 1 · FROM atomize/read-only-findings                                                                                                                                      
-      [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                                
-  WHY THIS IS UNCLEAR                                                                                                                                                               
-    ‘same NFC’ can denote a mechanism or a credential, so the accepted access method cannot be determined.                                                                          
-  POSSIBLE READINGS                                                                                                                                                                 
-    [DOMINANT] Prior NFC mechanism — The rule reuses the previously described NFC mechanism.                                                                                        
-    [ALTERNATIVE] Prior NFC credential — The rule requires the previously described physical credential.                                                                            
-[3f81440f] Use the same NFC credential for the staff entrance. ↔ [42603e91] Mobile credentials are not accepted at the main entrance.                                               
-  CLASSIFICATION                                                                                                                                                                    
-    MAY                                                                                                                                                                             
-  SOURCE MEMORIES                                                                                                                                                                   
-    SOURCE 1 · FROM atomize/read-only-findings                                                                                                                                      
-      [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                                
-    SOURCE 2 · FROM atomize/read-only-findings                                                                                                                                      
-      [42603e91] Mobile credentials are not accepted at the main entrance.                                                                                                          
-  WHY THESE MEMORIES CONFLICT                                                                                                                                                       
-    The place scope determines whether the physical-card rule conflicts with the mobile-credential restriction.                                                                     
-  POSSIBLE READINGS                                                                                                                                                                 
-    [COMPETING] Different entrances — The physical-card rule and mobile restriction govern different entrances.                                                                     
-    [COMPETING] Same entrance — Both rules govern the same entrance and require a scope decision.                                                                                   
-[3f81440f] Use the same NFC credential for the staff entrance.                                                                                                                      
-  CLASSIFICATION                                                                                                                                                                    
-    UNCERTAIN · REQUIRES CONTEXT                                                                                                                                                    
-  SOURCE MEMORY                                                                                                                                                                     
-    SOURCE 1 · FROM atomize/read-only-findings                                                                                                                                      
-      [3f81440f] Use the same NFC credential for the staff entrance.                                                                                                                
-  WHY THIS IS UNCLEAR                                                                                                                                                               
-    The NFC antecedent is unavailable in the Source frame.                                                                                                                          
-READ-ONLY VERIFICATION · WORKBENCH UNCHANGED True · CHECKPOINTS 1
+
+ UNRESOLVED
+ The NFC antecedent and entrance scope remain unresolved.
+
+ REVIEW ITEMS · 3
+ AMBIGUITY 1 · [ee1fe351] Use the same NFC credential for the staff entrance.
+ [HIGH] ‘same NFC’ can denote a mechanism or a credential, so the accepted access method cannot be determined.
+ QUESTION · Does ‘same NFC’ mean the mechanism or the credential?
+
+ CONFLICT 2 · [ee1fe351] Use the same NFC credential for the staff entrance. ↔ [5bbfd392] Mobile credentials are not accepted at the main entrance.
+ [HIGH] The place scope determines whether the physical-card rule conflicts with the mobile-credential restriction.
+ QUESTION · Do both access rules govern the same entrance?
+
+ AMBIGUITY 3 · [ee1fe351] Use the same NFC credential for the staff entrance.
+ [HIGH] The NFC antecedent is unavailable in the Source frame.
+ QUESTION · Which local reading or scope should govern this source?
+
+[ee1fe351] Use the same NFC credential for the staff entrance.
+  CLASSIFICATION
+    INTERPRETATION · DOMINANT
+    CLARIFICATION · REQUIRED
+  SOURCE MEMORY
+    SOURCE 1 · FROM atomize/read-only-findings
+      [ee1fe351] Use the same NFC credential for the staff entrance.
+  WHY THIS IS UNCLEAR
+    ‘same NFC’ can denote a mechanism or a credential, so the accepted access method cannot be determined.
+  POSSIBLE READINGS
+    [DOMINANT] Prior NFC mechanism — The rule reuses the previously described NFC mechanism.
+    [ALTERNATIVE] Prior NFC credential — The rule requires the previously described physical credential.
+[ee1fe351] Use the same NFC credential for the staff entrance. ↔ [5bbfd392] Mobile credentials are not accepted at the main entrance.
+  CLASSIFICATION
+    MAY
+  SOURCE MEMORIES
+    SOURCE 1 · FROM atomize/read-only-findings
+      [ee1fe351] Use the same NFC credential for the staff entrance.
+    SOURCE 2 · FROM atomize/read-only-findings
+      [5bbfd392] Mobile credentials are not accepted at the main entrance.
+  WHY THESE MEMORIES CONFLICT
+    The place scope determines whether the physical-card rule conflicts with the mobile-credential restriction.
+  POSSIBLE READINGS
+    [COMPETING] Different entrances — The physical-card rule and mobile restriction govern different entrances.
+    [COMPETING] Same entrance — Both rules govern the same entrance and require a scope decision.
+[ee1fe351] Use the same NFC credential for the staff entrance.
+  CLASSIFICATION
+    UNCERTAIN · REQUIRES CONTEXT
+  SOURCE MEMORY
+    SOURCE 1 · FROM atomize/read-only-findings
+      [ee1fe351] Use the same NFC credential for the staff entrance.
+  WHY THIS IS UNCLEAR
+    The NFC antecedent is unavailable in the Source frame.
+READ-ONLY VERIFICATION · REVIEW RECORD UNCHANGED True · CHECKPOINTS 1
