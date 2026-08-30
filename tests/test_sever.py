@@ -10,6 +10,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
+import memcommit.application.operations.sever.runtime as sever_runtime
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.sever import command as sever_command
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
@@ -349,6 +350,14 @@ def test_sever_self_save_preserves_context_and_memory_identity(
         "connect_codex_chatgpt_provider",
         lambda: provider,
     )
+    applied_update_plans = []
+    apply_update = sever_runtime.apply_update
+
+    def observe_update_plan(plan, target):
+        applied_update_plans.append(plan)
+        return apply_update(plan, target)
+
+    monkeypatch.setattr(sever_runtime, "apply_update", observe_update_plan)
     before_uid = source.uid
     before_memory_uids = tuple(source.memories)
 
@@ -372,6 +381,10 @@ def test_sever_self_save_preserves_context_and_memory_identity(
     assert updated.memories[before_memory_uids[0]].content == (
         "Needs step-free access at appointments."
     )
+    assert len(applied_update_plans) == 1
+    assert tuple(
+        operation.operation for operation in applied_update_plans[0].operations
+    ) == ("edit", "remove")
     checkpoint = store.list_checkpoints("practice/source")[0]
     assert checkpoint["args"]["sever"]["save_mode"] == "SELF_SAVE"
     assert "context_creation" not in checkpoint["args"]
@@ -472,6 +485,14 @@ def test_accept_materializes_only_reviewed_result_content(isolated_store, monkey
         "connect_codex_chatgpt_provider",
         lambda: SeverProvider(),
     )
+    applied_update_plans = []
+    apply_update = sever_runtime.apply_update
+
+    def observe_update_plan(plan, target):
+        applied_update_plans.append(plan)
+        return apply_update(plan, target)
+
+    monkeypatch.setattr(sever_runtime, "apply_update", observe_update_plan)
 
     result = runner.invoke(
         app,
@@ -494,6 +515,10 @@ def test_accept_materializes_only_reviewed_result_content(isolated_store, monkey
     assert [item.content for item in output.iter_items()] == [
         "Needs step-free access at appointments."
     ]
+    assert len(applied_update_plans) == 1
+    assert tuple(
+        operation.operation for operation in applied_update_plans[0].operations
+    ) == ("add",)
     assert [item.content for item in store.load_direct(source.name).iter_items()] == [
         "I need a step-free entrance.",
         "My sibling prefers chocolate snacks.",

@@ -50,6 +50,7 @@ SeverSessionSnapshot(session, opaque CAS token)
         v
 run_sever_session_apply
   | exact interrupted-Apply recovery
+  | reviewed choices -> exact UpdatePlan -> detached Context post-image
   | SELF-SAVE Source CAS or OTHER-SAVE require-new output + checkpoint
   | APPLIED-session CAS save
   | exact compensation if that save fails
@@ -71,7 +72,7 @@ SeverPersistedApplyResult
 | Decision revision | `SeverDecisionRequest` | repository replace under the snapshot token | scripted choices and TUI responses submit the same exact candidate UID and selection | stale revisions fail before they can overwrite a newer decision; custom content is valid only for `CUSTOM` |
 | Destination revision | `SeverDestinationRequest`, `SeverDestinationPort` | live Store name validation plus repository CAS | the Save Location editor supplies only the proposed exact name | the exact ordinary local direct Source selects self-save; a fresh name selects other-save; every other existing or invalid output fails without rerunning analysis |
 | Apply input | `SeverPersistedApplyRequest` | `MemoryStoreSeverOutputPort` plus the session repository | CLI `--accept` and TUI Accept call the same persisted use case | the current token is reloaded before any output effect; local frames and granted identity/revision/content are fresh at the Result commit point |
-| Apply result | `SeverPersistedApplyResult` | Source CAS or require-new Context, checkpoint, APPLIED-session replacement, and exact compensation | interfaces receive the resulting snapshot | Source and Criteria bindings, candidates, save mode, output name, and grounded summary cannot change during Apply; a synchronous receipt failure publishes neither side |
+| Apply result | `SeverPersistedApplyResult` | Sever-to-`UpdatePlan` projection, detached `apply_update`, Source CAS or require-new Context, checkpoint, APPLIED-session replacement, and exact compensation | interfaces receive the resulting snapshot | Source and Criteria bindings, candidates, save mode, output name, and grounded summary cannot change during Apply; Update publishes nothing and a synchronous receipt failure publishes neither Sever side |
 | Interrupted Apply | same persisted request | exact Context/checkpoint recovery in `MemoryStoreSeverOutputPort` | retry uses the ordinary Apply path | only a self-save post-image or other-save Result whose digest and Sever checkpoint match the accepted session is adopted; unrelated state is never overwritten |
 | Idempotence | `run_sever_session_apply` | output and repository ports are skipped for an already APPLIED snapshot | reopening an applied session remains read-only | a repeated application call creates no second mutation or session revision; exact interrupted recovery reports `created=False` |
 | Presentation | none | none | command wait, plain renderer, setup TUI, Resolution Workbench | `operations.sever.application` imports no Typer, prompt-toolkit, TUI, or `commands.*` module |
@@ -87,9 +88,15 @@ without making generic semantic execution or provider connection responsible
 for Sever's decision meaning.
 
 `memcommit.application.operations.sever.session_store` owns only the private session file
-layout, locking, and digest CAS. Result materialization remains in
-`memcommit.application.operations.sever.runtime`, because a private review receipt and an
-ordinary Context mutation have different recovery and authority boundaries.
+layout, locking, and digest CAS. Sever-to-Update translation and Result
+publication remain in `memcommit.application.operations.sever.runtime`, because a private
+review receipt and an ordinary Context mutation have different recovery and
+authority boundaries. The deterministic in-memory ADD/EDIT/REMOVE projection
+now delegates to `memcommit.application.operations.update.application.apply_update`.
+That shared boundary returns only detached post-images: it does not open an
+Update workbench, persist an Update session, create a checkpoint, or render an
+Update receipt. Sever therefore retains its save-mode, authority, recovery,
+and publication meaning while no longer carrying a second local-update engine.
 `memcommit.application.operations.sever.resolution_adapter` is the pure projection from a
 validated session into shared Resolution values; keyboard, focus, rendering,
 and terminal lifecycle remain under the interfaces and command layers.
@@ -169,7 +176,8 @@ The focused boundary and compatibility run currently covers:
 - real-Store analysis with no terminal output or premature Result creation;
 - real-Store self-save and other-save Apply, checkpoint creation, exact result
   content, Context/Memory identity preservation, and Source preservation in
-  other-save;
+  other-save; focused spies also verify that self-save projects EDIT/REMOVE and
+  other-save projects ADD through the shared Update application boundary;
 - missing Source failure before provider construction;
 - real-Store session CAS, destination validation, persisted Apply, and repeat-
   Apply idempotence without terminal output;

@@ -19,7 +19,10 @@ The whole Source frame and whole Criteria frame use the shared
 [selective-curation batch contract](selective-curation-design-rationale.md).
 Inference is one contextual provider turn, while the returned artifact retains
 exactly one independently reviewable decision per Source Memory. Sever keeps
-its own durable schema, authority checks, and save-mode-aware materializer.
+its own durable schema, authority checks, save-mode-aware publication, and
+translation from reviewed choices to exact Update operations. The ordinary
+detached Context post-image is produced by the shared Update application
+boundary; Update does not own Sever's review, checkpoint, receipt, or Undo.
 
 The positional-first forms are:
 
@@ -292,7 +295,12 @@ identity and retained Memory identities, and records edits/removals in that
 Source checkpoint. Both modes record the session, Source, Criteria, save mode,
 Result, and source-to-result mapping. A stale or revoked granted input,
 including a change during save, leaves no partial Result. Forgotten content and
-rationale remain only in the Sever session. Because provider dispositions already give every Source Memory one
+rationale remain only in the Sever session. Immediately before publication,
+Sever maps self-save decisions to exact EDIT/REMOVE operations and other-save
+results to ADD operations, then asks `application.operations.update.apply_update`
+for a detached post-image. Sever itself still performs the Source CAS or
+require-new Result creation and creates the single Sever checkpoint. Because
+provider dispositions already give every Source Memory one
 complete treatment, the owning TTY skips the redundant review/approval
 workbench when no user response remains and saves the local Result directly.
 This remains true for granted inputs: a granted Source can contribute to

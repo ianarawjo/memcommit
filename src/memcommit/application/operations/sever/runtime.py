@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
+import hashlib
 import uuid
 
 # Transitional dependency: Grant access mechanics still live under commands.
@@ -78,6 +79,17 @@ from memcommit.application.operations.sever.application import (
 )
 from memcommit.application.operations.sever.provider import SeverProviderError
 from memcommit.application.operations.sever.session_store import SeverSessionStore
+from memcommit.application.operations.update.application import apply_update
+from memcommit.application.operations.update.model import (
+    AddOperation,
+    EditOperation,
+    GrantedUpdateTarget,
+    RemoveOperation,
+    SourceReference,
+    UpdateError,
+    UpdateOperation,
+    UpdatePlan,
+)
 from memcommit.persistence.store import (
     MemoryStore,
     _write_json_atomic,
@@ -86,9 +98,6 @@ from memcommit.persistence.store import (
 from memcommit.study_scenarios.legacy.prewarm.sever import (
     find_installed_projectable_sever_prewarm,
 )
-from memcommit.application.operations.update.model import GrantedUpdateTarget
-
-
 SeverProgressCallback = SeverProgressObserver
 
 
@@ -479,7 +488,63 @@ class MemoryStoreSeverOutputPort:
     store: MemoryStore
 
     @staticmethod
+    def _source_reference(
+        session: SeverSession,
+        source: SeverMemory,
+    ) -> SourceReference:
+        """Bind a Sever result step to its exact reviewed Source Memory."""
+
+        matches = tuple(
+            receipt
+            for receipt in session.source.contexts
+            if receipt[0] == source.context_name
+        )
+        if len(matches) != 1:
+            raise SeverApplicationError(
+                "The reviewed Sever Source does not identify one exact owner."
+            )
+        _context_name, context_uid, _context_digest = matches[0]
+        return SourceReference(
+            context_uid=context_uid,
+            context_name=source.context_name,
+            memory_uid=source.uid,
+            content_digest=hashlib.sha256(source.content.encode("utf-8")).hexdigest(),
+        )
+
+    @staticmethod
+    def _apply_projection(
+        session: SeverSession,
+        target: Context,
+        operations: tuple[UpdateOperation, ...],
+    ) -> Context:
+        """Apply exact Sever effects through Update without publishing them."""
+
+        try:
+            result = apply_update(
+                UpdatePlan(
+                    uid=session.uid,
+                    target_uid=target.uid,
+                    target_name=target.name,
+                    operations=operations,
+                ),
+                target,
+            )
+        except UpdateError as error:
+            raise SeverApplicationError(
+                "The reviewed Sever Result could not be applied to its working Target."
+            ) from error
+        post_image = result.post_image_for(target.uid)
+        if post_image is not None:
+            return post_image
+        if operations:
+            raise SeverApplicationError(
+                "The reviewed Sever Result did not produce its Target post-image."
+            )
+        return Context.from_dict(target.to_dict())
+
+    @classmethod
     def _result_context(
+        cls,
         session: SeverSession,
         *,
         output_uid: str,
@@ -487,9 +552,19 @@ class MemoryStoreSeverOutputPort:
         output = Context(uid=output_uid, name=session.output_name)
         result_uids: list[str] = []
         sources: list[dict[str, str]] = []
+        operations: list[UpdateOperation] = []
         for candidate, source, content in session.results():
             uid = _result_uid(session.uid, source.uid, content)
-            output.add(Memory(uid=uid, content=content))
+            operations.append(
+                AddOperation(
+                    owner_context_uid=output.uid,
+                    owner_context_name=output.name,
+                    memory_uid=uid,
+                    new_content=content,
+                    source_refs=(cls._source_reference(session, source),),
+                    reason=candidate.rationale,
+                )
+            )
             result_uids.append(uid)
             sources.append(
                 {
@@ -499,6 +574,7 @@ class MemoryStoreSeverOutputPort:
                     "selection": candidate.selection,
                 }
             )
+        output = cls._apply_projection(session, output, tuple(operations))
         return output, tuple(result_uids), sources
 
     @staticmethod
@@ -539,16 +615,16 @@ class MemoryStoreSeverOutputPort:
             raise SeverApplicationError(
                 "The self-save Source changed after review. Re-run Sever."
             )
-        output = Context.from_dict(original.to_dict())
         retained = {
             source.uid: (candidate, content)
             for candidate, source, content in session.results()
         }
         result_uids: list[str] = []
         sources: list[dict[str, str]] = []
+        operations: list[UpdateOperation] = []
         for candidate in session.candidates:
             source = session.source_memory(candidate.source_memory_uid)
-            current = output.memories.get(source.uid)
+            current = original.memories.get(source.uid)
             if (
                 source.context_name != source_name
                 or not isinstance(current, Memory)
@@ -559,10 +635,30 @@ class MemoryStoreSeverOutputPort:
                 )
             retained_result = retained.get(source.uid)
             if retained_result is None:
-                output.remove(source.uid)
+                operations.append(
+                    RemoveOperation(
+                        owner_context_uid=original.uid,
+                        owner_context_name=original.name,
+                        memory_uid=source.uid,
+                        old_content=source.content,
+                        source_refs=(cls._source_reference(session, source),),
+                        reason=candidate.rationale,
+                    )
+                )
             else:
                 _retained_candidate, content = retained_result
-                output.replace(Memory(uid=source.uid, content=content))
+                if content != source.content:
+                    operations.append(
+                        EditOperation(
+                            owner_context_uid=original.uid,
+                            owner_context_name=original.name,
+                            memory_uid=source.uid,
+                            old_content=source.content,
+                            new_content=content,
+                            source_refs=(cls._source_reference(session, source),),
+                            reason=candidate.rationale,
+                        )
+                    )
                 result_uids.append(source.uid)
             sources.append(
                 {
@@ -572,6 +668,7 @@ class MemoryStoreSeverOutputPort:
                     "selection": candidate.selection,
                 }
             )
+        output = cls._apply_projection(session, original, tuple(operations))
         return output, tuple(result_uids), sources
 
     @staticmethod
@@ -852,16 +949,11 @@ class MemoryStoreSeverOutputPort:
         if applied.save_mode == "SELF_SAVE":
             self._rollback_self_save(applied)
             return
-        expected = Context(
-            uid=application.output_context_uid,
-            name=applied.output_name,
+        expected, expected_uids, _sources = self._result_context(
+            applied,
+            output_uid=application.output_context_uid,
         )
-        expected_uids: list[str] = []
-        for _candidate, source, content in applied.results():
-            uid = _result_uid(applied.uid, source.uid, content)
-            expected.add(Memory(uid=uid, content=content))
-            expected_uids.append(uid)
-        if tuple(expected_uids) != application.result_memory_uids:
+        if expected_uids != application.result_memory_uids:
             raise SeverApplicationError(
                 "The Sever receipt does not identify its exact Result Memories."
             )
