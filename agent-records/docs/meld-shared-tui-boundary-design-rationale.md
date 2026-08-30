@@ -158,7 +158,7 @@ The intended dependency direction is:
 
 ```text
 commands.meld (CLI orchestration)
-  -> commands.meld.setup (typed setup and frozen readable authority)
+  -> commands.meld.endpoint_setup (typed setup and frozen readable authority)
   -> commands.meld.workbench (saved-session presentation)
   -> console.tui.components (operation-neutral mechanics)
 ```
@@ -209,7 +209,7 @@ Viewer owns focus; they do not submit a response or change session state.
   The relocation preserves the current Resolution Workbench projection and
   does not move provider, cache, receipt, or Apply semantics into presentation.
 - The later command-package consolidation moved the setup types and endpoint
-  projection into `commands.meld.setup` and the saved-session adapter into
+  projection into `commands.meld.endpoint_setup` and the saved-session adapter into
   `commands.meld.workbench`. It removed both the operation-specific
   `interfaces.tui.operations.meld` package and the `commands.meld.shell`
   facade. Public receipt and action shapes, provider/session/Apply boundaries,

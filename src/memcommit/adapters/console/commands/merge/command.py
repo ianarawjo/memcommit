@@ -13,7 +13,7 @@ from memcommit.adapters.console.commands.merge.resolution import (
     parse_merge_resolutions,
     render_merge_conflicts,
 )
-from memcommit.adapters.console.commands.merge.setup import (
+from memcommit.adapters.console.commands.merge.endpoint_setup import (
     build_merge_setup,
     choose_merge_request,
 )

@@ -21,7 +21,7 @@ from memcommit.application.operations.context_init.runtime import (
     execute_context_init,
     prepare_context_init,
 )
-from memcommit.adapters.console.commands.init.setup import (
+from memcommit.adapters.console.commands.init.choose_name import (
     ContextInitTuiSetup,
     run_context_init_tui,
 )
@@ -330,7 +330,7 @@ def test_context_init_console_owns_setup_and_receipt_without_facades():
         / "src/memcommit/adapters/interfaces/tui/operations/context_init"
     )
 
-    assert (command_root / "setup.py").is_file()
+    assert (command_root / "choose_name.py").is_file()
     assert (command_root / "receipt.py").is_file()
     assert not tuple(retired_tui_root.glob("*.py"))
     assert not (

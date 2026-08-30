@@ -4,8 +4,8 @@ import pytest
 
 import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.terminal.components.endpoint_setup.flows as endpoint_setup_flows
-import memcommit.adapters.console.commands.meld.setup as meld_setup_command
-from memcommit.adapters.console.commands.compare.setup import choose_compare_setup
+import memcommit.adapters.console.commands.meld.endpoint_setup as meld_setup_command
+from memcommit.adapters.console.commands.compare.endpoint_setup import choose_compare_setup
 from memcommit.adapters.console.terminal.components.endpoint_setup.flows import (
     choose_atomize_setup,
     choose_update_setup,
@@ -25,7 +25,7 @@ from memcommit.adapters.console.terminal.components.endpoint_setup.session impor
     _new_context_label_style,
     choose_session_endpoints,
 )
-from memcommit.adapters.console.commands.meld.setup import (
+from memcommit.adapters.console.commands.meld.endpoint_setup import (
     MeldEndpointSelection,
     choose_meld_setup,
 )

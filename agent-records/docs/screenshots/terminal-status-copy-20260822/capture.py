@@ -81,7 +81,7 @@ def _run_ground_child(_store_root: Path) -> None:
 
 
 def _run_compare_child(store_root: Path) -> None:
-    from memcommit.adapters.console.commands.compare.setup import choose_compare_setup
+    from memcommit.adapters.console.commands.compare.endpoint_setup import choose_compare_setup
 
     store = _prepare_compare_store(store_root)
     before = {

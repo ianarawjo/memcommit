@@ -13,7 +13,7 @@ from typer.testing import CliRunner
 import memcommit.adapters.console.clipboard as clipboard
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.commands.meld import command as meld_command
-import memcommit.adapters.console.commands.meld.setup as meld_setup_command
+import memcommit.adapters.console.commands.meld.endpoint_setup as meld_setup_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.compare.ledger.provider import (
     COMPARISON_PAYLOAD_MARKER,
@@ -29,12 +29,12 @@ from memcommit.application.capabilities.authority.context_access import (
 from memcommit.adapters.console.commands.compare.sessions import (
     comparison_session_entries,
 )
-from memcommit.adapters.console.commands.compare.setup import choose_compare_setup
+from memcommit.adapters.console.commands.compare.endpoint_setup import choose_compare_setup
 from memcommit.adapters.console.terminal.components.endpoint_setup.flows import (
     _readable_endpoint_catalog,
     choose_update_setup,
 )
-from memcommit.adapters.console.commands.meld.setup import MeldSetupReceipt
+from memcommit.adapters.console.commands.meld.endpoint_setup import MeldSetupReceipt
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.application.capabilities.authority.source_use_policy import (

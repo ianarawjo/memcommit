@@ -24,7 +24,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.background_turn` | `memcommit.adapters.console.terminal.components.background_turn` | shared-terminal-component | `terminal` |
 | `memcommit.commands.batch_input` | `memcommit.adapters.console.coordination.batch_input_source` | shared-command-mechanism | `coordination` |
 | `memcommit.commands.branch` | `memcommit.adapters.console.commands.branch.command` | command-entry | `branch` |
-| `memcommit.commands.branch_dialog` | `memcommit.adapters.console.commands.branch.setup` | command-owned-support | `branch` |
+| `memcommit.commands.branch_dialog` | `memcommit.adapters.console.commands.branch.endpoint_setup` | command-owned-support | `branch` |
 | `memcommit.commands.check_conformance` | `memcommit.adapters.console.commands.check_conformance.command` | command-entry | `check_conformance` |
 | `memcommit.commands.checkpoint` | `memcommit.adapters.console.commands.checkpoint.command` | command-entry | `checkpoint` |
 | `memcommit.commands.checkpoint_diff` | `memcommit.adapters.console.terminal.components.history.checkpoint_diff` | shared-terminal-component | `terminal` |
@@ -35,7 +35,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.command_wait` | `memcommit.adapters.console.terminal.components.command_wait` | shared-terminal-component | `terminal` |
 | `memcommit.commands.compare` | `memcommit.adapters.console.commands.compare.command` | command-entry | `compare` |
 | `memcommit.commands.compare_sessions` | `memcommit.adapters.console.commands.compare.sessions` | command-owned-support | `compare` |
-| `memcommit.commands.compare_setup` | `memcommit.adapters.console.commands.compare.setup` | command-owned-support | `compare` |
+| `memcommit.commands.compare_setup` | `memcommit.adapters.console.commands.compare.endpoint_setup` | command-owned-support | `compare` |
 | `memcommit.commands.compare_targeting` | `memcommit.adapters.console.commands.compare.targeting` | command-owned-support | `compare` |
 | `memcommit.commands.comparison_execution` | `memcommit.adapters.console.commands.compare.execution` | command-owned-support | `compare` |
 | `memcommit.commands.config` | `memcommit.adapters.console.commands.config.command` | command-entry | `config` |
@@ -98,7 +98,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.log` | `memcommit.adapters.console.commands.log.command` | command-entry | `log` |
 | `memcommit.commands.meld` | `memcommit.adapters.console.commands.meld.command` | command-entry | `meld` |
 | `memcommit.commands.meld_sessions` | `memcommit.adapters.console.commands.meld.sessions` | command-owned-support | `meld` |
-| `memcommit.commands.meld_setup` | `memcommit.adapters.console.commands.meld.setup` | command-owned-support | `meld` |
+| `memcommit.commands.meld_setup` | `memcommit.adapters.console.commands.meld.endpoint_setup` | command-owned-support | `meld` |
 | `memcommit.commands.meld_shell` | `memcommit.adapters.console.commands.meld.command` | command-owned-support | `meld` |
 | `memcommit.commands.memory_history` | `memcommit.adapters.console.coordination.memory_history` | shared-command-mechanism | `coordination` |
 | `memcommit.commands.memory_picker` | `memcommit.adapters.console.terminal.components.memory_report_picker` | shared-terminal-component | `terminal` |
@@ -142,7 +142,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.session_picker` | `memcommit.adapters.console.terminal.components.operation_launcher.session` | shared-terminal-component | `terminal` |
 | `memcommit.commands.sever` | `memcommit.adapters.console.commands.sever.command` | command-entry | `sever` |
 | `memcommit.commands.sever_sessions` | `memcommit.adapters.console.commands.sever.sessions` | command-owned-support | `sever` |
-| `memcommit.commands.sever_setup_shell` | `memcommit.adapters.console.commands.sever.setup` | command-owned-support | `sever` |
+| `memcommit.commands.sever_setup_shell` | `memcommit.adapters.console.commands.sever.endpoint_setup` | command-owned-support | `sever` |
 | `memcommit.commands.share` | `memcommit.adapters.console.commands.share.command` | command-entry | `share` |
 | `memcommit.commands.share_flow` | `memcommit.adapters.console.commands.share.flow` | command-owned-support | `share` |
 | `memcommit.commands.share_viewer` | `memcommit.adapters.console.commands.share.viewer` | command-owned-support | `share` |
@@ -160,5 +160,5 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.update` | `memcommit.adapters.console.commands.update.command` | command-entry | `update` |
 | `memcommit.commands.update_checkpoint_history` | `memcommit.adapters.console.terminal.components.history.update_checkpoint` | shared-terminal-component | `terminal` |
 | `memcommit.commands.update_render` | `memcommit.adapters.console.commands.update.render` | command-owned-support | `update` |
-| `memcommit.commands.update_setup` | `memcommit.adapters.console.commands.update.setup` | command-owned-support | `update` |
+| `memcommit.commands.update_setup` | `memcommit.adapters.console.commands.update.endpoint_setup` | command-owned-support | `update` |
 | `memcommit.commands.write_protection` | `memcommit.adapters.console.commands.write_protection.command` | command-entry | `write_protection` |

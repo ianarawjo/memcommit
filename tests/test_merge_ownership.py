@@ -29,7 +29,7 @@ assert "memcommit.application.operations.merge.runtime" not in sys.modules
 def test_merge_command_owns_setup_resolution_receipt_and_workbench() -> None:
     command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/merge"
 
-    assert (command_root / "setup.py").is_file()
+    assert (command_root / "endpoint_setup.py").is_file()
     assert (command_root / "resolution.py").is_file()
     assert (command_root / "receipt.py").is_file()
     assert (command_root / "workbench/review.py").is_file()

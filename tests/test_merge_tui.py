@@ -11,8 +11,8 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.merge.setup as merge_setup
-from memcommit.adapters.console.commands.merge.setup import (
+import memcommit.adapters.console.commands.merge.endpoint_setup as merge_setup
+from memcommit.adapters.console.commands.merge.endpoint_setup import (
     MergeSetup,
     build_merge_setup,
     choose_merge_request,

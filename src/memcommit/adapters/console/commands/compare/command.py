@@ -48,7 +48,7 @@ from memcommit.adapters.console.commands.compare.sessions import (
     revalidate_saved_comparison,
 )
 from memcommit.adapters.console.terminal.components.command_wait import run_command_wait
-from memcommit.adapters.console.commands.compare.setup import choose_compare_setup
+from memcommit.adapters.console.commands.compare.endpoint_setup import choose_compare_setup
 from memcommit.adapters.console.commands.compare.targeting import resolve_compare_cli_targets
 from memcommit.adapters.console.commands.rationale.command import render_rationale
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (

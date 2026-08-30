@@ -77,7 +77,7 @@ Audit's console-specific pieces are co-located under
 `memcommit.adapters.console.commands.audit`: `command.py` owns CLI operands,
 authority checks, progress projection, application invocation, and publication
 of the completed Session; `receipt.py` owns the compact saved-result receipt,
-`setup.py` owns Source selection, `session_catalog.py` owns the saved-session
+`endpoint_setup.py` owns Source selection, `session_catalog.py` owns the saved-session
 catalog, and `review.py` owns the read-only report projection and Viewer launch.
 The former
 `memcommit.adapters.interfaces.tui.operations.audit` package and the former

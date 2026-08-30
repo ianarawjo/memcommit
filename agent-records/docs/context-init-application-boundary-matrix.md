@@ -22,11 +22,15 @@ and existing legacy names remain readable.
 
 The console-specific input and output adapters are co-located under
 `memcommit.adapters.console.commands.init`: `command.py` owns orchestration,
-`setup.py` owns the optional exact-name editor, and `receipt.py` owns successful
+`choose_name.py` owns the optional exact-name editor, and `receipt.py` owns successful
 human-readable output. The former operation-specific TUI and CLI interface
 paths are removed without facades. The shared Context name editor remains in
 `core.context_targeting.tui`; this is an ownership relocation only and does not
 change its interaction or validation contract.
+
+The verb-shaped filename distinguishes this action from configuration and from
+the multi-role Endpoint Setup component: Init asks for one exact new name and
+then returns a typed request.
 
 ## Call path
 
@@ -62,7 +66,7 @@ typed data; it is not yet a stable public Python API.
 | Concern | Owner after extraction | Contract |
 | --- | --- | --- |
 | CLI argument parsing and cancellation text | `commands/init/command.py` | No request is executed after TUI cancellation. |
-| Suggested exact-name editing | `commands/init/setup.py` over the shared Context name editor | Returns a request only; creates, loads, switches, and persists nothing. |
+| Suggested exact-name editing | `commands/init/choose_name.py` over the shared Context name editor | Returns a request only; creates, loads, switches, and persists nothing. |
 | Successful human-readable output | `commands/init/receipt.py` | Preserves the established single and `--parents` receipts. |
 | Parent-prefix expansion | `operations/context_init/application.py` | Ordered lexical prefixes end at the requested leaf. No embedded-Context relation is created. |
 | Require-new versus reuse policy | `operations/context_init/application.py` | Exact mode requires the sole Context to be new; `--parents` may reuse any valid existing prefix, including the leaf. |

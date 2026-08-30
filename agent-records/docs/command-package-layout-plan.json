@@ -76,7 +76,7 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.branch.setup",
+      "canonical_module": "memcommit.adapters.console.commands.branch.endpoint_setup",
       "legacy_module": "memcommit.commands.branch_dialog",
       "owner": "branch",
       "public_exports": [],
@@ -163,7 +163,7 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.compare.setup",
+      "canonical_module": "memcommit.adapters.console.commands.compare.endpoint_setup",
       "legacy_module": "memcommit.commands.compare_setup",
       "owner": "compare",
       "public_exports": [],
@@ -661,7 +661,7 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.meld.setup",
+      "canonical_module": "memcommit.adapters.console.commands.meld.endpoint_setup",
       "legacy_module": "memcommit.commands.meld_setup",
       "owner": "meld",
       "public_exports": [],
@@ -1001,7 +1001,7 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.sever.setup",
+      "canonical_module": "memcommit.adapters.console.commands.sever.endpoint_setup",
       "legacy_module": "memcommit.commands.sever_setup_shell",
       "owner": "sever",
       "public_exports": [],
@@ -1145,7 +1145,7 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.update.setup",
+      "canonical_module": "memcommit.adapters.console.commands.update.endpoint_setup",
       "legacy_module": "memcommit.commands.update_setup",
       "owner": "update",
       "public_exports": [],

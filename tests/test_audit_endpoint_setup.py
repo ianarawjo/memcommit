@@ -6,7 +6,7 @@ import pytest
 
 import memcommit.adapters.console.commands.audit.command as audit_command
 import memcommit.application.capabilities.ops as ops
-from memcommit.adapters.console.commands.audit.setup import (
+from memcommit.adapters.console.commands.audit.endpoint_setup import (
     audit_endpoint_setup_spec,
     choose_audit_setup,
 )

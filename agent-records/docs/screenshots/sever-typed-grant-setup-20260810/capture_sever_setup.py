@@ -168,7 +168,7 @@ def _spawn(argv: list[str]) -> tuple[pexpect.spawn, _StreamRecorder]:
 
 
 def main() -> None:
-    from memcommit.adapters.console.commands.sever.setup import _shared_local_output_name
+    from memcommit.adapters.console.commands.sever.endpoint_setup import _shared_local_output_name
     from memcommit.application.operations.sever.session_store import SeverSessionStore
     from memcommit.persistence.store import MemoryStore
 

@@ -74,7 +74,7 @@ under `memcommit.adapters.console.commands.merge`. The former
 `adapters.interfaces.tui.operations.merge` package described transport
 mechanics rather than a stable owner, even though the Merge command was their
 only production consumer. The command package now names the actual stages:
-`setup.py` freezes and selects endpoints, `resolution.py` owns the
+`endpoint_setup.py` freezes and selects endpoints, `resolution.py` owns the
 noninteractive conflict-decision path, `receipt.py` reports the applied result,
 and `workbench/review.py` plus `workbench/conflicts.py` own interactive review.
 No compatibility facade remains because these were internal paths. This is a

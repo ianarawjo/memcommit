@@ -75,7 +75,7 @@ def _update() -> None:
 
 
 def _branch() -> None:
-    from memcommit.adapters.console.commands.branch.setup import choose_branch_creation
+    from memcommit.adapters.console.commands.branch.endpoint_setup import choose_branch_creation
 
     _print_terminal()
     result = choose_branch_creation(
@@ -89,7 +89,7 @@ def _branch() -> None:
 
 
 def _meld() -> None:
-    from memcommit.adapters.console.commands.meld.setup import (
+    from memcommit.adapters.console.commands.meld.endpoint_setup import (
         MeldTuiSetup,
         choose_meld_endpoint_setup,
     )
@@ -114,7 +114,7 @@ def _meld() -> None:
 
 
 def _sever() -> None:
-    from memcommit.adapters.console.commands.sever.setup import (
+    from memcommit.adapters.console.commands.sever.endpoint_setup import (
         SeverTuiSetup,
         choose_sever_endpoint_setup,
     )

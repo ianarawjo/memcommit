@@ -51,7 +51,7 @@ def _prepare_store(root: Path):
 
 
 def _run_setup_child(store_root: Path, *, directional: bool) -> None:
-    from memcommit.adapters.console.commands.meld.setup import choose_meld_setup
+    from memcommit.adapters.console.commands.meld.endpoint_setup import choose_meld_setup
 
     store, incoming, baseline, empty_result, incoming_focus = _prepare_store(store_root)
     before = {

@@ -43,7 +43,7 @@ def _prepare_store(root: Path):
 
 
 def _run_child(store_root: Path, *, cancel: bool) -> None:
-    from memcommit.adapters.console.commands.audit.setup import choose_audit_setup
+    from memcommit.adapters.console.commands.audit.endpoint_setup import choose_audit_setup
 
     store, current, peer = _prepare_store(store_root)
     before = {

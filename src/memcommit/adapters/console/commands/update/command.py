@@ -11,7 +11,7 @@ from memcommit.adapters.console.terminal.components.command_wait import (
     CommandWaitView,
     run_command_wait,
 )
-from memcommit.adapters.console.commands.update.setup import choose_update_setup
+from memcommit.adapters.console.commands.update.endpoint_setup import choose_update_setup
 from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     freeze_granted_context_binding,

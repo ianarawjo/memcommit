@@ -2,7 +2,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.commands.branch.setup import choose_branch_creation
+from memcommit.adapters.console.commands.branch.endpoint_setup import choose_branch_creation
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,

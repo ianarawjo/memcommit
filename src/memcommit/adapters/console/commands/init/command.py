@@ -12,7 +12,7 @@ from memcommit.application.operations.context_init.runtime import (
 )
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import choose_context_name
 from memcommit.adapters.console.commands.init.receipt import render_context_init
-from memcommit.adapters.console.commands.init.setup import (
+from memcommit.adapters.console.commands.init.choose_name import (
     ContextInitTuiSetup,
     run_context_init_tui,
 )

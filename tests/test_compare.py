@@ -33,7 +33,7 @@ from memcommit.application.operations.compare.ledger.store import (
     save_comparison_analysis,
 )
 from memcommit.adapters.console.commands.compare.command import render_comparison
-from memcommit.adapters.console.commands.compare.setup import CompareSetupReceipt
+from memcommit.adapters.console.commands.compare.endpoint_setup import CompareSetupReceipt
 from memcommit.adapters.console.commands.compare.sessions import (
     choose_comparison_session,
     comparison_session_entries,

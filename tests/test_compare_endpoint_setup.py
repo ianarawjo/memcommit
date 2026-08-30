@@ -6,10 +6,10 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import pytest
 
-import memcommit.adapters.console.commands.compare.setup as compare_setup_command
+import memcommit.adapters.console.commands.compare.endpoint_setup as compare_setup_command
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.terminal.components.endpoint_setup import EndpointSetupMemory
-from memcommit.adapters.console.commands.compare.setup import (
+from memcommit.adapters.console.commands.compare.endpoint_setup import (
     CompareEndpointSelection,
     CompareTuiSetup,
     choose_compare_endpoint_setup,

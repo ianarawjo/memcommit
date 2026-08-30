@@ -10,7 +10,7 @@ from prompt_toolkit.output import DummyOutput
 from memcommit.adapters.console.commands.branch.receipt import (
     BranchCreationReceipt,
 )
-from memcommit.adapters.console.commands.branch.setup import (
+from memcommit.adapters.console.commands.branch.endpoint_setup import (
     branch_endpoint_setup_spec,
     branch_exact_command_review,
     choose_branch_creation,
@@ -178,7 +178,7 @@ def test_branch_console_package_owns_setup_and_receipt_without_facades() -> None
         REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/tui/operations/branch"
     )
 
-    assert (command_root / "setup.py").is_file()
+    assert (command_root / "endpoint_setup.py").is_file()
     assert (command_root / "receipt.py").is_file()
     assert not (command_root / "dialog.py").exists()
     assert not tuple(retired_root.glob("*.py"))

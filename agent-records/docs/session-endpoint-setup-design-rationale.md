@@ -358,7 +358,7 @@ The implementation has three layers:
    draft state.
 3. Compare, Update, Meld, and Sever adapters own role specs, typed receipts,
    semantic validation, and orchestration. Sever owns that projection directly
-   in `memcommit.adapters.console.commands.sever.setup`; the shared component
+   in `memcommit.adapters.console.commands.sever.endpoint_setup`; the shared component
    remains operation-neutral.
 
 The Endpoint Setup composition lives under
@@ -371,6 +371,13 @@ Sever's former lazy evidence inspection without allowing a Memory cursor to
 enter the typed executable draft; other operations retain exact Memory focus.
 `SessionPicker` remains the saved-work launcher and does not absorb new session
 setup.
+
+Command adapters that directly project this component use the explicit module
+name `endpoint_setup.py`: Audit, Branch, Compare, Meld, Merge, Sever, and
+Update. Other command-local `setup.py` modules remain unchanged when they own a
+different interaction rather than this endpoint grammar. This keeps the shared
+component name and each operation adapter's filename aligned without treating
+every interactive entry screen as the same capability.
 
 ## Bare entry and saved-work boundary
 

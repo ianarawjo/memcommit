@@ -18,7 +18,7 @@ import memcommit.application.capabilities.ops as ops
 import memcommit.configuration.config as config_module
 from memcommit.adapters.console.commands.meld import command as meld_command
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.adapters.console.commands.meld.setup import MeldSetupReceipt
+from memcommit.adapters.console.commands.meld.endpoint_setup import MeldSetupReceipt
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.compare.ledger.model import (
     ComparisonInput,

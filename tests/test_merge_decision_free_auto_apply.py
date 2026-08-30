@@ -6,7 +6,7 @@ import typer
 from typer.testing import CliRunner
 
 import memcommit.adapters.console.commands.merge.command as merge_command
-from memcommit.adapters.console.commands.merge.setup import MergeSetup, merge_setup_spec
+from memcommit.adapters.console.commands.merge.endpoint_setup import MergeSetup, merge_setup_spec
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory

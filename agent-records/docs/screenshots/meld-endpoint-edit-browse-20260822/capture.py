@@ -48,7 +48,7 @@ def _prepare_store(store_root: Path):
 
 
 def _run_child(store_root: Path, *, route: str) -> None:
-    from memcommit.adapters.console.commands.meld.setup import choose_meld_setup
+    from memcommit.adapters.console.commands.meld.endpoint_setup import choose_meld_setup
 
     store, left, right = _prepare_store(store_root)
     before = {

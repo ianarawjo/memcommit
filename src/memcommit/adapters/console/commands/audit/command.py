@@ -37,7 +37,7 @@ from memcommit.adapters.console.commands.audit.receipt import (
 from memcommit.adapters.console.commands.audit.review import (
     render_quality_audit_review_snapshot,
 )
-from memcommit.adapters.console.commands.audit.setup import choose_audit_setup
+from memcommit.adapters.console.commands.audit.endpoint_setup import choose_audit_setup
 from memcommit.core.context import Context
 from memcommit.application.operations.conformance.model import ConformanceError
 from memcommit.application.capabilities.authority.source_use_policy import (

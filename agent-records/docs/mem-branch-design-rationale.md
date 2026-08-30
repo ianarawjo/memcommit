@@ -87,7 +87,7 @@ regenerated for this ownership-only change.
 
 Branch's console presentation is co-located under
 `memcommit.adapters.console.commands.branch`. `command.py` owns Typer
-orchestration and receipt rendering, `setup.py` owns the A/B role labels,
+orchestration and receipt rendering, `endpoint_setup.py` owns the A/B role labels,
 local-only availability, require-new validation, exact command review, and
 interactive selection, and `receipt.py` owns the process-local
 `BranchCreationReceipt`. The former interface package and `dialog.py` facade

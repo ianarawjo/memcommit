@@ -11,7 +11,7 @@ from memcommit.application.operations.compare.ledger.provider import (
 from memcommit.core.context_targeting.presets import (
     legacy_root_only_option_alias,
 )
-from memcommit.adapters.console.commands.meld.setup import choose_meld_setup
+from memcommit.adapters.console.commands.meld.endpoint_setup import choose_meld_setup
 from memcommit.application.operations.meld.model import (
     MeldError,
 )

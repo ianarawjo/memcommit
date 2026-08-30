@@ -112,7 +112,7 @@ def _run_common_child() -> None:
 
 
 def _run_sever_child() -> None:
-    from memcommit.adapters.console.commands.sever.setup import choose_sever_setup
+    from memcommit.adapters.console.commands.sever.endpoint_setup import choose_sever_setup
 
     print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
     receipt = choose_sever_setup(
