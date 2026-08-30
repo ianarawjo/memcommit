@@ -1,4 +1,4 @@
-"""Frozen public Grant rows for Context namespace navigation."""
+"""Freeze authorized public Grant rows for Context namespace navigation."""
 
 from __future__ import annotations
 

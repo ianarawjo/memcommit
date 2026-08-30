@@ -36,9 +36,12 @@ there is intentionally no profile-wide “last Scope” preference.
 - `search.py` loads one or more searchable roots and independently controls
   embedded-Context traversal and authorized activity artifacts for Find and
   ordinary Query.
-- `catalog.py` freezes public Grant rows for namespace navigation while keeping
-  the READ-authorized subset separate from opaque QUERY and other non-READ
-  roots. Namespace visibility therefore never becomes ordinary load authority.
+- `application.capabilities.authority.granted_context_navigation` freezes
+  public Grant rows from the active Profile and Store while keeping the
+  READ-authorized subset separate from opaque QUERY and other non-READ roots.
+  This owner is an application capability rather than core targeting because
+  it performs live attachment revalidation and applies Grant visibility policy.
+  Namespace visibility therefore never becomes ordinary load authority.
 - `tui/tree.py` owns frozen namespace topology, cursor, and expansion state.
 - `tui/selection.py` owns checked values and single-versus-multiple cardinality.
 - `tui/memory_selection.py` owns one retained exact direct-Memory choice. It is

@@ -14,7 +14,7 @@ from memcommit.application.capabilities.authority.context_access import (
 )
 from memcommit.core.context import Context, QueryContextRef
 from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
-from memcommit.core.context_targeting.catalog import (
+from memcommit.application.capabilities.authority.granted_context_navigation import (
     GrantedContextNavigation,
     freeze_granted_context_navigation,
 )

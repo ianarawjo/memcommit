@@ -8,7 +8,7 @@ from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.core.context_targeting.catalog import (
+from memcommit.application.capabilities.authority.granted_context_navigation import (
     GrantedContextNavigation,
     freeze_granted_context_navigation,
 )

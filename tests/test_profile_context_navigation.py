@@ -7,7 +7,9 @@ from types import SimpleNamespace
 from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_context_navigation,
 )
-from memcommit.core.context_targeting.catalog import GrantedContextNavigation
+from memcommit.application.capabilities.authority.granted_context_navigation import (
+    GrantedContextNavigation,
+)
 
 
 class _FakeCatalog:

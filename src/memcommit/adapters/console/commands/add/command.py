@@ -19,7 +19,9 @@ from memcommit.application.capabilities.authority.context_access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.application.capabilities.authority.granted_context_navigation import (
+    freeze_granted_context_navigation,
+)
 from memcommit.core.context_targeting.operands import choose_endpoint_operand
 from memcommit.adapters.console.commands.add.input_records import parse_input_records
 from memcommit.adapters.console.commands.add.receipt import render_add_receipt

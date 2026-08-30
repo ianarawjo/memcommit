@@ -74,7 +74,9 @@ from memcommit.core.context_targeting.tui.tree import (
     ContextTreeState,
     build_context_tree,
 )
-from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.application.capabilities.authority.granted_context_navigation import (
+    freeze_granted_context_navigation,
+)
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState

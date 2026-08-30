@@ -11,7 +11,9 @@ from memcommit.application.operations.embed.application import (
     FrozenMemoryEmbedPlan,
 )
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
-from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.application.capabilities.authority.granted_context_navigation import (
+    freeze_granted_context_navigation,
+)
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.adapters.console.commands.embed.workbench.model import EmbedTuiSetup
 from memcommit.adapters.console.commands.embed.workbench.screen import run_embed_tui

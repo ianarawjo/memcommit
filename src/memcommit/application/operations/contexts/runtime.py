@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from memcommit.core.context_targeting.naming import is_portable_context_name
-from memcommit.core.context_targeting.catalog import (
+from memcommit.application.capabilities.authority.granted_context_navigation import (
     freeze_granted_context_navigation,
     grant_navigation_capability_text,
 )

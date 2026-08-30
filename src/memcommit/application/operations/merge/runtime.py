@@ -19,7 +19,9 @@ from memcommit.core.context import (
 )
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
+from memcommit.application.capabilities.authority.granted_context_navigation import (
+    freeze_granted_context_navigation,
+)
 from memcommit.application.capabilities.authority.source_use_policy import authorize_derived_transfer
 from memcommit.application.operations.merge.application import (
     FrozenMergePlan,

@@ -68,6 +68,24 @@ Task 2 workflow.
   granted tree, `..` may return to another READ-granted parent; it never opens a
   query-only override.
 
+## Implementation ownership
+
+The shared Grant-navigation snapshot is owned by
+`memcommit.application.capabilities.authority.granted_context_navigation`.
+It is not a core Context-targeting primitive: freezing the snapshot loads the
+active Profile registry, verifies that the supplied Store belongs to that
+Profile, revalidates each local attachment Context identity, and applies the
+READ-versus-visible-only policy. Pure public-name hierarchy and lexical
+expansion remain under `core.context_targeting.resolution`, while ordinary
+on-disk Context discovery remains under
+`persistence.store.context_memory.catalog_scan`.
+
+The capability remains shared rather than moving into the Contexts operation.
+Contexts, Switch, setup screens, and other operations all consume the same
+authorized navigation snapshot. This relocation changes imports and dependency
+direction only; public names, compact capability labels, query-only visibility,
+READ selectability, and attachment-UID failure behavior remain unchanged.
+
 ## Read and query surfaces
 
 `mem ls`, `mem show`, and `mem status` resolve the current READ grant through

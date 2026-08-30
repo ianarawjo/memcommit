@@ -18,7 +18,7 @@ from memcommit.adapters.console.terminal.components.command_wait import (
     run_command_wait,
 )
 from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
-from memcommit.core.context_targeting.catalog import (
+from memcommit.application.capabilities.authority.granted_context_navigation import (
     GrantedContextNavigation,
     grant_navigation_annotation,
 )
