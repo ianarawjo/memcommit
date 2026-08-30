@@ -653,6 +653,9 @@ _OPERATION_DISCOVERY_TOKENS = {
 # because both operations share that application package.
 _APPLICATION_DISCOVERY_TOKENS = {
     "find-duplicates": ("find_duplicates", "exact_duplicates", "dedup"),
+    # The boundary record retains its Context-specific historical filename,
+    # while the canonical application operation now matches public `mem init`.
+    "init": ("init",),
 }
 
 

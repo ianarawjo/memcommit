@@ -68,8 +68,8 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.context | shared-concept-implementation | relocate-without-alias | memcommit.core.context | 279 |
 | memcommit.context_catalog | shared-concept-implementation | relocate-without-alias | memcommit.core.context_targeting.context_catalog | 1 |
 | memcommit.context_history | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.retained_history.context_history | 4 |
-| memcommit.context_init_application | historical-compatibility-facade | remove | memcommit.application.operations.context_init.application | 0 |
-| memcommit.context_init_runtime | historical-compatibility-facade | remove | memcommit.application.operations.context_init.runtime | 0 |
+| memcommit.context_init_application | historical-compatibility-facade | remove | memcommit.application.operations.init.application | 0 |
+| memcommit.context_init_runtime | historical-compatibility-facade | remove | memcommit.application.operations.init.runtime | 0 |
 | memcommit.context_lifecycle | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.retained_history.context_lifecycle | 1 |
 | memcommit.context_locator | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.context_locator | 44 |
 | memcommit.context_naming | shared-concept-implementation | relocate-without-alias | memcommit.core.context_targeting.naming | 26 |

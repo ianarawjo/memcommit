@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
-from memcommit.application.operations.context_init.application import ContextInitRequest
+from memcommit.application.operations.init.application import ContextInitRequest
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import (
     ContextNameView,
     choose_context_name,

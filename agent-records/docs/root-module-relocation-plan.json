@@ -564,8 +564,8 @@
     },
     {
       "action": "remove",
-      "canonical_target": "memcommit.application.operations.context_init.application",
-      "canonical_target_path": "memcommit/application/operations/context_init/application.py",
+      "canonical_target": "memcommit.application.operations.init.application",
+      "canonical_target_path": "memcommit/application/operations/init/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.context_init_application",
@@ -575,8 +575,8 @@
     },
     {
       "action": "remove",
-      "canonical_target": "memcommit.application.operations.context_init.runtime",
-      "canonical_target_path": "memcommit/application/operations/context_init/runtime.py",
+      "canonical_target": "memcommit.application.operations.init.runtime",
+      "canonical_target_path": "memcommit/application/operations/init/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.context_init_runtime",

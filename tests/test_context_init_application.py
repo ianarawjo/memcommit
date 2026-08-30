@@ -8,16 +8,16 @@ import uuid
 
 import pytest
 
-import memcommit.application.operations.context_init.application as context_init_application
-from memcommit.application.operations.context_init.application import (
+import memcommit.application.operations.init.application as context_init_application
+from memcommit.application.operations.init.application import (
     ContextInitError,
     ContextInitRequest,
     CreatedContext,
     plan_context_init,
     run_context_init,
 )
-import memcommit.application.operations.context_init.runtime as context_init_runtime
-from memcommit.application.operations.context_init.runtime import (
+import memcommit.application.operations.init.runtime as context_init_runtime
+from memcommit.application.operations.init.runtime import (
     execute_context_init,
     prepare_context_init,
 )
