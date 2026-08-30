@@ -18,7 +18,9 @@ def test_review_command_owns_snapshot_without_interface_facade() -> None:
 
 
 def test_terminal_review_contracts_have_one_shared_console_owner() -> None:
-    shared_module = REPOSITORY_ROOT / "src/memcommit/adapters/console/coordination/review.py"
+    shared_module = (
+        REPOSITORY_ROOT / "src/memcommit/adapters/console/coordination/review.py"
+    )
     old_package = (
         REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/tui/workbenches/review"
     )
@@ -35,8 +37,6 @@ def test_review_atomize_and_impact_import_the_shared_contract_directly() -> None
         "src/memcommit/adapters/console/commands/review/command.py",
         "src/memcommit/adapters/console/commands/review/snapshot.py",
         "src/memcommit/adapters/console/commands/atomize/review.py",
-        "src/memcommit/adapters/console/commands/atomize/workbench/adapter.py",
-        "src/memcommit/adapters/console/commands/atomize/workbench/screen.py",
         "src/memcommit/adapters/console/commands/atomize/impact.py",
     )
 

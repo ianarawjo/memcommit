@@ -1,4 +1,5 @@
 """Reviewed declared-frame comments for uncertain atomize findings."""
+
 from __future__ import annotations
 
 import json
@@ -14,11 +15,11 @@ from memcommit.application.operations.atomize.domain import (
     create_atomize_analysis,
     impact_atomize,
 )
-from memcommit.application.operations.atomize.workbench import (
-    AtomizeWorkbenchError,
-    AtomizeWorkbenchSession,
-    atomize_workbench_issue_projection,
-    project_atomize_workbench_findings,
+from memcommit.application.operations.atomize.records import (
+    AtomizeRecordError,
+    AtomizeReviewRecord,
+    atomize_review_issue_projection,
+    project_atomize_review_findings,
 )
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import AutoCheckpoint
@@ -30,9 +31,7 @@ PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"
 
 
 def _aggregate_response(payload: dict, response: dict) -> dict:
-    candidate_ids = [
-        memory["candidate_id"] for memory in payload["memories"]
-    ]
+    candidate_ids = [memory["candidate_id"] for memory in payload["memories"]]
     return {
         "overview": {
             "understood": {
@@ -90,16 +89,14 @@ class ReviewedAtomizeProvider:
                         "reason_codes": ["A06_NO_HIDDEN_CONTEXT"],
                         "children": [],
                         "reason": (
-                            "The phrase 'the same NFC' has no declared "
-                            "antecedent."
+                            "The phrase 'the same NFC' has no declared antecedent."
                         ),
                     }
                 ]
             }
         else:
             assert (
-                declared_frame
-                == "'the same NFC' means the staff-door NFC credential."
+                declared_frame == "'the same NFC' means the staff-door NFC credential."
             )
             result = {
                 "items": [
@@ -151,18 +148,21 @@ class AllAtomicProvider:
         assert operation == "impact_atomize"
         payload = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1])
         return json.dumps(
-            _aggregate_response(payload, {
-                "items": [
-                    {
-                        "candidate_id": memory["candidate_id"],
-                        "classification": "ATOMIC",
-                        "reason_codes": ["A01_ONE_FOCUS"],
-                        "children": [],
-                        "reason": "The Memory has one independently revisable focus.",
-                    }
-                    for memory in payload["memories"]
-                ]
-            })
+            _aggregate_response(
+                payload,
+                {
+                    "items": [
+                        {
+                            "candidate_id": memory["candidate_id"],
+                            "classification": "ATOMIC",
+                            "reason_codes": ["A01_ONE_FOCUS"],
+                            "children": [],
+                            "reason": "The Memory has one independently revisable focus.",
+                        }
+                        for memory in payload["memories"]
+                    ]
+                },
+            )
         )
 
 
@@ -189,14 +189,14 @@ def _stage_operation_response(
     analysis: AtomizeAnalysisSession,
     memory_uid: str,
     text: str,
-) -> AtomizeWorkbenchSession:
+) -> AtomizeReviewRecord:
     """Stage one Atomize-owned execution decision without using Review."""
 
     workbench = store.load_atomize_workbench(analysis)
     assert workbench is not None
     finding = next(
         item
-        for item in project_atomize_workbench_findings(analysis)
+        for item in project_atomize_review_findings(analysis)
         if memory_uid in item.source_uids
     )
     workbench.response_for(finding.uid).text = text
@@ -222,7 +222,7 @@ def test_atomize_findings_are_read_only_until_apply_completes(
 
     preview = runner.invoke(app, ["impact", "atomize"])
     incomplete = runner.invoke(app, ["review", "atomize", "--snapshot"])
-    applied = runner.invoke(app, ["atomize", "--save"])
+    applied = runner.invoke(app, ["atomize"])
     review = runner.invoke(app, ["review", "atomize", "--snapshot"])
 
     assert preview.exit_code == 0, preview.output
@@ -239,8 +239,6 @@ def test_atomize_findings_are_read_only_until_apply_completes(
     assert len(provider.payloads) == 1
 
 
-
-
 def test_reviewed_frame_may_not_replace_source_memory_evidence():
     ctx = ops.init("frame-only")
     ops.add(ctx, "The same credential is used.")
@@ -253,26 +251,29 @@ def test_reviewed_frame_may_not_replace_source_memory_evidence():
     def respond(payload):
         candidate_id = payload["memories"][0]["candidate_id"]
         return json.dumps(
-            _aggregate_response(payload, {
-                "items": [
-                    {
-                        "candidate_id": candidate_id,
-                        "classification": "COMPOSITE",
-                        "reason_codes": ["A04_SOURCE_GROUNDED"],
-                        "children": [
-                            {
-                                "content": "Staff enter.",
-                                "source_spans": ["Staff enter"],
-                            },
-                            {
-                                "content": "Students cannot enter.",
-                                "source_spans": ["Students cannot enter"],
-                            },
-                        ],
-                        "reason": "The frame alone supplies both claims.",
-                    }
-                ]
-            })
+            _aggregate_response(
+                payload,
+                {
+                    "items": [
+                        {
+                            "candidate_id": candidate_id,
+                            "classification": "COMPOSITE",
+                            "reason_codes": ["A04_SOURCE_GROUNDED"],
+                            "children": [
+                                {
+                                    "content": "Staff enter.",
+                                    "source_spans": ["Staff enter"],
+                                },
+                                {
+                                    "content": "Students cannot enter.",
+                                    "source_spans": ["Students cannot enter"],
+                                },
+                            ],
+                            "reason": "The frame alone supplies both claims.",
+                        }
+                    ]
+                },
+            )
         )
 
     class Provider:
@@ -322,8 +323,6 @@ def test_legacy_atomize_analysis_loads_with_empty_review_provenance(
     assert restored.to_dict()["schema_version"] == 4
 
 
-
-
 def test_plain_impact_resumes_without_incorporating_saved_comments(
     isolated_store,
     monkeypatch,
@@ -359,9 +358,10 @@ def test_plain_impact_resumes_without_incorporating_saved_comments(
     restored = store.load_atomize_workbench(source_analysis)
     assert restored is not None
     assert restored.responses == workbench.responses
-    assert store._atomize_analysis_path(
-        store.load_current_direct().uid
-    ).read_bytes() == analysis_before
+    assert (
+        store._atomize_analysis_path(store.load_current_direct().uid).read_bytes()
+        == analysis_before
+    )
     assert len(provider.payloads) == 1
 
 
@@ -388,10 +388,10 @@ def test_review_and_atomize_schema_versions_reject_booleans(
     assert workbench is not None
     workbench_data = workbench.to_dict()
     workbench_data["schema_version"] = True
-    with pytest.raises(AtomizeWorkbenchError):
-        AtomizeWorkbenchSession.from_dict(
+    with pytest.raises(AtomizeRecordError):
+        AtomizeReviewRecord.from_dict(
             workbench_data,
-            issues=atomize_workbench_issue_projection(analysis),
+            issues=atomize_review_issue_projection(analysis),
         )
 
 
@@ -424,9 +424,7 @@ def test_create_analysis_rejects_malformed_declared_frame_origin_cleanly():
             declared_frame_origins={
                 memory.uid: AtomizeFrameOrigin(
                     review_item_uid=memory.uid,
-                    source_analysis_uid=(
-                        "10000000-0000-4000-8000-000000000001"
-                    ),
+                    source_analysis_uid=("10000000-0000-4000-8000-000000000001"),
                     uncertainty_reason=None,  # type: ignore[arg-type]
                 )
             },

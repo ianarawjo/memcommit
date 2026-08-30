@@ -11,16 +11,21 @@ from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     context_access_display_facts,
 )
-from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
+from memcommit.adapters.console.terminal.components.context_picker import (
+    context_memory_rows,
+)
 from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.adapters.console.terminal.components.endpoint_setup import EndpointSetupMemory
+from memcommit.adapters.console.terminal.components.endpoint_setup import (
+    EndpointSetupMemory,
+)
 from memcommit.adapters.console.commands.update.workbench import (
     UpdateEndpointSetup,
     choose_update_endpoint_setup,
 )
 from memcommit.persistence.store import MemoryStore
+from memcommit.source_projection.model import SourceDisplayFacts
 
 
 @dataclass(frozen=True)
@@ -35,14 +40,10 @@ class UpdateSetupReceipt:
     target_memory_uid: str | None = None
 
 
-def choose_update_setup(
+def _readable_endpoint_catalog(
     store: MemoryStore,
-    *,
-    app_input: Input | None = None,
-    app_output: Output | None = None,
-    require_tty: bool = True,
-) -> UpdateSetupReceipt | None:
-    """Freeze readable authority, then collect one shared Update setup."""
+) -> tuple[tuple[str, ...], str, str, dict[str, SourceDisplayFacts]]:
+    """Freeze the readable names and defaults used by Update setup."""
 
     local_names = tuple(store.list_context_names())
     if not local_names:
@@ -65,10 +66,38 @@ def choose_update_setup(
         raise ValueError("Starting Update requires two readable Contexts.")
     source_name = current_name if current_name in names else names[0]
     target_name = next(name for name in names if name != source_name)
-    annotations = tuple(
-        (name, context_access_display_facts(catalog.access_for(name)))
+    annotations = {
+        name: context_access_display_facts(catalog.access_for(name))
         for name in names
         if catalog.access_for(name).is_granted
+    }
+    return names, source_name, target_name, annotations
+
+
+def choose_update_setup(
+    store: MemoryStore,
+    *,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> UpdateSetupReceipt | None:
+    """Freeze readable authority, then collect one shared Update setup."""
+
+    current_name = store.current_context_name()
+    names, source_name, target_name, annotation_map = _readable_endpoint_catalog(store)
+    annotations = tuple(annotation_map.items())
+
+    root_name = current_name if current_name in names else names[0]
+    catalog = freeze_profile_readable_context_catalog(
+        store,
+        ContextAccess(
+            store=store,
+            context_name=root_name,
+            display_name=root_name,
+            attachment_name=None,
+            permission="READ",
+        ),
+        include_query_routes=False,
     )
 
     def load_memories(role_uid: str, context_name: str):

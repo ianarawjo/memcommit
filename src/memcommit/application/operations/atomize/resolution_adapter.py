@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 from memcommit.application.operations.atomize.domain import AtomizeAnalysisSession
-from memcommit.application.operations.atomize.workbench import (
-    AtomizeWorkbenchError,
-    AtomizeWorkbenchFinding,
-    AtomizeWorkbenchSession,
-    atomize_workbench_issue_projection,
-    project_atomize_workbench_findings,
+from memcommit.application.operations.atomize.records import (
+    AtomizeRecordError,
+    AtomizeReviewFinding,
+    AtomizeReviewRecord,
+    atomize_review_issue_projection,
+    project_atomize_review_findings,
 )
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionDetailBlock,
@@ -26,7 +26,7 @@ from memcommit.application.capabilities.resolution.workbench import (
 from memcommit.application.capabilities.reviewing.result_workbench import ResultRef
 
 
-def _priority_label(finding: AtomizeWorkbenchFinding) -> str:
+def _priority_label(finding: AtomizeReviewFinding) -> str:
     return {
         # Priority describes semantic attention, not whether a response gates
         # application. Atomize can apply its exact current proposal while a
@@ -78,20 +78,20 @@ class AtomizeResolutionWorkbenchAdapter:
     def __init__(
         self,
         analysis: AtomizeAnalysisSession,
-        workbench: AtomizeWorkbenchSession,
+        workbench: AtomizeReviewRecord,
     ):
         if not isinstance(analysis, AtomizeAnalysisSession):
             raise TypeError("Expected an AtomizeAnalysisSession.")
-        if not isinstance(workbench, AtomizeWorkbenchSession):
-            raise TypeError("Expected an AtomizeWorkbenchSession.")
+        if not isinstance(workbench, AtomizeReviewRecord):
+            raise TypeError("Expected an AtomizeReviewRecord.")
         if not workbench.matches_analysis(
             analysis_uid=analysis.uid,
             context_uid=analysis.context_uid,
             context_name=analysis.context_name,
             context_digest=analysis.context_digest,
-            issues=atomize_workbench_issue_projection(analysis),
+            issues=atomize_review_issue_projection(analysis),
         ):
-            raise AtomizeWorkbenchError(
+            raise AtomizeRecordError(
                 "The atomize workbench does not match its saved analysis."
             )
         self._analysis = analysis
@@ -102,7 +102,7 @@ class AtomizeResolutionWorkbenchAdapter:
         workbench = self._workbench
         findings = {
             finding.uid: finding
-            for finding in project_atomize_workbench_findings(analysis)
+            for finding in project_atomize_review_findings(analysis)
         }
         source_by_uid = {item.memory_uid: item.content for item in analysis.items}
         position_by_uid = {
@@ -272,7 +272,9 @@ class AtomizeResolutionWorkbenchAdapter:
             for finding in findings.values()
         )
         unresolved_at_apply = unresolved_at_apply_count > 0
-        capabilities = frozenset({"ACCEPT"}) if not application_complete else frozenset()
+        capabilities = (
+            frozenset({"ACCEPT"}) if not application_complete else frozenset()
+        )
         overview_sections = _overview_sections(analysis)
         return ResolutionWorkbenchView(
             operation="ATOMIZE",
@@ -336,9 +338,7 @@ class AtomizeResolutionWorkbenchAdapter:
                 else "CHANGES"
             ),
             unresolved_at_apply_count=(
-                unresolved_at_apply_count
-                if not application_complete
-                else 0
+                unresolved_at_apply_count if not application_complete else 0
             ),
             input_locked=application_complete,
         )
@@ -346,7 +346,7 @@ class AtomizeResolutionWorkbenchAdapter:
 
 def project_atomize_resolution(
     analysis: AtomizeAnalysisSession,
-    workbench: AtomizeWorkbenchSession,
+    workbench: AtomizeReviewRecord,
 ) -> ResolutionWorkbenchView:
     """Return the common view for one analysis-bound Atomize workbench."""
     return AtomizeResolutionWorkbenchAdapter(analysis, workbench).view()

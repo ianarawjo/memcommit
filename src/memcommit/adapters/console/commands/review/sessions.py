@@ -15,7 +15,7 @@ from memcommit.application.capabilities.retained_history.applied_review import (
     CHECKPOINT_REVIEW_OPERATIONS,
     list_applied_checkpoint_reviews,
 )
-from memcommit.adapters.console.commands.atomize.sessions import atomize_session_entries
+from memcommit.adapters.console.commands.atomize.records import atomize_record_entries
 from memcommit.adapters.console.commands.compare.sessions import (
     comparison_session_entries,
 )
@@ -322,7 +322,7 @@ def review_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]
     )
     entries.extend(
         _review_entry(entry)
-        for entry in atomize_session_entries(store)
+        for entry in atomize_record_entries(store)
         if entry.status == "APPLIED"
     )
     entries.extend(_review_entry(entry) for entry in comparison_session_entries(store))

@@ -39,21 +39,21 @@ from memcommit.application.operations.atomize.analysis_runtime import (
 from memcommit.application.operations.atomize.application import (
     AtomizeApplicationError,
     AtomizeOutputPlanRequest,
-    AtomizePersistedApplyRequest,
+    AtomizeRecordApplyRequest,
     AtomizeSaveAsRequest,
-    AtomizeSessionSnapshot,
+    AtomizeExecutionSnapshot,
 )
 from memcommit.application.operations.atomize.runtime import (
-    capture_current_atomize_session_snapshot_at_version,
-    capture_atomize_session_snapshot,
-    capture_atomize_session_snapshot_at_version,
+    capture_current_atomize_execution_snapshot_at_version,
+    capture_atomize_execution_snapshot,
+    capture_atomize_execution_snapshot_at_version,
     execute_atomize_output_plan_update,
     execute_atomize_save_as,
-    execute_atomize_session_apply,
+    execute_atomize_record_apply,
 )
-from memcommit.application.operations.atomize.workbench import (
-    AtomizeWorkbenchError,
-    project_atomize_workbench_findings,
+from memcommit.application.operations.atomize.records import (
+    AtomizeRecordError,
+    project_atomize_review_findings,
 )
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.providers.subscription import QueryProviderError
@@ -132,8 +132,8 @@ def _overview(analysis) -> AtomizeOverviewResult:
 
 def _project(opened, snapshot) -> AtomizeAnalysisResult:
     analysis = opened.analysis
-    workbench = opened.workbench
-    findings = project_atomize_workbench_findings(analysis)
+    workbench = opened.review_record
+    findings = project_atomize_review_findings(analysis)
 
     return AtomizeAnalysisResult(
         analysis_uid=analysis.uid,
@@ -191,9 +191,7 @@ def _project(opened, snapshot) -> AtomizeAnalysisResult:
         workbench_uid=workbench.uid,
         output_context_name=workbench.output_context_name,
         application_completed=workbench.application is not None,
-        in_place_apply_allowed=(
-            workbench.output_context_name == analysis.context_name
-        ),
+        in_place_apply_allowed=(workbench.output_context_name == analysis.context_name),
         _snapshot=snapshot,
     )
 
@@ -242,16 +240,16 @@ def _saved_snapshot(
                 f"No saved atomize analysis exists for {context.name!r}."
             )
         capture = (
-            capture_atomize_session_snapshot_at_version
+            capture_atomize_execution_snapshot_at_version
             if terminal_retry
-            else capture_current_atomize_session_snapshot_at_version
+            else capture_current_atomize_execution_snapshot_at_version
         )
         snapshot = capture(
             store=runtime.store,
             analysis=analysis,
             expected_version=validated_version,
         )
-        if snapshot.workbench is None:
+        if snapshot.review_record is None:
             raise FileNotFoundError(
                 f"No saved atomize workbench exists for {context.name!r}."
             )
@@ -263,7 +261,7 @@ def _saved_snapshot(
     except (
         AtomizeApplicationError,
         AtomizeImpactError,
-        AtomizeWorkbenchError,
+        AtomizeRecordError,
         RuntimeError,
         TypeError,
         ValueError,
@@ -275,7 +273,7 @@ def _saved_proposal(snapshot, *, origin="SAVED") -> AtomizeAnalysisResult:
     return _project(
         SimpleNamespace(
             analysis=snapshot.analysis,
-            workbench=snapshot.workbench,
+            review_record=snapshot.review_record,
             origin=origin,
         ),
         snapshot,
@@ -298,8 +296,8 @@ def _applied_items(result) -> tuple[AtomizeAppliedItemResult, ...]:
 
 def _adopt_terminal_retry(
     runtime: ClientRuntime,
-    snapshot: AtomizeSessionSnapshot,
-) -> AtomizeSessionSnapshot:
+    snapshot: AtomizeExecutionSnapshot,
+) -> AtomizeExecutionSnapshot:
     """Adopt only the terminal receipt added to one exact reviewed snapshot."""
 
     current_analysis = runtime.store.load_atomize_analysis(
@@ -312,16 +310,16 @@ def _adopt_terminal_retry(
     )
     if (
         current_analysis == snapshot.analysis
-        and snapshot.workbench is not None
-        and snapshot.workbench.application is None
+        and snapshot.review_record is not None
+        and snapshot.review_record.application is None
         and current_workbench is not None
         and current_workbench.application is not None
-        and replace(current_workbench, application=None) == snapshot.workbench
+        and replace(current_workbench, application=None) == snapshot.review_record
     ):
-        return capture_atomize_session_snapshot(
+        return capture_atomize_execution_snapshot(
             store=runtime.store,
             analysis=current_analysis,
-            expected_workbench=current_workbench,
+            expected_review_record=current_workbench,
         )
     return snapshot
 
@@ -339,17 +337,13 @@ def open_atomize_analysis(
     if context_name is not None and (
         not isinstance(context_name, str) or not context_name.strip()
     ):
-        raise AtomizeInputError(
-            "context_name must be nonblank text when supplied."
-        )
+        raise AtomizeInputError("context_name must be nonblank text when supplied.")
     if not isinstance(refresh, bool) or not isinstance(use_prepared, bool):
         raise AtomizeInputError("Atomize analysis controls must be booleans.")
     if memory_selector is not None and (
         not isinstance(memory_selector, str) or not memory_selector.strip()
     ):
-        raise AtomizeInputError(
-            "memory_selector must be nonblank text when supplied."
-        )
+        raise AtomizeInputError("memory_selector must be nonblank text when supplied.")
     context = _load_context(runtime, context_name)
     try:
         opened = execute_atomize_analysis_open(
@@ -367,10 +361,10 @@ def open_atomize_analysis(
             store=runtime.store,
             provider_factory=lambda: _provider(runtime),
         )
-        snapshot = capture_atomize_session_snapshot(
+        snapshot = capture_atomize_execution_snapshot(
             store=runtime.store,
             analysis=opened.analysis,
-            expected_workbench=opened.workbench,
+            expected_review_record=opened.review_record,
         )
         return _project(opened, snapshot)
     except AtomizeProviderFailure:
@@ -387,7 +381,7 @@ def open_atomize_analysis(
         AtomizeAnalysisApplicationError,
         AtomizeApplicationError,
         AtomizeImpactError,
-        AtomizeWorkbenchError,
+        AtomizeRecordError,
         RuntimeError,
         TypeError,
         ValueError,
@@ -404,10 +398,11 @@ def apply_atomize_as_is(
     if not isinstance(analysis, AtomizeAnalysisResult):
         raise AtomizeInputError("analysis must be an AtomizeAnalysisResult.")
     snapshot = analysis._snapshot
-    if (
-        not isinstance(snapshot, AtomizeSessionSnapshot)
-        or analysis.origin not in {"SAVED", "EXACT_PREWARM", "PROVIDER"}
-    ):
+    if not isinstance(snapshot, AtomizeExecutionSnapshot) or analysis.origin not in {
+        "SAVED",
+        "EXACT_PREWARM",
+        "PROVIDER",
+    }:
         raise AtomizeInputError(
             "analysis is not an accepted structural Atomize proposal."
         )
@@ -415,14 +410,14 @@ def apply_atomize_as_is(
         expected = _project(
             SimpleNamespace(
                 analysis=snapshot.analysis,
-                workbench=snapshot.workbench,
+                review_record=snapshot.review_record,
                 origin=analysis.origin,
             ),
             snapshot,
         )
     except (
         AtomizeExecutionError,
-        AtomizeWorkbenchError,
+        AtomizeRecordError,
         AttributeError,
         TypeError,
         ValueError,
@@ -449,15 +444,15 @@ def apply_atomize_as_is(
     except (
         AtomizeApplicationError,
         AtomizeImpactError,
-        AtomizeWorkbenchError,
+        AtomizeRecordError,
         RuntimeError,
         TypeError,
         ValueError,
     ) as error:
         _raise_execution(error)
     try:
-        applied = execute_atomize_session_apply(
-            AtomizePersistedApplyRequest(snapshot=snapshot),
+        applied = execute_atomize_record_apply(
+            AtomizeRecordApplyRequest(snapshot=snapshot),
             store=runtime.store,
             provider_factory=lambda: _provider(runtime),
         )
@@ -532,7 +527,7 @@ def plan_atomize_output(
         )
     except OSError as error:
         raise_public(AtomizeStorageError, error)
-    except (AtomizeApplicationError, AtomizeWorkbenchError) as error:
+    except (AtomizeApplicationError, AtomizeRecordError) as error:
         _raise_execution(error)
     except (RuntimeError, TypeError, ValueError) as error:
         raise_public(AtomizeExecutionError, error)
@@ -552,7 +547,7 @@ def save_saved_atomize_as(
         expected_version=expected_version,
         terminal_retry=True,
     )
-    workbench = snapshot.workbench
+    workbench = snapshot.review_record
     assert workbench is not None
     destination = workbench.output_context_name
     if destination == context.name:
@@ -592,9 +587,7 @@ def save_saved_atomize_as(
                 else result.normal_form.dedun_group_count
             ),
             absorbed_count=(
-                0
-                if result.normal_form is None
-                else result.normal_form.absorbed_count
+                0 if result.normal_form is None else result.normal_form.absorbed_count
             ),
             normal_form_verified=result.normal_form is not None,
             application_mode=applied.audit.application_mode,

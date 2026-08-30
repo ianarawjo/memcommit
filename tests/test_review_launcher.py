@@ -15,7 +15,10 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
     SessionOpenReceipt,
     SessionPickerEntry,
 )
-from memcommit.application.operations.review.model import ReviewSession, direct_context_digest
+from memcommit.application.operations.review.model import (
+    ReviewSession,
+    direct_context_digest,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -86,7 +89,7 @@ def test_aggregate_catalog_excludes_nonterminal_execution_states(
 
     monkeypatch.setattr(
         review_sessions,
-        "atomize_session_entries",
+        "atomize_record_entries",
         lambda _store: (atomize,),
     )
     monkeypatch.setattr(

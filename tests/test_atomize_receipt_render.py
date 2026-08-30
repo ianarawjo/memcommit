@@ -11,8 +11,8 @@ from memcommit.application.operations.atomize.application import (
 _EMPTY_AUDIT = AtomizeApplicationAudit(
     application_mode="REVIEWED",
     unresolved_at_apply=(),
-    workbench_uid=None,
-    workbench_response_digest=None,
+    review_record_uid=None,
+    review_record_response_digest=None,
 )
 
 
@@ -141,8 +141,8 @@ def test_atomize_receipt_presents_each_unresolved_issue_as_one_logical_line(
                 "response_state": "OPEN",
             },
         ),
-        workbench_uid="workbench-uid",
-        workbench_response_digest="response-digest",
+        review_record_uid="review-record-uid",
+        review_record_response_digest="response-digest",
     )
 
     render_atomize_apply_result(

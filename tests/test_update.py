@@ -12,7 +12,7 @@ import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.update.command as update_command
 import memcommit.adapters.console.commands.update.render as update_render
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.terminal.components.endpoint_setup.flows import UpdateSetupReceipt
+from memcommit.adapters.console.commands.update.endpoint_setup import UpdateSetupReceipt
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionOpenReceipt,
 )
@@ -25,11 +25,15 @@ from memcommit.core.context import (
 )
 from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.application.capabilities.semantic.goal_focus import inline_goal_focus
-from memcommit.application.capabilities.semantic.goal_focus_runtime import freeze_goal_focus_operand
+from memcommit.application.capabilities.semantic.goal_focus_runtime import (
+    freeze_goal_focus_operand,
+)
 from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
-from memcommit.application.capabilities.resolution.workbench import ResolutionWorkbenchAction
+from memcommit.application.capabilities.resolution.workbench import (
+    ResolutionWorkbenchAction,
+)
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
 from memcommit.application.operations.update.model import (

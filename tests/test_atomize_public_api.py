@@ -24,9 +24,12 @@ from memcommit import (
     AtomizeStructuralApplyResult,
     MemCommitClient,
 )
-from memcommit.application.operations.atomize.domain import create_atomize_analysis, impact_atomize
+from memcommit.application.operations.atomize.domain import (
+    create_atomize_analysis,
+    impact_atomize,
+)
 from memcommit.application.operations.atomize.runtime import (
-    capture_atomize_session_snapshot,
+    capture_atomize_execution_snapshot,
 )
 from memcommit.adapters.python_api.errors import AtomizeExecutionError
 from memcommit.core.context import Memory
@@ -374,10 +377,10 @@ def test_terminal_review_output_plan_cannot_be_edited(isolated_store):
         expected_version=proposal.version,
     )
     analysis = store.load_atomize_analysis(context.uid)
-    terminal = capture_atomize_session_snapshot(
+    terminal = capture_atomize_execution_snapshot(
         store=store,
         analysis=analysis,
-        expected_workbench=store.load_atomize_workbench(analysis),
+        expected_review_record=store.load_atomize_workbench(analysis),
     )
 
     assert applied.recovered is False

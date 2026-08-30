@@ -1,11 +1,10 @@
-"""Discover exact saved Atomize work for the shared session launcher."""
+"""Discover and revalidate retained Atomize analysis/application records."""
 
 from __future__ import annotations
 
 from datetime import datetime
 from pathlib import Path
 import re
-import sys
 import uuid
 
 from memcommit.application.operations.atomize.domain import (
@@ -14,15 +13,12 @@ from memcommit.application.operations.atomize.domain import (
     atomize_analysis_matches_context,
 )
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
-    SessionNewReceipt,
-    SessionOpenReceipt,
     SessionPickerEntry,
-    choose_session,
-)
-from memcommit.adapters.console.terminal.components.operation_launcher.location import (
-    session_picker_location,
 )
 from memcommit.core.context import Context
+from memcommit.application.operations.atomize.runtime import (
+    atomize_analysis_was_applied,
+)
 from memcommit.persistence.store import MemoryStore
 from memcommit.core.context_targeting.uid_locator import (
     UidLocatorUnavailableError,
@@ -183,8 +179,7 @@ def load_saved_atomize_analysis(
 ) -> AtomizeAnalysisSession:
     """Resolve one analysis UID/prefix without falling into create/refresh."""
     candidates = tuple(
-        analysis
-        for analysis, _path in _canonical_saved_atomize_analyses(store)
+        analysis for analysis, _path in _canonical_saved_atomize_analyses(store)
     )
     try:
         return resolve_exact_or_unique_uid(
@@ -246,54 +241,6 @@ def revalidate_saved_atomize_analysis(
         )
 
 
-def atomize_analysis_was_applied(
-    store: MemoryStore,
-    context: Context,
-    analysis_uid: str,
-) -> bool:
-    """Recognize a terminal application receipt, independent of later state.
-
-    Apply is a one-shot transition for one analysis identity. Undo or later
-    edits may change the Context again, but neither makes that reviewed
-    analysis eligible for a second structural application.
-    """
-
-    return atomize_application_checkpoint_uid(store, context, analysis_uid) is not None
-
-
-def atomize_application_checkpoint_uid(
-    store: MemoryStore,
-    context: Context,
-    analysis_uid: str,
-) -> str | None:
-    """Return the exact recognized application checkpoint for presentation."""
-
-    for checkpoint in store.list_checkpoints(context.name):
-        args = checkpoint.get("args")
-        trace = args.get("trace") if isinstance(args, dict) else None
-        if not (
-            checkpoint.get("command") == "atomize"
-            and isinstance(trace, dict)
-            and args.get("analysis_uid") == analysis_uid
-            and trace.get("operation_id") == analysis_uid
-        ):
-            continue
-        snapshot = checkpoint.get("snapshot")
-        if not isinstance(snapshot, dict):
-            continue
-        try:
-            checkpoint_context = Context.from_dict(snapshot)
-        except (KeyError, TypeError):
-            continue
-        if (
-            checkpoint_context.uid == context.uid
-            and checkpoint_context.name == context.name
-            and isinstance(checkpoint.get("uid"), str)
-        ):
-            return checkpoint["uid"]
-    return None
-
-
 def atomize_workbench_was_applied(
     store: MemoryStore,
     analysis: AtomizeAnalysisSession,
@@ -334,12 +281,12 @@ def atomize_planned_output_was_applied(
     )
 
 
-def atomize_session_entries(
+def atomize_record_entries(
     store: MemoryStore,
     *,
     show_all: bool = False,
 ) -> tuple[SessionPickerEntry, ...]:
-    """Project saved Atomize artifacts without rendering source Memory text."""
+    """Project retained Atomize records without rendering source Memory text."""
     entries: list[SessionPickerEntry] = []
     for analysis, path in _canonical_saved_atomize_analyses(store):
         status = "CURRENT"
@@ -371,7 +318,7 @@ def atomize_session_entries(
         elif status == "CURRENT" and workbench is None:
             status = "ANALYSIS ONLY"
         issue_count = len(workbench.issues) if workbench is not None else 0
-        argv = ("mem", "atomize", "--context", analysis.context_name)
+        argv = ("mem", "impact", "atomize", "--session", analysis.uid)
         if show_all:
             argv += ("--all",)
         entries.append(
@@ -410,33 +357,3 @@ def atomize_session_entries(
             )
         )
     return tuple(entries)
-
-
-def choose_atomize_session(
-    store: MemoryStore,
-    *,
-    show_all: bool = False,
-) -> SessionOpenReceipt | SessionNewReceipt | None:
-    """Return an exact launcher receipt; the picker itself creates nothing."""
-    entries = atomize_session_entries(store, show_all=show_all)
-    if not entries and not (sys.stdin.isatty() and sys.stdout.isatty()):
-        return None
-    receipt = choose_session(
-        entries,
-        title="MEM ATOMIZE · SESSIONS",
-        new_receipt=SessionNewReceipt(kind="atomize", argv=("mem", "atomize")),
-        location=session_picker_location(store),
-    )
-    if receipt is None:
-        return None
-    if isinstance(receipt, SessionNewReceipt):
-        if receipt.kind != "atomize" or receipt.argv != ("mem", "atomize"):
-            raise ValueError("Atomize session picker returned an invalid receipt.")
-        return receipt
-    if not isinstance(receipt, SessionOpenReceipt) or receipt.kind != "atomize":
-        raise ValueError("Atomize session picker returned an invalid receipt.")
-    entry_by_key = {entry.key: entry for entry in entries}
-    selected = entry_by_key.get(receipt.key)
-    if selected is None or receipt.argv != selected.reopen_argv:
-        raise ValueError("Atomize session picker returned a forged receipt.")
-    return receipt

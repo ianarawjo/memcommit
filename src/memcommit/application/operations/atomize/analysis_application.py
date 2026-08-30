@@ -11,9 +11,9 @@ from memcommit.application.operations.atomize.domain import (
     AtomizeProvider,
     atomize_analysis_matches_context,
 )
-from memcommit.application.operations.atomize.workbench import (
-    AtomizeWorkbenchSession,
-    atomize_workbench_issue_projection,
+from memcommit.application.operations.atomize.records import (
+    AtomizeReviewRecord,
+    atomize_review_issue_projection,
 )
 from memcommit.core.context import Context
 
@@ -80,10 +80,10 @@ class AtomizeAnalysisOpenRequest:
 
 @dataclass(frozen=True)
 class AtomizeAnalysisOpenResult:
-    """One durable analysis/workbench pair and its semantic origin."""
+    """One durable analysis/review-record pair and its semantic origin."""
 
     analysis: AtomizeAnalysisSession
-    workbench: AtomizeWorkbenchSession
+    review_record: AtomizeReviewRecord
     origin: AtomizeAnalysisOrigin
 
     @property
@@ -112,7 +112,7 @@ def _validate_result(
     result: AtomizeAnalysisOpenResult,
 ) -> AtomizeAnalysisOpenResult:
     analysis = result.analysis
-    workbench = result.workbench
+    review_record = result.review_record
     if result.origin not in {"SAVED", "EXACT_PREWARM", "PROVIDER"}:
         raise AtomizeAnalysisApplicationError(
             "Atomize analysis returned an unknown origin."
@@ -125,19 +125,19 @@ def _validate_result(
         raise AtomizeAnalysisApplicationError(
             "Atomize analysis returned a result outside the requested Context."
         )
-    if not workbench.matches_analysis(
+    if not review_record.matches_analysis(
         analysis_uid=analysis.uid,
         context_uid=analysis.context_uid,
         context_name=analysis.context_name,
         context_digest=analysis.context_digest,
-        issues=atomize_workbench_issue_projection(analysis),
+        issues=atomize_review_issue_projection(analysis),
     ):
         raise AtomizeAnalysisApplicationError(
-            "Atomize analysis returned a mismatched workbench."
+            "Atomize analysis returned a mismatched review record."
         )
     if (
         request.output_context_name is not None
-        and workbench.output_context_name != request.output_context_name
+        and review_record.output_context_name != request.output_context_name
     ):
         raise AtomizeAnalysisApplicationError(
             "Atomize analysis returned a different Output plan."

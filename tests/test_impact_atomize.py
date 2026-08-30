@@ -18,8 +18,7 @@ from memcommit.application.operations.atomize.domain import (
     sentence_like_segment_count,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.atomize.sessions import (
-    atomize_session_entries,
+from memcommit.adapters.console.commands.atomize.records import (
     revalidate_saved_atomize_analysis,
 )
 from memcommit.core.context import (
@@ -109,8 +108,7 @@ class AtomizeNormalFormProvider:
         if operation == "find_duplicates":
             payload = json.loads(prompt.split("QUALITY FIND PAYLOAD:\n", 1)[1])
             by_content = {
-                item["content"]: item["candidate_id"]
-                for item in payload["memories"]
+                item["content"]: item["candidate_id"] for item in payload["memories"]
             }
             findings = []
             if "hi" in by_content and "hi." in by_content:
@@ -253,7 +251,7 @@ def test_focused_atomize_keeps_neighbors_context_only_and_applies_selected_memor
     ]
 
 
-def test_focused_atomize_save_as_preserves_unselected_memories(
+def test_focused_atomize_cli_preserves_unselected_memories(
     isolated_store,
     monkeypatch,
 ):
@@ -291,25 +289,13 @@ def test_focused_atomize_save_as_preserves_unselected_memories(
         lambda: AtomizeProvider(respond),
     )
 
-    preview = runner.invoke(
+    applied = runner.invoke(
         app,
         ["atomize", "--memory", selected.uid[:8]],
     )
-    applied = runner.invoke(
-        app,
-        ["atomize", "--save-as", "focused/atomize-derived"],
-    )
 
-    assert preview.exit_code == 0, preview.output
     assert applied.exit_code == 0, applied.output
     assert [item.content for item in store.load_direct(source.name).iter_items()] == [
-        neighbor.content,
-        selected.content,
-    ]
-    assert [
-        item.content
-        for item in store.load_direct("focused/atomize-derived").iter_items()
-    ] == [
         neighbor.content,
         "Parking closes.",
         "The stairwell stays open.",
@@ -345,15 +331,16 @@ def test_atomize_publishes_split_and_dedun_as_one_undo_unit(
     )
 
     preview = runner.invoke(app, ["impact", "atomize"])
-    applied = runner.invoke(app, ["atomize", "--save"])
+    applied = runner.invoke(app, ["atomize"])
 
     assert preview.exit_code == 0, preview.output
     assert applied.exit_code == 0, applied.output
     assert "DEDUN GROUPS 1 · ABSORBED 1" in applied.output
     assert "NORMAL FORM · SEMANTIC CHUNK + DEDUN · VERIFIED" in applied.output
-    assert [
-        item.content for item in store.load_direct(source.name).iter_items()
-    ] == ["hi", "Bye."]
+    assert [item.content for item in store.load_direct(source.name).iter_items()] == [
+        "hi",
+        "Bye.",
+    ]
     atomize_checkpoints = [
         checkpoint
         for checkpoint in store.list_checkpoints(source.name)
@@ -400,7 +387,7 @@ def test_atomize_normal_form_failure_publishes_no_partial_split(
     )
 
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    rejected = runner.invoke(app, ["atomize", "--save"])
+    rejected = runner.invoke(app, ["atomize"])
 
     assert rejected.exit_code == 1
     assert "did not reach semantic chunk normal form" in rejected.stderr
@@ -432,7 +419,7 @@ def test_focused_atomize_dedun_prefers_unchanged_neighbor(
         app,
         ["impact", "atomize", "--memory", selected.uid[:8]],
     )
-    applied = runner.invoke(app, ["atomize", "--save"])
+    applied = runner.invoke(app, ["atomize"])
 
     assert preview.exit_code == 0, preview.output
     assert applied.exit_code == 0, applied.output
@@ -470,9 +457,9 @@ def test_impact_atomize_auto_types_bare_memory_and_finds_its_owner(
     assert [item["content"] for item in provider.calls[0][3]["memories"]] == [
         selected.content
     ]
-    assert [
-        item["content"] for item in provider.calls[0][3]["context_evidence"]
-    ] == [neighbor.content]
+    assert [item["content"] for item in provider.calls[0][3]["context_evidence"]] == [
+        neighbor.content
+    ]
     assert store.current_context_name() == current.name
 
 
@@ -494,9 +481,12 @@ def test_atomize_overview_prompt_requires_short_report_paragraphs() -> None:
         ]["text"]["description"]
     )
     for section in ("understood", "changed", "unresolved"):
-        assert output_schema["properties"]["overview"]["properties"][section][
-            "properties"
-        ]["source_ids"]["minItems"] == 1
+        assert (
+            output_schema["properties"]["overview"]["properties"][section][
+                "properties"
+            ]["source_ids"]["minItems"]
+            == 1
+        )
 
 
 def test_atomize_overview_schema_does_not_admit_ungrounded_report_text() -> None:
@@ -1241,7 +1231,7 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
     checkpoints_before = len(store.list_checkpoints(ctx.name))
     context_before_apply = store.load_direct(ctx.name).to_dict()
 
-    applied = runner.invoke(app, ["atomize", "--save"])
+    applied = runner.invoke(app, ["atomize"])
 
     assert applied.exit_code == 0, applied.output
     assert "EFFECTS · SPLIT 1 · CHILDREN 2 · KEEP 2" in applied.output
@@ -1273,14 +1263,12 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
         "PRESERVE",
     ]
 
-    repeated = runner.invoke(app, ["atomize", "--save"])
+    repeated = runner.invoke(app, ["atomize"])
     assert repeated.exit_code == 0
-    assert "already applied" in repeated.output
+    assert "RECOVERY STATUS · prior checkpoint recovered" in repeated.output
     assert len(store.list_checkpoints(ctx.name)) == checkpoints_before + 1
 
-    traced = runner.invoke(
-        app, ["trace", composite.uid[:8], "--verbose", "--plain"]
-    )
+    traced = runner.invoke(app, ["trace", composite.uid[:8], "--verbose", "--plain"])
     assert traced.exit_code == 0
     assert "SPLIT · RECORDED" in traced.output
     assert "ATOMIZE_PREVIEW  APPLIED" in traced.output
@@ -1298,9 +1286,9 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
     assert projected_applied
 
     checkpoints_after_undo = len(store.list_checkpoints(ctx.name))
-    repeated_after_undo = runner.invoke(app, ["atomize", "--save"])
+    repeated_after_undo = runner.invoke(app, ["atomize"])
     assert repeated_after_undo.exit_code == 0, repeated_after_undo.output
-    assert "already applied" in repeated_after_undo.output
+    assert "RECOVERY STATUS · prior checkpoint recovered" in repeated_after_undo.output
     assert len(store.list_checkpoints(ctx.name)) == checkpoints_after_undo
     assert store.load_direct(ctx.name).to_dict() == context_before_apply
 
@@ -1317,429 +1305,6 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
         "undo",
         "atomize",
     ]
-
-
-def test_planned_atomize_output_is_shared_and_save_materializes_it_once(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    source = ops.init("planned/input")
-    ops.add(source, "The entrance closes at 5 p.m.")
-    store.save(source)
-    store.set_current(source.name)
-
-    provider = AtomizeProvider(
-        lambda payload: {"items": [_item(payload["memories"][0]["candidate_id"])]}
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
-        lambda: provider,
-    )
-
-    opened = runner.invoke(
-        app,
-        [
-            "atomize",
-            "--context",
-            source.name,
-            "--output",
-            "planned/output",
-        ],
-    )
-    assert opened.exit_code == 0, opened.output
-    analysis = store.load_atomize_analysis(source.uid)
-    assert analysis is not None
-    workbench = store.load_atomize_workbench(analysis)
-    assert workbench is not None
-    assert workbench.output_context_name == "planned/output"
-    assert not store.context_exists("planned/output")
-
-    applied = runner.invoke(
-        app,
-        ["atomize", "--context", source.name, "--save"],
-    )
-    assert applied.exit_code == 0, applied.output
-    assert "ATOMIZE APPLIED · planned/output" in applied.output
-    assert "CONTEXT · CREATED AND CURRENT · planned/output" in applied.output
-    assert store.load_direct(source.name).memories
-    output = store.load_direct("planned/output")
-    assert store.load_atomize_analysis(output.uid).uid == analysis.uid
-    terminal_workbench = store.load_atomize_workbench(analysis)
-    assert terminal_workbench is not None
-    assert terminal_workbench.application is not None
-    assert terminal_workbench.application.output_context_name == "planned/output"
-    entries = atomize_session_entries(store)
-    assert len(entries) == 1
-    assert entries[0].key == analysis.uid
-    assert entries[0].status == "APPLIED"
-    assert "planned/input → planned/output" in entries[0].subtitle
-
-    reopened = runner.invoke(
-        app,
-        ["atomize", "--context", source.name],
-    )
-    assert reopened.exit_code == 0, reopened.output
-    assert "already applied" in reopened.output
-
-    repeated = runner.invoke(
-        app,
-        ["atomize", "--context", source.name, "--save"],
-    )
-    assert repeated.exit_code == 0, repeated.output
-    assert "already applied" in repeated.output
-    assert [call[1] for call in provider.calls] == [
-        "impact_atomize",
-        "impact_atomize",
-    ]
-
-    diverged_output = store.load_direct("planned/output")
-    ops.add(diverged_output, "A local follow-up was added after Atomize.")
-    store.save(diverged_output)
-    checkpoints_after_divergence = len(store.list_checkpoints("planned/output"))
-
-    repeated_after_divergence = runner.invoke(
-        app,
-        ["atomize", "--context", source.name, "--save"],
-    )
-
-    assert repeated_after_divergence.exit_code == 0, repeated_after_divergence.output
-    assert "already applied" in repeated_after_divergence.output
-    assert len(store.list_checkpoints("planned/output")) == checkpoints_after_divergence
-    assert atomize_session_entries(store)[0].status == "APPLIED"
-    assert len(provider.calls) == 2
-
-
-def test_atomize_save_as_rejects_conflicts_and_preserves_published_failure(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    source = ops.init("source")
-    memory = ops.add(source, "First fact. Second fact.")
-    store.save(
-        source,
-        AutoCheckpoint(
-            command="init",
-            args={"name": source.name},
-            description="Initialized source",
-        ),
-    )
-    store.set_current(source.name)
-
-    def respond(payload):
-        return {
-            "items": [
-                _item(
-                    payload["memories"][0]["candidate_id"],
-                    "COMPOSITE",
-                    children=[
-                        {
-                            "content": "First fact.",
-                            "source_spans": ["First fact"],
-                        },
-                        {
-                            "content": "Second fact.",
-                            "source_spans": ["Second fact"],
-                        },
-                    ],
-                )
-            ]
-        }
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
-        lambda: AtomizeProvider(respond),
-    )
-    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    source_bytes = store._context_file(source.name).read_bytes()
-    existing = ops.init("existing")
-    store.save(existing)
-
-    mutually_exclusive = runner.invoke(
-        app,
-        ["atomize", "--save", "--save-as", "new"],
-    )
-    occupied = runner.invoke(
-        app,
-        ["atomize", "--save-as", existing.name],
-    )
-
-    assert mutually_exclusive.exit_code == 2
-    assert "either --save or --save-as" in mutually_exclusive.stderr
-    assert occupied.exit_code == 1
-    assert "already exists" in occupied.stderr
-    assert store.current_context_name() == source.name
-    assert store._context_file(source.name).read_bytes() == source_bytes
-
-    def fail_apply(*args, **kwargs):
-        raise AtomizeImpactError("injected apply failure")
-
-    monkeypatch.setattr(
-        "memcommit.application.operations.atomize.normal_form.apply_atomize_analysis",
-        fail_apply,
-    )
-    failed = runner.invoke(app, ["atomize", "--save-as", "rolled-back"])
-
-    assert failed.exit_code == 1
-    assert "injected apply failure" in failed.stderr
-    assert not store.context_exists("rolled-back")
-    assert store.list_context_names() == ["existing", "source"]
-    assert not any(store.atomize_analyses_dir.glob("*.json")) or list(
-        store.atomize_analyses_dir.glob("*.json")
-    ) == [store._atomize_analysis_path(source.uid)]
-    assert store.current_context_name() == source.name
-    assert store._context_file(source.name).read_bytes() == source_bytes
-    assert memory.uid in store.load_direct(source.name).memories
-
-
-def test_atomize_save_as_preserves_destination_when_final_switch_fails(
-    isolated_store,
-    monkeypatch,
-):
-    import memcommit.persistence.store as store_module
-
-    store = MemoryStore()
-    source = ops.init("switch-source")
-    memory = ops.add(source, "First fact. Second fact.")
-    store.save(source)
-    store.set_current(source.name)
-
-    def respond(payload):
-        return {
-            "items": [
-                _item(
-                    payload["memories"][0]["candidate_id"],
-                    "COMPOSITE",
-                    children=[
-                        {
-                            "content": "First fact.",
-                            "source_spans": ["First fact"],
-                        },
-                        {
-                            "content": "Second fact.",
-                            "source_spans": ["Second fact"],
-                        },
-                    ],
-                )
-            ]
-        }
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
-        lambda: AtomizeProvider(respond),
-    )
-    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    source_bytes = store._context_file(source.name).read_bytes()
-    state_bytes = store_module.STATE_FILE.read_bytes()
-    original_write = store_module._write_json_atomic
-
-    def fail_state_switch(path, data):
-        if path == store_module.STATE_FILE and data.get("current") == "derived":
-            raise OSError("injected state switch failure")
-        return original_write(path, data)
-
-    monkeypatch.setattr(
-        store_module,
-        "_write_json_atomic",
-        fail_state_switch,
-    )
-    result = runner.invoke(app, ["atomize", "--save-as", "derived"])
-
-    assert result.exit_code == 1
-    assert "injected state switch failure" in result.stderr
-    assert "final Atomize output and receipt are retained" in result.stderr
-    assert store.context_exists("derived")
-    assert len(store.list_checkpoints("derived")) == 1
-    assert store.current_context_name() == source.name
-    assert store_module.STATE_FILE.read_bytes() == state_bytes
-    assert store._context_file(source.name).read_bytes() == source_bytes
-    assert memory.uid in store.load_direct(source.name).memories
-
-
-def test_atomize_save_as_retry_completes_receipt_without_duplicate_checkpoint(
-    isolated_store,
-    monkeypatch,
-):
-    from memcommit.application.operations.atomize.runtime import (
-        MemoryStoreAtomizeSessionRepository,
-    )
-
-    store = MemoryStore()
-    source = ops.init("retry-source")
-    ops.add(source, "First fact. Second fact.")
-    store.save(source)
-    store.set_current(source.name)
-
-    def respond(payload):
-        return {
-            "items": [
-                _item(
-                    payload["memories"][0]["candidate_id"],
-                    "COMPOSITE",
-                    children=[
-                        {
-                            "content": "First fact.",
-                            "source_spans": ["First fact"],
-                        },
-                        {
-                            "content": "Second fact.",
-                            "source_spans": ["Second fact"],
-                        },
-                    ],
-                )
-            ]
-        }
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
-        lambda: AtomizeProvider(respond),
-    )
-    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    analysis = store.load_atomize_analysis(source.uid)
-    assert analysis is not None
-    original = MemoryStoreAtomizeSessionRepository.replace_application
-    failed_once = False
-
-    def fail_once(repository, *args, **kwargs):
-        nonlocal failed_once
-        if not failed_once:
-            failed_once = True
-            raise OSError("injected receipt failure")
-        return original(repository, *args, **kwargs)
-
-    monkeypatch.setattr(
-        MemoryStoreAtomizeSessionRepository,
-        "replace_application",
-        fail_once,
-    )
-
-    failed = runner.invoke(app, ["atomize", "--save-as", "retry-output"])
-
-    assert failed.exit_code == 1
-    assert "injected receipt failure" in failed.stderr
-    assert "retained" in failed.stderr
-    assert store.context_exists("retry-output")
-    first_checkpoints = store.list_checkpoints("retry-output")
-    assert [checkpoint["command"] for checkpoint in first_checkpoints] == [
-        "atomize"
-    ]
-    workbench = store.load_atomize_workbench(analysis)
-    assert workbench is not None
-    assert workbench.application is None
-    assert store.current_context_name() == source.name
-
-    retried = runner.invoke(
-        app,
-        ["atomize", "--context", source.name, "--save-as", "retry-output"],
-    )
-
-    assert retried.exit_code == 0, retried.output
-    assert "RECOVERY STATUS · prior checkpoint recovered" in retried.output
-    assert store.list_checkpoints("retry-output") == first_checkpoints
-    workbench = store.load_atomize_workbench(analysis)
-    assert workbench is not None
-    assert workbench.application is not None
-    assert workbench.application.checkpoint_uid == first_checkpoints[0]["uid"]
-    assert store.current_context_name() == "retry-output"
-
-
-def test_atomize_save_as_preserves_concurrent_current_selection(
-    isolated_store,
-    monkeypatch,
-):
-    from memcommit.application.operations.atomize.domain import apply_atomize_analysis as apply_analysis
-
-    store = MemoryStore()
-    source = ops.init("source")
-    ops.add(source, "First fact. Second fact.")
-    store.save(source)
-    store.save(ops.init("other"))
-    store.set_current(source.name)
-
-    def respond(payload):
-        return {
-            "items": [
-                _item(
-                    payload["memories"][0]["candidate_id"],
-                    "COMPOSITE",
-                    children=[
-                        {
-                            "content": "First fact.",
-                            "source_spans": ["First fact"],
-                        },
-                        {
-                            "content": "Second fact.",
-                            "source_spans": ["Second fact"],
-                        },
-                    ],
-                )
-            ]
-        }
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
-        lambda: AtomizeProvider(respond),
-    )
-    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-
-    def switch_then_apply(context, analysis):
-        store.set_current("other")
-        return apply_analysis(context, analysis)
-
-    monkeypatch.setattr(
-        "memcommit.application.operations.atomize.normal_form.apply_atomize_analysis",
-        switch_then_apply,
-    )
-
-    result = runner.invoke(app, ["atomize", "--save-as", "derived"])
-
-    assert result.exit_code == 1
-    assert "current Context changed" in result.stderr
-    assert "final Atomize output and receipt are retained" in result.stderr
-    assert store.current_context_name() == "other"
-    assert store.context_exists("derived")
-
-
-def test_atomize_save_as_does_not_overwrite_concurrent_destination(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    source = ops.init("source")
-    ops.add(source, "One atomic fact.")
-    store.save(source)
-    store.set_current(source.name)
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
-        lambda: AtomizeProvider(_all_atomic),
-    )
-    assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    original_projection = ops._atomize_projection
-    competitor = None
-
-    def create_competitor(context, name):
-        nonlocal competitor
-        result = original_projection(context, name)
-        competitor = ops.init(name)
-        ops.add(competitor, "concurrent owner")
-        store.create_context(competitor)
-        return result
-
-    monkeypatch.setattr(
-        "memcommit.application.operations.atomize.runtime.ops._atomize_projection",
-        create_competitor,
-    )
-
-    result = runner.invoke(app, ["atomize", "--save-as", "derived"])
-
-    assert result.exit_code == 1
-    assert "already exists" in result.stderr
-    assert competitor is not None
-    loaded = store.load_direct("derived")
-    assert loaded.uid == competitor.uid
-    assert [item.content for item in loaded.iter_items()] == ["concurrent owner"]
-    assert store.current_context_name() == source.name
 
 
 def test_atomize_split_fails_closed_when_catalog_is_incomplete(
@@ -1783,7 +1348,7 @@ def test_atomize_split_fails_closed_when_catalog_is_incomplete(
     malformed.parent.mkdir()
     malformed.write_text("{", encoding="utf-8")
 
-    result = runner.invoke(app, ["atomize", "--save"])
+    result = runner.invoke(app, ["atomize"])
 
     assert result.exit_code == 1
     assert "invalid" in result.stderr.lower()
@@ -1820,7 +1385,7 @@ def test_atomize_save_rejects_unavailable_embedded_context_without_data_loss(
     before = store._context_file(parent.name).read_bytes()
     checkpoints = store.list_checkpoints(parent.name)
 
-    result = runner.invoke(app, ["atomize", "--save"])
+    result = runner.invoke(app, ["atomize"])
 
     assert result.exit_code == 1
     assert "unavailable embedded Context reference" in result.stderr
@@ -1831,13 +1396,7 @@ def test_atomize_save_rejects_unavailable_embedded_context_without_data_loss(
 
 @pytest.mark.parametrize(
     ("apply_args", "expected_name"),
-    [
-        (["atomize", "--save"], "interleaved"),
-        (
-            ["atomize", "--save-as", "interleaved-derived"],
-            "interleaved-derived",
-        ),
-    ],
+    [(["atomize"], "interleaved")],
 )
 def test_atomize_apply_uses_direct_memory_ordinals_around_embedded_contexts(
     isolated_store,
@@ -1931,7 +1490,7 @@ def test_atomize_revert_keep_does_not_rearm_an_applied_analysis(
         lambda: AtomizeProvider(respond),
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
-    assert runner.invoke(app, ["atomize", "--save"]).exit_code == 0
+    assert runner.invoke(app, ["atomize"]).exit_code == 0
     init_uid = next(
         checkpoint["uid"]
         for checkpoint in store.list_checkpoints(ctx.name)
@@ -1943,12 +1502,12 @@ def test_atomize_revert_keep_does_not_rearm_an_applied_analysis(
 
     inspected = runner.invoke(app, ["atomize"])
     assert inspected.exit_code == 0, inspected.output
-    assert "already applied" in inspected.output
+    assert "RECOVERY STATUS · prior checkpoint recovered" in inspected.output
 
     checkpoints_after_revert = len(store.list_checkpoints(ctx.name))
-    rejected_reapply = runner.invoke(app, ["atomize", "--save"])
+    rejected_reapply = runner.invoke(app, ["atomize"])
     assert rejected_reapply.exit_code == 0, rejected_reapply.output
-    assert "already applied" in rejected_reapply.output
+    assert "RECOVERY STATUS · prior checkpoint recovered" in rejected_reapply.output
     assert len(store.list_checkpoints(ctx.name)) == checkpoints_after_revert
     assert source.uid in store.load_direct(ctx.name).memories
 
@@ -2088,7 +1647,7 @@ def test_atomize_save_blocks_stale_analysis_and_inbound_split_reference(
     context_before = store._context_file(source.name).read_bytes()
     checkpoints_before = store.list_checkpoints(source.name)
 
-    blocked = runner.invoke(app, ["atomize", "--save"])
+    blocked = runner.invoke(app, ["atomize"])
 
     assert blocked.exit_code == 1
     assert "inbound memory references" in blocked.stderr
@@ -2108,178 +1667,7 @@ def test_atomize_save_blocks_stale_analysis_and_inbound_split_reference(
         ),
     )
 
-    stale = runner.invoke(app, ["atomize", "--save"])
+    stale = runner.invoke(app, ["atomize"])
 
     assert stale.exit_code == 1
     assert "stale" in stale.stderr
-
-
-def test_atomize_save_as_is_one_creation_command_with_lifecycle_undo_redo(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    source = ops.init("source")
-    atomic = ops.add(source, "The entrance closes at 5 p.m.")
-    composite = ops.add(source, "The store closes. The café remains open.")
-    query_ref = ops.reference_query_context(
-        "organization/wiki",
-        "7a9f2582-86aa-4650-8d72-287e82cc7942",
-        source,
-    )
-    child = ops.init("shared/policy")
-    ops.add(child, "The policy remains available.")
-    store.save(child)
-    ops.embed(child, source)
-    store.save(
-        source,
-        AutoCheckpoint(
-            command="init",
-            args={"name": source.name},
-            description="Initialized source",
-        ),
-    )
-    store.set_current(source.name)
-
-    observer = ops.init("observer")
-    reference = ops.embed_memory(composite, source, observer)
-    store.save(observer)
-
-    def respond(payload):
-        ids = {
-            memory["content"]: memory["candidate_id"] for memory in payload["memories"]
-        }
-        return {
-            "items": [
-                _item(ids[atomic.content]),
-                _item(
-                    ids[composite.content],
-                    "COMPOSITE",
-                    children=[
-                        {
-                            "content": "The store closes.",
-                            "source_spans": ["The store closes"],
-                        },
-                        {
-                            "content": "The café remains open.",
-                            "source_spans": ["The café remains open"],
-                        },
-                    ],
-                ),
-            ]
-        }
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
-        lambda: AtomizeProvider(respond),
-    )
-    monkeypatch.setattr(
-        MemoryStore,
-        "load_query_source",
-        lambda *args, **kwargs: pytest.fail(
-            "atomize save-as must not open query-only content"
-        ),
-    )
-    preview = runner.invoke(app, ["impact", "atomize"])
-    assert preview.exit_code == 0, preview.output
-    source_bytes = store._context_file(source.name).read_bytes()
-    source_checkpoints = store.list_checkpoints(source.name)
-    source_analysis = store.load_atomize_analysis(source.uid)
-
-    saved = runner.invoke(
-        app,
-        ["atomize", "--save-as", "derived/atomized"],
-    )
-
-    assert saved.exit_code == 0, saved.output
-    assert "ATOMIZE APPLIED · derived/atomized" in saved.output
-    assert "CONTEXT · CREATED AND CURRENT · derived/atomized" in saved.output
-    assert store.current_context_name() == "derived/atomized"
-    assert store._context_file(source.name).read_bytes() == source_bytes
-    assert store.list_checkpoints(source.name) == source_checkpoints
-    assert isinstance(
-        store.load_direct(source.name).memories[composite.uid],
-        Memory,
-    )
-
-    destination = store.load("derived/atomized")
-    assert destination.uid != source.uid
-    direct_memories = [
-        item for item in destination.iter_items() if isinstance(item, Memory)
-    ]
-    assert [item.content for item in direct_memories] == [
-        atomic.content,
-        "The store closes.",
-        "The café remains open.",
-    ]
-    assert direct_memories[0].uid == atomic.uid
-    assert composite.uid not in {item.uid for item in direct_memories}
-    assert all(
-        item.uid not in {atomic.uid, composite.uid} for item in direct_memories[1:]
-    )
-    assert any(
-        isinstance(item, QueryContextRef) and item.uid == query_ref.uid
-        for item in destination.iter_items()
-    )
-    assert any(
-        isinstance(item, Context) and item.name == child.name
-        for item in destination.iter_items()
-    )
-    assert [
-        checkpoint["command"] for checkpoint in store.list_checkpoints(destination.name)
-    ] == ["atomize"]
-    destination_after_apply = destination.to_dict()
-    destination_uid = destination.uid
-    checkpoint_uid = store.list_checkpoints(destination.name)[0]["uid"]
-
-    destination_analysis = store.load_atomize_analysis(destination.uid)
-    assert source_analysis is not None
-    assert destination_analysis is not None
-    assert destination_analysis.uid == source_analysis.uid
-    assert destination_analysis.context_uid == destination.uid
-    assert store.load_atomize_analysis(source.uid).context_uid == source.uid
-
-    observer_ref = store.load(observer.name).memories[reference.uid]
-    assert isinstance(observer_ref, MemoryRef)
-    assert observer_ref.target_context_uid == source.uid
-    assert observer_ref.target is not None
-    assert observer_ref.target.uid == composite.uid
-
-    traced = runner.invoke(
-        app,
-        [
-            "trace",
-            composite.uid[:8],
-            "--context",
-            destination.name,
-                "--verbose",
-                "--plain",
-            ],
-    )
-    assert traced.exit_code == 0, traced.output
-    assert "CREATED+SPLIT · RECORDED" in traced.output
-    assert "ATOMIZE_PREVIEW  APPLIED" in traced.output
-
-    undone = runner.invoke(app, ["undo"])
-    assert undone.exit_code == 0, undone.output
-    assert not store.context_exists(destination.name)
-    assert store.current_context_name() == source.name
-    source_workbench = store.load_atomize_workbench(source_analysis)
-    assert source_workbench is not None
-    assert source_workbench.application is None
-
-    redone = runner.invoke(app, ["redo"])
-    assert redone.exit_code == 0, redone.output
-    assert store.load_direct(destination.name).to_dict() == destination_after_apply
-    assert store.load_direct(destination.name).uid == destination_uid
-    restored_analysis = store.load_atomize_analysis(destination_uid)
-    assert restored_analysis is not None
-    assert restored_analysis.uid == source_analysis.uid
-    source_workbench = store.load_atomize_workbench(source_analysis)
-    assert source_workbench is not None
-    assert source_workbench.application is not None
-    assert source_workbench.application.checkpoint_uid == checkpoint_uid
-    assert [
-        checkpoint["command"]
-        for checkpoint in store.list_checkpoints(destination.name)[:3]
-    ] == ["redo", "undo", "atomize"]

@@ -1,5 +1,11 @@
 # `mem atomize` workbench design rationale
 
+> **Historical design (superseded 2026-08-30):** Atomize no longer has an
+> executable console workbench. Impact owns the non-applying analysis UI,
+> Review owns the read-only applied report, and `mem atomize [TARGET]` applies
+> immediately in place. See
+> [`atomize-one-shot-execution-design-rationale.md`](atomize-one-shot-execution-design-rationale.md).
+
 ## 2026-08-29 responsibility revision
 
 Atomize findings are now read-only operation evidence. The workbench no longer

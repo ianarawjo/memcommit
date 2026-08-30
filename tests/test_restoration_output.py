@@ -10,7 +10,10 @@ from click.testing import CliRunner as ClickCliRunner
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.capabilities.retained_history.command_history import CommandContextChange, ContextCommandUnit
+from memcommit.application.capabilities.retained_history.command_history import (
+    CommandContextChange,
+    ContextCommandUnit,
+)
 from memcommit.adapters.console.terminal.components.restoration_receipt import (
     _render_impact,
     _restored_command,
@@ -133,15 +136,21 @@ def test_revert_reports_target_action_and_removed_content(isolated_store):
         ("mem undo", SemanticColorRole.UNDO),
         ("mem revert", SemanticColorRole.UNDO),
     ):
-        assert click.style(
-            text,
-            fg=semantic_color_rgb(role),
-            bold=True,
-        ) in result.output
-    assert click.style(
-        '"remove this"',
-        fg=semantic_color_rgb(SemanticColorRole.REMOVE),
-    ) in result.output
+        assert (
+            click.style(
+                text,
+                fg=semantic_color_rgb(role),
+                bold=True,
+            )
+            in result.output
+        )
+    assert (
+        click.style(
+            '"remove this"',
+            fg=semantic_color_rgb(SemanticColorRole.REMOVE),
+        )
+        in result.output
+    )
 
 
 def test_revert_impact_colors_typed_markers_without_changing_plain_text():
@@ -199,15 +208,15 @@ def test_revert_impact_colors_typed_markers_without_changing_plain_text():
         ("+", memory_label, added_uid, SemanticColorRole.ADD),
         ("+", embed_label, ref_uid, SemanticColorRole.ADD),
     ):
-        assert click.style(
-            marker,
-            fg=semantic_color_rgb(role),
-            bold=True,
-        ) in colored.output
         assert (
-            f"  {marker} [{label} {uid[:8]}]"
-            in plain.output
+            click.style(
+                marker,
+                fg=semantic_color_rgb(role),
+                bold=True,
+            )
+            in colored.output
         )
+        assert f"  {marker} [{label} {uid[:8]}]" in plain.output
     summary = (
         "Affected content: 1 Memory added, 1 Memory ref added, "
         "1 Memory edited, 1 Memory removed"
@@ -220,26 +229,35 @@ def test_revert_impact_colors_typed_markers_without_changing_plain_text():
         ('"after"', SemanticColorRole.EDIT),
         ('"remove me"', SemanticColorRole.REMOVE),
     ):
-        assert click.style(
-            text,
-            fg=semantic_color_rgb(role),
-        ) in colored.output
-    assert click.style(
-        '"add me"',
-        fg=memory_object_color_rgb(),
-    ) in colored.output
-    assert click.style(
-        '"embedded source body"',
-        fg=memory_object_color_rgb(),
-    ) in colored.output
-    assert click.style(
-        embed_label,
-        fg=semantic_color_rgb(SemanticColorRole.EMBED),
-    ) in colored.output
+        assert (
+            click.style(
+                text,
+                fg=semantic_color_rgb(role),
+            )
+            in colored.output
+        )
     assert (
-        'source/notes:55555555 "embedded source body"  READ ONLY'
-        in plain.output
+        click.style(
+            '"add me"',
+            fg=memory_object_color_rgb(),
+        )
+        in colored.output
     )
+    assert (
+        click.style(
+            '"embedded source body"',
+            fg=memory_object_color_rgb(),
+        )
+        in colored.output
+    )
+    assert (
+        click.style(
+            embed_label,
+            fg=semantic_color_rgb(SemanticColorRole.EMBED),
+        )
+        in colored.output
+    )
+    assert 'source/notes:55555555 "embedded source body"  READ ONLY' in plain.output
     assert f"[{removed_uid[:8]}] Memory:" not in plain.output
     assert f"[{ref_uid[:8]}] Memory ref:" not in plain.output
     assert " Memory [55555555]" not in plain.output
@@ -263,9 +281,7 @@ def test_revert_impact_marks_an_unavailable_live_embed_as_dangling():
                             "uid": "source-context-uid",
                             "name": "source/notes",
                         },
-                        "target_memory_uid": (
-                            "55555555-5555-5555-5555-555555555555"
-                        ),
+                        "target_memory_uid": ("55555555-5555-5555-5555-555555555555"),
                     }
                 },
                 "order": [ref_uid],
@@ -275,10 +291,7 @@ def test_revert_impact_marks_an_unavailable_live_embed_as_dangling():
     result = ClickCliRunner().invoke(receipt, color=False)
 
     assert result.exit_code == 0, result.output
-    assert (
-        "  + [embedded 44444444] source/notes:55555555  DANGLING"
-        in result.output
-    )
+    assert "  + [embedded 44444444] source/notes:55555555  DANGLING" in result.output
     assert "READ ONLY" not in result.output
 
 
@@ -578,7 +591,7 @@ def _command_unit(
         (
             "atomize",
             {"analysis_uid": "analysis-uid"},
-            "mem atomize --save --context work/notes",
+            "mem atomize work/notes",
         ),
         (
             "dev query-source install",

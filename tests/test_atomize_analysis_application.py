@@ -97,7 +97,7 @@ def test_provider_create_then_saved_resume_does_not_reconnect(isolated_store):
     assert resumed.origin == "SAVED"
     assert resumed.created_analysis is False
     assert resumed.analysis.uid == created.analysis.uid
-    assert resumed.workbench.uid == created.workbench.uid
+    assert resumed.review_record.uid == created.review_record.uid
     assert provider.calls == 1
 
 
@@ -135,7 +135,7 @@ def test_runtime_looks_up_hidden_prepared_analysis_before_provider(
     assert opened.origin == "EXACT_PREWARM"
     assert opened.materialized_prepared is True
     assert opened.analysis == prepared
-    assert opened.workbench.output_context_name == "atomize/prepared-output"
+    assert opened.review_record.output_context_name == "atomize/prepared-output"
 
 
 def test_disallowed_prepared_lookup_falls_through_to_provider(
@@ -221,7 +221,7 @@ def test_refresh_calls_provider_and_preserves_durable_output_plan(isolated_store
 
     assert refreshed.origin == "PROVIDER"
     assert refreshed.analysis.uid != first.analysis.uid
-    assert refreshed.workbench.output_context_name == "atomize/planned-output"
+    assert refreshed.review_record.output_context_name == "atomize/planned-output"
     assert provider.calls == 1
 
 

@@ -6,7 +6,9 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from memcommit.application.operations.atomize.application import AtomizeSessionSnapshot
+    from memcommit.application.operations.atomize.application import (
+        AtomizeExecutionSnapshot,
+    )
 
 
 @dataclass(frozen=True)
@@ -100,7 +102,7 @@ class AtomizeAnalysisResult:
     output_context_name: str
     application_completed: bool
     in_place_apply_allowed: bool
-    _snapshot: AtomizeSessionSnapshot = field(repr=False, compare=False)
+    _snapshot: AtomizeExecutionSnapshot = field(repr=False, compare=False)
 
 
 @dataclass(frozen=True)

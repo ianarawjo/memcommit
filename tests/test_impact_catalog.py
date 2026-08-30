@@ -64,7 +64,7 @@ def test_catalog_unites_only_durable_impact_artifacts(
     )
     monkeypatch.setattr(
         impact_catalog,
-        "atomize_session_entries",
+        "atomize_record_entries",
         lambda _store: (atomize,),
     )
     monkeypatch.setattr(

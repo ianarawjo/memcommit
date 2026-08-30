@@ -8,12 +8,12 @@ import uuid
 
 import pytest
 
-from memcommit.application.operations.atomize.workbench import (
+from memcommit.application.operations.atomize.records import (
     ATOMIZE_WORKBENCH_SCHEMA_VERSION,
-    AtomizeWorkbenchError,
-    AtomizeWorkbenchIssue,
-    AtomizeWorkbenchSession,
-    atomize_workbench_issue_digest,
+    AtomizeRecordError,
+    AtomizeReviewIssue,
+    AtomizeReviewRecord,
+    atomize_review_issue_digest,
 )
 
 
@@ -21,20 +21,20 @@ def _digest(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def _issues() -> tuple[AtomizeWorkbenchIssue, ...]:
+def _issues() -> tuple[AtomizeReviewIssue, ...]:
     return (
-        AtomizeWorkbenchIssue(
+        AtomizeReviewIssue(
             uid="ambiguity:m2",
             source_order=1,
             priority=2,
             choice_uids=("ambiguity:m2:reading:1", "ambiguity:m2:reading:2"),
         ),
-        AtomizeWorkbenchIssue(
+        AtomizeReviewIssue(
             uid="atomize:m1",
             source_order=0,
             priority=1,
         ),
-        AtomizeWorkbenchIssue(
+        AtomizeReviewIssue(
             uid="conflict:m2:m3",
             source_order=1,
             priority=3,
@@ -44,9 +44,9 @@ def _issues() -> tuple[AtomizeWorkbenchIssue, ...]:
 
 
 def _session(
-    issues: tuple[AtomizeWorkbenchIssue, ...] | None = None,
-) -> AtomizeWorkbenchSession:
-    return AtomizeWorkbenchSession.create(
+    issues: tuple[AtomizeReviewIssue, ...] | None = None,
+) -> AtomizeReviewRecord:
+    return AtomizeReviewRecord.create(
         analysis_uid=str(uuid.uuid4()),
         context_uid=str(uuid.uuid4()),
         context_name="temp/task-1",
@@ -66,7 +66,7 @@ def test_create_round_trips_only_mutable_state_bound_to_issue_digest():
     session.toggle_layout()
 
     data = session.to_dict()
-    restored = AtomizeWorkbenchSession.from_dict(data, issues=issues)
+    restored = AtomizeReviewRecord.from_dict(data, issues=issues)
 
     assert set(data) == {
         "schema_version",
@@ -83,7 +83,7 @@ def test_create_round_trips_only_mutable_state_bound_to_issue_digest():
     }
     assert data["schema_version"] == ATOMIZE_WORKBENCH_SCHEMA_VERSION
     assert data["output_context_name"] == "temp/task-1"
-    assert data["issue_digest"] == atomize_workbench_issue_digest(issues)
+    assert data["issue_digest"] == atomize_review_issue_digest(issues)
     assert "issues" not in data
     assert restored.to_dict() == data
     assert restored.layout == "STACKED"
@@ -92,7 +92,7 @@ def test_create_round_trips_only_mutable_state_bound_to_issue_digest():
 
 def test_output_plan_round_trips_and_schema_one_defaults_to_in_place():
     issues = _issues()
-    session = AtomizeWorkbenchSession.create(
+    session = AtomizeReviewRecord.create(
         analysis_uid=str(uuid.uuid4()),
         context_uid=str(uuid.uuid4()),
         context_name="atomize/input",
@@ -102,7 +102,7 @@ def test_output_plan_round_trips_and_schema_one_defaults_to_in_place():
     )
 
     assert session.output_context_name == "atomize/output"
-    restored = AtomizeWorkbenchSession.from_dict(
+    restored = AtomizeReviewRecord.from_dict(
         session.to_dict(),
         issues=issues,
     )
@@ -111,7 +111,7 @@ def test_output_plan_round_trips_and_schema_one_defaults_to_in_place():
     destination_only = session.to_dict()
     destination_only["schema_version"] = 2
     destination_only.pop("application")
-    restored_destination_only = AtomizeWorkbenchSession.from_dict(
+    restored_destination_only = AtomizeReviewRecord.from_dict(
         destination_only,
         issues=issues,
     )
@@ -122,7 +122,7 @@ def test_output_plan_round_trips_and_schema_one_defaults_to_in_place():
     legacy["schema_version"] = 1
     legacy.pop("output_context_name")
     legacy.pop("application")
-    restored_legacy = AtomizeWorkbenchSession.from_dict(
+    restored_legacy = AtomizeReviewRecord.from_dict(
         legacy,
         issues=issues,
     )
@@ -131,7 +131,7 @@ def test_output_plan_round_trips_and_schema_one_defaults_to_in_place():
 
 def test_application_receipt_is_terminal_and_round_trips_with_comments():
     issues = _issues()
-    session = AtomizeWorkbenchSession.create(
+    session = AtomizeReviewRecord.create(
         analysis_uid=str(uuid.uuid4()),
         context_uid=str(uuid.uuid4()),
         context_name="atomize/input",
@@ -146,7 +146,7 @@ def test_application_receipt_is_terminal_and_round_trips_with_comments():
     )
     session.response_for("ambiguity:m2").text = "Retain this as review evidence."
 
-    restored = AtomizeWorkbenchSession.from_dict(
+    restored = AtomizeReviewRecord.from_dict(
         session.to_dict(),
         issues=issues,
     )
@@ -157,7 +157,7 @@ def test_application_receipt_is_terminal_and_round_trips_with_comments():
     assert restored.response_for("ambiguity:m2").text == (
         "Retain this as review evidence."
     )
-    with pytest.raises(AtomizeWorkbenchError, match="different application"):
+    with pytest.raises(AtomizeRecordError, match="different application"):
         restored.record_application(
             output_context_name="atomize/output",
             checkpoint_uid=str(uuid.uuid4()),
@@ -209,7 +209,7 @@ def test_select_choice_and_freeform_response_are_independent():
     assert response.text
     assert session.answered_count == 1
 
-    with pytest.raises(AtomizeWorkbenchError, match="Unknown"):
+    with pytest.raises(AtomizeRecordError, match="Unknown"):
         session.select_choice(2)
 
 
@@ -243,7 +243,7 @@ def test_exact_match_checks_revision_context_and_complete_issue_projection():
         **{**arguments, "context_digest": _digest("edited")}
     )
     changed_choices = (
-        AtomizeWorkbenchIssue(
+        AtomizeReviewIssue(
             uid=issues[0].uid,
             source_order=issues[0].source_order,
             priority=issues[0].priority,
@@ -292,8 +292,8 @@ def test_strict_loader_rejects_invalid_session_shapes(mutate, message):
     data = copy.deepcopy(_session(issues).to_dict())
     mutate(data)
 
-    with pytest.raises(AtomizeWorkbenchError, match=message):
-        AtomizeWorkbenchSession.from_dict(data, issues=issues)
+    with pytest.raises(AtomizeRecordError, match=message):
+        AtomizeReviewRecord.from_dict(data, issues=issues)
 
 
 def test_loader_rejects_issue_or_choice_mismatch_and_unknown_response_target():
@@ -302,15 +302,15 @@ def test_loader_rejects_issue_or_choice_mismatch_and_unknown_response_target():
     data = session.to_dict()
 
     reordered = tuple(reversed(issues))
-    with pytest.raises(AtomizeWorkbenchError, match="do not match"):
-        AtomizeWorkbenchSession.from_dict(data, issues=reordered)
+    with pytest.raises(AtomizeRecordError, match="do not match"):
+        AtomizeReviewRecord.from_dict(data, issues=reordered)
 
     unknown_target = copy.deepcopy(data)
     unknown_target["responses"] = {
         "missing": {"selected_choice_uid": None, "text": "comment"}
     }
-    with pytest.raises(AtomizeWorkbenchError, match="response target"):
-        AtomizeWorkbenchSession.from_dict(unknown_target, issues=issues)
+    with pytest.raises(AtomizeRecordError, match="response target"):
+        AtomizeReviewRecord.from_dict(unknown_target, issues=issues)
 
     unknown_choice = copy.deepcopy(data)
     unknown_choice["responses"] = {
@@ -319,20 +319,20 @@ def test_loader_rejects_issue_or_choice_mismatch_and_unknown_response_target():
             "text": "",
         }
     }
-    with pytest.raises(AtomizeWorkbenchError, match="unknown choice"):
-        AtomizeWorkbenchSession.from_dict(unknown_choice, issues=issues)
+    with pytest.raises(AtomizeRecordError, match="unknown choice"):
+        AtomizeReviewRecord.from_dict(unknown_choice, issues=issues)
 
 
 def test_issue_descriptors_are_strict_and_digest_all_ordering_inputs():
-    with pytest.raises(AtomizeWorkbenchError, match="Duplicate"):
-        AtomizeWorkbenchIssue(
+    with pytest.raises(AtomizeRecordError, match="Duplicate"):
+        AtomizeReviewIssue(
             uid="issue",
             source_order=0,
             priority=1,
             choice_uids=("same", "same"),
         )
-    with pytest.raises(AtomizeWorkbenchError, match="source order"):
-        AtomizeWorkbenchIssue(
+    with pytest.raises(AtomizeRecordError, match="source order"):
+        AtomizeReviewIssue(
             uid="issue",
             source_order=True,
             priority=1,
@@ -340,7 +340,7 @@ def test_issue_descriptors_are_strict_and_digest_all_ordering_inputs():
 
     base = _issues()
     priority_changed = (
-        AtomizeWorkbenchIssue(
+        AtomizeReviewIssue(
             uid=base[0].uid,
             source_order=base[0].source_order,
             priority=base[0].priority + 1,
@@ -348,6 +348,6 @@ def test_issue_descriptors_are_strict_and_digest_all_ordering_inputs():
         ),
         *base[1:],
     )
-    assert atomize_workbench_issue_digest(base) != (
-        atomize_workbench_issue_digest(priority_changed)
+    assert atomize_review_issue_digest(base) != (
+        atomize_review_issue_digest(priority_changed)
     )

@@ -9,7 +9,7 @@ import typer
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.atomize.domain import AtomizeImpactError
-from memcommit.application.operations.atomize.workbench import AtomizeWorkbenchError
+from memcommit.application.operations.atomize.records import AtomizeRecordError
 from memcommit.adapters.console.commands.atomize.review import (
     open_atomize_review as _run_atomize_workbench,
 )
@@ -484,7 +484,7 @@ def cmd(
         ValueError,
         FindingsError,
         AtomizeImpactError,
-        AtomizeWorkbenchError,
+        AtomizeRecordError,
         QueryProviderError,
         QualityAuditError,
         ReviewError,

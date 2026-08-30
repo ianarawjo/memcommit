@@ -8,6 +8,7 @@
     "atomize": [
       "agent-records/docs/atomize-application-boundary-matrix.md",
       "agent-records/docs/atomize-domain-package-design-rationale.md",
+      "agent-records/docs/atomize-one-shot-execution-design-rationale.md",
       "agent-records/docs/atomize-read-only-findings-design-rationale.md",
       "agent-records/docs/context-locator-design-rationale.md",
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",

@@ -389,9 +389,10 @@ COMMAND_FORMS = {
     ),
     "atomize": (
         "mem atomize (atomize the current Context now; inspect the saved analysis with mem review)",
-        "mem atomize [target] (auto-type one Context or direct Memory)",
-        "mem atomize --context [context] (compatibility alias)",
-        "mem atomize --sessions (enter the interactive Atomize session launcher)",
+        "mem atomize [target] (atomize one Context or direct Memory in place)",
+        "mem atomize --context [context] (explicit Context target)",
+        "mem atomize --context [context] --memory [uid] (explicit direct Memory target)",
+        "mem atomize [target] --refresh (reanalyze the exact target before applying)",
     ),
     "branch": (
         "mem branch (choose a local Source, parent location, and fresh target)",

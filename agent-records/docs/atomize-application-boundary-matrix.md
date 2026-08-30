@@ -1,5 +1,20 @@
 # Atomize application-boundary matrix
 
+## 2026-08-30 one-shot console revision
+
+`mem atomize [TARGET]` now freezes a Context or one direct Memory, performs
+analysis reuse/refresh, and applies the exact result in place in one use case.
+The console no longer exposes Atomize `--sessions`, `--save`, `--save-as`,
+`--output`, or `--all`, and it no longer launches Endpoint Setup or an
+executable workbench. Impact owns the non-applying analysis UI; Review owns the
+read-only applied report. Their retained artifacts are analysis/application
+records, while interactive cursor and sort changes remain process-local.
+
+The Save As, Output-plan, and workbench rows below describe historical or
+public-API compatibility behavior and are not current console routes. The
+authoritative current rationale is
+[`atomize-one-shot-execution-design-rationale.md`](atomize-one-shot-execution-design-rationale.md).
+
 ## 2026-08-29 responsibility revision
 
 The current Atomize application boundary includes analysis open/reuse, exact

@@ -1,5 +1,10 @@
 # Shared semantic review shell
 
+> **Atomize route update (2026-08-30):** `mem atomize [TARGET]` now applies in
+> place immediately, Impact owns non-applying analysis, and Review is
+> read-only. Atomize `--save`/`--save-as` and executable-workbench statements
+> below are historical; the other operation contracts remain current.
+
 ## Decision
 
 The original shared review-shell design covers two implemented surfaces:

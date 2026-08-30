@@ -19,7 +19,9 @@ from memcommit.application.operations.atomize.domain import (
 from memcommit.application.operations.atomize.resolution_adapter import (
     AtomizeResolutionWorkbenchAdapter,
 )
-from memcommit.application.operations.atomize.workbench import create_atomize_workbench
+from memcommit.application.operations.atomize.records import (
+    create_atomize_review_record,
+)
 from memcommit.core.context import Context, Memory
 from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     resolution_viewer_fragments,
@@ -333,7 +335,7 @@ def _atomize_fixture() -> tuple[AtomizeAnalysisSession, str, str]:
 
 def test_atomize_adapter_joins_read_only_findings_and_ignores_legacy_response() -> None:
     analysis, conflict_uid, composite_uid = _atomize_fixture()
-    workbench = create_atomize_workbench(analysis)
+    workbench = create_atomize_review_record(analysis)
     response = workbench.response_for(conflict_uid)
     response.selected_choice_uid = "reading:different-doors"
     response.text = "The access rule is for the staff entrance."
@@ -428,8 +430,7 @@ def test_atomize_adapter_joins_read_only_findings_and_ignores_legacy_response() 
     split_rendered = "".join(text for _style, text in split_fragments)
     assert "atomize-child:" not in split_rendered
     assert any(
-        style == "class:memory-object"
-        and "MEMORY 1 · The north door closes." in text
+        style == "class:memory-object" and "MEMORY 1 · The north door closes." in text
         for style, text in split_fragments
     )
 
@@ -442,7 +443,7 @@ def test_atomize_adapter_legacy_response_does_not_change_structural_apply() -> N
         source_review_uid=_uid(),
         source_review_digest=_digest("reviewed-responses"),
     )
-    workbench = create_atomize_workbench(reviewed)
+    workbench = create_atomize_review_record(reviewed)
 
     ready = AtomizeResolutionWorkbenchAdapter(reviewed, workbench).view()
 
@@ -456,16 +457,19 @@ def test_atomize_adapter_legacy_response_does_not_change_structural_apply() -> N
     assert edited.status == "READY_TO_APPLY"
     assert edited.accept_enabled is True
     assert edited.capabilities == frozenset({"ACCEPT"})
-    assert session_review_action_view(
-        edited,
-        {},
-        whole_set_available=True,
-    ).kind == "APPLY"
+    assert (
+        session_review_action_view(
+            edited,
+            {},
+            whole_set_available=True,
+        ).kind
+        == "APPLY"
+    )
 
 
 def test_applied_atomize_adapter_is_read_only_review_evidence() -> None:
     analysis, _conflict_uid, _composite_uid = _atomize_fixture()
-    workbench = create_atomize_workbench(analysis)
+    workbench = create_atomize_review_record(analysis)
     workbench.record_application(
         output_context_name=analysis.context_name,
         checkpoint_uid=_uid(),
@@ -479,14 +483,12 @@ def test_applied_atomize_adapter_is_read_only_review_evidence() -> None:
     assert view.unresolved_at_apply_count == 0
     assert view.input_locked is True
     split = next(item for item in view.items if item.kind == "ATOMIZE_SPLIT")
-    assert [block.heading for block in split.blocks] == [
-        "APPLIED CHILD MEMORIES"
-    ]
+    assert [block.heading for block in split.blocks] == ["APPLIED CHILD MEMORIES"]
 
 
 def test_unanswered_atomize_quality_finding_advances_to_apply_as_is() -> None:
     analysis, conflict_uid, _composite_uid = _atomize_fixture()
-    workbench = create_atomize_workbench(analysis)
+    workbench = create_atomize_review_record(analysis)
     view = AtomizeResolutionWorkbenchAdapter(analysis, workbench).view()
 
     todo = session_todo_view(
@@ -523,7 +525,7 @@ def test_reviewed_atomize_split_advances_shared_todo_to_apply() -> None:
         source_review_uid=_uid(),
         source_review_digest=_digest("reviewed-split"),
     )
-    workbench = create_atomize_workbench(reviewed)
+    workbench = create_atomize_review_record(reviewed)
     view = AtomizeResolutionWorkbenchAdapter(reviewed, workbench).view()
 
     todo = session_todo_view(
@@ -536,8 +538,7 @@ def test_reviewed_atomize_split_advances_shared_todo_to_apply() -> None:
     assert [item.priority for item in view.items] == ["REVIEW"]
     assert todo.kind == "REVIEW AND APPLY"
     assert (
-        session_review_action_view(view, {}, whole_set_available=True).kind
-        == "APPLY"
+        session_review_action_view(view, {}, whole_set_available=True).kind == "APPLY"
     )
     assert todo.label == "Confirm final Atomize Apply"
     assert "APPLY is available" in todo.detail
@@ -551,7 +552,7 @@ def test_initial_atomize_optional_split_is_already_ready_to_apply() -> None:
         source_review_uid=None,
         source_review_digest=None,
     )
-    workbench = create_atomize_workbench(initial)
+    workbench = create_atomize_review_record(initial)
     view = AtomizeResolutionWorkbenchAdapter(initial, workbench).view()
 
     todo = session_todo_view(
@@ -565,8 +566,7 @@ def test_initial_atomize_optional_split_is_already_ready_to_apply() -> None:
     assert view.accept_enabled is True
     assert todo.kind == "REVIEW AND APPLY"
     assert (
-        session_review_action_view(view, {}, whole_set_available=True).kind
-        == "APPLY"
+        session_review_action_view(view, {}, whole_set_available=True).kind == "APPLY"
     )
 
 

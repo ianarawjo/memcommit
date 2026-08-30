@@ -15,7 +15,7 @@ from memcommit.application.operations.atomize.domain import (
     collect_atomize_candidates,
 )
 from tests.atomize_analysis_support import (
-    open_or_create_atomize_workbench,
+    open_or_create_atomize_review_record,
 )
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
 from memcommit.application.operations.compare.compare_rules import (
@@ -268,7 +268,7 @@ def test_atomize_cache_identity_changes_with_the_study_prompt_policy(
     study_provider = _AtomicProvider()
     _patch_atomize_policy(monkeypatch, STUDY_SEMANTIC_PROMPT_POLICY)
 
-    study = open_or_create_atomize_workbench(
+    study = open_or_create_atomize_review_record(
         store=store,
         ctx=context,
         provider_factory=lambda: study_provider,
@@ -280,7 +280,7 @@ def test_atomize_cache_identity_changes_with_the_study_prompt_policy(
     assert serialized["schema_version"] == ATOMIZE_ANALYSIS_SCHEMA_VERSION
     assert serialized["prompt_policy_id"] == STUDY_PROMPT_POLICY_ID
 
-    reused = open_or_create_atomize_workbench(
+    reused = open_or_create_atomize_review_record(
         store=store,
         ctx=context,
         provider_factory=lambda: (_ for _ in ()).throw(
@@ -291,7 +291,7 @@ def test_atomize_cache_identity_changes_with_the_study_prompt_policy(
 
     general_provider = _AtomicProvider()
     _patch_atomize_policy(monkeypatch, GENERAL_SEMANTIC_PROMPT_POLICY)
-    general = open_or_create_atomize_workbench(
+    general = open_or_create_atomize_review_record(
         store=store,
         ctx=context,
         provider_factory=lambda: general_provider,

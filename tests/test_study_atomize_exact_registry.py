@@ -13,8 +13,11 @@ import memcommit.application.operations.atomize.domain as atomize_module
 import memcommit.application.operations.atomize.analysis_runtime as atomize_analysis_runtime_module
 import memcommit.application.capabilities.ops as ops
 import memcommit.study_scenarios.legacy.prewarm.atomize as atomize_prewarm_module
-from memcommit.application.operations.atomize.domain import create_atomize_analysis, impact_atomize
-from tests.atomize_analysis_support import open_or_create_atomize_workbench
+from memcommit.application.operations.atomize.domain import (
+    create_atomize_analysis,
+    impact_atomize,
+)
+from tests.atomize_analysis_support import open_or_create_atomize_review_record
 from memcommit.adapters.console.entrypoint import app
 from memcommit.configuration.config import Config
 from memcommit.core.context import Memory
@@ -24,8 +27,12 @@ from memcommit.application.operations.profile.config import (
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.capabilities.semantic.prompt_policy import STUDY_SEMANTIC_PROMPT_POLICY
-from memcommit.application.capabilities.semantic.prompt_policy import GENERAL_PROMPT_POLICY_ID
+from memcommit.application.capabilities.semantic.prompt_policy import (
+    STUDY_SEMANTIC_PROMPT_POLICY,
+)
+from memcommit.application.capabilities.semantic.prompt_policy import (
+    GENERAL_PROMPT_POLICY_ID,
+)
 from memcommit.study_scenarios.legacy.prewarm.atomize import (
     build_atomize_prewarm_artifact,
     find_declared_atomize_prewarm,
@@ -211,7 +218,7 @@ def test_exact_atomize_registry_installs_and_reopens_without_provider(
         context=store.load_direct(source.name),
     )
     assert match is not None
-    opened = open_or_create_atomize_workbench(
+    opened = open_or_create_atomize_review_record(
         store=store,
         ctx=store.load_direct(source.name),
         provider_factory=forbidden,
@@ -226,7 +233,7 @@ def test_exact_atomize_registry_installs_and_reopens_without_provider(
     assert opened.analysis.to_dict() == prepared.to_dict()
     assert opened.created_analysis is False
     assert opened.materialized_prepared is True
-    assert opened.workbench.output_context_name == "practice/source-atomized"
+    assert opened.review_record.output_context_name == "practice/source-atomized"
     assert is_installed_atomize_prewarm(store, opened.analysis)
 
 
@@ -270,11 +277,23 @@ def test_exact_single_memory_focus_reuses_equivalent_atomize_prewarm(
         registry_snapshot=registry,
     )
     memory = next(item for item in source.iter_items() if isinstance(item, Memory))
+    calls: list[tuple[str, str | None]] = []
+
+    class RecordingProvider(CompositeProvider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            phase = None
+            if operation == "impact_atomize":
+                phase = json.loads(prompt.split(PAYLOAD_MARKER, 1)[1]).get("phase")
+            calls.append((operation, phase))
+            return super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+
     monkeypatch.setattr(
         "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
-        lambda: (_ for _ in ()).throw(
-            AssertionError("equivalent focused prewarm opened a provider")
-        ),
+        RecordingProvider,
     )
 
     result = runner.invoke(
@@ -289,8 +308,9 @@ def test_exact_single_memory_focus_reuses_equivalent_atomize_prewarm(
     )
 
     assert result.exit_code == 0, result.stderr or result.output
-    assert "EXACT PREWARM · CURRENT" in result.output
-    assert "provider was not called" in result.output
+    assert "ANALYSIS · EXACT PREWARM · INITIAL ANALYSIS REUSED" in result.output
+    assert ("impact_atomize", None) not in calls
+    assert ("impact_atomize", "normal_form_validation") in calls
 
 
 def test_exact_atomize_source_change_fails_before_publication(
@@ -369,7 +389,7 @@ def test_exact_atomize_installation_rolls_back_partial_workbench_save(
     )
 
     with pytest.raises(OSError, match="injected save failure"):
-        open_or_create_atomize_workbench(
+        open_or_create_atomize_review_record(
             store=store,
             ctx=source,
             provider_factory=lambda: (_ for _ in ()).throw(

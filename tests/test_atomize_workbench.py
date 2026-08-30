@@ -14,44 +14,34 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.atomize.command as atomize_command
-import memcommit.adapters.console.commands.atomize.sessions as atomize_sessions_module
 from memcommit.application.operations.atomize.domain import (
-    ATOMIZE_LEGACY_RULESET_VERSION,
     AtomizeAnalysisSession,
     AtomizeImpactError,
     AtomizeReading,
     create_atomize_analysis,
     impact_atomize,
 )
-from memcommit.application.operations.atomize.workbench import (
-    create_atomize_workbench,
+from memcommit.application.operations.atomize.records import (
+    create_atomize_review_record,
 )
 from tests.atomize_analysis_support import (
     ATOMIZE_AGGREGATE_TIMEOUT_SECONDS,
     _connect_aggregate_atomize_provider,
-    open_or_create_atomize_workbench,
+    open_or_create_atomize_review_record,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.atomize.workbench.screen import (
+from memcommit.adapters.console.commands.atomize.impact import (
     _finding_map,
     _list_text,
     _source_map,
-    render_atomize_workbench_snapshot,
-    run_atomize_workbench_shell,
+    render_atomize_impact_snapshot,
+    run_atomize_impact_shell,
 )
-from memcommit.adapters.console.commands.atomize.sessions import (
-    atomize_session_entries,
-    choose_atomize_session,
+from memcommit.adapters.console.commands.atomize.records import (
+    atomize_record_entries,
     revalidate_saved_atomize_analysis,
 )
-from memcommit.adapters.console.terminal.components.endpoint_setup.flows import AtomizeSetupReceipt
-from memcommit.adapters.console.terminal.components.operation_launcher.session import (
-    SessionNewReceipt,
-    SessionOpenReceipt,
-    SessionPickerLocation,
-)
 from memcommit.providers.subscription import CodexChatGPTProvider
-from memcommit.application.capabilities.resolution.workbench import ResolutionWorkbenchAction
 from memcommit.persistence.store import MemoryStore
 
 
@@ -410,8 +400,8 @@ def test_aggregate_analysis_preserves_overview_and_typed_issue_arity():
         "ALTERNATIVE",
     ]
     analysis = create_atomize_analysis(ctx, report)
-    snapshot = render_atomize_workbench_snapshot(
-        create_atomize_workbench(analysis),
+    snapshot = render_atomize_impact_snapshot(
+        create_atomize_review_record(analysis),
         analysis,
     )
     assert "CONFLICT · MAY" in snapshot
@@ -469,7 +459,7 @@ def test_context_clean_quality_scan_does_not_duplicate_source_uncertainty():
         quality_issues=(),
     )
     analysis = create_atomize_analysis(ctx, report)
-    workbench = create_atomize_workbench(analysis)
+    workbench = create_atomize_review_record(analysis)
 
     assert workbench.issue_count == 1
     assert workbench.issues[0].uid.startswith("atomize:")
@@ -522,7 +512,7 @@ def test_cli_reuses_one_analysis_then_bare_atomize_applies_and_review_reopens(
     assert len(store.list_checkpoints(ctx.name)) == len(checkpoints_before) + 1
 
 
-def test_atomize_sessions_catalog_reopens_exact_analysis_provider_free(
+def test_atomize_records_reopen_exact_analysis_provider_free(
     isolated_store,
     monkeypatch,
 ):
@@ -535,7 +525,7 @@ def test_atomize_sessions_catalog_reopens_exact_analysis_provider_free(
     analysis = store.load_atomize_analysis(ctx.uid)
     assert analysis is not None
 
-    entries = atomize_session_entries(store)
+    entries = atomize_record_entries(store)
     assert len(entries) == 1
     entry = entries[0]
     assert entry.key == analysis.uid
@@ -544,9 +534,10 @@ def test_atomize_sessions_catalog_reopens_exact_analysis_provider_free(
     assert entry.status == "CURRENT"
     assert entry.reopen_argv == (
         "mem",
+        "impact",
         "atomize",
-        "--context",
-        ctx.name,
+        "--session",
+        analysis.uid,
     )
     assert "the picker does not run it" in entry.detail
 
@@ -555,14 +546,6 @@ def test_atomize_sessions_catalog_reopens_exact_analysis_provider_free(
     store.save(other)
     store.set_current(other.name)
     before = store._context_file(ctx.name).read_bytes()
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.choose_atomize_session",
-        lambda _store, *, show_all: SessionOpenReceipt(
-            kind="atomize",
-            key=entry.key,
-            argv=entry.reopen_argv,
-        ),
-    )
 
     def provider_must_not_connect():
         raise AssertionError("saved selection must be provider-free")
@@ -571,10 +554,11 @@ def test_atomize_sessions_catalog_reopens_exact_analysis_provider_free(
         "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
         provider_must_not_connect,
     )
-    resumed = runner.invoke(app, ["atomize", "--sessions"])
+    resumed = runner.invoke(app, ["impact", "atomize", "--session", entry.key])
 
     assert resumed.exit_code == 0, resumed.output
-    assert "Resumed; the provider was not called." in resumed.output
+    assert "Resumed saved analysis" in resumed.output
+    assert "the provider was not called" in resumed.output
     assert store.current_context_name() == other.name
     assert store._context_file(ctx.name).read_bytes() == before
     assert len(provider.payloads) == 1
@@ -588,22 +572,6 @@ def test_bare_interactive_atomize_applies_the_current_context_without_a_session(
     ctx, _ = _init_context(store)
     provider = AggregateProvider()
     _patch_provider(monkeypatch, provider)
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command._interactive_terminal",
-        lambda: True,
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.choose_atomize_session",
-        lambda *_args, **_kwargs: (_ for _ in ()).throw(
-            AssertionError("bare Atomize must not open the session launcher")
-        ),
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.present_atomize_workbench",
-        lambda **_kwargs: (_ for _ in ()).throw(
-            AssertionError("bare Atomize must not open the workbench")
-        ),
-    )
     checkpoints_before = store.list_checkpoints(ctx.name)
 
     result = runner.invoke(app, ["atomize"])
@@ -668,12 +636,7 @@ def test_bare_atomize_reports_final_normal_form_provider_work(
     assert progress_boundaries == [
         {
             "operation": "ATOMIZE",
-            "stage": "analyzing memory structure",
-            "provider_calls": 0,
-        },
-        {
-            "operation": "ATOMIZE",
-            "stage": "normalizing atomized output",
+            "stage": "analyzing and normalizing memory structure",
             "provider_calls": 3,
         },
     ]
@@ -708,18 +671,6 @@ def test_bare_atomize_receipt_samples_content_and_applied_review_remains_complet
     store.set_current(ctx.name)
     provider = SplitProvider()
     _patch_provider(monkeypatch, provider)
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.choose_atomize_session",
-        lambda *_args, **_kwargs: (_ for _ in ()).throw(
-            AssertionError("bare Atomize must not open the session launcher")
-        ),
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.present_atomize_workbench",
-        lambda **_kwargs: (_ for _ in ()).throw(
-            AssertionError("bare Atomize must not open the workbench")
-        ),
-    )
 
     applied = runner.invoke(app, ["atomize"])
 
@@ -737,7 +688,7 @@ def test_bare_atomize_receipt_samples_content_and_applied_review_remains_complet
     checkpoints_after_apply = store.list_checkpoints(ctx.name)
     repeated = runner.invoke(app, ["atomize"])
     assert repeated.exit_code == 0, repeated.output
-    assert "already applied; no new checkpoint" in repeated.output
+    assert "RECOVERY STATUS · prior checkpoint recovered" in repeated.output
     assert store.list_checkpoints(ctx.name) == checkpoints_after_apply
     assert len(provider.payloads) == 1
 
@@ -766,132 +717,6 @@ def test_bare_atomize_receipt_samples_content_and_applied_review_remains_complet
     assert store._context_file(ctx.name).read_bytes() == output_before
 
 
-def test_atomize_launcher_shows_frozen_profile_and_store_location(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx, _ = _init_context(store)
-    open_or_create_atomize_workbench(
-        store=store,
-        ctx=ctx,
-        provider_factory=AggregateProvider,
-    )
-    location = SessionPickerLocation(
-        profile_name="study-profile",
-        store_path=str(isolated_store),
-    )
-    captured = {}
-    monkeypatch.setattr(
-        atomize_sessions_module,
-        "session_picker_location",
-        lambda selected_store: (
-            location
-            if selected_store is store
-            else pytest.fail("launcher must orient to its supplied store")
-        ),
-    )
-    monkeypatch.setattr(
-        atomize_sessions_module,
-        "choose_session",
-        lambda entries, **kwargs: captured.update(
-            entries=entries,
-            kwargs=kwargs,
-        ),
-    )
-
-    assert choose_atomize_session(store) is None
-    assert captured["kwargs"]["location"] == location
-    assert captured["kwargs"]["title"] == "MEM ATOMIZE · SESSIONS"
-
-
-def test_atomize_launcher_new_persists_input_output_on_shared_workbench(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx, _ = _init_context(store)
-    provider = AggregateProvider()
-    _patch_provider(monkeypatch, provider)
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.choose_atomize_session",
-        lambda _store, *, show_all: SessionNewReceipt(
-            kind="atomize",
-            argv=("mem", "atomize"),
-        ),
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.choose_atomize_setup",
-        lambda _store: AtomizeSetupReceipt(
-            input_name=ctx.name,
-            output_name="workbench/atomized-output",
-            create_output=True,
-        ),
-    )
-
-    opened = runner.invoke(app, ["atomize", "--sessions"])
-
-    assert opened.exit_code == 0, opened.output
-    analysis = store.load_atomize_analysis(ctx.uid)
-    assert analysis is not None
-    workbench = store.load_atomize_workbench(analysis)
-    assert workbench is not None
-    assert workbench.output_context_name == "workbench/atomized-output"
-    assert not store.context_exists("workbench/atomized-output")
-    assert "INPUT" in opened.output
-    assert "OUTPUT" in opened.output
-    assert len(provider.payloads) == 1
-
-    resumed = runner.invoke(
-        app,
-        ["atomize", "--context", ctx.name],
-    )
-    assert resumed.exit_code == 0, resumed.output
-    assert f"ATOMIZE APPLIED · {ctx.name}" in resumed.output
-    assert "REVIEW · mem review atomize --context" in resumed.output
-    assert not store.context_exists("workbench/atomized-output")
-    assert len(provider.payloads) == 1
-
-
-def test_atomize_launcher_passes_exact_setup_memory_to_command(
-    isolated_store,
-    monkeypatch,
-):
-    monkeypatch.setattr(
-        atomize_command,
-        "choose_atomize_session",
-        lambda _store, *, show_all: SessionNewReceipt(
-            kind="atomize",
-            argv=("mem", "atomize"),
-        ),
-    )
-    monkeypatch.setattr(
-        atomize_command,
-        "choose_atomize_setup",
-        lambda _store: AtomizeSetupReceipt(
-            input_name="focused/source",
-            output_name="focused/output",
-            create_output=True,
-            input_memory_uid="memory-uid",
-        ),
-    )
-    calls = []
-    monkeypatch.setattr(atomize_command, "cmd", lambda **kwargs: calls.append(kwargs))
-
-    result = runner.invoke(app, ["atomize", "--sessions"])
-
-    assert result.exit_code == 0, result.output
-    assert calls == [
-        {
-            "context_name": "focused/source",
-            "output_name": "focused/output",
-            "show_all": False,
-            "refresh": True,
-            "memory_selector": "memory-uid",
-        }
-    ]
-
-
 def test_atomize_refresh_retains_terminal_uid_and_exact_retry_is_provider_free(
     isolated_store,
     monkeypatch,
@@ -903,17 +728,14 @@ def test_atomize_refresh_retains_terminal_uid_and_exact_retry_is_provider_free(
 
     opened = runner.invoke(
         app,
-        ["atomize", "--context", ctx.name, "--output", ctx.name],
+        ["atomize", "--context", ctx.name],
     )
     assert opened.exit_code == 0, opened.output
     first = store.load_atomize_analysis(ctx.uid)
     assert first is not None
-    applied = runner.invoke(app, ["atomize", "--context", ctx.name, "--save"])
-    assert applied.exit_code == 0, applied.output
-
     repeated = runner.invoke(
         app,
-        ["atomize", "--context", ctx.name, "--output", ctx.name],
+        ["atomize", "--context", ctx.name],
     )
     assert repeated.exit_code == 0, repeated.output
     assert store.load_atomize_analysis(ctx.uid).uid == first.uid
@@ -924,8 +746,6 @@ def test_atomize_refresh_retains_terminal_uid_and_exact_retry_is_provider_free(
         [
             "atomize",
             "--context",
-            ctx.name,
-            "--output",
             ctx.name,
             "--refresh",
         ],
@@ -946,147 +766,10 @@ def test_atomize_refresh_retains_terminal_uid_and_exact_retry_is_provider_free(
     assert first.uid[:8] in historical.output
 
 
-def test_atomize_sessions_empty_and_forged_receipts_fail_closed(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.sessions.choose_session",
-        lambda *_args, **_kwargs: (_ for _ in ()).throw(
-            AssertionError("empty catalog must not open the picker")
-        ),
-    )
-
-    assert choose_atomize_session(store) is None
-    empty = runner.invoke(app, ["atomize", "--sessions"])
-    assert empty.exit_code == 0, empty.output
-    assert "Atomize selection ended; no analysis was opened." in empty.output
-
-    class TTY:
-        @staticmethod
-        def isatty():
-            return True
-
-    monkeypatch.setattr(atomize_sessions_module.sys, "stdin", TTY())
-    monkeypatch.setattr(atomize_sessions_module.sys, "stdout", TTY())
-    new_receipt = SessionNewReceipt(kind="atomize", argv=("mem", "atomize"))
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.sessions.choose_session",
-        lambda entries, **kwargs: (
-            new_receipt
-            if entries == () and kwargs["new_receipt"] == new_receipt
-            else pytest.fail("empty Atomize must offer New")
-        ),
-    )
-    assert choose_atomize_session(store) == new_receipt
-
-    ctx, _ = _init_context(store)
-    opened = open_or_create_atomize_workbench(
-        store=store,
-        ctx=ctx,
-        provider_factory=AggregateProvider,
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.sessions.choose_session",
-        lambda *_args, **_kwargs: SessionOpenReceipt(
-            kind="atomize",
-            key=opened.analysis.uid,
-            argv=("mem", "atomize", "--save"),
-        ),
-    )
-
-    with pytest.raises(ValueError, match="forged receipt"):
-        choose_atomize_session(store)
-
-
-def test_atomize_session_selection_rechecks_persisted_identity(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx, _ = _init_context(store)
-    opened = open_or_create_atomize_workbench(
-        store=store,
-        ctx=ctx,
-        provider_factory=AggregateProvider,
-    )
-    entry = atomize_session_entries(store)[0]
-
-    def remove_selected(_store, *, show_all):
-        store.delete_atomize_workbench(ctx.uid)
-        store.delete_atomize_analysis(ctx.uid)
-        return SessionOpenReceipt(
-            kind="atomize",
-            key=opened.analysis.uid,
-            argv=entry.reopen_argv,
-        )
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.choose_atomize_session",
-        remove_selected,
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
-        lambda: (_ for _ in ()).throw(
-            AssertionError("missing selection must not refresh")
-        ),
-    )
-
-    result = runner.invoke(app, ["atomize", "--sessions"])
-
-    assert result.exit_code == 1
-    assert "is no longer available" in result.output
-    assert store.load_atomize_analysis(ctx.uid) is None
-
-
-def test_atomize_sessions_refuse_legacy_ruleset_without_provider_call(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx, _ = _init_context(store)
-    opened = open_or_create_atomize_workbench(
-        store=store,
-        ctx=ctx,
-        provider_factory=AggregateProvider,
-    )
-    legacy = replace(
-        opened.analysis,
-        ruleset_version=ATOMIZE_LEGACY_RULESET_VERSION,
-    )
-    store.save_atomize_analysis(legacy)
-    entry = atomize_session_entries(store)[0]
-    assert entry.status == "STALE"
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.choose_atomize_session",
-        lambda _store, *, show_all: SessionOpenReceipt(
-            kind="atomize",
-            key=legacy.uid,
-            argv=entry.reopen_argv,
-        ),
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
-        lambda: (_ for _ in ()).throw(
-            AssertionError("legacy selection must not refresh")
-        ),
-    )
-
-    result = runner.invoke(app, ["atomize", "--sessions"])
-
-    assert result.exit_code == 1
-    assert "older semantic ruleset" in result.output
-    saved = store.load_atomize_analysis(ctx.uid)
-    assert saved is not None
-    assert saved.uid == legacy.uid
-    assert saved.ruleset_version == ATOMIZE_LEGACY_RULESET_VERSION
-
-
 def test_atomize_sessions_mark_a_legacy_ruleset_stale(isolated_store):
     store = MemoryStore()
     ctx, _ = _init_context(store)
-    opened = open_or_create_atomize_workbench(
+    opened = open_or_create_atomize_review_record(
         store=store,
         ctx=ctx,
         provider_factory=AggregateProvider,
@@ -1109,7 +792,7 @@ def test_atomize_sessions_mark_a_legacy_ruleset_stale(isolated_store):
     store.delete_atomize_workbench(ctx.uid)
     store.save_atomize_analysis(legacy)
 
-    assert atomize_session_entries(store)[0].status == "STALE"
+    assert atomize_record_entries(store)[0].status == "STALE"
     with pytest.raises(ValueError, match="older semantic ruleset"):
         revalidate_saved_atomize_analysis(store, legacy)
 
@@ -1121,7 +804,7 @@ def test_refresh_rolls_back_analysis_if_workbench_save_fails(
     store = MemoryStore()
     ctx, _ = _init_context(store)
     first_provider = AggregateProvider()
-    first = open_or_create_atomize_workbench(
+    first = open_or_create_atomize_review_record(
         store=store,
         ctx=ctx,
         provider_factory=lambda: first_provider,
@@ -1143,7 +826,7 @@ def test_refresh_rolls_back_analysis_if_workbench_save_fails(
     replacement_provider = AggregateProvider()
 
     with pytest.raises(OSError, match="injected workbench"):
-        open_or_create_atomize_workbench(
+        open_or_create_atomize_review_record(
             store=store,
             ctx=ctx,
             provider_factory=lambda: replacement_provider,
@@ -1168,13 +851,13 @@ def test_refresh_is_explicit_and_stale_analysis_fails_closed(
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
     first = store.load_atomize_analysis(ctx.uid)
     assert first is not None
-    planned = open_or_create_atomize_workbench(
+    planned = open_or_create_atomize_review_record(
         store=store,
         ctx=store.load_direct(ctx.name),
         provider_factory=AggregateProvider,
         output_context_name="workbench/refreshed-output",
     )
-    assert planned.workbench.output_context_name == "workbench/refreshed-output"
+    assert planned.review_record.output_context_name == "workbench/refreshed-output"
     assert len(provider.payloads) == 1
 
     refreshed = runner.invoke(
@@ -1200,8 +883,6 @@ def test_refresh_is_explicit_and_stale_analysis_fails_closed(
     assert store.load_atomize_analysis(ctx.uid).uid == second.uid
 
 
-
-
 def test_atomize_session_catalog_isolated_to_supplied_profile_store(tmp_path):
     profile_a = MemoryStore(root=tmp_path / "profile-a")
     profile_b = MemoryStore(root=tmp_path / "profile-b")
@@ -1209,7 +890,7 @@ def test_atomize_session_catalog_isolated_to_supplied_profile_store(tmp_path):
     context_a = ops.init("private/a")
     ops.add(context_a, "Only profile A owns this Memory.")
     profile_a.save(context_a)
-    opened_a = open_or_create_atomize_workbench(
+    opened_a = open_or_create_atomize_review_record(
         store=profile_a,
         ctx=context_a,
         provider_factory=AggregateProvider,
@@ -1218,14 +899,14 @@ def test_atomize_session_catalog_isolated_to_supplied_profile_store(tmp_path):
     context_b = ops.init("private/b")
     ops.add(context_b, "Only profile B owns this Memory.")
     profile_b.save(context_b)
-    opened_b = open_or_create_atomize_workbench(
+    opened_b = open_or_create_atomize_review_record(
         store=profile_b,
         ctx=context_b,
         provider_factory=AggregateProvider,
     )
 
-    entries_a = atomize_session_entries(profile_a)
-    entries_b = atomize_session_entries(profile_b)
+    entries_a = atomize_record_entries(profile_a)
+    entries_b = atomize_record_entries(profile_b)
 
     assert [(entry.key, entry.title) for entry in entries_a] == [
         (opened_a.analysis.uid, context_a.name)
@@ -1235,31 +916,21 @@ def test_atomize_session_catalog_isolated_to_supplied_profile_store(tmp_path):
     ]
 
 
-
-
-
-
-
-
-
-
 def test_atomize_shell_embeds_read_only_result_case_navigation() -> None:
     ctx = ops.init("workbench/result-view")
     ops.add(ctx, "Use the same NFC.")
     report = impact_atomize(ctx, lambda: AggregateProvider())
     analysis = create_atomize_analysis(ctx, report)
-    workbench = create_atomize_workbench(analysis)
+    workbench = create_atomize_review_record(analysis)
     before = workbench.to_dict()
-    saved: list[dict] = []
 
     with create_pipe_input() as pipe_input:
         # V opens the shared result view, Enter expands its selected case,
         # Backspace collapses it, and V returns to the complete issue ledger.
         pipe_input.send_text("v\r\x7fvq")
-        result = run_atomize_workbench_shell(
+        result = run_atomize_impact_shell(
             workbench,
             analysis,
-            save=lambda session: saved.append(session.to_dict()),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -1269,7 +940,6 @@ def test_atomize_shell_embeds_read_only_result_case_navigation() -> None:
     assert workbench.answered_count == 0
     assert workbench.cursor_uid == before["cursor_uid"]
     assert all(not response.answered for response in workbench.responses.values())
-    assert saved == []
 
 
 def test_drilldown_back_and_numeric_keys_do_not_change_a_reading():
@@ -1277,18 +947,16 @@ def test_drilldown_back_and_numeric_keys_do_not_change_a_reading():
     ops.add(ctx, "Use the same NFC.")
     report = impact_atomize(ctx, lambda: AggregateProvider())
     analysis = create_atomize_analysis(ctx, report)
-    workbench = create_atomize_workbench(analysis)
+    workbench = create_atomize_review_record(analysis)
     first = workbench.ordered_issues()[0]
-    saved: list[dict] = []
 
     with create_pipe_input() as pipe_input:
         # Opening, hovering reading 2, and going back are presentation-only.
         # The former direct numeric shortcut is intentionally inert.
         pipe_input.send_text("\r\x1b[B\x7f2q")
-        run_atomize_workbench_shell(
+        run_atomize_impact_shell(
             workbench,
             analysis,
-            save=lambda session: saved.append(session.to_dict()),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -1296,9 +964,6 @@ def test_drilldown_back_and_numeric_keys_do_not_change_a_reading():
 
     assert workbench.cursor_uid == first.uid
     assert workbench.response_for(first.uid).selected_choice_uid is None
-    assert saved == []
-
-
 
 
 def test_enter_expands_and_closes_an_issue_without_readings():
@@ -1306,7 +971,7 @@ def test_enter_expands_and_closes_an_issue_without_readings():
     ops.add(ctx, "Use the same NFC.")
     report = impact_atomize(ctx, lambda: AggregateProvider())
     analysis = create_atomize_analysis(ctx, report)
-    workbench = create_atomize_workbench(analysis)
+    workbench = create_atomize_review_record(analysis)
     workbench.move(1)
     issue = workbench.current_issue()
     assert issue is not None
@@ -1322,19 +987,16 @@ def test_enter_expands_and_closes_an_issue_without_readings():
     assert "AMBIGUITY 2/2" in expanded
     assert "Which local reading or scope should govern this source?" in (expanded)
 
-    saved: list[dict] = []
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\r\rq")
-        run_atomize_workbench_shell(
+        run_atomize_impact_shell(
             workbench,
             analysis,
-            save=lambda session: saved.append(session.to_dict()),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
     assert workbench.cursor_uid == issue.uid
-    assert saved == []
 
 
 def test_tui_up_and_down_follow_the_vertical_issue_list():
@@ -1342,17 +1004,15 @@ def test_tui_up_and_down_follow_the_vertical_issue_list():
     ops.add(ctx, "Use the same NFC.")
     report = impact_atomize(ctx, lambda: AggregateProvider())
     analysis = create_atomize_analysis(ctx, report)
-    workbench = create_atomize_workbench(analysis)
+    workbench = create_atomize_review_record(analysis)
     ordered = workbench.ordered_issues()
     assert len(ordered) == 2
 
-    saved: list[dict] = []
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\t\x1b[B\x1b[B\rq")
-        run_atomize_workbench_shell(
+        run_atomize_impact_shell(
             workbench,
             analysis,
-            save=lambda session: saved.append(session.to_dict()),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -1365,165 +1025,52 @@ def test_tui_up_and_down_follow_the_vertical_issue_list():
         # issue 1. Moving the Items cursor is only a preview; Enter explicitly
         # opens that row and updates the durable workbench cursor.
         pipe_input.send_text("\t\x1b[B\x1b[B\x1b[A\rq")
-        run_atomize_workbench_shell(
+        run_atomize_impact_shell(
             workbench,
             analysis,
-            save=lambda session: saved.append(session.to_dict()),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
     assert workbench.cursor_uid == ordered[0].uid
-    assert saved == []
 
 
-def test_shared_atomize_shell_preserves_durable_sort_toggle():
-    ctx = ops.init("workbench/shared-sort")
-    ops.add(ctx, "Use the same NFC.")
-    report = impact_atomize(ctx, lambda: AggregateProvider())
-    analysis = create_atomize_analysis(ctx, report)
-    workbench = create_atomize_workbench(analysis)
-    assert workbench.sort_mode == "SOURCE"
+def test_atomize_impact_sort_toggle_is_process_local(isolated_store):
+    store = MemoryStore()
+    ctx, _memory = _init_context(store)
+    opened = open_or_create_atomize_review_record(
+        store=store,
+        ctx=ctx,
+        provider_factory=AggregateProvider,
+    )
+    workbench = store.load_atomize_workbench(opened.analysis)
+    assert workbench is not None and workbench.sort_mode == "SOURCE"
 
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("sq")
-        run_atomize_workbench_shell(
+        run_atomize_impact_shell(
             workbench,
-            analysis,
-            save=lambda session: None,
+            opened.analysis,
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
 
     assert workbench.sort_mode == "PRIORITY"
+    durable = store.load_atomize_workbench(opened.analysis)
+    assert durable is not None and durable.sort_mode == "SOURCE"
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-def test_atomize_persists_shared_destination_change_before_final_apply(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    ctx, _memory = _init_context(store)
-    _patch_provider(monkeypatch, AggregateProvider())
-    open_or_create_atomize_workbench(
-        store=store,
-        ctx=ctx,
-        provider_factory=AggregateProvider,
-        output_context_name="workbench/old-output",
-    )
-    actions = iter(
-        (
-            ResolutionWorkbenchAction(
-                kind="CHANGE_DESTINATION",
-                destination="workbench/final-output",
-            ),
-            ResolutionWorkbenchAction(kind="ACCEPT"),
-        )
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.present_atomize_workbench",
-        lambda **_kwargs: next(actions),
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command._interactive_terminal",
-        lambda: True,
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.terminal.components.save_location_review.review_save_location",
-        lambda *_args, **_kwargs: (_ for _ in ()).throw(
-            AssertionError(
-                "a planned Output was already reviewed in the shared workbench"
-            )
-        ),
-    )
-
-    result = runner.invoke(
-        app,
-        ["atomize", "--context", ctx.name, "--output", "workbench/old-output"],
-    )
+def test_atomize_help_exposes_only_target_refresh_and_explicit_aliases():
+    result = runner.invoke(app, ["atomize", "--help"])
 
     assert result.exit_code == 0, result.output
-    assert not store.context_exists("workbench/old-output")
-    assert store.context_exists("workbench/final-output")
-    assert store.current_context_name() == "workbench/final-output"
-
-
-def test_applied_output_preview_does_not_become_a_second_session_owner(
-    isolated_store,
-):
-    store = MemoryStore()
-    source, _memory = _init_context(store)
-    opened = open_or_create_atomize_workbench(
-        store=store,
-        ctx=source,
-        provider_factory=AggregateProvider,
-        output_context_name="workbench/applied-output",
-    )
-
-    applied = runner.invoke(
-        app,
-        [
-            "atomize",
-            "--context",
-            source.name,
-            "--save-as",
-            "workbench/applied-output",
-        ],
-    )
-    assert applied.exit_code == 0, applied.output
-    output = store.load_direct("workbench/applied-output")
-    output_analysis = store.load_atomize_analysis(output.uid)
-    assert output_analysis is not None
-    assert output_analysis.uid == opened.analysis.uid
-    assert store.load_atomize_workbench(output_analysis) is None
-
-    # Re-executing an applied Output reports the terminal state without
-    # reopening a pre-Apply Viewer or persisting a second session owner.
-    preview = runner.invoke(
-        app,
-        ["atomize", "--context", "workbench/applied-output"],
-    )
-    assert preview.exit_code == 0, preview.output
-    assert "already applied" in preview.output
-    assert store.load_atomize_workbench(output_analysis) is None
-
-    reviewed_output = runner.invoke(
-        app,
-        [
-            "review",
-            "atomize",
-            "--context",
-            "workbench/applied-output",
-            "--snapshot",
-        ],
-    )
-    assert reviewed_output.exit_code == 0, reviewed_output.output
-    assert "APPLIED ANALYSIS" in reviewed_output.output
-    assert store.load_atomize_workbench(output_analysis) is None
-
-    # Recover catalogs produced by the historical bug without deleting the
-    # derived file: the Source terminal receipt remains the canonical owner.
-    store.save_atomize_workbench(create_atomize_workbench(output_analysis))
-    entries = atomize_session_entries(store)
-    assert len(entries) == 1
-    assert entries[0].key == opened.analysis.uid
-    assert entries[0].title == source.name
-    assert entries[0].status == "APPLIED"
-
-
+    assert "TARGET" in result.output
+    assert "--context" in result.output
+    assert "--memory" in result.output
+    assert "--refresh" in result.output
+    for removed in ("--sessions", "--save", "--save-as", "--output", "--all"):
+        assert removed not in result.output
 
 
 def test_unanswered_atomize_findings_apply_as_is_and_are_checkpointed(
@@ -1531,13 +1078,13 @@ def test_unanswered_atomize_findings_apply_as_is_and_are_checkpointed(
 ):
     store = MemoryStore()
     ctx, _memory = _init_context(store)
-    opened = open_or_create_atomize_workbench(
+    opened = open_or_create_atomize_review_record(
         store=store,
         ctx=ctx,
         provider_factory=AggregateProvider,
     )
 
-    result = runner.invoke(app, ["atomize", "--context", ctx.name, "--save"])
+    result = runner.invoke(app, ["atomize", "--context", ctx.name])
 
     assert result.exit_code == 0, result.output
     assert "UNRESOLVED ISSUES · 2 · APPLIED AS-IS" in result.output
@@ -1550,8 +1097,8 @@ def test_unanswered_atomize_findings_apply_as_is_and_are_checkpointed(
         "ATOMIZE_UNCERTAINTY",
     }
     assert {item["response_state"] for item in args["unresolved_at_apply"]} == {"OPEN"}
-    assert args["application_workbench_uid"] == opened.workbench.uid
-    assert len(args["application_workbench_response_digest"]) == 64
+    assert args["application_review_record_uid"] == opened.review_record.uid
+    assert len(args["application_review_record_response_digest"]) == 64
     assert "2 unresolved at apply" in checkpoint["description"]
 
 
@@ -1586,8 +1133,8 @@ def test_issue_list_uses_labels_and_discloses_additional_readings():
             quality_issues=(replace(issue, readings=readings),),
         ),
     )
-    snapshot = render_atomize_workbench_snapshot(
-        create_atomize_workbench(analysis),
+    snapshot = render_atomize_impact_snapshot(
+        create_atomize_review_record(analysis),
         analysis,
     )
     issue_list = snapshot.split("\n\nAMBIGUITY 1/", 1)[0]
@@ -1606,7 +1153,7 @@ def test_schema_v3_readings_resume_with_full_text_as_legacy_label():
     ops.add(ctx, "Use the same NFC.")
     report = impact_atomize(ctx, lambda: AggregateProvider())
     analysis = create_atomize_analysis(ctx, report)
-    workbench = create_atomize_workbench(analysis)
+    workbench = create_atomize_review_record(analysis)
     legacy = analysis.to_dict()
     legacy["schema_version"] = 3
     for issue in legacy["quality_issues"]:
@@ -1614,7 +1161,7 @@ def test_schema_v3_readings_resume_with_full_text_as_legacy_label():
             reading.pop("label")
 
     restored = AtomizeAnalysisSession.from_dict(legacy)
-    snapshot = render_atomize_workbench_snapshot(workbench, restored)
+    snapshot = render_atomize_impact_snapshot(workbench, restored)
 
     restored_reading = restored.quality_issues[0].readings[0]
     assert restored_reading.label == restored_reading.text

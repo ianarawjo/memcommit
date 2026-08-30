@@ -29,14 +29,18 @@ from memcommit.application.capabilities.authority.context_access import (
 from memcommit.adapters.console.commands.compare.sessions import (
     comparison_session_entries,
 )
-from memcommit.adapters.console.commands.compare.endpoint_setup import choose_compare_setup
-from memcommit.adapters.console.terminal.components.endpoint_setup.flows import (
+from memcommit.adapters.console.commands.compare.endpoint_setup import (
+    choose_compare_setup,
+)
+from memcommit.adapters.console.commands.update.endpoint_setup import (
     _readable_endpoint_catalog,
     choose_update_setup,
 )
 from memcommit.adapters.console.commands.meld.endpoint_setup import MeldSetupReceipt
 from memcommit.core.context import AutoCheckpoint, Context, Memory
-from memcommit.application.capabilities.authority.readable_contexts import ReadableContextCatalog
+from memcommit.application.capabilities.authority.readable_contexts import (
+    ReadableContextCatalog,
+)
 from memcommit.application.capabilities.authority.source_use_policy import (
     analysis_retention,
     authorize_analysis_save,
@@ -1534,7 +1538,7 @@ def test_new_compare_and_update_setup_include_a_granted_target(
             require_tty=False,
         )
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\t\t\t\r")
+        pipe_input.send_text("\t\t\t\r\x1b[B\r\x1b[B\t\t\t\r\x1b[B\r\x1b[B\r")
         update = choose_update_setup(
             active,
             app_input=pipe_input,

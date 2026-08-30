@@ -1,5 +1,9 @@
 # Memory refinement pipeline
 
+> **Atomize route update (2026-08-30):** the console Atomize stage is now
+> `mem atomize [TARGET]`, a one-shot in-place transformation. References below
+> to Atomize `--save` or `--save-as` describe the superseded console workflow.
+
 > Naming amendment (2026-08-20): exact stored duplicates are removed by
 > `mem dedup`; semantic redundancy discovery, review, and Apply are now the
 > single `mem dedun` operation. Historical pipeline sections below retain

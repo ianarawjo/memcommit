@@ -19,13 +19,14 @@
         "evidence": [
           "agent-records/docs/atomize-application-boundary-matrix.md",
           "agent-records/docs/atomize-domain-package-design-rationale.md",
+          "agent-records/docs/atomize-one-shot-execution-design-rationale.md",
           "agent-records/docs/atomize-read-only-findings-design-rationale.md",
           "agent-records/docs/context-locator-design-rationale.md",
           "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
           "agent-records/docs/study-semantic-prompt-policy-design-rationale.md",
           "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md"
         ],
-        "reason": "Analysis, immutable findings, Output planning, both structural Apply directions, complete receipt, recovery, and read-only Review are verified without an Atomize-owned resolution route."
+        "reason": "The CLI freezes a Context or direct-Memory target and enters one analysis-to-in-place-application boundary; retained records support exact recovery, non-applying Impact, and read-only Review without an Atomize-owned resolution route."
       },
       "compare": {
         "evidence": [

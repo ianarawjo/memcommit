@@ -1,5 +1,10 @@
 # Saved-work session picker design rationale
 
+> **Atomize route update (2026-08-30):** Atomize no longer exposes
+> `mem atomize --sessions`; its retained analyses are records discoverable
+> through Impact and Review. Atomize-specific picker statements below are
+> historical. Other operations continue to use the saved-session picker.
+
 ## Neutral launcher ownership
 
 The visual catalog is now owned by

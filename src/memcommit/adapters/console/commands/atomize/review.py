@@ -5,8 +5,7 @@ from __future__ import annotations
 import copy
 from dataclasses import replace
 
-from memcommit.adapters.console.commands.atomize.sessions import (
-    atomize_application_checkpoint_uid,
+from memcommit.adapters.console.commands.atomize.records import (
     load_saved_atomize_analysis,
     revalidate_saved_atomize_analysis,
 )
@@ -22,10 +21,13 @@ from memcommit.application.operations.atomize.resolution_adapter import (
 from memcommit.application.operations.atomize.result_adapter import (
     AtomizeResultWorkbenchAdapter,
 )
-from memcommit.application.operations.atomize.workbench import (
-    AtomizeWorkbenchSession,
-    atomize_workbench_issue_projection,
-    create_atomize_workbench,
+from memcommit.application.operations.atomize.records import (
+    AtomizeReviewRecord,
+    atomize_review_issue_projection,
+    create_atomize_review_record,
+)
+from memcommit.application.operations.atomize.runtime import (
+    atomize_application_checkpoint_uid,
 )
 from memcommit.application.operations.review.model import ReviewError
 from memcommit.persistence.store import MemoryStore
@@ -33,7 +35,7 @@ from memcommit.persistence.store import MemoryStore
 
 def atomize_review_report(
     analysis: AtomizeAnalysisSession,
-    workbench: AtomizeWorkbenchSession,
+    workbench: AtomizeReviewRecord,
 ) -> ReviewReportController:
     """Expose terminal Atomize evidence without response or Apply controls."""
 
@@ -41,8 +43,20 @@ def atomize_review_report(
     if workbench.application is not None:
         result_view = replace(result_view, status="APPLIED ANALYSIS")
 
+    adapter = AtomizeResolutionWorkbenchAdapter(analysis, workbench)
+
+    def review_view():
+        projected = adapter.view()
+        return replace(
+            projected,
+            title="MEM REVIEW · ATOMIZE",
+            route=f"CONTEXT {analysis.context_name}",
+            status="APPLIED RECORD · READ ONLY",
+            context_locations=projected.context_locations[:1],
+        )
+
     return ReviewReportController.from_resolution(
-        AtomizeResolutionWorkbenchAdapter(analysis, workbench).view,
+        review_view,
         kind="READ_ONLY",
         title="MEM REVIEW · ATOMIZE",
         summary=(
@@ -105,7 +119,7 @@ def open_atomize_review(
 
     workbench = store.load_atomize_workbench(analysis)
     if workbench is None:
-        workbench = create_atomize_workbench(analysis)
+        workbench = create_atomize_review_record(analysis)
     if workbench.application is None:
         checkpoint_uid = atomize_application_checkpoint_uid(store, ctx, analysis.uid)
         if checkpoint_uid is None:
@@ -124,7 +138,7 @@ def open_atomize_review(
         context_uid=analysis.context_uid,
         context_name=analysis.context_name,
         context_digest=analysis.context_digest,
-        issues=atomize_workbench_issue_projection(analysis),
+        issues=atomize_review_issue_projection(analysis),
     ):
         raise ReviewError("The saved atomize workbench does not match its analysis.")
 

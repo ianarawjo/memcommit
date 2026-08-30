@@ -1,5 +1,9 @@
 # Query-only Context research prototype
 
+> **Atomize route update (2026-08-30):** query-only authority remains excluded
+> from Atomize. The current console producer is one-shot `mem atomize
+> [TARGET]`; references below to Atomize `--save`/`--save-as` are historical.
+
 ## Decision
 
 Some study information should be visible as an available view without being

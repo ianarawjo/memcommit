@@ -247,8 +247,9 @@ app.command(
     "atomize",
     help=operation_summary("atomize"),
     epilog=(
-        "Positional form: 'mem atomize [CONTEXT]'. Omitting CONTEXT uses the "
-        "current Context; --context remains a compatibility alias."
+        "Positional TARGET accepts an existing Context, direct Memory UID, or "
+        "CONTEXT:UID. Omitting it uses the current Context; --context and "
+        "--memory remain explicit aliases."
     ),
 )(atomize.cmd)
 app.command(

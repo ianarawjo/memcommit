@@ -20,9 +20,7 @@ def test_repository_requires_an_installed_src_layout():
     assert not (REPOSITORY / "memcommit").exists()
     assert (REPOSITORY / "src" / "memcommit" / "__init__.py").is_file()
     assert metadata["tool"]["setuptools"]["package-dir"] == {"": "src"}
-    assert metadata["tool"]["setuptools"]["packages"]["find"]["where"] == [
-        "src"
-    ]
+    assert metadata["tool"]["setuptools"]["packages"]["find"]["where"] == ["src"]
 
     environment = os.environ.copy()
     environment.pop("PYTHONPATH", None)
@@ -187,7 +185,7 @@ blocked = (
     'memcommit.application.operations.atomize.normal_form',
     'memcommit.application.operations.atomize.resolution_adapter',
     'memcommit.application.operations.atomize.result_adapter',
-    'memcommit.application.operations.atomize.workbench',
+    'memcommit.application.operations.atomize.records',
     'memcommit.application.operations.chunk.application',
     'memcommit.application.operations.chunk.domain',
     'memcommit.application.operations.chunk.runtime',

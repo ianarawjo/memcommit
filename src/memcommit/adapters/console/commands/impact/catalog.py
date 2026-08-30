@@ -13,12 +13,14 @@ from dataclasses import replace
 from datetime import datetime
 import sys
 
-from memcommit.adapters.console.commands.atomize.sessions import atomize_session_entries
+from memcommit.adapters.console.commands.atomize.records import atomize_record_entries
 from memcommit.adapters.console.terminal.components.operation_launcher.location import (
     session_picker_location,
 )
 from memcommit.adapters.console.commands.meld.sessions import list_meld_session_catalog
-from memcommit.adapters.console.commands.sever.sessions import list_sever_session_catalog
+from memcommit.adapters.console.commands.sever.sessions import (
+    list_sever_session_catalog,
+)
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
@@ -218,7 +220,7 @@ def impact_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]
     """Return every durable artifact currently inspectable by Impact."""
 
     entries: list[SessionPickerEntry] = []
-    entries.extend(_impact_entry(entry) for entry in atomize_session_entries(store))
+    entries.extend(_impact_entry(entry) for entry in atomize_record_entries(store))
     entries.extend(_meld_entries(store))
     entries.extend(
         _impact_entry(entry.picker_entry)

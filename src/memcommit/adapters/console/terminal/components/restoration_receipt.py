@@ -9,8 +9,13 @@ from typing import Any
 
 import typer
 
-from memcommit.application.capabilities.retained_history.command_history import CommandRestoreResult, ContextCommandUnit
-from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
+from memcommit.application.capabilities.retained_history.command_history import (
+    CommandRestoreResult,
+    ContextCommandUnit,
+)
+from memcommit.adapters.console.terminal.core.identity import (
+    collision_safe_uid_prefixes,
+)
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
@@ -732,7 +737,7 @@ def _restored_command(unit: ContextCommandUnit) -> str:
         if context_name is not None:
             if unit.changes and unit.changes[0].before is None:
                 return f"mem atomize --save-as {_command_arg(context_name)}"
-            return f"mem atomize --save --context {_command_arg(context_name)}"
+            return f"mem atomize {_command_arg(context_name)}"
     if unit.command == "dev query-source install" and all(
         isinstance(args.get(key), str) for key in ("name", "into")
     ):
@@ -937,9 +942,7 @@ def render_revert_receipt(
 def render_checkpoint_unit_revert_receipt(
     result,
     *,
-    resolved_memory_ref_contents: Mapping[
-        str, Mapping[MemoryRefTargetKey, str | None]
-    ]
+    resolved_memory_ref_contents: Mapping[str, Mapping[MemoryRefTargetKey, str | None]]
     | None = None,
 ) -> None:
     """Report one atomic recursive Checkpoint recovery unit."""
@@ -955,8 +958,7 @@ def render_checkpoint_unit_revert_receipt(
         if index:
             typer.echo()
         typer.echo(
-            "Context: "
-            + _short(member.context_name, limit=_MAX_CONTENT_CODEPOINTS)
+            "Context: " + _short(member.context_name, limit=_MAX_CONTENT_CODEPOINTS)
         )
         typer.echo(
             "Restored state recorded by: "

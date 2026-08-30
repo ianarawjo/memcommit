@@ -693,8 +693,8 @@ def test_delete_removes_context_scoped_analysis_and_matching_review(
         AtomizeItem,
         create_atomize_analysis,
     )
-    from memcommit.application.operations.atomize.workbench import (
-        create_atomize_workbench,
+    from memcommit.application.operations.atomize.records import (
+        create_atomize_review_record,
     )
     from memcommit.application.operations.review.model import create_atomize_review
 
@@ -725,7 +725,7 @@ def test_delete_removes_context_scoped_analysis_and_matching_review(
         ),
     )
     store.save_atomize_analysis(first_analysis)
-    first_workbench = create_atomize_workbench(first_analysis)
+    first_workbench = create_atomize_review_record(first_analysis)
     first_workbench.response_for(
         f"atomize:{first_memory.uid}"
     ).text = "Private workbench context."
@@ -787,8 +787,8 @@ def test_delete_removes_uid_retained_atomize_and_review_evidence(isolated_store)
         AtomizeImpactReport,
         create_atomize_analysis,
     )
-    from memcommit.application.operations.atomize.workbench import (
-        create_atomize_workbench,
+    from memcommit.application.operations.atomize.records import (
+        create_atomize_review_record,
     )
     from memcommit.application.capabilities.memory_issue_analysis.model import (
         AmbiguityReport,
@@ -811,7 +811,7 @@ def test_delete_removes_uid_retained_atomize_and_review_evidence(isolated_store)
             items=(),
         ),
     )
-    workbench = create_atomize_workbench(analysis)
+    workbench = create_atomize_review_record(analysis)
     store.archive_atomize_session(analysis, workbench)
 
     deleted_review = create_ambiguity_review(

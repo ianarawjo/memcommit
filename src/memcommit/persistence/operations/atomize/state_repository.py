@@ -136,10 +136,10 @@ class _AtomizeStateStoreMixin:
         from memcommit.application.operations.atomize.domain import (
             AtomizeAnalysisSession,
         )
-        from memcommit.application.operations.atomize.workbench import (
-            AtomizeWorkbenchError,
-            AtomizeWorkbenchSession,
-            atomize_workbench_issue_projection,
+        from memcommit.application.operations.atomize.records import (
+            AtomizeRecordError,
+            AtomizeReviewRecord,
+            atomize_review_issue_projection,
         )
 
         if not isinstance(analysis, AtomizeAnalysisSession):
@@ -167,9 +167,9 @@ class _AtomizeStateStoreMixin:
                     f,
                     object_pairs_hook=_reject_duplicate_json_keys,
                 )
-            session = AtomizeWorkbenchSession.from_dict(
+            session = AtomizeReviewRecord.from_dict(
                 data,
-                issues=atomize_workbench_issue_projection(analysis),
+                issues=atomize_review_issue_projection(analysis),
             )
             if (
                 session.analysis_uid != analysis.uid
@@ -182,7 +182,7 @@ class _AtomizeStateStoreMixin:
             return session
         except (
             json.JSONDecodeError,
-            AtomizeWorkbenchError,
+            AtomizeRecordError,
             ValueError,
         ) as error:
             raise ValueError("Saved atomize workbench is invalid.") from error
@@ -190,26 +190,26 @@ class _AtomizeStateStoreMixin:
     @_profile_write_guarded
     def save_atomize_workbench(self, session) -> None:
         """Atomically persist one Context-bound mutable workbench."""
-        from memcommit.application.operations.atomize.workbench import (
-            AtomizeWorkbenchSession,
+        from memcommit.application.operations.atomize.records import (
+            AtomizeReviewRecord,
         )
 
-        if not isinstance(session, AtomizeWorkbenchSession):
-            raise TypeError("Expected an AtomizeWorkbenchSession.")
+        if not isinstance(session, AtomizeReviewRecord):
+            raise TypeError("Expected an AtomizeReviewRecord.")
         with self._atomize_session_write_lock(session.context_uid):
             self._save_atomize_workbench_locked(session)
 
     def _save_atomize_workbench_locked(self, session) -> None:
         """Persist one workbench while its Context-scoped CAS lock is held."""
-        from memcommit.application.operations.atomize.workbench import (
-            AtomizeWorkbenchError,
-            AtomizeWorkbenchSession,
-            atomize_workbench_issue_projection,
+        from memcommit.application.operations.atomize.records import (
+            AtomizeRecordError,
+            AtomizeReviewRecord,
+            atomize_review_issue_projection,
         )
 
         self._assert_profile_write_allowed()
-        if not isinstance(session, AtomizeWorkbenchSession):
-            raise TypeError("Expected an AtomizeWorkbenchSession.")
+        if not isinstance(session, AtomizeReviewRecord):
+            raise TypeError("Expected an AtomizeReviewRecord.")
         path = self._atomize_workbench_path(session.context_uid)
         if self.atomize_workbenches_dir.exists() and (
             not self.atomize_workbenches_dir.is_dir()
@@ -221,11 +221,11 @@ class _AtomizeStateStoreMixin:
             raise ValueError("Atomize workbench storage is invalid.")
         data = session.to_dict()
         try:
-            AtomizeWorkbenchSession.from_dict(
+            AtomizeReviewRecord.from_dict(
                 data,
                 issues=session.issues,
             )
-        except AtomizeWorkbenchError as error:
+        except AtomizeRecordError as error:
             raise ValueError("Atomize workbench is invalid.") from error
         analysis = self.load_atomize_analysis(session.context_uid)
         if analysis is None or not session.matches_analysis(
@@ -233,7 +233,7 @@ class _AtomizeStateStoreMixin:
             context_uid=analysis.context_uid,
             context_name=analysis.context_name,
             context_digest=analysis.context_digest,
-            issues=atomize_workbench_issue_projection(analysis),
+            issues=atomize_review_issue_projection(analysis),
         ):
             raise ValueError("Atomize workbench does not match the saved analysis.")
         _write_json_atomic(path, data)
@@ -274,38 +274,38 @@ class _AtomizeStateStoreMixin:
             AtomizeAnalysisSession,
             AtomizeImpactError,
         )
-        from memcommit.application.operations.atomize.workbench import (
-            AtomizeWorkbenchError,
-            AtomizeWorkbenchSession,
-            atomize_workbench_issue_projection,
+        from memcommit.application.operations.atomize.records import (
+            AtomizeRecordError,
+            AtomizeReviewRecord,
+            atomize_review_issue_projection,
         )
 
         if not isinstance(analysis, AtomizeAnalysisSession):
             raise TypeError("Expected an AtomizeAnalysisSession.")
         if workbench is not None and not isinstance(
             workbench,
-            AtomizeWorkbenchSession,
+            AtomizeReviewRecord,
         ):
-            raise TypeError("Expected an AtomizeWorkbenchSession.")
+            raise TypeError("Expected an AtomizeReviewRecord.")
         analysis_data = analysis.to_dict()
         try:
             AtomizeAnalysisSession.from_dict(analysis_data)
             if workbench is not None:
-                restored_workbench = AtomizeWorkbenchSession.from_dict(
+                restored_workbench = AtomizeReviewRecord.from_dict(
                     workbench.to_dict(),
-                    issues=atomize_workbench_issue_projection(analysis),
+                    issues=atomize_review_issue_projection(analysis),
                 )
                 if not restored_workbench.matches_analysis(
                     analysis_uid=analysis.uid,
                     context_uid=analysis.context_uid,
                     context_name=analysis.context_name,
                     context_digest=analysis.context_digest,
-                    issues=atomize_workbench_issue_projection(analysis),
+                    issues=atomize_review_issue_projection(analysis),
                 ):
                     raise ValueError(
                         "Atomize workbench does not match its retained analysis."
                     )
-        except (AtomizeImpactError, AtomizeWorkbenchError) as error:
+        except (AtomizeImpactError, AtomizeRecordError) as error:
             raise ValueError("Atomize session history is invalid.") from error
         path = self._atomize_session_history_path(
             analysis.context_uid,
@@ -374,10 +374,10 @@ class _AtomizeStateStoreMixin:
             AtomizeAnalysisSession,
             AtomizeImpactError,
         )
-        from memcommit.application.operations.atomize.workbench import (
-            AtomizeWorkbenchError,
-            AtomizeWorkbenchSession,
-            atomize_workbench_issue_projection,
+        from memcommit.application.operations.atomize.records import (
+            AtomizeRecordError,
+            AtomizeReviewRecord,
+            atomize_review_issue_projection,
         )
 
         path = self._atomize_session_history_path(context_uid, analysis_uid)
@@ -408,9 +408,9 @@ class _AtomizeStateStoreMixin:
             workbench = (
                 None
                 if workbench_data is None
-                else AtomizeWorkbenchSession.from_dict(
+                else AtomizeReviewRecord.from_dict(
                     workbench_data,
-                    issues=atomize_workbench_issue_projection(analysis),
+                    issues=atomize_review_issue_projection(analysis),
                 )
             )
             if workbench is not None and not workbench.matches_analysis(
@@ -418,14 +418,14 @@ class _AtomizeStateStoreMixin:
                 context_uid=analysis.context_uid,
                 context_name=analysis.context_name,
                 context_digest=analysis.context_digest,
-                issues=atomize_workbench_issue_projection(analysis),
+                issues=atomize_review_issue_projection(analysis),
             ):
                 raise ValueError("Atomize session history identity is invalid.")
             return analysis, workbench, path
         except (
             json.JSONDecodeError,
             AtomizeImpactError,
-            AtomizeWorkbenchError,
+            AtomizeRecordError,
             TypeError,
             ValueError,
         ) as error:

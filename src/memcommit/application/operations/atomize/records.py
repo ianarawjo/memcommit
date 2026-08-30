@@ -1,10 +1,10 @@
-"""Operation-owned durable state for one Context-bound atomize workbench.
+"""Durable analysis/application records for one Context-bound Atomize run.
 
-The atomize analysis remains the authority for issue semantics.  This module
-stores only resumable interaction state and binds it to an exact immutable
-issue projection with ``issue_digest``.  Loaders must therefore supply the
-issue descriptors from the selected analysis revision; an old workbench can
-never be silently interpreted against a different set of findings or choices.
+The analysis remains authoritative for issue semantics. The record binds that
+immutable issue projection to the exact application checkpoint. Cursor, sort,
+response, and Output-plan fields are decoded only for compatibility with the
+historical workbench schema and public API; the current Impact and Review
+adapters never persist interactive UI state or choose an execution destination.
 """
 
 from __future__ import annotations
@@ -30,9 +30,9 @@ ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT = 20_000
 ATOMIZE_WORKBENCH_ID_CHAR_LIMIT = 200
 ATOMIZE_WORKBENCH_CONTEXT_NAME_CHAR_LIMIT = 500
 
-AtomizeWorkbenchSort = Literal["SOURCE", "PRIORITY"]
-AtomizeWorkbenchLayout = Literal["SPLIT", "STACKED"]
-AtomizeWorkbenchKind = Literal[
+AtomizeReviewSort = Literal["SOURCE", "PRIORITY"]
+AtomizeReviewLayout = Literal["SPLIT", "STACKED"]
+AtomizeReviewKind = Literal[
     "AMBIGUITY",
     "CONFLICT",
     "ATOMIZE_SPLIT",
@@ -43,8 +43,8 @@ _SORT_MODES = {"SOURCE", "PRIORITY"}
 _LAYOUT_MODES = {"SPLIT", "STACKED"}
 
 
-class AtomizeWorkbenchError(ValueError):
-    """Invalid, corrupt, or analysis-mismatched atomize workbench state."""
+class AtomizeRecordError(ValueError):
+    """Invalid, corrupt, or analysis-mismatched Atomize record state."""
 
 
 def _exact_dict(
@@ -53,7 +53,7 @@ def _exact_dict(
     label: str,
 ) -> dict[str, object]:
     if not isinstance(value, dict) or set(value) != keys:
-        raise AtomizeWorkbenchError(f"Invalid {label}.")
+        raise AtomizeRecordError(f"Invalid {label}.")
     return value
 
 
@@ -65,7 +65,7 @@ def _string(
     limit: int = ATOMIZE_WORKBENCH_RESPONSE_CHAR_LIMIT,
 ) -> str:
     if not isinstance(value, str) or (not empty and not value) or len(value) > limit:
-        raise AtomizeWorkbenchError(f"Invalid {label}.")
+        raise AtomizeRecordError(f"Invalid {label}.")
     return value
 
 
@@ -78,9 +78,9 @@ def _canonical_uuid(value: object, label: str) -> str:
     try:
         canonical = str(uuid.UUID(text))
     except ValueError as error:
-        raise AtomizeWorkbenchError(f"Invalid {label}.") from error
+        raise AtomizeRecordError(f"Invalid {label}.") from error
     if text != canonical:
-        raise AtomizeWorkbenchError(f"Invalid {label}.")
+        raise AtomizeRecordError(f"Invalid {label}.")
     return text
 
 
@@ -89,7 +89,7 @@ def _digest(value: object, label: str) -> str:
     if len(text) != 64 or any(
         character not in "0123456789abcdef" for character in text
     ):
-        raise AtomizeWorkbenchError(f"Invalid {label}.")
+        raise AtomizeRecordError(f"Invalid {label}.")
     return text
 
 
@@ -103,12 +103,12 @@ def _identifier(value: object, label: str) -> str:
 
 def _integer(value: object, label: str) -> int:
     if isinstance(value, bool) or not isinstance(value, int) or value < 0:
-        raise AtomizeWorkbenchError(f"Invalid {label}.")
+        raise AtomizeRecordError(f"Invalid {label}.")
     return value
 
 
 @dataclass(frozen=True)
-class AtomizeWorkbenchIssue:
+class AtomizeReviewIssue:
     """Immutable UI projection supplied by one analysis revision.
 
     ``priority`` is intentionally an integer rather than a semantic label.
@@ -127,13 +127,13 @@ class AtomizeWorkbenchIssue:
         _integer(self.source_order, "atomize workbench source order")
         _integer(self.priority, "atomize workbench priority")
         if not isinstance(self.choice_uids, tuple):
-            raise AtomizeWorkbenchError("Invalid atomize workbench choice uids.")
+            raise AtomizeRecordError("Invalid atomize workbench choice uids.")
         parsed = tuple(
             _identifier(value, "atomize workbench choice uid")
             for value in self.choice_uids
         )
         if len(set(parsed)) != len(parsed):
-            raise AtomizeWorkbenchError("Duplicate atomize workbench choice uid.")
+            raise AtomizeRecordError("Duplicate atomize workbench choice uid.")
 
     def digest_record(self) -> dict[str, object]:
         """Return the exact immutable fields covered by ``issue_digest``."""
@@ -146,11 +146,11 @@ class AtomizeWorkbenchIssue:
 
 
 @dataclass(frozen=True)
-class AtomizeWorkbenchFinding:
+class AtomizeReviewFinding:
     """Typed read-only view data projected from one saved analysis."""
 
     uid: str
-    kind: AtomizeWorkbenchKind
+    kind: AtomizeReviewKind
     source_uids: tuple[str, ...]
     source_order: int
     priority: int
@@ -160,8 +160,8 @@ class AtomizeWorkbenchFinding:
     readings: tuple["AtomizeReading", ...] = ()
     children: tuple["AtomizeChild", ...] = ()
 
-    def descriptor(self) -> AtomizeWorkbenchIssue:
-        return AtomizeWorkbenchIssue(
+    def descriptor(self) -> AtomizeReviewIssue:
+        return AtomizeReviewIssue(
             uid=self.uid,
             source_order=self.source_order,
             priority=self.priority,
@@ -169,16 +169,16 @@ class AtomizeWorkbenchFinding:
         )
 
 
-def project_atomize_workbench_findings(
+def project_atomize_review_findings(
     analysis: "AtomizeAnalysisSession",
-) -> tuple[AtomizeWorkbenchFinding, ...]:
+) -> tuple[AtomizeReviewFinding, ...]:
     """Project typed actionable findings without flattening their arity."""
     from memcommit.application.operations.atomize.domain import AtomizeAnalysisSession
 
     if not isinstance(analysis, AtomizeAnalysisSession):
-        raise AtomizeWorkbenchError("Expected an AtomizeAnalysisSession.")
+        raise AtomizeRecordError("Expected an AtomizeAnalysisSession.")
     position_by_uid = {item.memory_uid: item.position for item in analysis.items}
-    findings: list[AtomizeWorkbenchFinding] = []
+    findings: list[AtomizeReviewFinding] = []
     clarification_priority = {
         "NONE": 1,
         "HELPFUL": 2,
@@ -203,7 +203,7 @@ def project_atomize_workbench_findings(
             # "CONFLICT · MAY", not "CONFLICT · CONFLICT · MAY".
             classification = issue.conflict or "MAY"
         findings.append(
-            AtomizeWorkbenchFinding(
+            AtomizeReviewFinding(
                 uid=issue.uid,
                 kind=issue.kind,
                 source_uids=issue.source_uids,
@@ -220,7 +220,7 @@ def project_atomize_workbench_findings(
             continue
         uncertain = item.classification == "UNCERTAIN"
         findings.append(
-            AtomizeWorkbenchFinding(
+            AtomizeReviewFinding(
                 uid=f"atomize:{item.memory_uid}",
                 kind=("ATOMIZE_UNCERTAINTY" if uncertain else "ATOMIZE_SPLIT"),
                 source_uids=(item.memory_uid,),
@@ -257,37 +257,37 @@ def project_atomize_workbench_findings(
         )
     )
     if len({finding.uid for finding in findings}) != len(findings):
-        raise AtomizeWorkbenchError("Duplicate projected atomize workbench issue uid.")
+        raise AtomizeRecordError("Duplicate projected atomize workbench issue uid.")
     return tuple(findings)
 
 
-def atomize_workbench_issue_projection(
+def atomize_review_issue_projection(
     analysis: "AtomizeAnalysisSession",
-) -> tuple[AtomizeWorkbenchIssue, ...]:
+) -> tuple[AtomizeReviewIssue, ...]:
     """Return the immutable projection covered by a workbench digest."""
     return tuple(
-        finding.descriptor() for finding in project_atomize_workbench_findings(analysis)
+        finding.descriptor() for finding in project_atomize_review_findings(analysis)
     )
 
 
-def create_atomize_workbench(
+def create_atomize_review_record(
     analysis: "AtomizeAnalysisSession",
     *,
     output_context_name: str | None = None,
-) -> "AtomizeWorkbenchSession":
+) -> "AtomizeReviewRecord":
     """Create fresh mutable state pinned to one immutable analysis."""
-    return AtomizeWorkbenchSession.create(
+    return AtomizeReviewRecord.create(
         analysis_uid=analysis.uid,
         context_uid=analysis.context_uid,
         context_name=analysis.context_name,
         context_digest=analysis.context_digest,
         output_context_name=output_context_name or analysis.context_name,
-        issues=atomize_workbench_issue_projection(analysis),
+        issues=atomize_review_issue_projection(analysis),
     )
 
 
-def atomize_workbench_response_digest(
-    session: "AtomizeWorkbenchSession",
+def atomize_review_response_digest(
+    session: "AtomizeReviewRecord",
 ) -> str:
     """Content-address semantic answers, excluding cursor and layout state."""
     payload = {
@@ -296,7 +296,7 @@ def atomize_workbench_response_digest(
         "responses": {
             issue.uid: session.responses.get(
                 issue.uid,
-                AtomizeWorkbenchResponse(),
+                AtomizeReviewResponse(),
             ).to_dict()
             for issue in session.issues
         },
@@ -311,8 +311,8 @@ def atomize_workbench_response_digest(
     ).hexdigest()
 
 
-def atomize_workbench_record_digest(
-    session: "AtomizeWorkbenchSession",
+def atomize_review_record_digest(
+    session: "AtomizeReviewRecord",
 ) -> str:
     """Fingerprint the complete mutable record for lifecycle CAS."""
 
@@ -326,8 +326,8 @@ def atomize_workbench_record_digest(
     ).hexdigest()
 
 
-def atomize_workbench_declared_frames(
-    session: "AtomizeWorkbenchSession",
+def atomize_review_record_declared_frames(
+    session: "AtomizeReviewRecord",
     analysis: "AtomizeAnalysisSession",
 ):
     """Convert reviewed unary readings/comments into per-Memory frames.
@@ -342,25 +342,23 @@ def atomize_workbench_declared_frames(
     from memcommit.application.operations.atomize.domain import AtomizeFrameOrigin
 
     findings = {
-        finding.uid: finding for finding in project_atomize_workbench_findings(analysis)
+        finding.uid: finding for finding in project_atomize_review_findings(analysis)
     }
     if not session.matches_analysis(
         analysis_uid=analysis.uid,
         context_uid=analysis.context_uid,
         context_name=analysis.context_name,
         context_digest=analysis.context_digest,
-        issues=atomize_workbench_issue_projection(analysis),
+        issues=atomize_review_issue_projection(analysis),
     ):
-        raise AtomizeWorkbenchError(
-            "The atomize workbench does not match its analysis."
-        )
-    entries: dict[str, tuple[AtomizeWorkbenchFinding, str]] = {}
+        raise AtomizeRecordError("The atomize workbench does not match its analysis.")
+    entries: dict[str, tuple[AtomizeReviewFinding, str]] = {}
     for issue_uid, response in session.responses.items():
         if not response.answered:
             continue
         finding = findings[issue_uid]
         if len(finding.source_uids) != 1:
-            raise AtomizeWorkbenchError(
+            raise AtomizeRecordError(
                 "Pairwise conflict responses cannot become single-Memory "
                 "atomization frames. They remain staged for a future "
                 "reconcile operation; clear them before reviewed reanalysis."
@@ -376,7 +374,7 @@ def atomize_workbench_declared_frames(
                 None,
             )
             if reading is None:
-                raise AtomizeWorkbenchError(
+                raise AtomizeRecordError(
                     "The selected atomize workbench reading is unavailable."
                 )
             parts.append(f"Selected ordinary reading: {reading.text}")
@@ -396,7 +394,7 @@ def atomize_workbench_declared_frames(
         if parts:
             memory_uid = finding.source_uids[0]
             if memory_uid in entries:
-                raise AtomizeWorkbenchError(
+                raise AtomizeRecordError(
                     "More than one answered unary issue targets the same "
                     "Memory. Consolidate the exact context into one response "
                     "and clear the other before reviewed reanalysis."
@@ -415,26 +413,26 @@ def atomize_workbench_declared_frames(
     return frames, origins
 
 
-def normalize_atomize_workbench_issues(
-    issues: Iterable[AtomizeWorkbenchIssue],
-) -> tuple[AtomizeWorkbenchIssue, ...]:
+def normalize_atomize_review_issues(
+    issues: Iterable[AtomizeReviewIssue],
+) -> tuple[AtomizeReviewIssue, ...]:
     """Validate and freeze an analysis-provided issue projection."""
     try:
         parsed = tuple(issues)
     except TypeError as error:
-        raise AtomizeWorkbenchError("Invalid atomize workbench issues.") from error
-    if any(not isinstance(issue, AtomizeWorkbenchIssue) for issue in parsed):
-        raise AtomizeWorkbenchError("Invalid atomize workbench issue.")
+        raise AtomizeRecordError("Invalid atomize workbench issues.") from error
+    if any(not isinstance(issue, AtomizeReviewIssue) for issue in parsed):
+        raise AtomizeRecordError("Invalid atomize workbench issue.")
     if len({issue.uid for issue in parsed}) != len(parsed):
-        raise AtomizeWorkbenchError("Duplicate atomize workbench issue uid.")
+        raise AtomizeRecordError("Duplicate atomize workbench issue uid.")
     return parsed
 
 
-def atomize_workbench_issue_digest(
-    issues: Iterable[AtomizeWorkbenchIssue],
+def atomize_review_issue_digest(
+    issues: Iterable[AtomizeReviewIssue],
 ) -> str:
     """Fingerprint issue identity, order, priority, and selectable readings."""
-    parsed = normalize_atomize_workbench_issues(issues)
+    parsed = normalize_atomize_review_issues(issues)
     encoded = json.dumps(
         [issue.digest_record() for issue in parsed],
         ensure_ascii=False,
@@ -445,7 +443,7 @@ def atomize_workbench_issue_digest(
 
 
 @dataclass
-class AtomizeWorkbenchResponse:
+class AtomizeReviewResponse:
     """One selected analysis choice plus one deliberately untyped response."""
 
     selected_choice_uid: str | None = None
@@ -458,7 +456,7 @@ class AtomizeWorkbenchResponse:
         }
 
     @classmethod
-    def from_dict(cls, value: object) -> "AtomizeWorkbenchResponse":
+    def from_dict(cls, value: object) -> "AtomizeReviewResponse":
         data = _exact_dict(
             value,
             {"selected_choice_uid", "text"},
@@ -485,8 +483,8 @@ class AtomizeWorkbenchResponse:
 
 
 @dataclass(frozen=True)
-class AtomizeWorkbenchApplication:
-    """Terminal proof that this workbench crossed Apply once."""
+class AtomizeApplicationRecord:
+    """Terminal proof that one exact analysis crossed Apply once."""
 
     output_context_name: str
     checkpoint_uid: str
@@ -498,7 +496,7 @@ class AtomizeWorkbenchApplication:
         }
 
     @classmethod
-    def from_dict(cls, value: object) -> "AtomizeWorkbenchApplication":
+    def from_dict(cls, value: object) -> "AtomizeApplicationRecord":
         data = _exact_dict(
             value,
             {"output_context_name", "checkpoint_uid"},
@@ -518,8 +516,8 @@ class AtomizeWorkbenchApplication:
 
 
 @dataclass
-class AtomizeWorkbenchSession:
-    """One mutable UI session pinned to one immutable analysis revision."""
+class AtomizeReviewRecord:
+    """One persisted analysis/application record with legacy UI fields."""
 
     uid: str
     analysis_uid: str
@@ -529,11 +527,11 @@ class AtomizeWorkbenchSession:
     issue_digest: str
     cursor_uid: str | None
     output_context_name: str | None = None
-    sort_mode: AtomizeWorkbenchSort = "SOURCE"
-    layout: AtomizeWorkbenchLayout = "SPLIT"
-    responses: dict[str, AtomizeWorkbenchResponse] = field(default_factory=dict)
-    application: AtomizeWorkbenchApplication | None = None
-    _issues: tuple[AtomizeWorkbenchIssue, ...] = field(
+    sort_mode: AtomizeReviewSort = "SOURCE"
+    layout: AtomizeReviewLayout = "SPLIT"
+    responses: dict[str, AtomizeReviewResponse] = field(default_factory=dict)
+    application: AtomizeApplicationRecord | None = None
+    _issues: tuple[AtomizeReviewIssue, ...] = field(
         default=(),
         repr=False,
         compare=False,
@@ -551,10 +549,10 @@ class AtomizeWorkbenchSession:
             limit=ATOMIZE_WORKBENCH_CONTEXT_NAME_CHAR_LIMIT,
         )
         if self.application is not None:
-            if not isinstance(self.application, AtomizeWorkbenchApplication):
-                raise AtomizeWorkbenchError("Invalid atomize workbench application.")
+            if not isinstance(self.application, AtomizeApplicationRecord):
+                raise AtomizeRecordError("Invalid atomize workbench application.")
             if self.application.output_context_name != self.output_context_name:
-                raise AtomizeWorkbenchError(
+                raise AtomizeRecordError(
                     "Atomize workbench application Output does not match its plan."
                 )
 
@@ -567,10 +565,10 @@ class AtomizeWorkbenchSession:
         context_name: str,
         context_digest: str,
         output_context_name: str | None = None,
-        issues: Iterable[AtomizeWorkbenchIssue],
-    ) -> "AtomizeWorkbenchSession":
+        issues: Iterable[AtomizeReviewIssue],
+    ) -> "AtomizeReviewRecord":
         """Create a fresh workbench for one exact analysis issue projection."""
-        parsed_issues = normalize_atomize_workbench_issues(issues)
+        parsed_issues = normalize_atomize_review_issues(issues)
         source_ordered = _ordered_issues(parsed_issues, "SOURCE")
         session = cls(
             uid=str(uuid.uuid4()),
@@ -596,7 +594,7 @@ class AtomizeWorkbenchSession:
                 "atomize workbench output Context name",
                 limit=ATOMIZE_WORKBENCH_CONTEXT_NAME_CHAR_LIMIT,
             ),
-            issue_digest=atomize_workbench_issue_digest(parsed_issues),
+            issue_digest=atomize_review_issue_digest(parsed_issues),
             cursor_uid=source_ordered[0].uid if source_ordered else None,
             _issues=parsed_issues,
         )
@@ -633,15 +631,15 @@ class AtomizeWorkbenchSession:
         cls,
         value: object,
         *,
-        issues: Iterable[AtomizeWorkbenchIssue],
-    ) -> "AtomizeWorkbenchSession":
+        issues: Iterable[AtomizeReviewIssue],
+    ) -> "AtomizeReviewRecord":
         """Restore state only against the exact selected analysis issues."""
-        parsed_issues = normalize_atomize_workbench_issues(issues)
+        parsed_issues = normalize_atomize_review_issues(issues)
         if not isinstance(value, dict):
-            raise AtomizeWorkbenchError("Invalid atomize workbench session.")
+            raise AtomizeRecordError("Invalid atomize workbench session.")
         schema_version = value.get("schema_version")
         if isinstance(schema_version, bool):
-            raise AtomizeWorkbenchError("Unsupported atomize workbench schema version.")
+            raise AtomizeRecordError("Unsupported atomize workbench schema version.")
         common_keys = {
             "schema_version",
             "uid",
@@ -660,7 +658,7 @@ class AtomizeWorkbenchSession:
         elif schema_version == ATOMIZE_WORKBENCH_SCHEMA_VERSION:
             keys = common_keys | {"output_context_name", "application"}
         else:
-            raise AtomizeWorkbenchError("Unsupported atomize workbench schema version.")
+            raise AtomizeRecordError("Unsupported atomize workbench schema version.")
         data = _exact_dict(
             value,
             keys,
@@ -671,13 +669,13 @@ class AtomizeWorkbenchSession:
             {"uid", "name", "digest"},
             "atomize workbench Context",
         )
-        expected_issue_digest = atomize_workbench_issue_digest(parsed_issues)
+        expected_issue_digest = atomize_review_issue_digest(parsed_issues)
         stored_issue_digest = _digest(
             data["issue_digest"],
             "atomize workbench issue digest",
         )
         if stored_issue_digest != expected_issue_digest:
-            raise AtomizeWorkbenchError(
+            raise AtomizeRecordError(
                 "Atomize workbench issues do not match the analysis."
             )
 
@@ -691,35 +689,33 @@ class AtomizeWorkbenchSession:
         if (not parsed_issues and cursor_uid is not None) or (
             parsed_issues and cursor_uid not in issue_by_uid
         ):
-            raise AtomizeWorkbenchError("Invalid atomize workbench cursor.")
+            raise AtomizeRecordError("Invalid atomize workbench cursor.")
 
         sort_mode = data["sort"]
         layout = data["layout"]
         if not isinstance(sort_mode, str) or sort_mode not in _SORT_MODES:
-            raise AtomizeWorkbenchError("Invalid atomize workbench sort mode.")
+            raise AtomizeRecordError("Invalid atomize workbench sort mode.")
         if not isinstance(layout, str) or layout not in _LAYOUT_MODES:
-            raise AtomizeWorkbenchError("Invalid atomize workbench layout.")
+            raise AtomizeRecordError("Invalid atomize workbench layout.")
 
         raw_responses = data["responses"]
         if not isinstance(raw_responses, dict):
-            raise AtomizeWorkbenchError("Invalid atomize workbench responses.")
-        responses: dict[str, AtomizeWorkbenchResponse] = {}
+            raise AtomizeRecordError("Invalid atomize workbench responses.")
+        responses: dict[str, AtomizeReviewResponse] = {}
         for issue_uid, raw_response in raw_responses.items():
             if (
                 not isinstance(issue_uid, str)
                 or issue_uid not in issue_by_uid
                 or issue_uid in responses
             ):
-                raise AtomizeWorkbenchError(
-                    "Invalid atomize workbench response target."
-                )
-            response = AtomizeWorkbenchResponse.from_dict(raw_response)
+                raise AtomizeRecordError("Invalid atomize workbench response target.")
+            response = AtomizeReviewResponse.from_dict(raw_response)
             if (
                 response.selected_choice_uid is not None
                 and response.selected_choice_uid
                 not in issue_by_uid[issue_uid].choice_uids
             ):
-                raise AtomizeWorkbenchError(
+                raise AtomizeRecordError(
                     "Atomize workbench response selects an unknown choice."
                 )
             responses[issue_uid] = response
@@ -761,7 +757,7 @@ class AtomizeWorkbenchSession:
                 None
                 if schema_version != ATOMIZE_WORKBENCH_SCHEMA_VERSION
                 or data["application"] is None
-                else AtomizeWorkbenchApplication.from_dict(data["application"])
+                else AtomizeApplicationRecord.from_dict(data["application"])
             ),
             sort_mode=sort_mode,  # type: ignore[arg-type]
             layout=layout,  # type: ignore[arg-type]
@@ -777,7 +773,7 @@ class AtomizeWorkbenchSession:
     ) -> None:
         """Make Apply terminal without preventing later comment edits."""
 
-        receipt = AtomizeWorkbenchApplication(
+        receipt = AtomizeApplicationRecord(
             output_context_name=_string(
                 output_context_name,
                 "atomize application Output Context name",
@@ -789,11 +785,11 @@ class AtomizeWorkbenchSession:
             ),
         )
         if receipt.output_context_name != self.output_context_name:
-            raise AtomizeWorkbenchError(
+            raise AtomizeRecordError(
                 "Atomize application Output does not match the workbench plan."
             )
         if self.application is not None and self.application != receipt:
-            raise AtomizeWorkbenchError(
+            raise AtomizeRecordError(
                 "Atomize workbench already records a different application."
             )
         self.application = receipt
@@ -812,7 +808,7 @@ class AtomizeWorkbenchSession:
             or self.application.output_context_name != output_context_name
             or self.application.checkpoint_uid != checkpoint_uid
         ):
-            raise AtomizeWorkbenchError(
+            raise AtomizeRecordError(
                 "Atomize workbench does not record this application."
             )
         self.output_context_name = _string(
@@ -829,11 +825,11 @@ class AtomizeWorkbenchSession:
         context_uid: str,
         context_name: str,
         context_digest: str,
-        issues: Iterable[AtomizeWorkbenchIssue],
+        issues: Iterable[AtomizeReviewIssue],
     ) -> bool:
         """Return whether this state can safely resume one exact revision."""
         try:
-            parsed_issues = normalize_atomize_workbench_issues(issues)
+            parsed_issues = normalize_atomize_review_issues(issues)
             return (
                 self.analysis_uid
                 == _canonical_uuid(analysis_uid, "atomize analysis uid")
@@ -853,16 +849,16 @@ class AtomizeWorkbenchSession:
                     context_digest,
                     "atomize workbench Context digest",
                 )
-                and self.issue_digest == atomize_workbench_issue_digest(parsed_issues)
+                and self.issue_digest == atomize_review_issue_digest(parsed_issues)
             )
-        except AtomizeWorkbenchError:
+        except AtomizeRecordError:
             return False
 
-    def ordered_issues(self) -> list[AtomizeWorkbenchIssue]:
+    def ordered_issues(self) -> list[AtomizeReviewIssue]:
         return _ordered_issues(self._issues, self.sort_mode)
 
     @property
-    def issues(self) -> tuple[AtomizeWorkbenchIssue, ...]:
+    def issues(self) -> tuple[AtomizeReviewIssue, ...]:
         """Expose the immutable projection without exposing mutable responses."""
         return self._issues
 
@@ -870,7 +866,7 @@ class AtomizeWorkbenchSession:
     def issue_count(self) -> int:
         return len(self._issues)
 
-    def current_issue(self) -> AtomizeWorkbenchIssue | None:
+    def current_issue(self) -> AtomizeReviewIssue | None:
         ordered = self.ordered_issues()
         if not ordered:
             self.cursor_uid = None
@@ -882,17 +878,17 @@ class AtomizeWorkbenchSession:
         self.cursor_uid = current.uid
         return current
 
-    def response_for(self, issue_uid: str) -> AtomizeWorkbenchResponse:
+    def response_for(self, issue_uid: str) -> AtomizeReviewResponse:
         if issue_uid not in {issue.uid for issue in self._issues}:
-            raise AtomizeWorkbenchError("Unknown atomize workbench issue.")
+            raise AtomizeRecordError("Unknown atomize workbench issue.")
         return self.responses.setdefault(
             issue_uid,
-            AtomizeWorkbenchResponse(),
+            AtomizeReviewResponse(),
         )
 
     def move(self, delta: int) -> None:
         if isinstance(delta, bool) or not isinstance(delta, int):
-            raise AtomizeWorkbenchError("Invalid atomize workbench movement.")
+            raise AtomizeRecordError("Invalid atomize workbench movement.")
         ordered = self.ordered_issues()
         if not ordered:
             self.cursor_uid = None
@@ -919,12 +915,12 @@ class AtomizeWorkbenchSession:
             or choice_index < 0
             or choice_index >= len(issue.choice_uids)
         ):
-            raise AtomizeWorkbenchError("Unknown atomize workbench choice.")
+            raise AtomizeRecordError("Unknown atomize workbench choice.")
         response.selected_choice_uid = issue.choice_uids[choice_index]
 
     def selected_choice_index(
         self,
-        issue: AtomizeWorkbenchIssue | None = None,
+        issue: AtomizeReviewIssue | None = None,
     ) -> int | None:
         issue = issue or self.current_issue()
         if issue is None:
@@ -936,7 +932,7 @@ class AtomizeWorkbenchSession:
             return issue.choice_uids.index(selected)
         except ValueError as error:
             # This indicates post-load mutation outside the public methods.
-            raise AtomizeWorkbenchError(
+            raise AtomizeRecordError(
                 "Atomize workbench response selects an unknown choice."
             ) from error
 
@@ -955,9 +951,9 @@ class AtomizeWorkbenchSession:
 
 
 def _ordered_issues(
-    issues: tuple[AtomizeWorkbenchIssue, ...],
-    sort_mode: AtomizeWorkbenchSort,
-) -> list[AtomizeWorkbenchIssue]:
+    issues: tuple[AtomizeReviewIssue, ...],
+    sort_mode: AtomizeReviewSort,
+) -> list[AtomizeReviewIssue]:
     indexed = list(enumerate(issues))
     if sort_mode == "SOURCE":
         ordered = sorted(

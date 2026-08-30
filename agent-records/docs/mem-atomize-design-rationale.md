@@ -1,5 +1,12 @@
 # `mem atomize` design rationale
 
+> **Current contract (2026-08-30):** The console operation is now the one-shot,
+> target-driven in-place command documented in
+> [`atomize-one-shot-execution-design-rationale.md`](atomize-one-shot-execution-design-rationale.md).
+> Statements below that describe `mem atomize --sessions`, `--save`,
+> `--save-as`, `--output`, an executable workbench, or Atomize Endpoint Setup
+> are retained only as historical design evidence and are not current routes.
+
 ## Design prompt
 
 The refinement pipeline needs an explicit Atomize command that composes

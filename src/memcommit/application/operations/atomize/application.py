@@ -10,10 +10,10 @@ from memcommit.application.operations.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeApplyResult,
 )
-from memcommit.application.operations.atomize.workbench import (
-    AtomizeWorkbenchSession,
-    atomize_workbench_response_digest,
-    project_atomize_workbench_findings,
+from memcommit.application.operations.atomize.records import (
+    AtomizeReviewRecord,
+    atomize_review_response_digest,
+    project_atomize_review_findings,
 )
 from memcommit.core.context import Context
 
@@ -50,8 +50,8 @@ class AtomizeApplicationAudit:
 
     application_mode: str
     unresolved_at_apply: tuple[dict[str, object], ...]
-    workbench_uid: str | None
-    workbench_response_digest: str | None
+    review_record_uid: str | None
+    review_record_response_digest: str | None
 
     @property
     def unresolved_at_apply_count(self) -> int:
@@ -62,19 +62,19 @@ class AtomizeApplicationAudit:
             "application_mode": self.application_mode,
             "unresolved_at_apply_count": self.unresolved_at_apply_count,
             "unresolved_at_apply": [dict(item) for item in self.unresolved_at_apply],
-            "application_workbench_uid": self.workbench_uid,
-            "application_workbench_response_digest": (
-                self.workbench_response_digest
+            "application_review_record_uid": self.review_record_uid,
+            "application_review_record_response_digest": (
+                self.review_record_response_digest
             ),
         }
 
 
 @dataclass(frozen=True)
-class AtomizeSessionSnapshot:
-    """One immutable analysis/workbench pair under an opaque repository token."""
+class AtomizeExecutionSnapshot:
+    """One immutable analysis/record pair under an opaque repository token."""
 
     analysis: AtomizeAnalysisSession
-    workbench: AtomizeWorkbenchSession | None
+    review_record: AtomizeReviewRecord | None
     version_token: str
 
 
@@ -89,17 +89,17 @@ class AtomizeMaterialization:
 
 
 @dataclass(frozen=True)
-class AtomizePersistedApplyRequest:
+class AtomizeRecordApplyRequest:
     """Apply the exact saved Atomize revision accepted by an interface."""
 
-    snapshot: AtomizeSessionSnapshot
+    snapshot: AtomizeExecutionSnapshot
 
 
 @dataclass(frozen=True)
-class AtomizePersistedApplyResult:
+class AtomizeRecordApplyResult:
     """The complete structural effect and terminal saved-session state."""
 
-    snapshot: AtomizeSessionSnapshot
+    snapshot: AtomizeExecutionSnapshot
     materialization: AtomizeMaterialization
     audit: AtomizeApplicationAudit
     recovered: bool
@@ -110,7 +110,7 @@ class AtomizeInPlaceResult:
     """One complete analysis-to-checkpoint outcome for an exact target scope."""
 
     analysis: AtomizeAnalysisSession
-    application: AtomizePersistedApplyResult
+    application: AtomizeRecordApplyResult
     analysis_origin: Literal["SAVED", "EXACT_PREWARM", "PROVIDER"]
 
 
@@ -118,7 +118,7 @@ class AtomizeInPlaceResult:
 class AtomizeSaveAsRequest:
     """Create one reviewed Atomize output without exposing an intermediate copy."""
 
-    snapshot: AtomizeSessionSnapshot
+    snapshot: AtomizeExecutionSnapshot
     destination_name: str
     expected_current: str | None
 
@@ -127,7 +127,7 @@ class AtomizeSaveAsRequest:
 class AtomizeSaveAsResult:
     """One final new Context, its Source-owned receipt, and selection outcome."""
 
-    snapshot: AtomizeSessionSnapshot
+    snapshot: AtomizeExecutionSnapshot
     output_analysis: AtomizeAnalysisSession
     materialization: AtomizeMaterialization
     audit: AtomizeApplicationAudit
@@ -138,44 +138,44 @@ class AtomizeSaveAsResult:
 class AtomizeOutputPlanRequest:
     """Replace the Output plan of one exact nonterminal workbench revision."""
 
-    snapshot: AtomizeSessionSnapshot
+    snapshot: AtomizeExecutionSnapshot
     output_context_name: str
 
 
 @dataclass(frozen=True)
-class AtomizeWorkbenchUpdateResult:
+class AtomizeReviewRecordUpdateResult:
     """One exact provider-free derived-session revision."""
 
-    snapshot: AtomizeSessionSnapshot
+    snapshot: AtomizeExecutionSnapshot
     changed: bool
 
 
-class AtomizeSessionRepository(Protocol):
-    """Persist an analysis/workbench pair without exposing record digests."""
+class AtomizeRecordRepository(Protocol):
+    """Persist an analysis/review-record pair without exposing record digests."""
 
     def load(
         self,
         analysis: AtomizeAnalysisSession,
-    ) -> AtomizeSessionSnapshot:
+    ) -> AtomizeExecutionSnapshot:
         """Load the exact current pair for one immutable analysis identity."""
 
     def replace_application(
         self,
-        workbench: AtomizeWorkbenchSession,
+        review_record: AtomizeReviewRecord,
         *,
         analysis: AtomizeAnalysisSession,
         expected_version: str,
-    ) -> AtomizeSessionSnapshot:
+    ) -> AtomizeExecutionSnapshot:
         """Commit one terminal receipt only under the exact opaque version."""
 
-    def replace_workbench(
+    def replace_review_record(
         self,
-        workbench: AtomizeWorkbenchSession,
+        review_record: AtomizeReviewRecord,
         *,
         analysis: AtomizeAnalysisSession,
         expected_version: str,
-    ) -> AtomizeSessionSnapshot:
-        """Commit one complete nonterminal or review-only workbench revision."""
+    ) -> AtomizeExecutionSnapshot:
+        """Commit one complete nonterminal or review-only record revision."""
 
 
 class AtomizeOutputPort(Protocol):
@@ -183,14 +183,14 @@ class AtomizeOutputPort(Protocol):
 
     def recover_materialization(
         self,
-        snapshot: AtomizeSessionSnapshot,
+        snapshot: AtomizeExecutionSnapshot,
         audit: AtomizeApplicationAudit,
     ) -> AtomizeMaterialization | None:
         """Return only a checkpoint produced by this exact accepted revision."""
 
     def materialize(
         self,
-        snapshot: AtomizeSessionSnapshot,
+        snapshot: AtomizeExecutionSnapshot,
         audit: AtomizeApplicationAudit,
     ) -> AtomizeMaterialization:
         """Create or concurrently recover the exact in-place checkpoint."""
@@ -207,7 +207,7 @@ class AtomizeSaveAsOutputPort(Protocol):
 
     def recover_materialization(
         self,
-        snapshot: AtomizeSessionSnapshot,
+        snapshot: AtomizeExecutionSnapshot,
         audit: AtomizeApplicationAudit,
         destination_name: str,
     ) -> tuple[AtomizeAnalysisSession, AtomizeMaterialization] | None:
@@ -215,7 +215,7 @@ class AtomizeSaveAsOutputPort(Protocol):
 
     def materialize(
         self,
-        snapshot: AtomizeSessionSnapshot,
+        snapshot: AtomizeExecutionSnapshot,
         audit: AtomizeApplicationAudit,
         destination_name: str,
         expected_current: str | None,
@@ -231,27 +231,27 @@ class AtomizeSaveAsOutputPort(Protocol):
         """Select the exact published output under current-state CAS."""
 
 
-def _accepted_workbench(
-    snapshot: AtomizeSessionSnapshot,
-    repository: AtomizeSessionRepository,
-) -> tuple[AtomizeSessionSnapshot, AtomizeWorkbenchSession]:
+def _accepted_review_record(
+    snapshot: AtomizeExecutionSnapshot,
+    repository: AtomizeRecordRepository,
+) -> tuple[AtomizeExecutionSnapshot, AtomizeReviewRecord]:
     current = repository.load(snapshot.analysis)
     if current != snapshot:
         raise AtomizeApplicationError(
             "The Atomize session changed before the review update. Reopen it."
         )
-    if current.workbench is None:
+    if current.review_record is None:
         raise AtomizeApplicationError(
-            "The accepted Atomize analysis has no editable workbench."
+            "The accepted Atomize analysis has no review record."
         )
-    return current, current.workbench
+    return current, current.review_record
 
 
 def run_atomize_output_plan_update(
     request: AtomizeOutputPlanRequest,
     *,
-    repository: AtomizeSessionRepository,
-) -> AtomizeWorkbenchUpdateResult:
+    repository: AtomizeRecordRepository,
+) -> AtomizeReviewRecordUpdateResult:
     """Replace one reviewed Output plan without provider or Context mutation."""
 
     if not isinstance(request, AtomizeOutputPlanRequest):
@@ -261,34 +261,34 @@ def run_atomize_output_plan_update(
         or not request.output_context_name
     ):
         raise AtomizeApplicationError("Atomize Output Context must be nonempty.")
-    current, workbench = _accepted_workbench(request.snapshot, repository)
+    current, workbench = _accepted_review_record(request.snapshot, repository)
     if workbench.application is not None:
         if workbench.output_context_name == request.output_context_name:
-            return AtomizeWorkbenchUpdateResult(snapshot=current, changed=False)
+            return AtomizeReviewRecordUpdateResult(snapshot=current, changed=False)
         raise AtomizeApplicationError(
             "An applied Atomize workbench cannot change its Output plan."
         )
     updated = copy.deepcopy(workbench)
     updated.output_context_name = request.output_context_name
     if updated == workbench:
-        return AtomizeWorkbenchUpdateResult(snapshot=current, changed=False)
-    committed = repository.replace_workbench(
+        return AtomizeReviewRecordUpdateResult(snapshot=current, changed=False)
+    committed = repository.replace_review_record(
         updated,
         analysis=current.analysis,
         expected_version=current.version_token,
     )
-    return AtomizeWorkbenchUpdateResult(snapshot=committed, changed=True)
+    return AtomizeReviewRecordUpdateResult(snapshot=committed, changed=True)
 
 
 def atomize_application_audit(
     analysis: AtomizeAnalysisSession,
-    workbench: AtomizeWorkbenchSession | None,
+    workbench: AtomizeReviewRecord | None,
 ) -> AtomizeApplicationAudit:
     """Freeze unresolved state without turning silence into a decision."""
 
     responses = {} if workbench is None else workbench.responses
     unresolved: list[dict[str, object]] = []
-    for finding in project_atomize_workbench_findings(analysis):
+    for finding in project_atomize_review_findings(analysis):
         if finding.kind not in {
             "AMBIGUITY",
             "CONFLICT",
@@ -313,22 +313,20 @@ def atomize_application_audit(
     return AtomizeApplicationAudit(
         application_mode="AS_IS" if unresolved else "REVIEWED",
         unresolved_at_apply=tuple(unresolved),
-        workbench_uid=(workbench.uid if workbench is not None else None),
-        workbench_response_digest=(
-            atomize_workbench_response_digest(workbench)
-            if workbench is not None
-            else None
+        review_record_uid=(workbench.uid if workbench is not None else None),
+        review_record_response_digest=(
+            atomize_review_response_digest(workbench) if workbench is not None else None
         ),
     )
 
 
 def _terminal_workbench(
-    snapshot: AtomizeSessionSnapshot,
+    snapshot: AtomizeExecutionSnapshot,
     materialization: AtomizeMaterialization,
     *,
     output_context_name: str | None = None,
-) -> AtomizeWorkbenchSession | None:
-    workbench = snapshot.workbench
+) -> AtomizeReviewRecord | None:
+    workbench = snapshot.review_record
     if workbench is None:
         return None
     terminal = copy.deepcopy(workbench)
@@ -344,7 +342,7 @@ def _terminal_workbench(
 def run_atomize_save_as(
     request: AtomizeSaveAsRequest,
     *,
-    repository: AtomizeSessionRepository,
+    repository: AtomizeRecordRepository,
     output_port: AtomizeSaveAsOutputPort,
 ) -> AtomizeSaveAsResult:
     """Publish one final output and finish its Source-owned receipt on retry.
@@ -361,7 +359,7 @@ def run_atomize_save_as(
         raise AtomizeApplicationError(
             "The Atomize session changed before Save As. Reopen the review."
         )
-    audit = atomize_application_audit(current.analysis, current.workbench)
+    audit = atomize_application_audit(current.analysis, current.review_record)
     recovered_pair = output_port.recover_materialization(
         current,
         audit,
@@ -385,8 +383,11 @@ def run_atomize_save_as(
     )
     committed = current
     if terminal is not None:
-        if current.workbench is not None and current.workbench.application is not None:
-            if current.workbench != terminal:
+        if (
+            current.review_record is not None
+            and current.review_record.application is not None
+        ):
+            if current.review_record != terminal:
                 raise AtomizeApplicationError(
                     "The Atomize session records a different application receipt."
                 )
@@ -407,7 +408,7 @@ def run_atomize_save_as(
                         "receipt could not be verified. Retry the same Save As: "
                         f"{observation_error}"
                     ) from observation_error
-                if observed.workbench == terminal:
+                if observed.review_record == terminal:
                     committed = observed
                 else:
                     raise AtomizeApplicationError(
@@ -415,7 +416,7 @@ def run_atomize_save_as(
                         "receipt was not saved. Retry the same Save As: "
                         f"{error}"
                     ) from error
-            if committed.workbench != terminal:
+            if committed.review_record != terminal:
                 raise AtomizeApplicationError(
                     "Atomize receipt persistence returned a different session."
                 )
@@ -440,12 +441,12 @@ def run_atomize_save_as(
     )
 
 
-def run_atomize_session_apply(
-    request: AtomizePersistedApplyRequest,
+def run_atomize_record_apply(
+    request: AtomizeRecordApplyRequest,
     *,
-    repository: AtomizeSessionRepository,
+    repository: AtomizeRecordRepository,
     output_port: AtomizeOutputPort,
-) -> AtomizePersistedApplyResult:
+) -> AtomizeRecordApplyResult:
     """Materialize and receipt one exact structural review as one outcome."""
 
     reviewed = request.snapshot
@@ -454,7 +455,7 @@ def run_atomize_session_apply(
         raise AtomizeApplicationError(
             "The Atomize session changed before Apply. Reopen the review."
         )
-    audit = atomize_application_audit(current.analysis, current.workbench)
+    audit = atomize_application_audit(current.analysis, current.review_record)
     materialization = output_port.recover_materialization(current, audit)
     recovered = materialization is not None
     if materialization is None:
@@ -463,19 +464,22 @@ def run_atomize_session_apply(
 
     terminal = _terminal_workbench(current, materialization)
     if terminal is None:
-        return AtomizePersistedApplyResult(
+        return AtomizeRecordApplyResult(
             snapshot=current,
             materialization=materialization,
             audit=audit,
             recovered=recovered,
         )
 
-    if current.workbench is not None and current.workbench.application is not None:
-        if current.workbench != terminal:
+    if (
+        current.review_record is not None
+        and current.review_record.application is not None
+    ):
+        if current.review_record != terminal:
             raise AtomizeApplicationError(
                 "The Atomize session records a different application receipt."
             )
-        return AtomizePersistedApplyResult(
+        return AtomizeRecordApplyResult(
             snapshot=current,
             materialization=materialization,
             audit=audit,
@@ -499,8 +503,8 @@ def run_atomize_session_apply(
                 "Atomize materialization succeeded, but receipt persistence "
                 "failed and its durable state could not be verified."
             ) from observation_error
-        if observed.workbench == terminal:
-            return AtomizePersistedApplyResult(
+        if observed.review_record == terminal:
+            return AtomizeRecordApplyResult(
                 snapshot=observed,
                 materialization=materialization,
                 audit=audit,
@@ -521,11 +525,11 @@ def run_atomize_session_apply(
             ) from error
         raise
 
-    if committed.workbench != terminal:
+    if committed.review_record != terminal:
         raise AtomizeApplicationError(
             "Atomize receipt persistence returned a different session."
         )
-    return AtomizePersistedApplyResult(
+    return AtomizeRecordApplyResult(
         snapshot=committed,
         materialization=materialization,
         audit=audit,

@@ -12,7 +12,7 @@ MODULE_PAIRS = (
     ("memcommit.atomize", "memcommit.application.operations.atomize.domain"),
     (
         "memcommit.atomize_workbench",
-        "memcommit.application.operations.atomize.workbench",
+        "memcommit.application.operations.atomize.records",
     ),
     (
         "memcommit.atomize_normal_form",
@@ -75,11 +75,9 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
         "src/memcommit/adapters/console/commands/atomize/command.py",
         "src/memcommit/adapters/console/commands/atomize/impact.py",
         "src/memcommit/adapters/console/commands/atomize/review.py",
-        "src/memcommit/adapters/console/commands/atomize/sessions.py",
+        "src/memcommit/adapters/console/commands/atomize/records.py",
         "src/memcommit/adapters/console/commands/impact/command.py",
         "src/memcommit/adapters/console/commands/review/command.py",
-        "src/memcommit/adapters/console/commands/atomize/workbench/adapter.py",
-        "src/memcommit/adapters/console/commands/atomize/workbench/screen.py",
         "src/memcommit/application/operations/atomize/analysis_application.py",
         "src/memcommit/application/operations/atomize/analysis_runtime.py",
         "src/memcommit/application/operations/atomize/application.py",

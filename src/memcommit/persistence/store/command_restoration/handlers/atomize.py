@@ -29,8 +29,8 @@ class _AtomizeRestorationMixin:
         from memcommit.application.operations.atomize.domain import (
             AtomizeAnalysisSession,
         )
-        from memcommit.application.operations.atomize.workbench import (
-            atomize_workbench_record_digest,
+        from memcommit.application.operations.atomize.records import (
+            atomize_review_record_digest,
         )
         from memcommit.application.capabilities.retained_history.command_history import (
             CommandRestoreResult,
@@ -180,7 +180,7 @@ class _AtomizeRestorationMixin:
                                 raise ValueError(
                                     "Atomize Source workbench receipt is invalid."
                                 )
-                            terminal_digest = atomize_workbench_record_digest(terminal)
+                            terminal_digest = atomize_review_record_digest(terminal)
                             reviewing = copy.deepcopy(terminal)
                             reviewing.clear_application(
                                 output_context_name=change.context_name,
@@ -189,9 +189,7 @@ class _AtomizeRestorationMixin:
                                     source_workbench_record.get("output_context_name")
                                 ),
                             )
-                            reviewing_digest = atomize_workbench_record_digest(
-                                reviewing
-                            )
+                            reviewing_digest = atomize_review_record_digest(reviewing)
                             if reviewing_digest != source_workbench_record.get(
                                 "record_digest"
                             ):
@@ -346,7 +344,7 @@ class _AtomizeRestorationMixin:
                                     "The Source Atomize workbench changed before Redo."
                                 )
                         else:
-                            if reviewing is None or atomize_workbench_record_digest(
+                            if reviewing is None or atomize_review_record_digest(
                                 reviewing
                             ) != manifest.get("reviewing_workbench_digest"):
                                 raise ConcurrentContextUpdateError(
@@ -358,9 +356,9 @@ class _AtomizeRestorationMixin:
                                 output_context_name=change.context_name,
                                 checkpoint_uid=change.checkpoint_uid,
                             )
-                            if atomize_workbench_record_digest(
-                                terminal
-                            ) != manifest.get("terminal_workbench_digest"):
+                            if atomize_review_record_digest(terminal) != manifest.get(
+                                "terminal_workbench_digest"
+                            ):
                                 raise ConcurrentContextUpdateError(
                                     "The terminal Atomize workbench changed "
                                     "before Redo."

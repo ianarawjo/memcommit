@@ -22,7 +22,7 @@ from memcommit.core.context import Context
 from memcommit.persistence.store import MemoryStore
 
 
-def open_or_create_atomize_workbench(
+def open_or_create_atomize_review_record(
     *,
     store: MemoryStore,
     ctx: Context,
@@ -62,5 +62,5 @@ def open_or_create_atomize_workbench(
 __all__ = [
     "ATOMIZE_AGGREGATE_TIMEOUT_SECONDS",
     "_connect_aggregate_atomize_provider",
-    "open_or_create_atomize_workbench",
+    "open_or_create_atomize_review_record",
 ]

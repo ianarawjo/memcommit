@@ -1,5 +1,11 @@
 # Atomize console presentation ownership
 
+> **Superseded console layout (2026-08-30):** the Atomize workbench package was
+> removed. Its non-applying screen now belongs to `commands/atomize/impact.py`,
+> its completed report belongs to `commands/atomize/review.py`, and retained
+> discovery belongs to `commands/atomize/records.py`. The earlier extraction
+> details below remain historical evidence.
+
 Last reviewed: 2026-08-29.
 
 ## Selected boundary

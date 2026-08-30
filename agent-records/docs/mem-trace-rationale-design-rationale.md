@@ -1,5 +1,10 @@
 # `mem trace`, `mem rationale`, and saved atomize provenance
 
+> **Atomize route update (2026-08-30):** Trace and Rationale continue to read
+> Atomize analysis/application evidence, but the producing console route is
+> now one-shot `mem atomize [TARGET]`; Atomize `--save`/`--save-as` examples
+> below are historical.
+
 ## Motivation
 
 Raw intake can produce a Memory whose wording is incomplete, and semantic

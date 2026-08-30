@@ -20,11 +20,17 @@ from memcommit.application.operations.atomize.analysis_application import (
     AtomizeProviderFactory,
     run_atomize_analysis_open,
 )
-from memcommit.application.operations.atomize.application import AtomizeSessionSnapshot
-from memcommit.application.operations.atomize.workbench import create_atomize_workbench
+from memcommit.application.operations.atomize.application import (
+    AtomizeExecutionSnapshot,
+)
+from memcommit.application.operations.atomize.records import (
+    create_atomize_review_record,
+)
 from memcommit.core.context import Context
 from memcommit.providers.subscription import CodexChatGPTProvider
-from memcommit.application.capabilities.semantic.prompt_policy import resolve_semantic_prompt_policy
+from memcommit.application.capabilities.semantic.prompt_policy import (
+    resolve_semantic_prompt_policy,
+)
 from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.atomize import (
     find_declared_atomize_prewarm,
@@ -38,14 +44,14 @@ def _archive_displaced_atomize_pair(
     store: MemoryStore,
     *,
     existing: AtomizeAnalysisSession | None,
-    workbench,
+    review_record,
     replacement_uid: str,
 ) -> bool:
     """Retain the prior UID only when a genuinely new analysis replaces it."""
 
     if existing is None or existing.uid == replacement_uid:
         return False
-    return store.archive_atomize_session(existing, workbench)
+    return store.archive_atomize_session(existing, review_record)
 
 
 def _remove_failed_atomize_archive(
@@ -127,7 +133,7 @@ def _install_prepared_atomize_analysis(
     previous_workbench = (
         store.load_atomize_workbench(existing) if existing is not None else None
     )
-    workbench = create_atomize_workbench(
+    workbench = create_atomize_review_record(
         analysis,
         output_context_name=output_context_name or context.name,
     )
@@ -137,7 +143,7 @@ def _install_prepared_atomize_analysis(
         history_created = _archive_displaced_atomize_pair(
             store,
             existing=existing,
-            workbench=previous_workbench,
+            review_record=previous_workbench,
             replacement_uid=analysis.uid,
         )
         store.save_atomize_analysis(analysis)
@@ -174,7 +180,7 @@ def _install_prepared_atomize_analysis(
         raise
     return AtomizeAnalysisOpenResult(
         analysis=analysis,
-        workbench=workbench,
+        review_record=workbench,
         origin="EXACT_PREWARM",
     )
 
@@ -187,7 +193,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
     validate_before_save: Callable[[], None] | None = None
     prepared_analysis_override: AtomizeAnalysisSession | None = None
     prepared_output_name: str | None = None
-    expected_session: AtomizeSessionSnapshot | None = None
+    expected_session: AtomizeExecutionSnapshot | None = None
 
     def _replace_expected_session(
         self,
@@ -211,7 +217,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
             )
             if (
                 current_analysis != expected.analysis
-                or current_workbench != expected.workbench
+                or current_workbench != expected.review_record
             ):
                 raise AtomizeImpactError(
                     "The atomize workbench changed while reviewed "
@@ -220,7 +226,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
             history_created = _archive_displaced_atomize_pair(
                 self.store,
                 existing=expected.analysis,
-                workbench=expected.workbench,
+                review_record=expected.review_record,
                 replacement_uid=analysis.uid,
             )
             analysis_saved = False
@@ -233,7 +239,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
                     self.store._save_atomize_analysis_locked(  # noqa: SLF001
                         expected.analysis
                     )
-                    if expected.workbench is None:
+                    if expected.review_record is None:
                         path = self.store._atomize_workbench_path(  # noqa: SLF001
                             expected.analysis.context_uid
                         )
@@ -241,7 +247,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
                             path.unlink()
                     else:
                         self.store._save_atomize_workbench_locked(  # noqa: SLF001
-                            expected.workbench
+                            expected.review_record
                         )
                 _remove_failed_atomize_archive(
                     self.store,
@@ -309,7 +315,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
                 )
             workbench = self.store.load_atomize_workbench(existing)
             if workbench is None:
-                workbench = create_atomize_workbench(
+                workbench = create_atomize_review_record(
                     existing,
                     output_context_name=request.output_context_name,
                 )
@@ -326,7 +332,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
                 self.store.save_atomize_workbench(workbench)
             return AtomizeAnalysisOpenResult(
                 analysis=existing,
-                workbench=workbench,
+                review_record=workbench,
                 origin="SAVED",
             )
 
@@ -337,10 +343,11 @@ class MemoryStoreAtomizeAnalysisOpenPort:
         if prepared_analysis is not None and not request.refresh:
             prepared_uids = tuple(item.memory_uid for item in prepared_analysis.items)
             if request.memory_selector is not None and requested_uids != prepared_uids:
-                raise AtomizeImpactError(
-                    "A focused atomize request cannot reuse a whole-Context "
-                    "prepared analysis."
-                )
+                # A whole-Context prewarm is equivalent only when the focused
+                # request covers that same one-Memory actionable set. A wider
+                # prewarm is ignored so the exact focus receives fresh analysis.
+                prepared_analysis = None
+        if prepared_analysis is not None and not request.refresh:
             if (
                 request.declared_frames
                 or request.declared_frame_origins
@@ -399,7 +406,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
             )
         if self.validate_before_save is not None:
             self.validate_before_save()
-        workbench = create_atomize_workbench(
+        workbench = create_atomize_review_record(
             analysis,
             output_context_name=effective_output_name,
         )
@@ -407,7 +414,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
             self._replace_expected_session(analysis, workbench)
             return AtomizeAnalysisOpenResult(
                 analysis=analysis,
-                workbench=workbench,
+                review_record=workbench,
                 origin="PROVIDER",
             )
 
@@ -417,7 +424,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
             history_created = _archive_displaced_atomize_pair(
                 self.store,
                 existing=existing,
-                workbench=previous_workbench,
+                review_record=previous_workbench,
                 replacement_uid=analysis.uid,
             )
             self.store.save_atomize_analysis(analysis)
@@ -454,7 +461,7 @@ class MemoryStoreAtomizeAnalysisOpenPort:
             raise
         return AtomizeAnalysisOpenResult(
             analysis=analysis,
-            workbench=workbench,
+            review_record=workbench,
             origin="PROVIDER",
         )
 
@@ -467,7 +474,7 @@ def execute_atomize_analysis_open(
     validate_before_save: Callable[[], None] | None = None,
     prepared_analysis_override: AtomizeAnalysisSession | None = None,
     prepared_output_name: str | None = None,
-    expected_session: AtomizeSessionSnapshot | None = None,
+    expected_session: AtomizeExecutionSnapshot | None = None,
 ) -> AtomizeAnalysisOpenResult:
     """Execute one Atomize open through production non-terminal adapters."""
 
