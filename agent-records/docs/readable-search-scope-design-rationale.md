@@ -11,7 +11,8 @@ to change disclosure scope accidentally while refactoring another.
 
 ## Decision
 
-`memcommit.core.context_targeting.search` owns two operation-neutral steps:
+`memcommit.application.operations.search.source` owns two Search Source
+preparation steps shared by Search, Find, and ordinary Query:
 
 1. `load_readable_search_roots` validates ordinary roots, optionally expands
    canonical lexical descendants, independently chooses direct loading or
@@ -48,12 +49,13 @@ Query-only routes are intentionally excluded from this protocol. Their public
 names may be projected into authorized ordinary views, but their concealed
 content is accessible only through the dedicated Query interface. They cannot
 be passed as ordinary roots, loaded directly, or made traversable merely by
-enabling embeds. This module grants no `DERIVE`, `COMBINE`, export, history, or
-mutation authority; every provider-backed or consequential operation must
-retain its own permission checks and exact access bindings.
+enabling embeds. This Search-owned module grants no `DERIVE`, `COMBINE`, export,
+history, or mutation authority; every provider-backed or consequential
+operation must retain its own permission checks and exact access bindings.
 
 Compatibility adapters remain temporarily in `find.py` for tests and retained
 internal callers that referenced the former private helpers. New cross-command
-code must import the shared module rather than those aliases. Canonical lexical
-name expansion itself lives in `context_targeting.resolution`, shared with the
-merged Context loader without coupling search artifacts to saved-session code.
+code must import the Search Source module rather than those aliases. Canonical
+lexical name expansion itself remains in `context_targeting.resolution`, shared
+with the merged Context loader without making Search artifacts part of core
+targeting.

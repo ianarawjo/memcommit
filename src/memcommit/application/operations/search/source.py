@@ -1,19 +1,19 @@
-"""Search-specific loading over shared Context targeting models."""
+"""Freeze readable Source roots and candidates for Search-family operations."""
 
 from __future__ import annotations
 
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Protocol
 
-from memcommit.core.context import Context
-from memcommit.core.context_targeting.model import ContextScope
-from memcommit.core.context_targeting.resolution import expand_lexical_context_names
+from memcommit.application.operations.search.artifacts import collect_search_artifacts
 from memcommit.application.operations.search.model import (
     SearchCandidate,
     append_artifact_candidates,
     collect_candidates_from_roots,
 )
-from memcommit.application.operations.search.artifacts import collect_search_artifacts
+from memcommit.core.context import Context
+from memcommit.core.context_targeting.model import ContextScope
+from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 
 if TYPE_CHECKING:
     from memcommit.persistence.store import MemoryStore

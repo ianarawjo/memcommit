@@ -33,9 +33,12 @@ there is intentionally no profile-wide “last Scope” preference.
   direct-Memory locator against a strict complete ordinary-local direct graph,
   completes a local auto-typed Context/Memory target, and offers the sibling
   all-direct-item owner lookup needed by Show.
-- `search.py` loads one or more searchable roots and independently controls
-  embedded-Context traversal and authorized activity artifacts for Find and
-  ordinary Query.
+- `application.operations.search.source` loads one or more searchable roots
+  and independently controls embedded-Context traversal and authorized
+  activity artifacts for Search, Find, and ordinary Query. It belongs to the
+  Search operation because those roots are immediately projected into
+  Search-owned candidates rather than remaining operation-neutral Context
+  targets.
 - `application.capabilities.authority.readable_contexts` owns the Store-backed
   read facade that unifies ordinary local and effectively READ-granted public
   Contexts. It remains outside core because it reads Profile and persistence
