@@ -12,6 +12,7 @@ from memcommit.adapters.console.commands import (
     checkpoint,
     check_conformance,
     chunk,
+    clear,
     compare,
     consolidate,
     contexts,
@@ -66,7 +67,6 @@ from memcommit.adapters.console.commands import (
     write_protection,
 )
 from memcommit.adapters.console.commands.reference import command as reference
-from memcommit.adapters.console.commands.clear.command import cmd as clear_cmd
 from memcommit.adapters.console.commands.config.command import app as config_app
 from memcommit.adapters.console.commands.dev.command import app as dev_app
 from memcommit.adapters.console.commands.semantic_eval.command import eval_app
@@ -154,7 +154,7 @@ app.add_typer(
 app.command(
     "clear",
     help=operation_summary("clear"),
-)(clear_cmd)
+)(clear.cmd)
 app.command(
     "delete",
     help=operation_summary("delete"),
