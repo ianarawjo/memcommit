@@ -206,7 +206,7 @@ def _run_prepare_exact_child(store_root: Path) -> None:
     from memcommit.adapters.console.commands.meld.command import render_meld_session
     from memcommit.application.operations.meld.model import INLINE_MELD_CONTEXT_NAME
     from memcommit.application.operations.meld.runtime import execute_meld_start, prepare_meld_start
-    from memcommit.application.operations.meld.start_application import MeldStartRequest
+    from memcommit.application.operations.meld.start import MeldStartRequest
 
     store, baseline = _initialize_store(store_root)
     provider = _SlowInlineProvider()

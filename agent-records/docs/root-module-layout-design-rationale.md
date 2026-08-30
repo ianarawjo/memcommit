@@ -101,14 +101,14 @@ On 2026-08-29 the Audit-specific slice crossed that staging boundary.
 Its durable model, complete three-or-four-check execution, private CAS session
 store, and Resolution compatibility projection moved to
 `memcommit.application.operations.audit`. Shared finder, report, and workbench
-contracts now live under
-`application.capabilities.reviewing.memory_issue`. Audit is a named
+contracts first lived under a provisional reviewing namespace. They now live
+directly under `application.capabilities.memory_issue_analysis`. Audit is a named
 operation that consumes those reusable capabilities; it is not itself a shared
-review capability. The narrower name records that Duplicate, Ambiguity, and
+analysis capability. The narrower name records that Duplicate, Ambiguity, and
 Conflict results are model-assisted Memory-issue candidates for review rather
 than an open-ended quality subsystem. No compatibility facade retains either
 the provisional `application.capabilities.reviewing.quality.audit` paths or the
-former shared `reviewing.quality` namespace.
+former shared reviewing paths.
 
 On 2026-08-27 the Context, Memory, reference, and checkpoint values moved
 intact from `memcommit.context` to `memcommit.core.context`. The stable

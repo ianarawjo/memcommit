@@ -5,18 +5,18 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
-    find_conflicts as detect_conflicts,
+from memcommit.application.capabilities.memory_issue_analysis.relation_analysis import (
+    analyze_memory_conflicts,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     ConflictReport,
     FindingsProvider,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
+from memcommit.application.capabilities.memory_issue_analysis.source import (
     QualityFindSourceFrame,
     freeze_quality_find_source,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
+from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindWorkbenchSession,
     create_quality_find_workbench,
 )
@@ -54,7 +54,7 @@ def analyze_find_conflicts(
 ) -> FindConflictsResult:
     """Run one conflict detector against an already frozen Source."""
 
-    report = detect_conflicts(
+    report = analyze_memory_conflicts(
         source.analysis_context(),
         provider_factory,
         context_name_by_uid=source.memory_context_names,

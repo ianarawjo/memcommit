@@ -39,7 +39,7 @@ if TYPE_CHECKING:
         AtomizeImpactReport,
         AtomizeProvider,
     )
-    from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+    from memcommit.application.capabilities.memory_issue_analysis.model import (
         AmbiguityReport,
         ConflictReport,
         DuplicateReport,
@@ -962,11 +962,11 @@ def find_redundancies(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "DuplicateReport":
     """Find exact DUP and semantic-DUN evidence without mutating *ctx*."""
-    from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
-        find_redundancies as _find_redundancies,
+    from memcommit.application.capabilities.memory_issue_analysis.relation_analysis import (
+        analyze_memory_redundancies,
     )
 
-    return _find_redundancies(
+    return analyze_memory_redundancies(
         ctx,
         provider_factory,
         context_name_by_uid=context_name_by_uid,
@@ -989,11 +989,11 @@ def find_ambiguities(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "AmbiguityReport":
     """Find ambiguous direct Memories without mutating *ctx*."""
-    from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
-        find_ambiguities as _find_ambiguities,
+    from memcommit.application.capabilities.memory_issue_analysis.reading_analysis import (
+        analyze_memory_ambiguities,
     )
 
-    return _find_ambiguities(
+    return analyze_memory_ambiguities(
         ctx,
         provider_factory,
         context_name_by_uid=context_name_by_uid,
@@ -1007,11 +1007,11 @@ def find_conflicts(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "ConflictReport":
     """Find conflicting direct-Memory pairs without mutating *ctx*."""
-    from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
-        find_conflicts as _find_conflicts,
+    from memcommit.application.capabilities.memory_issue_analysis.relation_analysis import (
+        analyze_memory_conflicts,
     )
 
-    return _find_conflicts(
+    return analyze_memory_conflicts(
         ctx,
         provider_factory,
         context_name_by_uid=context_name_by_uid,

@@ -8,7 +8,7 @@ import sys
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-CANONICAL_NAME = "memcommit.application.operations.update.application"
+CANONICAL_NAME = "memcommit.application.operations.update.materialization"
 
 
 def test_update_package_import_is_lazy() -> None:
@@ -16,7 +16,7 @@ def test_update_package_import_is_lazy() -> None:
 import sys
 import memcommit.application.operations.update
 
-assert "memcommit.application.operations.update.application" not in sys.modules
+assert "memcommit.application.operations.update.materialization" not in sys.modules
 """
 
     subprocess.run(
@@ -33,8 +33,8 @@ def test_production_update_consumers_use_the_operation_owner() -> None:
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
         "src/memcommit/persistence/store/checkpoint",
         "src/memcommit/persistence/store/command_restoration",
-        "src/memcommit/application/operations/update/granted_application.py",
-        "src/memcommit/application/operations/update/granted_source_application.py",
+        "src/memcommit/application/operations/update/granted_target.py",
+        "src/memcommit/application/operations/update/granted_source.py",
     )
 
     for relative_path in relative_paths:

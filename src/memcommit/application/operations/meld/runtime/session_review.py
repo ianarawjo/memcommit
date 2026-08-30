@@ -7,10 +7,10 @@ from dataclasses import dataclass
 from memcommit.application.capabilities.authority.context_access import (
     revalidate_granted_context_binding,
 )
-from memcommit.application.operations.meld.application import (
+from memcommit.application.operations.meld.apply import (
     MeldApplicationError,
 )
-from memcommit.application.operations.meld.assessment_application import (
+from memcommit.application.operations.meld.assessment import (
     FrozenMeldAssessment,
     MeldAssessmentPort,
     MeldAssessmentResult,
@@ -31,7 +31,7 @@ from memcommit.application.operations.meld.resolution_cache import (
     configured_meld_cache_identity,
     meld_resolution_cache_key,
 )
-from memcommit.application.operations.meld.session_application import (
+from memcommit.application.operations.meld.sessions import (
     MeldDestinationPort,
     MeldDestinationRequest,
     MeldPreservationPort,

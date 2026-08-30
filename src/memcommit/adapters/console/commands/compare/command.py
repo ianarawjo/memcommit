@@ -11,14 +11,14 @@ from memcommit.application.operations.compare.ledger.model import (
     ComparisonError,
     ComparisonInput,
 )
-from memcommit.application.operations.compare.summary import (
+from memcommit.application.operations.compare.compare_summary import (
     ComparisonSummary,
     ComparisonSummaryError,
 )
-from memcommit.application.operations.compare.summary_application import (
+from memcommit.application.operations.compare.application import (
     run_comparison_summary,
 )
-from memcommit.application.operations.compare.summary_provider import (
+from memcommit.application.operations.compare.provider_contract import (
     COMPARISON_SUMMARY_OPERATION,
 )
 from memcommit.adapters.console.commands.compare.presentation import (

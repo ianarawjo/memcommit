@@ -70,7 +70,6 @@ def test_production_dedun_consumers_use_the_operation_owner() -> None:
         "src/memcommit/adapters/python_api/dedun.py",
         "src/memcommit/adapters/python_api/_operations/dedun.py",
         "src/memcommit/adapters/console/commands/consolidate/command.py",
-        "src/memcommit/adapters/console/commands/find_duplicates/dedup_handoff.py",
         "src/memcommit/adapters/console/commands/find_duplicates/command.py",
         "src/memcommit/adapters/console/terminal/components/quality_find/workbench.py",
         "src/memcommit/application/operations/dedun/planning.py",

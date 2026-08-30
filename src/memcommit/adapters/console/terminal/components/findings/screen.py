@@ -31,7 +31,7 @@ from memcommit.adapters.console.terminal.components.findings.document import (
 from memcommit.adapters.console.terminal.components.findings.issue_one_line_presentation import (
     issue_one_line_fragments,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.report import (
+from memcommit.application.capabilities.memory_issue_analysis.report import (
     QualityFindBrowserReceipt,
     QualityFindReportView,
     QualityFindingReportItem,

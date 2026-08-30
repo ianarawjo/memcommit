@@ -13,7 +13,7 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     run_quality_find_resolution_workbench,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityFinding,
     AmbiguityReport,
     DuplicateFinding,
@@ -30,11 +30,11 @@ from memcommit.adapters.console.terminal.core.theme import SemanticColorRole
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     semantic_role_style,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
+from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     create_quality_find_workbench,
     quality_find_report_view,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.report import (
+from memcommit.application.capabilities.memory_issue_analysis.report import (
     QualityFindBrowserReceipt,
     QualityFindReportError,
 )

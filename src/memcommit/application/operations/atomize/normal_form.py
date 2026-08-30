@@ -29,17 +29,17 @@ from memcommit.application.operations.dedun.application import (
     project_dedun,
 )
 from memcommit.application.operations.dedun.planning import freeze_dedun_plan
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
-    find_redundancies,
+from memcommit.application.capabilities.memory_issue_analysis.relation_analysis import (
+    analyze_memory_redundancies,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
+from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     create_quality_find_workbench,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
+from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     quality_finding_handoffs,
 )
 from memcommit.application.operations.review.model import direct_context_digest
@@ -79,7 +79,7 @@ def _dedun_projection(
     affected_uids: set[str],
     provider_factory: Callable[[], AtomizeProvider],
 ) -> tuple[dict[str, object] | None, tuple[tuple[str, str], ...]]:
-    report = find_redundancies(projected, provider_factory)
+    report = analyze_memory_redundancies(projected, provider_factory)
     findings = _relevant_findings(report, affected_uids)
     if not findings:
         return None, ()
@@ -196,7 +196,7 @@ def project_atomize_normal_form(
                 f"form: {labels}. No Context change was published."
             )
 
-        verification = find_redundancies(projected, provider_factory)
+        verification = analyze_memory_redundancies(projected, provider_factory)
         remaining = _relevant_findings(verification, set(final_uids))
         if remaining:
             raise AtomizeImpactError(

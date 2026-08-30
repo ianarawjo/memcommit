@@ -30,7 +30,7 @@ from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.dedun.workbench import run_dedun_workbench
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
+from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoffError,
 )
 from memcommit.application.capabilities.semantic.redundancy_evidence import (

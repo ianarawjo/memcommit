@@ -43,7 +43,7 @@ from memcommit.application.operations.conformance.model import ConformanceError
 from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_analysis_save,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     FindingsError,
     FindingsProvider,
 )
@@ -59,7 +59,7 @@ from memcommit.application.operations.audit.model import (
     QualityAuditSession,
 )
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
-from memcommit.application.capabilities.reviewing.memory_issue.finding.report import (
+from memcommit.application.capabilities.memory_issue_analysis.report import (
     quality_find_category_label,
 )
 from memcommit.providers.subscription import (

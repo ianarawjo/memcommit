@@ -14,8 +14,8 @@ from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
 from memcommit.core.context import MemoryRef
 from memcommit.application.operations.compare.ledger.store import comparison_analysis_path
-from memcommit.application.operations.compare.summary import ComparisonSummaryError
-from memcommit.application.operations.compare.summary_provider import summarize_comparison
+from memcommit.application.operations.compare.compare_summary import ComparisonSummaryError
+from memcommit.application.operations.compare.provider_contract import summarize_comparison
 from memcommit.providers.policy import ResolvedProviderPolicy
 from memcommit.providers.profile_routes import (
     ProfileProviderRoutesError,

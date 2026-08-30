@@ -12,7 +12,7 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
     (
         "memcommit.meld_application",
-        "memcommit.application.operations.meld.application",
+        "memcommit.application.operations.meld.apply",
     ),
     (
         "memcommit.meld_runtime",
@@ -20,27 +20,27 @@ MODULE_PAIRS = (
     ),
     (
         "memcommit.meld_application_flow",
-        "memcommit.application.operations.meld.application_flow",
+        "memcommit.application.operations.meld.execution",
     ),
     (
         "memcommit.meld_session_application",
-        "memcommit.application.operations.meld.session_application",
+        "memcommit.application.operations.meld.sessions",
     ),
     (
         "memcommit.meld_start_application",
-        "memcommit.application.operations.meld.start_application",
+        "memcommit.application.operations.meld.start",
     ),
     (
         "memcommit.meld_restart_application",
-        "memcommit.application.operations.meld.restart_application",
+        "memcommit.application.operations.meld.restart",
     ),
     (
         "memcommit.meld_assessment_application",
-        "memcommit.application.operations.meld.assessment_application",
+        "memcommit.application.operations.meld.assessment",
     ),
     (
         "memcommit.meld_resolution_application",
-        "memcommit.application.operations.meld.resolution_application",
+        "memcommit.application.operations.meld.resolution",
     ),
 )
 
@@ -50,14 +50,14 @@ def test_meld_package_import_is_lazy() -> None:
 import sys
 import memcommit.application.operations.meld
 
-assert "memcommit.application.operations.meld.application" not in sys.modules
+assert "memcommit.application.operations.meld.apply" not in sys.modules
 assert "memcommit.application.operations.meld.runtime" not in sys.modules
-assert "memcommit.application.operations.meld.application_flow" not in sys.modules
-assert "memcommit.application.operations.meld.session_application" not in sys.modules
-assert "memcommit.application.operations.meld.start_application" not in sys.modules
-assert "memcommit.application.operations.meld.restart_application" not in sys.modules
-assert "memcommit.application.operations.meld.assessment_application" not in sys.modules
-assert "memcommit.application.operations.meld.resolution_application" not in sys.modules
+assert "memcommit.application.operations.meld.execution" not in sys.modules
+assert "memcommit.application.operations.meld.sessions" not in sys.modules
+assert "memcommit.application.operations.meld.start" not in sys.modules
+assert "memcommit.application.operations.meld.restart" not in sys.modules
+assert "memcommit.application.operations.meld.assessment" not in sys.modules
+assert "memcommit.application.operations.meld.resolution" not in sys.modules
 """
 
     subprocess.run(
@@ -72,8 +72,8 @@ def test_production_meld_consumers_use_the_operation_owner() -> None:
         REPOSITORY_ROOT / relative_path
         for relative_path in (
         "src/memcommit/adapters/python_api/_operations/meld.py",
-        "src/memcommit/application/operations/meld/restart_application.py",
-        "src/memcommit/application/operations/meld/resolution_application.py",
+        "src/memcommit/application/operations/meld/restart.py",
+        "src/memcommit/application/operations/meld/resolution.py",
         )
     ) + tuple(
         sorted(

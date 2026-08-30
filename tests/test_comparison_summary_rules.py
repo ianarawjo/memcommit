@@ -8,9 +8,9 @@ import pytest
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
-from memcommit.application.operations.compare.summary import ComparisonSummaryError
-from memcommit.application.operations.compare.summary_provider import summarize_comparison
-from memcommit.application.operations.compare.summary_rules import (
+from memcommit.application.operations.compare.compare_summary import ComparisonSummaryError
+from memcommit.application.operations.compare.provider_contract import summarize_comparison
+from memcommit.application.operations.compare.compare_rules import (
     COMPARISON_SUMMARY_RULESET_VERSION,
     COMPARISON_SUMMARY_WORD_LIMIT,
     comparison_summary_ruleset,

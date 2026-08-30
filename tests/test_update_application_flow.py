@@ -16,7 +16,7 @@ from memcommit.application.operations.update.model import (
     UpdateSession,
     operation_digest,
 )
-from memcommit.application.operations.update.application_flow import (
+from memcommit.application.operations.update.execution import (
     UpdateApplicationFlowError,
     UpdateApplicationFlowPort,
 )

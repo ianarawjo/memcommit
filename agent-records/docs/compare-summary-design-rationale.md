@@ -49,12 +49,12 @@ coverage it requires.
 
 The transient contract has one canonical operation package:
 
-- `operations.compare.summary_rules` owns the versioned compact-relation
+- `operations.compare.compare_rules` owns the versioned compact-relation
   rules and checked-in fixture decoder;
-- `operations.compare.summary` owns the immutable bounded result;
-- `operations.compare.summary_provider` owns prompt planning, schema, and
+- `operations.compare.compare_summary` owns the immutable bounded result;
+- `operations.compare.provider_contract` owns prompt planning, schema, and
   strict decoding; and
-- `operations.compare.summary_application` owns COMBINE authorization,
+- `operations.compare.application` owns COMBINE authorization,
   provider invocation, and post-call source revalidation.
 
 The previous flat `comparison_summary*` paths are module-identity aliases for

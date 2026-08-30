@@ -52,10 +52,10 @@ from memcommit.core.context_targeting.presets import (
     resolve_scope_preset,
 )
 from memcommit.application.capabilities.authority.source_use_policy import authorize_derived_transfer
-from memcommit.application.operations.update.granted_source_application import (
+from memcommit.application.operations.update.granted_source import (
     apply_granted_source_staged_update,
 )
-from memcommit.application.operations.update.granted_application import (
+from memcommit.application.operations.update.granted_target import (
     apply_granted_staged_update,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
@@ -78,7 +78,7 @@ from memcommit.application.operations.update.model import (
     session_matches,
     update_session_record_digest,
 )
-from memcommit.application.operations.update.application_flow import (
+from memcommit.application.operations.update.execution import (
     UpdateApplicationFlowPort,
 )
 from memcommit.application.operations.update.endpoints import (

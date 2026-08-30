@@ -37,12 +37,14 @@ and one freeform reviewer annotation, but it does not change the finder's
 read-only/mutation contract or apply those annotations to Memories.
 
 The physical application boundary follows that product split. Shared typed
-finding/report values live in `reviewing.memory_issue.finding.model`, while
-provider-backed and deterministic judgment mechanics live in `detection` and
+issue/report values live in `capabilities.memory_issue_analysis.model`;
+Context-aware ambiguity enters `reading_analysis`, relation judgment enters
+`relation_analysis`, provider mechanics live in `provider_contract`, and
 readable Source freezing lives in `source`. The four public commands enter
 their matching `application.operations.find_*` package for request, authority,
-Source, and analysis orchestration. There is no `findings.py` compatibility
-facade; the old name concealed both data and execution in one module.
+Source, and analysis orchestration. There is no compatibility facade for the
+former `reviewing.memory_issue` hierarchy because presentation is only one
+consumer of this operation-neutral analysis capability.
 
 ## Direct relation reports and explicit judgment workbench
 

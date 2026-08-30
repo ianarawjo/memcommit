@@ -13,7 +13,7 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory, MemoryRef, QueryContextRef
-from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
+from memcommit.application.capabilities.memory_issue_analysis.provider_contract import (
     FindingsError,
     collect_direct_memories,
     enumerate_pairs,
@@ -181,7 +181,7 @@ def test_find_duplicates_scans_representatives_without_pair_targets(
         }
 
     monkeypatch.setattr(
-        "memcommit.application.capabilities.reviewing.memory_issue.finding.detection.enumerate_pairs",
+        "memcommit.application.capabilities.memory_issue_analysis.provider_contract.enumerate_pairs",
         lambda candidates: pytest.fail(
             "duplicate discovery must not enumerate pair targets"
         ),
@@ -1015,7 +1015,7 @@ def test_quality_finder_all_aliases_freeze_one_profile_wide_source(
         )
     authorized = []
     monkeypatch.setattr(
-        "memcommit.application.capabilities.reviewing.memory_issue.finding.source.authorize_combination",
+        "memcommit.application.capabilities.memory_issue_analysis.source.authorize_combination",
         lambda accesses: authorized.append(
             tuple(access.display_name for access in accesses)
         ),
@@ -1076,7 +1076,7 @@ def test_quality_finder_all_authority_failure_precedes_provider_connection(
     store.save(context)
     store.set_current(context.name)
     monkeypatch.setattr(
-        "memcommit.application.capabilities.reviewing.memory_issue.finding.source.authorize_combination",
+        "memcommit.application.capabilities.memory_issue_analysis.source.authorize_combination",
         lambda _accesses: (_ for _ in ()).throw(ProfileError("combine denied")),
     )
     monkeypatch.setattr(
@@ -1362,7 +1362,7 @@ def test_duplicate_scan_does_not_allocate_pair_records(monkeypatch):
     for index in range(4):
         ops.add(ctx, str(index))
     monkeypatch.setattr(
-        "memcommit.application.capabilities.reviewing.memory_issue.finding.detection.MemoryPair",
+        "memcommit.application.capabilities.memory_issue_analysis.provider_contract.MemoryPair",
         lambda *args, **kwargs: pytest.fail(
             "duplicate discovery allocated a pair record"
         ),

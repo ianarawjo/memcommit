@@ -40,14 +40,14 @@ from memcommit.application.operations.meld.model import (
     inline_meld_context,
     meld_canonical_digest,
 )
-from memcommit.application.operations.meld.restart_application import (
+from memcommit.application.operations.meld.restart import (
     MeldRestartError,
     MeldRestartPort,
     MeldRestartRequest,
     MeldRestartResult,
     run_meld_restart,
 )
-from memcommit.application.operations.meld.start_application import (
+from memcommit.application.operations.meld.start import (
     MeldStartError,
     MeldStartOrigin,
     MeldStartPort,

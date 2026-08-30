@@ -110,7 +110,7 @@ def _prepare_meld_store(root: Path):
 
 
 def _ambiguity_report(context, memory, *, suffix: str):
-    from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+    from memcommit.application.capabilities.memory_issue_analysis.model import (
         AmbiguityFinding,
         AmbiguityReport,
     )

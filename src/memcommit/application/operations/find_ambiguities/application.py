@@ -5,18 +5,18 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
-    find_ambiguities as detect_ambiguities,
+from memcommit.application.capabilities.memory_issue_analysis.reading_analysis import (
+    analyze_memory_ambiguities,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityReport,
     FindingsProvider,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
+from memcommit.application.capabilities.memory_issue_analysis.source import (
     QualityFindSourceFrame,
     freeze_quality_find_source,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
+from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindWorkbenchSession,
     create_quality_find_workbench,
 )
@@ -54,7 +54,7 @@ def analyze_find_ambiguities(
 ) -> FindAmbiguitiesResult:
     """Run one ambiguity detector against an already frozen Source."""
 
-    report = detect_ambiguities(
+    report = analyze_memory_ambiguities(
         source.analysis_context(),
         provider_factory,
         context_name_by_uid=source.memory_context_names,

@@ -756,7 +756,7 @@ def test_delete_removes_context_scoped_analysis_and_matching_review(
 
 
 def test_delete_preserves_review_bound_to_another_context(isolated_store):
-    from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+    from memcommit.application.capabilities.memory_issue_analysis.model import (
         AmbiguityReport,
     )
     from memcommit.application.operations.review.model import create_ambiguity_review
@@ -790,7 +790,7 @@ def test_delete_removes_uid_retained_atomize_and_review_evidence(isolated_store)
     from memcommit.application.operations.atomize.workbench import (
         create_atomize_workbench,
     )
-    from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+    from memcommit.application.capabilities.memory_issue_analysis.model import (
         AmbiguityReport,
     )
     from memcommit.application.operations.review.model import create_ambiguity_review

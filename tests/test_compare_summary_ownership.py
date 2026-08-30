@@ -34,9 +34,9 @@ assert "memcommit.comparison_store" not in sys.modules
 def test_production_summary_consumers_use_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/console/commands/compare/command.py",
-        "src/memcommit/application/operations/compare/summary.py",
-        "src/memcommit/application/operations/compare/summary_provider.py",
-        "src/memcommit/application/operations/compare/summary_application.py",
+        "src/memcommit/application/operations/compare/compare_summary.py",
+        "src/memcommit/application/operations/compare/provider_contract.py",
+        "src/memcommit/application/operations/compare/application.py",
     )
     legacy_imports = (
         "from memcommit.comparison_summary import",
@@ -51,7 +51,7 @@ def test_production_summary_consumers_use_operation_owner() -> None:
         assert not [legacy for legacy in legacy_imports if legacy in source]
 
 
-def test_summary_owner_does_not_absorb_deep_compare_or_presentation() -> None:
+def test_compare_owner_does_not_absorb_deep_compare_or_presentation() -> None:
     package_source = "\n".join(
         path.read_text(encoding="utf-8")
         for path in sorted(

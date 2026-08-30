@@ -33,7 +33,7 @@ from memcommit.adapters.console.terminal.components.quality_find.workbench impor
     choose_quality_find_setup,
 )
 from memcommit.adapters.console.commands.review.sessions import review_session_entries
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,

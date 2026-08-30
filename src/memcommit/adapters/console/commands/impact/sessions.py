@@ -18,7 +18,7 @@ from memcommit.adapters.console.terminal.components.impact import ImpactControll
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.capabilities.reviewing.memory_diff import update_operation_change
 from memcommit.application.operations.meld.model import MeldSession
-from memcommit.application.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
+from memcommit.application.operations.meld.resolution_projection import MeldResolutionWorkbenchAdapter
 from memcommit.application.capabilities.resolution.workbench import ResolutionWorkbenchView
 from memcommit.application.operations.sever.model import SeverSession
 from memcommit.application.operations.sever.resolution_adapter import (

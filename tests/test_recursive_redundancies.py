@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     DuplicateReport,
     FindingsError,
 )
@@ -52,7 +52,7 @@ def test_cli_recursive_redundancies_analyzes_each_context_independently(
         return DuplicateReport(memory_count=1, findings=())
 
     monkeypatch.setattr(
-        "memcommit.application.operations.find_redundancies.application.detect_redundancies",
+        "memcommit.application.operations.find_redundancies.application.analyze_memory_redundancies",
         analyze,
     )
 
@@ -87,7 +87,7 @@ def test_cli_recursive_redundancies_publishes_no_report_after_later_failure(
         return DuplicateReport(memory_count=len(context.memories), findings=())
 
     monkeypatch.setattr(
-        "memcommit.application.operations.find_redundancies.application.detect_redundancies",
+        "memcommit.application.operations.find_redundancies.application.analyze_memory_redundancies",
         analyze,
     )
 

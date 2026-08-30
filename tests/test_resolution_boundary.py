@@ -66,7 +66,7 @@ def test_merge_application_does_not_import_an_interface_adapter():
     )
 
 
-def test_meld_resolution_application_does_not_import_runtime_or_interfaces():
+def test_meld_resolution_does_not_import_runtime_or_interfaces():
     forbidden = (
         "memcommit.adapters.console.commands",
         "memcommit.adapters.interfaces",
@@ -80,7 +80,7 @@ def test_meld_resolution_application_does_not_import_runtime_or_interfaces():
         / "application"
         / "operations"
         / "meld"
-        / "resolution_application.py"
+        / "resolution.py"
     )
 
     assert not any(
@@ -105,8 +105,8 @@ def test_meld_interfaces_enter_the_operation_owned_resolution_boundary():
     )
     agent_imports = _imports(PACKAGE / "adapters" / "agent" / "meld.py")
 
-    assert "memcommit.application.operations.meld.resolution_application" in command_imports
-    assert "memcommit.application.operations.meld.resolution_application" in public_imports
+    assert "memcommit.application.operations.meld.resolution" in command_imports
+    assert "memcommit.application.operations.meld.resolution" in public_imports
     assert "memcommit.adapters.python_api" in agent_imports
 
 

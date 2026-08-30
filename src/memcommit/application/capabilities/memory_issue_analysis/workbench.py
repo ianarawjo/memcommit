@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 from memcommit.core.context import Context, Memory
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -20,13 +20,13 @@ from memcommit.application.capabilities.reviewing.memory_issue.finding.model imp
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.report import (
+from memcommit.application.capabilities.memory_issue_analysis.report import (
     QualityFindReportView,
     QualityFindingReading,
     QualityFindingReportItem,
     QualityFindingSource,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
+from memcommit.application.capabilities.memory_issue_analysis.source import (
     QualityFindSourceError,
     QualityFindSourceFrame,
     _direct_memories,

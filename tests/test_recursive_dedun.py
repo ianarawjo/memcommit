@@ -22,11 +22,11 @@ from memcommit.application.operations.dedun.scope import (
 )
 from memcommit.application.operations.dedun.application import DedunConflictError
 from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     DuplicateReport,
     FindingsError,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.redundancy_scope import (
+from memcommit.application.capabilities.memory_issue_analysis.redundancy_scope import (
     analyze_independent_redundancy_scope,
 )
 from memcommit.persistence.store import MemoryStore
@@ -279,7 +279,7 @@ def test_recursive_dedun_later_analysis_failure_publishes_no_context(
         return DuplicateReport(memory_count=len(context.memories), findings=())
 
     monkeypatch.setattr(
-        "memcommit.application.operations.find_redundancies.application.detect_redundancies",
+        "memcommit.application.operations.find_redundancies.application.analyze_memory_redundancies",
         analyze,
     )
 

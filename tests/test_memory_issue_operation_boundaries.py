@@ -6,11 +6,11 @@ import ast
 import importlib.util
 from pathlib import Path
 
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityReport,
     ConflictReport,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
+from memcommit.application.capabilities.memory_issue_analysis.source import (
     QualityFindSourceFrame,
 )
 from memcommit.application.operations.find_ambiguities.application import (
@@ -35,18 +35,17 @@ class _ForbiddenProvider:
         raise AssertionError("an empty detection frame must not connect a provider")
 
 
-def test_old_mixed_findings_module_is_unavailable() -> None:
+def test_old_reviewing_memory_issue_package_is_unavailable() -> None:
     assert (
         importlib.util.find_spec(
-            "memcommit.application.capabilities.reviewing."
-            "memory_issue.finding.findings"
+            "memcommit.application.capabilities.reviewing.memory_issue"
         )
         is None
     )
 
 
-def test_frozen_source_is_owned_by_finding_not_resolution() -> None:
-    assert QualityFindSourceFrame.__module__.endswith("memory_issue.finding.source")
+def test_frozen_source_is_owned_by_memory_issue_analysis() -> None:
+    assert QualityFindSourceFrame.__module__.endswith("memory_issue_analysis.source")
 
 
 def test_empty_issue_operations_return_typed_reports_without_provider() -> None:

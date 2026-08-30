@@ -160,7 +160,7 @@ class _UpdateStateStoreMixin:
             operation_digest,
             session_matches,
         )
-        from memcommit.application.operations.update.application import (
+        from memcommit.application.operations.update.materialization import (
             prepare_update_application,
         )
         from memcommit.core.context_targeting.loading import load_context_scope

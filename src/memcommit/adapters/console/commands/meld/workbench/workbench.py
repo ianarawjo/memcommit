@@ -139,7 +139,7 @@ def run_meld_shell(
         ResolutionGlobalStrategy,
         run_resolution_workbench_shell,
     )
-    from memcommit.application.operations.meld.resolution_adapter import (
+    from memcommit.application.operations.meld.resolution_projection import (
         MeldResolutionWorkbenchAdapter,
     )
     from memcommit.adapters.console.terminal.components.impact import ImpactController

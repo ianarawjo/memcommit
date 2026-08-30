@@ -11,7 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from memcommit.application.operations.compare.ledger.model import ComparisonFrame, ComparisonInput
-from memcommit.application.operations.compare.summary_rules import (
+from memcommit.application.operations.compare.compare_rules import (
     COMPARISON_SUMMARY_RULESET_VERSION,
 )
 from memcommit.application.capabilities.semantic.understanding import UnderstandingSummary

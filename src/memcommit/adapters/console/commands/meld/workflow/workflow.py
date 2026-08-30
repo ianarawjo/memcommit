@@ -34,8 +34,8 @@ from memcommit.application.operations.meld.model import (
     inline_meld_context,
     meld_canonical_digest,
 )
-from memcommit.application.operations.meld.restart_application import MeldRestartRequest
-from memcommit.application.operations.meld.start_application import MeldStartRequest
+from memcommit.application.operations.meld.restart import MeldRestartRequest
+from memcommit.application.operations.meld.start import MeldStartRequest
 from memcommit.application.capabilities.authority.source_use_policy import (
     analysis_retention,
     authorize_analysis_save,
@@ -409,7 +409,7 @@ def _assess_and_save(
         execute_prepared_meld_turn,
         prepare_pending_meld_turn,
     )
-    from memcommit.application.operations.meld.session_application import (
+    from memcommit.application.operations.meld.sessions import (
         PendingMeldTurn,
     )
 
@@ -470,7 +470,7 @@ def _accept(
 ) -> tuple[bool, str, int]:
     """Hand one explicitly accepted Meld to the operation-owned Apply service."""
 
-    from memcommit.application.operations.meld.application import MeldApplyRequest
+    from memcommit.application.operations.meld.apply import MeldApplyRequest
     from memcommit.application.operations.meld.runtime import execute_meld_apply
 
     receipt = execute_meld_apply(
@@ -503,7 +503,7 @@ def _complete_default_terminal_execution(
         from memcommit.application.operations.meld.runtime import (
             execute_meld_initial_preservation,
         )
-        from memcommit.application.operations.meld.session_application import (
+        from memcommit.application.operations.meld.sessions import (
             MeldSessionSnapshot,
         )
 
@@ -544,12 +544,12 @@ def _run_interactive(
         execute_meld_preservation,
         execute_meld_session_defer,
     )
-    from memcommit.application.operations.meld.session_application import (
+    from memcommit.application.operations.meld.sessions import (
         MeldDestinationRequest,
         MeldSessionSnapshot,
         prepare_meld_preservation_turn,
     )
-    from memcommit.application.operations.meld.resolution_application import (
+    from memcommit.application.operations.meld.resolution import (
         MeldResolutionTurnRequest,
         prepare_meld_resolution_turn,
     )
@@ -1054,11 +1054,11 @@ def execute_meld_command(
         execute_meld_preservation,
         execute_meld_session_defer,
     )
-    from memcommit.application.operations.meld.session_application import (
+    from memcommit.application.operations.meld.sessions import (
         MeldSessionSnapshot,
         prepare_meld_preservation_turn,
     )
-    from memcommit.application.operations.meld.resolution_application import (
+    from memcommit.application.operations.meld.resolution import (
         MeldResolutionTurnRequest,
         prepare_meld_resolution_turn,
     )

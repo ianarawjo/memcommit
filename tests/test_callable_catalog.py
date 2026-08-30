@@ -115,7 +115,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["atomize"].application_modules
     )
     assert (
-        "memcommit.application.operations.compare.summary_application"
+        "memcommit.application.operations.compare.application"
         in by_operation["compare"].application_modules
     )
     for operation in ("dedup", "find-duplicates"):
@@ -134,7 +134,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["help"].application_modules
     )
     assert (
-        "memcommit.application.operations.meld.session_application"
+        "memcommit.application.operations.meld.sessions"
         in by_operation["meld"].application_modules
     )
     assert (

@@ -29,7 +29,7 @@ from memcommit.adapters.agent.contract import (
 from memcommit.adapters.agent.quality_find import (
     quality_finding_handoff_agent_schema,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
+from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
 )

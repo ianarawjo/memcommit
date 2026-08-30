@@ -12,25 +12,25 @@ adapters.
 
 Meld now separates its terminal-independent contracts:
 
-- `memcommit.application.operations.meld.assessment_application` owns one frozen semantic
+- `memcommit.application.operations.meld.assessment` owns one frozen semantic
   turn, cache replay,
   provider execution, one repair attempt, and all-or-nothing publication.
-- `memcommit.application.operations.meld.session_application` owns saved-session snapshots,
+- `memcommit.application.operations.meld.sessions` owns saved-session snapshots,
   pending dialogue
   turns, defer, provider-free preservation, and destination-change requests.
-- `memcommit.application.operations.meld.resolution_application` projects a saved
+- `memcommit.application.operations.meld.resolution` projects a saved
   assessment into the common
   Resolution contract, validates exact issue/option UIDs against its opaque
   version, and translates a valid choice to operation-owned provider guidance.
-- `memcommit.application.operations.meld.application` owns reviewed Apply routing.
+- `memcommit.application.operations.meld.apply` owns reviewed Apply routing.
   `memcommit.application.operations.meld.runtime` supplies the
   MemoryStore, Grant, checkpoint, recovery, cache, and provider adapters.
-- `memcommit.application.operations.meld.start_application` owns the canonical
+- `memcommit.application.operations.meld.start` owns the canonical
   source/target request and
   validates the resulting initial review. The runtime repeats source authority,
   transfer, Compare-basis, empty-target, and session-absence checks before it
   publishes either a directional review or a symmetric Result session.
-- `memcommit.application.operations.meld.restart_application` owns replacement of an
+- `memcommit.application.operations.meld.restart` owns replacement of an
   existing target-bound
   review under an opaque expected version. Start and restart share the same
   authorization, Compare, cache, and construction runtime, but restart must
@@ -144,7 +144,7 @@ the interface, then converted that ordinal back to provider text in the CLI.
 The CLI's scripted `--choice` path did the same independently, while Python and
 agent callers could submit only free-form text. The corrected boundary carries
 the exact option UID into
-`memcommit.application.operations.meld.resolution_application`; only that operation layer
+`memcommit.application.operations.meld.resolution`; only that operation layer
 reads its frozen option text. Python exposes option UID and requires the
 expected version for every comment, while the agent requires
 `expected_version` for comment, preserve, defer, and Apply. Apply alone accepts

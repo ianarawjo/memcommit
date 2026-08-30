@@ -20,7 +20,7 @@ Audit checks the resulting state. No stage implicitly performs a later one.
 
 ## Application contract
 
-`memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff`
+`memcommit.application.capabilities.memory_issue_analysis.handoff`
 owns an adapter-neutral
 `QualityFindingHandoff`. Every handoff records:
 
@@ -101,30 +101,32 @@ Every adapter receives the same application-owned handoff:
 All four adapter paths converge on `ResolveRequest.source_precondition`; none may
 synthesize its own digest, target, Memory selector, or guidance.
 
-## Memory-issue finding ownership
+## Memory Issue Analysis ownership
 
 On 2026-08-30 the shared package moved from the provisional
-`reviewing.quality` name to `reviewing.memory_issue`. Duplicate,
-Ambiguity, and Conflict outputs are model-assisted candidates for review, not
-proof that a Memory has an open-ended quality defect; the narrower package
-name preserves that epistemic boundary while retaining `reviewing` as the
-owner of report, response, and repair-handoff contracts. Existing type names
-remain unchanged in this path-only step so public Python values and serialized
-handoffs are not silently migrated with package ownership.
+`reviewing.quality` name to `reviewing.memory_issue`, then moved directly to
+`application.capabilities.memory_issue_analysis` after the judgment was also
+needed outside a review phase. Duplicate, Ambiguity, and Conflict outputs are
+model-assisted candidates for review, not proof that a Memory has an
+open-ended quality defect. Existing type names remain unchanged in this
+ownership step so public Python values and serialized handoffs are not silently
+migrated with the physical package.
 
-The shared family is now split by direction: read-only models, detection,
-Source freezing, reports, and lexical redundancy analysis live under
-`reviewing.memory_issue.finding`; response-bearing workbench projections and
-repair handoffs live under `reviewing.memory_issue.resolution`. This prevents
-an immutable observation from being named as if it already authorized repair.
+The shared family is split by judgment shape: Context-aware ambiguity enters
+`reading_analysis`; redundancy and conflict enter `relation_analysis`; models,
+provider mechanics, Source freezing, report projections, response workbenches,
+and typed handoffs remain narrower peer modules. The workbench and handoff do
+not make analysis mutating: they only preserve typed evidence for a later
+operation that independently validates its authority and materialization.
 
 The four public discovery routes now have symmetric console package names and
 explicit application owners: `find_duplicates`, `find_redundancies`,
 `find_ambiguities`, and `find_conflicts`. Their `application.py` modules own
 request validation, readable authority/Source preparation where applicable,
-and typed analysis results. Shared finding/report contracts and the detector
-stay under `reviewing.memory_issue`, so Audit and other operations can
-reuse a judgment primitive without calling a peer Find operation.
+and typed analysis results. Shared issue/report contracts and analysis
+entrypoints stay under `capabilities.memory_issue_analysis`, so Audit and other
+operations can reuse a judgment primitive without calling a peer Find
+operation or inheriting its presentation workflow.
 
 ## Deliberate boundaries
 

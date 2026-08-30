@@ -30,7 +30,7 @@ from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     DuplicateFinding,
     DuplicateReport,
     FindingsError,
@@ -56,13 +56,13 @@ from memcommit.application.operations.dedun.scope import (
     freeze_recursive_dedun_scope,
     prepare_recursive_dedun_scope,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
+from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingSource,
 )
 from memcommit.application.capabilities.semantic.redundancy_evidence import (
     redundancy_evidence_json,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.redundancy_scope import (
+from memcommit.application.capabilities.memory_issue_analysis.redundancy_scope import (
     RedundancyScopeAnalysis,
 )
 from memcommit.application.operations.find_redundancies.application import (

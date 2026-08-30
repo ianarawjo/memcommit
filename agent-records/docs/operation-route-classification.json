@@ -94,7 +94,8 @@
       "find-ambiguities": {
         "evidence": [
           "agent-records/docs/context-locator-design-rationale.md",
-          "agent-records/docs/memory-issue-finding-application-boundary-matrix.md",
+          "agent-records/docs/memory-issue-analysis-application-boundary-matrix.md",
+          "agent-records/docs/memory-issue-analysis-design-rationale.md",
           "agent-records/docs/memory-quality-finders-design-rationale.md",
           "agent-records/docs/quality-finding-handoff-design-rationale.md",
           "agent-records/docs/read-report-lifecycle-design-rationale.md",
@@ -105,7 +106,8 @@
       "find-conflicts": {
         "evidence": [
           "agent-records/docs/context-locator-design-rationale.md",
-          "agent-records/docs/memory-issue-finding-application-boundary-matrix.md",
+          "agent-records/docs/memory-issue-analysis-application-boundary-matrix.md",
+          "agent-records/docs/memory-issue-analysis-design-rationale.md",
           "agent-records/docs/memory-quality-finders-design-rationale.md",
           "agent-records/docs/quality-finding-handoff-design-rationale.md",
           "agent-records/docs/read-report-lifecycle-design-rationale.md",
@@ -247,7 +249,8 @@
         "evidence": [
           "agent-records/docs/context-locator-design-rationale.md",
           "agent-records/docs/find-duplicates-callable-boundary-matrix.md",
-          "agent-records/docs/memory-issue-finding-application-boundary-matrix.md",
+          "agent-records/docs/memory-issue-analysis-application-boundary-matrix.md",
+          "agent-records/docs/memory-issue-analysis-design-rationale.md",
           "agent-records/docs/dedup-design-rationale.md",
           "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
         ],
@@ -257,7 +260,8 @@
         "evidence": [
           "agent-records/docs/context-locator-design-rationale.md",
           "agent-records/docs/find-redundancies-callable-boundary-matrix.md",
-          "agent-records/docs/memory-issue-finding-application-boundary-matrix.md",
+          "agent-records/docs/memory-issue-analysis-application-boundary-matrix.md",
+          "agent-records/docs/memory-issue-analysis-design-rationale.md",
           "agent-records/docs/memory-quality-finders-design-rationale.md",
           "agent-records/docs/quality-finding-handoff-design-rationale.md",
           "agent-records/docs/read-report-lifecycle-design-rationale.md",

@@ -74,10 +74,10 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
 from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_combination,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
+from memcommit.application.capabilities.memory_issue_analysis.source import (
     QualityFindSourceFrame,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
+from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindKind,
     QualityFindReport,
     QualityFindWorkbenchError,
@@ -85,7 +85,7 @@ from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbe
     create_quality_find_workbench,
     quality_find_report_view,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
+from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
     quality_finding_handoff,
     quality_finding_handoffs,

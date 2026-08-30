@@ -6,13 +6,15 @@ import uuid
 from collections.abc import Callable
 from datetime import datetime, timezone
 
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     FindingsProvider,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
-    find_ambiguities,
-    find_conflicts,
-    find_redundancies,
+from memcommit.application.capabilities.memory_issue_analysis.reading_analysis import (
+    analyze_memory_ambiguities,
+)
+from memcommit.application.capabilities.memory_issue_analysis.relation_analysis import (
+    analyze_memory_conflicts,
+    analyze_memory_redundancies,
 )
 from memcommit.application.operations.audit.model import (
     QUALITY_AUDIT_RULESETS,
@@ -138,9 +140,9 @@ def run_quality_audit(
         ],
         ...,
     ] = (
-        ("duplicates", find_redundancies),
-        ("ambiguities", find_ambiguities),
-        ("conflicts", find_conflicts),
+        ("duplicates", analyze_memory_redundancies),
+        ("ambiguities", analyze_memory_ambiguities),
+        ("conflicts", analyze_memory_conflicts),
     )
     checks: list[QualityAuditCheck] = []
     for index, (kind, finder) in enumerate(operations, start=1):

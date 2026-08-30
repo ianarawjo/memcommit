@@ -18,21 +18,21 @@ from memcommit.application.capabilities.authority.source_use_policy import (
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     DuplicateReport,
     FindingsProvider,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
-    find_redundancies,
+from memcommit.application.capabilities.memory_issue_analysis.relation_analysis import (
+    analyze_memory_redundancies,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
+from memcommit.application.capabilities.memory_issue_analysis.source import (
     QualityFindSourceFrame,
 )
 from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
+from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     create_quality_find_workbench,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
+from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
     quality_finding_handoffs,
 )
@@ -129,7 +129,7 @@ def analyze_independent_redundancy_scope(
     source: QualityFindSourceFrame,
     provider_factory: Callable[[], FindingsProvider],
     *,
-    operation: Callable[..., DuplicateReport] = find_redundancies,
+    operation: Callable[..., DuplicateReport] = analyze_memory_redundancies,
 ) -> RedundancyScopeAnalysis:
     """Analyze every frozen Context exactly once without cross-Context edges."""
 

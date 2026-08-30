@@ -7,7 +7,7 @@ import pytest
 
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.update.model import AddOperation, EditOperation, UpdateSession
-from memcommit.application.operations.update.application import (
+from memcommit.application.operations.update.materialization import (
     UpdateApplicationError,
     prepare_update_application,
 )

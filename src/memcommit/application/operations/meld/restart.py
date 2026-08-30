@@ -11,7 +11,7 @@ from memcommit.application.operations.meld.model import (
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MeldSession,
 )
-from memcommit.application.operations.meld.start_application import (
+from memcommit.application.operations.meld.start import (
     MeldStartMode,
     MeldStartOrigin,
     validate_meld_start_scope,

@@ -9,24 +9,24 @@ from types import SimpleNamespace
 import pytest
 
 import memcommit.application.operations.compare.ledger.execution as comparison_execution
-import memcommit.application.operations.meld.assessment_application as meld_assessment_application
+import memcommit.application.operations.meld.assessment as meld_assessment_application
 import memcommit.application.operations.meld.provider.contract as meld_provider_contract
 import memcommit.application.operations.meld.provider.decoder as meld_provider_decoder
 import memcommit.application.operations.meld.provider.execution as meld_provider_execution
 import memcommit.application.operations.meld.provider.projection as meld_provider_projection
 import memcommit.application.operations.meld.provider.request as meld_provider_request
-import memcommit.application.operations.meld.restart_application as meld_restart_application
+import memcommit.application.operations.meld.restart as meld_restart_application
 import memcommit.application.operations.meld.runtime as meld_runtime
 import memcommit.application.operations.meld.runtime.apply as meld_runtime_apply
 import memcommit.application.operations.meld.runtime.session_launch as meld_session_launch
 import memcommit.application.operations.meld.runtime.session_review as meld_session_review
 import memcommit.application.operations.meld.runtime.source_bindings as meld_source_bindings
-import memcommit.application.operations.meld.session_application as meld_session_application
-import memcommit.application.operations.meld.start_application as meld_start_application
+import memcommit.application.operations.meld.sessions as meld_session_application
+import memcommit.application.operations.meld.start as meld_start_application
 from memcommit.application.capabilities.authority.context_access import ContextAccess
 from memcommit.core.context import Context, Memory
 from memcommit.application.operations.meld.model import meld_canonical_digest
-from memcommit.application.operations.meld.restart_application import MeldRestartRequest
+from memcommit.application.operations.meld.restart import MeldRestartRequest
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[1] / "src" / "memcommit"

@@ -12,8 +12,8 @@ from memcommit.application.capabilities.authority.context_access import (
 )
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
 from memcommit.application.operations.compare.ledger.store import ConcurrentComparisonUpdateError
-from memcommit.application.operations.compare.summary import ComparisonSummary
-from memcommit.application.operations.compare.summary_provider import (
+from memcommit.application.operations.compare.compare_summary import ComparisonSummary
+from memcommit.application.operations.compare.provider_contract import (
     ComparisonSummaryProvider,
     summarize_comparison,
 )

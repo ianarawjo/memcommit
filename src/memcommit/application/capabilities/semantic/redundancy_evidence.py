@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
+from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QUALITY_FINDING_HANDOFF_CONTRACT_VERSION,
     QualityFindingHandoff,
     QualityFindingHandoffError,

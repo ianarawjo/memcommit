@@ -12,7 +12,7 @@ from memcommit.application.operations.compare.ledger.granted_store import (
     load_granted_comparison_artifact,
     recursive_comparison_projection,
 )
-from memcommit.application.operations.meld.application import (
+from memcommit.application.operations.meld.apply import (
     MeldApplicationError,
 )
 from memcommit.application.operations.meld.model import (

@@ -15,7 +15,7 @@ from memcommit.adapters.console.terminal.components.quality_find.workbench impor
     run_interactive_quality_find,
     run_quality_find_resolution_workbench,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -23,10 +23,10 @@ from memcommit.application.capabilities.reviewing.memory_issue.finding.model imp
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
+from memcommit.application.capabilities.memory_issue_analysis.source import (
     QualityFindSourceFrame,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
+from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindWorkbenchError,
     create_quality_find_workbench,
     quality_find_resolution_view,
@@ -732,7 +732,7 @@ def test_find_redundancies_has_no_initial_selector_route(
     store.set_current(ctx.name)
     observed: list[str] = []
     monkeypatch.setattr(
-        "memcommit.application.operations.find_redundancies.application.detect_redundancies",
+        "memcommit.application.operations.find_redundancies.application.analyze_memory_redundancies",
         lambda source, *_args, **_kwargs: (
             observed.append(source.name) or DuplicateReport(memory_count=2, findings=())
         ),
@@ -757,7 +757,7 @@ def test_repeated_dedun_bypasses_report_recents_and_target_setup(
     store.create_context(ctx)
     store.set_current(ctx.name)
     monkeypatch.setattr(
-        "memcommit.application.operations.find_redundancies.application.detect_redundancies",
+        "memcommit.application.operations.find_redundancies.application.analyze_memory_redundancies",
         lambda *_args, **_kwargs: DuplicateReport(memory_count=2, findings=()),
     )
 

@@ -18,6 +18,7 @@ CAPABILITY_ENTRIES = {
     "context_locator.py",
     "evaluation",
     "flow.py",
+    "memory_issue_analysis",
     "ops.py",
     "resolution",
     "retained_history",
@@ -25,6 +26,7 @@ CAPABILITY_ENTRIES = {
     "reviewing",
     "semantic",
     "semantic_execution",
+    "semantic_result_memorization.py",
 }
 
 LEGACY_APPLICATION_MODULES = (

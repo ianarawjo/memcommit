@@ -8,22 +8,22 @@ from dataclasses import dataclass
 from memcommit.application.capabilities.authority.context_access import (
     resolve_context_access,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
-    find_redundancies as detect_redundancies,
+from memcommit.application.capabilities.memory_issue_analysis.relation_analysis import (
+    analyze_memory_redundancies,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     DuplicateReport,
     FindingsProvider,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.redundancy_scope import (
+from memcommit.application.capabilities.memory_issue_analysis.redundancy_scope import (
     RedundancyScopeAnalysis,
     analyze_independent_redundancy_scope,
     freeze_redundancy_scope,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
+from memcommit.application.capabilities.memory_issue_analysis.source import (
     QualityFindSourceFrame,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
+from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindWorkbenchSession,
     create_quality_find_workbench,
 )
@@ -60,7 +60,7 @@ def analyze_combined_find_redundancies(
         raise ValueError(
             "A recursive redundancy Source must be analyzed as independent Contexts."
         )
-    report = detect_redundancies(
+    report = analyze_memory_redundancies(
         source.analysis_context(),
         provider_factory,
         context_name_by_uid=source.memory_context_names,
@@ -105,7 +105,7 @@ def analyze_find_redundancies(
     return analyze_independent_redundancy_scope(
         source,
         provider_factory,
-        operation=detect_redundancies,
+        operation=analyze_memory_redundancies,
     )
 
 

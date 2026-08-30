@@ -77,11 +77,11 @@ from memcommit.application.operations.meld.provider.request import (
     meld_turn_request_digest,
 )
 from memcommit.application.operations.meld.runtime import prepare_meld_start
-from memcommit.application.operations.meld.start_application import MeldStartRequest
+from memcommit.application.operations.meld.start import MeldStartRequest
 from memcommit.application.operations.update.model import GrantedUpdateTarget
 from memcommit.application.operations.meld.choice_branches import MeldChoiceBranchSet
 from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
-from memcommit.application.operations.meld.resolution_adapter import MeldResolutionWorkbenchAdapter
+from memcommit.application.operations.meld.resolution_projection import MeldResolutionWorkbenchAdapter
 from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )

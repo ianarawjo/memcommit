@@ -29,16 +29,16 @@ from memcommit.application.operations.meld.model import (
     MeldError as CoreMeldError,
     meld_canonical_digest,
 )
-from memcommit.application.operations.meld.application import MeldApplyRequest
+from memcommit.application.operations.meld.apply import MeldApplyRequest
 from memcommit.application.operations.meld.provider.contract import (
     MeldProviderError,
 )
-from memcommit.application.operations.meld.resolution_application import (
+from memcommit.application.operations.meld.resolution import (
     MeldResolutionError,
     MeldResolutionTurnRequest,
     prepare_meld_resolution_turn,
 )
-from memcommit.application.operations.meld.restart_application import (
+from memcommit.application.operations.meld.restart import (
     MeldRestartError,
     MeldRestartRequest,
 )
@@ -53,13 +53,13 @@ from memcommit.application.operations.meld.runtime import (
     load_meld_source,
     prepare_pending_meld_turn,
 )
-from memcommit.application.operations.meld.session_application import (
+from memcommit.application.operations.meld.sessions import (
     MeldSessionVersionError,
     MeldSessionVersionInputError,
     prepare_meld_preservation_turn,
     require_meld_session_version,
 )
-from memcommit.application.operations.meld.start_application import MeldStartError, MeldStartRequest
+from memcommit.application.operations.meld.start import MeldStartError, MeldStartRequest
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError
 

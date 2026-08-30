@@ -12,7 +12,7 @@ presence of any Grant in the session and not the ownership of the Source.
 
 ## Operation ownership
 
-`memcommit.application.operations.update.application` is the canonical owner of the
+`memcommit.application.operations.update.materialization` is the canonical owner of the
 deterministic, non-persisting plan application contract. The Store and the
 local-, granted-Target-, and granted-Source application paths consume that
 contract but retain their own freshness, authority, multi-owner transaction,
@@ -20,9 +20,14 @@ checkpoint, and receipt responsibilities. Update has no independent operation
 runtime module, so this relocation does not create one or absorb those
 consumers into the package.
 
-The former `memcommit.update_application` path remains a behavior-free
-module-identity alias for import-order, monkeypatch, and serialized-global
-compatibility. This ownership-only relocation changes no semantic plan,
+The remaining terminal-independent modules are named by responsibility:
+`execution.py` sequences review to Apply, `granted_target.py` owns a Target
+whose authority Store is mutated, and `granted_source.py` owns a granted
+read-only Source feeding a local Target. These are mechanical renames only;
+they do not add Memory Issue verification or change source/target authority.
+
+The former `memcommit.update_application` path retains its existing
+compatibility policy. This ownership-only relocation changes no semantic plan,
 preflight, CAS, authority, checkpoint, or zero-operation behavior and requires
 no terminal screenshot refresh.
 

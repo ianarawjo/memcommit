@@ -14,7 +14,7 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
 )
 from memcommit.application.capabilities.reviewing.report import ReviewReportController
 from memcommit.application.operations.meld.model import MeldSession
-from memcommit.application.operations.meld.resolution_adapter import (
+from memcommit.application.operations.meld.resolution_projection import (
     MeldResolutionWorkbenchAdapter,
 )
 from memcommit.application.operations.review.model import ReviewError

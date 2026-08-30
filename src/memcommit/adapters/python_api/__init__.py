@@ -410,7 +410,7 @@ _LAZY_EXPORTS = {
     },
     **{
         name: (
-            "memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff",
+            "memcommit.application.capabilities.memory_issue_analysis.handoff",
             name,
         )
         for name in (

@@ -1,9 +1,9 @@
-"""Read-only semantic Memory-issue findings for directly owned Memories.
+"""Provider contract for read-only Memory Issue analysis.
 
-Each public finder makes at most one provider call. Conflict names its complete
-pair target space; duplicate discovery instead sends one representative per
-deterministic equivalence component and never materializes every possible
-pair.
+Each selected analysis makes at most one provider call. Conflict names its
+complete pair target space; redundancy discovery instead sends one
+representative per deterministic equivalence component and never materializes
+every possible pair.
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     find_exact_duplicate_groups,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,

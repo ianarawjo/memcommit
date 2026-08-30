@@ -10,7 +10,7 @@ from memcommit.application.capabilities.authority.context_access import (
 )
 from memcommit.core.context import AutoCheckpoint
 from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.application.operations.update.granted_application import _authority_name, _remove_checkpoint
+from memcommit.application.operations.update.granted_target import _authority_name, _remove_checkpoint
 from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
@@ -28,7 +28,7 @@ from memcommit.application.operations.update.model import (
     operation_digest,
     session_matches,
 )
-from memcommit.application.operations.update.application import prepare_update_application
+from memcommit.application.operations.update.materialization import prepare_update_application
 
 
 def apply_granted_source_staged_update(

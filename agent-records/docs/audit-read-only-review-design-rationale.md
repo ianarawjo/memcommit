@@ -99,10 +99,10 @@ optional Conformance as one complete operation, and publishes only a validated
 record through `repository.py`'s `AuditRecordRepository` port. The concrete
 `persistence.operations.audit.record_repository.JsonAuditRecordRepository`
 owns private immutable UID-addressed JSON records. The read-only console projector
-composes the shared Memory-issue report views directly; Audit has no Resolution
+composes the shared Memory Issue report views directly; Audit has no Resolution
 projection, response model, option grammar, or CAS update route. The reusable
-finder, report, and workbench contracts remain under
-`application.capabilities.reviewing.memory_issue`.
+analysis, report, and workbench contracts live directly under
+`application.capabilities.memory_issue_analysis`.
 
 Optional Conformance is preflighted inside the Audit application before any
 provider connection. Console progress is supplied through callbacks, but the
@@ -112,8 +112,9 @@ validated Session; a failed check publishes no partial Audit. The former
 `application.capabilities.reviewing.quality.audit` and `audit_store` modules are
 removed without compatibility facades because they were provisional internal
 owners, not supported import surfaces. The remaining shared capability was
-then named `reviewing.memory_issue`: its outputs are model-assisted
-issue candidates for review, not proof of a generalized quality judgment.
+later moved out of the presentation-oriented `reviewing` namespace and named
+`memory_issue_analysis`: its outputs are model-assisted issue candidates for
+review, not proof of a generalized quality judgment.
 
 The response-bearing draft was never distributed. On 2026-08-30 its runtime
 compatibility was removed instead of turning an unreleased shape into a durable

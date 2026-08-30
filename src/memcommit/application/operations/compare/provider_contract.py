@@ -7,11 +7,11 @@ import re
 from typing import Protocol
 
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
-from memcommit.application.operations.compare.summary import (
+from memcommit.application.operations.compare.compare_summary import (
     ComparisonSummary,
     ComparisonSummaryError,
 )
-from memcommit.application.operations.compare.summary_rules import (
+from memcommit.application.operations.compare.compare_rules import (
     COMPARISON_SUMMARY_WORD_LIMIT,
     comparison_summary_ruleset_prompt_payload,
     measure_comparison_summary_words,

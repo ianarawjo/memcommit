@@ -31,7 +31,7 @@ from memcommit.adapters.console.terminal.core.text import (
 from memcommit.adapters.console.terminal.core.identity import (
     collision_safe_uid_prefixes,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
+from memcommit.application.capabilities.memory_issue_analysis.model import (
     FindingsError,
 )
 from memcommit.application.operations.fit.judgment import FitJudgmentError
@@ -48,7 +48,7 @@ from memcommit.application.operations.find_conflicts.application import (
     analyze_find_conflicts,
     prepare_find_conflicts,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
+from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     quality_finding_handoff_json,
     quality_finding_handoffs,
 )

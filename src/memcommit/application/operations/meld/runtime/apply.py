@@ -10,7 +10,7 @@ from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     revalidate_granted_context_binding,
 )
-from memcommit.application.operations.meld.application import (
+from memcommit.application.operations.meld.apply import (
     MeldApplicationError,
     MeldApplyPort,
     MeldApplyReceipt,
@@ -29,7 +29,7 @@ from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,
     resolve_granted_context_view,
 )
-from memcommit.application.operations.update.granted_application import (
+from memcommit.application.operations.update.granted_target import (
     _remove_checkpoint,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory

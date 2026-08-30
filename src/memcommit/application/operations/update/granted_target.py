@@ -46,7 +46,7 @@ from memcommit.application.operations.update.model import (
     required_grant_permissions,
     session_matches,
 )
-from memcommit.application.operations.update.application import (
+from memcommit.application.operations.update.materialization import (
     prepare_update_application,
 )
 

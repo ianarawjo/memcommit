@@ -3,8 +3,8 @@
 ## Lightweight Summary implementation ownership
 
 The default transient Compare path is owned by
-`memcommit.application.operations.compare.summary`, `.summary_rules`,
-`.summary_provider`, and `.summary_application`. The former flat
+`memcommit.application.operations.compare.compare_summary`, `.compare_rules`,
+`.provider_contract`, and `.application`. The former flat
 `memcommit.comparison_summary*` module paths are identity-preserving
 compatibility aliases so import order, monkeypatches, and pre-relocation pickle
 references resolve to the same canonical modules and classes. New production
@@ -33,7 +33,7 @@ not imported by the canonical Summary application or provider.
 
 | Use case | Typed owner | Python | Agent | CLI / TUI |
 | --- | --- | --- | --- | --- |
-| Default transient summary | `operations.compare.summary_application.run_comparison_summary` | not exposed as the deep public API | not exposed as the deep agent API | default explicit endpoints or endpoint setup |
+| Default transient summary | `operations.compare.application.run_comparison_summary` | not exposed as the deep public API | not exposed as the deep agent API | default explicit endpoints or endpoint setup |
 | Run or reuse | `comparison_execution.ensure_comparison_analysis` | `compare_contexts` | `kind=run` | explicit endpoints or endpoint setup |
 | Open exact saved analysis | `comparison_session_application.open_comparison_session` | `open_comparison` | `kind=open` | saved-session picker |
 | Refresh reviewed analysis | `prepare_comparison_refresh` plus production execution | `refresh_comparison(expected_version=...)` | `kind=refresh` | explicit `--refresh` freezes the current slot at command start |

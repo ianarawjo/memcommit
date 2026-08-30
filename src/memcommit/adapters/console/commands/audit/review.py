@@ -31,15 +31,15 @@ from memcommit.adapters.console.terminal.components.findings import (
 )
 from memcommit.application.operations.audit.model import QualityAuditSession
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
-from memcommit.application.capabilities.reviewing.memory_issue.finding.report import (
+from memcommit.application.capabilities.memory_issue_analysis.report import (
     QualityFindReportView,
     quality_find_category_label,
     quality_find_report_summary_text,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
+from memcommit.application.capabilities.memory_issue_analysis.source import (
     QualityFindSourceFrame,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
+from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindWorkbenchSession,
     quality_find_report_view,
 )

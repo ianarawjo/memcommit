@@ -82,7 +82,7 @@ from memcommit.adapters.python_api.semantic import (
     FitPropositionInput,
 )
 from memcommit.core.context import QueryContextRef
-from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
+from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
 )
 from memcommit.application.operations.profile.config import (

@@ -8,7 +8,7 @@ from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerDocument,
     SemanticViewerSection,
 )
-from memcommit.application.capabilities.reviewing.memory_issue.finding.report import (
+from memcommit.application.capabilities.memory_issue_analysis.report import (
     QualityFindReportView,
     QualityFindingReportItem,
     quality_find_category_label,
