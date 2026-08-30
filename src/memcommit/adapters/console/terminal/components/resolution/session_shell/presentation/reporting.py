@@ -665,10 +665,10 @@ def _seeded_report_lines(
     report_text: str,
     strategies: tuple[ResolutionGlobalStrategy, ...],
     review_and_apply: bool = False,
-    report_decision: bool = False,
     read_only: bool = False,
     impact_controller: ImpactController | None = None,
     drafts: dict[str, ResponseDraft] | None = None,
+    report_decision: bool = False,
 ) -> list[str]:
     lines = report_text.splitlines()
     if view.context_locations:
