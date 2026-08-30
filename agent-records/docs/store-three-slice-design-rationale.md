@@ -45,8 +45,11 @@ three initial slices or the seven Context/Memory modules are final service bound
 The second-stage split follows independently named persistence actions rather than an
 arbitrary line limit:
 
-- `discovery.py` scans the Context catalog, resolves record paths, and validates names
-  and storage availability;
+- `catalog_scan.py` scans record headers into the ordinary Context catalog and reports
+  typed omissions without following unsafe namespace entries;
+- `addressing.py` resolves Context and checkpoint paths under one guarded storage root;
+- `occupancy.py` decides whether a Context exists or a name can be created without
+  colliding with pre-existing storage;
 - `loading.py` owns direct, referenced, current, graph, and locked snapshot reads;
 - `rename.py` plans and commits Context graph renames together with every persisted
   reference that must move atomically;

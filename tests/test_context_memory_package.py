@@ -30,16 +30,20 @@ EXPECTED_METHODS = {
     },
     "models.py": set(),
     "records.py": set(),
-    "discovery.py": {
+    "addressing.py": {
         "_assert_context_storage_root",
-        "_catalog_diagnostic",
-        "_scan_context_record_paths",
-        "scan_context_catalog",
         "_context_dir",
         "_context_file",
         "_checkpoints_dir",
-        "context_exists",
+    },
+    "catalog_scan.py": {
+        "_catalog_diagnostic",
+        "_scan_context_record_paths",
+        "scan_context_catalog",
         "list_context_names",
+    },
+    "occupancy.py": {
+        "context_exists",
         "_assert_context_storage_available",
         "_prune_empty_namespace_dirs",
         "assert_context_creatable",
@@ -140,7 +144,9 @@ def test_context_memory_surface_composes_the_focused_mixins() -> None:
         base.__module__.rsplit(".", 1)[-1] for base in ContextMemoryStoreMixin.__bases__
     ) == (
         "current",
-        "discovery",
+        "addressing",
+        "catalog_scan",
+        "occupancy",
         "loading",
         "rename",
         "saving",

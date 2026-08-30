@@ -1,43 +1,20 @@
-"""Discover and validate ordinary Context record paths."""
+"""Scan ordinary Context records into a validated catalog."""
 
 from __future__ import annotations
 
 import json
 from pathlib import Path
 
-from memcommit.core.context_targeting.naming import (
-    RESERVED_CONTEXT_SEGMENTS,
-    validate_portable_context_name,
-)
 from memcommit.core.context_targeting.context_catalog import (
     ContextCatalogDiagnostic,
     ContextCatalogDiagnosticCode,
     ContextCatalogScan,
 )
 
-from .records import (
-    _context_name_parts,
-    _validate_context_header,
-)
+from .records import _context_name_parts, _validate_context_header
 
 
-class _ContextDiscoveryMixin:
-    def _assert_context_storage_root(self) -> bool:
-        """Return whether the ordinary root exists, rejecting unsafe aliases.
-
-        A symlink at ``contexts/`` used to bypass the per-namespace symlink
-        checks because every descendant resolved inside the aliased root.  All
-        ordinary Context paths enter through this guard so a catalog read and a
-        later load/write enforce the same storage boundary.
-        """
-        if self.contexts_dir.is_symlink():
-            raise ValueError("Context storage root cannot be a symbolic link.")
-        if not self.contexts_dir.exists():
-            return False
-        if not self.contexts_dir.is_dir():
-            raise ValueError("Context storage root is not a directory.")
-        return True
-
+class _ContextCatalogScanMixin:
     def _catalog_diagnostic(
         self,
         code: ContextCatalogDiagnosticCode,
@@ -73,9 +50,7 @@ class _ContextDiscoveryMixin:
         while pending:
             directory = pending.pop()
             try:
-                entries = tuple(
-                    sorted(directory.iterdir(), key=lambda entry: entry.name)
-                )
+                entries = tuple(sorted(directory.iterdir(), key=lambda entry: entry.name))
             except OSError as error:
                 diagnostics.append(
                     self._catalog_diagnostic(
@@ -100,9 +75,7 @@ class _ContextDiscoveryMixin:
                                 "UNSAFE_ENTRY",
                                 entry,
                                 context_name=None,
-                                message=(
-                                    "Context storage contains a symbolic-link entry."
-                                ),
+                                message="Context storage contains a symbolic-link entry.",
                             )
                         )
                         continue
@@ -113,9 +86,7 @@ class _ContextDiscoveryMixin:
                                     "UNSAFE_ENTRY",
                                     entry,
                                     context_name=None,
-                                    message=(
-                                        "Context record path is not a regular file."
-                                    ),
+                                    message="Context record path is not a regular file.",
                                 )
                             )
                         else:
@@ -128,9 +99,7 @@ class _ContextDiscoveryMixin:
                                     "UNSAFE_ENTRY",
                                     entry,
                                     context_name=None,
-                                    message=(
-                                        "Context storage contains a special entry."
-                                    ),
+                                    message="Context storage contains a special entry.",
                                 )
                             )
                         continue
@@ -140,7 +109,7 @@ class _ContextDiscoveryMixin:
                                 "UNSAFE_ENTRY",
                                 entry,
                                 context_name=None,
-                                message=("Context record path is not a regular file."),
+                                message="Context record path is not a regular file.",
                             )
                         )
                         continue
@@ -170,7 +139,7 @@ class _ContextDiscoveryMixin:
                     continue
                 records.append((name, entry))
 
-            # Reverse the sorted children because ``pending`` is a LIFO stack.
+            # Reverse sorted children because ``pending`` is a LIFO stack.
             pending.extend(reversed(child_directories))
 
         return tuple(sorted(records)), tuple(diagnostics)
@@ -222,96 +191,5 @@ class _ContextDiscoveryMixin:
             diagnostics=tuple(found_diagnostics),
         )
 
-    def _context_dir(self, name: str) -> Path:
-        self._assert_context_storage_root()
-        parts = _context_name_parts(name)
-        path = self.contexts_dir.joinpath(*parts)
-        candidate = self.contexts_dir
-        for part in parts:
-            candidate /= part
-            if candidate.is_symlink():
-                raise ValueError(
-                    f"Invalid context name '{name}': symbolic links are not "
-                    "allowed in context namespaces."
-                )
-            if candidate.exists() and not candidate.is_dir():
-                raise ValueError(
-                    f"Invalid context name '{name}': namespace component "
-                    f"'{candidate.name}' is not a directory."
-                )
-        contexts_root = self.contexts_dir.resolve()
-        resolved = path.resolve(strict=False)
-        if resolved != contexts_root and contexts_root not in resolved.parents:
-            raise ValueError(
-                f"Invalid context name '{name}': path escapes the context store."
-            )
-        return path
-
-    def _context_file(self, name: str) -> Path:
-        return self._context_dir(name) / "context.json"
-
-    def _checkpoints_dir(self, name: str) -> Path:
-        path = self._context_dir(name) / "checkpoints"
-        if path.is_symlink():
-            raise ValueError(
-                f"Refusing to access checkpoints for '{name}' through a symbolic link."
-            )
-        contexts_root = self.contexts_dir.resolve()
-        resolved = path.resolve(strict=False)
-        if resolved != contexts_root and contexts_root not in resolved.parents:
-            raise ValueError(
-                f"Refusing to access checkpoints for '{name}' outside the "
-                "context store."
-            )
-        return path
-
-    def context_exists(self, name: str) -> bool:
-        if not self._assert_context_storage_root():
-            return False
-        try:
-            context_file = self._context_file(name)
-        except (OSError, TypeError, ValueError):
-            return False
-        return context_file.is_file() and not context_file.is_symlink()
-
     def list_context_names(self) -> list[str]:
         return list(self.scan_context_catalog().names)
-
-    def _assert_context_storage_available(self, name: str) -> None:
-        """Allow a new root Context when only namespace directories predate it."""
-        context_dir = self._context_dir(name)
-        if not context_dir.exists():
-            return
-        invalid_entries = [
-            entry.name
-            for entry in context_dir.iterdir()
-            if (
-                entry.is_symlink()
-                or not entry.is_dir()
-                or entry.name.casefold() in RESERVED_CONTEXT_SEGMENTS
-            )
-        ]
-        if invalid_entries:
-            raise ValueError(
-                f"Cannot create context '{name}': its storage directory already "
-                "exists and is not empty; only child namespace directories may "
-                "precede a root Context. Invalid entries: "
-                + ", ".join(sorted(invalid_entries))
-            )
-
-    def _prune_empty_namespace_dirs(self, start: Path) -> None:
-        """Remove empty namespace directories without removing self.contexts_dir."""
-        candidate = start
-        while candidate != self.contexts_dir:
-            try:
-                candidate.rmdir()
-            except OSError:
-                break
-            candidate = candidate.parent
-
-    def assert_context_creatable(self, name: str) -> None:
-        """Fail before expensive work when a new Context cannot use this name."""
-        validate_portable_context_name(name)
-        if self.context_exists(name):
-            raise FileExistsError(f"Context '{name}' already exists.")
-        self._assert_context_storage_available(name)
