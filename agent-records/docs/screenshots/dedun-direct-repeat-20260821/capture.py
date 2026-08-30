@@ -78,9 +78,9 @@ def _initialize() -> None:
 def _run_child() -> None:
     import click
 
-    import memcommit.adapters.console.commands.find_redundancies.command as find_command
+    import memcommit.application.operations.find_redundancies.application as find_application
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
         DuplicateFinding,
         DuplicateReport,
     )
@@ -112,7 +112,7 @@ def _run_child() -> None:
                 ),
             )
 
-        find_command.ops.find_redundancies = analyze
+        find_application.detect_redundancies = analyze
         print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)
 
         for ordinal in ("FIRST", "SECOND"):

@@ -24,7 +24,7 @@ from memcommit.adapters.console.commands.review.resolution_shell import (
     run_review_resolution_shell,
 )
 from memcommit.core.context import Memory
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     AmbiguityFinding,
     AmbiguityReport,
 )

@@ -16,7 +16,7 @@ from typing import Literal
 
 from memcommit.core.context import Context, Memory
 from memcommit.application.operations.conformance.model import ConformanceReport
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,

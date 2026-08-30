@@ -70,7 +70,7 @@ def _source(kind: str):
 
 
 def _session(kind: str, *, empty: bool = False):
-    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
         AmbiguityFinding,
         AmbiguityReport,
         ConflictFinding,

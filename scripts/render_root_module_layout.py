@@ -200,7 +200,7 @@ CONCEPT_TARGETS = {
     "distill_elaborate_reference": "memcommit.application.capabilities.semantic.generative_reduction_reference",
     "duplicate_pipeline": "memcommit.application.capabilities.semantic.classification.duplicates",
     "exact_command_review": "memcommit.adapters.console.terminal.components.command_editor.command_review.model",
-    "findings": "memcommit.application.capabilities.reviewing.memory_issue_finding.findings",
+    "findings": "memcommit.application.capabilities.reviewing.memory_issue_finding.detection",
     "goal_focus": "memcommit.application.capabilities.semantic.goal_focus",
     "goal_focus_runtime": "memcommit.application.capabilities.semantic.goal_focus_runtime",
     "granted_provenance": "memcommit.application.capabilities.retained_history.granted_provenance",

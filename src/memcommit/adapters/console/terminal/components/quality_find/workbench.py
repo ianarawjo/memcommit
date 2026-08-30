@@ -142,41 +142,6 @@ class QualityFindSetupReceipt:
         return self.context_names[0]
 
 
-def freeze_all_readable_quality_find_source(
-    store: MemoryStore,
-    *,
-    current_name: str | None,
-) -> QualityFindSourceFrame:
-    """Freeze PROFILE as one exact direct-Memory quality-analysis frame."""
-
-    access = resolve_context_access(
-        store,
-        None,
-        current_name=current_name,
-        required_permission="READ",
-    )
-    catalog = freeze_profile_readable_context_catalog(
-        store,
-        access,
-        include_query_routes=False,
-    )
-    names = tuple(catalog.list_context_names())
-    accesses = tuple(catalog.access_for(name) for name in names)
-    # A Profile-wide semantic frame derives from every frozen contributor.
-    # READ grants therefore need the applicable DERIVE/COMBINE authority
-    # before any Source is disclosed to a provider.
-    authorize_combination(accesses)
-    contexts = tuple(catalog.load_direct(name) for name in names)
-    return QualityFindSourceFrame.create(
-        contexts,
-        context_names=names,
-        target_names=(),
-        selection_mode="MULTIPLE",
-        include_descendants=False,
-        profile_selected=True,
-    )
-
-
 QualityFindAnalyzer = Callable[[QualityFindSourceFrame], QualityFindReport]
 QualitySetupKind = QualityFindKind | Literal["audit"]
 

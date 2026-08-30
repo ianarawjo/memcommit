@@ -39,7 +39,7 @@ if TYPE_CHECKING:
         AtomizeImpactReport,
         AtomizeProvider,
     )
-    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
         AmbiguityReport,
         ConflictReport,
         DuplicateReport,
@@ -962,7 +962,7 @@ def find_redundancies(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "DuplicateReport":
     """Find exact DUP and semantic-DUN evidence without mutating *ctx*."""
-    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.detection import (
         find_redundancies as _find_redundancies,
     )
 
@@ -989,7 +989,7 @@ def find_ambiguities(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "AmbiguityReport":
     """Find ambiguous direct Memories without mutating *ctx*."""
-    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.detection import (
         find_ambiguities as _find_ambiguities,
     )
 
@@ -1007,7 +1007,7 @@ def find_conflicts(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "ConflictReport":
     """Find conflicting direct-Memory pairs without mutating *ctx*."""
-    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.detection import (
         find_conflicts as _find_conflicts,
     )
 

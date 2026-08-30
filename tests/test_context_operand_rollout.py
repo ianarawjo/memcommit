@@ -30,7 +30,7 @@ from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.core.context import AutoCheckpoint
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     AmbiguityReport,
     ConflictReport,
     DuplicateReport,
@@ -89,21 +89,21 @@ def test_read_and_analysis_commands_share_relative_context_operand_boundary(
     )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_ambiguities.command.ops.find_ambiguities",
+        "memcommit.application.operations.find_ambiguities.application.detect_ambiguities",
         lambda context, *_args, **_kwargs: AmbiguityReport(
             memory_count=len(context.memories),
             findings=(),
         ),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_redundancies.command.ops.find_redundancies",
+        "memcommit.application.operations.find_redundancies.application.detect_redundancies",
         lambda context, *_args, **_kwargs: DuplicateReport(
             memory_count=len(context.memories),
             findings=(),
         ),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_conflicts.command.ops.find_conflicts",
+        "memcommit.application.operations.find_conflicts.application.detect_conflicts",
         lambda context, *_args, **_kwargs: ConflictReport(
             memory_count=len(context.memories),
             pair_count=0,

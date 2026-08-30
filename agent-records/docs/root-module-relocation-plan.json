@@ -1081,8 +1081,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.capabilities.reviewing.memory_issue_finding.findings",
-      "canonical_target_path": "memcommit/application/capabilities/reviewing/memory_issue_finding/findings.py",
+      "canonical_target": "memcommit.application.capabilities.reviewing.memory_issue_finding.detection",
+      "canonical_target_path": "memcommit/application/capabilities/reviewing/memory_issue_finding/detection.py",
       "inbound_package_importers": 15,
       "lines": 1121,
       "module": "memcommit.findings",

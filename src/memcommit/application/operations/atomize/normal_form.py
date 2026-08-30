@@ -29,9 +29,11 @@ from memcommit.application.operations.dedun.application import (
     project_dedun,
 )
 from memcommit.application.operations.dedun.planning import freeze_dedun_plan
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     DuplicateFinding,
     DuplicateReport,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.detection import (
     find_redundancies,
 )
 from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (

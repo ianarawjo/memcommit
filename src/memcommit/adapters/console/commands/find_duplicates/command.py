@@ -6,7 +6,6 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.persistence.command_ledger.attempts import annotate_read_report_attempt
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
@@ -23,7 +22,10 @@ from memcommit.core.context_targeting.presets import (
 )
 from memcommit.application.operations.dedup.application import (
     ExactDuplicateContextReport,
-    find_exact_duplicate_scope,
+)
+from memcommit.application.operations.find_duplicates.application import (
+    FindDuplicatesRequest,
+    find_duplicates,
 )
 from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
 from memcommit.adapters.console.terminal.core.text import display_escape_text
@@ -91,16 +93,13 @@ def cmd(
     store = MemoryStore(create=False)
     try:
         snapshot = ContextOperandSnapshot.capture(store)
-        access = resolve_context_access(
+        scope = find_duplicates(
             store,
-            context_name,
+            FindDuplicatesRequest(
+                context_name=context_name,
+                include_descendants=preset is ContextScopePreset.RECURSIVE,
+            ),
             current_name=snapshot.current_name,
-            required_permission="READ",
-        )
-        scope = find_exact_duplicate_scope(
-            store,
-            access,
-            include_descendants=preset is ContextScopePreset.RECURSIVE,
         )
         annotate_read_report_attempt(
             ReadReportTarget(
@@ -108,7 +107,7 @@ def cmd(
                 context_names=tuple(
                     frame.context_name for frame in scope.contexts
                 ),
-                target_names=(access.display_name,),
+                target_names=(scope.root_name,),
                 selection_mode="SINGLE",
                 ranges=("RECURSIVE" if scope.include_descendants else "DIRECT",),
             )

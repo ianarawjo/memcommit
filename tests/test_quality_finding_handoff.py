@@ -7,7 +7,7 @@ import json
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,

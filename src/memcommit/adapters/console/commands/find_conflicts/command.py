@@ -6,17 +6,12 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.commands.find_conflicts.resolve_handoff import (
     run_conflict_resolve_handoff,
 )
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
-)
-from memcommit.application.capabilities.authority.context_access import (
-    GrantedReadStore,
-    resolve_context_access,
 )
 from memcommit.adapters.console.terminal.components.quality_find.rendering import (
     render_heading,
@@ -27,7 +22,6 @@ from memcommit.adapters.console.terminal.components.quality_find.rendering impor
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     annotate_quality_find_attempt,
-    freeze_all_readable_quality_find_source,
     interactive_quality_find_available,
     run_interactive_quality_find,
 )
@@ -37,7 +31,7 @@ from memcommit.adapters.console.terminal.core.text import (
 from memcommit.adapters.console.terminal.core.identity import (
     collision_safe_uid_prefixes,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     FindingsError,
 )
 from memcommit.application.operations.fit.judgment import FitJudgmentError
@@ -49,9 +43,10 @@ from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.operations.resolve.application import ResolveError
-from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
-    QualityFindSourceFrame,
-    create_quality_find_workbench,
+from memcommit.application.operations.find_conflicts.application import (
+    FindConflictsRequest,
+    analyze_find_conflicts,
+    prepare_find_conflicts,
 )
 from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
     quality_finding_handoff_json,
@@ -149,11 +144,10 @@ def cmd(
                 store,
                 current_name=context_snapshot.current_name,
                 kind="conflicts",
-                analyze=lambda source: ops.find_conflicts(
-                    source.analysis_context(),
+                analyze=lambda source: analyze_find_conflicts(
+                    source,
                     connect_codex_chatgpt_provider,
-                    context_name_by_uid=source.memory_context_names,
-                ),
+                ).report,
                 handoff_handler=lambda handoff: run_conflict_resolve_handoff(
                     store,
                     current_name=context_snapshot.current_name,
@@ -183,27 +177,14 @@ def cmd(
         return
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
-        if all_contexts:
-            source = freeze_all_readable_quality_find_source(
-                store,
-                current_name=context_snapshot.current_name,
-            )
-        else:
-            access = resolve_context_access(
-                store,
-                context_name,
-                current_name=context_snapshot.current_name,
-                required_permission="READ",
-            )
-            ctx = (
-                GrantedReadStore(access).load_direct(access.display_name)
-                if access.is_granted
-                else store.load_direct(access.context_name)
-            )
-            source = QualityFindSourceFrame.create(
-                (ctx,),
-                context_names=(access.display_name,),
-            )
+        source = prepare_find_conflicts(
+            store,
+            FindConflictsRequest(
+                context_name=context_name,
+                all_readable=all_contexts,
+            ),
+            current_name=context_snapshot.current_name,
+        )
     except (
         FileNotFoundError,
         OSError,
@@ -230,11 +211,11 @@ def cmd(
             ),
             total=1,
         ):
-            report = ops.find_conflicts(
-                source.analysis_context(),
+            result = analyze_find_conflicts(
+                source,
                 connect_codex_chatgpt_provider,
-                context_name_by_uid=source.memory_context_names,
             )
+            report = result.report
     except (FindingsError, QueryProviderError) as error:
         typer.secho(
             "Find conflicts error: " + display_escape_text(str(error)),
@@ -246,8 +227,7 @@ def cmd(
     annotate_quality_find_attempt("conflicts", source)
 
     if handoff_json:
-        session = create_quality_find_workbench("conflicts", source, report)
-        for handoff in quality_finding_handoffs(session):
+        for handoff in quality_finding_handoffs(result.session):
             typer.echo(quality_finding_handoff_json(handoff))
         return
 

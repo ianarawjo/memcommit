@@ -38,7 +38,7 @@ from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     find_exact_duplicate_groups,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     DuplicateFinding,
     DuplicateReport,
 )

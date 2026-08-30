@@ -6,7 +6,6 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
@@ -31,7 +30,7 @@ from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     DuplicateFinding,
     DuplicateReport,
     FindingsError,
@@ -65,8 +64,11 @@ from memcommit.application.capabilities.semantic.redundancy_evidence import (
 )
 from memcommit.application.capabilities.reviewing.memory_issue_finding.redundancy_scope import (
     RedundancyScopeAnalysis,
-    analyze_independent_redundancy_scope,
-    freeze_redundancy_scope,
+)
+from memcommit.application.operations.find_redundancies.application import (
+    FindRedundanciesRequest,
+    analyze_find_redundancies,
+    prepare_find_redundancies,
 )
 
 
@@ -216,20 +218,23 @@ def _run(
     recursive_dedun = None
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
-        access = resolve_context_access(
-            store,
-            context_name,
-            current_name=context_snapshot.current_name,
-            required_permission="READ",
-        )
         if dedun_handoff and include_descendants:
+            access = resolve_context_access(
+                store,
+                context_name,
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
+            )
             recursive_dedun = freeze_recursive_dedun_scope(store, access)
             source = recursive_dedun.source
         else:
-            source = freeze_redundancy_scope(
+            source = prepare_find_redundancies(
                 store,
-                access,
-                include_descendants=include_descendants,
+                FindRedundanciesRequest(
+                    context_name=context_name,
+                    include_descendants=include_descendants,
+                ),
+                current_name=context_snapshot.current_name,
             )
     except (
         FileNotFoundError,
@@ -252,10 +257,9 @@ def _run(
             "analyzing independent direct Context frames",
             total=len(source.contexts),
         ):
-            analysis = analyze_independent_redundancy_scope(
+            analysis = analyze_find_redundancies(
                 source,
                 connect_codex_chatgpt_provider,
-                operation=ops.find_redundancies,
             )
     except (FindingsError, QueryProviderError) as error:
         typer.secho(
@@ -300,7 +304,7 @@ def _run(
             for handoff in frame.handoffs
             if handoff.classification in DEDUN_ELIGIBLE_RELATIONS
         )
-        context_label = display_escape_text(access.display_name)
+        context_label = display_escape_text(source.context_names[0])
         if not applicable and not report.exact_item_groups:
             typer.echo(f"No redundancies in '{context_label}'.")
             return
@@ -313,7 +317,7 @@ def _run(
                 applicable,
                 exact_source=QualityFindingSource(
                     context_uid=ctx.uid,
-                    display_name=access.display_name,
+                    display_name=source.context_names[0],
                     direct_memory_digest=source.context_digests[0],
                 ),
                 exact_source_frame_digest=source.digest,

@@ -43,7 +43,7 @@ from memcommit.application.operations.conformance.model import ConformanceError
 from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_analysis_save,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     FindingsError,
     FindingsProvider,
 )

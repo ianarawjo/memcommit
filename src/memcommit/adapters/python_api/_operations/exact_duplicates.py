@@ -16,9 +16,11 @@ from memcommit.adapters.python_api.errors import (
     SemanticInputError,
     SemanticStorageError,
 )
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.operations.dedup.application import find_exact_duplicate_scope
+from memcommit.application.operations.find_duplicates.application import (
+    FindDuplicatesRequest,
+    find_duplicates,
+)
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 
@@ -42,17 +44,13 @@ def find_duplicates_exact(
         else:
             canonical = resolve_context_locator(context_name, current=current_name)
         registry = _active_registry(runtime)
-        access = resolve_context_access(
+        scope = find_duplicates(
             runtime.store,
-            canonical,
+            FindDuplicatesRequest(
+                context_name=canonical,
+                include_descendants=include_descendants,
+            ),
             current_name=current_name,
-            required_permission="READ",
-            registry=registry,
-        )
-        scope = find_exact_duplicate_scope(
-            runtime.store,
-            access,
-            include_descendants=include_descendants,
             registry=registry,
         )
     except (FileNotFoundError, KeyError) as error:

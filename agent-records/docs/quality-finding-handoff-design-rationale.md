@@ -113,11 +113,12 @@ remain unchanged in this path-only step so public Python values and serialized
 handoffs are not silently migrated with package ownership.
 
 The four public discovery routes now have symmetric console package names and
-explicit staged application owners: `find_duplicates`, `find_redundancies`,
-`find_ambiguities`, and `find_conflicts`. Their `application.py` modules export
-no placeholder callable. Each remains visibly incomplete until its full
-request, authority, frozen Source, analysis, and result boundary moves inward;
-shared finding analysis stays under `reviewing.memory_issue_finding`.
+explicit application owners: `find_duplicates`, `find_redundancies`,
+`find_ambiguities`, and `find_conflicts`. Their `application.py` modules own
+request validation, readable authority/Source preparation where applicable,
+and typed analysis results. Shared finding/report contracts and the detector
+stay under `reviewing.memory_issue_finding`, so Audit and other operations can
+reuse a judgment primitive without calling a peer Find operation.
 
 ## Deliberate boundaries
 

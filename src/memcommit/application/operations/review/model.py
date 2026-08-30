@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 from memcommit.core.context import Context, Memory
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     AmbiguityReport,
 )
 

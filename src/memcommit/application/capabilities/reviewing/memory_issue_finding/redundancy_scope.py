@@ -5,7 +5,6 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-import memcommit.application.capabilities.ops as ops
 from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     GrantedReadStore,
@@ -19,9 +18,12 @@ from memcommit.application.capabilities.authority.source_use_policy import (
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     DuplicateReport,
     FindingsProvider,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.detection import (
+    find_redundancies,
 )
 from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
@@ -125,7 +127,7 @@ def analyze_independent_redundancy_scope(
     source: QualityFindSourceFrame,
     provider_factory: Callable[[], FindingsProvider],
     *,
-    operation: Callable[..., DuplicateReport] = ops.find_redundancies,
+    operation: Callable[..., DuplicateReport] = find_redundancies,
 ) -> RedundancyScopeAnalysis:
     """Analyze every frozen Context exactly once without cross-Context edges."""
 

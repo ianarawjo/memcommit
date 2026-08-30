@@ -36,6 +36,14 @@ is a separate consumer of an ambiguity report. It persists selected readings
 and one freeform reviewer annotation, but it does not change the finder's
 read-only/mutation contract or apply those annotations to Memories.
 
+The physical application boundary follows that product split. Shared typed
+finding/report values live in `reviewing.memory_issue_finding.model`, while
+provider-backed and deterministic judgment mechanics live in `detection` and
+readable Source freezing lives in `source`. The four public commands enter
+their matching `application.operations.find_*` package for request, authority,
+Source, and analysis orchestration. There is no `findings.py` compatibility
+facade; the old name concealed both data and execution in one module.
+
 ## Direct relation reports and explicit judgment workbench
 
 Flagless and explicit Context forms use the stable one-shot report contract:

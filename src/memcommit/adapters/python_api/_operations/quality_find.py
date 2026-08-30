@@ -5,7 +5,6 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import replace
 
-import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api._runtime import ClientRuntime
 from memcommit.adapters.python_api._support.errors import raise_public
 from memcommit.adapters.python_api._support.semantic import safe_semantic_provider
@@ -32,7 +31,7 @@ from memcommit.application.capabilities.authority.source_use_policy import (
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     find_exact_duplicate_groups,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     ConflictReport,
     FindingsError,
 )
@@ -45,7 +44,6 @@ from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
     QualityFindKind,
     QualityFindSourceFrame,
-    create_quality_find_workbench,
 )
 from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
     quality_finding_handoffs,
@@ -53,6 +51,15 @@ from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff i
 from memcommit.application.capabilities.reviewing.memory_issue_finding.redundancy_scope import (
     analyze_independent_redundancy_scope,
     freeze_redundancy_scope,
+)
+from memcommit.application.operations.find_ambiguities.application import (
+    analyze_find_ambiguities,
+)
+from memcommit.application.operations.find_conflicts.application import (
+    analyze_find_conflicts,
+)
+from memcommit.application.operations.find_redundancies.application import (
+    analyze_combined_find_redundancies,
 )
 
 
@@ -195,11 +202,6 @@ def find_quality(
     except (TypeError, ValueError) as error:
         raise_public(SemanticInputError, error)
 
-    operation = {
-        "duplicates": ops.find_redundancies,
-        "ambiguities": ops.find_ambiguities,
-        "conflicts": ops.find_conflicts,
-    }[kind]
     try:
         if include_descendants:
             analysis = analyze_independent_redundancy_scope(
@@ -227,11 +229,16 @@ def find_quality(
                 include_descendants=True,
                 contexts=contexts,
             )
-        report = operation(
-            source.analysis_context(),
-            lambda: safe_semantic_provider(runtime),
-            context_name_by_uid=source.memory_context_names,
-        )
+        def provider_factory():
+            return safe_semantic_provider(runtime)
+
+        if kind == "duplicates":
+            result = analyze_combined_find_redundancies(source, provider_factory)
+        elif kind == "ambiguities":
+            result = analyze_find_ambiguities(source, provider_factory)
+        else:
+            result = analyze_find_conflicts(source, provider_factory)
+        report = result.report
         if kind == "duplicates" and len(source.contexts) == 1:
             report = replace(
                 report,
@@ -241,8 +248,7 @@ def find_quality(
                     if group.item_kind != "MEMORY"
                 ),
             )
-        session = create_quality_find_workbench(kind, source, report)
-        handoffs = quality_finding_handoffs(session)
+        handoffs = quality_finding_handoffs(result.session)
     except SemanticProviderFailure:
         raise
     except FindingsError as error:

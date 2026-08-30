@@ -6,8 +6,10 @@ import uuid
 from collections.abc import Callable
 from datetime import datetime, timezone
 
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     FindingsProvider,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.detection import (
     find_ambiguities,
     find_conflicts,
     find_redundancies,

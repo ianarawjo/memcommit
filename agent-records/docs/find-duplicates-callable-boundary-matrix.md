@@ -11,13 +11,13 @@ the applying Dedup boundary.
 
 | Route | Public input | Application entry | Result/effect |
 | --- | --- | --- | --- |
-| CLI | `mem find-duplicates [--context CONTEXT] [-d\|-r]` | shared locator and readable-scope freeze, then per-Context `find_exact_duplicates` | complete Context-labelled exact groups; no mutation |
-| Public Python | `MemCommitClient.find_duplicates(context_name, include_descendants=...)` | `api._operations.exact_duplicates.find_duplicates_exact`, then the same scope core | aggregate `ExactDuplicateFindResult` plus per-Context results; no mutation |
+| CLI | `mem find-duplicates [--context CONTEXT] [-d\|-r]` | `operations.find_duplicates.application.find_duplicates` | complete Context-labelled exact groups; no mutation |
+| Public Python | `MemCommitClient.find_duplicates(context_name, include_descendants=...)` | the same `FindDuplicatesRequest` and application callable | aggregate `ExactDuplicateFindResult` plus per-Context results; no mutation |
 
-Both routes converge on
-`memcommit.application.operations.dedup.application.find_exact_duplicates` and its
-pure `memcommit.direct_item_duplicates` detector. Production consumers import
-that command-aligned operation owner directly. They do not construct a
+Both routes converge first on the operation-aligned
+`memcommit.application.operations.find_duplicates.application` boundary, which
+then delegates exact scope analysis to `dedup.application` and its pure
+`reviewing.direct_item_duplicates` detector. Adapters do not construct a
 provider, normalize content, open a semantic workbench, create a checkpoint,
 or modify the global current Context. Recursive reach uses public lexical
 names, may include READ-granted descendants, and never follows Embed edges.
@@ -25,7 +25,7 @@ Their Read Report
 operation identity is exactly `find-duplicates`; metadata from
 `find-redundancies` is rejected instead of canonicalized as an alias.
 
-This shared implementation home does not merge Find Duplicates with applying
+This shared detector does not merge Find Duplicates with applying
 Dedup. Find Duplicates exposes only the frozen provider-free report, while
 Dedup alone invokes the authority, reference, checkpoint, and atomic
 publication portion of the same exact operation boundary.

@@ -13,7 +13,7 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     run_quality_find_resolution_workbench,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     AmbiguityFinding,
     AmbiguityReport,
     DuplicateFinding,

@@ -896,7 +896,6 @@ def test_find_and_quality_finders_read_granted_current_projection(
         lambda: provider,
     )
     for module in (
-        "find_duplicates",
         "find_ambiguities",
         "find_conflicts",
     ):

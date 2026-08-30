@@ -6,14 +6,9 @@ from typing import Annotated, Optional
 
 import typer
 
-import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
-)
-from memcommit.application.capabilities.authority.context_access import (
-    GrantedReadStore,
-    resolve_context_access,
 )
 from memcommit.adapters.console.terminal.components.quality_find.rendering import (
     render_heading,
@@ -25,7 +20,6 @@ from memcommit.adapters.console.terminal.components.quality_find.rendering impor
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     annotate_quality_find_attempt,
-    freeze_all_readable_quality_find_source,
     interactive_quality_find_available,
     run_interactive_quality_find,
 )
@@ -39,7 +33,7 @@ from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     FindingsError,
 )
 from memcommit.providers.subscription import (
@@ -49,8 +43,10 @@ from memcommit.providers.subscription import (
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
-    QualityFindSourceFrame,
+from memcommit.application.operations.find_ambiguities.application import (
+    FindAmbiguitiesRequest,
+    analyze_find_ambiguities,
+    prepare_find_ambiguities,
 )
 
 
@@ -130,11 +126,10 @@ def cmd(
                 store,
                 current_name=context_snapshot.current_name,
                 kind="ambiguities",
-                analyze=lambda source: ops.find_ambiguities(
-                    source.analysis_context(),
+                analyze=lambda source: analyze_find_ambiguities(
+                    source,
                     connect_codex_chatgpt_provider,
-                    context_name_by_uid=source.memory_context_names,
-                ),
+                ).report,
             )
         except (
             FileNotFoundError,
@@ -157,27 +152,14 @@ def cmd(
         return
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
-        if all_contexts:
-            source = freeze_all_readable_quality_find_source(
-                store,
-                current_name=context_snapshot.current_name,
-            )
-        else:
-            access = resolve_context_access(
-                store,
-                context_name,
-                current_name=context_snapshot.current_name,
-                required_permission="READ",
-            )
-            ctx = (
-                GrantedReadStore(access).load_direct(access.display_name)
-                if access.is_granted
-                else store.load_direct(access.context_name)
-            )
-            source = QualityFindSourceFrame.create(
-                (ctx,),
-                context_names=(access.display_name,),
-            )
+        source = prepare_find_ambiguities(
+            store,
+            FindAmbiguitiesRequest(
+                context_name=context_name,
+                all_readable=all_contexts,
+            ),
+            current_name=context_snapshot.current_name,
+        )
     except (
         FileNotFoundError,
         OSError,
@@ -204,11 +186,11 @@ def cmd(
             ),
             total=1,
         ):
-            report = ops.find_ambiguities(
-                source.analysis_context(),
+            result = analyze_find_ambiguities(
+                source,
                 connect_codex_chatgpt_provider,
-                context_name_by_uid=source.memory_context_names,
             )
+            report = result.report
     except (FindingsError, QueryProviderError) as error:
         typer.secho(
             "Find ambiguities error: " + display_escape_text(str(error)),

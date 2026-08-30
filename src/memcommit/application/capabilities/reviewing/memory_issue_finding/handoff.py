@@ -14,7 +14,7 @@ from dataclasses import dataclass, replace
 from collections.abc import Mapping
 from typing import Literal
 
-from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,

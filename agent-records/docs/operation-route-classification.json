@@ -91,6 +91,28 @@
         ],
         "reason": "CLI, TUI, Python, and agent routes share one provider-free readable-source freeze and complete literal or explicit-regex span result with no cache, session, or effect."
       },
+      "find-ambiguities": {
+        "evidence": [
+          "agent-records/docs/context-locator-design-rationale.md",
+          "agent-records/docs/memory-issue-finding-application-boundary-matrix.md",
+          "agent-records/docs/memory-quality-finders-design-rationale.md",
+          "agent-records/docs/quality-finding-handoff-design-rationale.md",
+          "agent-records/docs/read-report-lifecycle-design-rationale.md",
+          "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
+        ],
+        "reason": "Direct, Profile-wide, selected TUI, public Python, and agent routes share one authorized frozen Source and typed ambiguity analysis boundary; the operation remains read-only and Review remains a separate consumer."
+      },
+      "find-conflicts": {
+        "evidence": [
+          "agent-records/docs/context-locator-design-rationale.md",
+          "agent-records/docs/memory-issue-finding-application-boundary-matrix.md",
+          "agent-records/docs/memory-quality-finders-design-rationale.md",
+          "agent-records/docs/quality-finding-handoff-design-rationale.md",
+          "agent-records/docs/read-report-lifecycle-design-rationale.md",
+          "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
+        ],
+        "reason": "Direct, Profile-wide, selected TUI, public Python, agent, and JSON-handoff routes share one authorized frozen Source and typed conflict analysis boundary; Resolve revalidates a separate application request."
+      },
       "fit": {
         "evidence": [
           "agent-records/docs/fit-application-boundary-matrix.md",
@@ -225,6 +247,7 @@
         "evidence": [
           "agent-records/docs/context-locator-design-rationale.md",
           "agent-records/docs/find-duplicates-callable-boundary-matrix.md",
+          "agent-records/docs/memory-issue-finding-application-boundary-matrix.md",
           "agent-records/docs/dedup-design-rationale.md",
           "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
         ],
@@ -234,6 +257,7 @@
         "evidence": [
           "agent-records/docs/context-locator-design-rationale.md",
           "agent-records/docs/find-redundancies-callable-boundary-matrix.md",
+          "agent-records/docs/memory-issue-finding-application-boundary-matrix.md",
           "agent-records/docs/memory-quality-finders-design-rationale.md",
           "agent-records/docs/quality-finding-handoff-design-rationale.md",
           "agent-records/docs/read-report-lifecycle-design-rationale.md",
@@ -374,8 +398,6 @@
       "diff",
       "edit",
       "eval",
-      "find-ambiguities",
-      "find-conflicts",
       "ground",
       "impact",
       "import",

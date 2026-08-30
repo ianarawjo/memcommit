@@ -115,7 +115,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.find_runtime | historical-compatibility-facade | remove | memcommit.application.operations.search.runtime | 0 |
 | memcommit.find_scope_evidence | operation-implementation | relocate-without-alias | memcommit.application.operations.search.scope_evidence | 2 |
 | memcommit.find_turn_dialogue | operation-implementation | relocate-without-alias | memcommit.application.operations.search.turn_dialogue | 1 |
-| memcommit.findings | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue_finding.findings | 15 |
+| memcommit.findings | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue_finding.detection | 15 |
 | memcommit.fit | historical-compatibility-facade | remove | memcommit.application.operations.fit.ground_report | 1 |
 | memcommit.fit_application | historical-compatibility-facade | remove | memcommit.application.operations.fit.application | 0 |
 | memcommit.fit_coherence | historical-compatibility-facade | remove | memcommit.application.operations.fit.coherence | 0 |

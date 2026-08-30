@@ -14,11 +14,11 @@ and Apply boundary.
 
 | Route | Public input | Application entry | Result/effect |
 | --- | --- | --- | --- |
-| CLI | `mem find-redundancies [CONTEXT] [-d\| -r]` or `--context CONTEXT` | exact root or readable lexical source freeze and per-Context `ops.find_redundancies` | immediate complete report in TTY and non-TTY environments; no initial selector, review workbench, or Apply handoff |
-| Public Python | `MemCommitClient.find_redundancies(..., include_descendants=...)` | `api._operations.quality_find.find_quality(..., "duplicates")` | aggregate typed result plus per-Context results; no mutation |
+| CLI | `mem find-redundancies [CONTEXT] [-d\| -r]` or `--context CONTEXT` | `operations.find_redundancies.application.prepare_find_redundancies` then `analyze_find_redundancies` | immediate complete report in TTY and non-TTY environments; no initial selector, review workbench, or Apply handoff |
+| Public Python | `MemCommitClient.find_redundancies(..., include_descendants=...)` | the same operation's combined or independent analysis callable | aggregate typed result plus per-Context results; no mutation |
 | Agent | `memcommit_quality_find(kind=redundancies, include_descendants=...)` | the same public Python route | JSON-safe aggregate and conditional per-Context evidence; no mutation |
 
-`ops.find_duplicates` now owns the separate provider-free exact-DUP report.
+`operations.find_duplicates.application` owns the separate provider-free exact-DUP report.
 The complete-DUN report type retains `DuplicateReport` and the provider task
 retains `find_duplicates` for schema and evaluation-fixture compatibility;
 those internal names do not collapse the two public operation identities.
