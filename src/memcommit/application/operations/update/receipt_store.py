@@ -44,7 +44,11 @@ class UpdateReceiptStore:
         return first_record == second_record
 
     def save_terminal(self, session: UpdateSession) -> None:
-        if session.status not in {"applied", "undone"} or session.application is None:
+        if (
+            session.status not in {"applied", "undone", "declined"}
+            or (session.status == "declined" and session.application is not None)
+            or (session.status in {"applied", "undone"} and session.application is None)
+        ):
             raise ValueError("Update receipt storage requires terminal evidence.")
         path = self.path(session.uid)
         existing = self.store._load_update_session(path)
@@ -60,10 +64,12 @@ class UpdateReceiptStore:
     def load(self, session_uid: str) -> UpdateSession:
         session = self.store._load_update_session(self.path(session_uid))
         if session is None:
-            raise FileNotFoundError(
-                f"Update receipt '{session_uid}' is unavailable."
-            )
-        if session.status not in {"applied", "undone"} or session.application is None:
+            raise FileNotFoundError(f"Update receipt '{session_uid}' is unavailable.")
+        if (
+            session.status not in {"applied", "undone", "declined"}
+            or (session.status == "declined" and session.application is not None)
+            or (session.status in {"applied", "undone"} and session.application is None)
+        ):
             raise ValueError("Stored Update receipt is not terminal evidence.")
         return session
 
@@ -84,7 +90,11 @@ class UpdateReceiptStore:
             sorted(
                 sessions,
                 key=lambda session: (
-                    session.application.applied_at if session.application else "",
+                    (
+                        session.application.applied_at
+                        if session.application is not None
+                        else session.created_at
+                    ),
                     session.uid,
                 ),
                 reverse=True,

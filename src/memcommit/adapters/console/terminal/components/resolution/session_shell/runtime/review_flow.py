@@ -7,7 +7,9 @@ from typing import Any
 
 from prompt_toolkit.application.current import get_app
 
-from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import (
+    CommandReview,
+)
 from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
 from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerController,
@@ -149,6 +151,7 @@ class ResolutionReviewFlow:
                 controller.set_status("")
                 return
             if pane == "todo":
+                controller.move_report_decision(delta)
                 controller.set_status("")
                 return
             if pane == "save_location":

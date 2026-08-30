@@ -32,10 +32,8 @@ from .planning import (
     UPDATE_PROVIDER_CONTRACT_VERSION,
     UPDATE_REASON_CHAR_LIMIT,
     UPDATE_RESPONSE_CHAR_LIMIT,
-    UPDATE_REVIEW_GUIDANCE_CHAR_LIMIT,
     UpdateProvider,
     plan_update,
-    revise_update,
 )
 from .receipts import (
     ContextFingerprint,
@@ -55,7 +53,6 @@ from .session import (
     count_operations,
     inline_update_session_source,
     session_matches,
-    update_session_record_digest,
 )
 
 __all__ = (
@@ -67,7 +64,6 @@ __all__ = (
     "UPDATE_PROVIDER_CONTRACT_VERSION",
     "UPDATE_REASON_CHAR_LIMIT",
     "UPDATE_RESPONSE_CHAR_LIMIT",
-    "UPDATE_REVIEW_GUIDANCE_CHAR_LIMIT",
     "UPDATE_SCHEMA_VERSION",
     "INLINE_UPDATE_CONTEXT_NAME",
     "AddOperation",
@@ -99,7 +95,5 @@ __all__ = (
     "operation_digest",
     "plan_update",
     "required_grant_permissions",
-    "revise_update",
     "session_matches",
-    "update_session_record_digest",
 )

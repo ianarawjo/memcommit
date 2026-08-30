@@ -18,7 +18,9 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.widgets import Frame
 
-from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import (
+    CommandReview,
+)
 from memcommit.adapters.console.terminal.components.exact_name import (
     ExactNameFieldView,
     ExactNameInputControl,
@@ -34,6 +36,9 @@ from memcommit.adapters.console.terminal.components.responses import (
     response_frame_fragments,
 )
 from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
+from memcommit.adapters.console.terminal.components.selection import (
+    render_vertical_choice_rows,
+)
 from memcommit.adapters.console.terminal.components.save_location import (
     save_location_row_fragments,
     save_location_tree_fragments,
@@ -88,6 +93,7 @@ def report_sections(
     split_report_text: str | None,
     global_strategies: tuple[ResolutionGlobalStrategy, ...],
     review_and_apply: bool,
+    report_decision: bool,
     read_only: bool,
     impact_controller: ImpactController | None,
     drafts: dict[str, ResponseDraft],
@@ -100,6 +106,7 @@ def report_sections(
             split_report_text,
             global_strategies,
             review_and_apply=review_and_apply,
+            report_decision=report_decision,
             read_only=read_only,
             impact_controller=impact_controller,
             drafts=drafts,
@@ -152,7 +159,11 @@ def report_sections(
     if not read_only:
         entries.append(
             (
-                "REVIEW_AND_APPLY" if review_and_apply else "RESOLVE_ALL",
+                "REPORT_DECISION"
+                if report_decision
+                else "REVIEW_AND_APPLY"
+                if review_and_apply
+                else "RESOLVE_ALL",
                 "REPORT:ACTION",
                 None,
             )
@@ -268,6 +279,7 @@ class ResolutionControlConfig:
     impact_controller: ImpactController | None
     destination: ResolutionDestination | None
     destination_available: bool
+    report_decision: bool = False
 
 
 class ResolutionShellControls:
@@ -345,7 +357,9 @@ class ResolutionShellControls:
         )
         self.todo_window = Window(
             self.todo_control,
-            height=Dimension.exact(1),
+            # The shared choice renderer anchors after the focused row. Keep
+            # one spare line so moving to DECLINE does not scroll APPLY away.
+            height=Dimension.exact(3 if config.report_decision else 1),
             dont_extend_height=True,
             wrap_lines=False,
         )
@@ -429,6 +443,7 @@ class ResolutionShellControls:
             split_report_text=self.config.split_report_text,
             global_strategies=self.config.global_strategies,
             review_and_apply=self.config.review_and_apply,
+            report_decision=self.config.report_decision,
             read_only=self.config.read_only,
             impact_controller=self.config.impact_controller,
             drafts=self.controller.local_drafts,
@@ -594,6 +609,7 @@ class ResolutionShellControls:
                         selected_strategy_index=self.controller.strategy["index"],
                         focused_section=self.viewer_section_index(),
                         review_and_apply=config.review_and_apply,
+                        report_decision=config.report_decision,
                         read_only=config.read_only,
                         impact_controller=config.impact_controller,
                         content_width=self.pane_content_width(),
@@ -607,6 +623,7 @@ class ResolutionShellControls:
                     drafts=self.controller.local_drafts,
                     focused_section=self.viewer_section_index(),
                     review_and_apply=config.review_and_apply,
+                    report_decision=config.report_decision,
                     read_only=config.read_only,
                     impact_controller=config.impact_controller,
                     expanded_impact_section_uid=(
@@ -681,6 +698,17 @@ class ResolutionShellControls:
     def todo_fragments(self) -> list[tuple[str, str]]:
         todo = self.controller.displayed_todo()
         focused = self.controller.session_navigation.pane == "todo"
+        if self.config.report_decision:
+            state = self.controller.report_decision_state
+            if state is None:
+                raise RuntimeError("Report decision state is unavailable.")
+            return render_vertical_choice_rows(
+                state,
+                focused=focused,
+                content_width=self.pane_content_width(),
+                numbered=False,
+                blank_between=False,
+            )
         display_kind = (
             "APPLY CONFIRMATION" if todo.kind == "REVIEW AND APPLY" else todo.kind
         )

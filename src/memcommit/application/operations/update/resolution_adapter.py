@@ -1,9 +1,8 @@
 """Pure Update-plan projection for the common resolution workbench.
 
 Update has no issue-resolution artifact or per-change review obligation. Its
-planned changes can nevertheless carry review comments in the owning staged
-workflow; those comments revise the complete proposal before Apply rather than
-mutating an individual operation directly in the terminal.
+planned changes are evidence for one exact Apply-or-Decline decision. Proposal
+iteration belongs to a composing operation such as Meld, not this adapter.
 """
 
 from __future__ import annotations
@@ -96,6 +95,8 @@ def _operation_item(
             if session_status == "applied"
             else "UNDONE"
             if session_status == "undone"
+            else "DECLINED"
+            if session_status == "declined"
             else "PLANNED"
         ),
         # Update changes have no REQUIRED/OPTIONAL issue priority. ``CHANGE``
@@ -109,7 +110,7 @@ def _operation_item(
         obligation="NONE",
         response_state="NOT_APPLICABLE",
         blocks=tuple(blocks),
-        commentable=session_status == "staged",
+        commentable=False,
     )
 
 
@@ -168,6 +169,10 @@ class UpdateResolutionWorkbenchAdapter:
                 "The recorded target Memory changes were undone; this artifact "
                 "still describes the exact reversible transition."
             ),
+            "declined": (
+                "This exact proposal was declined. No target Memory changes were "
+                "applied and no checkpoint was created."
+            ),
         }.get(session.status, "This Update records exact target Memory changes.")
         overview_sections = (ResolutionOverviewSection("plan", "PLAN", overview),)
         return ResolutionWorkbenchView(
@@ -195,11 +200,11 @@ class UpdateResolutionWorkbenchAdapter:
             results_label="APPLICATION",
             results=(),
             capabilities=(
-                frozenset({"SUBMIT_ITEM", "SUBMIT_ALL"})
+                frozenset({"ACCEPT", "DECLINE"})
                 if session.status == "staged"
                 else frozenset()
             ),
-            accept_enabled=False,
+            accept_enabled=session.status == "staged",
             input_locked=False,
             report_items_summary=ResolutionDetailBlock(
                 heading="WHAT WILL CHANGE",

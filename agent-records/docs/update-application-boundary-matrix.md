@@ -3,7 +3,7 @@
 ## Purpose
 
 This note records the `APPLY-01` verification slice for Update. It separates
-the shared review policy from Update's own application semantics so later
+the shared report-decision mechanics from Update's own application semantics so later
 operation migrations do not copy an accidental Update-specific rule.
 
 Update consumes one exact staged semantic plan. The mutation boundary follows
@@ -28,7 +28,7 @@ authority, multi-owner transaction, checkpoint, and durable receipt
 responsibilities.
 
 The remaining terminal-independent modules are named by responsibility:
-`execution.py` sequences review to Apply, `granted_target.py` owns a Target
+`execution.py` sequences an exact decision to Apply, `granted_target.py` owns a Target
 whose authority Store is mutated, and `granted_source.py` owns a granted
 read-only Source feeding a local Target. These are mechanical renames only;
 they do not add Memory Issue verification or change source/target authority.
@@ -47,14 +47,12 @@ duplicates and conflicts only as constraints on that proposal. The persisted
 session contains exact changes, not a complete ambiguity/redundancy/conflict
 artifact, and the local decision-free route has no issue-resolution iteration.
 
-The correct future integration point is the detached Target post-image created
-by `materialization.prepare_update_application`: analyze the complete post-image
-frame through Memory Issue Analysis, filter the report to findings touching a
-changed Memory UID, expose those findings in Update's Resolution session, and
-repeat proposal revision plus analysis until required issues are resolved.
-This review does not add a hidden provider pass or an unanswerable Apply gate.
-Doing so would change provider cost and failure ordering while leaving no typed
-place to retain questions, responses, or revalidation evidence.
+The correct integration point for richer operations is the detached Target
+post-image created by `materialization.prepare_update_application`. A composing
+operation may analyze that complete post-image and iterate its own proposal,
+but direct Update remains a local patch primitive: one provider-built proposal,
+one report, and one Apply-or-Decline decision. Update does not own questions,
+responses, or proposal revision.
 
 ### Physical model ownership
 
@@ -74,7 +72,7 @@ concepts:
 - `session.py` owns persisted direct-command serialization, lifecycle transitions,
   inline reconstruction, and stale/applied input matching;
 - `planning.py` owns the provider contract, semantic budget, prompts, output
-  schema, response validation, initial planning, and reviewed revision.
+  schema, response validation, and the single initial plan.
 
 The dependency direction is `planning -> session -> inputs -> receipts ->
 changes`, with higher layers importing lower concept records directly where
@@ -87,13 +85,12 @@ former 40-name public surface while making physical ownership testable.
 
 | Case | Execution-decision behavior | Durable effect | Recovery |
 | --- | --- | --- | --- |
-| Direct interactive `mem update`, local Target, one or more operations | One report-first Update workbench review and exact Apply confirmation because no enclosing operation owns the decision | All affected Target owners and the applied session receipt | One operation-unit `mem undo` / `mem redo` |
-| Direct interactive `mem update`, granted Source and local Target | Same single workbench review; the Source remains read-only | Local Target owners and the applied session receipt | One operation-unit `mem undo` / `mem redo` |
-| Granted Target, one or more operations | Exact authority-sensitive decision remains mandatory in a TTY | Authority Target owners only after approval, plus the local applied receipt | Authority-aware command history; decision evidence is retained even when recovery exists |
+| Direct interactive `mem update`, local Target, one or more operations | The report itself offers only `APPLY` and `DECLINE`; no separate confirmation or revision turn exists | Apply changes all affected Target owners; Decline retains terminal evidence without a Target write | Applied work has one operation-unit `mem undo` / `mem redo`; Decline creates no checkpoint |
+| Direct interactive `mem update`, granted Source and local Target | Same binary report decision; the Source remains read-only | Local Target owners on Apply, or a no-mutation Decline receipt | Applied work has one operation-unit `mem undo` / `mem redo` |
+| Granted Target, one or more operations | The same exact binary report decision remains mandatory in a TTY | Authority Target owners only after Apply, or a local no-mutation Decline receipt | Authority-aware command history after Apply; Decline creates no authority mutation |
 | Meld, Sever, Resolve, Forget, or Atomize application composition | No Update-owned terminal review; the enclosing operation already owns semantic review | Detached working Target only until the enclosing operation publishes | Enclosing operation owns cancellation, final checkpoint, and receipt |
-| Any Target, zero operations | No additional decision because no Context mutation exists | Applied session receipt only | No Context checkpoint and no Context Undo unit |
-| Unanswered required item or pending response | No automatic Accept | None until the item is resolved or the response is incorporated | Not applicable |
-| Closed or cancelled authority decision | Session remains staged | No Target owner changes | Reopen the staged session through Update |
+| Any Target, zero operations | The same explicit `APPLY` / `DECLINE` choice keeps direct Update's contract uniform | Terminal receipt only | No Context checkpoint and no Context Undo unit |
+| Escape or terminal close without a decision | Session remains staged | No Target owner changes | Reopen the staged session through Update |
 | Stale Source, Target, Grant, or session revision | Fail before publication | No partial success receipt | Re-run or reopen against current state |
 | Optional Goal focus | Context/Memory/text frame guides relevance but supplies no `source_id` and authorizes no fact | Exact focus receipt is retained in the session and owner checkpoints | Durable Goal pre-image is locked and revalidated before Apply |
 
@@ -108,7 +105,7 @@ checkpoint solely to make operations look alike.
 
 - Update freezes Source and Target identity, scope, Memory digests, optional
   typed Goal focus, operations, and session revision before Apply. The stored
-  session uses compare-and-swap when it is revised or marked applied. Goal is
+  session uses compare-and-swap when it is marked applied or declined. Goal is
   a relevance/output criterion, never Source evidence.
 - Local and granted application revalidate the frozen inputs and relevant Grant
   before the first Target write.
@@ -188,15 +185,18 @@ ADD/EDIT/REMOVE counts, session/checkpoint identities,
 historical UNDONE terminal evidence; an incomplete staged Update resumes
 through `mem update`.
 
-## 2026-08-30 direct review and composed application
+## 2026-08-30 direct report decision and composed application
 
-Direct interactive `mem update` now owns one report-first pre-Apply review and
-one exact Apply confirmation because it has no enclosing semantic session. A
-local reversible write is no longer silently advanced merely because Undo
-exists. The same surface retains semantic
-revision for a local Target and limits a granted Target to exact authority
-approval. Non-interactive compatibility routes cannot open a terminal and
-continue to apply the exact staged request supplied by their caller.
+Direct interactive `mem update` owns one report-first pre-Apply boundary
+because it has no enclosing semantic session. The Report and the decision are
+one screen: `APPLY` accepts the exact frozen proposal and `DECLINE` records a
+terminal no-mutation receipt. The former `--comment` / `--expect-session`
+revision turn and the separate Apply-confirmation screen were removed. This is
+intentional: iteration belongs to Meld, Atomize, Resolve, or another composing
+operation that owns the larger semantic session, while Update remains an exact
+local patch application. Non-interactive compatibility routes cannot open a
+terminal and continue to apply the exact staged request supplied by their
+caller.
 
 This console policy does not enter `application.apply_update`. Meld, Sever,
 Resolve, Forget, and Atomize call that application boundary against their own

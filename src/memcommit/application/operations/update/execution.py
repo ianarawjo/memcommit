@@ -20,7 +20,7 @@ class UpdateApplicationFlowError(RuntimeError):
 class UpdateApplicationFlowPort:
     """Apply one complete plan under caller-selected review policy.
 
-    A direct console invocation supplies ``application_reviewer``. Composing
+    A direct console invocation supplies ``application_decider``. Composing
     operations omit it because their own session already owns the decision.
     ``authority_reviewer`` remains the compatibility gate for callers that
     expose only granted-Target approval.
@@ -29,22 +29,8 @@ class UpdateApplicationFlowPort:
     local_applier: UpdateApplier
     granted_source_applier: UpdateApplier
     granted_target_applier: UpdateApplier
-    application_reviewer: UpdateDecisionReviewer | None = None
+    application_decider: UpdateDecisionReviewer | None = None
     authority_reviewer: UpdateDecisionReviewer | None = None
-
-    @staticmethod
-    def _same_review_boundary(
-        prepared: UpdateSession,
-        reviewed: UpdateSession,
-    ) -> bool:
-        """Allow semantic revision without changing the frozen invocation."""
-
-        return replace(
-            reviewed,
-            uid=prepared.uid,
-            created_at=prepared.created_at,
-            operations=prepared.operations,
-        ) == prepared
 
     def decide(self, prepared: UpdateSession) -> UpdateSession | None:
         """Resolve the direct-command review or a granted-target write gate."""
@@ -53,21 +39,19 @@ class UpdateApplicationFlowPort:
             raise UpdateApplicationFlowError(
                 "Update application flow requires a staged session."
             )
-        if not prepared.operations:
-            return prepared
-        if self.application_reviewer is not None:
-            reviewed = self.application_reviewer(prepared)
-            if reviewed is None:
+        if self.application_decider is not None:
+            decided = self.application_decider(prepared)
+            if decided is None:
                 return None
-            if (
-                not isinstance(reviewed, UpdateSession)
-                or reviewed.status != "staged"
-                or not self._same_review_boundary(prepared, reviewed)
-            ):
+            if not isinstance(decided, UpdateSession) or decided != prepared:
                 raise UpdateApplicationFlowError(
-                    "Update review changed the frozen invocation boundary."
+                    "Update decision changed the exact prepared proposal."
                 )
-            return reviewed
+            return decided
+        if not prepared.operations:
+            # Composition may complete a proven no-op silently. A direct
+            # command still reaches its explicit Apply-or-Decline decider.
+            return prepared
         if prepared.granted_target is None:
             # Composing operations do not enter the direct-command review
             # adapter; their own session already owns the human decision.

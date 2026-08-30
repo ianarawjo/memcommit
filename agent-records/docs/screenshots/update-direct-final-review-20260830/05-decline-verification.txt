@@ -1,0 +1,13 @@
+UPDATE DECLINED · capture/update-review/new-guidance → capture/update-review/campus-guide
+OUTCOME · NO TARGET CHANGES · no Context checkpoint
+RECEIPT · abd93c6e-7fc3-443b-9509-21936ba6cb4c
+REVIEW · mem review update --session abd93c6e-7fc3-443b-9509-21936ba6cb4c
+CAPTURE GATE · PRESS V FOR READ-ONLY TARGET VERIFICATION
+v
+
+READ-ONLY VERIFICATION · UPDATE
+  SESSION STATE · declined
+  PROVIDER CALLS · 1
+  TARGET MEMORIES · 1
+  CHECKPOINTS · 0
+  [1f66831b] The south entrance closes at 17:00.

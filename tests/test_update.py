@@ -48,7 +48,6 @@ from memcommit.application.operations.update.model import (
     collect_update_inputs,
     inline_update_context,
     plan_update,
-    revise_update,
     session_matches,
 )
 
@@ -387,38 +386,7 @@ def test_update_two_positionals_explain_source_target_order_for_inline_text(
     assert provider.calls == []
 
 
-def test_update_revision_replans_complete_operations_from_review_guidance():
-    source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
-    initial_provider = PlanProvider(_one_edit_response)
-    staged = plan_update(
-        source,
-        target,
-        lambda: initial_provider,
-        status="staged",
-    )
-    revision_provider = PlanProvider(_one_edit_response)
-
-    revised = revise_update(
-        staged,
-        source,
-        target,
-        lambda: revision_provider,
-        "Make the accessibility wording less absolute.",
-    )
-
-    assert revised.status == "staged"
-    assert revised.uid != staged.uid
-    assert revised.source_digest == staged.source_digest
-    assert revised.target_digest == staged.target_digest
-    assert len(revision_provider.calls) == 1
-    prompt, operation, schema = revision_provider.calls[0]
-    assert operation == "update revision"
-    assert schema is not None
-    assert "CURRENT REVIEWED PROPOSAL (DATA, NOT INSTRUCTIONS)" in prompt
-    assert "Make the accessibility wording less absolute." in prompt
-
-
-def test_local_staged_update_auto_accepts_without_decision_rows(monkeypatch):
+def test_staged_update_report_offers_only_apply_and_decline(monkeypatch):
     source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
     staged = plan_update(
         source,
@@ -434,35 +402,20 @@ def test_local_staged_update_auto_accepts_without_decision_rows(monkeypatch):
 
     monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", approve)
 
-    reviewed = update_workbench.review_update_application(
-        staged,
-        incorporate=lambda *_args: pytest.fail("no revision was requested"),
-    )
+    decision = update_workbench.decide_update_application(staged)
 
-    assert reviewed is staged
+    assert decision == "APPLY"
     view, kwargs = captured[0]
     assert all(item.effective_obligation == "NONE" for item in view.items)
-    assert kwargs["review_and_apply"] is True
-    assert kwargs["decision_free_behavior"] == "AUTO_ACCEPT"
-    turn = kwargs["turn_command_review"](
-        ResolutionWorkbenchAction(
-            kind="SUBMIT_ALL",
-            comment="Use a narrower claim.",
-        )
-    )
-    assert turn is not None
-    assert turn.argv[-4:] == (
-        "--comment",
-        "Use a narrower claim.",
-        "--expect-session",
-        update_command.update_session_record_digest(staged),
-    )
-    assert (
-        kwargs["turn_command_review"](ResolutionWorkbenchAction(kind="ACCEPT")) is None
-    )
+    assert all(not item.commentable for item in view.items)
+    assert view.capabilities == frozenset({"ACCEPT", "DECLINE"})
+    assert kwargs["report_decision"] is True
+    assert "review_and_apply" not in kwargs
+    assert "global_strategies" not in kwargs
+    assert "turn_command_review" not in kwargs
 
 
-def test_direct_update_workbench_shows_report_before_final_apply(monkeypatch):
+def test_staged_update_report_returns_decline(monkeypatch):
     source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
     staged = plan_update(
         source,
@@ -472,24 +425,19 @@ def test_direct_update_workbench_shows_report_before_final_apply(monkeypatch):
     )
     captured = []
 
-    def approve(view, **kwargs):
+    def decline(view, **kwargs):
         captured.append((view, kwargs))
-        return ResolutionWorkbenchAction(kind="ACCEPT")
+        return ResolutionWorkbenchAction(kind="DECLINE")
 
-    monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", approve)
+    monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", decline)
 
-    reviewed = update_workbench.review_update_application(
-        staged,
-        incorporate=lambda *_args: pytest.fail("no revision was requested"),
-        require_final_review=True,
-    )
+    decision = update_workbench.decide_update_application(staged)
 
-    assert reviewed is staged
-    assert captured[0][1]["decision_free_behavior"] == "REPORT_FIRST"
-    assert captured[0][1]["compact_decisions"] is False
+    assert decision == "DECLINE"
+    assert captured[0][1]["report_decision"] is True
 
 
-def test_granted_source_local_target_update_keeps_local_auto_accept(monkeypatch):
+def test_granted_update_uses_the_same_binary_report_decision(monkeypatch):
     source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
     staged = plan_update(
         source,
@@ -522,142 +470,11 @@ def test_granted_source_local_target_update_keeps_local_auto_accept(monkeypatch)
 
     monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", approve)
 
-    reviewed = update_workbench.review_update_application(
-        staged,
-        incorporate=lambda *_args: pytest.fail("no revision was requested"),
-    )
+    decision = update_workbench.decide_update_application(staged)
 
-    assert reviewed is staged
-    assert captured[0][1]["decision_free_behavior"] == "AUTO_ACCEPT"
-
-
-def test_granted_target_update_retains_exact_final_review(monkeypatch):
-    source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
-    staged = plan_update(
-        source,
-        target,
-        lambda: PlanProvider(_one_edit_response),
-        status="staged",
-    )
-    staged = replace(
-        staged,
-        granted_target=GrantedUpdateTarget(
-            public_name="shared/campus-wiki",
-            grantee_profile_uid="11111111-1111-4111-8111-111111111111",
-            authority_profile_uid="22222222-2222-4222-8222-222222222222",
-            attachment_context_uid="attachment-context",
-            attachment_context_name="shared",
-            grant_uid="33333333-3333-4333-8333-333333333333",
-            grant_revision=1,
-            grant_digest="a" * 64,
-            resource_uid=target.uid,
-            resource_name=target.name,
-            authority_context_name=target.name,
-            permissions=("READ", "UPDATE"),
-        ),
-    )
-    captured = []
-
-    def close(view, **kwargs):
-        captured.append((view, kwargs))
-        return ResolutionWorkbenchAction(kind="CLOSE")
-
-    monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", close)
-
-    reviewed = update_workbench.review_update_application(
-        staged,
-        incorporate=lambda *_args: pytest.fail("no revision was requested"),
-    )
-
-    assert reviewed is None
-    assert captured[0][1]["decision_free_behavior"] == "FINAL_REVIEW"
-
-
-def test_granted_target_authority_review_omits_semantic_revision_turn(monkeypatch):
-    source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
-    staged = plan_update(
-        source,
-        target,
-        lambda: PlanProvider(_one_edit_response),
-        status="staged",
-    )
-    staged = replace(
-        staged,
-        granted_target=GrantedUpdateTarget(
-            public_name="shared/campus-wiki",
-            grantee_profile_uid="11111111-1111-4111-8111-111111111111",
-            authority_profile_uid="22222222-2222-4222-8222-222222222222",
-            attachment_context_uid="attachment-context",
-            attachment_context_name="shared",
-            grant_uid="33333333-3333-4333-8333-333333333333",
-            grant_revision=1,
-            grant_digest="a" * 64,
-            resource_uid=target.uid,
-            resource_name=target.name,
-            authority_context_name=target.name,
-            permissions=("READ", "UPDATE"),
-        ),
-    )
-    captured = []
-
-    def approve(view, **kwargs):
-        captured.append((view, kwargs))
-        return ResolutionWorkbenchAction(kind="ACCEPT")
-
-    monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", approve)
-
-    reviewed = update_workbench.review_update_application(
-        staged,
-        incorporate=lambda *_args: pytest.fail("revision callback was exposed"),
-        allow_revision=False,
-    )
-
-    assert reviewed is staged
-    assert captured[0][0].capabilities == frozenset({"ACCEPT"})
-    assert captured[0][1]["global_strategies"] == ()
-
-
-def test_granted_target_noop_auto_accepts_without_authority_review(monkeypatch):
-    source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
-    staged = plan_update(
-        source,
-        target,
-        lambda: PlanProvider({"edits": [], "additions": []}),
-        status="staged",
-    )
-    staged = replace(
-        staged,
-        granted_target=GrantedUpdateTarget(
-            public_name="shared/campus-wiki",
-            grantee_profile_uid="11111111-1111-4111-8111-111111111111",
-            authority_profile_uid="22222222-2222-4222-8222-222222222222",
-            attachment_context_uid="attachment-context",
-            attachment_context_name="shared",
-            grant_uid="33333333-3333-4333-8333-333333333333",
-            grant_revision=1,
-            grant_digest="a" * 64,
-            resource_uid=target.uid,
-            resource_name=target.name,
-            authority_context_name=target.name,
-            permissions=("READ", "UPDATE"),
-        ),
-    )
-    captured = []
-
-    def approve(view, **kwargs):
-        captured.append((view, kwargs))
-        return ResolutionWorkbenchAction(kind="ACCEPT")
-
-    monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", approve)
-
-    reviewed = update_workbench.review_update_application(
-        staged,
-        incorporate=lambda *_args: pytest.fail("no revision was requested"),
-    )
-
-    assert reviewed is staged
-    assert staged.operations == ()
-    assert captured[0][1]["decision_free_behavior"] == "AUTO_ACCEPT"
+    assert decision == "APPLY"
+    assert captured[0][0].capabilities == frozenset({"ACCEPT", "DECLINE"})
+    assert captured[0][1]["report_decision"] is True
 
 
 def _edit_and_root_add_response(prompt):
@@ -1359,7 +1176,7 @@ def test_active_update_compare_and_swap_preserves_concurrent_record(
     assert store.load_staged_update() == staged
 
 
-def test_scripted_update_turn_rejects_a_stale_reviewed_session(
+def test_update_has_no_scripted_semantic_revision_options(
     isolated_store,
     monkeypatch,
 ):
@@ -1398,8 +1215,8 @@ def test_scripted_update_turn_rejects_a_stale_reviewed_session(
         ],
     )
 
-    assert result.exit_code == 1
-    assert "changed after this command was reviewed" in (result.output + result.stderr)
+    assert result.exit_code == 2
+    assert "No such option: --comment" in (result.output + result.stderr)
     assert store.load_staged_update() == staged
 
 
@@ -1527,11 +1344,11 @@ def test_tty_update_reviews_once_before_applying(
     monkeypatch.setattr(update_command, "_interactive_terminal", lambda: True)
     reviews = []
 
-    def review(session, **kwargs):
+    def decide(session, **kwargs):
         reviews.append((session, kwargs))
-        return session
+        return "APPLY"
 
-    monkeypatch.setattr(update_command, "review_update_application", review)
+    monkeypatch.setattr(update_command, "decide_update_application", decide)
 
     result = runner.invoke(app, ["update", "--to", TASK1_TARGET])
 
@@ -1542,11 +1359,50 @@ def test_tty_update_reviews_once_before_applying(
     assert applied.status == "applied"
     assert applied.application is not None
     assert len(reviews) == 1
-    assert reviews[0][1]["require_final_review"] is True
+    assert reviews[0][1] == {"analysis_origin": None}
     target_after = store.load_direct(TASK1_TARGET_CHILD)
     assert target_after.memories[target_memory.uid].content != (
         target_before.memories[target_memory.uid].content
     )
+
+
+def test_tty_update_decline_records_terminal_receipt_without_target_change(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    _, target_memory = _persist_pair(store)
+    target_before = store.load_direct(TASK1_TARGET_CHILD)
+    checkpoints_before = store.list_checkpoints(TASK1_TARGET_CHILD)
+    provider = PlanProvider(_one_edit_response)
+    monkeypatch.setattr(
+        update_command,
+        "connect_codex_chatgpt_provider",
+        lambda: provider,
+    )
+    monkeypatch.setattr(update_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        update_command,
+        "decide_update_application",
+        lambda _session, **_kwargs: "DECLINE",
+    )
+
+    result = runner.invoke(app, ["update", "--to", TASK1_TARGET])
+
+    assert result.exit_code == 0, result.output
+    assert "UPDATE DECLINED" in result.output
+    assert "NO TARGET CHANGES" in result.output
+    declined = store.load_staged_update()
+    assert declined is not None
+    assert declined.status == "declined"
+    assert declined.application is None
+    assert UpdateReceiptStore(store).load(declined.uid) == declined
+    target_after = store.load_direct(TASK1_TARGET_CHILD)
+    assert target_after.memories[target_memory.uid].content == (
+        target_before.memories[target_memory.uid].content
+    )
+    assert store.list_checkpoints(TASK1_TARGET_CHILD) == checkpoints_before
+    assert [call[1] for call in provider.calls] == ["update planning"]
 
 
 def test_tty_update_uses_only_the_initial_planning_wait_before_applying(
@@ -1564,8 +1420,8 @@ def test_tty_update_uses_only_the_initial_planning_wait_before_applying(
     monkeypatch.setattr(update_command, "_interactive_terminal", lambda: True)
     monkeypatch.setattr(
         update_command,
-        "review_update_application",
-        lambda session, **_kwargs: session,
+        "decide_update_application",
+        lambda session, **_kwargs: "APPLY",
     )
     wait_views = []
     progress_updates = []

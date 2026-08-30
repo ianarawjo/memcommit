@@ -1,0 +1,121 @@
+52 180
+$ mem update --from capture/update-review/new-guidance --to capture/update-review/campus-guide
+PTY · 180×52
+PROFILE · local capture · CURRENT · capture/update-review/new-guidance
+MEM UPDATE · 1/2 · CONNECTING PROVIDER . · 0sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 0sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES .. · 0sMEM UPDATE · 2/2 · PLANNING MEMORY CHANGES … · 0s MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 1s                                                 [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[0m Staged update: capture/update-review/new-guidance -> capture/update-review/campus-guide                                                                                         [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m CONTEXT LOCATIONS                                                                                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m   SOURCE · capture/update-review/new-guidance                                                                                                                                   [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m   TARGET · capture/update-review/campus-guide                                                                                                                                   [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m STAGED · 1 EDITS · 0 ADDITIONS · 0 REMOVALS · 1 CHANGES                                                                                                                         [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ PLAN[0m                                                                                                                                                                            [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;139;213;255m The exact target Memory changes are staged and bound to this Source and Target revision. Apply remains separate.[0m                                                                [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m WHAT WILL CHANGE                                                                                                                                                                [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247m 1 exact target Memory changes in the target Context capture/update-review/campus-guide: 1 EDIT, 0 ADD, and 0 REMOVE. Impact shows each located before/after transition once; exa[0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247mct reason and source provenance remain inspectable in Items.[0m                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m IMPACT · UPDATE                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m These exact target changes are staged. Choose Apply or Decline; this surface does not revise the proposal.                                                                      [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mcapture/update-review/campus-guide [31caea74][0m                                                                                                                  [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - The south entrance closes at [0;38;2;237;135;150;4m17:00.[0m                                                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             + The south entrance closes at [0;38;2;166;218;149;4m18:00 during the study period.[0m                                                                                                       [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m APPLICATION DECISION                                                                                                                                                            [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247m Choose APPLY or DECLINE in To Do. The exact proposal is not revised on this screen.[0m                                                                                             [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;1m› REPORT         Complete Update report[0m                                                                                                                                          [0;1m^[179C[0m│[0m
+[0m│  EDIT           capture/update-review/campus-guide Memory [31caea74-ab97-46f2-a243-aeeb084e4e8f]                                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;2;16;36;47;48;2;139;213;255m✓ APPLY · Apply the exact proposal shown in the report[0m                                                                                                                            [179C│[0m
+[0m│  DECLINE · Record no Target changes or checkpoints                                                                                                                               [179C│[0m
+[0m│                                                                                                                                                                                  [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close A apply  H Help  y/Y copy  Q close[137D[44A[C[0m[?25l[7A[0m┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│ Staged update: capture/update-review/new-guidance -> capture/update-review/campus-guide                                                                                         [0;1m^[179C[0m│[0m
+[0m│ CONTEXT LOCATIONS                                                                                                                                                               [0;48;2;68;68;68m [179C[0m│[0m
+[0m│   SOURCE · capture/update-review/new-guidance                                                                                                                                   [0;48;2;68;68;68m [179C[0m│[0m
+[0m│   TARGET · capture/update-review/campus-guide                                                                                                                                   [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ STAGED · 1 EDITS · 0 ADDITIONS · 0 REMOVALS · 1 CHANGES                                                                                                                         [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ PLAN                                                                                                                                                                            [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;244;245;247m The exact target Memory changes are staged and bound to this Source and Target revision. Apply remains separate.[0m                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ WHAT WILL CHANGE                                                                                                                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;244;245;247m 1 exact target Memory changes in the target Context capture/update-review/campus-guide: 1 EDIT, 0 ADD, and 0 REMOVE. Impact shows each located before/after transition once; exa[0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;244;245;247mct reason and source provenance remain inspectable in Items.[0m                                                                                                                     [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ IMPACT · UPDATE                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ These exact target changes are staged. Choose Apply or Decline; this surface does not revise the proposal.                                                                      [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mcapture/update-review/campus-guide [31caea74][0m                                                                                                                  [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;255;255;255m             - The south entrance closes at [0;38;2;237;135;150;4m17:00.[0m                                                                                                                               [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;255;255;255m             + The south entrance closes at [0;38;2;166;218;149;4m18:00 during the study period.[0m                                                                                                       [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ APPLICATION DECISION                                                                                                                                                            [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;244;245;247m Choose APPLY or DECLINE in To Do. The exact proposal is not revised on this screen.[0m                                                                                             [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+
+
+
+
+
+
+
+
+
+
+[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[0;38;2;16;36;47;48;2;139;213;255;1m✓ APPLY · Apply the exact proposal shown in the report[0m                                                                                                                            [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m  DECLINE · Record no Target changes or checkpoints                                                                                                                               [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                  [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[5C[0mch[Cose  Enter [Confirm decision  Tab[Cswitch  Esc/Backspace ba[Ck[CA apply  H Help  Q [Close[0m[K[3A[91D[0m[48A[J[0m[?7h[?1049l[?2004lUPDATE APPLIED · capture/update-review/new-guidance → capture/update-review/campus-guide
+EFFECTS · ADD 0 · EDIT 1 · REMOVE 0
+RECEIPT · 9b1f2da6-03a7-406b-8c9f-3ed7b8bace6c
+CHECKPOINTS · capture/update-review/campus-guide [a7a1bc64-df11-4a78-96b8-66ff9f2547b7]
+REVIEW · mem review update --session 9b1f2da6-03a7-406b-8c9f-3ed7b8bace6c
+RECOVERY · mem undo
+CAPTURE GATE · PRESS V FOR READ-ONLY TARGET VERIFICATION
+v
+
+READ-ONLY VERIFICATION · UPDATE
+  SESSION STATE · applied
+  PROVIDER CALLS · 1
+  TARGET MEMORIES · 1
+  CHECKPOINTS · 1
+  [31caea74] The south entrance closes at 18:00 during the study period.

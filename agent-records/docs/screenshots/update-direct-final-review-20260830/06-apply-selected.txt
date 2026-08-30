@@ -1,0 +1,52 @@
+┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────┐
+│ Staged update: capture/update-review/new-guidance -> capture/update-review/campus-guide                                                                                         ^│
+│ CONTEXT LOCATIONS                                                                                                                                                                │
+│   SOURCE · capture/update-review/new-guidance                                                                                                                                    │
+│   TARGET · capture/update-review/campus-guide                                                                                                                                    │
+│ STAGED · 1 EDITS · 0 ADDITIONS · 0 REMOVALS · 1 CHANGES                                                                                                                          │
+│                                                                                                                                                                                  │
+│ PLAN                                                                                                                                                                             │
+│ The exact target Memory changes are staged and bound to this Source and Target revision. Apply remains separate.                                                                 │
+│                                                                                                                                                                                  │
+│ WHAT WILL CHANGE                                                                                                                                                                 │
+│ 1 exact target Memory changes in the target Context capture/update-review/campus-guide: 1 EDIT, 0 ADD, and 0 REMOVE. Impact shows each located before/after transition once; exa │
+│ct reason and source provenance remain inspectable in Items.                                                                                                                      │
+│                                                                                                                                                                                  │
+│ IMPACT · UPDATE                                                                                                                                                                  │
+│ These exact target changes are staged. Choose Apply or Decline; this surface does not revise the proposal.                                                                       │
+│ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      │
+│       ▸ ~ [EDIT] capture/update-review/campus-guide [31caea74]                                                                                                                   │
+│             - The south entrance closes at 17:00.                                                                                                                                │
+│             + The south entrance closes at 18:00 during the study period.                                                                                                        │
+│ APPLICATION DECISION                                                                                                                                                             │
+│ Choose APPLY or DECLINE in To Do. The exact proposal is not revised on this screen.                                                                                              │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Update report                                                                                                                                          ^│
+│  EDIT           capture/update-review/campus-guide Memory [31caea74-ab97-46f2-a243-aeeb084e4e8f]                                                                                 │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃✓ APPLY · Apply the exact proposal shown in the report                                                                                                                            ┃
+┃  DECLINE · Record no Target changes or checkpoints                                                                                                                               ┃
+┃                                                                                                                                                                                  ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ ↑/↓ choose  Enter confirm decision  Tab switch  Esc/Backspace back A apply  H Help  Q close

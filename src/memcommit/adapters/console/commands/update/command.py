@@ -27,15 +27,13 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
 )
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
-    safe_terminal_text,
 )
 from memcommit.adapters.console.commands.update.render import (
     render_plan,
-    render_update_report_snapshot,
 )
 from memcommit.adapters.console.commands.update.receipt import render_update_receipt
 from memcommit.adapters.console.commands.update.workbench.application import (
-    review_update_application,
+    decide_update_application,
 )
 from memcommit.core.context import Context
 from memcommit.application.capabilities.context_locator import resolve_context_locator
@@ -80,9 +78,7 @@ from memcommit.application.operations.update.model import (
     collect_update_inputs,
     inline_update_context,
     plan_update,
-    revise_update,
     session_matches,
-    update_session_record_digest,
 )
 from memcommit.application.operations.update.execution import (
     UpdateApplicationFlowPort,
@@ -145,6 +141,7 @@ def _browse_saved_update(store: MemoryStore) -> None:
                 session,
                 staged=session.status == "staged",
                 applied=session.status == "applied",
+                declined=session.status == "declined",
             )
         return
 
@@ -212,6 +209,9 @@ def _browse_saved_update(store: MemoryStore) -> None:
             "RECOVERY · mem redo"
         )
         return
+    if current.status == "declined":
+        typer.echo(render_update_receipt(current))
+        return
     if current.status == "impact":
         typer.echo(
             f"UPDATE IMPACT SAVED · {current.source_name} → {current.target_name}\n"
@@ -260,7 +260,6 @@ def _update_confirmed_inputs_view(
     *,
     source_descendants: bool,
     target_descendants: bool,
-    guidance: str | None = None,
 ) -> CommandWaitView:
     """Freeze the exact Update route shown while its semantic turn runs."""
 
@@ -277,14 +276,6 @@ def _update_confirmed_inputs_view(
         + ("INCLUDE DESCENDANTS" if target_descendants else "SELECTED GRAPH ONLY"),
         "  ROLE · CHANGES APPLY HERE AFTER REVIEW",
     ]
-    if guidance is not None:
-        lines.extend(
-            [
-                "",
-                "REVISION COMMENT · SUBMITTED",
-                safe_terminal_text(guidance),
-            ]
-        )
     lines.extend(
         [
             "",
@@ -294,26 +285,6 @@ def _update_confirmed_inputs_view(
     return CommandWaitView(
         title="UPDATE INPUTS",
         text="\n".join(lines),
-    )
-
-
-def _update_revision_wait_view(
-    session: UpdateSession,
-    guidance: str,
-) -> CommandWaitView:
-    """Keep the reviewed staged report visible until its replacement is ready."""
-
-    text = "\n".join(
-        [
-            render_update_report_snapshot(session, staged=True),
-            "",
-            "PENDING REVISION · SUBMITTED",
-            safe_terminal_text(guidance),
-        ]
-    )
-    return CommandWaitView(
-        title="PREVIOUS UPDATE REPORT",
-        text=text,
     )
 
 
@@ -361,79 +332,28 @@ def _plan_update_with_wait(
     )
 
 
-def _revise_update_with_wait(
-    current: UpdateSession,
-    source: Context,
-    target: Context,
-    guidance: str,
-) -> UpdateSession:
-    """Replace a reviewed plan while retaining its frozen report and route."""
-
-    def revise(progress):
-        def connect():
-            provider = connect_codex_chatgpt_provider()
-            progress.update("incorporating review comments", step=2)
-            return provider
-
-        return revise_update(
-            current,
-            source,
-            target,
-            connect,
-            guidance,
-        )
-
-    return run_command_wait(
-        "UPDATE",
-        "connecting provider",
-        total=2,
-        work=revise,
-        return_view=_update_revision_wait_view(current, guidance),
-        context_view=_update_confirmed_inputs_view(
-            source,
-            target,
-            source_descendants=current.source_include_descendants,
-            target_descendants=current.target_include_descendants,
-            guidance=guidance,
-        ),
-    )
-
-
-def _review_direct_update(
+def _decide_direct_update(
     prepared: UpdateSession,
     *,
     store: MemoryStore,
-    source: Context,
-    target: Context,
     analysis_origin: str | None,
 ) -> UpdateSession | None:
-    """Give a direct interactive invocation one explicit Apply boundary."""
+    """Choose Apply or persist an exact no-mutation Decline receipt."""
 
     if not _interactive_terminal():
         return prepared
-
-    def incorporate(
-        current: UpdateSession,
-        guidance: str,
-    ) -> UpdateSession:
-        if current.granted_target is not None:
-            raise RuntimeError("Granted Target approval cannot revise the Update plan.")
-        revised = _revise_update_with_wait(
-            current,
-            source,
-            target,
-            guidance,
-        )
-        store.save_staged_update(revised, expected_current=current)
-        return revised
-
-    return review_update_application(
+    decision = decide_update_application(
         prepared,
-        incorporate=incorporate,
         analysis_origin=analysis_origin,
-        allow_revision=prepared.granted_target is None,
-        require_final_review=True,
     )
+    if decision == "APPLY":
+        return prepared
+    if decision == "DECLINE":
+        store.save_staged_update(
+            prepared.with_declined(),
+            expected_current=prepared,
+        )
+    return None
 
 
 def cmd(
@@ -545,21 +465,6 @@ def cmd(
             ),
         ),
     ] = None,
-    comment: Annotated[
-        Optional[str],
-        typer.Option(
-            "--comment",
-            help="Rebuild the staged Update plan from one reviewed semantic turn",
-        ),
-    ] = None,
-    expect_session: Annotated[
-        Optional[str],
-        typer.Option(
-            "--expect-session",
-            metavar="SHA256",
-            help="Require the exact staged Update revision reviewed for this turn",
-        ),
-    ] = None,
     sessions: Annotated[
         bool,
         typer.Option(
@@ -606,27 +511,6 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
-    if (comment is None) != (expect_session is None):
-        typer.secho(
-            "Update error: --comment and --expect-session must be supplied together.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if comment is not None and not comment.strip():
-        typer.secho(
-            "Update error: --comment cannot be empty.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if comment is not None and replace_stage:
-        typer.secho(
-            "Update error: a semantic turn cannot replace the staged session boundary.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
     if memory is not None and source_name is not None:
         typer.secho(
             "Update error: --memory supplies Source content and cannot be "
@@ -644,8 +528,6 @@ def cmd(
         or source_memory is not None
         or target_memory is not None
         or scope_flags_supplied
-        or comment is not None
-        or expect_session is not None
     ):
         typer.secho(
             "Update error: --sessions cannot be combined with Context operands "
@@ -667,8 +549,6 @@ def cmd(
             source_memory is not None
             or target_memory is not None
             or scope_flags_supplied
-            or comment is not None
-            or expect_session is not None
             or goal is not None
         ):
             typer.secho(
@@ -865,8 +745,8 @@ def cmd(
         )
     )
     completed_previous: UpdateSession | None = None
-    if existing is not None and existing.status == "applied":
-        if (
+    if existing is not None and existing.status in {"applied", "declined"}:
+        if existing.status == "applied" and (
             existing.source_include_descendants == source_descendants
             and existing.target_include_descendants == target_descendants
             and existing.source_memory_uid == requested_inputs.source_memory_uid
@@ -964,28 +844,6 @@ def cmd(
                     session,
                 )
             )
-        if comment is not None:
-            if session is None or session.status != "staged":
-                raise UpdateError(
-                    "A semantic Update turn requires the matching staged session."
-                )
-            if update_session_record_digest(session) != expect_session:
-                raise UpdateError(
-                    "The staged Update session changed after this command was reviewed. "
-                    "Reopen it and rebuild the turn command."
-                )
-            revised = _revise_update_with_wait(
-                session,
-                source,
-                target,
-                comment.strip(),
-            )
-            store.save_staged_update(revised, expected_current=session)
-            render_plan(revised, staged=True)
-            typer.echo(
-                "Update revision saved; review it before applying the target changes."
-            )
-            return
         if session is None:
             if (
                 cached is not None
@@ -1129,12 +987,10 @@ def cmd(
                 granted_target_applier=lambda reviewed: (
                     apply_granted_staged_update(store, reviewed)
                 ),
-                application_reviewer=lambda prepared: (
-                    _review_direct_update(
+                application_decider=lambda prepared: (
+                    _decide_direct_update(
                         prepared,
                         store=store,
-                        source=source,
-                        target=target,
                         analysis_origin=update_analysis_origin,
                     )
                 ),
@@ -1142,6 +998,9 @@ def cmd(
         )
         if application.status == "CANCELLED":
             current = store.load_staged_update() or session
+            if current.status == "declined":
+                typer.echo(render_update_receipt(current))
+                return
             typer.echo(
                 f"UPDATE INCOMPLETE · {current.source_name} → {current.target_name}"
             )

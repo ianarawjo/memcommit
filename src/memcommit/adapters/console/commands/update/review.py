@@ -26,7 +26,7 @@ def update_review_report(session: UpdateSession) -> ReviewReportController:
         title="MEM REVIEW · UPDATE",
         summary=(
             "Review exact ADD, EDIT, and REMOVE details, reasons, owners, and "
-            "source references. Applying the staged plan remains outside Review."
+            "source references together with the terminal Apply or Decline state."
         ),
     )
 
@@ -60,7 +60,7 @@ def open_update_review(
             )
         except UidLocatorError as error:
             raise ReviewError(str(error)) from error
-    if session.status not in {"applied", "undone"}:
+    if session.status not in {"applied", "undone", "declined"}:
         raise ReviewError(
             "Update execution is not complete. Resume it with 'mem update'; "
             "Review opens only terminal application evidence."

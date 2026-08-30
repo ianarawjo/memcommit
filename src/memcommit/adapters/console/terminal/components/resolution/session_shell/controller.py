@@ -5,7 +5,9 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
-from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import (
+    CommandReview,
+)
 from memcommit.adapters.console.terminal.components.responses.model import (
     ResponseDraft,
     ResponseTarget,
@@ -15,6 +17,10 @@ from memcommit.adapters.console.terminal.components.responses.resolution import 
 )
 from memcommit.adapters.console.terminal.components.responses.state import (
     ResponseFrameState,
+)
+from memcommit.adapters.console.terminal.components.selection import (
+    FlatSelectionState,
+    SelectionOption,
 )
 from memcommit.adapters.console.terminal.components.save_location import (
     SaveLocationEditorState,
@@ -67,6 +73,7 @@ class ResolutionSessionController:
     session_navigation: SessionWorkbenchNavigation
     global_strategies: tuple[ResolutionGlobalStrategy, ...] = ()
     review_and_apply: bool = False
+    report_decision: bool = False
     read_only: bool = False
     read_only_handoff: SessionTodoView | None = None
     item_handoff: SessionTodoView | Callable[[], SessionTodoView | None] | None = None
@@ -110,8 +117,28 @@ class ResolutionSessionController:
         default_factory=lambda: {"value": "COMMENT ON SELECTED ITEM"}
     )
     local_drafts: dict[str, ResponseDraft] = field(default_factory=dict)
+    report_decision_state: FlatSelectionState | None = field(init=False)
 
     def __post_init__(self) -> None:
+        self.report_decision_state = (
+            FlatSelectionState(
+                options=(
+                    SelectionOption(
+                        "APPLY",
+                        "APPLY · Apply the exact proposal shown in the report",
+                    ),
+                    SelectionOption(
+                        "DECLINE",
+                        "DECLINE · Record no Target changes or checkpoints",
+                    ),
+                ),
+                cursor_uid="APPLY",
+                selected_uid="APPLY",
+                allow_empty=False,
+            )
+            if self.report_decision
+            else None
+        )
         self.destination_editor_state = {
             "value": (
                 SaveLocationEditorState.create(self.destination)
@@ -325,6 +352,12 @@ class ResolutionSessionController:
         """Describe review entry before opening and confirmation after it."""
 
         active_view = self.current_view()
+        if self.report_decision:
+            return SessionTodoView(
+                "APPLICATION DECISION",
+                "Choose Apply or Decline",
+                "The decision concerns the exact proposal visible in this report.",
+            )
         if self.viewer_content["kind"] == "REVIEW":
             action = self.review_action()
             return SessionTodoView(
@@ -340,6 +373,28 @@ class ResolutionSessionController:
             whole_set_available=bool(self.global_strategies),
             read_only_handoff=self.read_only_handoff,
             item_handoff=self.current_item_handoff(),
+        )
+
+    def move_report_decision(self, delta: int) -> bool:
+        """Move and stage one binary report decision as a single control."""
+
+        state = self.report_decision_state
+        if state is None:
+            return False
+        changed = state.move(delta)
+        state.set_selected(state.cursor_uid)
+        self.set_status("")
+        return changed
+
+    def report_decision_action(self) -> ResolutionWorkbenchAction | None:
+        """Return the explicitly selected report decision."""
+
+        state = self.report_decision_state
+        if state is None or state.selected_uid is None:
+            self.set_status("Choose Apply or Decline.")
+            return None
+        return self.semantic_action(
+            "ACCEPT" if state.selected_uid == "APPLY" else "DECLINE"
         )
 
     def decision_free_apply_available(self) -> bool:

@@ -6,7 +6,9 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.layout import to_container
 from prompt_toolkit.output import DummyOutput
-from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import (
+    CommandReview,
+)
 
 import memcommit.adapters.console.terminal.components.resolution.session_shell as resolution_shell_package
 import memcommit.adapters.console.terminal.components.resolution.session_shell.presentation as resolution_presentation_module
@@ -128,6 +130,35 @@ def _run(
             app_output=DummyOutput(),
             require_tty=False,
         )
+
+
+@pytest.mark.parametrize(
+    ("keys", "expected"),
+    (("\x1b[Z\r", "ACCEPT"), ("\x1b[Z\x1b[B\r", "DECLINE")),
+)
+def test_report_decision_returns_apply_or_decline_without_final_review(
+    keys,
+    expected,
+):
+    view = _view(
+        capabilities=frozenset({"ACCEPT", "DECLINE"}),
+        accept_enabled=True,
+    )
+    with create_pipe_input() as pipe_input:
+        # Shift-Tab enters To Do directly from the report. Down changes the
+        # shared binary selection from Apply to Decline without opening a
+        # second confirmation screen.
+        pipe_input.send_text(keys)
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            report_decision=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == expected
 
 
 def test_resolution_viewer_y_and_Y_share_focused_and_complete_copy_contract(

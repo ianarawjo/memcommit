@@ -18,7 +18,9 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import Frame
 
 from memcommit.application.capabilities.review_policy import DecisionFreeBehavior
-from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import (
+    CommandReview,
+)
 from memcommit.adapters.console.terminal.components.multiline_input import (
     build_framed_multiline_input,
 )
@@ -105,6 +107,7 @@ def run_resolution_workbench_shell(
     split_report_item_badges: tuple[str, ...] = (),
     split_report_conflicts_remaining: int | None = None,
     review_and_apply: bool = False,
+    report_decision: bool = False,
     start_final_review_when_no_required: bool = False,
     decision_free_behavior: DecisionFreeBehavior | None = None,
     read_only: bool = False,
@@ -131,6 +134,17 @@ def run_resolution_workbench_shell(
         )
     if split_report_fragments is not None and split_report_text is None:
         raise ValueError("Styled split reports require matching plain report text.")
+    if report_decision and (
+        not split_viewer_items
+        or review_and_apply
+        or read_only
+        or global_strategies
+        or compact_decisions
+    ):
+        raise ValueError(
+            "A report decision requires the full writable report without a "
+            "separate review or resolution strategy."
+        )
     decision_free_behavior = normalize_decision_free_behavior(
         decision_free_behavior,
         start_final_review_when_no_required=start_final_review_when_no_required,
@@ -161,6 +175,7 @@ def run_resolution_workbench_shell(
         session_navigation=session_navigation,
         global_strategies=global_strategies,
         review_and_apply=review_and_apply,
+        report_decision=report_decision,
         read_only=read_only,
         read_only_handoff=read_only_handoff,
         item_handoff=item_handoff,
@@ -168,6 +183,10 @@ def run_resolution_workbench_shell(
         draft_saver_available=draft_saver is not None,
     )
     current_view = controller.current_view
+    if report_decision and not {"ACCEPT", "DECLINE"}.issubset(
+        current_view().capabilities
+    ):
+        raise ValueError("A report decision requires ACCEPT and DECLINE capabilities.")
     current_item_handoff = controller.current_item_handoff
     current_response_target = controller.current_response_target
 
@@ -193,6 +212,7 @@ def run_resolution_workbench_shell(
             split_report_item_badges=split_report_item_badges,
             split_report_conflicts_remaining=split_report_conflicts_remaining,
             review_and_apply=review_and_apply,
+            report_decision=report_decision,
             read_only=read_only,
             impact_controller=impact_controller,
             destination=destination,

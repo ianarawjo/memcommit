@@ -110,12 +110,8 @@ def test_update_flow_dispatches_by_the_actual_mutation_owner(
         session,
         port=UpdateApplicationFlowPort(
             local_applier=lambda reviewed: apply("local", reviewed),
-            granted_source_applier=lambda reviewed: apply(
-                "granted-source", reviewed
-            ),
-            granted_target_applier=lambda reviewed: apply(
-                "granted-target", reviewed
-            ),
+            granted_source_applier=lambda reviewed: apply("granted-source", reviewed),
+            granted_target_applier=lambda reviewed: apply("granted-target", reviewed),
             authority_reviewer=lambda reviewed: reviewed,
         ),
     )
@@ -142,14 +138,14 @@ def test_update_flow_has_no_intermediate_decision_or_cancel_phase():
     assert result.applied == _applied(session)
 
 
-def test_direct_application_reviewer_runs_for_a_local_mutation():
+def test_direct_application_decider_runs_for_a_local_mutation():
     session = _mutation_staged()
     reviewed = []
     port = UpdateApplicationFlowPort(
         local_applier=_applied,
         granted_source_applier=_unexpected,
         granted_target_applier=_unexpected,
-        application_reviewer=lambda current: reviewed.append(current) or current,
+        application_decider=lambda current: reviewed.append(current) or current,
     )
 
     result = run_application_flow(session, port=port)
@@ -158,7 +154,23 @@ def test_direct_application_reviewer_runs_for_a_local_mutation():
     assert result.status == "APPLIED"
 
 
-def test_direct_application_review_may_replace_only_the_semantic_plan():
+def test_direct_application_decider_also_owns_a_zero_operation_receipt():
+    session = _staged()
+    decided = []
+    port = UpdateApplicationFlowPort(
+        local_applier=_applied,
+        granted_source_applier=_unexpected,
+        granted_target_applier=_unexpected,
+        application_decider=lambda current: decided.append(current) or current,
+    )
+
+    result = run_application_flow(session, port=port)
+
+    assert decided == [session]
+    assert result.status == "APPLIED"
+
+
+def test_direct_application_decision_cannot_replace_the_semantic_plan():
     session = _mutation_staged()
     revised = replace(
         session,
@@ -170,27 +182,26 @@ def test_direct_application_review_may_replace_only_the_semantic_plan():
         local_applier=_applied,
         granted_source_applier=_unexpected,
         granted_target_applier=_unexpected,
-        application_reviewer=lambda _current: revised,
+        application_decider=lambda _current: revised,
     )
 
-    result = run_application_flow(session, port=port)
+    with pytest.raises(UpdateApplicationFlowError, match="exact prepared proposal"):
+        run_application_flow(session, port=port)
 
-    assert result.decided == revised
 
-
-def test_direct_application_review_cannot_change_the_target_boundary():
+def test_direct_application_decision_cannot_change_the_target_boundary():
     session = _mutation_staged()
     port = UpdateApplicationFlowPort(
         local_applier=_unexpected,
         granted_source_applier=_unexpected,
         granted_target_applier=_unexpected,
-        application_reviewer=lambda current: replace(
+        application_decider=lambda current: replace(
             current,
             target_name="different",
         ),
     )
 
-    with pytest.raises(UpdateApplicationFlowError, match="frozen invocation"):
+    with pytest.raises(UpdateApplicationFlowError, match="exact prepared proposal"):
         run_application_flow(session, port=port)
 
 

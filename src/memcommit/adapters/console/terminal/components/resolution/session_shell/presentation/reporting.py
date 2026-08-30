@@ -226,6 +226,7 @@ def resolution_report_fragments(
     drafts: dict[str, ResponseDraft] | None = None,
     focused_section: int = 0,
     review_and_apply: bool = False,
+    report_decision: bool = False,
     read_only: bool = False,
     impact_controller: ImpactController | None = None,
     expanded_impact_section_uid: str | None = None,
@@ -621,13 +622,21 @@ def resolution_report_fragments(
                 fragments.append(("[SetCursorPosition]", ""))
             section_index += 1
     if not read_only:
-        action_heading = "RESOLVE ALL · WHOLE-SET STRATEGY"
-        action_detail = (
-            "Choose a strategy below. It requests a revised proposal and "
-            "never applies the target."
-        )
-        show_strategies = True
-        if review_and_apply:
+        if report_decision:
+            action_heading = "APPLICATION DECISION"
+            action_detail = (
+                "Choose APPLY or DECLINE in To Do. The exact proposal is not "
+                "revised on this screen."
+            )
+            show_strategies = False
+        else:
+            action_heading = "RESOLVE ALL · WHOLE-SET STRATEGY"
+            action_detail = (
+                "Choose a strategy below. It requests a revised proposal and "
+                "never applies the target."
+            )
+            show_strategies = True
+        if review_and_apply and not report_decision:
             action_heading, action_detail, show_strategies = _report_action(
                 view,
                 draft_values,
@@ -656,6 +665,7 @@ def _seeded_report_lines(
     report_text: str,
     strategies: tuple[ResolutionGlobalStrategy, ...],
     review_and_apply: bool = False,
+    report_decision: bool = False,
     read_only: bool = False,
     impact_controller: ImpactController | None = None,
     drafts: dict[str, ResponseDraft] | None = None,
@@ -689,13 +699,21 @@ def _seeded_report_lines(
     if impact is not None:
         lines.extend(["", *_impact_lines(impact)])
     if not read_only:
-        action_heading = "RESOLVE ALL · WHOLE-SET STRATEGY"
-        action_detail = (
-            "Choose a strategy below. It requests a revised proposal and "
-            "never applies the target."
-        )
-        show_strategies = True
-        if review_and_apply:
+        if report_decision:
+            action_heading = "APPLICATION DECISION"
+            action_detail = (
+                "Choose APPLY or DECLINE in To Do. The exact proposal is not "
+                "revised on this screen."
+            )
+            show_strategies = False
+        else:
+            action_heading = "RESOLVE ALL · WHOLE-SET STRATEGY"
+            action_detail = (
+                "Choose a strategy below. It requests a revised proposal and "
+                "never applies the target."
+            )
+            show_strategies = True
+        if review_and_apply and not report_decision:
             action_heading, action_detail, show_strategies = _report_action(
                 view,
                 drafts or {},
@@ -735,6 +753,7 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
         "IMPACT ·",
         "APPLY CHANGES ·",
         "APPLY AS IS ·",
+        "APPLICATION DECISION",
     )
     sections: list[tuple[int, str]] = []
     in_conflicts = False
@@ -756,12 +775,15 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
                 "INCORPORATE RESPONSES",
                 "APPLY CHANGES ·",
                 "APPLY AS IS ·",
+                "APPLICATION DECISION",
             )
         ):
             in_results = False
         if line.startswith(headings):
             key = (
-                "RESOLVE_ALL"
+                "REPORT_DECISION"
+                if line.startswith("APPLICATION DECISION")
+                else "RESOLVE_ALL"
                 if line.startswith(
                     (
                         "RESOLVE ALL ·",
@@ -807,6 +829,7 @@ def resolution_seeded_report_fragments(
     selected_strategy_index: int = 0,
     focused_section: int = 0,
     review_and_apply: bool = False,
+    report_decision: bool = False,
     read_only: bool = False,
     impact_controller: ImpactController | None = None,
     content_width: int = 76,
@@ -824,6 +847,7 @@ def resolution_seeded_report_fragments(
         report_text,
         strategies,
         review_and_apply=review_and_apply,
+        report_decision=report_decision,
         read_only=read_only,
         impact_controller=impact_controller,
         drafts=drafts,

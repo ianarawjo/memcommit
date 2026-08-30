@@ -5,7 +5,10 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from typing import Literal
 
-from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus, GoalFocusError
+from memcommit.application.capabilities.semantic.goal_focus import (
+    FrozenGoalFocus,
+    GoalFocusError,
+)
 from memcommit.core.context import Context
 
 from .changes import (
@@ -19,7 +22,6 @@ from .changes import (
     _require_exact_keys,
     _require_string,
     _require_uuid,
-    _sha256_json,
     operation_digest,
 )
 from .inputs import (
@@ -36,7 +38,7 @@ UPDATE_SCHEMA_VERSION = 7
 UPDATE_INLINE_MEMORY_SCHEMA_VERSION = 8
 UPDATE_GOAL_FOCUS_SCHEMA_VERSION = 9
 UPDATE_INLINE_GOAL_FOCUS_SCHEMA_VERSION = 10
-UpdateStatus = Literal["impact", "staged", "applied", "undone"]
+UpdateStatus = Literal["impact", "staged", "declined", "applied", "undone"]
 
 
 @dataclass(frozen=True)
@@ -87,6 +89,13 @@ class UpdateSession:
             application=application,
         )
 
+    def with_declined(self) -> UpdateSession:
+        """Record an explicit no-Apply decision without a checkpoint receipt."""
+
+        if self.status != "staged" or self.application is not None:
+            raise ValueError("Only a staged update can be declined.")
+        return replace(self, status="declined", application=None)
+
     def with_restored_application(self, *, applied: bool) -> UpdateSession:
         """Project one exact retained receipt across command Undo or Redo."""
         expected = "undone" if applied else "applied"
@@ -109,7 +118,9 @@ class UpdateSession:
             schema_version = (
                 UPDATE_INLINE_MEMORY_SCHEMA_VERSION
                 if inline
-                else UPDATE_SCHEMA_VERSION if focused else 6
+                else UPDATE_SCHEMA_VERSION
+                if focused
+                else 6
             )
         source: dict[str, object] = {
             "uid": self.source_uid,
@@ -223,7 +234,7 @@ class UpdateSession:
         else:
             raise ValueError("Unsupported update session schema version.")
         status = data["status"]
-        if status not in {"impact", "staged", "applied", "undone"}:
+        if status not in {"impact", "staged", "declined", "applied", "undone"}:
             raise ValueError("Invalid update session status.")
         if (status in {"applied", "undone"}) != (application is not None):
             raise ValueError("Invalid update application state.")
@@ -433,9 +444,8 @@ class UpdateSession:
         ]
         if len(operation_identities) != len(set(operation_identities)):
             raise ValueError("Duplicate Memory uid in update session.")
-        if (
-            application is not None
-            and application.operation_digest != operation_digest(operations)
+        if application is not None and application.operation_digest != operation_digest(
+            operations
         ):
             raise ValueError(
                 "Update application receipt does not match its operations."
@@ -527,12 +537,6 @@ def inline_update_session_source(session: UpdateSession) -> Context | None:
     return source
 
 
-def update_session_record_digest(session: UpdateSession) -> str:
-    """Hash the complete saved Update revision used by one semantic turn."""
-
-    if not isinstance(session, UpdateSession):
-        raise TypeError("Update session digest requires an UpdateSession.")
-    return _sha256_json(session.to_dict())
 def session_matches(
     session: UpdateSession,
     source: Context,

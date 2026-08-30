@@ -46,6 +46,7 @@ def build_surface_activation(
     read_only_handoff = options.read_only_handoff
     global_strategies = options.global_strategies
     review_and_apply = options.review_and_apply
+    report_decision = controller.report_decision
     draft_saver = options.draft_saver
     split_kind = controls.split_kind
     active_viewer_sections = controls.active_viewer_sections
@@ -55,6 +56,7 @@ def build_surface_activation(
     reset_viewer_section = controls.reset_viewer_section
     destination_tree_is_focused = controls.destination_tree_is_focused
     body_control = controls.body_control
+    todo_control = controls.todo_control
     viewer_controller = state.viewer_controller
     save_draft = editors.save_draft
     open_item_input = editors.open_item_input
@@ -129,6 +131,12 @@ def build_surface_activation(
                             if impact_reason_expanded["uid"] is None
                             else "Impact rationale shown."
                         )
+                        event.app.invalidate()
+                        return
+                    if section.kind == "REPORT_DECISION":
+                        session_navigation.focus("todo")
+                        event.app.layout.focus(todo_control)
+                        set_status("")
                         event.app.invalidate()
                         return
                     if section.kind in {"REVIEW_AND_APPLY", "RESOLVE_ALL"}:
@@ -209,6 +217,16 @@ def build_surface_activation(
                         )
                         event.app.exit(result=action)
                         return
+            elif kind == "TODO" and report_decision:
+                action = controller.report_decision_action()
+                if action is not None:
+                    record_study_action(
+                        "APPLICATION_DECISION",
+                        surface="resolution",
+                        action=action.kind,
+                    )
+                    event.app.exit(result=action)
+                    return
             elif kind == "TODO" and viewer_content["kind"] == "REVIEW":
                 action = approved_final_review_action(active_view)
                 if action is not None:

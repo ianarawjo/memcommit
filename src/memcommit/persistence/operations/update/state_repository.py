@@ -96,11 +96,15 @@ class _UpdateStateStoreMixin:
             )
 
             receipts = UpdateReceiptStore(self)
-            if current is not None and current.status in {"applied", "undone"}:
+            if current is not None and current.status in {
+                "applied",
+                "undone",
+                "declined",
+            }:
                 # Migrate the last singleton receipt before any newer Update
                 # can replace it, including receipts created by older builds.
                 receipts.save_terminal(current)
-            if session.status in {"applied", "undone"}:
+            if session.status in {"applied", "undone", "declined"}:
                 self._save_active_terminal_update(session, receipts=receipts)
             else:
                 self._save_update_session(self.staged_update_file, session)

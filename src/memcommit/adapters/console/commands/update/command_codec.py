@@ -125,39 +125,8 @@ def build_start_review(
     )
 
 
-def build_turn_review(
-    *,
-    source_name: str,
-    target_name: str,
-    source_descendants: bool,
-    target_descendants: bool,
-    source_memory_uid: str | None,
-    target_memory_uid: str | None,
-    comment: str,
-    expected_session: str,
-    inline_source_content: str | None = None,
-) -> CommandReview:
-    start = build_start_review(
-        source_name=source_name,
-        target_name=target_name,
-        source_descendants=source_descendants,
-        target_descendants=target_descendants,
-        source_memory_uid=source_memory_uid,
-        target_memory_uid=target_memory_uid,
-        inline_source_content=inline_source_content,
-    )
-    return CommandReview(
-        (*start.argv, "--comment", comment, "--expect-session", expected_session),
-        (
-            "Submit one semantic Update revision against the exact displayed session.",
-            "Replace the staged plan; do not apply target changes.",
-        ),
-    )
-
-
 __all__ = [
     "UPDATE_COMMAND_FORM",
     "build_start_review",
-    "build_turn_review",
     "parse_endpoint_argv",
 ]

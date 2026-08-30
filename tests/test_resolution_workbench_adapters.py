@@ -29,7 +29,7 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell imp
     session_todo_view,
 )
 from memcommit.application.operations.meld.model import MeldAssessment, MeldSession
-from memcommit.application.operations.meld.resolution_projection import (
+from memcommit.application.operations.meld.proposal_projection import (
     MeldResolutionWorkbenchAdapter,
 )
 from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
@@ -655,8 +655,9 @@ def test_update_adapter_labels_exact_operations_as_noninteractive_changes() -> N
     staged_view = UpdateResolutionWorkbenchAdapter(
         replace(session, status="staged")
     ).view()
-    assert staged_view.capabilities == frozenset({"SUBMIT_ITEM", "SUBMIT_ALL"})
-    assert all(item.commentable for item in staged_view.items)
+    assert staged_view.capabilities == frozenset({"ACCEPT", "DECLINE"})
+    assert staged_view.accept_enabled is True
+    assert all(not item.commentable for item in staged_view.items)
     assert all(item.effective_obligation == "NONE" for item in staged_view.items)
 
     apply_view = replace(
