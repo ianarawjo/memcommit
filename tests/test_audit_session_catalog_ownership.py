@@ -45,16 +45,26 @@ def test_audit_catalog_is_implemented_by_the_command_package() -> None:
     assert "interfaces.tui.operations.audit" not in source_path.read_text(encoding="utf-8")
 
 
-def test_review_consumers_import_the_command_owner() -> None:
-    for filename in ("review/command.py", "review/sessions.py"):
-        source = (REPOSITORY_ROOT / "src/memcommit/adapters/console/commands" / filename).read_text(
-            encoding="utf-8"
-        )
-        assert (
-            "from memcommit.adapters.console.commands.audit.sessions import "
-            "audit_session_entries"
-        ) in source
-        assert "interfaces.tui.operations.audit" not in source
+def test_review_consumers_import_the_operation_owned_audit_adapters() -> None:
+    command_source = (
+        REPOSITORY_ROOT
+        / "src/memcommit/adapters/console/commands/review/command.py"
+    ).read_text(encoding="utf-8")
+    sessions_source = (
+        REPOSITORY_ROOT
+        / "src/memcommit/adapters/console/commands/review/sessions.py"
+    ).read_text(encoding="utf-8")
+
+    assert (
+        "from memcommit.adapters.console.commands.audit.review import ("
+        in command_source
+    )
+    assert (
+        "from memcommit.adapters.console.commands.audit.sessions import "
+        "audit_session_entries"
+    ) in sessions_source
+    assert "interfaces.tui.operations.audit" not in command_source
+    assert "interfaces.tui.operations.audit" not in sessions_source
 
 
 def test_retired_audit_interface_package_has_no_python_facade() -> None:

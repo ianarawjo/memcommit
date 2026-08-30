@@ -12,7 +12,7 @@ from typer.testing import CliRunner
 
 import memcommit.adapters.console.clipboard as clipboard
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.meld as meld_command
+from memcommit.adapters.console.commands.meld import command as meld_command
 import memcommit.adapters.console.commands.meld.setup as meld_setup_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.operations.compare.ledger.provider import (
@@ -1663,7 +1663,7 @@ def test_symmetric_meld_requires_durable_grant_basis_before_provider(
     active.set_current(source.name)
     result_name = "participant/unsavable-meld"
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("provider must not run without analysis retention"),
     )
 
@@ -1755,7 +1755,7 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
     # Compare command or a hidden current-Context switch.
     granted_comparison_analysis_path(active, source.uid, wiki.uid).unlink()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
         lambda: Provider(),
     )
 

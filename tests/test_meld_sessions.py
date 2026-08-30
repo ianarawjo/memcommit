@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.meld import _session_command
+from memcommit.adapters.console.commands.meld.command import _session_command
 from memcommit.adapters.console.commands.meld.sessions import (
     MeldSessionCatalogError,
     list_meld_session_catalog,
@@ -194,9 +194,12 @@ def test_meld_session_picker_reopens_without_provider_or_mutation(
             argv=option.reopen_argv,
         )
 
-    monkeypatch.setattr("memcommit.adapters.console.commands.meld.choose_session", choose)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.meld.command.choose_session",
+        choose,
+    )
+    monkeypatch.setattr(
+        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("A provider was opened during read-only resume.")
         ),
@@ -232,7 +235,10 @@ def test_meld_session_picker_revalidates_after_selection(
             argv=option.reopen_argv,
         )
 
-    monkeypatch.setattr("memcommit.adapters.console.commands.meld.choose_session", choose)
+    monkeypatch.setattr(
+        "memcommit.adapters.console.commands.meld.command.choose_session",
+        choose,
+    )
 
     result = runner.invoke(app, ["meld", "--sessions"])
 

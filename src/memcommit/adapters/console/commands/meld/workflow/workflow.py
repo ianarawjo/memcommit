@@ -2,49 +2,43 @@
 
 from __future__ import annotations
 
-import shlex
 import sys
-from dataclasses import dataclass
 
 from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
 )
 from memcommit.core.context import Context
+from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.core.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )
-from memcommit.core.context_targeting.model import InlineTextOperand
-from memcommit.core.context_targeting.operands import (
-    classify_context_or_inline_text_operand,
-)
 from memcommit.application.capabilities.authority.access import (
     ContextAccess,
+    GrantedReadStore,
+    revalidate_granted_context_binding,
     resolve_context_access,
 )
 from memcommit.adapters.console.terminal.components.command_wait import (
     run_command_wait,
 )
+from memcommit.application.operations.compare.ledger.granted_store import (
+    granted_artifact_contexts,
+    load_granted_comparison_artifact,
+    recursive_comparison_projection,
+)
 from memcommit.application.operations.meld.model import (
-    INLINE_MELD_CONTEXT_NAME,
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
+    MELD_OWNER_AWARE_SCHEMA_VERSION,
     MELD_SCHEMA_VERSION,
+    MeldFrame,
     MeldIssue,
     MeldSession,
+    inline_meld_context,
     meld_canonical_digest,
 )
 from memcommit.application.operations.meld.restart_application import MeldRestartRequest
-from memcommit.application.operations.meld.runtime.source_bindings import (
-    assert_meld_non_target_source_bindings as _assert_non_target_source_bindings,
-    assert_meld_source_bindings as _assert_source_bindings,
-    assert_unapplied_meld_target as _assert_unapplied_target,
-    load_bound_meld_contexts as _load_bound_contexts,
-    load_local_meld_source as _load_local_meld_source,
-    load_meld_source as _load_meld_source,
-    meld_bound_frame_digest as _bound_frame_digest,
-)
 from memcommit.application.operations.meld.start_application import MeldStartRequest
-from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.capabilities.authority.derived_policy import (
     analysis_retention,
     authorize_analysis_save,
@@ -62,9 +56,15 @@ from memcommit.providers.subscription import (
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
-from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store import (
+    MemoryStore,
+    context_record_digest,
+)
 
 from memcommit.adapters.console.commands.meld.errors import MeldCommandError
+from memcommit.adapters.console.commands.meld.interpretation import (
+    InterpretedMeldCommand,
+)
 from memcommit.adapters.console.commands.meld.presentation import (
     _meld_wait_view,
     _meld_wait_context_view,
@@ -120,6 +120,99 @@ def _issue_selector(
     raise MeldCommandError(f"Meld issue selector '{selector}' is ambiguous.")
 
 
+def _load_bound_contexts(
+    store: MemoryStore,
+    session: MeldSession,
+    *,
+    registry=None,
+) -> tuple[Context, Context, Context]:
+    if session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION:
+        left = inline_meld_context(session)
+        baseline = session.frames[1]
+        right = load_context_scope(
+            store,
+            baseline.context_name,
+            include_descendants=bool(baseline.include_descendants),
+        )
+        return left, right, right
+    if session.mode == "DIRECTIONAL" and (
+        session.granted_incoming is not None or session.granted_target is not None
+    ):
+        bindings = (session.granted_incoming, session.granted_target)
+        loaded = []
+        for frame, binding in zip(session.frames, bindings, strict=True):
+            if binding is None:
+                access = ContextAccess(
+                    store=store,
+                    context_name=frame.context_name,
+                    display_name=frame.context_name,
+                    attachment_name=None,
+                    permission="READ",
+                )
+            else:
+                access = revalidate_granted_context_binding(
+                    binding,
+                    registry=registry,
+                )
+            loaded.append(
+                _load_meld_source(
+                    access,
+                    include_descendants=bool(frame.include_descendants),
+                    project=(session.schema_version < MELD_OWNER_AWARE_SCHEMA_VERSION),
+                )
+            )
+        left, right = loaded
+        # Directional BASELINE is the target. Loading it through the frozen
+        # endpoint preserves its public identity while reading authority data.
+        return left, right, right
+    try:
+        loaded: list[Context] = []
+        for frame in session.frames:
+            if (
+                session.mode == "DIRECTIONAL"
+                and session.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION
+            ):
+                context = load_context_scope(
+                    store,
+                    frame.context_name,
+                    include_descendants=bool(frame.include_descendants),
+                )
+            else:
+                context = (
+                    recursive_comparison_projection(
+                        load_context_scope(
+                            store,
+                            frame.context_name,
+                            include_descendants=bool(frame.include_descendants),
+                        )
+                    )
+                    if frame.include_descendants
+                    else store.load_direct(frame.context_name)
+                )
+            loaded.append(context)
+        left, right = loaded
+    except FileNotFoundError:
+        if session.mode != "SYMMETRIC" or session.comparison_seed is None:
+            raise
+        artifact = load_granted_comparison_artifact(
+            store,
+            session.frames[0].context_uid,
+            session.frames[1].context_uid,
+        )
+        if artifact is None:
+            raise MeldCommandError(
+                "The granted Compare basis for this Meld is unavailable."
+            )
+        left, right = granted_artifact_contexts(store, artifact)
+    target = (
+        right
+        if session.mode == "DIRECTIONAL"
+        and session.schema_version >= MELD_OWNER_AWARE_SCHEMA_VERSION
+        else store.load_direct(session.target.context_name)
+    )
+    return left, right, target
+
+
 def _resolve_meld_source(
     store: MemoryStore,
     name: str,
@@ -134,22 +227,47 @@ def _resolve_meld_source(
     )
 
 
-def _is_inline_memory_operand(
-    store: MemoryStore,
-    value: str,
+def _load_meld_source(
+    access: ContextAccess,
     *,
-    current_name: str | None,
-) -> bool:
-    """Classify only unambiguously non-Context one-operand text as Memory."""
+    include_descendants: bool = False,
+    project: bool = True,
+) -> Context:
+    if include_descendants:
+        reader = GrantedReadStore(access) if access.is_granted else access.store
+        context = load_context_scope(
+            reader,
+            access.display_name if access.is_granted else access.context_name,
+            include_descendants=True,
+        )
+    else:
+        context = (
+            (
+                GrantedReadStore(access).load(access.display_name)
+                if project
+                else GrantedReadStore(access).load_direct(access.display_name)
+            )
+            if access.is_granted
+            else access.store.load_direct(access.context_name)
+        )
+    return recursive_comparison_projection(context) if project else context
 
-    return isinstance(
-        classify_context_or_inline_text_operand(
-            value,
-            current=current_name,
-            context_exists=store.context_exists,
-        ),
-        InlineTextOperand,
+
+def _load_local_meld_source(
+    store: MemoryStore,
+    name: str,
+    *,
+    include_descendants: bool,
+    project: bool = True,
+) -> Context:
+    if not include_descendants:
+        return store.load_direct(name)
+    context = load_context_scope(
+        store,
+        name,
+        include_descendants=True,
     )
+    return recursive_comparison_projection(context) if project else context
 
 
 def _meld_request_matches_saved_session(
@@ -203,6 +321,84 @@ def _meld_request_matches_saved_session(
             requested_uid = focus.selected_uid
         sources_match = sources_match and frame.selected_memory_uid == requested_uid
     return sources_match
+
+
+def _bound_frame_digest(frame, context: Context) -> str:
+    if frame.contexts is None:
+        return context_record_digest(context)
+    return MeldFrame.from_context(
+        context,
+        role=frame.role,
+        include_descendants=frame.include_descendants,
+        owner_aware=True,
+    ).context_digest
+
+
+def _assert_source_bindings(
+    session: MeldSession,
+    left: Context,
+    right: Context,
+) -> None:
+    for frame, context in zip(
+        session.frames,
+        (left, right),
+        strict=True,
+    ):
+        if (
+            context.uid != frame.context_uid
+            or context.name != frame.context_name
+            or _bound_frame_digest(frame, context) != frame.context_digest
+        ):
+            raise MeldCommandError(
+                f"Source Context '{frame.context_name}' changed after this "
+                "meld was analyzed."
+            )
+
+
+def _assert_non_target_source_bindings(
+    session: MeldSession,
+    left: Context,
+    right: Context,
+) -> None:
+    """Recheck read-only inputs while allowing an applied baseline to differ."""
+    for frame, context in zip(
+        session.frames,
+        (left, right),
+        strict=True,
+    ):
+        if (
+            frame.context_uid == session.target.context_uid
+            and frame.context_name == session.target.context_name
+        ):
+            continue
+        if (
+            context.uid != frame.context_uid
+            or context.name != frame.context_name
+            or _bound_frame_digest(frame, context) != frame.context_digest
+        ):
+            raise MeldCommandError(
+                f"Source Context '{frame.context_name}' changed after this "
+                "meld was analyzed."
+            )
+
+
+def _assert_unapplied_target(
+    session: MeldSession,
+    target: Context,
+) -> None:
+    target_digest = (
+        _bound_frame_digest(session.frames[1], target)
+        if session.mode == "DIRECTIONAL"
+        else context_record_digest(target)
+    )
+    if (
+        target.uid != session.target.context_uid
+        or target.name != session.target.context_name
+        or target_digest != session.target.context_digest
+    ):
+        raise MeldCommandError(
+            "The meld target changed after analysis; the proposal is stale."
+        )
 
 
 def _assess_and_save(
@@ -612,284 +808,32 @@ def _resume_picked_meld(
     )
 
 
-@dataclass(frozen=True)
-class MeldCommandRequest:
-    """Validated CLI values needed by the Meld execution workflow."""
-
-    left: str | None
-    right: str | None
-    result: str | None
-    into: str | None
-    to: str | None
-    from_: str | None
-    issue: str | None
-    choice: int | None
-    comment: str | None
-    expect_session: str | None
-    preserve_all: bool
-    defer_all: bool
-    accept: bool
-    restart: bool
-    revision: str | None
-    revises_turn: tuple[str, ...]
-    expand: str | None
-    left_descendants: bool
-    right_descendants: bool
-    memory: str | None
-    incoming_memory: str | None
-    baseline_memory: str | None
-    action_count: int
-    to_is_symmetric: bool
-    directional_to: str | None
-
-
 def execute_meld_command(
     *,
     store: MemoryStore,
-    request: MeldCommandRequest,
+    request: InterpretedMeldCommand,
 ) -> None:
-    """Execute one validated non-launcher Meld route."""
-    left = request.left
-    right = request.right
-    result = request.result
-    into = request.into
-    to = request.to
-    from_ = request.from_
+    """Dispatch one interpreted Meld command against current saved state."""
+    requested_mode = request.mode
+    left_name = request.left_name
+    right_name = request.right_name
+    target_name = request.target_name
+    current_name = request.current_name
+    start_command = request.start_command
+    left_descendants = request.left_descendants
+    right_descendants = request.right_descendants
+    incoming_text = request.incoming_text
+    incoming_memory = request.incoming_memory
+    baseline_memory = request.baseline_memory
+    action = request.action
     issue = request.issue
     choice = request.choice
     comment = request.comment
     expect_session = request.expect_session
-    preserve_all = request.preserve_all
-    defer_all = request.defer_all
-    accept = request.accept
-    restart = request.restart
     revision = request.revision
     revises_turn = request.revises_turn
     expand = request.expand
-    left_descendants = request.left_descendants
-    right_descendants = request.right_descendants
-    memory = request.memory
-    incoming_memory = request.incoming_memory
-    baseline_memory = request.baseline_memory
-    action_count = request.action_count
-    to_is_symmetric = request.to_is_symmetric
-    directional_to = request.directional_to
-
-    current_name = store.current_context_name()
     create_target = False
-    explicit_result = (
-        result if result is not None else (to if to_is_symmetric else None)
-    )
-    directional_baseline = into if into is not None else directional_to
-    incoming_text = memory
-    if incoming_text is not None:
-        requested_mode = "DIRECTIONAL"
-        if left_descendants:
-            raise MeldCommandError(
-                "Inline --memory cannot be combined with INCOMING descendants."
-            )
-        left_name = INLINE_MELD_CONTEXT_NAME
-        if directional_baseline is not None:
-            right_name = resolve_context_locator(
-                directional_baseline,
-                current=current_name,
-            )
-        else:
-            if not current_name:
-                raise MeldCommandError(
-                    "Inline --memory uses the current Context as BASELINE, "
-                    "but no current Context is available. Supply --into or "
-                    "--to BASELINE."
-                )
-            right_name = current_name
-        target_name = right_name
-        start_command = shlex.join(
-            ["mem", "meld", "--memory", incoming_text, "--into", right_name]
-        )
-    elif from_ is not None:
-        if directional_baseline is None and not current_name:
-            raise MeldCommandError(
-                "No current BASELINE Context. Switch to the intended "
-                "baseline before using --from, or supply --to BASELINE."
-            )
-        requested_mode = "DIRECTIONAL"
-        # Both roles are fixed from one current-name snapshot.  The
-        # convenience spelling must resume the same target-scoped session
-        # as the portable INCOMING --into BASELINE form.
-        parsed_from = classify_context_or_inline_text_operand(
-            from_,
-            current=current_name,
-            context_exists=store.context_exists,
-        )
-        if isinstance(parsed_from, InlineTextOperand):
-            incoming_text = parsed_from.text
-            left_name = INLINE_MELD_CONTEXT_NAME
-        else:
-            left_name = resolve_context_locator(
-                parsed_from.locator,
-                current=current_name,
-            )
-        right_name = (
-            resolve_context_locator(
-                directional_baseline,
-                current=current_name,
-            )
-            if directional_baseline is not None
-            else current_name
-        )
-        assert right_name is not None
-        target_name = right_name
-        start_command = shlex.join(
-            ["mem", "meld", "--memory", incoming_text, "--into", right_name]
-            if incoming_text is not None
-            else ["mem", "meld", left_name, right_name]
-        )
-    elif directional_baseline is not None:
-        if right is not None or result is not None:
-            raise MeldCommandError(
-                "Directional --into/--to accepts at most one positional INCOMING "
-                "Context. Use 'mem meld INCOMING BASELINE' instead."
-            )
-        requested_mode = "DIRECTIONAL"
-        if left is None:
-            if not current_name:
-                raise MeldCommandError(
-                    "No current INCOMING Context. Supply one explicitly or "
-                    "switch to it before using --into/--to."
-                )
-            left_name = current_name
-        else:
-            parsed_left = classify_context_or_inline_text_operand(
-                left,
-                current=current_name,
-                context_exists=store.context_exists,
-            )
-            if isinstance(parsed_left, InlineTextOperand):
-                incoming_text = parsed_left.text
-                left_name = INLINE_MELD_CONTEXT_NAME
-            else:
-                left_name = resolve_context_locator(
-                    parsed_left.locator,
-                    current=current_name,
-                )
-        right_name = resolve_context_locator(
-            directional_baseline,
-            current=current_name,
-        )
-        target_name = right_name
-        start_command = shlex.join(
-            ["mem", "meld", "--memory", incoming_text, "--into", right_name]
-            if incoming_text is not None
-            else ["mem", "meld", left_name, right_name]
-        )
-    elif explicit_result is not None:
-        if left is None or right is None:
-            raise MeldCommandError(
-                "Symmetric Meld requires PEER A and PEER B before RESULT C. "
-                "Use 'mem meld PEER_A PEER_B --to RESULT_C' or "
-                "'mem meld PEER_A PEER_B RESULT_C'."
-            )
-        requested_mode = "SYMMETRIC"
-        left_name = resolve_context_locator(left, current=current_name)
-        right_name = resolve_context_locator(right, current=current_name)
-        # RESULT C can be created, so its exact name deliberately does not
-        # pass through the existing-Context locator resolver. Existing
-        # empty or exactly session-bound results retain that same name.
-        target_name = explicit_result
-        start_command = shlex.join(
-            ["mem", "meld", left_name, right_name, "--to", target_name]
-        )
-    elif left is not None and right is not None:
-        requested_mode = "DIRECTIONAL"
-        left_name = resolve_context_locator(left, current=current_name)
-        right_name = resolve_context_locator(right, current=current_name)
-        target_name = right_name
-        start_command = shlex.join(["mem", "meld", left_name, right_name])
-    elif left is not None:
-        if not current_name:
-            raise MeldCommandError(
-                "'mem meld INCOMING' uses the current Context as BASELINE, "
-                "but no current Context is available. Supply "
-                "'mem meld INCOMING BASELINE'."
-            )
-        requested_mode = "DIRECTIONAL"
-        if _is_inline_memory_operand(
-            store,
-            left,
-            current_name=current_name,
-        ):
-            incoming_text = left
-            if left_descendants:
-                raise MeldCommandError(
-                    "Inline Memory input cannot be combined with INCOMING descendants."
-                )
-            left_name = INLINE_MELD_CONTEXT_NAME
-        else:
-            left_name = resolve_context_locator(left, current=current_name)
-        right_name = current_name
-        target_name = right_name
-        start_command = shlex.join(
-            ["mem", "meld", "--memory", incoming_text]
-            if incoming_text is not None
-            else ["mem", "meld", left_name]
-        )
-    else:
-        raise MeldCommandError(
-            "Starting Meld requires INCOMING, INCOMING BASELINE, or "
-            "PEER_A PEER_B RESULT_C Contexts."
-        )
-
-    if requested_mode == "DIRECTIONAL":
-        if incoming_memory is not None and left_descendants:
-            raise MeldCommandError(
-                "--incoming-memory cannot be combined with --left-descendants."
-            )
-        if baseline_memory is not None and right_descendants:
-            raise MeldCommandError(
-                "--baseline-memory cannot be combined with --right-descendants."
-            )
-        start_parts = (
-            ["mem", "meld", "--memory", incoming_text, "--into", right_name]
-            if incoming_text is not None
-            else ["mem", "meld", left_name, right_name]
-        )
-        if left_descendants:
-            start_parts.append("--left-descendants")
-        if right_descendants:
-            start_parts.append("--right-descendants")
-        if incoming_memory is not None:
-            start_parts.extend(("--incoming-memory", incoming_memory))
-        if baseline_memory is not None:
-            start_parts.extend(("--baseline-memory", baseline_memory))
-    else:
-        if incoming_memory is not None or baseline_memory is not None:
-            raise MeldCommandError(
-                "Memory scope flags are supported only by directional Meld."
-            )
-        start_parts = ["mem", "meld", left_name]
-        if left_descendants:
-            start_parts.append("--left-descendants")
-        start_parts.append(right_name)
-        if right_descendants:
-            start_parts.append("--right-descendants")
-        start_parts.extend(("--to", target_name))
-    start_command = shlex.join(start_parts)
-
-    if left_name == right_name:
-        if requested_mode == "DIRECTIONAL":
-            raise MeldCommandError(
-                "Directional Meld requires different INCOMING and BASELINE "
-                f"Contexts; both resolved to '{left_name}'."
-            )
-        raise MeldCommandError("The two PEER source Contexts must be distinct.")
-    if requested_mode == "SYMMETRIC" and target_name in {
-        left_name,
-        right_name,
-    }:
-        raise MeldCommandError(
-            "Symmetric Meld requires PEER A, PEER B, and RESULT C to be "
-            f"distinct; RESULT '{target_name}' is also a PEER source."
-        )
     left_access: ContextAccess | None = None
     right_access: ContextAccess | None = None
     if requested_mode == "DIRECTIONAL":
@@ -987,20 +931,11 @@ def execute_meld_command(
         session is not None
         and session.state in {"APPLIED", "KEPT_REVIEW_ONLY"}
         and not request_matches_saved
-        and action_count == 0
+        and action == "NONE"
         and expand is None
     )
     if session is None:
-        if any(
-            (
-                comment is not None,
-                choice,
-                preserve_all,
-                defer_all,
-                accept,
-                restart,
-            )
-        ):
+        if action != "NONE":
             raise MeldCommandError(
                 f"Start the meld with a plain '{start_command}' first."
             )
@@ -1079,7 +1014,7 @@ def execute_meld_command(
         )
         return
 
-    if restart or auto_restart:
+    if action == "RESTART" or auto_restart:
         prior_session_uid = session.uid
         prior_digest = meld_canonical_digest(session.to_dict())
         restart_request = MeldRestartRequest(
@@ -1181,11 +1116,11 @@ def execute_meld_command(
     )
     left_ctx, right_ctx, target = _load_bound_contexts(store, session)
     _assert_non_target_source_bindings(session, left_ctx, right_ctx)
-    if session.state != "APPLIED" and not accept:
+    if session.state != "APPLIED" and action != "ACCEPT":
         _assert_source_bindings(session, left_ctx, right_ctx)
         _assert_unapplied_target(session, target)
 
-    if accept:
+    if action == "ACCEPT":
         recovered, _checkpoint_uid, _result_count = _accept(
             store=store,
             session=session,
@@ -1194,7 +1129,7 @@ def execute_meld_command(
         present_accepted_meld(session, recovered=recovered)
         return
 
-    if defer_all:
+    if action == "DEFER_ALL":
         session = execute_meld_session_defer(
             session_snapshot,
             store=store,
@@ -1202,7 +1137,7 @@ def execute_meld_command(
         present_deferred_meld(session)
         return
 
-    if preserve_all:
+    if action == "PRESERVE_ALL":
         pending = prepare_meld_preservation_turn(
             session_snapshot,
             guidance=_preserve_all_guidance(session),
@@ -1223,7 +1158,7 @@ def execute_meld_command(
         present_incomplete_meld(session)
         return
 
-    if comment is not None or choice is not None:
+    if action == "RESPONSE":
         selected_issue = _issue_selector(session, issue) if issue is not None else None
         option_uid = None
         if choice is not None:

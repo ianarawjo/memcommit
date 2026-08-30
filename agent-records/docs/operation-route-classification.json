@@ -145,7 +145,8 @@
           "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
           "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
           "agent-records/docs/session-endpoint-setup-design-rationale.md",
-          "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md"
+          "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md",
+          "agent-records/docs/meld-command-interpretation-design-rationale.md"
         ],
         "reason": "CLI, TUI, Python, and agent routes share typed Start, Restart, saved-turn, cache/provider, CAS, and Apply lifecycles with exact/equivalent/projected reuse and one reviewed-session version contract."
       },

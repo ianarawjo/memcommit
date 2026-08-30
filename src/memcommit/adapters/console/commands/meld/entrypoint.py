@@ -9,10 +9,7 @@ from memcommit.application.operations.compare.ledger.provider import (
     ComparisonProviderError,
 )
 from memcommit.core.context_targeting.presets import (
-    ContextScopePreset,
     legacy_root_only_option_alias,
-    resolve_descendant_scopes,
-    resolve_scope_preset,
 )
 from memcommit.adapters.console.commands.meld.setup import choose_meld_setup
 from memcommit.application.operations.meld.model import (
@@ -47,12 +44,19 @@ from memcommit.persistence.store import (
 from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
 
 from memcommit.adapters.console.commands.meld.errors import MeldCommandError
+from memcommit.adapters.console.commands.meld.interpretation import (
+    InterpretedMeldCommand,
+    MeldCommandInterpretationError,
+    MeldCommandRequest,
+    MeldSessionsCommand,
+    MeldSetupCommand,
+    interpret_meld_command,
+)
 from memcommit.adapters.console.commands.meld.presentation import (
     _meld_picker_entry,
 )
 from memcommit.adapters.console.commands.meld.workflow import (
     _resume_picked_meld,
-    MeldCommandRequest,
     execute_meld_command,
 )
 
@@ -349,192 +353,10 @@ def cmd(
     ] = None,
 ) -> None:
     """Meld INCOMING Context/Memory into BASELINE; add RESULT for peers."""
-    scope_flags_supplied = (
-        direct
-        or recursive
-        or left_descendants is not None
-        or right_descendants is not None
-    )
-    try:
-        preset = resolve_scope_preset(
-            direct=direct,
-            recursive=recursive,
-            default=ContextScopePreset.DIRECT,
-        )
-        left_descendants, right_descendants = resolve_descendant_scopes(
-            preset=preset,
-            explicit=(left_descendants, right_descendants),
-        )
-    except (TypeError, ValueError) as error:
-        typer.secho(
-            f"Meld error: {display_escape_text(str(error))}",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    action_count = sum(
-        (
-            comment is not None or choice is not None,
-            preserve_all,
-            defer_all,
-            accept,
-            restart,
-        )
-    )
-    if action_count > 1:
-        typer.secho(
-            "Meld error: use one comment, preserve, defer, accept, or restart action.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if expand is not None and action_count:
-        typer.secho(
-            "Meld error: --expand cannot be combined with a semantic or "
-            "terminal action.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if choice is not None and issue is None:
-        typer.secho(
-            "Meld error: --choice requires --issue.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if issue is not None and comment is None and choice is None:
-        typer.secho(
-            "Meld error: --issue requires --comment or --choice.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if (revision is not None or revises_turn) and comment is None and choice is None:
-        typer.secho(
-            "Meld error: --revision and --revises-turn require a comment or choice.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if expect_session is not None and not (
-        comment is not None or choice is not None or preserve_all or defer_all
-    ):
-        typer.secho(
-            "Meld error: --expect-session is valid only for a semantic or defer turn.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    to_is_symmetric = to is not None and left is not None and right is not None
-    directional_to = to if to is not None and not to_is_symmetric else None
-    if from_ is not None and into is not None:
-        typer.secho(
-            "Meld error: --from and --into are alternative directional "
-            "spellings and cannot be combined.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if result is not None and to is not None:
-        typer.secho(
-            "Meld error: supply symmetric RESULT C either positionally or with "
-            "--to, not both.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if directional_to is not None and into is not None:
-        typer.secho(
-            "Meld error: directional BASELINE cannot be supplied with both "
-            "--into and --to.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if (to_is_symmetric or result is not None) and (
-        into is not None or from_ is not None
-    ):
-        typer.secho(
-            "Meld error: symmetric RESULT C/--to cannot be combined with "
-            "directional --into or --from.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if from_ is not None and any(value is not None for value in (left, right, result)):
-        typer.secho(
-            "Meld error: --from supplies INCOMING and cannot be combined "
-            "with positional Contexts.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-    if memory is not None and any(
-        value is not None
-        for value in (
-            left,
-            right,
-            result,
-            (to if to_is_symmetric else None),
-            from_,
-            incoming_memory,
-        )
-    ):
-        typer.secho(
-            "Meld error: --memory supplies INCOMING content and cannot be "
-            "combined with positional sources, symmetric RESULT, --from, or "
-            "--incoming-memory.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-
-    browse_by_default = (
-        left is None
-        and right is None
-        and result is None
-        and into is None
-        and to is None
-        and from_ is None
-        and issue is None
-        and choice is None
-        and comment is None
-        and not preserve_all
-        and not defer_all
-        and not accept
-        and not restart
-        and not left_descendants
-        and not right_descendants
-        and incoming_memory is None
-        and baseline_memory is None
-        and memory is None
-        and revision is None
-        and not revises_turn
-        and expect_session is None
-        and expand is None
-        and not scope_flags_supplied
-    )
-    if sessions and not browse_by_default:
-        typer.secho(
-            "Meld error: --sessions cannot be combined with source operands "
-            "or Meld actions.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
-
     store = MemoryStore(create=False)
     try:
-        if sessions:
-            _browse_saved_meld_sessions(store)
-            return
-        if browse_by_default:
-            _start_new_meld_from_setup(store)
-            return
-        execute_meld_command(
-            store=store,
-            request=MeldCommandRequest(
+        interpreted = interpret_meld_command(
+            MeldCommandRequest(
                 left=left,
                 right=right,
                 result=result,
@@ -552,16 +374,36 @@ def cmd(
                 revision=revision,
                 revises_turn=tuple(revises_turn or ()),
                 expand=expand,
+                sessions=sessions,
+                direct=direct,
+                recursive=recursive,
                 left_descendants=left_descendants,
                 right_descendants=right_descendants,
                 memory=memory,
                 incoming_memory=incoming_memory,
                 baseline_memory=baseline_memory,
-                action_count=action_count,
-                to_is_symmetric=to_is_symmetric,
-                directional_to=directional_to,
             ),
+            store=store,
         )
+        if isinstance(interpreted, MeldSessionsCommand):
+            _browse_saved_meld_sessions(store)
+            return
+        if isinstance(interpreted, MeldSetupCommand):
+            _start_new_meld_from_setup(store)
+            return
+        if not isinstance(interpreted, InterpretedMeldCommand):
+            raise MeldCommandError("Meld interpretation returned an invalid route.")
+        execute_meld_command(
+            store=store,
+            request=interpreted,
+        )
+    except MeldCommandInterpretationError as error:
+        typer.secho(
+            f"Meld error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     except (
         FileNotFoundError,
         OSError,

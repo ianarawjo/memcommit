@@ -16,7 +16,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 import memcommit.configuration.config as config_module
-import memcommit.adapters.console.commands.meld as meld_command
+from memcommit.adapters.console.commands.meld import command as meld_command
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.adapters.console.commands.meld.setup import MeldSetupReceipt
 from memcommit.application.operations.atomize.grounding import (
@@ -45,7 +45,7 @@ from memcommit.application.operations.compare.ledger.store import (
 from memcommit.core.context import Context, Memory, MemoryRef
 from memcommit.configuration.config import Config
 from memcommit.adapters.console.commands.compare.command import render_comparison
-from memcommit.adapters.console.commands.meld import render_meld_session
+from memcommit.adapters.console.commands.meld.command import render_meld_session
 from memcommit.adapters.console.commands.meld.workbench import (
     MeldShellAction,
     _comparison_issue_resolution_badges,
@@ -826,7 +826,7 @@ def _task2_contexts(
 
 def _patch_provider(monkeypatch, provider):
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -2442,7 +2442,7 @@ def test_symmetric_meld_creates_missing_compare_without_switching_current(
 
     provider = Task2CompareProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     current_before = store.current_context_name()
@@ -2470,7 +2470,7 @@ def test_symmetric_meld_refreshes_stale_compare(
     assert prior is not None
     provider = Task2CompareProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     changed = store.load_direct(left.name)
@@ -2505,7 +2505,7 @@ def test_symmetric_meld_creates_exact_order_when_only_reverse_exists(
     reverse = _save_task2_comparison(store, right, left)
     provider = Task2CompareProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -3198,7 +3198,7 @@ def test_symmetric_meld_failed_basis_leaves_new_result_absent(
             raise ComparisonProviderError("comparison basis failed")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
         lambda: FailingCompareProvider(),
     )
     missing_name = "task-2/participant/missing-compare-result"

@@ -97,7 +97,7 @@ def test_meld_interfaces_enter_the_operation_owned_resolution_boundary():
         / "console"
         / "commands"
         / "meld"
-        / "command"
+        / "workflow"
         / "workflow.py"
     )
     public_imports = _imports(

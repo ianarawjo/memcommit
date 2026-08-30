@@ -5,7 +5,7 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
-import memcommit.adapters.console.commands.meld as meld_command
+from memcommit.adapters.console.commands.meld import command as meld_command
 import memcommit.adapters.console.commands.compare.command as compare_command
 from memcommit.adapters.console.commands.compare.presentation import render_comparison
 import memcommit.adapters.console.commands.meld.workbench.workbench as meld_workbench

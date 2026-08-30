@@ -299,7 +299,7 @@ def test_applied_meld_selection_still_opens_read_only_review(
     isolated_store,
     monkeypatch,
 ):
-    import memcommit.adapters.console.commands.meld as meld_command
+    from memcommit.adapters.console.commands.meld import command as meld_command
     import memcommit.adapters.console.commands.meld.review as meld_review
 
     session_uid = str(uuid.uuid4())

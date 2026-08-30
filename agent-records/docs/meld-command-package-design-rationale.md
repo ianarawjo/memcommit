@@ -11,34 +11,41 @@ made presentation changes appear coupled to authority and persistence logic.
 
 ## Chosen boundary
 
-The historical module is now a package with three responsibility owners:
+The Meld adapter keeps its implementation owners directly under the operation
+package rather than under a generic `command/` container:
 
-- `entrypoint.py` owns the Typer signature, option-conflict validation, launcher
-  routes, and construction of a normalized `MeldCommandRequest`.
-- `workflow.py` owns source and target binding checks, authorization, saved
-  session state, provider and application-service delegation, TUI handoff, and
-  Apply/defer execution.
+- `entrypoint.py` owns the Typer signature, raw value collection, launcher
+  dispatch, and translation of interpretation failures to CLI usage errors.
+- `interpretation.py` owns option conflicts, operand and scope normalization,
+  one current-Context snapshot, and construction of a canonical
+  `InterpretedMeldCommand`.
+- `workflow/workflow.py` owns source and target binding checks, authorization,
+  saved session state, provider and application-service delegation, TUI
+  handoff, and Apply/defer execution.
 - `presentation.py` owns session and receipt rendering, wait-screen projection,
   picker projection, and all terminal outcome messages.
 
 `errors.py` contains only the shared user-facing exception so that presentation
 does not need to depend on workflow. The dependency direction is entrypoint to
-workflow and presentation, and workflow to presentation and the application
-layer. Presentation does not import entrypoint or workflow.
+interpretation and workflow, workflow to presentation and the application
+layer, and the thin `command.py` compatibility facade to those owners.
+Presentation does not import entrypoint or workflow.
 
 ## Compatibility invariants
 
 The import path `memcommit.adapters.console.commands.meld.command` remains a
-facade that re-exports every prior top-level command function. Assignments to
-historical integration and test seams are forwarded to the submodule that owns
-the name, preserving callers that replace provider, picker, TUI, or helper
-functions on the old module object. Runtime modules do not import back through
-the facade.
+thin module facade that re-exports every prior top-level command function.
+Assignments to historical integration and test seams are forwarded to the
+submodule that owns the name, preserving callers that replace provider,
+picker, TUI, or helper functions on the old module object. The outer Meld
+package remains a lazy `cmd`-only composition surface, and runtime modules do
+not import back through either facade.
 
 The CLI operands, validation ordering, session formats, provider boundaries,
 authorization checks, output text, and TUI behavior are intentionally
-unchanged. `MeldCommandRequest` is process-local normalization; it is not a new
-persisted schema or an application-layer command model.
+unchanged. `MeldCommandRequest` and `InterpretedMeldCommand` are process-local
+console values; neither is a persisted schema or an application-layer command
+model.
 
 ## Alternatives and limits
 

@@ -200,7 +200,8 @@
       "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
       "agent-records/docs/session-endpoint-setup-design-rationale.md",
-      "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md"
+      "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md",
+      "agent-records/docs/meld-command-interpretation-design-rationale.md"
     ],
     "merge": [
       "agent-records/docs/merge-application-boundary-matrix.md",

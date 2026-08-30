@@ -31,7 +31,7 @@ from memcommit.application.operations.meld.restart_application import MeldRestar
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[1] / "src" / "memcommit"
 MELD_COMMAND_ROOT = (
-    PACKAGE_ROOT / "adapters" / "console" / "commands" / "meld" / "command"
+    PACKAGE_ROOT / "adapters" / "console" / "commands" / "meld"
 )
 
 

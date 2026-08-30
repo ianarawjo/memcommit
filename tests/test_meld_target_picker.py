@@ -9,7 +9,9 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.adapters.console.commands.meld import start_reviewed_symmetric_meld
+from memcommit.adapters.console.commands.meld.command import (
+    start_reviewed_symmetric_meld,
+)
 from memcommit.adapters.console.commands.meld.target_picker import (
     choose_meld_target,
     eligible_meld_targets,
