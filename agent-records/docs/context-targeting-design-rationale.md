@@ -40,6 +40,10 @@ there is intentionally no profile-wide “last Scope” preference.
   read facade that unifies ordinary local and effectively READ-granted public
   Contexts. It remains outside core because it reads Profile and persistence
   state, resolves exact authority, and projects process-local readable edges.
+- `application.capabilities.memory_report_targeting` resolves exact current,
+  retained, referenced, local, or READ-granted Memory coordinates for shared
+  read-only reports. It remains outside core because it composes authority,
+  history reconstruction, reference provenance, and physical Store access.
 - `application.capabilities.authority.granted_context_navigation` freezes
   public Grant rows from the active Profile and Store while keeping the
   READ-authorized subset separate from opaque QUERY and other non-READ roots.

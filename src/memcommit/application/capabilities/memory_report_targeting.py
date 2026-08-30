@@ -1,4 +1,4 @@
-"""Owner-aware explicit items shared by read-only Memory reports.
+"""Resolve exact owner-aware targets for read-only Memory reports.
 
 The interactive selectors already return an exact owner coordinate. Explicit
 CLI operands need the same property: a bare UID searches every ordinary local

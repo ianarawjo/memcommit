@@ -46,7 +46,7 @@ from memcommit.application.capabilities.retained_history.granted_provenance impo
 )
 from memcommit.application.capabilities.retained_history.context_history import ContextTraceReport, build_context_trace
 from memcommit.core.context_targeting.model import ContextTarget
-from memcommit.core.context_targeting.report_items import (
+from memcommit.application.capabilities.memory_report_targeting import (
     ReadableMemoryTargetNotFoundError,
     freeze_memory_report_readable_catalog,
     parse_memory_report_locator,

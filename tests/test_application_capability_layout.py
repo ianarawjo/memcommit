@@ -19,6 +19,7 @@ CAPABILITY_ENTRIES = {
     "evaluation",
     "flow.py",
     "memory_issue_analysis",
+    "memory_report_targeting.py",
     "ops.py",
     "resolution",
     "retained_history",

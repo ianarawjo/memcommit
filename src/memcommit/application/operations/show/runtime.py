@@ -20,7 +20,7 @@ from memcommit.core.context_targeting.loading import (
     DirectItemNotFoundError,
     resolve_local_direct_item_locator,
 )
-from memcommit.core.context_targeting.report_items import (
+from memcommit.application.capabilities.memory_report_targeting import (
     ReadableMemoryTargetAmbiguityError,
     ReadableMemoryTargetNotFoundError,
     freeze_memory_report_readable_catalog,
