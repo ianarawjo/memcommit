@@ -8,9 +8,10 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.coordination.memory_report_recents import (
     MemoryReportRecentSelection,
-    MemoryReportSelectAction,
 )
-from memcommit.adapters.console.terminal.components.memory_report_picker import MemoryReportTargetSelection
+from memcommit.adapters.console.terminal.components.memory_report_picker import (
+    MemoryReportTargetSelection,
+)
 from memcommit.core.context import Memory, MemoryRef, QueryContextRef
 from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     collect_memory_history_candidates,
@@ -98,7 +99,7 @@ def test_bare_trace_runs_existing_report_for_picker_uid(
         select,
     )
 
-    result = invoke("trace", "--plain")
+    result = invoke("trace")
 
     assert result.exit_code == 0, result.output
     assert observed == {
@@ -173,7 +174,7 @@ def test_trace_descendant_range_opens_the_selected_owner_history(
         select,
     )
 
-    result = invoke("trace", "--plain")
+    result = invoke("trace")
 
     assert result.exit_code == 0, result.output
     assert observed["rows"] == [("notes/child", target.uid, 2)]
@@ -252,47 +253,18 @@ def test_interactive_rationale_returns_terminal_receipt_without_viewer(
     assert "RATIONALE REPORT" not in result.output
 
 
-def test_interactive_trace_opens_vertical_viewer_only_when_requested(
-    isolated_store,
-    monkeypatch,
-):
+def test_trace_selector_prints_one_lineage_and_rejects_retired_tui(isolated_store):
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "portable note").exit_code == 0
     target = _direct_memories(MemoryStore())[0]
-    viewed: list[tuple[str, str]] = []
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.trace.command.interactive_report_terminal",
-        lambda: True,
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.trace.command.open_trace_viewer",
-        lambda report, *, verbose, limit: viewed.append(
-            (report.context_name, report.selected_uid)
-        ),
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.trace.command.choose_memory_report_target",
-        lambda items,
-        *,
-        context_name,
-        operation,
-        initial_include_descendants,
-        **kwargs: (_target_selection(context_name, context_name, target.uid)),
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.trace.command.choose_memory_report_recent",
-        lambda store, *, operation: MemoryReportSelectAction(),
-    )
-    bare = invoke("trace")
     explicit = invoke("trace", target.uid)
     explicit_tui = invoke("trace", target.uid, "--tui")
 
-    assert bare.exit_code == 0, bare.output
     assert explicit.exit_code == 0, explicit.output
-    assert explicit_tui.exit_code == 0, explicit_tui.output
-    assert "TRACE · notes" in bare.output
+    assert explicit_tui.exit_code == 2
     assert "TRACE · notes" in explicit.output
-    assert viewed == [("notes", target.uid)]
+    assert "portable note" in explicit.output
+    assert "No such option: --tui" in explicit_tui.output
 
 
 def test_bare_trace_recent_reopens_without_context_memory_selector(
@@ -302,7 +274,6 @@ def test_bare_trace_recent_reopens_without_context_memory_selector(
     assert invoke("init", "notes").exit_code == 0
     assert invoke("add", "portable note").exit_code == 0
     target = _direct_memories(MemoryStore())[0]
-    viewed: list[str] = []
     monkeypatch.setattr(
         "memcommit.adapters.console.commands.trace.command.interactive_report_terminal",
         lambda: True,
@@ -321,16 +292,10 @@ def test_bare_trace_recent_reopens_without_context_memory_selector(
             AssertionError("a recent receipt must bypass fresh selection")
         ),
     )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.trace.command.open_trace_viewer",
-        lambda report, *, verbose, limit: viewed.append(report.current[0].content),
-    )
-
-    result = invoke("trace", "--tui")
+    result = invoke("trace")
 
     assert result.exit_code == 0, result.output
-    assert len(viewed) == 1
-    assert viewed == ["portable note"]
+    assert "portable note" in result.output
 
 
 def test_bare_rationale_recent_reopens_its_recorded_scope(

@@ -57,10 +57,10 @@ The execution and exact-replay forms are:
 ```text
 mem resolve [CONTEXT | MEMORY_UID_PREFIX | CONTEXT:MEMORY_UID_PREFIX ...]
   [--context CONTEXT] [--memory [CONTEXT:]UID_OR_PREFIX ...]
-  [--no-create] [--yes] [--allow-delete --guidance TEXT] [--plain | --tui]
+  [--no-create] [--yes] [--allow-delete --guidance TEXT]
 
 mem resolve [FULL_MEMORY_UID ...] --context CANONICAL_NAME [same effect flags]
-  --candidate FULL_CANDIDATE_UID --expected-revision REVISION --apply --plain
+  --candidate FULL_CANDIDATE_UID --expected-revision REVISION --apply
 ```
 
 Resolve uses the shared mixed Context/direct-Memory operand grammar before it
@@ -90,10 +90,10 @@ The CLI form is an execution command: after all semantic gates and freshness
 checks, one grounded plan applies without a model-choice or approval turn.
 The default target removes `NO`: an independently verified MAY or YES
 post-image may Apply. `--yes` freezes the stricter target and rejects MAY.
-`--plain` changes presentation, not mutation semantics; `--tui` requires the
-interactive read-only Viewer for a non-applicable outcome. The explicit
-`--candidate ... --apply` form remains an exact replay path for an externally
-reviewed plan, such as one obtained from `mem impact resolve`.
+Non-applicable outcomes print one stable read-only result in every terminal.
+The retired presentation flags are rejected. The explicit `--candidate ...
+--apply` form remains an exact replay path for an externally reviewed plan,
+such as one obtained from `mem impact resolve`.
 
 ### Apply-first and recovery policy
 
@@ -429,5 +429,5 @@ details, candidate reasoning, and exact effects remain in the immutable
 checkpoint; naming that checkpoint-backed Review route prevents a compact
 receipt from becoming a dead end without copying the report into terminal
 scrollback. This does not weaken Apply's authority, freshness, or atomicity
-checks. The explicit `--tui` inspection route and typed analysis remain
-detailed.
+checks. Detailed non-applying analysis remains available through
+`mem impact resolve`; an applied checkpoint remains available through Review.

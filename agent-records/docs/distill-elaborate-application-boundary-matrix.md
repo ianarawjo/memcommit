@@ -1,6 +1,17 @@
 # Distill and Elaborate application boundary matrix
 
-Last reviewed: 2026-08-29.
+Last reviewed: 2026-08-30.
+
+## 2026-08-30 console route update
+
+Standalone Distill and Elaborate keep one execution/result route in every
+terminal. Their former `--plain`/`--tui` presentation switches and generic
+console runners are removed. Direct standalone requests still publish and
+return an application receipt; physical Ground proposal routes render one
+stable proposal/result before optional explicit adoption. Non-applying detail
+belongs to `mem impact distill|elaborate`, and applied detail belongs to
+checkpoint-backed Review. The retained workbench/Viewer modules remain tested
+components rather than direct-command launchers.
 
 ## Implementation ownership
 

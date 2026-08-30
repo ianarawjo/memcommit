@@ -93,28 +93,19 @@ state still contains its established row projection and therefore imports the
 terminal tree renderer; separating that state/projection seam is a later
 internal cleanup, not part of this behavior-preserving ownership move.
 
-`memcommit.bootstrap` is the only module that knows both the plain Summarize
-presenter and the Summarize TUI presenter. The current Typer command asks that
-composition root for a runner; neither presenter imports or invokes the other.
+The later console-routing retirement removed `memcommit.bootstrap` and the
+generic mode runner. The Summarize Typer command now invokes its application
+runtime and result presenter directly; its former workbench remains an
+independently tested component and neither presenter invokes the other.
 
 ## Summarize console contract
 
-One invocation constructs one typed `SummarizeRequest`, then the router gives
-the selected sibling adapter control of when execution begins:
-
-- automatic mode executes the complete current-or-explicit Context request in
-  the line-oriented terminal flow, even when input and output are interactive;
-- `--plain` explicitly selects that same scripted renderer;
-- `--tui` requires an interactive terminal and fails before Store construction
-  or provider connection when that capability is absent, then exposes the
-  Recent/Context/range setup as an additional action; and
-- the TUI can cancel before execution; an individual Run invokes the
-  application once, while `BOTH` visibly invokes direct then recursive and
-  publishes only the complete pair; and
-- `--copy` remains a post-result presentation effect and creates no receipt or
-  structured mutation stage; Viewer `y`/`Y` copies the focused scope or complete
-  document through the same injected plain-text boundary and likewise creates
-  no structured stage.
+One invocation constructs one typed `SummarizeRequest`, executes the complete
+current-or-explicit Context request, and prints one result regardless of TTY
+state. `--copy` remains a post-result presentation effect and creates no
+receipt or structured mutation stage. The former workbench's cancellation,
+dual-range, and focused-copy contracts remain component-level evidence, not a
+current `mem summarize` launcher.
 
 The TUI adapter freezes one Profile-wide readable catalog before showing the
 shared Context selector. The reach control orders `BOTH`, exact, and
@@ -216,9 +207,9 @@ application behavior.
   execution, byte/checkpoint verification, and the noninteractive plain route
   under `agent-records/docs/screenshots/mem-summarize-context-first-workbench-20260813/`.
 - The later routing trace under
-  `agent-records/docs/screenshots/mem-summarize-immediate-routing-20260821/` records immediate
-  current and explicit Context summaries without alternate-screen entry, plus
-  the same workbench as an explicit `--tui` action and unchanged Store bytes.
+  `agent-records/docs/screenshots/mem-summarize-immediate-routing-20260821/`
+  records immediate current and explicit Context summaries; its workbench
+  capture is historical evidence for the retired direct-command route.
 - A built wheel contains the new interface hierarchy; an isolated
   `uvx --from <wheel>` environment runs the installed `mem summarize --help`
   and resolves the frame component from site-packages.

@@ -43,7 +43,6 @@ def test_production_consumers_use_operation_owners() -> None:
         "src/memcommit/application/operations/ground/distill.py",
         "src/memcommit/application/operations/ground/elaborate.py",
         "src/memcommit/adapters/console/commands/elaborate/proposal.py",
-        "src/memcommit/adapters/console/commands/elaborate/runner.py",
         "src/memcommit/adapters/console/commands/elaborate/viewer/projection.py",
         "src/memcommit/adapters/console/commands/elaborate/viewer/screen.py",
         "src/memcommit/application/operations/distill/runtime.py",
@@ -72,13 +71,15 @@ def test_distill_and_elaborate_keep_distinct_execution_contracts() -> None:
         )
     )
     elaborate_application = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/elaborate/application.py"
+        REPOSITORY_ROOT
+        / "src/memcommit/application/operations/elaborate/application.py"
     ).read_text(encoding="utf-8")
     elaborate_runtime = (
         REPOSITORY_ROOT / "src/memcommit/application/operations/elaborate/runtime.py"
     ).read_text(encoding="utf-8")
     elaborate_add_runtime = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/elaborate/add_runtime.py"
+        REPOSITORY_ROOT
+        / "src/memcommit/application/operations/elaborate/add_runtime.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.application.operations.elaborate" not in distill_source
@@ -87,7 +88,10 @@ def test_distill_and_elaborate_keep_distinct_execution_contracts() -> None:
     )
     assert "memorize_semantic_result" not in elaborate_runtime
     assert "MemoryStore" not in elaborate_runtime
-    assert "from memcommit.application.operations.elaborate.runtime import" in elaborate_add_runtime
+    assert (
+        "from memcommit.application.operations.elaborate.runtime import"
+        in elaborate_add_runtime
+    )
     assert "memorize_semantic_result" in elaborate_add_runtime
     assert "memcommit.application.operations.add" not in elaborate_add_runtime
     assert (
@@ -103,7 +107,9 @@ def test_operation_owners_do_not_depend_on_command_or_interface_adapters() -> No
         path.read_text(encoding="utf-8")
         for package in ("distill", "elaborate")
         for path in sorted(
-            (REPOSITORY_ROOT / "src/memcommit/application/operations" / package).glob("*.py")
+            (REPOSITORY_ROOT / "src/memcommit/application/operations" / package).glob(
+                "*.py"
+            )
         )
     )
 

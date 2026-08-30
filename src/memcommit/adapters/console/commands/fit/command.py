@@ -16,7 +16,10 @@ from memcommit.application.operations.fit.application import (
     FitResult,
     FitStoredSourcesRequest,
 )
-from memcommit.application.operations.fit.judgment import FitJudgmentError, FitProposition
+from memcommit.application.operations.fit.judgment import (
+    FitJudgmentError,
+    FitProposition,
+)
 from memcommit.application.operations.fit.runtime import (
     FitSourceError,
     run_fit_with_store,
@@ -31,7 +34,10 @@ from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.fit.presentation import fit_result_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider
+from memcommit.providers.subscription import (
+    QueryProviderError,
+    connect_semantic_provider,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -115,14 +121,6 @@ def cmd(
             help="Show one immutable Fit receipt by exact uid instead of running Fit",
         ),
     ] = None,
-    plain: Annotated[
-        bool,
-        typer.Option(
-            "--plain",
-            hidden=True,
-            help="Print the same compact Fit receipt without terminal color",
-        ),
-    ] = False,
 ) -> None:
     """Judge whether every supplied proposition can jointly hold."""
 
@@ -151,9 +149,7 @@ def cmd(
                         store=store,
                         provider_factory=connect_semantic_provider,
                     )
-                with CommandProgress(
-                    "FIT", "checking Ground", total=1
-                ) as progress:
+                with CommandProgress("FIT", "checking Ground", total=1) as progress:
                     result = run_fit_with_store(
                         request,
                         store=store,
@@ -166,7 +162,7 @@ def cmd(
                 execute_ground(
                     FitRequest(ground_name=ground_name, receipt_uid=receipt)
                 ),
-                color=False if plain else None,
+                color=None,
             )
             return
 
@@ -201,9 +197,7 @@ def cmd(
         def execute_propositions(
             next_request: FitPropositionsRequest | FitStoredSourcesRequest,
         ):
-            with CommandProgress(
-                "FIT", "checking propositions", total=1
-            ) as progress:
+            with CommandProgress("FIT", "checking propositions", total=1) as progress:
                 result = (
                     run_stored_source_fit(
                         next_request,
@@ -221,7 +215,7 @@ def cmd(
 
         render_proposition_fit_plain(
             execute_propositions(general_request),
-            color=False if plain else None,
+            color=None,
         )
     except (
         FitError,

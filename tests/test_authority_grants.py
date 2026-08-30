@@ -14,7 +14,9 @@ import memcommit.adapters.console.commands.query.command as query_command
 import memcommit.adapters.console.commands.rationale.command as rationale_command
 from memcommit.adapters.python_api import MemCommitClient, ShowContextResult
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.capabilities.authority.context_access import (
+    resolve_context_access,
+)
 from memcommit.adapters.console.terminal.components.memory_report_picker import (
     MemoryReportTargetSelection,
 )
@@ -495,7 +497,6 @@ def test_granted_read_shows_current_trace_route_but_never_opens_history(
         [
             "trace",
             target.uid[:8],
-            "--plain",
         ],
     )
     log_memory = runner.invoke(

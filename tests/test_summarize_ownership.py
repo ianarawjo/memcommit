@@ -28,7 +28,6 @@ assert "memcommit.application.operations.summarize.runtime" not in sys.modules
 
 def test_production_summarize_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/bootstrap.py",
         "src/memcommit/adapters/console/commands/summarize/command.py",
         "src/memcommit/application/operations/distill/application.py",
         "src/memcommit/application/operations/distill/runtime.py",
@@ -50,12 +49,9 @@ def test_production_summarize_consumers_use_the_operation_owner() -> None:
 
 
 def test_summarize_console_owns_presentation_and_workbench_without_facades() -> None:
-    command_root = (
-        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/summarize"
-    )
+    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/summarize"
     retired_tui_root = (
-        REPOSITORY_ROOT
-        / "src/memcommit/adapters/interfaces/tui/operations/summarize"
+        REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/tui/operations/summarize"
     )
 
     assert (command_root / "presentation.py").is_file()

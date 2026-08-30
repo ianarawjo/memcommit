@@ -104,7 +104,9 @@ class SeverProvider:
                         "Access-related needs were condensed while unrelated "
                         "personal detail was removed under the minimization criterion."
                     ),
-                    "source_memory_ids": [payload["source"]["memories"][0]["memory_id"]],
+                    "source_memory_ids": [
+                        payload["source"]["memories"][0]["memory_id"]
+                    ],
                     "criterion_memory_ids": [criterion_id],
                 },
                 "candidates": candidates,
@@ -192,11 +194,15 @@ def test_explicit_sever_creates_review_session_without_output_or_query_access(
     )
     _context(store, "local/guardrails", "Share only necessary information.")
     provider = SeverProvider()
-    monkeypatch.setattr(sever_command, "connect_codex_chatgpt_provider", lambda: provider)
+    monkeypatch.setattr(
+        sever_command, "connect_codex_chatgpt_provider", lambda: provider
+    )
     monkeypatch.setattr(
         MemoryStore,
         "load_query_source",
-        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("query-only source opened")),
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            AssertionError("query-only source opened")
+        ),
     )
 
     result = runner.invoke(
@@ -448,9 +454,7 @@ def test_scripted_sever_decision_rejects_a_stale_reviewed_session(
     )
 
     assert result.exit_code == 1
-    assert "changed after this command was reviewed" in (
-        result.output + result.stderr
-    )
+    assert "changed after this command was reviewed" in (result.output + result.stderr)
     assert SeverSessionStore(store).load(before.uid) == before
 
 
@@ -538,9 +542,7 @@ def test_sever_undo_and_redo_restore_output_session_and_checkpoint_log(
     reviewing = SeverSessionStore(store).load(applied_session.uid)
     assert reviewing.state == "REVIEWING"
     assert reviewing.application is None
-    [(archived_context, archived_checkpoints)] = (
-        store.list_command_context_archives()
-    )
+    [(archived_context, archived_checkpoints)] = store.list_command_context_archives()
     assert archived_context.to_dict() == result_before
     assert [entry["command"] for entry in archived_checkpoints] == [
         "undo",
@@ -556,11 +558,13 @@ def test_sever_undo_and_redo_restore_output_session_and_checkpoint_log(
     assert restored_session.state == "APPLIED"
     assert restored_session.application == application
     assert store.list_command_context_archives() == ()
-    assert [
-        entry["command"] for entry in store.list_checkpoints("result")
-    ] == ["redo", "undo", "sever"]
+    assert [entry["command"] for entry in store.list_checkpoints("result")] == [
+        "redo",
+        "undo",
+        "sever",
+    ]
     assert runner.invoke(app, ["switch", "result"]).exit_code == 0
-    logged = runner.invoke(app, ["log", "--plain"])
+    logged = runner.invoke(app, ["log"])
     assert logged.exit_code == 0, logged.output
     assert "redo" in logged.output
     assert "undo" in logged.output
@@ -677,9 +681,7 @@ def test_sever_undo_rolls_back_context_archive_when_session_save_fails(
     assert store.load_direct("result").to_dict() == result_before
     assert SeverSessionStore(store).load(session.uid) == session
     assert store.list_command_context_archives() == ()
-    assert [
-        entry["command"] for entry in store.list_checkpoints("result")
-    ] == ["sever"]
+    assert [entry["command"] for entry in store.list_checkpoints("result")] == ["sever"]
 
 
 def test_query_only_reference_is_never_a_source_memory(isolated_store, monkeypatch):
@@ -689,8 +691,7 @@ def test_query_only_reference_is_never_a_source_memory(isolated_store, monkeypat
         QueryContextRef(
             uid="11111111-1111-4111-8111-111111111111",
             name=(
-                "remote/government/healthcare-agent/info-request/"
-                "questions-and-answers"
+                "remote/government/healthcare-agent/info-request/questions-and-answers"
             ),
             target_source_uid="22222222-2222-4222-8222-222222222222",
             provider="codex_chatgpt",
@@ -699,7 +700,9 @@ def test_query_only_reference_is_never_a_source_memory(isolated_store, monkeypat
     store.save(source)
     _context(store, "public-guidance", "Minimize outbound personal information.")
     provider = SeverProvider()
-    monkeypatch.setattr(sever_command, "connect_codex_chatgpt_provider", lambda: provider)
+    monkeypatch.setattr(
+        sever_command, "connect_codex_chatgpt_provider", lambda: provider
+    )
 
     result = runner.invoke(
         app,
@@ -810,9 +813,10 @@ def test_source_and_criteria_descendant_scopes_are_independent(
         "Root source"
     ]
     assert payload["criteria"]["scope"] == "INCLUDE_DESCENDANTS"
-    assert {
-        item["content"] for item in payload["criteria"]["memories"]
-    } == {"Root criterion", "Child criterion"}
+    assert {item["content"] for item in payload["criteria"]["memories"]} == {
+        "Root criterion",
+        "Child criterion",
+    }
     session = SeverSessionStore(store).list()[0]
     assert not session.source.include_descendants
     assert session.criteria.include_descendants
@@ -931,9 +935,7 @@ def test_resolution_adapter_exposes_source_criteria_output_skeleton(isolated_sto
         "SOURCE MEMORY",
         "APPLICABLE CRITERION 1",
     ]
-    assert [block.heading for block in item.blocks] == [
-        "PROPOSED RESULT MEMORY"
-    ]
+    assert [block.heading for block in item.blocks] == ["PROPOSED RESULT MEMORY"]
     assert [
         (location.role, location.name, location.state)
         for location in view.context_locations

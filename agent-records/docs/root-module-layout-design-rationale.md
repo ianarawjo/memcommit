@@ -22,10 +22,10 @@ the implementation that owns it without first knowing the repository history.
   exports may load lazily when eager loading would make a foundational module
   depend on a higher-level adapter merely because both now share a package.
 - One source implementation has exactly one canonical path.
-- The package root retains only its public package surface and bootstrap
-  composition root. Public Context values remain re-exported by `memcommit`,
-  while their defining module belongs to core; existing-Context operand
-  resolution belongs to application orchestration.
+- The package root retains only its public package surface. Public Context
+  values remain re-exported by `memcommit`, while their defining module belongs
+  to core; existing-Context operand resolution belongs to application
+  orchestration.
 - Existing behavioral failures are not silently converted into new contracts.
   Baseline failures remain a comparison set during path-only work.
 - Operation evidence state remains authored only in the existing evidence
@@ -71,6 +71,16 @@ entry when the per-Memory Query catalog, canonical renderer, font assets, and
 runtime dependency were removed together. The frozen plan keeps that name and
 reason visible but assigns no canonical target, making retirement explicit
 rather than a missing target or an untracked deletion.
+
+On 2026-08-30 `memcommit.bootstrap` was retired with the generic console
+presentation-mode router it existed only to compose. Complete command argv now
+select one semantic execution and result projection independent of terminal
+interactivity, so a package-root composition object choosing between plain and
+TUI presenters would recreate a concept the console no longer exposes. The
+same frozen plan was synchronized with earlier completed retirements and
+splits for Atomize Grounding, legacy Ground sessions, federated Review report
+adapters, and translation catalogs; those entries record already-established
+owners rather than introducing new behavior here.
 
 On 2026-08-27 the executable Typer registry moved from the package root to
 `memcommit.adapters.console.entrypoint`. The `memcommit.cli` import was removed

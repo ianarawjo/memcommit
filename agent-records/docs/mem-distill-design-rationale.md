@@ -201,8 +201,8 @@ changed. Mutation-oriented operations retain their distinct Impact ledgers.
 
 ## Interfaces and interaction
 
-Direct standalone Add is line-oriented by default and rejects `--tui`; the
-Impact route owns interactive read-only inspection. The legacy review route's
+Direct standalone Add is line-oriented and has no presentation-mode option;
+the Impact route owns interactive read-only inspection. The legacy review route's
 TUI composes the shared Context-summary workbench with Distill's typed
 projection. It supports one Context plus exact/subtree reach, explicitly omits
 Summarize's ambiguous `BOTH` mode, performs no provider call until the run

@@ -6,27 +6,14 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.capabilities.authority.context_access import (
-    context_access_display_facts,
-    resolve_context_access,
-)
-from memcommit.bootstrap import build_distill_console_runner
-from memcommit.adapters.console.clipboard import write_system_clipboard
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
-)
-from memcommit.application.capabilities.authority.readable_contexts import (
-    freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_context_traversal,
     resolve_scope_preset,
-)
-from memcommit.adapters.console.terminal.components.context_picker import (
-    ContextMemoryRow,
-    context_memory_rows,
 )
 from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,
@@ -56,14 +43,7 @@ from memcommit.adapters.console.commands.distill.receipt import render_distill_r
 from memcommit.adapters.console.terminal.components.applied_memory_preview import (
     render_applied_memory_preview,
 )
-from memcommit.adapters.console import (
-    ConsoleMode,
-    ConsoleModeError,
-    SystemTerminalCapabilities,
-    resolve_console_mode,
-)
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.commands.distill.workbench import DistillTuiSetup
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import (
@@ -74,20 +54,6 @@ from memcommit.application.capabilities.semantic_result_memorization import (
     resolve_semantic_result_endpoints,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.summarize.model import SummaryFrame
-
-
-def _summary_frame_memory_rows(frame: SummaryFrame) -> tuple[ContextMemoryRow, ...]:
-    """Project the exact frozen Ground evidence consumed by Distill."""
-
-    return tuple(
-        ContextMemoryRow(
-            label=f"{source.context_name} · {source.memory_uid[:8]}",
-            content=source.content,
-            selector=source.memory_uid,
-        )
-        for source in frame.sources
-    )
 
 
 def render_distill(result: DistillResult) -> str:
@@ -181,20 +147,6 @@ def cmd(
             help="Create --save-as from the operation-owned Distill decision",
         ),
     ] = False,
-    plain: Annotated[
-        bool,
-        typer.Option(
-            "--plain",
-            help="Print a read-only legacy or Ground result without a Viewer",
-        ),
-    ] = False,
-    tui: Annotated[
-        bool,
-        typer.Option(
-            "--tui",
-            help="Require the read-only legacy or Ground result Viewer",
-        ),
-    ] = False,
 ) -> None:
     """Distill reusable Rules and add them to an existing Context."""
 
@@ -205,17 +157,6 @@ def cmd(
             default=ContextScopePreset.DIRECT,
         )
         traversal = resolve_context_traversal(preset=preset)
-        automatic_result = not plain and not tui
-        mode = resolve_console_mode(plain=plain, tui=tui)
-        # Standalone results return through the compact/plain adapter. The
-        # Context Summary Viewer is an explicit --tui inspection surface.
-        if mode is ConsoleMode.AUTO:
-            mode = ConsoleMode.PLAIN
-        if adopt and tui:
-            raise DistillError(
-                "--adopt cannot use the read-only TUI; the explicit "
-                "line-oriented command is the adoption boundary."
-            )
         if adopt and ground is None:
             raise DistillError("--adopt requires --ground.")
         if ground is not None and (
@@ -251,11 +192,6 @@ def cmd(
 
         store, _snapshot = command_resources()
         if ground is None and save_as is None:
-            if tui:
-                raise DistillError(
-                    "Direct Distill Add is non-interactive; use "
-                    "'mem impact distill' to inspect without saving."
-                )
             endpoints = resolve_semantic_result_endpoints(
                 source_locator=(
                     source_name if source_name is not None else context_name
@@ -354,76 +290,6 @@ def cmd(
                 )
                 return ground_result.distill
 
-        def prepare_tui(request: DistillRequest) -> DistillTuiSetup:
-            active_store, active_snapshot = command_resources()
-            if frozen_ground is not None:
-                name = frozen_ground.candidate_frame.context_name
-                if request != frozen_ground.request:
-                    raise DistillError(
-                        "Ground Distill cannot change its frozen Source or reach."
-                    )
-                ground_preview_frame = frozen_ground.candidate_frame
-                if ground_preview_frame is not None:
-
-                    def memory_loader(_name: str) -> tuple[ContextMemoryRow, ...]:
-                        return _summary_frame_memory_rows(ground_preview_frame)
-
-                else:
-
-                    def memory_loader(
-                        context_name: str,
-                    ) -> tuple[ContextMemoryRow, ...]:
-                        return context_memory_rows(
-                            active_store.load_direct(context_name)
-                        )
-
-                return DistillTuiSetup(
-                    names=(name,),
-                    selected_context=name,
-                    initial_range_mode="EXACT",
-                    current_context=(
-                        name if active_snapshot.current_name == name else None
-                    ),
-                    source_locked=True,
-                    memory_loader=memory_loader,
-                )
-            selected_access = resolve_context_access(
-                active_store,
-                request.context_locator,
-                current_name=active_snapshot.current_name,
-                required_permission="READ",
-            )
-            catalog = freeze_profile_readable_context_catalog(
-                active_store,
-                selected_access,
-                include_query_routes=False,
-            )
-            names = tuple(catalog.list_context_names())
-            annotations = tuple(
-                (name, context_access_display_facts(access))
-                for name in names
-                if (access := catalog.access_for(name)).is_granted
-            )
-            current = active_snapshot.current_name
-            return DistillTuiSetup(
-                names=names,
-                selected_context=selected_access.display_name,
-                initial_range_mode=(
-                    "SUBTREE" if request.include_descendants else "EXACT"
-                ),
-                current_context=current if current in names else None,
-                annotations=annotations,
-                memory_loader=lambda name: context_memory_rows(
-                    catalog.load_direct(name)
-                ),
-            )
-
-        runner = build_distill_console_runner(
-            execute=execute,
-            prepare_tui=prepare_tui,
-            clipboard_writer=write_system_clipboard,
-            terminal=SystemTerminalCapabilities(),
-        )
         execution_request = (
             frozen_ground.request
             if frozen_ground is not None
@@ -444,17 +310,8 @@ def cmd(
         )
         # The hidden compatibility Apply form is still execution-first: its
         # proposal is internal staging and must not become a pre-Apply report.
-        result = (
-            execute(execution_request)
-            if save_as is not None and apply
-            else execute(execution_request)
-            if automatic_result
-            else runner.run(execution_request, mode=mode)
-        )
-        if result is None:
-            typer.echo("Distill cancelled; Source unchanged.")
-            return
-        if automatic_result and not (save_as is not None and apply):
+        result = execute(execution_request)
+        if not (save_as is not None and apply):
             render_distill_receipt(result)
 
         if adopt:
@@ -505,7 +362,6 @@ def cmd(
             )
     except (
         DistillError,
-        ConsoleModeError,
         FileNotFoundError,
         OSError,
         ProfileConfigError,

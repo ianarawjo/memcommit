@@ -8,7 +8,6 @@ import memcommit.adapters.console.commands.replace.command as replace_command
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory
-from memcommit.application.operations.replace.application import ReplaceRequest
 from memcommit.persistence.store import MemoryStore
 
 
@@ -55,7 +54,7 @@ def test_replace_plain_is_execution_format_not_preview(isolated_store) -> None:
 
     result = runner.invoke(
         app,
-        ["replace", "--plain", "--ignore-case", "needle", "pin"],
+        ["replace", "--ignore-case", "needle", "pin"],
     )
 
     assert result.exit_code == 0, result.output + result.stderr
@@ -192,7 +191,7 @@ def test_replace_complete_request_defaults_to_direct_execution_in_tty(
     assert _memory_contents(store, context.name) == ("author",)
 
 
-def test_replace_tui_flag_opens_compact_editor_with_prefilled_request(
+def test_complete_replace_request_never_opens_input_editor_in_tty(
     isolated_store,
     monkeypatch,
 ) -> None:
@@ -200,32 +199,28 @@ def test_replace_tui_flag_opens_compact_editor_with_prefilled_request(
     store = MemoryStore()
     store.save(context)
     store.set_current(context.name)
-    captured = {}
 
     class InteractiveTerminal:
         def is_interactive(self) -> bool:
             return True
-
-    def run_tui(request, **_kwargs):
-        captured["request"] = request
-        return None
 
     monkeypatch.setattr(
         replace_command,
         "SystemTerminalCapabilities",
         InteractiveTerminal,
     )
-    monkeypatch.setattr(replace_command, "run_replace_tui", run_tui)
+    monkeypatch.setattr(
+        replace_command,
+        "run_replace_tui",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("a complete Replace request must not open the input editor")
+        ),
+    )
 
-    result = runner.invoke(app, ["replace", "writer", "author", "--tui"])
+    result = runner.invoke(app, ["replace", "writer", "author"])
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert captured["request"] == ReplaceRequest(
-        "writer",
-        "author",
-        ("replace/source",),
-    )
-    assert result.output == "Replace closed.\n"
+    assert result.output == "No matches. Nothing changed.\n"
 
 
 def test_replace_help_has_no_plan_or_apply_contract() -> None:

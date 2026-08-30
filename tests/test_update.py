@@ -2345,7 +2345,6 @@ def test_multi_context_update_is_one_atomic_undo_and_redo_unit(
             "--context",
             TASK1_TARGET_CHILD,
             "--verbose",
-            "--plain",
         ],
     )
 

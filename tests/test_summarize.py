@@ -12,18 +12,19 @@ from memcommit.adapters.console.clipboard import ClipboardError
 import memcommit.adapters.console.commands.summarize.command as summarize_command
 from memcommit.adapters.console.commands.help.command import COMMAND_FORMS
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonInput
-from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import analyze_comparison
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
+    ComparisonInput,
+)
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
+    analyze_comparison,
+)
 from memcommit.core.context import Memory
-from memcommit.adapters.console.commands.summarize.workbench import SummarizeTuiOutcome
-from memcommit.application.capabilities.reviewing.read_report import ReadReportRecent, ReadReportTarget
 from memcommit.application.operations.summarize.model import (
     SUMMARIZE_OPERATION,
     SummarizeError,
     collect_summary_scope,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.summarize.application import SummarizeResult
 from memcommit.application.capabilities.semantic.understanding import (
     UnderstandingSummary,
     parse_source_linked_understanding,
@@ -31,21 +32,6 @@ from memcommit.application.capabilities.semantic.understanding import (
 
 
 runner = CliRunner()
-
-
-def test_summarize_tui_defaults_to_both_but_preserves_explicit_scope_flags():
-    assert summarize_command._initial_tui_range_mode(
-        direct=False,
-        recursive=False,
-    ) == "BOTH"
-    assert summarize_command._initial_tui_range_mode(
-        direct=True,
-        recursive=False,
-    ) == "EXACT"
-    assert summarize_command._initial_tui_range_mode(
-        direct=False,
-        recursive=True,
-    ) == "SUBTREE"
 
 
 def test_understanding_deduplicates_two_aliases_for_one_durable_memory():
@@ -85,7 +71,6 @@ def test_mem_summarize_inventory_matches_direct_default_and_copy_contract():
         "mem summarize [context] (direct summary of an explicit Context)",
         "mem summarize -r (recursive summary of the current Context)",
         "mem summarize [context] -r (lexical descendants and embedded Contexts)",
-        "mem summarize --tui (choose a Recent report or readable Context and range)",
         "mem summarize [context] --copy "
         "(copy verified direct understanding as plain text)",
     )
@@ -214,291 +199,21 @@ def test_mem_summarize_rejects_direct_and_recursive_together(isolated_store):
     assert "Choose either --direct/-d or --recursive/-r" in result.output
 
 
-def test_mem_summarize_forced_tui_requires_terminal_before_store_execution(
+def test_mem_summarize_rejects_retired_presentation_flags_before_execution(
     isolated_store,
     monkeypatch,
 ):
     monkeypatch.setattr(
         "memcommit.adapters.console.commands.summarize.command.MemoryStore",
         lambda *args, **kwargs: (_ for _ in ()).throw(
-            AssertionError("forced TUI failure must not open the Store")
+            AssertionError("retired flag parsing must not open the Store")
         ),
     )
 
     result = runner.invoke(app, ["summarize", "summary", "--tui"])
 
-    assert result.exit_code == 1
-    assert "requires a TTY" in result.output
-
-
-def test_explicit_tui_summarize_replays_a_recent_context_and_range(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    store.save(ops.init("summary/recent"))
-    store.set_current("summary/recent")
-    target = ReadReportTarget(
-        operation="summarize",
-        context_names=("summary/recent",),
-        target_names=("summary/recent",),
-        selection_mode="SINGLE",
-        ranges=("RECURSIVE",),
-    )
-    recent = ReadReportRecent(
-        attempt_uid="recent-summary",
-        target=target,
-        started_at="2026-08-16T12:00:00+00:00",
-    )
-    captured = {}
-
-    class InteractiveTerminal:
-        def is_interactive(self):
-            return True
-
-    class FakeRunner:
-        def run(self, request, *, mode):
-            captured["request"] = request
-            captured["mode"] = mode
-            return SummarizeResult(
-                context_name="summary/recent",
-                include_descendants=True,
-                follow_embeds=True,
-                source_digest="a" * 64,
-                source_count=0,
-                understanding=UnderstandingSummary("Nothing to summarize.", ()),
-            )
-
-    monkeypatch.setattr(
-        summarize_command,
-        "SystemTerminalCapabilities",
-        InteractiveTerminal,
-    )
-    monkeypatch.setattr(
-        summarize_command,
-        "read_report_recents",
-        lambda *_args, **_kwargs: (recent,),
-    )
-    monkeypatch.setattr(
-        summarize_command,
-        "choose_read_report_recent",
-        lambda *_args, **_kwargs: target,
-    )
-    monkeypatch.setattr(
-        summarize_command,
-        "revalidate_read_report_recent",
-        lambda *_args, **_kwargs: target,
-    )
-    monkeypatch.setattr(
-        summarize_command,
-        "build_summarize_console_runner",
-        lambda **_kwargs: FakeRunner(),
-    )
-
-    summarize_command.cmd(
-        context_name=None,
-        direct=False,
-        recursive=False,
-        copy_result=False,
-        plain=False,
-        tui=True,
-    )
-
-    assert captured["request"].context_locator == "summary/recent"
-    assert captured["request"].include_descendants is True
-    assert captured["request"].follow_embeds is True
-
-
-def test_explicit_tui_summarize_replays_both_ranges_into_tui_setup(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    store.save(ops.init("summary/both"))
-    store.set_current("summary/both")
-    target = ReadReportTarget(
-        operation="summarize",
-        context_names=("summary/both",),
-        target_names=("summary/both",),
-        selection_mode="SINGLE",
-        ranges=("DIRECT", "RECURSIVE"),
-    )
-    recent = ReadReportRecent(
-        attempt_uid="recent-summary-both",
-        target=target,
-        started_at="2026-08-16T12:00:00+00:00",
-    )
-    captured = {}
-
-    class InteractiveTerminal:
-        def is_interactive(self):
-            return True
-
-    class FakeRunner:
-        def __init__(self, prepare_tui):
-            self.prepare_tui = prepare_tui
-
-        def run(self, request, *, mode):
-            captured["setup"] = self.prepare_tui(request)
-            direct_result = SummarizeResult(
-                context_name="summary/both",
-                include_descendants=False,
-                follow_embeds=False,
-                source_digest="a" * 64,
-                source_count=0,
-                understanding=UnderstandingSummary("Nothing direct.", ()),
-            )
-            recursive_result = SummarizeResult(
-                context_name="summary/both",
-                include_descendants=True,
-                follow_embeds=True,
-                source_digest="b" * 64,
-                source_count=0,
-                understanding=UnderstandingSummary("Nothing recursive.", ()),
-            )
-            return SummarizeTuiOutcome((direct_result, recursive_result))
-
-    monkeypatch.setattr(
-        summarize_command,
-        "SystemTerminalCapabilities",
-        InteractiveTerminal,
-    )
-    monkeypatch.setattr(
-        summarize_command,
-        "read_report_recents",
-        lambda *_args, **_kwargs: (recent,),
-    )
-    monkeypatch.setattr(
-        summarize_command,
-        "choose_read_report_recent",
-        lambda *_args, **_kwargs: target,
-    )
-    monkeypatch.setattr(
-        summarize_command,
-        "revalidate_read_report_recent",
-        lambda *_args, **_kwargs: target,
-    )
-    monkeypatch.setattr(
-        summarize_command,
-        "build_summarize_console_runner",
-        lambda **kwargs: FakeRunner(kwargs["prepare_tui"]),
-    )
-
-    summarize_command.cmd(
-        context_name=None,
-        direct=False,
-        recursive=False,
-        copy_result=False,
-        plain=False,
-        tui=True,
-    )
-
-    assert captured["setup"].selected_context == "summary/both"
-    assert captured["setup"].initial_range_mode == "BOTH"
-
-
-def test_auto_tty_summarize_executes_current_direct_without_launcher(
-    isolated_store,
-    monkeypatch,
-    capsys,
-):
-    store = MemoryStore()
-    store.save(ops.init("summary/current"))
-    store.set_current("summary/current")
-
-    class InteractiveTerminal:
-        def is_interactive(self):
-            return True
-
-    monkeypatch.setattr(
-        summarize_command,
-        "SystemTerminalCapabilities",
-        InteractiveTerminal,
-    )
-    monkeypatch.setattr(
-        summarize_command,
-        "choose_read_report_recent",
-        lambda *_args, **_kwargs: (_ for _ in ()).throw(
-            AssertionError("AUTO Summarize must not open the report launcher")
-        ),
-    )
-    monkeypatch.setattr(
-        summarize_command,
-        "connect_codex_chatgpt_provider",
-        lambda: (_ for _ in ()).throw(
-            AssertionError("an empty summary must remain provider-free")
-        ),
-    )
-
-    summarize_command.cmd(
-        context_name=None,
-        direct=False,
-        recursive=False,
-        copy_result=False,
-        plain=False,
-        tui=False,
-    )
-
-    captured = capsys.readouterr()
-    assert "SUMMARY · summary/current" in captured.out
-    assert "STATUS · DIRECT" in captured.out
-
-
-def test_auto_tty_summarize_executes_explicit_context_without_workbench(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    store.save(ops.init("summary/current"))
-    store.save(ops.init("practice/source"))
-    store.set_current("summary/current")
-
-    class InteractiveTerminal:
-        def is_interactive(self):
-            return True
-
-    monkeypatch.setattr(
-        summarize_command,
-        "SystemTerminalCapabilities",
-        InteractiveTerminal,
-    )
-    captured: dict[str, object] = {}
-
-    class ImmediateRunner:
-        def __init__(self, execute):
-            self.execute = execute
-
-        def run(self, request, *, mode):
-            captured["request"] = request
-            captured["mode"] = mode
-            return self.execute(request)
-
-    monkeypatch.setattr(
-        summarize_command,
-        "build_summarize_console_runner",
-        lambda **kwargs: ImmediateRunner(kwargs["execute"]),
-    )
-    monkeypatch.setattr(
-        summarize_command,
-        "connect_codex_chatgpt_provider",
-        lambda: (_ for _ in ()).throw(
-            AssertionError("an empty summary must remain provider-free")
-        ),
-    )
-
-    summarize_command.cmd(
-        context_name="practice/source",
-        direct=False,
-        recursive=False,
-        copy_result=False,
-        plain=False,
-        tui=False,
-    )
-
-    assert captured["mode"] is summarize_command.ConsoleMode.PLAIN
-    assert captured["request"] == summarize_command.SummarizeRequest(
-        context_locator="practice/source",
-    )
+    assert result.exit_code == 2
+    assert "No such option: --tui" in result.output
 
 
 def test_mem_summarize_plain_preserves_noninteractive_output(
@@ -516,7 +231,7 @@ def test_mem_summarize_plain_preserves_noninteractive_output(
 
     result = runner.invoke(
         app,
-        ["summarize", "plain-summary", "--plain"],
+        ["summarize", "plain-summary"],
     )
 
     assert result.exit_code == 0
@@ -579,37 +294,6 @@ def test_mem_summarize_copy_failure_keeps_result_visible_and_fails_cleanly(
     assert "WHAT MEM UNDERSTOOD" not in result.stdout
     assert "The Context describes a closure" in result.stdout
     assert "Copy error: clipboard unavailable" in result.output
-
-
-def test_summarize_both_clipboard_keeps_scope_results_separate() -> None:
-    direct = SummarizeResult(
-        context_name="summary",
-        include_descendants=False,
-        follow_embeds=False,
-        source_digest="a" * 64,
-        source_count=1,
-        understanding=UnderstandingSummary("Direct understanding.", ("m1",)),
-    )
-    recursive = SummarizeResult(
-        context_name="summary",
-        include_descendants=True,
-        follow_embeds=True,
-        source_digest="b" * 64,
-        source_count=2,
-        understanding=UnderstandingSummary(
-            "Recursive understanding.",
-            ("m1", "m2"),
-        ),
-    )
-
-    assert summarize_command._summarize_clipboard_text(
-        SummarizeTuiOutcome((direct, recursive))
-    ) == (
-        "[CURRENT ONLY]\n"
-        "Direct understanding.\n\n"
-        "[CURRENT + DESCENDANTS]\n"
-        "Recursive understanding."
-    )
 
 
 def test_mem_summarize_empty_context_is_provider_free(

@@ -134,59 +134,59 @@
       "role": "historical-compatibility-facade"
     },
     {
-      "action": "remove",
-      "canonical_target": "memcommit.application.operations.atomize.grounding",
-      "canonical_target_path": "memcommit/application/operations/atomize/grounding.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_grounding",
       "path": "memcommit/atomize_grounding.py",
-      "reason": "historical forwarding imports are intentionally unsupported",
-      "role": "historical-compatibility-facade"
+      "reason": "retired when Atomize issues became read-only evidence instead of a second Grounding workflow",
+      "role": "retired-prototype"
     },
     {
-      "action": "remove",
-      "canonical_target": "memcommit.application.operations.atomize.grounding_application",
-      "canonical_target_path": "memcommit/application/operations/atomize/grounding_application.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_grounding_application",
       "path": "memcommit/atomize_grounding_application.py",
-      "reason": "historical forwarding imports are intentionally unsupported",
-      "role": "historical-compatibility-facade"
+      "reason": "retired with Atomize's provider-backed Grounding workflow",
+      "role": "retired-prototype"
     },
     {
-      "action": "remove",
-      "canonical_target": "memcommit.application.operations.atomize.grounding_provider",
-      "canonical_target_path": "memcommit/application/operations/atomize/grounding_provider.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_grounding_provider",
       "path": "memcommit/atomize_grounding_provider.py",
-      "reason": "historical forwarding imports are intentionally unsupported",
-      "role": "historical-compatibility-facade"
+      "reason": "retired with Atomize's provider-backed Grounding workflow",
+      "role": "retired-prototype"
     },
     {
-      "action": "remove",
-      "canonical_target": "memcommit.application.operations.atomize.grounding_runtime",
-      "canonical_target_path": "memcommit/application/operations/atomize/grounding_runtime.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_grounding_runtime",
       "path": "memcommit/atomize_grounding_runtime.py",
-      "reason": "historical forwarding imports are intentionally unsupported",
-      "role": "historical-compatibility-facade"
+      "reason": "retired with Atomize's provider-backed Grounding workflow",
+      "role": "retired-prototype"
     },
     {
-      "action": "remove",
-      "canonical_target": "memcommit.application.operations.atomize.grounding_meld_adapter",
-      "canonical_target_path": "memcommit/application/operations/atomize/grounding_meld_adapter.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.atomize_meld_adapter",
       "path": "memcommit/atomize_meld_adapter.py",
-      "reason": "historical forwarding imports are intentionally unsupported",
-      "role": "historical-compatibility-facade"
+      "reason": "retired with Atomize's compound Grounding incorporation route",
+      "role": "retired-prototype"
     },
     {
       "action": "remove",
@@ -234,8 +234,8 @@
     },
     {
       "action": "remove",
-      "canonical_target": "memcommit.application.operations.atomize.workbench",
-      "canonical_target_path": "memcommit/application/operations/atomize/workbench.py",
+      "canonical_target": "memcommit.application.operations.atomize.records",
+      "canonical_target_path": "memcommit/application/operations/atomize/records.py",
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.atomize_workbench",
@@ -244,26 +244,26 @@
       "role": "historical-compatibility-facade"
     },
     {
-      "action": "remove",
-      "canonical_target": "memcommit.application.operations.atomize.workflow",
-      "canonical_target_path": "memcommit/application/operations/atomize/workflow.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 0,
       "lines": 97,
       "module": "memcommit.atomize_workflow",
       "path": "memcommit/atomize_workflow.py",
-      "reason": "historical forwarding imports are intentionally unsupported",
-      "role": "historical-compatibility-facade"
+      "reason": "retired after the unused Atomize analysis-open composition facade was removed",
+      "role": "retired-prototype"
     },
     {
-      "action": "retain",
-      "canonical_target": "memcommit.bootstrap",
-      "canonical_target_path": "memcommit/bootstrap.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 3,
       "lines": 127,
       "module": "memcommit.bootstrap",
       "path": "memcommit/bootstrap.py",
-      "reason": "application composition root",
-      "role": "root-boundary"
+      "reason": "retired with the console presentation-mode router it existed only to compose",
+      "role": "retired-prototype"
     },
     {
       "action": "relocate-without-alias",
@@ -564,8 +564,8 @@
     },
     {
       "action": "remove",
-      "canonical_target": "memcommit.application.operations.context_init.application",
-      "canonical_target_path": "memcommit/application/operations/context_init/application.py",
+      "canonical_target": "memcommit.application.operations.init.application",
+      "canonical_target_path": "memcommit/application/operations/init/application.py",
       "inbound_package_importers": 0,
       "lines": 11,
       "module": "memcommit.context_init_application",
@@ -575,8 +575,8 @@
     },
     {
       "action": "remove",
-      "canonical_target": "memcommit.application.operations.context_init.runtime",
-      "canonical_target_path": "memcommit/application/operations/context_init/runtime.py",
+      "canonical_target": "memcommit.application.operations.init.runtime",
+      "canonical_target_path": "memcommit/application/operations/init/runtime.py",
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.context_init_runtime",
@@ -1311,15 +1311,15 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.operations.ground.model",
-      "canonical_target_path": "memcommit/application/operations/ground/model.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 26,
       "lines": 2440,
       "module": "memcommit.ground",
       "path": "memcommit/ground.py",
-      "reason": "implementation is named for and consumed by one operation family",
-      "role": "operation-implementation"
+      "reason": "retired when the legacy named Ground session model was removed",
+      "role": "retired-prototype"
     },
     {
       "action": "relocate-without-alias",
@@ -1366,15 +1366,15 @@
       "role": "operation-implementation"
     },
     {
-      "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.operations.ground.turn_dialogue",
-      "canonical_target_path": "memcommit/application/operations/ground/turn_dialogue.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 2,
       "lines": 1058,
       "module": "memcommit.ground_turn_dialogue",
       "path": "memcommit/ground_turn_dialogue.py",
-      "reason": "implementation is named for and consumed by one operation family",
-      "role": "operation-implementation"
+      "reason": "retired with the legacy named Ground session interface",
+      "role": "retired-prototype"
     },
     {
       "action": "relocate-without-alias",
@@ -2268,15 +2268,15 @@
       "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.operations.review.report_adapters",
-      "canonical_target_path": "memcommit/application/operations/review/report_adapters.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 3,
       "lines": 120,
       "module": "memcommit.review_report_adapters",
       "path": "memcommit/review_report_adapters.py",
-      "reason": "implementation is named for and consumed by one operation family",
-      "role": "operation-implementation"
+      "reason": "retired after generic application-to-console report projection was federated into each operation's console adapter",
+      "role": "retired-prototype"
     },
     {
       "action": "relocate-without-alias",
@@ -2620,26 +2620,26 @@
       "role": "historical-compatibility-facade"
     },
     {
-      "action": "remove",
-      "canonical_target": "memcommit.application.operations.translate.view",
-      "canonical_target_path": "memcommit/application/operations/translate/view.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.translation_view",
       "path": "memcommit/translation_view.py",
-      "reason": "historical forwarding imports are intentionally unsupported",
-      "role": "historical-compatibility-facade"
+      "reason": "retired when the mixed translation view was split into a core catalog and explicit application and persistence owners",
+      "role": "retired-prototype"
     },
     {
-      "action": "remove",
-      "canonical_target": "memcommit.application.operations.translate.view_store",
-      "canonical_target_path": "memcommit/application/operations/translate/view_store.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.translation_view_store",
       "path": "memcommit/translation_view_store.py",
-      "reason": "historical forwarding imports are intentionally unsupported",
-      "role": "historical-compatibility-facade"
+      "reason": "retired when translation catalog persistence moved to its explicit repository owner",
+      "role": "retired-prototype"
     },
     {
       "action": "relocate-without-alias",
@@ -2745,10 +2745,10 @@
   "root_module_count": 249,
   "schema_version": 1,
   "summary": {
-    "historical-compatibility-facade": 103,
-    "operation-implementation": 75,
-    "retired-prototype": 3,
-    "root-boundary": 2,
+    "historical-compatibility-facade": 95,
+    "operation-implementation": 72,
+    "retired-prototype": 15,
+    "root-boundary": 1,
     "shared-concept-implementation": 66
   }
 }

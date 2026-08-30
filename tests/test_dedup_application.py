@@ -508,7 +508,6 @@ def test_cli_and_public_api_share_semantic_dedun_application(isolated_store):
             "dedun",
             "--evidence",
             redundancy_evidence_json(handoff),
-            "--plain",
         ],
         color=True,
     )

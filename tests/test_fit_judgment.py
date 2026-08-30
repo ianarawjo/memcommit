@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 
+import click
 import pytest
 from typer.testing import CliRunner
 
@@ -190,20 +191,20 @@ def test_mem_fit_accepts_two_literal_propositions_and_prints_yes(
 
     result = CliRunner().invoke(
         app,
-        ["fit", "The main entrance closes.", "The staff entrance opens.", "--plain"],
+        ["fit", "The main entrance closes.", "The staff entrance opens."],
         color=True,
     )
 
     assert result.exit_code == 0, result.output
-    assert "\x1b[" not in result.output
-    assert result.output == "FIT · YES · [TARGETS: PROPOSITION p1, p2]\n"
+    assert "\x1b[" in result.output
+    assert click.unstyle(result.output) == "FIT · YES · [TARGETS: PROPOSITION p1, p2]\n"
 
 
 def test_mem_fit_requires_two_operands_and_explicit_ground_mode() -> None:
-    one = CliRunner().invoke(app, ["fit", "Only one proposition.", "--plain"])
+    one = CliRunner().invoke(app, ["fit", "Only one proposition."])
     mixed = CliRunner().invoke(
         app,
-        ["fit", "A", "B", "--ground", "ticker", "--plain"],
+        ["fit", "A", "B", "--ground", "ticker"],
     )
 
     assert one.exit_code == 1

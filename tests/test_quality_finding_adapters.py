@@ -309,7 +309,7 @@ def test_cli_json_handoff_round_trips_into_plain_resolve(
 
     resolved = runner.invoke(
         app,
-        ["resolve", "--finding-handoff", receipt, "--plain"],
+        ["resolve", "--finding-handoff", receipt],
     )
     assert resolved.exit_code == 0, resolved.output
     assert resolved.output == (f"RESOLVE · {context.name}\nFIT · YES · NO CHANGE\n")

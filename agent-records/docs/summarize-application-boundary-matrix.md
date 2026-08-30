@@ -6,13 +6,13 @@ The internal application and production-runtime extractions are implemented and
 verified. `run_summarize` completes the use case through abstract ports, while
 `execute_summarize` composes it with a real `MemoryStore` and injected provider
 without Typer, prompt-toolkit, terminal output, or TUI state. The console host
-lets the automatic/plain adapter execute the current or explicit Context
-immediately, while explicit `--tui` lets the interactive adapter execute after
-a process-local selection and then present the same typed result. These are
-internal boundaries, not yet a stable public
+executes the current or explicit Context immediately and prints one typed
+result. The former console mode router and direct-command Viewer switch are
+retired; the standalone workbench remains a tested component but is not a
+`mem summarize` route. These are internal boundaries, not yet a stable public
 Python API.
 
-Last reviewed: 2026-08-25.
+Last reviewed: 2026-08-30.
 
 ## Objective and non-goals
 
@@ -35,13 +35,11 @@ only the typed process-local result. Its CLI `--copy` route remains a
 post-result plain-text presentation effect and creates no structured clipboard
 stage.
 
-Summarize is also the first complete console-composition slice. The existing
-plain route and a new read-only semantic Viewer sit behind an injected console
-runner and composition root. Automatic mode deliberately selects the
-line-oriented execution route even in a TTY because the current-Context/direct
-defaults already form an executable request; `--tui` explicitly selects the
-broader Recent/target/range workbench. The application remains
-independent of Typer, prompt-toolkit, and process-global terminal detection.
+Summarize's current-Context/direct defaults already form an executable request,
+so `mem summarize` has one line-oriented result route in every terminal. The
+retired `--plain`/`--tui` flags and generic console runner are absent. The
+application remains independent of Typer, prompt-toolkit, and process-global
+terminal detection.
 Atomize, Compare, and other semantic operations retain their operation
 behavior while their imports of the extracted component contracts now use the
 new interface owner.
@@ -68,7 +66,7 @@ The canonical terminal-independent owners now live under
 frozen Source, provider-session protocol, freshness check, and read-only
 result. `runtime.py` owns Store and Grant projection, exact Study lookup,
 configured-provider composition, and the production execution adapters.
-CLI, TUI, bootstrap, Distill, Ground, prewarm/eval, and other production
+CLI, Distill, Ground, prewarm/eval, and other production
 consumers import those operation-owned modules directly.
 
 The historical `memcommit.summarize_application` and
@@ -87,11 +85,12 @@ paths are removed without facades. The shared Context-summary workbench remains
 under `adapters.interfaces.tui.workbenches` because its mechanics are reused by
 other operations; this relocation changes only Summarize adapter ownership.
 
-This relocation changes physical ownership only. It does not alter frame
-collection, direct/recursive axes, READ or Grant authority, provider timing,
-Study exact-artifact eligibility, source revalidation, typed result or receipt
-shape, console routing, clipboard behavior, or TUI interaction. The existing
-ordered PTY evidence therefore remains valid without a screenshot refresh.
+The later console-routing retirement changes only the direct command route. It
+does not alter frame collection, direct/recursive axes, READ or Grant
+authority, provider timing, Study exact-artifact eligibility, source
+revalidation, typed result, or clipboard behavior. Earlier ordered PTY
+evidence remains historical evidence for the now-unreachable direct-command
+workbench.
 
 ## Current dependency path
 
@@ -104,33 +103,19 @@ Python production caller
 
 mem summarize argv
   -> memcommit.adapters.console.commands.summarize.command.cmd
-  -> resolve semantic scope and presentation mode
-  -> AUTO becomes immediate plain execution; --tui alone opts into setup
-  -> bootstrap builds ConsoleRunner(application callable, plain presenter,
-     TUI route, terminal capability)
-  -> ConsoleRunner validates forced TUI eligibility before execution
-  -> plain: run_summarize_with_store, then render_summarize_plain
-     or
-  -> TUI: freeze readable Context catalog, then show shared Context-summary
-     workbench
-       -> close: return cancellation without application execution
-       -> explicit individual Run/Rerun: construct one canonical request
-       -> explicit BOTH: construct direct then recursive requests and publish
-          only the complete typed pair
-       -> for each request call run_summarize_with_store(request, store,
-          current snapshot, provider session)
-       -> MemoryStoreSummarySourcePort
-       -> run_summarize
-       -> SummarySourcePort.freeze
-            -> existing Context locator / READ Grant projection / frame builder
-       -> provider session only for a nonempty frame
-            -> existing configured SemanticProvider compatibility connector
-            -> summarize_frame prompt, schema, call, and local validation
-       -> SummarySourcePort.revalidate
-            -> every selected Grant binding, Context identity, and frame digest
-       -> SummarizeResult
-       -> one result or SummarizeTuiOutcome(direct, recursive)
-       -> typed semantic Viewer below the retained controls
+  -> resolve direct or recursive semantic scope
+  -> run_summarize_with_store(request, store, current snapshot, provider session)
+  -> MemoryStoreSummarySourcePort
+  -> run_summarize
+  -> SummarySourcePort.freeze
+       -> existing Context locator / READ Grant projection / frame builder
+  -> provider session only for a nonempty frame
+       -> existing configured SemanticProvider compatibility connector
+       -> summarize_frame prompt, schema, call, and local validation
+  -> SummarySourcePort.revalidate
+       -> every selected Grant binding, Context identity, and frame digest
+  -> SummarizeResult
+  -> render_summarize_plain
 ```
 
 ## Callable matrix
@@ -149,16 +134,15 @@ mem summarize argv
 | `SemanticProvider.complete` compatibility connector | provider protocol and existing infrastructure | Infrastructure port and adapters | prompt/schema -> raw completion | Network or subprocess, credentials, timeout | Existing allowlists, endpoint checks, bounds, and error redaction apply | Provider run metadata only; no Summarize receipt | Existing typed config plus secret environment | About 20 command modules; Summarize only changed to injection | Provider command tests and provider rationale | `DEFER`; do not move globally in this slice |
 | `UnderstandingSummary` and source-linked parser/schema | shared understanding core | Domain/shared semantic contract | validated text + Memory identities | None | Rejects unknown or unsupported source aliases | None | None | Atomize, Compare, Summarize | `tests/test_summarize.py` and related operation tests | `KEEP` |
 | Compare understanding block | `memcommit.adapters.console.commands.compare.presentation:render_comparison` | Compare console projection | `UnderstandingSummary` -> labelled terminal lines | Terminal output only in caller | Escapes presentation; no authority decision | None | None | Compare plain adapter; Summarize deliberately renders the same typed text as its unlabelled artifact body | CLI output tests | `INLINED`; the shared helper was removed after Compare became its only caller, while heading ownership remains operation-specific |
-| `ConsoleRunner.run` | `memcommit.adapters.console` | Console route coordinator | typed request + mode -> typed result or interactive cancellation | Plain executes immediately; the injected TUI route controls explicit execution | Forced TUI capability fails before catalog or application execution | None | Injected terminal capability only | Summarize bootstrap | route, cancellation, and command tests | `VERIFIED` for read-only slice |
-| `render_summarize_plain` | `memcommit.adapters.console.commands.summarize.presentation` | Plain console presenter | `SummarizeResult` -> terminal output | stdout rendering | No authority or provider decision | None | None | Summarize console runner | exact plain-output tests | `VERIFIED` |
-| `project_summarize_result` / `project_summarize_outcome` / `project_summarize_clipboard` / `run_summarize_tui` | `memcommit.adapters.console.commands.summarize.workbench` | Summarize console workbench adapter | frozen readable setup + staged range + injected execute -> one result, complete direct/recursive pair, or cancellation | prompt-toolkit setup/result presentation; individual modes call once and `BOTH` calls direct then recursive; injected plain writer handles `y`/`Y` | Picker never loads Memory content or switches current; every request reauthorizes before provider; copy occurs only from a revalidated typed result; no mutation or partial pair publication | Per-scope Study exact artifacts remain independent; copy creates no structured stage | None | Summarize console runner | projection, dual-view ordering, cancel-before-execute, three-way selection, focused/complete copy, rerun, and PTY evidence | `VERIFIED` |
-| `commands.summarize.cmd` | Typer command entry adapter | CLI parsing and error boundary | argv/current CLI state -> exit/output | Deferred Store construction, current snapshot, progress, presentation, and injected plain OS clipboard write | Delegates Store/Grant and semantic sequence to the shared runtime; copy occurs only after result revalidation | No summary receipt; `--copy` and TUI `y`/`Y` create no structured stage | Existing provider bootstrap and platform clipboard adapter | `mem` console entry | CLI/runtime parity, route, copy, and no-eager-execution tests | `MIGRATED` for orchestration and presentation composition |
+| `render_summarize_plain` | `memcommit.adapters.console.commands.summarize.presentation` | Console result presenter | `SummarizeResult` -> terminal output | stdout rendering | No authority or provider decision | None | None | Summarize command | exact output tests | `VERIFIED` |
+| `project_summarize_result` / `project_summarize_outcome` / `project_summarize_clipboard` / `run_summarize_tui` | `memcommit.adapters.console.commands.summarize.workbench` | Independently tested terminal component | frozen readable setup + staged range + injected execute -> one result, complete direct/recursive pair, or cancellation | prompt-toolkit setup/result presentation | Component authority and no-partial-pair invariants remain tested, but it has no direct `mem summarize` launcher | Per-scope Study artifacts remain independent | None | Component tests only | projection, selection, copy, and historical PTY evidence | `UNREACHABLE` from the direct command; removal or reuse deferred |
+| `commands.summarize.cmd` | Typer command entry adapter | CLI parsing and error boundary | argv/current CLI state -> exit/output | Store construction, current snapshot, progress, one result projection, and injected OS clipboard write | Delegates Store/Grant and semantic sequence to the shared runtime; copy occurs only after result revalidation | No Summary receipt; `--copy` creates no structured stage | Existing provider bootstrap and platform clipboard adapter | `mem` console entry | CLI/runtime parity, one-route output, copy, and retired-flag rejection tests | `MIGRATED` for orchestration and presentation composition |
 
 ## Operation matrix
 
 | Operation | Entry points | Application request/result | Authority | Cache/projection | Provider contract | Session/receipt | Review/Apply/CAS | Durable writes | Config | Verification | State |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Summarize | Plain CLI, read-only TUI, internal Store-backed Python production callable; no agent tool | `SummarizeRequest` / `SummarizeResult` | Exact local or granted `READ`; granted binding frozen and revalidated | Study-only exact-frame shared artifact; no projection or composition; cached quality must satisfy the request | Compatible hit or one bounded `summarize_context` call; empty frame provider-free; strict source-linked schema and local validation | Process-local result only; no local Summary session | No review or Apply; source digest is revalidated before return | Shared artifact remains baseline-owned | Exact provider/model/reasoning remain in the artifact key; the current configuration is a minimum quality request | application/runtime parity, recursive/direct/miss/source-change/Grant, and exact-prewarm tests | `VERIFIED` internal application, runtime, and console adapters |
+| Summarize | One CLI result route and internal Store-backed Python production callable; no agent tool | `SummarizeRequest` / `SummarizeResult` | Exact local or granted `READ`; granted binding frozen and revalidated | Study-only exact-frame shared artifact; no projection or composition; cached quality must satisfy the request | Compatible hit or one bounded `summarize_context` call; empty frame provider-free; strict source-linked schema and local validation | Process-local result only; no local Summary session | No review or Apply; source digest is revalidated before return | Shared artifact remains baseline-owned | Exact provider/model/reasoning remain in the artifact key; the current configuration is a minimum quality request | application/runtime parity, recursive/direct/miss/source-change/Grant, exact-prewarm, and retired-mode tests | `VERIFIED` internal application, runtime, and console adapters |
 
 ## Provider security matrix
 
@@ -168,7 +152,13 @@ mem summarize argv
 
 ## Verified compatibility evidence
 
-The focused suite covers:
+The focused suite covers the current one-route command contract, including
+direct/recursive execution, a single typed result projection, copy after
+revalidation, and parse-time rejection of retired presentation flags. The
+remaining mode-specific bullets and PTY counts below describe historical
+component evidence rather than currently reachable `mem summarize` routes.
+
+The focused suite also covers:
 
 - TUI/Typer/command-import independence of the application module;
 - typed direct invocation and provider-session lifetime;
@@ -199,9 +189,8 @@ The focused suite covers:
   publication; and
 - the shared semantic execution policy and provider command boundary;
 - direct imports from the new component owners across every migrated consumer;
-- real 180×52 color PTY evidence that both `mem summarize` and
-  `mem summarize CONTEXT` stay out of the alternate screen while explicit
-  `--tui` retains the read-only setup and cancellation boundary;
+- historical 180×52 color PTY evidence for both immediate Summary output and
+  the now-retired direct-command workbench route;
 - real 180×52 color PTY Context-first entry, in-place empty Summary action,
   three-way range transition, complete dual result, focused/complete copy,
   cancellation, read-only byte/checkpoint, and plain-output evidence; and

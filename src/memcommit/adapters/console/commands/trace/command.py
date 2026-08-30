@@ -7,9 +7,13 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.capabilities.authority.context_access import (
+    resolve_context_access,
+)
 from memcommit.persistence.command_ledger.attempts import annotate_memory_report_attempt
-from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
+)
 from memcommit.adapters.console.coordination.memory_history import (
     build_memory_history,
     load_retained_history_context,
@@ -24,17 +28,19 @@ from memcommit.adapters.console.coordination.memory_report_recents import (
     MemoryReportSelectAction,
     choose_memory_report_recent,
 )
-from memcommit.adapters.console.coordination.history_target import resolve_explicit_context_history_target
+from memcommit.adapters.console.coordination.history_target import (
+    resolve_explicit_context_history_target,
+)
 from memcommit.adapters.console.commands.trace.context_projection import (
     format_context_trace_report,
-    open_context_trace_viewer,
 )
-from memcommit.adapters.console.terminal.components.read_only_viewer import interactive_report_terminal
+from memcommit.adapters.console.terminal.components.read_only_viewer import (
+    interactive_report_terminal,
+)
 from memcommit.adapters.console.commands.trace.projection import (
     DEFAULT_TRACE_OPERATION_LIMIT,
     MAX_TRACE_OPERATION_LIMIT,
     format_compact_trace_report,
-    open_trace_viewer,
 )
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
@@ -44,7 +50,10 @@ from memcommit.application.capabilities.retained_history.granted_provenance impo
     GrantedMemoryTraceReport,
     build_granted_memory_trace,
 )
-from memcommit.application.capabilities.retained_history.context_history import ContextTraceReport, build_context_trace
+from memcommit.application.capabilities.retained_history.context_history import (
+    ContextTraceReport,
+    build_context_trace,
+)
 from memcommit.core.context_targeting.model import ContextTarget
 from memcommit.application.capabilities.memory_report_targeting import (
     ReadableMemoryTargetNotFoundError,
@@ -90,7 +99,6 @@ def _present_context_trace(
     report: ContextTraceReport,
     *,
     as_json: bool,
-    tui: bool,
     verbose: bool,
     limit: int | None,
 ) -> None:
@@ -99,35 +107,11 @@ def _present_context_trace(
     if as_json:
         typer.echo(json.dumps(report.to_dict(), ensure_ascii=False, indent=2))
         return
-    if tui:
-        if not interactive_report_terminal():
-            raise MemoryHistoryReconstructionError("--tui requires an interactive terminal.")
-        open_context_trace_viewer(report, verbose=verbose, limit=limit)
-        return
     typer.echo(
         format_context_trace_report(
             report,
             verbose=verbose,
             limit=limit,
-        )
-    )
-
-
-def render_trace_receipt(report: MemoryHistory) -> None:
-    """Return a bounded lineage result; the document remains explicitly reachable."""
-
-    typer.echo(
-        "\n".join(
-            [
-                f"TRACE · {display_escape_text(report.context_name)}",
-                f"MEMORY · {report.selected_uid}",
-                f"LINEAGE · {len(report.events)} events · "
-                f"{len(report.component_uids)} components",
-                f"ATTENTION · {len(report.warnings)} limits",
-                "DETAILS · mem trace "
-                f"{report.selected_uid} --context "
-                f"{display_escape_text(report.context_name)} --plain",
-            ]
         )
     )
 
@@ -201,26 +185,6 @@ def render_reference_trace(
             typer.echo(f"  {display_escape_text(warning)}")
 
 
-def render_reference_trace_receipt(report: MemoryReferenceTraceReport) -> None:
-    reference = report.reference
-    typer.echo(
-        "\n".join(
-            [
-                f"TRACE · {display_escape_text(report.context_name)}",
-                f"REFERENCE · {report.selected_uid} · {reference.mode}",
-                "TARGET · "
-                f"{display_escape_text(reference.target_context_name)}:"
-                f"{reference.target_memory_uid}",
-                f"OCCURRENCE · {len(report.events)} events",
-                f"TARGET HISTORY · {report.target_history_status}",
-                "DETAILS · mem trace "
-                f"{display_escape_text(report.context_name)}:{report.selected_uid} "
-                "--plain",
-            ]
-        )
-    )
-
-
 def render_granted_trace(
     report: GrantedMemoryTraceReport,
     *,
@@ -248,22 +212,6 @@ def render_granted_trace(
         )
     typer.echo("\nHISTORY — hidden by Grant")
     typer.echo(f"  {display_escape_text(report.warning)}")
-
-
-def render_granted_trace_receipt(report: GrantedMemoryTraceReport) -> None:
-    typer.echo(
-        "\n".join(
-            [
-                f"TRACE · {display_escape_text(report.context_name)}",
-                f"MEMORY · {report.selected_uid}",
-                f"ACCESS · GRANT {report.grant_uid} · REVISION {report.grant_revision}",
-                "HISTORY · HIDDEN BY GRANT",
-                "DETAILS · mem trace "
-                f"{report.selected_uid} --context "
-                f"{display_escape_text(report.context_name)} --plain",
-            ]
-        )
-    )
 
 
 def cmd(
@@ -317,29 +265,8 @@ def cmd(
         bool,
         typer.Option("--json", help="Emit the structured trace as JSON"),
     ] = False,
-    plain: Annotated[
-        bool,
-        typer.Option(
-            "--plain",
-            help="Print the lineage document (the default result route)",
-        ),
-    ] = False,
-    tui: Annotated[
-        bool,
-        typer.Option(
-            "--tui",
-            help="Open the retained lineage in the read-only Viewer",
-        ),
-    ] = False,
 ) -> None:
     """Show one Context lineage or one Memory's retained provenance."""
-    if plain and tui:
-        typer.secho(
-            "Trace error: choose either --plain or --tui, not both.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(2)
     if not 1 <= limit <= MAX_TRACE_OPERATION_LIMIT:
         typer.secho(
             f"Trace error: --limit must be between 1 and {MAX_TRACE_OPERATION_LIMIT}.",
@@ -352,7 +279,9 @@ def cmd(
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         if selector is None and as_json:
-            raise MemoryHistoryReconstructionError("JSON output requires an explicit item UID.")
+            raise MemoryHistoryReconstructionError(
+                "JSON output requires an explicit item UID."
+            )
         explicit_context = context_name is not None
         if selector is not None and not explicit_context:
             explicit_target = resolve_explicit_context_history_target(
@@ -373,7 +302,6 @@ def cmd(
                 _present_context_trace(
                     context_report,
                     as_json=as_json,
-                    tui=tui,
                     verbose=verbose,
                     limit=operation_limit,
                 )
@@ -387,7 +315,9 @@ def cmd(
                 context_name = launch.context_name
                 selector = launch.memory_uid
             elif not isinstance(launch, MemoryReportSelectAction):
-                raise MemoryHistoryReconstructionError("Trace launcher returned an invalid action.")
+                raise MemoryHistoryReconstructionError(
+                    "Trace launcher returned an invalid action."
+                )
 
         if selector is None:
             name = context_snapshot.resolve_or_current(context_name)
@@ -562,43 +492,13 @@ def cmd(
             )
         )
         return
-    if tui:
-        if not interactive_report_terminal():
-            typer.secho(
-                "Trace error: --tui requires an interactive terminal.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(2)
-        if not isinstance(report, MemoryHistory):
-            typer.secho(
-                "Trace error: --tui currently supports direct local Memory "
-                "lineage; use --plain for a reference or granted Memory.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(2)
-        open_trace_viewer(
+    if isinstance(report, MemoryReferenceTraceReport):
+        render_reference_trace(
             report,
             verbose=verbose,
             limit=operation_limit,
         )
-        return
-    if plain:
-        if isinstance(report, MemoryReferenceTraceReport):
-            render_reference_trace(
-                report,
-                verbose=verbose,
-                limit=operation_limit,
-            )
-        elif isinstance(report, GrantedMemoryTraceReport):
-            render_granted_trace(report, verbose=verbose)
-        else:
-            render_trace(report, verbose=verbose, limit=operation_limit)
-        return
-    if isinstance(report, MemoryReferenceTraceReport):
-        render_reference_trace_receipt(report)
     elif isinstance(report, GrantedMemoryTraceReport):
-        render_granted_trace_receipt(report)
+        render_granted_trace(report, verbose=verbose)
     else:
-        render_trace_receipt(report)
+        render_trace(report, verbose=verbose, limit=operation_limit)

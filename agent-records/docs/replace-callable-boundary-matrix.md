@@ -1,6 +1,6 @@
 # Replace callable boundary matrix
 
-Last reviewed: 2026-08-23.
+Last reviewed: 2026-08-30.
 
 ## Closure statement
 
@@ -40,7 +40,7 @@ agent/MCP kind=plan/apply ----------/        plan handle --> apply_replace
 | Publication | `MemoryStore.save_context_command_batch` | Source bindings and catalog are revalidated under the write boundary; all changed Contexts and checkpoints publish atomically or none do |
 | No-op | `memcommit.application.operations.replace.application` / `runtime` | No match or identical before/after still revalidates the complete scope and returns an explicit no-op receipt without a checkpoint |
 | Recovery | command history | Per-Context checkpoints share one operation UID, so one Undo or Redo restores the complete multi-Context command unit |
-| CLI | `memcommit.adapters.console.commands.replace.command` | A complete request executes immediately in any terminal; `--plain` changes only receipt styling and does not suppress mutation |
+| CLI | `memcommit.adapters.console.commands.replace.command` | A complete request executes immediately with one receipt in any terminal; only a missing pattern or replacement opens the input editor, and retired presentation flags are rejected |
 | TUI | `memcommit.adapters.console.commands.replace.workbench` | The primary-screen compact form edits pattern, replacement, local target set, lexical/embedded reach, mode, and case; Enter on Replace With executes directly, closes the form, and prints one concise receipt without Review or To Do |
 | Python | `MemCommitClient.plan_replace` / `apply_replace` | A typed immutable plan carries an opaque client-local handle; Apply rejects plans from another client or modified digests |
 | Agent | `memcommit_replace` version 1 | `plan` returns JSON-safe complete changes; `apply` recomputes from exact request values and requires the previously reviewed digest; provider use is always false |
@@ -61,9 +61,9 @@ relocation.
 - `tests/test_replace_runtime.py` proves lexical and embedded scope,
   reference exclusion, no-match freshness, namespace freshness, atomic
   multi-Context Apply, failure rollback, and operation-unit Undo/Redo.
-- `tests/test_replace_cli.py` proves immediate atomic execution, Undo,
-  receipt-only plain mode, relative-locator snapshots, literal/regex
-  distinction, and deletion syntax.
+- `tests/test_replace_cli.py` proves immediate atomic execution, Undo, one
+  terminal-independent receipt route, relative-locator snapshots,
+  literal/regex distinction, deletion syntax, and incomplete-input editing.
 - `tests/test_replace_tui.py` proves direct execution, cancellation,
   primary-screen cleanup, and visible descendant projection.
 - `tests/test_replace_public_api.py` and

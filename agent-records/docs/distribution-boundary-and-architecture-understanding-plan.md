@@ -198,61 +198,47 @@ and is recorded in the relevant operation matrix or rationale. A structural
 change that weakens those invariants requires a separately reviewed design
 decision rather than an undocumented convenience.
 
-### Console composition root and adapter isolation
+### Console command routing and adapter isolation
 
-The installed `mem` executable remains one console host, but CLI rendering and
-interactive TUI behavior are separate adapters. They must not invoke each
-other or reconstruct an operation. Both translate to the same application use
-case. A small console router selects the presentation route, and a composition
-root supplies its concrete dependencies.
+The installed `mem` executable remains one console host. Line rendering,
+interactive input editors, and report viewers are terminal components around
+the same application use case, but there is no global presentation-mode router
+or root bootstrap module.
 
 ```text
 mem entry point
       |
       v
-composition root / bootstrap
-      |
-      v
-console router
-  |              |
-  v              v
-TUI adapter   plain or JSON CLI adapter
-  |              |
-  +-------+------+
-          v
-   application use case
+operation command adapter
+  |                    |
+  v                    v
+missing-input editor   complete request
+  |                    |
+  +----------+---------+
+             v
+      application use case
+             |
+             v
+       typed result/receipt
 ```
 
-`bootstrap` means startup composition, not operation policy. It may know the
-concrete application services, Store and provider adapters, CLI renderer, TUI
-controller, config source, and terminal-capability implementation because its
-job is to construct and connect them. No application, domain, infrastructure,
-plain presenter, or TUI presenter imports bootstrap. During the Typer rollout,
-an operation command is the entry boundary that asks bootstrap for its runner;
-the console-script root can assume that responsibility after command
-registration is factory-based.
-
-The console router owns only route selection. Presentation mode is independent
-from semantic operands such as Context and reach:
-
-- automatic mode opens an operation's TUI only when both input and output are
-  interactive terminal streams;
-- `--plain` explicitly chooses the stable scripted renderer, including inside
-  an interactive terminal;
-- `--tui` explicitly requires the interactive renderer and fails before the
-  application callable is executed when terminal capability is absent; and
-- machine-readable JSON remains a separately versioned explicit route once its
-  contract is implemented.
+The command adapter composes concrete Store/provider dependencies and the
+narrow terminal components required by that operation. Input completeness and
+operation meaning select the route: bare Find or incomplete Replace may open an
+input editor, while complete argv executes and returns the same result in every
+terminal. Explicitly named Impact, Review, JSON, and other report operations
+remain distinct contracts rather than presentation modes of an execution
+command.
 
 Framework-owned `--help` and version handling are not operation execution. A
-semantic option such as `--recursive` does not silently become a presentation
-choice: an agent can add `--plain`, while a person can retain the Viewer for an
-explicit Context or reach. This separates operation meaning from host
-capability and keeps both routes testable.
+semantic option such as `--recursive` remains part of the request; terminal
+capability may change ANSI, wrapping, clipboard support, or the eligibility of
+a missing-input editor, but it does not replace a complete result with a
+different interaction.
 
-TTY detection is an injected terminal capability, not a domain rule or a
-collection of command-local `isatty()` checks. Production inspects the process
-streams lazily, while tests supply an explicit capability snapshot. A TUI may
+TTY detection remains an adapter capability, not a domain rule. Production
+inspects process streams lazily where an input editor requires it, while tests
+supply an explicit capability snapshot. A TUI may
 use prompt-toolkit `Input` and `Output` objects for deterministic testing, but
 it remains a terminal interface; terminal independence belongs to the
 application and Python API paths.

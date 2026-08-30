@@ -23,7 +23,6 @@ BASELINE_COMMIT = "885e62c0"
 
 ROOT_BOUNDARIES = {
     "__init__": "public package surface",
-    "bootstrap": "application composition root",
 }
 
 
@@ -50,6 +49,28 @@ HISTORICAL_PACKAGE_TARGETS = {
 # receives a compatibility alias once both its behavior and canonical owner
 # have been deliberately removed.
 RETIRED_ROOT_MODULES = {
+    "atomize_grounding": (
+        "retired when Atomize issues became read-only evidence instead of a "
+        "second Grounding workflow"
+    ),
+    "atomize_grounding_application": (
+        "retired with Atomize's provider-backed Grounding workflow"
+    ),
+    "atomize_grounding_provider": (
+        "retired with Atomize's provider-backed Grounding workflow"
+    ),
+    "atomize_grounding_runtime": (
+        "retired with Atomize's provider-backed Grounding workflow"
+    ),
+    "atomize_meld_adapter": (
+        "retired with Atomize's compound Grounding incorporation route"
+    ),
+    "atomize_workflow": (
+        "retired after the unused Atomize analysis-open composition facade was removed"
+    ),
+    "bootstrap": (
+        "retired with the console presentation-mode router it existed only to compose"
+    ),
     "console_invocation": (
         "retired after its isolated routing prototype proved unused by shipped "
         "console commands"
@@ -61,6 +82,20 @@ RETIRED_ROOT_MODULES = {
         "retired after its disconnected classification registry was replaced "
         "by tests of the concrete command builders and interaction surfaces"
     ),
+    "ground": ("retired when the legacy named Ground session model was removed"),
+    "ground_turn_dialogue": ("retired with the legacy named Ground session interface"),
+    "review_report_adapters": (
+        "retired after generic application-to-console report projection was "
+        "federated into each operation's console adapter"
+    ),
+    "translation_view": (
+        "retired when the mixed translation view was split into a core catalog "
+        "and explicit application and persistence owners"
+    ),
+    "translation_view_store": (
+        "retired when translation catalog persistence moved to its explicit "
+        "repository owner"
+    ),
 }
 
 
@@ -68,11 +103,14 @@ COMPATIBILITY_TARGET_OVERRIDES = {
     # This historical forwarding implementation moves with the physical
     # facade cleanup rather than remaining executable at the package root.
     "atomize_workflow": "memcommit.application.operations.atomize.workflow",
+    "atomize_workbench": "memcommit.application.operations.atomize.records",
     "comparison_summary": "memcommit.application.operations.compare.compare_summary",
     "comparison_summary_application": "memcommit.application.operations.compare.application",
     "comparison_summary_provider": "memcommit.application.operations.compare.provider_contract",
     "comparison_summary_rules": "memcommit.application.operations.compare.compare_rules",
     "context_scope": "memcommit.core.context_targeting.loading",
+    "context_init_application": "memcommit.application.operations.init.application",
+    "context_init_runtime": "memcommit.application.operations.init.runtime",
     "forget_resolution_adapter": (
         "memcommit.adapters.console.commands.forget.workbench.presentation"
     ),
@@ -135,12 +173,10 @@ OPERATION_TARGETS = {
     "granted_comparison_store": "memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository",
     "granted_source_update_application": "memcommit.application.operations.update.granted_source",
     "granted_update_application": "memcommit.application.operations.update.granted_target",
-    "ground": "memcommit.application.operations.ground.model",
     "ground_context_catalog": "memcommit.application.operations.ground.context_catalog",
     "ground_dialogue": "memcommit.application.operations.ground.dialogue",
     "ground_distill": "memcommit.application.operations.ground.distill",
     "ground_elaborate": "memcommit.application.operations.ground.elaborate",
-    "ground_turn_dialogue": "memcommit.application.operations.ground.turn_dialogue",
     "ground_workspace": "memcommit.application.operations.ground.workspace_model",
     "ground_workspace_application": "memcommit.application.operations.ground.workspace_application",
     "ground_workspace_draft": "memcommit.application.operations.ground.workspace_draft",
@@ -171,7 +207,6 @@ OPERATION_TARGETS = {
     "resolve_targeting": "memcommit.application.operations.resolve.targeting",
     "resource_import": "memcommit.application.operations.resource_import.model",
     "review": "memcommit.application.operations.review.model",
-    "review_report_adapters": "memcommit.application.operations.review.report_adapters",
     "search": "memcommit.application.operations.search.model",
     "search_artifacts": "memcommit.application.operations.search.artifacts",
     "share": "memcommit.application.operations.share.model",

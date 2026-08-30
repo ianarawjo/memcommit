@@ -5,9 +5,13 @@ from __future__ import annotations
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.retained_history.command_history import CommandHistoryError
+from memcommit.application.capabilities.retained_history.command_history import (
+    CommandHistoryError,
+)
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.capabilities.retained_history.reconstruction import build_history
+from memcommit.application.capabilities.retained_history.reconstruction import (
+    build_history,
+)
 from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
@@ -116,9 +120,7 @@ def test_undo_immediately_after_branch_cancels_the_created_context(
     assert branched.exit_code == 0, branched.output
     branch_record = store.load_direct("feature").to_dict()
     branch_uid = branch_record["uid"]
-    branch_history_uids = [
-        entry["uid"] for entry in store.list_checkpoints("feature")
-    ]
+    branch_history_uids = [entry["uid"] for entry in store.list_checkpoints("feature")]
     assert store.current_context_name() == "feature"
 
     undone = invoke("undo")
@@ -279,9 +281,7 @@ def test_empty_stale_granted_receipt_does_not_mask_local_undo(
     monkeypatch.setattr(
         "memcommit.application.operations.restoration.runtime.restore_granted_update",
         lambda *_args: (_ for _ in ()).throw(
-            CommandHistoryError(
-                "There is no recorded Context command to undo."
-            )
+            CommandHistoryError("There is no recorded Context command to undo.")
         ),
     )
 
@@ -307,9 +307,7 @@ def test_empty_stale_granted_receipt_does_not_mask_local_redo(
     monkeypatch.setattr(
         "memcommit.application.operations.restoration.runtime.restore_granted_update",
         lambda *_args: (_ for _ in ()).throw(
-            CommandHistoryError(
-                "There is no recorded Context command to redo."
-            )
+            CommandHistoryError("There is no recorded Context command to redo.")
         ),
     )
 
@@ -367,7 +365,7 @@ def test_history_and_trace_keep_command_undo_and_redo_operation_boundaries(
         for event in restoration_events
     )
 
-    rendered = invoke("trace", memory.uid[:8], "--plain")
+    rendered = invoke("trace", memory.uid[:8])
 
     assert rendered.exit_code == 0, rendered.output
     assert "[undo] [CHECKPOINT " in rendered.output
@@ -377,7 +375,7 @@ def test_history_and_trace_keep_command_undo_and_redo_operation_boundaries(
         "[undo] [CHECKPOINT "
     )
 
-    detailed = invoke("trace", memory.uid[:8], "--verbose", "--plain")
+    detailed = invoke("trace", memory.uid[:8], "--verbose")
     assert detailed.exit_code == 0, detailed.output
     assert "Operation: undo" in detailed.output
     assert "Operation: redo" in detailed.output

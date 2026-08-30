@@ -7,43 +7,20 @@ from typing import Annotated, Iterator, Optional
 
 import typer
 
-from memcommit.bootstrap import build_summarize_console_runner
 from memcommit.adapters.console.clipboard import ClipboardError, write_system_clipboard
 from memcommit.persistence.command_ledger.attempts import annotate_read_report_attempt
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
-from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
-from memcommit.adapters.console.terminal.components.operation_launcher.location import (
-    operation_launcher_orientation,
-)
-from memcommit.application.capabilities.authority.context_access import (
-    context_access_display_facts,
-    resolve_context_access,
-)
-from memcommit.application.capabilities.authority.readable_contexts import (
-    freeze_profile_readable_context_catalog,
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
 )
 from memcommit.core.context_targeting.presets import (
     ContextScopePreset,
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
-from memcommit.core.context_targeting.tui.reach import ContextReachViewMode
-from memcommit.adapters.console import (
-    ConsoleMode,
-    ConsoleModeError,
-    SystemTerminalCapabilities,
-    resolve_console_mode,
-)
-from memcommit.adapters.console.terminal.components.read_report import (
-    ReadReportSelectTarget,
-    choose_read_report_recent,
-)
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.commands.summarize.workbench import (
-    SummarizeTuiOutcome,
-    SummarizeTuiSetup,
-    project_summarize_clipboard,
+from memcommit.adapters.console.commands.summarize.presentation import (
+    render_summarize_plain,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
@@ -52,13 +29,15 @@ from memcommit.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.capabilities.reviewing.read_report import ReadReportError, ReadReportTarget
-from memcommit.application.capabilities.reviewing.read_report_recents import (
-    read_report_recents,
-    revalidate_read_report_recent,
+from memcommit.application.capabilities.reviewing.read_report import ReadReportTarget
+from memcommit.application.operations.summarize.model import (
+    SummarizeError,
+    SummarizeProvider,
 )
-from memcommit.application.operations.summarize.model import SummarizeError, SummarizeProvider
-from memcommit.application.operations.summarize.application import SummarizeRequest, SummarizeResult
+from memcommit.application.operations.summarize.application import (
+    SummarizeRequest,
+    SummarizeResult,
+)
 from memcommit.application.operations.summarize.runtime import run_summarize_with_store
 
 
@@ -77,27 +56,11 @@ def _provider_session() -> Iterator[SummarizeProvider]:
 
 
 def _summarize_clipboard_text(
-    result: SummarizeResult | SummarizeTuiOutcome,
+    result: SummarizeResult,
 ) -> str:
-    """Keep both explicitly requested TUI views distinct on the clipboard."""
+    """Copy the complete understanding body from the single Summary result."""
 
-    return project_summarize_clipboard(result).text
-
-
-def _initial_tui_range_mode(
-    *,
-    direct: bool,
-    recursive: bool,
-) -> ContextReachViewMode:
-    """Keep explicit CLI scope while making a flagless TUI dual-view."""
-
-    if direct and recursive:
-        raise ValueError("Summarize TUI scope flags are mutually exclusive.")
-    if direct:
-        return "EXACT"
-    if recursive:
-        return "SUBTREE"
-    return "BOTH"
+    return display_escape_text(result.understanding.text)
 
 
 def cmd(
@@ -136,77 +99,9 @@ def cmd(
             ),
         ),
     ] = False,
-    plain: Annotated[
-        bool,
-        typer.Option(
-            "--plain",
-            help="Print the result (the default without --tui)",
-        ),
-    ] = False,
-    tui: Annotated[
-        bool,
-        typer.Option(
-            "--tui",
-            help="Open the interactive Recent, Context, range, and result flow",
-        ),
-    ] = False,
 ) -> None:
     """Summarize what Mem understands; never change or checkpoint a Context."""
     try:
-        mode = resolve_console_mode(plain=plain, tui=tui)
-        terminal = SystemTerminalCapabilities()
-        # A missing Context operand is still a complete request because
-        # Summarize owns the current-Context/direct defaults. Keep executable
-        # argv in the primary terminal flow; the broader Recent/target/range
-        # workbench is an explicit --tui action, as with supplied-pattern Find.
-        if mode is ConsoleMode.AUTO:
-            mode = ConsoleMode.PLAIN
-        resources: tuple[MemoryStore, ContextOperandSnapshot] | None = None
-
-        def command_resources() -> tuple[MemoryStore, ContextOperandSnapshot]:
-            nonlocal resources
-            if resources is None:
-                store = MemoryStore(create=False)
-                resources = (store, ContextOperandSnapshot.capture(store))
-            return resources
-
-        if (
-            context_name is None
-            and not direct
-            and not recursive
-            and mode is not ConsoleMode.PLAIN
-            and terminal.is_interactive()
-        ):
-            store, _snapshot = command_resources()
-            recents = read_report_recents(store, operation="summarize")
-            launch = choose_read_report_recent(
-                recents,
-                operation="summarize",
-                orientation=operation_launcher_orientation(store),
-            )
-            if launch is None:
-                typer.echo("Summarize cancelled.")
-                return
-            if isinstance(launch, ReadReportTarget):
-                matching = next(
-                    (recent for recent in recents if recent.target == launch),
-                    None,
-                )
-                if matching is None:
-                    raise ReadReportError(
-                        "Summarize launcher returned an unknown recent target."
-                    )
-                launch = revalidate_read_report_recent(store, matching)
-                if len(launch.target_names) != 1:
-                    raise ReadReportError(
-                        "Summarize recent target must contain one Context."
-                    )
-                context_name = launch.target_names[0]
-                direct = launch.ranges == ("DIRECT",)
-                recursive = launch.ranges == ("RECURSIVE",)
-            elif not isinstance(launch, ReadReportSelectTarget):
-                raise ReadReportError("Summarize launcher returned an invalid action.")
-
         preset = resolve_scope_preset(
             direct=direct,
             recursive=recursive,
@@ -214,91 +109,28 @@ def cmd(
         )
         traversal = resolve_context_traversal(preset=preset)
 
-        def execute(request: SummarizeRequest):
-            # Route validation happens before opening durable or semantic
-            # infrastructure, so a forced TUI cannot partially execute when
-            # no terminal is available.
-            store, snapshot = command_resources()
-            return run_summarize_with_store(
-                request,
-                store=store,
-                current_context_name=snapshot.current_name,
-                provider_session_factory=_provider_session,
-            )
-
-        def prepare_tui(request: SummarizeRequest) -> SummarizeTuiSetup:
-            store, snapshot = command_resources()
-            selected_access = resolve_context_access(
-                store,
-                request.context_locator,
-                current_name=snapshot.current_name,
-                required_permission="READ",
-            )
-            catalog = freeze_profile_readable_context_catalog(
-                store,
-                selected_access,
-                include_query_routes=False,
-            )
-            names = tuple(catalog.list_context_names())
-            annotations = tuple(
-                (name, context_access_display_facts(access))
-                for name in names
-                if (access := catalog.access_for(name)).is_granted
-            )
-            current = snapshot.current_name
-            return SummarizeTuiSetup(
-                names=names,
-                selected_context=selected_access.display_name,
-                initial_range_mode=_initial_tui_range_mode(
-                    direct=direct,
-                    recursive=recursive,
-                ),
-                current_context=current if current in names else None,
-                annotations=annotations,
-                memory_loader=lambda name: context_memory_rows(
-                    catalog.load_direct(name)
-                ),
-            )
-
-        runner = build_summarize_console_runner(
-            execute=execute,
-            prepare_tui=prepare_tui,
-            clipboard_writer=write_system_clipboard,
-            terminal=terminal,
-        )
-        result = runner.run(
+        store = MemoryStore(create=False)
+        snapshot = ContextOperandSnapshot.capture(store)
+        result = run_summarize_with_store(
             SummarizeRequest(
                 context_locator=context_name,
                 include_descendants=traversal.include_descendants,
                 follow_embeds=traversal.follow_embeds,
             ),
-            mode=mode,
+            store=store,
+            current_context_name=snapshot.current_name,
+            provider_session_factory=_provider_session,
         )
-        if isinstance(result, SummarizeTuiOutcome):
-            annotate_read_report_attempt(
-                ReadReportTarget(
-                    operation="summarize",
-                    context_names=(result.results[0].context_name,),
-                    target_names=(result.results[0].context_name,),
-                    selection_mode="SINGLE",
-                    ranges=tuple(
-                        "RECURSIVE" if item.include_descendants else "DIRECT"
-                        for item in result.results
-                    ),
-                )
+        render_summarize_plain(result)
+        annotate_read_report_attempt(
+            ReadReportTarget(
+                operation="summarize",
+                context_names=(result.context_name,),
+                target_names=(result.context_name,),
+                selection_mode="SINGLE",
+                ranges=("RECURSIVE" if result.include_descendants else "DIRECT",),
             )
-        elif isinstance(result, SummarizeResult):
-            annotate_read_report_attempt(
-                ReadReportTarget(
-                    operation="summarize",
-                    context_names=(result.context_name,),
-                    target_names=(result.context_name,),
-                    selection_mode="SINGLE",
-                    ranges=(
-                        "RECURSIVE" if result.include_descendants else "DIRECT",
-                    ),
-                )
-            )
+        )
     except (
         FileNotFoundError,
         OSError,
@@ -307,8 +139,6 @@ def cmd(
         QueryProviderError,
         RuntimeError,
         SummarizeError,
-        ReadReportError,
-        ConsoleModeError,
         ValueError,
     ) as error:
         typer.secho(
@@ -317,10 +147,6 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-
-    if result is None:
-        typer.echo("Summarize cancelled.")
-        return
 
     if copy_result:
         clipboard_text = _summarize_clipboard_text(result)
@@ -334,8 +160,7 @@ def cmd(
             )
             raise typer.Exit(1)
         typer.secho(
-            "Copied Summary as plain text; no structured "
-            "clipboard stage was created.",
+            "Copied Summary as plain text; no structured clipboard stage was created.",
             fg=typer.colors.GREEN,
             err=True,
         )

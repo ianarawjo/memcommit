@@ -1268,7 +1268,7 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
     assert "RECOVERY STATUS · prior checkpoint recovered" in repeated.output
     assert len(store.list_checkpoints(ctx.name)) == checkpoints_before + 1
 
-    traced = runner.invoke(app, ["trace", composite.uid[:8], "--verbose", "--plain"])
+    traced = runner.invoke(app, ["trace", composite.uid[:8], "--verbose"])
     assert traced.exit_code == 0
     assert "SPLIT · RECORDED" in traced.output
     assert "ATOMIZE_PREVIEW  APPLIED" in traced.output

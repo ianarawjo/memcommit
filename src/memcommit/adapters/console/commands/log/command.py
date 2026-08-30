@@ -12,7 +12,9 @@ from memcommit.persistence.command_ledger.attempts import (
     annotate_memory_report_attempt,
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
-from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
+)
 from memcommit.adapters.console.terminal.components.history.presentation import (
     history_result_recovery_label,
 )
@@ -39,7 +41,10 @@ from memcommit.application.capabilities.retained_history.display import (
     history_display_row_segments,
     project_history_display_rows,
 )
-from memcommit.application.capabilities.retained_history.reconstruction import HistoryError, build_history
+from memcommit.application.capabilities.retained_history.reconstruction import (
+    HistoryError,
+    build_history,
+)
 from memcommit.application.operations.log.search import (
     HistorySearchError,
     HistorySearchResult,
@@ -152,9 +157,7 @@ def _render_history_results(
         return
     for result in results:
         timestamp = (
-            result.timestamp[:16].replace("T", " ")
-            if result.timestamp
-            else "current"
+            result.timestamp[:16].replace("T", " ") if result.timestamp else "current"
         )
         identity = result.checkpoint_uid or result.candidate_id
         kind = _styled_semantic_label(
@@ -205,9 +208,7 @@ def _render_operation_attempts(attempts: Sequence[CommandAttempt]) -> None:
             f"{operation}{suffix}"
         )
         if attempt.command is not None:
-            typer.echo(
-                "      command=" + display_escape_text(attempt.command)
-            )
+            typer.echo("      command=" + display_escape_text(attempt.command))
         sever = attempt.details.get("sever")
         if isinstance(sever, dict):
             source = sever.get("source_name")
@@ -275,9 +276,7 @@ def _render_study_actions(
     for event in events:
         timestamp = event.occurred_at[:19].replace("T", " ")
         elapsed = (
-            ""
-            if event.elapsed_seconds is None
-            else f" +{event.elapsed_seconds:.3f}s"
+            "" if event.elapsed_seconds is None else f" +{event.elapsed_seconds:.3f}s"
         )
         action = _styled_semantic_label(event.action, action=event.action)
         typer.echo(
@@ -302,13 +301,9 @@ def cmd(
             )
         ),
     ] = None,
-    manual: Annotated[bool, typer.Option("--manual", "-m", help="Show only manually-created checkpoints")] = False,
-    plain: Annotated[
+    manual: Annotated[
         bool,
-        typer.Option(
-            "--plain",
-            help="Compatibility option; Log always prints stable rows",
-        ),
+        typer.Option("--manual", "-m", help="Show only manually-created checkpoints"),
     ] = False,
     limit: Annotated[
         int,
@@ -357,9 +352,8 @@ def cmd(
         ),
     ] = None,
 ) -> None:
-    # Log is deliberately terminal-independent. Keep --plain accepted for
-    # existing scripts, but never let terminal capability change this report.
-    del plain
+    # Log is deliberately terminal-independent; terminal capability never
+    # changes which history rows this command returns.
     if operations and actions:
         typer.secho(
             "--operations and --actions are separate log views.",
@@ -368,7 +362,12 @@ def cmd(
         )
         raise typer.Exit(1)
     if actions:
-        if query is not None or manual or memory is not None or context_name is not None:
+        if (
+            query is not None
+            or manual
+            or memory is not None
+            or context_name is not None
+        ):
             typer.secho(
                 "--actions cannot be combined with a history query, "
                 "--manual, --memory, or --context.",
@@ -409,7 +408,12 @@ def cmd(
         return
 
     if operations:
-        if query is not None or manual or memory is not None or context_name is not None:
+        if (
+            query is not None
+            or manual
+            or memory is not None
+            or context_name is not None
+        ):
             typer.secho(
                 "--operations cannot be combined with a history query, "
                 "--manual, --memory, or --context.",
@@ -507,7 +511,11 @@ def cmd(
         return
 
     if not name:
-        typer.secho("No current context. Run 'mem init <name>' first.", fg=typer.colors.RED, err=True)
+        typer.secho(
+            "No current context. Run 'mem init <name>' first.",
+            fg=typer.colors.RED,
+            err=True,
+        )
         raise typer.Exit(1)
 
     context = store.load_direct(name)

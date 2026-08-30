@@ -56,14 +56,6 @@ def cmd(
         bool,
         typer.Option("--apply", hidden=True),
     ] = False,
-    plain: Annotated[
-        bool,
-        typer.Option("--plain", hidden=True),
-    ] = False,
-    tui: Annotated[
-        bool,
-        typer.Option("--tui", hidden=True),
-    ] = False,
     direct: Annotated[
         bool,
         typer.Option(
@@ -102,12 +94,7 @@ def cmd(
         raise typer.Exit(2)
 
     replay_requested = bool(
-        evidence
-        or survivors
-        or expected_revision is not None
-        or apply_now
-        or plain
-        or tui
+        evidence or survivors or expected_revision is not None or apply_now
     )
     if replay_requested:
         if context_name is not None or evidence_json or direct or recursive:
@@ -123,8 +110,6 @@ def cmd(
             survivors=survivors,
             expected_revision=expected_revision,
             apply_now=apply_now,
-            plain=plain,
-            tui=tui,
         )
         return
     try:

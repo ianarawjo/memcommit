@@ -176,8 +176,8 @@ receipt. Standalone output uses an explicit operation-wide grammar:
 verdict is the result of the complete n-ary operation, not the status of the
 first listed target.
 
-Fit always returns a compact terminal receipt; it has no standalone Viewer or
-`--tui` route. Every general result is one logical target-summary line. One
+Fit always returns a compact terminal receipt; it has no presentation-mode
+route. Every general result is one logical target-summary line. One
 outer `[TARGETS: ...]` groups selected Context names, direct Memory UID
 prefixes, and literal proposition aliases by type. A type label starts a group;
 comma-separated values belong to it until the next type label. Contexts are
@@ -194,9 +194,8 @@ control from fabricating another receipt line. In a color-capable TTY, only the
 typed `YES`, `MAY`, or `NO`
 token uses its shared judgment role: green, yellow, or red respectively.
 Operation chrome, punctuation, source labels, Context/Ground names, counts,
-and Memory bodies remain neutral. `--plain` remains accepted for compatibility
-and suppresses ANSI without changing the receipt text or preserving a second
-layout mode.
+and Memory bodies remain neutral. Pipes, `NO_COLOR`, and terminal capability
+suppress ANSI without changing the receipt text or creating a second layout.
 
 Each positional operand is typed locally before provider construction. The
 reserved `text:` prefix forces the remainder to be literal proposition text.

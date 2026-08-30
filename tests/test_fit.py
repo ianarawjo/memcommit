@@ -323,7 +323,7 @@ def test_mem_fit_plain_runs_against_physical_ground(monkeypatch, isolated_store)
 
     result = CliRunner().invoke(
         app,
-        ["fit", "--ground", "physical-fit", "--plain"],
+        ["fit", "--ground", "physical-fit"],
     )
 
     assert result.exit_code == 0, result.output

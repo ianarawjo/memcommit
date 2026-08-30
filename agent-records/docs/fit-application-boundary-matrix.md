@@ -110,8 +110,8 @@ even when provider material evidence names only one side. Fitting Examples and
 graph findings are counted but never expanded. A stale receipt prints only its
 stale summary, because its old issue details no longer describe the current
 Ground. In a color-capable TTY only typed `YES`, `MAY`, and `NO` tokens use the
-shared judgment palette. ANSI-free text, `--plain`, pipes, and `NO_COLOR`
-retain the exact labels, order, and punctuation; there is no `--tui` route.
+shared judgment palette. ANSI-free pipes and `NO_COLOR` retain the exact
+labels, order, and punctuation; there is no presentation-mode route.
 
 ## Invariants
 
@@ -128,7 +128,8 @@ retain the exact labels, order, and punctuation; there is no `--tui` route.
    UID/digest changed after freezing.
 6. General output is exactly one grouped target line for every verdict. Ground
    output is one operation-wide `FIT` summary plus one line per current
-   Rule–Example issue; `--plain` suppresses color without changing that layout.
+   Rule–Example issue; terminal capability may suppress color without changing
+   that layout.
 7. Physical Ground and standalone Fit use the same application/runtime
    execution and explicit CLI receipt boundary.
 8. Compact presentation never removes evidence from the persisted receipt or
@@ -180,7 +181,7 @@ Completed 2026-08-15:
 - `agent-records/docs/screenshots/mem-general-fit-20260815` retains seven ordered `180 x 52`
   true-color states from provider progress through zero-write verification;
 - application/runtime and CLI tests preserve new-run and receipt-reopen
-  behavior, stable non-TTY output, `--plain`, and pre-storage `--tui` failure;
+  behavior, stable non-TTY output, and parse-time rejection of retired flags;
 - typed adapter tests cover compact section identities, all-fit/issue/stale
   marks, focused Example copy, complete compact copy, and one-line plain text;
 - shared Viewer interaction tests exercise lowercase `y` and uppercase `Y` in

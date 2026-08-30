@@ -2,6 +2,11 @@
 
 Last reviewed: 2026-08-20.
 
+> **Route update (2026-08-30):** Find now opens this compact scope only when
+> its pattern is omitted in an interactive terminal. A complete Find argv
+> prints one bounded result and the former `--tui` launcher is retired. Search
+> retains only the routes documented by its own command contract.
+
 ## Motivating scenario
 
 Provider-free `mem find --tui` used most of a 180×52 terminal to display a

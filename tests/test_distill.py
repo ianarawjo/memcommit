@@ -707,7 +707,7 @@ def test_mem_distill_ground_adopt_is_an_explicit_physical_write(
 
     result = runner.invoke(
         app,
-        ["distill", "--ground", "physical-distill", "--adopt", "--plain"],
+        ["distill", "--ground", "physical-distill", "--adopt"],
     )
 
     assert result.exit_code == 0, result.output

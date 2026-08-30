@@ -7,10 +7,10 @@ were directly under memcommit at baseline commit 885e62c0.
 
 | Role | Modules |
 | --- | ---: |
-| historical-compatibility-facade | 103 |
-| operation-implementation | 75 |
-| retired-prototype | 3 |
-| root-boundary | 2 |
+| historical-compatibility-facade | 95 |
+| operation-implementation | 72 |
+| retired-prototype | 15 |
+| root-boundary | 1 |
 | shared-concept-implementation | 66 |
 
 ## Modules
@@ -29,18 +29,18 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.atomize_analysis_application | historical-compatibility-facade | remove | memcommit.application.operations.atomize.analysis_application | 0 |
 | memcommit.atomize_analysis_runtime | historical-compatibility-facade | remove | memcommit.application.operations.atomize.analysis_runtime | 0 |
 | memcommit.atomize_application | historical-compatibility-facade | remove | memcommit.application.operations.atomize.application | 0 |
-| memcommit.atomize_grounding | historical-compatibility-facade | remove | memcommit.application.operations.atomize.grounding | 0 |
-| memcommit.atomize_grounding_application | historical-compatibility-facade | remove | memcommit.application.operations.atomize.grounding_application | 0 |
-| memcommit.atomize_grounding_provider | historical-compatibility-facade | remove | memcommit.application.operations.atomize.grounding_provider | 0 |
-| memcommit.atomize_grounding_runtime | historical-compatibility-facade | remove | memcommit.application.operations.atomize.grounding_runtime | 0 |
-| memcommit.atomize_meld_adapter | historical-compatibility-facade | remove | memcommit.application.operations.atomize.grounding_meld_adapter | 0 |
+| memcommit.atomize_grounding | retired-prototype | retire | none (retired) | 0 |
+| memcommit.atomize_grounding_application | retired-prototype | retire | none (retired) | 0 |
+| memcommit.atomize_grounding_provider | retired-prototype | retire | none (retired) | 0 |
+| memcommit.atomize_grounding_runtime | retired-prototype | retire | none (retired) | 0 |
+| memcommit.atomize_meld_adapter | retired-prototype | retire | none (retired) | 0 |
 | memcommit.atomize_normal_form | historical-compatibility-facade | remove | memcommit.application.operations.atomize.normal_form | 0 |
 | memcommit.atomize_resolution_adapter | historical-compatibility-facade | remove | memcommit.application.operations.atomize.resolution_adapter | 0 |
 | memcommit.atomize_result_adapter | historical-compatibility-facade | remove | memcommit.application.operations.atomize.result_adapter | 0 |
 | memcommit.atomize_runtime | historical-compatibility-facade | remove | memcommit.application.operations.atomize.runtime | 0 |
-| memcommit.atomize_workbench | historical-compatibility-facade | remove | memcommit.application.operations.atomize.workbench | 0 |
-| memcommit.atomize_workflow | historical-compatibility-facade | remove | memcommit.application.operations.atomize.workflow | 0 |
-| memcommit.bootstrap | root-boundary | retain | memcommit.bootstrap | 3 |
+| memcommit.atomize_workbench | historical-compatibility-facade | remove | memcommit.application.operations.atomize.records | 0 |
+| memcommit.atomize_workflow | retired-prototype | retire | none (retired) | 0 |
+| memcommit.bootstrap | retired-prototype | retire | none (retired) | 3 |
 | memcommit.checkpoint_catalog | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.retained_history.checkpoint_catalog | 3 |
 | memcommit.checkpoint_frames | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.retained_history.checkpoint_frames | 1 |
 | memcommit.checkpoint_migration | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.retained_history.checkpoint_migration | 0 |
@@ -68,8 +68,8 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.context | shared-concept-implementation | relocate-without-alias | memcommit.core.context | 279 |
 | memcommit.context_catalog | shared-concept-implementation | relocate-without-alias | memcommit.core.context_targeting.context_catalog | 1 |
 | memcommit.context_history | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.retained_history.context_history | 4 |
-| memcommit.context_init_application | historical-compatibility-facade | remove | memcommit.application.operations.context_init.application | 0 |
-| memcommit.context_init_runtime | historical-compatibility-facade | remove | memcommit.application.operations.context_init.runtime | 0 |
+| memcommit.context_init_application | historical-compatibility-facade | remove | memcommit.application.operations.init.application | 0 |
+| memcommit.context_init_runtime | historical-compatibility-facade | remove | memcommit.application.operations.init.runtime | 0 |
 | memcommit.context_lifecycle | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.retained_history.context_lifecycle | 1 |
 | memcommit.context_locator | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.context_locator | 44 |
 | memcommit.context_naming | shared-concept-implementation | relocate-without-alias | memcommit.core.context_targeting.naming | 26 |
@@ -136,12 +136,12 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.granted_query_runtime | historical-compatibility-facade | remove | memcommit.application.operations.query.granted_runtime | 0 |
 | memcommit.granted_source_update_application | operation-implementation | relocate-without-alias | memcommit.application.operations.update.granted_source | 1 |
 | memcommit.granted_update_application | operation-implementation | relocate-without-alias | memcommit.application.operations.update.granted_target | 5 |
-| memcommit.ground | operation-implementation | relocate-without-alias | memcommit.application.operations.ground.model | 26 |
+| memcommit.ground | retired-prototype | retire | none (retired) | 26 |
 | memcommit.ground_context_catalog | operation-implementation | relocate-without-alias | memcommit.application.operations.ground.context_catalog | 1 |
 | memcommit.ground_dialogue | operation-implementation | relocate-without-alias | memcommit.application.operations.ground.dialogue | 1 |
 | memcommit.ground_distill | operation-implementation | relocate-without-alias | memcommit.application.operations.ground.distill | 2 |
 | memcommit.ground_elaborate | operation-implementation | relocate-without-alias | memcommit.application.operations.ground.elaborate | 2 |
-| memcommit.ground_turn_dialogue | operation-implementation | relocate-without-alias | memcommit.application.operations.ground.turn_dialogue | 2 |
+| memcommit.ground_turn_dialogue | retired-prototype | retire | none (retired) | 2 |
 | memcommit.ground_workspace | operation-implementation | relocate-without-alias | memcommit.application.operations.ground.workspace_model | 13 |
 | memcommit.ground_workspace_application | operation-implementation | relocate-without-alias | memcommit.application.operations.ground.workspace_application | 4 |
 | memcommit.ground_workspace_draft | operation-implementation | relocate-without-alias | memcommit.application.operations.ground.workspace_draft | 3 |
@@ -223,7 +223,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.result_workbench | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.result_workbench | 13 |
 | memcommit.review | operation-implementation | relocate-without-alias | memcommit.application.operations.review.model | 21 |
 | memcommit.review_report | historical-compatibility-facade | remove | memcommit.application.capabilities.reviewing.report | 3 |
-| memcommit.review_report_adapters | operation-implementation | relocate-without-alias | memcommit.application.operations.review.report_adapters | 3 |
+| memcommit.review_report_adapters | retired-prototype | retire | none (retired) | 3 |
 | memcommit.search | operation-implementation | relocate-without-alias | memcommit.application.operations.search.model | 11 |
 | memcommit.search_artifacts | operation-implementation | relocate-without-alias | memcommit.application.operations.search.artifacts | 1 |
 | memcommit.selective_curation | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.semantic.selective_curation | 5 |
@@ -255,8 +255,8 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.switch_runtime | historical-compatibility-facade | remove | memcommit.application.operations.switch.runtime | 0 |
 | memcommit.temporal_history | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.retained_history.temporal | 2 |
 | memcommit.translate | historical-compatibility-facade | remove | memcommit.application.operations.translate.runtime | 0 |
-| memcommit.translation_view | historical-compatibility-facade | remove | memcommit.application.operations.translate.view | 0 |
-| memcommit.translation_view_store | historical-compatibility-facade | remove | memcommit.application.operations.translate.view_store | 0 |
+| memcommit.translation_view | retired-prototype | retire | none (retired) | 0 |
+| memcommit.translation_view_store | retired-prototype | retire | none (retired) | 0 |
 | memcommit.uid_locator | shared-concept-implementation | relocate-without-alias | memcommit.core.context_targeting.uid_locator | 6 |
 | memcommit.understanding | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.semantic.understanding | 10 |
 | memcommit.update | operation-implementation | relocate-without-alias | memcommit.application.operations.update.model | 33 |

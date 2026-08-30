@@ -28,10 +28,10 @@ optional content-free Recent or Select Target
 That launcher is optional navigation, not the default meaning of every
 operand-free command. Summarize has a complete current-Context/direct request
 even when no Context operand is written, so its ordinary invocation executes
-immediately. `mem summarize --tui` opts into the Recent/Select Target lifecycle;
-an explicit Context combined with `--tui` enters the operation-owned setup with
-that Context staged. This matches the broader rule that executable argv does
-not open full-screen setup implicitly.
+immediately. Its former presentation-mode workbench launcher is retired; a
+future target-selection route would need its own explicit operation contract.
+This matches the broader rule that executable argv does not open full-screen
+setup implicitly.
 
 `ReadReportTarget` is the interface-independent identity joining those steps.
 It records only the canonical operation name, effective readable Context names,
@@ -65,10 +65,10 @@ launcher as Summarize and Find without breaking existing attempt ledgers.
 the neutral Operation Launcher and returns only a `ReadReportTarget` or a
 Select-Target action. It does not own target trees or result documents:
 
-- Summarize retains its Context Summary workbench and direct/recursive/Both
-  result contract.
-- Trace returns a bounded receipt by default, retains its complete temporal
-  lineage under `--plain`, and opens the history explorer only with `--tui`.
+- Summarize executes one direct/recursive request and prints one result; its
+  former Context Summary workbench remains component-level code.
+- Trace prints its bounded temporal lineage directly; its former receipt/detail
+  indirection and Viewer switch are retired.
 - Rationale retains its whole-Trace, example-calibrated natural-provenance
   synthesis and compact terminal receipt; its legacy current-purpose inference
   fields remain JSON compatibility data only.
@@ -126,7 +126,7 @@ directly by the shared operation launcher component.
 - No recent selection mutates global current Context or creates a saved
   analysis/session record.
 - Ordinary current-Context and explicitly targeted Summarize routes execute in
-  the primary terminal flow; `--tui` is the explicit launcher/setup route.
+  the primary terminal flow; no presentation-mode launcher remains.
 
 ## Intentional limitations
 

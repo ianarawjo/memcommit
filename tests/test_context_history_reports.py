@@ -38,7 +38,7 @@ def _evolving_context() -> tuple[MemoryStore, Memory]:
 def test_trace_positional_context_returns_its_complete_lineage(isolated_store):
     _store, memory = _evolving_context()
 
-    result = _invoke("trace", "notes", "--plain")
+    result = _invoke("trace", "notes")
 
     assert result.exit_code == 0, result.output + result.stderr
     assert "TRACE · notes" in result.output
@@ -61,29 +61,13 @@ def test_trace_context_json_names_the_context_subject(isolated_store):
     assert len(payload["events"]) >= 3
 
 
-def test_trace_context_tui_reads_one_lineage_without_checkpoint_picker(
-    isolated_store,
-    monkeypatch,
-):
+def test_trace_context_rejects_retired_tui_mode(isolated_store):
     _evolving_context()
-    opened = []
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.trace.command.interactive_report_terminal",
-        lambda: True,
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.trace.command.open_context_trace_viewer",
-        lambda report, **kwargs: opened.append((report, kwargs)),
-    )
 
     result = _invoke("trace", "notes", "--tui")
 
-    assert result.exit_code == 0, result.output + result.stderr
-    assert len(opened) == 1
-    report, options = opened[0]
-    assert report.context_name == "notes"
-    assert len(report.events) >= 3
-    assert options["limit"] == 20
+    assert result.exit_code == 2
+    assert "No such option: --tui" in result.stderr
 
 
 class _ContextRationaleProvider:
@@ -133,7 +117,7 @@ def test_history_target_failure_uses_the_shared_context_suggestion(
 ):
     assert _invoke("init", "practice/rules").exit_code == 0
 
-    result = _invoke("trace", "pracitce/rules", "--plain")
+    result = _invoke("trace", "pracitce/rules")
 
     assert result.exit_code == 1
     assert "Context 'pracitce/rules' does not exist." in result.stderr

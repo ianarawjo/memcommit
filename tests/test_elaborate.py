@@ -840,7 +840,7 @@ def test_elaborate_shared_viewer_copies_one_proposal_or_all() -> None:
     assert "PROPOSAL OVERVIEW" in copied[1]
 
 
-def test_elaborate_console_owns_proposal_viewer_and_runner_without_facades() -> None:
+def test_elaborate_console_keeps_projection_without_a_mode_router() -> None:
     repository_root = Path(__file__).resolve().parents[1]
     command_root = repository_root / "src/memcommit/adapters/console/commands/elaborate"
     retired_tui_root = (
@@ -848,7 +848,7 @@ def test_elaborate_console_owns_proposal_viewer_and_runner_without_facades() -> 
     )
 
     assert (command_root / "proposal.py").is_file()
-    assert (command_root / "runner.py").is_file()
+    assert not (command_root / "runner.py").exists()
     assert (command_root / "viewer/model.py").is_file()
     assert (command_root / "viewer/projection.py").is_file()
     assert (command_root / "viewer/screen.py").is_file()
@@ -857,10 +857,7 @@ def test_elaborate_console_owns_proposal_viewer_and_runner_without_facades() -> 
         repository_root / "src/memcommit/adapters/interfaces/cli/elaborate.py"
     ).exists()
 
-    bootstrap_source = (repository_root / "src/memcommit/bootstrap.py").read_text(
-        encoding="utf-8"
-    )
-    assert "build_elaborate_console_runner" not in bootstrap_source
+    assert not (repository_root / "src/memcommit/bootstrap.py").exists()
 
 
 def test_mem_elaborate_plain_uses_the_typed_application(
@@ -879,7 +876,7 @@ def test_mem_elaborate_plain_uses_the_typed_application(
 
     result = runner.invoke(
         app,
-        ["elaborate", "--goal", "Confirm before acting.", "--plain"],
+        ["elaborate", "--goal", "Confirm before acting."],
     )
 
     assert result.exit_code == 0, result.output
@@ -916,7 +913,6 @@ def test_mem_elaborate_ground_adopt_is_an_explicit_physical_write(
             "physical-elaborate",
             "--from-goal",
             "--adopt",
-            "--plain",
         ],
     )
 

@@ -26,13 +26,7 @@ from memcommit.adapters.console.commands.find.presentation import (
     DEFAULT_FIND_PREVIEW_MATCHES,
     render_find_result,
 )
-from memcommit.adapters.console.commands.find.compact import run_compact_find_result
-from memcommit.adapters.console import (
-    ConsoleMode,
-    ConsoleModeError,
-    SystemTerminalCapabilities,
-    resolve_console_mode,
-)
+from memcommit.adapters.console import SystemTerminalCapabilities
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.find.workbench import (
     FindTuiSetup,
@@ -122,22 +116,10 @@ def cmd(
             help="Print every matching row instead of the bounded preview",
         ),
     ] = False,
-    plain: Annotated[
-        bool,
-        typer.Option(
-            "--plain",
-            help="Print the result (the default when PATTERN is supplied)",
-        ),
-    ] = False,
-    tui: Annotated[
-        bool,
-        typer.Option("--tui", help="Require the compact interactive Find form"),
-    ] = False,
 ) -> None:
     """Find exact text spans without a provider, cache, session, or mutation."""
 
     try:
-        mode = resolve_console_mode(plain=plain, tui=tui)
         traversal = resolve_context_traversal(
             preset=resolve_scope_preset(
                 direct=direct,
@@ -148,9 +130,7 @@ def cmd(
             follow_embeds=follow_embeds,
         )
         terminal = SystemTerminalCapabilities()
-        if pattern is None and (
-            mode is ConsoleMode.PLAIN or not terminal.is_interactive()
-        ):
+        if pattern is None and not terminal.is_interactive():
             raise ValueError(
                 "PATTERN is required outside a terminal. In a terminal, run "
                 "'mem find' to open interactive Find."
@@ -206,13 +186,9 @@ def cmd(
         def execute(next_request: FindRequest) -> FindResult:
             return execute_find(next_request, catalog=catalog)
 
-        # A supplied pattern is already an executable request, so never send it
-        # through full-screen setup implicitly. Short/static results stay
-        # inline; a longer AUTO TTY result may use only the compact pager below.
-        # --tui remains the explicit escape hatch for reviewing setup controls.
-        if mode is ConsoleMode.TUI or (
-            mode is ConsoleMode.AUTO and request is None and terminal.is_interactive()
-        ):
+        # Missing input opens the operation's input editor. A complete request
+        # always executes through the same result projection, independent of TTY.
+        if request is None:
             names = tuple(catalog.list_context_names())
             current = snapshot.current_name
             current_name = current if current in names else target_names[0]
@@ -237,29 +213,15 @@ def cmd(
         else:
             assert request is not None
             result = execute(request)
-            if (
-                mode is ConsoleMode.AUTO
-                and terminal.is_interactive()
-                and not show_all_results
-                and len(result.matches) > DEFAULT_FIND_PREVIEW_MATCHES
-            ):
-                # A completed one-shot request stays in the primary terminal
-                # flow. Only its bounded rows become interactive; setup and
-                # result semantics remain outside the shared pager shell.
-                run_compact_find_result(
+            typer.echo(
+                render_find_result(
                     result,
+                    match_limit=(
+                        None if show_all_results else DEFAULT_FIND_PREVIEW_MATCHES
+                    ),
                     all_readable_contexts=all_contexts,
                 )
-            else:
-                typer.echo(
-                    render_find_result(
-                        result,
-                        match_limit=(
-                            None if show_all_results else DEFAULT_FIND_PREVIEW_MATCHES
-                        ),
-                        all_readable_contexts=all_contexts,
-                    )
-                )
+            )
 
         if result is None:
             typer.echo("Find closed.")
@@ -278,7 +240,6 @@ def cmd(
             typer.secho("Copied complete Find result.", fg=typer.colors.GREEN, err=True)
     except (
         ClipboardError,
-        ConsoleModeError,
         FileNotFoundError,
         FindError,
         OSError,

@@ -6,15 +6,24 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.clipboard import write_system_clipboard
-from memcommit.adapters.console.commands.elaborate.runner import (
-    build_elaborate_console_runner,
+from memcommit.adapters.console.commands.elaborate.proposal import (
+    render_elaborate_plain,
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
-from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
-from memcommit.application.operations.elaborate.model import ElaborateError, ElaborateMode
-from memcommit.application.operations.elaborate.application import ElaborateRequest, ElaborateResult
-from memcommit.application.capabilities.semantic.goal_focus_runtime import freeze_goal_focus_operand
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
+)
+from memcommit.application.operations.elaborate.model import (
+    ElaborateError,
+    ElaborateMode,
+)
+from memcommit.application.operations.elaborate.application import (
+    ElaborateRequest,
+    ElaborateResult,
+)
+from memcommit.application.capabilities.semantic.goal_focus_runtime import (
+    freeze_goal_focus_operand,
+)
 from memcommit.application.operations.elaborate.add_runtime import (
     FrozenElaborateSource,
     PreparedElaborateAdd,
@@ -32,16 +41,13 @@ from memcommit.application.operations.ground.elaborate import (
 from memcommit.adapters.console.terminal.components.applied_memory_preview import (
     render_applied_memory_preview,
 )
-from memcommit.adapters.console import (
-    ConsoleMode,
-    ConsoleModeError,
-    SystemTerminalCapabilities,
-    resolve_console_mode,
-)
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider
+from memcommit.providers.subscription import (
+    QueryProviderError,
+    connect_semantic_provider,
+)
 from memcommit.application.capabilities.semantic_result_memorization import (
     resolve_memorization_target,
     resolve_semantic_result_endpoints,
@@ -140,34 +146,13 @@ def cmd(
         bool,
         typer.Option(
             "--from-rules",
-            help=(
-                "With --ground, propose Case propositions from its active Rules"
-            ),
+            help=("With --ground, propose Case propositions from its active Rules"),
         ),
-    ] = False,
-    plain: Annotated[
-        bool,
-        typer.Option("--plain", help="Print a read-only Ground result without a Viewer"),
-    ] = False,
-    tui: Annotated[
-        bool,
-        typer.Option("--tui", help="Require the read-only Ground result Viewer"),
     ] = False,
 ) -> None:
     """Generate Rules or Cases and add them to an existing Context."""
 
     try:
-        mode = resolve_console_mode(plain=plain, tui=tui)
-        # Standalone semantic Add commands are line-oriented by default. Impact
-        # owns non-mutating inspection, so a TTY must not silently change the
-        # command into an interactive preview workflow.
-        if mode is ConsoleMode.AUTO:
-            mode = ConsoleMode.PLAIN
-        if adopt and tui:
-            raise ElaborateError(
-                "--adopt cannot use the read-only TUI; the explicit "
-                "line-oriented command is the adoption boundary."
-            )
         frozen_ground: FrozenGroundElaborate | None = None
         ground_result: GroundElaborateResult | None = None
         ground_store: MemoryStore | None = None
@@ -296,21 +281,9 @@ def cmd(
                 progress.update("proposal ready", step=1)
                 return result
 
-        runner = build_elaborate_console_runner(
-            execute=execute,
-            clipboard_writer=write_system_clipboard,
-            terminal=SystemTerminalCapabilities(),
-        )
-        if frozen_ground is None:
-            if tui:
-                raise ElaborateError(
-                    "Direct Elaborate Add is non-interactive; use "
-                    "'mem impact elaborate' to inspect without saving."
-                )
-            result = execute(request)
-        else:
-            result = runner.run(request, mode=mode)
+        result = execute(request)
         if frozen_ground is not None:
+            render_elaborate_plain(result)
             if adopt:
                 if ground_result is None or ground_store is None:
                     raise ElaborateError("Elaborate produced no Ground proposal.")
@@ -359,7 +332,6 @@ def cmd(
         typer.echo(f"REVIEW · mem review elaborate --receipt {receipt.checkpoint_uid}")
         typer.echo("UNDO · mem undo")
     except (
-        ConsoleModeError,
         ElaborateError,
         FileNotFoundError,
         OSError,

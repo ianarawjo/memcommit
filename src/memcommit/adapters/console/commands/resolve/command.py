@@ -6,7 +6,6 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.clipboard import write_system_clipboard
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
@@ -14,13 +13,6 @@ from memcommit.adapters.console.coordination.context_operand import (
 from memcommit.application.operations.fit.judgment import FitJudgmentError
 from memcommit.adapters.console.commands.resolve.analysis import render_resolve_plain
 from memcommit.adapters.console.commands.resolve.receipt import render_resolve_receipt
-from memcommit.adapters.console.commands.resolve.workbench import run_resolve_tui
-from memcommit.adapters.console import (
-    ConsoleMode,
-    ConsoleModeError,
-    SystemTerminalCapabilities,
-    resolve_console_mode,
-)
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
@@ -137,37 +129,14 @@ def cmd(
             help="Apply the exact regenerated candidate after Fit verification",
         ),
     ] = False,
-    plain: Annotated[
-        bool,
-        typer.Option(
-            "--plain",
-            help="Print non-applicable outcomes instead of opening the TUI",
-        ),
-    ] = False,
-    tui: Annotated[
-        bool,
-        typer.Option(
-            "--tui",
-            help="Require an interactive view for non-applicable outcomes",
-        ),
-    ] = False,
 ) -> None:
     """Make one complete Memory frame Fit through grounded minimum changes."""
 
     try:
-        mode = resolve_console_mode(plain=plain, tui=tui)
-        # A terminal outcome is still a result, not an invitation to inspect a
-        # report. Keep the Viewer behind the explicit --tui route.
-        if mode is ConsoleMode.AUTO:
-            mode = ConsoleMode.PLAIN
         if apply_now:
             if candidate_uid is None or expected_revision is None:
                 raise ResolveError(
                     "Resolve --apply requires --candidate and --expected-revision."
-                )
-            if mode is ConsoleMode.TUI:
-                raise ResolveError(
-                    "Resolve --apply is already exact; do not combine it with --tui."
                 )
         elif candidate_uid is not None or expected_revision is not None:
             raise ResolveError(
@@ -258,28 +227,8 @@ def cmd(
             )
             return
 
-        interactive = SystemTerminalCapabilities().is_interactive()
-        selected_mode = (
-            ConsoleMode.TUI
-            if mode is ConsoleMode.AUTO and interactive
-            else ConsoleMode.PLAIN
-            if mode is ConsoleMode.AUTO
-            else mode
-        )
-        if selected_mode is ConsoleMode.TUI:
-            run_resolve_tui(
-                analysis,
-                apply_candidate=lambda selected: apply_resolve(
-                    analysis,
-                    selected,
-                    frame_port=port,
-                ),
-                clipboard_writer=write_system_clipboard,
-            )
-        else:
-            render_resolve_plain(analysis)
+        render_resolve_plain(analysis)
     except (
-        ConsoleModeError,
         FileNotFoundError,
         FitJudgmentError,
         OSError,

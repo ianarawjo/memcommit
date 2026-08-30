@@ -73,7 +73,7 @@ def test_trace_shows_newest_operation_first_with_forward_row_arrows(
     assert invoke("edit", memory.uid, "revision one").exit_code == 0
     assert invoke("edit", memory.uid, "revision two").exit_code == 0
 
-    result = invoke("trace", memory.uid[:8], "--plain")
+    result = invoke("trace", memory.uid[:8])
 
     assert result.exit_code == 0
     rows = [
@@ -143,7 +143,7 @@ def test_trace_records_unchanged_memory_route_for_branch_entry_points(
         "target": "practice/2",
     }
 
-    rendered = invoke("trace", f"practice/2:{target_memory.uid}", "--plain")
+    rendered = invoke("trace", f"practice/2:{target_memory.uid}")
     assert rendered.exit_code == 0, rendered.output
     assert "[branch]" in rendered.output
     assert "practice/1 → practice/2 · Memory content unchanged" in rendered.output
@@ -220,7 +220,7 @@ def test_merge_lineage_connects_source_and_fresh_target_trace_both_directions(
             "target": target.name,
         }
 
-    rendered = invoke("trace", source_memory.uid, "--plain", "--all")
+    rendered = invoke("trace", source_memory.uid, "--all")
     assert rendered.exit_code == 0, rendered.output
     assert "[merge] [CHECKPOINT " in rendered.output
     assert "[MEMORIES 2]" in rendered.output
@@ -313,7 +313,7 @@ def test_merge_trace_preserves_keep_target_and_take_source_dispositions(
     ]
     assert taken_event.after[0].content == "Feature wording."
 
-    rendered = invoke("trace", main_memory.uid, "--plain", "--all")
+    rendered = invoke("trace", main_memory.uid, "--all")
     assert rendered.exit_code == 0, rendered.output
     assert "Target retained; Source not materialized" in rendered.output
     assert "Target content replaced from Source" in rendered.output
@@ -429,7 +429,7 @@ def test_trace_resolves_removed_historical_memory(isolated_store):
     )
     assert invoke("remove", memory.uid[:8]).exit_code == 0
 
-    result = invoke("trace", memory.uid[:8], "--plain")
+    result = invoke("trace", memory.uid[:8])
 
     assert result.exit_code == 0
     assert "[add]" in result.output
@@ -466,8 +466,8 @@ def test_trace_reconstructs_legacy_chunk_lineage_both_directions(
     ]
     assert len(children) == 2
 
-    from_parent = invoke("trace", parent.uid[:8], "--verbose", "--plain")
-    from_child = invoke("trace", children[1].uid[:8], "--verbose", "--plain")
+    from_parent = invoke("trace", parent.uid[:8], "--verbose")
+    from_child = invoke("trace", children[1].uid[:8], "--verbose")
 
     for result in (from_parent, from_child):
         assert result.exit_code == 0
@@ -734,7 +734,7 @@ def test_trace_reads_current_state_after_revert(isolated_store):
     assert invoke("edit", memory.uid, "later").exit_code == 0
     assert invoke("revert", keep_checkpoint[:8]).exit_code == 0
 
-    result = invoke("trace", memory.uid[:8], "--plain")
+    result = invoke("trace", memory.uid[:8])
 
     assert result.exit_code == 0
     assert "[revert]" in result.output

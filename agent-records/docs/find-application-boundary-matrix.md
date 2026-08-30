@@ -1,6 +1,6 @@
 # Find callable boundary matrix
 
-Last reviewed: 2026-08-25.
+Last reviewed: 2026-08-30.
 
 ## Purpose
 
@@ -14,7 +14,7 @@ semantic cache, visible session, or mutation plan.
 
 ```text
 mem find PATTERN -------------------\
-interactive Find workbench ----------+--> FindRequest
+bare Find input editor --------------+--> FindRequest
 MemCommitClient.find ----------------+
 agent memcommit_find ----------------/          |
                                                   v
@@ -27,8 +27,8 @@ agent memcommit_find ----------------/          |
                                       (runtime adapter)
                                                   |
                                       FindResult
-                                      /             \
-                              plain presenter    TUI Viewer
+                                              |
+                                      result projection
 ```
 
 ## Package ownership
@@ -44,12 +44,13 @@ directly.
 
 The human console vertical is co-located under
 `memcommit.adapters.console.commands.find`: `command.py` owns orchestration,
-`presentation.py` and `source_row.py` own plain result projection, `compact.py`
-owns completed-result paging, and `workbench/` owns interactive request setup
-and result inspection. The former CLI and operation-specific TUI interface
+`presentation.py` and `source_row.py` own result projection, while `workbench/`
+owns the interactive request setup opened only when the pattern is omitted.
+The former CLI and operation-specific TUI interface
 paths are removed without facades. This changes ownership and canonical names
-only; it does not change matching, scope, clipboard, paging, or terminal
-interaction behavior.
+only. The later console-routing retirement did change presentation routing:
+a complete request no longer enters paging or a Viewer because stdout is a
+TTY, and the former `--plain`/`--tui` switches are rejected.
 
 The historical `memcommit.literal_find_application` and
 `memcommit.literal_find_runtime` paths remain behavior-free module-identity
@@ -75,7 +76,7 @@ non-goals of the ownership-only move.
 | MemoryRef | runtime source collector | The selected owner and referenced Source identity are both retained; unresolved or unreadable references are skipped rather than opened through concealed authority |
 | Result | `FindResult` | Complete scanned-item, matched-item, and occurrence counts accompany immutable per-item spans |
 | Durable effect | none | No provider, cache, session, checkpoint, Context write, current switch, or materialization occurs |
-| Presentation | command-owned plain and interactive adapters, neutral Source Reference projection, shared compact Scope, and shared compact pager mechanics | Rows use `N [UID] content, [Context mX]`, where `N` is match order and `mX` is frozen searchable-corpus position; Up to ten matches print inline; a longer supplied-pattern TTY result uses a primary-screen ten-row pager with `SHOWING a–b OF total`, row/page/boundary arrow navigation, wrapped complete rows, and a non-erasing close; `--plain` retains the bounded static projection and `--all-results` prints every row; `-a/--all` instead freezes every readable Context as the exact target set; Find never content-elides a Source row; operand-free `mem find` or explicit `--tui` opens a primary-screen `SCOPE → FIND → RESULTS` form whose direct exact Context input expands to Profile/multiple tree selection only while Browse is open; `y` copies the complete numbered focused row there, while `--copy` and TUI `Y` copy the complete typed result projection |
+| Presentation | command-owned result and missing-input adapters, neutral Source Reference projection, and shared compact Scope | Rows use `N [UID] content, [Context mX]`, where `N` is match order and `mX` is frozen searchable-corpus position; every supplied-pattern invocation prints the same bounded ten-row projection, `--all-results` prints every row, and `-a/--all` freezes every readable Context as the exact target set; Find never content-elides a Source row; operand-free interactive `mem find` opens the primary-screen `SCOPE → FIND → RESULTS` input form, while `--copy` retains the complete typed result projection |
 | Public adapters | Python and version-1 agent | Both call the same runtime/application boundary and return typed/JSON projections with `effect: NONE` and `provider_used: false` |
 
 The shared compact selector projects descendant choices into the exact visible
@@ -94,13 +95,11 @@ loader expansion.
   exclusion, reject unsafe mixed recursive copy, and never disclose a nested
   QUERY-only Memory.
 - `tests/test_find_cli.py` checks actual Typer routes, repeated roots,
-  descendants, literal defaults, regex rejection, non-TTY behavior, short
-  inline TTY output, long-result compact-pager routing, bounded `--plain`
-  versus `--all-results`, complete clipboard output, and the explicit `--tui`
-  override.
-- `tests/test_paged_result.py` checks the operation-neutral range/total state,
-  stable discrete pages, retained row position, result boundaries, and actual
-  prompt-toolkit arrow dispatch without an operation model.
+  descendants, literal defaults, regex rejection, non-TTY behavior, one
+  terminal-independent bounded result for complete requests, `--all-results`,
+  complete clipboard output, and the operand-free input editor.
+- `tests/test_paged_result.py` retains component-level range/total mechanics;
+  Find no longer uses them to route a complete command result.
 - `tests/test_find_presentation.py` checks shared logical-row grammar,
   complete unelided content, hidden human-facing spans, explicit page
   disclosure, distinct empty-scope output, and MemoryRef owner-to-Source

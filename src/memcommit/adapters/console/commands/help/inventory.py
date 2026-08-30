@@ -367,7 +367,7 @@ COMMAND_FORMS = {
     ),
     "resolve": (
         "mem resolve (automatically apply one grounded full-frame plan, or show a non-applicable outcome)",
-        "mem resolve [context] --plain (apply a grounded plan or print ASSUMED / ALREADY_FIT)",
+        "mem resolve [context] (apply a grounded plan or print ASSUMED / ALREADY_FIT)",
         "mem resolve [context] [memory_uid] (auto-classify one Context and optional edit restrictions)",
         "mem resolve [context] --memory [memory_uid] (explicitly accept a short Memory prefix)",
         "mem resolve [context]:[memory_uid] (bind one Memory restriction to its exact Context)",
@@ -505,7 +505,6 @@ COMMAND_FORMS = {
         'mem replace "[text]" --delete-match (immediately remove exact matched text)',
         'mem replace "[expression]" "[replacement]" --regex (explicit regex matching with literal replacement)',
         'mem replace "[text]" "[replacement]" --context [context1] --context [context2] --descendants (execute across multiple local roots)',
-        'mem replace "[text]" "[replacement]" --tui (edit the complete request in the compact Replace form)',
     ),
     "embed": (
         "mem embed (choose Context or Memory link, target, and insertion gap interactively)",
@@ -832,7 +831,6 @@ COMMAND_FORMS = {
         "mem summarize [context] (direct summary of an explicit Context)",
         "mem summarize -r (recursive summary of the current Context)",
         "mem summarize [context] -r (lexical descendants and embedded Contexts)",
-        "mem summarize --tui (choose a Recent report or readable Context and range)",
         "mem summarize [context] --copy (copy verified direct understanding as plain text)",
     ),
     "switch": (
@@ -857,11 +855,9 @@ COMMAND_FORMS = {
     ),
     "trace": (
         "mem trace (open Recents or select a Memory from the current Context)",
-        "mem trace [memory_selector] (interactively inspect the lineage printed by mem log --memory)",
+        "mem trace [memory_selector] (print the bounded retained lineage document)",
         "mem trace --context [context] (start Memory selection in one local Context)",
         "mem trace [memory_selector] --context [context] (explicit Context and Memory)",
-        "mem trace [memory_selector] --plain (print the bounded lineage "
-        "document instead of opening its read-only Viewer)",
     ),
     "undo": ("mem undo (undo the latest recorded Context command)",),
     "unlock": (

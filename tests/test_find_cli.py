@@ -34,7 +34,7 @@ def test_find_plain_matches_every_literal_occurrence(isolated_store) -> None:
 
     result = runner.invoke(
         app,
-        ["find", "--plain", "--ignore-case", "needle"],
+        ["find", "--ignore-case", "needle"],
     )
 
     assert result.exit_code == 0, result.output + result.stderr
@@ -54,7 +54,7 @@ def test_find_row_distinguishes_match_order_from_frozen_source_position(
     store.save(context)
     store.set_current("find/source")
 
-    result = runner.invoke(app, ["find", "--plain", "needle"])
+    result = runner.invoke(app, ["find", "needle"])
 
     assert result.exit_code == 0, result.output + result.stderr
     assert (
@@ -69,8 +69,8 @@ def test_find_regex_is_explicit_and_rejects_zero_width(isolated_store) -> None:
     store.save(context)
     store.set_current("find/source")
 
-    literal = runner.invoke(app, ["find", "--plain", "a.*a"])
-    invalid = runner.invoke(app, ["find", "--plain", "--regex", "^|"])
+    literal = runner.invoke(app, ["find", "a.*a"])
+    invalid = runner.invoke(app, ["find", "--regex", "^|"])
 
     assert literal.exit_code == 0, literal.output + literal.stderr
     assert "MATCHED 0" in literal.output
@@ -96,7 +96,6 @@ def test_find_repeated_context_roots_and_descendants_are_complete(
         app,
         [
             "find",
-            "--plain",
             "--context",
             "find/root",
             "--context",
@@ -157,7 +156,7 @@ def test_find_pattern_defaults_to_inline_result_in_tty(
     assert "Needle in an inline result." in result.output
 
 
-def test_find_tui_flag_still_opens_supplied_pattern_in_tty(
+def test_complete_find_request_never_opens_input_editor_in_tty(
     isolated_store,
     monkeypatch,
 ) -> None:
@@ -165,28 +164,29 @@ def test_find_tui_flag_still_opens_supplied_pattern_in_tty(
     store = MemoryStore()
     store.save(context)
     store.set_current("find/source")
-    captured = {}
 
     class InteractiveTerminal:
         def is_interactive(self) -> bool:
             return True
-
-    def run_tui(request, **_kwargs):
-        captured["request"] = request
-        return None
 
     monkeypatch.setattr(
         find_command,
         "SystemTerminalCapabilities",
         InteractiveTerminal,
     )
-    monkeypatch.setattr(find_command, "run_find_workbench", run_tui)
+    monkeypatch.setattr(
+        find_command,
+        "run_find_workbench",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(
+            AssertionError("a complete Find request must not open the input editor")
+        ),
+    )
 
-    result = runner.invoke(app, ["find", "Needle", "--tui"])
+    result = runner.invoke(app, ["find", "Needle"])
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert captured["request"].pattern == "Needle"
-    assert result.output == "Find closed.\n"
+    assert "FIND RESULTS" in result.output
+    assert "MATCHED 0 · OCCURRENCES 0" in result.output
 
 
 def test_find_inline_preview_and_all_results_keep_complete_match_count(
@@ -199,10 +199,10 @@ def test_find_inline_preview_and_all_results_keep_complete_match_count(
     store.save(context)
     store.set_current("find/source")
 
-    preview = runner.invoke(app, ["find", "--plain", "needle"])
+    preview = runner.invoke(app, ["find", "needle"])
     complete = runner.invoke(
         app,
-        ["find", "--plain", "--all-results", "needle"],
+        ["find", "--all-results", "needle"],
     )
 
     assert preview.exit_code == 0, preview.output + preview.stderr
@@ -231,8 +231,8 @@ def test_find_all_and_short_alias_search_every_readable_context(
     store.save(second)
     store.set_current(first.name)
 
-    long_option = runner.invoke(app, ["find", "--plain", "--all", "needle"])
-    short_option = runner.invoke(app, ["find", "--plain", "-a", "needle"])
+    long_option = runner.invoke(app, ["find", "--all", "needle"])
+    short_option = runner.invoke(app, ["find", "-a", "needle"])
 
     assert long_option.exit_code == 0, long_option.output + long_option.stderr
     assert short_option.exit_code == 0, short_option.output + short_option.stderr
@@ -274,7 +274,7 @@ def test_find_copy_remains_complete_when_terminal_output_is_previewed(
     copied: list[str] = []
     monkeypatch.setattr(find_command, "write_system_clipboard", copied.append)
 
-    result = runner.invoke(app, ["find", "--plain", "--copy", "needle"])
+    result = runner.invoke(app, ["find", "--copy", "needle"])
 
     assert result.exit_code == 0, result.output + result.stderr
     assert "11 [" not in result.output
@@ -284,38 +284,29 @@ def test_find_copy_remains_complete_when_terminal_output_is_previewed(
     assert "needle row 10, [find/source m11]" in copied[0]
 
 
-def test_find_long_tty_result_uses_compact_pager(isolated_store, monkeypatch) -> None:
+def test_find_long_tty_result_uses_the_same_bounded_projection(
+    isolated_store,
+    monkeypatch,
+) -> None:
     context = ops.init("find/source")
     for index in range(12):
         ops.add(context, f"needle row {index}")
     store = MemoryStore()
     store.save(context)
     store.set_current("find/source")
-    captured = {}
 
     class InteractiveTerminal:
         def is_interactive(self) -> bool:
             return True
-
-    def run_compact(result, *, all_readable_contexts=False):
-        captured["result"] = result
-        captured["all_readable_contexts"] = all_readable_contexts
-        return 0
 
     monkeypatch.setattr(
         find_command,
         "SystemTerminalCapabilities",
         InteractiveTerminal,
     )
-    monkeypatch.setattr(
-        find_command,
-        "run_compact_find_result",
-        run_compact,
-    )
-
     result = runner.invoke(app, ["find", "-a", "needle"])
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert len(captured["result"].matches) == 12
-    assert captured["all_readable_contexts"] is True
-    assert result.output == ""
+    assert "MATCHED 12 · OCCURRENCES 12 · SHOWING 1–10 OF 12" in result.output
+    assert "11 [" not in result.output
+    assert "rerun with --all-results" in result.output

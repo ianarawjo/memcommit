@@ -29,7 +29,6 @@ absent or hidden, no provider is connected.
 mem log --memory MEMORY
 mem trace
 mem trace MEMORY
-mem trace MEMORY --plain
 mem rationale
 mem rationale MEMORY
 ```
@@ -252,12 +251,10 @@ Rationale uses the full-screen target selector only when a target is omitted.
 After selection it restores the ordinary terminal and prints one compact
 receipt; an explicit operand prints the same receipt directly. Its usual
 Memory-plus-lifecycle result does not justify a second Viewer or a close key.
-Trace normally returns a bounded lineage receipt with Context, selected Memory,
-event/component counts, warning count, and an exact `--plain` detail route.
-Bare, recent, and explicit targets share that result contract; selecting a
-target does not cause a second automatic full-screen transition. `--plain`
-prints the complete ANSI-free lineage document, while explicit `--tui` opens
-that document in the common read-only Viewer. JSON retains the complete
+Trace prints the bounded lineage document directly. Bare, recent, and explicit
+targets share that result contract; selecting a target does not cause a second
+automatic full-screen transition. The former compact receipt indirection and
+`--plain`/`--tui` presentation switches are retired. JSON retains the complete
 structured Trace and the validated bounded provenance projection.
 
 The full document renders every visible newest-first operation as the same
@@ -266,14 +263,9 @@ before` / `+ after` Memory diff. `NOW` and `ORIGIN` endpoint bands are
 intentionally omitted: the newest diff's after side and the oldest visible
 diff's before side already carry that state, while the shared `[command]
 [CHECKPOINT …] [MEMORY …]  time · summary` grammar gives the operation the same
-scan landmarks as Log. In `--tui`, Trace moves by visible wrapped rows through the common
-cursor-backed read pane, so a hidden fixed cursor cannot reset the viewport to
-its first logical line.
-Trace sizes that Viewer to the document with a ten-row minimum and a 28-row
-application cap in the ordinary terminal buffer. A short lineage therefore
-does not reserve an empty 52-row canvas; a longer lineage stops growing and
-scrolls inside the same frame. This compactness changes presentation only, not
-the source freeze, operation bound, full plain document, or close behavior.
+scan landmarks as Log. Historical Viewer component evidence remains useful for
+the shared wrapped-row mechanics, but the direct Trace command no longer opens
+that Viewer.
 Rationale reuses the same target and Trace projection, then synthesizes only a
 compact natural-language account grounded in that Trace; it does not inherit
 Trace's owner-history authority when the target is granted.
@@ -872,10 +864,10 @@ does not prove intent. An authority-owned local Context can expose retained
 history; a granted READ view can expose only current content and must return a
 hidden-history projection without connecting a provider.
 
-Context Trace's `--tui` route reads one bounded lineage document. It does not
-open a checkpoint picker: browsing a sequence of pairwise checkpoint results
-would duplicate Diff's subject instead of presenting the Context-wide time
-axis. Diff remains the exact one-checkpoint-versus-predecessor inspection tool.
+Context Trace reads one bounded lineage document and does not open a checkpoint
+picker: browsing a sequence of pairwise checkpoint results would duplicate
+Diff's subject instead of presenting the Context-wide time axis. Diff remains
+the exact one-checkpoint-versus-predecessor inspection tool.
 
 ## Alternatives rejected
 

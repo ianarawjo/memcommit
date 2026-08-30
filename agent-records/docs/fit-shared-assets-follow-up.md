@@ -24,7 +24,7 @@ reasons are not expanded and fitting detail remains omitted.
 The compact CLI consumes typed receipt segments and resolves only its
 `YES/MAY/NO` token through the shared terminal judgment palette. It does not
 reuse EDIT/EMBED/REMOVE action meaning or tint the complete relationship line.
-`--plain`, pipes, and `NO_COLOR` preserve the exact ANSI-free text.
+Pipes and `NO_COLOR` preserve the exact ANSI-free text.
 
 ## Current boundary
 
@@ -42,10 +42,9 @@ reuse EDIT/EMBED/REMOVE action meaning or tint the complete relationship line.
 
 ## Compatibility and evidence
 
-The hidden `--plain` flag remains accepted for existing scripts and suppresses
-color without selecting a second layout.
-`--tui` is intentionally absent, so argument parsing rejects it before storage
-or provider construction. Historical Viewer screenshots under
+The retired `--plain` and `--tui` flags are absent, so argument parsing rejects
+them before storage or provider construction. ANSI-free output follows
+terminal capability, pipes, and `NO_COLOR`. Historical Viewer screenshots under
 `agent-records/docs/screenshots/mem-fit-shared-viewer-20260815`,
 `agent-records/docs/screenshots/mem-general-fit-20260815`, and the Viewer states in
 `agent-records/docs/screenshots/ground-unified-fit-20260816` document the superseded route;

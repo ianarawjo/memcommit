@@ -148,15 +148,15 @@ alignment and stripping ANSI preserves the exact inventory.
 
 ## Plain and interactive adapters
 
-`mem log` and Fit retain identical line structure in terminals and pipes. Typer may
-emit semantic foreground escapes for a color-capable terminal, but stripping
-ANSI yields the same report as `--plain`. The presence of color never opens a
+`mem log` and Fit retain identical line structure in terminals and pipes. Typer
+may emit semantic foreground escapes for a color-capable terminal, but
+stripping ANSI yields the same report. The presence of color never opens a
 picker or changes the selected Context.
 
 The Fit CLI consumes typed receipt segments, so its adapter styles the
 judgment field without reparsing report prose. A color-capable TTY shows
-`YES`, `MAY`, and `NO` through the shared judgment roles; `--plain`, a pipe,
-or `NO_COLOR` emits the exact same receipt with no ANSI styling.
+`YES`, `MAY`, and `NO` through the shared judgment roles; a pipe or `NO_COLOR`
+emits the exact same receipt with no ANSI styling.
 
 The line-oriented Revert receipt likewise consumes typed restoration facts,
 but owns a compact composition distinct from the checkpoint Viewer. Its
@@ -211,8 +211,8 @@ restating the Log row format in a second renderer. Inline `−` and
 `+` markers carry REMOVE plus the proven after-side ADD, EDIT, or restoration
 role, while the Memory text beside them stays lavender. A mixed Atomize or
 Update command remains neutral even when its lineage block contains colored
-child effects. The ANSI-free TUI projection and `--plain` output retain the
-same markers, labels, ordering, bounds, and omitted-operation count.
+child effects. ANSI-free output retains the same markers, labels, ordering,
+bounds, and omitted-operation count.
 
 ## Alternatives considered
 

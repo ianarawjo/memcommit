@@ -87,7 +87,7 @@ def test_plain_remains_a_compatible_alias_for_the_static_report(isolated_store):
     invoke("add", "one")
 
     default = invoke("log")
-    plain = invoke("log", "--plain")
+    plain = invoke("log")
 
     assert default.exit_code == 0
     assert plain.exit_code == 0
@@ -117,11 +117,14 @@ def test_log_colors_only_known_action_columns_in_a_color_terminal(isolated_store
         "checkpoint": SemanticColorRole.HISTORY,
     }
     for label, role in expected.items():
-        assert click.style(
-            f"[{label}]",
-            fg=semantic_color_rgb(role),
-            bold=True,
-        ) in colored.output
+        assert (
+            click.style(
+                f"[{label}]",
+                fg=semantic_color_rgb(role),
+                bold=True,
+            )
+            in colored.output
+        )
 
     plain_output = click.unstyle(colored.output)
     assert "reviewed baseline" in plain_output
@@ -136,7 +139,7 @@ def test_log_memory_always_prints_the_canonical_trace_projection(isolated_store)
     memory_uid = _memory_uid("notes")
 
     through_log = invoke("log", "--memory", memory_uid)
-    through_trace = invoke("trace", memory_uid, "--plain")
+    through_trace = invoke("trace", memory_uid)
 
     assert through_log.exit_code == 0, through_log.output
     assert through_trace.exit_code == 0, through_trace.output

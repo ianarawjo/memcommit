@@ -12,7 +12,9 @@ from memcommit.application.operations.rationale.rules import (
     RationaleLimitUnit,
     RationaleNarrativeStatus,
 )
-from memcommit.application.operations.rationale.semantic import RationaleNarrativeProjection
+from memcommit.application.operations.rationale.semantic import (
+    RationaleNarrativeProjection,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -51,7 +53,7 @@ def test_bare_reference_uid_traces_occurrence_and_live_target_separately(
     reference = _reference(store, "parent")
     assert invoke("edit", f"source:{memory.uid}", "version two").exit_code == 0
 
-    result = invoke("trace", reference.uid[:8], "--plain")
+    result = invoke("trace", reference.uid[:8])
 
     assert result.exit_code == 0, result.output + result.stderr
     assert f"[REFERENCE {reference.uid[:8]}] · LIVE" in result.output
@@ -196,6 +198,5 @@ def test_duplicate_bare_report_uid_lists_every_typed_owner(isolated_store):
     assert f"first:{shared_uid} (MEMORY)" in result.output
     assert f"second:{shared_uid} (MEMORY)" in result.output
     assert (
-        "To select one, rerun with its CONTEXT:UID value shown above."
-        in result.output
+        "To select one, rerun with its CONTEXT:UID value shown above." in result.output
     )

@@ -1,5 +1,11 @@
 # `mem summarize` and the shared understanding unit
 
+> **Console route update (2026-08-30):** `mem summarize` now has one
+> line-oriented result route. The `--plain`/`--tui` switches and generic
+> console runner described in historical sections below are retired. The
+> standalone workbench remains component-level code, not a current command
+> entry path; see `summarize-application-boundary-matrix.md`.
+
 ## Status
 
 Implemented. This note defines the reusable `UnderstandingSummary` embedded in

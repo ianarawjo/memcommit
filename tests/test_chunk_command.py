@@ -21,7 +21,9 @@ def _direct_memories(store: MemoryStore, context_name: str) -> list[Memory]:
 
 def test_chunk_without_selector_chunks_current_context_by_sentences(isolated_store):
     assert runner.invoke(app, ["init", "notes"]).exit_code == 0
-    assert runner.invoke(app, ["add", "First sentence. Second sentence."]).exit_code == 0
+    assert (
+        runner.invoke(app, ["add", "First sentence. Second sentence."]).exit_code == 0
+    )
     assert runner.invoke(app, ["add", "Already atomic."]).exit_code == 0
     assert runner.invoke(app, ["add", "Question? Answer!"]).exit_code == 0
     store = MemoryStore()
@@ -54,7 +56,7 @@ def test_chunk_without_selector_chunks_current_context_by_sentences(isolated_sto
     ]
 
     for selector in (first.uid[:8], after[0].uid[:8]):
-        trace = runner.invoke(app, ["trace", selector, "--plain", "--verbose"])
+        trace = runner.invoke(app, ["trace", selector, "--verbose"])
         assert trace.exit_code == 0, trace.output + trace.stderr
         assert "SPLIT" in trace.output
         assert "RECORDED" in trace.output
@@ -210,9 +212,7 @@ def test_chunk_context_records_literal_boundary_for_trace(isolated_store):
     ]
     checkpoint = store.list_checkpoints("notes")[0]
     assert checkpoint["args"]["break_on"] == ","
-    trace = runner.invoke(
-        app, ["trace", original.uid[:8], "--plain", "--verbose"]
-    )
+    trace = runner.invoke(app, ["trace", original.uid[:8], "--verbose"])
     assert trace.exit_code == 0, trace.output + trace.stderr
     assert "SPLIT" in trace.output
     assert "RECORDED" in trace.output
@@ -234,10 +234,13 @@ def test_chunk_clauses_break_on_and_character_limits_are_applied_and_recorded(
     isolated_store,
 ):
     assert runner.invoke(app, ["init", "notes"]).exit_code == 0
-    assert runner.invoke(
-        app,
-        ["add", "Alpha, beta; gamma: delta — epsilon. Next sentence."],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["add", "Alpha, beta; gamma: delta — epsilon. Next sentence."],
+        ).exit_code
+        == 0
+    )
     store = MemoryStore()
     context = store.load_current_direct()
     original = _direct_memories(store, context.name)[0]
@@ -278,9 +281,7 @@ def test_chunk_clauses_break_on_and_character_limits_are_applied_and_recorded(
     assert checkpoint["args"]["min_chars"] == 10
     assert checkpoint["args"]["max_chars"] == 18
 
-    trace = runner.invoke(
-        app, ["trace", after[0].uid[:8], "--plain", "--verbose"]
-    )
+    trace = runner.invoke(app, ["trace", after[0].uid[:8], "--verbose"])
     assert trace.exit_code == 0, trace.output + trace.stderr
     assert "SPLIT" in trace.output
     assert "mapping could not be reconstructed" not in trace.output

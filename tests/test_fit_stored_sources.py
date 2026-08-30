@@ -20,7 +20,10 @@ from memcommit.application.operations.fit.judgment import (
     FIT_JUDGMENT_PAYLOAD_MARKER,
     FitProposition,
 )
-from memcommit.application.operations.fit.runtime import FitSourceError, run_stored_source_fit
+from memcommit.application.operations.fit.runtime import (
+    FitSourceError,
+    run_stored_source_fit,
+)
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -207,7 +210,6 @@ def test_mem_fit_accepts_multiple_current_memory_selectors(
             memories[0].uid[:8],
             "--memory",
             memories[1].uid[:8],
-            "--plain",
         ],
     )
 
@@ -237,7 +239,7 @@ def test_mem_fit_without_operands_uses_current_context(
     provider = _FitProvider()
     monkeypatch.setattr(fit_command, "connect_semantic_provider", lambda: provider)
 
-    result = CliRunner().invoke(app, ["fit", "--plain"])
+    result = CliRunner().invoke(app, ["fit"])
 
     assert result.exit_code == 0, result.output
     assert result.output == f"FIT · YES · [TARGETS: CONTEXT {current.name}]\n"
@@ -267,7 +269,7 @@ def test_mem_fit_without_operands_rejects_one_memory_before_provider(
 
     monkeypatch.setattr(fit_command, "connect_semantic_provider", provider_factory)
 
-    result = CliRunner().invoke(app, ["fit", "--plain"])
+    result = CliRunner().invoke(app, ["fit"])
 
     assert result.exit_code == 1
     assert "at least two propositions" in result.output
@@ -300,7 +302,6 @@ def test_mem_fit_auto_resolves_memory_context_and_literal_in_operand_order(
             current_memories[0].uid[:8],
             policies.name,
             "Visitors receive an entrance notice.",
-            "--plain",
         ],
     )
 
@@ -338,7 +339,7 @@ def test_mem_fit_text_prefix_forces_literal_when_context_name_collides(
 
     result = CliRunner().invoke(
         app,
-        ["fit", "text:policies", memories[0].uid[:7], "--plain"],
+        ["fit", "text:policies", memories[0].uid[:7]],
     )
 
     assert result.exit_code == 0, result.output
@@ -381,7 +382,6 @@ def test_mem_fit_auto_qualified_memory_uses_relative_context_locator(
             "fit",
             current_memories[0].uid[:8],
             f"../sibling:{sibling_memories[0].uid[:8]}",
-            "--plain",
         ],
     )
 
@@ -414,7 +414,7 @@ def test_mem_fit_auto_uid_shape_fails_as_memory_instead_of_becoming_text(
     monkeypatch.setattr(fit_command, "connect_semantic_provider", provider_factory)
     result = CliRunner().invoke(
         app,
-        ["fit", "deadbeef", "Another proposition.", "--plain"],
+        ["fit", "deadbeef", "Another proposition."],
     )
 
     assert result.exit_code == 1
@@ -438,7 +438,7 @@ def test_mem_fit_explicit_context_preserves_uid_shaped_legacy_name(
 
     result = CliRunner().invoke(
         app,
-        ["fit", "--context", legacy.name, "--plain"],
+        ["fit", "--context", legacy.name],
     )
 
     assert result.exit_code == 0, result.output
@@ -484,7 +484,6 @@ def test_mem_fit_accepts_multiple_contexts_and_relative_memory_qualifier(
             third.name,
             "--context",
             fourth.name,
-            "--plain",
         ],
     )
 

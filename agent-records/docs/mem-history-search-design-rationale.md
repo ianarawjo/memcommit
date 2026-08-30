@@ -170,7 +170,6 @@ mem log "the last version before the detour ended"
 mem log --memory MEMORY
 mem log --memory MEMORY --context CONTEXT
 mem log --manual
-mem log --plain
 ```
 
 `mem log` is a terminal-independent report. With no target it prints the
@@ -185,7 +184,7 @@ picker.
 `--memory` selects the Memory-lineage projection of the same retained Context
 history. It accepts a current or historical direct-Memory UID or unambiguous
 prefix and prints the same bounded vertical lineage document as
-`mem trace MEMORY --plain`. Its existing `--limit` option bounds the newest
+`mem trace MEMORY`. Its existing `--limit` option bounds the newest
 visible operations and states the exact older count when anything is omitted.
 Each lineage block begins with the same typed compact History row as ordinary
 Log—action, named UID badges, timestamp, and summary. Direct Add/Remove stop at
@@ -197,16 +196,15 @@ Trace expands every diff and exposes provenance as a separate `Lineage:`
 detail. Both adapters consume the same adapter-neutral row segments; this is
 shared presentation structure, not merely two strings that happen to look
 alike. Trace does not add separate `NOW` or `ORIGIN` bands around those rows.
-`mem trace MEMORY` remains the discoverable interactive inspection route in a
-TTY; `--all` is the explicit complete human-readable route, while JSON remains
-complete independently of presentation bounds. The two commands share
+`mem trace MEMORY` prints that lineage directly; `--all` is the explicit
+complete human-readable route, while JSON remains complete independently of
+presentation bounds. The two commands share
 retained-history access, direct-Memory delta extraction, operation grouping,
 and ANSI-free projection rather than recursively invoking one CLI command from
 the other.
 
-`--plain` remains accepted as a compatibility no-op so existing scripts do not
-break merely because static output became the only Log presentation. Detailed
-interactive checkpoint and lineage inspection remains available through
+Retired presentation flags are rejected rather than retained as compatibility
+no-ops. Detailed checkpoint and lineage inspection remains available through
 `mem diff`, `mem trace`, and the reviewed `mem revert` flow; Log itself owns no
 terminal UI.
 

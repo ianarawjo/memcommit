@@ -22,7 +22,7 @@ def render_distill_receipt(result: DistillResult) -> None:
                 f"UNDERSTOOD · {overview}",
                 f"PROPOSED · {len(analysis.rules)} rules",
                 f"ATTENTION · {len(analysis.outside_memory_uids)} source Memories outside proposed Rules",
-                "DETAILS · rerun with --plain or --tui",
+                "DETAILS · mem impact distill",
                 "SOURCE · UNCHANGED",
             ]
         )

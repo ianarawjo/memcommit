@@ -35,7 +35,10 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
+from memcommit.application.operations.profile.model import (
+    create_authority_grant,
+    update_authority_grant,
+)
 from memcommit.adapters.console.commands.resolve.workbench import (
     project_resolve_analysis,
     resolve_candidate_exact_review,
@@ -50,8 +53,12 @@ from memcommit.application.operations.resolve.application import (
     run_resolve,
 )
 from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
-from memcommit.application.operations.resolve.rules import resolve_ruleset_prompt_payload
-from memcommit.application.operations.resolve.semantic import ProviderResolveSemanticPort
+from memcommit.application.operations.resolve.rules import (
+    resolve_ruleset_prompt_payload,
+)
+from memcommit.application.operations.resolve.semantic import (
+    ProviderResolveSemanticPort,
+)
 from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.persistence.store import MemoryStore
 
@@ -78,9 +85,7 @@ def _assert_compact_applied_receipt(
     assert len(lines) == 5
     checkpoint_uid = lines[2].removeprefix("CHECKPOINT · ")
     assert str(uuid.UUID(checkpoint_uid)) == checkpoint_uid
-    assert lines[3] == (
-        f"REVIEW · mem review resolve --receipt {checkpoint_uid}"
-    )
+    assert lines[3] == (f"REVIEW · mem review resolve --receipt {checkpoint_uid}")
     assert lines[4] == "RECOVERY · mem undo"
 
 
@@ -1160,7 +1165,7 @@ def test_resolve_plain_cli_automatically_applies_one_grounded_plan(
 
     result = runner.invoke(
         app,
-        ["resolve", "--context", "resolve/test", "--plain"],
+        ["resolve", "--context", "resolve/test"],
     )
 
     assert result.exit_code == 0, result.output
@@ -1188,7 +1193,7 @@ def test_resolve_plain_cli_reports_applied_post_fit_may(
 
     result = runner.invoke(
         app,
-        ["resolve", "--context", "resolve/test", "--plain"],
+        ["resolve", "--context", "resolve/test"],
     )
 
     assert result.exit_code == 0, result.output
@@ -1209,7 +1214,7 @@ def test_resolve_plain_cli_compacts_needs_input_without_a_repair_report(
 
     result = runner.invoke(
         app,
-        ["resolve", "--context", "resolve/test", "--plain"],
+        ["resolve", "--context", "resolve/test"],
     )
 
     assert result.exit_code == 0, result.output
@@ -1234,7 +1239,7 @@ def test_resolve_plain_cli_retains_assumption_boundary_compactly(
 
     result = runner.invoke(
         app,
-        ["resolve", "--context", "resolve/test", "--plain"],
+        ["resolve", "--context", "resolve/test"],
     )
 
     assert result.exit_code == 0, result.output
@@ -1263,14 +1268,11 @@ def test_resolve_plain_cli_reports_actual_already_fit_may_verdict(
 
     result = runner.invoke(
         app,
-        ["resolve", "--context", "resolve/test", "--plain"],
+        ["resolve", "--context", "resolve/test"],
     )
 
     assert result.exit_code == 0, result.output
-    assert result.output == (
-        "RESOLVE · resolve/test\n"
-        "FIT · MAY · NO CHANGE\n"
-    )
+    assert result.output == ("RESOLVE · resolve/test\nFIT · MAY · NO CHANGE\n")
     assert store.list_checkpoints("resolve/test") == []
 
 
@@ -1295,7 +1297,6 @@ def test_resolve_plain_cli_compacts_all_applied_effect_counts(
             "--allow-delete",
             "--guidance",
             "The unscoped statement is obsolete after integration.",
-            "--plain",
         ],
     )
 
@@ -1319,7 +1320,7 @@ def test_resolve_plain_cli_auto_classifies_positional_context(
         lambda: provider,
     )
 
-    result = runner.invoke(app, ["resolve", context.name, "--plain"])
+    result = runner.invoke(app, ["resolve", context.name])
 
     assert result.exit_code == 0, result.output
     _assert_compact_applied_receipt(result)
@@ -1341,7 +1342,7 @@ def test_resolve_plain_cli_mixes_context_and_memory_auto_operands(
 
     result = runner.invoke(
         app,
-        ["resolve", second.uid[:8], context.name, "--plain"],
+        ["resolve", second.uid[:8], context.name],
     )
 
     assert result.exit_code == 0, result.output
@@ -1363,7 +1364,7 @@ def test_resolve_plain_cli_finds_unique_owner_for_bare_memory_operand(
     )
 
     assert store.current_context_name() is None
-    result = runner.invoke(app, ["resolve", second.uid[:8], "--plain"])
+    result = runner.invoke(app, ["resolve", second.uid[:8]])
 
     assert result.exit_code == 0, result.output
     _assert_compact_applied_receipt(result)
@@ -1390,7 +1391,6 @@ def test_resolve_plain_cli_accepts_explicit_short_memory_operand(
             context.name,
             "--memory",
             second.uid[:6],
-            "--plain",
         ],
     )
 
@@ -1418,7 +1418,6 @@ def test_resolve_plain_cli_combines_same_explicit_and_qualified_context(
             f"{context.name}:{second.uid[:8]}",
             "--context",
             context.name,
-            "--plain",
         ],
     )
 
@@ -1455,7 +1454,6 @@ def test_resolve_cli_rejects_distinct_context_operands_before_provider(
             "resolve",
             context.name,
             f"{other.name}:{other_memory.uid[:8]}",
-            "--plain",
         ],
     )
 
@@ -1492,7 +1490,6 @@ def test_resolve_cli_rejects_two_prefixes_for_same_memory_before_provider(
             context.name,
             second.uid[:8],
             second.uid[:12],
-            "--plain",
         ],
     )
 
@@ -1537,7 +1534,6 @@ def test_resolve_plain_cli_can_replay_an_external_exact_plan(
             "--expected-revision",
             analysis.frame.revision,
             "--apply",
-            "--plain",
         ],
     )
 

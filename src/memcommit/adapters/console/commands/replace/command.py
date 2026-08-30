@@ -18,12 +18,7 @@ from memcommit.core.context_targeting.presets import (
 from memcommit.adapters.console.commands.replace.receipt import (
     render_replace_apply_result,
 )
-from memcommit.adapters.console import (
-    ConsoleMode,
-    ConsoleModeError,
-    SystemTerminalCapabilities,
-    resolve_console_mode,
-)
+from memcommit.adapters.console import SystemTerminalCapabilities
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.replace.workbench import (
     ReplaceTuiSetup,
@@ -107,26 +102,15 @@ def cmd(
             help="Replace each match with empty text",
         ),
     ] = False,
-    plain: Annotated[
-        bool,
-        typer.Option("--plain", help="Print an ANSI-free execution receipt"),
-    ] = False,
-    tui: Annotated[
-        bool,
-        typer.Option("--tui", help="Edit the request in compact interactive Replace"),
-    ] = False,
 ) -> None:
     """Replace exact matches immediately as one atomic Undoable command."""
 
     try:
-        mode = resolve_console_mode(plain=plain, tui=tui)
         if delete_match and replacement is not None:
             raise ValueError("REPLACEMENT and --delete-match cannot be used together.")
 
         terminal = SystemTerminalCapabilities()
-        if pattern is None and (
-            mode is ConsoleMode.PLAIN or not terminal.is_interactive()
-        ):
+        if pattern is None and not terminal.is_interactive():
             raise ValueError(
                 "PATTERN is required outside a terminal. In a terminal, run "
                 "'mem replace' to open interactive Replace."
@@ -135,7 +119,7 @@ def cmd(
             pattern is not None
             and replacement is None
             and not delete_match
-            and (mode is ConsoleMode.PLAIN or not terminal.is_interactive())
+            and not terminal.is_interactive()
         ):
             raise ValueError(
                 "REPLACEMENT or --delete-match is required outside the TUI."
@@ -183,11 +167,7 @@ def cmd(
         def execute(next_request: ReplaceRequest):
             return execute_replace_with_store(next_request, store=store)
 
-        if mode is ConsoleMode.TUI or (
-            mode is ConsoleMode.AUTO
-            and terminal.is_interactive()
-            and (pattern is None or (replacement is None and not delete_match))
-        ):
+        if pattern is None or (replacement is None and not delete_match):
             names = tuple(store.list_context_names())
             current = snapshot.current_name
             current_name = current if current in names else canonical_targets[0]
@@ -215,7 +195,6 @@ def cmd(
             annotate_command_outcome("NO_CHANGE")
         typer.echo(render_replace_apply_result(result))
     except (
-        ConsoleModeError,
         FileNotFoundError,
         OSError,
         ProfileConfigError,

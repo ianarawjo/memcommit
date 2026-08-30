@@ -11,7 +11,6 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 PACKAGE_ROOT = REPOSITORY_ROOT / "src" / "memcommit"
 ROOT_BOUNDARIES = {
     "__init__.py",
-    "bootstrap.py",
 }
 
 

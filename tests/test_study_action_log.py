@@ -10,7 +10,10 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.keys import Keys
 import pytest
 
-from memcommit.application.operations.profile.config import ProfileEntry, study_run_identity
+from memcommit.application.operations.profile.config import (
+    ProfileEntry,
+    study_run_identity,
+)
 from memcommit.persistence.command_ledger.study_actions import (
     StudyActionError,
     StudyActionLedger,
@@ -186,7 +189,7 @@ def test_participant_log_retains_full_command_and_focused_help_lookup(tmp_path):
     store_dir = tmp_path / "store"
     store_dir.mkdir()
     attempt_uid = str(uuid.uuid4())
-    command_argv = ("help", "why are these alike?", "--plain")
+    command_argv = ("help", "why are these alike?")
     active = begin_study_action_recording(
         profile=_study_profile(),
         store_dir=store_dir,

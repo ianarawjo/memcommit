@@ -6,7 +6,6 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.clipboard import write_system_clipboard
 from memcommit.application.operations.dedun.application import (
     DedunConflictError,
     DedunError,
@@ -20,14 +19,7 @@ from memcommit.adapters.console.commands.dedun.presentation import (
     render_dedun_plan_plain,
     render_dedun_receipt,
 )
-from memcommit.adapters.console import (
-    ConsoleMode,
-    ConsoleModeError,
-    SystemTerminalCapabilities,
-    resolve_console_mode,
-)
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.commands.dedun.workbench import run_dedun_workbench
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (
@@ -74,19 +66,10 @@ def cmd(
         bool,
         typer.Option("--apply", help="Apply the reviewed survivor decisions"),
     ] = False,
-    plain: Annotated[
-        bool,
-        typer.Option("--plain", help="Print the plan or receipt instead of the TUI"),
-    ] = False,
-    tui: Annotated[
-        bool,
-        typer.Option("--tui", help="Require the semantic redundancy review flow"),
-    ] = False,
 ) -> None:
     """Apply confirmed semantic redundancies, retaining existing wording."""
 
     try:
-        mode = resolve_console_mode(plain=plain, tui=tui)
         if not evidence:
             raise DedunError(
                 "Dedun requires exact or semantic redundancy evidence from its review."
@@ -95,10 +78,6 @@ def cmd(
             if not survivors or expected_revision is None:
                 raise DedunError(
                     "Dedun --apply requires --survivor and --expected-revision."
-                )
-            if mode is ConsoleMode.TUI:
-                raise DedunError(
-                    "Dedun --apply is already exact; do not combine it with --tui."
                 )
         elif survivors or expected_revision is not None:
             raise DedunError(
@@ -130,29 +109,9 @@ def cmd(
             )
             render_dedun_receipt(receipt)
             return
-        interactive = SystemTerminalCapabilities().is_interactive()
-        selected_mode = (
-            ConsoleMode.TUI
-            if mode is ConsoleMode.AUTO and interactive
-            else ConsoleMode.PLAIN
-            if mode is ConsoleMode.AUTO
-            else mode
-        )
-        if selected_mode is ConsoleMode.TUI:
-            run_dedun_workbench(
-                plan,
-                apply_selections=lambda values: apply_dedun(
-                    plan,
-                    values,
-                    port=port,
-                ),
-                clipboard_writer=write_system_clipboard,
-            )
-        else:
-            render_dedun_plan_plain(plan)
+        render_dedun_plan_plain(plan)
     except (
         ConcurrentContextUpdateError,
-        ConsoleModeError,
         DedunError,
         FileNotFoundError,
         OSError,
