@@ -3,7 +3,7 @@
 ## Ownership boundary
 
 Grant access resolution, frozen binding, authorization locking, and bounded
-READ projection are owned by `memcommit.application.capabilities.authority.access`.  They are shared
+READ projection are owned by `memcommit.application.capabilities.authority.context_access`.  They are shared
 application infrastructure, not CLI behavior: command, runtime, evaluation,
 and study adapters import that owner directly.  The former
 `memcommit.adapters.console.commands.granted_context` module was removed rather than retained
@@ -15,6 +15,14 @@ Profile-registry persistence and its serialized compatibility schema remain in
 those persistence responsibilities is independent from locating the shared
 authorization boundary and must preserve existing registry and saved-artifact
 formats when undertaken.
+
+The authority capability is split by decision point. `context_access` resolves
+an ordinary or granted Context and verifies the baseline permission requested by
+the caller. `source_use_policy` then authorizes what an operation may do with
+those resolved Sources, including combination, cross-domain transfer, and
+analysis retention. The latter name deliberately avoids using `derived` as the
+module identity because `DERIVE` is only one permission in that broader use
+policy; the function names retain the more precise `authorize_*` vocabulary.
 
 ## Problem
 

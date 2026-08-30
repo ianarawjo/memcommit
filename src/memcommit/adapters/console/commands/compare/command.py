@@ -41,7 +41,7 @@ from memcommit.adapters.console.commands.compare.execution import (
     ensure_comparison_analysis,
     load_comparison_context,
 )
-from memcommit.application.capabilities.authority.derived_policy import AnalysisRetention
+from memcommit.application.capabilities.authority.source_use_policy import AnalysisRetention
 from memcommit.adapters.console.commands.compare.sessions import (
     choose_comparison_session,
     load_saved_comparison,

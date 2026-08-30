@@ -6,7 +6,7 @@ import hashlib
 from collections.abc import Callable, Iterable
 from contextlib import ExitStack
 
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     revalidate_granted_context_binding,
 )

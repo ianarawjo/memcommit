@@ -15,7 +15,7 @@ from memcommit.application.operations.add.application import (
     run_add,
 )
 from memcommit.application.operations.add.runtime import MemoryStoreAddTargetPort
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     context_access_display_facts,
     resolve_context_access,
 )

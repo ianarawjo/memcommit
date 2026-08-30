@@ -99,7 +99,7 @@ operation-owned model and provider-decoder contracts. It does not import
 terminal or command modules. `memcommit.application.operations.sever.runtime` implements
 Store, Grant, cache, provider-attempt, destination-validation, private-session,
 and checkpoint ports. Grant mechanics temporarily remain under
-`memcommit.application.capabilities.authority.access`; that transitional dependency is confined to the
+`memcommit.application.capabilities.authority.context_access`; that transitional dependency is confined to the
 runtime adapter, as it is for the Summarize slice.
 
 The former flat `memcommit.sever`, `memcommit.sever_provider`,

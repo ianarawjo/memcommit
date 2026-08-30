@@ -16,7 +16,7 @@ from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.adapters.console.commands.compare.command import render_comparison
 from memcommit.adapters.console.commands.compare.execution import ensure_comparison_analysis
-from memcommit.application.capabilities.authority.access import ContextAccess
+from memcommit.application.capabilities.authority.context_access import ContextAccess
 from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
     ComparisonInput,

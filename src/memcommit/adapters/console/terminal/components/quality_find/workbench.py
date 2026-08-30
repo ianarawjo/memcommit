@@ -22,7 +22,7 @@ from memcommit.persistence.command_ledger.attempts import annotate_read_report_a
 from memcommit.adapters.console.terminal.components.operation_launcher.location import (
     operation_launcher_orientation,
 )
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     context_access_display_facts,
     resolve_context_access,
 )
@@ -71,7 +71,7 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.application.capabilities.authority.derived_policy import (
+from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_combination,
 )
 from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (

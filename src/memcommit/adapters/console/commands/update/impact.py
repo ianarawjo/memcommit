@@ -17,12 +17,12 @@ from memcommit.adapters.console.commands.update.render import (
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     freeze_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.application.capabilities.authority.derived_policy import (
+from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_derived_transfer,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError

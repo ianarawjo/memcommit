@@ -14,7 +14,7 @@ import memcommit.adapters.console.commands.search.command as search_command
 import memcommit.application.operations.search.materialization_application as materialization_application
 import memcommit.application.operations.search.materialization_runtime as materialization_runtime
 import memcommit.persistence.store as store_module
-from memcommit.application.capabilities.authority.access import resolve_context_access
+from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.core.context_targeting.readable_catalog import (
     freeze_readable_context_catalog,
 )

@@ -5,7 +5,7 @@ import typer
 from memcommit.adapters.console.terminal.components.context_picker import choose_context, context_memory_rows
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     resolve_context_access,
 )

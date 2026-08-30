@@ -6,7 +6,7 @@ from dataclasses import dataclass, field, replace
 import hashlib
 from typing import Protocol
 
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     GrantedReadStore,
     freeze_granted_context_binding,
@@ -35,7 +35,7 @@ from memcommit.core.context_targeting.resolution import (
 from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.application.capabilities.authority.derived_policy import (
+from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_combination,
 )
 from memcommit.application.operations.fit.ground_report import (

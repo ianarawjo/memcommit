@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import hashlib
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     authorized_context_operation,
     grant_checkpoint_args,

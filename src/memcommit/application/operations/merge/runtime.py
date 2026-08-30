@@ -5,7 +5,7 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     GrantedReadStore,
     authorized_context_operation,
@@ -20,7 +20,7 @@ from memcommit.core.context import (
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.core.context_targeting.catalog import freeze_granted_context_navigation
-from memcommit.application.capabilities.authority.derived_policy import authorize_derived_transfer
+from memcommit.application.capabilities.authority.source_use_policy import authorize_derived_transfer
 from memcommit.application.operations.merge.application import (
     FrozenMergePlan,
     MergeAddition,

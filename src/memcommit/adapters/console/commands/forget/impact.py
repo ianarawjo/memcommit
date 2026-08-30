@@ -22,7 +22,7 @@ from memcommit.adapters.console.coordination.context_operand import (
 )
 from memcommit.adapters.console.terminal.components.impact import ImpactController
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     context_access_display_facts,
     resolve_context_access,
 )

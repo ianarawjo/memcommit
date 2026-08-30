@@ -4,7 +4,7 @@ import typer
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     authorized_context_mutation,
     grant_checkpoint_args,
     resolve_context_access,

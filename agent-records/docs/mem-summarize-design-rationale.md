@@ -186,7 +186,7 @@ routing remains line-oriented; the explicit `--tui` route uses an injected
 terminal capability and fails before Store construction when no TTY exists.
 
 The runtime has one documented transitional dependency on the existing
-operation-neutral Grant mechanics under `memcommit.application.capabilities.authority.access`.
+operation-neutral Grant mechanics under `memcommit.application.capabilities.authority.context_access`.
 Those mechanics are already reused outside commands. They are not copied or
 moved in this slice because a second operation must first confirm their final
 owner and lifecycle.

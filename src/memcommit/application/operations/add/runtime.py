@@ -13,7 +13,7 @@ from memcommit.application.operations.add.application import (
     FrozenAddTarget,
     run_add,
 )
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     authorized_context_mutation,
     grant_checkpoint_args,
     resolve_context_access,

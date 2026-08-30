@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     resolve_context_access,
 )
@@ -14,7 +14,7 @@ from memcommit.core.context_targeting.readable_catalog import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.application.capabilities.authority.derived_policy import authorize_combination
+from memcommit.application.capabilities.authority.source_use_policy import authorize_combination
 from memcommit.application.capabilities.retained_history.memory_history_reconstruction.retained_record_verification import (
     MemoryState,
 )

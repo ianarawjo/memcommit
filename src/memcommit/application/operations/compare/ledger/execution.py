@@ -19,7 +19,7 @@ from memcommit.application.operations.compare.ledger.store import (
     load_comparison_analysis,
     save_comparison_analysis,
 )
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     GrantedReadStore,
     freeze_granted_context_binding,
@@ -29,7 +29,7 @@ from memcommit.application.capabilities.authority.access import (
 from memcommit.core.context import Context
 from memcommit.application.operations.compare.ledger.evidence import project_comparison_context
 from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.application.capabilities.authority.derived_policy import (
+from memcommit.application.capabilities.authority.source_use_policy import (
     AnalysisRetention,
     analysis_retention,
     authorize_analysis_save,

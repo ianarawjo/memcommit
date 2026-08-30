@@ -41,7 +41,7 @@ def test_clear_command_delegates_behavior_to_operation_runtime() -> None:
     }
     assert "memcommit.application.operations.clear.application" in imports
     assert "memcommit.application.operations.clear.runtime" in imports
-    assert "memcommit.application.capabilities.authority.access" not in imports
+    assert "memcommit.application.capabilities.authority.context_access" not in imports
     assert "memcommit.core.context_targeting.readable_catalog" not in imports
     assert "memcommit.core.context_targeting.resolution" not in imports
 

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     GrantedReadStore,
     revalidate_granted_context_binding,

@@ -21,12 +21,12 @@ from memcommit.adapters.python_api.quality_find import (
     QualityFindContextResult,
     QualityFindResult,
 )
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     resolve_context_access,
 )
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.capabilities.authority.derived_policy import (
+from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_combination,
 )
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (

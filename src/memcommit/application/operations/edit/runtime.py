@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     authorized_context_mutation,
     grant_checkpoint_args,

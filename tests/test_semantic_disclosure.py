@@ -8,7 +8,7 @@ import pytest
 
 import memcommit.application.operations.summarize.runtime as summarize_runtime
 from memcommit.core.context import Context, GrantedContextLink, Memory
-from memcommit.application.capabilities.authority.access import ContextAccess
+from memcommit.application.capabilities.authority.context_access import ContextAccess
 from memcommit.core.context_targeting.search import load_readable_search_roots
 from memcommit.application.operations.search.application import SearchRequest
 from memcommit.application.operations.search.runtime import execute_search

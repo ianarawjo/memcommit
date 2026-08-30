@@ -1,11 +1,11 @@
-"""Two-sided authority policy for derived and combined grant outputs."""
+"""Authorize downstream use and retention of readable Context sources."""
 
 from __future__ import annotations
 
 from collections.abc import Iterable
 from typing import Literal
 
-from memcommit.application.capabilities.authority.access import ContextAccess
+from memcommit.application.capabilities.authority.context_access import ContextAccess
 from memcommit.application.operations.profile.model import ProfileError
 
 

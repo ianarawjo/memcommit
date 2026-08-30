@@ -23,7 +23,7 @@ import memcommit.application.operations.meld.runtime.session_review as meld_sess
 import memcommit.application.operations.meld.runtime.source_bindings as meld_source_bindings
 import memcommit.application.operations.meld.session_application as meld_session_application
 import memcommit.application.operations.meld.start_application as meld_start_application
-from memcommit.application.capabilities.authority.access import ContextAccess
+from memcommit.application.capabilities.authority.context_access import ContextAccess
 from memcommit.core.context import Context, Memory
 from memcommit.application.operations.meld.model import meld_canonical_digest
 from memcommit.application.operations.meld.restart_application import MeldRestartRequest

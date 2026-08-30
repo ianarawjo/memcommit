@@ -18,7 +18,7 @@ from typing import Sequence
 from memcommit.application.operations.compare.ledger.execution import (
     load_comparison_context,
 )
-from memcommit.application.capabilities.authority.access import resolve_context_access
+from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.application.operations.compare.ledger.store import (
     load_comparison_analysis,
 )

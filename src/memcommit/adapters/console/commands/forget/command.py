@@ -6,7 +6,7 @@ import typer
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.terminal.components.command_wait import run_command_wait
 from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     context_access_display_facts,
     resolve_context_access,
 )

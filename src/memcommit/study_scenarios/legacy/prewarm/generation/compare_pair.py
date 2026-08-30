@@ -26,7 +26,7 @@ from memcommit.application.operations.compare.ledger.execution import (
     ensure_comparison_analysis,
     load_comparison_context,
 )
-from memcommit.application.capabilities.authority.access import ContextAccess, resolve_context_access
+from memcommit.application.capabilities.authority.context_access import ContextAccess, resolve_context_access
 from memcommit.application.operations.compare.ledger.model import ComparisonAnalysis, ComparisonInput
 from memcommit.application.operations.compare.ledger.provider import analyze_comparison
 from memcommit.application.operations.compare.ledger.store import load_comparison_analysis

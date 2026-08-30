@@ -21,7 +21,7 @@ from memcommit.application.operations.compare.ledger.provider import (
 from memcommit.application.operations.compare.ledger.store import (
     comparison_analysis_path,
 )
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     freeze_granted_context_binding,
     resolve_context_access,
     revalidate_granted_context_binding,
@@ -37,7 +37,7 @@ from memcommit.adapters.console.terminal.components.endpoint_setup.flows import 
 from memcommit.adapters.console.commands.meld.setup import MeldSetupReceipt
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
-from memcommit.application.capabilities.authority.derived_policy import (
+from memcommit.application.capabilities.authority.source_use_policy import (
     analysis_retention,
     authorize_analysis_save,
 )

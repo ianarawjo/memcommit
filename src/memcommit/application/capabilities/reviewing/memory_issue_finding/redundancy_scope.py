@@ -6,14 +6,14 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     GrantedReadStore,
 )
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.capabilities.authority.derived_policy import (
+from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_combination,
 )
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (

@@ -2,7 +2,7 @@ import json
 import uuid
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.access import ContextAccess
+from memcommit.application.capabilities.authority.context_access import ContextAccess
 from memcommit.application.operations.compare.ledger.model import (
     ComparisonAnalysis,
     ComparisonInput,

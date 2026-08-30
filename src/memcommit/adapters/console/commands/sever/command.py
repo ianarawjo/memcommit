@@ -10,7 +10,7 @@ import typer
 from memcommit.application.capabilities.review_policy import (
     ownership_aware_application_review,
 )
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     resolve_context_access,
 )

@@ -43,7 +43,7 @@ from memcommit.adapters.console.terminal.components.context_picker import (
     render_context_options,
     render_context_roots,
 )
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     context_access_display_facts,
     resolve_context_access,
 )

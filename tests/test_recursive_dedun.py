@@ -9,7 +9,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.access import resolve_context_access
+from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.capabilities.retained_history.command_history import (
     build_command_stacks,

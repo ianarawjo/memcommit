@@ -7,7 +7,7 @@ import hashlib
 import uuid
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     authorized_context_operation,
     granted_memory_source,
@@ -23,7 +23,7 @@ from memcommit.application.capabilities.retained_history.context_snapshot import
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.capabilities.authority.derived_policy import (
+from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_analysis_save,
     authorize_derived_transfer,
 )

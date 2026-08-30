@@ -8,7 +8,7 @@ import uuid
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.access import granted_context_link, resolve_context_access
+from memcommit.application.capabilities.authority.context_access import granted_context_link, resolve_context_access
 from memcommit.core.context import Context, QueryContextRef
 from memcommit.application.operations.conformance.model import CONTEXT_CONFORMANCE_OPERATION
 from memcommit.application.operations.elaborate.model import ELABORATE_PAYLOAD_MARKER, ElaborateError

@@ -11,7 +11,7 @@ from memcommit.adapters.console.coordination.memory_transfer.model import (
 from memcommit.adapters.console.terminal.components.memory_transfer import (
     run_memory_transfer_workbench,
 )
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     GrantedReadStore,
     resolve_context_access,

@@ -13,7 +13,7 @@ from memcommit.adapters.console.terminal.components.endpoint_setup import (
     EndpointSetupSpec,
     run_endpoint_setup,
 )
-from memcommit.application.capabilities.authority.access import resolve_context_access
+from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.application.operations.merge.application import MergeReach, MergeRequest
 from memcommit.application.operations.merge.runtime import MemoryStoreMergePort
 from memcommit.core.context_targeting.readable_catalog import (

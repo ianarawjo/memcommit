@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     GrantedReadStore,
     context_access_display_facts,

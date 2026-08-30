@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.capabilities.authority.access import resolve_context_access
+from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.core.context_targeting.loading import (
     resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,

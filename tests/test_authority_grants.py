@@ -14,7 +14,7 @@ import memcommit.adapters.console.commands.query.command as query_command
 import memcommit.adapters.console.commands.rationale.command as rationale_command
 from memcommit.adapters.python_api import MemCommitClient, ShowContextResult
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.capabilities.authority.access import resolve_context_access
+from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.adapters.console.terminal.components.memory_report_picker import (
     MemoryReportTargetSelection,
 )

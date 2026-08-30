@@ -751,8 +751,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.capabilities.authority.derived_policy",
-      "canonical_target_path": "memcommit/application/capabilities/authority/derived_policy.py",
+      "canonical_target": "memcommit.application.capabilities.authority.source_use_policy",
+      "canonical_target_path": "memcommit/application/capabilities/authority/source_use_policy.py",
       "inbound_package_importers": 26,
       "lines": 116,
       "module": "memcommit.derived_policy",

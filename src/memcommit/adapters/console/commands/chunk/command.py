@@ -5,7 +5,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     resolve_context_access,
 )
 from memcommit.application.operations.chunk.application import chunk

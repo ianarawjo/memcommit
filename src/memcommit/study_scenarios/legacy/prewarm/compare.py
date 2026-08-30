@@ -12,7 +12,7 @@ import uuid
 from memcommit.application.operations.compare.ledger.execution import (
     load_comparison_context,
 )
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     resolve_context_access,
 )
@@ -35,7 +35,7 @@ from memcommit.providers.policy import (
 )
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.application.capabilities.authority.derived_policy import (
+from memcommit.application.capabilities.authority.source_use_policy import (
     analysis_retention,
     authorize_analysis_save,
     authorize_combination,
@@ -74,7 +74,7 @@ from memcommit.study_scenarios.legacy.prewarm.scope_equivalence import (
 )
 
 if TYPE_CHECKING:
-    from memcommit.application.capabilities.authority.access import ContextAccess
+    from memcommit.application.capabilities.authority.context_access import ContextAccess
 
 
 COMPARE_ARTIFACT_KIND = "STUDY_COMPARE_EXACT_PREWARM"

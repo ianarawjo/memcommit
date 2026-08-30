@@ -21,7 +21,7 @@ from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     context_access_display_facts,
     resolve_context_access,
@@ -40,7 +40,7 @@ from memcommit.adapters.console.commands.audit.review import (
 from memcommit.adapters.console.commands.audit.setup import choose_audit_setup
 from memcommit.core.context import Context
 from memcommit.application.operations.conformance.model import ConformanceError
-from memcommit.application.capabilities.authority.derived_policy import (
+from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_analysis_save,
 )
 from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (

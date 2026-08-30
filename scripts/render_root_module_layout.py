@@ -195,7 +195,7 @@ CONCEPT_TARGETS = {
     "context_naming": "memcommit.core.context_targeting.naming",
     "context_snapshot": "memcommit.application.capabilities.retained_history.context_snapshot",
     "current_context_navigation": "memcommit.core.context_targeting.navigation",
-    "derived_policy": "memcommit.application.capabilities.authority.derived_policy",
+    "derived_policy": "memcommit.application.capabilities.authority.source_use_policy",
     "direct_item_duplicates": "memcommit.application.capabilities.reviewing.direct_item_duplicates",
     "distill_elaborate_reference": "memcommit.application.capabilities.semantic.generative_reduction_reference",
     "duplicate_pipeline": "memcommit.application.capabilities.semantic.classification.duplicates",

@@ -10,7 +10,7 @@ from memcommit.core.context_targeting.memory_focus import (
     MemoryFocusError,
     resolve_memory_focus,
 )
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     GrantedReadStore,
     revalidate_granted_context_binding,
@@ -36,7 +36,7 @@ from memcommit.application.operations.meld.model import (
 )
 from memcommit.application.operations.meld.restart_application import MeldRestartRequest
 from memcommit.application.operations.meld.start_application import MeldStartRequest
-from memcommit.application.capabilities.authority.derived_policy import (
+from memcommit.application.capabilities.authority.source_use_policy import (
     analysis_retention,
     authorize_analysis_save,
     authorize_combination,

@@ -12,7 +12,7 @@ from memcommit.adapters.console.terminal.components.command_wait import (
     run_command_wait,
 )
 from memcommit.adapters.console.commands.update.setup import choose_update_setup
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     freeze_granted_context_binding,
     resolve_context_access,
@@ -51,7 +51,7 @@ from memcommit.core.context_targeting.presets import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.application.capabilities.authority.derived_policy import authorize_derived_transfer
+from memcommit.application.capabilities.authority.source_use_policy import authorize_derived_transfer
 from memcommit.application.operations.update.granted_source_application import (
     apply_granted_source_staged_update,
 )

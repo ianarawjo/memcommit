@@ -9,7 +9,7 @@ from memcommit.adapters.console.terminal.components.progress import CommandProgr
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     context_access_display_facts,
     resolve_context_access,
@@ -52,7 +52,7 @@ from memcommit.core.context_targeting.presets import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.application.capabilities.authority.derived_policy import authorize_combination
+from memcommit.application.capabilities.authority.source_use_policy import authorize_combination
 from memcommit.application.operations.search.answer_dialogue import (
     SearchAnswerCorpusTooLarge,
 )

@@ -5,13 +5,13 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.access import (
+from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     freeze_granted_context_binding,
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.application.capabilities.authority.derived_policy import (
+from memcommit.application.capabilities.authority.source_use_policy import (
     analysis_retention,
     authorize_analysis_save,
     authorize_combination,
