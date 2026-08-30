@@ -2313,14 +2313,14 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.operations.add.semantic_runtime",
-      "canonical_target_path": "memcommit/application/operations/add/semantic_runtime.py",
+      "canonical_target": "memcommit.application.capabilities.semantic_result_memorization",
+      "canonical_target_path": "memcommit/application/capabilities/semantic_result_memorization.py",
       "inbound_package_importers": 8,
       "lines": 190,
       "module": "memcommit.semantic_add_runtime",
       "path": "memcommit/semantic_add_runtime.py",
-      "reason": "implementation is named for and consumed by one operation family",
-      "role": "operation-implementation"
+      "reason": "implementation belongs to a reusable named concept",
+      "role": "shared-concept-implementation"
     },
     {
       "action": "relocate-without-alias",
@@ -2746,9 +2746,9 @@
   "schema_version": 1,
   "summary": {
     "historical-compatibility-facade": 103,
-    "operation-implementation": 74,
+    "operation-implementation": 73,
     "retired-prototype": 3,
     "root-boundary": 2,
-    "shared-concept-implementation": 67
+    "shared-concept-implementation": 68
   }
 }

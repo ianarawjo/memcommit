@@ -8,10 +8,10 @@ were directly under memcommit at baseline commit 885e62c0.
 | Role | Modules |
 | --- | ---: |
 | historical-compatibility-facade | 103 |
-| operation-implementation | 74 |
+| operation-implementation | 73 |
 | retired-prototype | 3 |
 | root-boundary | 2 |
-| shared-concept-implementation | 67 |
+| shared-concept-implementation | 68 |
 
 ## Modules
 
@@ -227,7 +227,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.search | operation-implementation | relocate-without-alias | memcommit.application.operations.search.model | 11 |
 | memcommit.search_artifacts | operation-implementation | relocate-without-alias | memcommit.application.operations.search.artifacts | 1 |
 | memcommit.selective_curation | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.semantic.selective_curation | 5 |
-| memcommit.semantic_add_runtime | operation-implementation | relocate-without-alias | memcommit.application.operations.add.semantic_runtime | 8 |
+| memcommit.semantic_add_runtime | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.semantic_result_memorization | 8 |
 | memcommit.semantic_disclosure | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.semantic.disclosure | 6 |
 | memcommit.semantic_prompt_policy | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.semantic.prompt_policy | 10 |
 | memcommit.semantic_provider | shared-concept-implementation | relocate-without-alias | memcommit.providers.semantic | 7 |
