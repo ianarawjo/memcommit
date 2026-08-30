@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 from pathlib import Path
 import subprocess
 import sys
@@ -24,6 +25,34 @@ assert "memcommit.application.operations.reference.runtime" not in sys.modules
         cwd=REPOSITORY_ROOT,
         check=True,
     )
+
+
+def test_reference_entrypoint_uses_the_lazy_command_package_surface() -> None:
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/entrypoint.py"
+    tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+    direct_imports = {
+        node.module
+        for node in ast.walk(tree)
+        if isinstance(node, ast.ImportFrom) and node.module is not None
+    }
+    package_imports = {
+        alias.name
+        for node in ast.walk(tree)
+        if isinstance(node, ast.ImportFrom)
+        and node.module == "memcommit.adapters.console.commands"
+        for alias in node.names
+    }
+    reference_attributes = {
+        node.attr
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Attribute)
+        and isinstance(node.value, ast.Name)
+        and node.value.id == "reference"
+    }
+
+    assert "memcommit.adapters.console.commands.reference.command" not in direct_imports
+    assert "reference" in package_imports
+    assert "cmd" in reference_attributes
 
 
 def test_production_reference_consumers_use_the_operation_owner() -> None:

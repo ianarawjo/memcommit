@@ -48,6 +48,7 @@ from memcommit.adapters.console.commands import (
     query,
     rationale,
     redo,
+    reference,
     replace,
     rename,
     remove,
@@ -66,7 +67,6 @@ from memcommit.adapters.console.commands import (
     update,
     write_protection,
 )
-from memcommit.adapters.console.commands.reference import command as reference
 from memcommit.adapters.console.commands.config.command import app as config_app
 from memcommit.adapters.console.commands.dev.command import app as dev_app
 from memcommit.adapters.console.commands.semantic_eval.command import eval_app
