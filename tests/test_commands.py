@@ -656,7 +656,6 @@ class TestHelp:
 
     def test_interactive_help_names_the_entry_surface(self):
         session_launchers = (
-            "atomize",
             "compare",
             "ground",
             "meld",
@@ -680,6 +679,13 @@ class TestHelp:
                 f"Enter the interactive {command_name.title()} "
                 f"{expected_surface} launcher"
             )
+
+        atomize = root.get_command(context, "atomize")
+        assert atomize is not None
+        assert not any(
+            isinstance(parameter, click.Option) and "--sessions" in parameter.opts
+            for parameter in atomize.params
+        )
 
         all_forms = tuple(
             form for forms in help_inventory.COMMAND_FORMS.values() for form in forms
