@@ -12,7 +12,9 @@ OWNER_MODULE = "memcommit.adapters.console.terminal.components.quality_find.rend
 
 
 def test_quality_find_render_is_the_only_physical_owner() -> None:
-    owner_path = PACKAGE / "adapters/console/terminal/components/quality_find/rendering.py"
+    owner_path = (
+        PACKAGE / "adapters/console/terminal/components/quality_find/rendering.py"
+    )
     tree = ast.parse(owner_path.read_text(encoding="utf-8"), filename=str(owner_path))
     functions = {
         node.name
@@ -30,7 +32,9 @@ def test_quality_find_render_is_the_only_physical_owner() -> None:
         "render_reason",
     } <= functions
     assert not (PACKAGE / "adapters/console/coordination/findings_render.py").exists()
-    assert not (PACKAGE / "adapters/console/coordination/quality_find_render.py").exists()
+    assert not (
+        PACKAGE / "adapters/console/coordination/quality_find_render.py"
+    ).exists()
     assert not (PACKAGE / "adapters/interfaces/cli/quality_findings.py").exists()
 
 
@@ -39,11 +43,11 @@ def test_quality_find_commands_import_the_shared_console_owner() -> None:
         "find_ambiguities/command.py",
         "find_conflicts/command.py",
         "find_duplicates/command.py",
-        "find_exact_duplicates/command.py",
+        "find_duplicates/command.py",
     ):
-        source = (
-            PACKAGE / "adapters" / "console" / "commands" / filename
-        ).read_text(encoding="utf-8")
+        source = (PACKAGE / "adapters" / "console" / "commands" / filename).read_text(
+            encoding="utf-8"
+        )
         assert f"from {OWNER_MODULE} import (" in source
         assert "adapters.interfaces.cli.quality_findings" not in source
         assert "adapters.console.shared.findings_render" not in source

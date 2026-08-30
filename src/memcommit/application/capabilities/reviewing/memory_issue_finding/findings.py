@@ -1,4 +1,4 @@
-"""Read-only semantic quality findings for directly owned Memories.
+"""Read-only semantic Memory-issue findings for directly owned Memories.
 
 Each public finder makes at most one provider call. Conflict names its complete
 pair target space; duplicate discovery instead sends one representative per
@@ -29,7 +29,9 @@ from memcommit.application.capabilities.semantic_execution import (
     SemanticExecutionPolicy,
     plan_semantic_execution,
 )
-from memcommit.application.capabilities.semantic.prompt_policy import resolve_semantic_prompt_policy
+from memcommit.application.capabilities.semantic.prompt_policy import (
+    resolve_semantic_prompt_policy,
+)
 
 
 QUALITY_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
@@ -338,7 +340,9 @@ def _pair_payload(pairs: list[MemoryPair]) -> list[dict[str, str]]:
 def _load_calibration_cases(filename: str) -> list[object]:
     """Load versioned examples shared by prompts and fixture contract tests."""
     try:
-        resource = resources.files("memcommit.application.capabilities.evaluation").joinpath(
+        resource = resources.files(
+            "memcommit.application.capabilities.evaluation"
+        ).joinpath(
             "fixtures",
             filename,
         )
@@ -374,16 +378,8 @@ def _prompt_calibration_cases(
 
     policy = resolve_semantic_prompt_policy()
     return (
-        (
-            policy.to_prompt_record()
-            if not policy.include_authored_examples
-            else None
-        ),
-        (
-            _load_calibration_cases(filename)
-            if policy.include_authored_examples
-            else []
-        ),
+        (policy.to_prompt_record() if not policy.include_authored_examples else None),
+        (_load_calibration_cases(filename) if policy.include_authored_examples else []),
     )
 
 
@@ -607,9 +603,7 @@ def find_redundancies(
     findings = list(mechanical)
 
     if len(semantic_candidates) >= 2:
-        prompt_policy, calibration_cases = _prompt_calibration_cases(
-            "duplicates.json"
-        )
+        prompt_policy, calibration_cases = _prompt_calibration_cases("duplicates.json")
         candidate_by_id = {
             candidate.candidate_id: candidate for candidate in semantic_candidates
         }
@@ -882,11 +876,7 @@ def find_ambiguities(
         ),
         payload={
             "operation": "find_ambiguities",
-            **(
-                {"prompt_policy": prompt_policy}
-                if prompt_policy is not None
-                else {}
-            ),
+            **({"prompt_policy": prompt_policy} if prompt_policy is not None else {}),
             "context": {"name": ctx.name},
             "memories": _memory_payload(candidates),
             "calibration_cases": calibration_cases,
@@ -1057,11 +1047,7 @@ def find_conflicts(
         ),
         payload={
             "operation": "find_conflicts",
-            **(
-                {"prompt_policy": prompt_policy}
-                if prompt_policy is not None
-                else {}
-            ),
+            **({"prompt_policy": prompt_policy} if prompt_policy is not None else {}),
             "context": {"name": ctx.name},
             "memories": _memory_payload(candidates),
             "pairs": _pair_payload(pairs),

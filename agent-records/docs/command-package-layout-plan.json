@@ -328,9 +328,9 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find_duplicates.dedup_handoff",
+      "canonical_module": "memcommit.adapters.console.commands.find_redundancies.dedup_handoff",
       "legacy_module": "memcommit.commands.duplicate_dedup_handoff",
-      "owner": "find_duplicates",
+      "owner": "find_redundancies",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -415,18 +415,18 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find_duplicates.command",
+      "canonical_module": "memcommit.adapters.console.commands.find_redundancies.command",
       "legacy_module": "memcommit.commands.find_duplicates",
-      "owner": "find_duplicates",
+      "owner": "find_redundancies",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find_exact_duplicates.command",
+      "canonical_module": "memcommit.adapters.console.commands.find_duplicates.command",
       "legacy_module": "memcommit.commands.find_exact_duplicates",
-      "owner": "find_exact_duplicates",
+      "owner": "find_duplicates",
       "public_exports": [
         "cmd"
       ],

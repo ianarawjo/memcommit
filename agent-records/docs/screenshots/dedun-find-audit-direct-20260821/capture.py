@@ -26,7 +26,8 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT / "src"))
 
 _SUPPORT_PATH = (
-    ROOT / "agent-records/docs/screenshots/quality-conflict-resolve-handoff-20260816/capture.py"
+    ROOT
+    / "agent-records/docs/screenshots/quality-conflict-resolve-handoff-20260816/capture.py"
 )
 _SPEC = importlib.util.spec_from_file_location(
     "direct_receipt_capture_support",
@@ -253,7 +254,7 @@ def _show_verification(context_name: str, provider: _Provider, label: str) -> No
 
 
 def _run_dedun_child(*, no_change: bool) -> None:
-    import memcommit.adapters.console.commands.find_duplicates.command as find_command
+    import memcommit.adapters.console.commands.find_redundancies.command as find_command
     from memcommit.persistence.store import MemoryStore
 
     context_name = "quality/no-change" if no_change else "quality/direct-dedun"
@@ -288,7 +289,7 @@ def _run_dedun_child(*, no_change: bool) -> None:
 
 
 def _run_find_child() -> None:
-    import memcommit.adapters.console.commands.find_duplicates.command as find_command
+    import memcommit.adapters.console.commands.find_redundancies.command as find_command
 
     context_name = "quality/direct-find"
     with tempfile.TemporaryDirectory(prefix="direct-find-capture-") as directory:
@@ -318,7 +319,7 @@ def _run_find_exact_child() -> None:
 
 def _run_audit_child() -> None:
     import memcommit.adapters.console.commands.audit.command as audit_command
-    from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
+    from memcommit.application.operations.audit.session_store import QualityAuditStore
     from memcommit.persistence.store import MemoryStore
 
     context_name = "quality/direct-audit"

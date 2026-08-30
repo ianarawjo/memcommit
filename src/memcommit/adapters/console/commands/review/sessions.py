@@ -35,9 +35,7 @@ from memcommit.adapters.console.commands.sever.sessions import (
     list_sever_session_catalog,
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.application.capabilities.reviewing.quality.audit_store import (
-    QualityAuditStore,
-)
+from memcommit.application.operations.audit.session_store import QualityAuditStore
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
 from memcommit.application.operations.review.model import ReviewError

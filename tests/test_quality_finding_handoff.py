@@ -7,7 +7,7 @@ import json
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -15,11 +15,11 @@ from memcommit.application.capabilities.reviewing.quality.findings import (
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.application.capabilities.reviewing.quality.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
     QualityFindSourceFrame,
     create_quality_find_workbench,
 )
-from memcommit.application.capabilities.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,
     quality_finding_handoff_from_json,
@@ -53,10 +53,15 @@ def _conflict_session():
             ),
         ),
     )
-    return context, first, second, create_quality_find_workbench(
-        "conflicts",
+    return (
         context,
-        report,
+        first,
+        second,
+        create_quality_find_workbench(
+            "conflicts",
+            context,
+            report,
+        ),
     )
 
 
@@ -200,9 +205,7 @@ def test_handoff_fails_closed_when_finder_source_changed():
 def test_handoff_json_round_trip_and_identity_tamper_detection():
     handoff = quality_finding_handoffs(_conflict_session()[3])[0]
 
-    restored = quality_finding_handoff_from_json(
-        quality_finding_handoff_json(handoff)
-    )
+    restored = quality_finding_handoff_from_json(quality_finding_handoff_json(handoff))
     assert restored == handoff
 
     tampered = handoff.to_dict()

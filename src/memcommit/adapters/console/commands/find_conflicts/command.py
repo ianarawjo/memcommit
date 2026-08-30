@@ -14,7 +14,10 @@ from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.application.capabilities.authority.access import GrantedReadStore, resolve_context_access
+from memcommit.application.capabilities.authority.access import (
+    GrantedReadStore,
+    resolve_context_access,
+)
 from memcommit.adapters.console.terminal.components.quality_find.rendering import (
     render_heading,
     render_memory,
@@ -31,8 +34,12 @@ from memcommit.adapters.console.terminal.components.quality_find.workbench impor
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
-from memcommit.application.capabilities.reviewing.quality.findings import FindingsError
+from memcommit.adapters.console.terminal.core.identity import (
+    collision_safe_uid_prefixes,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    FindingsError,
+)
 from memcommit.application.operations.fit.judgment import FitJudgmentError
 from memcommit.providers.subscription import (
     QueryProviderError,
@@ -42,11 +49,11 @@ from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.operations.resolve.application import ResolveError
-from memcommit.application.capabilities.reviewing.quality.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
     QualityFindSourceFrame,
     create_quality_find_workbench,
 )
-from memcommit.application.capabilities.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
     quality_finding_handoff_json,
     quality_finding_handoffs,
 )

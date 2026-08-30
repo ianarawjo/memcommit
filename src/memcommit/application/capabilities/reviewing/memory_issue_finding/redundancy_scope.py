@@ -6,19 +6,29 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.access import ContextAccess, GrantedReadStore
+from memcommit.application.capabilities.authority.access import (
+    ContextAccess,
+    GrantedReadStore,
+)
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.capabilities.authority.derived_policy import authorize_combination
-from memcommit.application.capabilities.reviewing.direct_item_duplicates import ExactDuplicateGroup
-from memcommit.application.capabilities.reviewing.quality.findings import DuplicateReport, FindingsProvider
+from memcommit.application.capabilities.authority.derived_policy import (
+    authorize_combination,
+)
+from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
+    ExactDuplicateGroup,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    DuplicateReport,
+    FindingsProvider,
+)
 from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.application.capabilities.reviewing.quality.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
     QualityFindSourceFrame,
     create_quality_find_workbench,
 )
-from memcommit.application.capabilities.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
     QualityFindingHandoff,
     quality_finding_handoffs,
 )
@@ -66,16 +76,16 @@ def freeze_redundancy_scope(
 ) -> QualityFindSourceFrame:
     """Freeze one root or readable lexical subtree as independent frames."""
 
-    if not isinstance(active_store, MemoryStore) or not isinstance(
-        access, ContextAccess
-    ) or type(include_descendants) is not bool:
+    if (
+        not isinstance(active_store, MemoryStore)
+        or not isinstance(access, ContextAccess)
+        or type(include_descendants) is not bool
+    ):
         raise TypeError("Find Redundancies requires Context access and boolean reach.")
     if not include_descendants:
         authorize_combination((access,))
         context = (
-            GrantedReadStore(access, registry=registry).load_direct(
-                access.display_name
-            )
+            GrantedReadStore(access, registry=registry).load_direct(access.display_name)
             if access.is_granted
             else access.store.load_direct(access.context_name)
         )

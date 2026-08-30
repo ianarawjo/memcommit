@@ -11,7 +11,9 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.capabilities.authority.access import resolve_context_access
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.capabilities.retained_history.command_history import build_command_stacks
+from memcommit.application.capabilities.retained_history.command_history import (
+    build_command_stacks,
+)
 from memcommit.core.context import MemoryRef
 from memcommit.application.operations.dedun.scope import (
     apply_recursive_dedun_scope,
@@ -20,8 +22,13 @@ from memcommit.application.operations.dedun.scope import (
 )
 from memcommit.application.operations.dedun.application import DedunConflictError
 from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
-from memcommit.application.capabilities.reviewing.quality.findings import DuplicateReport, FindingsError
-from memcommit.application.capabilities.reviewing.quality.redundancy_scope import analyze_independent_redundancy_scope
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    DuplicateReport,
+    FindingsError,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.redundancy_scope import (
+    analyze_independent_redundancy_scope,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -206,7 +213,7 @@ def test_recursive_dedun_applies_semantic_groups_per_context(
     store.set_current(root.name)
     provider = SemanticGroupProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_duplicates.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.find_redundancies.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -272,7 +279,7 @@ def test_recursive_dedun_later_analysis_failure_publishes_no_context(
         return DuplicateReport(memory_count=len(context.memories), findings=())
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_duplicates.command.ops.find_redundancies",
+        "memcommit.adapters.console.commands.find_redundancies.command.ops.find_redundancies",
         analyze,
     )
 

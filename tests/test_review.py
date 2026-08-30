@@ -1,4 +1,5 @@
 """Persistent semantic review state and prompt-toolkit shell contracts."""
+
 from __future__ import annotations
 
 import json
@@ -23,7 +24,7 @@ from memcommit.adapters.console.commands.review.resolution_shell import (
     run_review_resolution_shell,
 )
 from memcommit.core.context import Memory
-from memcommit.application.capabilities.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
     AmbiguityFinding,
     AmbiguityReport,
 )
@@ -76,9 +77,7 @@ def _context_and_report():
                 memory=third,
                 interpretation="SINGLE",
                 clarification="HELPFUL",
-                ordinary_readings=(
-                    "Ask the person responsible for this matter.",
-                ),
+                ordinary_readings=("Ask the person responsible for this matter.",),
                 reason=(
                     "The responsible person is not named; clarification "
                     "would help identify a contact while the instruction "
@@ -134,8 +133,7 @@ def test_common_review_response_frame_persists_choice_and_comment():
         # Open the first finding, enter RESPONSES on reading 1, choose reading
         # 2, then move to its independent Response box.
         pipe_input.send_text(
-            "\t\x1b[B\r\t\x1b[B\r\x1b[B\r"
-            "교직원 출입구의 자격 규칙이다.\rq"
+            "\t\x1b[B\r\t\x1b[B\r\x1b[B\r교직원 출입구의 자격 규칙이다.\rq"
         )
         result = run_review_resolution_shell(
             session,
@@ -226,9 +224,7 @@ def test_review_uses_one_combined_response_for_selection_refinement_or_new_readi
 
     session.select_choice(0)
     response = session.response_for(first.uid)
-    response.text = (
-        "위 해석이 맞지만 이 문에서는 출입 권한이 교직원으로 제한된다."
-    )
+    response.text = "위 해석이 맞지만 이 문에서는 출입 권한이 교직원으로 제한된다."
 
     restored = ReviewSession.from_dict(session.to_dict())
     restored_response = restored.response_for(first.uid)
@@ -271,17 +267,14 @@ def test_review_session_round_trip_and_full_context_staleness():
     unrelated_direct = next(
         item
         for item in ctx.iter_items()
-        if isinstance(item, Memory) and item.uid not in {
-            finding.memory.uid for finding in report.findings
-        }
+        if isinstance(item, Memory)
+        and item.uid not in {finding.memory.uid for finding in report.findings}
     )
     unrelated_direct.content = "프레임 안의 다른 Memory가 변경되었다."
     assert not review_matches_context(restored, ctx)
 
     with pytest.raises(ReviewError, match="schema version"):
-        ReviewSession.from_dict(
-            {**session.to_dict(), "schema_version": 999}
-        )
+        ReviewSession.from_dict({**session.to_dict(), "schema_version": 999})
 
     reordered, reordered_report, _, _ = _context_and_report()
     reordered_session = create_ambiguity_review(reordered, reordered_report)
@@ -297,9 +290,7 @@ def test_review_session_round_trip_and_full_context_staleness():
 
 def test_store_rejects_duplicate_json_keys_in_review_session(isolated_store):
     MemoryStore()
-    (isolated_store / "review-session.json").write_text(
-        '{"uid": "one", "uid": "two"}'
-    )
+    (isolated_store / "review-session.json").write_text('{"uid": "one", "uid": "two"}')
 
     with pytest.raises(ValueError, match="invalid JSON"):
         MemoryStore().load_review_session()
@@ -344,8 +335,7 @@ def test_cli_creates_snapshot_resumes_without_provider_and_never_mutates(
 
     def respond(payload):
         ids = {
-            memory["content"]: memory["candidate_id"]
-            for memory in payload["memories"]
+            memory["content"]: memory["candidate_id"] for memory in payload["memories"]
         }
         return {
             "findings": [
@@ -437,10 +427,13 @@ def test_cli_refuses_stale_saved_review(isolated_store, monkeypatch):
         "memcommit.adapters.console.commands.review.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
-    assert runner.invoke(
-        app,
-        ["review", "ambiguities", "--snapshot"],
-    ).exit_code == 0
+    assert (
+        runner.invoke(
+            app,
+            ["review", "ambiguities", "--snapshot"],
+        ).exit_code
+        == 0
+    )
 
     changed = store.load_direct(ctx.name)
     changed.replace(Memory(uid=memory.uid, content="Changed."))

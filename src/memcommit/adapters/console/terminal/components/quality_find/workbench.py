@@ -58,7 +58,9 @@ from memcommit.adapters.console.terminal.components.read_report import (
     ReadReportSelectTarget,
     choose_read_report_recent,
 )
-from memcommit.adapters.console.terminal.components.findings import run_quality_find_browser
+from memcommit.adapters.console.terminal.components.findings import (
+    run_quality_find_browser,
+)
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.tui.range_selection import (
     ContextRangeSelectionState,
@@ -69,8 +71,10 @@ from memcommit.core.context_targeting.tui.selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.application.capabilities.authority.derived_policy import authorize_combination
-from memcommit.application.capabilities.reviewing.quality.workbench import (
+from memcommit.application.capabilities.authority.derived_policy import (
+    authorize_combination,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
     QualityFindKind,
     QualityFindReport,
     QualityFindSourceFrame,
@@ -79,7 +83,7 @@ from memcommit.application.capabilities.reviewing.quality.workbench import (
     create_quality_find_workbench,
     quality_find_report_view,
 )
-from memcommit.application.capabilities.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
     QualityFindingHandoff,
     quality_finding_handoff,
     quality_finding_handoffs,
@@ -195,9 +199,7 @@ def _read_report_operation(
         default = "find-conflicts"
     operation = default if operation_name is None else operation_name
     expected = (
-        {"dedun", "find-redundancies"}
-        if kind == "duplicates"
-        else {f"find-{kind}"}
+        {"dedun", "find-redundancies"} if kind == "duplicates" else {f"find-{kind}"}
     )
     if operation not in expected:
         raise ValueError(
@@ -668,8 +670,8 @@ def run_quality_find_resolution_workbench(
         and bool(session.report.findings)
     )
     duplicate_handoffs = eligible_duplicate_handoffs()
-    duplicate_handoff_available = (
-        duplicate_handoff_handler is not None and bool(duplicate_handoffs)
+    duplicate_handoff_available = duplicate_handoff_handler is not None and bool(
+        duplicate_handoffs
     )
     action = run_quality_find_browser(
         quality_find_report_view(
@@ -760,7 +762,9 @@ def run_interactive_quality_find(
         # provenance only. PROFILE itself means all readable Contexts at this
         # invocation, so expand it against the newly frozen catalog. Ordinary
         # checked ranges remain exact and must not acquire new descendants.
-        replay_context_names = names if target.profile_selected else target.context_names
+        replay_context_names = (
+            names if target.profile_selected else target.context_names
+        )
         receipt = QualityFindSetupReceipt(
             target_names=target.target_names,
             context_names=replay_context_names,

@@ -13,12 +13,17 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.add import command as add_command
 from memcommit.core.context import AutoCheckpoint, Memory
-from memcommit.application.capabilities.reviewing.quality.findings import AmbiguityFinding, AmbiguityReport
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    AmbiguityFinding,
+    AmbiguityReport,
+)
 from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (
     reconstruct_memory_history,
 )
 from memcommit.application.operations.rationale.model import build_rationale
-from memcommit.application.operations.rationale.semantic import rationale_provenance_payload
+from memcommit.application.operations.rationale.semantic import (
+    rationale_provenance_payload,
+)
 from memcommit.application.operations.review.model import create_ambiguity_review
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.model import plan_update
@@ -287,7 +292,9 @@ def test_merge_trace_preserves_keep_target_and_take_source_dispositions(
 
     assert kept.exit_code == 0, kept.output
     assert taken.exit_code == 0, taken.output
-    report = reconstruct_memory_history(store, store.load_direct(main.name), main_memory.uid)
+    report = reconstruct_memory_history(
+        store, store.load_direct(main.name), main_memory.uid
+    )
     dispositions = [
         event.reason_codes[-1] for event in report.events if event.kind == "MERGED_IN"
     ]
@@ -331,7 +338,9 @@ def test_trace_keeps_one_legacy_warning_when_no_branch_receipt_exists(
     for path in source_checkpoints.glob("*.json"):
         shutil.copy2(path, target_checkpoints / path.name)
 
-    report = reconstruct_memory_history(store, store.load_direct(target.name), memory.uid)
+    report = reconstruct_memory_history(
+        store, store.load_direct(target.name), memory.uid
+    )
 
     assert [event.kind for event in report.events] == ["CREATED"]
     assert len(report.warnings) == 1
@@ -364,7 +373,9 @@ def test_trace_retains_each_recorded_context_route_across_nested_branches(
     )
     assert len({source_memory.uid, middle_memory.uid, target_memory.uid}) == 3
 
-    report = reconstruct_memory_history(store, store.load_direct("nested/2"), target_memory.uid)
+    report = reconstruct_memory_history(
+        store, store.load_direct("nested/2"), target_memory.uid
+    )
 
     assert report.warnings == ()
     routes = [
@@ -396,7 +407,9 @@ def test_trace_does_not_trust_invalid_branch_creation_metadata(
     branch_entry["args"]["branch_tree"]["operation_uid"] = "forged"
     monkeypatch.setattr(store, "list_checkpoints", lambda _name: retained)
 
-    report = reconstruct_memory_history(store, store.load_direct("invalid/target"), memory.uid)
+    report = reconstruct_memory_history(
+        store, store.load_direct("invalid/target"), memory.uid
+    )
 
     assert not any(event.kind == "BRANCHED" for event in report.events)
     assert any("invalid Branch creation metadata" in item for item in report.warnings)
@@ -522,7 +535,9 @@ def test_explicit_lineage_tracks_identical_fresh_child_then_current_edit(
         ),
     )
 
-    report = reconstruct_memory_history(store, store.load_direct("atomized"), child.uid[:8])
+    report = reconstruct_memory_history(
+        store, store.load_direct("atomized"), child.uid[:8]
+    )
 
     assert report.component_uids == tuple(sorted((source.uid, child.uid)))
     assert unrelated.uid not in report.component_uids

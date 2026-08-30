@@ -13,7 +13,7 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory, MemoryRef, QueryContextRef
-from memcommit.application.capabilities.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
     FindingsError,
     collect_direct_memories,
     enumerate_pairs,
@@ -21,7 +21,9 @@ from memcommit.application.capabilities.reviewing.quality.findings import (
     find_conflicts,
     find_redundancies as find_duplicates,
 )
-from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.terminal.core.identity import (
+    collision_safe_uid_prefixes,
+)
 from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
@@ -179,7 +181,7 @@ def test_find_duplicates_scans_representatives_without_pair_targets(
         }
 
     monkeypatch.setattr(
-        "memcommit.application.capabilities.reviewing.quality.findings.enumerate_pairs",
+        "memcommit.application.capabilities.reviewing.memory_issue_finding.findings.enumerate_pairs",
         lambda candidates: pytest.fail(
             "duplicate discovery must not enumerate pair targets"
         ),
@@ -693,7 +695,7 @@ def test_cli_redundancy_report_groups_members_once_without_left_right_labels(
         }
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_duplicates.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.find_redundancies.command.connect_codex_chatgpt_provider",
         lambda: PayloadProvider(respond),
     )
 
@@ -922,7 +924,7 @@ def test_cli_finders_are_read_only_and_each_use_one_provider_call(
 
     provider = PayloadProvider(lambda operation, payload: {"findings": []})
     for module_name in [
-        "find_duplicates",
+        "find_redundancies",
         "find_ambiguities",
         "find_conflicts",
     ]:
@@ -1112,7 +1114,7 @@ def test_cli_positional_context_does_not_switch_current(
     store.save(target)
     store.set_current(active.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_duplicates.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.find_redundancies.command.connect_codex_chatgpt_provider",
         lambda: PayloadProvider(lambda _operation, _payload: {"findings": []}),
     )
     monkeypatch.setattr(
@@ -1201,7 +1203,7 @@ def test_cli_direct_scope_does_not_open_memory_ref_or_embedded_context_files(
     store._context_file(child.name).write_text("{invalid")
     provider = PayloadProvider(lambda operation, payload: {"findings": []})
     for module_name in [
-        "find_duplicates",
+        "find_redundancies",
         "find_ambiguities",
         "find_conflicts",
     ]:
@@ -1263,7 +1265,7 @@ def test_cli_dedun_immediately_applies_eligible_groups_and_prints_review_receipt
 
     provider = PayloadProvider(respond)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_duplicates.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.find_redundancies.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -1321,7 +1323,7 @@ def test_cli_dedun_unions_semantic_memory_and_exact_embed_groups_atomically(
         }
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_duplicates.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.find_redundancies.command.connect_codex_chatgpt_provider",
         lambda: PayloadProvider(respond),
     )
 
@@ -1360,7 +1362,7 @@ def test_duplicate_scan_does_not_allocate_pair_records(monkeypatch):
     for index in range(4):
         ops.add(ctx, str(index))
     monkeypatch.setattr(
-        "memcommit.application.capabilities.reviewing.quality.findings.MemoryPair",
+        "memcommit.application.capabilities.reviewing.memory_issue_finding.findings.MemoryPair",
         lambda *args, **kwargs: pytest.fail(
             "duplicate discovery allocated a pair record"
         ),

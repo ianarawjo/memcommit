@@ -18,7 +18,10 @@ OUT = ROOT / "agent-records/docs/screenshots/mem-dedup-resolution-20260816"
 COLUMNS = 180
 ROWS = 52
 
-_BASE_PATH = ROOT / "agent-records/docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
+_BASE_PATH = (
+    ROOT
+    / "agent-records/docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
+)
 _SPEC = importlib.util.spec_from_file_location("dedup_capture_base", _BASE_PATH)
 assert _SPEC is not None and _SPEC.loader is not None
 _BASE = importlib.util.module_from_spec(_SPEC)
@@ -161,7 +164,7 @@ def _pause(label: str) -> None:
 def _run_child(kind: str) -> None:
     import click
 
-    import memcommit.adapters.console.commands.find_duplicates.command as find_command
+    import memcommit.adapters.console.commands.find_redundancies.command as find_command
     import memcommit.application.capabilities.ops as ops
     from memcommit.adapters.console.entrypoint import app
     from memcommit.persistence.store import MemoryStore
@@ -379,12 +382,10 @@ def main() -> None:
     _capture_success()
     _capture_stale()
     _capture_inbound()
-    assert "STATUS · SUCCESS" in (
-        OUT / "16-success-receipt.txt"
-    ).read_text(encoding="utf-8")
-    success = (OUT / "17-read-only-store-verification.txt").read_text(
+    assert "STATUS · SUCCESS" in (OUT / "16-success-receipt.txt").read_text(
         encoding="utf-8"
     )
+    success = (OUT / "17-read-only-store-verification.txt").read_text(encoding="utf-8")
     assert "CHECKPOINTS 1" in success
     assert "COMMANDS ['dedun']" in success
     assert "MEM REVIEW · DEDUN" in success
@@ -397,9 +398,7 @@ def main() -> None:
     )
     assert "CHECKPOINTS 0" in inbound
     assert "00000200" in inbound
-    raw = "".join(
-        path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript")
-    )
+    raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     assert "PTY 180 52" in raw
     assert "\x1b[" in raw
     assert "38;" in raw

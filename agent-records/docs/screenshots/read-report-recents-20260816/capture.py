@@ -19,7 +19,8 @@ COLUMNS = 180
 ROWS = 52
 
 _BASE_PATH = (
-    ROOT / "agent-records/docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
+    ROOT
+    / "agent-records/docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
 )
 _SPEC = importlib.util.spec_from_file_location("read_report_capture_base", _BASE_PATH)
 assert _SPEC is not None and _SPEC.loader is not None
@@ -54,7 +55,10 @@ def _isolate_store(root: Path) -> None:
 
 
 def _record_recent(store, target, started_at: str) -> None:
-    from memcommit.persistence.command_ledger.attempts import CommandAttempt, CommandAttemptLedger
+    from memcommit.persistence.command_ledger.attempts import (
+        CommandAttempt,
+        CommandAttemptLedger,
+    )
 
     uid = (
         "11111111-1111-4111-8111-111111111111"
@@ -87,8 +91,12 @@ def _context_state(store, name: str) -> tuple[bytes, tuple[str, ...]]:
 def _run_child(kind: str) -> None:
     import memcommit.application.capabilities.ops as ops
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.application.capabilities.reviewing.quality.findings import DuplicateReport
-    from memcommit.application.capabilities.reviewing.read_report import ReadReportTarget
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+        DuplicateReport,
+    )
+    from memcommit.application.capabilities.reviewing.read_report import (
+        ReadReportTarget,
+    )
     from memcommit.persistence.store import MemoryStore
 
     fixture_root = OUT / f".fixture-{kind}"

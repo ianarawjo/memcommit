@@ -29,9 +29,17 @@ from memcommit.application.operations.dedun.application import (
     project_dedun,
 )
 from memcommit.application.operations.dedun.planning import freeze_dedun_plan
-from memcommit.application.capabilities.reviewing.quality.findings import DuplicateFinding, DuplicateReport, find_redundancies
-from memcommit.application.capabilities.reviewing.quality.workbench import create_quality_find_workbench
-from memcommit.application.capabilities.reviewing.quality.handoff import quality_finding_handoffs
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    DuplicateFinding,
+    DuplicateReport,
+    find_redundancies,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+    create_quality_find_workbench,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
+    quality_finding_handoffs,
+)
 from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.persistence.store import context_record_digest
 
@@ -137,10 +145,7 @@ def _final_affected_uids(
     absorbed_to_survivor: tuple[tuple[str, str], ...],
 ) -> tuple[str, ...]:
     survivor_by_absorbed = dict(absorbed_to_survivor)
-    final = {
-        survivor_by_absorbed.get(uid, uid)
-        for uid in affected_uids
-    }
+    final = {survivor_by_absorbed.get(uid, uid) for uid in affected_uids}
     return tuple(sorted(final))
 
 
@@ -158,9 +163,7 @@ def project_atomize_normal_form(
         raise TypeError("Atomize normal-form planning requires typed inputs.")
     projected = Context.from_dict(context.to_dict())
     structural = apply_atomize_analysis(projected, analysis)
-    affected_uids = {
-        uid for item in structural.items for uid in item.result_uids
-    }
+    affected_uids = {uid for item in structural.items for uid in item.result_uids}
     try:
         dedun_record, absorbed_to_survivor = _dedun_projection(
             projected,

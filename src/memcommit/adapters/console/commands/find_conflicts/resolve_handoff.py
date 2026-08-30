@@ -6,14 +6,19 @@ from memcommit.adapters.console.clipboard import write_system_clipboard
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.commands.resolve.receipt import render_resolve_receipt
 from memcommit.adapters.console.commands.resolve.workbench import run_resolve_tui
-from memcommit.application.capabilities.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
     QualityFindingHandoff,
     conflict_handoff_to_resolve_request,
 )
 from memcommit.providers.subscription import connect_semantic_provider
-from memcommit.application.operations.resolve.application import apply_resolve, run_resolve
+from memcommit.application.operations.resolve.application import (
+    apply_resolve,
+    run_resolve,
+)
 from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
-from memcommit.application.operations.resolve.semantic import ProviderResolveSemanticPort
+from memcommit.application.operations.resolve.semantic import (
+    ProviderResolveSemanticPort,
+)
 from memcommit.persistence.store import MemoryStore
 
 

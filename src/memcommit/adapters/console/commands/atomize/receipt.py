@@ -16,7 +16,7 @@ from memcommit.adapters.console.terminal.core.theme import (
     memory_object_color_rgb,
     semantic_color_rgb,
 )
-from memcommit.application.capabilities.reviewing.quality.report import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.report import (
     QualityFindingReportItem,
     QualityFindingSource,
 )
@@ -86,7 +86,9 @@ def _render_applied_splits(*, session: AtomizeAnalysisSession, result) -> None:
     remaining = len(splits) - min(len(splits), _APPLY_RESULT_SAMPLE_LIMIT)
     if remaining:
         typer.echo("")
-        typer.echo(f"… {remaining} MORE {_plural(remaining, 'SPLIT').upper()} · see REVIEW")
+        typer.echo(
+            f"… {remaining} MORE {_plural(remaining, 'SPLIT').upper()} · see REVIEW"
+        )
 
 
 def _unresolved_issue_items(
@@ -120,10 +122,14 @@ def _unresolved_issue_items(
             or not isinstance(reason, str)
             or not reason
         ):
-            raise ValueError("Atomize Apply audit contains an invalid unresolved issue.")
+            raise ValueError(
+                "Atomize Apply audit contains an invalid unresolved issue."
+            )
         missing = [uid for uid in source_uids if uid not in source_by_uid]
         if missing:
-            raise ValueError("Atomize Apply audit references an unavailable Source Memory.")
+            raise ValueError(
+                "Atomize Apply audit references an unavailable Source Memory."
+            )
         category = "conflicts" if kind == "CONFLICT" else "ambiguities"
         projected.append(
             QualityFindingReportItem(

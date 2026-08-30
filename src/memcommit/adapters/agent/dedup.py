@@ -28,7 +28,7 @@ from memcommit.adapters.agent.contract import (
 from memcommit.adapters.agent.quality_find import (
     redundancy_evidence_agent_schema,
 )
-from memcommit.application.capabilities.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
 )

@@ -599,14 +599,7 @@ def _cli_entries(
 
 
 def _client_methods(repository: Path) -> dict[str, set[str]]:
-    path = (
-        repository
-        / "src"
-        / "memcommit"
-        / "adapters"
-        / "python_api"
-        / "client.py"
-    )
+    path = repository / "src" / "memcommit" / "adapters" / "python_api" / "client.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     found: dict[str, set[str]] = defaultdict(set)
     for node in tree.body:
@@ -638,12 +631,11 @@ _OPERATION_DISCOVERY_TOKENS = {
     "dedup": ("dedup",),
     "eval": ("eval", "semantic_eval"),
     "find-duplicates": (
-        "find_exact_duplicates",
+        "find_duplicates",
         "exact_duplicates",
     ),
     "find-redundancies": (
         "find_redundancies",
-        "find_duplicates",
         "quality_find",
     ),
     "help": ("help", "help_inventory"),
@@ -660,7 +652,7 @@ _OPERATION_DISCOVERY_TOKENS = {
 # Python surface remains find_duplicates rather than inheriting dedup merely
 # because both operations share that application package.
 _APPLICATION_DISCOVERY_TOKENS = {
-    "find-duplicates": ("find_exact_duplicates", "exact_duplicates", "dedup"),
+    "find-duplicates": ("find_duplicates", "exact_duplicates", "dedup"),
 }
 
 
@@ -715,12 +707,7 @@ def _operation_classifications(
 ) -> dict[str, str]:
     """Load the reviewed conclusion separately from mechanically observed shape."""
 
-    path = (
-        repository
-        / "agent-records"
-        / "docs"
-        / "operation-route-classification.json"
-    )
+    path = repository / "agent-records" / "docs" / "operation-route-classification.json"
     document = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(document, dict) or document.get("schema_version") != 1:
         raise ValueError(f"{path}: expected classification schema version 1")
@@ -759,9 +746,10 @@ def _operation_classifications(
                     raise ValueError(f"{path}: {state}/{name} requires a reason")
                 for evidence_path in evidence:
                     candidate = repository / evidence_path
-                    if not evidence_path.startswith(
-                        "agent-records/docs/"
-                    ) or not candidate.is_file():
+                    if (
+                        not evidence_path.startswith("agent-records/docs/")
+                        or not candidate.is_file()
+                    ):
                         raise ValueError(
                             f"{path}: {state}/{name} evidence does not exist: "
                             f"{evidence_path}"
@@ -794,9 +782,7 @@ def _operation_routes(
     module_names = {module.name for module in modules}
     client_methods = _client_methods(repository)
     matrix_files = tuple(
-        sorted(
-            (repository / "agent-records" / "docs").glob("*boundary-matrix.md")
-        )
+        sorted((repository / "agent-records" / "docs").glob("*boundary-matrix.md"))
     )
     result: list[OperationRouteRecord] = []
     for operation in operations:
@@ -828,9 +814,9 @@ def _operation_routes(
                 for module in module_names
                 if module.startswith("memcommit.adapters.interfaces.tui.operations.")
                 and _module_owner_matches(
-                    module.removeprefix("memcommit.adapters.interfaces.tui.operations.").split(
-                        ".", 1
-                    )[0],
+                    module.removeprefix(
+                        "memcommit.adapters.interfaces.tui.operations."
+                    ).split(".", 1)[0],
                     tokens,
                 )
             )

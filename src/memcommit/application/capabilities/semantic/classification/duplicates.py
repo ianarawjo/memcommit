@@ -4,6 +4,7 @@ Exact and conservative surface equivalence are production host invariants, so
 the provider sees only pairs that require semantic judgment. This keeps the
 small-model operation narrow without weakening the production boundary.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -12,7 +13,9 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.application.capabilities.reviewing.quality.findings import _surface_key
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    _surface_key,
+)
 from memcommit.providers.types import SemanticProvider
 
 

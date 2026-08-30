@@ -37,14 +37,14 @@ from memcommit.application.operations.ground.workspace_runtime import (
 from memcommit.providers.types import ProviderIdentity
 from memcommit.persistence.store import MemoryStore
 from memcommit.adapters.console.commands.audit.command import _run_quality_audit_checks
-from memcommit.application.capabilities.reviewing.quality.audit import (
+from memcommit.application.operations.audit.model import (
     QUALITY_AUDIT_LEGACY_SCHEMA_VERSION,
     QualityAuditSession,
+)
+from memcommit.application.operations.audit.resolution_adapter import (
     quality_audit_resolution_view,
 )
-from memcommit.application.capabilities.reviewing.quality.audit_store import (
-    QualityAuditStore,
-)
+from memcommit.application.operations.audit.session_store import QualityAuditStore
 from memcommit.persistence.store import context_record_digest
 
 

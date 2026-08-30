@@ -9,7 +9,9 @@ from memcommit.application.operations.compare.ledger.provider import (
 from memcommit.application.operations.search.answer_dialogue import (
     _search_answer_execution_policy,
 )
-from memcommit.application.capabilities.reviewing.quality.findings import _findings_execution_policy
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    _findings_execution_policy,
+)
 from memcommit.application.operations.log.search import HISTORY_SEARCH_EXECUTION_POLICY
 from memcommit.application.operations.meld.provider.contract import (
     MELD_EXECUTION_POLICY,

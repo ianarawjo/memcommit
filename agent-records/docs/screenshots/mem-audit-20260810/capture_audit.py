@@ -189,7 +189,7 @@ def _spawn(environment: dict[str, str], *arguments: str):
 
 
 def _new_audit_uid(before: set[str]) -> str:
-    from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
+    from memcommit.application.operations.audit.session_store import QualityAuditStore
     from memcommit.persistence.store import MemoryStore
 
     sessions = [
@@ -205,8 +205,10 @@ def _new_audit_uid(before: set[str]) -> str:
 
 
 def main() -> None:
-    from memcommit.application.capabilities.reviewing.quality.audit import quality_audit_resolution_view
-    from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
+    from memcommit.application.operations.audit.resolution_adapter import (
+        quality_audit_resolution_view,
+    )
+    from memcommit.application.operations.audit.session_store import QualityAuditStore
     from memcommit.persistence.store import MemoryStore
 
     environment = dict(os.environ)
@@ -266,8 +268,7 @@ def main() -> None:
         audit,
         audit_raw,
         lambda plain: (
-            "mem help · explore while work continues" in plain
-            and "MEM AUDIT" in plain
+            "mem help · explore while work continues" in plain and "MEM AUDIT" in plain
         ),
         label="Help during Audit",
         timeout=10,
@@ -290,9 +291,7 @@ def main() -> None:
     _wait_for_screen(
         audit,
         audit_raw,
-        lambda plain: (
-            "AUDIT SUMMARY" in plain and "SAVED · 3/3 CHECKS" in plain
-        ),
+        lambda plain: ("AUDIT SUMMARY" in plain and "SAVED · 3/3 CHECKS" in plain),
         label="completed Audit report",
         timeout=900,
     )
@@ -351,9 +350,7 @@ def main() -> None:
     _wait_for_screen(
         review,
         review_raw,
-        lambda plain: (
-            "AUDIT SUMMARY" in plain and "SAVED · 3/3 CHECKS" in plain
-        ),
+        lambda plain: ("AUDIT SUMMARY" in plain and "SAVED · 3/3 CHECKS" in plain),
         label="saved Audit Review",
         timeout=10,
     )

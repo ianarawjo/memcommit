@@ -3,6 +3,7 @@
 The terminal is only a view/controller.  This module owns the durable semantic
 state so a review can be resumed after the PTY or controlling agent disconnects.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -12,7 +13,9 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 from memcommit.core.context import Context, Memory
-from memcommit.application.capabilities.reviewing.quality.findings import AmbiguityReport
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    AmbiguityReport,
+)
 
 
 REVIEW_SCHEMA_VERSION = 2
@@ -56,11 +59,7 @@ def _string(
     empty: bool = False,
     limit: int = REVIEW_RESPONSE_CHAR_LIMIT,
 ) -> str:
-    if (
-        not isinstance(value, str)
-        or (not empty and not value)
-        or len(value) > limit
-    ):
+    if not isinstance(value, str) or (not empty and not value) or len(value) > limit:
         raise ReviewError(f"Invalid {label}.")
     return value
 
@@ -169,10 +168,7 @@ class ReviewItem:
             or clarification not in _CLARIFICATIONS
         ):
             raise ReviewError("Invalid review item.")
-        parsed_choices = tuple(
-            ReviewChoice.from_dict(choice)
-            for choice in choices
-        )
+        parsed_choices = tuple(ReviewChoice.from_dict(choice) for choice in choices)
         if len({choice.uid for choice in parsed_choices}) != len(parsed_choices):
             raise ReviewError("Duplicate review choice uid.")
         return cls(
@@ -213,9 +209,7 @@ class ReviewResponse:
             "review response",
         )
         selected = data["selected_choice_uid"]
-        if selected is not None and (
-            not isinstance(selected, str) or not selected
-        ):
+        if selected is not None and (not isinstance(selected, str) or not selected):
             raise ReviewError("Invalid selected review choice.")
         return cls(
             selected_choice_uid=selected,
@@ -256,8 +250,7 @@ class ReviewSession:
             "context_digest": self.context_digest,
             "items": [item.to_dict() for item in self.items],
             "responses": {
-                uid: response.to_dict()
-                for uid, response in self.responses.items()
+                uid: response.to_dict() for uid, response in self.responses.items()
             },
             "cursor_uid": self.cursor_uid,
             "sort_mode": self.sort_mode,
@@ -319,8 +312,7 @@ class ReviewSession:
             not isinstance(kind, str)
             or kind not in {"ambiguities", "atomize"}
             or (
-                schema_version == REVIEW_LEGACY_SCHEMA_VERSION
-                and kind != "ambiguities"
+                schema_version == REVIEW_LEGACY_SCHEMA_VERSION and kind != "ambiguities"
             )
         ):
             raise ReviewError("Unsupported review kind.")
@@ -356,8 +348,7 @@ class ReviewSession:
         ):
             raise ReviewError("Invalid atomize review item.")
         if cursor_uid is not None and (
-            not isinstance(cursor_uid, str)
-            or cursor_uid not in item_by_uid
+            not isinstance(cursor_uid, str) or cursor_uid not in item_by_uid
         ):
             raise ReviewError("Invalid review cursor.")
 
@@ -370,9 +361,7 @@ class ReviewSession:
             ):
                 raise ReviewError("Invalid review response target.")
             parsed = ReviewResponse.from_dict(response)
-            choice_uids = {
-                choice.uid for choice in item_by_uid[item_uid].choices
-            }
+            choice_uids = {choice.uid for choice in item_by_uid[item_uid].choices}
             if (
                 parsed.selected_choice_uid is not None
                 and parsed.selected_choice_uid not in choice_uids
@@ -403,13 +392,9 @@ class ReviewSession:
             try:
                 uuid.UUID(source_analysis_uid)
             except ValueError as error:
-                raise ReviewError(
-                    "Invalid source atomize analysis uid."
-                ) from error
+                raise ReviewError("Invalid source atomize analysis uid.") from error
         elif source_analysis_uid is not None:
-            raise ReviewError(
-                "Ambiguity reviews cannot reference an atomize analysis."
-            )
+            raise ReviewError("Ambiguity reviews cannot reference an atomize analysis.")
         return cls(
             uid=uid,
             kind=kind,
@@ -466,9 +451,7 @@ class ReviewSession:
         current = self.current_item()
         assert current is not None
         index = next(
-            index
-            for index, item in enumerate(ordered)
-            if item.uid == current.uid
+            index for index, item in enumerate(ordered) if item.uid == current.uid
         )
         index = max(0, min(index + delta, len(ordered) - 1))
         self.cursor_uid = ordered[index].uid
@@ -493,15 +476,11 @@ class ReviewSession:
         if selected is None:
             return None
         return next(
-            index
-            for index, choice in enumerate(item.choices)
-            if choice.uid == selected
+            index for index, choice in enumerate(item.choices) if choice.uid == selected
         )
 
     def toggle_sort(self) -> None:
-        self.sort_mode = (
-            "PRIORITY" if self.sort_mode == "SOURCE" else "SOURCE"
-        )
+        self.sort_mode = "PRIORITY" if self.sort_mode == "SOURCE" else "SOURCE"
 
     @property
     def answered_count(self) -> int:
@@ -536,13 +515,8 @@ def create_ambiguity_review(
     report: AmbiguityReport,
 ) -> ReviewSession:
     """Convert one finder report into a source-ordered durable review."""
-    direct_memories = [
-        item for item in ctx.iter_items() if isinstance(item, Memory)
-    ]
-    source_order = {
-        memory.uid: index
-        for index, memory in enumerate(direct_memories)
-    }
+    direct_memories = [item for item in ctx.iter_items() if isinstance(item, Memory)]
+    source_order = {memory.uid: index for index, memory in enumerate(direct_memories)}
     if report.memory_count != len(direct_memories):
         raise ReviewError("Ambiguity report does not match the Context.")
 
@@ -601,20 +575,14 @@ def create_atomize_review(ctx: Context, analysis) -> ReviewSession:
         atomize_analysis_matches_context,
     )
 
-    if (
-        not isinstance(analysis, AtomizeAnalysisSession)
-        or not atomize_analysis_matches_context(analysis, ctx)
-    ):
+    if not isinstance(
+        analysis, AtomizeAnalysisSession
+    ) or not atomize_analysis_matches_context(analysis, ctx):
         raise ReviewError(
             "The saved atomize analysis is missing or stale for this Context."
         )
-    direct_memories = [
-        item for item in ctx.iter_items() if isinstance(item, Memory)
-    ]
-    source_order = {
-        memory.uid: index
-        for index, memory in enumerate(direct_memories)
-    }
+    direct_memories = [item for item in ctx.iter_items() if isinstance(item, Memory)]
+    source_order = {memory.uid: index for index, memory in enumerate(direct_memories)}
     if any(item.memory_uid not in source_order for item in analysis.items):
         raise ReviewError(
             "The saved atomize analysis does not match the Context Memories."
@@ -667,22 +635,16 @@ def atomize_review_matches_analysis(
         or not atomize_analysis_matches_context(analysis, ctx)
     ):
         return False
-    uncertain = [
-        item
-        for item in analysis.items
-        if item.classification == "UNCERTAIN"
-    ]
-    return (
-        [item.memory_uid for item in uncertain]
-        == [item.uid for item in session.items]
-        and all(
-            review_item.reason == analysis_item.reason
-            and review_item.source_order == analysis_item.position
-            for review_item, analysis_item in zip(
-                session.items,
-                uncertain,
-                strict=True,
-            )
+    uncertain = [item for item in analysis.items if item.classification == "UNCERTAIN"]
+    return [item.memory_uid for item in uncertain] == [
+        item.uid for item in session.items
+    ] and all(
+        review_item.reason == analysis_item.reason
+        and review_item.source_order == analysis_item.position
+        for review_item, analysis_item in zip(
+            session.items,
+            uncertain,
+            strict=True,
         )
     )
 
@@ -727,13 +689,8 @@ def review_response_digest(session: ReviewSession) -> str:
 
 def review_matches_context(session: ReviewSession, ctx: Context) -> bool:
     """Return whether a saved review still has its complete local frame."""
-    direct_memories = [
-        item for item in ctx.iter_items() if isinstance(item, Memory)
-    ]
-    source_order = {
-        memory.uid: index
-        for index, memory in enumerate(direct_memories)
-    }
+    direct_memories = [item for item in ctx.iter_items() if isinstance(item, Memory)]
+    source_order = {memory.uid: index for index, memory in enumerate(direct_memories)}
     return (
         session.context_uid == ctx.uid
         and session.context_name == ctx.name

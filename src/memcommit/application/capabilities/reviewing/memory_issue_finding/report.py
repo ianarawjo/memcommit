@@ -1,4 +1,4 @@
-"""Read-only presentation contract for process-local quality findings.
+"""Read-only presentation contract for process-local Memory-issue findings.
 
 Finders report model-assisted evidence.  They do not create review obligations,
 collect answers, or own a later mutation.  Operation handoffs remain explicit

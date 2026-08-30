@@ -1,4 +1,4 @@
-"""Lazy public CLI surface for the find_exact_duplicates command package."""
+"""Lazy public CLI surface for the find_redundancies command package."""
 
 from memcommit.adapters.console.commands import _load_entrypoint_attribute
 

@@ -10,10 +10,17 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import (
+    require_interactive_terminal,
+)
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.adapters.console.terminal.components.frame import TuiRegion, build_tui_frame
-from memcommit.adapters.console.terminal.core.keybindings import bind_case_insensitive_key
+from memcommit.adapters.console.terminal.components.frame import (
+    TuiRegion,
+    build_tui_frame,
+)
+from memcommit.adapters.console.terminal.core.keybindings import (
+    bind_case_insensitive_key,
+)
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
@@ -24,11 +31,12 @@ from memcommit.adapters.console.terminal.components.findings.document import (
 from memcommit.adapters.console.terminal.components.findings.issue_one_line_presentation import (
     issue_one_line_fragments,
 )
-from memcommit.application.capabilities.reviewing.quality.report import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.report import (
     QualityFindBrowserReceipt,
     QualityFindReportView,
     QualityFindingReportItem,
 )
+
 
 def run_quality_find_browser(
     view: QualityFindReportView,

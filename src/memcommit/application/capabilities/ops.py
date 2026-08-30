@@ -1,21 +1,21 @@
 """
-    In-memory operations on Context objects.
-    No disk I/O — callers persist via MemoryStore.save(ctx) when needed.
+In-memory operations on Context objects.
+No disk I/O — callers persist via MemoryStore.save(ctx) when needed.
 
-    Semantic operations require either an LLMClient or a validated one-shot
-    prompt provider. Newer provider-backed implementations live in focused
-    modules and retain thin wrappers here as the application in-memory API.
+Semantic operations require either an LLMClient or a validated one-shot
+prompt provider. Newer provider-backed implementations live in focused
+modules and retain thin wrappers here as the application in-memory API.
 
-    Application API:
-        import memcommit.application.capabilities.ops as ops
-        mem  = ops.add(ctx, "some information")
-        ops.embed(child_ctx, parent_ctx)
+Application API:
+    import memcommit.application.capabilities.ops as ops
+    mem  = ops.add(ctx, "some information")
+    ops.embed(child_ctx, parent_ctx)
 
-        # Semantic — forget candidate generation (non-mutating):
-        proposals, history = ops.forget(ctx, "elephants", llm_client)
-        proposals, history = ops.revise_forget("keep only the edit", llm_client, history, ctx)
-        from memcommit.application.capabilities.semantic.changes import apply_changes
-        apply_changes(ctx, proposals)
+    # Semantic — forget candidate generation (non-mutating):
+    proposals, history = ops.forget(ctx, "elephants", llm_client)
+    proposals, history = ops.revise_forget("keep only the edit", llm_client, history, ctx)
+    from memcommit.application.capabilities.semantic.changes import apply_changes
+    apply_changes(ctx, proposals)
 """
 
 from __future__ import annotations
@@ -25,7 +25,13 @@ import uuid
 from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING, Callable
 
-from memcommit.core.context import Context, Information, Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import (
+    Context,
+    Information,
+    Memory,
+    MemoryRef,
+    QueryContextRef,
+)
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 
 if TYPE_CHECKING:
@@ -33,14 +39,17 @@ if TYPE_CHECKING:
         AtomizeImpactReport,
         AtomizeProvider,
     )
-    from memcommit.application.capabilities.reviewing.quality.findings import (
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
         AmbiguityReport,
         ConflictReport,
         DuplicateReport,
         FindingsProvider,
     )
     from memcommit.application.operations.dedup.application import ExactDuplicateReport
-    from memcommit.application.operations.search.model import PromptProvider, SearchMatch
+    from memcommit.application.operations.search.model import (
+        PromptProvider,
+        SearchMatch,
+    )
     from memcommit.application.capabilities.semantic.llm import LLMClient
     from memcommit.application.capabilities.semantic.changes import ProposedChange
     from memcommit.application.operations.translate.runtime import (
@@ -194,8 +203,7 @@ def embed_memory(
     memory = _direct_source_memory(memory, source)
     if position is not None and not 0 <= position <= len(target.ordered_uids()):
         raise ValueError(
-            "Memory Embed position must be between 0 and "
-            f"{len(target.ordered_uids())}."
+            f"Memory Embed position must be between 0 and {len(target.ordered_uids())}."
         )
 
     for info in target.iter_items():
@@ -265,7 +273,9 @@ def reference_context(
     and self-reference checks without importing Store or CLI concerns.
     """
 
-    from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+    from memcommit.application.capabilities.retained_history.context_snapshot import (
+        ContextSnapshotRef,
+    )
 
     if not isinstance(snapshot, ContextSnapshotRef):
         raise TypeError("Context Reference requires a ContextSnapshotRef.")
@@ -275,8 +285,7 @@ def reference_context(
         if (
             isinstance(item, ContextSnapshotRef)
             and item.target_context_uid == snapshot.target_context_uid
-            and item.snapshot_content_sha256
-            == snapshot.snapshot_content_sha256
+            and item.snapshot_content_sha256 == snapshot.snapshot_content_sha256
         ):
             raise ValueError(
                 f"Context '{snapshot.target_context_name}' already has this "
@@ -303,8 +312,7 @@ def reference_query_context(
             )
         if isinstance(info, (Context, QueryContextRef)) and info.name == name:
             raise ValueError(
-                f"A context-like item named '{name}' already exists in "
-                f"'{target.name}'."
+                f"A context-like item named '{name}' already exists in '{target.name}'."
             )
 
     ref = QueryContextRef(
@@ -375,8 +383,7 @@ def validate_embed(
         or not 0 <= position <= len(parent.ordered_uids())
     ):
         raise ValueError(
-            "Embed position must be between 0 and "
-            f"{len(parent.ordered_uids())}."
+            f"Embed position must be between 0 and {len(parent.ordered_uids())}."
         )
     if child.uid == parent.uid:
         raise ValueError("Cannot embed a context into itself.")
@@ -424,9 +431,7 @@ def _branch_memory_uid_map(
 ) -> dict[str, str]:
     """Freeze fresh occurrence identities for every current direct Memory."""
 
-    source_uids = {
-        item.uid for item in ctx.iter_items() if isinstance(item, Memory)
-    }
+    source_uids = {item.uid for item in ctx.iter_items() if isinstance(item, Memory)}
     result = (
         {uid: str(uuid.uuid4()) for uid in source_uids}
         if supplied is None
@@ -467,7 +472,9 @@ def _copy_context_for_branch(
         uid=str(uuid.uuid4()),
         name=validate_portable_context_name(new_name),
     )
-    from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+    from memcommit.application.capabilities.retained_history.context_snapshot import (
+        ContextSnapshotRef,
+    )
 
     uid_map = _branch_memory_uid_map(
         ctx,
@@ -522,9 +529,7 @@ def _atomize_projection(ctx: Context, new_name: str) -> Context:
         ctx,
         new_name,
         memory_uid_map={
-            item.uid: item.uid
-            for item in ctx.iter_items()
-            if isinstance(item, Memory)
+            item.uid: item.uid for item in ctx.iter_items() if isinstance(item, Memory)
         },
         allow_source_memory_uids=True,
     )
@@ -586,7 +591,9 @@ def branch_subtree(
         )
         for source in sources
     }
-    from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
+    from memcommit.application.capabilities.retained_history.context_snapshot import (
+        ContextSnapshotRef,
+    )
 
     # Populate every target Memory first so an internal live reference can
     # bind to the independently owned target occurrence regardless of Context
@@ -628,9 +635,7 @@ def branch_subtree(
                         "A subtree Branch found an unavailable internal Memory target."
                     )
                 target_owner = targets[internal_owner.name]
-                target_memory_uid = uid_maps[internal_owner.uid][
-                    item.target_memory_uid
-                ]
+                target_memory_uid = uid_maps[internal_owner.uid][item.target_memory_uid]
                 target_memory = target_owner.memories.get(target_memory_uid)
                 if not isinstance(target_memory, Memory):
                     raise ValueError(
@@ -747,8 +752,7 @@ def merge(source: Context, target: Context) -> list[Information]:
             and existing.target_memory_uid == info.target_memory_uid
             and (
                 info.is_live
-                or existing.snapshot_content_sha256
-                == info.snapshot_content_sha256
+                or existing.snapshot_content_sha256 == info.snapshot_content_sha256
             )
             for existing in target.iter_items()
         ):
@@ -773,7 +777,9 @@ def merge(source: Context, target: Context) -> list[Information]:
 def analyze_forget(ctx: Context, query: str, llm: object):
     """Analyze Forget through the operation-owned provider module."""
 
-    from memcommit.application.operations.forget.provider import analyze_forget as _analyze_forget
+    from memcommit.application.operations.forget.provider import (
+        analyze_forget as _analyze_forget,
+    )
 
     return _analyze_forget(ctx, query, llm)
 
@@ -798,7 +804,9 @@ def revise_forget(
 ) -> tuple[list[ProposedChange], list[dict[str, object]]]:
     """Revise Forget proposals through the operation-owned provider module."""
 
-    from memcommit.application.operations.forget.provider import revise_forget as _revise_forget
+    from memcommit.application.operations.forget.provider import (
+        revise_forget as _revise_forget,
+    )
 
     return _revise_forget(feedback, llm, history, ctx)
 
@@ -893,7 +901,10 @@ def _run_integrate_batch(
 ) -> "tuple[list[ProposedChange], list[dict], bool]":
     """Run one LLM call for a single integrate batch. Returns (proposals, history, should_add)."""
     from memcommit.application.capabilities.semantic.changes import parse_proposals
-    from memcommit.application.capabilities.semantic.utils import build_messages, extract_json
+    from memcommit.application.capabilities.semantic.utils import (
+        build_messages,
+        extract_json,
+    )
 
     lines = [f"[{m.uid}] {m.content}" for m in batch]
     memory_block = "\n".join(lines) or "(no memories in this batch)"
@@ -932,7 +943,9 @@ def impact_atomize(
     memory_selector: str | None = None,
 ) -> "AtomizeImpactReport":
     """Preview direct-Memory atomization without mutating *ctx*."""
-    from memcommit.application.operations.atomize.domain import impact_atomize as _impact_atomize
+    from memcommit.application.operations.atomize.domain import (
+        impact_atomize as _impact_atomize,
+    )
 
     return _impact_atomize(
         ctx,
@@ -949,7 +962,9 @@ def find_redundancies(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "DuplicateReport":
     """Find exact DUP and semantic-DUN evidence without mutating *ctx*."""
-    from memcommit.application.capabilities.reviewing.quality.findings import find_redundancies as _find_redundancies
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+        find_redundancies as _find_redundancies,
+    )
 
     return _find_redundancies(
         ctx,
@@ -974,7 +989,9 @@ def find_ambiguities(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "AmbiguityReport":
     """Find ambiguous direct Memories without mutating *ctx*."""
-    from memcommit.application.capabilities.reviewing.quality.findings import find_ambiguities as _find_ambiguities
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+        find_ambiguities as _find_ambiguities,
+    )
 
     return _find_ambiguities(
         ctx,
@@ -990,7 +1007,9 @@ def find_conflicts(
     context_name_by_uid: "Mapping[str, str] | None" = None,
 ) -> "ConflictReport":
     """Find conflicting direct-Memory pairs without mutating *ctx*."""
-    from memcommit.application.capabilities.reviewing.quality.findings import find_conflicts as _find_conflicts
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+        find_conflicts as _find_conflicts,
+    )
 
     return _find_conflicts(
         ctx,
@@ -1062,8 +1081,14 @@ def revise_integrate(
     Pass the batch_histories returned by integrate() or a prior revise_integrate().
     Returns (revised_proposals, updated_batch_histories).
     """
-    from memcommit.application.capabilities.semantic.changes import AddChange, parse_proposals
-    from memcommit.application.capabilities.semantic.utils import build_messages, extract_json
+    from memcommit.application.capabilities.semantic.changes import (
+        AddChange,
+        parse_proposals,
+    )
+    from memcommit.application.capabilities.semantic.utils import (
+        build_messages,
+        extract_json,
+    )
 
     all_proposals: list[ProposedChange] = []
     new_histories: list[list[dict]] = []
@@ -1164,7 +1189,9 @@ def apply_translation(
     plan: "TranslationPlan",
 ) -> "TranslationApplyResult":
     """Apply one exact translation plan to its unchanged direct Context."""
-    from memcommit.application.operations.translate.runtime import apply_translation as apply_plan
+    from memcommit.application.operations.translate.runtime import (
+        apply_translation as apply_plan,
+    )
 
     return apply_plan(ctx, plan)
 

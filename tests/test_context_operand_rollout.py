@@ -30,7 +30,7 @@ from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.core.context import AutoCheckpoint
-from memcommit.application.capabilities.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
     AmbiguityReport,
     ConflictReport,
     DuplicateReport,
@@ -96,7 +96,7 @@ def test_read_and_analysis_commands_share_relative_context_operand_boundary(
         ),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_duplicates.command.ops.find_redundancies",
+        "memcommit.adapters.console.commands.find_redundancies.command.ops.find_redundancies",
         lambda context, *_args, **_kwargs: DuplicateReport(
             memory_count=len(context.memories),
             findings=(),

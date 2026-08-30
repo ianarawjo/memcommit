@@ -18,7 +18,8 @@ COLUMNS = 180
 ROWS = 52
 
 _BASE_PATH = (
-    ROOT / "agent-records/docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
+    ROOT
+    / "agent-records/docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
 )
 _SPEC = importlib.util.spec_from_file_location("dedun_direct_capture_base", _BASE_PATH)
 assert _SPEC is not None and _SPEC.loader is not None
@@ -79,10 +80,15 @@ def _initialize() -> None:
 def _run_child() -> None:
     import click
 
-    import memcommit.adapters.console.commands.find_duplicates.command as find_command
+    import memcommit.adapters.console.commands.find_redundancies.command as find_command
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.application.capabilities.reviewing.quality.findings import DuplicateFinding, DuplicateReport
-    from memcommit.application.capabilities.reviewing.read_report_recents import read_report_recents
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+        DuplicateFinding,
+        DuplicateReport,
+    )
+    from memcommit.application.capabilities.reviewing.read_report_recents import (
+        read_report_recents,
+    )
     from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="dedun-direct-repeat-") as directory:
@@ -195,9 +201,7 @@ def main() -> None:
         if child.isalive():
             child.close(force=True)
 
-    raw = "".join(
-        path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript")
-    )
+    raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     assert "PTY 180 52" in raw
     assert "\x1b[" in raw
     assert "\x1b[32" in raw or "38;" in raw

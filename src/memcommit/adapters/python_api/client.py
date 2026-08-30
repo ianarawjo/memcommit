@@ -30,7 +30,10 @@ from memcommit.adapters.python_api.dedup import (
     ExactDuplicateFindResult,
 )
 from memcommit.adapters.python_api.dedun import DedunApplyResult, DedunPlanResult
-from memcommit.adapters.python_api.embed import EmbeddedContextResult, EmbeddedMemoryResult
+from memcommit.adapters.python_api.embed import (
+    EmbeddedContextResult,
+    EmbeddedMemoryResult,
+)
 from memcommit.adapters.python_api.forget import (
     ForgetApplyResult,
     ForgetReviewResult,
@@ -49,17 +52,26 @@ from memcommit.adapters.python_api.meld import (
     MeldApplyResult as PublicMeldApplyResult,
     MeldSessionResult,
 )
-from memcommit.adapters.python_api.memory_transfer import CopyMemoriesReceipt, MoveMemoriesReceipt
+from memcommit.adapters.python_api.memory_transfer import (
+    CopyMemoriesReceipt,
+    MoveMemoriesReceipt,
+)
 from memcommit.adapters.python_api.query import (
     GrantedQueryResult,
     OrdinaryQueryResult,
     QueryProviderConfig,
     ReferenceQueryResult,
 )
-from memcommit.adapters.python_api.reference import ContextReferenceResult, MemoryReferenceResult
+from memcommit.adapters.python_api.reference import (
+    ContextReferenceResult,
+    MemoryReferenceResult,
+)
 from memcommit.adapters.python_api.replace import ReplaceApplyReceipt, ReplacePlanResult
 from memcommit.adapters.python_api.quality_find import QualityFindResult
-from memcommit.adapters.python_api.resolve import ResolveAnalysisResult, ResolveApplyResult
+from memcommit.adapters.python_api.resolve import (
+    ResolveAnalysisResult,
+    ResolveApplyResult,
+)
 from memcommit.adapters.python_api.search import SearchResult
 from memcommit.adapters.python_api.show import ShowResult
 from memcommit.adapters.python_api.semantic import (
@@ -70,7 +82,9 @@ from memcommit.adapters.python_api.semantic import (
     FitPropositionInput,
 )
 from memcommit.core.context import QueryContextRef
-from memcommit.application.capabilities.reviewing.quality.handoff import QualityFindingHandoff
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
+    QualityFindingHandoff,
+)
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     ProfileEntry,
@@ -212,7 +226,9 @@ class MemCommitClient:
     ) -> HelpDetailCatalogResult:
         """List individually retrievable Help details for one operation."""
 
-        from memcommit.adapters.python_api._operations.help import list_operation_details
+        from memcommit.adapters.python_api._operations.help import (
+            list_operation_details,
+        )
 
         return list_operation_details(operation_name)
 
@@ -223,7 +239,9 @@ class MemCommitClient:
     ) -> HelpDetailResult:
         """Describe one exact typed Help detail without executing it."""
 
-        from memcommit.adapters.python_api._operations.help import describe_operation_detail
+        from memcommit.adapters.python_api._operations.help import (
+            describe_operation_detail,
+        )
 
         return describe_operation_detail(operation_name, detail_id)
 
@@ -343,7 +361,9 @@ class MemCommitClient:
     ) -> ContextDeleteReceipt:
         """Permanently delete the exact Context identity in a reviewed plan."""
 
-        from memcommit.adapters.python_api._operations.delete import apply_context_delete
+        from memcommit.adapters.python_api._operations.delete import (
+            apply_context_delete,
+        )
 
         return apply_context_delete(self._runtime, reviewed)
 
@@ -391,7 +411,9 @@ class MemCommitClient:
     ) -> ForgetReviewResult:
         """Analyze one complete direct Source into a process-local review."""
 
-        from memcommit.adapters.python_api._operations.forget import analyze_forget_context
+        from memcommit.adapters.python_api._operations.forget import (
+            analyze_forget_context,
+        )
 
         return analyze_forget_context(
             self._runtime,
@@ -409,7 +431,9 @@ class MemCommitClient:
     ) -> ForgetReviewResult:
         """Change one exact process-local Forget decision without effects."""
 
-        from memcommit.adapters.python_api._operations.forget import select_forget_review
+        from memcommit.adapters.python_api._operations.forget import (
+            select_forget_review,
+        )
 
         return select_forget_review(
             self._runtime,
@@ -426,7 +450,9 @@ class MemCommitClient:
     ) -> ForgetReviewResult:
         """Run one provider revision over a process-local Forget review."""
 
-        from memcommit.adapters.python_api._operations.forget import revise_forget_review
+        from memcommit.adapters.python_api._operations.forget import (
+            revise_forget_review,
+        )
 
         return revise_forget_review(self._runtime, review, guidance)
 
@@ -514,7 +540,9 @@ class MemCommitClient:
     ) -> ExactDuplicateFindResult:
         """Find exact groups in one direct or lexical Context scope."""
 
-        from memcommit.adapters.python_api._operations.exact_duplicates import find_duplicates_exact
+        from memcommit.adapters.python_api._operations.exact_duplicates import (
+            find_duplicates_exact,
+        )
 
         return find_duplicates_exact(
             self._runtime,
@@ -554,7 +582,9 @@ class MemCommitClient:
     ) -> ResolveAnalysisResult:
         """Resolve one exact finder receipt after fresh source and authority checks."""
 
-        from memcommit.adapters.python_api._operations.resolve import resolve_conflict_finding
+        from memcommit.adapters.python_api._operations.resolve import (
+            resolve_conflict_finding,
+        )
 
         return resolve_conflict_finding(
             self._runtime,
@@ -695,7 +725,9 @@ class MemCommitClient:
     def distill_ground(self, ground_name: str) -> DistillProposal:
         """Distill one exact bound Ground frame without mutating the Ground."""
 
-        from memcommit.adapters.python_api._operations.ground_distill import distill_ground
+        from memcommit.adapters.python_api._operations.ground_distill import (
+            distill_ground,
+        )
 
         return distill_ground(self._runtime, ground_name)
 
@@ -741,7 +773,9 @@ class MemCommitClient:
     ) -> ElaborateProposal:
         """Project one exact Ground Goal or Rule set through Elaborate."""
 
-        from memcommit.adapters.python_api._operations.ground_elaborate import elaborate_ground
+        from memcommit.adapters.python_api._operations.ground_elaborate import (
+            elaborate_ground,
+        )
 
         return elaborate_ground(
             self._runtime,
@@ -894,7 +928,9 @@ class MemCommitClient:
     ) -> AtomizeAnalysisResult:
         """Open one exact durable structural Atomize proposal."""
 
-        from memcommit.adapters.python_api._operations.atomize import open_atomize_analysis
+        from memcommit.adapters.python_api._operations.atomize import (
+            open_atomize_analysis,
+        )
 
         return open_atomize_analysis(
             self._runtime,
@@ -913,7 +949,9 @@ class MemCommitClient:
     ) -> AtomizePlanUpdateResult:
         """Set one exact in-place or require-new structural Output plan."""
 
-        from memcommit.adapters.python_api._operations.atomize import plan_atomize_output
+        from memcommit.adapters.python_api._operations.atomize import (
+            plan_atomize_output,
+        )
 
         return plan_atomize_output(
             self._runtime,
@@ -930,7 +968,9 @@ class MemCommitClient:
     ) -> AtomizeSaveAsApplyResult:
         """Publish or recover one exact reviewed require-new Output."""
 
-        from memcommit.adapters.python_api._operations.atomize import save_saved_atomize_as
+        from memcommit.adapters.python_api._operations.atomize import (
+            save_saved_atomize_as,
+        )
 
         return save_saved_atomize_as(
             self._runtime,
@@ -944,7 +984,9 @@ class MemCommitClient:
     ) -> AtomizeStructuralApplyResult:
         """Apply or recover an accepted structural proposal in place."""
 
-        from memcommit.adapters.python_api._operations.atomize import apply_atomize_as_is
+        from memcommit.adapters.python_api._operations.atomize import (
+            apply_atomize_as_is,
+        )
 
         return apply_atomize_as_is(self._runtime, analysis)
 
@@ -956,7 +998,9 @@ class MemCommitClient:
     ) -> AtomizeStructuralApplyResult:
         """Apply an exact saved structural revision without a provider turn."""
 
-        from memcommit.adapters.python_api._operations.atomize import apply_saved_atomize_as_is
+        from memcommit.adapters.python_api._operations.atomize import (
+            apply_saved_atomize_as_is,
+        )
 
         return apply_saved_atomize_as_is(
             self._runtime,
@@ -1055,7 +1099,9 @@ class MemCommitClient:
     ) -> ContextReferenceResult:
         """Retain one immutable direct or recursive Source Context snapshot."""
 
-        from memcommit.adapters.python_api._operations.reference import reference_context
+        from memcommit.adapters.python_api._operations.reference import (
+            reference_context,
+        )
 
         return reference_context(
             self._runtime,

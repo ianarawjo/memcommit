@@ -42,13 +42,15 @@ from memcommit.application.operations.resolve.application import (
     apply_resolve as apply_core_resolve,
     run_resolve,
 )
-from memcommit.application.capabilities.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,
 )
 from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
-from memcommit.application.operations.resolve.semantic import ProviderResolveSemanticPort
+from memcommit.application.operations.resolve.semantic import (
+    ProviderResolveSemanticPort,
+)
 from memcommit.persistence.store import ConcurrentContextUpdateError
 
 

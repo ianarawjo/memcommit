@@ -17,7 +17,7 @@ from memcommit.adapters.console.coordination.context_operand import (
 from memcommit.adapters.console.terminal.components.impact import ImpactController
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
-from memcommit.application.capabilities.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,
     quality_finding_handoff_from_json,

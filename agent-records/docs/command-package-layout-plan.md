@@ -56,7 +56,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.diff_browser` | `memcommit.adapters.console.terminal.components.history.browser` | shared-terminal-component | `terminal` |
 | `memcommit.commands.direct_item_placement` | `memcommit.adapters.console.terminal.components.direct_item_placement` | shared-terminal-component | `terminal` |
 | `memcommit.commands.distill` | `memcommit.adapters.console.commands.distill.command` | command-entry | `distill` |
-| `memcommit.commands.duplicate_dedup_handoff` | `memcommit.adapters.console.commands.find_duplicates.dedup_handoff` | command-owned-support | `find_duplicates` |
+| `memcommit.commands.duplicate_dedup_handoff` | `memcommit.adapters.console.commands.find_redundancies.dedup_handoff` | command-owned-support | `find_redundancies` |
 | `memcommit.commands.edit` | `memcommit.adapters.console.commands.edit.command` | command-entry | `edit` |
 | `memcommit.commands.elaborate` | `memcommit.adapters.console.commands.elaborate.command` | command-entry | `elaborate` |
 | `memcommit.commands.endpoint_setup_flows` | `memcommit.adapters.console.terminal.components.endpoint_setup.flows` | shared-terminal-component | `terminal` |
@@ -67,8 +67,8 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.find_ambiguities` | `memcommit.adapters.console.commands.find_ambiguities.command` | command-entry | `find_ambiguities` |
 | `memcommit.commands.find_chat_shell` | `memcommit.adapters.console.commands.search.chat_shell` | command-owned-support | `search` |
 | `memcommit.commands.find_conflicts` | `memcommit.adapters.console.commands.find_conflicts.command` | command-entry | `find_conflicts` |
-| `memcommit.commands.find_duplicates` | `memcommit.adapters.console.commands.find_duplicates.command` | command-entry | `find_duplicates` |
-| `memcommit.commands.find_exact_duplicates` | `memcommit.adapters.console.commands.find_exact_duplicates.command` | command-entry | `find_exact_duplicates` |
+| `memcommit.commands.find_duplicates` | `memcommit.adapters.console.commands.find_redundancies.command` | command-entry | `find_redundancies` |
+| `memcommit.commands.find_exact_duplicates` | `memcommit.adapters.console.commands.find_duplicates.command` | command-entry | `find_duplicates` |
 | `memcommit.commands.find_materialization` | `memcommit.adapters.console.commands.search.materialization` | command-owned-support | `search` |
 | `memcommit.commands.find_query_provider_policy` | `memcommit.providers.operation_connections` | infrastructure-support | `providers` |
 | `memcommit.commands.find_search_workbench` | `memcommit.adapters.console.commands.search.search_workbench` | command-owned-support | `search` |

@@ -20,7 +20,8 @@ Audit checks the resulting state. No stage implicitly performs a later one.
 
 ## Application contract
 
-`memcommit.quality_finding_handoff` owns an adapter-neutral
+`memcommit.application.capabilities.reviewing.memory_issue_finding.handoff`
+owns an adapter-neutral
 `QualityFindingHandoff`. Every handoff records:
 
 - the exact finding identity and frozen finder-frame digest;
@@ -99,6 +100,24 @@ Every adapter receives the same application-owned handoff:
 
 All four adapter paths converge on `ResolveRequest.source_precondition`; none may
 synthesize its own digest, target, Memory selector, or guidance.
+
+## Memory-issue finding ownership
+
+On 2026-08-30 the shared package moved from the provisional
+`reviewing.quality` name to `reviewing.memory_issue_finding`. Duplicate,
+Ambiguity, and Conflict outputs are model-assisted candidates for review, not
+proof that a Memory has an open-ended quality defect; the narrower package
+name preserves that epistemic boundary while retaining `reviewing` as the
+owner of report, response, and repair-handoff contracts. Existing type names
+remain unchanged in this path-only step so public Python values and serialized
+handoffs are not silently migrated with package ownership.
+
+The four public discovery routes now have symmetric console package names and
+explicit staged application owners: `find_duplicates`, `find_redundancies`,
+`find_ambiguities`, and `find_conflicts`. Their `application.py` modules export
+no placeholder callable. Each remains visibly incomplete until its full
+request, authority, frozen Source, analysis, and result boundary moves inward;
+shared finding analysis stays under `reviewing.memory_issue_finding`.
 
 ## Deliberate boundaries
 

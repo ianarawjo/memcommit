@@ -14,9 +14,7 @@ import tarfile
 
 REPOSITORY = Path(__file__).resolve().parents[1]
 PACKAGE = REPOSITORY / "src" / "memcommit"
-OUTPUT_JSON = (
-    REPOSITORY / "agent-records" / "docs" / "root-module-relocation-plan.json"
-)
+OUTPUT_JSON = REPOSITORY / "agent-records" / "docs" / "root-module-relocation-plan.json"
 OUTPUT_MARKDOWN = (
     REPOSITORY / "agent-records" / "docs" / "root-module-relocation-plan.md"
 )
@@ -76,9 +74,7 @@ COMPATIBILITY_TARGET_OVERRIDES = {
     ),
     # The baseline facade still names the pre-staging interface package; keep
     # its historical key while advancing only the canonical implementation.
-    "impact_controller": (
-        "memcommit.adapters.console.terminal.components.impact"
-    ),
+    "impact_controller": ("memcommit.adapters.console.terminal.components.impact"),
     "literal_find_application": "memcommit.application.operations.find.application",
     "literal_find_runtime": "memcommit.application.operations.find.runtime",
     "review_report": "memcommit.application.capabilities.reviewing.report",
@@ -98,6 +94,8 @@ MODULE_TARGET_PATH_OVERRIDES = {
 
 
 OPERATION_TARGETS = {
+    "quality_audit": "memcommit.application.operations.audit.model",
+    "quality_audit_store": "memcommit.application.operations.audit.session_store",
     "comparison": "memcommit.application.operations.compare.ledger.model",
     "comparison_evidence": "memcommit.application.operations.compare.ledger.evidence",
     "comparison_execution": "memcommit.application.operations.compare.ledger.execution",
@@ -201,7 +199,7 @@ CONCEPT_TARGETS = {
     "distill_elaborate_reference": "memcommit.application.capabilities.semantic.generative_reduction_reference",
     "duplicate_pipeline": "memcommit.application.capabilities.semantic.classification.duplicates",
     "exact_command_review": "memcommit.adapters.console.coordination.command_review.model",
-    "findings": "memcommit.application.capabilities.reviewing.quality.findings",
+    "findings": "memcommit.application.capabilities.reviewing.memory_issue_finding.findings",
     "goal_focus": "memcommit.application.capabilities.semantic.goal_focus",
     "goal_focus_runtime": "memcommit.application.capabilities.semantic.goal_focus_runtime",
     "granted_provenance": "memcommit.application.capabilities.retained_history.granted_provenance",
@@ -217,15 +215,13 @@ CONCEPT_TARGETS = {
     "profiles": "memcommit.application.operations.profile.model",
     "provenance": "memcommit.application.capabilities.retained_history.memory_history_reconstruction",
     "provider_types": "memcommit.providers.types",
-    "quality_audit": "memcommit.application.capabilities.reviewing.quality.audit",
-    "quality_audit_store": "memcommit.application.capabilities.reviewing.quality.audit_store",
-    "quality_find_report": "memcommit.application.capabilities.reviewing.quality.report",
-    "quality_find_workbench": "memcommit.application.capabilities.reviewing.quality.workbench",
-    "quality_finding_handoff": "memcommit.application.capabilities.reviewing.quality.handoff",
+    "quality_find_report": "memcommit.application.capabilities.reviewing.memory_issue_finding.report",
+    "quality_find_workbench": "memcommit.application.capabilities.reviewing.memory_issue_finding.workbench",
+    "quality_finding_handoff": "memcommit.application.capabilities.reviewing.memory_issue_finding.handoff",
     "query_provider": "memcommit.providers.subscription",
     "read_report": "memcommit.application.capabilities.reviewing.read_report",
     "read_report_recents": "memcommit.application.capabilities.reviewing.read_report_recents",
-    "redundancy_scope": "memcommit.application.capabilities.reviewing.quality.redundancy_scope",
+    "redundancy_scope": "memcommit.application.capabilities.reviewing.memory_issue_finding.redundancy_scope",
     "resolution_workbench": "memcommit.application.capabilities.resolution.workbench",
     "result_workbench": "memcommit.application.capabilities.reviewing.result_workbench",
     "selective_curation": "memcommit.application.capabilities.semantic.selective_curation",
@@ -286,9 +282,7 @@ def _compatibility_target(source: str, *, stem: str) -> str | None:
                 bindings[alias.asname or alias.name.split(".")[0]] = alias.name
         elif isinstance(node, ast.ImportFrom) and node.module:
             for alias in node.names:
-                bindings[alias.asname or alias.name] = (
-                    f"{node.module}.{alias.name}"
-                )
+                bindings[alias.asname or alias.name] = f"{node.module}.{alias.name}"
         elif (
             isinstance(node, ast.Assign)
             and len(node.targets) == 1
@@ -319,9 +313,7 @@ def _compatibility_target(source: str, *, stem: str) -> str | None:
 def _is_compatibility(source: str) -> bool:
     doc = ast.get_docstring(ast.parse(source)) or ""
     first_line = doc.splitlines()[0] if doc.splitlines() else ""
-    return "Compatibility" in first_line or (
-        "sys.modules[__name__]" in source
-    )
+    return "Compatibility" in first_line or ("sys.modules[__name__]" in source)
 
 
 def _baseline_sources() -> dict[str, str]:

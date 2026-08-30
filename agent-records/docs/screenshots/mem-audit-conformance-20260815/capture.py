@@ -27,10 +27,14 @@ def _demo_child() -> None:
         _run_quality_audit_checks,
         run_quality_audit_review,
     )
-    from memcommit.application.operations.conformance.model import CONTEXT_CONFORMANCE_OPERATION
+    from memcommit.application.operations.conformance.model import (
+        CONTEXT_CONFORMANCE_OPERATION,
+    )
     from memcommit.providers.types import ProviderIdentity
-    from memcommit.application.capabilities.reviewing.quality.audit import quality_audit_resolution_view
-    from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
+    from memcommit.application.operations.audit.resolution_adapter import (
+        quality_audit_resolution_view,
+    )
+    from memcommit.application.operations.audit.session_store import QualityAuditStore
     from memcommit.adapters.console.terminal.components.resolution.session_shell import (
         render_resolution_workbench_snapshot,
     )
@@ -101,10 +105,9 @@ def _demo_child() -> None:
         target_after = direct_context_digest(store.load_direct(target.name))
         rules_after = direct_context_digest(store.load_direct(rules.name))
         unchanged = target_before == target_after and rules_before == rules_after
-        no_checkpoints = (
-            not store.list_checkpoints(target.name)
-            and not store.list_checkpoints(rules.name)
-        )
+        no_checkpoints = not store.list_checkpoints(
+            target.name
+        ) and not store.list_checkpoints(rules.name)
         print("\nREAD-ONLY VERIFICATION", flush=True)
         print(
             render_resolution_workbench_snapshot(
@@ -113,8 +116,7 @@ def _demo_child() -> None:
             flush=True,
         )
         print(
-            "SOURCE AND RULES UNCHANGED · "
-            + ("YES" if unchanged else "NO"),
+            "SOURCE AND RULES UNCHANGED · " + ("YES" if unchanged else "NO"),
             flush=True,
         )
         print(

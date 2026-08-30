@@ -60,12 +60,14 @@ from memcommit.adapters.console.commands.review.sessions import (
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.application.capabilities.reviewing.quality.findings import FindingsError
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    FindingsError,
+)
 from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.application.capabilities.reviewing.quality.audit import QualityAuditError
+from memcommit.application.operations.audit.model import QualityAuditError
 from memcommit.application.operations.review.model import (
     ReviewError,
     atomize_review_matches_analysis,

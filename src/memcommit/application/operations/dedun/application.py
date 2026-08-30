@@ -10,8 +10,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Protocol
 
-from memcommit.application.capabilities.reviewing.direct_item_duplicates import ExactDuplicateGroup
-from memcommit.application.capabilities.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
+    ExactDuplicateGroup,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
     QualityFindingHandoff,
     QualityFindingSource,
 )
@@ -321,9 +323,7 @@ def dedun_projection_record(
             }
             for group in projection.exact_item_groups
         ],
-        "redundancy_evidence_uids": [
-            handoff.uid for handoff in plan.request.handoffs
-        ],
+        "redundancy_evidence_uids": [handoff.uid for handoff in plan.request.handoffs],
         "survivor_uids": list(projection.survivor_uids),
         "absorbed_uids": list(projection.absorbed_uids),
     }
@@ -440,18 +440,14 @@ def project_dedun(
     """Return the exact complete Dedun effect without publishing a checkpoint."""
 
     exact = validate_dedun_selections(plan, selections)
-    semantic_survivor_uids = tuple(
-        selection.survivor_uid for selection in exact
-    )
+    semantic_survivor_uids = tuple(selection.survivor_uid for selection in exact)
     semantic_absorbed_uids = tuple(
         member.uid
         for component, selection in zip(plan.components, exact, strict=True)
         for member in component.members
         if member.uid != selection.survivor_uid
     )
-    exact_survivor_uids = tuple(
-        group.survivor_uid for group in plan.exact_item_groups
-    )
+    exact_survivor_uids = tuple(group.survivor_uid for group in plan.exact_item_groups)
     exact_absorbed_uids = tuple(
         uid for group in plan.exact_item_groups for uid in group.absorbed_uids
     )

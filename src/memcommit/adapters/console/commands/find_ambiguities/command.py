@@ -11,7 +11,10 @@ from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.application.capabilities.authority.access import GrantedReadStore, resolve_context_access
+from memcommit.application.capabilities.authority.access import (
+    GrantedReadStore,
+    resolve_context_access,
+)
 from memcommit.adapters.console.terminal.components.quality_find.rendering import (
     render_heading,
     render_memory,
@@ -29,12 +32,16 @@ from memcommit.adapters.console.terminal.components.quality_find.workbench impor
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.adapters.console.terminal.core.identity import collision_safe_uid_prefixes
+from memcommit.adapters.console.terminal.core.identity import (
+    collision_safe_uid_prefixes,
+)
 from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.application.capabilities.reviewing.quality.findings import FindingsError
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    FindingsError,
+)
 from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
@@ -42,7 +49,9 @@ from memcommit.providers.subscription import (
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.capabilities.reviewing.quality.workbench import QualityFindSourceFrame
+from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+    QualityFindSourceFrame,
+)
 
 
 def cmd(

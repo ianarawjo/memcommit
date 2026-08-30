@@ -30,7 +30,7 @@ from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.dedun.workbench import run_dedun_workbench
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.capabilities.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
     QualityFindingHandoffError,
 )
 from memcommit.application.capabilities.semantic.redundancy_evidence import (
@@ -52,8 +52,7 @@ def cmd(
         typer.Option(
             "--evidence",
             help=(
-                "Canonical confirmed redundancy evidence JSON; repeat for "
-                "every link"
+                "Canonical confirmed redundancy evidence JSON; repeat for every link"
             ),
         ),
     ] = None,
@@ -95,21 +94,17 @@ def cmd(
         if apply_now:
             if not survivors or expected_revision is None:
                 raise DedunError(
-                    "Dedun --apply requires --survivor and "
-                    "--expected-revision."
+                    "Dedun --apply requires --survivor and --expected-revision."
                 )
             if mode is ConsoleMode.TUI:
                 raise DedunError(
-                    "Dedun --apply is already exact; do not combine it "
-                    "with --tui."
+                    "Dedun --apply is already exact; do not combine it with --tui."
                 )
         elif survivors or expected_revision is not None:
             raise DedunError(
                 "Dedun --survivor and --expected-revision require --apply."
             )
-        handoffs = tuple(
-            redundancy_evidence_from_json(item) for item in evidence
-        )
+        handoffs = tuple(redundancy_evidence_from_json(item) for item in evidence)
         request = DedunRequest(
             handoffs,
             exact_source=handoffs[0].sources[0],

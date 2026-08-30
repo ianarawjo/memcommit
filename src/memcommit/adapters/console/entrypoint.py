@@ -28,7 +28,7 @@ from memcommit.adapters.console.commands import (
     find_ambiguities,
     find_conflicts,
     find_duplicates,
-    find_exact_duplicates,
+    find_redundancies,
     fit,
     forget,
     ground,
@@ -339,7 +339,7 @@ app.command(
         "Positional form: 'mem find-redundancies [CONTEXT]'. Omitting CONTEXT "
         "uses the current Context; --context remains a compatibility alias."
     ),
-)(find_duplicates.cmd)
+)(find_redundancies.cmd)
 app.command(
     "find-duplicates",
     help=operation_summary("find-duplicates"),
@@ -347,7 +347,7 @@ app.command(
         "Positional form: 'mem find-duplicates [CONTEXT]'. Omitting CONTEXT "
         "uses the current Context; --context remains a compatibility alias."
     ),
-)(find_exact_duplicates.cmd)
+)(find_duplicates.cmd)
 app.command(
     "find-ambiguities",
     help=operation_summary("find-ambiguities"),
@@ -437,6 +437,8 @@ app.command(
     "help",
     help=operation_summary("help"),
 )(help.cmd)
+
+
 # checkout preserves Git-style navigation syntax across two distinct operations.
 @app.command(
     "checkout",

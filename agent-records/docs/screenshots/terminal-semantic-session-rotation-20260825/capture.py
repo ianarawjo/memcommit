@@ -22,8 +22,12 @@ ROWS = 52
 UP = "\x1b[A"
 DOWN = "\x1b[B"
 
-_BASE_PATH = ROOT / "agent-records/docs/screenshots/atomize-memory-selection-20260814/capture.py"
-_SPEC = importlib.util.spec_from_file_location("session_rotation_capture_base", _BASE_PATH)
+_BASE_PATH = (
+    ROOT / "agent-records/docs/screenshots/atomize-memory-selection-20260814/capture.py"
+)
+_SPEC = importlib.util.spec_from_file_location(
+    "session_rotation_capture_base", _BASE_PATH
+)
 assert _SPEC is not None and _SPEC.loader is not None
 _BASE = importlib.util.module_from_spec(_SPEC)
 _SPEC.loader.exec_module(_BASE)
@@ -34,7 +38,9 @@ _BASE.ROWS = ROWS
 
 def _store_digest(root: Path) -> str:
     digest = hashlib.sha256()
-    for path in sorted(candidate for candidate in root.rglob("*") if candidate.is_file()):
+    for path in sorted(
+        candidate for candidate in root.rglob("*") if candidate.is_file()
+    ):
         digest.update(str(path.relative_to(root)).encode("utf-8"))
         digest.update(b"\0")
         digest.update(path.read_bytes())
@@ -44,7 +50,9 @@ def _store_digest(root: Path) -> str:
 
 def _prepare_atomize_store(root: Path):
     import memcommit.application.capabilities.ops as ops
-    from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
+    from memcommit.application.operations.atomize.workflow import (
+        open_or_create_atomize_workbench,
+    )
     from memcommit.persistence.store import MemoryStore
     from tests.test_atomize_workbench import AggregateProvider
 
@@ -75,7 +83,10 @@ def _prepare_atomize_store(root: Path):
 
 def _prepare_meld_store(root: Path):
     import memcommit.application.capabilities.ops as ops
-    from memcommit.application.operations.meld.model import MeldSession, meld_canonical_digest
+    from memcommit.application.operations.meld.model import (
+        MeldSession,
+        meld_canonical_digest,
+    )
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore(root=root)
@@ -99,7 +110,10 @@ def _prepare_meld_store(root: Path):
 
 
 def _ambiguity_report(context, memory, *, suffix: str):
-    from memcommit.application.capabilities.reviewing.quality.findings import AmbiguityFinding, AmbiguityReport
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+        AmbiguityFinding,
+        AmbiguityReport,
+    )
 
     return AmbiguityReport(
         memory_count=len(context.memories),
@@ -158,7 +172,9 @@ def _patch_command_stores(store) -> None:
     review_command.MemoryStore = lambda *args, **kwargs: store
 
     def reject_provider():
-        raise AssertionError("Launcher and retained-review capture must be provider-free.")
+        raise AssertionError(
+            "Launcher and retained-review capture must be provider-free."
+        )
 
     atomize_command.connect_codex_chatgpt_provider = reject_provider
     meld_command.connect_codex_chatgpt_provider = reject_provider
@@ -183,17 +199,25 @@ def _run_atomize_child(root: Path) -> None:
     _patch_command_stores(store)
     before = _store_digest(root)
     print("$ mem atomize --sessions", flush=True)
-    print(f"PTY {os.get_terminal_size().columns} {os.get_terminal_size().lines}", flush=True)
+    print(
+        f"PTY {os.get_terminal_size().columns} {os.get_terminal_size().lines}",
+        flush=True,
+    )
     _run_cli(["atomize", "--sessions"])
     print("\nATOMIZE NEW FLOW · CANCELLED")
     print(f"  RETAINED TERMINAL UID · {retained_uid}")
     print(f"  ACTIVE REFRESH UID · {active_uid}")
     print(f"  DISTINCT UIDS · {retained_uid != active_uid}")
     print(f"  TERMINAL HISTORY COUNT · {len(store.list_atomize_session_history())}")
-    print(f"  ACTIVE ANALYSIS STILL PRESENT · {store.load_atomize_analysis(store.load_direct('capture/atomize-policy').uid) is not None}")
+    print(
+        f"  ACTIVE ANALYSIS STILL PRESENT · {store.load_atomize_analysis(store.load_direct('capture/atomize-policy').uid) is not None}"
+    )
     print(f"  PROVIDER CALLS DURING PREPARATION · {provider_calls}")
     print("  PROVIDER CALLS DURING LAUNCHER · 0")
-    print(f"  STORE UNCHANGED BY CANCELLED NEW FLOW · {_store_digest(root) == before}", flush=True)
+    print(
+        f"  STORE UNCHANGED BY CANCELLED NEW FLOW · {_store_digest(root) == before}",
+        flush=True,
+    )
 
 
 def _run_meld_child(root: Path) -> None:
@@ -201,7 +225,10 @@ def _run_meld_child(root: Path) -> None:
     _patch_command_stores(store)
     before = _store_digest(root)
     print("$ mem meld --sessions", flush=True)
-    print(f"PTY {os.get_terminal_size().columns} {os.get_terminal_size().lines}", flush=True)
+    print(
+        f"PTY {os.get_terminal_size().columns} {os.get_terminal_size().lines}",
+        flush=True,
+    )
     _run_cli(["meld", "--sessions"])
     print("\nMELD NEW FLOW · CANCELLED")
     print(f"  RETAINED TERMINAL UID · {retained_uid}")
@@ -209,7 +236,10 @@ def _run_meld_child(root: Path) -> None:
     print(f"  DISTINCT UIDS · {retained_uid != active_uid}")
     print(f"  TERMINAL HISTORY COUNT · {len(store.list_meld_session_history())}")
     print("  PROVIDER CALLS · 0")
-    print(f"  STORE UNCHANGED BY CANCELLED NEW FLOW · {_store_digest(root) == before}", flush=True)
+    print(
+        f"  STORE UNCHANGED BY CANCELLED NEW FLOW · {_store_digest(root) == before}",
+        flush=True,
+    )
 
 
 def _run_review_child(root: Path) -> None:
@@ -217,7 +247,10 @@ def _run_review_child(root: Path) -> None:
     _patch_command_stores(store)
     before = _store_digest(root)
     print("$ mem review", flush=True)
-    print(f"PTY {os.get_terminal_size().columns} {os.get_terminal_size().lines}", flush=True)
+    print(
+        f"PTY {os.get_terminal_size().columns} {os.get_terminal_size().lines}",
+        flush=True,
+    )
     _run_cli(["review"])
     retained = store.load_review_session_by_uid(retained_uid)
     retained_source = store.load_review_session_source(retained_uid)
@@ -227,9 +260,14 @@ def _run_review_child(root: Path) -> None:
     print(f"  DISTINCT UIDS · {retained_uid != active_uid}")
     print(f"  RETAINED ANSWERS · {retained.answered_count}/{len(retained.items)}")
     print(f"  RETAINED SOURCE MEMORIES · {len(retained_source.memories)}")
-    print(f"  ACTIVE SOURCE MEMORIES · {len(store.load_direct('capture/review-policy').memories)}")
+    print(
+        f"  ACTIVE SOURCE MEMORIES · {len(store.load_direct('capture/review-policy').memories)}"
+    )
     print("  PROVIDER CALLS · 0")
-    print(f"  STORE UNCHANGED BY HISTORY VIEW · {_store_digest(root) == before}", flush=True)
+    print(
+        f"  STORE UNCHANGED BY HISTORY VIEW · {_store_digest(root) == before}",
+        flush=True,
+    )
 
 
 def _run_summary_child(results_path: Path) -> None:
@@ -246,7 +284,10 @@ def _run_summary_child(results_path: Path) -> None:
     print("SAME-FRAME REANALYSIS · explicit --refresh / --restart / --new")
     print("HISTORICAL REVIEW · immutable source snapshot, read-only by UID")
     print()
-    print("\x1b[38;2;166;218;149;1mVERIFICATION COMPLETE · 3/3 OPERATION ADAPTERS\x1b[0m", flush=True)
+    print(
+        "\x1b[38;2;166;218;149;1mVERIFICATION COMPLETE · 3/3 OPERATION ADAPTERS\x1b[0m",
+        flush=True,
+    )
 
 
 def _environment() -> dict[str, str]:

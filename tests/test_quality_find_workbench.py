@@ -15,7 +15,7 @@ from memcommit.adapters.console.terminal.components.quality_find.workbench impor
     run_interactive_quality_find,
     run_quality_find_resolution_workbench,
 )
-from memcommit.application.capabilities.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -23,14 +23,19 @@ from memcommit.application.capabilities.reviewing.quality.findings import (
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.application.capabilities.reviewing.quality.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
     QualityFindSourceFrame,
     QualityFindWorkbenchError,
     create_quality_find_workbench,
     quality_find_resolution_view,
 )
-from memcommit.application.capabilities.reviewing.read_report import ReadReportRecent, ReadReportTarget
-from memcommit.adapters.console.terminal.components.responses.resolution import response_target_from_item
+from memcommit.application.capabilities.reviewing.read_report import (
+    ReadReportRecent,
+    ReadReportTarget,
+)
+from memcommit.adapters.console.terminal.components.responses.resolution import (
+    response_target_from_item,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -725,7 +730,7 @@ def test_find_redundancies_has_no_initial_selector_route(
     store.set_current(ctx.name)
     observed: list[str] = []
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_duplicates.command.ops.find_redundancies",
+        "memcommit.adapters.console.commands.find_redundancies.command.ops.find_redundancies",
         lambda source, *_args, **_kwargs: (
             observed.append(source.name) or DuplicateReport(memory_count=2, findings=())
         ),
@@ -750,7 +755,7 @@ def test_repeated_dedun_bypasses_report_recents_and_target_setup(
     store.create_context(ctx)
     store.set_current(ctx.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_duplicates.command.ops.find_redundancies",
+        "memcommit.adapters.console.commands.find_redundancies.command.ops.find_redundancies",
         lambda *_args, **_kwargs: DuplicateReport(memory_count=2, findings=()),
     )
 

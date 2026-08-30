@@ -32,7 +32,7 @@ def test_production_dedup_consumers_use_the_operation_owner() -> None:
         "src/memcommit/adapters/python_api/_operations/dedup.py",
         "src/memcommit/adapters/python_api/_operations/exact_duplicates.py",
         "src/memcommit/adapters/console/commands/dedup/command.py",
-        "src/memcommit/adapters/console/commands/find_exact_duplicates/command.py",
+        "src/memcommit/adapters/console/commands/find_duplicates/command.py",
         "src/memcommit/application/capabilities/ops.py",
     )
 
@@ -62,9 +62,12 @@ def test_exact_dedup_and_semantic_dedun_remain_separate_owners() -> None:
 
     assert "memcommit.application.operations.dedun" not in exact
     assert "memcommit.application.operations.dedup" not in semantic
-    assert not {
-        "memcommit.findings",
-        "memcommit.semantic_provider",
-        "memcommit.application.operations.dedun.application",
-        "memcommit.application.operations.dedun.runtime",
-    } & exact_imports
+    assert (
+        not {
+            "memcommit.findings",
+            "memcommit.semantic_provider",
+            "memcommit.application.operations.dedun.application",
+            "memcommit.application.operations.dedun.runtime",
+        }
+        & exact_imports
+    )

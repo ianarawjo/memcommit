@@ -13,7 +13,7 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     run_quality_find_resolution_workbench,
 )
-from memcommit.application.capabilities.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
     AmbiguityFinding,
     AmbiguityReport,
     DuplicateFinding,
@@ -27,12 +27,14 @@ from memcommit.adapters.console.terminal.components.findings.issue_one_line_pres
     issue_one_line_text,
 )
 from memcommit.adapters.console.terminal.core.theme import SemanticColorRole
-from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_role_style
-from memcommit.application.capabilities.reviewing.quality.workbench import (
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
+    semantic_role_style,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
     create_quality_find_workbench,
     quality_find_report_view,
 )
-from memcommit.application.capabilities.reviewing.quality.report import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.report import (
     QualityFindBrowserReceipt,
     QualityFindReportError,
 )
@@ -154,9 +156,7 @@ def test_pair_issue_refs_expand_colliding_uid_prefixes() -> None:
         ),
     )
 
-    paragraph = issue_one_line_text(
-        quality_find_report_view(session, context).items[0]
-    )
+    paragraph = issue_one_line_text(quality_find_report_view(session, context).items[0])
 
     assert "[MEMORY a31f02c1-0000-0000-0000-000000000001]" in paragraph
     assert "[MEMORY a31f02c1-0000-0000-0000-000000000002]" in paragraph
@@ -197,8 +197,9 @@ def test_finding_browser_root_close_never_creates_response_state() -> None:
     assert session.responses == {}
 
 
-def test_dedun_handoff_receives_all_eligible_report_evidence_without_confirmation(
-) -> None:
+def test_dedun_handoff_receives_all_eligible_report_evidence_without_confirmation() -> (
+    None
+):
     context, first, second = _source()
     third = ops.add(context, "Reports can be delivered whenever convenient.")
     session = create_quality_find_workbench(
@@ -268,8 +269,7 @@ def test_compact_finding_browser_never_enters_the_alternate_screen() -> None:
         and (
             (isinstance(node.func, ast.Name) and node.func.id == "Application")
             or (
-                isinstance(node.func, ast.Attribute)
-                and node.func.attr == "Application"
+                isinstance(node.func, ast.Attribute) and node.func.attr == "Application"
             )
         )
     ]

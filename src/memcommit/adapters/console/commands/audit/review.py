@@ -29,17 +29,15 @@ from memcommit.adapters.console.terminal.components.findings import (
     issue_one_line_fragments,
     quality_find_report_header_text,
 )
-from memcommit.application.capabilities.reviewing.quality.audit import (
-    QualityAuditSession,
+from memcommit.application.operations.audit.model import QualityAuditSession
+from memcommit.application.operations.audit.resolution_adapter import (
     quality_audit_resolution_view,
 )
-from memcommit.application.capabilities.reviewing.quality.audit_store import (
-    QualityAuditStore,
-)
-from memcommit.application.capabilities.reviewing.quality.report import (
+from memcommit.application.operations.audit.session_store import QualityAuditStore
+from memcommit.application.capabilities.reviewing.memory_issue_finding.report import (
     quality_find_category_label,
 )
-from memcommit.application.capabilities.reviewing.quality.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
     QualityFindSourceFrame,
     QualityFindWorkbenchSession,
     quality_find_report_view,

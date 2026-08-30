@@ -72,6 +72,13 @@ The sibling placement preserves the same adapter layer and dependency meaning
 while giving the command tree one navigational grammar. No compatibility
 package remains at the former internal path.
 
+On 2026-08-30 the two historically inverted Find package names were aligned
+with their public commands. `commands/find_duplicates` now owns the
+provider-free exact-Duplicate route, and `commands/find_redundancies` owns the
+semantic Redundancy route; `find_ambiguities` and `find_conflicts` were already
+named after their public entries. The relocation changes no CLI spelling or
+analysis behavior and retains no alias package for the former internal names.
+
 Reference's interactive setup likewise lives under
 `adapters/console/commands/reference/workbench/`. It selects the Reference
 unit, Source, Context scope, and local Target and freezes the reviewed exact

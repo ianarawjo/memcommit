@@ -933,7 +933,7 @@ def test_recursive_dedun_rejects_granted_boundaries_before_provider(
     )
     active.set_current("task-root")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_duplicates.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.find_redundancies.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("authority rejection must precede provider connection")
         ),

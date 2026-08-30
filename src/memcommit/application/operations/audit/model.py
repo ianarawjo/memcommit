@@ -1,11 +1,9 @@
-"""Durable Memory quality Audit snapshots and review projection.
+"""Operation-owned durable Memory quality Audit model and validation.
 
-Audit is an orchestration boundary, not a fourth semantic judge. It freezes one
-direct Context frame, runs the existing Duplicate, Ambiguity, and Conflict
-finders independently, and may retain one separately typed Conformance check
-against an explicit Rules Context. Version-1/2 records remain readable, but
-version 3 drops Conflict's unused scope-dimension tags. Historical response
-fields remain annotations; the Audit Review route no longer edits them.
+Audit freezes one direct Context frame and retains independently typed quality
+checks with their exact provider provenance. Version-1/2 records remain
+readable, while historical response fields remain annotations that the current
+read-only Review route never edits.
 """
 
 from __future__ import annotations
@@ -14,44 +12,28 @@ import hashlib
 import json
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from typing import Callable, Literal
+from datetime import datetime
+from typing import Literal
 
 from memcommit.core.context import Context, Memory
 from memcommit.application.operations.conformance.model import ConformanceReport
-from memcommit.application.capabilities.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
     ConflictReport,
     DuplicateFinding,
     DuplicateReport,
-    FindingsProvider,
     QUALITY_RULESET_VERSIONS,
-    find_ambiguities,
-    find_conflicts,
-    find_redundancies,
 )
-from memcommit.providers.types import CompletionRun, ProviderIdentity
-from memcommit.application.capabilities.reviewing.quality.report import (
-    quality_find_category_label,
-    quality_find_report_summary_text,
-)
-from memcommit.application.capabilities.reviewing.quality.workbench import (
+from memcommit.providers.types import ProviderIdentity
+from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
     QualityFindResponse,
-    QualityFindSourceFrame,
-    QualityFindWorkbenchSession,
-    quality_find_report_view,
-    quality_find_resolution_view,
 )
-from memcommit.application.capabilities.resolution.workbench import (
-    ResolutionContextLocation,
-    ResolutionMetric,
-    ResolutionOverviewSection,
-    ResolutionWorkbenchView,
-    resolution_overview_text,
+from memcommit.application.operations.review.model import (
+    REVIEW_RESPONSE_CHAR_LIMIT,
+    direct_context_digest,
 )
-from memcommit.application.operations.review.model import REVIEW_RESPONSE_CHAR_LIMIT, direct_context_digest
 
 
 QUALITY_AUDIT_SCHEMA_VERSION = 3
@@ -778,8 +760,13 @@ class QualityAuditSession:
             datetime.fromisoformat(session.created_at)
         except ValueError as error:
             raise QualityAuditError("Invalid Audit creation time.") from error
-        # Re-project once so a persisted selected option cannot name a choice
-        # that its exact typed finding does not expose.
+        # The legacy option grammar is owned by the operation adapter. Import it
+        # only while decoding retained annotations so the durable model does not
+        # depend on that projection during ordinary module initialization.
+        from memcommit.application.operations.audit.resolution_adapter import (
+            quality_audit_resolution_view,
+        )
+
         view = quality_audit_resolution_view(session)
         for item_uid, response in responses.items():
             item = view.item(item_uid)
@@ -788,251 +775,7 @@ class QualityAuditSession:
         return session
 
 
-class _CapturingProviderFactory:
-    """Capture the exact provider run without changing a finder's call contract."""
-
-    def __init__(self, factory: Callable[[], FindingsProvider]):
-        self._factory = factory
-        self.provider: FindingsProvider | None = None
-
-    def __call__(self) -> FindingsProvider:
-        if self.provider is not None:
-            raise QualityAuditError("An Audit finder requested more than one provider.")
-        self.provider = self._factory()
-        return self.provider
-
-    def provenance(self, operation: str) -> QualityAuditProvenance:
-        if self.provider is None:
-            return QualityAuditProvenance(operation=operation, provider_called=False)
-        last_run = getattr(self.provider, "last_run", None)
-        identity = getattr(self.provider, "identity", None)
-        if isinstance(last_run, CompletionRun):
-            identity = last_run.identity
-        if not isinstance(identity, ProviderIdentity):
-            raise QualityAuditError(
-                "A durable Audit requires provider and model provenance."
-            )
-        if last_run is not None and (
-            not isinstance(last_run, CompletionRun) or last_run.operation != operation
-        ):
-            raise QualityAuditError(
-                "Audit provider provenance does not match its finder."
-            )
-        return QualityAuditProvenance(
-            operation=operation,
-            provider_called=True,
-            identity=identity,
-            upstream_model=(
-                last_run.upstream_model if isinstance(last_run, CompletionRun) else None
-            ),
-            upstream_provider=(
-                last_run.upstream_provider
-                if isinstance(last_run, CompletionRun)
-                else None
-            ),
-        )
-
-
-def create_quality_audit(
-    ctx: Context,
-    checks: tuple[QualityAuditCheck, ...],
-    *,
-    conformance: ConformanceReport | None = None,
-    uid: str | None = None,
-    created_at: str | None = None,
-) -> QualityAuditSession:
-    """Create and fully validate one completed Audit snapshot."""
-
-    source = QualityAuditSource.from_context(ctx)
-    session = QualityAuditSession(
-        uid=uid or str(uuid.uuid4()),
-        created_at=created_at
-        or datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        source=source,
-        checks=checks,
-        conformance=conformance,
-    )
-    return QualityAuditSession.from_dict(session.to_dict())
-
-
-def run_quality_audit(
-    ctx: Context,
-    provider_factory: Callable[[], FindingsProvider],
-    *,
-    on_check: Callable[[QualityAuditKind, int, int], None] | None = None,
-) -> QualityAuditSession:
-    """Run all three independent finders over one frozen direct Context frame."""
-
-    source = QualityAuditSource.from_context(ctx)
-    frozen = source.context()
-    operations: tuple[
-        tuple[
-            QualityAuditKind,
-            Callable[[Context, Callable[[], FindingsProvider]], QualityAuditReport],
-        ],
-        ...,
-    ] = (
-        ("duplicates", find_redundancies),
-        ("ambiguities", find_ambiguities),
-        ("conflicts", find_conflicts),
-    )
-    checks: list[QualityAuditCheck] = []
-    for index, (kind, finder) in enumerate(operations, start=1):
-        if on_check is not None:
-            on_check(kind, index, len(operations))
-        capture = _CapturingProviderFactory(provider_factory)
-        report = finder(frozen, capture)
-        checks.append(
-            QualityAuditCheck(
-                kind=kind,
-                ruleset_version=QUALITY_AUDIT_RULESETS[kind],
-                report=report,
-                provenance=capture.provenance(f"find_{kind}"),
-            )
-        )
-    return create_quality_audit(frozen, tuple(checks))
-
-
 def quality_audit_record_digest(session: QualityAuditSession) -> str:
     """Fingerprint the complete mutable Audit record for CAS persistence."""
 
     return _digest(session.to_dict())
-
-
-def quality_audit_resolution_view(
-    session: QualityAuditSession,
-) -> ResolutionWorkbenchView:
-    """Compose the legacy Resolution-shaped compatibility projection."""
-
-    ctx = session.source.context()
-    source_frame = QualityFindSourceFrame.create((ctx,))
-    items = []
-    counts: dict[str, int] = {}
-    summaries: dict[str, str] = {}
-    for check in session.checks:
-        sub_session = QualityFindWorkbenchSession(
-            uid=session.uid,
-            kind=check.kind,
-            source=source_frame,
-            report=check.report,
-            responses=session.responses,
-        )
-        projected = quality_find_resolution_view(sub_session, ctx)
-        items.extend(projected.items)
-        counts[check.kind] = len(projected.items)
-        summaries[check.kind] = quality_find_report_summary_text(
-            quality_find_report_view(sub_session, ctx)
-        )
-
-    check_lines = [
-        f"{quality_find_category_label(kind)} · FINISHED · {summaries[kind]}"
-        for kind in QUALITY_AUDIT_KINDS
-    ]
-    provenance_lines = [
-        f"{quality_find_category_label(check.kind)} · {check.ruleset_version} · "
-        f"{check.provenance.display_name()}"
-        for check in session.checks
-    ]
-    conformance = session.conformance
-    check_total = 3
-    if conformance is not None:
-        check_total = 4
-        check_lines.append(
-            "CONFORMANCE · FINISHED · "
-            f"{len(conformance.context_judgments)} Rules · "
-            f"{conformance.issue_count} issues"
-        )
-        identity = conformance.provider_identity
-        assert identity is not None
-        provenance_lines.append(
-            f"CONFORMANCE · {conformance.ruleset_version} · {identity.display_name()}"
-        )
-    checks_text = "\n".join(check_lines)
-    provenance_text = "\n".join(provenance_lines)
-    sections_list = [
-        ResolutionOverviewSection(
-            "summary",
-            "AUDIT SUMMARY",
-            (
-                "All quality finders completed over the same saved direct "
-                "Context snapshot. Each section retains its own Memory, pair, "
-                "group, or absorption unit."
-                + (
-                    " Conformance evaluated the same Source against "
-                    f"{len(conformance.rules)} frozen Rules."
-                    if conformance is not None
-                    else ""
-                )
-            ),
-        ),
-        ResolutionOverviewSection("checks", "CHECKS", checks_text),
-        ResolutionOverviewSection(
-            "scope",
-            "AUDITED SOURCE",
-            (
-                f"{session.source.context_name} · {len(session.source.memories)} direct "
-                "Memories as captured when this Audit ran. Descendants and "
-                "embedded Contexts were not analyzed."
-            ),
-        ),
-        ResolutionOverviewSection("provenance", "PROVENANCE", provenance_text),
-        ResolutionOverviewSection(
-            "boundary",
-            "BOUNDARY",
-            (
-                "This saved Audit is a model-assisted finding record, not proof "
-                "that the Source is free of quality problems. Saved historical "
-                "review notes do not alter the snapshot, Context, or Memories."
-            ),
-        ),
-    ]
-    if conformance is not None:
-        rule_by_uid = {rule.uid: rule for rule in conformance.rules}
-        sections_list.insert(
-            3,
-            ResolutionOverviewSection(
-                "conformance",
-                "CONFORMANCE",
-                "\n".join(
-                    f"{rule_by_uid[item.rule_uid].alias} · {item.status} · {item.reason}"
-                    for item in conformance.context_judgments
-                ),
-            ),
-        )
-    sections = tuple(sections_list)
-    metrics = [
-        ResolutionMetric("SOURCE MEMORIES", str(len(session.source.memories))),
-        ResolutionMetric("REDUNDANCIES", str(counts["duplicates"])),
-        ResolutionMetric("AMBIGUITIES", str(counts["ambiguities"])),
-        ResolutionMetric("CONFLICTS", str(counts["conflicts"])),
-    ]
-    if conformance is not None:
-        metrics.append(
-            ResolutionMetric("CONFORMANCE ISSUES", str(conformance.issue_count))
-        )
-    return ResolutionWorkbenchView(
-        operation="AUDIT",
-        artifact_uid=session.uid,
-        revision=session.snapshot_digest,
-        title="MEM AUDIT",
-        route=session.source.context_name,
-        status=f"SAVED · {check_total}/{check_total} CHECKS · READ-ONLY REPORT",
-        metrics=tuple(metrics),
-        context_locations=(
-            ResolutionContextLocation("AUDITED SOURCE", session.source.context_name),
-        ),
-        overview=resolution_overview_text(sections),
-        overview_sections=sections,
-        list_label=(
-            "AUDIT CHECKS · REDUNDANCIES → AMBIGUITIES → CONFLICTS"
-            + (" · CONFORMANCE IN OVERVIEW" if conformance is not None else "")
-        ),
-        items=tuple(items),
-        empty_message=(
-            f"All {check_total} checks completed with no actionable quality findings."
-        ),
-        results_label="EXACT RESULTS",
-        results=(),
-        capabilities=frozenset(),
-        show_results=False,
-    )

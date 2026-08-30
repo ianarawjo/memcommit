@@ -39,33 +39,24 @@ from memcommit.adapters.console.commands.audit.review import (
 )
 from memcommit.adapters.console.commands.audit.setup import choose_audit_setup
 from memcommit.core.context import Context
-from memcommit.application.operations.conformance.model import (
-    ConformanceError,
-    check_context_conformance,
-)
-from memcommit.application.operations.conformance.runtime import (
-    freeze_context_conformance,
-)
+from memcommit.application.operations.conformance.model import ConformanceError
 from memcommit.application.capabilities.authority.derived_policy import (
     authorize_analysis_save,
 )
-from memcommit.application.capabilities.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
     FindingsError,
     FindingsProvider,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.capabilities.reviewing.quality.audit import (
+from memcommit.application.operations.audit.application import run_quality_audit
+from memcommit.application.operations.audit.model import (
     QualityAuditError,
     QualityAuditKind,
     QualityAuditSession,
-    create_quality_audit,
-    run_quality_audit,
 )
-from memcommit.application.capabilities.reviewing.quality.audit_store import (
-    QualityAuditStore,
-)
-from memcommit.application.capabilities.reviewing.quality.report import (
+from memcommit.application.operations.audit.session_store import QualityAuditStore
+from memcommit.application.capabilities.reviewing.memory_issue_finding.report import (
     quality_find_category_label,
 )
 from memcommit.providers.subscription import (
@@ -98,29 +89,16 @@ def _run_quality_audit_checks(
                 step=step,
             )
 
-        session = run_quality_audit(
+        return run_quality_audit(
             ctx,
             provider_factory,
+            conformance_rules=conformance_rules,
             on_check=update_progress,
+            on_conformance=lambda: progress.update(
+                "checking conformance",
+                step=4,
+            ),
         )
-        if conformance_rules is not None:
-            progress.update("checking conformance", step=4)
-            frozen = freeze_context_conformance(ctx, conformance_rules)
-            report = check_context_conformance(
-                source_label=frozen.target_name,
-                rules_label=frozen.rules_name,
-                rules=frozen.rules,
-                subjects=frozen.subjects,
-                provider=provider_factory(),
-            )
-            session = create_quality_audit(
-                ctx,
-                session.checks,
-                conformance=report,
-                uid=session.uid,
-                created_at=session.created_at,
-            )
-        return session
 
     return run_command_wait(
         "AUDIT",
@@ -286,10 +264,6 @@ def cmd(
                     "Audit Conformance currently requires a local Target Context."
                 )
 
-        if rules_ctx is not None:
-            # Fail structural Conformance setup before opening any of the four
-            # provider turns; a bad Rules frame must not waste a partial Audit.
-            freeze_context_conformance(ctx, rules_ctx)
         session = _run_quality_audit_checks(
             ctx,
             connect_codex_chatgpt_provider,

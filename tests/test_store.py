@@ -1,4 +1,5 @@
 """Tests for MemoryStore — disk persistence layer (uses isolated_store fixture)."""
+
 import json
 from pathlib import Path
 import uuid
@@ -65,6 +66,7 @@ def test_store_init_twice_is_idempotent(isolated_store):
 # ---------------------------------------------------------------------------
 # current context
 # ---------------------------------------------------------------------------
+
 
 def test_current_context_name_is_none_initially(isolated_store):
     store = MemoryStore()
@@ -163,6 +165,7 @@ def test_failed_state_replace_preserves_previous_current(
 # ---------------------------------------------------------------------------
 # context_exists / save / load
 # ---------------------------------------------------------------------------
+
 
 def test_context_does_not_exist_before_save(isolated_store):
     store = MemoryStore()
@@ -297,6 +300,7 @@ def test_load_current_returns_correct_context(isolated_store):
 # list_context_names
 # ---------------------------------------------------------------------------
 
+
 def test_list_context_names_empty(isolated_store):
     store = MemoryStore()
     assert store.list_context_names() == []
@@ -312,6 +316,7 @@ def test_list_context_names_returns_all(isolated_store):
 # ---------------------------------------------------------------------------
 # delete
 # ---------------------------------------------------------------------------
+
 
 def test_delete_removes_context(isolated_store):
     store = MemoryStore()
@@ -345,8 +350,8 @@ def test_delete_removes_context(isolated_store):
     assert event.descendants_preserved is True
     assert store.list_context_lifecycle_events() == [event]
 
-    event_path = isolated_store / "ledger" / "context-events" / (
-        event.event_uid + ".json"
+    event_path = (
+        isolated_store / "ledger" / "context-events" / (event.event_uid + ".json")
     )
     serialized = json.loads(event_path.read_text(encoding="utf-8"))
     assert serialized == event.to_dict()
@@ -427,9 +432,7 @@ def test_context_lifecycle_events_support_recursive_namespace_filter(
     assert store.context_exists(child.name)
     child_event = store.delete(child.name)
 
-    assert store.list_context_lifecycle_events(context_name="tree") == [
-        parent_event
-    ]
+    assert store.list_context_lifecycle_events(context_name="tree") == [parent_event]
     assert set(
         store.list_context_lifecycle_events(
             context_name="tree",
@@ -691,7 +694,9 @@ def test_delete_removes_context_scoped_analysis_and_matching_review(
         AtomizeItem,
         create_atomize_analysis,
     )
-    from memcommit.application.operations.atomize.workbench import create_atomize_workbench
+    from memcommit.application.operations.atomize.workbench import (
+        create_atomize_workbench,
+    )
     from memcommit.application.operations.review.model import create_atomize_review
 
     store = MemoryStore()
@@ -794,7 +799,9 @@ def test_delete_removes_only_exact_context_atomize_grounding_artifact(
 
 
 def test_delete_preserves_review_bound_to_another_context(isolated_store):
-    from memcommit.application.capabilities.reviewing.quality.findings import AmbiguityReport
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+        AmbiguityReport,
+    )
     from memcommit.application.operations.review.model import create_ambiguity_review
 
     store = MemoryStore()
@@ -819,9 +826,16 @@ def test_delete_preserves_review_bound_to_another_context(isolated_store):
 
 
 def test_delete_removes_uid_retained_atomize_and_review_evidence(isolated_store):
-    from memcommit.application.operations.atomize.domain import AtomizeImpactReport, create_atomize_analysis
-    from memcommit.application.operations.atomize.workbench import create_atomize_workbench
-    from memcommit.application.capabilities.reviewing.quality.findings import AmbiguityReport
+    from memcommit.application.operations.atomize.domain import (
+        AtomizeImpactReport,
+        create_atomize_analysis,
+    )
+    from memcommit.application.operations.atomize.workbench import (
+        create_atomize_workbench,
+    )
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+        AmbiguityReport,
+    )
     from memcommit.application.operations.review.model import create_ambiguity_review
 
     store = MemoryStore()
@@ -909,8 +923,10 @@ def test_delete_preflights_symbolic_link_atomize_grounding_artifact(
 # checkpoints
 # ---------------------------------------------------------------------------
 
+
 def test_checkpoint_is_created_on_auto_save(isolated_store):
     from memcommit.core.context import AutoCheckpoint
+
     store = MemoryStore()
     ctx = ops.init("ckpt-ctx")
     store.save(ctx, AutoCheckpoint(command="init", args={}, description="setup"))
@@ -940,14 +956,8 @@ def test_checkpoint_rejects_stale_loaded_context_without_appending_history(
     ):
         store.checkpoint(stale, message="stale snapshot")
 
-    assert (
-        store.load_direct(context.name).to_dict()
-        == context_after_concurrent_save
-    )
-    assert (
-        store.list_checkpoints(context.name)
-        == history_after_concurrent_save
-    )
+    assert store.load_direct(context.name).to_dict() == context_after_concurrent_save
+    assert store.list_checkpoints(context.name) == history_after_concurrent_save
 
 
 def test_checkpoint_rejects_unsaved_context_state(
@@ -1103,6 +1113,7 @@ def test_failed_existing_context_write_does_not_leave_false_checkpoint(
 def test_list_checkpoints_sorted_newest_first(isolated_store):
     from memcommit.core.context import AutoCheckpoint
     import time
+
     store = MemoryStore()
     ctx = ops.init("timeline")
     store.save(ctx, AutoCheckpoint(command="first", args={}, description="first"))
@@ -1133,12 +1144,7 @@ def test_rapid_checkpoints_with_same_description_use_unique_files(isolated_store
 
     checkpoints = store.list_checkpoints("rapid-history")
     checkpoint_files = list(
-        (
-            isolated_store
-            / "contexts"
-            / "rapid-history"
-            / "checkpoints"
-        ).glob("*.json")
+        (isolated_store / "contexts" / "rapid-history" / "checkpoints").glob("*.json")
     )
     assert len(checkpoints) == 6
     assert len(checkpoint_files) == 6
@@ -1147,6 +1153,7 @@ def test_rapid_checkpoints_with_same_description_use_unique_files(isolated_store
 
 def test_revert_restores_earlier_state(isolated_store):
     from memcommit.core.context import AutoCheckpoint
+
     store = MemoryStore()
 
     ctx = ops.init("rev-ctx")
@@ -1184,9 +1191,7 @@ def test_revert_carries_loaded_digest_into_locked_save(
         ctx,
         AutoCheckpoint(command="second", args={}, description="second"),
     )
-    expected = store_module.context_record_digest(
-        store.load_direct(ctx.name)
-    )
+    expected = store_module.context_record_digest(store.load_direct(ctx.name))
     observed = []
     original_save_locked = store._save_locked
 
@@ -1208,10 +1213,9 @@ def test_revert_carries_loaded_digest_into_locked_save(
     store.revert(ctx.name, first_uid, keep_history=True)
 
     assert observed == [expected]
-    assert [
-        memory.content
-        for memory in store.load_direct(ctx.name).iter_items()
-    ] == ["original"]
+    assert [memory.content for memory in store.load_direct(ctx.name).iter_items()] == [
+        "original"
+    ]
 
 
 @pytest.mark.parametrize(
@@ -1268,9 +1272,7 @@ def test_revert_rejects_stale_reviewed_frame_before_any_mutation(
     expectations = {
         "expected_context_uid": reviewed_context.uid,
         "expected_context_digest": context_record_digest(reviewed_context),
-        "expected_history_digest": checkpoint_history_digest(
-            reviewed_history
-        ),
+        "expected_history_digest": checkpoint_history_digest(reviewed_history),
     }
     expectations[stale_field] = stale_value
     context_before_revert = reviewed_context.to_dict()

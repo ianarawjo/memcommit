@@ -9,7 +9,10 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.capabilities.reviewing.quality.findings import DuplicateReport, FindingsError
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    DuplicateReport,
+    FindingsError,
+)
 from memcommit.adapters.agent.quality_find import QualityFindAgentAdapter
 from memcommit.persistence.store import MemoryStore
 
@@ -49,7 +52,7 @@ def test_cli_recursive_redundancies_analyzes_each_context_independently(
         return DuplicateReport(memory_count=1, findings=())
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_duplicates.command.ops.find_redundancies",
+        "memcommit.adapters.console.commands.find_redundancies.command.ops.find_redundancies",
         analyze,
     )
 
@@ -65,8 +68,7 @@ def test_cli_recursive_redundancies_analyzes_each_context_independently(
     assert f"CONTEXT 2/2 · {child.name}" in result.output
     assert outside.name not in result.output
     assert {
-        name: store.load_direct(name).to_dict()
-        for name in store.list_context_names()
+        name: store.load_direct(name).to_dict() for name in store.list_context_names()
     } == before
 
 
@@ -85,7 +87,7 @@ def test_cli_recursive_redundancies_publishes_no_report_after_later_failure(
         return DuplicateReport(memory_count=len(context.memories), findings=())
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_duplicates.command.ops.find_redundancies",
+        "memcommit.adapters.console.commands.find_redundancies.command.ops.find_redundancies",
         analyze,
     )
 

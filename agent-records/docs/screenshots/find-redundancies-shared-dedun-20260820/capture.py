@@ -19,7 +19,8 @@ COLUMNS = 180
 ROWS = 52
 
 _SUPPORT_PATH = (
-    ROOT / "agent-records/docs/screenshots/quality-conflict-resolve-handoff-20260816/capture.py"
+    ROOT
+    / "agent-records/docs/screenshots/quality-conflict-resolve-handoff-20260816/capture.py"
 )
 _SPEC = importlib.util.spec_from_file_location(
     "quality_find_capture_support",
@@ -94,7 +95,9 @@ def _verification(label: str, provider: _Provider) -> str:
 
     store = MemoryStore()
     context = store.load_direct("quality/redundancy-capture")
-    memories = [item.content for item in context.iter_items() if isinstance(item, Memory)]
+    memories = [
+        item.content for item in context.iter_items() if isinstance(item, Memory)
+    ]
     return (
         f"{label} VERIFICATION · MEMORIES {len(memories)} · "
         f"CHECKPOINTS {len(store.list_checkpoints(context.name))} · "
@@ -106,7 +109,7 @@ def _verification(label: str, provider: _Provider) -> str:
 def _run_child(command: str) -> None:
     import click
 
-    import memcommit.adapters.console.commands.find_duplicates.command as find_command
+    import memcommit.adapters.console.commands.find_redundancies.command as find_command
     from memcommit.adapters.console.entrypoint import app
 
     with tempfile.TemporaryDirectory(prefix="find-redundancies-capture-") as directory:

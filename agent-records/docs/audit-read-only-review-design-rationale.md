@@ -74,8 +74,9 @@ review contract.
 ## Console presentation ownership
 
 Audit's console-specific pieces are co-located under
-`memcommit.adapters.console.commands.audit`: `command.py` owns execution and
-persistence orchestration, `receipt.py` owns the compact saved-result receipt,
+`memcommit.adapters.console.commands.audit`: `command.py` owns CLI operands,
+authority checks, progress projection, application invocation, and publication
+of the completed Session; `receipt.py` owns the compact saved-result receipt,
 `setup.py` owns Source selection, `session_catalog.py` owns the saved-session
 catalog, and `review.py` owns the read-only report projection and Viewer launch.
 The former
@@ -87,6 +88,30 @@ ordering, report content, Viewer behavior, exceptions, and the zero-write
 boundary are unchanged. The existing Audit terminal captures therefore remain
 behaviorally valid; their reproduction script now imports the command-owned
 setup module.
+
+## Application ownership
+
+Audit's application-specific model, execution, session persistence, and legacy
+Resolution projection live under `memcommit.application.operations.audit`.
+`model.py` owns the durable Source, Check, Session, schema validation, and record
+digest; `application.py` freezes one Source and runs the three quality finders
+plus optional Conformance as one complete operation; `session_store.py` owns the
+private UID-addressed CAS records; and `resolution_adapter.py` retains only the
+typed compatibility shape needed by historical responses and the current
+read-only document projector. The reusable finder, report, and workbench
+contracts remain under
+`application.capabilities.reviewing.memory_issue_finding`.
+
+Optional Conformance is preflighted inside the Audit application before any
+provider connection. Console progress is supplied through callbacks, but the
+console no longer assembles or re-creates the fourth-check Session itself. This
+keeps all configured checks over one frozen Source and returns exactly one fully
+validated Session; a failed check publishes no partial Audit. The former
+`application.capabilities.reviewing.quality.audit` and `audit_store` modules are
+removed without compatibility facades because they were provisional internal
+owners, not supported import surfaces. The remaining shared capability was
+then named `reviewing.memory_issue_finding`: its outputs are model-assisted
+issue candidates for review, not proof of a generalized quality judgment.
 
 Audit schema versions 1 and 2 may contain response records written by the
 earlier UI. Version 2 Conflict records also contain the retired

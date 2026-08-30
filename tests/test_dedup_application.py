@@ -35,8 +35,13 @@ from memcommit.application.operations.dedun.application import (
     recommended_dedun_selections,
 )
 from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
-from memcommit.application.capabilities.reviewing.direct_item_duplicates import find_exact_duplicate_groups
-from memcommit.application.capabilities.reviewing.quality.findings import DuplicateFinding, DuplicateReport
+from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
+    find_exact_duplicate_groups,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
+    DuplicateFinding,
+    DuplicateReport,
+)
 from memcommit.adapters.agent.dedup import DEDUP_AGENT_TOOL_NAME
 from memcommit.adapters.agent.registry import build_default_agent_tool_registry
 from memcommit.adapters.console.terminal.core.theme import (
@@ -49,8 +54,10 @@ from memcommit.adapters.console.commands.dedun.workbench import (
     run_dedun_workbench,
 )
 from memcommit.adapters.console.terminal.components.resolution import ResolutionOutcome
-from memcommit.application.capabilities.reviewing.quality.workbench import create_quality_find_workbench
-from memcommit.application.capabilities.reviewing.quality.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+    create_quality_find_workbench,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
     QualityFindingReviewDraft,
@@ -70,7 +77,10 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
+from memcommit.application.operations.profile.model import (
+    create_authority_grant,
+    update_authority_grant,
+)
 from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.persistence.store import MemoryStore
 

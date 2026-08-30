@@ -231,9 +231,18 @@ __all__ = [
 _LAZY_EXPORTS = {
     "AddMemoriesResult": ("memcommit.adapters.python_api.add", "AddMemoriesResult"),
     "AddedMemoryResult": ("memcommit.adapters.python_api.add", "AddedMemoryResult"),
-    "EmbeddedContextResult": ("memcommit.adapters.python_api.embed", "EmbeddedContextResult"),
-    "EmbeddedMemoryResult": ("memcommit.adapters.python_api.embed", "EmbeddedMemoryResult"),
-    "EmbedPlacementResult": ("memcommit.adapters.python_api.embed", "EmbedPlacementResult"),
+    "EmbeddedContextResult": (
+        "memcommit.adapters.python_api.embed",
+        "EmbeddedContextResult",
+    ),
+    "EmbeddedMemoryResult": (
+        "memcommit.adapters.python_api.embed",
+        "EmbeddedMemoryResult",
+    ),
+    "EmbedPlacementResult": (
+        "memcommit.adapters.python_api.embed",
+        "EmbedPlacementResult",
+    ),
     "MemoryReferenceResult": (
         "memcommit.adapters.python_api.reference",
         "MemoryReferenceResult",
@@ -275,15 +284,27 @@ _LAZY_EXPORTS = {
         "memcommit.adapters.python_api.help",
         "HelpComparisonOptionResult",
     ),
-    "HelpComparisonResult": ("memcommit.adapters.python_api.help", "HelpComparisonResult"),
-    "HelpDetailCatalogResult": ("memcommit.adapters.python_api.help", "HelpDetailCatalogResult"),
+    "HelpComparisonResult": (
+        "memcommit.adapters.python_api.help",
+        "HelpComparisonResult",
+    ),
+    "HelpDetailCatalogResult": (
+        "memcommit.adapters.python_api.help",
+        "HelpDetailCatalogResult",
+    ),
     "HelpDetailReferenceResult": (
         "memcommit.adapters.python_api.help",
         "HelpDetailReferenceResult",
     ),
     "HelpDetailResult": ("memcommit.adapters.python_api.help", "HelpDetailResult"),
-    "HelpTextDetailResult": ("memcommit.adapters.python_api.help", "HelpTextDetailResult"),
-    "OperationHelpResult": ("memcommit.adapters.python_api.help", "OperationHelpResult"),
+    "HelpTextDetailResult": (
+        "memcommit.adapters.python_api.help",
+        "HelpTextDetailResult",
+    ),
+    "OperationHelpResult": (
+        "memcommit.adapters.python_api.help",
+        "OperationHelpResult",
+    ),
     **{
         name: ("memcommit.adapters.python_api.show", name)
         for name in (
@@ -298,7 +319,10 @@ _LAZY_EXPORTS = {
         )
     },
     **{
-        f"Comparison{name}": ("memcommit.adapters.python_api.compare", f"Comparison{name}")
+        f"Comparison{name}": (
+            "memcommit.adapters.python_api.compare",
+            f"Comparison{name}",
+        )
         for name in (
             "FrameResult",
             "IssueResult",
@@ -340,10 +364,19 @@ _LAZY_EXPORTS = {
         )
     },
     "GrantedQueryResult": ("memcommit.adapters.python_api.query", "GrantedQueryResult"),
-    "OrdinaryQueryResult": ("memcommit.adapters.python_api.query", "OrdinaryQueryResult"),
+    "OrdinaryQueryResult": (
+        "memcommit.adapters.python_api.query",
+        "OrdinaryQueryResult",
+    ),
     "QueryCitation": ("memcommit.adapters.python_api.query", "QueryCitation"),
-    "QueryProviderConfig": ("memcommit.adapters.python_api.query", "QueryProviderConfig"),
-    "ReferenceQueryResult": ("memcommit.adapters.python_api.query", "ReferenceQueryResult"),
+    "QueryProviderConfig": (
+        "memcommit.adapters.python_api.query",
+        "QueryProviderConfig",
+    ),
+    "ReferenceQueryResult": (
+        "memcommit.adapters.python_api.query",
+        "ReferenceQueryResult",
+    ),
     **{
         name: ("memcommit.adapters.python_api.replace", name)
         for name in (
@@ -376,41 +409,86 @@ _LAZY_EXPORTS = {
         for name in ("QualityFindContextResult", "QualityFindResult")
     },
     **{
-        name: ("memcommit.application.capabilities.reviewing.quality.handoff", name)
+        name: (
+            "memcommit.application.capabilities.reviewing.memory_issue_finding.handoff",
+            name,
+        )
         for name in (
             "QualityFindingHandoff",
             "QualityFindingReviewDraft",
             "QualityFindingSource",
         )
     },
-    "ResolveAnalysisResult": ("memcommit.adapters.python_api.resolve", "ResolveAnalysisResult"),
-    "ResolveApplyResult": ("memcommit.adapters.python_api.resolve", "ResolveApplyResult"),
-    "ResolveCandidateResult": ("memcommit.adapters.python_api.resolve", "ResolveCandidateResult"),
-    "ResolveEffectResult": ("memcommit.adapters.python_api.resolve", "ResolveEffectResult"),
-    "ResolveIssueResult": ("memcommit.adapters.python_api.resolve", "ResolveIssueResult"),
-    "DistillApplyResult": ("memcommit.adapters.python_api.semantic", "DistillApplyResult"),
+    "ResolveAnalysisResult": (
+        "memcommit.adapters.python_api.resolve",
+        "ResolveAnalysisResult",
+    ),
+    "ResolveApplyResult": (
+        "memcommit.adapters.python_api.resolve",
+        "ResolveApplyResult",
+    ),
+    "ResolveCandidateResult": (
+        "memcommit.adapters.python_api.resolve",
+        "ResolveCandidateResult",
+    ),
+    "ResolveEffectResult": (
+        "memcommit.adapters.python_api.resolve",
+        "ResolveEffectResult",
+    ),
+    "ResolveIssueResult": (
+        "memcommit.adapters.python_api.resolve",
+        "ResolveIssueResult",
+    ),
+    "DistillApplyResult": (
+        "memcommit.adapters.python_api.semantic",
+        "DistillApplyResult",
+    ),
     "DistillProposal": ("memcommit.adapters.python_api.semantic", "DistillProposal"),
-    "DistillRuleProposal": ("memcommit.adapters.python_api.semantic", "DistillRuleProposal"),
-    "ElaborateCaseProposal": ("memcommit.adapters.python_api.semantic", "ElaborateCaseProposal"),
+    "DistillRuleProposal": (
+        "memcommit.adapters.python_api.semantic",
+        "DistillRuleProposal",
+    ),
+    "ElaborateCaseProposal": (
+        "memcommit.adapters.python_api.semantic",
+        "ElaborateCaseProposal",
+    ),
     "ElaborateCaseValidationProposal": (
         "memcommit.adapters.python_api.semantic",
         "ElaborateCaseValidationProposal",
     ),
-    "ElaborateProposal": ("memcommit.adapters.python_api.semantic", "ElaborateProposal"),
+    "ElaborateProposal": (
+        "memcommit.adapters.python_api.semantic",
+        "ElaborateProposal",
+    ),
     "ElaborateRuleCheckProposal": (
         "memcommit.adapters.python_api.semantic",
         "ElaborateRuleCheckProposal",
     ),
-    "ElaborateRuleProposal": ("memcommit.adapters.python_api.semantic", "ElaborateRuleProposal"),
+    "ElaborateRuleProposal": (
+        "memcommit.adapters.python_api.semantic",
+        "ElaborateRuleProposal",
+    ),
     "ElaborateTargetContextItemProposal": (
         "memcommit.adapters.python_api.semantic",
         "ElaborateTargetContextItemProposal",
     ),
-    "FitJudgmentResult": ("memcommit.adapters.python_api.semantic", "FitJudgmentResult"),
-    "FitPropositionInput": ("memcommit.adapters.python_api.semantic", "FitPropositionInput"),
+    "FitJudgmentResult": (
+        "memcommit.adapters.python_api.semantic",
+        "FitJudgmentResult",
+    ),
+    "FitPropositionInput": (
+        "memcommit.adapters.python_api.semantic",
+        "FitPropositionInput",
+    ),
     "ForgetApplyResult": ("memcommit.adapters.python_api.forget", "ForgetApplyResult"),
-    "ForgetCandidateResult": ("memcommit.adapters.python_api.forget", "ForgetCandidateResult"),
-    "ForgetReviewResult": ("memcommit.adapters.python_api.forget", "ForgetReviewResult"),
+    "ForgetCandidateResult": (
+        "memcommit.adapters.python_api.forget",
+        "ForgetCandidateResult",
+    ),
+    "ForgetReviewResult": (
+        "memcommit.adapters.python_api.forget",
+        "ForgetReviewResult",
+    ),
     **{
         name: ("memcommit.adapters.python_api.errors", name)
         for name in __all__

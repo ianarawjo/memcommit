@@ -18,7 +18,8 @@ COLUMNS = 180
 ROWS = 52
 
 _BASE_PATH = (
-    ROOT / "agent-records/docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
+    ROOT
+    / "agent-records/docs/screenshots/context-endpoint-memory-preview-20260810/capture.py"
 )
 _SPEC = importlib.util.spec_from_file_location(
     "find_redundancies_direct_capture_base",
@@ -109,7 +110,7 @@ def _invoke(app, args: list[str]) -> int:
 
 
 def _run_child() -> None:
-    import memcommit.adapters.console.commands.find_duplicates.command as find_command
+    import memcommit.adapters.console.commands.find_redundancies.command as find_command
     from memcommit.adapters.console.entrypoint import app
 
     with tempfile.TemporaryDirectory(
@@ -203,9 +204,7 @@ def main() -> None:
         if child.isalive():
             child.close(force=True)
 
-    raw = "".join(
-        path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript")
-    )
+    raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     assert "PTY 180 52" in raw
     assert "\x1b[" in raw
     assert "38;" in raw

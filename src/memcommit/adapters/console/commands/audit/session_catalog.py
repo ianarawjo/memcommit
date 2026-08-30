@@ -7,12 +7,8 @@ from datetime import datetime
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionPickerEntry,
 )
-from memcommit.application.capabilities.reviewing.quality.audit import (
-    QualityAuditSession,
-)
-from memcommit.application.capabilities.reviewing.quality.audit_store import (
-    QualityAuditStore,
-)
+from memcommit.application.operations.audit.model import QualityAuditSession
+from memcommit.application.operations.audit.session_store import QualityAuditStore
 
 
 def _timestamp(session: QualityAuditSession, sessions: QualityAuditStore) -> float:

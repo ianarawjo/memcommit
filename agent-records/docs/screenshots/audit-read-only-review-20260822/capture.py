@@ -17,7 +17,9 @@ COLUMNS = 180
 ROWS = 52
 DOWN = "\x1b[B"
 
-_BASE_PATH = ROOT / "agent-records/docs/screenshots/atomize-memory-selection-20260814/capture.py"
+_BASE_PATH = (
+    ROOT / "agent-records/docs/screenshots/atomize-memory-selection-20260814/capture.py"
+)
 _SPEC = importlib.util.spec_from_file_location("audit_review_capture_base", _BASE_PATH)
 assert _SPEC is not None and _SPEC.loader is not None
 _BASE = importlib.util.module_from_spec(_SPEC)
@@ -29,7 +31,7 @@ _BASE.ROWS = ROWS
 
 def _session(*, empty: bool):
     from memcommit.core.context import Context, Memory
-    from memcommit.application.capabilities.reviewing.quality.findings import (
+    from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
         AmbiguityFinding,
         AmbiguityReport,
         ConflictFinding,
@@ -38,11 +40,13 @@ def _session(*, empty: bool):
         DuplicateReport,
     )
     from memcommit.providers.types import ProviderIdentity
-    from memcommit.application.capabilities.reviewing.quality.audit import (
+    from memcommit.application.operations.audit.application import create_quality_audit
+    from memcommit.application.operations.audit.model import (
         QUALITY_AUDIT_RULESETS,
         QualityAuditCheck,
         QualityAuditProvenance,
-        create_quality_audit,
+    )
+    from memcommit.application.operations.audit.resolution_adapter import (
         quality_audit_resolution_view,
     )
 
@@ -175,8 +179,10 @@ def _session(*, empty: bool):
 
 
 def _run_child(kind: str, store_root: Path) -> None:
-    from memcommit.adapters.console.commands.audit.command import run_quality_audit_review
-    from memcommit.application.capabilities.reviewing.quality.audit import quality_audit_record_digest
+    from memcommit.adapters.console.commands.audit.command import (
+        run_quality_audit_review,
+    )
+    from memcommit.application.operations.audit.model import quality_audit_record_digest
     from memcommit.persistence.store import MemoryStore
 
     session = _session(empty=kind == "empty")

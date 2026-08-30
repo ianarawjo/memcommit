@@ -17,15 +17,13 @@ from memcommit.adapters.console.terminal.core.theme import (
     semantic_color_rgb,
     semantic_quality_role,
 )
-from memcommit.application.capabilities.reviewing.quality.audit import (
-    QualityAuditSession,
-)
-from memcommit.application.capabilities.reviewing.quality.report import (
+from memcommit.application.operations.audit.model import QualityAuditSession
+from memcommit.application.capabilities.reviewing.memory_issue_finding.report import (
     QualityFindingReportItem,
     quality_find_category_label,
     quality_find_report_summary_text,
 )
-from memcommit.application.capabilities.reviewing.quality.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
     QualityFindSourceFrame,
     QualityFindWorkbenchSession,
     quality_find_report_view,

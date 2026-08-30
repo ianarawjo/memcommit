@@ -17,9 +17,7 @@ FORMER_COMMANDS = REPOSITORY / "src" / "memcommit" / "commands"
 LEGACY_NAMESPACE = "memcommit.commands"
 CANONICAL_NAMESPACE = "memcommit.adapters.console.commands"
 COORDINATION_NAMESPACE = "memcommit.adapters.console.coordination"
-OUTPUT_JSON = (
-    REPOSITORY / "agent-records" / "docs" / "command-package-layout-plan.json"
-)
+OUTPUT_JSON = REPOSITORY / "agent-records" / "docs" / "command-package-layout-plan.json"
 OUTPUT_MARKDOWN = (
     REPOSITORY / "agent-records" / "docs" / "command-package-layout-plan.md"
 )
@@ -97,6 +95,11 @@ ENTRY_TARGETS = {
     # The former semantic Find entry became Search, while provider-free
     # Literal Find became the canonical Find command.
     "find": "search",
+    # The historical internal names were inverted relative to the public CLI:
+    # find_duplicates ran semantic redundancy analysis, while
+    # find_exact_duplicates backed the provider-free find-duplicates route.
+    "find_duplicates": "find_redundancies",
+    "find_exact_duplicates": "find_duplicates",
     "help_inventory": "help",
     "literal_find": "find",
 }
@@ -131,7 +134,7 @@ OWNED_SUPPORT_TARGETS = {
     "compare_targeting": "compare.targeting",
     "comparison_execution": "compare.execution",
     "conflict_resolve_handoff": "find_conflicts.resolve_handoff",
-    "duplicate_dedup_handoff": "find_duplicates.dedup_handoff",
+    "duplicate_dedup_handoff": "find_redundancies.dedup_handoff",
     "find_chat_shell": "search.chat_shell",
     "find_materialization": "search.materialization",
     "find_search_workbench": "search.search_workbench",
@@ -497,9 +500,7 @@ def verify_layout(plan: dict[str, object]) -> None:
             if not package_init.is_file():
                 failures.append(f"missing command package boundary: {package_init}")
     removed = _removed_command_modules(plan)
-    retired = {
-        str(module) for module in plan.get("retired_legacy_modules", ())
-    }
+    retired = {str(module) for module in plan.get("retired_legacy_modules", ())}
     for path in (REPOSITORY / "src" / "memcommit").rglob("*.py"):
         try:
             tree = ast.parse(path.read_text(encoding="utf-8"))

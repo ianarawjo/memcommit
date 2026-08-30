@@ -1,4 +1,4 @@
-"""Private CAS persistence for completed Memory quality Audit sessions."""
+"""Operation-owned private CAS persistence for completed Audit sessions."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import uuid
 from pathlib import Path
 from typing import Iterator
 
-from memcommit.application.capabilities.reviewing.quality.audit import (
+from memcommit.application.operations.audit.model import (
     QualityAuditError,
     QualityAuditSession,
     quality_audit_record_digest,

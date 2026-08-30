@@ -5,7 +5,10 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.access import ContextAccess, authorized_context_mutation
+from memcommit.application.capabilities.authority.access import (
+    ContextAccess,
+    authorized_context_mutation,
+)
 from memcommit.core.context import AutoCheckpoint, Memory, MemoryRef
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.readable_catalog import ReadableContextCatalog
@@ -24,9 +27,15 @@ from memcommit.application.operations.dedun.application import (
 )
 from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
 from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.application.capabilities.reviewing.quality.workbench import QualityFindSourceFrame
-from memcommit.application.capabilities.reviewing.quality.handoff import QualityFindingSource
-from memcommit.application.capabilities.reviewing.quality.redundancy_scope import RedundancyScopeAnalysis
+from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+    QualityFindSourceFrame,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
+    QualityFindingSource,
+)
+from memcommit.application.capabilities.reviewing.memory_issue_finding.redundancy_scope import (
+    RedundancyScopeAnalysis,
+)
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
@@ -229,9 +238,7 @@ def _project_dedun_scope_effect(
         for member in component.members
         if member.uid != selection.survivor_uid
     )
-    exact_survivors = tuple(
-        group.survivor_uid for group in plan.exact_item_groups
-    )
+    exact_survivors = tuple(group.survivor_uid for group in plan.exact_item_groups)
     exact_absorbed = tuple(
         uid for group in plan.exact_item_groups for uid in group.absorbed_uids
     )
@@ -301,9 +308,7 @@ def _dedun_scope_record(
             }
             for group in plan.exact_item_groups
         ],
-        "redundancy_evidence_uids": [
-            handoff.uid for handoff in plan.request.handoffs
-        ],
+        "redundancy_evidence_uids": [handoff.uid for handoff in plan.request.handoffs],
         "survivor_uids": list(projection.survivor_uids),
         "absorbed_uids": list(projection.absorbed_uids),
     }
@@ -316,9 +321,7 @@ def _memory_absorptions(
     semantic_members = {
         member.uid for component in plan.components for member in component.members
     }
-    return {
-        uid for uid in projection.absorbed_uids if uid in semantic_members
-    } | {
+    return {uid for uid in projection.absorbed_uids if uid in semantic_members} | {
         uid
         for group in plan.exact_item_groups
         if group.item_kind == "MEMORY"
@@ -359,9 +362,7 @@ def apply_recursive_dedun_scope(
             "The Context namespace changed during recursive Dedun; nothing was written."
         )
     graph = tuple(active_store.load_direct_context_graph_strict())
-    graph_digests = {
-        context.name: context_record_digest(context) for context in graph
-    }
+    graph_digests = {context.name: context_record_digest(context) for context in graph}
     applications: list[
         tuple[PreparedDedunContext, FrozenDedunPlan, DedunScopeProjection]
     ] = []
@@ -414,8 +415,7 @@ def apply_recursive_dedun_scope(
         "include_descendants": True,
     }
     total_absorbed = sum(
-        len(projection.absorbed_uids)
-        for _frame, _plan, projection in applications
+        len(projection.absorbed_uids) for _frame, _plan, projection in applications
     )
     description = (
         f"Resolved recursive Dedun across {len(applications)} Context(s); "
@@ -427,9 +427,7 @@ def apply_recursive_dedun_scope(
         changed_names.add(plan.context_name)
         current = active_store.load_for_update(plan.context_name)
         semantic_members = {
-            member.uid
-            for component in plan.components
-            for member in component.members
+            member.uid for component in plan.components for member in component.members
         }
         for uid in projection.absorbed_uids:
             if uid in semantic_members and not isinstance(

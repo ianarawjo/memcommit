@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from typing import Literal, Sequence
 
 from memcommit.core.context import Context, Memory
-from memcommit.application.capabilities.reviewing.quality.findings import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -22,7 +22,7 @@ from memcommit.application.capabilities.reviewing.quality.findings import (
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.application.capabilities.reviewing.quality.report import (
+from memcommit.application.capabilities.reviewing.memory_issue_finding.report import (
     QualityFindReportView,
     QualityFindingReading,
     QualityFindingReportItem,
@@ -40,7 +40,10 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionWorkbenchView,
     resolution_overview_text,
 )
-from memcommit.application.operations.review.model import REVIEW_RESPONSE_CHAR_LIMIT, direct_context_digest
+from memcommit.application.operations.review.model import (
+    REVIEW_RESPONSE_CHAR_LIMIT,
+    direct_context_digest,
+)
 
 
 QualityFindKind = Literal["duplicates", "ambiguities", "conflicts"]
