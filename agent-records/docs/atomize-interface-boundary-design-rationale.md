@@ -36,8 +36,8 @@ component owns the one-logical-line text and semantic token styling, while
 Atomize owns classification and projection of its audit records.
 
 There is no `commands/atomize/grounding.py`. The removed interface and facade
-paths are not compatibility shims; only legacy data models and Store handlers
-remain, as described in
+paths are not compatibility shims, and no legacy data model or Store handler
+remains, as described in
 [`atomize-grounding-application-boundary-design-rationale.md`](atomize-grounding-application-boundary-design-rationale.md).
 
 ## Invariants

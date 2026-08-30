@@ -349,16 +349,6 @@ class _ContextLifecycleMixin:
             if canonical_context_uid == context_uid
             else None
         )
-        grounding_path = (
-            self._atomize_grounding_session_path(context_uid)
-            if canonical_context_uid == context_uid
-            else None
-        )
-        grounding_history_dir = (
-            self._atomize_grounding_history_dir(context_uid)
-            if canonical_context_uid == context_uid
-            else None
-        )
         atomize_session_history_dir = (
             self.atomize_session_history_dir / context_uid
             if canonical_context_uid == context_uid
@@ -377,7 +367,6 @@ class _ContextLifecycleMixin:
         for artifact, label in (
             (analysis_path, "Atomize analysis"),
             (workbench_path, "Atomize workbench"),
-            (grounding_path, "Atomize grounding"),
             (meld_path, "Meld session"),
         ):
             if (
@@ -386,15 +375,6 @@ class _ContextLifecycleMixin:
                 and (not artifact.is_file() or artifact.is_symlink())
             ):
                 raise ValueError(f"{label} storage is invalid.")
-        if (
-            grounding_history_dir is not None
-            and grounding_history_dir.exists()
-            and any(
-                child.is_symlink() or not child.is_file() or child.suffix != ".json"
-                for child in grounding_history_dir.iterdir()
-            )
-        ):
-            raise ValueError("Atomize grounding history is invalid.")
         review_session = self.load_review_session()
         retained_reviews = self.list_review_sessions()
         delete_review_session = (
@@ -537,11 +517,6 @@ class _ContextLifecycleMixin:
             # Workbench responses may contain free-form user context. They are
             # scoped to the deleted Context and must not survive it.
             attempt_cleanup("Atomize workbench", workbench_path.unlink)
-        if grounding_path is not None and grounding_path.exists():
-            # Grounding turns retain the reviewer's words verbatim. Keeping
-            # them after their exact Context is gone would be both misleading
-            # state and an avoidable privacy leak.
-            attempt_cleanup("Atomize grounding", grounding_path.unlink)
         if meld_path is not None and meld_path.exists():
             # Meld dialogue may retain both source text and verbatim user
             # comments. Its privacy and validity lifetime is the target.
@@ -562,18 +537,6 @@ class _ContextLifecycleMixin:
             "rationale inference cache",
             lambda: delete_rationale_inference_paths(rationale_inference_paths),
         )
-        if grounding_history_dir is not None and grounding_history_dir.exists():
-            # Terminal dialogues contain the same verbatim local evidence as
-            # the latest slot and share the deleted Context's privacy lifetime.
-            def remove_grounding_history() -> None:
-                shutil.rmtree(grounding_history_dir)
-                _fsync_directory(grounding_history_dir.parent)
-                try:
-                    self.atomize_grounding_history_dir.rmdir()
-                except OSError:
-                    pass
-
-            attempt_cleanup("Atomize grounding history", remove_grounding_history)
         if (
             atomize_session_history_dir is not None
             and atomize_session_history_dir.exists()

@@ -67,8 +67,6 @@ def _configure_store(store_dir: Path) -> None:
     store_module.REVIEW_SESSION_FILE = store_dir / "review-session.json"
     store_module.ATOMIZE_ANALYSES_DIR = store_dir / "atomize-analyses"
     store_module.ATOMIZE_WORKBENCHES_DIR = store_dir / "atomize-workbenches"
-    store_module.ATOMIZE_GROUNDING_SESSIONS_DIR = store_dir / "atomize-groundings"
-    store_module.ATOMIZE_GROUNDING_HISTORY_DIR = store_dir / "atomize-grounding-history"
     store_module.GROUND_SESSIONS_DIR = store_dir / "ground-sessions"
     store_module.MELD_SESSIONS_DIR = store_dir / "meld-sessions"
 

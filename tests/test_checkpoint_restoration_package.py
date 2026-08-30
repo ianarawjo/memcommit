@@ -66,7 +66,6 @@ EXPECTED_METHODS = {
     "command_restoration/handlers/companion_sessions.py": {
         "_prepare_sever_command_restore",
         "_prepare_meld_command_restore",
-        "_prepare_atomize_grounding_command_restore",
         "_prepare_update_command_restore",
     },
 }
@@ -92,7 +91,7 @@ def test_checkpoint_and_restoration_methods_have_one_owner() -> None:
     }
     assert actual == EXPECTED_METHODS
     all_methods = [method for methods in actual.values() for method in methods]
-    assert len(all_methods) == len(set(all_methods)) == 24
+    assert len(all_methods) == len(set(all_methods)) == 23
 
 
 def test_checkpoint_and_restoration_surfaces_preserve_composition() -> None:

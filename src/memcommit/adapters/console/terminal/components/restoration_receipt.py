@@ -733,8 +733,6 @@ def _restored_command(unit: ContextCommandUnit) -> str:
             if unit.changes and unit.changes[0].before is None:
                 return f"mem atomize --save-as {_command_arg(context_name)}"
             return f"mem atomize --save --context {_command_arg(context_name)}"
-    if unit.command == "atomize-grounding" and context_name is not None:
-        return "mem atomize --accept-grounding --context " + _command_arg(context_name)
     if unit.command == "dev query-source install" and all(
         isinstance(args.get(key), str) for key in ("name", "into")
     ):

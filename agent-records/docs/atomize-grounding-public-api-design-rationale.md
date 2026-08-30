@@ -1,5 +1,9 @@
 # Atomize Grounding public Python API
 
+> Historical record: this API was retired on 2026-08-29. Its remaining model
+> and persistence compatibility was removed on 2026-08-30; the lifecycle below
+> is no longer callable.
+
 ## Motivation
 
 The Atomize Grounding lifecycle already had a terminal-independent application

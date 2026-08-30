@@ -40,7 +40,6 @@ from memcommit.application.capabilities.retained_history.memory_history_reconstr
     _frame_equal,
     _frame_from_context,
     _frame_from_snapshot,
-    _grounding_change_evidence,
     _history_change_matches_snapshot,
     _meld_change_evidence,
     _ordered_states,
@@ -988,18 +987,6 @@ def _transition_events(
     added -= consumed_after
     changed -= consumed_before | consumed_after
 
-    grounding_changes: dict[str, dict[str, Any]] = {}
-    if command == "atomize-grounding":
-        grounding_changes, grounding_error = _grounding_change_evidence(
-            args=args,
-            before=before,
-            after=after,
-        )
-        if grounding_error is not None:
-            warnings.append(
-                f"Checkpoint [{checkpoint_uid[:8]}] {grounding_error}; "
-                "its changes were reconstructed from snapshots."
-            )
     meld_changes: dict[str, dict[str, Any]] = {}
     if command == "meld":
         meld_changes, meld_error = _meld_change_evidence(
@@ -1064,14 +1051,13 @@ def _transition_events(
         )
 
     for uid in sorted(changed, key=lambda item: after.memories[item].position):
-        grounding = grounding_changes.get(uid)
         meld = meld_changes.get(uid)
         events.append(
             MemoryHistoryEvent(
                 kind="EDITED",
                 evidence=(
                     "RECORDED"
-                    if (command == "edit" or grounding is not None or meld is not None)
+                    if (command == "edit" or meld is not None)
                     else "RECONSTRUCTED"
                 ),
                 timestamp=timestamp,
@@ -1080,68 +1066,31 @@ def _transition_events(
                 description=description,
                 before=(before.memories[uid],),
                 after=(after.memories[uid],),
-                reason=(
-                    grounding["reason"]
-                    if grounding is not None
-                    else (meld["reason"] if meld is not None else None)
-                ),
+                reason=meld["reason"] if meld is not None else None,
                 reason_codes=(
-                    ("ATOMIZE_GROUNDING",)
-                    if grounding is not None
-                    else (
-                        (
-                            "MELD",
-                            "EDIT",
-                            meld["disposition"],
-                        )
-                        if meld is not None
-                        else ()
-                    )
+                    ("MELD", "EDIT", meld["disposition"])
+                    if meld is not None
+                    else ()
                 ),
-                operation_id=(
-                    grounding["session_uid"]
-                    if grounding is not None
-                    else (meld["session_uid"] if meld is not None else None)
-                ),
+                operation_id=meld["session_uid"] if meld is not None else None,
                 declared_frame=(
-                    grounding["declared_frame"]
-                    if grounding is not None
-                    else (meld["declared_frame"] if meld is not None else None)
+                    meld["declared_frame"] if meld is not None else None
                 ),
                 declared_frame_digest=(
                     hashlib.sha256(
-                        grounding["declared_frame"].encode("utf-8")
+                        meld["declared_frame"].encode("utf-8")
                     ).hexdigest()
-                    if grounding is not None
-                    else (
-                        hashlib.sha256(
-                            meld["declared_frame"].encode("utf-8")
-                        ).hexdigest()
-                        if meld is not None
-                        else None
-                    )
+                    if meld is not None
+                    else None
                 ),
                 uncertainty_reason=(
-                    "Applied after a multi-turn atomize grounding dialogue."
-                    if grounding is not None
-                    else (
-                        "Edited by an accepted directional Context meld."
-                        if meld is not None
-                        else None
-                    )
+                    "Edited by an accepted directional Context meld."
+                    if meld is not None
+                    else None
                 ),
-                source_review_uid=(
-                    grounding["session_uid"]
-                    if grounding is not None
-                    else (meld["session_uid"] if meld is not None else None)
-                ),
+                source_review_uid=meld["session_uid"] if meld is not None else None,
                 source_review_digest=(
-                    grounding["change_set_digest"]
-                    if grounding is not None
-                    else (meld["change_set_digest"] if meld is not None else None)
-                ),
-                source_analysis_uid=(
-                    grounding["source_analysis_uid"] if grounding is not None else None
+                    meld["change_set_digest"] if meld is not None else None
                 ),
             )
         )
@@ -1195,7 +1144,6 @@ def _transition_events(
     )
     for uid in sorted(added, key=lambda item: after.memories[item].position):
         occurrence, occurrence_evidence = occurrences.get(uid, (None, None))
-        grounding = grounding_changes.get(uid)
         meld = meld_changes.get(uid)
         event_kind: MemoryHistoryEventKind = (
             "MERGED_IN"
@@ -1203,9 +1151,7 @@ def _transition_events(
             else ("MELDED" if meld is not None else "CREATED")
         )
         evidence: MemoryHistoryEvidence
-        if grounding is not None:
-            evidence = "RECORDED"
-        elif meld is not None:
+        if meld is not None:
             evidence = "RECORDED"
         elif occurrence_evidence is not None:
             evidence = occurrence_evidence
@@ -1225,83 +1171,46 @@ def _transition_events(
                 description=description,
                 after=(after.memories[uid],),
                 reason=(
-                    grounding["reason"]
-                    if grounding is not None
+                    meld["reason"]
+                    if meld is not None
                     else (
-                        meld["reason"]
-                        if meld is not None
-                        else (
-                            "Copied into this Context's source-based initial "
-                            f"frame from '{source_context['name']}'."
-                            if recorded_init_copy
-                            else None
-                        )
+                        "Copied into this Context's source-based initial "
+                        f"frame from '{source_context['name']}'."
+                        if recorded_init_copy
+                        else None
                     )
                 ),
                 reason_codes=(
-                    ("ATOMIZE_GROUNDING",)
-                    if grounding is not None
-                    else (
-                        (
-                            "MELD",
-                            "ADD",
-                            meld["disposition"],
-                        )
-                        if meld is not None and meld["mode"] == "DIRECTIONAL"
-                        else ("MELD", meld["disposition"])
-                        if meld is not None
-                        else ()
-                    )
+                    ("MELD", "ADD", meld["disposition"])
+                    if meld is not None and meld["mode"] == "DIRECTIONAL"
+                    else ("MELD", meld["disposition"])
+                    if meld is not None
+                    else ()
                 ),
                 source_occurrence=occurrence,
-                operation_id=(
-                    grounding["session_uid"]
-                    if grounding is not None
-                    else (meld["session_uid"] if meld is not None else None)
-                ),
+                operation_id=meld["session_uid"] if meld is not None else None,
                 declared_frame=(
-                    grounding["declared_frame"]
-                    if grounding is not None
-                    else (meld["declared_frame"] if meld is not None else None)
+                    meld["declared_frame"] if meld is not None else None
                 ),
                 declared_frame_digest=(
                     hashlib.sha256(
-                        grounding["declared_frame"].encode("utf-8")
+                        meld["declared_frame"].encode("utf-8")
                     ).hexdigest()
-                    if grounding is not None
-                    else (
-                        hashlib.sha256(
-                            meld["declared_frame"].encode("utf-8")
-                        ).hexdigest()
-                        if meld is not None
-                        else None
-                    )
+                    if meld is not None
+                    else None
                 ),
                 uncertainty_reason=(
-                    "Created after a multi-turn atomize grounding dialogue."
-                    if grounding is not None
-                    else (
-                        (
-                            "Added by an accepted directional Context meld."
-                            if meld["mode"] == "DIRECTIONAL"
-                            else ("Created by an accepted symmetric Context meld.")
-                        )
-                        if meld is not None
-                        else None
+                    (
+                        "Added by an accepted directional Context meld."
+                        if meld["mode"] == "DIRECTIONAL"
+                        else "Created by an accepted symmetric Context meld."
                     )
+                    if meld is not None
+                    else None
                 ),
-                source_review_uid=(
-                    grounding["session_uid"]
-                    if grounding is not None
-                    else (meld["session_uid"] if meld is not None else None)
-                ),
+                source_review_uid=meld["session_uid"] if meld is not None else None,
                 source_review_digest=(
-                    grounding["change_set_digest"]
-                    if grounding is not None
-                    else (meld["change_set_digest"] if meld is not None else None)
-                ),
-                source_analysis_uid=(
-                    grounding["source_analysis_uid"] if grounding is not None else None
+                    meld["change_set_digest"] if meld is not None else None
                 ),
             )
         )

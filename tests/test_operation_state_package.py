@@ -38,8 +38,6 @@ EXPECTED_METHODS = {
         "atomize_analyses_dir",
         "atomize_workbenches_dir",
         "atomize_session_history_dir",
-        "atomize_grounding_sessions_dir",
-        "atomize_grounding_history_dir",
         "meld_sessions_dir",
         "meld_session_history_dir",
         "meld_resolution_branches_dir",
@@ -135,12 +133,6 @@ EXPECTED_METHODS = {
         "delete_atomize_session_history",
         "load_atomize_session_history",
         "list_atomize_session_history",
-        "_atomize_grounding_session_path",
-        "_atomize_grounding_history_dir",
-        "_atomize_grounding_history_path",
-        "load_atomize_grounding_session",
-        "save_atomize_grounding_session",
-        "load_atomize_grounding_history",
     },
 }
 
@@ -166,7 +158,7 @@ def test_operation_state_methods_have_one_focused_owner() -> None:
     }
     assert actual == EXPECTED_METHODS
     all_methods = [method for methods in actual.values() for method in methods]
-    assert len(all_methods) == len(set(all_methods)) == 103
+    assert len(all_methods) == len(set(all_methods)) == 95
 
 
 def test_operation_state_surface_composes_in_dependency_order() -> None:

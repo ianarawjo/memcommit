@@ -68,8 +68,6 @@ from ..infrastructure import protection as _protection_module
 from ..infrastructure.locking import _StoreLockingMixin
 from ..infrastructure.paths import (
     ATOMIZE_ANALYSES_DIR,
-    ATOMIZE_GROUNDING_HISTORY_DIR,
-    ATOMIZE_GROUNDING_SESSIONS_DIR,
     ATOMIZE_SESSION_HISTORY_DIR,
     ATOMIZE_WORKBENCHES_DIR,
     CONTEXTS_DIR,
@@ -145,8 +143,6 @@ class _OperationStateCompatibilityModule(ModuleType):
 
 __all__ = [
     "ATOMIZE_ANALYSES_DIR",
-    "ATOMIZE_GROUNDING_HISTORY_DIR",
-    "ATOMIZE_GROUNDING_SESSIONS_DIR",
     "ATOMIZE_SESSION_HISTORY_DIR",
     "ATOMIZE_WORKBENCHES_DIR",
     "AutoCheckpoint",

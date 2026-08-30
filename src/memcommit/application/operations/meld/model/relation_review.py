@@ -415,7 +415,7 @@ def validate_meld_turn_lineage(
     revises_turn_uids: Iterable[str],
     known_turn_uids: Iterable[str],
 ) -> None:
-    """Validate turn lineage shared by meld and atomize-grounding adapters."""
+    """Validate turn lineage for one Meld review session."""
     revises = tuple(revises_turn_uids)
     known = set(known_turn_uids)
     if revision not in _REVISIONS:

@@ -40,7 +40,6 @@ def test_retained_record_verification_has_focused_physical_owners() -> None:
         "validators/atomize.py",
         "validators/branch.py",
         "validators/chunk.py",
-        "validators/grounding.py",
         "validators/meld.py",
         "validators/merge.py",
     }

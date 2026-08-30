@@ -1,6 +1,6 @@
 # Atomize read-only findings and receipt boundary
 
-Last reviewed: 2026-08-29.
+Last reviewed: 2026-08-30.
 
 ## Problem
 
@@ -74,18 +74,19 @@ contracts expose `open`, Output planning, in-place Apply, and Save As. Response
 update, response reanalysis, incorporate-and-apply, and Atomize Grounding
 methods/tools are not public routes.
 
-## Legacy record compatibility
+## Retired record boundary
 
-Previously persisted Atomize workbenches can still contain response fields,
-and the Store can still contain Atomize Grounding sessions, history, and
-checkpoint payloads. Their model decoders, history validation, deletion
-cleanup, and Undo/Redo restoration remain so retained records can be loaded and
-verified. Active commands never author or consume those fields. This is a
-read/restore compatibility boundary, not a hidden executable Grounding route.
+Previously persisted Atomize workbenches may still contain obsolete response
+fields, but no current route consumes them. Atomize Grounding sessions and
+history have no model decoder, Store path, history validator, Context cleanup,
+or Undo/Redo companion-session handler. Historical checkpoints may still be
+read generically from their Context snapshots; their Grounding payload is not
+interpreted as current operation evidence.
 
-Legacy data is intentionally not migrated or deleted automatically. Rewriting
-it during an unrelated Atomize run would discard provenance and could make an
-old checkpoint unverifiable.
+Existing Grounding files are intentionally not migrated or deleted
+automatically. They are inert artifacts, and any later removal or archival
+must be an explicit data-lifecycle operation rather than an Atomize side
+effect.
 
 ## Alternatives considered
 
@@ -98,15 +99,17 @@ Keeping the conversational UI but treating it as optional was rejected because
 the UI, response persistence, provider reanalysis, and compound Apply route
 would still make resolution part of Atomize's public responsibility.
 
-Deleting legacy Grounding models and Store paths was rejected because old
-history and restoration records remain valid research evidence.
+Keeping legacy Grounding models and Store paths was rejected because it made
+unrelated persistence, deletion, history, and restoration layers continue to
+own a retired Atomize sub-workflow. Common Context snapshots preserve the
+Memory-state evidence without preserving that operation contract.
 
 ## Verification and limits
 
 Focused tests cover the one-line receipt, ambiguity projection, read-only
 Review, absent response and Grounding public routes, strict agent schema,
-provider-free saved review, legacy Grounding decoding, and checkpoint
-restoration. The ordered 180×52 terminal record under
+provider-free saved review, and generic checkpoint restoration. The ordered
+180×52 terminal record under
 `agent-records/docs/screenshots/atomize-read-only-findings-20260829/` captures
 analysis, immutable finding detail, Apply receipt, and post-Apply read-only
 review.

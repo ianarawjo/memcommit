@@ -46,8 +46,6 @@ def _isolate_store(root: Path) -> None:
         "REVIEW_SESSION_FILE": store_dir / "review-session.json",
         "ATOMIZE_ANALYSES_DIR": store_dir / "atomize-analyses",
         "ATOMIZE_WORKBENCHES_DIR": store_dir / "atomize-workbenches",
-        "ATOMIZE_GROUNDING_SESSIONS_DIR": store_dir / "atomize-groundings",
-        "ATOMIZE_GROUNDING_HISTORY_DIR": store_dir / "atomize-grounding-history",
         "GROUND_SESSIONS_DIR": store_dir / "ground-sessions",
         "MELD_SESSIONS_DIR": store_dir / "meld-sessions",
     }

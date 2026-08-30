@@ -2,6 +2,10 @@
 
 Last verified: 2026-08-15.
 
+> Historical record: this agent tool was retired on 2026-08-29. Its remaining
+> model and persistence compatibility was removed on 2026-08-30; the contract
+> below is no longer registered or callable.
+
 ## Motivation
 
 Conversational Atomize Grounding already has one durable application workflow

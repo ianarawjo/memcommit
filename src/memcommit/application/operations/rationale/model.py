@@ -259,7 +259,6 @@ def _recorded_reason_events(trace: MemoryHistory) -> tuple[MemoryHistoryEvent, .
         if event.reason
         and (
             event.kind not in {"CREATED", "MERGED_IN", "MELDED"}
-            or event.command == "atomize-grounding"
             or event.command == "meld"
         )
     )

@@ -1,5 +1,11 @@
 # Conversational grounding for semantic review
 
+> Historical record: the Atomize Grounding routes described below were
+> retired on 2026-08-29, and their remaining model, persistence, history,
+> cleanup, and restoration compatibility was removed on 2026-08-30. This
+> document preserves the explored design; it does not describe current
+> callable behavior.
+
 ## Status
 
 This note records the implemented atomize-specific conversational loop and the

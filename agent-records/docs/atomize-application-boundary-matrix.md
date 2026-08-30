@@ -9,9 +9,10 @@ response reanalysis, compound incorporation, and executable Atomize Grounding
 are removed. Findings remain immutable evidence and
 `ATOMIZE_UNCERTAINTY` is presented externally as `AMBIGUITY`.
 
-Legacy workbench response fields, Grounding models, Store paths, retained
-history validation, and Undo/Redo restoration remain read/restore-only
-compatibility. They are not current routes.
+Legacy workbench response fields remain serialized but unused. Grounding
+models, Store paths, retained-history validation, Context cleanup, and
+companion Undo/Redo restoration are removed; historical Context snapshots use
+only the common reconstruction and restoration paths.
 
 The response/reanalysis/Grounding rows later in this document are retained as
 historical extraction evidence and are superseded by
@@ -41,20 +42,17 @@ Domain and saved analysis records remain independent of Store, provider
 decoding remains non-mutating, normal-form planning publishes no partial
 state, and both presentation adapters remain read-only projections.
 
-The `grounding` package remains only as the canonical decoder and validator
-for previously persisted Grounding schemas. The executable
-`grounding_application`, `grounding_provider`, `grounding_runtime`, and
-`grounding_meld_adapter` modules and their console/Python/agent adapters are
-removed rather than retained as callable compatibility aliases. Structural
-legacy facades that are unrelated to Grounding continue to preserve their
-existing import identity.
+The `grounding` package and the executable `grounding_application`,
+`grounding_provider`, `grounding_runtime`, and `grounding_meld_adapter`
+modules are removed together with their Store, history, restoration,
+console, Python, and agent adapters. Structural legacy facades that are
+unrelated to Grounding continue to preserve their existing import identity.
 
-The responsibility revision does not change analysis, workbench, or legacy
-Grounding schema versions; semantic planning bounds; complete-frame exposure;
-strict provider decoding; CAS and checkpoint behavior; or Dedun-backed
-normal-form validation. It changes which saved fields are actionable: legacy
-response and Grounding data can still be decoded and restored, but cannot
-initiate new Atomize execution.
+The responsibility revision does not change analysis or workbench schema
+versions; semantic planning bounds; complete-frame exposure; strict provider
+decoding; CAS and checkpoint behavior; or Dedun-backed normal-form validation.
+Legacy response bytes still participate only in workbench stale-state safety;
+Grounding artifacts have no active decoder or restoration contract.
 
 ## Current execution junction
 
@@ -195,7 +193,7 @@ analysis only.
 | Save-as structural Apply | new Context, one Atomize creation checkpoint, copied analysis, current-pointer CAS, Source terminal receipt | one Undo/Redo removes/restores the complete created Context and Source receipt | verified as one command unit for new histories |
 | Save-as failure after publication | exact inspectable new Context in its last durable phase; Source unchanged | exact retry completes missing receipt/selection without a second checkpoint | verified retained-publication recovery |
 | Structural Apply receipt failure | synchronous pre-commit failure exposes no Context effect; a prior exact checkpoint is recoverable without replay | checkpoint/receipt pair remains one application outcome | verified for local in-place Apply |
-| Legacy Grounding checkpoint | no new route writes one; retained history can still be restored | legacy Undo/Redo and decoder tests | preserve historical bytes without reviving Grounding execution |
+| Legacy Grounding checkpoint | no new route writes one; generic before/after snapshots remain readable | Context snapshot restoration only; no companion session synchronization | keep artifact bytes inert without reviving Grounding ownership |
 
 ## Hidden prewarm and visible-session boundary
 
@@ -273,10 +271,9 @@ schema, semantic budgets, or reconciliation.
 The package groups related ownership without merging slice contracts. Primary
 structural application remains in `application` / `runtime`; analysis open,
 reuse, refresh, provider/cache, and pair-publication policy remains in
-`analysis_application` / `analysis_runtime`. Grounding executable siblings no
-longer exist; only the `grounding` schema package remains for legacy
-load/history/restoration. No shared package location creates resolution or
-mutation authority.
+`analysis_application` / `analysis_runtime`. Grounding executable siblings,
+schema package, and legacy load/history/restoration handlers no longer exist.
+No shared package location creates resolution or mutation authority.
 
 The opaque session revision binds the immutable analysis record and complete
 workbench record, including legacy response bytes, Output plan, and any
@@ -343,7 +340,7 @@ explicit refresh, stale rejection, and analysis/workbench pair restoration.
 - no provider-prompt or Atomize classification change;
 - no change to `APPLY`, `APPLY AS IS`, or ownership-aware presentation policy;
 - no deletion or cleanup of a published save-as destination;
-- no migration or deletion of legacy Grounding schemas;
+- no migration or deletion of inert legacy Grounding artifact files;
 - no conversion of pair-shaped conflicts into unary provider guidance; and
 - no expansion from local ordinary Contexts to Grant-authorized mutation.
 

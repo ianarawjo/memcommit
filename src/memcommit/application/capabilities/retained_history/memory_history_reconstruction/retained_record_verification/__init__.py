@@ -39,7 +39,6 @@ from .validators.atomize import (
 )
 from .validators.branch import _RecordedBranchTransition, _recorded_branch_transition
 from .validators.chunk import _checkpoint_chunk_options, _replay_checkpoint_chunk
-from .validators.grounding import _grounding_change_evidence
 from .validators.meld import _meld_change_evidence
 from .validators.merge import (
     _RecordedMergeEdge,
@@ -73,7 +72,6 @@ __all__ = [
     "_frame_equal",
     "_frame_from_context",
     "_frame_from_snapshot",
-    "_grounding_change_evidence",
     "_history_change_matches_snapshot",
     "_meld_change_evidence",
     "_ordered_states",

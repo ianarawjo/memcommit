@@ -102,8 +102,6 @@ def _configure_store(root: Path) -> None:
         "REVIEW_SESSION_FILE": root / "review-session.json",
         "ATOMIZE_ANALYSES_DIR": root / "atomize-analyses",
         "ATOMIZE_WORKBENCHES_DIR": root / "atomize-workbenches",
-        "ATOMIZE_GROUNDING_SESSIONS_DIR": root / "atomize-groundings",
-        "ATOMIZE_GROUNDING_HISTORY_DIR": root / "atomize-grounding-history",
         "GROUND_SESSIONS_DIR": root / "ground-sessions",
         "MELD_SESSIONS_DIR": root / "meld-sessions",
     }.items():

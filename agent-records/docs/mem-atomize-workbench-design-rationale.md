@@ -10,8 +10,9 @@ provider-free and read-only after Apply; it has no Responses frame.
 The current flow is analysis → exact structural Apply/Save As → complete
 one-line unresolved-issue receipt → read-only Review. Atomize Grounding and its
 console, Python, agent, provider, runtime, and Meld adapter routes are retired.
-Legacy response and Grounding records remain decodable only for history and
-restoration compatibility.
+Legacy response fields remain serialized but unused. Grounding model,
+persistence, history, cleanup, and restoration compatibility were removed on
+2026-08-30; only generic Context snapshot history/restoration remains.
 
 The detailed response, `--with-review`, and Grounding sections below are
 retained as a historical implementation record. They are not current behavior

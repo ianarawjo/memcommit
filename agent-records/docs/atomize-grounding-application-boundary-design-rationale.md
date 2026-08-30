@@ -1,6 +1,6 @@
 # Retired Atomize Grounding application boundary
 
-Last reviewed: 2026-08-29.
+Last reviewed: 2026-08-30.
 
 ## Current status
 
@@ -16,56 +16,63 @@ Atomize records structural ambiguity or conflict but does not resolve it.
 Resolution or disambiguation belongs to a later independent operation, not to
 an Atomize sub-workflow.
 
-## Preserved compatibility boundary
+## Removed compatibility boundary
 
-The model package at
-`memcommit.application.operations.atomize.grounding` remains solely to decode
-and validate records written by earlier versions. Store paths and methods for
-the latest session and retained session history also remain. They are used by:
+The former read/restore-only compatibility surface is also removed. There is
+no `memcommit.application.operations.atomize.grounding` model package, Store
+path or reader, Context-deletion hook, retained-history validator, companion
+Undo/Redo restoration, or exact-command reconstruction for Atomize Grounding.
+Keeping those readers made persistence, history, deletion, and restoration
+continue to recognize Grounding as an Atomize-owned operation even after its
+executable route was retired.
 
-- retained-history and checkpoint verification;
-- Undo/Redo restoration of historical Atomize Grounding checkpoints;
-- Context deletion cleanup; and
-- tests that prove old serialized records still round-trip and fail closed
-  when malformed.
+Historical `atomize-grounding` checkpoints still contain ordinary before and
+after Context snapshots. Common history reconstruction may therefore report
+their Memory changes from snapshots, and command restoration may restore the
+Context state without synchronizing a retired companion session. It no longer
+validates or projects the Grounding dialogue, proposals, reasons, or exact
+resume command.
 
-No active Atomize command, Python facade, agent adapter, provider path, or Meld
-path imports this package to start new work. Compatibility code may restore the
-bytes belonging to an old command unit, but it cannot reassess a turn or apply
-a new Grounding proposal.
+Existing `atomize-groundings/` and `atomize-grounding-history/` files are left
+untouched as inert user artifacts. No current operation reads, writes,
+restores, or deletes them. Automatic deletion or migration would be a separate
+data-lifecycle decision and is intentionally outside this boundary change.
 
 ## Invariants
 
 1. New Atomize execution never authors a Grounding session, turn, response,
    decision, proposal, or history record.
-2. Loading or restoring legacy Grounding data performs no provider call and
-   grants no new mutation authority.
-3. Existing Grounding checkpoint payloads remain verifiable; Context deletion
-   still removes only the matching Context's legacy artifacts.
+2. Persistence, retained history, Context deletion, and Undo/Redo contain no
+   Atomize Grounding-specific branch.
+3. Historical Context snapshots remain generic history/restoration input, but
+   Grounding-specific payloads have no active decoder or semantic authority.
 4. The absence of a current resolution route is explicit. Atomize does not
    manufacture a handoff schema or silently reinterpret a finding.
-5. Historical data is not rewritten or deleted merely because a newer
-   Atomize analysis runs.
+5. Existing artifact files are not rewritten or deleted merely because the
+   compatibility code was removed.
 
 ## Alternatives considered
 
 Keeping a dormant public Grounding facade was rejected because a callable
 Start or Reply method would still advertise issue resolution as an Atomize
 responsibility. Keeping only the data model draws a testable line between
-historical compatibility and current capability.
+historical compatibility and current capability, but it was ultimately
+rejected because the Store and history layers still had to own that model.
 
 Automatically translating legacy dialogues into a new resolution record was
 also rejected. There is no independently specified consumer contract yet, and
 translation could invent provenance or resolution semantics.
 
-Deleting every Grounding type and Store path was rejected because old
-checkpoints and research records would become unreadable and restoration could
-no longer validate their exact command unit.
+The earlier decision to keep every Grounding type and Store path for legacy
+decoding was reconsidered. It preserved operation ownership throughout the
+Store, history, restoration, and deletion layers without an active consumer.
+Generic Context snapshots retain the durable Memory-state evidence that common
+history and restoration need; the Grounding dialogue itself is no longer a
+supported runtime contract.
 
 ## Verification
 
-Ownership tests assert that every executable Grounding module and adapter is
-absent while the legacy model remains lazy and concept-owned. Model,
-retained-history, Store lifecycle, and restoration suites retain coverage for
-old records. Public Python and agent tests assert that no Grounding route is
-exported or registered.
+Ownership tests assert that every executable, model, persistence, and history
+Grounding module is absent. Store, restoration, retained-history, public
+Python, and agent tests cover the remaining generic boundaries and assert that
+no Grounding route is exported or registered.

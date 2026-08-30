@@ -254,8 +254,6 @@ class _CommandRestorationEngineMixin:
             return self._prepare_meld_command_restore(unit, direction)
         if unit.command == "sever":
             return self._prepare_sever_command_restore(unit, direction)
-        if unit.command == "atomize-grounding":
-            return self._prepare_atomize_grounding_command_restore(unit, direction)
         if unit.command == "update":
             return self._prepare_update_command_restore(unit, direction)
         return None

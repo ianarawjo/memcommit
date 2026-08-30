@@ -1,6 +1,6 @@
 # Structural Atomize public Python API
 
-Last reviewed: 2026-08-29.
+Last reviewed: 2026-08-30.
 
 ## Contract
 
@@ -57,9 +57,10 @@ compound incorporate-and-apply, or Atomize Grounding methods. Their DTOs,
 operation adapters, errors, and root exports are also absent. Keeping those
 methods would make disambiguation and resolution part of the Atomize contract.
 
-Old workbench response fields and Grounding records remain readable through
-internal legacy model/Store paths for checkpoint and research-history
-compatibility. They are not projected as current API capability.
+Old workbench response fields remain serialized but unused. Grounding records
+have no internal model or Store reader and are not projected as current API
+capability. Historical Context snapshots remain available to common history
+and restoration code without a Grounding-specific contract.
 
 ## Error and dependency boundary
 

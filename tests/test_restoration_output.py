@@ -581,11 +581,6 @@ def _command_unit(
             "mem atomize --save --context work/notes",
         ),
         (
-            "atomize-grounding",
-            {"grounding": {"session_uid": "session-uid"}},
-            "mem atomize --accept-grounding --context work/notes",
-        ),
-        (
             "dev query-source install",
             {
                 "name": "hidden/source",

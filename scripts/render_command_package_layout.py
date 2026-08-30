@@ -106,6 +106,9 @@ ENTRY_TARGETS = {
 
 
 RETIRED_BASELINE_MODULES = {
+    "atomize_grounding": (
+        "retired when Atomize findings became read-only operation evidence"
+    ),
     "ground_named_shell": (
         "retired with the unpublished named Ground session interface"
     ),
@@ -123,7 +126,6 @@ RETIRED_BASELINE_MODULES = {
 
 
 OWNED_SUPPORT_TARGETS = {
-    "atomize_grounding": "atomize.grounding",
     "atomize_render": "atomize.render",
     "atomize_sessions": "atomize.sessions",
     "atomize_workbench_shell": "atomize.workbench.screen",
@@ -387,8 +389,8 @@ def build_plan() -> dict[str, object]:
             }
         )
     legacy = [str(entry["legacy_module"]).rsplit(".", 1)[-1] for entry in entries]
-    if len(entries) != 149 or len(set(legacy)) != 149:
-        raise RuntimeError("command layout must map 149 active baseline modules")
+    if len(entries) != 148 or len(set(legacy)) != 148:
+        raise RuntimeError("command layout must map 148 active baseline modules")
     baseline = _baseline_modules()
     classified = set(legacy) | set(RETIRED_BASELINE_MODULES)
     if classified != baseline:

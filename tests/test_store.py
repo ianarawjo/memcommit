@@ -2,7 +2,6 @@
 
 import json
 from pathlib import Path
-import uuid
 
 import pytest
 
@@ -756,48 +755,6 @@ def test_delete_removes_context_scoped_analysis_and_matching_review(
     assert store.context_exists(second.name)
 
 
-def test_delete_removes_only_exact_context_atomize_grounding_artifact(
-    isolated_store,
-):
-    store = MemoryStore()
-    deleted = ops.init("deleted")
-    retained = ops.init("retained")
-    store.save(deleted)
-    store.save(retained)
-    deleted_path = store._atomize_grounding_session_path(deleted.uid)
-    retained_path = store._atomize_grounding_session_path(retained.uid)
-    deleted_path.parent.mkdir(parents=True)
-    deleted_path.write_text(
-        '{"reviewer_comment": "private context for deleted"}',
-        encoding="utf-8",
-    )
-    retained_path.write_text(
-        '{"reviewer_comment": "private context for retained"}',
-        encoding="utf-8",
-    )
-    deleted_history = store._atomize_grounding_history_dir(deleted.uid)
-    retained_history = store._atomize_grounding_history_dir(retained.uid)
-    deleted_history.mkdir(parents=True)
-    retained_history.mkdir()
-    (deleted_history / f"{uuid.uuid4()}.json").write_text(
-        '{"reviewer_comment": "archived private context for deleted"}',
-        encoding="utf-8",
-    )
-    retained_history_file = retained_history / f"{uuid.uuid4()}.json"
-    retained_history_file.write_text(
-        '{"reviewer_comment": "archived private context for retained"}',
-        encoding="utf-8",
-    )
-
-    store.delete(deleted.name)
-
-    assert not deleted_path.exists()
-    assert not deleted_history.exists()
-    assert retained_path.is_file()
-    assert retained_history_file.is_file()
-    assert store.context_exists(retained.name)
-
-
 def test_delete_preserves_review_bound_to_another_context(isolated_store):
     from memcommit.application.capabilities.reviewing.memory_issue_finding.findings import (
         AmbiguityReport,
@@ -894,29 +851,6 @@ def test_delete_preflights_invalid_exact_atomize_artifact(
 
     assert store.context_exists(ctx.name)
     assert analysis_path.is_dir()
-
-
-def test_delete_preflights_symbolic_link_atomize_grounding_artifact(
-    isolated_store,
-):
-    store = MemoryStore()
-    ctx = ops.init("protected-grounding")
-    store.save(ctx)
-    grounding_path = store._atomize_grounding_session_path(ctx.uid)
-    grounding_path.parent.mkdir(parents=True)
-    outside = isolated_store.parent / "outside-grounding.json"
-    outside.write_text("private reviewer comment", encoding="utf-8")
-    grounding_path.symlink_to(outside)
-
-    with pytest.raises(
-        ValueError,
-        match="Atomize grounding storage is invalid",
-    ):
-        store.delete(ctx.name)
-
-    assert store.context_exists(ctx.name)
-    assert grounding_path.is_symlink()
-    assert outside.read_text(encoding="utf-8") == "private reviewer comment"
 
 
 # ---------------------------------------------------------------------------

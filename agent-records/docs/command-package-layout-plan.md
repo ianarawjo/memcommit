@@ -8,8 +8,8 @@ This is the exact path-only classification of the formerly flat
 route closure remains solely in the operation evidence ledger.
 
 - Baseline modules: 153
-- Active canonical mappings: 149
-- Retired baseline modules: 4
+- Active canonical mappings: 148
+- Retired baseline modules: 5
 - Command entry packages: 63
 - Shared command mechanisms: 42
 
@@ -17,7 +17,6 @@ route closure remains solely in the operation evidence ledger.
 | --- | --- | --- | --- |
 | `memcommit.commands.add` | `memcommit.adapters.console.commands.add.command` | command-entry | `add` |
 | `memcommit.commands.atomize` | `memcommit.adapters.console.commands.atomize.command` | command-entry | `atomize` |
-| `memcommit.commands.atomize_grounding` | `memcommit.adapters.console.commands.atomize.grounding` | command-owned-support | `atomize` |
 | `memcommit.commands.atomize_render` | `memcommit.adapters.console.commands.atomize.render` | command-owned-support | `atomize` |
 | `memcommit.commands.atomize_sessions` | `memcommit.adapters.console.commands.atomize.sessions` | command-owned-support | `atomize` |
 | `memcommit.commands.atomize_workbench_shell` | `memcommit.adapters.console.commands.atomize.workbench.screen` | command-owned-support | `atomize` |
