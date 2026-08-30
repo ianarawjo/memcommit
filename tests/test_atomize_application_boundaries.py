@@ -22,7 +22,7 @@ from memcommit.application.operations.atomize.runtime import (
     MemoryStoreAtomizeOutputPort,
     capture_atomize_session_snapshot,
 )
-from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
+from tests.atomize_analysis_support import open_or_create_atomize_workbench
 from memcommit.adapters.console.commands.atomize.command import cmd as atomize_command
 from memcommit.core.context import AutoCheckpoint, Memory
 from memcommit.application.capabilities.retained_history.memory_history_reconstruction.memory_history_construction import (

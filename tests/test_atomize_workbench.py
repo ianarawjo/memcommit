@@ -26,7 +26,7 @@ from memcommit.application.operations.atomize.domain import (
 from memcommit.application.operations.atomize.workbench import (
     create_atomize_workbench,
 )
-from memcommit.application.operations.atomize.workflow import (
+from tests.atomize_analysis_support import (
     ATOMIZE_AGGREGATE_TIMEOUT_SECONDS,
     _connect_aggregate_atomize_provider,
     open_or_create_atomize_workbench,

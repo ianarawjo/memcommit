@@ -14,7 +14,7 @@ import memcommit.application.operations.atomize.analysis_runtime as atomize_anal
 import memcommit.application.capabilities.ops as ops
 import memcommit.study_scenarios.legacy.prewarm.atomize as atomize_prewarm_module
 from memcommit.application.operations.atomize.domain import create_atomize_analysis, impact_atomize
-from memcommit.application.operations.atomize.workflow import open_or_create_atomize_workbench
+from tests.atomize_analysis_support import open_or_create_atomize_workbench
 from memcommit.adapters.console.entrypoint import app
 from memcommit.configuration.config import Config
 from memcommit.core.context import Memory

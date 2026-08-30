@@ -1,14 +1,9 @@
-"""Atomize analysis-open workflow composition."""
+"""Test-only convenience adapter for the canonical Atomize analysis boundary."""
 
 from __future__ import annotations
 
 from typing import Callable
 
-from memcommit.application.operations.atomize.domain import (
-    AtomizeAnalysisSession,
-    AtomizeFrameOrigin,
-    AtomizeProvider,
-)
 from memcommit.application.operations.atomize.analysis_application import (
     AtomizeAnalysisOpenRequest,
     AtomizeAnalysisOpenResult,
@@ -18,37 +13,13 @@ from memcommit.application.operations.atomize.analysis_runtime import (
     _connect_aggregate_atomize_provider,
     execute_atomize_analysis_open,
 )
+from memcommit.application.operations.atomize.domain import (
+    AtomizeAnalysisSession,
+    AtomizeFrameOrigin,
+    AtomizeProvider,
+)
 from memcommit.core.context import Context
 from memcommit.persistence.store import MemoryStore
-
-
-# The workflow exposes the result under its original name while delegating the
-# executable boundary to the typed application/runtime port.
-OpenAtomizeWorkbenchResult = AtomizeAnalysisOpenResult
-
-
-def install_prepared_atomize_analysis(
-    *,
-    store: MemoryStore,
-    ctx: Context,
-    analysis: AtomizeAnalysisSession,
-    output_context_name: str | None = None,
-) -> OpenAtomizeWorkbenchResult:
-    """Install one explicitly supplied exact prepared analysis provider-free."""
-
-    return execute_atomize_analysis_open(
-        AtomizeAnalysisOpenRequest(
-            context=ctx,
-            output_context_name=output_context_name,
-            allow_prepared=True,
-        ),
-        store=store,
-        provider_factory=lambda: (_ for _ in ()).throw(
-            AssertionError("prepared Atomize installation opened a provider")
-        ),
-        prepared_analysis_override=analysis,
-        prepared_output_name=output_context_name,
-    )
 
 
 def open_or_create_atomize_workbench(
@@ -65,8 +36,8 @@ def open_or_create_atomize_workbench(
     validate_before_save: Callable[[], None] | None = None,
     prepared_analysis: AtomizeAnalysisSession | None = None,
     memory_selector: str | None = None,
-) -> OpenAtomizeWorkbenchResult:
-    """Preserve the historical callable while routing through typed open."""
+) -> AtomizeAnalysisOpenResult:
+    """Keep test setup concise while exercising the production typed boundary."""
 
     return execute_atomize_analysis_open(
         AtomizeAnalysisOpenRequest(
@@ -90,8 +61,6 @@ def open_or_create_atomize_workbench(
 
 __all__ = [
     "ATOMIZE_AGGREGATE_TIMEOUT_SECONDS",
-    "OpenAtomizeWorkbenchResult",
     "_connect_aggregate_atomize_provider",
-    "install_prepared_atomize_analysis",
     "open_or_create_atomize_workbench",
 ]

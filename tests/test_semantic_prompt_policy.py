@@ -14,7 +14,7 @@ from memcommit.application.operations.atomize.domain import (
     _prompt as atomize_prompt,
     collect_atomize_candidates,
 )
-from memcommit.application.operations.atomize.workflow import (
+from tests.atomize_analysis_support import (
     open_or_create_atomize_workbench,
 )
 from memcommit.application.operations.compare.ledger.model import ComparisonInput
