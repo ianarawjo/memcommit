@@ -9,8 +9,8 @@ Context creation, publication, or final semantic Apply.
 
 | Image | Fixture and preceding keys | Visible state | Durable mutation |
 | --- | --- | --- | --- |
-| `01-update-entry` | Update `capture/source → capture/target`; none | unchanged WORKBENCH upper selectors and blue editable proposed command | none |
-| `02-update-invalid-command` | `Tab×6`, replace arguments with `--from capture/target --to missing` | red invalid command; upper Source and Target remain unchanged | none |
+| `01-update-entry` | Update `capture/source → capture/target`; none | two compact input-first endpoint rows and blue editable proposed command | none |
+| `02-update-invalid-command` | `Down×2`, replace arguments with `--from capture/target --to missing` | red invalid command; upper Source and Target remain unchanged | none |
 | `03-update-command-reprojects-upper-fields` | replace arguments with `--from capture/target --to capture/source --source-descendants` | Source/Target swap and Source descendants update atomically while the command remains focused | none |
 | `04-update-receipt-verification` | `Enter` | typed reversed Update setup receipt; provider and Store unchanged | none |
 | `05-branch-entry` | Branch from `capture/alpha`; none | unchanged COMPACT upper rows and blue editable proposed command | none |

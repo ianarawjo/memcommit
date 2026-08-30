@@ -118,10 +118,19 @@ complete effects even though the compact command box does not repeat them.
 
 ## Endpoint Setup rollout
 
-Branch, Meld, Update, and Sever now use the same editor at the bottom of their
-unchanged upper setup interfaces. `EndpointCommandBinding` couples one
-operation-owned `CommandForm`, canonical review projection, and complete argv
-decoder. The common Endpoint Setup shell resolves decoded Context spellings
+Branch, Meld, Update, and Sever now use the same compact, input-first Endpoint
+Setup presentation and the same editor at the bottom of that form. Update had
+previously retained the larger `WORKBENCH` projection even though its two
+existing-Context roles, independent reach, and exact-Memory focus were already
+fully described by the shared `EndpointSetupSpec`. Selecting `COMPACT_FORM`
+removes that visual exception without changing Update's typed draft, readable
+catalog, codec, planning boundary, or materialization semantics. The larger
+projection remains available to operations whose setup genuinely needs its
+always-expanded trees and evidence frames.
+
+`EndpointCommandBinding` couples one operation-owned `CommandForm`, canonical
+review projection, and complete argv decoder. The common Endpoint Setup shell
+resolves decoded Context spellings
 against its frozen role catalogs, infers existing-versus-new placement,
 validates operation rules and direct-Memory identity, and only then replaces
 mode, endpoint, reach, Memory, and new-name controls together.

@@ -164,7 +164,7 @@ def _capture_update() -> None:
         child.expect("NEW UPDATE")
         _BASE._settle(child)
         _snapshot(recorder, "01-update-entry")
-        child.send("\t" * 6 + "\x15--from capture/target --to missing")
+        child.send("\x1b[B" * 2 + "\x15--from capture/target --to missing")
         _BASE._settle(child)
         _snapshot(recorder, "02-update-invalid-command")
         child.send(

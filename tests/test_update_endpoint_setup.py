@@ -62,6 +62,7 @@ def test_update_setup_projects_two_independent_shared_endpoint_roles() -> None:
     spec = update_endpoint_setup_spec(_setup())
 
     assert spec.initial_mode_uid == "UPDATE"
+    assert spec.screen_layout == "COMPACT_FORM"
     assert tuple(role.uid for role in spec.roles) == ("A", "B")
     assert all(role.allow_descendants for role in spec.roles)
     assert all(role.allow_memory_focus for role in spec.roles)
@@ -94,10 +95,10 @@ def test_update_cli_exposes_common_and_role_specific_scope_controls() -> None:
 @pytest.mark.parametrize(
     ("keys", "source_descendants", "target_descendants"),
     (
-        ("\t\t\t\t\t\t\r", False, False),
-        ("\t\x1b[C\t\t\t\t\t\r", True, False),
-        ("\t\t\t\t\x1b[C\t\t\r", False, True),
-        ("\t\x1b[C\t\t\t\x1b[C\t\t\r", True, True),
+        ("\x1b[B\x1b[B\r", False, False),
+        ("\t\t \x1b[B\x1b[B\r", True, False),
+        ("\x1b[B\t\t \x1b[B\r", False, True),
+        ("\t\t \x1b[B\t\t \x1b[B\r", True, True),
     ),
 )
 def test_update_setup_returns_all_independent_range_combinations(
@@ -125,11 +126,11 @@ def test_update_setup_returns_all_independent_range_combinations(
 
 def test_update_setup_runs_the_visible_command_and_reprojects_every_upper_field() -> None:
     with create_pipe_input() as pipe_input:
-        # A -> range -> Memory -> B -> range -> Memory -> editable command.
+        # A -> B -> editable command through the compact vertical row topology.
         # The fixed ``mem update`` prefix remains chrome; replace every
         # argument and approve the exact visible buffer.
         pipe_input.send_text(
-            "\t" * 6
+            "\x1b[B" * 2
             + "\x15--from target --to source --source-descendants\r"
         )
         selected = choose_update_endpoint_setup(
@@ -149,7 +150,10 @@ def test_update_setup_runs_the_visible_command_and_reprojects_every_upper_field(
 
 def test_update_setup_can_focus_one_exact_memory_per_side() -> None:
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\t\x1b[B\r\t\t\t\x1b[B\r\t\r")
+        pipe_input.send_text(
+            "\t\t\t\r\x1b[B\r\x1b[B"
+            "\t\t\t\r\x1b[B\r\x1b[B\r"
+        )
         selected = choose_update_endpoint_setup(
             _setup(),
             memory_loader=_load,
@@ -168,7 +172,7 @@ def test_update_setup_can_focus_one_exact_memory_per_side() -> None:
 
 def test_update_setup_keeps_source_memory_and_target_descendants_independent() -> None:
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\t\x1b[B\r\t\t\x1b[C\t\t\r")
+        pipe_input.send_text("\t\t\t\r\x1b[B\r\x1b[B\t\t \x1b[B\r")
         selected = choose_update_endpoint_setup(
             _setup(),
             memory_loader=_load,
@@ -244,7 +248,10 @@ def test_update_command_composition_preserves_a_frozen_readable_catalog(
     )
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\t\x1b[B\r\t\t\t\x1b[B\r\t\r")
+        pipe_input.send_text(
+            "\t\t\t\r\x1b[B\r\x1b[B"
+            "\t\t\t\r\x1b[B\r\x1b[B\r"
+        )
         receipt = update_setup_command.choose_update_setup(
             Store(),  # type: ignore[arg-type]
             app_input=pipe_input,
