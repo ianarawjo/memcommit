@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Staged update: capture/update-review/new-guidance -> capture/update-review/campus-guide                                                                                         ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · capture/update-review/new-guidance                                                                                                                                    ┃
+┃   TARGET · capture/update-review/campus-guide                                                                                                                                    ┃
+┃ STAGED · 1 EDITS · 0 ADDITIONS · 0 REMOVALS · 1 CHANGES                                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ PLAN                                                                                                                                                                             ┃
+┃ The exact target Memory changes are staged and bound to this Source and Target revision. Apply remains separate.                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT WILL CHANGE                                                                                                                                                                 ┃
+┃ 1 exact target Memory changes in the target Context capture/update-review/campus-guide: 1 EDIT, 0 ADD, and 0 REMOVE. Impact shows each located before/after transition once; exa ┃
+┃ct reason and source provenance remain inspectable in Items.                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃ IMPACT · UPDATE                                                                                                                                                                  ┃
+┃ These exact target changes are staged. Apply remains a separate explicit action.                                                                                                 ┃
+┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
+┃       ▸ ~ [EDIT] capture/update-review/campus-guide [f6e4f38d]                                                                                                                   ┃
+┃             - The south entrance closes at 17:00.                                                                                                                                ┃
+┃             + The south entrance closes at 18:00 during the study period.                                                                                                        ┃
+┃ APPLY CONFIRMATION                                                                                                                                                               ┃
+┃ Confirm final Update Apply. APPLY is available. Enter to confirm the decided state.                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Update report                                                                                                                                          ^│
+│  EDIT           capture/update-review/campus-guide Memory [f6e4f38d-a110-4a9f-a06f-628af2ffdc25]                                                                                 │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ APPLY CONFIRMATION ]  Confirm final Update Apply · APPLY is available. Enter to confirm the decided state.                                                                      │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close G comment all  A review & apply  H Help  y/Y copy  Q close

@@ -1,0 +1,15 @@
+UPDATE APPLIED · capture/update-review/new-guidance → capture/update-review/campus-guide
+EFFECTS · ADD 0 · EDIT 1 · REMOVE 0
+RECEIPT · 10ad74e7-02ad-43f3-afb0-d9825dd8629f
+CHECKPOINTS · capture/update-review/campus-guide [6f1d28da-8c51-4266-9871-07272649ef5f]
+REVIEW · mem review update --session 10ad74e7-02ad-43f3-afb0-d9825dd8629f
+RECOVERY · mem undo
+CAPTURE GATE · PRESS V FOR READ-ONLY TARGET VERIFICATION
+v
+
+READ-ONLY VERIFICATION · UPDATE
+  SESSION STATE · applied
+  PROVIDER CALLS · 1
+  TARGET MEMORIES · 1
+  CHECKPOINTS · 1
+  [f6e4f38d] The south entrance closes at 18:00 during the study period.

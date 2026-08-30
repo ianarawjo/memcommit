@@ -13,6 +13,8 @@ from memcommit.adapters.console.commands.impact.sessions import (
 )
 from memcommit.adapters.console.commands.update.render import (
     render_plan,
+)
+from memcommit.adapters.console.commands.update.workbench.application import (
     run_update_workbench,
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress

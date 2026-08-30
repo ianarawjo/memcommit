@@ -10,7 +10,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.update.command as update_command
-import memcommit.adapters.console.commands.update.render as update_render
+import memcommit.adapters.console.commands.update.workbench.application as update_workbench
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.update.endpoint_setup import UpdateSetupReceipt
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
@@ -432,9 +432,9 @@ def test_local_staged_update_auto_accepts_without_decision_rows(monkeypatch):
         captured.append((view, kwargs))
         return ResolutionWorkbenchAction(kind="ACCEPT")
 
-    monkeypatch.setattr(update_render, "run_resolution_workbench_shell", approve)
+    monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", approve)
 
-    reviewed = update_render.review_update_application(
+    reviewed = update_workbench.review_update_application(
         staged,
         incorporate=lambda *_args: pytest.fail("no revision was requested"),
     )
@@ -460,6 +460,33 @@ def test_local_staged_update_auto_accepts_without_decision_rows(monkeypatch):
     assert (
         kwargs["turn_command_review"](ResolutionWorkbenchAction(kind="ACCEPT")) is None
     )
+
+
+def test_direct_update_workbench_shows_report_before_final_apply(monkeypatch):
+    source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
+    staged = plan_update(
+        source,
+        target,
+        lambda: PlanProvider(_one_edit_response),
+        status="staged",
+    )
+    captured = []
+
+    def approve(view, **kwargs):
+        captured.append((view, kwargs))
+        return ResolutionWorkbenchAction(kind="ACCEPT")
+
+    monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", approve)
+
+    reviewed = update_workbench.review_update_application(
+        staged,
+        incorporate=lambda *_args: pytest.fail("no revision was requested"),
+        require_final_review=True,
+    )
+
+    assert reviewed is staged
+    assert captured[0][1]["decision_free_behavior"] == "REPORT_FIRST"
+    assert captured[0][1]["compact_decisions"] is False
 
 
 def test_granted_source_local_target_update_keeps_local_auto_accept(monkeypatch):
@@ -493,9 +520,9 @@ def test_granted_source_local_target_update_keeps_local_auto_accept(monkeypatch)
         captured.append((view, kwargs))
         return ResolutionWorkbenchAction(kind="ACCEPT")
 
-    monkeypatch.setattr(update_render, "run_resolution_workbench_shell", approve)
+    monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", approve)
 
-    reviewed = update_render.review_update_application(
+    reviewed = update_workbench.review_update_application(
         staged,
         incorporate=lambda *_args: pytest.fail("no revision was requested"),
     )
@@ -535,9 +562,9 @@ def test_granted_target_update_retains_exact_final_review(monkeypatch):
         captured.append((view, kwargs))
         return ResolutionWorkbenchAction(kind="CLOSE")
 
-    monkeypatch.setattr(update_render, "run_resolution_workbench_shell", close)
+    monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", close)
 
-    reviewed = update_render.review_update_application(
+    reviewed = update_workbench.review_update_application(
         staged,
         incorporate=lambda *_args: pytest.fail("no revision was requested"),
     )
@@ -577,9 +604,9 @@ def test_granted_target_authority_review_omits_semantic_revision_turn(monkeypatc
         captured.append((view, kwargs))
         return ResolutionWorkbenchAction(kind="ACCEPT")
 
-    monkeypatch.setattr(update_render, "run_resolution_workbench_shell", approve)
+    monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", approve)
 
-    reviewed = update_render.review_update_application(
+    reviewed = update_workbench.review_update_application(
         staged,
         incorporate=lambda *_args: pytest.fail("revision callback was exposed"),
         allow_revision=False,
@@ -621,9 +648,9 @@ def test_granted_target_noop_auto_accepts_without_authority_review(monkeypatch):
         captured.append((view, kwargs))
         return ResolutionWorkbenchAction(kind="ACCEPT")
 
-    monkeypatch.setattr(update_render, "run_resolution_workbench_shell", approve)
+    monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", approve)
 
-    reviewed = update_render.review_update_application(
+    reviewed = update_workbench.review_update_application(
         staged,
         incorporate=lambda *_args: pytest.fail("no revision was requested"),
     )
@@ -1485,7 +1512,7 @@ def test_impact_then_update_reuses_plan_and_materializes_local_fork(
     assert store.current_context_name() == TASK1_SOURCE
 
 
-def test_tty_update_applies_without_opening_an_opinion_submission_turn(
+def test_tty_update_reviews_once_before_applying(
     isolated_store,
     monkeypatch,
 ):
@@ -1498,11 +1525,13 @@ def test_tty_update_applies_without_opening_an_opinion_submission_turn(
         lambda: PlanProvider(_one_edit_response),
     )
     monkeypatch.setattr(update_command, "_interactive_terminal", lambda: True)
-    monkeypatch.setattr(
-        update_render,
-        "review_update_application",
-        lambda *_args, **_kwargs: pytest.fail("Update opened a review turn"),
-    )
+    reviews = []
+
+    def review(session, **kwargs):
+        reviews.append((session, kwargs))
+        return session
+
+    monkeypatch.setattr(update_command, "review_update_application", review)
 
     result = runner.invoke(app, ["update", "--to", TASK1_TARGET])
 
@@ -1512,6 +1541,8 @@ def test_tty_update_applies_without_opening_an_opinion_submission_turn(
     assert applied is not None
     assert applied.status == "applied"
     assert applied.application is not None
+    assert len(reviews) == 1
+    assert reviews[0][1]["require_final_review"] is True
     target_after = store.load_direct(TASK1_TARGET_CHILD)
     assert target_after.memories[target_memory.uid].content != (
         target_before.memories[target_memory.uid].content
@@ -1531,6 +1562,11 @@ def test_tty_update_uses_only_the_initial_planning_wait_before_applying(
         lambda: provider,
     )
     monkeypatch.setattr(update_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(
+        update_command,
+        "review_update_application",
+        lambda session, **_kwargs: session,
+    )
     wait_views = []
     progress_updates = []
 

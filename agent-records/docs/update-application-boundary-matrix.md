@@ -87,9 +87,10 @@ former 40-name public surface while making physical ownership testable.
 
 | Case | Execution-decision behavior | Durable effect | Recovery |
 | --- | --- | --- | --- |
-| Local Target, one or more operations | A decision-free plan advances directly to Apply | All affected Target owners and the applied session receipt | One operation-unit `mem undo` / `mem redo` |
-| Granted Source, local Target | Same as a local Source because the Source remains read-only | Local Target owners and the applied session receipt | One operation-unit `mem undo` / `mem redo` |
+| Direct interactive `mem update`, local Target, one or more operations | One report-first Update workbench review and exact Apply confirmation because no enclosing operation owns the decision | All affected Target owners and the applied session receipt | One operation-unit `mem undo` / `mem redo` |
+| Direct interactive `mem update`, granted Source and local Target | Same single workbench review; the Source remains read-only | Local Target owners and the applied session receipt | One operation-unit `mem undo` / `mem redo` |
 | Granted Target, one or more operations | Exact authority-sensitive decision remains mandatory in a TTY | Authority Target owners only after approval, plus the local applied receipt | Authority-aware command history; decision evidence is retained even when recovery exists |
+| Meld, Sever, Resolve, Forget, or Atomize application composition | No Update-owned terminal review; the enclosing operation already owns semantic review | Detached working Target only until the enclosing operation publishes | Enclosing operation owns cancellation, final checkpoint, and receipt |
 | Any Target, zero operations | No additional decision because no Context mutation exists | Applied session receipt only | No Context checkpoint and no Context Undo unit |
 | Unanswered required item or pending response | No automatic Accept | None until the item is resolved or the response is incorporated | Not applicable |
 | Closed or cancelled authority decision | Session remains staged | No Target owner changes | Reopen the staged session through Update |
@@ -181,8 +182,23 @@ cache identity and frozen scope ambiguous.
 ## 2026-08-20 execution-receipt migration
 
 Update's provider plan is internal prepared state. Required interactive
-choices produce a decided staged session; local decision-free execution
-advances automatically to Apply. Success prints only typed ADD/EDIT/REMOVE
-counts, session/checkpoint identities, `mem review update --session UID`, and
-recovery. Review accepts only APPLIED or historical UNDONE terminal evidence;
-an incomplete staged Update resumes through `mem update`.
+choices produce a decided staged session. Success prints only typed
+ADD/EDIT/REMOVE counts, session/checkpoint identities,
+`mem review update --session UID`, and recovery. Review accepts only APPLIED or
+historical UNDONE terminal evidence; an incomplete staged Update resumes
+through `mem update`.
+
+## 2026-08-30 direct review and composed application
+
+Direct interactive `mem update` now owns one report-first pre-Apply review and
+one exact Apply confirmation because it has no enclosing semantic session. A
+local reversible write is no longer silently advanced merely because Undo
+exists. The same surface retains semantic
+revision for a local Target and limits a granted Target to exact authority
+approval. Non-interactive compatibility routes cannot open a terminal and
+continue to apply the exact staged request supplied by their caller.
+
+This console policy does not enter `application.apply_update`. Meld, Sever,
+Resolve, Forget, and Atomize call that application boundary against their own
+working Target after their operation-specific review. They receive a typed
+result but no Update screen, console text, checkpoint, or hidden durable write.

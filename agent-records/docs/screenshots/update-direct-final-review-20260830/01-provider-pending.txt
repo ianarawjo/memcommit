@@ -1,0 +1,5 @@
+52 180
+$ mem update --from capture/update-review/new-guidance --to capture/update-review/campus-guide
+PTY · 180×52
+PROFILE · local capture · CURRENT · capture/update-review/new-guidance
+MEM UPDATE · 2/2 · PLANNING MEMORY CHANGES . · 0s

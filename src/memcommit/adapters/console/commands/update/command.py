@@ -31,8 +31,10 @@ from memcommit.adapters.console.terminal.core.text import (
 )
 from memcommit.adapters.console.commands.update.render import (
     render_plan,
-    render_update_receipt,
     render_update_report_snapshot,
+)
+from memcommit.adapters.console.commands.update.receipt import render_update_receipt
+from memcommit.adapters.console.commands.update.workbench.application import (
     review_update_application,
 )
 from memcommit.core.context import Context
@@ -397,27 +399,40 @@ def _revise_update_with_wait(
     )
 
 
-def _review_granted_target_authority(
+def _review_direct_update(
     prepared: UpdateSession,
     *,
+    store: MemoryStore,
+    source: Context,
+    target: Context,
     analysis_origin: str | None,
 ) -> UpdateSession | None:
-    """Approve or close one exact external-owner plan without revising it."""
+    """Give a direct interactive invocation one explicit Apply boundary."""
 
     if not _interactive_terminal():
         return prepared
 
-    def reject_revision(
-        _current: UpdateSession,
-        _guidance: str,
+    def incorporate(
+        current: UpdateSession,
+        guidance: str,
     ) -> UpdateSession:
-        raise RuntimeError("Granted Target approval cannot revise the Update plan.")
+        if current.granted_target is not None:
+            raise RuntimeError("Granted Target approval cannot revise the Update plan.")
+        revised = _revise_update_with_wait(
+            current,
+            source,
+            target,
+            guidance,
+        )
+        store.save_staged_update(revised, expected_current=current)
+        return revised
 
     return review_update_application(
         prepared,
-        incorporate=reject_revision,
+        incorporate=incorporate,
         analysis_origin=analysis_origin,
-        allow_revision=False,
+        allow_revision=prepared.granted_target is None,
+        require_final_review=True,
     )
 
 
@@ -1114,9 +1129,12 @@ def cmd(
                 granted_target_applier=lambda reviewed: (
                     apply_granted_staged_update(store, reviewed)
                 ),
-                authority_reviewer=lambda prepared: (
-                    _review_granted_target_authority(
+                application_reviewer=lambda prepared: (
+                    _review_direct_update(
                         prepared,
+                        store=store,
+                        source=source,
+                        target=target,
                         analysis_origin=update_analysis_origin,
                     )
                 ),

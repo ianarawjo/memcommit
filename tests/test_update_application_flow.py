@@ -142,6 +142,58 @@ def test_update_flow_has_no_intermediate_decision_or_cancel_phase():
     assert result.applied == _applied(session)
 
 
+def test_direct_application_reviewer_runs_for_a_local_mutation():
+    session = _mutation_staged()
+    reviewed = []
+    port = UpdateApplicationFlowPort(
+        local_applier=_applied,
+        granted_source_applier=_unexpected,
+        granted_target_applier=_unexpected,
+        application_reviewer=lambda current: reviewed.append(current) or current,
+    )
+
+    result = run_application_flow(session, port=port)
+
+    assert reviewed == [session]
+    assert result.status == "APPLIED"
+
+
+def test_direct_application_review_may_replace_only_the_semantic_plan():
+    session = _mutation_staged()
+    revised = replace(
+        session,
+        uid=str(uuid.uuid4()),
+        created_at="2026-08-15T00:00:02+00:00",
+        operations=(),
+    )
+    port = UpdateApplicationFlowPort(
+        local_applier=_applied,
+        granted_source_applier=_unexpected,
+        granted_target_applier=_unexpected,
+        application_reviewer=lambda _current: revised,
+    )
+
+    result = run_application_flow(session, port=port)
+
+    assert result.decided == revised
+
+
+def test_direct_application_review_cannot_change_the_target_boundary():
+    session = _mutation_staged()
+    port = UpdateApplicationFlowPort(
+        local_applier=_unexpected,
+        granted_source_applier=_unexpected,
+        granted_target_applier=_unexpected,
+        application_reviewer=lambda current: replace(
+            current,
+            target_name="different",
+        ),
+    )
+
+    with pytest.raises(UpdateApplicationFlowError, match="frozen invocation"):
+        run_application_flow(session, port=port)
+
+
 def test_granted_target_keeps_only_exact_authority_approval():
     marker = _grant_marker()
     session = replace(_mutation_staged(), granted_target=marker)
