@@ -37,7 +37,7 @@ and one freeform reviewer annotation, but it does not change the finder's
 read-only/mutation contract or apply those annotations to Memories.
 
 The physical application boundary follows that product split. Shared typed
-finding/report values live in `reviewing.memory_issue_finding.model`, while
+finding/report values live in `reviewing.memory_issue.finding.model`, while
 provider-backed and deterministic judgment mechanics live in `detection` and
 readable Source freezing lives in `source`. The four public commands enter
 their matching `application.operations.find_*` package for request, authority,

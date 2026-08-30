@@ -41,7 +41,7 @@ from memcommit.application.operations.resolve.semantic import (
 from memcommit.application.operations.resolve.targeting import (
     normalize_resolve_cli_targets,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,
     quality_finding_handoff_from_json,

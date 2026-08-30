@@ -27,13 +27,13 @@ from memcommit.application.operations.dedun.application import (
 )
 from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
 from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
     QualityFindSourceFrame,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
     QualityFindingSource,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.redundancy_scope import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.redundancy_scope import (
     RedundancyScopeAnalysis,
 )
 from memcommit.persistence.store import MemoryStore, context_record_digest

@@ -115,7 +115,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.find_runtime | historical-compatibility-facade | remove | memcommit.application.operations.search.runtime | 0 |
 | memcommit.find_scope_evidence | operation-implementation | relocate-without-alias | memcommit.application.operations.search.scope_evidence | 2 |
 | memcommit.find_turn_dialogue | operation-implementation | relocate-without-alias | memcommit.application.operations.search.turn_dialogue | 1 |
-| memcommit.findings | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue_finding.detection | 15 |
+| memcommit.findings | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue.finding.detection | 15 |
 | memcommit.fit | historical-compatibility-facade | remove | memcommit.application.operations.fit.ground_report | 1 |
 | memcommit.fit_application | historical-compatibility-facade | remove | memcommit.application.operations.fit.application | 0 |
 | memcommit.fit_coherence | historical-compatibility-facade | remove | memcommit.application.operations.fit.coherence | 0 |
@@ -192,9 +192,9 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.provider_types | shared-concept-implementation | relocate-without-alias | memcommit.providers.types | 45 |
 | memcommit.quality_audit | operation-implementation | relocate-without-alias | memcommit.application.operations.audit.model | 6 |
 | memcommit.quality_audit_store | operation-implementation | relocate-without-alias | memcommit.persistence.operations.audit.record_repository | 4 |
-| memcommit.quality_find_report | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue_finding.report | 6 |
-| memcommit.quality_find_workbench | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue_finding.workbench | 11 |
-| memcommit.quality_finding_handoff | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue_finding.handoff | 21 |
+| memcommit.quality_find_report | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue.finding.report | 6 |
+| memcommit.quality_find_workbench | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench | 11 |
+| memcommit.quality_finding_handoff | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff | 21 |
 | memcommit.query_application | historical-compatibility-facade | remove | memcommit.application.operations.query.ordinary_application | 0 |
 | memcommit.query_provider | shared-concept-implementation | relocate-without-alias | memcommit.providers.subscription | 63 |
 | memcommit.query_reference_application | historical-compatibility-facade | remove | memcommit.application.operations.query.reference_application | 0 |
@@ -207,7 +207,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.rationale_semantic | operation-implementation | relocate-without-alias | memcommit.application.operations.rationale.semantic | 3 |
 | memcommit.read_report | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.read_report | 7 |
 | memcommit.read_report_recents | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.read_report_recents | 3 |
-| memcommit.redundancy_scope | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue_finding.redundancy_scope | 3 |
+| memcommit.redundancy_scope | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.memory_issue.finding.redundancy_scope | 3 |
 | memcommit.reference_application | historical-compatibility-facade | remove | memcommit.application.operations.reference.application | 0 |
 | memcommit.reference_provenance | operation-implementation | relocate-without-alias | memcommit.application.operations.reference.provenance | 3 |
 | memcommit.reference_runtime | historical-compatibility-facade | remove | memcommit.application.operations.reference.runtime | 0 |

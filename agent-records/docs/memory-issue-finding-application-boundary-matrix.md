@@ -7,9 +7,13 @@ boundaries. The capability family does not decide which command was invoked:
 
 | Shared owner | Contract |
 | --- | --- |
-| `reviewing.memory_issue_finding.model` | typed Duplicate, Ambiguity, and Conflict findings, reports, provider protocol, and ruleset identities |
-| `reviewing.memory_issue_finding.detection` | provider-free and one-shot provider detection over an already assembled direct-Memory `Context`; no Store lookup, persistence, handoff, or rendering |
-| `reviewing.memory_issue_finding.source` | exact or Profile-wide readable Source freeze, including `READ`, `DERIVE`, and applicable `COMBINE` checks before provider disclosure |
+| `reviewing.memory_issue.finding.model` | typed Duplicate, Ambiguity, and Conflict findings, reports, provider protocol, and ruleset identities |
+| `reviewing.memory_issue.finding.detection` | provider-free and one-shot provider detection over an already assembled direct-Memory `Context`; no Store lookup, persistence, handoff, or rendering |
+| `reviewing.memory_issue.finding.source` | exact or Profile-wide readable Source freeze, including `READ`, `DERIVE`, and applicable `COMBINE` checks before provider disclosure |
+| `reviewing.memory_issue.finding.report` | immutable finding-document projections used by read-only result browsers |
+| `reviewing.memory_issue.finding.redundancy_scope` | independent per-Context redundancy analysis across a frozen lexical scope |
+| `reviewing.memory_issue.resolution.workbench` | process-local responses and Resolution-session projections over frozen findings |
+| `reviewing.memory_issue.resolution.handoff` | typed, source-bound transfer from read-only findings into a named repair operation |
 
 The former `findings.py` mixed all three contracts and is removed without a
 compatibility alias. Audit, Atomize normal-form validation, and semantic
@@ -43,7 +47,7 @@ provider hook was stale and has been removed from the route contract.
   publishes no partial report if a later frame fails.
 - Findings and reports remain immutable read-only evidence. Resolution and
   materialization revalidate their own Source and authority boundaries.
-- The `reviewing.memory_issue_finding` package name and its existing workbench
-  and handoff contracts are intentionally unchanged here; separating finding
-  presentation from resolution and reconsidering the broader `reviewing` name
-  are independent follow-up decisions.
+- `reviewing.memory_issue.finding` owns observation and report construction;
+  `reviewing.memory_issue.resolution` owns response state and repair handoff.
+  The broader operation-neutral `reviewing` capabilities remain outside this
+  package and are intentionally unchanged.

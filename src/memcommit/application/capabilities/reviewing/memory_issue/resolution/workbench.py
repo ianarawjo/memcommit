@@ -7,14 +7,12 @@ and a one-shot finder must not look answerable.
 
 from __future__ import annotations
 
-import hashlib
-import json
 import uuid
 from dataclasses import dataclass, field
-from typing import Literal, Sequence
+from typing import Literal
 
 from memcommit.core.context import Context, Memory
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -22,11 +20,16 @@ from memcommit.application.capabilities.reviewing.memory_issue_finding.model imp
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.report import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.report import (
     QualityFindReportView,
     QualityFindingReading,
     QualityFindingReportItem,
     QualityFindingSource,
+)
+from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
+    QualityFindSourceError,
+    QualityFindSourceFrame,
+    _direct_memories,
 )
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionContextLocation,
@@ -42,180 +45,12 @@ from memcommit.application.capabilities.resolution.workbench import (
 )
 from memcommit.application.operations.review.model import (
     REVIEW_RESPONSE_CHAR_LIMIT,
-    direct_context_digest,
 )
 
 
 QualityFindKind = Literal["duplicates", "ambiguities", "conflicts"]
 QualityFindReport = DuplicateReport | AmbiguityReport | ConflictReport
-QualityFindSelectionMode = Literal["SINGLE", "MULTIPLE"]
-
-
-class QualityFindWorkbenchError(ValueError):
-    """Invalid process-local quality-finder review state."""
-
-
-@dataclass(frozen=True)
-class QualityFindSourceFrame:
-    """One frozen, provenance-preserving aggregate quality-analysis frame.
-
-    Context cardinality and lexical reach are setup choices. Execution uses the
-    exact effective Context set recorded here and flattens only directly owned
-    Memories into one provider frame. The owner map remains local so findings
-    can show the real Context for each Memory without fabricating ownership on
-    the temporary aggregate Context.
-    """
-
-    contexts: tuple[Context, ...]
-    context_names: tuple[str, ...]
-    context_digests: tuple[str, ...]
-    target_names: tuple[str, ...]
-    selection_mode: QualityFindSelectionMode
-    include_descendants: bool
-    profile_selected: bool
-    digest: str
-
-    @classmethod
-    def create(
-        cls,
-        contexts: Sequence[Context],
-        *,
-        context_names: Sequence[str] | None = None,
-        target_names: Sequence[str] | None = None,
-        selection_mode: QualityFindSelectionMode = "SINGLE",
-        include_descendants: bool = False,
-        profile_selected: bool = False,
-    ) -> "QualityFindSourceFrame":
-        values = tuple(contexts)
-        names = (
-            tuple(context.name for context in values)
-            if context_names is None
-            else tuple(context_names)
-        )
-        targets = names if target_names is None else tuple(target_names)
-        if (
-            not values
-            or len(values) != len(names)
-            or len(set(names)) != len(names)
-            or any(not isinstance(name, str) or not name for name in names)
-        ):
-            raise QualityFindWorkbenchError(
-                "Quality finder source requires distinct readable Context names."
-            )
-        if len({context.uid for context in values}) != len(values):
-            raise QualityFindWorkbenchError(
-                "Quality finder targets resolve the same Context more than once."
-            )
-        if (
-            selection_mode not in {"SINGLE", "MULTIPLE"}
-            or type(include_descendants) is not bool
-            or type(profile_selected) is not bool
-        ):
-            raise QualityFindWorkbenchError("Invalid quality finder range settings.")
-        if (
-            len(set(targets)) != len(targets)
-            or any(not isinstance(name, str) or not name for name in targets)
-            or not set(targets) <= set(names)
-            or (profile_selected and targets)
-            or (not profile_selected and not targets)
-            or (
-                selection_mode == "SINGLE"
-                and not profile_selected
-                and len(targets) != 1
-            )
-        ):
-            raise QualityFindWorkbenchError("Invalid quality finder target roots.")
-
-        memory_uids: set[str] = set()
-        for context in values:
-            for memory in _direct_memories(context):
-                if memory.uid in memory_uids:
-                    # Findings identify inputs by durable Memory UID. Allowing
-                    # an alias collision would make owner provenance ambiguous.
-                    raise QualityFindWorkbenchError(
-                        "Quality finder source contains a repeated Memory uid."
-                    )
-                memory_uids.add(memory.uid)
-        digests = tuple(direct_context_digest(context) for context in values)
-        encoded = json.dumps(
-            {
-                "contexts": [
-                    {"uid": context.uid, "name": name, "digest": digest}
-                    for context, name, digest in zip(values, names, digests)
-                ],
-                "targets": list(targets),
-                "selection_mode": selection_mode,
-                "include_descendants": include_descendants,
-                "profile_selected": profile_selected,
-            },
-            ensure_ascii=False,
-            separators=(",", ":"),
-            sort_keys=True,
-        )
-        return cls(
-            contexts=values,
-            context_names=names,
-            context_digests=digests,
-            target_names=targets,
-            selection_mode=selection_mode,
-            include_descendants=include_descendants,
-            profile_selected=profile_selected,
-            digest=hashlib.sha256(encoded.encode("utf-8")).hexdigest(),
-        )
-
-    @property
-    def memory_count(self) -> int:
-        return sum(len(_direct_memories(context)) for context in self.contexts)
-
-    @property
-    def route(self) -> str:
-        if len(self.context_names) == 1:
-            return self.context_names[0]
-        return f"{len(self.context_names)} CONTEXTS"
-
-    @property
-    def memory_context_names(self) -> dict[str, str]:
-        return {
-            memory.uid: context_name
-            for context, context_name in zip(self.contexts, self.context_names)
-            for memory in _direct_memories(context)
-        }
-
-    @property
-    def memory_ordinals(self) -> dict[str, int]:
-        return {
-            memory.uid: ordinal
-            for context in self.contexts
-            for ordinal, memory in enumerate(_direct_memories(context), start=1)
-        }
-
-    def analysis_context(self) -> Context:
-        """Build the temporary direct-Memory Context supplied to one finder."""
-
-        aggregate = Context(
-            uid=str(uuid.uuid5(uuid.NAMESPACE_URL, f"memcommit:quality:{self.digest}")),
-            name=(
-                self.context_names[0]
-                if len(self.context_names) == 1
-                else f"QUALITY FIND FRAME · {len(self.context_names)} CONTEXTS"
-            ),
-        )
-        for context in self.contexts:
-            for memory in _direct_memories(context):
-                aggregate.add(Memory(memory.uid, memory.content))
-        return aggregate
-
-    def matches(self, contexts: Sequence[Context]) -> bool:
-        values = tuple(contexts)
-        return (
-            len(values) == len(self.contexts)
-            and tuple(context.uid for context in values)
-            == tuple(context.uid for context in self.contexts)
-            and tuple(context.name for context in values)
-            == tuple(context.name for context in self.contexts)
-            and tuple(direct_context_digest(context) for context in values)
-            == self.context_digests
-        )
+QualityFindWorkbenchError = QualityFindSourceError
 
 
 @dataclass
@@ -262,10 +97,6 @@ class QualityFindWorkbenchSession:
     @property
     def answered_count(self) -> int:
         return sum(response.answered for response in self.responses.values())
-
-
-def _direct_memories(ctx: Context) -> tuple[Memory, ...]:
-    return tuple(item for item in ctx.iter_items() if isinstance(item, Memory))
 
 
 def _memory_key(memory: Memory) -> tuple[str, str]:

@@ -20,7 +20,7 @@ Audit checks the resulting state. No stage implicitly performs a later one.
 
 ## Application contract
 
-`memcommit.application.capabilities.reviewing.memory_issue_finding.handoff`
+`memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff`
 owns an adapter-neutral
 `QualityFindingHandoff`. Every handoff records:
 
@@ -104,7 +104,7 @@ synthesize its own digest, target, Memory selector, or guidance.
 ## Memory-issue finding ownership
 
 On 2026-08-30 the shared package moved from the provisional
-`reviewing.quality` name to `reviewing.memory_issue_finding`. Duplicate,
+`reviewing.quality` name to `reviewing.memory_issue`. Duplicate,
 Ambiguity, and Conflict outputs are model-assisted candidates for review, not
 proof that a Memory has an open-ended quality defect; the narrower package
 name preserves that epistemic boundary while retaining `reviewing` as the
@@ -112,12 +112,18 @@ owner of report, response, and repair-handoff contracts. Existing type names
 remain unchanged in this path-only step so public Python values and serialized
 handoffs are not silently migrated with package ownership.
 
+The shared family is now split by direction: read-only models, detection,
+Source freezing, reports, and lexical redundancy analysis live under
+`reviewing.memory_issue.finding`; response-bearing workbench projections and
+repair handoffs live under `reviewing.memory_issue.resolution`. This prevents
+an immutable observation from being named as if it already authorized repair.
+
 The four public discovery routes now have symmetric console package names and
 explicit application owners: `find_duplicates`, `find_redundancies`,
 `find_ambiguities`, and `find_conflicts`. Their `application.py` modules own
 request validation, readable authority/Source preparation where applicable,
 and typed analysis results. Shared finding/report contracts and the detector
-stay under `reviewing.memory_issue_finding`, so Audit and other operations can
+stay under `reviewing.memory_issue`, so Audit and other operations can
 reuse a judgment primitive without calling a peer Find operation.
 
 ## Deliberate boundaries

@@ -15,7 +15,7 @@ from memcommit.adapters.console.terminal.components.quality_find.workbench impor
     run_interactive_quality_find,
     run_quality_find_resolution_workbench,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -23,8 +23,10 @@ from memcommit.application.capabilities.reviewing.memory_issue_finding.model imp
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
     QualityFindSourceFrame,
+)
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
     QualityFindWorkbenchError,
     create_quality_find_workbench,
     quality_find_resolution_view,

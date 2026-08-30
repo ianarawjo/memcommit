@@ -242,7 +242,7 @@ def _payload(
     # The aggregate call names the complete pair space instead of asking the
     # model to silently choose likely pairs. The provider-capacity preflight
     # below remains the only aggregate size boundary.
-    from memcommit.application.capabilities.reviewing.memory_issue_finding.detection import (
+    from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
         _load_calibration_cases,
     )
 

@@ -60,7 +60,7 @@ from memcommit.adapters.console.commands.review.sessions import (
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     FindingsError,
 )
 from memcommit.providers.subscription import (

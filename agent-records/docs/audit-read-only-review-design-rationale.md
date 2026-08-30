@@ -102,7 +102,7 @@ owns private immutable UID-addressed JSON records. The read-only console project
 composes the shared Memory-issue report views directly; Audit has no Resolution
 projection, response model, option grammar, or CAS update route. The reusable
 finder, report, and workbench contracts remain under
-`application.capabilities.reviewing.memory_issue_finding`.
+`application.capabilities.reviewing.memory_issue`.
 
 Optional Conformance is preflighted inside the Audit application before any
 provider connection. Console progress is supplied through callbacks, but the
@@ -112,7 +112,7 @@ validated Session; a failed check publishes no partial Audit. The former
 `application.capabilities.reviewing.quality.audit` and `audit_store` modules are
 removed without compatibility facades because they were provisional internal
 owners, not supported import surfaces. The remaining shared capability was
-then named `reviewing.memory_issue_finding`: its outputs are model-assisted
+then named `reviewing.memory_issue`: its outputs are model-assisted
 issue candidates for review, not proof of a generalized quality judgment.
 
 The response-bearing draft was never distributed. On 2026-08-30 its runtime

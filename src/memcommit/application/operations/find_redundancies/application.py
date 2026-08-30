@@ -8,20 +8,22 @@ from dataclasses import dataclass
 from memcommit.application.capabilities.authority.context_access import (
     resolve_context_access,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.detection import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
     find_redundancies as detect_redundancies,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     DuplicateReport,
     FindingsProvider,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.redundancy_scope import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.redundancy_scope import (
     RedundancyScopeAnalysis,
     analyze_independent_redundancy_scope,
     freeze_redundancy_scope,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
     QualityFindSourceFrame,
+)
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
     QualityFindWorkbenchSession,
     create_quality_find_workbench,
 )

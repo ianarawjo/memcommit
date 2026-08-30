@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     DuplicateReport,
     FindingsError,
 )

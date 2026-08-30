@@ -33,7 +33,7 @@ from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     FindingsError,
 )
 from memcommit.providers.subscription import (

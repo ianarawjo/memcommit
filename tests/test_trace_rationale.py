@@ -13,7 +13,7 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.add import command as add_command
 from memcommit.core.context import AutoCheckpoint, Memory
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     AmbiguityFinding,
     AmbiguityReport,
 )

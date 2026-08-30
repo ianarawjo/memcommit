@@ -14,7 +14,7 @@ from dataclasses import dataclass, replace
 from collections.abc import Mapping
 from typing import Literal
 
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
@@ -22,9 +22,11 @@ from memcommit.application.capabilities.reviewing.memory_issue_finding.model imp
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
-    QualityFindResponse,
+from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
     QualityFindSourceFrame,
+)
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
+    QualityFindResponse,
     QualityFindWorkbenchError,
     QualityFindWorkbenchSession,
 )

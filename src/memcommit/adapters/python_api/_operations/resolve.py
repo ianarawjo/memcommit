@@ -42,7 +42,7 @@ from memcommit.application.operations.resolve.application import (
     apply_resolve as apply_core_resolve,
     run_resolve,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
     conflict_handoff_to_resolve_request,

@@ -5,7 +5,7 @@ import json
 import memcommit.application.operations.atomize.domain as atomize_module
 import memcommit.application.operations.atomize.analysis_runtime as atomize_runtime_module
 import memcommit.application.operations.compare.summary_provider as comparison_summary_module
-import memcommit.application.capabilities.reviewing.memory_issue_finding.detection as findings_module
+import memcommit.application.capabilities.reviewing.memory_issue.finding.detection as findings_module
 import memcommit.application.capabilities.ops as ops
 import memcommit.application.operations.query.answer as ordinary_query_module
 from memcommit.application.operations.atomize.domain import (

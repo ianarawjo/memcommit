@@ -38,7 +38,7 @@ from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     find_exact_duplicate_groups,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     DuplicateFinding,
     DuplicateReport,
 )
@@ -54,10 +54,10 @@ from memcommit.adapters.console.commands.dedun.workbench import (
     run_dedun_workbench,
 )
 from memcommit.adapters.console.terminal.components.resolution import ResolutionOutcome
-from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
     create_quality_find_workbench,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
     QualityFindingReviewDraft,

@@ -19,7 +19,7 @@ from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     find_exact_duplicate_groups,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,

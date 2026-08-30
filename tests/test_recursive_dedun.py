@@ -22,11 +22,11 @@ from memcommit.application.operations.dedun.scope import (
 )
 from memcommit.application.operations.dedun.application import DedunConflictError
 from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     DuplicateReport,
     FindingsError,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.redundancy_scope import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.redundancy_scope import (
     analyze_independent_redundancy_scope,
 )
 from memcommit.persistence.store import MemoryStore

@@ -89,7 +89,7 @@ def _context_state(store, name: str) -> tuple[bytes, tuple[str, ...]]:
 def _run_child(kind: str) -> None:
     import memcommit.application.capabilities.ops as ops
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+    from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
         DuplicateReport,
     )
     from memcommit.application.capabilities.reviewing.read_report import (

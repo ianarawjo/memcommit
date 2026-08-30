@@ -18,19 +18,21 @@ from memcommit.application.capabilities.authority.source_use_policy import (
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     DuplicateReport,
     FindingsProvider,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.detection import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
     find_redundancies,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
     QualityFindSourceFrame,
+)
+from memcommit.application.operations.profile.config import ProfileRegistry
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
     create_quality_find_workbench,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
     QualityFindingHandoff,
     quality_finding_handoffs,
 )

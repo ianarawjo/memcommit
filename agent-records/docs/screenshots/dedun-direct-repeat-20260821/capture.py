@@ -80,7 +80,7 @@ def _run_child() -> None:
 
     import memcommit.application.operations.find_redundancies.application as find_application
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+    from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
         DuplicateFinding,
         DuplicateReport,
     )

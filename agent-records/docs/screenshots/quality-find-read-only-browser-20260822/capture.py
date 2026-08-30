@@ -70,7 +70,7 @@ def _source(kind: str):
 
 
 def _session(kind: str, *, empty: bool = False):
-    from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+    from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
         AmbiguityFinding,
         AmbiguityReport,
         ConflictFinding,
@@ -78,7 +78,7 @@ def _session(kind: str, *, empty: bool = False):
         DuplicateFinding,
         DuplicateReport,
     )
-    from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+    from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
         create_quality_find_workbench,
     )
 
@@ -161,7 +161,7 @@ def _run_child(kind: str) -> None:
     from memcommit.adapters.console.terminal.components.findings import (
         run_quality_find_browser,
     )
-    from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+    from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
         quality_find_report_view,
     )
 

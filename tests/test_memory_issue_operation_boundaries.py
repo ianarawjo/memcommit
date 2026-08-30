@@ -6,11 +6,11 @@ import ast
 import importlib.util
 from pathlib import Path
 
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     AmbiguityReport,
     ConflictReport,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
     QualityFindSourceFrame,
 )
 from memcommit.application.operations.find_ambiguities.application import (
@@ -39,10 +39,14 @@ def test_old_mixed_findings_module_is_unavailable() -> None:
     assert (
         importlib.util.find_spec(
             "memcommit.application.capabilities.reviewing."
-            "memory_issue_finding.findings"
+            "memory_issue.finding.findings"
         )
         is None
     )
+
+
+def test_frozen_source_is_owned_by_finding_not_resolution() -> None:
+    assert QualityFindSourceFrame.__module__.endswith("memory_issue.finding.source")
 
 
 def test_empty_issue_operations_return_typed_reports_without_provider() -> None:

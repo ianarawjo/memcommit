@@ -102,7 +102,7 @@ Its durable model, complete three-or-four-check execution, private CAS session
 store, and Resolution compatibility projection moved to
 `memcommit.application.operations.audit`. Shared finder, report, and workbench
 contracts now live under
-`application.capabilities.reviewing.memory_issue_finding`. Audit is a named
+`application.capabilities.reviewing.memory_issue`. Audit is a named
 operation that consumes those reusable capabilities; it is not itself a shared
 review capability. The narrower name records that Duplicate, Ambiguity, and
 Conflict results are model-assisted Memory-issue candidates for review rather

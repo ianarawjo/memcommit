@@ -31,7 +31,7 @@ from memcommit.application.capabilities.authority.source_use_policy import (
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     find_exact_duplicate_groups,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     ConflictReport,
     FindingsError,
 )
@@ -41,14 +41,16 @@ from memcommit.application.operations.profile.config import (
     profile_store_dir,
 )
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
     QualityFindKind,
+)
+from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
     QualityFindSourceFrame,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
     quality_finding_handoffs,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.redundancy_scope import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.redundancy_scope import (
     analyze_independent_redundancy_scope,
     freeze_redundancy_scope,
 )

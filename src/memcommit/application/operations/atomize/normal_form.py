@@ -29,17 +29,17 @@ from memcommit.application.operations.dedun.application import (
     project_dedun,
 )
 from memcommit.application.operations.dedun.planning import freeze_dedun_plan
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     DuplicateFinding,
     DuplicateReport,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.detection import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
     find_redundancies,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
     create_quality_find_workbench,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
     quality_finding_handoffs,
 )
 from memcommit.application.operations.review.model import direct_context_digest

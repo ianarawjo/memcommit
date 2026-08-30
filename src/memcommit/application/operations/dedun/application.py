@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING, Protocol
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.handoff import (
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.handoff import (
     QualityFindingHandoff,
     QualityFindingSource,
 )

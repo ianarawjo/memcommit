@@ -19,7 +19,7 @@ from memcommit.adapters.console.terminal.core.theme import (
     semantic_color_rgb,
     semantic_quality_role,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.report import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.report import (
     QualityFindingReportItem,
     quality_finding_label_parts,
 )

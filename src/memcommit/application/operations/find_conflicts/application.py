@@ -5,18 +5,18 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.reviewing.memory_issue_finding.detection import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.detection import (
     find_conflicts as detect_conflicts,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.model import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.model import (
     ConflictReport,
     FindingsProvider,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.source import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.source import (
+    QualityFindSourceFrame,
     freeze_quality_find_source,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.workbench import (
-    QualityFindSourceFrame,
+from memcommit.application.capabilities.reviewing.memory_issue.resolution.workbench import (
     QualityFindWorkbenchSession,
     create_quality_find_workbench,
 )

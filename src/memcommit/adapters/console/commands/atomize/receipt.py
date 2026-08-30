@@ -16,7 +16,7 @@ from memcommit.adapters.console.terminal.core.theme import (
     memory_object_color_rgb,
     semantic_color_rgb,
 )
-from memcommit.application.capabilities.reviewing.memory_issue_finding.report import (
+from memcommit.application.capabilities.reviewing.memory_issue.finding.report import (
     QualityFindingReportItem,
     QualityFindingSource,
 )
