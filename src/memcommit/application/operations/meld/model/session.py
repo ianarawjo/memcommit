@@ -7,9 +7,9 @@ from collections import Counter, defaultdict
 from dataclasses import dataclass, replace
 from typing import Iterable
 
-from memcommit.application.operations.compare.ledger.model import (
-    COMPARISON_RULESET_VERSION,
-    ComparisonAnalysis,
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
+    MEMORY_RELATION_RULESET_VERSION,
+    MemoryRelationAnalysis,
 )
 from memcommit.application.operations.update.model import GrantedUpdateTarget
 from memcommit.core.context import Context, Memory
@@ -97,12 +97,12 @@ class MeldSession:
         return cls.from_dict(session.to_dict())
 
     @classmethod
-    def create_symmetric_from_comparison(
+    def create_symmetric_from_relation_analysis(
         cls,
-        analysis: ComparisonAnalysis,
+        analysis: MemoryRelationAnalysis,
         target: Context,
     ) -> "MeldSession":
-        """Start one target-bound Meld from an exact reviewed comparison."""
+        """Start one target-bound Meld from exact peer-relation analysis."""
         seed = MeldComparisonSeed.create(analysis)
         frames = _comparison_meld_frames(seed.analysis)
         if target.uid in {frame.context_uid for frame in frames} or (
@@ -124,6 +124,16 @@ class MeldSession:
             _comparison_meld_assessment(seed.analysis),
         )
         return session
+
+    @classmethod
+    def create_symmetric_from_comparison(
+        cls,
+        analysis: MemoryRelationAnalysis,
+        target: Context,
+    ) -> "MeldSession":
+        """Compatibility entry point for the persisted comparison schema."""
+
+        return cls.create_symmetric_from_relation_analysis(analysis, target)
 
     @classmethod
     def create_directional(
@@ -216,16 +226,16 @@ class MeldSession:
         return cls.from_dict(session.to_dict())
 
     @classmethod
-    def create_directional_from_comparison(
+    def create_directional_from_relation_analysis(
         cls,
-        analysis: ComparisonAnalysis,
+        analysis: MemoryRelationAnalysis,
         incoming: Context,
         baseline: Context,
         *,
         granted_incoming: GrantedUpdateTarget | None = None,
         granted_target: GrantedUpdateTarget | None = None,
     ) -> "MeldSession":
-        """Bind Directional materialization to an exact ordered Compare ledger."""
+        """Bind Directional materialization to exact peer-relation analysis."""
         seed = MeldComparisonSeed.create(analysis)
         if incoming.uid == baseline.uid or incoming.name == baseline.name:
             raise MeldError(
@@ -258,6 +268,26 @@ class MeldSession:
             granted_target=granted_target,
         )
         return cls.from_dict(session.to_dict())
+
+    @classmethod
+    def create_directional_from_comparison(
+        cls,
+        analysis: MemoryRelationAnalysis,
+        incoming: Context,
+        baseline: Context,
+        *,
+        granted_incoming: GrantedUpdateTarget | None = None,
+        granted_target: GrantedUpdateTarget | None = None,
+    ) -> "MeldSession":
+        """Compatibility entry point for the persisted comparison schema."""
+
+        return cls.create_directional_from_relation_analysis(
+            analysis,
+            incoming,
+            baseline,
+            granted_incoming=granted_incoming,
+            granted_target=granted_target,
+        )
 
     def to_dict(self) -> dict[str, object]:
         result: dict[str, object] = {
@@ -761,7 +791,7 @@ class MeldSession:
 
         if self.comparison_seed is not None:
             analysis = self.comparison_seed.analysis
-            if analysis.ruleset_version != COMPARISON_RULESET_VERSION:
+            if analysis.ruleset_version != MEMORY_RELATION_RULESET_VERSION:
                 raise MeldError(
                     "Meld comparison seed uses an unsupported relation ruleset."
                 )

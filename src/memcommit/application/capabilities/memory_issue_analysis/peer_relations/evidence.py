@@ -328,10 +328,20 @@ def project_comparison_context(root: Context) -> Context:
     return projected
 
 
+MemoryRelationEvidenceError = ComparisonEvidenceError
+MemoryRelationEvidenceSource = ComparisonEvidenceSource
+ProjectedMemoryRelationMemory = ProjectedComparisonMemory
+project_memory_relation_context = project_comparison_context
+
+
 __all__ = [
     "ComparisonEvidenceError",
     "ComparisonEvidenceSource",
     "ComparisonSourceForm",
+    "MemoryRelationEvidenceError",
+    "MemoryRelationEvidenceSource",
+    "ProjectedMemoryRelationMemory",
     "ProjectedComparisonMemory",
+    "project_memory_relation_context",
     "project_comparison_context",
 ]

@@ -7,7 +7,7 @@ import json
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.operations.compare.ledger.model import ComparisonInput
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonInput
 from memcommit.application.operations.compare.compare_summary import ComparisonSummaryError
 from memcommit.application.operations.compare.provider_contract import summarize_comparison
 from memcommit.application.operations.compare.compare_rules import (

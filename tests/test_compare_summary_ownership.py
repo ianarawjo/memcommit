@@ -51,12 +51,20 @@ def test_production_summary_consumers_use_operation_owner() -> None:
         assert not [legacy for legacy in legacy_imports if legacy in source]
 
 
-def test_compare_owner_does_not_absorb_deep_compare_or_presentation() -> None:
+def test_compare_summary_owner_does_not_absorb_deep_compare_or_presentation() -> None:
+    summary_modules = (
+        "application.py",
+        "compare_rules.py",
+        "compare_summary.py",
+        "provider_contract.py",
+    )
     package_source = "\n".join(
-        path.read_text(encoding="utf-8")
-        for path in sorted(
-            (REPOSITORY_ROOT / "src/memcommit/application/operations/compare").glob("*.py")
-        )
+        (
+            REPOSITORY_ROOT
+            / "src/memcommit/application/operations/compare"
+            / module
+        ).read_text(encoding="utf-8")
+        for module in summary_modules
     )
 
     assert "memcommit.adapters.console.commands" not in package_source
@@ -66,3 +74,42 @@ def test_compare_owner_does_not_absorb_deep_compare_or_presentation() -> None:
     assert "ensure_comparison_analysis" not in package_source
     assert "save_comparison_analysis" not in package_source
     assert "open_comparison_session" not in package_source
+
+
+def test_deep_relation_judgment_is_not_owned_by_compare_operation() -> None:
+    compare_root = REPOSITORY_ROOT / "src/memcommit/application/operations/compare"
+
+    # An ignored ``__pycache__`` directory may survive a source relocation in
+    # an already-used checkout; physical ownership is defined by Python source.
+    assert not tuple((compare_root / "ledger").glob("*.py"))
+    capability_root = (
+        REPOSITORY_ROOT
+        / "src/memcommit/application/capabilities/memory_issue_analysis/peer_relations"
+    )
+    assert {path.name for path in capability_root.glob("*.py")} >= {
+        "evidence.py",
+        "execution.py",
+        "model.py",
+        "provider_contract.py",
+        "repository.py",
+    }
+
+
+def test_meld_and_update_do_not_depend_on_compare_operation() -> None:
+    operations_root = REPOSITORY_ROOT / "src/memcommit/application/operations"
+    source_by_operation = {
+        operation: "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in sorted((operations_root / operation).rglob("*.py"))
+        )
+        for operation in ("meld", "update")
+    }
+
+    assert all(
+        "memcommit.application.operations.compare" not in source
+        for source in source_by_operation.values()
+    )
+    assert (
+        "memcommit.application.capabilities.memory_issue_analysis.peer_relations"
+        in source_by_operation["meld"]
+    )

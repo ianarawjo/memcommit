@@ -32,7 +32,7 @@ import time
 from typing import Protocol
 import uuid
 
-from memcommit.application.operations.compare.ledger.execution import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution import (
     load_comparison_context,
     recursive_comparison_projection,
 )
@@ -41,7 +41,7 @@ from memcommit.application.capabilities.authority.readable_contexts import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
     ComparisonInput,
@@ -57,7 +57,7 @@ from memcommit.study_scenarios.legacy.prewarm.compare_compact import (
     COMPACT_PROMPT_VERSION,
     run_compact_compare,
 )
-from memcommit.application.operations.compare.ledger.provider import analyze_comparison
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import analyze_comparison
 from memcommit.application.operations.profile.config import load_profile_registry
 from memcommit.application.operations.profile.model import _study_practice_contexts
 from memcommit.providers.types import (

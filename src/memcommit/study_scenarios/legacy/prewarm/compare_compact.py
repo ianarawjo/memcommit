@@ -18,7 +18,7 @@ import json
 from typing import Protocol
 import uuid
 
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonAnalysis,
     ComparisonInput,
     ComparisonIssue,

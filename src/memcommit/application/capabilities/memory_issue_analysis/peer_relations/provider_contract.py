@@ -7,7 +7,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Protocol
 
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     COMPARISON_TEXT_LIMIT,
     ComparisonAnalysis,
     ComparisonError,
@@ -1060,3 +1060,10 @@ def analyze_comparison(
             raise ComparisonProviderError(
                 f"Codex compare repair remained invalid: {repair_error}"
             ) from repair_error
+
+
+# Keep provider operation names and serialized errors stable while exposing an
+# operation-neutral semantic entry point to capability consumers.
+analyze_memory_relations = analyze_comparison
+MemoryRelationProvider = ComparisonProvider
+MemoryRelationProviderError = ComparisonProviderError

@@ -13,7 +13,7 @@ from memcommit.adapters.python_api import EmbedAuthorityError, EmbedContextError
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory, MemoryRef
 from memcommit.application.capabilities.retained_history.context_snapshot import ContextSnapshotRef
-from memcommit.application.operations.compare.ledger.store import comparison_analysis_path
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import comparison_analysis_path
 from memcommit.application.operations.embed.application import MemoryEmbedRequest
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.adapters.agent.embed import EmbedAgentAdapter

@@ -36,6 +36,7 @@
           "agent-records/docs/context-locator-design-rationale.md",
           "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
           "agent-records/docs/mem-compare-design-rationale.md",
+          "agent-records/docs/peer-relation-analysis-design-rationale.md",
           "agent-records/docs/session-endpoint-setup-design-rationale.md",
           "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
         ],
@@ -172,6 +173,7 @@
           "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
           "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
           "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "agent-records/docs/peer-relation-analysis-design-rationale.md",
           "agent-records/docs/session-endpoint-setup-design-rationale.md",
           "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md",
           "agent-records/docs/meld-command-interpretation-design-rationale.md"
@@ -387,6 +389,7 @@
           "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
           "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
           "agent-records/docs/goal-focus-operand-design-rationale.md",
+          "agent-records/docs/peer-relation-analysis-design-rationale.md",
           "agent-records/docs/session-endpoint-setup-design-rationale.md"
         ],
         "reason": "Apply policy and recovery are verified, but the remaining Update routes have not been traced into one complete reviewed application boundary."

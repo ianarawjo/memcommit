@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.application.operations.compare.ledger.model import ComparisonAnalysis
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import MemoryRelationAnalysis
 from memcommit.application.operations.meld.model import (
     INLINE_MELD_CONTEXT_NAME,
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
@@ -36,7 +36,7 @@ def validate_meld_start_scope(
     incoming_memory: str | None,
     baseline_memory: str | None,
     incoming_text: str | None,
-    comparison: ComparisonAnalysis | None,
+    comparison: MemoryRelationAnalysis | None,
     error_type: type[RuntimeError],
 ) -> None:
     """Validate directional Memory focus before any Store or provider work."""
@@ -90,7 +90,7 @@ class MeldStartRequest:
     incoming_memory: str | None = None
     baseline_memory: str | None = None
     incoming_text: str | None = None
-    comparison: ComparisonAnalysis | None = None
+    comparison: MemoryRelationAnalysis | None = None
 
     def __post_init__(self) -> None:
         names = (self.left_name, self.right_name, self.target_name)

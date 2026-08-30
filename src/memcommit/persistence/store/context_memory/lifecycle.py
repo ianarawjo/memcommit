@@ -308,7 +308,7 @@ class _ContextLifecycleMixin:
             canonical_context_uid = str(uuid.UUID(context_uid))
         except (AttributeError, TypeError, ValueError):
             canonical_context_uid = None
-        from memcommit.application.operations.compare.ledger.store import (
+        from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
             comparison_paths_for_context,
             delete_comparison_paths,
         )

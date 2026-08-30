@@ -31,6 +31,23 @@ compatibility policy. This ownership-only relocation changes no semantic plan,
 preflight, CAS, authority, checkpoint, or zero-operation behavior and requires
 no terminal screenshot refresh.
 
+### Memory Issue Analysis boundary review
+
+Update has no dependency on the Compare operation. Its planning provider owns
+a directional Source-to-Target change proposal and currently mentions
+duplicates and conflicts only as constraints on that proposal. The persisted
+session contains exact changes, not a complete ambiguity/redundancy/conflict
+artifact, and the local decision-free route has no issue-resolution iteration.
+
+The correct future integration point is the detached Target post-image created
+by `materialization.prepare_update_application`: analyze the complete post-image
+frame through Memory Issue Analysis, filter the report to findings touching a
+changed Memory UID, expose those findings in Update's Resolution session, and
+repeat proposal revision plus analysis until required issues are resolved.
+This review does not add a hidden provider pass or an unanswerable Apply gate.
+Doing so would change provider cost and failure ordering while leaving no typed
+place to retain questions, responses, or revalidation evidence.
+
 ### Physical model ownership
 
 The historical `memcommit.application.operations.update.model` import remains

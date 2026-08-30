@@ -22,7 +22,7 @@ from .session_launch import (
     MemoryStoreMeldRestartPort as MemoryStoreMeldRestartPort,
     MemoryStoreMeldStartPort,
     PreparedMeldExecution,
-    _start_comparison as _start_comparison,
+    _start_relation_analysis as _start_relation_analysis,
     execute_meld_restart,
     execute_meld_start,
     prepare_meld_restart,

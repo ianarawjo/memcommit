@@ -6,8 +6,8 @@ from datetime import datetime
 from pathlib import Path
 import sys
 
-from memcommit.application.operations.compare.ledger.model import ComparisonAnalysis
-from memcommit.application.operations.compare.ledger.session_application import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonAnalysis
+from memcommit.application.operations.compare.sessions import (
     iter_saved_comparisons,
     load_saved_comparison,
     revalidate_saved_comparison,

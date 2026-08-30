@@ -6,10 +6,10 @@ import uuid
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Iterable
 
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     COMPARISON_DESCENDANT_SCHEMA_VERSION,
-    ComparisonAnalysis,
-    ComparisonMemory,
+    MemoryRelationAnalysis,
+    MemoryRelationMemory,
 )
 
 from .source_frames import (
@@ -525,7 +525,7 @@ def meld_turn_evidence_payload(turn: MeldTurn) -> dict[str, object]:
 
 
 def _comparison_meld_frames(
-    analysis: ComparisonAnalysis,
+    analysis: MemoryRelationAnalysis,
 ) -> tuple[MeldFrame, MeldFrame]:
     """Project ordered Compare frames without changing durable identities."""
     frames: list[MeldFrame] = []
@@ -566,7 +566,7 @@ def _comparison_meld_frames(
 
 
 def _comparison_meld_assessment(
-    analysis: ComparisonAnalysis,
+    analysis: MemoryRelationAnalysis,
     *,
     include_materialization_review: bool = True,
 ) -> MeldAssessment:
@@ -648,7 +648,7 @@ def _comparison_meld_assessment(
 
 
 def directional_comparison_basis_assessment(
-    analysis: ComparisonAnalysis,
+    analysis: MemoryRelationAnalysis,
     frames: tuple[MeldFrame, MeldFrame],
 ) -> MeldAssessment:
     """Project one ordered Compare ledger onto owner-aware directional frames.
@@ -668,7 +668,7 @@ def directional_comparison_basis_assessment(
     for frame_index, (comparison_frame, directional_frame) in enumerate(
         zip(analysis.frames, frames, strict=True)
     ):
-        def is_directional_source(memory: ComparisonMemory) -> bool:
+        def is_directional_source(memory: MemoryRelationMemory) -> bool:
             if memory.source is None:
                 # Older saved Compare analyses predate typed provenance. Their
                 # exact identity checks below remain the compatibility guard.

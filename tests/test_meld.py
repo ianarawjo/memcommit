@@ -20,16 +20,16 @@ from memcommit.adapters.console.commands.meld import command as meld_command
 from memcommit.adapters.python_api import MemCommitClient
 from memcommit.adapters.console.commands.meld.endpoint_setup import MeldSetupReceipt
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonInput,
     comparison_canonical_digest,
 )
-from memcommit.application.operations.compare.ledger.provider import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
     COMPARISON_PAYLOAD_MARKER,
     ComparisonProviderError,
     analyze_comparison,
 )
-from memcommit.application.operations.compare.ledger.store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
     load_comparison_analysis,
     save_comparison_analysis,
 )
@@ -573,7 +573,7 @@ def test_symmetric_meld_reuses_scoped_compare_descendants(isolated_store):
         ),
         store=store,
     )
-    reviewed = prepared.comparison
+    reviewed = prepared.relation_analysis
     assert reviewed is not None
     session = MeldSession.create_symmetric_from_comparison(reviewed, target)
     restored = MeldSession.from_dict(session.to_dict())

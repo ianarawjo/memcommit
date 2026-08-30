@@ -6,7 +6,7 @@ import time
 
 import pytest
 
-from memcommit.application.operations.compare.ledger.model import ComparisonInput
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonInput
 from memcommit.core.context import Context, Memory
 from memcommit.providers.types import CompletionRun, ProviderIdentity
 from memcommit.study_scenarios.legacy.prewarm.compare_compact import (

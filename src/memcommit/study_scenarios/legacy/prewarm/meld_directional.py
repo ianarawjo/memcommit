@@ -18,7 +18,7 @@ from memcommit.application.capabilities.authority.context_access import (
     freeze_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     COMPARISON_RULESET_VERSION,
     ComparisonInput,
 )
@@ -45,7 +45,7 @@ from memcommit.application.operations.meld.model import (
 from memcommit.application.operations.meld.provider.contract import (
     MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION,
 )
-from memcommit.application.operations.compare.ledger.granted_store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     recursive_comparison_projection,
 )
 from memcommit.application.operations.profile.config import (

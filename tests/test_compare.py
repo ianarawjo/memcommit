@@ -17,14 +17,14 @@ import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.compare.command as compare_command
 import memcommit.adapters.console.commands.compare.sessions as compare_sessions_module
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.compare.ledger.model import ComparisonInput, comparison_canonical_digest
-from memcommit.application.operations.compare.ledger.provider import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonInput, comparison_canonical_digest
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
     COMPARISON_PAYLOAD_MARKER,
     ComparisonProviderError,
     analyze_comparison,
     comparison_output_schema,
 )
-from memcommit.application.operations.compare.ledger.store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
     ConcurrentComparisonUpdateError,
     comparison_analysis_path,
     comparison_paths_for_context,
@@ -1644,7 +1644,7 @@ def test_concurrent_source_deletes_treat_already_removed_pair_as_clean(
         return paths
 
     monkeypatch.setattr(
-        "memcommit.application.operations.compare.ledger.store.comparison_paths_for_context",
+        "memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository.comparison_paths_for_context",
         synchronized_preflight,
     )
     with ThreadPoolExecutor(max_workers=2) as executor:

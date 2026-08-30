@@ -8,7 +8,7 @@ from types import SimpleNamespace
 
 import pytest
 
-import memcommit.application.operations.compare.ledger.execution as comparison_execution
+import memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution as relation_execution
 import memcommit.application.operations.meld.assessment as meld_assessment_application
 import memcommit.application.operations.meld.provider.contract as meld_provider_contract
 import memcommit.application.operations.meld.provider.decoder as meld_provider_decoder
@@ -59,7 +59,7 @@ def _meld_command_source() -> str:
         meld_session_launch,
         meld_session_review,
         meld_source_bindings,
-        comparison_execution,
+        relation_execution,
     ),
 )
 def test_meld_execution_modules_have_no_terminal_or_command_dependencies(module):
@@ -122,7 +122,7 @@ def test_meld_command_contains_no_initial_cache_or_provisional_session_logic():
         for primitive in (
             "find_installed_directional_meld_prewarm",
             "find_installed_equivalent_directional_comparison",
-            "ensure_comparison_analysis",
+            "ensure_memory_relation_analysis",
             "install_prepared_comparison_analysis",
             "MeldSession.create_directional",
             "prepare_meld_assessment",
@@ -187,9 +187,9 @@ def test_symmetric_saved_compare_reuse_does_not_connect_provider(monkeypatch):
         assert callable(kwargs["analyze"])
         return SimpleNamespace(analysis=saved, origin="SAVED_REUSE")
 
-    monkeypatch.setattr(meld_session_launch, "ensure_comparison_analysis", ensure)
+    monkeypatch.setattr(meld_session_launch, "ensure_memory_relation_analysis", ensure)
 
-    result = meld_runtime._start_comparison(
+    result = meld_runtime._start_relation_analysis(
         meld_start_application.MeldStartRequest(
             mode="SYMMETRIC",
             left_name=left.name,
@@ -251,7 +251,7 @@ def test_symmetric_subset_projection_is_resolved_and_recorded_in_runtime(
     def ensure(**kwargs):
         assert (
             kwargs["equivalent"](
-                meld_session_launch.ComparisonInput.from_contexts(left, right)
+                meld_session_launch.MemoryRelationInput.from_contexts(left, right)
             )
             is projected
         )
@@ -260,14 +260,14 @@ def test_symmetric_subset_projection_is_resolved_and_recorded_in_runtime(
             origin="EQUIVALENT_SCOPE_PREWARM",
         )
 
-    monkeypatch.setattr(meld_session_launch, "ensure_comparison_analysis", ensure)
+    monkeypatch.setattr(meld_session_launch, "ensure_memory_relation_analysis", ensure)
     monkeypatch.setattr(
         meld_session_launch,
         "record_projected_compare_prewarm",
         lambda *args, **kwargs: recorded.append((args, kwargs)),
     )
 
-    result = meld_runtime._start_comparison(
+    result = meld_runtime._start_relation_analysis(
         meld_start_application.MeldStartRequest(
             mode="SYMMETRIC",
             left_name=left.name,
@@ -409,7 +409,7 @@ def test_memory_focused_directional_restart_reuses_prewarm_and_cas_replaces_with
         comparison_calls.append((args, kwargs))
         return None
 
-    monkeypatch.setattr(meld_session_launch, "_start_comparison", resolve_comparison)
+    monkeypatch.setattr(meld_session_launch, "_start_relation_analysis", resolve_comparison)
     monkeypatch.setattr(
         meld_session_launch,
         "find_installed_directional_meld_prewarm",

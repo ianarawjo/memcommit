@@ -5,7 +5,7 @@ from __future__ import annotations
 import sys
 from typing import Annotated, Optional
 import typer
-from memcommit.application.operations.compare.ledger.provider import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
     ComparisonProviderError,
 )
 from memcommit.core.context_targeting.presets import (

@@ -11,7 +11,7 @@ from memcommit.adapters.console.commands.compare.sessions import (
 from memcommit.adapters.console.commands.review.report import show_operation_review
 from memcommit.adapters.console.commands.review.sessions import select_report_session
 from memcommit.application.capabilities.reviewing.report import ReviewReportController
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonAnalysis,
     comparison_canonical_digest,
 )

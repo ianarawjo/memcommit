@@ -6,7 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
     ComparisonError,
@@ -14,7 +14,7 @@ from memcommit.application.operations.compare.ledger.model import (
     comparison_canonical_digest,
     comparison_analysis_matches_input,
 )
-from memcommit.application.operations.compare.ledger.store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
     ConcurrentComparisonUpdateError,
     load_comparison_analysis,
     save_comparison_analysis,
@@ -27,7 +27,7 @@ from memcommit.application.capabilities.authority.context_access import (
     revalidate_granted_context_binding,
 )
 from memcommit.core.context import Context
-from memcommit.application.operations.compare.ledger.evidence import project_comparison_context
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import project_comparison_context
 from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.application.capabilities.authority.source_use_policy import (
     AnalysisRetention,
@@ -35,7 +35,7 @@ from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_analysis_save,
     authorize_combination,
 )
-from memcommit.application.operations.compare.ledger.granted_store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     load_granted_comparison_artifact,
     save_granted_comparison_artifact,
 )
@@ -460,3 +460,13 @@ def install_prepared_comparison_analysis(
         retention=result.retention,
         origin="EXACT_PREWARM",
     )
+
+
+# Persisted Compare artifacts keep their established schema and storage keys;
+# new consumers address the same capability through operation-neutral names.
+MemoryRelationExecutionResult = ComparisonExecutionResult
+connect_memory_relation_provider = connect_comparison_provider
+project_memory_relation_context = recursive_comparison_projection
+load_memory_relation_context = load_comparison_context
+ensure_memory_relation_analysis = ensure_comparison_analysis
+install_prepared_memory_relation_analysis = install_prepared_comparison_analysis

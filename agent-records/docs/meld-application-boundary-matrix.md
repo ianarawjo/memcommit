@@ -43,6 +43,14 @@ assessment publication and Apply repeat the same canonical checks at their
 transaction boundary; the adapter does not maintain a parallel stale-binding
 rule.
 
+Exhaustive peer judgment is not owned by Meld or Compare. The relation model,
+evidence projection, provider execution, and compatible repositories live in
+`application.capabilities.memory_issue_analysis.peer_relations`. Meld imports
+that capability through `MemoryRelation*` names and owns only the conversion
+to Meld dispositions, issues, proposals, follow-up turns, and application.
+The serialized `comparison_seed` and Study prewarm vocabulary remain intact so
+existing sessions and prepared artifacts require no migration.
+
 The historical flat `memcommit.meld_*_application`,
 `memcommit.meld_application_flow`, and `memcommit.meld_runtime` paths retain
 their existing compatibility policy. Importing
@@ -72,12 +80,12 @@ matrix as fully closed would therefore hide adapter drift.
 | Remaining boundary | Current command-owned behavior | Required terminal-independent result |
 | --- | --- | --- |
 | Start scope | direct-Memory selectors are parsed and used in a provisional directional session but are absent from `MeldStartRequest` | selectors are typed request fields, validated against descendant reach, and preserved in the durable session |
-| Compare basis | symmetric Compare creation and directional exact/equivalent/projected lookup occur in command helpers | one application/runtime resolver owns ordered Compare reuse, installation, provider fallback, and origin |
+| Relation basis | symmetric relation creation and directional exact/equivalent/projected lookup occur in application runtime | one application/runtime resolver consumes shared Memory Issue Analysis, installation, provider fallback, and origin |
 | Provider prediction | the CLI constructs a provisional session and repeats prewarm lookup to decide whether to open a progress surface | a typed prepared Start/Restart value reports whether semantic provider work remains without publishing state |
 | Adapter parity | Python and agent Start enter the runtime without the CLI's Compare-preparation path | CLI, Python, and agent requests enter the same Prepare/Execute path and expose the same scope controls |
 
 Progress: all four audited Start boundaries are now closed. Direct-Memory
-scope is typed; ordered Compare resolution is runtime-owned; and Start/Restart
+scope is typed; ordered relation resolution is runtime-owned; and Start/Restart
 first return a `PreparedMeldExecution` whose `provider_required` flag and
 provisional read-only view come from the same frozen cache decision that is
 later executed. `comparison_execution` is terminal-neutral; its old command
@@ -106,7 +114,7 @@ provider decoder, session publication, or Apply transaction.
 
 | Semantic basis | Exact | Equivalent graph/scope | Safe subset projection | Provider construction on hit | Durable visible session before invocation |
 | --- | --- | --- | --- | --- | --- |
-| Ordered Compare imported by Meld | supported | supported where the declared comparison proof matches | supported where the comparison adapter proves a complete requested projection | forbidden | no |
+| Peer relation analysis consumed by Meld | supported | supported where the declared relation proof matches | supported where the capability proves a complete requested projection | forbidden | no |
 | Initial directional Meld review | supported | supported for the declared graph-equivalent scope | supported for a validated requested subtree/subset | forbidden | no |
 | Meld follow-up resolution branch | exact full-request key | not inferred across different dialogue | not inferred across partial issue turns | forbidden | no |
 

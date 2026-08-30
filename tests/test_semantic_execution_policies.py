@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from memcommit.application.operations.atomize.domain import _atomize_execution_policy
-from memcommit.application.operations.compare.ledger.provider import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
     COMPARISON_EXECUTION_POLICY,
 )
 from memcommit.application.operations.search.answer_dialogue import (

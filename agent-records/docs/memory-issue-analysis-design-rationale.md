@@ -42,7 +42,9 @@ would preserve the misleading dependency direction for new internal imports.
 
 This change preserves the existing provider contracts and serialized type
 vocabulary. It does not yet make one unified provider turn for all issue kinds.
-Compare's exhaustive ledger remains the current basis for Meld, and Update's
-existing verification path is unchanged. Moving Meld and Update onto Memory
-Issue Analysis requires a separate review of their source frames, disposition
-coverage, proposal semantics, and pre/post-materialization boundaries.
+The separately reviewed exhaustive peer ledger now lives under
+`memory_issue_analysis.peer_relations`, so Compare and Meld share the analysis
+without depending on one another. Update's existing verification path remains
+unchanged: its required post-image Audit/Resolve iteration is recorded in
+`peer-relation-analysis-design-rationale.md` and is not approximated by a
+hidden validation call.

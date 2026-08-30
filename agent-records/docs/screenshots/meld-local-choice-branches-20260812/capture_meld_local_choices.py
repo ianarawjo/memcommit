@@ -64,8 +64,8 @@ def _spawn_child(store_root: Path, mode: str) -> tuple[pexpect.spawn, object]:
 
 def _create_fixture(store_root: Path):
     import memcommit.application.capabilities.ops as ops
-    from memcommit.application.operations.compare.ledger.model import ComparisonInput
-    from memcommit.application.operations.compare.ledger.provider import analyze_comparison
+    from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonInput
+    from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import analyze_comparison
     from memcommit.application.operations.meld.model import MeldSession
     from memcommit.persistence.store import MemoryStore
     from tests.test_meld import Task2CompareProvider

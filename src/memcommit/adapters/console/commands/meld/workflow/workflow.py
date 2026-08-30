@@ -19,7 +19,7 @@ from memcommit.application.capabilities.authority.context_access import (
 from memcommit.adapters.console.terminal.components.command_wait import (
     run_command_wait,
 )
-from memcommit.application.operations.compare.ledger.granted_store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     granted_artifact_contexts,
     load_granted_comparison_artifact,
     recursive_comparison_projection,

@@ -63,7 +63,7 @@ def _set_store_root(root: Path) -> None:
 
 class _DelayedCompareProvider:
     def complete(self, prompt, *, operation, output_schema=None):
-        from memcommit.application.operations.compare.ledger.provider import COMPARISON_PAYLOAD_MARKER
+        from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import COMPARISON_PAYLOAD_MARKER
 
         if operation != "compare_contexts":
             raise AssertionError(f"Unexpected provider operation: {operation}")
@@ -145,7 +145,7 @@ def _run_child(store_root: Path) -> None:
     import memcommit.application.capabilities.ops as ops
     from memcommit.adapters.console.entrypoint import app
     from memcommit.adapters.console.commands import meld as meld_command
-    from memcommit.application.operations.compare.ledger.store import load_comparison_analysis
+    from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import load_comparison_analysis
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()

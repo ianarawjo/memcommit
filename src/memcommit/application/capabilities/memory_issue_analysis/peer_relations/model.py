@@ -1,9 +1,14 @@
-"""Strict immutable state for one targetless peer-Context comparison.
+"""Strict immutable state for one targetless peer-Context relation analysis.
 
-Compare is deliberately smaller than Meld.  It binds two equal-authority
-Context snapshots and records a complete primary relation ledger plus visible
-grounding candidates.  It has no target, conversational turns, result
-proposals, readiness flag, or application authority.
+This capability binds two equal-authority Context snapshots and records a
+complete primary relation ledger plus visible issue candidates. It has no
+target, conversational turns, result proposals, readiness flag, or application
+authority. Compare may present the ledger and Meld may derive proposals from
+it, but neither operation owns the semantic judgment recorded here.
+
+The persisted ``Comparison*`` vocabulary remains the wire-compatible schema.
+New operation code should use the ``MemoryRelation*`` aliases at the bottom of
+this module so ownership is not confused with the Compare command.
 """
 from __future__ import annotations
 
@@ -15,7 +20,7 @@ from datetime import datetime, timezone
 from typing import Iterable, Literal
 
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.compare.ledger.evidence import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
     ComparisonEvidenceError,
     ComparisonEvidenceSource,
     ProjectedComparisonMemory,
@@ -1252,3 +1257,20 @@ class ComparisonAnalysis:
                 "Every unresolved comparison relation must appear in a "
                 "visible REQUIRED issue."
             )
+
+
+# ``Comparison*`` is retained as the serialized compatibility vocabulary.
+# These aliases are the capability-owned names for new consumers such as Meld.
+MemoryRelationError = ComparisonError
+MemoryRelationMemory = ComparisonMemory
+MemoryRelationFrame = ComparisonFrame
+MemoryRelationMember = ComparisonMember
+MemoryRelation = ComparisonRelation
+MemoryRelationOption = ComparisonOption
+MemoryRelationIssue = ComparisonIssue
+MemoryRelationReports = ComparisonReports
+MemoryRelationInput = ComparisonInput
+MemoryRelationAnalysis = ComparisonAnalysis
+MEMORY_RELATION_RULESET_VERSION = COMPARISON_RULESET_VERSION
+memory_relation_canonical_digest = comparison_canonical_digest
+memory_relation_analysis_matches_input = comparison_analysis_matches_input

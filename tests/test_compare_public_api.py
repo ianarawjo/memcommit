@@ -14,8 +14,8 @@ from memcommit.adapters.python_api import (
     ComparisonResult,
     MemCommitClient,
 )
-from memcommit.application.operations.compare.ledger.provider import COMPARISON_PAYLOAD_MARKER
-from memcommit.application.operations.compare.ledger.store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import COMPARISON_PAYLOAD_MARKER
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
     load_comparison_analysis,
     save_comparison_analysis,
 )

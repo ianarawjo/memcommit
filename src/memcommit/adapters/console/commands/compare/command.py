@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonAnalysis,
     ComparisonError,
     ComparisonInput,
@@ -28,11 +28,11 @@ from memcommit.adapters.console.commands.compare.presentation import (
 from memcommit.adapters.console.commands.compare.summary_presentation import (
     render_comparison_summary,
 )
-from memcommit.application.operations.compare.ledger.provider import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
     ComparisonProviderError,
     analyze_comparison,
 )
-from memcommit.application.operations.compare.ledger.store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
     ConcurrentComparisonUpdateError,
 )
 from memcommit.adapters.console.commands.compare.execution import (

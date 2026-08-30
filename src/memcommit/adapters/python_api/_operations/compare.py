@@ -23,32 +23,32 @@ from memcommit.adapters.python_api.errors import (
     CompareStorageError,
 )
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonError,
     comparison_canonical_digest,
 )
-from memcommit.application.operations.compare.ledger.execution import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution import (
     ComparisonExecutionResult,
     connect_comparison_provider,
     ensure_comparison_analysis,
     load_comparison_context,
 )
-from memcommit.application.operations.compare.ledger.provider import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
     ComparisonProviderError,
     analyze_comparison,
 )
-from memcommit.application.operations.compare.ledger.session_application import (
+from memcommit.application.operations.compare.sessions import (
     ComparisonSessionConflictError,
     ComparisonSessionInputError,
     ComparisonSessionUnavailableError,
     open_comparison_session,
     prepare_comparison_refresh,
 )
-from memcommit.application.operations.compare.ledger.store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
     ConcurrentComparisonUpdateError,
 )
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.operations.compare.ledger.granted_store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     load_granted_comparison_artifact,
 )
 from memcommit.application.operations.profile.model import (

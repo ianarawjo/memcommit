@@ -10,8 +10,8 @@ from memcommit.application.capabilities.authority.context_access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.application.operations.compare.ledger.model import ComparisonInput
-from memcommit.application.operations.compare.ledger.store import ConcurrentComparisonUpdateError
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonInput
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import ConcurrentComparisonUpdateError
 from memcommit.application.operations.compare.compare_summary import ComparisonSummary
 from memcommit.application.operations.compare.provider_contract import (
     ComparisonSummaryProvider,

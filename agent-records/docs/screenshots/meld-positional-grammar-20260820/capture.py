@@ -68,7 +68,7 @@ def _set_store_root(root: Path) -> None:
 class _GrammarProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         if operation == "compare_contexts":
-            from memcommit.application.operations.compare.ledger.provider import COMPARISON_PAYLOAD_MARKER
+            from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import COMPARISON_PAYLOAD_MARKER
 
             payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
             left_id = payload["frames"][0]["memories"][0]["memory_id"]

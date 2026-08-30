@@ -17,23 +17,23 @@ from memcommit.application.capabilities.authority.source_use_policy import (
     authorize_combination,
     authorize_derived_transfer,
 )
-from memcommit.application.operations.compare.ledger.execution import (
-    connect_comparison_provider,
-    ensure_comparison_analysis,
-    install_prepared_comparison_analysis,
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution import (
+    connect_memory_relation_provider,
+    ensure_memory_relation_analysis,
+    install_prepared_memory_relation_analysis,
 )
-from memcommit.application.operations.compare.ledger.granted_store import (
-    load_granted_comparison_artifact,
-    recursive_comparison_projection,
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
+    load_granted_memory_relation_artifact,
+    project_memory_relation_context,
 )
-from memcommit.application.operations.compare.ledger.model import (
-    COMPARISON_RULESET_VERSION,
-    ComparisonAnalysis,
-    ComparisonInput,
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
+    MEMORY_RELATION_RULESET_VERSION,
+    MemoryRelationAnalysis,
+    MemoryRelationInput,
 )
-from memcommit.application.operations.compare.ledger.provider import analyze_comparison
-from memcommit.application.operations.compare.ledger.store import (
-    load_comparison_analysis,
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import analyze_memory_relations
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
+    load_memory_relation_analysis,
 )
 from memcommit.application.operations.meld.model import (
     MeldSession,
@@ -88,11 +88,11 @@ from .source_bindings import (
 )
 
 
-class _LiveComparisonRequired(RuntimeError):
+class _LiveRelationAnalysisRequired(RuntimeError):
     """Internal signal that a prepared symmetric Start needs its provider."""
 
 
-def _start_comparison(
+def _start_relation_analysis(
     request: MeldStartRequest | MeldRestartRequest,
     *,
     store: MemoryStore,
@@ -104,13 +104,13 @@ def _start_comparison(
     provider_factory,
     allow_provider: bool = True,
     error_type: type[RuntimeError] = MeldStartError,
-) -> ComparisonAnalysis | None:
-    """Resolve the ordered Compare basis at the application boundary.
+) -> MemoryRelationAnalysis | None:
+    """Resolve the ordered peer-relation analysis at the Meld boundary.
 
-    Directional Meld may proceed without a Compare basis, but it still reuses
-    an exact, equivalent, or safely projected installed basis when one exists.
-    Symmetric Meld always materializes a durable exact basis, connecting the
-    provider only after every reusable route misses.
+    Directional Meld may proceed without this basis, but it still reuses an
+    exact, equivalent, or safely projected installed analysis when one exists.
+    Symmetric Meld always materializes a durable exact analysis, connecting
+    the provider only after every reusable route misses.
     """
 
     if request.incoming_memory is not None or request.baseline_memory is not None:
@@ -124,30 +124,30 @@ def _start_comparison(
         if (
             not analysis.matches(left, right)
             or analysis.include_descendants != include_descendants
-            or analysis.ruleset_version != COMPARISON_RULESET_VERSION
+            or analysis.ruleset_version != MEMORY_RELATION_RULESET_VERSION
         ):
-            raise error_type("The supplied ordered Compare analysis is stale.")
+            raise error_type("The supplied peer-relation analysis is stale.")
         return analysis
 
     if request.mode == "DIRECTIONAL":
-        analysis = load_comparison_analysis(
+        analysis = load_memory_relation_analysis(
             left.uid,
             right.uid,
             store=store,
         )
         if analysis is None:
-            artifact = load_granted_comparison_artifact(store, left.uid, right.uid)
+            artifact = load_granted_memory_relation_artifact(store, left.uid, right.uid)
             analysis = artifact.analysis if artifact is not None else None
         if analysis is not None:
             if (
                 not analysis.matches(left, right)
                 or analysis.include_descendants != include_descendants
-                or analysis.ruleset_version != COMPARISON_RULESET_VERSION
+                or analysis.ruleset_version != MEMORY_RELATION_RULESET_VERSION
             ):
-                raise error_type("The saved ordered Compare analysis is stale.")
+                raise error_type("The saved peer-relation analysis is stale.")
             return analysis
 
-        comparison_input = ComparisonInput.from_contexts(
+        relation_input = MemoryRelationInput.from_contexts(
             left,
             right,
             reference_descendants=request.left_descendants,
@@ -155,12 +155,12 @@ def _start_comparison(
         )
         equivalent = find_installed_equivalent_directional_comparison(
             store=store,
-            comparison_input=comparison_input,
+            comparison_input=relation_input,
             registry_snapshot=load_profile_registry(),
         )
         if equivalent is None:
             return None
-        installed = install_prepared_comparison_analysis(
+        installed = install_prepared_memory_relation_analysis(
             store=store,
             reference_access=left_access,
             compared_access=right_access,
@@ -185,33 +185,33 @@ def _start_comparison(
 
     equivalent_match: EquivalentComparePrewarmMatch | None = None
 
-    def equivalent(comparison_input: ComparisonInput) -> ComparisonAnalysis | None:
+    def equivalent(relation_input: MemoryRelationInput) -> MemoryRelationAnalysis | None:
         nonlocal equivalent_match
         equivalent_match = find_declared_equivalent_compare_analysis(
             store=store,
-            comparison_input=comparison_input,
+            comparison_input=relation_input,
             current_name=current_name,
             registry_snapshot=load_profile_registry(),
         )
         if equivalent_match is None:
             equivalent_match = find_declared_projected_compare_analysis(
                 store=store,
-                comparison_input=comparison_input,
+                comparison_input=relation_input,
                 current_name=current_name,
                 registry_snapshot=load_profile_registry(),
             )
         return equivalent_match.analysis if equivalent_match is not None else None
 
-    def analyze_live(comparison_input: ComparisonInput) -> ComparisonAnalysis:
+    def analyze_live(relation_input: MemoryRelationInput) -> MemoryRelationAnalysis:
         if not allow_provider:
-            raise _LiveComparisonRequired
-        return analyze_comparison(
-            comparison_input,
-            connect_comparison_provider(provider_factory),
+            raise _LiveRelationAnalysisRequired
+        return analyze_memory_relations(
+            relation_input,
+            connect_memory_relation_provider(provider_factory),
         )
 
     try:
-        execution = ensure_comparison_analysis(
+        execution = ensure_memory_relation_analysis(
             store=store,
             reference_access=left_access,
             compared_access=right_access,
@@ -223,7 +223,7 @@ def _start_comparison(
             analyze=analyze_live,
             equivalent=equivalent,
         )
-    except _LiveComparisonRequired:
+    except _LiveRelationAnalysisRequired:
         return None
     if execution.origin == "EQUIVALENT_SCOPE_PREWARM" and equivalent_match:
         if equivalent_match.origin == "EXACT_PREWARM":
@@ -261,7 +261,7 @@ class PreparedMeldExecution:
     target: Context
     expected_session_digest: str | None
     create_target: bool
-    comparison: ComparisonAnalysis | None
+    relation_analysis: MemoryRelationAnalysis | None
     provisional_session: MeldSession | None
     directional_prewarm: DirectionalMeldPrewarmMatch | None
     provider_required: bool
@@ -387,16 +387,16 @@ def _prepare_initial_meld(
                 "The Meld session changed before restart."
             )
 
-    comparison = (
+    relation_analysis = (
         None
         if inline
-        else _start_comparison(
+        else _start_relation_analysis(
             request,
             store=store,
             left_access=left_access,
             right_access=right_access,
-            left=recursive_comparison_projection(left),
-            right=recursive_comparison_projection(right),
+            left=project_memory_relation_context(left),
+            right=project_memory_relation_context(right),
             current_name=current_name,
             provider_factory=lambda: (_ for _ in ()).throw(
                 AssertionError("Meld preparation connected a provider.")
@@ -429,9 +429,9 @@ def _prepare_initial_meld(
                     incoming_memory_selector=request.incoming_memory,
                     baseline_memory_selector=request.baseline_memory,
                 )
-                if comparison is None
-                else MeldSession.create_directional_from_comparison(
-                    comparison,
+                if relation_analysis is None
+                else MeldSession.create_directional_from_relation_analysis(
+                    relation_analysis,
                     left,
                     right,
                     granted_incoming=granted_incoming,
@@ -455,11 +455,11 @@ def _prepare_initial_meld(
         target=target,
         expected_session_digest=expected_session_digest,
         create_target=create_target,
-        comparison=comparison,
+        relation_analysis=relation_analysis,
         provisional_session=provisional_session,
         directional_prewarm=directional_prewarm,
         provider_required=(
-            comparison is None
+            relation_analysis is None
             if request.mode == "SYMMETRIC"
             else directional_prewarm is None
         ),
@@ -476,25 +476,25 @@ def _execute_prepared_initial_meld(
 
     request = prepared.request
     store = prepared.store
-    comparison = prepared.comparison
-    if request.mode == "SYMMETRIC" and comparison is None:
+    relation_analysis = prepared.relation_analysis
+    if request.mode == "SYMMETRIC" and relation_analysis is None:
         assert prepared.left_access is not None
-        comparison_input = ComparisonInput.from_contexts(
-            recursive_comparison_projection(prepared.left),
-            recursive_comparison_projection(prepared.right),
+        relation_input = MemoryRelationInput.from_contexts(
+            project_memory_relation_context(prepared.left),
+            project_memory_relation_context(prepared.right),
             reference_descendants=request.left_descendants,
             compared_descendants=request.right_descendants,
         )
-        live_analysis = analyze_comparison(
-            comparison_input,
-            connect_comparison_provider(provider_factory),
+        live_analysis = analyze_memory_relations(
+            relation_input,
+            connect_memory_relation_provider(provider_factory),
         )
-        comparison = install_prepared_comparison_analysis(
+        relation_analysis = install_prepared_memory_relation_analysis(
             store=store,
             reference_access=prepared.left_access,
             compared_access=prepared.right_access,
-            reference=recursive_comparison_projection(prepared.left),
-            compared=recursive_comparison_projection(prepared.right),
+            reference=project_memory_relation_context(prepared.left),
+            compared=project_memory_relation_context(prepared.right),
             current_name=prepared.current_name,
             include_descendants=(
                 request.left_descendants,
@@ -544,9 +544,9 @@ def _execute_prepared_initial_meld(
             )
             origin = prepared.directional_prewarm.origin
     else:
-        assert comparison is not None
-        session = MeldSession.create_symmetric_from_comparison(
-            comparison,
+        assert relation_analysis is not None
+        session = MeldSession.create_symmetric_from_relation_analysis(
+            relation_analysis,
             prepared.target,
         )
         assert_meld_source_bindings(session, prepared.left, prepared.right)

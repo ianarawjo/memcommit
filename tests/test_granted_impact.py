@@ -15,10 +15,10 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.commands.meld import command as meld_command
 import memcommit.adapters.console.commands.meld.endpoint_setup as meld_setup_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.compare.ledger.provider import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
     COMPARISON_PAYLOAD_MARKER,
 )
-from memcommit.application.operations.compare.ledger.store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
     comparison_analysis_path,
 )
 from memcommit.application.capabilities.authority.context_access import (
@@ -45,7 +45,7 @@ from memcommit.application.capabilities.authority.source_use_policy import (
     analysis_retention,
     authorize_analysis_save,
 )
-from memcommit.application.operations.compare.ledger.granted_store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     granted_comparison_analysis_path,
     load_granted_comparison_artifact,
 )

@@ -5,12 +5,12 @@ import uuid
 
 import pytest
 
-import memcommit.application.operations.compare.ledger.model as comparison_module
+import memcommit.application.capabilities.memory_issue_analysis.peer_relations.model as comparison_module
 import memcommit.application.capabilities.ops as ops
 import memcommit.study_scenarios.legacy.prewarm.compare as compare_prewarm_module
 import memcommit.study_scenarios.legacy.prewarm.update as update_prewarm_module
 import memcommit.application.operations.update.model as update_module
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonAnalysis,
     ComparisonInput,
     ComparisonMember,

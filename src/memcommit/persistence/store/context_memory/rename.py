@@ -483,7 +483,7 @@ class _ContextRenameMixin:
         meld_records = self._read_meld_records_for_rename()
         post_meld_records: dict[str, dict[str, object]] = {}
         meld_session_count = 0
-        from memcommit.application.operations.compare.ledger.model import (
+        from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
             comparison_canonical_digest,
         )
         from memcommit.application.operations.meld.model import MeldError, MeldSession

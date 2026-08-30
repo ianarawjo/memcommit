@@ -9,13 +9,13 @@ import re
 import uuid
 
 import memcommit.persistence.store as store_module
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonAnalysis,
     ComparisonError,
     comparison_canonical_digest,
 )
 from memcommit.core.context import Context
-from memcommit.application.operations.compare.ledger.evidence import project_comparison_context
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import project_comparison_context
 from memcommit.core.context_targeting.loading import load_context_scope
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
@@ -311,3 +311,14 @@ def delete_comparison_paths(paths: tuple[Path, ...]) -> None:
             root.rmdir()
         except OSError:
             pass
+
+
+# The on-disk directory and filenames are a compatibility contract. These
+# names expose their capability meaning without migrating durable artifacts.
+ConcurrentMemoryRelationUpdateError = ConcurrentComparisonUpdateError
+memory_relation_analyses_dir = comparison_analyses_dir
+memory_relation_analysis_path = comparison_analysis_path
+load_memory_relation_analysis = load_comparison_analysis
+save_memory_relation_analysis = save_comparison_analysis
+memory_relation_paths_for_context = comparison_paths_for_context
+delete_memory_relation_paths = delete_comparison_paths

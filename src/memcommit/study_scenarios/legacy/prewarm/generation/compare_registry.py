@@ -15,14 +15,14 @@ from pathlib import Path
 import sys
 from typing import Sequence
 
-from memcommit.application.operations.compare.ledger.execution import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution import (
     load_comparison_context,
 )
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
-from memcommit.application.operations.compare.ledger.store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
     load_comparison_analysis,
 )
-from memcommit.application.operations.compare.ledger.granted_store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     load_granted_comparison_artifact,
 )
 from memcommit.application.operations.profile.config import (

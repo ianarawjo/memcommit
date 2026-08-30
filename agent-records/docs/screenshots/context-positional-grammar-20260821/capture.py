@@ -55,7 +55,7 @@ def _configure_store(store_root: Path) -> None:
 class _CompareProvider:
     def complete(self, prompt, *, operation, output_schema=None):
         assert operation == "compare_contexts"
-        from memcommit.application.operations.compare.ledger.provider import COMPARISON_PAYLOAD_MARKER
+        from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import COMPARISON_PAYLOAD_MARKER
 
         payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
         reference_id = payload["frames"][0]["memories"][0]["memory_id"]
@@ -197,7 +197,7 @@ def _run_merge() -> None:
 
 def _run_compare() -> None:
     from memcommit.adapters.console.commands import compare as compare_command
-    from memcommit.application.operations.compare.ledger.store import comparison_analyses_dir
+    from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import comparison_analyses_dir
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()

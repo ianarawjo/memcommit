@@ -10,16 +10,16 @@ import memcommit.configuration.config as config_module
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.commands.meld import command as meld_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.compare.ledger.model import ComparisonInput
-from memcommit.application.operations.compare.ledger.provider import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonInput
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
     COMPARISON_PAYLOAD_MARKER,
     analyze_comparison,
 )
-from memcommit.application.operations.compare.ledger.store import save_comparison_analysis
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import save_comparison_analysis
 from memcommit.configuration.config import Config
 from memcommit.core.context import Context, Memory
 from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.application.operations.compare.ledger.granted_store import recursive_comparison_projection
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import recursive_comparison_projection
 from memcommit.application.operations.meld.model import (
     MeldAssessment,
     MeldProposal,

@@ -17,7 +17,7 @@ from memcommit.application.operations.atomize.domain import (
 from tests.atomize_analysis_support import (
     open_or_create_atomize_review_record,
 )
-from memcommit.application.operations.compare.ledger.model import ComparisonInput
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonInput
 from memcommit.application.operations.compare.compare_rules import (
     comparison_summary_ruleset_prompt_payload,
 )

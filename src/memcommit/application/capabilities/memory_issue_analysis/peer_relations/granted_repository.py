@@ -14,13 +14,13 @@ from memcommit.application.capabilities.authority.context_access import (
     freeze_granted_context_binding,
     revalidate_granted_context_binding,
 )
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonAnalysis,
     ComparisonError,
     comparison_canonical_digest,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.compare.ledger.evidence import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evidence import (
     ProjectedComparisonMemory,
     project_comparison_context,
 )
@@ -304,3 +304,15 @@ def granted_artifact_contexts(
 
 def recursive_comparison_projection(root: Context) -> Context:
     return project_comparison_context(root)
+
+
+# Grant-bound storage keeps its established file contract while exposing the
+# same operation-neutral capability vocabulary used by Meld.
+GrantedMemoryRelationArtifact = GrantedComparisonArtifact
+granted_memory_relation_analyses_dir = granted_comparison_analyses_dir
+granted_memory_relation_analysis_path = granted_comparison_analysis_path
+load_granted_memory_relation_artifact = load_granted_comparison_artifact
+iter_granted_memory_relation_artifacts = iter_granted_comparison_artifacts
+save_granted_memory_relation_artifact = save_granted_comparison_artifact
+memory_relation_artifact_contexts = granted_artifact_contexts
+project_memory_relation_context = recursive_comparison_projection

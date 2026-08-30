@@ -93,7 +93,7 @@ class _Provider:
 def _run_child(root: Path) -> None:
     import memcommit.adapters.console.commands.compare.command as compare_command
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.application.operations.compare.ledger.store import comparison_analysis_path
+    from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import comparison_analysis_path
     from memcommit.providers.policy import ResolvedProviderPolicy
 
     store, reference, peer = _prepare_store(root)

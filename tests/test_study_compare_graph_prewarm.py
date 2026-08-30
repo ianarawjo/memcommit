@@ -4,7 +4,7 @@ import uuid
 
 import memcommit.application.capabilities.ops as ops
 import memcommit.study_scenarios.legacy.prewarm.generation.compare_graph as graph_prewarm
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonAnalysis,
     ComparisonMember,
     ComparisonRelation,

@@ -12,6 +12,7 @@ already frozen Memory frame; it does not decide which command was invoked:
 | `capabilities.memory_issue_analysis.provider_contract` | shared prompt, schema, decoder, budget, calibration, and provider-call mechanics |
 | `capabilities.memory_issue_analysis.reading_analysis` | Context-aware ambiguity analysis; every candidate is interpreted against the complete supplied frame |
 | `capabilities.memory_issue_analysis.relation_analysis` | exact/semantic redundancy and conflict analysis over the requested frame; callers select the relation judgment they need |
+| `capabilities.memory_issue_analysis.peer_relations` | exhaustive source-linked two-Context relation ledger, provider execution, evidence projection, and compatible local/Grant retention shared by Compare and Meld |
 | `capabilities.memory_issue_analysis.source` | exact or Profile-wide readable Source freeze, including `READ`, `DERIVE`, and applicable `COMBINE` checks before provider disclosure |
 | `capabilities.memory_issue_analysis.report` | immutable issue-document projections used by read-only result browsers |
 | `capabilities.memory_issue_analysis.redundancy_scope` | independent per-Context redundancy analysis across a frozen lexical scope |
@@ -22,9 +23,10 @@ The former `reviewing.memory_issue` hierarchy classified the capability by a
 presentation phase that not every consumer shares. It is removed without a
 compatibility alias. Find, Audit, Atomize normal-form validation, and semantic
 classification import the narrow analysis owner directly; they do not invoke a
-peer `find-*` application merely to reuse a judgment primitive. Meld and Update
-remain intentionally unchanged in this step and still require a separate
-boundary review before adopting the capability.
+peer `find-*` application merely to reuse a judgment primitive. Compare and
+Meld import the exhaustive `peer_relations` owner directly. Update has no
+Compare dependency; a later operation-owned post-image Audit/Resolve loop is
+required before it can safely consume issue findings.
 
 ## Named operation routes
 
@@ -58,5 +60,8 @@ provider hook was stale and has been removed from the route contract.
 - `capabilities.memory_issue_analysis` is the canonical physical owner. The
   former `semantic` and `reviewing` category packages are not dependencies of
   this capability and are not alternate import surfaces.
-- Meld and Update module renames in the same change are mechanical only: their
-  provider, session, Apply, and Compare-basis behavior does not change.
+- Meld's relation analysis is capability-owned while its disposition,
+  proposal, session, and Apply behavior remains operation-owned.
+- Update does not gain an invisible issue gate. Its current plan/application
+  lifecycle stays unchanged until findings can participate in a typed revision
+  iteration.

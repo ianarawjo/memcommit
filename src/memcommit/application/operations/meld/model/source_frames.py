@@ -8,10 +8,10 @@ import uuid
 from dataclasses import dataclass, replace
 from typing import Literal
 
-from memcommit.application.operations.compare.ledger.model import (
-    COMPARISON_RULESET_VERSION,
-    ComparisonAnalysis,
-    comparison_canonical_digest,
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
+    MEMORY_RELATION_RULESET_VERSION,
+    MemoryRelationAnalysis,
+    memory_relation_canonical_digest,
 )
 from memcommit.application.operations.update.model import ContextFingerprint
 from memcommit.application.capabilities.semantic.disclosure import (
@@ -717,26 +717,26 @@ class MeldTarget:
 
 @dataclass(frozen=True)
 class MeldComparisonSeed:
-    """Exact ordered Compare snapshot that supplied turn zero."""
+    """Wire-compatible peer-relation snapshot that supplied turn zero."""
 
     analysis_digest: str
-    analysis: ComparisonAnalysis
+    analysis: MemoryRelationAnalysis
 
     @classmethod
     def create(
         cls,
-        analysis: ComparisonAnalysis,
+        analysis: MemoryRelationAnalysis,
     ) -> "MeldComparisonSeed":
-        if not isinstance(analysis, ComparisonAnalysis):
-            raise MeldError("Meld comparison seed must be a comparison.")
-        restored = ComparisonAnalysis.from_dict(analysis.to_dict())
-        if restored.ruleset_version != COMPARISON_RULESET_VERSION:
+        if not isinstance(analysis, MemoryRelationAnalysis):
+            raise MeldError("Meld relation seed must be a relation analysis.")
+        restored = MemoryRelationAnalysis.from_dict(analysis.to_dict())
+        if restored.ruleset_version != MEMORY_RELATION_RULESET_VERSION:
             raise MeldError(
-                "Meld requires a comparison from the current relation ruleset."
+                "Meld requires analysis from the current relation ruleset."
             )
         return cls.from_dict(
             {
-                "analysis_digest": comparison_canonical_digest(restored.to_dict()),
+                "analysis_digest": memory_relation_canonical_digest(restored.to_dict()),
                 "analysis": restored.to_dict(),
             }
         )
@@ -755,7 +755,7 @@ class MeldComparisonSeed:
             "meld comparison seed",
         )
         try:
-            analysis = ComparisonAnalysis.from_dict(data["analysis"])
+            analysis = MemoryRelationAnalysis.from_dict(data["analysis"])
         except (TypeError, ValueError) as error:
             raise MeldError("Invalid meld comparison seed analysis.") from error
         result = cls(
@@ -765,7 +765,7 @@ class MeldComparisonSeed:
             ),
             analysis=analysis,
         )
-        if result.analysis_digest != comparison_canonical_digest(
+        if result.analysis_digest != memory_relation_canonical_digest(
             result.analysis.to_dict()
         ):
             raise MeldError("Meld comparison seed digest does not match its analysis.")

@@ -9,14 +9,14 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 import uuid
 
-from memcommit.application.operations.compare.ledger.execution import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution import (
     load_comparison_context,
 )
 from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
     ComparisonInput,
@@ -26,7 +26,7 @@ from memcommit.application.operations.compare.ledger.model import (
     ComparisonReports,
     comparison_canonical_digest,
 )
-from memcommit.application.operations.compare.ledger.provider import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
     COMPARISON_PROVIDER_CONTRACT_VERSION,
 )
 from memcommit.configuration.config import Config

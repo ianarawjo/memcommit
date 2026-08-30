@@ -7,10 +7,10 @@ from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     revalidate_granted_context_binding,
 )
-from memcommit.application.operations.compare.ledger.granted_store import (
-    granted_artifact_contexts,
-    load_granted_comparison_artifact,
-    recursive_comparison_projection,
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
+    memory_relation_artifact_contexts,
+    load_granted_memory_relation_artifact,
+    project_memory_relation_context,
 )
 from memcommit.application.operations.meld.apply import (
     MeldApplicationError,
@@ -55,7 +55,7 @@ def load_meld_source(
             if access.is_granted
             else access.store.load_direct(access.context_name)
         )
-    return recursive_comparison_projection(context) if project else context
+    return project_memory_relation_context(context) if project else context
 
 
 def load_local_meld_source(
@@ -70,7 +70,7 @@ def load_local_meld_source(
     if not include_descendants:
         return store.load_direct(name)
     context = load_context_scope(store, name, include_descendants=True)
-    return recursive_comparison_projection(context) if project else context
+    return project_memory_relation_context(context) if project else context
 
 
 def load_bound_meld_contexts(
@@ -133,7 +133,7 @@ def load_bound_meld_contexts(
                 )
             else:
                 context = (
-                    recursive_comparison_projection(
+                    project_memory_relation_context(
                         load_context_scope(
                             store,
                             frame.context_name,
@@ -148,7 +148,7 @@ def load_bound_meld_contexts(
     except FileNotFoundError:
         if session.mode != "SYMMETRIC" or session.comparison_seed is None:
             raise
-        artifact = load_granted_comparison_artifact(
+        artifact = load_granted_memory_relation_artifact(
             store,
             session.frames[0].context_uid,
             session.frames[1].context_uid,
@@ -157,7 +157,7 @@ def load_bound_meld_contexts(
             raise MeldApplicationError(
                 "The granted Compare basis for this Meld is unavailable."
             )
-        left, right = granted_artifact_contexts(store, artifact)
+        left, right = memory_relation_artifact_contexts(store, artifact)
     target = (
         right
         if session.mode == "DIRECTIONAL"
@@ -261,7 +261,7 @@ def target_save_source_bindings(
     """Return live local sources that must stay locked through target CAS."""
 
     if session.mode == "SYMMETRIC" and session.comparison_seed is not None:
-        artifact = load_granted_comparison_artifact(
+        artifact = load_granted_memory_relation_artifact(
             store,
             session.frames[0].context_uid,
             session.frames[1].context_uid,
@@ -289,7 +289,7 @@ def target_save_source_bindings(
                 frame.context_name,
                 include_descendants=True,
             )
-            projected = recursive_comparison_projection(scope)
+            projected = project_memory_relation_context(scope)
             if (
                 projected.uid != frame.context_uid
                 or projected.name != frame.context_name
@@ -313,7 +313,7 @@ def target_save_source_bindings(
                 include_descendants=True,
             )
             if (
-                context_record_digest(recursive_comparison_projection(reloaded_scope))
+                context_record_digest(project_memory_relation_context(reloaded_scope))
                 != frame.context_digest
             ):
                 raise MeldApplicationError(

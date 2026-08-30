@@ -7,20 +7,20 @@ from pathlib import Path
 import re
 import uuid
 
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
     comparison_canonical_digest,
 )
-from memcommit.application.operations.compare.ledger.execution import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution import (
     load_comparison_context,
 )
-from memcommit.application.operations.compare.ledger.store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
     comparison_analyses_dir,
     load_comparison_analysis,
 )
 from memcommit.application.capabilities.authority.context_access import ContextAccess
-from memcommit.application.operations.compare.ledger.granted_store import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     granted_artifact_contexts,
     iter_granted_comparison_artifacts,
 )

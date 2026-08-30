@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections import Counter
 import shlex
 
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonAnalysis,
     ComparisonError,
     ComparisonRelation,

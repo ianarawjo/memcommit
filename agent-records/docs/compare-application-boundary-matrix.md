@@ -11,11 +11,12 @@ references resolve to the same canonical modules and classes. New production
 code imports the operation package directly.
 
 This ownership move does not combine the transient paragraph with the deep
-ledger lifecycle below. `comparison`, `comparison_provider`,
-`comparison_store`, `comparison_execution`, and
-`comparison_session_application` remain the owners of exhaustive Run, Open,
-and Refresh for now. Plain-text rendering also remains interface-owned and is
-not imported by the canonical Summary application or provider.
+ledger lifecycle below. The exhaustive relation model, evidence, provider,
+execution, and repositories live in
+`application.capabilities.memory_issue_analysis.peer_relations`; Compare's
+`operations.compare.sessions` owns Run/Open/Refresh request semantics over that
+capability. Plain-text rendering remains interface-owned and is not imported
+by either application boundary.
 
 ## Operation shape
 
@@ -34,8 +35,8 @@ not imported by the canonical Summary application or provider.
 | Use case | Typed owner | Python | Agent | CLI / TUI |
 | --- | --- | --- | --- | --- |
 | Default transient summary | `operations.compare.application.run_comparison_summary` | not exposed as the deep public API | not exposed as the deep agent API | default explicit endpoints or endpoint setup |
-| Run or reuse | `comparison_execution.ensure_comparison_analysis` | `compare_contexts` | `kind=run` | explicit endpoints or endpoint setup |
-| Open exact saved analysis | `comparison_session_application.open_comparison_session` | `open_comparison` | `kind=open` | saved-session picker |
+| Run or reuse | `memory_issue_analysis.peer_relations.execution.ensure_comparison_analysis` | `compare_contexts` | `kind=run` | explicit endpoints or endpoint setup |
+| Open exact saved analysis | `operations.compare.sessions.open_comparison_session` | `open_comparison` | `kind=open` | saved-session picker |
 | Refresh reviewed analysis | `prepare_comparison_refresh` plus production execution | `refresh_comparison(expected_version=...)` | `kind=refresh` | explicit `--refresh` freezes the current slot at command start |
 
 ## Cache matrix

@@ -17,18 +17,18 @@ from memcommit.adapters.python_api import MemCommitClient
 from memcommit.adapters.console.commands.compare.command import render_comparison
 from memcommit.adapters.console.commands.compare.execution import ensure_comparison_analysis
 from memcommit.application.capabilities.authority.context_access import ContextAccess
-from memcommit.application.operations.compare.ledger.model import (
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonAnalysis,
     ComparisonInput,
     ComparisonMember,
     ComparisonRelation,
     ComparisonReports,
 )
-from memcommit.application.operations.compare.ledger.store import load_comparison_analysis
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import load_comparison_analysis
 from memcommit.configuration.config import Config
 from memcommit.core.context import Context, Memory
 from memcommit.core.context_targeting.loading import load_context_scope
-from memcommit.application.operations.compare.ledger.granted_store import recursive_comparison_projection
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import recursive_comparison_projection
 from memcommit.application.operations.meld.start import MeldStartRequest
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
@@ -855,7 +855,7 @@ def test_task3_child_subset_uses_projected_symmetric_compare_without_provider(
         "load_profile_registry",
         lambda: registry,
     )
-    analysis = meld_session_launch._start_comparison(
+    analysis = meld_session_launch._start_relation_analysis(
         MeldStartRequest(
             mode="SYMMETRIC",
             left_name=child.name,

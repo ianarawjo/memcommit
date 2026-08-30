@@ -12,8 +12,8 @@ from memcommit.adapters.console.clipboard import ClipboardError
 import memcommit.adapters.console.commands.summarize.command as summarize_command
 from memcommit.adapters.console.commands.help.command import COMMAND_FORMS
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.compare.ledger.model import ComparisonInput
-from memcommit.application.operations.compare.ledger.provider import analyze_comparison
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonInput
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import analyze_comparison
 from memcommit.core.context import Memory
 from memcommit.adapters.console.commands.summarize.workbench import SummarizeTuiOutcome
 from memcommit.application.capabilities.reviewing.read_report import ReadReportRecent, ReadReportTarget
