@@ -35,10 +35,10 @@ def test_production_resolve_consumers_use_the_operation_owner() -> None:
         "src/memcommit/adapters/console/commands/resolve/receipt.py",
         "src/memcommit/adapters/console/commands/resolve/workbench/presentation.py",
         "src/memcommit/adapters/console/commands/resolve/workbench/screen.py",
-        "src/memcommit/adapters/console/commands/find_conflicts/resolve_handoff.py",
+        "src/memcommit/adapters/console/commands/resolve/finding_handoff.py",
         "src/memcommit/adapters/console/commands/find_conflicts/command.py",
         "src/memcommit/adapters/console/commands/resolve/impact.py",
-        "src/memcommit/application/capabilities/memory_issue_analysis/handoff.py",
+        "src/memcommit/application/operations/resolve/finding_handoff.py",
         "src/memcommit/application/operations/resolve/semantic.py",
         "src/memcommit/application/operations/resolve/targeting.py",
         "src/memcommit/application/operations/resolve/runtime.py",
@@ -51,10 +51,17 @@ def test_production_resolve_consumers_use_the_operation_owner() -> None:
         assert "from memcommit.resolve_runtime import" not in source
 
 
+def test_shared_quality_finding_handoff_does_not_depend_on_resolve() -> None:
+    source = (
+        REPOSITORY_ROOT
+        / "src/memcommit/application/capabilities/memory_issue_analysis/handoff.py"
+    ).read_text(encoding="utf-8")
+
+    assert "memcommit.application.operations.resolve" not in source
+
+
 def test_resolve_console_owns_analysis_receipt_and_workbench_without_facades() -> None:
-    command_root = (
-        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/resolve"
-    )
+    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/resolve"
     retired_tui_root = (
         REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/tui/operations/resolve"
     )

@@ -38,7 +38,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.compare_targeting` | `memcommit.adapters.console.commands.compare.targeting` | command-owned-support | `compare` |
 | `memcommit.commands.comparison_execution` | `memcommit.adapters.console.commands.compare.execution` | command-owned-support | `compare` |
 | `memcommit.commands.config` | `memcommit.adapters.console.commands.config.command` | command-entry | `config` |
-| `memcommit.commands.conflict_resolve_handoff` | `memcommit.adapters.console.commands.find_conflicts.resolve_handoff` | command-owned-support | `find_conflicts` |
+| `memcommit.commands.conflict_resolve_handoff` | `memcommit.adapters.console.commands.resolve.finding_handoff` | command-owned-support | `resolve` |
 | `memcommit.commands.consolidate` | `memcommit.adapters.console.commands.consolidate.command` | command-entry | `consolidate` |
 | `memcommit.commands.context_operand` | `memcommit.adapters.console.coordination.context_operand` | shared-command-mechanism | `coordination` |
 | `memcommit.commands.context_picker` | `memcommit.adapters.console.terminal.components.context_picker` | shared-terminal-component | `terminal` |

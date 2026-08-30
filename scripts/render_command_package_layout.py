@@ -146,7 +146,7 @@ OWNED_SUPPORT_TARGETS = {
     "compare_setup": "compare.endpoint_setup",
     "compare_targeting": "compare.targeting",
     "comparison_execution": "compare.execution",
-    "conflict_resolve_handoff": "find_conflicts.resolve_handoff",
+    "conflict_resolve_handoff": "resolve.finding_handoff",
     "duplicate_dedup_handoff": "find_redundancies.dedup_handoff",
     "find_chat_shell": "search.chat_shell",
     "find_materialization": "search.materialization",

@@ -23,11 +23,13 @@ from memcommit.application.capabilities.memory_issue_analysis.workbench import (
 )
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoffError,
-    conflict_handoff_to_resolve_request,
     quality_finding_handoff_from_json,
     quality_finding_handoff_json,
     quality_finding_handoff,
     quality_finding_handoffs,
+)
+from memcommit.application.operations.resolve.finding_handoff import (
+    conflict_handoff_to_resolve_request,
 )
 from memcommit.application.operations.resolve.application import ResolveError
 from memcommit.application.operations.review.model import direct_context_digest

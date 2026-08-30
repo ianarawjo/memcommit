@@ -186,9 +186,9 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find_conflicts.resolve_handoff",
+      "canonical_module": "memcommit.adapters.console.commands.resolve.finding_handoff",
       "legacy_module": "memcommit.commands.conflict_resolve_handoff",
-      "owner": "find_conflicts",
+      "owner": "resolve",
       "public_exports": [],
       "role": "command-owned-support"
     },

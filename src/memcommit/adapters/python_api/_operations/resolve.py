@@ -45,6 +45,8 @@ from memcommit.application.operations.resolve.application import (
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
+)
+from memcommit.application.operations.resolve.finding_handoff import (
     conflict_handoff_to_resolve_request,
 )
 from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort

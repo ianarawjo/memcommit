@@ -45,6 +45,12 @@ The routes are deliberately explicit:
 | Ambiguity | `CLARIFY` | Typed route only |
 | Conflict | `RESOLVE` | Same-Context conversion implemented |
 
+`CLARIFY` is a version-1 wire-compatibility marker, not an implemented
+function, command, or independent operation. The intended interactive owner is
+Resolve, but the marker remains unchanged until Resolve has a typed Ambiguity
+input-and-response contract; changing the serialized route before that receiver
+exists would claim executable behavior that is not yet present.
+
 The version-1 receipt retains its `QualityFindingReviewDraft` field for wire
 compatibility with previously serialized handoffs. The read-only finder
 adapter always emits the empty value; only a separately answerable legacy
@@ -59,11 +65,12 @@ Memory contents. No command automatically writes it to a cache or file.
 
 ## Conflict to Resolve
 
-`conflict_handoff_to_resolve_request` converts one handoff to a normal
-`ResolveRequest` only when the finder analyzed exactly one Context and both
-conflicting Memories are directly owned by it. The request uses full Memory
-UIDs as selectors and carries a `ResolveSourcePrecondition` containing the
-Context UID, public display name, and complete ordered direct-Memory digest.
+Resolve-owned `application.operations.resolve.finding_handoff` converts one
+handoff to a normal `ResolveRequest` only when the finder analyzed exactly one
+Context and both conflicting Memories are directly owned by it. The request
+uses full Memory UIDs as selectors and carries a `ResolveSourcePrecondition`
+containing the Context UID, public display name, and complete ordered
+direct-Memory digest.
 
 `run_resolve` compares that precondition with its newly frozen frame before
 semantic preflight or provider connection. An added, removed, reordered, or
@@ -92,14 +99,20 @@ Every adapter receives the same application-owned handoff:
   the same conversion. Ordinary finder output remains read-only.
 - The interactive conflict workbench offers `Resolve selected conflict` in
   To Do only for a single-Context finder frame. It emits the exact selected
-  item UID and opens the ordinary Resolve review. It does not apply anything
-  at the handoff boundary.
+  item UID to `commands.resolve.finding_handoff`, which opens the ordinary
+  Resolve review. Find owns no Resolve execution code and applies nothing at
+  the handoff boundary.
 - The `memcommit_quality_find` agent/MCP tool returns the same JSON receipt.
   `memcommit_resolve` accepts it as `finding_handoff`; context and Memory
   selector fields are then forbidden so an adapter cannot retarget it.
 
 All four adapter paths converge on `ResolveRequest.source_precondition`; none may
 synthesize its own digest, target, Memory selector, or guidance.
+
+The shared handoff capability owns only frozen finding evidence and its route.
+Conversion into a `ResolveRequest` belongs to the receiving Resolve operation,
+and interactive execution belongs to the Resolve console adapter. This keeps
+Find read-only even when its browser offers a next-operation action.
 
 ## Memory Issue Analysis ownership
 
@@ -133,15 +146,17 @@ operation or inheriting its presentation workflow.
 - Cross-Context conflicts do not enter Resolve v1. Repairing them requires an
   operation whose post-image and ownership semantics cover multiple Contexts;
   silently shrinking the finder frame to one owner would change the question.
-- Complete DUN redundancy and ambiguity evidence identifies its receiving
-  operation but does not pretend that Resolve implements Dedun or Clarify.
+- Complete DUN redundancy identifies Dedun as its receiving operation.
+  Ambiguity retains the legacy `CLARIFY` wire marker without pretending that a
+  Clarify operation or a Resolve Ambiguity consumer already exists.
 - Find Redundancies does not install a handoff executor. Dedun alone accepts
   every eligible redundancy finding from its complete frame and independently
   revalidates the deterministic survivor and Apply boundary.
 - Serialized receipts are transferable but intentionally not durable sessions.
   Callers that retain them own that file or message lifecycle; MemCommit does
   not create a new cache containing finding reasons, questions, or answers.
-- Dedun and Clarify remain named routes rather than fake Resolve variants.
-  Dedun consumes the source-bound redundancy handoff while retaining its own
-  disposition and materialization semantics; a future Clarify executor must do
-  the same for ambiguity evidence.
+- Dedun consumes the source-bound redundancy handoff while retaining its own
+  disposition and materialization semantics. Ambiguity will move to the same
+  user-input-first Resolve lifecycle as Conflict only when that receiving
+  application contract exists; the compatibility marker alone is not such a
+  lifecycle.

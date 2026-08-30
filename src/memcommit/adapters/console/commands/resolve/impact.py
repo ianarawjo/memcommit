@@ -19,8 +19,10 @@ from memcommit.adapters.console.terminal.components.progress import CommandProgr
 from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoffError,
-    conflict_handoff_to_resolve_request,
     quality_finding_handoff_from_json,
+)
+from memcommit.application.operations.resolve.finding_handoff import (
+    conflict_handoff_to_resolve_request,
 )
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionContextLocation,

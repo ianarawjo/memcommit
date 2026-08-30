@@ -1,25 +1,27 @@
-"""Interactive adapter from one typed conflict finding into Resolve."""
+"""Interactive console entry from one typed finding into Resolve."""
 
 from __future__ import annotations
 
 from memcommit.adapters.console.clipboard import write_system_clipboard
-from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.commands.resolve.receipt import render_resolve_receipt
 from memcommit.adapters.console.commands.resolve.workbench import run_resolve_tui
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
-    conflict_handoff_to_resolve_request,
 )
-from memcommit.providers.subscription import connect_semantic_provider
 from memcommit.application.operations.resolve.application import (
     apply_resolve,
     run_resolve,
+)
+from memcommit.application.operations.resolve.finding_handoff import (
+    conflict_handoff_to_resolve_request,
 )
 from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.application.operations.resolve.semantic import (
     ProviderResolveSemanticPort,
 )
 from memcommit.persistence.store import MemoryStore
+from memcommit.providers.subscription import connect_semantic_provider
 
 
 def run_conflict_resolve_handoff(

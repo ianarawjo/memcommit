@@ -6,7 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.commands.find_conflicts.resolve_handoff import (
+from memcommit.adapters.console.commands.resolve.finding_handoff import (
     run_conflict_resolve_handoff,
 )
 from memcommit.adapters.console.coordination.context_operand import (
