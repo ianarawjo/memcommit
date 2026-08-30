@@ -16,7 +16,9 @@ from memcommit.application.capabilities.retained_history.applied_review import (
     list_applied_checkpoint_reviews,
 )
 from memcommit.adapters.console.commands.atomize.sessions import atomize_session_entries
-from memcommit.adapters.console.commands.compare.sessions import comparison_session_entries
+from memcommit.adapters.console.commands.compare.sessions import (
+    comparison_session_entries,
+)
 from memcommit.adapters.console.terminal.components.operation_launcher.location import (
     session_picker_location,
 )
@@ -26,10 +28,16 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.adapters.console.commands.audit.sessions import audit_session_entries
-from memcommit.adapters.console.commands.sever.sessions import list_sever_session_catalog
+from memcommit.adapters.console.commands.audit.session_catalog import (
+    audit_session_entries,
+)
+from memcommit.adapters.console.commands.sever.sessions import (
+    list_sever_session_catalog,
+)
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.application.capabilities.reviewing.quality.audit_store import (
+    QualityAuditStore,
+)
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
 from memcommit.application.operations.review.model import ReviewError
@@ -251,9 +259,7 @@ def _saved_review_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]:
         operation = session.kind.replace("_", " ").replace("-", " ").upper()
         total = len(session.items)
         status = (
-            f"{session.answered_count}/{total} ANSWERED"
-            if total
-            else "NO REVIEW ITEMS"
+            f"{session.answered_count}/{total} ANSWERED" if total else "NO REVIEW ITEMS"
         )
         if retained:
             status += " · RETAINED"
@@ -302,11 +308,7 @@ def _saved_review_entry(store: MemoryStore) -> SessionPickerEntry | None:
     if active is None:
         return None
     return next(
-        (
-            entry
-            for entry in _saved_review_entries(store)
-            if entry.key == active.uid
-        ),
+        (entry for entry in _saved_review_entries(store) if entry.key == active.uid),
         None,
     )
 

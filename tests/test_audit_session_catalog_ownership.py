@@ -10,15 +10,17 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-CANONICAL_MODULE = "memcommit.adapters.console.commands.audit.sessions"
+CANONICAL_MODULE = "memcommit.adapters.console.commands.audit.session_catalog"
 RETIRED_PACKAGE = (
-    REPOSITORY_ROOT
-    / "src/memcommit/adapters/interfaces/tui/operations/audit"
+    REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/tui/operations/audit"
 )
 
 
 def test_audit_catalog_is_implemented_by_the_command_package() -> None:
-    source_path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/audit/sessions.py"
+    source_path = (
+        REPOSITORY_ROOT
+        / "src/memcommit/adapters/console/commands/audit/session_catalog.py"
+    )
     tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
 
     definitions = {
@@ -42,17 +44,17 @@ def test_audit_catalog_is_implemented_by_the_command_package() -> None:
 
     assert {"_timestamp", "audit_session_entries"} <= definitions
     assert aliases == []
-    assert "interfaces.tui.operations.audit" not in source_path.read_text(encoding="utf-8")
+    assert "interfaces.tui.operations.audit" not in source_path.read_text(
+        encoding="utf-8"
+    )
 
 
 def test_review_consumers_import_the_operation_owned_audit_adapters() -> None:
     command_source = (
-        REPOSITORY_ROOT
-        / "src/memcommit/adapters/console/commands/review/command.py"
+        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/review/command.py"
     ).read_text(encoding="utf-8")
     sessions_source = (
-        REPOSITORY_ROOT
-        / "src/memcommit/adapters/console/commands/review/sessions.py"
+        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/review/sessions.py"
     ).read_text(encoding="utf-8")
 
     assert (
@@ -60,8 +62,9 @@ def test_review_consumers_import_the_operation_owned_audit_adapters() -> None:
         in command_source
     )
     assert (
-        "from memcommit.adapters.console.commands.audit.sessions import "
-        "audit_session_entries"
+        "from memcommit.adapters.console.commands.audit.session_catalog import (\n"
+        "    audit_session_entries,\n"
+        ")"
     ) in sessions_source
     assert "interfaces.tui.operations.audit" not in command_source
     assert "interfaces.tui.operations.audit" not in sessions_source

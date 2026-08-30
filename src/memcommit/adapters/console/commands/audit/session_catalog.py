@@ -4,9 +4,15 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from memcommit.adapters.console.terminal.components.operation_launcher.session import SessionPickerEntry
-from memcommit.application.capabilities.reviewing.quality.audit import QualityAuditSession
-from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.adapters.console.terminal.components.operation_launcher.session import (
+    SessionPickerEntry,
+)
+from memcommit.application.capabilities.reviewing.quality.audit import (
+    QualityAuditSession,
+)
+from memcommit.application.capabilities.reviewing.quality.audit_store import (
+    QualityAuditStore,
+)
 
 
 def _timestamp(session: QualityAuditSession, sessions: QualityAuditStore) -> float:
@@ -60,7 +66,11 @@ def audit_session_entries(
                         f"Direct Memories {len(session.source.memories)}",
                         (
                             "Duplicate, Ambiguity, Conflict"
-                            + (", and Conformance" if session.conformance is not None else "")
+                            + (
+                                ", and Conformance"
+                                if session.conformance is not None
+                                else ""
+                            )
                             + " checks: FINISHED"
                         ),
                         "Source: UNCHANGED BY AUDIT",

@@ -75,12 +75,13 @@ review contract.
 
 Audit's console-specific pieces are co-located under
 `memcommit.adapters.console.commands.audit`: `command.py` owns execution and
-the saved receipt, `setup.py` owns Source selection, `sessions.py` owns the
-saved-session catalog, and `review.py` owns the read-only report projection and
-Viewer launch. The former
-`memcommit.adapters.interfaces.tui.operations.audit` package and the
-`commands.audit.sessions` module alias are removed rather than retained as
-facades. `mem review audit` imports the narrow command-owned modules directly.
+persistence orchestration, `receipt.py` owns the compact saved-result receipt,
+`setup.py` owns Source selection, `session_catalog.py` owns the saved-session
+catalog, and `review.py` owns the read-only report projection and Viewer launch.
+The former
+`memcommit.adapters.interfaces.tui.operations.audit` package and the former
+`commands.audit.sessions` module are removed rather than retained as facades.
+`mem review audit` imports the narrow command-owned modules directly.
 This is an ownership-only relocation: setup interaction, catalog reads and
 ordering, report content, Viewer behavior, exceptions, and the zero-write
 boundary are unchanged. The existing Audit terminal captures therefore remain

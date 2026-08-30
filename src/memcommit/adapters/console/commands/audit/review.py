@@ -8,11 +8,15 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 import typer
 
-from memcommit.adapters.console.commands.audit.sessions import audit_session_entries
+from memcommit.adapters.console.commands.audit.session_catalog import (
+    audit_session_entries,
+)
 from memcommit.adapters.console.commands.review.sessions import select_report_session
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.core.theme import semantic_quality_role
-from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_role_style
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
+    semantic_role_style,
+)
 from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerBlock,
     SemanticViewerDocument,
@@ -32,7 +36,9 @@ from memcommit.application.capabilities.reviewing.quality.audit import (
 from memcommit.application.capabilities.reviewing.quality.audit_store import (
     QualityAuditStore,
 )
-from memcommit.application.capabilities.reviewing.quality.report import quality_find_category_label
+from memcommit.application.capabilities.reviewing.quality.report import (
+    quality_find_category_label,
+)
 from memcommit.application.capabilities.reviewing.quality.workbench import (
     QualityFindSourceFrame,
     QualityFindWorkbenchSession,

@@ -60,7 +60,7 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.audit.sessions",
+      "canonical_module": "memcommit.adapters.console.commands.audit.session_catalog",
       "legacy_module": "memcommit.commands.audit_sessions",
       "owner": "audit",
       "public_exports": [],

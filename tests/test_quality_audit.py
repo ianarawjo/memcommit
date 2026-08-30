@@ -13,6 +13,9 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.audit.command as audit_command
+from memcommit.adapters.console.commands.audit.receipt import (
+    render_quality_audit_receipt,
+)
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.audit.command import (
     _run_quality_audit_checks,
@@ -22,7 +25,9 @@ from memcommit.adapters.console.commands.audit.review import (
     render_quality_audit_review_snapshot,
     run_quality_audit_review,
 )
-from memcommit.adapters.console.commands.audit.sessions import audit_session_entries
+from memcommit.adapters.console.commands.audit.session_catalog import (
+    audit_session_entries,
+)
 from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     QualityFindSetupReceipt,
     choose_quality_find_setup,
@@ -42,8 +47,12 @@ from memcommit.adapters.console.terminal.core.theme import (
     memory_object_color_rgb,
     semantic_color_rgb,
 )
-from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_role_style
-from memcommit.adapters.console.terminal.components.semantic_viewer import semantic_document_plain_text
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
+    semantic_role_style,
+)
+from memcommit.adapters.console.terminal.components.semantic_viewer import (
+    semantic_document_plain_text,
+)
 from memcommit.application.capabilities.reviewing.quality.audit import (
     QUALITY_AUDIT_PREVIOUS_SCHEMA_VERSION,
     QUALITY_AUDIT_RULESETS,
@@ -56,7 +65,9 @@ from memcommit.application.capabilities.reviewing.quality.audit import (
     quality_audit_resolution_view,
     run_quality_audit,
 )
-from memcommit.application.capabilities.reviewing.quality.audit_store import QualityAuditStore
+from memcommit.application.capabilities.reviewing.quality.audit_store import (
+    QualityAuditStore,
+)
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
@@ -310,9 +321,7 @@ def test_audit_report_keeps_three_sections_and_type_specific_items():
     )
     assert "AUDITED SOURCE" in view.overview
     assert "FROZEN SOURCE" not in view.overview
-    assert [location.role for location in view.context_locations] == [
-        "AUDITED SOURCE"
-    ]
+    assert [location.role for location in view.context_locations] == ["AUDITED SOURCE"]
     assert "not proof" in view.overview
     assert view.capabilities == frozenset()
     assert view.status.endswith("READ-ONLY REPORT")
@@ -404,9 +413,7 @@ def test_audit_review_is_one_complete_answer_free_document():
     ):
         assert ("class:finding-marker", marker) in section.block.fragments
         resting_label_style = f"{semantic_role_style(role)} class:finding-label"
-        focused_label_style = (
-            f"{semantic_role_style(role)} class:finding-label.focused"
-        )
+        focused_label_style = f"{semantic_role_style(role)} class:finding-label.focused"
         assert (resting_label_style, label) in section.block.fragments
         focused_fragments = section.block.render(active=True)
         assert ("class:finding-marker.focused", marker) in focused_fragments
@@ -624,7 +631,7 @@ def test_audit_receipt_colors_only_quality_labels_and_preserves_plain_text():
 
     @click.command()
     def receipt():
-        audit_command.render_quality_audit_receipt(session)
+        render_quality_audit_receipt(session)
 
     colored = ClickCliRunner().invoke(receipt, color=True)
     plain = ClickCliRunner().invoke(receipt, color=False)
@@ -660,25 +667,34 @@ def test_audit_receipt_colors_only_quality_labels_and_preserves_plain_text():
         ("AMBIGUITIES", SemanticColorRole.QUALITY_AMBIGUITY),
         ("CONFLICTS", SemanticColorRole.QUALITY_CONFLICT),
     ):
-        assert click.style(
-            label,
-            fg=semantic_color_rgb(role),
-            bold=True,
-        ) in colored.output
+        assert (
+            click.style(
+                label,
+                fg=semantic_color_rgb(role),
+                bold=True,
+            )
+            in colored.output
+        )
     for label, role in (
         ("REDUNDANT", SemanticColorRole.QUALITY_DUPLICATE),
         ("UNDERSPECIFIED", SemanticColorRole.QUALITY_AMBIGUITY),
         ("CONFLICT", SemanticColorRole.QUALITY_CONFLICT),
     ):
-        assert click.style(
-            label,
-            fg=semantic_color_rgb(role),
-            bold=True,
-        ) in colored.output
-    assert click.style(
-        f"“{first.content}”",
-        fg=memory_object_color_rgb(),
-    ) in colored.output
+        assert (
+            click.style(
+                label,
+                fg=semantic_color_rgb(role),
+                bold=True,
+            )
+            in colored.output
+        )
+    assert (
+        click.style(
+            f"“{first.content}”",
+            fg=memory_object_color_rgb(),
+        )
+        in colored.output
+    )
     assert "\x1b[" not in plain.output
     assert "\x1b[" not in no_color.output
 
@@ -723,7 +739,7 @@ def test_audit_receipt_previews_three_findings_then_reports_the_remainder():
 
     @click.command()
     def receipt():
-        audit_command.render_quality_audit_receipt(session)
+        render_quality_audit_receipt(session)
 
     result = ClickCliRunner().invoke(receipt, color=False)
 
@@ -743,7 +759,7 @@ def test_audit_receipt_preview_expands_colliding_memory_uid_prefixes():
 
     @click.command()
     def receipt():
-        audit_command.render_quality_audit_receipt(session)
+        render_quality_audit_receipt(session)
 
     result = ClickCliRunner().invoke(receipt, color=False)
 

@@ -22,7 +22,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.atomize_sessions` | `memcommit.adapters.console.commands.atomize.sessions` | command-owned-support | `atomize` |
 | `memcommit.commands.atomize_workbench_shell` | `memcommit.adapters.console.commands.atomize.workbench.screen` | command-owned-support | `atomize` |
 | `memcommit.commands.audit` | `memcommit.adapters.console.commands.audit.command` | command-entry | `audit` |
-| `memcommit.commands.audit_sessions` | `memcommit.adapters.console.commands.audit.sessions` | command-owned-support | `audit` |
+| `memcommit.commands.audit_sessions` | `memcommit.adapters.console.commands.audit.session_catalog` | command-owned-support | `audit` |
 | `memcommit.commands.background_turn` | `memcommit.adapters.console.terminal.components.background_turn` | shared-terminal-component | `terminal` |
 | `memcommit.commands.batch_input` | `memcommit.adapters.console.coordination.batch_input_source` | shared-command-mechanism | `coordination` |
 | `memcommit.commands.branch` | `memcommit.adapters.console.commands.branch.command` | command-entry | `branch` |
