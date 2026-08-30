@@ -1,5 +1,10 @@
 # Ticker `check-conformance` evaluation
 
+> Historical experiment, captured 2026-08-15. The exact-output Case
+> Conformance API was removed before distribution. These images,
+> `actual-run.json`, and `capture.py` are preserved only as design evidence;
+> the script is not a runnable contract for the current source tree.
+
 This ordered 180x52 color-PTY capture reuses the exact twenty ticker examples
 and five Rules from the preceding Distill evaluation. It constructs an isolated
 typed Ground, then runs the real shared Conformance core twice with
@@ -33,7 +38,8 @@ the Rules predicted `AAIT` while the frozen expected output was `AAT`.
 
 Context Conformance returned five `CONFORMS` judgments. In particular, it
 interpreted `AI` as contributing the single component `A` and therefore did not
-flag the executable mismatch. This difference is the reason both contracts are
-retained: Context Conformance assesses whether existing material can be read as
-adhering to Rules, while Case Conformance actually executes Rules without the
-answers and tests their determinacy and output fidelity.
+flag the executable mismatch. This contrast exposed that exact-output execution
+was a different operation from Rule/Context Conformance. Because the physical
+Ground model now stores proposition Examples and the prototype had not been
+distributed, the Case replay branch was removed instead of retained as a
+compatibility mode.

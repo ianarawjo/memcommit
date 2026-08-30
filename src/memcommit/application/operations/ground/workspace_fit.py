@@ -9,8 +9,6 @@ from typing import Callable
 
 from memcommit.core.context import Context
 from memcommit.application.operations.fit.ground_report import (
-    FIT_RULESET_VERSION,
-    FIT_SCHEMA_VERSION,
     FitError,
     FitExample,
     FitProvider,
@@ -34,8 +32,12 @@ from memcommit.application.operations.ground.workspace_projection import (
     GroundWorkspaceProjectionError,
     project_ordinary_memories,
 )
-from memcommit.application.operations.ground.workspace_runtime import load_ground_workspace
-from memcommit.application.capabilities.semantic.goal_focus_runtime import freeze_goal_focus_context
+from memcommit.application.operations.ground.workspace_runtime import (
+    load_ground_workspace,
+)
+from memcommit.application.capabilities.semantic.goal_focus_runtime import (
+    freeze_goal_focus_context,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -107,7 +109,6 @@ def freeze_ground_workspace_fit(
             uid=item.uid,
             alias=f"e{index}",
             statement=item.content,
-            projection="PROPOSITION",
             rule_uids=rule_uids,
         )
         for index, item in enumerate(examples, 1)
@@ -262,8 +263,6 @@ def execute_ground_workspace_fit(
         report,
         coherence=coherence,
         provider_identity=(coherence.provider_identity or report.provider_identity),
-        schema_version=FIT_SCHEMA_VERSION,
-        ruleset_version=FIT_RULESET_VERSION,
     )
     if not workspace_fit_report_is_current(store, report):
         raise FitError(

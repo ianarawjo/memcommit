@@ -604,8 +604,7 @@ class QualityAuditSession:
         )
         if conformance is not None:
             if (
-                conformance.mode != "CONTEXT"
-                or conformance.source_label != source.context_name
+                conformance.source_label != source.context_name
                 or conformance.provider_identity is None
             ):
                 raise QualityAuditError(
@@ -615,9 +614,7 @@ class QualityAuditSession:
                 item.uid: item.content for item in conformance.subjects
             }
             source_subjects = {item.uid: item.content for item in source.memories}
-            if conformance_subjects != source_subjects or any(
-                item.expected is not None for item in conformance.subjects
-            ):
+            if conformance_subjects != source_subjects:
                 raise QualityAuditError(
                     "Audit Conformance does not cover the exact frozen Source."
                 )

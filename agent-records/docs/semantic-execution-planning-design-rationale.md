@@ -219,14 +219,11 @@ as exempt.
 
 ## Whole-frame Conformance
 
-Case and Context Conformance both declare `WHOLE_FRAME_ONLY`. Case Conformance
-must expose every input to the same frozen Rule set while withholding expected
-outputs, then return exactly one prediction or unresolved disposition per case.
-Context Conformance must judge every Rule against the complete target frame and
-account for every target Memory as cited evidence or explicitly outside. Hidden
-batching would require operation-owned reconciliation for cross-case Rule
-interpretation and Context-wide mixed evidence; neither operation currently
-claims such a reconciler.
+Rule/Context Conformance declares `WHOLE_FRAME_ONLY`. It must judge every Rule
+against the complete target frame and account for every target Memory as cited
+evidence or explicitly outside. Hidden batching would require operation-owned
+reconciliation for cross-Example Rule interpretation and Context-wide mixed
+evidence; Conformance does not claim such a reconciler.
 
 ## Whole-frame Resolve
 

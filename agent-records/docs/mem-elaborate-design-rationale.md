@@ -52,7 +52,7 @@ value. A count mismatch publishes nothing. General provider input and response
 envelope limits remain independent of this count contract, so a provider may
 still fail an exceptionally large exact request rather than silently reducing
 its count. Strict Rules-to-Cases also fails before provider construction when
-the complete Rule-by-Case Conformance/Fit validation frame exceeds the shared
+the complete Rule-by-Example Conformance/Fit validation frame exceeds the shared
 whole-frame item or text limits. Best-effort does not inherit limits belonging
 only to semantic calls it does not make.
 

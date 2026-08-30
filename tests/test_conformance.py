@@ -8,13 +8,11 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.conformance.model import (
-    CASE_CONFORMANCE_OPERATION,
     CONTEXT_CONFORMANCE_OPERATION,
     ConformanceError,
     ConformanceReport,
     ConformanceRule,
     ConformanceSubject,
-    check_case_conformance,
     check_context_conformance,
 )
 from memcommit.application.operations.conformance.runtime import (
@@ -63,89 +61,6 @@ class Provider:
 
 def _rule(content="Use uppercase initials."):
     return ConformanceRule(_uid(), "r1", content)
-
-
-def test_case_conformance_withholds_expected_and_derives_exact_pass_fail():
-    rule = _rule()
-    first = ConformanceSubject(
-        _uid(), "c1", "North Star Energy Inc.", "NSE", "FIT", (rule.uid,)
-    )
-    second = ConformanceSubject(
-        _uid(), "c2", "Axiom AI Technologies Inc.", "AAT", "BOUNDARY", (rule.uid,)
-    )
-    provider = Provider(
-        {
-            "overview": "The Rule determines both predictions.",
-            "predictions": [
-                {
-                    "case_id": "c1",
-                    "disposition": "PREDICTED",
-                    "predicted": "NSE",
-                    "reason": "Uses initials.",
-                },
-                {
-                    "case_id": "c2",
-                    "disposition": "PREDICTED",
-                    "predicted": "AAIT",
-                    "reason": "Preserves AI as a component.",
-                },
-            ],
-        }
-    )
-
-    report = check_case_conformance(
-        source_label="GROUND · ticker",
-        rules_label="GROUND RULES · ticker",
-        rules=(rule,),
-        subjects=(first, second),
-        provider=provider,
-    )
-
-    prompt, operation, _schema = provider.calls[0]
-    payload = json.loads(prompt.split("CONFORMANCE CASE PAYLOAD:\n", 1)[1])
-    assert operation == CASE_CONFORMANCE_OPERATION
-    assert "expected" not in json.dumps(payload)
-    assert [item.status for item in report.case_judgments] == ["PASS", "FAIL"]
-    assert report.issue_count == 1
-    assert ConformanceReport.from_dict(report.to_dict()) == report
-
-
-def test_case_conformance_rejects_omitted_or_duplicate_case():
-    rule = _rule()
-    cases = tuple(
-        ConformanceSubject(
-            _uid(), f"c{index}", f"Case {index}", "X", "FIT", (rule.uid,)
-        )
-        for index in (1, 2)
-    )
-    provider = Provider(
-        {
-            "overview": "Invalid duplicate coverage.",
-            "predictions": [
-                {
-                    "case_id": "c1",
-                    "disposition": "PREDICTED",
-                    "predicted": "X",
-                    "reason": "One.",
-                },
-                {
-                    "case_id": "c1",
-                    "disposition": "PREDICTED",
-                    "predicted": "X",
-                    "reason": "Again.",
-                },
-            ],
-        }
-    )
-
-    with pytest.raises(ConformanceError, match="exactly once"):
-        check_case_conformance(
-            source_label="ground",
-            rules_label="rules",
-            rules=(rule,),
-            subjects=cases,
-            provider=provider,
-        )
 
 
 def test_context_conformance_judges_each_rule_and_accounts_every_memory():
@@ -216,7 +131,11 @@ def test_context_conformance_judges_each_rule_and_accounts_every_memory():
         "CONFORMANCE · 2/2 EXAMPLES CONFORM · 2/2 RULES MET · "
         "[EXAMPLES ticker/examples] · [RULES ticker/rules] · 1 EXAMPLE N/A"
     )
-    assert ConformanceReport.from_dict(report.to_dict()) == report
+    serialized = report.to_dict()
+    assert "mode" not in serialized
+    assert "case_judgments" not in serialized
+    assert "expected" not in serialized["subjects"][0]
+    assert ConformanceReport.from_dict(serialized) == report
 
 
 def test_context_conformance_renders_rule_summary_and_exact_failing_cases():
@@ -293,14 +212,14 @@ def test_context_conformance_renders_rule_summary_and_exact_failing_cases():
     assert "OUTSIDE RULE JUDGMENTS" not in rendered
 
 
-def test_context_conformance_still_reads_schema_one_without_case_details():
+def test_context_conformance_rejects_unpublished_legacy_schema():
     rule = _rule()
     subject = ConformanceSubject(
         _uid(), "m000001", "A -> A", linked_rule_uids=(rule.uid,)
     )
     report = check_context_conformance(
-        source_label="legacy/examples",
-        rules_label="legacy/rules",
+        source_label="current/examples",
+        rules_label="current/rules",
         rules=(rule,),
         subjects=(subject,),
         provider=Provider(
@@ -319,61 +238,10 @@ def test_context_conformance_still_reads_schema_one_without_case_details():
         ),
     )
     legacy = report.to_dict()
-    legacy["schema_version"] = 1
-    legacy["ruleset_version"] = "conformance-v1"
-    for judgment in legacy["context_judgments"]:
-        judgment.pop("nonconforming_cases")
+    legacy["schema_version"] = 3
 
-    restored = ConformanceReport.from_dict(legacy)
-
-    assert restored.schema_version == 1
-    assert restored.context_judgments[0].nonconforming_subject_uids == ()
-    assert restored.to_dict() == legacy
-
-
-def test_context_conformance_still_reads_schema_two_case_identities():
-    rule = _rule("Use lowercase letters.")
-    subject = ConformanceSubject(
-        _uid(), "m000001", "A is apple", linked_rule_uids=(rule.uid,)
-    )
-    report = check_context_conformance(
-        source_label="legacy/examples",
-        rules_label="legacy/rules",
-        rules=(rule,),
-        subjects=(subject,),
-        provider=Provider(
-            {
-                "judgments": [
-                    {
-                        "rule_id": "r1",
-                        "status": "VIOLATES",
-                        "evidence_memory_ids": ["m000001"],
-                        "nonconforming_cases": [
-                            {
-                                "memory_id": "m000001",
-                                "reason": "The initial letter is uppercase.",
-                            }
-                        ],
-                        "reason": "The observed initial is uppercase.",
-                    }
-                ],
-                "outside_memory_ids": [],
-            }
-        ),
-    )
-    schema_two = report.to_dict()
-    schema_two["schema_version"] = 2
-    schema_two["ruleset_version"] = "conformance-v1"
-    for judgment in schema_two["context_judgments"]:
-        cases = judgment.pop("nonconforming_cases")
-        judgment["nonconforming_subject_uids"] = [case["subject_uid"] for case in cases]
-
-    restored = ConformanceReport.from_dict(schema_two)
-
-    assert restored.schema_version == 2
-    assert restored.context_judgments[0].nonconforming_subject_uids == (subject.uid,)
-    assert restored.context_judgments[0].nonconforming_cases[0].reason is None
-    assert restored.to_dict() == schema_two
+    with pytest.raises(ConformanceError, match="Unsupported"):
+        ConformanceReport.from_dict(legacy)
 
 
 def test_context_conformance_renders_unresolved_example_reason_inline():
@@ -517,7 +385,6 @@ def test_freeze_ground_conformance_uses_physical_rules_and_examples(
     assert frozen.subjects[0].content == (
         "North Star Energy Inc. is represented by NSE."
     )
-    assert frozen.subjects[0].expected is None
     assert frozen.subjects[0].linked_rule_uids == tuple(
         item.uid for item in frozen.rules
     )

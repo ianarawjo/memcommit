@@ -350,8 +350,8 @@ def execute_context_conformance_with_rules_operand(
     """Check one local Target against a Context, Memory, or literal Rule.
 
     Context Conformance still owns one complete Target Context frame. Only its
-    Rules endpoint is widened here; Ground replay and Audit keep their existing
-    typed Context contracts.
+    Rules endpoint is widened here; Ground and Audit keep their existing typed
+    Context contracts.
     """
 
     if not store.context_exists(target_name):

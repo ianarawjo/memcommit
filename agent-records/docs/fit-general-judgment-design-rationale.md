@@ -145,7 +145,7 @@ and what additional contract they add:
 | Distill | Uses generative reduction, so its Rules remain unverified. Goal-focused Distill composes one whole-result Fit audit; an unfocused result may receive a later Fit judgment. Neither establishes truth or evidential support. |
 | Elaborate | Uses generative expansion, so its proposals remain unverified. Default Rules-to-Cases is best-effort and does not invoke Fit; explicit strict mode composes general Fit after independent Rule Conformance and accepts only Source-compatible Cases. Fit still cannot establish truth, factual grounding, or evidential support. |
 | Find, Query | Use interpretation and relevance rather than compatibility; ordinary common sense can assist retrieval, but Fit labels are not relevance scores. |
-| Ground | Projects selected Rules and an Example into a Fit frame. Exact-output replay remains a separate conformance adapter because deterministic output reproduction is stronger than proposition compatibility. |
+| Ground | Projects selected Rules and proposition-shaped Examples into a Fit frame. Rule Conformance separately checks the complete Example Context against the Rules; neither operation reconstructs an exact-output replay contract. |
 
 Whenever an operation uses the LLM as a judge, the reusable design discipline
 is: freeze the complete authorized input, define a closed judgment vocabulary,
@@ -269,11 +269,12 @@ mem fit --ground [ground]
 mem fit --ground [ground] --receipt [uid]
 ```
 
-For native proposition Examples, the adapter maps `YES -> FIT`,
+For proposition Examples, the adapter maps `YES -> FIT`,
 `NO -> CONTRADICTS`, and `MAY -> UNDERDETERMINED`. It never maps an unrelated
 claim to `NOT_APPLICABLE`; unrelated but compatible propositions are `YES`.
-Legacy exact-output Grounds continue through deterministic conformance replay
-and retain their historic receipt vocabulary for compatibility.
+The unpublished exact-output Ground adapter and its historic receipt vocabulary
+were removed rather than migrated; the stored Fit schema now has one
+proposition-only Example shape.
 
 The Ground adapter projects the complete stored analysis as a small receipt:
 one `FIT · YES|MAY|NO|STALE · [TARGETS: GROUND <name>] · <fitted>/<total>` whole-operation
@@ -287,8 +288,8 @@ coherence issue follows the same rule: its axis, frozen check participants,
 additional material Context Memories, and reason remain visible on one
 display-escaped logical line rather than a heading-plus-evidence-plus-`WHY`
 stack.
-`UNDERDETERMINED` becomes `? MAY`, `CONTRADICTS` becomes `! NO`, and a legacy
-`NOT_APPLICABLE` check becomes `· N/A`. Fitting Example and graph details are
+`UNDERDETERMINED` becomes `? MAY`, `CONTRADICTS` becomes `! NO`, and a
+coherence-only `NOT_APPLICABLE` check becomes `· N/A`. Fitting Example and graph details are
 omitted; they remain counted and retained in the immutable Ground receipt.
 Stale results omit old issue detail rather than presenting it as current.
 

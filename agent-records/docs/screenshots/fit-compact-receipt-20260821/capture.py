@@ -15,7 +15,9 @@ import pexpect
 
 ROOT = Path(__file__).resolve().parents[3]
 OUT = Path(__file__).resolve().parent
-BASE_PATH = ROOT / "agent-records/docs/screenshots/atomize-memory-selection-20260814/capture.py"
+BASE_PATH = (
+    ROOT / "agent-records/docs/screenshots/atomize-memory-selection-20260814/capture.py"
+)
 ROWS = 52
 COLUMNS = 180
 
@@ -43,7 +45,9 @@ class _Provider:
         self.verdict = verdict
 
     def complete(self, prompt, *, operation, output_schema=None):
-        from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
+        from memcommit.application.operations.fit.judgment import (
+            FIT_JUDGMENT_PAYLOAD_MARKER,
+        )
 
         type(self).calls += 1
         assert operation == "fit_propositions"
@@ -91,7 +95,12 @@ def _use_store_root(root: Path) -> None:
 
 
 def _ground_result(*, current: bool):
-    from memcommit.application.operations.fit.ground_report import FitExample, FitJudgment, FitReport, FitRule
+    from memcommit.application.operations.fit.ground_report import (
+        FitExample,
+        FitJudgment,
+        FitReport,
+        FitRule,
+    )
     from memcommit.application.operations.fit.application import FitResult
 
     rule_uid = "11111111-1111-1111-1111-111111111111"
@@ -110,21 +119,18 @@ def _ground_result(*, current: bool):
                 fit_uid,
                 "e1",
                 "Apple Inc. may be represented as AAPL.",
-                "PROPOSITION",
                 (rule_uid,),
             ),
             FitExample(
                 may_uid,
                 "e2",
                 "Axiom AI Technologies may be AAT or AAIT.",
-                "PROPOSITION",
                 (rule_uid,),
             ),
             FitExample(
                 no_uid,
                 "e3",
                 "One exact symbol must be both AAT and AXAI.",
-                "PROPOSITION",
                 (rule_uid,),
             ),
         ),
@@ -134,21 +140,18 @@ def _ground_result(*, current: bool):
                 "FIT",
                 (rule_uid,),
                 "The abbreviation follows the Rule.",
-                "AAPL",
             ),
             FitJudgment(
                 may_uid,
                 "UNDERDETERMINED",
                 (rule_uid,),
                 "The Rule does not choose between the two abbreviations.",
-                "AAT or AAIT",
             ),
             FitJudgment(
                 no_uid,
                 "CONTRADICTS",
                 (rule_uid,),
                 "One exact symbol cannot have both values.",
-                "AAT and AXAI",
             ),
         ),
         overview="One passes, one is conditional, and one conflicts.",

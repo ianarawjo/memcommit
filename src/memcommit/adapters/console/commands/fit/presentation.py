@@ -9,7 +9,11 @@ from memcommit.application.operations.fit.application import (
     FitPropositionsResult,
     FitResult,
 )
-from memcommit.application.operations.fit.coherence import FitCoherenceFinding, FitCoherenceReport
+from memcommit.application.operations.fit.coherence import (
+    FitCoherenceFinding,
+    FitCoherenceReport,
+    FitCoherenceStatus,
+)
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 
 
@@ -107,7 +111,11 @@ def proposition_fit_result_text(result: FitPropositionsResult) -> str:
     return "\n".join(proposition_fit_result_lines(result))
 
 
-def fit_mark(result: FitResult, *, status: FitStatus | None = None) -> str:
+def fit_mark(
+    result: FitResult,
+    *,
+    status: FitStatus | FitCoherenceStatus | None = None,
+) -> str:
     """Project freshness and conformance into Fit's compact shared marks."""
 
     if not isinstance(result, FitResult):
@@ -145,7 +153,7 @@ def fit_verdict(result: FitResult) -> str:
     return "YES"
 
 
-def fit_issue_label(status: FitStatus) -> tuple[str, str]:
+def fit_issue_label(status: FitStatus | FitCoherenceStatus) -> tuple[str, str]:
     """Translate an internal non-Fit status into Fit's public receipt terms."""
 
     if status == "UNDERDETERMINED":

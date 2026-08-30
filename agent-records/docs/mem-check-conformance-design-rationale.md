@@ -14,54 +14,7 @@ available directly through `mem check-conformance` and as an optional fourth
 section of `mem audit`. Both adapters call the same typed core; Audit does not
 invoke the CLI command as a subprocess or reinterpret its rendered text.
 
-## Two contracts
-
-### Case Conformance
-
-```text
-Ground Rules + Ground Memories(input, expected) -> PASS / FAIL / AMBIGUOUS / OUT_OF_SCOPE
-```
-
-`mem check-conformance --ground NAME` reads active proposed or accepted Rules
-and active `INCLUDE` Ground Memories with nonempty expected outputs. The
-provider receives each input, role, and the complete frozen active Rule set,
-but **never receives the
-expected output**. It must first return one exact prediction, ambiguity, or
-out-of-scope disposition per case. The host then derives `PASS` or `FAIL` by
-exactly comparing the frozen prediction with the frozen expected text. This
-prevents answer copying and makes the current comparison boundary explicit.
-
-Each Ground Memory still retains its single reciprocal Rule link as provenance,
-but prediction is not restricted to that link. One output may compose several
-Rules, as ticker generation composes normalization, base-symbol, and
-share-class rules. Treating the provenance link as the complete execution
-dependency was rejected because it makes compositional Rule sets untestable.
-
-Exact comparison intentionally treats semantically equivalent but textually
-different outputs as failures. A future semantic-equivalence judge would be a
-separate frozen reconciliation turn, not a hidden relaxation of this contract.
-
-The current `content` plus singleton `expected` fields are one narrow
-implementation of a more general proposition contract. In the intended Ground
-model, a Rule is a generalized proposition and an Example is a concrete
-proposition. `Apple Inc. -> AAPL or APLE`, `Axiom AI Technologies -> AAT`, and
-`on 2026-08-15 the observed sky was blue` are all valid one-line Example
-propositions; only the first two happen to have an input/output projection.
-
-Equality, membership, structural validation, and semantic criteria are
-operation-owned evaluators compiled from or attached to a proposition. They
-must not replace the proposition as the user-facing object. When a proposition
-permits several outcomes, plurality is not itself an error. Underdetermination
-instead means the current Rules do not support or contradict the reviewed
-Example proposition sufficiently to settle its relation.
-
-The current Case Conformance executor still supports only the exact
-input/output projection. A proposition-oriented `fit` operation should reuse
-its bounded provider and coverage mechanics, but return an explicit relation
-for every Example and cite the responsible Rules. It must not add a failed
-prediction to the Example proposition or revise either layer automatically.
-
-### Context Conformance
+## Rule/Context Conformance
 
 ```text
 Rules Context + Target Context -> one Conformance judgment per Rule
@@ -73,6 +26,12 @@ Each Rule receives exactly one `CONFORMS`, `VIOLATES`,
 `PARTIALLY_CONFORMS`, `NOT_APPLICABLE`, or `INSUFFICIENT_EVIDENCE` judgment.
 Every Target Memory must be cited by at least one Rule judgment or explicitly
 placed outside the judgments. Absence of evidence is not conformance.
+
+`mem check-conformance --ground NAME` uses the same contract. It projects the
+physical Ground's active Rule Memories and Example proposition Memories into
+one frozen Rule/Context frame; it does not reconstruct hidden inputs or
+expected outputs. Fit independently judges the same proposition-shaped
+Examples with its `YES`/`MAY`/`NO` compatibility contract.
 
 The command exposes the same Target and Rules roles through three equivalent
 vocabularies:
@@ -86,14 +45,13 @@ mem check-conformance --from UID_OR_PREFIX
 mem check-conformance --from "literal Rule proposition"
 ```
 
-`Example` is the canonical Ground-v3 term for a concrete proposition; `Case`
-remains an accepted user-facing alias because exact input/output replay and
-older Ground material use that vocabulary. `--from` always names the Rules
+`Example` is the canonical term for a concrete proposition. `--case` remains a
+CLI vocabulary alias for the same Target Context slot; it does not select a
+Case replay engine or a second report mode. `--from` always names the Rules
 source and `--to` the Context being judged. If exactly one option-qualified
 role is omitted, the command-start current Context supplies it, matching the
-shared endpoint convention. The legacy positional Target does not by itself
-infer a Rules Context, so an accidentally incomplete old command remains an
-error.
+shared endpoint convention. The positional Target does not by itself infer a
+Rules Context, so an incomplete command remains an error.
 
 Aliases are one semantic slot rather than independent inputs. Repeating a
 Rules alias or a Subject alias, or combining the positional Target with a
@@ -158,12 +116,12 @@ the host must not count a partly undecidable Example as conforming. Rule and
 Example `N/A` rows are excluded from their respective denominators and counted
 separately.
 
-Conformance schema version 3 stores each counterexample identity together with
-its exact reason. Version 2 saved reports remain readable with their exact
-counterexample identities and no invented case-specific reason. Version 1
-reports remain readable without reconstructed counterexample detail. New
-reports use `conformance-v2`; compatible saved schema-1/2 `conformance-v1`
-reports remain valid historical evidence.
+Conformance schema version 4 is the sole runtime report shape. It stores each
+counterexample identity together with its exact reason and has no mode or Case
+judgment fields. Versions 1–3 and the exact-output Case contract were removed
+rather than migrated because the prototype had not been distributed and no
+durable compatibility promise existed. Historical captures remain evidence of
+the discarded experiment, not readable runtime receipts.
 
 ### Asymmetric compact terminal receipt
 
@@ -230,9 +188,9 @@ slice and do not become fabricated duplicate/ambiguity/conflict review items.
 
 ## Execution and safety invariants
 
-- Case and Context Conformance each declare `WHOLE_FRAME_ONLY` execution.
-- Every frozen case or Rule is judged exactly once; every Target Memory is
-  cited or explicitly outside.
+- Rule/Context Conformance declares `WHOLE_FRAME_ONLY` execution.
+- Every frozen Rule is judged exactly once; every Target Memory is cited or
+  explicitly outside.
 - No partial report is published after provider, schema, coverage, or stale
   input failure.
 - Neither direct Conformance nor Audit changes a Ground, Context, Rule, or
@@ -240,13 +198,13 @@ slice and do not become fabricated duplicate/ambiguity/conflict review items.
 - Audit validates optional Conformance setup before opening any of its four
   provider turns.
 - Durable Audit requires recorded provider identity and exact Source equality.
-- A Ground revision is revalidated after Case Conformance before returning its
-  report.
+- A Ground workspace is revalidated after Rule/Context Conformance before its
+  report is returned.
 
 ## Intentional non-goals
 
-This operation does not enforce or rewrite Rules, repair failing cases, update
-a Ground, promote a candidate Rule, or prove general correctness. Replaying
-the same examples checks round-trip fidelity; generalization requires held-out
-Ground Memories. Context Conformance checks adherence to supplied Rules, not
-whether those Rules are normatively desirable or externally true.
+This operation does not execute a Rule as a transformation, compare an output
+with a hidden expected value, enforce or rewrite Rules, repair failing
+Examples, update a Ground, promote a candidate Rule, or prove general
+correctness. Conformance checks whether supplied evidence meets supplied Rules,
+not whether those Rules are normatively desirable or externally true.

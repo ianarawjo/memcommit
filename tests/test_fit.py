@@ -13,7 +13,6 @@ from memcommit.application.operations.fit.ground_report import (
     FIT_SCHEMA_VERSION,
     FitError,
     FitExample,
-    FitReport,
     FitRule,
     fit_ground_examples,
 )
@@ -108,54 +107,12 @@ def _rule(statement: str = "Use the first four letters in uppercase.") -> FitRul
     return FitRule(_uid(), "r1", statement)
 
 
-def test_exact_output_fit_withholds_expected_and_converts_failure() -> None:
-    rule = _rule()
-    example = FitExample(
-        _uid(),
-        "e1",
-        "Axiom AI Technologies -> AAT",
-        "EXACT_OUTPUT",
-        (rule.uid,),
-        input_text="Axiom AI Technologies",
-        expected_output="AAT",
-    )
-    provider = _Provider(
-        {
-            "overview": "The rule yields four letters.",
-            "predictions": [
-                {
-                    "case_id": "e1",
-                    "disposition": "PREDICTED",
-                    "predicted": "AXIO",
-                    "reason": "The rule explicitly selects four letters.",
-                }
-            ],
-        }
-    )
-    report = fit_ground_examples(
-        ground_uid=_uid(),
-        ground_name="ticker",
-        ground_revision=3,
-        ground_digest="a" * 64,
-        rules=(rule,),
-        examples=(example,),
-        provider=provider,
-    )
-
-    assert report.judgments[0].status == "CONTRADICTS"
-    assert report.judgments[0].observed == "AXIO"
-    assert '"expected"' not in provider.prompt
-    assert "AAT" not in provider.prompt
-    assert FitReport.from_dict(report.to_dict()) == report
-
-
 def test_proposition_fit_accounts_for_observation_counterexample() -> None:
     rule = _rule("The sky is always blue.")
     example = FitExample(
         _uid(),
         "e1",
         "On August 15 the sky was yellow.",
-        "PROPOSITION",
         (rule.uid,),
     )
     provider = _Provider(
@@ -193,32 +150,29 @@ def test_proposition_fit_accounts_for_observation_counterexample() -> None:
         in provider.prompt
     )
     assert "Do not omit, rank, retrieve, generate, revise" in provider.prompt
+    serialized = report.to_dict()
+    assert set(serialized["examples"][0]) == {
+        "uid",
+        "alias",
+        "statement",
+        "rule_uids",
+    }
+    assert set(serialized["judgments"][0]) == {
+        "example_uid",
+        "status",
+        "rule_uids",
+        "reason",
+    }
+    assert type(report).from_dict(serialized) == report
+
+    serialized["schema_version"] = 2
+    with pytest.raises(FitError, match="Unsupported"):
+        type(report).from_dict(serialized)
 
 
-def test_fit_rejects_mixed_projection_and_incomplete_coverage() -> None:
+def test_fit_rejects_incomplete_coverage() -> None:
     rule = _rule()
-    exact = FitExample(
-        _uid(),
-        "e1",
-        "Apple -> APPL",
-        "EXACT_OUTPUT",
-        (rule.uid,),
-        input_text="Apple",
-        expected_output="APPL",
-    )
-    proposition = FitExample(
-        _uid(), "e2", "Apple maps to APPL.", "PROPOSITION", (rule.uid,)
-    )
-    with pytest.raises(FitError, match="cannot mix"):
-        fit_ground_examples(
-            ground_uid=_uid(),
-            ground_name="ticker",
-            ground_revision=1,
-            ground_digest="c" * 64,
-            rules=(rule,),
-            examples=(exact, proposition),
-            provider=_Provider({}),
-        )
+    proposition = FitExample(_uid(), "e1", "Apple maps to AAPL.", (rule.uid,))
 
     with pytest.raises(FitError, match="omitted"):
         fit_ground_examples(
