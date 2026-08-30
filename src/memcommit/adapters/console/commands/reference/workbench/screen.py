@@ -27,10 +27,10 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
 from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor import (
     render_exact_command_review,
 )
 from memcommit.adapters.console.terminal.components.focus import (

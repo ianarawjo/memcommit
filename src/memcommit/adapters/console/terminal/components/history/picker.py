@@ -35,12 +35,12 @@ from memcommit.adapters.console.terminal.components.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
-    EditableExactCommandControl,
-    ExactCommandDraft,
-    ExactCommandForm,
-    ExactCommandFormField,
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor import (
+    CommandEditorControl,
+    CommandDraft,
+    CommandForm,
+    CommandFormField,
     resolve_displayed_command_value,
 )
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
@@ -159,19 +159,19 @@ class HistoryBackNavigation:
 HISTORY_BACK = HistoryBackNavigation()
 
 
-REVERT_COMMAND_FORM = ExactCommandForm(
+REVERT_COMMAND_FORM = CommandForm(
     command=("mem", "revert"),
     usage=("mem revert CHECKPOINT --context CONTEXT (--keep | --discard-newer)"),
     fields=(
-        ExactCommandFormField(
+        CommandFormField(
             "CHECKPOINT",
             "one exact checkpoint UID or unambiguous prefix",
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "--context CONTEXT",
             "the frozen local Context whose state will be restored",
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "--keep | --discard-newer",
             "the explicit newer-checkpoint retention policy",
         ),
@@ -794,8 +794,8 @@ def choose_history(
         history_policy.choose("KEEP_ALL" if keep else "DISCARD_NEWER")
         sync_detail(anchor="start")
 
-    command_control = EditableExactCommandControl.create(
-        ExactCommandDraft(
+    command_control = CommandEditorControl.create(
+        CommandDraft(
             review=proposed_revert_review,
             apply_argv=apply_command_argv,
             form=REVERT_COMMAND_FORM,

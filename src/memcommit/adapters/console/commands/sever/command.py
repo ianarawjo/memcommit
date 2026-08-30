@@ -52,9 +52,7 @@ from memcommit.application.operations.sever.model import (
     SeverSelection,
     SeverSession,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review import (
-    sever as sever_command_review,
-)
+from memcommit.adapters.console.commands.sever import command_codec as sever_command_review
 from memcommit.application.operations.sever.application import (
     SeverAnalysisProgress,
     SeverAnalysisRequest,

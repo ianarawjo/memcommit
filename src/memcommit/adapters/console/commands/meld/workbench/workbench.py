@@ -26,9 +26,7 @@ from memcommit.application.operations.meld.model import (
     MeldSession,
     meld_canonical_digest,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review import (
-    meld as meld_command_review,
-)
+from memcommit.adapters.console.commands.meld import command_codec as meld_command_review
 from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
 
 

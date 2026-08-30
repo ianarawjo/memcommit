@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
 from memcommit.adapters.console.terminal.components.semantic_viewer import SemanticViewerDocument
 from memcommit.adapters.console.terminal.components.resolution import (
     ResolutionChoice,

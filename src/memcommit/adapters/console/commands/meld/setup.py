@@ -12,15 +12,14 @@ from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
     context_access_display_facts,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review import (
-    meld as meld_command_review,
-)
+from memcommit.adapters.console.commands.meld import command_codec as meld_command_review
 from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
 from memcommit.core.context_targeting.readable_catalog import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup import (
+    EndpointCommandBinding,
     EndpointSetupMemory,
     EndpointSetupMode,
     EndpointSetupRole,
@@ -227,7 +226,11 @@ def choose_meld_endpoint_setup(
         ),
         memory_loader=memory_loader,
         validate_draft=lambda value: _validate_meld_draft(value),
-        command_review=lambda value: _meld_start_review(value),
+        command_editor=EndpointCommandBinding(
+            form=meld_command_review.MELD_COMMAND_FORM,
+            review=_meld_start_review,
+            parse=meld_command_review.parse_endpoint_argv,
+        ),
         app_input=app_input,
         app_output=app_output,
         require_tty=require_tty,

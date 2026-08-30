@@ -4,10 +4,13 @@ from click import Group, Option
 from typer.main import get_command
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.terminal.components.command_editor.command_review import (
-    meld as meld_command_review,
-    sever as sever_command_review,
-    update as update_command_review,
+from memcommit.adapters.console.commands.meld import command_codec as meld_command_review
+from memcommit.adapters.console.commands.sever import command_codec as sever_command_review
+from memcommit.adapters.console.commands.update import command_codec as update_command_review
+from memcommit.adapters.console.commands.branch import command_codec as branch_command_review
+from memcommit.adapters.console.terminal.components.endpoint_setup import (
+    EndpointSetupDraft,
+    EndpointSetupValue,
 )
 
 
@@ -112,6 +115,90 @@ def test_turn_command_builders_freeze_the_reviewed_session_revision() -> None:
     assert update.argv[-2:] == ("--expect-session", "b" * 64)
     assert sever.argv[-2:] == ("--expect-session", "c" * 64)
     assert "--accept" not in meld.argv + update.argv + sever.argv
+
+
+def test_endpoint_command_codecs_round_trip_all_editable_setup_shapes() -> None:
+    meld_symmetric = EndpointSetupDraft(
+        "SYMMETRIC",
+        (
+            EndpointSetupValue("A", "a", include_descendants=True),
+            EndpointSetupValue("B", "b"),
+            EndpointSetupValue("C", "c", create=True),
+        ),
+    )
+    meld_directional = EndpointSetupDraft(
+        "DIRECTIONAL",
+        (
+            EndpointSetupValue("A", "a", memory_uid="memory-a"),
+            EndpointSetupValue("B", "b", memory_uid="memory-b"),
+        ),
+    )
+    update = EndpointSetupDraft(
+        "UPDATE",
+        (
+            EndpointSetupValue("A", "a", include_descendants=True),
+            EndpointSetupValue("B", "b", memory_uid="memory-b"),
+        ),
+    )
+    sever = EndpointSetupDraft(
+        "SEVER",
+        (
+            EndpointSetupValue("SOURCE", "a", include_descendants=True),
+            EndpointSetupValue("CRITERIA", "rules"),
+            EndpointSetupValue("OUTPUT", "result", create=True),
+        ),
+    )
+    branch = EndpointSetupDraft(
+        "BRANCH",
+        (
+            EndpointSetupValue("A", "a", include_descendants=True),
+            EndpointSetupValue("B", "new", create=True),
+        ),
+    )
+
+    assert meld_command_review.parse_endpoint_argv(
+        meld_command_review.build_start_review(
+            mode="SYMMETRIC",
+            left_name="a",
+            right_name="b",
+            target_name="c",
+            left_descendants=True,
+        ).argv
+    ) == EndpointSetupDraft(
+        meld_symmetric.mode_uid,
+        (*meld_symmetric.values[:2], EndpointSetupValue("C", "c")),
+    )
+    assert meld_command_review.parse_endpoint_argv(
+        meld_command_review.build_start_review(
+            mode="DIRECTIONAL",
+            left_name="a",
+            right_name="b",
+            left_memory_uid="memory-a",
+            right_memory_uid="memory-b",
+        ).argv
+    ) == meld_directional
+    assert update_command_review.parse_endpoint_argv(
+        update_command_review.build_start_review(
+            source_name="a",
+            target_name="b",
+            source_descendants=True,
+            target_memory_uid="memory-b",
+        ).argv
+    ) == update
+    assert sever_command_review.parse_endpoint_argv(
+        sever_command_review.build_start_review(
+            source_name="a",
+            criteria_name="rules",
+            output_name="result",
+            source_descendants=True,
+        ).argv
+    ) == EndpointSetupDraft(
+        sever.mode_uid,
+        (*sever.values[:2], EndpointSetupValue("OUTPUT", "result")),
+    )
+    assert branch_command_review.parse_endpoint_argv(
+        branch_command_review.build_review(branch).argv
+    ) == branch
 
 
 def test_public_semantic_session_commands_accept_revision_guards() -> None:

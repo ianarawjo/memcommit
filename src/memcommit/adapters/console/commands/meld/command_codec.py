@@ -1,8 +1,93 @@
-"""Project Meld setup and saved-session turns to reviewable commands."""
+"""Encode and decode Meld's exact public command forms."""
 
 from __future__ import annotations
 
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from collections.abc import Sequence
+
+from memcommit.adapters.console.terminal.components.command_editor import (
+    CommandForm,
+    CommandFormField,
+    CommandReview,
+)
+from memcommit.adapters.console.terminal.components.endpoint_setup.model import (
+    EndpointSetupDraft,
+    EndpointSetupValue,
+)
+
+
+MELD_COMMAND_FORM = CommandForm(
+    command=("mem", "meld"),
+    usage=(
+        "mem meld LEFT RIGHT [--to TARGET] [--left-descendants] "
+        "[--right-descendants] [--incoming-memory UID] [--baseline-memory UID]"
+    ),
+    fields=(
+        CommandFormField("LEFT RIGHT", "the exact incoming and baseline Contexts"),
+        CommandFormField("--to TARGET", "a separate symmetric Result Context"),
+        CommandFormField(
+            "--left-descendants / --right-descendants",
+            "independent lexical Source ranges",
+        ),
+        CommandFormField(
+            "--incoming-memory / --baseline-memory UID",
+            "an optional exact direct Memory in directional mode",
+        ),
+    ),
+)
+
+
+def parse_endpoint_argv(argv: Sequence[str]) -> EndpointSetupDraft:
+    """Decode the endpoint-setup subset without invoking a nested CLI."""
+
+    values = tuple(argv)
+    if values[:2] != ("mem", "meld"):
+        raise ValueError("Editable Meld commands must start with 'mem meld'.")
+    positionals: list[str] = []
+    options: dict[str, str] = {}
+    switches: set[str] = set()
+    value_options = {"--to", "--incoming-memory", "--baseline-memory"}
+    switch_options = {"--left-descendants", "--right-descendants"}
+    index = 2
+    while index < len(values):
+        token = values[index]
+        if token in value_options:
+            if token in options or index + 1 >= len(values):
+                raise ValueError(f"Meld {token} requires exactly one value.")
+            options[token] = values[index + 1]
+            index += 2
+            continue
+        if token in switch_options:
+            if token in switches:
+                raise ValueError(f"Meld {token} may appear only once.")
+            switches.add(token)
+            index += 1
+            continue
+        if token.startswith("-"):
+            raise ValueError(f"Editable Meld does not accept {token}.")
+        positionals.append(token)
+        index += 1
+    if len(positionals) != 2:
+        raise ValueError("Editable Meld requires exactly LEFT and RIGHT Contexts.")
+    left, right = positionals
+    target = options.get("--to")
+    mode = "SYMMETRIC" if target is not None else "DIRECTIONAL"
+    endpoints = [
+        EndpointSetupValue(
+            "A",
+            left,
+            include_descendants="--left-descendants" in switches,
+            memory_uid=options.get("--incoming-memory"),
+        ),
+        EndpointSetupValue(
+            "B",
+            right,
+            include_descendants="--right-descendants" in switches,
+            memory_uid=options.get("--baseline-memory"),
+        ),
+    ]
+    if target is not None:
+        endpoints.append(EndpointSetupValue("C", target))
+    return EndpointSetupDraft(mode, tuple(endpoints))
 
 
 def build_start_review(
@@ -100,4 +185,9 @@ def build_turn_review(
     )
 
 
-__all__ = ["build_start_review", "build_turn_review"]
+__all__ = [
+    "MELD_COMMAND_FORM",
+    "build_start_review",
+    "build_turn_review",
+    "parse_endpoint_argv",
+]

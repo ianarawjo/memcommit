@@ -17,8 +17,8 @@ from memcommit.adapters.console.terminal.components.context_picker import (
 from memcommit.adapters.console.terminal.components.context_reach_dialog import (
     choose_context_reach,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.shell import (
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.approval import (
     approve_exact_command,
 )
 from memcommit.adapters.console.terminal.components.exact_name_dialog import (

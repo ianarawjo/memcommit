@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
-
 from prompt_toolkit.application import Application, get_app
 from prompt_toolkit.filters import Condition, has_focus
 from prompt_toolkit.input import Input
@@ -33,6 +31,10 @@ from memcommit.adapters.console.terminal.core.capabilities import require_intera
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.components.endpoint_setup.compact_screen import (
     run_compact_endpoint_setup,
+)
+from memcommit.adapters.console.terminal.components.endpoint_setup.command_binding import (
+    DraftValidator,
+    EndpointCommandBinding,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.memory_focus import (
     EndpointMemoryFocusController,
@@ -64,9 +66,9 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.rendering import (
-    format_exact_command,
+from memcommit.adapters.console.terminal.components.command_editor import (
+    CommandDraft,
+    CommandEditorControl,
 )
 from memcommit.adapters.console.terminal.components.exact_name import (
     ExactNameFieldControl,
@@ -76,16 +78,12 @@ from memcommit.adapters.console.terminal.components.selection import FlatSelecti
 from memcommit.adapters.console.terminal.components.selection import render_vertical_choice_rows
 
 
-DraftValidator = Callable[[EndpointSetupDraft], str | None]
-CommandReviewBuilder = Callable[[EndpointSetupDraft], CommandReview]
-
-
 def run_endpoint_setup(
     spec: EndpointSetupSpec,
     *,
     memory_loader: MemoryProjectionLoader | None = None,
     validate_draft: DraftValidator | None = None,
-    command_review: CommandReviewBuilder | None = None,
+    command_editor: EndpointCommandBinding | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
@@ -99,7 +97,7 @@ def run_endpoint_setup(
             spec,
             memory_loader=memory_loader,
             validate_draft=validate_draft,
-            command_review=command_review,
+            command_editor=command_editor,
             app_input=app_input,
             app_output=app_output,
             require_tty=require_tty,
@@ -358,20 +356,69 @@ def run_endpoint_setup(
             raise ValueError(message)
         return draft
 
-    def render_command() -> list[tuple[str, str]]:
-        if command_review is None:
-            return []
-        try:
-            review = command_review(checked_draft())
-        except (OSError, TypeError, ValueError) as error:
-            return [
-                ("class:error", "COMMAND · INVALID\n"),
-                ("class:error", f"{safe_terminal_text(str(error))}\n\n"),
-            ]
-        return [
-            ("class:report-label", "COMMAND · RUNNABLE\n"),
-            ("class:report-neutral", f"{format_exact_command(review)}\n\n"),
-        ]
+    def apply_command_draft(draft: EndpointSetupDraft) -> None:
+        """Move every upper control only after the complete command validates."""
+
+        for value in draft.values:
+            if value.memory_uid is None:
+                continue
+            memories = memory_focuses[value.role_uid].prepare_context(
+                value.context_name
+            )
+            if all(memory.uid != value.memory_uid for memory in memories):
+                raise ValueError(
+                    f"Memory '{value.memory_uid}' is unavailable in "
+                    f"Context '{value.context_name}'."
+                )
+
+        mode_state.cursor_uid = draft.mode_uid
+        mode_state.set_selected(draft.mode_uid)
+        for value in draft.values:
+            role_uid = value.role_uid
+            if value.create:
+                new_name_fields[role_uid].set_text(value.context_name)
+                confirmed_new_names[role_uid] = value.context_name
+                create_new[role_uid] = True
+            else:
+                selectors[role_uid].select_name(value.context_name)
+                if role_uid in create_new:
+                    create_new[role_uid] = False
+            if role_uid in reach_states:
+                reach_states[role_uid] = ContextReachState.create(
+                    include_descendants=value.include_descendants
+                )
+            if role_uid in memory_focuses:
+                memory_focuses[role_uid].select_exact(
+                    value.context_name,
+                    value.memory_uid,
+                )
+        status["value"] = ""
+
+    def apply_command_argv(argv: tuple[str, ...]) -> None:
+        if command_editor is None:
+            raise RuntimeError("This Endpoint Setup has no editable command.")
+        apply_command_draft(
+            command_editor.decode(
+                argv,
+                spec=spec,
+                validate_draft=validate_draft,
+            )
+        )
+
+    command_control = (
+        CommandEditorControl.create(
+            CommandDraft(
+                review=lambda: command_editor.review(checked_draft()),
+                apply_argv=apply_command_argv,
+                form=command_editor.form,
+            ),
+            action_label=f"RUN EXACT {spec.command_verb} COMMAND",
+            incomplete_action="FIX THE RED COMMAND BEFORE RUNNING",
+            input_name="endpoint-setup-proposed-command",
+        )
+        if command_editor is not None
+        else None
+    )
 
     def render_action() -> list[tuple[str, str]]:
         mode_uid = selected_mode_uid()
@@ -430,7 +477,6 @@ def run_endpoint_setup(
         fragments.extend(
             [
                 ("", "\n"),
-                *render_command(),
                 ("[SetCursorPosition]", "") if focused else ("", ""),
                 (
                     focused_control_style(focused=focused),
@@ -451,6 +497,22 @@ def run_endpoint_setup(
         is_focused=lambda: get_app().layout.has_focus(action_control),
         height=Dimension(min=9, weight=1),
     )
+    command_frame = (
+        build_focused_frame(
+            command_control.body,
+            title=lambda: (
+                "PROPOSED COMMAND"
+                if command_control.frame_title == "COMMAND · RUNNABLE"
+                else "PROPOSED COMMAND · INVALID"
+            ),
+            is_focused=command_control.is_focused,
+            height=Dimension.exact(4),
+        )
+        if command_control is not None
+        else None
+    )
+    if command_frame is not None:
+        command_frame.container.style = command_control.frame_style
     header = Window(
         FormattedTextControl(
             f" {safe_terminal_text(spec.title)}\n {safe_terminal_text(spec.subtitle)}"
@@ -469,6 +531,13 @@ def run_endpoint_setup(
             return " " + safe_terminal_text(status["value"])
         if get_app().layout.has_focus(mode_control):
             return " ←/→ or ↑/↓ choose shape · Tab endpoint · Esc cancel"
+        if command_control is not None and command_control.is_focused():
+            if not command_control.valid:
+                return " Fix the red command before running · Tab first control · Esc cancel"
+            return (
+                f" Enter run exact {safe_terminal_text(spec.command_verb)} command"
+                " · Tab first control · Esc cancel"
+            )
         if get_app().layout.has_focus(action_control):
             return " Enter run selected setup · ↑ endpoint · Esc cancel"
         if any(
@@ -539,7 +608,7 @@ def run_endpoint_setup(
         TuiRegion(header),
         TuiRegion(mode_frame),
         *role_regions,
-        TuiRegion(action_frame),
+        TuiRegion(command_frame if command_frame is not None else action_frame),
         TuiRegion(footer),
     )
     preferred_new_control = next(
@@ -565,6 +634,11 @@ def run_endpoint_setup(
         output=app_output,
         mouse_support=False,
         style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
+        before_render=(
+            (lambda _app: command_control.sync_if_review_changed())
+            if command_control is not None
+            else None
+        ),
     )
 
     def move_mode(_event, delta: int) -> SurfaceMoveResult:
@@ -654,9 +728,12 @@ def run_endpoint_setup(
 
     def finish(event) -> SurfaceActionResult:
         try:
+            if command_control is not None and not command_control.validate_current(
+                event.app
+            ):
+                status["value"] = command_control.draft.error
+                return "HANDLED"
             draft = checked_draft()
-            if command_review is not None:
-                command_review(draft)
         except (OSError, TypeError, ValueError) as error:
             status["value"] = str(error)
             return "HANDLED"
@@ -723,10 +800,19 @@ def run_endpoint_setup(
                 )
         values.append(
             FocusSurface(
-                "CONTINUE",
-                action_control,
+                "COMMAND" if command_control is not None else "CONTINUE",
+                (
+                    command_control.active_control
+                    if command_control is not None
+                    else action_control
+                ),
                 move_vertical=lambda _event, _delta: "BOUNDARY",
                 activate=finish,
+                on_focus=(
+                    command_control.sync_if_review_changed
+                    if command_control is not None
+                    else None
+                ),
             )
         )
         return tuple(values)
@@ -805,6 +891,10 @@ def run_endpoint_setup(
             for field in new_name_fields.values()
         )
     )
+    writable_input_focus = Condition(
+        lambda: new_input_focus()
+        or (command_control is not None and command_control.is_focused())
+    )
 
     def focused_role_uid() -> str | None:
         return next(
@@ -862,13 +952,13 @@ def run_endpoint_setup(
         event.app.exit(result=None)
 
     @bindings.add("escape", eager=True)
-    @bindings.add("backspace", filter=~new_input_focus, eager=True)
+    @bindings.add("backspace", filter=~writable_input_focus, eager=True)
     def _back(event) -> None:
         dispatch_tui_back(event, close=close)
 
     @bindings.add("c-c", eager=True)
     @bindings.add(Keys.SIGINT, eager=True)
-    @bind_case_insensitive_key(bindings, "q", filter=~new_input_focus, eager=True)
+    @bind_case_insensitive_key(bindings, "q", filter=~writable_input_focus, eager=True)
     def _close(event) -> None:
         close(event)
 

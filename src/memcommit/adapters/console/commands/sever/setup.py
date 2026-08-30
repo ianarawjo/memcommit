@@ -11,10 +11,9 @@ from prompt_toolkit.output import Output
 
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
-from memcommit.adapters.console.terminal.components.command_editor.command_review import (
-    sever as sever_command_review,
-)
+from memcommit.adapters.console.commands.sever import command_codec as sever_command_review
 from memcommit.adapters.console.terminal.components.endpoint_setup import (
+    EndpointCommandBinding,
     EndpointSetupDraft,
     EndpointSetupMemory,
     EndpointSetupMode,
@@ -265,7 +264,11 @@ def choose_sever_endpoint_setup(
         sever_endpoint_setup_spec(setup),
         memory_loader=load_memories,
         validate_draft=lambda draft: _validate_sever_draft(setup, draft),
-        command_review=command_review,
+        command_editor=EndpointCommandBinding(
+            form=sever_command_review.SEVER_COMMAND_FORM,
+            review=command_review,
+            parse=sever_command_review.parse_endpoint_argv,
+        ),
         app_input=app_input,
         app_output=app_output,
         require_tty=require_tty,

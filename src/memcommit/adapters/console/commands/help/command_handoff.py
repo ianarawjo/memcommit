@@ -21,11 +21,11 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
-    EditableExactCommandControl,
-    ExactCommandDraft,
-    ExactCommandForm,
-    ExactCommandFormField,
+from memcommit.adapters.console.terminal.components.command_editor import (
+    CommandEditorControl,
+    CommandDraft,
+    CommandForm,
+    CommandFormField,
     CommandReview,
 )
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
@@ -70,11 +70,11 @@ def edit_help_command(
     initial = _parse_selected_line(command_name, command_line)
     prefix = initial[:2]
     current: dict[str, tuple[str, ...]] = {"argv": initial}
-    form = ExactCommandForm(
+    form = CommandForm(
         command=prefix,
         usage=command_line,
         fields=(
-            ExactCommandFormField(
+            CommandFormField(
                 "ARGUMENTS",
                 "edit the selected command's operands and options before running it",
             ),
@@ -94,8 +94,8 @@ def edit_help_command(
             )
         current["argv"] = argv
 
-    command = EditableExactCommandControl.create(
-        ExactCommandDraft(
+    command = CommandEditorControl.create(
+        CommandDraft(
             review=review,
             apply_argv=apply_argv,
             form=form,

@@ -9,7 +9,7 @@ from prompt_toolkit.output import DummyOutput
 
 from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
 from memcommit.application.operations.edit.application import EditRequest, FrozenEditPlan
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor import (
     format_exact_command,
 )
 from memcommit.adapters.console.commands.edit.workbench import (

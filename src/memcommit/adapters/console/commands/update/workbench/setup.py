@@ -9,10 +9,9 @@ from memcommit.adapters.console.commands.update.workbench.model import (
     UpdateEndpointSelection,
     UpdateEndpointSetup,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review import (
-    update as update_command_review,
-)
+from memcommit.adapters.console.commands.update import command_codec as update_command_review
 from memcommit.adapters.console.terminal.components.endpoint_setup import (
+    EndpointCommandBinding,
     EndpointSetupMode,
     EndpointSetupRole,
     EndpointSetupSpec,
@@ -92,13 +91,17 @@ def choose_update_endpoint_setup(
             if value.value("A").context_name == value.value("B").context_name
             else None
         ),
-        command_review=lambda value: update_command_review.build_start_review(
-            source_name=value.value("A").context_name,
-            target_name=value.value("B").context_name,
-            source_descendants=value.value("A").include_descendants,
-            target_descendants=value.value("B").include_descendants,
-            source_memory_uid=value.value("A").memory_uid,
-            target_memory_uid=value.value("B").memory_uid,
+        command_editor=EndpointCommandBinding(
+            form=update_command_review.UPDATE_COMMAND_FORM,
+            review=lambda value: update_command_review.build_start_review(
+                source_name=value.value("A").context_name,
+                target_name=value.value("B").context_name,
+                source_descendants=value.value("A").include_descendants,
+                target_descendants=value.value("B").include_descendants,
+                source_memory_uid=value.value("A").memory_uid,
+                target_memory_uid=value.value("B").memory_uid,
+            ),
+            parse=update_command_review.parse_endpoint_argv,
         ),
         app_input=app_input,
         app_output=app_output,

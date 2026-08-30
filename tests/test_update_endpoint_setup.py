@@ -123,6 +123,30 @@ def test_update_setup_returns_all_independent_range_combinations(
     )
 
 
+def test_update_setup_runs_the_visible_command_and_reprojects_every_upper_field() -> None:
+    with create_pipe_input() as pipe_input:
+        # A -> range -> Memory -> B -> range -> Memory -> editable command.
+        # The fixed ``mem update`` prefix remains chrome; replace every
+        # argument and approve the exact visible buffer.
+        pipe_input.send_text(
+            "\t" * 6
+            + "\x15--from target --to source --source-descendants\r"
+        )
+        selected = choose_update_endpoint_setup(
+            _setup(),
+            memory_loader=_load,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == UpdateEndpointSelection(
+        "target",
+        "source",
+        source_descendants=True,
+    )
+
+
 def test_update_setup_can_focus_one_exact_memory_per_side() -> None:
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\t\t\x1b[B\r\t\t\t\x1b[B\r\t\r")

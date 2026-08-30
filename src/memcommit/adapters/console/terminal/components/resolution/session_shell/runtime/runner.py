@@ -18,7 +18,7 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.widgets import Frame
 
 from memcommit.application.capabilities.review_policy import DecisionFreeBehavior
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
 from memcommit.adapters.console.terminal.components.multiline_input import (
     build_framed_multiline_input,
 )

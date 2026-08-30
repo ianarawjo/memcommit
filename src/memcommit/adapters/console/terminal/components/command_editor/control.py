@@ -12,16 +12,16 @@ from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.widgets import TextArea
 
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.form import (
-    ExactCommandDraft,
+from memcommit.adapters.console.terminal.components.command_editor.form import (
+    CommandDraft,
 )
 
 
 @dataclass
-class EditableExactCommandControl:
+class CommandEditorControl:
     """Always-visible one-line editor synchronized with an operation form."""
 
-    draft: ExactCommandDraft
+    draft: CommandDraft
     action_label: str
     incomplete_action: str
     command_prefix: str
@@ -29,16 +29,17 @@ class EditableExactCommandControl:
     input: TextArea
     body: HSplit
     _changing_buffer: bool = field(default=False, init=False)
+    _last_review_signature: tuple[str, str] | None = field(default=None, init=False)
 
     @classmethod
     def create(
         cls,
-        draft: ExactCommandDraft,
+        draft: CommandDraft,
         *,
         action_label: str,
         incomplete_action: str,
         input_name: str,
-    ) -> "EditableExactCommandControl":
+    ) -> "CommandEditorControl":
         for value, label in (
             (action_label, "Proposed-command action"),
             (incomplete_action, "Proposed-command incomplete action"),
@@ -47,7 +48,7 @@ class EditableExactCommandControl:
             if not isinstance(value, str) or not value.strip():
                 raise ValueError(f"{label} must be nonempty text.")
 
-        holder: dict[str, EditableExactCommandControl] = {}
+        holder: dict[str, CommandEditorControl] = {}
         command_prefix = shlex.join(draft.form.command)
         review_control = FormattedTextControl(
             lambda: holder["value"]._render_error(),
@@ -106,6 +107,7 @@ class EditableExactCommandControl:
 
     @property
     def frame_title(self) -> str:
+        self.sync_if_review_changed()
         return "COMMAND · RUNNABLE" if self.draft.valid else "COMMAND · INVALID"
 
     def frame_style(self) -> str:
@@ -121,7 +123,14 @@ class EditableExactCommandControl:
     def _on_text_changed(self, _buffer) -> None:
         if self._changing_buffer:
             return
-        self.draft.synchronize(self.command_line())
+        if self.draft.synchronize(self.command_line()):
+            # A valid command has already moved the operation-owned state.
+            # Remember its canonical projection without replacing the person's
+            # still-focused spelling or argument order.
+            try:
+                self._last_review_signature = ("VALID", self.draft.command_line())
+            except (KeyError, OSError, RuntimeError, TypeError, ValueError):
+                self._last_review_signature = None
         try:
             get_app().invalidate()
         except RuntimeError:
@@ -166,12 +175,34 @@ class EditableExactCommandControl:
 
         try:
             line = self.draft.accept_review()
+            signature = ("VALID", line)
         except (KeyError, OSError, RuntimeError, TypeError, ValueError) as error:
             line = self.draft.reject_review(error)
+            signature = ("INVALID", str(error))
         self._replace_text(self._editable_arguments(line))
+        self._last_review_signature = signature
         if app is not None:
             app.invalidate()
         return self.draft.valid
+
+    def sync_if_review_changed(self) -> bool:
+        """Refresh after upper controls change without erasing invalid input.
+
+        A valid command-buffer edit updates the operation state first and
+        records the resulting canonical review signature.  A later render can
+        therefore distinguish an upper-control change from the buffer edit
+        that caused it.  Invalid command text leaves the signature untouched,
+        so repainting never silently restores the last valid command.
+        """
+
+        try:
+            line = self.draft.command_line()
+            signature = ("VALID", line)
+        except (KeyError, OSError, RuntimeError, TypeError, ValueError) as error:
+            signature = ("INVALID", str(error))
+        if signature == self._last_review_signature:
+            return self.draft.valid
+        return self.sync_from_review()
 
     def validate_current(self, app=None) -> bool:
         """Revalidate the visible line before the operation-owned approval."""
@@ -182,4 +213,4 @@ class EditableExactCommandControl:
         return valid
 
 
-__all__ = ["EditableExactCommandControl"]
+__all__ = ["CommandEditorControl"]

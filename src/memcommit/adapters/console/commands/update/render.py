@@ -23,9 +23,7 @@ from memcommit.application.operations.update.model import (
     required_grant_permissions,
     update_session_record_digest,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review import (
-    update as update_command_review,
-)
+from memcommit.adapters.console.commands.update import command_codec as update_command_review
 from memcommit.application.operations.update.resolution_adapter import (
     UpdateResolutionWorkbenchAdapter,
 )

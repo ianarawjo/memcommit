@@ -18,8 +18,8 @@ from prompt_toolkit.output import DummyOutput
 
 import memcommit.adapters.console.terminal.components.primitives as legacy_tui_primitives
 
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.rendering import (
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.rendering import (
     format_exact_command,
     render_exact_command_review,
 )

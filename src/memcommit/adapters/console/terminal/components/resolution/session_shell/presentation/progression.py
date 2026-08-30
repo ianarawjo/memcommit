@@ -5,8 +5,8 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.rendering import (
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.rendering import (
     format_exact_command,
 )
 from memcommit.adapters.console.terminal.components.report_card import boxed_lines

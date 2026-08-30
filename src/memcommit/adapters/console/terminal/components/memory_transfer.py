@@ -26,7 +26,7 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
 from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.terminal.components.direct_item_placement import (
@@ -34,11 +34,11 @@ from memcommit.adapters.console.terminal.components.direct_item_placement import
     DirectItemPlacementTreeProjection,
     direct_item_placement_rows,
 )
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
-    EditableExactCommandControl,
-    ExactCommandDraft,
-    ExactCommandForm,
-    ExactCommandFormField,
+from memcommit.adapters.console.terminal.components.command_editor import (
+    CommandEditorControl,
+    CommandDraft,
+    CommandForm,
+    CommandFormField,
     resolve_displayed_command_value,
     shortest_unique_identifier_prefix,
 )
@@ -76,23 +76,23 @@ from memcommit.adapters.console.coordination.memory_transfer.model import (
 )
 
 
-COPY_COMMAND_FORM = ExactCommandForm(
+COPY_COMMAND_FORM = CommandForm(
     command=("mem", "copy"),
     usage="mem copy MEMORY... --into TARGET [--before ITEM | --after ITEM]",
     fields=(
-        ExactCommandFormField(
+        CommandFormField(
             "MEMORY... | -m MEMORY...",
             "choose one or more direct Memory locators in transfer order",
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "--from SOURCE",
             "apply one direct owner to every unqualified Memory selector",
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "--into TARGET",
             "choose the one local Context whose direct order changes",
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "--before ITEM | --after ITEM",
             "choose one adjacent direct-item gap; omit to append",
         ),
@@ -100,30 +100,30 @@ COPY_COMMAND_FORM = ExactCommandForm(
 )
 
 
-MOVE_COMMAND_FORM = ExactCommandForm(
+MOVE_COMMAND_FORM = CommandForm(
     command=("mem", "move"),
     usage=(
         "mem move MEMORY... --into TARGET [--before ITEM | --after ITEM] "
         "[--break-links]"
     ),
     fields=(
-        ExactCommandFormField(
+        CommandFormField(
             "MEMORY... | -m MEMORY...",
             "choose one or more directly owned Memories in transfer order",
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "--from SOURCE",
             "apply one direct owner to every unqualified Memory selector",
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "--into TARGET",
             "choose the new local direct owner",
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "--before ITEM | --after ITEM",
             "choose one adjacent direct-item gap; omit to append",
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "--break-links",
             "advanced opt-in: leave inbound live Memory Embeds dangling",
         ),
@@ -517,8 +517,8 @@ def run_memory_transfer_workbench(
             move_break["value"] = request.link_policy == "BREAK"
         status["value"] = ""
 
-    command_control = EditableExactCommandControl.create(
-        ExactCommandDraft(
+    command_control = CommandEditorControl.create(
+        CommandDraft(
             review=selected_review,
             apply_argv=apply_command_argv,
             form=(COPY_COMMAND_FORM if operation == "COPY" else MOVE_COMMAND_FORM),

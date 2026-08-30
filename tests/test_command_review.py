@@ -2,11 +2,11 @@
 
 from importlib.util import find_spec
 
-from memcommit.adapters.console.terminal.components.command_editor.command_review import (
+from memcommit.adapters.console.terminal.components.command_editor import (
     CommandReview as PublicCommandReview,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor import (
     CommandReview as TuiCommandReview,
     render_exact_command_review,
 )
@@ -43,3 +43,10 @@ def test_review_owns_immutable_copies_of_caller_sequences():
 
 def test_pre_command_review_shared_module_is_unavailable():
     assert find_spec("memcommit.adapters.console.coordination.exact_command_review") is None
+
+
+def test_command_editor_has_no_parallel_review_or_exact_subpackages() -> None:
+    owner = "memcommit.adapters.console.terminal.components.command_editor"
+
+    assert find_spec(f"{owner}.command_review") is None
+    assert find_spec(f"{owner}.exact_command_review") is None

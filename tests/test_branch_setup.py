@@ -66,6 +66,16 @@ def test_branch_setup_returns_the_initial_compact_plan() -> None:
     assert result == BranchCreationReceipt("alpha", "alpha/branch")
 
 
+def test_branch_setup_runs_the_visible_edited_command() -> None:
+    # A Browse/range, B input/parent Browse, then the editable command.
+    result = _choose(
+        "\t" * 5
+        + "\x15beta/new-branch --from beta --source-descendants\r"
+    )
+
+    assert result == BranchCreationReceipt("beta", "beta/new-branch", True)
+
+
 def test_branch_setup_reparents_an_untouched_exact_name() -> None:
     # Down enters TO; Right crosses its field edge into Browse Parent.
     result = _choose("\x1b[B\x1b[C\r\x1b[B\r\t\r")
@@ -90,7 +100,9 @@ def test_branch_setup_cancel_returns_no_receipt() -> None:
 def test_branch_setup_rejects_an_existing_exact_name() -> None:
     # The parent-locator role is always require-new, so even a catalog spelling
     # remains a new-name validation failure instead of selecting that Context.
-    result = _choose("\x1b[B\x15beta\x1b[B\rq")
+    # The command row is writable, so Escape—not a printable q—cancels after
+    # the existing target is rejected without moving the upper fields.
+    result = _choose("\x1b[B\x15beta\x1b[B\r\x1b")
 
     assert result is None
 

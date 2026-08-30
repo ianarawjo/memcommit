@@ -6,7 +6,7 @@ from collections.abc import Sequence
 from typing import Literal
 
 from memcommit.adapters.console.terminal.components.progress import BUSY_FRAMES
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.rendering import (
+from memcommit.adapters.console.terminal.components.command_editor.rendering import (
     render_exact_command_blocks,
     render_exact_command_review,
 )

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor import (
     CommandReview,
 )
 from memcommit.adapters.console.terminal.components.semantic_viewer import SemanticViewerDocument

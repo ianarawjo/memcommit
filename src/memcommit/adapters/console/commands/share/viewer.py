@@ -30,8 +30,8 @@ from memcommit.adapters.console.terminal.components.frame import (
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor import (
     format_exact_command,
 )
 from memcommit.adapters.console.terminal.components.semantic_viewer import (

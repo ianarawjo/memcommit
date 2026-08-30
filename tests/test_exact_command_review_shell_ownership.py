@@ -9,7 +9,7 @@ import sys
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 LEGACY_NAME = "memcommit.adapters.console.terminal.components.exact_command_review.shell"
-CANONICAL_NAME = "memcommit.adapters.console.terminal.components.command_editor.exact_command_review.shell"
+CANONICAL_NAME = "memcommit.adapters.console.terminal.components.command_editor.approval"
 
 
 def test_review_shell_has_only_the_command_editor_import_path() -> None:
@@ -38,7 +38,7 @@ else:
 def test_review_shell_is_exported_by_the_component_package() -> None:
     canonical = importlib.import_module(CANONICAL_NAME)
     package = importlib.import_module(
-        "memcommit.adapters.console.terminal.components.command_editor.exact_command_review"
+        "memcommit.adapters.console.terminal.components.command_editor"
     )
 
     assert package.approve_exact_command is canonical.approve_exact_command

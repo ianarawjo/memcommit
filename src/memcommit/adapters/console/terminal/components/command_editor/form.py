@@ -6,15 +6,15 @@ import shlex
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.rendering import (
+from memcommit.adapters.console.terminal.components.command_editor.rendering import (
     format_exact_command,
 )
 
 
 @dataclass(frozen=True)
-class ExactCommandFormField:
+class CommandFormField:
     """One operand or flag row shown below an editable command."""
 
     syntax: str
@@ -34,12 +34,12 @@ class ExactCommandFormField:
 
 
 @dataclass(frozen=True)
-class ExactCommandForm:
+class CommandForm:
     """Operation-owned command grammar projected through common TUI chrome."""
 
     command: tuple[str, ...]
     usage: str
-    fields: tuple[ExactCommandFormField, ...]
+    fields: tuple[CommandFormField, ...]
 
     def __post_init__(self) -> None:
         if (
@@ -54,7 +54,7 @@ class ExactCommandForm:
         ):
             raise ValueError("Command-form usage must be nonempty one-line text.")
         if not self.fields or any(
-            not isinstance(field, ExactCommandFormField) for field in self.fields
+            not isinstance(field, CommandFormField) for field in self.fields
         ):
             raise ValueError("Command forms require at least one typed field.")
 
@@ -75,7 +75,7 @@ class ExactCommandForm:
         return argv
 
 
-class ExactCommandDraft:
+class CommandDraft:
     """Synchronize one command line with operation-owned interactive state.
 
     The common draft owns parsing and live validity.  Its callback may update
@@ -88,12 +88,12 @@ class ExactCommandDraft:
         *,
         review: Callable[[], CommandReview],
         apply_argv: Callable[[tuple[str, ...]], None],
-        form: ExactCommandForm,
+        form: CommandForm,
     ) -> None:
         if not callable(review) or not callable(apply_argv):
             raise TypeError("Editable commands require review and Apply callbacks.")
-        if not isinstance(form, ExactCommandForm):
-            raise TypeError("Editable commands require an ExactCommandForm.")
+        if not isinstance(form, CommandForm):
+            raise TypeError("Editable commands require a CommandForm.")
         self._review = review
         self._apply_argv = apply_argv
         self.form = form
@@ -202,9 +202,9 @@ def resolve_displayed_command_value(
 
 
 __all__ = [
-    "ExactCommandDraft",
-    "ExactCommandForm",
-    "ExactCommandFormField",
+    "CommandDraft",
+    "CommandForm",
+    "CommandFormField",
     "resolve_displayed_command_value",
     "shortest_unique_identifier_prefix",
 ]

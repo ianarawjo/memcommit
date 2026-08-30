@@ -25,11 +25,11 @@ from memcommit.adapters.console.terminal.components.direct_item_placement import
     DirectItemPlacementTreeProjection,
     direct_item_placement_rows,
 )
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
-    EditableExactCommandControl,
-    ExactCommandDraft,
-    ExactCommandForm,
-    ExactCommandFormField,
+from memcommit.adapters.console.terminal.components.command_editor import (
+    CommandEditorControl,
+    CommandDraft,
+    CommandForm,
+    CommandFormField,
     CommandReview,
     resolve_displayed_command_value,
     shortest_unique_identifier_prefix,
@@ -84,28 +84,28 @@ from memcommit.application.operations.embed.application import (
 from memcommit.adapters.console.commands.embed.workbench.model import EmbedTuiSetup
 
 
-EMBED_COMMAND_FORM = ExactCommandForm(
+EMBED_COMMAND_FORM = CommandForm(
     command=("mem", "embed"),
     usage=(
         "mem embed [ITEM] [--from SOURCE] --into TARGET [--before ITEM | --after ITEM]"
     ),
     fields=(
-        ExactCommandFormField(
+        CommandFormField(
             "ITEM",
             "Child Context, or a Source Memory UID/prefix when --from is present",
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "--from SOURCE",
             (
                 "select a Source Context when ITEM is omitted, or the directly "
                 "owning Context for a Memory ITEM"
             ),
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "--into TARGET",
             "choose the one local Context whose direct order may change",
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "--before ITEM | --after ITEM",
             "choose one adjacent direct-item gap; omit to append",
         ),
@@ -531,8 +531,8 @@ def run_embed_tui(
         placement.state.select_position(position)
         status["value"] = ""
 
-    command_control = EditableExactCommandControl.create(
-        ExactCommandDraft(
+    command_control = CommandEditorControl.create(
+        CommandDraft(
             review=selected_review,
             apply_argv=apply_command_argv,
             form=EMBED_COMMAND_FORM,

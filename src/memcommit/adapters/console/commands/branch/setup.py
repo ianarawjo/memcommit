@@ -8,11 +8,12 @@ from collections.abc import Callable, Mapping, Sequence
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.commands.branch import command_codec as branch_command_codec
 from memcommit.adapters.console.commands.branch.receipt import (
     BranchCreationReceipt,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup import (
+    EndpointCommandBinding,
     EndpointSetupDraft,
     EndpointSetupMode,
     EndpointSetupRole,
@@ -98,37 +99,7 @@ def branch_endpoint_setup_spec(
     )
 
 
-def branch_exact_command_review(draft: EndpointSetupDraft) -> CommandReview:
-    """Render the exact public Branch command represented by one typed draft."""
-
-    source = draft.value("A")
-    target = draft.value("B")
-    if not target.create:
-        raise ValueError("TO must be one exact new Context name.")
-    argv = [
-        "mem",
-        "branch",
-        target.context_name,
-        "--from",
-        source.context_name,
-        (
-            "--source-descendants"
-            if source.include_descendants
-            else "--source-root-only"
-        ),
-    ]
-    scope = (
-        "the frozen local Source root and lexical descendants"
-        if source.include_descendants
-        else "the frozen local Source root only"
-    )
-    return CommandReview(
-        tuple(argv),
-        (
-            f"Create the exact new Branch target from {scope}.",
-            "Switch the current Context to the new target root after publication.",
-        ),
-    )
+branch_exact_command_review = branch_command_codec.build_review
 
 
 def choose_branch_creation(
@@ -156,7 +127,11 @@ def choose_branch_creation(
             value,
             existing_names=frozenset(local_names),
         ),
-        command_review=branch_exact_command_review,
+        command_editor=EndpointCommandBinding(
+            form=branch_command_codec.BRANCH_COMMAND_FORM,
+            review=branch_exact_command_review,
+            parse=branch_command_codec.parse_endpoint_argv,
+        ),
         app_input=app_input,
         app_output=app_output,
         require_tty=False,

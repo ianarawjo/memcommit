@@ -8,7 +8,7 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor import (
     CommandReview,
 )
 from memcommit.adapters.console.terminal.components.plain_text_clipboard import ClipboardWriter

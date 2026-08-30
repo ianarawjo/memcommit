@@ -1,23 +1,23 @@
 """Editable proposed-command form and identifier display contracts."""
 
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
-    EditableExactCommandControl,
-    ExactCommandDraft,
-    ExactCommandForm,
-    ExactCommandFormField,
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor import (
+    CommandEditorControl,
+    CommandDraft,
+    CommandForm,
+    CommandFormField,
     resolve_displayed_command_value,
     shortest_unique_identifier_prefix,
 )
 
 
-def _form() -> ExactCommandForm:
-    return ExactCommandForm(
+def _form() -> CommandForm:
+    return CommandForm(
         command=("mem", "sample"),
         usage="mem sample VALUE --into TARGET",
         fields=(
-            ExactCommandFormField("VALUE", "one value"),
-            ExactCommandFormField("--into TARGET", "one target"),
+            CommandFormField("VALUE", "one value"),
+            CommandFormField("--into TARGET", "one target"),
         ),
     )
 
@@ -42,7 +42,7 @@ def test_exact_command_draft_round_trips_through_operation_owned_state() -> None
         assert argv[3] == "--into"
         state["value"], state["target"] = argv[2], argv[4]
 
-    draft = ExactCommandDraft(review=review, apply_argv=apply_argv, form=_form())
+    draft = CommandDraft(review=review, apply_argv=apply_argv, form=_form())
 
     assert draft.accept_review() == "mem sample before --into one"
     assert draft.synchronize("mem sample 'two words' --into second")
@@ -53,7 +53,7 @@ def test_exact_command_draft_round_trips_through_operation_owned_state() -> None
 
 def test_exact_command_draft_rejects_cross_operation_edits_without_partial_state() -> None:
     applied = []
-    draft = ExactCommandDraft(
+    draft = CommandDraft(
         review=lambda: CommandReview(
             ("mem", "sample", "value", "--into", "target"),
             ("No durable action has run.",),
@@ -82,8 +82,8 @@ def test_editable_command_is_always_visible_and_syncs_in_both_directions() -> No
             raise ValueError("Complete VALUE and --into TARGET are required.")
         state["value"], state["target"] = argv[2], argv[4]
 
-    control = EditableExactCommandControl.create(
-        ExactCommandDraft(review=review, apply_argv=apply_argv, form=_form()),
+    control = CommandEditorControl.create(
+        CommandDraft(review=review, apply_argv=apply_argv, form=_form()),
         action_label="APPLY SAMPLE",
         incomplete_action="FIX SAMPLE COMMAND",
         input_name="sample-proposed-command",
@@ -112,8 +112,8 @@ def test_editable_command_box_turns_red_while_live_input_is_invalid() -> None:
             raise ValueError("Complete VALUE and --into TARGET are required.")
         applied.append(argv)
 
-    control = EditableExactCommandControl.create(
-        ExactCommandDraft(
+    control = CommandEditorControl.create(
+        CommandDraft(
             review=lambda: CommandReview(
                 ("mem", "sample", "value", "--into", "target"),
                 ("No durable action has run.",),
@@ -137,6 +137,37 @@ def test_editable_command_box_turns_red_while_live_input_is_invalid() -> None:
     assert "bg:" not in control._input_style()
     assert "underline" not in control._input_style()
     assert "Complete VALUE and --into TARGET" in control.draft.error
+
+
+def test_editor_observes_upper_changes_without_erasing_unrepaired_invalid_text() -> None:
+    state = {"value": "before", "target": "one"}
+
+    def review() -> CommandReview:
+        return CommandReview(
+            ("mem", "sample", state["value"], "--into", state["target"]),
+            ("No durable action has run.",),
+        )
+
+    def apply_argv(argv: tuple[str, ...]) -> None:
+        if len(argv) != 5 or argv[3] != "--into":
+            raise ValueError("Complete VALUE and --into TARGET are required.")
+        state["value"], state["target"] = argv[2], argv[4]
+
+    control = CommandEditorControl.create(
+        CommandDraft(review=review, apply_argv=apply_argv, form=_form()),
+        action_label="APPLY SAMPLE",
+        incomplete_action="FIX SAMPLE COMMAND",
+        input_name="observed-sample-proposed-command",
+    )
+    control.input.text = "incomplete"
+
+    assert not control.valid
+    assert control.sync_if_review_changed() is False
+    assert control.input.text == "incomplete"
+
+    state.update(value="upper", target="two")
+    assert control.sync_if_review_changed() is True
+    assert control.input.text == "upper --into two"
 
 
 def test_identifier_prefix_uses_seven_characters_until_a_collision_requires_more() -> None:

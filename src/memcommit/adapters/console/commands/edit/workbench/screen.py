@@ -24,17 +24,17 @@ from memcommit.application.operations.edit.application import (
     edit_target_selector,
     validate_edit_request,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
 from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     restore_display_escape_text,
 )
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
-    EditableExactCommandControl,
-    ExactCommandDraft,
-    ExactCommandForm,
-    ExactCommandFormField,
+from memcommit.adapters.console.terminal.components.command_editor import (
+    CommandEditorControl,
+    CommandDraft,
+    CommandForm,
+    CommandFormField,
     resolve_displayed_command_value,
 )
 from memcommit.adapters.console.terminal.components.focus import (
@@ -62,19 +62,19 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
 from memcommit.adapters.console.commands.edit.workbench.model import EditTuiSetup
 
 
-EDIT_COMMAND_FORM = ExactCommandForm(
+EDIT_COMMAND_FORM = CommandForm(
     command=("mem", "edit"),
     usage="mem edit MEMORY_SELECTOR CONTENT --context CONTEXT",
     fields=(
-        ExactCommandFormField(
+        CommandFormField(
             "MEMORY_SELECTOR",
             "one directly owned Memory UID or unambiguous prefix",
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "CONTENT",
             "exact replacement text using canonical single-line terminal escapes",
         ),
-        ExactCommandFormField(
+        CommandFormField(
             "--context CONTEXT",
             "the exact UPDATE-authorized Context that owns the Memory",
         ),
@@ -212,8 +212,8 @@ def run_edit_tui(
             synchronizing_from_command["value"] = False
         status["value"] = ""
 
-    command_control = EditableExactCommandControl.create(
-        ExactCommandDraft(
+    command_control = CommandEditorControl.create(
+        CommandDraft(
             review=lambda: edit_exact_command_review(selected_request()),
             apply_argv=apply_command_argv,
             form=EDIT_COMMAND_FORM,

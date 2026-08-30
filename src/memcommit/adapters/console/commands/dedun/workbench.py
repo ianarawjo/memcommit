@@ -15,7 +15,7 @@ from memcommit.application.operations.dedun.application import (
     dedun_resolution_case,
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor import (
     CommandReview,
 )
 from memcommit.adapters.console.terminal.components.plain_text_clipboard import ClipboardWriter

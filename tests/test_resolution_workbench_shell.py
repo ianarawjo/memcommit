@@ -6,7 +6,7 @@ import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.layout import to_container
 from prompt_toolkit.output import DummyOutput
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.model import CommandReview
 
 import memcommit.adapters.console.terminal.components.resolution.session_shell as resolution_shell_package
 import memcommit.adapters.console.terminal.components.resolution.session_shell.presentation as resolution_presentation_module

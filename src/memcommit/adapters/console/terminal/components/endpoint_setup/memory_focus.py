@@ -128,6 +128,25 @@ class EndpointMemoryFocusController:
         self.cursor_uid = _WHOLE_CONTEXT_UID
         return changed
 
+    def select_exact(self, context_name: str, memory_uid: str | None) -> bool:
+        """Stage one command-decoded choice after validating its frozen owner."""
+
+        memories = self.prepare_context(context_name)
+        if memory_uid is not None and all(
+            memory.uid != memory_uid for memory in memories
+        ):
+            raise ValueError(
+                f"Memory '{memory_uid}' is unavailable in Context '{context_name}'."
+            )
+        changed = memory_uid != self.selected_memory_uid
+        self.selected_memory_uid = memory_uid
+        self.cursor_uid = (
+            _WHOLE_CONTEXT_UID
+            if memory_uid is None
+            else _memory_option_uid(memory_uid)
+        )
+        return changed
+
     def move(self, delta: int) -> bool:
         state = self.state()
         changed = state.move(delta)

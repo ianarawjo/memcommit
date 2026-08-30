@@ -17,13 +17,13 @@ from prompt_toolkit.layout import (
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.interaction import (
+from memcommit.adapters.console.terminal.components.command_editor.interaction import (
     bind_exact_command_approval,
 )
-from memcommit.adapters.console.terminal.components.command_editor.command_review.model import (
+from memcommit.adapters.console.terminal.components.command_editor.model import (
     CommandReview,
 )
-from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.rendering import (
+from memcommit.adapters.console.terminal.components.command_editor.rendering import (
     render_exact_command_review,
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
