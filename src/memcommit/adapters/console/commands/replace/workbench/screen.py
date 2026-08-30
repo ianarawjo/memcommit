@@ -19,7 +19,7 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.core.context_targeting.tui.compact_scope import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.readable_scope_editor import (
     CompactReadableScopeControl,
 )
 from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal

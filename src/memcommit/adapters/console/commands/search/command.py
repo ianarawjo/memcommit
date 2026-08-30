@@ -15,8 +15,8 @@ from memcommit.application.capabilities.authority.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.adapters.console.coordination.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.exact_command_review.rendering import (
+from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.rendering import (
     format_exact_command,
 )
 from memcommit.adapters.console.commands.search.chat_shell import (

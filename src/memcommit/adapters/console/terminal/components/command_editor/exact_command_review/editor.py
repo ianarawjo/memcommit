@@ -12,7 +12,7 @@ from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.widgets import TextArea
 
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.terminal.components.exact_command_review.form import (
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.form import (
     ExactCommandDraft,
 )
 

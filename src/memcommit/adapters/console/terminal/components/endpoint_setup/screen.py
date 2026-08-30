@@ -25,7 +25,7 @@ from memcommit.core.context_targeting.tui.reach import (
     render_context_reach,
 )
 from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.core.context_targeting.tui.selector import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
@@ -64,8 +64,8 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     SEMANTIC_VIEWER_STYLE,
     focused_control_style,
 )
-from memcommit.adapters.console.coordination.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.exact_command_review.rendering import (
+from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.rendering import (
     format_exact_command,
 )
 from memcommit.adapters.console.terminal.components.exact_name import (

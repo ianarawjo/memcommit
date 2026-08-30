@@ -12,7 +12,7 @@ from memcommit.application.capabilities.authority.access import (
     ContextAccess,
     context_access_display_facts,
 )
-from memcommit.adapters.console.coordination.command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.command_review import (
     meld as meld_command_review,
 )
 from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows

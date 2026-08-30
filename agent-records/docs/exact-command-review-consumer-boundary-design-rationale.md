@@ -14,8 +14,8 @@ operation's application-boundary rationale.
 
 ## Shared contract
 
-`console.tui.components.exact_command_review` owns one immutable logical
-`argv` plus effects value and its terminal-safe projection.  A consequential
+`console.terminal.components.command_editor` owns one immutable logical `argv`
+plus effects value and its terminal-safe projection. A consequential
 review owns a focused `Enter` action.  Existing `A`/`a` bindings remain only as
 compatibility aliases where they were already published.  Escape or the
 operation's read-only back action cancels without applying the reviewed work.
@@ -26,12 +26,15 @@ identity adjacent to a typed frozen request, plan, or action and must validate
 that identity again at its mutation or dispatch boundary.
 
 The standalone full-screen approval surface is owned by
-`memcommit.adapters.console.terminal.components.exact_command_review.shell`. The former
+`memcommit.adapters.console.terminal.components.command_editor.exact_command_review.shell`. The former
 `memcommit.adapters.console.coordination.exact_command_review_shell` facade is removed;
 callers and monkeypatches use the canonical component directly.
-This is an ownership-only relocation: key bindings, rendering, validation,
-approval, cancellation, and terminal behavior are unchanged, so no interaction
-capture is refreshed for the move.
+The former `console.coordination.command_review` and sibling
+`terminal.components.exact_command_review` physical owners are also removed;
+their two deliberately separate packages now share the `command_editor`
+parent. This is an ownership-only relocation: key bindings, rendering,
+validation, approval, cancellation, and terminal behavior are unchanged, so
+the existing interaction captures remain representative.
 
 The optional editable proposed-command layer is an always-visible,
 non-executing setup state. It owns one-line parsing and form presentation,

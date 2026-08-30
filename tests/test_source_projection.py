@@ -8,7 +8,7 @@ from memcommit.core.context_targeting.catalog import (
     grant_navigation_annotation,
     grant_navigation_capability_labels,
 )
-from memcommit.core.context_targeting.tui.rendering import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.tree_rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )

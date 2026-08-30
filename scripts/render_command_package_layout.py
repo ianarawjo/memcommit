@@ -242,7 +242,6 @@ SHARED_MODULES = {
 
 SHARED_MODULE_TARGETS = {
     "batch_input": "batch_input_source",
-    "exact_command_review": "command_review",
     "findings_render": "quality_find_render",
 }
 
@@ -257,7 +256,8 @@ RELOCATED_SHARED_TARGETS = {
     "diff_browser": "memcommit.adapters.console.terminal.components.history.browser",
     "direct_item_placement": "memcommit.adapters.console.terminal.components.direct_item_placement",
     "endpoint_setup_flows": "memcommit.adapters.console.terminal.components.endpoint_setup.flows",
-    "exact_command_review_shell": "memcommit.adapters.console.terminal.components.exact_command_review.shell",
+    "exact_command_review": "memcommit.adapters.console.terminal.components.command_editor.command_review",
+    "exact_command_review_shell": "memcommit.adapters.console.terminal.components.command_editor.exact_command_review.shell",
     "exact_name_dialog": "memcommit.adapters.console.terminal.components.exact_name_dialog",
     "findings_render": "memcommit.adapters.console.terminal.components.quality_find.rendering",
     "flat_selection_dialog": "memcommit.adapters.console.terminal.components.flat_selection_dialog",

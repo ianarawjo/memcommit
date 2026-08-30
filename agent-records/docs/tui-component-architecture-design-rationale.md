@@ -43,6 +43,11 @@ memcommit/adapters/console/
       resolution/               Resolution workbench compositions
       endpoint_setup/           endpoint control and shared setup flows
       history/                  history picker, browser, and presentation
+      command_editor/           exact-command projection and editing family
+        command_review/         immutable review plus operation projections
+        exact_command_review/   form, rendering, interaction, approval shell
+      operation_context_scope_editor/
+                                selectors and editors for operation scope
       context_picker/           Context/direct-item terminal picker
         model.py                terminal row and receipt contracts
         projection.py           Context and clipboard projections
@@ -67,8 +72,8 @@ retained as forwarding packages. `terminal/components` is a component-library
 boundary: a small behavior can remain one module, while a richer control may
 group model, rendering, and interaction behind one package API. Viewer and
 Workbench are component roles, not additional top-level adapter hierarchies.
-`console.coordination` consequently retains only nonvisual command mechanics such as
-operand resolution, review values, command grouping, and transfer arguments.
+`console.coordination` consequently retains only nonvisual command mechanics
+such as operand resolution, command grouping, and transfer arguments.
 The name replaces `console.shared` because reuse is only a relationship, while
 coordination states the package's responsibility at the console-adapter boundary.
 The existing flat layout and its two established concept packages remain intact;
@@ -79,14 +84,16 @@ adapter routes and therefore sits beside `entrypoint.py`; it is neither a
 terminal capability nor an operation-specific command implementation.
 
 The complete Context picker is also a terminal component. Core Context
-targeting retains `ContextTreeState`, exact/subtree reach, selection state, and
-typed target values, while the prompt-toolkit application, preview rows,
-clipboard projection, and action receipts are owned by
-`terminal.components.context_picker`. The existing core
-`DirectMemorySelectorControl` still consumes the terminal preview-row contract;
-that dependency is an explicit staged-migration boundary rather than evidence
-that the full picker belongs in core. Its ownership must be resolved before a
-repository-wide core-to-adapter import prohibition is introduced.
+targeting retains `ContextTreeState`, exact/subtree reach, selection state,
+name-draft state, and typed target values. Prompt-toolkit selectors and editors
+are owned by `terminal.components.operation_context_scope_editor`; preview
+rows, clipboard projection, and action receipts are owned by
+`terminal.components.context_picker`. Moving `DirectMemorySelectorControl`
+with the other operation-scope controls removes the former core owner of a
+component that already depended on terminal preview rows. The range-selection
+state still contains its established row projection and therefore imports the
+terminal tree renderer; separating that state/projection seam is a later
+internal cleanup, not part of this behavior-preserving ownership move.
 
 `memcommit.bootstrap` is the only module that knows both the plain Summarize
 presenter and the Summarize TUI presenter. The current Typer command asks that

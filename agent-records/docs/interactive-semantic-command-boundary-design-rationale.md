@@ -29,7 +29,7 @@ Their tests must verify the displayed argv, revision binding, approval path,
 and commandless Apply boundary directly.
 
 The shared console boundary lives at
-`memcommit.adapters.console.coordination.command_review`. Its `model` owns the
+`memcommit.adapters.console.terminal.components.command_editor.command_review`. Its `model` owns the
 immutable `CommandReview`; the `meld`, `update`, and `sever` modules each
 project their operation-specific START and TURN state through the same
 `build_start_review` and `build_turn_review` names. Rendering and input remain

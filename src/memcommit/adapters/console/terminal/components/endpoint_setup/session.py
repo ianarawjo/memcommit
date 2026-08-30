@@ -35,7 +35,7 @@ from memcommit.core.context_targeting.tui.name_draft import (
     ContextNameDraftState,
     infer_context_parent,
 )
-from memcommit.core.context_targeting.tui.rendering import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.tree_rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )

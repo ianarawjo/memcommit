@@ -1,4 +1,4 @@
-"""Shared row grammar for Context namespace trees."""
+"""Shared terminal row grammar for Context namespace trees."""
 
 from __future__ import annotations
 

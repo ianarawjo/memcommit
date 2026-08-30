@@ -59,8 +59,8 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.edit` | `memcommit.adapters.console.commands.edit.command` | command-entry | `edit` |
 | `memcommit.commands.elaborate` | `memcommit.adapters.console.commands.elaborate.command` | command-entry | `elaborate` |
 | `memcommit.commands.endpoint_setup_flows` | `memcommit.adapters.console.terminal.components.endpoint_setup.flows` | shared-terminal-component | `terminal` |
-| `memcommit.commands.exact_command_review` | `memcommit.adapters.console.coordination.command_review` | shared-command-mechanism | `coordination` |
-| `memcommit.commands.exact_command_review_shell` | `memcommit.adapters.console.terminal.components.exact_command_review.shell` | shared-terminal-component | `terminal` |
+| `memcommit.commands.exact_command_review` | `memcommit.adapters.console.terminal.components.command_editor.command_review` | shared-terminal-component | `terminal` |
+| `memcommit.commands.exact_command_review_shell` | `memcommit.adapters.console.terminal.components.command_editor.exact_command_review.shell` | shared-terminal-component | `terminal` |
 | `memcommit.commands.exact_name_dialog` | `memcommit.adapters.console.terminal.components.exact_name_dialog` | shared-terminal-component | `terminal` |
 | `memcommit.commands.find` | `memcommit.adapters.console.commands.search.command` | command-entry | `search` |
 | `memcommit.commands.find_ambiguities` | `memcommit.adapters.console.commands.find_ambiguities.command` | command-entry | `find_ambiguities` |

@@ -4,7 +4,7 @@ from click import Group, Option
 from typer.main import get_command
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.coordination.command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.command_review import (
     meld as meld_command_review,
     sever as sever_command_review,
     update as update_command_review,

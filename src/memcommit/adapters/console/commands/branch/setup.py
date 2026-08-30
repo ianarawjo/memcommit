@@ -8,7 +8,7 @@ from collections.abc import Callable, Mapping, Sequence
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
 from memcommit.adapters.console.commands.branch.receipt import (
     BranchCreationReceipt,
 )

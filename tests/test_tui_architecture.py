@@ -206,7 +206,7 @@ def test_add_tui_delegates_common_interaction_mechanics() -> None:
     imports = set(_imports(path))
 
     assert {
-        "memcommit.core.context_targeting.tui.selector",
+        "memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector",
         "memcommit.adapters.console.terminal.components.focus",
         "memcommit.adapters.console.terminal.components.frame",
         "memcommit.adapters.console.terminal.components.in_frame_input",
@@ -219,14 +219,22 @@ def test_add_tui_delegates_common_interaction_mechanics() -> None:
 
 
 def test_direct_memory_actions_share_one_selector_composition() -> None:
-    owner = PACKAGE / "core" / "context_targeting" / "tui" / "direct_memory_selector.py"
+    owner = (
+        PACKAGE
+        / "adapters"
+        / "console"
+        / "terminal"
+        / "components"
+        / "operation_context_scope_editor"
+        / "direct_memory_selector.py"
+    )
     owner_imports = set(_imports(owner))
 
     assert {
         "memcommit.core.context_targeting.tui.memory_selection",
         "memcommit.adapters.console.terminal.components.context_picker.model",
         "memcommit.adapters.console.terminal.components.context_picker.preview",
-        "memcommit.core.context_targeting.tui.selector",
+        "memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector",
     } <= owner_imports
 
     reference_screen = (
@@ -260,7 +268,7 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
     for path in consumers:
         imports = set(_imports(path))
         source = path.read_text()
-        assert "memcommit.core.context_targeting.tui.direct_memory_selector" in imports
+        assert "memcommit.adapters.console.terminal.components.operation_context_scope_editor.direct_memory_selector" in imports
         assert "ContextMemoryPreviewController(" not in source
         assert "DirectMemorySelectionState(" not in source
 

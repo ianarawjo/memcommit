@@ -21,7 +21,7 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.terminal.components.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
     EditableExactCommandControl,
     ExactCommandDraft,
     ExactCommandForm,

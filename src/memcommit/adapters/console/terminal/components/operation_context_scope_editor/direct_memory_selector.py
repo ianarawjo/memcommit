@@ -1,4 +1,4 @@
-"""Reusable exact direct-Memory selector composed with a Context tree."""
+"""Exact direct-Memory selector composed with an existing-Context tree."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ from memcommit.adapters.console.terminal.components.context_picker.model import 
 from memcommit.adapters.console.terminal.components.context_picker.preview import (
     ContextMemoryPreviewController,
 )
-from memcommit.core.context_targeting.tui.selector import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector import (
     ContextSelectorControl,
     ContextSelectorRowProjection,
     ContextSelectorView,

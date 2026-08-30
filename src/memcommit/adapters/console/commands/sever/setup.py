@@ -11,7 +11,7 @@ from prompt_toolkit.output import Output
 
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
-from memcommit.adapters.console.coordination.command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.command_review import (
     sever as sever_command_review,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup import (

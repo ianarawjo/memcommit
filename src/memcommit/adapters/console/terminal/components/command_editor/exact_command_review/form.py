@@ -6,9 +6,9 @@ import shlex
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 
-from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.terminal.components.exact_command_review.rendering import (
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.rendering import (
     format_exact_command,
 )
 

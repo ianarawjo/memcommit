@@ -42,7 +42,7 @@ from memcommit.adapters.console.terminal.core.keybindings import (
     bind_case_insensitive_key,
     dispatch_tui_back,
 )
-from memcommit.core.context_targeting.tui.selector import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )

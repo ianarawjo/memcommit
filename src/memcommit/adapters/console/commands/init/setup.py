@@ -6,7 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 
 from memcommit.application.operations.context_init.application import ContextInitRequest
-from memcommit.core.context_targeting.tui.name_editor import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import (
     ContextNameView,
     choose_context_name,
     suggest_fresh_context_name,

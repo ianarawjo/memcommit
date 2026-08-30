@@ -15,7 +15,7 @@ from prompt_toolkit.styles import merge_styles
 
 from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.adapters.console.terminal.components.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
     CommandReview,
     render_exact_command_review,
 )

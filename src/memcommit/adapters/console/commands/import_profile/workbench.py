@@ -17,8 +17,8 @@ from memcommit.adapters.console.terminal.components.context_picker import (
 from memcommit.adapters.console.terminal.components.context_reach_dialog import (
     choose_context_reach,
 )
-from memcommit.adapters.console.coordination.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.exact_command_review.shell import (
+from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.shell import (
     approve_exact_command,
 )
 from memcommit.adapters.console.terminal.components.exact_name_dialog import (
@@ -30,7 +30,7 @@ from memcommit.adapters.console.terminal.components.flat_selection_dialog import
 from memcommit.adapters.console.terminal.components.primitives import ExactNameFieldView
 from memcommit.core.context import Memory, MemoryRef
 from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.core.context_targeting.tui.name_editor import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import (
     ContextNameView,
     choose_context_name,
 )

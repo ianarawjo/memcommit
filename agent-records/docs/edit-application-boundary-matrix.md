@@ -21,7 +21,7 @@ positional selector or content.
 | Prefix grammar | `memcommit.application.capabilities.ops.resolve_direct_memory` | Exact UID or one unambiguous prefix across direct items; MemoryRef, embedded Context, and query rows are never editable Memories. |
 | Explicit and batch CLI composition | `memcommit.adapters.console.commands.edit.command` | Positional selector/content routes to the exact application; `--input` retains atomic UID-tab-content batch parsing and its existing checkpoint. |
 | Interactive setup | `memcommit.adapters.console.commands.edit.workbench` | Shared direct-Memory selector -> prefilled multiline replacement -> proposed exact command -> `FrozenEditPlan`; process-local editing has no durable effect. |
-| Shared selector mechanics | `memcommit.core.context_targeting.tui.direct_memory_selector` | Context cursor, Memory hover, and checked exact Memory remain distinct; the control assigns no edit/snapshot/embed meaning. |
+| Shared selector mechanics | `memcommit.adapters.console.terminal.components.operation_context_scope_editor.direct_memory_selector` | Context cursor, Memory hover, and checked exact Memory remain distinct; the control assigns no edit/snapshot/embed meaning. |
 
 Edit's process-local model, UPDATE-aware setup composition, and interactive
 screen are co-located under `commands/edit/workbench`. The former

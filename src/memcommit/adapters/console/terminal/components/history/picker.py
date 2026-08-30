@@ -35,8 +35,8 @@ from memcommit.adapters.console.terminal.components.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.adapters.console.coordination.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
     EditableExactCommandControl,
     ExactCommandDraft,
     ExactCommandForm,

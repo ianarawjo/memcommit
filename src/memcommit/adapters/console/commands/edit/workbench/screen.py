@@ -13,7 +13,7 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
 from memcommit.core.context_targeting.model import DirectMemoryTarget
-from memcommit.core.context_targeting.tui.direct_memory_selector import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.direct_memory_selector import (
     DirectMemorySelectorControl,
     DirectMemorySelectorView,
 )
@@ -24,13 +24,13 @@ from memcommit.application.operations.edit.application import (
     edit_target_selector,
     validate_edit_request,
 )
-from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
 from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     restore_display_escape_text,
 )
-from memcommit.adapters.console.terminal.components.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
     EditableExactCommandControl,
     ExactCommandDraft,
     ExactCommandForm,

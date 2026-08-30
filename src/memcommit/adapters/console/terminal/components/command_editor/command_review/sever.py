@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
 
 
 def build_start_review(

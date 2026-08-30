@@ -18,19 +18,19 @@ from prompt_toolkit.layout import (
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.core.context_targeting.tui.direct_memory_selector import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.direct_memory_selector import (
     DirectMemorySelectorControl,
     DirectMemorySelectorView,
 )
 from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
-from memcommit.core.context_targeting.tui.selector import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
 from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.adapters.console.terminal.components.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
     render_exact_command_review,
 )
 from memcommit.adapters.console.terminal.components.focus import (

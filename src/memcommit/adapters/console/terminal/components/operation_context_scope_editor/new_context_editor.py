@@ -1,4 +1,4 @@
-"""Operation-neutral exact Context-name editing controls."""
+"""Terminal controls for editing a new exact Context name."""
 
 from __future__ import annotations
 
@@ -47,7 +47,7 @@ from memcommit.adapters.console.terminal.core.text_layout import (
     single_line_terminal_text,
     terminal_cell_width,
 )
-from memcommit.core.context_targeting.tui.rendering import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.tree_rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )

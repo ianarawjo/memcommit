@@ -960,8 +960,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.adapters.console.coordination.command_review.model",
-      "canonical_target_path": "memcommit/adapters/console/coordination/command_review/model.py",
+      "canonical_target": "memcommit.adapters.console.terminal.components.command_editor.command_review.model",
+      "canonical_target_path": "memcommit/adapters/console/terminal/components/command_editor/command_review/model.py",
       "inbound_package_importers": 14,
       "lines": 42,
       "module": "memcommit.exact_command_review",
@@ -1543,8 +1543,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.adapters.console.coordination.command_review",
-      "canonical_target_path": "memcommit/adapters/console/coordination/command_review/__init__.py",
+      "canonical_target": "memcommit.adapters.console.terminal.components.command_editor.command_review",
+      "canonical_target_path": "memcommit/adapters/console/terminal/components/command_editor/command_review/__init__.py",
       "inbound_package_importers": 6,
       "lines": 236,
       "module": "memcommit.interactive_command_review",

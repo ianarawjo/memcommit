@@ -148,7 +148,7 @@ def _update_view(*, accept_only: bool = False):
 
 
 def _turn() -> None:
-    from memcommit.adapters.console.coordination.command_review import (
+    from memcommit.adapters.console.terminal.components.command_editor.command_review import (
         update as update_command_review,
     )
     from memcommit.adapters.console.terminal.components.resolution.session_shell import (

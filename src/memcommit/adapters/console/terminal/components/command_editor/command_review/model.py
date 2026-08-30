@@ -1,4 +1,4 @@
-"""Immutable command identity shown at a coordinated approval boundary."""
+"""Immutable command identity shown by the shared command editor."""
 
 from __future__ import annotations
 

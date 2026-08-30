@@ -31,7 +31,7 @@ from memcommit.adapters.console.terminal.components.background_turn import (
     BackgroundExecutorTurn,
 )
 from memcommit.adapters.console.terminal.components.progress import busy_suffix
-from memcommit.core.context_targeting.tui.compact_scope import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.readable_scope_editor import (
     CompactReadableScopeControl,
 )
 from memcommit.adapters.console.terminal.components.horizontal_choice import (
@@ -78,7 +78,7 @@ from memcommit.adapters.console.terminal.components.focus import (
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.core.context_targeting.tui.name_editor import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import (
     ContextNameControl,
     suggest_fresh_context_name,
 )

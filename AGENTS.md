@@ -152,11 +152,14 @@ material inside an agent record is not such approval.
 ## Shared Context targeting
 
 - Treat Context targets, lexical reach, namespace-tree navigation, and checked
-  selection as one reusable component family under
-  `memcommit.core.context_targeting`. Keep operation-neutral values in `model.py`,
-  pure public-name expansion in `resolution.py`, merged Context loading in
+  selection as one reusable family split by responsibility. Keep
+  operation-neutral values in `memcommit.core.context_targeting.model`, pure
+  public-name expansion in `resolution.py`, merged Context loading in
   `loading.py`, search-only corpus construction in `search.py`, and
-  prompt-toolkit state under `tui/`.
+  process-local tree/selection/reach state under `tui/`. Keep prompt-toolkit
+  selectors, Context-name editors, readable-scope controls, and their tree-row
+  rendering under
+  `memcommit.adapters.console.terminal.components.operation_context_scope_editor`.
 - Import the narrow owning module instead of reaching through another command
   or adding a parallel helper beside an operation. When a shared component
   grows into multiple related files, group them under one concept package and
@@ -196,8 +199,9 @@ material inside an agent record is not such approval.
   returns to direct input. Browsing must not create, load, switch, rename, or
   persist a Context, and the operation's exact validator remains authoritative.
 - Keep compatibility facades thin and free of implementation. New internal
-  code must import `memcommit.core.context_targeting` modules directly rather than
-  adding behavior to legacy `memcommit.context_scope` or command-local wrappers.
+  code must import the narrow core state/resolution module or terminal component
+  directly rather than adding behavior to legacy `memcommit.context_scope` or
+  command-local wrappers.
 
 ## Shared semantic execution planning
 
@@ -396,7 +400,8 @@ material inside an agent record is not such approval.
 - For an exact writable one-line name, reuse `ExactNameInputControl` from
   `memcommit.adapters.console.terminal.components.primitives`; add `ExactNameFieldControl` only when the
   field owns its own focused box. Context placement additionally composes
-  `ContextParentLocatorControl` from `memcommit.core.context_targeting.tui`; do not
+  `ContextParentLocatorControl` from
+  `memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor`; do not
   make a Save Location, Meld, Sever, Study, or other operation-named editor own
   these mechanics. Use `build_focused_frame` for arbitrary shared frame chrome,
   while labels, validators, receipts, persistence, and Apply meaning remain in

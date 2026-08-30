@@ -67,7 +67,7 @@ from memcommit.core.context_targeting.tui.range_selection import (
 )
 from memcommit.core.context_targeting.tui.reach import render_context_reach
 from memcommit.core.context_targeting.tui.selection import render_context_target_mode
-from memcommit.core.context_targeting.tui.selector import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )

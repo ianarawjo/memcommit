@@ -10,7 +10,7 @@ from memcommit.core.context_targeting.presets import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.core.context_targeting.tui.name_editor import suggest_fresh_context_name
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import suggest_fresh_context_name
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.branch.application import BranchRequest
 from memcommit.application.operations.branch.runtime import (

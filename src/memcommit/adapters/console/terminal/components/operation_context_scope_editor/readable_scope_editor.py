@@ -1,4 +1,4 @@
-"""Compact direct-input and browse projection for readable Context scope."""
+"""Compact editor for a readable operation Context scope."""
 
 from __future__ import annotations
 

@@ -83,7 +83,7 @@ The Add workbench introduces no operation-owned scrolling or focus index:
 
 | Interaction | Shared owner | Add-specific meaning |
 | --- | --- | --- |
-| Context tree, cursor, selection, and CREATE availability | `memcommit.core.context_targeting.tui.ContextSelectorControl` | which frozen target to put in `AddRequest` |
+| Context tree, cursor, selection, and CREATE availability | `memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector.ContextSelectorControl` | which frozen target to put in `AddRequest` |
 | Read-only wrapped draft viewport and scrollbar | `memcommit.adapters.console.terminal.components.scrollable_pane` | ordered compact draft projections |
 | Writable multiline cursor, wrapping, and scrollbar | `memcommit.adapters.console.terminal.components.multiline_input` | exact text of one draft |
 | Attaching the editor inside the draft frame | `memcommit.adapters.console.terminal.components.in_frame_input` | edit/save/cancel lifecycle |

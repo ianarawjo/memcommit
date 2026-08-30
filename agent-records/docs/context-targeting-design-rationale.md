@@ -43,32 +43,30 @@ there is intentionally no profile-wide “last Scope” preference.
 - `tui/selection.py` owns checked values and single-versus-multiple cardinality.
 - `tui/memory_selection.py` owns one retained exact direct-Memory choice. It is
   deliberately independent from the tree's transient preview cursor.
-- `tui/direct_memory_selector.py` composes that retained choice with the common
-  Context selector and lazy direct-item preview controller. Context focus only
-  opens a namespace location; only an exact ordinary Memory row can produce a
-  `DirectMemoryTarget`.
-- `tui/selector.py` composes that cardinality state with the common framed
-  namespace tree while callers retain role labels and availability.
 - `tui/range_selection.py` composes the frozen readable tree with a process-local
   Profile shortcut, one-versus-many roots, exact-versus-descendant reach, and
   independently unchecked subtree exclusions. Its common checked-row
   projection also maps the compact root-plus-reach state used by saved-session
   setup screens onto every effective visible Context row.
 - `tui/reach.py` owns the shared exact-versus-descendant segmented control.
-- `tui/rendering.py` owns pointer, marker-slot, indentation, branch, escaping,
-  annotation, and line-break grammar while operations supply semantic markers.
-- `tui/name_editor.py` owns the optional existing-parent locator and composes it
-  with the operation-neutral interface-owned exact-name input.
-  Callers supply labels such as Save Location, New Context, or Branch Name.
+- `adapters.console.terminal.components.operation_context_scope_editor`
+  owns the prompt-toolkit component family: existing-Context selection,
+  direct-Memory selection, new exact Context-name editing, compact readable
+  scope editing, and the shared tree-row rendering grammar. Context focus in
+  the direct-Memory selector only opens a namespace location; only an exact
+  ordinary Memory row can produce a `DirectMemoryTarget`. Callers still supply
+  role labels, availability, and labels such as Save Location, New Context, or
+  Branch Name.
 
 Find, ordinary Query, the common endpoint setup used by
 Compare/Update/Meld/Atomize, and Sever import these controls directly. The full
 picker, receipts, Memory preview rendering, clipboard projection, and terminal
 orchestration live in
 `adapters/console/terminal/components/context_picker`. Core Context targeting
-retains the frozen tree, reach, selection, and typed-target contracts, but no
-longer owns the complete terminal picker application. Inside the terminal
-package, `model.py`, `projection.py`, `preview.py`, and `rendering.py` expose
+retains the frozen tree, reach, selection, name-draft, and typed-target
+contracts, but no longer owns prompt-toolkit controls or the complete terminal
+picker application. Inside the terminal package, `model.py`, `projection.py`,
+`preview.py`, and `rendering.py` expose
 the reusable picker component contracts, while `dialog.py` alone owns the
 full-screen key bindings, layout, and application lifecycle. The picker
 preview controller is also

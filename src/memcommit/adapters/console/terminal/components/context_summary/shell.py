@@ -24,7 +24,7 @@ from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemoryPreviewController,
     memory_visibility_key_hint,
 )
-from memcommit.core.context_targeting.tui.selector import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector import (
     ContextSelectorControl,
     ContextSelectorRowProjection,
     ContextSelectorView,

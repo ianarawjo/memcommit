@@ -8,8 +8,8 @@ from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.terminal.components.context_reach_dialog import choose_context_reach
-from memcommit.adapters.console.coordination.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.exact_command_review.shell import approve_exact_command
+from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.shell import approve_exact_command
 from memcommit.adapters.console.terminal.components.exact_name_dialog import choose_exact_name
 from memcommit.adapters.console.terminal.components.flat_selection_dialog import choose_flat_option
 from memcommit.adapters.console.commands.import_profile.workbench import freeze_import_source_catalog

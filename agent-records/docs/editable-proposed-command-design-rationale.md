@@ -22,7 +22,7 @@ has already run.
 
 ## Shared component contract
 
-`memcommit.adapters.console.terminal.components.exact_command_review` owns three new
+`memcommit.adapters.console.terminal.components.command_editor.exact_command_review` owns three new
 operation-neutral pieces beside the existing immutable review and renderer:
 
 - `ExactCommandForm` and `ExactCommandFormField` describe one operation prefix

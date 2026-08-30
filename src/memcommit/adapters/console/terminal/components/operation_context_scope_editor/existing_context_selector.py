@@ -1,4 +1,4 @@
-"""Embeddable single- or multiple-Context selector presentation."""
+"""Embeddable selector for existing Context targets."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ from memcommit.adapters.console.terminal.core.text import (
     safe_terminal_text,
 )
 from memcommit.core.context_targeting.model import ContextSelectionMode
-from memcommit.core.context_targeting.tui.rendering import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.tree_rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )

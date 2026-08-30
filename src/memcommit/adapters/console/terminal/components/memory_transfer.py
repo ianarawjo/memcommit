@@ -17,16 +17,16 @@ from prompt_toolkit.styles import merge_styles
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.model import DirectMemoryTarget
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
-from memcommit.core.context_targeting.tui.direct_memory_selector import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.direct_memory_selector import (
     DirectMemorySelectorControl,
     DirectMemorySelectorView,
 )
 from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
-from memcommit.core.context_targeting.tui.selector import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
 from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.terminal.components.direct_item_placement import (
@@ -34,7 +34,7 @@ from memcommit.adapters.console.terminal.components.direct_item_placement import
     DirectItemPlacementTreeProjection,
     direct_item_placement_rows,
 )
-from memcommit.adapters.console.terminal.components.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
     EditableExactCommandControl,
     ExactCommandDraft,
     ExactCommandForm,

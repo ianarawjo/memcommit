@@ -28,8 +28,8 @@ from memcommit.adapters.console.terminal.components.progress import (
     BUSY_INTERVAL_SECONDS,
     busy_suffix,
 )
-from memcommit.adapters.console.coordination.command_review.model import CommandReview
-from memcommit.adapters.console.terminal.components.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
     bind_exact_command_approval,
     render_exact_command_review,
 )

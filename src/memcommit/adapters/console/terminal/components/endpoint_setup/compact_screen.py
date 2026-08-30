@@ -27,7 +27,7 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.core.context_targeting.tui.selector import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
@@ -41,7 +41,7 @@ from memcommit.adapters.console.terminal.core.text import (
     safe_terminal_text,
 )
 from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
-from memcommit.adapters.console.coordination.command_review.model import CommandReview
+from memcommit.adapters.console.terminal.components.command_editor.command_review.model import CommandReview
 from memcommit.adapters.console.terminal.components.endpoint_setup.memory_focus import (
     EndpointMemoryFocusController,
     MemoryProjectionLoader,
@@ -56,7 +56,7 @@ from memcommit.adapters.console.terminal.components.exact_name import (
     ExactNameFieldView,
     ExactNameInputControl,
 )
-from memcommit.adapters.console.terminal.components.exact_command_review.rendering import (
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review.rendering import (
     format_exact_command,
 )
 from memcommit.adapters.console.terminal.components.focus import (

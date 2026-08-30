@@ -22,8 +22,9 @@ visible before the operation input.
 
 ## Shared component boundary
 
-`CompactReadableScopeControl` under `memcommit.core.context_targeting.tui` owns only
-operation-neutral mechanics:
+`CompactReadableScopeControl` under
+`memcommit.adapters.console.terminal.components.operation_context_scope_editor.readable_scope_editor`
+owns only operation-neutral terminal mechanics:
 
 - one exact, single-line readable Context input with frozen-catalog completion;
 - one `[ BROWSE ]` action whose Profile/multiple tree exists only while open;

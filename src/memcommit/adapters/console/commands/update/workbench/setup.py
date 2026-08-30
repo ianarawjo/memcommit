@@ -9,7 +9,7 @@ from memcommit.adapters.console.commands.update.workbench.model import (
     UpdateEndpointSelection,
     UpdateEndpointSetup,
 )
-from memcommit.adapters.console.coordination.command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.command_review import (
     update as update_command_review,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup import (

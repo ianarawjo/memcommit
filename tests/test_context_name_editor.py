@@ -5,7 +5,7 @@ from __future__ import annotations
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.core.context_targeting.tui.name_editor import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import (
     ContextParentLocatorControl,
     ContextParentLocatorState,
     ContextNameView,

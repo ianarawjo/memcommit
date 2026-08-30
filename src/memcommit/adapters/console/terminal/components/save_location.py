@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.core.context_targeting.tui.name_editor import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import (
     ContextNameEditorState,
     ContextNameView,
     context_name_card_lines,

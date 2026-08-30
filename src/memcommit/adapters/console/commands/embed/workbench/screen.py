@@ -25,7 +25,7 @@ from memcommit.adapters.console.terminal.components.direct_item_placement import
     DirectItemPlacementTreeProjection,
     direct_item_placement_rows,
 )
-from memcommit.adapters.console.terminal.components.exact_command_review import (
+from memcommit.adapters.console.terminal.components.command_editor.exact_command_review import (
     EditableExactCommandControl,
     ExactCommandDraft,
     ExactCommandForm,
@@ -34,11 +34,11 @@ from memcommit.adapters.console.terminal.components.exact_command_review import 
     resolve_displayed_command_value,
     shortest_unique_identifier_prefix,
 )
-from memcommit.core.context_targeting.tui.selector import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector import (
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.core.context_targeting.tui.direct_memory_selector import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.direct_memory_selector import (
     DirectMemorySelectorControl,
     DirectMemorySelectorView,
 )
