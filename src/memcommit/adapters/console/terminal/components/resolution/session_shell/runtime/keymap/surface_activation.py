@@ -46,7 +46,7 @@ def build_surface_activation(
     read_only_handoff = options.read_only_handoff
     global_strategies = options.global_strategies
     review_and_apply = options.review_and_apply
-    report_decision = controller.report_decision
+    report_apply = controller.report_apply
     draft_saver = options.draft_saver
     split_kind = controls.split_kind
     active_viewer_sections = controls.active_viewer_sections
@@ -133,7 +133,7 @@ def build_surface_activation(
                         )
                         event.app.invalidate()
                         return
-                    if section.kind == "REPORT_DECISION":
+                    if section.kind == "REPORT_APPLY":
                         session_navigation.focus("todo")
                         event.app.layout.focus(todo_control)
                         set_status("")
@@ -217,11 +217,11 @@ def build_surface_activation(
                         )
                         event.app.exit(result=action)
                         return
-            elif kind == "TODO" and report_decision:
-                action = controller.report_decision_action()
+            elif kind == "TODO" and report_apply:
+                action = controller.report_apply_action()
                 if action is not None:
                     record_study_action(
-                        "APPLICATION_DECISION",
+                        "APPLICATION_ACCEPTED",
                         surface="resolution",
                         action=action.kind,
                     )

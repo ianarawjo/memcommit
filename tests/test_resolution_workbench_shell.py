@@ -132,33 +132,43 @@ def _run(
         )
 
 
-@pytest.mark.parametrize(
-    ("keys", "expected"),
-    (("\x1b[Z\r", "ACCEPT"), ("\x1b[Z\x1b[B\r", "DECLINE")),
-)
-def test_report_decision_returns_apply_or_decline_without_final_review(
-    keys,
-    expected,
-):
+def test_report_apply_returns_accept_without_final_review():
     view = _view(
-        capabilities=frozenset({"ACCEPT", "DECLINE"}),
+        capabilities=frozenset({"ACCEPT"}),
         accept_enabled=True,
     )
     with create_pipe_input() as pipe_input:
-        # Shift-Tab enters To Do directly from the report. Down changes the
-        # shared binary selection from Apply to Decline without opening a
-        # second confirmation screen.
-        pipe_input.send_text(keys)
+        # Shift-Tab enters the single Apply frame directly from the report.
+        pipe_input.send_text("\x1b[Z\r")
         action = run_resolution_workbench_shell(
             view,
             split_viewer_items=True,
-            report_decision=True,
+            report_apply=True,
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
 
-    assert action.kind == expected
+    assert action.kind == "ACCEPT"
+
+
+def test_report_apply_escape_closes_without_accepting():
+    view = _view(
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
+    )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b")
+        action = run_resolution_workbench_shell(
+            view,
+            split_viewer_items=True,
+            report_apply=True,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert action.kind == "CLOSE"
 
 
 def test_resolution_viewer_y_and_Y_share_focused_and_complete_copy_contract(

@@ -17,13 +17,13 @@ PROFILE · local capture · CURRENT · capture/update-review/new-guidance
 [0;38;2;139;213;255;1m┃[0;38;2;244;245;247mct reason and source provenance remain inspectable in Items.[0m                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m IMPACT · UPDATE                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0m These exact target changes are staged. Choose Apply or Decline; this surface does not revise the proposal.                                                                      [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m These exact target changes are staged. Apply accepts this proposal; Escape cancels without changing the Target.                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mcapture/update-review/campus-guide [1f66831b][0m                                                                                                                  [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mcapture/update-review/campus-guide [56589852][0m                                                                                                                  [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - The south entrance closes at [0;38;2;237;135;150;4m17:00.[0m                                                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             + The south entrance closes at [0;38;2;166;218;149;4m18:00 during the study period.[0m                                                                                                       [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0m APPLICATION DECISION                                                                                                                                                            [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0;38;2;244;245;247m Choose APPLY or DECLINE in To Do. The exact proposal is not revised on this screen.[0m                                                                                             [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m APPLY                                                                                                                                                                           [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247m Press Enter on APPLY to apply the exact proposal. Press Esc to cancel.[0m                                                                                                          [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
@@ -40,7 +40,7 @@ PROFILE · local capture · CURRENT · capture/update-review/new-guidance
 [0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
 [0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
 [0m│[0;1m› REPORT         Complete Update report[0m                                                                                                                                          [0;1m^[179C[0m│[0m
-[0m│  EDIT           capture/update-review/campus-guide Memory [1f66831b-2047-4603-9ea8-419705ea32f8]                                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  EDIT           capture/update-review/campus-guide Memory [56589852-3f77-44fd-8acf-f0c1e8e79b10]                                                                                [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
@@ -48,9 +48,9 @@ PROFILE · local capture · CURRENT · capture/update-review/new-guidance
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
-[0m┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
-[0m│[0;38;2;16;36;47;48;2;139;213;255m✓ APPLY · Apply the exact proposal shown in the report[0m                                                                                                                            [179C│[0m
-[0m│  DECLINE · Record no Target changes or checkpoints                                                                                                                               [179C│[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| APPLY |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;2;16;36;47;48;2;139;213;255m✓ APPLY[0m                                                                                                                                                                           [179C│[0m
+[0m│[0;38;2;16;36;47;48;2;139;213;255m  Apply the exact proposal · Press Esc to cancel[0m                                                                                                                                  [179C│[0m
 [0m│                                                                                                                                                                                  [179C│[0m
 [0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
 [0m ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close A apply  H Help  y/Y copy  Q close[137D[44A[C[0m[?25l[7A[0m┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
@@ -68,13 +68,13 @@ PROFILE · local capture · CURRENT · capture/update-review/new-guidance
 [0m│[0;38;2;244;245;247mct reason and source provenance remain inspectable in Items.[0m                                                                                                                     [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│ IMPACT · UPDATE                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
-[0m│ These exact target changes are staged. Choose Apply or Decline; this surface does not revise the proposal.                                                                      [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ These exact target changes are staged. Apply accepts this proposal; Escape cancels without changing the Target.                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     [0;48;2;68;68;68m [179C[0m│[0m
-[0m│[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mcapture/update-review/campus-guide [1f66831b][0m                                                                                                                  [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;166;218;149;1m       ▸ ~ [EDIT] [0;38;2;202;211;245mcapture/update-review/campus-guide [56589852][0m                                                                                                                  [0;48;2;68;68;68m [179C[0m│[0m
 [0m│[0;38;2;255;255;255m             - The south entrance closes at [0;38;2;237;135;150;4m17:00.[0m                                                                                                                               [0;48;2;68;68;68m [179C[0m│[0m
 [0m│[0;38;2;255;255;255m             + The south entrance closes at [0;38;2;166;218;149;4m18:00 during the study period.[0m                                                                                                       [0;48;2;68;68;68m [179C[0m│[0m
-[0m│ APPLICATION DECISION                                                                                                                                                            [0;48;2;68;68;68m [179C[0m│[0m
-[0m│[0;38;2;244;245;247m Choose APPLY or DECLINE in To Do. The exact proposal is not revised on this screen.[0m                                                                                             [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ APPLY                                                                                                                                                                           [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;244;245;247m Press Enter on APPLY to apply the exact proposal. Press Esc to cancel.[0m                                                                                                          [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
 [0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
@@ -99,10 +99,20 @@ PROFILE · local capture · CURRENT · capture/update-review/new-guidance
 
 
 
-[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
-[0;38;2;139;213;255;1m┃[0;38;2;16;36;47;48;2;139;213;255;1m✓ APPLY · Apply the exact proposal shown in the report[0m                                                                                                                            [179C[0;38;2;139;213;255;1m┃[0m
-[0;38;2;139;213;255;1m┃[0m  DECLINE · Record no Target changes or checkpoints                                                                                                                               [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ APPLY ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[0;38;2;16;36;47;48;2;139;213;255;1m✓ APPLY[0m                                                                                                                                                                           [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;16;36;47;48;2;139;213;255m  Apply the exact proposal · Press Esc to cancel[0m                                                                                                                                  [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                  [179C[0;38;2;139;213;255;1m┃[0m
 [0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
-[5C[0mch[Cose  Enter [Confirm decision  Tab[Cswitch  Esc/Backspace ba[Ck[CA apply  H Help  Q [Close[0m[K[3A[91D[0m[?25l[A[0m  APPLY · Apply the exact proposal shown in the report[0m
-[C[0;38;2;16;36;47;48;2;139;213;255;1m✓ DECLINE · Record no Target changes or checkpoints[48A[52D[0m
+[C[0mEnter apply  Tab switch  E[Cc[Ccancel A ap[Cly [CH Help  Q[Cclose[0m[K[51A[61D[0m[J[0m[?7h[?1049l[?2004lUPDATE CANCELLED · capture/update-review/new-guidance → capture/update-review/campus-guide
+SESSION · 9a8fd04f-0df3-44c7-9a65-f1a683443a67
+NO TARGET CHANGES · staged proposal retained · Resume with mem update.
+CAPTURE GATE · PRESS V FOR READ-ONLY TARGET VERIFICATION
+v
+
+READ-ONLY VERIFICATION · UPDATE
+  SESSION STATE · staged
+  PROVIDER CALLS · 1
+  TARGET MEMORIES · 1
+  CHECKPOINTS · 0
+  [56589852] The south entrance closes at 17:00.

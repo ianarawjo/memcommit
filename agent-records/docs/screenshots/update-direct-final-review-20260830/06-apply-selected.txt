@@ -13,13 +13,13 @@
 │ct reason and source provenance remain inspectable in Items.                                                                                                                      │
 │                                                                                                                                                                                  │
 │ IMPACT · UPDATE                                                                                                                                                                  │
-│ These exact target changes are staged. Choose Apply or Decline; this surface does not revise the proposal.                                                                       │
+│ These exact target changes are staged. Apply accepts this proposal; Escape cancels without changing the Target.                                                                  │
 │ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      │
-│       ▸ ~ [EDIT] capture/update-review/campus-guide [31caea74]                                                                                                                   │
+│       ▸ ~ [EDIT] capture/update-review/campus-guide [c2c2039d]                                                                                                                   │
 │             - The south entrance closes at 17:00.                                                                                                                                │
 │             + The south entrance closes at 18:00 during the study period.                                                                                                        │
-│ APPLICATION DECISION                                                                                                                                                             │
-│ Choose APPLY or DECLINE in To Do. The exact proposal is not revised on this screen.                                                                                              │
+│ APPLY                                                                                                                                                                            │
+│ Press Enter on APPLY to apply the exact proposal. Press Esc to cancel.                                                                                                           │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -36,7 +36,7 @@
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
 │› REPORT         Complete Update report                                                                                                                                          ^│
-│  EDIT           capture/update-review/campus-guide Memory [31caea74-ab97-46f2-a243-aeeb084e4e8f]                                                                                 │
+│  EDIT           capture/update-review/campus-guide Memory [c2c2039d-fbbe-4a37-9719-a9e1717b4a7c]                                                                                 │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -44,9 +44,9 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ TO DO ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃✓ APPLY · Apply the exact proposal shown in the report                                                                                                                            ┃
-┃  DECLINE · Record no Target changes or checkpoints                                                                                                                               ┃
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ APPLY ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃✓ APPLY                                                                                                                                                                           ┃
+┃  Apply the exact proposal · Press Esc to cancel                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
- ↑/↓ choose  Enter confirm decision  Tab switch  Esc/Backspace back A apply  H Help  Q close
+ Enter apply  Tab switch  Esc cancel A apply  H Help  Q close

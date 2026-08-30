@@ -86,10 +86,8 @@ def resolution_keyboard_hint_text(context: ResolutionKeyboardHintState) -> str:
             )
     elif context.split_viewer_items and context.split_kind() == "TODO":
         todo = controller.displayed_todo()
-        if controller.report_decision:
-            navigation_help = (
-                " ↑/↓ choose  Enter confirm decision  Tab switch  Esc/Backspace back "
-            )
+        if controller.report_apply:
+            navigation_help = " Enter apply  Tab switch  Esc cancel "
         elif controller.viewer_content["kind"] == "REVIEW":
             final_action = controller.review_action()
             navigation_help = (
@@ -188,7 +186,7 @@ def resolution_keyboard_hint_text(context: ResolutionKeyboardHintState) -> str:
             "A review & apply"
             if context.review_and_apply
             else "A apply"
-            if controller.report_decision
+            if controller.report_apply
             else "A accept"
         )
     if context.toggle_sort_available:

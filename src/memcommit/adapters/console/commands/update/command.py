@@ -141,7 +141,6 @@ def _browse_saved_update(store: MemoryStore) -> None:
                 session,
                 staged=session.status == "staged",
                 applied=session.status == "applied",
-                declined=session.status == "declined",
             )
         return
 
@@ -208,9 +207,6 @@ def _browse_saved_update(store: MemoryStore) -> None:
             f"SESSION · {current.uid}\n"
             "RECOVERY · mem redo"
         )
-        return
-    if current.status == "declined":
-        typer.echo(render_update_receipt(current))
         return
     if current.status == "impact":
         typer.echo(
@@ -335,10 +331,9 @@ def _plan_update_with_wait(
 def _decide_direct_update(
     prepared: UpdateSession,
     *,
-    store: MemoryStore,
     analysis_origin: str | None,
 ) -> UpdateSession | None:
-    """Choose Apply or persist an exact no-mutation Decline receipt."""
+    """Return the exact staged proposal only after explicit Apply."""
 
     if not _interactive_terminal():
         return prepared
@@ -346,14 +341,7 @@ def _decide_direct_update(
         prepared,
         analysis_origin=analysis_origin,
     )
-    if decision == "APPLY":
-        return prepared
-    if decision == "DECLINE":
-        store.save_staged_update(
-            prepared.with_declined(),
-            expected_current=prepared,
-        )
-    return None
+    return prepared if decision == "APPLY" else None
 
 
 def cmd(
@@ -745,8 +733,8 @@ def cmd(
         )
     )
     completed_previous: UpdateSession | None = None
-    if existing is not None and existing.status in {"applied", "declined"}:
-        if existing.status == "applied" and (
+    if existing is not None and existing.status == "applied":
+        if (
             existing.source_include_descendants == source_descendants
             and existing.target_include_descendants == target_descendants
             and existing.source_memory_uid == requested_inputs.source_memory_uid
@@ -990,7 +978,6 @@ def cmd(
                 application_decider=lambda prepared: (
                     _decide_direct_update(
                         prepared,
-                        store=store,
                         analysis_origin=update_analysis_origin,
                     )
                 ),
@@ -998,14 +985,13 @@ def cmd(
         )
         if application.status == "CANCELLED":
             current = store.load_staged_update() or session
-            if current.status == "declined":
-                typer.echo(render_update_receipt(current))
-                return
             typer.echo(
-                f"UPDATE INCOMPLETE · {current.source_name} → {current.target_name}"
+                f"UPDATE CANCELLED · {current.source_name} → {current.target_name}"
             )
             typer.echo(f"SESSION · {current.uid}")
-            typer.echo("No target changes were applied. Resume with mem update.")
+            typer.echo(
+                "NO TARGET CHANGES · staged proposal retained · Resume with mem update."
+            )
             return
         applied = application.applied
         if applied is None:

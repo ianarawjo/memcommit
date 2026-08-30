@@ -57,6 +57,7 @@ class ResolutionShellWidgets:
     destination_control: Any
     todo_window: Any
     todo_control: Any
+    todo_title: str
     footer: Any
 
 
@@ -104,7 +105,7 @@ def build_resolution_shell_layout(
             filter=Condition(response_visible),
         )
         items_frame = frame_factory(widgets.items_window, title="ITEMS")
-        todo_frame = frame_factory(widgets.todo_window, title="TO DO")
+        todo_frame = frame_factory(widgets.todo_window, title=widgets.todo_title)
         session_frames = [viewer_frame, responses_container, items_frame]
         if destination_available:
             session_frames.append(widgets.destination_frame)

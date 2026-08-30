@@ -1,0 +1,4 @@
+UPDATE CANCELLED · capture/update-review/new-guidance → capture/update-review/campus-guide
+SESSION · 9a8fd04f-0df3-44c7-9a65-f1a683443a67
+NO TARGET CHANGES · staged proposal retained · Resume with mem update.
+CAPTURE GATE · PRESS V FOR READ-ONLY TARGET VERIFICATION

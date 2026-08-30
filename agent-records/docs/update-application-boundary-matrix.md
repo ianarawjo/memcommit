@@ -3,7 +3,7 @@
 ## Purpose
 
 This note records the `APPLY-01` verification slice for Update. It separates
-the shared report-decision mechanics from Update's own application semantics so later
+the shared report-Apply mechanics from Update's own application semantics so later
 operation migrations do not copy an accidental Update-specific rule.
 
 Update consumes one exact staged semantic plan. The mutation boundary follows
@@ -51,7 +51,8 @@ The correct integration point for richer operations is the detached Target
 post-image created by `materialization.prepare_update_application`. A composing
 operation may analyze that complete post-image and iterate its own proposal,
 but direct Update remains a local patch primitive: one provider-built proposal,
-one report, and one Apply-or-Decline decision. Update does not own questions,
+one report, and one Apply action. Escape cancels the interactive invocation; it
+is navigation, not a persisted semantic decision. Update does not own questions,
 responses, or proposal revision.
 
 ### Physical model ownership
@@ -85,12 +86,12 @@ former 40-name public surface while making physical ownership testable.
 
 | Case | Execution-decision behavior | Durable effect | Recovery |
 | --- | --- | --- | --- |
-| Direct interactive `mem update`, local Target, one or more operations | The report itself offers only `APPLY` and `DECLINE`; no separate confirmation or revision turn exists | Apply changes all affected Target owners; Decline retains terminal evidence without a Target write | Applied work has one operation-unit `mem undo` / `mem redo`; Decline creates no checkpoint |
-| Direct interactive `mem update`, granted Source and local Target | Same binary report decision; the Source remains read-only | Local Target owners on Apply, or a no-mutation Decline receipt | Applied work has one operation-unit `mem undo` / `mem redo` |
-| Granted Target, one or more operations | The same exact binary report decision remains mandatory in a TTY | Authority Target owners only after Apply, or a local no-mutation Decline receipt | Authority-aware command history after Apply; Decline creates no authority mutation |
+| Direct interactive `mem update`, local Target, one or more operations | The report exposes one `APPLY` action; Esc cancels without a separate confirmation or revision turn | Apply changes all affected Target owners; cancellation leaves the staged proposal intact | Applied work has one operation-unit `mem undo` / `mem redo`; cancellation creates no checkpoint or receipt |
+| Direct interactive `mem update`, granted Source and local Target | Same single Apply action; the Source remains read-only | Local Target owners on Apply; cancellation leaves the staged proposal intact | Applied work has one operation-unit `mem undo` / `mem redo` |
+| Granted Target, one or more operations | The same exact Apply action remains mandatory in a TTY | Authority Target owners only after Apply; cancellation creates no authority mutation | Authority-aware command history after Apply |
 | Meld, Sever, Resolve, Forget, or Atomize application composition | No Update-owned terminal review; the enclosing operation already owns semantic review | Detached working Target only until the enclosing operation publishes | Enclosing operation owns cancellation, final checkpoint, and receipt |
-| Any Target, zero operations | The same explicit `APPLY` / `DECLINE` choice keeps direct Update's contract uniform | Terminal receipt only | No Context checkpoint and no Context Undo unit |
-| Escape or terminal close without a decision | Session remains staged | No Target owner changes | Reopen the staged session through Update |
+| Any Target, zero operations | The same explicit `APPLY` action keeps direct Update's contract uniform; Esc still cancels | Apply creates a terminal completion receipt only | No Context checkpoint and no Context Undo unit |
+| Escape or terminal close without Apply | Session remains staged | No Target owner changes, checkpoint, or terminal receipt | Reopen the staged session through Update |
 | Stale Source, Target, Grant, or session revision | Fail before publication | No partial success receipt | Re-run or reopen against current state |
 | Optional Goal focus | Context/Memory/text frame guides relevance but supplies no `source_id` and authorizes no fact | Exact focus receipt is retained in the session and owner checkpoints | Durable Goal pre-image is locked and revalidated before Apply |
 
@@ -105,7 +106,7 @@ checkpoint solely to make operations look alike.
 
 - Update freezes Source and Target identity, scope, Memory digests, optional
   typed Goal focus, operations, and session revision before Apply. The stored
-  session uses compare-and-swap when it is marked applied or declined. Goal is
+  session uses compare-and-swap when it is marked applied. Goal is
   a relevance/output criterion, never Source evidence.
 - Local and granted application revalidate the frozen inputs and relevant Grant
   before the first Target write.
@@ -185,12 +186,15 @@ ADD/EDIT/REMOVE counts, session/checkpoint identities,
 historical UNDONE terminal evidence; an incomplete staged Update resumes
 through `mem update`.
 
-## 2026-08-30 direct report decision and composed application
+## 2026-08-30 direct report Apply and composed application
 
 Direct interactive `mem update` owns one report-first pre-Apply boundary
-because it has no enclosing semantic session. The Report and the decision are
-one screen: `APPLY` accepts the exact frozen proposal and `DECLINE` records a
-terminal no-mutation receipt. The former `--comment` / `--expect-session`
+because it has no enclosing semantic session. The Report and its single
+`APPLY` action are one screen. Esc cancels the invocation while leaving the
+proposal staged and creates no checkpoint or terminal receipt. Cancellation is
+therefore a control-flow exit rather than a second semantic outcome. A future
+permanent rejection would need a separately named `DISCARD` contract instead
+of overloading cancellation. The former `--comment` / `--expect-session`
 revision turn and the separate Apply-confirmation screen were removed. This is
 intentional: iteration belongs to Meld, Atomize, Resolve, or another composing
 operation that owns the larger semantic session, while Update remains an exact

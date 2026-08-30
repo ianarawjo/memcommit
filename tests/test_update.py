@@ -386,7 +386,7 @@ def test_update_two_positionals_explain_source_target_order_for_inline_text(
     assert provider.calls == []
 
 
-def test_staged_update_report_offers_only_apply_and_decline(monkeypatch):
+def test_staged_update_report_offers_only_apply(monkeypatch):
     source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
     staged = plan_update(
         source,
@@ -408,14 +408,14 @@ def test_staged_update_report_offers_only_apply_and_decline(monkeypatch):
     view, kwargs = captured[0]
     assert all(item.effective_obligation == "NONE" for item in view.items)
     assert all(not item.commentable for item in view.items)
-    assert view.capabilities == frozenset({"ACCEPT", "DECLINE"})
-    assert kwargs["report_decision"] is True
+    assert view.capabilities == frozenset({"ACCEPT"})
+    assert kwargs["report_apply"] is True
     assert "review_and_apply" not in kwargs
     assert "global_strategies" not in kwargs
     assert "turn_command_review" not in kwargs
 
 
-def test_staged_update_report_returns_decline(monkeypatch):
+def test_staged_update_report_close_returns_no_application(monkeypatch):
     source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
     staged = plan_update(
         source,
@@ -425,19 +425,19 @@ def test_staged_update_report_returns_decline(monkeypatch):
     )
     captured = []
 
-    def decline(view, **kwargs):
+    def close(view, **kwargs):
         captured.append((view, kwargs))
-        return ResolutionWorkbenchAction(kind="DECLINE")
+        return ResolutionWorkbenchAction(kind="CLOSE")
 
-    monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", decline)
+    monkeypatch.setattr(update_workbench, "run_resolution_workbench_shell", close)
 
     decision = update_workbench.decide_update_application(staged)
 
-    assert decision == "DECLINE"
-    assert captured[0][1]["report_decision"] is True
+    assert decision is None
+    assert captured[0][1]["report_apply"] is True
 
 
-def test_granted_update_uses_the_same_binary_report_decision(monkeypatch):
+def test_granted_update_uses_the_same_report_apply(monkeypatch):
     source, _source_child, _source_memory, target, *_rest = _make_nested_pair()
     staged = plan_update(
         source,
@@ -473,8 +473,8 @@ def test_granted_update_uses_the_same_binary_report_decision(monkeypatch):
     decision = update_workbench.decide_update_application(staged)
 
     assert decision == "APPLY"
-    assert captured[0][0].capabilities == frozenset({"ACCEPT", "DECLINE"})
-    assert captured[0][1]["report_decision"] is True
+    assert captured[0][0].capabilities == frozenset({"ACCEPT"})
+    assert captured[0][1]["report_apply"] is True
 
 
 def _edit_and_root_add_response(prompt):
@@ -1366,7 +1366,7 @@ def test_tty_update_reviews_once_before_applying(
     )
 
 
-def test_tty_update_decline_records_terminal_receipt_without_target_change(
+def test_tty_update_escape_cancels_without_target_change_or_receipt(
     isolated_store,
     monkeypatch,
 ):
@@ -1384,19 +1384,20 @@ def test_tty_update_decline_records_terminal_receipt_without_target_change(
     monkeypatch.setattr(
         update_command,
         "decide_update_application",
-        lambda _session, **_kwargs: "DECLINE",
+        lambda _session, **_kwargs: None,
     )
 
     result = runner.invoke(app, ["update", "--to", TASK1_TARGET])
 
     assert result.exit_code == 0, result.output
-    assert "UPDATE DECLINED" in result.output
+    assert "UPDATE CANCELLED" in result.output
     assert "NO TARGET CHANGES" in result.output
-    declined = store.load_staged_update()
-    assert declined is not None
-    assert declined.status == "declined"
-    assert declined.application is None
-    assert UpdateReceiptStore(store).load(declined.uid) == declined
+    staged = store.load_staged_update()
+    assert staged is not None
+    assert staged.status == "staged"
+    assert staged.application is None
+    with pytest.raises(FileNotFoundError):
+        UpdateReceiptStore(store).load(staged.uid)
     target_after = store.load_direct(TASK1_TARGET_CHILD)
     assert target_after.memories[target_memory.uid].content == (
         target_before.memories[target_memory.uid].content

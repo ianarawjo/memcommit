@@ -25,17 +25,14 @@ def _view(
     staged: bool,
     applied: bool,
     undone: bool = False,
-    declined: bool = False,
 ):
-    if sum((staged, applied, undone, declined)) > 1:
+    if sum((staged, applied, undone)) > 1:
         raise ValueError("An Update view can have only one lifecycle status.")
     heading = (
         "Applied update"
         if applied
         else "Undone update"
         if undone
-        else "Declined update"
-        if declined
         else ("Staged update" if staged else "Impact")
     )
     status = (
@@ -43,8 +40,6 @@ def _view(
         if applied
         else "UNDONE"
         if undone
-        else "DECLINED"
-        if declined
         else ("STAGED" if staged else "IMPACT")
     )
     return replace(
@@ -60,7 +55,6 @@ def render_update_report_snapshot(
     staged: bool = False,
     applied: bool = False,
     undone: bool = False,
-    declined: bool = False,
 ) -> str:
     """Render the common Update report for read-only reuse by other shells."""
 
@@ -70,7 +64,6 @@ def render_update_report_snapshot(
             staged=staged,
             applied=applied,
             undone=undone,
-            declined=declined,
         )
     )
 
@@ -81,10 +74,9 @@ def render_plan(
     staged: bool = False,
     applied: bool = False,
     undone: bool = False,
-    declined: bool = False,
 ) -> None:
     """Render a canonical local plan without trusting model-formatted prose."""
-    if sum((staged, applied, undone, declined)) > 1:
+    if sum((staged, applied, undone)) > 1:
         raise ValueError("A plan can have only one lifecycle status.")
     edits, additions, removals = count_operations(session)
     view = _view(
@@ -92,7 +84,6 @@ def render_plan(
         staged=staged,
         applied=applied,
         undone=undone,
-        declined=declined,
     )
     typer.echo(render_resolution_workbench_snapshot(view))
     typer.echo(
@@ -158,11 +149,6 @@ def render_plan(
         typer.echo(f"Shared {session.target_name} is unchanged.")
     elif undone:
         typer.echo(f"The recorded Update to {session.target_name} remains undone.")
-    elif declined:
-        typer.echo(
-            f"The Update proposal for {session.target_name} was declined; "
-            "no target changes or checkpoints were created."
-        )
     else:
         typer.echo("No changes applied.")
 

@@ -223,8 +223,6 @@ def bind_focus_surfaces(
         _event,
         delta: int,
     ) -> SurfaceMoveResult:
-        if session_navigation.pane == "todo" and controller.report_decision:
-            return "MOVED" if controller.move_report_decision(delta) else "BOUNDARY"
         return "BOUNDARY"
 
     def _activate_surface(event) -> SurfaceActionResult:

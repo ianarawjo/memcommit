@@ -226,7 +226,7 @@ def resolution_report_fragments(
     drafts: dict[str, ResponseDraft] | None = None,
     focused_section: int = 0,
     review_and_apply: bool = False,
-    report_decision: bool = False,
+    report_apply: bool = False,
     read_only: bool = False,
     impact_controller: ImpactController | None = None,
     expanded_impact_section_uid: str | None = None,
@@ -622,11 +622,10 @@ def resolution_report_fragments(
                 fragments.append(("[SetCursorPosition]", ""))
             section_index += 1
     if not read_only:
-        if report_decision:
-            action_heading = "APPLICATION DECISION"
+        if report_apply:
+            action_heading = "APPLY"
             action_detail = (
-                "Choose APPLY or DECLINE in To Do. The exact proposal is not "
-                "revised on this screen."
+                "Press Enter on APPLY to apply the exact proposal. Press Esc to cancel."
             )
             show_strategies = False
         else:
@@ -636,7 +635,7 @@ def resolution_report_fragments(
                 "never applies the target."
             )
             show_strategies = True
-        if review_and_apply and not report_decision:
+        if review_and_apply and not report_apply:
             action_heading, action_detail, show_strategies = _report_action(
                 view,
                 draft_values,
@@ -668,7 +667,7 @@ def _seeded_report_lines(
     read_only: bool = False,
     impact_controller: ImpactController | None = None,
     drafts: dict[str, ResponseDraft] | None = None,
-    report_decision: bool = False,
+    report_apply: bool = False,
 ) -> list[str]:
     lines = report_text.splitlines()
     if view.context_locations:
@@ -699,11 +698,10 @@ def _seeded_report_lines(
     if impact is not None:
         lines.extend(["", *_impact_lines(impact)])
     if not read_only:
-        if report_decision:
-            action_heading = "APPLICATION DECISION"
+        if report_apply:
+            action_heading = "APPLY"
             action_detail = (
-                "Choose APPLY or DECLINE in To Do. The exact proposal is not "
-                "revised on this screen."
+                "Press Enter on APPLY to apply the exact proposal. Press Esc to cancel."
             )
             show_strategies = False
         else:
@@ -713,7 +711,7 @@ def _seeded_report_lines(
                 "never applies the target."
             )
             show_strategies = True
-        if review_and_apply and not report_decision:
+        if review_and_apply and not report_apply:
             action_heading, action_detail, show_strategies = _report_action(
                 view,
                 drafts or {},
@@ -753,7 +751,7 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
         "IMPACT ·",
         "APPLY CHANGES ·",
         "APPLY AS IS ·",
-        "APPLICATION DECISION",
+        "APPLY",
     )
     sections: list[tuple[int, str]] = []
     in_conflicts = False
@@ -775,14 +773,14 @@ def _seeded_report_sections(lines: list[str]) -> tuple[tuple[int, str], ...]:
                 "INCORPORATE RESPONSES",
                 "APPLY CHANGES ·",
                 "APPLY AS IS ·",
-                "APPLICATION DECISION",
+                "APPLY",
             )
         ):
             in_results = False
         if line.startswith(headings):
             key = (
-                "REPORT_DECISION"
-                if line.startswith("APPLICATION DECISION")
+                "REPORT_APPLY"
+                if line == "APPLY"
                 else "RESOLVE_ALL"
                 if line.startswith(
                     (
@@ -829,7 +827,7 @@ def resolution_seeded_report_fragments(
     selected_strategy_index: int = 0,
     focused_section: int = 0,
     review_and_apply: bool = False,
-    report_decision: bool = False,
+    report_apply: bool = False,
     read_only: bool = False,
     impact_controller: ImpactController | None = None,
     content_width: int = 76,
@@ -847,7 +845,7 @@ def resolution_seeded_report_fragments(
         report_text,
         strategies,
         review_and_apply=review_and_apply,
-        report_decision=report_decision,
+        report_apply=report_apply,
         read_only=read_only,
         impact_controller=impact_controller,
         drafts=drafts,

@@ -13,13 +13,13 @@
 ┃ct reason and source provenance remain inspectable in Items.                                                                                                                      ┃
 ┃                                                                                                                                                                                  ┃
 ┃ IMPACT · UPDATE                                                                                                                                                                  ┃
-┃ These exact target changes are staged. Choose Apply or Decline; this surface does not revise the proposal.                                                                       ┃
+┃ These exact target changes are staged. Apply accepts this proposal; Escape cancels without changing the Target.                                                                  ┃
 ┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
-┃       ▸ ~ [EDIT] capture/update-review/campus-guide [1f66831b]                                                                                                                   ┃
+┃       ▸ ~ [EDIT] capture/update-review/campus-guide [56589852]                                                                                                                   ┃
 ┃             - The south entrance closes at 17:00.                                                                                                                                ┃
 ┃             + The south entrance closes at 18:00 during the study period.                                                                                                        ┃
-┃ APPLICATION DECISION                                                                                                                                                             ┃
-┃ Choose APPLY or DECLINE in To Do. The exact proposal is not revised on this screen.                                                                                              ┃
+┃ APPLY                                                                                                                                                                            ┃
+┃ Press Enter on APPLY to apply the exact proposal. Press Esc to cancel.                                                                                                           ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
 ┃                                                                                                                                                                                  ┃
@@ -36,7 +36,7 @@
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 ┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
 │› REPORT         Complete Update report                                                                                                                                          ^│
-│  EDIT           capture/update-review/campus-guide Memory [1f66831b-2047-4603-9ea8-419705ea32f8]                                                                                 │
+│  EDIT           capture/update-review/campus-guide Memory [56589852-3f77-44fd-8acf-f0c1e8e79b10]                                                                                 │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                  │
@@ -44,9 +44,9 @@
 │                                                                                                                                                                                  │
 │                                                                                                                                                                                 v│
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
-│✓ APPLY · Apply the exact proposal shown in the report                                                                                                                            │
-│  DECLINE · Record no Target changes or checkpoints                                                                                                                               │
+┌────────────────────────────────────────────────────────────────────────────────────| APPLY |─────────────────────────────────────────────────────────────────────────────────────┐
+│✓ APPLY                                                                                                                                                                           │
+│  Apply the exact proposal · Press Esc to cancel                                                                                                                                  │
 │                                                                                                                                                                                  │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
  ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close A apply  H Help  y/Y copy  Q close

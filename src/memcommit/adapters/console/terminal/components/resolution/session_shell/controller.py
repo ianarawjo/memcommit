@@ -73,7 +73,7 @@ class ResolutionSessionController:
     session_navigation: SessionWorkbenchNavigation
     global_strategies: tuple[ResolutionGlobalStrategy, ...] = ()
     review_and_apply: bool = False
-    report_decision: bool = False
+    report_apply: bool = False
     read_only: bool = False
     read_only_handoff: SessionTodoView | None = None
     item_handoff: SessionTodoView | Callable[[], SessionTodoView | None] | None = None
@@ -117,26 +117,23 @@ class ResolutionSessionController:
         default_factory=lambda: {"value": "COMMENT ON SELECTED ITEM"}
     )
     local_drafts: dict[str, ResponseDraft] = field(default_factory=dict)
-    report_decision_state: FlatSelectionState | None = field(init=False)
+    report_apply_state: FlatSelectionState | None = field(init=False)
 
     def __post_init__(self) -> None:
-        self.report_decision_state = (
+        self.report_apply_state = (
             FlatSelectionState(
                 options=(
                     SelectionOption(
                         "APPLY",
-                        "APPLY · Apply the exact proposal shown in the report",
-                    ),
-                    SelectionOption(
-                        "DECLINE",
-                        "DECLINE · Record no Target changes or checkpoints",
+                        "APPLY",
+                        "Apply the exact proposal · Press Esc to cancel",
                     ),
                 ),
                 cursor_uid="APPLY",
                 selected_uid="APPLY",
                 allow_empty=False,
             )
-            if self.report_decision
+            if self.report_apply
             else None
         )
         self.destination_editor_state = {
@@ -352,11 +349,11 @@ class ResolutionSessionController:
         """Describe review entry before opening and confirmation after it."""
 
         active_view = self.current_view()
-        if self.report_decision:
+        if self.report_apply:
             return SessionTodoView(
-                "APPLICATION DECISION",
-                "Choose Apply or Decline",
-                "The decision concerns the exact proposal visible in this report.",
+                "APPLY",
+                "Apply the exact proposal",
+                "Press Esc to cancel without changing the Target.",
             )
         if self.viewer_content["kind"] == "REVIEW":
             action = self.review_action()
@@ -375,27 +372,14 @@ class ResolutionSessionController:
             item_handoff=self.current_item_handoff(),
         )
 
-    def move_report_decision(self, delta: int) -> bool:
-        """Move and stage one binary report decision as a single control."""
+    def report_apply_action(self) -> ResolutionWorkbenchAction | None:
+        """Return Apply for the single exact-report action."""
 
-        state = self.report_decision_state
-        if state is None:
-            return False
-        changed = state.move(delta)
-        state.set_selected(state.cursor_uid)
-        self.set_status("")
-        return changed
-
-    def report_decision_action(self) -> ResolutionWorkbenchAction | None:
-        """Return the explicitly selected report decision."""
-
-        state = self.report_decision_state
-        if state is None or state.selected_uid is None:
-            self.set_status("Choose Apply or Decline.")
+        state = self.report_apply_state
+        if state is None or state.selected_uid != "APPLY":
+            self.set_status("Apply is unavailable.")
             return None
-        return self.semantic_action(
-            "ACCEPT" if state.selected_uid == "APPLY" else "DECLINE"
-        )
+        return self.semantic_action("ACCEPT")
 
     def decision_free_apply_available(self) -> bool:
         if self.read_only or not self.review_and_apply:

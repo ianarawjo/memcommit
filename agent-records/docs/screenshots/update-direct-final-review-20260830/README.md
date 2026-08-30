@@ -1,10 +1,11 @@
-# Direct Update report-decision captures
+# Direct Update report-Apply captures
 
 These ordered captures record the 2026-08-30 direct local `mem update` path
-after Update became one exact report followed by an inline `APPLY` / `DECLINE`
-decision. The directory retains its original path so existing evidence links
-remain stable. The refreshed flow has no proposal-revision turn and no separate
-Apply-confirmation screen.
+after Update became one exact report with one inline `APPLY` action. Esc
+cancels the invocation without creating a terminal receipt. The directory
+retains its original path so existing evidence links remain stable. The
+refreshed flow has no proposal-revision turn and no separate Apply-confirmation
+screen.
 
 Both runs use a real color-capable PTY at 180 columns × 52 rows with
 `TERM=xterm-256color`, `COLORTERM=truecolor`, `NO_COLOR` removed, and an
@@ -20,23 +21,24 @@ are retained together.
    - Visible state: the selected Source and Target while one exact proposal is
      planned.
    - Durable mutation: none.
-2. `02-report-decision.png`
+2. `02-report-apply.png`
    - Preceding input: provider planning completed.
-   - Visible state: the exact report and the inline `APPLY` / `DECLINE` rows;
-     `APPLY` is the initial selection.
+   - Visible state: the exact report, its single `APPLY` action, and the
+     `Press Esc to cancel` guidance.
    - Durable mutation: none; the staged record exists.
-3. `03-decline-selected.png`
-   - Preceding input: `Shift-Tab`, `Down`.
-   - Visible state: `DECLINE` is the focused and selected report decision.
+3. `03-apply-focused-before-cancel.png`
+   - Preceding input: `Shift-Tab`.
+   - Visible state: the `APPLY` frame and its only action own focus; Esc remains
+     the visible cancellation path.
    - Durable mutation: none.
-4. `04-decline-receipt.png`
-   - Preceding input: `Enter` on `DECLINE`.
-   - Visible state: terminal `UPDATE DECLINED` receipt explicitly states that
-     no Target change or Context checkpoint exists.
-   - Durable mutation: only the terminal declined Update receipt.
-5. `05-decline-verification.png`
+4. `04-cancelled.png`
+   - Preceding input: `Esc` from the focused `APPLY` frame.
+   - Visible state: `UPDATE CANCELLED` states that the Target is unchanged and
+     the staged proposal remains resumable.
+   - Durable mutation: no Target change, Context checkpoint, or terminal receipt.
+5. `05-cancel-verification.png`
    - Preceding input: `V` at the capture-only verification gate.
-   - Visible state: declined session, one planning call, unchanged Target
+   - Visible state: staged session, one planning call, unchanged Target
      content, and zero checkpoints.
    - Durable mutation: none; this step only reloads retained state.
 6. `06-apply-selected.png`

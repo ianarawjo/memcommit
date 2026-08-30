@@ -93,7 +93,7 @@ def report_sections(
     split_report_text: str | None,
     global_strategies: tuple[ResolutionGlobalStrategy, ...],
     review_and_apply: bool,
-    report_decision: bool,
+    report_apply: bool,
     read_only: bool,
     impact_controller: ImpactController | None,
     drafts: dict[str, ResponseDraft],
@@ -106,7 +106,7 @@ def report_sections(
             split_report_text,
             global_strategies,
             review_and_apply=review_and_apply,
-            report_decision=report_decision,
+            report_apply=report_apply,
             read_only=read_only,
             impact_controller=impact_controller,
             drafts=drafts,
@@ -159,8 +159,8 @@ def report_sections(
     if not read_only:
         entries.append(
             (
-                "REPORT_DECISION"
-                if report_decision
+                "REPORT_APPLY"
+                if report_apply
                 else "REVIEW_AND_APPLY"
                 if review_and_apply
                 else "RESOLVE_ALL",
@@ -279,7 +279,7 @@ class ResolutionControlConfig:
     impact_controller: ImpactController | None
     destination: ResolutionDestination | None
     destination_available: bool
-    report_decision: bool = False
+    report_apply: bool = False
 
 
 class ResolutionShellControls:
@@ -357,9 +357,9 @@ class ResolutionShellControls:
         )
         self.todo_window = Window(
             self.todo_control,
-            # The shared choice renderer anchors after the focused row. Keep
-            # one spare line so moving to DECLINE does not scroll APPLY away.
-            height=Dimension.exact(3 if config.report_decision else 1),
+            # The focused-row cursor anchor follows the description. Keep one
+            # spare line so the single APPLY label never scrolls out of view.
+            height=Dimension.exact(3 if config.report_apply else 1),
             dont_extend_height=True,
             wrap_lines=False,
         )
@@ -443,7 +443,7 @@ class ResolutionShellControls:
             split_report_text=self.config.split_report_text,
             global_strategies=self.config.global_strategies,
             review_and_apply=self.config.review_and_apply,
-            report_decision=self.config.report_decision,
+            report_apply=self.config.report_apply,
             read_only=self.config.read_only,
             impact_controller=self.config.impact_controller,
             drafts=self.controller.local_drafts,
@@ -609,7 +609,7 @@ class ResolutionShellControls:
                         selected_strategy_index=self.controller.strategy["index"],
                         focused_section=self.viewer_section_index(),
                         review_and_apply=config.review_and_apply,
-                        report_decision=config.report_decision,
+                        report_apply=config.report_apply,
                         read_only=config.read_only,
                         impact_controller=config.impact_controller,
                         content_width=self.pane_content_width(),
@@ -623,7 +623,7 @@ class ResolutionShellControls:
                     drafts=self.controller.local_drafts,
                     focused_section=self.viewer_section_index(),
                     review_and_apply=config.review_and_apply,
-                    report_decision=config.report_decision,
+                    report_apply=config.report_apply,
                     read_only=config.read_only,
                     impact_controller=config.impact_controller,
                     expanded_impact_section_uid=(
@@ -698,10 +698,10 @@ class ResolutionShellControls:
     def todo_fragments(self) -> list[tuple[str, str]]:
         todo = self.controller.displayed_todo()
         focused = self.controller.session_navigation.pane == "todo"
-        if self.config.report_decision:
-            state = self.controller.report_decision_state
+        if self.config.report_apply:
+            state = self.controller.report_apply_state
             if state is None:
-                raise RuntimeError("Report decision state is unavailable.")
+                raise RuntimeError("Report Apply state is unavailable.")
             return render_vertical_choice_rows(
                 state,
                 focused=focused,

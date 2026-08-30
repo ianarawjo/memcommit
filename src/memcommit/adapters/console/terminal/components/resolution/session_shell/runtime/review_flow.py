@@ -151,7 +151,6 @@ class ResolutionReviewFlow:
                 controller.set_status("")
                 return
             if pane == "todo":
-                controller.move_report_decision(delta)
                 controller.set_status("")
                 return
             if pane == "save_location":

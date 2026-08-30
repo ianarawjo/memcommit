@@ -1,8 +1,8 @@
 """Pure Update-plan projection for the common resolution workbench.
 
 Update has no issue-resolution artifact or per-change review obligation. Its
-planned changes are evidence for one exact Apply-or-Decline decision. Proposal
-iteration belongs to a composing operation such as Meld, not this adapter.
+planned changes are evidence for one exact Apply action. Proposal iteration
+belongs to a composing operation such as Meld, not this adapter.
 """
 
 from __future__ import annotations
@@ -95,8 +95,6 @@ def _operation_item(
             if session_status == "applied"
             else "UNDONE"
             if session_status == "undone"
-            else "DECLINED"
-            if session_status == "declined"
             else "PLANNED"
         ),
         # Update changes have no REQUIRED/OPTIONAL issue priority. ``CHANGE``
@@ -169,10 +167,6 @@ class UpdateResolutionWorkbenchAdapter:
                 "The recorded target Memory changes were undone; this artifact "
                 "still describes the exact reversible transition."
             ),
-            "declined": (
-                "This exact proposal was declined. No target Memory changes were "
-                "applied and no checkpoint was created."
-            ),
         }.get(session.status, "This Update records exact target Memory changes.")
         overview_sections = (ResolutionOverviewSection("plan", "PLAN", overview),)
         return ResolutionWorkbenchView(
@@ -200,9 +194,7 @@ class UpdateResolutionWorkbenchAdapter:
             results_label="APPLICATION",
             results=(),
             capabilities=(
-                frozenset({"ACCEPT", "DECLINE"})
-                if session.status == "staged"
-                else frozenset()
+                frozenset({"ACCEPT"}) if session.status == "staged" else frozenset()
             ),
             accept_enabled=session.status == "staged",
             input_locked=False,

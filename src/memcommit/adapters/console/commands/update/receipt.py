@@ -9,19 +9,10 @@ from memcommit.application.operations.update.model import (
 
 
 def render_update_receipt(session: UpdateSession) -> str:
-    """Render one terminal Apply or Decline receipt without reopening Report."""
+    """Render terminal Update success without reopening its full report."""
 
-    if session.status == "declined" and session.application is None:
-        return "\n".join(
-            (
-                f"UPDATE DECLINED · {session.source_name} → {session.target_name}",
-                "OUTCOME · NO TARGET CHANGES · no Context checkpoint",
-                f"RECEIPT · {session.uid}",
-                f"REVIEW · mem review update --session {session.uid}",
-            )
-        )
     if session.status != "applied" or session.application is None:
-        raise ValueError("Update receipt requires an applied or declined session.")
+        raise ValueError("Update receipt requires an applied session.")
     edits, additions, removals = count_operations(session)
     checkpoints = session.application.checkpoints
     lines = [

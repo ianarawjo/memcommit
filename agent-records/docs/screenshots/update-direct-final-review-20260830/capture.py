@@ -1,4 +1,4 @@
-"""Capture direct Update's report-local Apply/Decline boundary in a real PTY."""
+"""Capture direct Update's report-local Apply and Esc-cancel paths in a PTY."""
 
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ _BASE_PATH = (
     / "agent-records/docs/screenshots/study-full-replay-20260811/capture_init_study.py"
 )
 _SPEC = importlib.util.spec_from_file_location(
-    "update_report_decision_capture_base", _BASE_PATH
+    "update_report_apply_capture_base", _BASE_PATH
 )
 assert _SPEC is not None and _SPEC.loader is not None
 _BASE = importlib.util.module_from_spec(_SPEC)
@@ -191,40 +191,49 @@ def _snapshot(recorder, stem: str) -> None:
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(
-        prefix="memcommit-update-report-decision-"
-    ) as temp:
+    with tempfile.TemporaryDirectory(prefix="memcommit-update-report-apply-") as temp:
         child, recorder = _spawn(Path(temp) / "store")
         try:
             child.expect("CURRENT")
             _BASE._pump(child, recorder, seconds=0.3)
             _snapshot(recorder, "01-provider-pending")
 
-            _wait_visible(child, recorder, "Staged update", "APPLY", "DECLINE")
-            _snapshot(recorder, "02-report-decision")
+            _wait_visible(
+                child,
+                recorder,
+                "Staged update",
+                "APPLY",
+                "Press Esc to cancel",
+            )
+            _snapshot(recorder, "02-report-apply")
 
             child.send("\x1b[Z")
-            child.send("\x1b[B")
-            _wait_visible(child, recorder, "APPLY", "DECLINE")
-            _snapshot(recorder, "03-decline-selected")
+            _wait_visible(child, recorder, "APPLY", "Press Esc to cancel")
+            _snapshot(recorder, "03-apply-focused-before-cancel")
 
-            child.send("\r")
-            child.expect("UPDATE DECLINED", timeout=20)
+            child.send("\x1b")
+            child.expect("UPDATE CANCELLED", timeout=20)
             child.expect("CAPTURE GATE")
             _BASE._pump(child, recorder, seconds=0.5)
-            _snapshot(recorder, "04-decline-receipt")
+            _snapshot(recorder, "04-cancelled")
 
             child.send("v\r")
             child.expect("READ-ONLY VERIFICATION .* UPDATE")
             child.expect(pexpect.EOF)
-            _snapshot(recorder, "05-decline-verification")
+            _snapshot(recorder, "05-cancel-verification")
         finally:
             if child.isalive():
                 child.close(force=True)
 
         child, recorder = _spawn(Path(temp) / "apply-store")
         try:
-            _wait_visible(child, recorder, "Staged update", "APPLY", "DECLINE")
+            _wait_visible(
+                child,
+                recorder,
+                "Staged update",
+                "APPLY",
+                "Press Esc to cancel",
+            )
             child.send("\x1b[Z")
             _BASE._pump(child, recorder, seconds=0.3)
             _snapshot(recorder, "06-apply-selected")
@@ -243,7 +252,7 @@ def main() -> None:
             if child.isalive():
                 child.close(force=True)
 
-    raw = (OUT / "02-report-decision.typescript").read_text(encoding="utf-8")
+    raw = (OUT / "02-report-apply.typescript").read_text(encoding="utf-8")
     if "\x1b[" not in raw or "38;2" not in raw:
         raise RuntimeError("Capture did not preserve ANSI true-color output.")
 

@@ -1,4 +1,4 @@
-"""Interactive Update Impact and exact report decision surfaces."""
+"""Interactive Update Impact and exact report Apply surfaces."""
 
 from __future__ import annotations
 
@@ -61,8 +61,8 @@ def decide_update_application(
     session: UpdateSession,
     *,
     analysis_origin: str | None = None,
-) -> Literal["APPLY", "DECLINE"] | None:
-    """Choose Apply or Decline against the exact report; never revise it."""
+) -> Literal["APPLY"] | None:
+    """Return Apply against the exact report, or close without changing it."""
 
     view = replace(
         _view(session, staged=True, applied=False),
@@ -81,30 +81,28 @@ def decide_update_application(
             if analysis_origin is not None
             else "STAGED"
         ),
-        capabilities=frozenset({"ACCEPT", "DECLINE"}),
+        capabilities=frozenset({"ACCEPT"}),
         accept_enabled=True,
     )
     action = run_resolution_workbench_shell(
         view,
-        terminal_label="Decide staged Update report",
+        terminal_label="Apply staged Update report",
         snapshot_hint=(
-            "Run 'mem update --to TARGET' in a TTY to decide the staged report."
+            "Run 'mem update --to TARGET' in a TTY to apply the staged report."
         ),
         split_viewer_items=True,
-        report_decision=True,
+        report_apply=True,
         impact_controller=_impact_controller(
             view,
             session,
             summary=(
-                "These exact target changes are staged. Choose Apply or Decline; "
-                "this surface does not revise the proposal."
+                "These exact target changes are staged. Apply accepts this proposal; "
+                "Escape cancels without changing the Target."
             ),
         ),
     )
     if action.kind == "ACCEPT":
         return "APPLY"
-    if action.kind == "DECLINE":
-        return "DECLINE"
     return None
 
 

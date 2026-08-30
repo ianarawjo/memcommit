@@ -24,7 +24,6 @@ ResolutionCapability = Literal[
     "PRESERVE_ALL",
     "DEFER",
     "ACCEPT",
-    "DECLINE",
 ]
 ResolutionItemRole = Literal["DECISION", "OPTIONAL_REVIEW", "CHANGE"]
 ResolutionItemObligation = Literal["REQUIRED", "OPTIONAL", "NONE"]
@@ -37,7 +36,6 @@ ResolutionActionKind = Literal[
     "PRESERVE_ALL",
     "DEFER",
     "ACCEPT",
-    "DECLINE",
     "CHANGE_DESTINATION",
     "HANDOFF",
     "CLOSE",
@@ -50,7 +48,6 @@ _CAPABILITIES = {
     "PRESERVE_ALL",
     "DEFER",
     "ACCEPT",
-    "DECLINE",
 }
 _ACTION_KINDS = {*_CAPABILITIES, "CHANGE_DESTINATION", "HANDOFF", "CLOSE"}
 

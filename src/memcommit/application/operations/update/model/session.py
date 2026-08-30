@@ -38,7 +38,7 @@ UPDATE_SCHEMA_VERSION = 7
 UPDATE_INLINE_MEMORY_SCHEMA_VERSION = 8
 UPDATE_GOAL_FOCUS_SCHEMA_VERSION = 9
 UPDATE_INLINE_GOAL_FOCUS_SCHEMA_VERSION = 10
-UpdateStatus = Literal["impact", "staged", "declined", "applied", "undone"]
+UpdateStatus = Literal["impact", "staged", "applied", "undone"]
 
 
 @dataclass(frozen=True)
@@ -88,13 +88,6 @@ class UpdateSession:
             status="applied",
             application=application,
         )
-
-    def with_declined(self) -> UpdateSession:
-        """Record an explicit no-Apply decision without a checkpoint receipt."""
-
-        if self.status != "staged" or self.application is not None:
-            raise ValueError("Only a staged update can be declined.")
-        return replace(self, status="declined", application=None)
 
     def with_restored_application(self, *, applied: bool) -> UpdateSession:
         """Project one exact retained receipt across command Undo or Redo."""
@@ -234,7 +227,7 @@ class UpdateSession:
         else:
             raise ValueError("Unsupported update session schema version.")
         status = data["status"]
-        if status not in {"impact", "staged", "declined", "applied", "undone"}:
+        if status not in {"impact", "staged", "applied", "undone"}:
             raise ValueError("Invalid update session status.")
         if (status in {"applied", "undone"}) != (application is not None):
             raise ValueError("Invalid update application state.")

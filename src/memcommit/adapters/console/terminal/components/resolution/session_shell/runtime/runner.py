@@ -107,7 +107,7 @@ def run_resolution_workbench_shell(
     split_report_item_badges: tuple[str, ...] = (),
     split_report_conflicts_remaining: int | None = None,
     review_and_apply: bool = False,
-    report_decision: bool = False,
+    report_apply: bool = False,
     start_final_review_when_no_required: bool = False,
     decision_free_behavior: DecisionFreeBehavior | None = None,
     read_only: bool = False,
@@ -134,7 +134,7 @@ def run_resolution_workbench_shell(
         )
     if split_report_fragments is not None and split_report_text is None:
         raise ValueError("Styled split reports require matching plain report text.")
-    if report_decision and (
+    if report_apply and (
         not split_viewer_items
         or review_and_apply
         or read_only
@@ -142,7 +142,7 @@ def run_resolution_workbench_shell(
         or compact_decisions
     ):
         raise ValueError(
-            "A report decision requires the full writable report without a "
+            "Report Apply requires the full writable report without a "
             "separate review or resolution strategy."
         )
     decision_free_behavior = normalize_decision_free_behavior(
@@ -175,7 +175,7 @@ def run_resolution_workbench_shell(
         session_navigation=session_navigation,
         global_strategies=global_strategies,
         review_and_apply=review_and_apply,
-        report_decision=report_decision,
+        report_apply=report_apply,
         read_only=read_only,
         read_only_handoff=read_only_handoff,
         item_handoff=item_handoff,
@@ -183,10 +183,8 @@ def run_resolution_workbench_shell(
         draft_saver_available=draft_saver is not None,
     )
     current_view = controller.current_view
-    if report_decision and not {"ACCEPT", "DECLINE"}.issubset(
-        current_view().capabilities
-    ):
-        raise ValueError("A report decision requires ACCEPT and DECLINE capabilities.")
+    if report_apply and "ACCEPT" not in current_view().capabilities:
+        raise ValueError("Report Apply requires the ACCEPT capability.")
     current_item_handoff = controller.current_item_handoff
     current_response_target = controller.current_response_target
 
@@ -212,7 +210,7 @@ def run_resolution_workbench_shell(
             split_report_item_badges=split_report_item_badges,
             split_report_conflicts_remaining=split_report_conflicts_remaining,
             review_and_apply=review_and_apply,
-            report_decision=report_decision,
+            report_apply=report_apply,
             read_only=read_only,
             impact_controller=impact_controller,
             destination=destination,
@@ -354,6 +352,7 @@ def run_resolution_workbench_shell(
             destination_control=destination_control,
             todo_window=todo_window,
             todo_control=todo_control,
+            todo_title="APPLY" if report_apply else "TO DO",
             footer=footer,
         ),
         frame_factory=Frame,
