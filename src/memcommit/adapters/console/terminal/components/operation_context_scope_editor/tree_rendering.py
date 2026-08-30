@@ -8,7 +8,10 @@ from dataclasses import dataclass
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.core.context_targeting.tui.tree import ContextTreeRow, ContextTreeState
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
+    ContextTreeRow,
+    ContextTreeState,
+)
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
     SourceTokenRole,

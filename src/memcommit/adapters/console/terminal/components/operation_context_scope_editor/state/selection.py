@@ -1,4 +1,4 @@
-"""Checked Context selection and cardinality controls."""
+"""Checked Context selection and cardinality state for terminal controls."""
 
 from __future__ import annotations
 

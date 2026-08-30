@@ -1,4 +1,4 @@
-"""Operation-neutral inheritance state for one exact Context-name draft."""
+"""Terminal editing state for one exact Context-name draft."""
 
 from __future__ import annotations
 

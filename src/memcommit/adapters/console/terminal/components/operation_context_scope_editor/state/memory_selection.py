@@ -1,4 +1,4 @@
-"""Process-local retained selection for exact direct Memory targets."""
+"""Process-local exact Memory selection for terminal Context controls."""
 
 from __future__ import annotations
 

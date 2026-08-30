@@ -26,7 +26,9 @@ from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame
 
-from memcommit.adapters.console.terminal.components.background_turn import BackgroundExecutorTurn
+from memcommit.adapters.console.terminal.components.background_turn import (
+    BackgroundExecutorTurn,
+)
 from memcommit.adapters.console.terminal.components.progress import (
     BUSY_INTERVAL_SECONDS,
     CommandProgress,
@@ -70,7 +72,7 @@ from memcommit.adapters.console.terminal.core.keybindings import (
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.core.context_targeting.tui.tree import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
     ContextTreeState,
     build_context_tree,
 )
@@ -109,9 +111,7 @@ class CommandWaitView:
 
     title: str
     text: str | StyleAndTextTuples
-    frame_renderer: (
-        Callable[[int], str | StyleAndTextTuples] | None
-    ) = None
+    frame_renderer: Callable[[int], str | StyleAndTextTuples] | None = None
 
     def render(self, frame_index: int) -> str | StyleAndTextTuples:
         """Render one animation frame while preserving static-view callers."""
@@ -700,7 +700,6 @@ def run_command_wait(
         event.app.invalidate()
 
     if return_pane is not None:
-
         if context_control is not None:
 
             @bind_case_insensitive_key(bindings, "c", eager=True)
@@ -746,9 +745,7 @@ def run_command_wait(
             if context_memory_anchor is not None:
                 return
             context_tree_state.expand_selected(
-                include_leaf_memories=(
-                    frozen_context_browser.memory_loader is not None
-                )
+                include_leaf_memories=(frozen_context_browser.memory_loader is not None)
             )
             load_visible_context_memories()
             record_study_action(
@@ -939,9 +936,7 @@ def run_command_wait(
         request_close(event)
 
     header = Window(
-        FormattedTextControl(
-            lambda: [("class:title", " " + help_status())]
-        ),
+        FormattedTextControl(lambda: [("class:title", " " + help_status())]),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )

@@ -1,4 +1,4 @@
-"""Shared exact-versus-descendant control for terminal shells."""
+"""Exact-versus-descendant state and rendering for terminal controls."""
 
 from __future__ import annotations
 

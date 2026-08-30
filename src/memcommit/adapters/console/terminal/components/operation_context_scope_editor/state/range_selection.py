@@ -7,16 +7,18 @@ from dataclasses import dataclass, field
 
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.core.context_targeting.tui.reach import ContextReachState
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.reach import (
+    ContextReachState,
+)
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.tree_rendering import (
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )
-from memcommit.core.context_targeting.tui.selection import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.selection import (
     ContextSelectionState,
     ContextTargetModeState,
 )
-from memcommit.core.context_targeting.tui.tree import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
     ContextTree,
     ContextTreeState,
     build_context_tree,

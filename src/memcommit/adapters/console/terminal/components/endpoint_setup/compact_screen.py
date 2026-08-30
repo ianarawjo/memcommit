@@ -31,8 +31,10 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.core.context_targeting.tui.reach import ContextReachState
-from memcommit.core.context_targeting.tui.name_draft import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.reach import (
+    ContextReachState,
+)
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.name_draft import (
     ContextNameDraftState,
     infer_context_parent,
 )
@@ -40,7 +42,9 @@ from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import (
+    require_interactive_terminal,
+)
 from memcommit.adapters.console.terminal.components.command_editor import (
     CommandDraft,
     CommandEditorControl,
@@ -76,12 +80,17 @@ from memcommit.adapters.console.terminal.components.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.adapters.console.terminal.core.keybindings import bind_case_insensitive_key
+from memcommit.adapters.console.terminal.core.keybindings import (
+    bind_case_insensitive_key,
+)
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     focused_control_style,
 )
-from memcommit.adapters.console.terminal.components.selection import choice_marker, choice_visual_state
+from memcommit.adapters.console.terminal.components.selection import (
+    choice_marker,
+    choice_visual_state,
+)
 from memcommit.source_projection.presentation import source_display_text
 
 
@@ -1473,9 +1482,7 @@ def run_compact_endpoint_setup(
                 f"{safe_terminal_text(spec.command_verb)} command · ↑ previous · Esc cancel"
             )
         if get_app().layout.has_focus(action_control):
-            return (
-                f" Enter {safe_terminal_text(spec.action_label)} · ↑ previous · Esc cancel"
-            )
+            return f" Enter {safe_terminal_text(spec.action_label)} · ↑ previous · Esc cancel"
         return " Tab next · Esc cancel"
 
     footer_control.text = render_footer

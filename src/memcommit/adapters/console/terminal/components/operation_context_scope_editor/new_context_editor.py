@@ -51,13 +51,21 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )
-from memcommit.core.context_targeting.tui.name_draft import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.name_draft import (
     ContextNameDraftState,
     infer_context_parent,
 )
-from memcommit.core.context_targeting.tui.selection import ContextSelectionState
-from memcommit.core.context_targeting.tui.tree import ContextTreeState, build_context_tree
-from memcommit.adapters.console.terminal.components.selection import tree_choice_marker, tree_choice_styles
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.selection import (
+    ContextSelectionState,
+)
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
+    ContextTreeState,
+    build_context_tree,
+)
+from memcommit.adapters.console.terminal.components.selection import (
+    tree_choice_marker,
+    tree_choice_styles,
+)
 
 
 def suggest_fresh_context_name(
@@ -349,9 +357,7 @@ class ContextNameControl:
             draft_state=ContextNameDraftState(
                 exact_name=view.value,
                 parent_name=(
-                    editor_state.selected_parent
-                    if editor_state is not None
-                    else None
+                    editor_state.selected_parent if editor_state is not None else None
                 ),
             ),
         )

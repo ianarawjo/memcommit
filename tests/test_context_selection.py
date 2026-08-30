@@ -7,20 +7,22 @@ from memcommit.core.context_targeting.resolution import (
     expand_lexical_context_names,
     order_context_names_by_hierarchy,
 )
-from memcommit.core.context_targeting.tui.reach import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.reach import (
     ContextReachState,
     ContextReachViewState,
     render_context_reach,
 )
-from memcommit.core.context_targeting.tui.range_selection import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.range_selection import (
     ContextRangeSelectionState,
     project_checked_context_names,
 )
-from memcommit.core.context_targeting.tui.selection import ContextSelectionState
-from memcommit.core.context_targeting.tui.memory_selection import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.selection import (
+    ContextSelectionState,
+)
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.memory_selection import (
     DirectMemorySelectionState,
 )
-from memcommit.core.context_targeting.tui.tree import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
     build_context_tree,
     context_subtree_names,
     visible_context_rows,
@@ -61,9 +63,10 @@ def test_public_catalog_order_matches_a_fully_expanded_context_tree():
         "task-2",
         "external",
     )
-    assert tuple(
-        row.name for row in visible_context_rows(tree, tree.expandable_names)
-    ) == ordered
+    assert (
+        tuple(row.name for row in visible_context_rows(tree, tree.expandable_names))
+        == ordered
+    )
 
 
 def test_context_scope_rejects_non_boolean_descendant_policy():

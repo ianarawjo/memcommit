@@ -10,7 +10,9 @@ from typing import Literal, Protocol, runtime_checkable
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.core.context_targeting.tui.reach import ContextReachState
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.reach import (
+    ContextReachState,
+)
 from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemoryBadge,
     ContextMemoryRow,

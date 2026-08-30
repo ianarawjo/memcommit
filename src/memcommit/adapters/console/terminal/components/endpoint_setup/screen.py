@@ -18,7 +18,7 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.core.context_targeting.tui.reach import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.reach import (
     ContextReachState,
     render_context_reach,
 )
@@ -27,7 +27,9 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import (
+    require_interactive_terminal,
+)
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.components.endpoint_setup.compact_screen import (
     run_compact_endpoint_setup,
@@ -74,8 +76,13 @@ from memcommit.adapters.console.terminal.components.exact_name import (
     ExactNameFieldControl,
     ExactNameFieldView,
 )
-from memcommit.adapters.console.terminal.components.selection import FlatSelectionState, SelectionOption
-from memcommit.adapters.console.terminal.components.selection import render_vertical_choice_rows
+from memcommit.adapters.console.terminal.components.selection import (
+    FlatSelectionState,
+    SelectionOption,
+)
+from memcommit.adapters.console.terminal.components.selection import (
+    render_vertical_choice_rows,
+)
 
 
 def run_endpoint_setup(

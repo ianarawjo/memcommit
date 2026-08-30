@@ -23,10 +23,12 @@ from prompt_toolkit.layout import (
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.layout.menus import CompletionsMenu
 
-from memcommit.core.context_targeting.tui.range_selection import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.range_selection import (
     ContextRangeSelectionState,
 )
-from memcommit.core.context_targeting.tui.reach import render_context_reach
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.reach import (
+    render_context_reach,
+)
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.components.exact_name import (
     ExactNameFieldView,
@@ -42,7 +44,9 @@ from memcommit.adapters.console.terminal.components.horizontal_choice import (
     HorizontalChoiceState,
     render_horizontal_choice,
 )
-from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import focused_control_style
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
+    focused_control_style,
+)
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
     source_display_text,

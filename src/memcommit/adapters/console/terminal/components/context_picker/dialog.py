@@ -43,13 +43,13 @@ from memcommit.adapters.console.terminal.components.plain_text_clipboard import 
     clipboard_failure_receipt,
     copy_plain_text,
 )
-from memcommit.core.context_targeting.tui.tree import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
     ContextTree,
     ContextTreeState,
     build_context_tree,
     expandable_context_subtree,
 )
-from memcommit.core.context_targeting.tui.reach import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.reach import (
     ContextReachState,
     render_context_reach,
 )
@@ -117,9 +117,7 @@ def choose_context(
     nested_accept_handler: (
         Callable[[str, str], ContextPickerActionReceipt] | None
     ) = None,
-    context_accept_handler: (
-        Callable[[str], ContextPickerActionReceipt] | None
-    ) = None,
+    context_accept_handler: (Callable[[str], ContextPickerActionReceipt] | None) = None,
     memory_scope_root: str | None = None,
     memory_reach_state: ContextReachState | None = None,
 ) -> str | ContextSubtreeSelection | ContextMemorySelection | _NestedSelectionT | None:
@@ -178,10 +176,8 @@ def choose_context(
             "selection factory."
         )
     if isinstance(initial_target, DirectMemoryTarget):
-        if (
-            memory_loader is None
-            or initial_target.context_name
-            not in (frozenset(options) | selectable_virtual)
+        if memory_loader is None or initial_target.context_name not in (
+            frozenset(options) | selectable_virtual
         ):
             raise ValueError(
                 "An initial direct-item target requires its Context in the catalog."
@@ -867,9 +863,7 @@ def choose_context(
             else ("q close" if browse_only else "q cancel")
         )
         catalog_label = (
-            "Contexts"
-            if context_accept_handler is not None
-            else "selectable"
+            "Contexts" if context_accept_handler is not None else "selectable"
         )
         normal_footer = (
             _CONTEXT_NAVIGATION_HINT
@@ -886,8 +880,7 @@ def choose_context(
                 ),
                 (
                     action_status.detail_style,
-                    " · "
-                    + display_escape_text(action_status.detail),
+                    " · " + display_escape_text(action_status.detail),
                 ),
                 ("", f"  {close_action}"),
             ]

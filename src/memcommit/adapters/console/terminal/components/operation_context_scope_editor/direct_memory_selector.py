@@ -9,7 +9,7 @@ from prompt_toolkit.application.current import get_app
 
 from memcommit.core.context_targeting.model import DirectMemoryTarget
 from memcommit.core.context_targeting.model import ContextSelectionMode
-from memcommit.core.context_targeting.tui.memory_selection import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.memory_selection import (
     DirectMemorySelectionState,
 )
 from memcommit.adapters.console.terminal.components.context_picker.model import (

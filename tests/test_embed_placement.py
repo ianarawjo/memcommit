@@ -32,7 +32,9 @@ from memcommit.adapters.console.commands.embed.workbench import (
     parse_embed_command_argv,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.core.context_targeting.tui.tree import ContextTreeRow
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
+    ContextTreeRow,
+)
 from memcommit.source_projection.model import SourceForm, SourceReach
 from memcommit.persistence.store import MemoryStore
 

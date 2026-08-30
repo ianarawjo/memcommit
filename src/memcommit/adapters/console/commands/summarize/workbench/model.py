@@ -5,8 +5,12 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 
-from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
-from memcommit.core.context_targeting.tui.reach import ContextReachViewMode
+from memcommit.adapters.console.terminal.components.context_picker import (
+    ContextMemoryRow,
+)
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.reach import (
+    ContextReachViewMode,
+)
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.application.operations.summarize.application import SummarizeResult
 
@@ -71,9 +75,7 @@ class SummarizeTuiOutcome:
             self.results[0].include_descendants
             or not self.results[1].include_descendants
         ):
-            raise ValueError(
-                "Both Summary views must keep direct before recursive."
-            )
+            raise ValueError("Both Summary views must keep direct before recursive.")
 
     def result_for(self, *, include_descendants: bool) -> SummarizeResult | None:
         return next(

@@ -12,7 +12,9 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     choose_context_name,
     suggest_fresh_context_name,
 )
-from memcommit.core.context_targeting.tui.name_draft import ContextNameDraftState
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.name_draft import (
+    ContextNameDraftState,
+)
 
 
 def test_generic_name_view_has_no_save_location_semantics() -> None:

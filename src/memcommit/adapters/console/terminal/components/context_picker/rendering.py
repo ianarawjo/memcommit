@@ -18,7 +18,7 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.core.context_targeting.model import DirectMemoryTarget
-from memcommit.core.context_targeting.tui.tree import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
     ContextTree,
     ContextTreeRow,
     ContextTreeState,
@@ -213,12 +213,9 @@ def render_context_memory_previews(
             if memory.selector is not None
             else None
         )
-        memory_is_selected = (
-            memory_target is not None
-            and (
-                memory_target in (selected_memories or frozenset())
-                or memory_target == selected_memory
-            )
+        memory_is_selected = memory_target is not None and (
+            memory_target in (selected_memories or frozenset())
+            or memory_target == selected_memory
         )
         if show_selection_marker:
             memory_pointer = "›" if memory_is_focused else " "

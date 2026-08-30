@@ -15,7 +15,7 @@ from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
-from memcommit.core.context_targeting.tui.reach import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.reach import (
     ContextReachState,
     ContextReachViewState,
     render_context_reach,
@@ -29,7 +29,9 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextSelectorRowProjection,
     ContextSelectorView,
 )
-from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import (
+    require_interactive_terminal,
+)
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.components.focus import (
     FocusSurface,
@@ -58,7 +60,9 @@ from memcommit.adapters.console.terminal.components.context_summary.model import
     ContextSummaryWorkbenchReceipt,
     ContextSummaryWorkbenchView,
 )
-from memcommit.application.capabilities.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.capabilities.reviewing.session_navigation import (
+    SessionWorkbenchNavigation,
+)
 
 
 def run_context_summary_workbench(
@@ -125,9 +129,7 @@ def run_context_summary_workbench(
     reach = (
         ContextReachViewState.create(mode=view.range_mode)
         if view.allow_both
-        else ContextReachState.create(
-            include_descendants=view.range_mode == "SUBTREE"
-        )
+        else ContextReachState.create(include_descendants=view.range_mode == "SUBTREE")
     )
     document = view.document
     navigation = SessionWorkbenchNavigation(pane="viewer")
@@ -164,10 +166,13 @@ def run_context_summary_workbench(
         if document is None:
             style = "class:memcommit.choice.active.focused" if focused else ""
             pointer = "›" if focused else " "
-            cursor = [('[SetCursorPosition]', '')] if focused else []
+            cursor = [("[SetCursorPosition]", "")] if focused else []
             return [
                 *cursor,
-                (style, f"{pointer} RUN {safe_terminal_text(view.operation_label.upper())} · ENTER\n"),
+                (
+                    style,
+                    f"{pointer} RUN {safe_terminal_text(view.operation_label.upper())} · ENTER\n",
+                ),
                 (
                     "class:viewer-body",
                     f"  {safe_terminal_text(view.empty_message)}",
@@ -207,7 +212,9 @@ def run_context_summary_workbench(
     def render_footer() -> str:
         app = get_app()
         if app.layout.has_focus(selector.control):
-            expansion = "A restore tree" if selector.tree.all_expanded else "A expand all"
+            expansion = (
+                "A restore tree" if selector.tree.all_expanded else "A expand all"
+            )
             action = safe_terminal_text(view.operation_label.lower())
             memory_hint = (
                 ""
@@ -233,10 +240,7 @@ def run_context_summary_workbench(
                     if view.targeting_editable
                     else ""
                 )
-                return (
-                    f" Enter run · {navigation_hint}"
-                    "Esc/Backspace/Q close"
-                )
+                return f" Enter run · {navigation_hint}Esc/Backspace/Q close"
             receipt = ""
             if copy_receipt is not None:
                 succeeded, message = copy_receipt
@@ -453,11 +457,7 @@ def run_context_summary_workbench(
 
     def copy_summary(event, *, whole_document: bool) -> None:
         nonlocal copy_receipt
-        if (
-            document is None
-            or clipboard_projector is None
-            or clipboard_writer is None
-        ):
+        if document is None or clipboard_projector is None or clipboard_writer is None:
             copy_receipt = (False, "clipboard is unavailable")
             event.app.invalidate()
             return

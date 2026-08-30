@@ -135,9 +135,7 @@ def test_summarize_command_tui_only_composes_shared_workbench() -> None:
 
 
 def test_moved_component_symbols_no_longer_live_in_tui_primitives() -> None:
-    tree = ast.parse(
-        (CONSOLE_TERMINAL / "components" / "primitives.py").read_text()
-    )
+    tree = ast.parse((CONSOLE_TERMINAL / "components" / "primitives.py").read_text())
     definitions = {
         node.name
         for node in tree.body
@@ -181,7 +179,10 @@ def test_no_consumer_reaches_moved_input_symbols_through_legacy_primitives() -> 
         for node in ast.walk(tree):
             if not isinstance(node, ast.ImportFrom):
                 continue
-            if node.module != "memcommit.adapters.console.terminal.components.primitives":
+            if (
+                node.module
+                != "memcommit.adapters.console.terminal.components.primitives"
+            ):
                 continue
             offenders.extend(
                 (str(path.relative_to(ROOT)), alias.name)
@@ -231,7 +232,7 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
     owner_imports = set(_imports(owner))
 
     assert {
-        "memcommit.core.context_targeting.tui.memory_selection",
+        "memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.memory_selection",
         "memcommit.adapters.console.terminal.components.context_picker.model",
         "memcommit.adapters.console.terminal.components.context_picker.preview",
         "memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector",
@@ -268,7 +269,10 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
     for path in consumers:
         imports = set(_imports(path))
         source = path.read_text()
-        assert "memcommit.adapters.console.terminal.components.operation_context_scope_editor.direct_memory_selector" in imports
+        assert (
+            "memcommit.adapters.console.terminal.components.operation_context_scope_editor.direct_memory_selector"
+            in imports
+        )
         assert "ContextMemoryPreviewController(" not in source
         assert "DirectMemorySelectionState(" not in source
 
@@ -276,12 +280,7 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
 def test_context_picker_is_owned_by_the_terminal_adapter() -> None:
     legacy_owner = PACKAGE / "core" / "context_targeting" / "tui" / "picker.py"
     package = (
-        PACKAGE
-        / "adapters"
-        / "console"
-        / "terminal"
-        / "components"
-        / "context_picker"
+        PACKAGE / "adapters" / "console" / "terminal" / "components" / "context_picker"
     )
     public_api = package / "__init__.py"
     model = package / "model.py"

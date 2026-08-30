@@ -1,4 +1,4 @@
-"""Process-local tree navigation over a frozen Context-name catalog."""
+"""Terminal tree navigation over a frozen Context-name catalog."""
 
 from __future__ import annotations
 

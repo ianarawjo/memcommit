@@ -24,9 +24,11 @@ The console-specific input and output adapters are co-located under
 `memcommit.adapters.console.commands.init`: `command.py` owns orchestration,
 `choose_name.py` owns the optional exact-name editor, and `receipt.py` owns successful
 human-readable output. The former operation-specific TUI and CLI interface
-paths are removed without facades. The shared Context name editor remains in
-`core.context_targeting.tui`; this is an ownership relocation only and does not
-change its interaction or validation contract.
+paths are removed without facades. The shared Context name editor and its draft
+state remain under
+`adapters.console.terminal.components.operation_context_scope_editor`; this is
+an ownership relocation only and does not change its interaction or validation
+contract.
 
 The verb-shaped filename distinguishes this action from configuration and from
 the multi-role Endpoint Setup component: Init asks for one exact new name and

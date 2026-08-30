@@ -72,9 +72,9 @@ The console-specific input and output adapters are co-located under
 `receipt.py` owns successful human-readable output. The former operation-specific
 TUI and CLI interface paths are removed without facades. The shared Context
 picker is owned by `adapters.console.terminal.components.context_picker`, while
-the tree, reach, selection, and typed targets remain in core Context targeting.
-This ownership split does not change interaction, authority, or the
-current-pointer contract.
+terminal tree, reach, and selection state live beside the shared scope editor.
+Typed targets remain in core Context targeting. This ownership split does not
+change interaction, authority, or the current-pointer contract.
 
 ## Responsibility matrix
 
@@ -82,7 +82,7 @@ current-pointer contract.
 | --- | --- | --- |
 | Typer grammar, cancellation, and error presentation | `commands/switch/command.py` | Captures current once, routes an optional TUI selection, invokes the typed use case, and renders the result. |
 | Interactive Switch shape | `commands/switch/setup.py` | Converts one frozen picker result into `SwitchContextRequest`; it performs no load, authorization, or write. |
-| Shared Context tree, direct-item preview, focus, and clipboard | Core `context_targeting/tui/tree.py` plus terminal `components/context_picker` | Core owns the frozen tree and typed targeting state; the terminal component projects and returns a Context name or read-only targeting value without owning an operational role or Store continuation. |
+| Shared Context tree, direct-item preview, focus, and clipboard | Terminal `components/operation_context_scope_editor/state/tree.py` plus `components/context_picker` | The terminal state package owns frozen navigation while core retains typed targets; the picker projects and returns a Context name or read-only targeting value without owning an operational role or Store continuation. |
 | Legacy picker imports | `commands/shared/context_picker.py` | Behavior-free compatibility exports only; production callers use the neutral owner directly. |
 | Global versus explicit-relative name semantics | `operations/switch/application.py` | Bare names remain canonical global names. Only `.`, `..`, `./...`, and `../...` resolve against the command-start current snapshot. |
 | Previous/next navigation meaning | `current_context_navigation.py` + `operations/switch/application.py` | Uses bounded actual pointer-transition history, never lexical catalog adjacency; direct selection clears forward history. |

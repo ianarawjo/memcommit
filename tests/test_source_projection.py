@@ -12,7 +12,7 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )
-from memcommit.core.context_targeting.tui.tree import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
     ContextTreeState,
     build_context_tree,
 )

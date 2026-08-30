@@ -20,14 +20,21 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextTreeRowDecoration,
     render_context_tree_rows,
 )
-from memcommit.core.context_targeting.tui.selection import ContextSelectionState
-from memcommit.core.context_targeting.tui.tree import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.selection import (
+    ContextSelectionState,
+)
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
     ContextTreeState,
     build_context_tree,
     context_ancestors,
 )
-from memcommit.core.context_targeting.tui.tree import ContextTreeRow
-from memcommit.adapters.console.terminal.components.selection import tree_choice_marker, tree_choice_styles
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
+    ContextTreeRow,
+)
+from memcommit.adapters.console.terminal.components.selection import (
+    tree_choice_marker,
+    tree_choice_styles,
+)
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
@@ -97,9 +104,7 @@ class ContextSelectorControl:
         view: ContextSelectorView,
         *,
         height: int = 5,
-        row_projector: Callable[
-            [ContextTreeRow, bool], ContextSelectorRowProjection
-        ]
+        row_projector: Callable[[ContextTreeRow, bool], ContextSelectorRowProjection]
         | None = None,
     ) -> None:
         if height < 1:

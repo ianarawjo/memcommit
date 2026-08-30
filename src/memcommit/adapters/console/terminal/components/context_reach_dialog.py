@@ -16,13 +16,15 @@ from prompt_toolkit.layout import (
 )
 from prompt_toolkit.output import Output
 
-from memcommit.core.context_targeting.tui.reach import (
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.reach import (
     ContextReachState,
     render_context_reach,
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.components.frame import build_focused_frame
-from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import MEMCOMMIT_TUI_STYLE
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
+    MEMCOMMIT_TUI_STYLE,
+)
 
 
 def choose_context_reach(

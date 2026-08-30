@@ -7,7 +7,10 @@ from dataclasses import dataclass, field
 from typing import AbstractSet
 
 from memcommit.core.context_targeting.model import DirectMemoryTarget
-from memcommit.core.context_targeting.tui.tree import ContextTreeRow, ContextTreeState
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.state.tree import (
+    ContextTreeRow,
+    ContextTreeState,
+)
 from memcommit.adapters.console.terminal.components.context_picker.model import (
     ContextMemoryRow,
     ContextPickerNavigationUnit,
