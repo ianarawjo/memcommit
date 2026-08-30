@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-from memcommit.core.context_targeting.memory_focus import is_memory_uid_selector
+from memcommit.core.context_targeting.uid_locator import is_memory_uid_selector
 from memcommit.core.context_targeting.model import (
     ContextScope,
     DirectMemoryLocator,

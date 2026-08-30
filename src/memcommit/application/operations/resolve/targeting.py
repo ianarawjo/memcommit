@@ -9,7 +9,7 @@ from memcommit.application.capabilities.authority.context_access import (
     resolve_context_access,
 )
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
+from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
 from memcommit.application.capabilities.local_target_lookup import (
     LocalDirectMemoryLocatorStore,
     resolve_local_direct_memory_locator,

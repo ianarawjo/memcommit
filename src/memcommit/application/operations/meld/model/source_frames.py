@@ -19,9 +19,9 @@ from memcommit.application.capabilities.semantic.disclosure import (
     require_semantic_disclosure_authority,
 )
 from memcommit.core.context import Context, Memory, QueryContextRef
-from memcommit.core.context_targeting.memory_focus import (
-    MemoryFocusError,
-    resolve_memory_focus,
+from memcommit.application.capabilities.semantic.memory_scope import (
+    MemoryScopeError,
+    resolve_memory_scope,
 )
 from memcommit.persistence.store import context_record_digest
 
@@ -438,16 +438,16 @@ class MeldFrame:
         if not complete_memories:
             raise MeldError(f"Source Context '{ctx.name}' has no direct Memories.")
         try:
-            focus = resolve_memory_focus(
+            scope = resolve_memory_scope(
                 complete_memories,
                 memory_selector,
                 label=f"{role} Memory",
             )
-        except MemoryFocusError as error:
+        except MemoryScopeError as error:
             raise MeldError(str(error)) from error
         memories = tuple(
             replace(memory, position=position)
-            for position, memory in enumerate(focus.actionable)
+            for position, memory in enumerate(scope.actionable)
         )
         fingerprints = (
             tuple(
@@ -479,14 +479,14 @@ class MeldFrame:
             value["include_descendants"] = include_descendants
         if fingerprints is not None:
             value["contexts"] = [item.to_dict() for item in fingerprints]
-        if focus.context_only:
+        if scope.context_only:
             value["context_evidence"] = [
-                item.to_dict() for item in focus.context_only
+                item.to_dict() for item in scope.context_only
             ]
-        if focus.selected_uid is not None:
+        if scope.selected_uid is not None:
             # Persist selection identity independently of neighbor count: a
             # one-Memory Context is still narrower than an unrestricted target.
-            value["selected_memory_uid"] = focus.selected_uid
+            value["selected_memory_uid"] = scope.selected_uid
         return cls.from_dict(value)
 
     def to_dict(self) -> dict[str, object]:

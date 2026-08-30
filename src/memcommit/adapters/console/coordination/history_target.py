@@ -9,9 +9,9 @@ from memcommit.application.capabilities.context_locator import (
     suggest_context_locators,
 )
 from memcommit.application.capabilities.name_suggestions import did_you_mean_suffix
-from memcommit.core.context_targeting.memory_focus import is_memory_uid_selector
 from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTarget
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
+from memcommit.core.context_targeting.uid_locator import is_memory_uid_selector
 
 
 HistoryReportTarget = ContextTarget | DirectMemoryTarget

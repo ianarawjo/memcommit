@@ -49,7 +49,7 @@ from memcommit.application.capabilities.local_target_lookup import (
     DirectMemoryAmbiguityError,
     resolve_local_context_memory_target,
 )
-from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
+from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
 from memcommit.core.context_targeting.model import (
     ContextTarget,
     DirectMemoryLocator,

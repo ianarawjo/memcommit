@@ -19,6 +19,13 @@ This distinction is internal. Ordinary reports show the selected work and its
 outcomes, not a second list explaining which neighboring Memories were sent as
 context.
 
+The shared application implementation names this boundary `MemoryScope` and
+owns it at `memcommit.application.capabilities.semantic.memory_scope`.
+Canonical Memory UID-shape recognition remains a core locator rule in
+`memcommit.core.context_targeting.uid_locator`. Existing Endpoint Setup wording
+and Meld's `memory_focus` provider marker are separate presentation and wire
+contracts; this internal relocation does not rename or reinterpret them.
+
 ## Selection contract
 
 The explicit command form accepts one UID or unambiguous UID prefix per role:

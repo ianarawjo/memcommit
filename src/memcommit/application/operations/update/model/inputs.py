@@ -14,9 +14,9 @@ from memcommit.application.capabilities.semantic.disclosure import (
     require_semantic_disclosure_authority,
 )
 from memcommit.core.context import Context, Memory, MemoryRef
-from memcommit.core.context_targeting.memory_focus import (
-    MemoryFocusError,
-    resolve_memory_focus,
+from memcommit.application.capabilities.semantic.memory_scope import (
+    MemoryScopeError,
+    resolve_memory_scope,
 )
 
 from .changes import (
@@ -408,33 +408,33 @@ def collect_update_inputs(
         ],
     }
     try:
-        source_focus = resolve_memory_focus(
+        source_scope = resolve_memory_scope(
             source_candidates,
             source_memory_selector,
             label="Source Memory",
         )
-        target_focus = resolve_memory_focus(
+        target_scope = resolve_memory_scope(
             target_memories,
             target_memory_selector,
             label="Target Memory",
         )
-    except MemoryFocusError as error:
+    except MemoryScopeError as error:
         raise UpdateError(str(error)) from error
     return UpdateInputs(
-        source_candidates=source_focus.actionable,
+        source_candidates=source_scope.actionable,
         # A focused target is an exact existing Memory operation. Its owner is
         # not exposed as an ADD target, preventing a sibling result from
         # escaping the selected Memory scope.
         target_contexts=(
-            () if target_focus.selected_uid is not None else target_context_candidates
+            () if target_scope.selected_uid is not None else target_context_candidates
         ),
-        target_memories=target_focus.actionable,
+        target_memories=target_scope.actionable,
         source_digest=_sha256_json(source_payload),
         target_digest=_sha256_json(target_payload),
         source_contexts=_fingerprint_contexts(source_contexts),
         target_context_fingerprints=_fingerprint_contexts(target_contexts),
-        source_context_only=source_focus.context_only,
-        target_context_only=target_focus.context_only,
-        source_memory_uid=source_focus.selected_uid,
-        target_memory_uid=target_focus.selected_uid,
+        source_context_only=source_scope.context_only,
+        target_context_only=target_scope.context_only,
+        source_memory_uid=source_scope.selected_uid,
+        target_memory_uid=target_scope.selected_uid,
     )

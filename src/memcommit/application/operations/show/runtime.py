@@ -28,7 +28,7 @@ from memcommit.application.capabilities.memory_report_targeting import (
     freeze_memory_report_readable_catalog,
     resolve_readable_memory_target,
 )
-from memcommit.core.context_targeting.memory_focus import is_memory_uid_prefix
+from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
 from memcommit.core.context_targeting.model import (
     ContextScope,
     DirectMemoryLocator,

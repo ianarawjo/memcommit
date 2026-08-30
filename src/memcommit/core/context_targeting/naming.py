@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import re
 
-from memcommit.core.context_targeting.memory_focus import is_memory_uid_selector
+from memcommit.core.context_targeting.uid_locator import is_memory_uid_selector
 
 
 _PORTABLE_CONTEXT_SEGMENT = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\Z")

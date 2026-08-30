@@ -18,9 +18,9 @@ from memcommit.application.capabilities.context_locator import (
     is_relative_context_locator,
     resolve_context_locator,
 )
-from memcommit.core.context_targeting.memory_focus import (
-    MemoryFocusError,
-    resolve_memory_focus,
+from memcommit.application.capabilities.semantic.memory_scope import (
+    MemoryScopeError,
+    resolve_memory_scope,
 )
 from memcommit.application.capabilities.local_target_lookup import (
     try_resolve_short_local_direct_memory_locator,
@@ -330,14 +330,14 @@ def run_stored_source_fit(
             if isinstance(item, Memory)
         )
         try:
-            focus = resolve_memory_focus(
+            scope = resolve_memory_scope(
                 direct_memories,
                 memory_source.selector,
                 label="direct Fit Memory",
             )
-        except MemoryFocusError as error:
+        except MemoryScopeError as error:
             raise FitSourceError(str(error)) from error
-        memory = focus.actionable[0]
+        memory = scope.actionable[0]
         # Fit is an n-ary compatibility operator over the argv operand frame.
         # Repeating one stored coordinate therefore repeats that proposition;
         # source digests still collapse safely for exact revalidation.

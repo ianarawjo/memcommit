@@ -6,9 +6,9 @@ import sys
 
 from memcommit.core.context import Context
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.core.context_targeting.memory_focus import (
-    MemoryFocusError,
-    resolve_memory_focus,
+from memcommit.application.capabilities.semantic.memory_scope import (
+    MemoryScopeError,
+    resolve_memory_scope,
 )
 from memcommit.application.capabilities.authority.context_access import (
     ContextAccess,
@@ -308,14 +308,14 @@ def _meld_request_matches_saved_session(
         requested_uid = None
         if selector is not None:
             try:
-                focus = resolve_memory_focus(
+                scope = resolve_memory_scope(
                     (*frame.memories, *frame.context_evidence),
                     selector,
                     label=label,
                 )
-            except MemoryFocusError as error:
+            except MemoryScopeError as error:
                 raise MeldCommandError(str(error)) from error
-            requested_uid = focus.selected_uid
+            requested_uid = scope.selected_uid
         sources_match = sources_match and frame.selected_memory_uid == requested_uid
     return sources_match
 

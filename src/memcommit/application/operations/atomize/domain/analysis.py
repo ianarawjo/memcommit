@@ -10,9 +10,9 @@ from memcommit.application.capabilities.semantic.prompt_policy import (
     resolve_semantic_prompt_policy,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.core.context_targeting.memory_focus import (
-    MemoryFocusError,
-    resolve_memory_focus,
+from memcommit.application.capabilities.semantic.memory_scope import (
+    MemoryScopeError,
+    resolve_memory_scope,
 )
 
 from .model import (
@@ -86,14 +86,14 @@ def select_atomize_candidates(
 
     candidates = collect_atomize_candidates(ctx)
     try:
-        focus = resolve_memory_focus(
+        scope = resolve_memory_scope(
             candidates,
             memory_selector,
             label="direct Memory",
         )
-    except MemoryFocusError as error:
+    except MemoryScopeError as error:
         raise AtomizeImpactError(str(error)) from error
-    return list(focus.actionable), list(focus.context_only)
+    return list(scope.actionable), list(scope.context_only)
 
 
 def impact_atomize(

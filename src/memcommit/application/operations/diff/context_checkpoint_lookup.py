@@ -10,9 +10,11 @@ from memcommit.application.capabilities.context_locator import (
     suggest_context_locators,
 )
 from memcommit.application.capabilities.name_suggestions import did_you_mean_suffix
-from memcommit.core.context_targeting.memory_focus import is_memory_uid_selector
 from memcommit.core.context_targeting.model import CheckpointTarget, ContextTarget
-from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique_uid
+from memcommit.core.context_targeting.uid_locator import (
+    is_memory_uid_selector,
+    resolve_exact_or_unique_uid,
+)
 
 
 class LocalCheckpointCatalog(Protocol):

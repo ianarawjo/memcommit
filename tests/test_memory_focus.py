@@ -6,11 +6,13 @@ import pytest
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.core.context_targeting.memory_focus import (
-    MemoryFocusError,
+from memcommit.application.capabilities.semantic.memory_scope import (
+    MemoryScopeError,
+    resolve_memory_scope,
+)
+from memcommit.core.context_targeting.uid_locator import (
     is_memory_uid_prefix,
     is_memory_uid_selector,
-    resolve_memory_focus,
 )
 
 
@@ -58,22 +60,22 @@ def test_no_selector_preserves_the_complete_actionable_frame() -> None:
     first = Candidate("11111111-1111-4111-8111-111111111111")
     second = Candidate("22222222-2222-4222-8222-222222222222")
 
-    focus = resolve_memory_focus((first, second), None)
+    scope = resolve_memory_scope((first, second), None)
 
-    assert focus.selected_uid is None
-    assert focus.actionable == (first, second)
-    assert focus.context_only == ()
+    assert scope.selected_uid is None
+    assert scope.actionable == (first, second)
+    assert scope.context_only == ()
 
 
 def test_selector_separates_one_actionable_memory_from_context_only_neighbors() -> None:
     first = Candidate("11111111-1111-4111-8111-111111111111")
     second = Candidate("22222222-2222-4222-8222-222222222222")
 
-    focus = resolve_memory_focus((first, second), "22222222")
+    scope = resolve_memory_scope((first, second), "22222222")
 
-    assert focus.selected_uid == second.uid
-    assert focus.actionable == (second,)
-    assert focus.context_only == (first,)
+    assert scope.selected_uid == second.uid
+    assert scope.actionable == (second,)
+    assert scope.context_only == (first,)
 
 
 def test_selector_rejects_missing_and_ambiguous_prefixes() -> None:
@@ -82,10 +84,10 @@ def test_selector_rejects_missing_and_ambiguous_prefixes() -> None:
         Candidate("11111112-1111-4111-8111-111111111111"),
     )
 
-    with pytest.raises(MemoryFocusError, match="No Source Memory"):
-        resolve_memory_focus(candidates, "9", label="Source Memory")
-    with pytest.raises(MemoryFocusError, match="Ambiguous prefix"):
-        resolve_memory_focus(candidates, "1111111", label="Source Memory")
+    with pytest.raises(MemoryScopeError, match="No Source Memory"):
+        resolve_memory_scope(candidates, "9", label="Source Memory")
+    with pytest.raises(MemoryScopeError, match="Ambiguous prefix"):
+        resolve_memory_scope(candidates, "1111111", label="Source Memory")
 
 
 @pytest.mark.parametrize("command", ["forget", "sever"])

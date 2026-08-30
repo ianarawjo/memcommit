@@ -26,9 +26,9 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evi
     ProjectedComparisonMemory,
     project_comparison_context,
 )
-from memcommit.core.context_targeting.memory_focus import (
-    MemoryFocusError,
-    resolve_memory_focus,
+from memcommit.application.capabilities.semantic.memory_scope import (
+    MemoryScopeError,
+    resolve_memory_scope,
 )
 from memcommit.persistence.store import context_record_digest
 from memcommit.application.capabilities.semantic.understanding import (
@@ -326,28 +326,28 @@ class ComparisonFrame:
 
         complete = cls.from_context(context, side=side)
         try:
-            focus = resolve_memory_focus(
+            scope = resolve_memory_scope(
                 complete.memories,
                 memory_selector,
                 label=f"{side} Memory",
             )
-        except MemoryFocusError as error:
+        except MemoryScopeError as error:
             raise ComparisonError(str(error)) from error
-        if focus.selected_uid is None:
+        if scope.selected_uid is None:
             return complete, ()
-        actionable = focus.actionable
+        actionable = scope.actionable
         frame = cls.from_dict(
             {
                 **complete.to_dict(),
                 "memories": [memory.to_dict() for memory in actionable],
                 "context_evidence": [
-                    memory.to_dict() for memory in focus.context_only
+                    memory.to_dict() for memory in scope.context_only
                 ],
                 # Evidence is empty when the Context has only one Memory, so
                 # selection identity must be stored independently. Otherwise
                 # a later Refresh could silently broaden an explicit focus
                 # after neighboring Memories are added.
-                "selected_memory_uid": focus.selected_uid,
+                "selected_memory_uid": scope.selected_uid,
             }
         )
         return frame, frame.context_evidence
