@@ -32,6 +32,7 @@ CAPABILITY_ENTRIES = {
     "resolution",
     "review_policy.py",
     "reviewing",
+    "save_context_from_selection",
     "semantic",
     "semantic_execution",
     "semantic_result_memorization.py",
