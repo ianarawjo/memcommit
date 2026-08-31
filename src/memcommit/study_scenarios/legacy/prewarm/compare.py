@@ -35,7 +35,7 @@ from memcommit.providers.policy import (
 )
 from memcommit.core.context import Context
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.application.capabilities.authority.source_use_policy import (
+from memcommit.application.authorization.source_use import (
     analysis_retention,
     authorize_analysis_save,
     authorize_combination,

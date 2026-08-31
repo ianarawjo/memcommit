@@ -36,7 +36,7 @@ from memcommit.application.operations.meld.model import (
 )
 from memcommit.application.operations.meld.preparation import MeldRestartRequest
 from memcommit.application.operations.meld.preparation import MeldStartRequest
-from memcommit.application.capabilities.authority.source_use_policy import (
+from memcommit.application.authorization.source_use import (
     analysis_retention,
     authorize_analysis_save,
     authorize_combination,

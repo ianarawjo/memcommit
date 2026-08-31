@@ -27,7 +27,7 @@ from memcommit.core.context import (
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.capabilities.authority.source_use_policy import (
+from memcommit.application.authorization.source_use import (
     authorize_analysis_save,
     authorize_combination,
     authorize_derived_transfer,

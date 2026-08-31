@@ -12,7 +12,7 @@ from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.application.capabilities.authority.source_use_policy import (
+from memcommit.application.authorization.source_use import (
     authorize_combination,
 )
 from memcommit.application.operations.profile.config import ProfileRegistry

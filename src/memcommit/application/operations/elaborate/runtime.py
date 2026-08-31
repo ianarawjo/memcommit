@@ -13,7 +13,7 @@ from memcommit.application.capabilities.authority.context_access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.application.capabilities.authority.source_use_policy import (
+from memcommit.application.authorization.source_use import (
     authorize_combination,
 )
 from memcommit.application.operations.profile.model import (

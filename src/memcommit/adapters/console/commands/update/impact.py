@@ -24,7 +24,7 @@ from memcommit.application.capabilities.authority.context_access import (
     freeze_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.application.capabilities.authority.source_use_policy import (
+from memcommit.application.authorization.source_use import (
     authorize_derived_transfer,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError

@@ -14,7 +14,7 @@ from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.application.capabilities.authority.source_use_policy import authorize_combination
+from memcommit.application.authorization.source_use import authorize_combination
 from memcommit.application.capabilities.history.verification import (
     MemoryState,
 )

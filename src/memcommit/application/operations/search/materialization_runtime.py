@@ -14,7 +14,7 @@ from memcommit.application.capabilities.authority.context_access import (
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.application.capabilities.authority.source_use_policy import (
+from memcommit.application.authorization.source_use import (
     authorize_analysis_save,
     authorize_combination,
     authorize_derived_transfer,

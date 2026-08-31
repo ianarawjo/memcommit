@@ -75,7 +75,7 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.application.capabilities.authority.source_use_policy import (
+from memcommit.application.authorization.source_use import (
     authorize_combination,
 )
 from memcommit.application.capabilities.memory_issue_analysis.source import (

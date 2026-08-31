@@ -58,7 +58,7 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.application.capabilities.authority.source_use_policy import (
+from memcommit.application.authorization.source_use import (
     authorize_combination,
 )
 from memcommit.application.operations.query.answer import OrdinaryQueryCorpusTooLarge

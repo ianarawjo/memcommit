@@ -40,7 +40,7 @@ from memcommit.adapters.console.commands.audit.review import (
 from memcommit.adapters.console.commands.audit.endpoint_setup import choose_audit_setup
 from memcommit.core.context import Context
 from memcommit.application.operations.conformance.model import ConformanceError
-from memcommit.application.capabilities.authority.source_use_policy import (
+from memcommit.application.authorization.source_use import (
     authorize_analysis_save,
 )
 from memcommit.application.capabilities.memory_issue_analysis.model import (

@@ -16,13 +16,14 @@ those persistence responsibilities is independent from locating the shared
 authorization boundary and must preserve existing registry and saved-artifact
 formats when undertaken.
 
-The authority capability is split by decision point. `context_access` resolves
-an ordinary or granted Context and verifies the baseline permission requested by
-the caller. `source_use_policy` then authorizes what an operation may do with
-those resolved Sources, including combination, cross-domain transfer, and
-analysis retention. The latter name deliberately avoids using `derived` as the
-module identity because `DERIVE` is only one permission in that broader use
-policy; the function names retain the more precise `authorize_*` vocabulary.
+Context access and authorization are split by decision point. `context_access`
+resolves an ordinary or granted Context and verifies the baseline permission
+requested by the caller. `memcommit.application.authorization.source_use` then
+authorizes what an operation may do with those resolved Sources, including
+combination, cross-domain transfer, and analysis retention. The authorization
+module deliberately avoids using `derived` as its identity because `DERIVE` is
+only one permission in that broader use policy; the function names retain the
+more precise `authorize_*` vocabulary.
 
 ## Problem
 

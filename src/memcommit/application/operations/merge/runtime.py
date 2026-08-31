@@ -22,7 +22,7 @@ from memcommit.core.context_targeting.resolution import expand_lexical_context_n
 from memcommit.application.capabilities.authority.granted_context_navigation import (
     freeze_granted_context_navigation,
 )
-from memcommit.application.capabilities.authority.source_use_policy import authorize_derived_transfer
+from memcommit.application.authorization.source_use import authorize_derived_transfer
 from memcommit.application.operations.merge.application import (
     FrozenMergePlan,
     MergeAddition,

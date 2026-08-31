@@ -35,7 +35,7 @@ from memcommit.core.context_targeting.resolution import (
 from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.application.capabilities.authority.source_use_policy import (
+from memcommit.application.authorization.source_use import (
     authorize_combination,
 )
 from memcommit.application.operations.fit.ground_report import (

@@ -41,7 +41,7 @@ from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.application.capabilities.authority.readable_contexts import (
     ReadableContextCatalog,
 )
-from memcommit.application.capabilities.authority.source_use_policy import (
+from memcommit.application.authorization.source_use import (
     analysis_retention,
     authorize_analysis_save,
 )

@@ -31,7 +31,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evi
     project_memory_relation_context as _project_memory_relation_context,
 )
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.application.capabilities.authority.source_use_policy import (
+from memcommit.application.authorization.source_use import (
     AnalysisRetention,
     analysis_retention,
     authorize_analysis_save,
