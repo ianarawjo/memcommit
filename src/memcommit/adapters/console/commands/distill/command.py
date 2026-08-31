@@ -51,7 +51,7 @@ from memcommit.providers.subscription import (
     connect_semantic_provider,
 )
 from memcommit.application.capabilities.semantic_result_memorization import (
-    resolve_semantic_result_endpoints,
+    resolve_existing_semantic_result_endpoints,
 )
 from memcommit.persistence.store import MemoryStore
 
@@ -192,7 +192,8 @@ def cmd(
 
         store, _snapshot = command_resources()
         if ground is None and save_as is None:
-            endpoints = resolve_semantic_result_endpoints(
+            endpoints = resolve_existing_semantic_result_endpoints(
+                store,
                 source_locator=(
                     source_name if source_name is not None else context_name
                 ),

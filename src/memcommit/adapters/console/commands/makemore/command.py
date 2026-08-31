@@ -49,8 +49,8 @@ from memcommit.providers.subscription import (
     connect_semantic_provider,
 )
 from memcommit.application.capabilities.semantic_result_memorization import (
-    resolve_memorization_target,
-    resolve_semantic_result_endpoints,
+    resolve_existing_memorization_target,
+    resolve_existing_semantic_result_endpoints,
 )
 from memcommit.persistence.store import MemoryStore
 
@@ -229,12 +229,14 @@ def cmd(
                         number=number,
                         strict=strict,
                     )
-                ordinary_target = resolve_memorization_target(
+                ordinary_target = resolve_existing_memorization_target(
+                    ordinary_store,
                     target_locator=target_name,
                     current=snapshot.current_name,
                 )
             else:
-                endpoints = resolve_semantic_result_endpoints(
+                endpoints = resolve_existing_semantic_result_endpoints(
+                    ordinary_store,
                     source_locator=source_name,
                     target_locator=target_name,
                     current=snapshot.current_name,

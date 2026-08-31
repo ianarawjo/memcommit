@@ -4,15 +4,22 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.context_locator import resolve_context_locator
+from memcommit.application.capabilities.operand_resolution import ContextOperandCandidate
+from memcommit.application.capabilities.authority.context_access import ContextAccess
+from memcommit.application.context_access.operand_resolution import (
+    ResolvedContextAccess,
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
+)
+from memcommit.persistence.store import MemoryStore
 
 
 @dataclass(frozen=True)
-class UpdateEndpoints:
-    """Canonical source and target names produced by the console adapter."""
+class UpdateEndpointAccesses:
+    """Exact source and target identities from one frozen readable catalog."""
 
-    source_name: str
-    target_name: str
+    source: ResolvedContextAccess
+    target: ResolvedContextAccess
 
 
 def choose_update_endpoint_operands(
@@ -47,40 +54,57 @@ def choose_update_endpoint_operands(
     return source_option, target_option
 
 
-def resolve_update_endpoints(
+def resolve_update_endpoint_accesses(
+    store: MemoryStore,
     *,
     source_locator: str | None,
     target_locator: str | None,
     current: str | None,
-) -> UpdateEndpoints:
-    """Resolve explicit or current-filled operands against one snapshot."""
+    candidates: tuple[ContextOperandCandidate[ContextAccess], ...] | None = None,
+) -> UpdateEndpointAccesses:
+    """Resolve both existing endpoints by name or UID against one snapshot."""
 
     if source_locator is None and target_locator is None:
         raise ValueError("At least one directional endpoint locator is required.")
-
     if source_locator is None:
         if not current:
             raise ValueError("No current source Context. Supply '--from SOURCE'.")
-        source_name = current
-    else:
-        source_name = resolve_context_locator(source_locator, current=current)
-
+        source_locator = current
     if target_locator is None:
         if not current:
             raise ValueError("No current target Context. Supply '--to TARGET'.")
-        target_name = current
-    else:
-        target_name = resolve_context_locator(target_locator, current=current)
-
-    # Canonicalize before comparing so aliases such as '.' cannot bypass the
-    # directional console contract.
-    if source_name == target_name:
+        target_locator = current
+    frozen = (
+        candidates
+        if candidates is not None
+        else freeze_profile_context_access_candidates(
+            store,
+            current_name=current,
+        )
+    )
+    source = resolve_existing_context_access(
+        store,
+        source_locator,
+        current_name=current,
+        required_permission="READ",
+        candidates=frozen,
+    )
+    target = resolve_existing_context_access(
+        store,
+        target_locator,
+        current_name=current,
+        required_permission="READ",
+        candidates=frozen,
+    )
+    # Names can expose the same durable Context through different authorized
+    # public routes. Update still requires two identities, not two spellings.
+    if source.uid == target.uid:
         raise ValueError("Source and target Contexts must be distinct.")
-    return UpdateEndpoints(source_name=source_name, target_name=target_name)
+    return UpdateEndpointAccesses(source=source, target=target)
 
 
 __all__ = [
-    "UpdateEndpoints",
+    "UpdateEndpointAccesses",
     "choose_update_endpoint_operands",
-    "resolve_update_endpoints",
+    "resolve_update_endpoint_accesses",
 ]

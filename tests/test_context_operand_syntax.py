@@ -14,10 +14,17 @@ from memcommit.adapters.console.coordination.endpoint_operand import (
 from memcommit.application.capabilities.context_operand_classification import (
     classify_context_or_inline_text_operand,
 )
+from memcommit.application.capabilities.semantic_result_memorization import (
+    resolve_existing_memorization_target,
+    resolve_existing_semantic_result_endpoints,
+)
 from memcommit.core.context_targeting.model import ExistingContextOperand, InlineTextOperand
 from memcommit.adapters.console.commands.update.endpoint_operands import (
     choose_update_endpoint_operands,
+    resolve_update_endpoint_accesses,
 )
+from memcommit.core.context import Context
+from memcommit.persistence.store import MemoryStore
 
 
 def test_unary_context_operand_defaults_to_current_and_rejects_duplicates():
@@ -115,6 +122,65 @@ def test_update_opt_in_single_source_uses_named_or_current_target():
             target_option=None,
             allow_single_source=True,
         )
+
+
+def test_update_endpoints_share_name_relative_and_context_uid_resolution(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = Context(
+        uid="2a4dc8ab-1111-4111-8111-111111111111",
+        name="practice/coffee/source",
+    )
+    target = Context(
+        uid="bbbbbbbb-1111-4111-8111-111111111111",
+        name="practice/coffee/target",
+    )
+    store.save(source)
+    store.save(target)
+    store.set_current(target.name)
+
+    endpoints = resolve_update_endpoint_accesses(
+        store,
+        source_locator="2a4dc8ab",
+        target_locator=".",
+        current=target.name,
+    )
+
+    assert endpoints.source.name == source.name
+    assert endpoints.target.name == target.name
+
+
+def test_semantic_result_endpoints_resolve_read_source_and_local_target_uids(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = Context(
+        uid="2a4dc8ab-1111-4111-8111-111111111111",
+        name="derive/source",
+    )
+    target = Context(
+        uid="bbbbbbbb-1111-4111-8111-111111111111",
+        name="derive/target",
+    )
+    store.save(source)
+    store.save(target)
+    store.set_current(source.name)
+
+    endpoints = resolve_existing_semantic_result_endpoints(
+        store,
+        source_locator=source.uid[:8],
+        target_locator=target.uid[:8],
+        current=source.name,
+    )
+
+    assert endpoints.source_name == source.name
+    assert endpoints.target_name == target.name
+    assert resolve_existing_memorization_target(
+        store,
+        target_locator=target.uid[:8],
+        current=source.name,
+    ) == target.name
 
 
 def test_context_or_inline_text_classification_fails_safe_for_locator_typos():

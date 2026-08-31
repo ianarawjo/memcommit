@@ -17,7 +17,14 @@ from memcommit.adapters.console.commands.update.endpoint_setup import (
 from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     freeze_granted_context_binding,
-    resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_context_access_or_inline_text,
+    resolve_existing_context_access,
+)
+from memcommit.application.capabilities.operand_resolution import (
+    ContextOperandNotFoundError,
 )
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionNewReceipt,
@@ -36,10 +43,6 @@ from memcommit.adapters.console.commands.update.workbench.application import (
     decide_update_application,
 )
 from memcommit.core.context import Context
-from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.capabilities.context_operand_classification import (
-    classify_context_or_inline_text_operand,
-)
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.application.context_access import GrantedContextBinding
 from memcommit.core.context_targeting.model import InlineTextOperand
@@ -76,7 +79,7 @@ from memcommit.application.operations.update.model import (
 from memcommit.application.operations.update.publication import apply_staged_update
 from memcommit.adapters.console.commands.update.endpoint_operands import (
     choose_update_endpoint_operands,
-    resolve_update_endpoints,
+    resolve_update_endpoint_accesses,
 )
 
 
@@ -220,25 +223,6 @@ def _browse_saved_update(store: MemoryStore) -> None:
     else:
         resume_kwargs["memory"] = current.inline_source_content
     cmd(**resume_kwargs)
-
-
-def _resolve_update_access(
-    store: MemoryStore,
-    name: str,
-    *,
-    current_name: str | None,
-):
-    try:
-        return resolve_context_access(
-            store,
-            name,
-            current_name=current_name,
-            required_permission="READ",
-        )
-    except ProfileError as error:
-        if "does not exist" not in str(error):
-            raise
-        raise FileNotFoundError(f"Context '{name}' not found.") from error
 
 
 def _update_confirmed_inputs_view(
@@ -576,6 +560,10 @@ def cmd(
         # Both locators must retain the meaning they had at command start,
         # even if another process switches the global current Context later.
         current_name = store.current_context_name()
+        context_candidates = freeze_profile_context_access_candidates(
+            store,
+            current_name=current_name,
+        )
         requested_goal_focus = (
             freeze_goal_focus_operand(
                 store,
@@ -588,10 +576,11 @@ def cmd(
         if requested_goal_focus is not None:
             revalidate_goal_focus(store, requested_goal_focus)
         if target_name is not None:
-            parsed_target = classify_context_or_inline_text_operand(
+            parsed_target = resolve_context_access_or_inline_text(
+                store,
                 target_name,
-                current=current_name,
-                context_exists=store.context_exists,
+                current_name=current_name,
+                candidates=context_candidates,
             )
             if isinstance(parsed_target, InlineTextOperand):
                 if len(positional_contexts) == 2:
@@ -605,19 +594,30 @@ def cmd(
                     "The Update Target must be an existing Context; inline text "
                     "is supported only as Source."
                 )
-            target_name = parsed_target.locator
+            target_name = parsed_target.name
         inline_source_content = memory
         if inline_source_content is None and source_name is not None:
-            parsed_source = classify_context_or_inline_text_operand(
-                source_name,
-                current=current_name,
-                context_exists=store.context_exists,
-            )
+            try:
+                parsed_source = resolve_context_access_or_inline_text(
+                    store,
+                    source_name,
+                    current_name=current_name,
+                    candidates=context_candidates,
+                )
+            except ContextOperandNotFoundError:
+                # A single positional Context is Update's Source. Preserve the
+                # established endpoint diagnostic when its implicit current
+                # Target is absent instead of letting Source lookup mask it.
+                if target_name is None and current_name is None:
+                    raise UpdateError(
+                        "No current target Context. Supply '--to TARGET'."
+                    ) from None
+                raise
             if isinstance(parsed_source, InlineTextOperand):
                 inline_source_content = parsed_source.text
                 source_name = None
             else:
-                source_name = parsed_source.locator
+                source_name = parsed_source.name
         source_access = None
         if inline_source_content is not None:
             if source_descendants or source_memory is not None:
@@ -633,24 +633,27 @@ def cmd(
                     )
                 resolved_target_name = current_name
             else:
-                resolved_target_name = resolve_context_locator(
-                    target_name,
-                    current=current_name,
-                )
+                resolved_target_name = target_name
+            target_access = resolve_existing_context_access(
+                store,
+                resolved_target_name,
+                current_name=current_name,
+                required_permission="READ",
+                candidates=context_candidates,
+            ).value
             source = inline_update_context(inline_source_content)
         else:
-            endpoints = resolve_update_endpoints(
+            endpoints = resolve_update_endpoint_accesses(
+                store,
                 source_locator=source_name,
                 target_locator=target_name,
                 current=current_name,
+                candidates=context_candidates,
             )
-            source_access = _resolve_update_access(
-                store,
-                endpoints.source_name,
-                current_name=current_name,
-            )
+            source_access = endpoints.source.value
+            target_access = endpoints.target.value
             authorize_context_use(source_access, ContextUse.READ)
-            resolved_target_name = endpoints.target_name
+            resolved_target_name = endpoints.target.name
             source_store = (
                 GrantedReadStore(source_access) if source_access.is_granted else store
             )
@@ -663,11 +666,6 @@ def cmd(
                 ),
                 include_descendants=source_descendants,
             )
-        target_access = _resolve_update_access(
-            store,
-            resolved_target_name,
-            current_name=current_name,
-        )
         target_authorization = authorize_context_use(
             target_access,
             ContextUse.READ,

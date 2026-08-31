@@ -31,7 +31,7 @@ from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,
 )
 from memcommit.adapters.console.commands.update.endpoint_operands import (
-    resolve_update_endpoints,
+    resolve_update_endpoint_accesses,
 )
 from memcommit.application.operations.update.model import (
     UpdateError,
@@ -48,25 +48,6 @@ from memcommit.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
-
-
-def _resolve_directional_access(
-    store: MemoryStore,
-    name: str,
-    *,
-    current_name: str | None,
-):
-    try:
-        return resolve_context_access(
-            store,
-            name,
-            current_name=current_name,
-            required_permission="READ",
-        )
-    except ProfileError as error:
-        if "does not exist" not in str(error):
-            raise
-        raise FileNotFoundError(f"Context '{name}' not found.") from error
 
 
 def open_saved_update_impact(
@@ -146,21 +127,14 @@ def run_directional_update_impact(
     """Preview one explicit or current-filled directional endpoint pair."""
 
     try:
-        endpoints = resolve_update_endpoints(
+        endpoints = resolve_update_endpoint_accesses(
+            store,
             source_locator=source_name,
             target_locator=target_name,
             current=current_name,
         )
-        source_access = _resolve_directional_access(
-            store,
-            endpoints.source_name,
-            current_name=current_name,
-        )
-        target_access = _resolve_directional_access(
-            store,
-            endpoints.target_name,
-            current_name=current_name,
-        )
+        source_access = endpoints.source.value
+        target_access = endpoints.target.value
         authorize_context_use(source_access, ContextUse.READ)
         target_authorization = authorize_context_use(
             target_access,
@@ -267,14 +241,14 @@ def run_directional_update_impact(
         with authority_grant_snapshot_lock() as registry:
             current_source_access = resolve_context_access(
                 store,
-                endpoints.source_name,
+                endpoints.source.name,
                 current_name=current_name,
                 required_permission="READ",
                 registry=registry,
             )
             current_target_access = resolve_context_access(
                 store,
-                endpoints.target_name,
+                endpoints.target.name,
                 current_name=current_name,
                 required_permission="READ",
                 registry=registry,

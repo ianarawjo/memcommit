@@ -7,7 +7,14 @@ from typing import Iterable
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import AutoCheckpoint
-from memcommit.application.capabilities.context_locator import resolve_context_locator
+from memcommit.application.capabilities.operand_resolution import (
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
+)
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
+)
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
@@ -44,48 +51,62 @@ class SemanticResultMemorizationReceipt:
         return len(self.memory_uids)
 
 
-def resolve_semantic_result_endpoints(
+def resolve_existing_semantic_result_endpoints(
+    store: MemoryStore,
     *,
     source_locator: str | None,
     target_locator: str | None,
     current: str | None,
 ) -> SemanticResultEndpoints:
-    """Fill either omitted endpoint from the same frozen Current value.
+    """Resolve one readable Source and one existing ordinary-local Target.
 
-    Source and Target may intentionally be the same Context. The caller must
-    freeze the Source pre-image before inference so generated Memories never
-    become input to the provider turn that created them.
+    The Source may be a READ-granted public Context. The memorization Target
+    stays ordinary-local because this capability freezes and later mutates its
+    record directly. Both operands share one command-start current snapshot,
+    while their candidate catalogs remain separate authority namespaces.
     """
 
-    if source_locator is None:
-        if current is None:
-            raise ValueError("No current Source Context.")
-        source_name = current
-    else:
-        source_name = resolve_context_locator(source_locator, current=current)
+    if source_locator is None and current is None:
+        raise ValueError("No current Source Context.")
+    if target_locator is None and current is None:
+        raise ValueError("No current Target Context.")
+    source_candidates = freeze_profile_context_access_candidates(
+        store,
+        current_name=current,
+    )
+    source = resolve_existing_context_access(
+        store,
+        source_locator if source_locator is not None else current,
+        current_name=current,
+        required_permission="READ",
+        candidates=source_candidates,
+    )
+    target = resolve_existing_context_operand(
+        freeze_local_context_operand_candidates(store),
+        target_locator if target_locator is not None else current,
+        current=current,
+    )
+    return SemanticResultEndpoints(
+        source_name=source.name,
+        target_name=target.name,
+    )
 
-    if target_locator is None:
-        if current is None:
-            raise ValueError("No current Target Context.")
-        target_name = current
-    else:
-        target_name = resolve_context_locator(target_locator, current=current)
 
-    return SemanticResultEndpoints(source_name=source_name, target_name=target_name)
-
-
-def resolve_memorization_target(
+def resolve_existing_memorization_target(
+    store: MemoryStore,
     *,
     target_locator: str | None,
     current: str | None,
 ) -> str:
-    """Resolve an inline-input operation's existing Target."""
+    """Resolve an inline-input operation's existing ordinary-local Target."""
 
-    if target_locator is None:
-        if current is None:
-            raise ValueError("No current Target Context.")
-        return current
-    return resolve_context_locator(target_locator, current=current)
+    if target_locator is None and current is None:
+        raise ValueError("No current Target Context.")
+    return resolve_existing_context_operand(
+        freeze_local_context_operand_candidates(store),
+        target_locator if target_locator is not None else current,
+        current=current,
+    ).name
 
 
 def freeze_memorization_target(
@@ -189,6 +210,6 @@ __all__ = [
     "SemanticResultMemorizationReceipt",
     "freeze_memorization_target",
     "memorize_semantic_result",
-    "resolve_memorization_target",
-    "resolve_semantic_result_endpoints",
+    "resolve_existing_memorization_target",
+    "resolve_existing_semantic_result_endpoints",
 ]

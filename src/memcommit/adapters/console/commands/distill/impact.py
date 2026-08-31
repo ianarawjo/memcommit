@@ -29,7 +29,7 @@ from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,
 )
 from memcommit.application.capabilities.semantic_result_memorization import (
-    resolve_semantic_result_endpoints,
+    resolve_existing_semantic_result_endpoints,
 )
 from memcommit.application.operations.distill.application import (
     DistillRequest,
@@ -265,7 +265,8 @@ def distill_cmd(
                 )
                 resolved_target = None
             else:
-                endpoints = resolve_semantic_result_endpoints(
+                endpoints = resolve_existing_semantic_result_endpoints(
+                    store,
                     source_locator=source_name
                     if source_name is not None
                     else context_name,

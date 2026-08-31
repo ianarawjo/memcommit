@@ -29,8 +29,8 @@ from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,
 )
 from memcommit.application.capabilities.semantic_result_memorization import (
-    resolve_memorization_target,
-    resolve_semantic_result_endpoints,
+    resolve_existing_memorization_target,
+    resolve_existing_semantic_result_endpoints,
 )
 from memcommit.application.operations.makemore.add_runtime import (
     freeze_makemore_context_source,
@@ -285,12 +285,14 @@ def makemore_cmd(
                     strict=strict,
                 )
             resolved_source = None
-            resolved_target = resolve_memorization_target(
+            resolved_target = resolve_existing_memorization_target(
+                store,
                 target_locator=target_name,
                 current=snapshot.current_name,
             )
         else:
-            endpoints = resolve_semantic_result_endpoints(
+            endpoints = resolve_existing_semantic_result_endpoints(
+                store,
                 source_locator=source_name,
                 target_locator=target_name,
                 current=snapshot.current_name,
