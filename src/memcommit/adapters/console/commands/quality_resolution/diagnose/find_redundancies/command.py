@@ -42,8 +42,8 @@ from memcommit.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.application.operations.quality_resolution.repair.dedun.application import (
     DEDUN_ELIGIBLE_RELATIONS,
     DedunRequest,

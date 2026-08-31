@@ -8,11 +8,11 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.adapters.console.commands.switch.setup import (
+from memcommit.adapters.console.commands.browse_navigate.switch.setup import (
     SwitchTuiSetup,
     run_switch_tui,
 )
-from memcommit.application.operations.switch.application import (
+from memcommit.application.operations.browse_navigate.switch.application import (
     SwitchContextError,
     SwitchContextRequest,
     SwitchContextTarget,
@@ -212,8 +212,8 @@ def test_tui_adapter_returns_request_without_selecting_state() -> None:
 def test_switch_application_and_runtime_do_not_import_terminal_adapters() -> None:
     forbidden = ("typer", "prompt_toolkit", "memcommit.adapters.console.commands")
     for relative in (
-        "src/memcommit/application/operations/switch/application.py",
-        "src/memcommit/application/operations/switch/runtime.py",
+        "src/memcommit/application/operations/browse_navigate/switch/application.py",
+        "src/memcommit/application/operations/browse_navigate/switch/runtime.py",
     ):
         imports = _imports(ROOT / relative)
         assert not any(
@@ -224,7 +224,7 @@ def test_switch_application_and_runtime_do_not_import_terminal_adapters() -> Non
 
 
 def test_switch_console_owns_setup_and_receipt_without_facades() -> None:
-    command_root = ROOT / "src/memcommit/adapters/console/commands/switch"
+    command_root = ROOT / "src/memcommit/adapters/console/commands/browse_navigate/switch"
     retired_tui_root = (
         ROOT / "src/memcommit/adapters/interfaces/tui/operations/switch"
     )

@@ -12,7 +12,7 @@ from memcommit.application.capabilities.authority.context_access import (
     revalidate_granted_context_binding,
 )
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
 )

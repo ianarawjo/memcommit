@@ -8,9 +8,9 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.application.operations.profile.model as profiles_module
+import memcommit.application.operations.profiles.profile.model as profiles_module
 import memcommit.persistence.store as store_module
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     profile_control_dir,
     profile_registry_file,
     profile_stores_dir,

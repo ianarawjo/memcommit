@@ -10,7 +10,7 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.clipboard import ClipboardError
 import memcommit.adapters.console.commands.search_explain.synthesize.summarize.command as summarize_command
-from memcommit.adapters.console.commands.help.command import COMMAND_FORMS
+from memcommit.adapters.console.commands.system_study_tools.help.command import COMMAND_FORMS
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonInput,

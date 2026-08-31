@@ -22,8 +22,8 @@ from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.search_explain.synthesize.summarize.presentation import (
     render_summarize_plain,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,

@@ -12,7 +12,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.mod
     MemoryRelationAnalysis,
     MemoryRelationInput,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
+from memcommit.application.operations.profiles.profile.config import ProfileRegistry
 from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.compare import (
     EquivalentComparePrewarmMatch,

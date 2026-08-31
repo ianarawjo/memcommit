@@ -20,7 +20,7 @@ from memcommit.application.operations.quality_resolution.diagnose.find_duplicate
     ExactDuplicateContextReport,
     ExactDuplicateScopeReport,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
+from memcommit.application.operations.profiles.profile.config import ProfileRegistry
 from memcommit.core.context import AutoCheckpoint, MemoryRef
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names

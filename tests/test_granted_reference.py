@@ -19,7 +19,7 @@ from memcommit.adapters.python_api import (
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory, MemoryRef
 from memcommit.adapters.agent.reference import ReferenceAgentAdapter
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -27,13 +27,13 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     ProfileError,
     create_authority_grant,
     update_authority_grant,
 )
-from memcommit.application.operations.reference.application import ReferenceRequest
-from memcommit.application.operations.reference.runtime import MemoryStoreReferencePort
+from memcommit.application.operations.create_copy_connect.reference.application import ReferenceRequest
+from memcommit.application.operations.create_copy_connect.reference.runtime import MemoryStoreReferencePort
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
@@ -250,7 +250,7 @@ def test_granted_reference_freeze_holds_grant_through_authority_read(
                     "-c",
                     (
                         "import sys\n"
-                        "from memcommit.application.operations.profile.model "
+                        "from memcommit.application.operations.profiles.profile.model "
                         "import update_authority_grant\n"
                         "print('DOWNGRADE STARTED', flush=True)\n"
                         "update_authority_grant("

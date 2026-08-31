@@ -33,21 +33,21 @@ from memcommit.application.operations.quality_resolution.validate.fit.judgment i
     FIT_JUDGMENT_OPERATION,
     FIT_JUDGMENT_PAYLOAD_MARKER,
 )
-from memcommit.application.operations.ground.makemore import (
+from memcommit.application.operations.ground_workbench.ground.makemore import (
     apply_ground_makemore_result,
     execute_ground_makemore,
     freeze_ground_makemore,
 )
-from memcommit.application.operations.ground.workspace_application import (
+from memcommit.application.operations.ground_workbench.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
 )
-from memcommit.application.operations.ground.workspace_runtime import (
+from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
     load_ground_workspace,
 )
-from memcommit.application.operations.ground.workspace_history import (
+from memcommit.application.operations.ground_workbench.ground.workspace_history import (
     build_ground_workspace_command_stack,
     undo_ground_workspace_command,
 )

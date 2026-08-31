@@ -65,13 +65,13 @@ def _new_context(*, name: str, content: str):
 
 def _setup(home: Path, *, active_participant: bool) -> None:
     os.environ["HOME"] = str(home)
-    from memcommit.application.operations.profile.config import (
+    from memcommit.application.operations.profiles.profile.config import (
         ProfileEntry,
         ProfileRegistry,
         profile_store_dir,
         virtual_authoring_registry,
     )
-    from memcommit.application.operations.profile.model import _write_registry, create_authority_grant
+    from memcommit.application.operations.profiles.profile.model import _write_registry, create_authority_grant
     from memcommit.persistence.store import MemoryStore
 
     authoring = virtual_authoring_registry().active

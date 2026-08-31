@@ -26,7 +26,7 @@ from memcommit.application.capabilities.authority.context_access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.adapters.console.commands.help.inventory import CommandEntry
+from memcommit.adapters.console.commands.system_study_tools.help.inventory import CommandEntry
 from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
@@ -44,8 +44,8 @@ from memcommit.application.capabilities.memory_issue_analysis.model import (
     FindingsError,
     FindingsProvider,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.application.operations.quality_resolution.diagnose.audit.application import (
     record_quality_audit,
     run_quality_audit,

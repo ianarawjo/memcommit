@@ -10,7 +10,7 @@ from memcommit.adapters.console.terminal.core.theme import (
     semantic_color_rgb,
 )
 from memcommit.adapters.console.coordination.copy_and_move.receipt import placement_text
-from memcommit.application.operations.copy_and_move.application import (
+from memcommit.application.capabilities.memory_transfer.application import (
     MoveMemoriesResult,
 )
 

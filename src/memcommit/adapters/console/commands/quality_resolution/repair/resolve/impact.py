@@ -33,8 +33,8 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionWorkbenchView,
 )
 from memcommit.application.operations.quality_resolution.validate.fit.judgment import FitJudgmentError
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.application.operations.quality_resolution.repair.resolve.application import (
     ResolveAnalysis,
     ResolveCandidate,

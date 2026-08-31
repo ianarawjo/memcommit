@@ -45,8 +45,8 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
 )
 from memcommit.persistence.store import MemoryStore
 from memcommit.providers.subscription import CodexChatGPTProvider
-from memcommit.application.operations.reference.application import ContextReferenceRequest
-from memcommit.application.operations.reference.runtime import execute_context_reference
+from memcommit.application.operations.create_copy_connect.reference.application import ContextReferenceRequest
+from memcommit.application.operations.create_copy_connect.reference.runtime import execute_context_reference
 
 
 runner = CliRunner()

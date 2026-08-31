@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.profile.config import load_profile_registry, profile_registry_file
+from memcommit.application.operations.profiles.profile.config import load_profile_registry, profile_registry_file
 from memcommit.persistence.store import MemoryStore
 
 
@@ -33,7 +33,7 @@ def test_profile_name_shorthand_uses_the_existing_selection_boundary(
         raise AssertionError("profile NAME must not open the picker")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profile.command.choose_profile",
+        "memcommit.adapters.console.commands.profiles.profile.command.choose_profile",
         unexpected_picker,
     )
 
@@ -100,7 +100,7 @@ def test_profile_subcommands_keep_precedence_over_the_name_shorthand(
         raise AssertionError(f"subcommand was routed through use: {name}")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profile.command._use_profile",
+        "memcommit.adapters.console.commands.profiles.profile.command._use_profile",
         unexpected_use,
     )
 
@@ -130,11 +130,11 @@ def test_profile_use_without_a_name_keeps_the_interactive_picker(
     monkeypatch.setenv("HOME", str(tmp_path))
     _prepare_authoring()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profile.command._interactive_terminal",
+        "memcommit.adapters.console.commands.profiles.profile.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profile.command.choose_profile",
+        "memcommit.adapters.console.commands.profiles.profile.command.choose_profile",
         lambda entries, *, current, registry_generation, apply_removal: "authoring",
     )
 

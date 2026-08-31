@@ -6,9 +6,9 @@ from types import SimpleNamespace
 
 import pytest
 
-from memcommit.application.operations.help.application import describe_operation
-from memcommit.application.operations.profile.config import ProfileEntry, virtual_authoring_registry
-from memcommit.adapters.console.commands.help import study_copy_guard as guard
+from memcommit.application.operations.system_study_tools.help.application import describe_operation
+from memcommit.application.operations.profiles.profile.config import ProfileEntry, virtual_authoring_registry
+from memcommit.adapters.console.commands.system_study_tools.help import study_copy_guard as guard
 
 
 def _field(text: str) -> guard.StudyHelpAuthoredField:

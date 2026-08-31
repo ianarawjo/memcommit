@@ -1290,7 +1290,7 @@ def test_bare_switch_uses_picker_result(
         return "alpha"
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.switch.command.choose_context",
+        "memcommit.adapters.console.commands.browse_navigate.switch.command.choose_context",
         select,
     )
 
@@ -1320,7 +1320,7 @@ def test_bare_checkout_uses_the_same_switch_picker(
         return "alpha"
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.switch.command.choose_context",
+        "memcommit.adapters.console.commands.browse_navigate.switch.command.choose_context",
         select,
     )
 
@@ -1343,7 +1343,7 @@ def test_bare_switch_cancel_preserves_current(
     invoke("init", "alpha")
     invoke("init", "beta")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.switch.command.choose_context",
+        "memcommit.adapters.console.commands.browse_navigate.switch.command.choose_context",
         lambda names, *, current, accept_label, memory_loader: None,
     )
 
@@ -1366,7 +1366,7 @@ def test_picker_result_is_revalidated_before_switch(
         return "alpha"
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.switch.command.choose_context",
+        "memcommit.adapters.console.commands.browse_navigate.switch.command.choose_context",
         delete_selected_then_return_it,
     )
 
@@ -1405,7 +1405,7 @@ def test_explicit_switch_remains_noninteractive(
         raise AssertionError("explicit switch must not open the picker")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.switch.command.choose_context",
+        "memcommit.adapters.console.commands.browse_navigate.switch.command.choose_context",
         unexpected_picker,
     )
 

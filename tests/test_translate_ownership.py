@@ -46,7 +46,7 @@ def test_production_translate_consumers_use_operation_owners() -> None:
         "src/memcommit/application/operations/translation/translate/add_translations_to_current_context.py",
         "src/memcommit/application/operations/translation/translate/create_translated_context.py",
         "src/memcommit/application/capabilities/ops.py",
-        "src/memcommit/application/operations/profile/model",
+        "src/memcommit/application/operations/profiles/profile/model",
         "src/memcommit/application/capabilities/history/reconstruction/memory_effect_derivation.py",
         "src/memcommit/persistence/operations",
         "src/memcommit/persistence/store/context_memory",

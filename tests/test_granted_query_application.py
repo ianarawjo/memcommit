@@ -21,7 +21,7 @@ from memcommit.application.operations.search_explain.retrieve_answer.query.grant
     execute_granted_query_read,
     execute_granted_query_request,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -29,7 +29,7 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     ProfileError,
     create_authority_grant,
     delete_authority_grant,

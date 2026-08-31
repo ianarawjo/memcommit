@@ -12,7 +12,7 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command as query_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -20,7 +20,7 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     create_authority_grant,
     delete_authority_grant,
 )

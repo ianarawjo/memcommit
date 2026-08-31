@@ -23,12 +23,12 @@ from memcommit.application.operations.search_explain.retrieve_answer.query.grant
     freeze_granted_query_source_binding,
     load_authority_query_source,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AuthorityGrant,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     authority_grant_snapshot_lock,
     resolve_granted_context_view,
 )

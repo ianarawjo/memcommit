@@ -40,8 +40,8 @@ from memcommit.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.application.operations.quality_resolution.repair.resolve.application import ResolveError
 from memcommit.application.operations.quality_resolution.diagnose.find_conflicts.application import (
     FindConflictsRequest,

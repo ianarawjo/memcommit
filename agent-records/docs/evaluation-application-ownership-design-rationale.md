@@ -4,8 +4,9 @@
 
 `eval` remains a public `PARTIAL` operation name, but it has no executable
 evaluation application yet. The console package keeps only a reservation
-callback and `memcommit.application.operations.eval` keeps only its package
-marker. The former semantic campaign, operation-gate campaign, scoring,
+callback and
+`memcommit.application.operations.system_study_tools.eval` keeps only its
+package marker. The former semantic campaign, operation-gate campaign, scoring,
 provider-selection, ledger presentation, and hidden `mem dev eval` routes are
 removed.
 

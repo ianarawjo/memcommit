@@ -46,7 +46,7 @@ from memcommit.application.operations.quality_resolution.repair.dedun.analysis i
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     find_exact_duplicate_groups,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
+from memcommit.application.operations.profiles.profile.config import ProfileRegistry
 from memcommit.application.operations.operation_lifecycle.review.model import direct_context_digest
 from memcommit.persistence.store import MemoryStore, context_record_digest
 

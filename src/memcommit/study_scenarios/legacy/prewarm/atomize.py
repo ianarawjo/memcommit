@@ -19,12 +19,12 @@ from memcommit.providers.policy import (
     resolve_operation_provider_policy,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     study_run_identity,
 )
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     _LEGACY_PRE_SPLIT_STUDY_PRACTICE_DESCRIPTION_CONTENT,
     _LEGACY_STUDY_PRACTICE_DESCRIPTION_OVERVIEW_CONTENT,
     _LEGACY_STUDY_PRACTICE_DESCRIPTION_SITUATION_CONTENT,

@@ -6,7 +6,7 @@ import uuid
 import pytest
 
 import memcommit.study_scenarios.legacy.prewarm.installations as installations_module
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,

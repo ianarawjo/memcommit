@@ -31,7 +31,7 @@ from memcommit.application.operations.semantic_updates.derive.makemore.add_runti
     freeze_makemore_context_source,
     prepare_makemore_add,
 )
-from memcommit.application.operations.ground.makemore import (
+from memcommit.application.operations.ground_workbench.ground.makemore import (
     FrozenGroundMakemore,
     GroundMakemoreResult,
     apply_ground_makemore_result,
@@ -42,8 +42,8 @@ from memcommit.adapters.console.terminal.components.applied_memory_preview impor
     render_applied_memory_preview,
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.providers.subscription import (
     QueryProviderError,
     connect_semantic_provider,

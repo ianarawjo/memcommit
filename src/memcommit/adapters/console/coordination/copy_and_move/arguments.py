@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.application.operations.copy_and_move.application import (
+from memcommit.application.capabilities.memory_transfer.application import (
     MemoryTransferError,
 )
 from memcommit.adapters.console.coordination.endpoint_operand import (

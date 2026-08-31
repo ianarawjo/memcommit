@@ -59,11 +59,11 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_scope_preset,
 )
 from memcommit.application.operations.search_explain.retrieve_answer.query.answer import OrdinaryQueryCorpusTooLarge
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileConfigError,
     load_profile_registry,
 )
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError
 from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application import (
     OrdinaryQueryRequest,

@@ -87,7 +87,7 @@ from memcommit.application.operations.semantic_updates.curate_integrate.meld.pro
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
     reconstruct_memory_history,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,

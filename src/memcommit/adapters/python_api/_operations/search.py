@@ -27,8 +27,8 @@ from memcommit.application.operations.search_explain.retrieve_answer.search.appl
 from memcommit.application.operations.search_explain.retrieve_answer.search.runtime import execute_search
 from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import HistoryError
 from memcommit.application.capabilities.history.query.semantic_history_query import HistorySearchError
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.application.operations.search_explain.retrieve_answer.search.model import SearchError
 
 

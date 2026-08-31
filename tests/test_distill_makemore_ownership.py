@@ -40,8 +40,8 @@ def test_production_consumers_use_operation_owners() -> None:
         "src/memcommit/adapters/console/commands/semantic_updates/derive/makemore/command.py",
         "src/memcommit/adapters/console/commands/semantic_updates/derive/distill/impact.py",
         "src/memcommit/adapters/console/commands/semantic_updates/derive/makemore/impact.py",
-        "src/memcommit/application/operations/ground/distill.py",
-        "src/memcommit/application/operations/ground/makemore.py",
+        "src/memcommit/application/operations/ground_workbench/ground/distill.py",
+        "src/memcommit/application/operations/ground_workbench/ground/makemore.py",
         "src/memcommit/adapters/console/commands/semantic_updates/derive/makemore/proposal.py",
         "src/memcommit/adapters/console/commands/semantic_updates/derive/makemore/viewer/projection.py",
         "src/memcommit/adapters/console/commands/semantic_updates/derive/makemore/viewer/screen.py",
@@ -93,7 +93,7 @@ def test_distill_and_makemore_keep_distinct_execution_contracts() -> None:
         in makemore_add_runtime
     )
     assert "memorize_semantic_result" in makemore_add_runtime
-    assert "memcommit.application.operations.add" not in makemore_add_runtime
+    assert "memcommit.application.operations.create_copy_connect.add" not in makemore_add_runtime
     assert (
         "memcommit.application.capabilities.semantic_result_memorization"
         in makemore_add_runtime

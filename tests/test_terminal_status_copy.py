@@ -42,7 +42,13 @@ def test_retired_implementation_status_phrases_do_not_return() -> None:
 
 def test_real_creation_and_permission_boundaries_remain_explicit() -> None:
     ground_shell = (
-        PACKAGE_ROOT / "adapters" / "console" / "commands" / "ground" / "shell"
+        PACKAGE_ROOT
+        / "adapters"
+        / "console"
+        / "commands"
+        / "ground_workbench"
+        / "ground"
+        / "shell"
     )
     ground_source = "\n".join(
         path.read_text(encoding="utf-8")

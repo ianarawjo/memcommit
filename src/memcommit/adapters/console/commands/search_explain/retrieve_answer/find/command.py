@@ -47,8 +47,8 @@ from memcommit.application.capabilities.save_context_from_selection.application 
 from memcommit.application.capabilities.save_context_from_selection.runtime import (
     execute_save_context_from_selection,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 

@@ -10,9 +10,9 @@ import sys
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-CANONICAL_CATALOG = "memcommit.adapters.console.commands.ground.workspace.catalog"
+CANONICAL_CATALOG = "memcommit.adapters.console.commands.ground_workbench.ground.workspace.catalog"
 FORMER_MODULES = (
-    "memcommit.adapters.console.commands.ground.workspace_picker",
+    "memcommit.adapters.console.commands.ground_workbench.ground.workspace_picker",
     "memcommit.adapters.interfaces.cli.ground_workspace",
     "memcommit.adapters.interfaces.tui.operations.ground_workspace.picker",
 )
@@ -20,7 +20,7 @@ FORMER_MODULES = (
 
 def test_ground_workspace_surfaces_are_grouped_by_console_role() -> None:
     workspace = (
-        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/ground/workspace"
+        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/ground_workbench/ground/workspace"
     )
 
     assert {
@@ -36,7 +36,7 @@ def test_ground_workspace_surfaces_are_grouped_by_console_role() -> None:
     }
     assert not (
         REPOSITORY_ROOT
-        / "src/memcommit/adapters/console/commands/ground/workspace_picker.py"
+        / "src/memcommit/adapters/console/commands/ground_workbench/ground/workspace_picker.py"
     ).exists()
     assert not (
         REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/cli/ground_workspace.py"
@@ -83,7 +83,7 @@ def test_catalog_exports_canonical_workspace_projection_objects() -> None:
 def test_ground_open_workflow_imports_the_workspace_catalog_owner() -> None:
     command_path = (
         REPOSITORY_ROOT
-        / "src/memcommit/adapters/console/commands/ground/command/workflow/open.py"
+        / "src/memcommit/adapters/console/commands/ground_workbench/ground/command/workflow/open.py"
     )
     tree = ast.parse(command_path.read_text(encoding="utf-8"))
     imported_modules = {

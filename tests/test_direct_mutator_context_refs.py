@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.add.command as add_command
+import memcommit.adapters.console.commands.create_copy_connect.add.command as add_command
 import memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget.command as forget_command
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app

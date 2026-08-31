@@ -17,7 +17,7 @@ from memcommit.application.capabilities.authority.readable_contexts import (
 )
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.operations.direct_changes.clear.application import ClearRequest, ClearResult
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 

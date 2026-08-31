@@ -58,8 +58,8 @@ from memcommit.application.operations.history_recovery.inspection.trace.runtime 
     load_trace_target_catalog,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 
 
 def render_trace(

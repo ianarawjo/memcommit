@@ -21,7 +21,7 @@ from memcommit.adapters.console.terminal.components.context_picker import (
     _visible_context_rows,
     choose_context,
 )
-from memcommit.adapters.console.commands.profile.picker import (
+from memcommit.adapters.console.commands.profiles.profile.picker import (
     ProfilePickerEntry,
     _render_profile_options,
     choose_profile,

@@ -13,10 +13,10 @@ import pytest
 import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import Context, GrantedMemorySource, Memory, MemoryRef
 from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
-from memcommit.application.operations.embed.application import EmbedRequest, MemoryEmbedRequest
-from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort, execute_embed
-from memcommit.application.operations.reference.application import ContextReferenceRequest, ReferenceRequest
-from memcommit.application.operations.reference.runtime import (
+from memcommit.application.operations.create_copy_connect.embed.application import EmbedRequest, MemoryEmbedRequest
+from memcommit.application.operations.create_copy_connect.embed.runtime import MemoryStoreEmbedPort, execute_embed
+from memcommit.application.operations.create_copy_connect.reference.application import ContextReferenceRequest, ReferenceRequest
+from memcommit.application.operations.create_copy_connect.reference.runtime import (
     MemoryStoreReferencePort,
     execute_context_reference,
     execute_reference,

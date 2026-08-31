@@ -5,14 +5,14 @@ from __future__ import annotations
 from collections.abc import Sequence
 import json
 
-from memcommit.application.operations.add.application import (
+from memcommit.application.operations.create_copy_connect.add.application import (
     AddError as ApplicationAddError,
     AddRequest,
     AddSource,
     run_add,
     validate_add_request,
 )
-from memcommit.application.operations.add.runtime import MemoryStoreAddTargetPort
+from memcommit.application.operations.create_copy_connect.add.runtime import MemoryStoreAddTargetPort
 from memcommit.adapters.python_api._runtime import ClientRuntime
 from memcommit.adapters.python_api._support.errors import raise_public
 from memcommit.adapters.python_api.add import AddMemoriesResult, AddedMemoryResult
@@ -25,12 +25,12 @@ from memcommit.adapters.python_api.errors import (
     AddStorageError,
 )
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError
 
 

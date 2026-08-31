@@ -369,6 +369,6 @@ The implementation is tested for:
 Related implementation and tests:
 
 - [`memcommit/persistence/store/context_memory/`](../../src/memcommit/persistence/store/context_memory/)
-- [`memcommit/adapters/console/commands/list/command.py`](../../src/memcommit/adapters/console/commands/list/command.py)
+- [`memcommit/adapters/console/commands/browse_navigate/list/command.py`](../../src/memcommit/adapters/console/commands/browse_navigate/list/command.py)
 - [`tests/test_context_namespaces.py`](../../tests/test_context_namespaces.py)
 - [`mem ls design rationale`](mem-ls-design-rationale.md)

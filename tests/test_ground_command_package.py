@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import inspect
 
-from memcommit.adapters.console.commands.ground.command import entrypoint, workflow
+from memcommit.adapters.console.commands.ground_workbench.ground.command import entrypoint, workflow
 
 
 def test_ground_command_entrypoint_delegates_one_typed_request(monkeypatch) -> None:

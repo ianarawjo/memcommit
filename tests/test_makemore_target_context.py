@@ -17,22 +17,22 @@ from memcommit.application.operations.semantic_updates.derive.makemore.add_runti
     freeze_makemore_context_source,
     prepare_makemore_add,
 )
-from memcommit.application.operations.ground.makemore import (
+from memcommit.application.operations.ground_workbench.ground.makemore import (
     execute_ground_makemore,
     freeze_ground_makemore,
 )
-from memcommit.application.operations.ground.workspace_application import (
+from memcommit.application.operations.ground_workbench.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
 )
-from memcommit.application.operations.ground.workspace_runtime import (
+from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
 )
 from memcommit.adapters.console.commands.semantic_updates.derive.makemore.proposal import makemore_result_text
 from memcommit.adapters.console.commands.semantic_updates.derive.makemore.viewer import project_makemore_result
 from memcommit.application.operations.quality_resolution.validate.fit.judgment import FIT_JUDGMENT_OPERATION
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -40,7 +40,7 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     ProfileError,
     create_authority_grant,
     update_authority_grant,

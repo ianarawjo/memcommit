@@ -32,7 +32,7 @@ from memcommit.application.operations.semantic_updates.curate_integrate.meld.mod
     MeldSession,
     directional_comparison_basis_assessment,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,

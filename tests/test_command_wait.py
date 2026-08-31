@@ -22,8 +22,8 @@ from memcommit.application.capabilities.authority.granted_context_navigation imp
     GrantedContextNavigation,
     grant_navigation_annotation,
 )
-from memcommit.adapters.console.commands.help.command import CommandEntry
-from memcommit.application.operations.profile.config import ProfileEntry
+from memcommit.adapters.console.commands.system_study_tools.help.command import CommandEntry
+from memcommit.application.operations.profiles.profile.config import ProfileEntry
 from memcommit.persistence.store import MemoryStore
 from memcommit.source_projection.model import (
     SourceAccess,

@@ -66,13 +66,13 @@ def _save_fixture(store, *, name: str, content: str) -> None:
 
 def _prepare(home: Path) -> tuple[str, Path]:
     os.environ["HOME"] = str(home)
-    from memcommit.application.operations.profile.config import (
+    from memcommit.application.operations.profiles.profile.config import (
         ProfileEntry,
         ProfileRegistry,
         profile_store_dir,
         virtual_authoring_registry,
     )
-    from memcommit.application.operations.profile.model import _write_registry
+    from memcommit.application.operations.profiles.profile.model import _write_registry
     from memcommit.persistence.store import MemoryStore
 
     authoring = virtual_authoring_registry().active
@@ -215,7 +215,7 @@ def _capture_profile_flow(home: Path, uid: str, store_root: Path) -> None:
     child.send("q")
     _finish(child, recorder)
 
-    from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir
+    from memcommit.application.operations.profiles.profile.config import load_profile_registry, profile_store_dir
 
     registry = load_profile_registry()
     renamed = registry.by_name("capture-renamed")
@@ -237,7 +237,7 @@ def _capture_combined_help(home: Path) -> None:
     from typer.main import get_command
 
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.adapters.console.commands.help.command import (
+    from memcommit.adapters.console.commands.system_study_tools.help.command import (
         _ordered_help_entries,
         command_entries,
     )

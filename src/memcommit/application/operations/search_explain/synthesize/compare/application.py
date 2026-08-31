@@ -18,7 +18,7 @@ from memcommit.application.operations.search_explain.synthesize.compare.provider
     summarize_comparison,
 )
 from memcommit.core.context import Context
-from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
+from memcommit.application.operations.profiles.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import MemoryStore
 
 

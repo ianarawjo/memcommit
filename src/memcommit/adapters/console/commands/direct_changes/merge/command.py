@@ -36,8 +36,8 @@ from memcommit.application.operations.direct_changes.merge.application import (
     run_merge,
 )
 from memcommit.application.operations.direct_changes.merge.runtime import MemoryStoreMergePort
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 

@@ -50,12 +50,12 @@ from memcommit.application.operations.search_explain.retrieve_answer.query.refer
     execute_query_reference,
 )
 from memcommit.application.operations.search_explain.retrieve_answer.query.answer import OrdinaryQueryCorpusTooLarge
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError
 from memcommit.application.operations.search_explain.retrieve_answer.search.model import SearchError
 

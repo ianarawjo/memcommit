@@ -17,16 +17,16 @@ from memcommit.adapters.console.terminal.components.direct_item_placement import
     direct_item_placement_rows,
     render_direct_item_tree_fragments,
 )
-from memcommit.application.operations.embed.application import (
+from memcommit.application.operations.create_copy_connect.embed.application import (
     EmbedPlacement,
     EmbedRequest,
     FrozenMemoryEmbedPlan,
     MemoryEmbedRequest,
     run_embed,
 )
-from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
-from memcommit.adapters.console.commands.embed import command as embed_command
-from memcommit.adapters.console.commands.embed.workbench import (
+from memcommit.application.operations.create_copy_connect.embed.runtime import MemoryStoreEmbedPort
+from memcommit.adapters.console.commands.create_copy_connect.embed import command as embed_command
+from memcommit.adapters.console.commands.create_copy_connect.embed.workbench import (
     choose_embed_setup,
     embed_exact_command_review,
     parse_embed_command_argv,
@@ -44,7 +44,7 @@ runner = CliRunner(mix_stderr=False)
 
 def test_embed_console_owns_command_receipt_and_workbench_without_facades() -> None:
     repository_root = Path(__file__).resolve().parents[1]
-    command_root = repository_root / "src/memcommit/adapters/console/commands/embed"
+    command_root = repository_root / "src/memcommit/adapters/console/commands/create_copy_connect/embed"
     retired_tui_root = (
         repository_root / "src/memcommit/adapters/interfaces/tui/operations/embed"
     )

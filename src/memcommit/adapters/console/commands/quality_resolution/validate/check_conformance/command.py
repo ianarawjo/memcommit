@@ -19,8 +19,8 @@ from memcommit.application.operations.quality_resolution.validate.check_conforma
     execute_ground_conformance,
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.providers.subscription import (
     QueryProviderError,
     connect_semantic_provider,

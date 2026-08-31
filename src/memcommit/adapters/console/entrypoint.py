@@ -2,33 +2,38 @@
 
 import typer
 
-from memcommit.adapters.console.commands import (
-    add,
-    branch,
+from memcommit.adapters.console.commands.browse_navigate import (
     checkout,
-    config,
     contexts,
-    copy,
-    dev,
-    embed,
-    eval,
-    ground,
-    help,
-    import_profile,
-    init,
-    init_study,
     list as list_command,
-    lock,
-    profile,
-    provider,
     pwd,
-    show,
-    reference,
     rename,
-    share,
+    show,
     status,
     switch,
+)
+from memcommit.adapters.console.commands.create_copy_connect import (
+    add,
+    branch,
+    copy,
+    embed,
+    init,
+    reference,
+    resource_import,
+)
+from memcommit.adapters.console.commands.ground_workbench import ground
+from memcommit.adapters.console.commands.profiles import profile
+from memcommit.adapters.console.commands.sharing_protection import (
+    lock,
+    share,
     unlock,
+)
+from memcommit.adapters.console.commands.system_study_tools import (
+    config,
+    eval,
+    help,
+    init_study,
+    provider,
 )
 from memcommit.adapters.console.commands.direct_changes import (
     chunk,
@@ -92,6 +97,7 @@ from memcommit.adapters.console.commands.semantic_updates.derive import (
 from memcommit.adapters.console.commands.semantic_updates.foundation import update
 from memcommit.adapters.console.commands.translation import translate
 from memcommit.adapters.console.coordination.root_group import MemCommandGroup
+from memcommit.adapters.console.diagnostics import dev
 from memcommit.operation_catalog import operation_summary
 
 _HELP_CONTEXT_SETTINGS = {
@@ -115,7 +121,7 @@ app.command(
 app.command(
     "import",
     help=operation_summary("import"),
-)(import_profile.cmd)
+)(resource_import.cmd)
 app.command(
     "init-study",
     help=operation_summary("init-study"),

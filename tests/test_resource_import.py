@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, Memory, MemoryRef
-from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir
+from memcommit.application.operations.profiles.profile.config import load_profile_registry, profile_store_dir
 from memcommit.persistence.store import MemoryStore
 
 

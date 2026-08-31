@@ -13,7 +13,7 @@ from memcommit.application.capabilities.command_recovery.model import (
     RestoreDirection,
 )
 from memcommit.application.context_access import public_context_name
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     authority_grant_snapshot_lock,
 )
 from memcommit.application.operations.semantic_updates.foundation.update.model import (

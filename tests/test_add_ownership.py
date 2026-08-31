@@ -13,10 +13,10 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_add_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.add
+import memcommit.application.operations.create_copy_connect.add
 
-assert "memcommit.application.operations.add.application" not in sys.modules
-assert "memcommit.application.operations.add.runtime" not in sys.modules
+assert "memcommit.application.operations.create_copy_connect.add.application" not in sys.modules
+assert "memcommit.application.operations.create_copy_connect.add.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -29,10 +29,10 @@ assert "memcommit.application.operations.add.runtime" not in sys.modules
 def test_production_add_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/add.py",
-        "src/memcommit/adapters/console/commands/add/command.py",
-        "src/memcommit/adapters/console/commands/add/receipt.py",
-        "src/memcommit/adapters/console/commands/add/workbench/screen.py",
-        "src/memcommit/application/operations/add/runtime.py",
+        "src/memcommit/adapters/console/commands/create_copy_connect/add/command.py",
+        "src/memcommit/adapters/console/commands/create_copy_connect/add/receipt.py",
+        "src/memcommit/adapters/console/commands/create_copy_connect/add/workbench/screen.py",
+        "src/memcommit/application/operations/create_copy_connect/add/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -44,13 +44,13 @@ def test_production_add_consumers_use_the_operation_owner() -> None:
 
 def test_add_presenters_are_colocated_with_their_command() -> None:
     command = REPOSITORY_ROOT / (
-        "src/memcommit/adapters/console/commands/add/command.py"
+        "src/memcommit/adapters/console/commands/create_copy_connect/add/command.py"
     )
     receipt = REPOSITORY_ROOT / (
-        "src/memcommit/adapters/console/commands/add/receipt.py"
+        "src/memcommit/adapters/console/commands/create_copy_connect/add/receipt.py"
     )
     workbench = REPOSITORY_ROOT / (
-        "src/memcommit/adapters/console/commands/add/workbench/screen.py"
+        "src/memcommit/adapters/console/commands/create_copy_connect/add/workbench/screen.py"
     )
     retired = tuple(
         REPOSITORY_ROOT / path
@@ -66,20 +66,20 @@ def test_add_presenters_are_colocated_with_their_command() -> None:
     assert workbench.is_file()
     assert all(not path.exists() for path in retired)
     assert (
-        "from memcommit.adapters.console.commands.add.receipt import render_add_receipt"
+        "from memcommit.adapters.console.commands.create_copy_connect.add.receipt import render_add_receipt"
     ) in command.read_text(encoding="utf-8")
-    assert "memcommit.adapters.console.commands.add.workbench" in command.read_text(
+    assert "memcommit.adapters.console.commands.create_copy_connect.add.workbench" in command.read_text(
         encoding="utf-8"
     )
 
 
 def test_exact_add_does_not_absorb_semantic_result_memorization() -> None:
-    operation_root = REPOSITORY_ROOT / "src/memcommit/application/operations/add"
+    operation_root = REPOSITORY_ROOT / "src/memcommit/application/operations/create_copy_connect/add"
     assert not (operation_root / "semantic_runtime.py").exists()
 
     for relative_path in (
-        "src/memcommit/application/operations/add/application.py",
-        "src/memcommit/application/operations/add/runtime.py",
+        "src/memcommit/application/operations/create_copy_connect/add/application.py",
+        "src/memcommit/application/operations/create_copy_connect/add/runtime.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "memcommit.semantic_add_runtime" not in source

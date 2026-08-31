@@ -23,8 +23,8 @@ from memcommit.application.operations.quality_resolution.diagnose.find_duplicate
     FindDuplicatesRequest,
     find_duplicates,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 
 
 def find_duplicates_exact(

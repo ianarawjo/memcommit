@@ -33,8 +33,8 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
 from memcommit.providers.subscription import (
     QueryProviderError,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import (
     ProfileError,
 )
 from memcommit.persistence.store import (

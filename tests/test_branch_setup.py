@@ -7,10 +7,10 @@ from pathlib import Path
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.adapters.console.commands.branch.receipt import (
+from memcommit.adapters.console.commands.create_copy_connect.branch.receipt import (
     BranchCreationReceipt,
 )
-from memcommit.adapters.console.commands.branch.endpoint_setup import (
+from memcommit.adapters.console.commands.create_copy_connect.branch.endpoint_setup import (
     branch_endpoint_setup_spec,
     branch_exact_command_review,
     choose_branch_creation,
@@ -173,7 +173,7 @@ def test_branch_exact_review_includes_source_and_scope() -> None:
 
 
 def test_branch_console_package_owns_setup_and_receipt_without_facades() -> None:
-    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/branch"
+    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/create_copy_connect/branch"
     retired_root = (
         REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/tui/operations/branch"
     )

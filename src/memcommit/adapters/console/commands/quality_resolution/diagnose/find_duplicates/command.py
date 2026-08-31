@@ -29,8 +29,8 @@ from memcommit.adapters.console.terminal.core.identity import (
     collision_safe_uid_prefixes,
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.application.capabilities.reviewing.read_report import ReadReportTarget
 from memcommit.persistence.store import MemoryStore
 

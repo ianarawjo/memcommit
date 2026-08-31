@@ -62,7 +62,7 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.application.operations.copy_and_move.application import (
+from memcommit.application.capabilities.memory_transfer.application import (
     CopyMemoriesRequest,
     FrozenCopyMemoriesPlan,
     FrozenMoveMemoriesPlan,

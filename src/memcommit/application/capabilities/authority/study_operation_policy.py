@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from memcommit.application.operations.profile.config import ProfileRegistry
+from memcommit.application.operations.profiles.profile.config import ProfileRegistry
 
 
 @dataclass(frozen=True)

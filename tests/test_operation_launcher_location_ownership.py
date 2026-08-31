@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]

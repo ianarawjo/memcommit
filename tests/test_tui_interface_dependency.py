@@ -76,7 +76,9 @@ def test_component_imports_resolve_to_their_canonical_objects() -> None:
 def test_help_terminal_browser_has_one_command_owner() -> None:
     commands_root = ADAPTERS_ROOT / "console" / "commands"
 
-    assert (commands_root / "help" / "command.py").is_file()
+    assert (
+        commands_root / "system_study_tools" / "help" / "command.py"
+    ).is_file()
     assert not tuple((commands_root / "help_inventory").glob("*.py"))
     assert (TERMINAL_COMPONENTS / "session_help.py").is_file()
     assert not (ADAPTERS_ROOT / "interfaces").exists()

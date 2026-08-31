@@ -14,11 +14,11 @@ from memcommit.core.memory_translation import (
     MemoryTranslationCatalog,
     TranslationCatalogError,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     GrantContextBinding,
     load_profile_registry,
 )
-from memcommit.application.operations.profile.model import GrantedContextView
+from memcommit.application.operations.profiles.profile.model import GrantedContextView
 from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.store.context_memory.records import context_record_digest
 from memcommit.persistence.store.translation_catalog import (

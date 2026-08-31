@@ -13,9 +13,9 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.share.flow import choose_share_endpoint
-from memcommit.adapters.console.commands.share.viewer import ShareViewerReceipt
-from memcommit.adapters.console.commands.share.viewer import (
+from memcommit.adapters.console.commands.sharing_protection.share.flow import choose_share_endpoint
+from memcommit.adapters.console.commands.sharing_protection.share.viewer import ShareViewerReceipt
+from memcommit.adapters.console.commands.sharing_protection.share.viewer import (
     run_share_unavailable_viewer,
     run_share_viewer,
     share_context_text,
@@ -24,7 +24,7 @@ from memcommit.adapters.console.commands.share.viewer import (
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.application.capabilities.reviewing.session_navigation import SessionWorkbenchNavigation
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     GRANT_RESOURCE_CONTEXT_TREE,
@@ -37,7 +37,7 @@ from memcommit.application.operations.profile.config import (
     profile_store_dir,
 )
 from memcommit.persistence.store import MemoryStore, context_record_digest
-from memcommit.application.operations.share.model import (
+from memcommit.application.operations.sharing_protection.share.model import (
     ShareError,
     deliver_prepared_share,
     list_share_sources,
@@ -216,8 +216,8 @@ def test_bare_share_opens_tty_flow_and_sends_selected_context(
         tmp_path,
         monkeypatch,
     )
-    share_command = importlib.import_module("memcommit.adapters.console.commands.share.command")
-    share_viewer = importlib.import_module("memcommit.adapters.console.commands.share.viewer")
+    share_command = importlib.import_module("memcommit.adapters.console.commands.sharing_protection.share.command")
+    share_viewer = importlib.import_module("memcommit.adapters.console.commands.sharing_protection.share.viewer")
     seen = {}
 
     monkeypatch.setattr(share_command, "_interactive_terminal", lambda: True)
@@ -281,9 +281,9 @@ def test_viewer_endpoint_browse_refreezes_and_applies_the_updated_command(
         encoding="utf-8",
     )
 
-    share_command = importlib.import_module("memcommit.adapters.console.commands.share.command")
-    share_flow = importlib.import_module("memcommit.adapters.console.commands.share.flow")
-    share_viewer = importlib.import_module("memcommit.adapters.console.commands.share.viewer")
+    share_command = importlib.import_module("memcommit.adapters.console.commands.sharing_protection.share.command")
+    share_flow = importlib.import_module("memcommit.adapters.console.commands.sharing_protection.share.flow")
+    share_viewer = importlib.import_module("memcommit.adapters.console.commands.sharing_protection.share.viewer")
     original_preview = prepare_share(source.name, "government/healthcare-agent")
     seen = []
 
@@ -331,8 +331,8 @@ def test_complete_share_operands_bypass_tty_viewer(
         tmp_path,
         monkeypatch,
     )
-    share_command = importlib.import_module("memcommit.adapters.console.commands.share.command")
-    share_viewer = importlib.import_module("memcommit.adapters.console.commands.share.viewer")
+    share_command = importlib.import_module("memcommit.adapters.console.commands.sharing_protection.share.command")
+    share_viewer = importlib.import_module("memcommit.adapters.console.commands.sharing_protection.share.viewer")
     monkeypatch.setattr(share_command, "_interactive_terminal", lambda: True)
     monkeypatch.setattr(
         share_viewer,
@@ -958,8 +958,8 @@ def test_incomplete_recursive_cli_keeps_range_through_tty_review(
         monkeypatch,
     )
     _add_share_subtree(sender_store, source)
-    share_command = importlib.import_module("memcommit.adapters.console.commands.share.command")
-    share_viewer = importlib.import_module("memcommit.adapters.console.commands.share.viewer")
+    share_command = importlib.import_module("memcommit.adapters.console.commands.sharing_protection.share.command")
+    share_viewer = importlib.import_module("memcommit.adapters.console.commands.sharing_protection.share.viewer")
     seen = {}
     monkeypatch.setattr(share_command, "_interactive_terminal", lambda: True)
 

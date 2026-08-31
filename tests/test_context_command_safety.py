@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.branch.receipt import BranchCreationReceipt
+from memcommit.adapters.console.commands.create_copy_connect.branch.receipt import BranchCreationReceipt
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.persistence.store import MemoryStore
 
@@ -69,7 +69,7 @@ def test_embed_rejects_source_renamed_after_load(isolated_store, monkeypatch):
         original_embed(child, parent, **kwargs)
 
     monkeypatch.setattr(
-        "memcommit.application.operations.embed.runtime.ops.embed",
+        "memcommit.application.operations.create_copy_connect.embed.runtime.ops.embed",
         rename_then_embed,
     )
 
@@ -129,7 +129,7 @@ def test_reference_rejects_source_renamed_after_load(
         return original_reference(item, candidate, target)
 
     monkeypatch.setattr(
-        "memcommit.application.operations.reference.runtime.ops.reference_memory",
+        "memcommit.application.operations.create_copy_connect.reference.runtime.ops.reference_memory",
         rename_then_reference,
     )
 
@@ -162,7 +162,7 @@ def test_branch_does_not_overwrite_concurrent_destination(
         return result
 
     monkeypatch.setattr(
-        "memcommit.application.operations.branch.runtime.ops.branch",
+        "memcommit.application.operations.create_copy_connect.branch.runtime.ops.branch",
         create_competitor,
     )
 
@@ -195,7 +195,7 @@ def test_branch_preserves_concurrent_current_selection(
         return result
 
     monkeypatch.setattr(
-        "memcommit.application.operations.branch.runtime.ops.branch",
+        "memcommit.application.operations.create_copy_connect.branch.runtime.ops.branch",
         switch_then_branch,
     )
 
@@ -221,7 +221,7 @@ def test_bare_branch_preserves_a_switch_made_while_the_picker_is_open(
         return BranchCreationReceipt("source", "feature")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.branch.command.choose_branch_creation",
+        "memcommit.adapters.console.commands.create_copy_connect.branch.command.choose_branch_creation",
         switch_then_choose,
     )
 
@@ -247,7 +247,7 @@ def test_bare_init_preserves_a_switch_made_while_the_editor_is_open(
         return "new-context"
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.init.command.choose_context_name",
+        "memcommit.adapters.console.commands.create_copy_connect.init.command.choose_context_name",
         switch_then_choose,
     )
 
@@ -276,7 +276,7 @@ def test_bare_branch_does_not_overwrite_a_target_created_during_setup(
         return BranchCreationReceipt("source", "feature")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.branch.command.choose_branch_creation",
+        "memcommit.adapters.console.commands.create_copy_connect.branch.command.choose_branch_creation",
         create_target_then_choose,
     )
 
@@ -314,7 +314,7 @@ def test_branch_rejects_history_changed_after_snapshot(
         return result
 
     monkeypatch.setattr(
-        "memcommit.application.operations.branch.runtime.ops.branch",
+        "memcommit.application.operations.create_copy_connect.branch.runtime.ops.branch",
         checkpoint_then_branch,
     )
 

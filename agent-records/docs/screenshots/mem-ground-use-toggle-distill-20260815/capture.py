@@ -65,7 +65,7 @@ class _PayloadProvider:
 
 def _prepare_store(root: Path):
     import memcommit.application.capabilities.ops as ops
-    from memcommit.application.operations.ground.model import (
+    from memcommit.application.operations.ground_workbench.ground.model import (
         GroundTargetSpec,
         bind_ground_workbench,
         create_ground_session,
@@ -135,12 +135,12 @@ def _run_child(store_root: Path) -> None:
     # and that child process at the same isolated default Profile Store.
     os.environ["HOME"] = str(store_root.parent)
 
-    from memcommit.adapters.console.commands.ground.command import (
+    from memcommit.adapters.console.commands.ground_workbench.ground.command import (
         _apply_named_ground_proposal,
         _ground_example_use_proposal,
     )
-    from memcommit.adapters.console.commands.ground.named_shell import run_named_ground_shell
-    from memcommit.application.operations.ground.distill import execute_ground_distill, freeze_ground_distill
+    from memcommit.adapters.console.commands.ground_workbench.ground.named_shell import run_named_ground_shell
+    from memcommit.application.operations.ground_workbench.ground.distill import execute_ground_distill, freeze_ground_distill
 
     store, session = _prepare_store(store_root)
     print("$ mem ground ticker-use", flush=True)

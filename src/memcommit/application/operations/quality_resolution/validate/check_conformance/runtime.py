@@ -31,12 +31,12 @@ from memcommit.core.context_targeting.model import (
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.application.operations.ground.workspace_model import GroundWorkspace
-from memcommit.application.operations.ground.workspace_projection import (
+from memcommit.application.operations.ground_workbench.ground.workspace_model import GroundWorkspace
+from memcommit.application.operations.ground_workbench.ground.workspace_projection import (
     GroundWorkspaceProjectionError,
     project_ordinary_memories,
 )
-from memcommit.application.operations.ground.workspace_runtime import (
+from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
     load_ground_workspace,
 )
 from memcommit.persistence.store import (

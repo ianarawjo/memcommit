@@ -55,12 +55,12 @@ def _isolate_store(root: Path) -> None:
 def _run_child() -> None:
     from typer.testing import CliRunner
 
-    import memcommit.adapters.console.commands.ground.command as ground_command
+    import memcommit.adapters.console.commands.ground_workbench.ground.command as ground_command
     import memcommit.application.capabilities.ops as ops
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.application.operations.ground.dialogue import GroundDialogueProposal
-    from memcommit.application.operations.ground.workspace_draft_store import GroundWorkspaceDraftStore
-    from memcommit.application.operations.ground.workspace_runtime import load_ground_workspace
+    from memcommit.application.operations.ground_workbench.ground.dialogue import GroundDialogueProposal
+    from memcommit.application.operations.ground_workbench.ground.workspace_draft_store import GroundWorkspaceDraftStore
+    from memcommit.application.operations.ground_workbench.ground.workspace_runtime import load_ground_workspace
     from memcommit.persistence.store import MemoryStore
 
     with tempfile.TemporaryDirectory(prefix="memcommit-ground-draft-capture-") as temp:

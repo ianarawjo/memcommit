@@ -16,7 +16,7 @@ from memcommit.application.capabilities.authority.checkpoint_read_model import (
     CheckpointRead,
 )
 from memcommit.application.capabilities.authority.context_access import ContextAccess
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     AuthorityGrant,
@@ -27,7 +27,7 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     GrantedContextView,
     ProfileError,
     create_authority_grant,

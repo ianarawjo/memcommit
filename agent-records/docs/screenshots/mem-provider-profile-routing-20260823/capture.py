@@ -71,7 +71,7 @@ def _write_study_registry(home: Path) -> None:
         STUDY_PROVIDER_POLICY_DIGEST,
         STUDY_PROVIDER_POLICY_VERSION,
     )
-    from memcommit.application.operations.profile.config import (
+    from memcommit.application.operations.profiles.profile.config import (
         AUTHORING_PROFILE_NAME,
         AUTHORING_PROFILE_UID,
         ProfileEntry,

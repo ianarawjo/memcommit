@@ -22,7 +22,7 @@ from memcommit.application.operations.semantic_updates.curate_integrate.meld.pro
     configured_meld_cache_identity,
     meld_resolution_cache_key,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     study_run_identity,

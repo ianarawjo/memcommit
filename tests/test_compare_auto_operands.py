@@ -11,7 +11,7 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory
 from memcommit.providers.policy import ResolvedProviderPolicy
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -19,7 +19,7 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import authority_grant_snapshot_lock, create_authority_grant
+from memcommit.application.operations.profiles.profile.model import authority_grant_snapshot_lock, create_authority_grant
 from memcommit.persistence.store import MemoryStore
 from memcommit.adapters.console.commands.search_explain.synthesize.compare.targeting import (
     CompareTargetingError,

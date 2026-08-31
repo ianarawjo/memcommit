@@ -19,7 +19,7 @@ from memcommit.providers.policy import (
 )
 from memcommit.core.context import Context
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,

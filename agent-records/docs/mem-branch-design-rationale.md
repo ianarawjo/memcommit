@@ -43,7 +43,7 @@ still exists in the typed draft.
 
 ## Operation ownership
 
-Branch is now owned by the focused `memcommit.application.operations.branch` package.
+Branch is now owned by the focused `memcommit.application.operations.create_copy_connect.branch` package.
 `application.py` owns the terminal-independent `BranchRequest`, the exact or
 lexical-subtree Source-to-target name plan, the publication port, and receipt
 validation. The request deliberately carries the local Context catalog frozen
@@ -61,7 +61,7 @@ application layer validates that the published Source-to-target mapping and
 selected current root exactly match its plan; it does not duplicate Store
 transaction mechanics.
 
-`memcommit.adapters.console.commands.branch.command` is consequently only the Typer and optional TUI
+`memcommit.adapters.console.commands.create_copy_connect.branch.command` is consequently only the Typer and optional TUI
 adapter: it resolves flags and relative Source syntax against the command-start
 current Context, obtains an interactive selection when needed, invokes the
 operation, and renders the receipt. `mem checkout -b` continues to call that
@@ -86,7 +86,7 @@ regenerated for this ownership-only change.
 ## Compact setup and shared component boundary
 
 Branch's console presentation is co-located under
-`memcommit.adapters.console.commands.branch`. `command.py` owns Typer
+`memcommit.adapters.console.commands.create_copy_connect.branch`. `command.py` owns Typer
 orchestration and receipt rendering, `endpoint_setup.py` owns the A/B role labels,
 local-only availability, require-new validation, exact command review, and
 interactive selection, and `receipt.py` owns the process-local

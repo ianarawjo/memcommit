@@ -65,13 +65,13 @@ def _save_fixture(store, *, name: str, content: str) -> None:
 
 def _prepare(home: Path) -> tuple[str, tuple[str, str], tuple[Path, Path]]:
     os.environ["HOME"] = str(home)
-    from memcommit.application.operations.profile.config import (
+    from memcommit.application.operations.profiles.profile.config import (
         ProfileEntry,
         ProfileRegistry,
         profile_store_dir,
         virtual_authoring_registry,
     )
-    from memcommit.application.operations.profile.model import _write_registry
+    from memcommit.application.operations.profiles.profile.model import _write_registry
     from memcommit.persistence.store import MemoryStore
 
     authoring = virtual_authoring_registry().active
@@ -248,8 +248,8 @@ def main() -> None:
         )
         _capture_flow(home)
 
-        from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir
-        from memcommit.application.operations.profile.model import study_run_profile_pairs
+        from memcommit.application.operations.profiles.profile.config import load_profile_registry, profile_store_dir
+        from memcommit.application.operations.profiles.profile.model import study_run_profile_pairs
 
         registry = load_profile_registry()
         pair = study_run_profile_pairs(registry.profiles)[0]

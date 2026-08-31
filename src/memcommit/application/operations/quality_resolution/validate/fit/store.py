@@ -9,12 +9,12 @@ from pathlib import Path
 import uuid
 
 from memcommit.application.operations.quality_resolution.validate.fit.ground_report import FitError, FitReport
-from memcommit.application.operations.ground.workspace_model import GroundWorkspace
-from memcommit.application.operations.ground.workspace_fit import (
+from memcommit.application.operations.ground_workbench.ground.workspace_model import GroundWorkspace
+from memcommit.application.operations.ground_workbench.ground.workspace_fit import (
     load_ground_workspace_fit_contexts,
     workspace_fit_report_is_current,
 )
-from memcommit.application.operations.ground.workspace_runtime import (
+from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
     load_ground_workspace,
 )
 from memcommit.persistence.store import MemoryStore

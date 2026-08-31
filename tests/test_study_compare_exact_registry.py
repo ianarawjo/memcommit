@@ -36,7 +36,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.gra
     recursive_comparison_projection,
 )
 from memcommit.application.operations.semantic_updates.curate_integrate.meld.preparation import MeldStartRequest
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,

@@ -21,13 +21,13 @@ from memcommit.adapters.python_api.show import (
     ShowResult,
     ShowSourceResult,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.operations.show.application import (
+from memcommit.application.operations.profiles.profile.model import ProfileError
+from memcommit.application.operations.browse_navigate.show.application import (
     ShowContextSnapshot,
     ShowEmbeddedContext,
     ShowError as ApplicationShowError,
@@ -37,7 +37,7 @@ from memcommit.application.operations.show.application import (
     ShowQueryView,
     ShowRequest,
 )
-from memcommit.application.operations.show.runtime import execute_show
+from memcommit.application.operations.browse_navigate.show.runtime import execute_show
 from memcommit.source_projection.model import SourceDisplayFacts
 
 

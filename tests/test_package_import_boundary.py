@@ -170,8 +170,8 @@ blocked = (
     'memcommit.translation_view_store',
     'memcommit.literal_find_application',
     'memcommit.literal_find_runtime',
-    'memcommit.application.operations.add.application',
-    'memcommit.application.operations.add.runtime',
+    'memcommit.application.operations.create_copy_connect.add.application',
+    'memcommit.application.operations.create_copy_connect.add.runtime',
     'memcommit.application.operations.semantic_updates.derive.atomize.application',
     'memcommit.application.operations.semantic_updates.derive.atomize.analysis_application',
     'memcommit.application.operations.semantic_updates.derive.atomize.analysis_runtime',
@@ -203,11 +203,11 @@ blocked = (
     'memcommit.application.operations.semantic_updates.derive.makemore.application',
     'memcommit.application.operations.semantic_updates.derive.makemore.runtime',
     'memcommit.application.operations.semantic_updates.derive.makemore.add_runtime',
-    'memcommit.application.operations.contexts.application',
-    'memcommit.application.operations.contexts.runtime',
+    'memcommit.application.operations.browse_navigate.contexts.application',
+    'memcommit.application.operations.browse_navigate.contexts.runtime',
     'memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application',
-    'memcommit.application.operations.embed.application',
-    'memcommit.application.operations.embed.runtime',
+    'memcommit.application.operations.create_copy_connect.embed.application',
+    'memcommit.application.operations.create_copy_connect.embed.runtime',
     'memcommit.application.operations.quality_resolution.validate.fit.application',
     'memcommit.application.operations.quality_resolution.validate.fit.runtime',
     'memcommit.application.operations.quality_resolution.validate.fit.coherence',
@@ -223,26 +223,26 @@ blocked = (
     'memcommit.application.operations.semantic_updates.curate_integrate.meld.planning',
     'memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_iteration',
     'memcommit.application.operations.semantic_updates.curate_integrate.meld.preparation',
-    'memcommit.application.operations.help.application',
-    'memcommit.application.operations.help.lookup_application',
+    'memcommit.application.operations.system_study_tools.help.application',
+    'memcommit.application.operations.system_study_tools.help.lookup_application',
     'memcommit.application.operations.search_explain.retrieve_answer.query.granted_application',
     'memcommit.application.operations.search_explain.retrieve_answer.query.granted_runtime',
     'memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_runtime',
     'memcommit.application.operations.search_explain.retrieve_answer.query.reference_application',
     'memcommit.application.operations.search_explain.retrieve_answer.query.reference_runtime',
     'memcommit.application.operations.history_recovery.recovery.redo.runtime',
-    'memcommit.application.operations.reference.application',
+    'memcommit.application.operations.create_copy_connect.reference.application',
     'memcommit.application.operations.history_recovery.recovery.revert.application',
     'memcommit.application.operations.history_recovery.recovery.revert.runtime',
-    'memcommit.application.operations.reference.runtime',
+    'memcommit.application.operations.create_copy_connect.reference.runtime',
     'memcommit.application.operations.semantic_updates.curate_integrate.sever.application',
     'memcommit.application.operations.semantic_updates.curate_integrate.sever.runtime',
     'memcommit.application.operations.semantic_updates.curate_integrate.sever.model',
     'memcommit.application.operations.semantic_updates.curate_integrate.sever.provider',
     'memcommit.application.operations.semantic_updates.curate_integrate.sever.resolution_adapter',
     'memcommit.application.operations.semantic_updates.curate_integrate.sever.session_store',
-    'memcommit.application.operations.show.application',
-    'memcommit.application.operations.show.runtime',
+    'memcommit.application.operations.browse_navigate.show.application',
+    'memcommit.application.operations.browse_navigate.show.runtime',
     'memcommit.application.operations.search_explain.retrieve_answer.search.application',
     'memcommit.application.operations.search_explain.retrieve_answer.search.runtime',
     'memcommit.application.operations.search_explain.retrieve_answer.search.save_context',
@@ -335,8 +335,8 @@ store.set_current(context.name)
 result = MemCommitClient(root=root).show()
 assert result.name == context.name
 assert 'memcommit.adapters.python_api._operations.show' in sys.modules
-assert 'memcommit.application.operations.show.application' in sys.modules
-assert 'memcommit.application.operations.show.runtime' in sys.modules
+assert 'memcommit.application.operations.browse_navigate.show.application' in sys.modules
+assert 'memcommit.application.operations.browse_navigate.show.runtime' in sys.modules
 assert 'memcommit.show_application' not in sys.modules
 assert 'memcommit.show_runtime' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.add' not in sys.modules
@@ -367,8 +367,8 @@ result = client.describe_operation('compare')
 assert result.name == 'compare'
 assert not root.exists()
 assert 'memcommit.adapters.python_api._operations.help' in sys.modules
-assert 'memcommit.application.operations.help.application' in sys.modules
-assert 'memcommit.application.operations.help.lookup_application' not in sys.modules
+assert 'memcommit.application.operations.system_study_tools.help.application' in sys.modules
+assert 'memcommit.application.operations.system_study_tools.help.lookup_application' not in sys.modules
 assert 'memcommit.help_application' not in sys.modules
 assert 'memcommit.help_lookup_application' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.add' not in sys.modules
@@ -397,8 +397,8 @@ import sys
 class NoGround(importlib.abc.MetaPathFinder):
     def find_spec(self, fullname, path=None, target=None):
         if (
-            fullname == 'memcommit.application.operations.ground'
-            or fullname.startswith('memcommit.application.operations.ground.')
+            fullname == 'memcommit.application.operations.ground_workbench.ground'
+            or fullname.startswith('memcommit.application.operations.ground_workbench.ground.')
         ):
             raise ImportError(f'blocked Ground integration: {fullname}')
         return None
@@ -444,8 +444,8 @@ except AddInputError:
 else:
     raise AssertionError('invalid Add input unexpectedly succeeded')
 assert 'memcommit.adapters.python_api._operations.add' in sys.modules
-assert 'memcommit.application.operations.add.application' in sys.modules
-assert 'memcommit.application.operations.add.runtime' in sys.modules
+assert 'memcommit.application.operations.create_copy_connect.add.application' in sys.modules
+assert 'memcommit.application.operations.create_copy_connect.add.runtime' in sys.modules
 assert 'memcommit.add_application' not in sys.modules
 assert 'memcommit.add_runtime' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.query' not in sys.modules
@@ -490,8 +490,8 @@ else:
 assert 'memcommit.adapters.python_api._operations.query' in sys.modules
 assert 'memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application' in sys.modules
 assert 'memcommit.adapters.python_api._operations.add' not in sys.modules
-assert 'memcommit.application.operations.add.application' not in sys.modules
-assert 'memcommit.application.operations.add.runtime' not in sys.modules
+assert 'memcommit.application.operations.create_copy_connect.add.application' not in sys.modules
+assert 'memcommit.application.operations.create_copy_connect.add.runtime' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
 assert 'memcommit.add_runtime' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.meld' not in sys.modules
@@ -536,8 +536,8 @@ assert 'memcommit.application.operations.semantic_updates.curate_integrate.meld.
 assert 'memcommit.meld_application' not in sys.modules
 assert 'memcommit.meld_runtime' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.add' not in sys.modules
-assert 'memcommit.application.operations.add.application' not in sys.modules
-assert 'memcommit.application.operations.add.runtime' not in sys.modules
+assert 'memcommit.application.operations.create_copy_connect.add.application' not in sys.modules
+assert 'memcommit.application.operations.create_copy_connect.add.runtime' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
 assert 'memcommit.add_runtime' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.query' not in sys.modules
@@ -572,8 +572,8 @@ else:
 assert 'memcommit.adapters.python_api._operations.compare' in sys.modules
 assert 'memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution' in sys.modules
 assert 'memcommit.adapters.python_api._operations.add' not in sys.modules
-assert 'memcommit.application.operations.add.application' not in sys.modules
-assert 'memcommit.application.operations.add.runtime' not in sys.modules
+assert 'memcommit.application.operations.create_copy_connect.add.application' not in sys.modules
+assert 'memcommit.application.operations.create_copy_connect.add.runtime' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
 assert 'memcommit.add_runtime' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.query' not in sys.modules
@@ -616,8 +616,8 @@ assert 'memcommit.application.operations.semantic_updates.curate_integrate.forge
 assert 'memcommit.forget_application' not in sys.modules
 assert 'memcommit.forget_runtime' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.add' not in sys.modules
-assert 'memcommit.application.operations.add.application' not in sys.modules
-assert 'memcommit.application.operations.add.runtime' not in sys.modules
+assert 'memcommit.application.operations.create_copy_connect.add.application' not in sys.modules
+assert 'memcommit.application.operations.create_copy_connect.add.runtime' not in sys.modules
 assert 'memcommit.add_application' not in sys.modules
 assert 'memcommit.add_runtime' not in sys.modules
 assert 'memcommit.adapters.python_api._operations.query' not in sys.modules

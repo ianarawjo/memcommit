@@ -14,8 +14,8 @@ from memcommit.application.operations.semantic_updates.derive.elaborate.applicat
     ElaborateRequest,
 )
 from memcommit.application.operations.semantic_updates.derive.elaborate.runtime import execute_elaborate
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 from memcommit.providers.subscription import (
     QueryProviderError,

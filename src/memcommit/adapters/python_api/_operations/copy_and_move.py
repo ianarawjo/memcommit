@@ -23,19 +23,19 @@ from memcommit.adapters.python_api.copy_and_move import (
     MemoryTransferPlacementResult,
     MoveMemoriesReceipt,
 )
-from memcommit.application.operations.copy_and_move.application import (
+from memcommit.application.capabilities.memory_transfer.application import (
     CopyMemoriesRequest,
     MemoryTransferAuthorityError as InternalMemoryTransferAuthorityError,
     MemoryTransferError as InternalMemoryTransferError,
     MemoryTransferStalePlanError,
     MoveMemoriesRequest,
 )
-from memcommit.application.operations.copy.application import run_copy
-from memcommit.application.operations.copy.runtime import MemoryStoreCopyPort
+from memcommit.application.operations.create_copy_connect.copy.application import run_copy
+from memcommit.application.operations.create_copy_connect.copy.runtime import MemoryStoreCopyPort
 from memcommit.application.operations.direct_changes.move.application import run_move
 from memcommit.application.operations.direct_changes.move.runtime import MemoryStoreMovePort
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError
 from memcommit.application.capabilities.authority.write_protection import WriteProtectionError
 

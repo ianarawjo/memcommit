@@ -108,5 +108,5 @@ def test_root_entrypoint_uses_command_package_public_surfaces() -> None:
 def test_eval_adapter_is_owned_by_the_public_operation_name() -> None:
     commands = CONSOLE / "commands"
 
-    assert (commands / "eval" / "command.py").is_file()
+    assert (commands / "system_study_tools" / "eval" / "command.py").is_file()
     assert not (commands / "semantic_eval").exists()

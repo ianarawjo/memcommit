@@ -22,8 +22,8 @@ from memcommit.adapters.console.coordination.batch_input_source import read_batc
 from memcommit.adapters.console.terminal.core.capabilities import is_interactive_terminal
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.commands.direct_changes.edit.workbench import choose_edit_setup
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 

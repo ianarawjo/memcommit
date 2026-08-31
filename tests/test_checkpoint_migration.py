@@ -7,7 +7,7 @@ import json
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.operations.rename.history_repair import (
+from memcommit.application.operations.browse_navigate.rename.history_repair import (
     apply_rename_history_repair,
     plan_rename_history_repair,
 )

@@ -28,7 +28,7 @@ from memcommit.application.capabilities.semantic.generative_reduction_reference 
 from memcommit.application.operations.search_explain.retrieve_answer.search.answer_references import (
     SearchAnswerEvidence,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     STUDY_RUN_AUTHORITY_SOURCE_KIND,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
     ProfileEntry,

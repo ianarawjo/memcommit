@@ -40,8 +40,8 @@ from memcommit.adapters.console.commands.direct_changes.delete.receipt import (
 from memcommit.adapters.console.commands.direct_changes.delete.review import context_delete_warning
 from memcommit.adapters.console.terminal.components.errors import render_cli_error
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 

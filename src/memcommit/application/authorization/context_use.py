@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 from memcommit.application.capabilities.authority.context_access import ContextAccess
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 
 
 class ContextUse(str, Enum):

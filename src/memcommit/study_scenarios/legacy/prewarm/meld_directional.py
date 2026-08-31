@@ -42,7 +42,7 @@ from memcommit.application.operations.semantic_updates.curate_integrate.meld.pro
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     recursive_comparison_projection,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,

@@ -10,20 +10,20 @@ from prompt_toolkit.output import DummyOutput
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import MemoryRef
-from memcommit.application.operations.embed.application import (
+from memcommit.application.operations.create_copy_connect.embed.application import (
     FrozenMemoryEmbedPlan,
     MemoryEmbedRequest,
     run_memory_embed,
 )
-from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
+from memcommit.application.operations.create_copy_connect.embed.runtime import MemoryStoreEmbedPort
 from memcommit.adapters.console.terminal.components.direct_item_placement import DirectItemGap
-from memcommit.adapters.console.commands.embed.workbench import (
+from memcommit.adapters.console.commands.create_copy_connect.embed.workbench import (
     build_embed_tui_setup,
     choose_embed_setup,
     memory_embed_exact_command_review,
     parse_embed_command_argv,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -31,7 +31,7 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
+from memcommit.application.operations.profiles.profile.model import create_authority_grant, update_authority_grant
 from memcommit.source_projection.presentation import source_display_text
 from memcommit.persistence.store import MemoryStore
 

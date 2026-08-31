@@ -25,8 +25,8 @@ from memcommit.application.capabilities.authority.context_access import (
     freeze_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
 )

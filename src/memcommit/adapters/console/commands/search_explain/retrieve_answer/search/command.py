@@ -65,8 +65,8 @@ from memcommit.source_projection.presentation import (
     source_object_label,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 
 
 def _interactive_terminal() -> bool:

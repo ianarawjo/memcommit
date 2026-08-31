@@ -1,6 +1,6 @@
 """Product-level operation-family catalog contracts."""
 
-from memcommit.adapters.console.commands.help.inventory import (
+from memcommit.adapters.console.commands.system_study_tools.help.inventory import (
     HELP_CATEGORY_GROUPS,
     HELP_CATEGORY_SECTIONS,
     HELP_SECTION_BY_COMMAND,

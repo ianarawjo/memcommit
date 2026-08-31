@@ -35,8 +35,8 @@ from memcommit.application.capabilities.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.config import ProfileRegistry
+from memcommit.application.operations.profiles.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
 )

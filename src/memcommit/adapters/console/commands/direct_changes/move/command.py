@@ -17,14 +17,14 @@ from memcommit.adapters.console.terminal.core.capabilities import is_interactive
 from memcommit.application.capabilities.authority.write_protection import (
     WriteProtectionError,
 )
-from memcommit.application.operations.copy_and_move.application import (
+from memcommit.application.capabilities.memory_transfer.application import (
     MemoryTransferError,
     MoveMemoriesRequest,
 )
 from memcommit.application.operations.direct_changes.move.application import run_move
 from memcommit.application.operations.direct_changes.move.runtime import MemoryStoreMovePort
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 

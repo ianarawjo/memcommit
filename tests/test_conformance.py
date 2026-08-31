@@ -23,11 +23,11 @@ from memcommit.application.operations.quality_resolution.validate.check_conforma
 from memcommit.adapters.console.entrypoint import app
 import memcommit.adapters.console.commands.quality_resolution.validate.check_conformance.command as check_conformance_command
 import memcommit.adapters.console.commands.quality_resolution.diagnose.audit.command as audit_command
-from memcommit.application.operations.ground.workspace_application import (
+from memcommit.application.operations.ground_workbench.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
 )
-from memcommit.application.operations.ground.workspace_runtime import (
+from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
     load_ground_workspace,

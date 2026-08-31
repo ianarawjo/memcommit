@@ -85,6 +85,7 @@ def test_add_command_imports_the_interface_owner() -> None:
         / "adapters"
         / "console"
         / "commands"
+        / "create_copy_connect"
         / "add"
         / "command.py"
     ).read_text(encoding="utf-8")

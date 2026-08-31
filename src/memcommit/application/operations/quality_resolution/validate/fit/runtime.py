@@ -57,14 +57,14 @@ from memcommit.application.operations.quality_resolution.validate.fit.judgment i
     execute_fit_judgments,
     prepare_fit_judgments,
 )
-from memcommit.application.operations.ground.workspace_fit import (
+from memcommit.application.operations.ground_workbench.ground.workspace_fit import (
     execute_ground_workspace_fit,
 )
-from memcommit.application.operations.ground.workspace_runtime import (
+from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
     load_ground_workspace,
 )
 from memcommit.application.operations.quality_resolution.validate.fit.store import FitStore
-from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
+from memcommit.application.operations.profiles.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import (
     MemoryStore,
     context_record_digest,

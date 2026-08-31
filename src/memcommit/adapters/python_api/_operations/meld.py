@@ -60,7 +60,7 @@ from memcommit.application.operations.semantic_updates.curate_integrate.meld.pro
     require_meld_session_version,
 )
 from memcommit.application.operations.semantic_updates.curate_integrate.meld.preparation import MeldStartError, MeldStartRequest
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError
 
 

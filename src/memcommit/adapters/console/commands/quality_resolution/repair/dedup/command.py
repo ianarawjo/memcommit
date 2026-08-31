@@ -24,8 +24,8 @@ from memcommit.application.operations.quality_resolution.diagnose.find_duplicate
     analyze_exact_duplicate_scope,
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 

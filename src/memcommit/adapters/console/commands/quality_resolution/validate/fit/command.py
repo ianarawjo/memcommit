@@ -32,8 +32,8 @@ from memcommit.adapters.console.commands.quality_resolution.validate.fit.render 
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.quality_resolution.validate.fit.presentation import fit_result_text
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.providers.subscription import (
     QueryProviderError,
     connect_semantic_provider,

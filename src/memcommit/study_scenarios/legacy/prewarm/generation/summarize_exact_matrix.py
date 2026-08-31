@@ -27,7 +27,7 @@ from memcommit.configuration.config import Config
 from memcommit.providers.policy import (
     resolve_codex_evaluation_policy,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     load_profile_registry,
     profile_store_dir,
     study_run_identity,

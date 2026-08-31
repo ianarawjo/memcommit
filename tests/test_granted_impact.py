@@ -48,7 +48,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.gra
 from memcommit.application.operations.semantic_updates.curate_integrate.meld.provider.contract import (
     MELD_PAYLOAD_MARKER,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -57,7 +57,7 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     ProfileError,
     create_authority_grant,
     delete_authority_grant,

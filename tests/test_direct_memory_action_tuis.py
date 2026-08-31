@@ -20,11 +20,11 @@ from memcommit.adapters.console.commands.direct_changes.edit.workbench import (
 from memcommit.adapters.console.commands.direct_changes.edit.workbench.screen import (
     edit_exact_command_review,
 )
-from memcommit.adapters.console.commands.reference.workbench import (
+from memcommit.adapters.console.commands.create_copy_connect.reference.workbench import (
     ReferenceTuiSetup,
     run_reference_tui,
 )
-from memcommit.application.operations.reference.application import (
+from memcommit.application.operations.create_copy_connect.reference.application import (
     ContextReferenceRequest,
     FrozenContextReferencePlan,
     FrozenReferencePlan,

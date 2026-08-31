@@ -14,7 +14,7 @@ import memcommit.adapters.console.commands.semantic_updates.foundation.update.co
 import memcommit.adapters.console.commands.semantic_updates.foundation.update.impact as update_impact
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.help.command import COMMAND_FORMS
+from memcommit.adapters.console.commands.system_study_tools.help.command import COMMAND_FORMS
 from memcommit.adapters.console.commands.operation_lifecycle.impact.registry import IMPACT_ROUTES, ImpactLifecycle
 from memcommit.adapters.console.commands.operation_lifecycle.impact.sessions import (
     render_impact_session_snapshot,

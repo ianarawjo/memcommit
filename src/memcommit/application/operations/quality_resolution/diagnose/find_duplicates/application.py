@@ -16,7 +16,7 @@ from memcommit.application.capabilities.reviewing.direct_item_duplicates import 
     ExactDuplicateGroup,
     find_exact_duplicate_groups,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
+from memcommit.application.operations.profiles.profile.config import ProfileRegistry
 from memcommit.core.context import Context, Memory
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names

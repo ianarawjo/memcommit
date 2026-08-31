@@ -25,12 +25,12 @@ from memcommit.adapters.python_api.resolve import (
 )
 from memcommit.application.operations.quality_resolution.validate.fit.judgment import FitJudgmentError
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError
 from memcommit.application.operations.quality_resolution.repair.resolve.application import (
     ResolveAnalysis,

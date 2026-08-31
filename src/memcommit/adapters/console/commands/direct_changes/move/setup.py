@@ -11,7 +11,7 @@ from memcommit.adapters.console.coordination.copy_and_move.model import (
 from memcommit.adapters.console.terminal.components.copy_and_move import (
     run_copy_and_move_workbench,
 )
-from memcommit.application.operations.copy_and_move.application import (
+from memcommit.application.capabilities.memory_transfer.application import (
     FrozenMoveMemoriesPlan,
 )
 from memcommit.application.operations.direct_changes.move.application import prepare_move

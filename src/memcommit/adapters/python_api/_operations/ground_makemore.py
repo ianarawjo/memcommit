@@ -17,7 +17,7 @@ from memcommit.adapters.python_api.errors import (
 )
 from memcommit.adapters.python_api.semantic import MakemoreProposal
 from memcommit.application.operations.semantic_updates.derive.makemore.model import MakemoreError
-from memcommit.application.operations.ground.makemore import (
+from memcommit.application.operations.ground_workbench.ground.makemore import (
     execute_ground_makemore,
     freeze_ground_makemore,
 )

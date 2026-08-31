@@ -11,7 +11,7 @@ from types import SimpleNamespace
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.profile.command as profile_command
+import memcommit.adapters.console.commands.profiles.profile.command as profile_command
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import AutoCheckpoint, Context
@@ -19,7 +19,7 @@ from memcommit.core.context_targeting.naming import (
     is_portable_context_name,
     validate_portable_context_name,
 )
-from memcommit.application.operations.profile.model import create_authority_grant
+from memcommit.application.operations.profiles.profile.model import create_authority_grant
 from memcommit.persistence.store import MemoryStore, validate_context_name
 
 

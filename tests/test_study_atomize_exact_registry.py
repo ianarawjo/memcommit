@@ -21,7 +21,7 @@ from tests.atomize_analysis_support import open_or_create_atomize_review_record
 from memcommit.adapters.console.entrypoint import app
 from memcommit.configuration.config import Config
 from memcommit.core.context import Memory
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,

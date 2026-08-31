@@ -30,8 +30,8 @@ from memcommit.application.operations.quality_resolution.repair.dedup.applicatio
 from memcommit.application.operations.quality_resolution.diagnose.find_duplicates.application import (
     analyze_exact_duplicate_scope,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError
 
 def dedup(

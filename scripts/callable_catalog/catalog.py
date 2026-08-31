@@ -621,7 +621,7 @@ _OPERATION_DISCOVERY_TOKENS = {
     # paired data/Store kernel and machine adapter. Their public client entry
     # modules remain operation-specific so discovery does not attribute both
     # methods to each Help operation.
-    "copy": ("copy", "copy_and_move"),
+    "copy": ("copy", "copy_and_move", "memory_transfer"),
     # Complete Dedun composes the exact Dedup layer in addition to its own
     # semantic packages. Keeping the mapping authored makes that dependency
     # visible without conflating the two public operation identities.
@@ -637,11 +637,11 @@ _OPERATION_DISCOVERY_TOKENS = {
         "quality_find",
     ),
     "help": ("help", "help_inventory"),
-    "import": ("import", "import_profile"),
+    "import": ("import", "import_profile", "resource_import"),
     "init": ("init", "context_init"),
     "list": ("list", "list_memories"),
     "lock": ("lock", "write_protection"),
-    "move": ("move", "copy_and_move"),
+    "move": ("move", "copy_and_move", "memory_transfer"),
     "pwd": ("pwd", "current_context"),
     "unlock": ("unlock", "write_protection"),
 }
@@ -661,6 +661,14 @@ _APPLICATION_DISCOVERY_TOKENS = {
 # boundary. This makes History visible as Trace's source without attributing
 # every transitively imported capability to the operation.
 _APPLICATION_CAPABILITY_MODULES = {
+    "copy": (
+        "memcommit.application.capabilities.memory_transfer.application",
+        "memcommit.application.capabilities.memory_transfer.runtime",
+    ),
+    "move": (
+        "memcommit.application.capabilities.memory_transfer.application",
+        "memcommit.application.capabilities.memory_transfer.runtime",
+    ),
     "trace": (
         "memcommit.application.capabilities.history.model.topology",
         "memcommit.application.capabilities.history.query.context_history_slicing",

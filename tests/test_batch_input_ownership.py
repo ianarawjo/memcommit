@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 import memcommit.adapters.console.coordination.batch_input_source as batch_input_source
-from memcommit.adapters.console.commands.add.input_records import (
+from memcommit.adapters.console.commands.create_copy_connect.add.input_records import (
     parse_input_records as parse_add_input_records,
 )
 from memcommit.adapters.console.commands.direct_changes.edit.input_records import (
@@ -35,6 +35,7 @@ def test_batch_input_has_one_source_owner_and_command_local_grammars() -> None:
         / "adapters"
         / "console"
         / "commands"
+        / "create_copy_connect"
         / "add"
         / "input_records.py"
     ).is_file()
@@ -105,13 +106,15 @@ def test_add_and_edit_commands_import_their_exact_owners() -> None:
         / "console"
         / "commands"
     )
-    add_source = (command_root / "add" / "command.py").read_text(encoding="utf-8")
+    add_source = (
+        command_root / "create_copy_connect" / "add" / "command.py"
+    ).read_text(encoding="utf-8")
     edit_source = (
         command_root / "direct_changes" / "edit" / "command.py"
     ).read_text(encoding="utf-8")
 
     assert (
-        "from memcommit.adapters.console.commands.add.input_records import "
+        "from memcommit.adapters.console.commands.create_copy_connect.add.input_records import "
         "parse_input_records" in add_source
     )
     assert (

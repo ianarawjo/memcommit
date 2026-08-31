@@ -26,7 +26,7 @@ from memcommit.adapters.agent.resolve import (
     RESOLVE_AGENT_TOOL_NAME,
 )
 from memcommit.adapters.agent.registry import build_default_agent_tool_registry
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -34,7 +34,7 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     create_authority_grant,
     update_authority_grant,
 )

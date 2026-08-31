@@ -62,10 +62,10 @@ def test_operation_routes_cover_every_help_operation_and_cli_entry() -> None:
     assert set(by_operation) == set(OPERATION_BY_NAME)
     assert all(record.cli_entry != "MISSING" for record in snapshot.operations)
     assert by_operation["checkout"].cli_entry == (
-        "memcommit.adapters.console.commands.checkout:cmd"
+        "memcommit.adapters.console.commands.browse_navigate.checkout:cmd"
     )
     assert by_operation["embed"].cli_entry == (
-        "memcommit.adapters.console.commands.embed:cmd"
+        "memcommit.adapters.console.commands.create_copy_connect.embed:cmd"
     )
 
 
@@ -74,7 +74,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     by_operation = {record.operation: record for record in snapshot.operations}
 
     assert (
-        "memcommit.application.operations.pwd.application"
+        "memcommit.application.operations.browse_navigate.pwd.application"
         in by_operation["pwd"].application_modules
     )
     assert (
@@ -85,7 +85,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert "query_ordinary" in by_operation["query"].public_methods
     assert "memcommit.adapters.agent.query" in by_operation["query"].agent_modules
     for operation, public_method, package in (
-        ("copy", "copy_memories", "copy"),
+        ("copy", "copy_memories", "create_copy_connect.copy"),
         ("move", "move_memories", "direct_changes.move"),
     ):
         route = by_operation[operation]
@@ -98,11 +98,11 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
             in route.application_modules
         )
         assert (
-            "memcommit.application.operations.copy_and_move.application"
+            "memcommit.application.capabilities.memory_transfer.application"
             in route.application_modules
         )
         assert (
-            "memcommit.application.operations.copy_and_move.runtime"
+            "memcommit.application.capabilities.memory_transfer.runtime"
             in route.application_modules
         )
         assert not route.tui_modules
@@ -150,7 +150,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["fit"].application_modules
     )
     assert (
-        "memcommit.application.operations.help.lookup_application"
+        "memcommit.application.operations.system_study_tools.help.lookup_application"
         in by_operation["help"].application_modules
     )
     assert (
@@ -214,7 +214,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["clear"].application_modules
     )
     assert (
-        "memcommit.application.operations.contexts.runtime"
+        "memcommit.application.operations.browse_navigate.contexts.runtime"
         in by_operation["contexts"].application_modules
     )
     assert (
@@ -242,7 +242,7 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["makemore"].application_modules
     )
     assert (
-        "memcommit.application.operations.show.application"
+        "memcommit.application.operations.browse_navigate.show.application"
         in by_operation["show"].application_modules
     )
     assert "show" in by_operation["show"].public_methods

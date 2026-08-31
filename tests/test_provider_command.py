@@ -15,7 +15,7 @@ from memcommit.providers.policy import (
     STUDY_PROVIDER_POLICY_VERSION,
     ResolvedProviderPolicy,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -311,7 +311,7 @@ def test_probe_requires_exact_synthetic_contract(monkeypatch):
         source="PROFILE_DEFAULT",
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.provider.command.connect_operation_provider",
+        "memcommit.adapters.console.commands.system_study_tools.provider.command.connect_operation_provider",
         lambda operation, **_kwargs: (FakeProvider(), policy),
     )
 
@@ -351,7 +351,7 @@ def test_probe_can_follow_one_effective_operation_route(monkeypatch):
         return FakeProvider(), policy
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.provider.command.connect_operation_provider",
+        "memcommit.adapters.console.commands.system_study_tools.provider.command.connect_operation_provider",
         connect,
     )
 

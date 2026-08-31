@@ -42,7 +42,7 @@ _BASE.ROWS = ROWS
 def _configure_isolated_profile_root(root: Path) -> None:
     """Redirect Profile and Store access without changing the process HOME."""
 
-    import memcommit.application.operations.profile.config as profile_config
+    import memcommit.application.operations.profiles.profile.config as profile_config
     import memcommit.configuration.config as config_module
 
     authoring = root / "authoring"

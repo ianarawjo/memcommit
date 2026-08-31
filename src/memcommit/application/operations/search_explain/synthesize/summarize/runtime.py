@@ -19,7 +19,7 @@ from memcommit.application.capabilities.authority.readable_contexts import Reada
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
+from memcommit.application.operations.profiles.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.search_explain.synthesize.summarize.model import (
     SummarizeError,

@@ -11,12 +11,12 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.application.operations.ground.workspace_application as ground_workspace_application
+import memcommit.application.operations.ground_workbench.ground.workspace_application as ground_workspace_application
 from memcommit.core.context import Memory
 from memcommit.application.capabilities.command_recovery import (
     build_command_stacks,
 )
-from memcommit.application.operations.ground.workspace_model import (
+from memcommit.application.operations.ground_workbench.ground.workspace_model import (
     GROUND_WORKSPACE_LANES,
     GroundWorkspaceError,
     GroundWorkspaceManifest,
@@ -24,32 +24,32 @@ from memcommit.application.operations.ground.workspace_model import (
     ground_workspace_context_names,
     load_ground_workspace_records,
 )
-from memcommit.application.operations.ground.workspace_application import (
+from memcommit.application.operations.ground_workbench.ground.workspace_application import (
     CreateGroundWorkspaceRequest,
 )
-from memcommit.application.operations.ground.workspace_runtime import (
+from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
     execute_ground_workspace_memory_add,
     execute_ground_workspace_creation,
     ground_workspace_exists,
     list_ground_workspace_names,
     load_ground_workspace,
 )
-from memcommit.application.operations.ground.workspace_history import (
+from memcommit.application.operations.ground_workbench.ground.workspace_history import (
     GroundWorkspaceHistoryError,
     build_ground_workspace_command_stack,
     undo_ground_workspace_command,
 )
-from memcommit.application.operations.ground.workspace_application import (
+from memcommit.application.operations.ground_workbench.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
 )
-from memcommit.adapters.console.commands.ground.workspace.location import (
+from memcommit.adapters.console.commands.ground_workbench.ground.workspace.location import (
     GroundWorkspaceLocationSetup,
     choose_ground_workspace_location,
 )
-from memcommit.adapters.console.commands.ground.workspace.viewer.model import (
+from memcommit.adapters.console.commands.ground_workbench.ground.workspace.viewer.model import (
     GroundWorkspaceViewerResult,
 )
-from memcommit.adapters.console.commands.ground.workspace.viewer.screen import (
+from memcommit.adapters.console.commands.ground_workbench.ground.workspace.viewer.screen import (
     run_ground_workspace_viewer,
 )
 import memcommit.application.capabilities.ops as ops

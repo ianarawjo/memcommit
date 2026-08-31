@@ -56,7 +56,7 @@ execution, not two separate operation kinds.
 Section membership must flatten to the family's exact operation order, and
 each affected descriptor carries the stable section identity.
 
-The Help operation remains under `memcommit.application.operations.help` and
+The Help operation remains under `memcommit.application.operations.system_study_tools.help` and
 depends on the catalog in one direction. Its composer still combines stable
 operation meaning with interface-supplied command forms; the catalog imports
 neither Help nor an adapter.

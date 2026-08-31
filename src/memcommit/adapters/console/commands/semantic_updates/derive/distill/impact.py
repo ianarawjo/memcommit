@@ -40,8 +40,8 @@ from memcommit.application.operations.semantic_updates.derive.distill.runtime im
     execute_distill,
     prepare_distill_add,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_context_traversal,

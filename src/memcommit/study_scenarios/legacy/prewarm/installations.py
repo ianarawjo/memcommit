@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 from typing import Mapping
 
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     load_profile_registry,
     profile_store_dir,
     study_run_identity,

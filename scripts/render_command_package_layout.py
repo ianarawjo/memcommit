@@ -102,6 +102,7 @@ ENTRY_TARGETS = {
     "find_duplicates": "find_redundancies",
     "find_exact_duplicates": "find_duplicates",
     "help_inventory": "help",
+    "import_profile": "resource_import",
     "list_memories": "list",
     "literal_find": "find",
     "semantic_eval": "eval",
@@ -112,6 +113,21 @@ ENTRY_TARGETS = {
 # separate from physical package ownership. The catalog family is the stable
 # first path component for classified operations on the console side.
 COMMAND_PACKAGE_TARGETS = {
+    "status": "browse_navigate.status",
+    "pwd": "browse_navigate.pwd",
+    "contexts": "browse_navigate.contexts",
+    "list": "browse_navigate.list",
+    "show": "browse_navigate.show",
+    "switch": "browse_navigate.switch",
+    "checkout": "browse_navigate.checkout",
+    "rename": "browse_navigate.rename",
+    "init": "create_copy_connect.init",
+    "add": "create_copy_connect.add",
+    "copy": "create_copy_connect.copy",
+    "branch": "create_copy_connect.branch",
+    "resource_import": "create_copy_connect.resource_import",
+    "reference": "create_copy_connect.reference",
+    "embed": "create_copy_connect.embed",
     "find": "search_explain.retrieve_answer.find",
     "search": "search_explain.retrieve_answer.search",
     "query": "search_explain.retrieve_answer.query",
@@ -145,6 +161,7 @@ COMMAND_PACKAGE_TARGETS = {
     "check_conformance": "quality_resolution.validate.check_conformance",
     "impact": "operation_lifecycle.impact",
     "review": "operation_lifecycle.review",
+    "ground": "ground_workbench.ground",
     "log": "history_recovery.inspection.log",
     "diff": "history_recovery.inspection.diff",
     "trace": "history_recovery.inspection.trace",
@@ -153,12 +170,34 @@ COMMAND_PACKAGE_TARGETS = {
     "undo": "history_recovery.recovery.undo",
     "redo": "history_recovery.recovery.redo",
     "revert": "history_recovery.recovery.revert",
+    "profile": "profiles.profile",
+    "share": "sharing_protection.share",
+    "lock": "sharing_protection.lock",
+    "unlock": "sharing_protection.unlock",
+    "help": "system_study_tools.help",
+    "provider": "system_study_tools.provider",
+    "config": "system_study_tools.config",
+    "init_study": "system_study_tools.init_study",
+    "eval": "system_study_tools.eval",
+}
+
+
+ENTRY_MODULE_OVERRIDES = {
+    # Dev is a hidden diagnostic surface, not a catalog-classified operation.
+    "dev": "memcommit.adapters.console.diagnostics.dev",
 }
 
 
 def _entry_package_target(stem: str) -> str:
     command = ENTRY_TARGETS.get(stem, stem)
     return COMMAND_PACKAGE_TARGETS.get(command, command)
+
+
+def _entry_package_module(stem: str) -> str:
+    override = ENTRY_MODULE_OVERRIDES.get(stem)
+    if override is not None:
+        return override
+    return f"{CANONICAL_NAMESPACE}.{_entry_package_target(stem)}"
 
 
 def _owned_support_target(target: str) -> str:
@@ -231,7 +270,7 @@ OWNED_SUPPORT_TARGETS = {
     "impact_process_local": "impact.process_local",
     "impact_registry": "impact.registry",
     "impact_sessions": "impact.sessions",
-    "import_workbench": "import_profile.workbench",
+    "import_workbench": "resource_import.workbench",
     "meld_sessions": "meld.sessions",
     "meld_setup": "meld.endpoint_setup",
     "meld_shell": "meld.command",
@@ -270,8 +309,8 @@ SPECIAL_SUPPORT_TARGETS = {
 
 
 MODULE_TARGET_PATH_OVERRIDES = {
-    "memcommit.adapters.console.commands.ground.shell": (
-        "src/memcommit/adapters/console/commands/ground/shell/__init__.py"
+    "memcommit.adapters.console.commands.ground_workbench.ground.shell": (
+        "src/memcommit/adapters/console/commands/ground_workbench/ground/shell/__init__.py"
     ),
     "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command": (
         "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/meld/command.py"
@@ -404,11 +443,12 @@ def build_plan() -> dict[str, object]:
     entries: list[dict[str, object]] = []
     for stem, exports in sorted(ENTRY_EXPORTS.items()):
         target = _entry_package_target(stem)
+        package_module = _entry_package_module(stem)
         entries.append(
             {
                 "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
-                "canonical_module": f"{CANONICAL_NAMESPACE}.{target}.command",
-                "owner": target,
+                "canonical_module": f"{package_module}.command",
+                "owner": package_module.removeprefix("memcommit.adapters.console."),
                 "role": "command-entry",
                 "public_exports": list(exports),
             }
@@ -667,7 +707,8 @@ def main() -> int:
                 raise SystemExit(f"stale command package layout artifact: {path}")
         for stem, exports in ENTRY_EXPORTS.items():
             target = _entry_package_target(stem)
-            package_init = COMMANDS.joinpath(*target.split(".")) / "__init__.py"
+            package_module = _entry_package_module(stem)
+            package_init = _target_path(package_module + ".__init__")
             if package_init.read_text(encoding="utf-8") != render_entry_init(
                 target, exports
             ):
@@ -680,7 +721,8 @@ def main() -> int:
     OUTPUT_MARKDOWN.write_text(rendered_markdown, encoding="utf-8")
     for stem, exports in ENTRY_EXPORTS.items():
         target = _entry_package_target(stem)
-        (COMMANDS.joinpath(*target.split(".")) / "__init__.py").write_text(
+        package_module = _entry_package_module(stem)
+        _target_path(package_module + ".__init__").write_text(
             render_entry_init(target, exports),
             encoding="utf-8",
         )

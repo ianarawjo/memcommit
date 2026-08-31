@@ -27,7 +27,7 @@ def _require_visible(recorder, *expected: str) -> None:
 
 
 def _provider_event_count() -> int:
-    from memcommit.application.operations.profile.config import load_profile_registry
+    from memcommit.application.operations.profiles.profile.config import load_profile_registry
     from memcommit.persistence.store import MemoryStore
     from memcommit.persistence.command_ledger.study_actions import StudyActionLedger
 
@@ -40,7 +40,7 @@ def _provider_event_count() -> int:
 
 
 def _verify_latest_atomize_attempt() -> None:
-    from memcommit.application.operations.profile.config import load_profile_registry
+    from memcommit.application.operations.profiles.profile.config import load_profile_registry
     from memcommit.persistence.store import MemoryStore
     from memcommit.persistence.command_ledger.study_actions import StudyActionLedger
 
@@ -63,7 +63,7 @@ def _verify_latest_atomize_attempt() -> None:
 
 def main() -> None:
     sys.path.insert(0, str(ROOT / "src"))
-    from memcommit.application.operations.profile.config import load_profile_registry
+    from memcommit.application.operations.profiles.profile.config import load_profile_registry
     from memcommit.persistence.store import MemoryStore
     from memcommit.study_scenarios.legacy.prewarm.atomize import is_installed_atomize_prewarm
 

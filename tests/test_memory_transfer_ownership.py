@@ -14,15 +14,15 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 def test_copy_and_move_own_separate_application_entrypoints() -> None:
     copy_application = importlib.import_module(
-        "memcommit.application.operations.copy.application"
+        "memcommit.application.operations.create_copy_connect.copy.application"
     )
     move_application = importlib.import_module(
         "memcommit.application.operations.direct_changes.move.application"
     )
     shared_contracts = importlib.import_module(
-        "memcommit.application.operations.copy_and_move.application"
+        "memcommit.application.capabilities.memory_transfer.application"
     )
-    copy_runtime = importlib.import_module("memcommit.application.operations.copy.runtime")
+    copy_runtime = importlib.import_module("memcommit.application.operations.create_copy_connect.copy.runtime")
     move_runtime = importlib.import_module("memcommit.application.operations.direct_changes.move.runtime")
 
     assert copy_application.run_copy.__module__ == copy_application.__name__
@@ -38,10 +38,10 @@ def test_copy_and_move_own_separate_application_entrypoints() -> None:
 def test_copy_and_move_shared_package_import_is_lazy() -> None:
     source = """
 import sys
-import memcommit.application.operations.copy_and_move
+import memcommit.application.capabilities.memory_transfer
 
-assert "memcommit.application.operations.copy_and_move.application" not in sys.modules
-assert "memcommit.application.operations.copy_and_move.runtime" not in sys.modules
+assert "memcommit.application.capabilities.memory_transfer.application" not in sys.modules
+assert "memcommit.application.capabilities.memory_transfer.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -57,7 +57,7 @@ def test_copy_and_move_own_commands_while_transfer_mechanics_stay_coordinated() 
 
     for command in ("copy", "move"):
         root = console / "commands" / (
-            Path(command)
+            Path("create_copy_connect") / command
             if command == "copy"
             else Path("direct_changes") / command
         )
@@ -81,7 +81,7 @@ def test_copy_and_move_own_commands_while_transfer_mechanics_stay_coordinated() 
 
 
 def test_branch_remains_a_separate_context_creation_operation() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/branch/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/create_copy_connect/branch/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module
@@ -96,7 +96,7 @@ def test_branch_remains_a_separate_context_creation_operation() -> None:
     )
 
     assert not any(
-        module == "memcommit.application.operations.copy_and_move"
-        or module.startswith("memcommit.application.operations.copy_and_move.")
+        module == "memcommit.application.capabilities.memory_transfer"
+        or module.startswith("memcommit.application.capabilities.memory_transfer.")
         for module in imports
     )

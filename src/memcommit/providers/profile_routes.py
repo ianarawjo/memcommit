@@ -23,7 +23,7 @@ from memcommit.providers.policy import (
     study_provider_config,
     validate_provider_route,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,

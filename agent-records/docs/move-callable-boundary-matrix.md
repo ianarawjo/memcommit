@@ -15,7 +15,7 @@ and Store runtime.
 | Route or concern | Owner | Verified invariant |
 | --- | --- | --- |
 | Move application | `memcommit.application.operations.direct_changes.move.application` | Move alone owns preparation, application ordering, UID preservation, default RETARGET or explicit BREAK, compatible typed BLOCK input, and receipt validation |
-| Shared values and Store kernel | `memcommit.application.operations.copy_and_move` | Typed Source/Target/placement/link values plus strict direct graph freeze, inbound live-Embed classification, full-graph revalidation, Target gap, protection, and exception-atomic multi-Context publication |
+| Shared values and Store kernel | `memcommit.application.capabilities.memory_transfer` | Typed Source/Target/placement/link values plus strict direct graph freeze, inbound live-Embed classification, full-graph revalidation, Target gap, protection, and exception-atomic multi-Context publication |
 | Console command | `memcommit.adapters.console.commands.direct_changes.move` | Move alone owns its Typer grammar, local-owner setup, application handoff, cancellation, errors, default live-Embed retarget, compatibility `--retarget-links`, explicit `--break-links`, and mixed-effect receipt |
 | Shared console mechanics | `memcommit.adapters.console.coordination.copy_and_move` | Move supplies its local catalogs and freeze callback to the common MULTIPLE direct-Memory, `INTO + POSITION`, editable exact-command, and placement-receipt mechanics; the workbench performs no direct publication |
 | Public Python | `MemCommitClient.move_memories` | Sequence and mutually exclusive policy validation with operation-specific public errors |

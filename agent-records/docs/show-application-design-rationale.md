@@ -71,7 +71,7 @@ content.
 ## Interface projections
 
 The plain CLI presenter under
-`memcommit.adapters.console.commands.show.presentation` is co-located with the
+`memcommit.adapters.console.commands.browse_navigate.show.presentation` is co-located with the
 Show command and keeps a direct ordinary-Memory lookup compact as
 `[Memory CONTEXT:UID] CONTENT`. The owner and full durable identity remain
 visible, but the single selected object's metadata does not consume a separate

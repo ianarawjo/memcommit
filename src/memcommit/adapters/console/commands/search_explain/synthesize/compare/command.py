@@ -80,11 +80,11 @@ from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
 from memcommit.application.capabilities.history.verification import (
     MemoryHistoryReconstructionError,
 )
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
 )

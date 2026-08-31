@@ -23,12 +23,14 @@ PLAN = json.loads(
 def test_commands_root_contains_only_packages() -> None:
     assert {path.name for path in COMMANDS.glob("*.py")} == {"__init__.py"}
     entry_packages = {
-        entry["owner"] for entry in PLAN["modules"] if entry["role"] == "command-entry"
+        entry["canonical_module"].removesuffix(".command")
+        for entry in PLAN["modules"]
+        if entry["role"] == "command-entry"
     }
     assert len(entry_packages) == PLAN["entry_package_count"]
     assert not (COMMANDS / "shared").exists()
     for package in entry_packages:
-        package_path = COMMANDS.joinpath(*package.split("."))
+        package_path = REPOSITORY / "src" / package.replace(".", "/")
         assert (package_path / "__init__.py").is_file()
         command_module = package_path / "command.py"
         command_package = package_path / "command" / "__init__.py"

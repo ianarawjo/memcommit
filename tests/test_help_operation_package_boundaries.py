@@ -17,11 +17,11 @@ APPLICATION_OPERATIONS = (
 
 def test_changed_help_operations_have_independent_console_packages() -> None:
     operation_paths = {
-        "checkout": "checkout",
-        "list": "list",
-        "lock": "lock",
-        "unlock": "unlock",
-        "rename": "rename",
+        "checkout": "browse_navigate/checkout",
+        "list": "browse_navigate/list",
+        "lock": "sharing_protection/lock",
+        "unlock": "sharing_protection/unlock",
+        "rename": "browse_navigate/rename",
         "revert": "history_recovery/recovery/revert",
     }
     for operation_path in operation_paths.values():
@@ -36,10 +36,10 @@ def test_changed_help_operations_have_independent_console_packages() -> None:
 def test_changed_application_effects_have_operation_packages() -> None:
     operation_paths = (
         "history_recovery/recovery/checkpoint",
-        "list",
-        "lock",
-        "unlock",
-        "rename",
+        "browse_navigate/list",
+        "sharing_protection/lock",
+        "sharing_protection/unlock",
+        "browse_navigate/rename",
         "history_recovery/recovery/revert",
     )
     for operation_path in operation_paths:
@@ -48,24 +48,27 @@ def test_changed_application_effects_have_operation_packages() -> None:
         assert (package / "application.py").is_file()
         assert (package / "runtime.py").is_file()
 
-    # Checkout is deliberately console composition of these two existing
-    # application operations, not a third effect model.
-    checkout_source = (CONSOLE_COMMANDS / "checkout" / "command.py").read_text(
-        encoding="utf-8"
-    )
+    # Checkout owns application routing while Branch and Switch retain the two
+    # concrete effect models selected by that plan.
+    checkout_package = APPLICATION_OPERATIONS / "browse_navigate/checkout"
+    assert (checkout_package / "application.py").is_file()
+    checkout_source = (
+        CONSOLE_COMMANDS / "browse_navigate/checkout/command.py"
+    ).read_text(encoding="utf-8")
+    assert "plan_checkout(" in checkout_source
     assert "branch.cmd(" in checkout_source
     assert "switch.cmd(" in checkout_source
 
 
 def test_copy_move_and_eval_have_public_operation_packages() -> None:
-    for operation_path in ("copy", "direct_changes/move"):
+    for operation_path in ("create_copy_connect/copy", "direct_changes/move"):
         package = APPLICATION_OPERATIONS / operation_path
         assert (package / "application.py").is_file()
         assert (package / "runtime.py").is_file()
-    eval_package = APPLICATION_OPERATIONS / "eval"
+    eval_package = APPLICATION_OPERATIONS / "system_study_tools/eval"
     assert (eval_package / "__init__.py").is_file()
     assert {path.name for path in eval_package.glob("*.py")} == {"__init__.py"}
-    eval_console = CONSOLE_COMMANDS / "eval"
+    eval_console = CONSOLE_COMMANDS / "system_study_tools/eval"
     assert (eval_console / "__init__.py").is_file()
     assert (eval_console / "command.py").is_file()
     evaluation_capability = (
@@ -77,8 +80,11 @@ def test_copy_move_and_eval_have_public_operation_packages() -> None:
 
 def test_console_adapters_do_not_reclaim_application_mutations() -> None:
     prohibited = {
-        "list": ("resolve_context_access", "freeze_readable_context_catalog"),
-        "rename": ("plan_context_rename", "rename_contexts("),
+        "browse_navigate/list": (
+            "resolve_context_access",
+            "freeze_readable_context_catalog",
+        ),
+        "browse_navigate/rename": ("plan_context_rename", "rename_contexts("),
         "history_recovery/recovery/revert": (
             "store.revert(",
             "store.revert_checkpoint_unit(",

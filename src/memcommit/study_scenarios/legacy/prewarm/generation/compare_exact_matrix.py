@@ -51,7 +51,7 @@ from memcommit.study_scenarios.legacy.prewarm.generation.compare_graph import (
 from memcommit.providers.policy import (
     resolve_codex_evaluation_policy,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,

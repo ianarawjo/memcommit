@@ -28,8 +28,8 @@ from memcommit.application.operations.search_explain.retrieve_answer.find.applic
     FindRequest,
 )
 from memcommit.application.operations.search_explain.retrieve_answer.find.runtime import execute_find
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 
 
 def _current_name(runtime: ClientRuntime) -> str | None:

@@ -26,13 +26,13 @@ packages. Their shared data vocabulary and Store transaction kernel use the
 conventional paired name `copy_and_move`:
 
 ```text
-memcommit/application/operations/copy/
+memcommit/application/operations/create_copy_connect/copy/
   application.py
   runtime.py
 memcommit/application/operations/direct_changes/move/
   application.py
   runtime.py
-memcommit/application/operations/copy_and_move/
+memcommit/application/capabilities/memory_transfer/
   application.py  # shared typed values and validation primitives
   runtime.py      # shared graph freeze and atomic Store mechanics
 ```
@@ -42,7 +42,8 @@ owns `prepare_move`/`run_move` and its Move-specific runtime port. The paired
 kernel composes Store, Grant, protection, link, checkpoint, and atomic
 multi-Context publication without presenting itself as a third operation.
 Console and machine adapters enter the operation-specific application
-functions. No physical `memory_transfer` package remains.
+functions. No third operation package named `memory_transfer` exists; that
+name now identifies only the cross-family application capability.
 
 The persisted checkpoint field `memory_transfer`, versioned agent fallback
 code `memory_transfer_failed`, and published `MemoryTransfer*` Python
@@ -225,16 +226,16 @@ Memory.
 ## Callable and presentation boundaries
 
 CLI, public Python, agent, and MCP routes enter Copy through
-`memcommit.application.operations.copy` and Move through
+`memcommit.application.operations.create_copy_connect.copy` and Move through
 `memcommit.application.operations.direct_changes.move`. Both ports subclass the shared
-`memcommit.application.operations.copy_and_move.runtime.MemoryStoreCopyAndMovePort`
+`memcommit.application.capabilities.memory_transfer.runtime.MemoryStoreCopyAndMovePort`
 kernel. Typed values remain shared, while operation ordering and receipt
 validation stay independently owned. Machine routes do not parse terminal
 output and report that no semantic provider was used.
 
 The console surface nevertheless has two command owners. Copy's grammar,
 Grant-aware setup, execution handoff, and fresh-UID receipt live under
-`adapters.console.commands.copy`; Move's grammar, local-owner setup, link
+`adapters.console.commands.create_copy_connect.copy`; Move's grammar, local-owner setup, link
 policy, execution handoff, and mixed-effect receipt live under
 `adapters.console.commands.direct_changes.move`. They share only the direct-Memory selection,
 Target-gap placement, editable exact-command, common operand, and placement

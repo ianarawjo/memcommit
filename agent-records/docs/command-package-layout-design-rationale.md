@@ -86,7 +86,7 @@ named after their public entries. The relocation changes no CLI spelling or
 analysis behavior and retains no alias package for the former internal names.
 
 Reference's interactive setup likewise lives under
-`adapters/console/commands/reference/workbench/`. It selects the Reference
+`adapters/console/commands/create_copy_connect/reference/workbench/`. It selects the Reference
 unit, Source, Context scope, and local Target and freezes the reviewed exact
 command, so it is command-owned console composition rather than a generic TUI
 operation. The move preserves its model, Store-port composition, screen, and
@@ -158,7 +158,7 @@ the application meaning of Impact from being defined by a console registry.
 ## Compatibility boundary
 
 Within the canonical console tree, every entry package continues to publish its
-intended CLI object. For example, `memcommit.adapters.console.commands.add.cmd` and
+intended CLI object. For example, `memcommit.adapters.console.commands.create_copy_connect.add.cmd` and
 `memcommit.adapters.console.commands.semantic_updates.derive.atomize.cmd` remain valid while internal code imports the
 implementation-owning `.command` module directly.
 

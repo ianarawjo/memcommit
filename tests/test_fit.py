@@ -26,11 +26,11 @@ from memcommit.application.operations.quality_resolution.validate.fit.runtime im
 from memcommit.application.operations.quality_resolution.validate.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.application.operations.quality_resolution.validate.fit.store import FitStore
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.ground.workspace_application import (
+from memcommit.application.operations.ground_workbench.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
 )
-from memcommit.application.operations.ground.workspace_runtime import (
+from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
     load_ground_workspace,

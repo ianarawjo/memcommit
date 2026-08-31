@@ -206,6 +206,7 @@ def test_add_tui_delegates_common_interaction_mechanics() -> None:
         / "adapters"
         / "console"
         / "commands"
+        / "create_copy_connect"
         / "add"
         / "workbench"
         / "screen.py"
@@ -250,6 +251,7 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
         / "adapters"
         / "console"
         / "commands"
+        / "create_copy_connect"
         / "reference"
         / "workbench"
         / "screen.py"
@@ -269,6 +271,7 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
         / "adapters"
         / "console"
         / "commands"
+        / "create_copy_connect"
         / "embed"
         / "workbench"
         / "screen.py",

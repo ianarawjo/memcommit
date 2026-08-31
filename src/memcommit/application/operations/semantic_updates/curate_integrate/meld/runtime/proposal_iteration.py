@@ -34,7 +34,7 @@ from memcommit.application.operations.semantic_updates.curate_integrate.meld.pro
     PendingMeldTurn,
     prepare_meld_turn,
 )
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
 )

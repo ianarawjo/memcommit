@@ -39,7 +39,7 @@ def test_production_fit_consumers_use_the_operation_owner() -> None:
         "src/memcommit/adapters/console/commands/quality_resolution/repair/resolve/impact.py",
         "src/memcommit/adapters/console/commands/quality_resolution/repair/resolve/command.py",
         "src/memcommit/application/operations/semantic_updates/derive/makemore/model.py",
-        "src/memcommit/application/operations/ground/workspace_fit.py",
+        "src/memcommit/application/operations/ground_workbench/ground/workspace_fit.py",
         "src/memcommit/application/operations/quality_resolution/validate/fit/application.py",
         "src/memcommit/application/operations/quality_resolution/validate/fit/runtime.py",
         "src/memcommit/application/operations/quality_resolution/repair/resolve/application.py",

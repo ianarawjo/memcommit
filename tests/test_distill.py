@@ -13,7 +13,7 @@ import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.semantic_updates.derive.distill.command as distill_command
 import memcommit.application.operations.semantic_updates.derive.distill.application as distill_application
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.help.command import COMMAND_FORMS
+from memcommit.adapters.console.commands.system_study_tools.help.command import COMMAND_FORMS
 from memcommit.core.context import Context, Memory
 from memcommit.application.operations.semantic_updates.derive.distill.model import (
     DISTILL_OPERATION,
@@ -35,21 +35,21 @@ from memcommit.application.operations.semantic_updates.derive.distill.runtime im
     execute_distill,
     execute_distill_apply,
 )
-from memcommit.application.operations.ground.distill import (
+from memcommit.application.operations.ground_workbench.ground.distill import (
     apply_ground_distill_result,
     execute_ground_distill,
     freeze_ground_distill,
 )
-from memcommit.application.operations.ground.workspace_application import (
+from memcommit.application.operations.ground_workbench.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
 )
-from memcommit.application.operations.ground.workspace_runtime import (
+from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
     load_ground_workspace,
 )
-from memcommit.application.operations.ground.workspace_history import (
+from memcommit.application.operations.ground_workbench.ground.workspace_history import (
     build_ground_workspace_command_stack,
     undo_ground_workspace_command,
 )

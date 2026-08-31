@@ -16,7 +16,7 @@ changing a measured Study operation.
 
 ## Typed operation contract
 
-The canonical implementation owner is `memcommit.application.operations.add`, split into
+The canonical implementation owner is `memcommit.application.operations.create_copy_connect.add`, split into
 terminal-independent `application` and Store/Grant-backed `runtime` modules.
 The former flat `memcommit.add_application` and `memcommit.add_runtime` paths
 remain module-identity aliases for import-order, monkeypatch, and serialized-
@@ -67,7 +67,7 @@ application. The success state displays every durable Memory UID and the one
 checkpoint; cancelling from the root performs no Store call.
 
 Add's completed-result presenter is colocated with the command at
-`memcommit.adapters.console.commands.add.receipt`. Naming it a receipt
+`memcommit.adapters.console.commands.create_copy_connect.add.receipt`. Naming it a receipt
 distinguishes one-way durable-result output from the interactive Add workbench,
 whose process-local model and prompt-toolkit screen live together under
 `commands.add.workbench`. These modules remain separate from `command.py` so

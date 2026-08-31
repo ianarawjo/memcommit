@@ -26,8 +26,8 @@ from memcommit.application.capabilities.write_protection.application import (
     WriteProtectionRequest,
     WriteProtectionResult,
 )
-from memcommit.application.operations.lock.runtime import execute_lock
-from memcommit.application.operations.unlock.runtime import execute_unlock
+from memcommit.application.operations.sharing_protection.lock.runtime import execute_lock
+from memcommit.application.operations.sharing_protection.unlock.runtime import execute_unlock
 from memcommit.core.context_targeting.model import DirectMemoryTarget
 from memcommit.persistence.store import MemoryStore
 

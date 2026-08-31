@@ -32,7 +32,7 @@ from memcommit.study_scenarios.legacy.prewarm.generation.compare_graph import (
 from memcommit.providers.policy import (
     resolve_operation_provider_policy,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     profile_control_dir,

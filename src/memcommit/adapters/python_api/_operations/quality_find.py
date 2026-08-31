@@ -35,8 +35,8 @@ from memcommit.application.capabilities.memory_issue_analysis.model import (
     ConflictReport,
     FindingsError,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindKind,
 )

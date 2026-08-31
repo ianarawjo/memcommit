@@ -35,8 +35,8 @@ from memcommit.application.operations.semantic_updates.curate_integrate.forget.r
     MemoryStoreForgetSourcePort,
     connect_forget_provider,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )

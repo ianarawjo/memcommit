@@ -25,7 +25,7 @@ rollout boundary are specified in
 [`context-name-portability-design-rationale.md`](context-name-portability-design-rationale.md).
 
 Top-level Rename enters a typed request/plan/result boundary at
-`memcommit.application.operations.rename`. The console adapter owns syntax,
+`memcommit.application.operations.browse_navigate.rename`. The console adapter owns syntax,
 confirmation, and receipt text; the application runtime resolves the existing
 source once, freezes the Store plan, and applies only that opaque reviewed
 plan. Persistence remains the owner of graph locks, CAS, rollback, and the

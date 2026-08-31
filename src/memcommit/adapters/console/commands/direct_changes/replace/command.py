@@ -24,8 +24,8 @@ from memcommit.adapters.console.commands.direct_changes.replace.workbench import
     ReplaceTuiSetup,
     run_replace_tui,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.application.operations.direct_changes.replace.application import (
     ReplaceError,
     ReplaceRequest,

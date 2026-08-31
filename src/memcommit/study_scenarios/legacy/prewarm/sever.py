@@ -15,7 +15,7 @@ from memcommit.providers.policy import (
 )
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     study_run_identity,

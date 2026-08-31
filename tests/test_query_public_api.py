@@ -23,7 +23,7 @@ from memcommit.adapters.python_api import (
     ReferenceQueryResult,
 )
 from memcommit.core.context import QueryContextRef
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -31,7 +31,7 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant
+from memcommit.application.operations.profiles.profile.model import create_authority_grant
 from memcommit.persistence.store import MemoryStore
 
 

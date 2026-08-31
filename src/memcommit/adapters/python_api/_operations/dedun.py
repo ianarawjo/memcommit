@@ -32,12 +32,12 @@ from memcommit.application.operations.quality_resolution.repair.dedun.applicatio
     prepare_dedun,
 )
 from memcommit.application.operations.quality_resolution.repair.dedun.runtime import MemoryStoreDedunPort
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,

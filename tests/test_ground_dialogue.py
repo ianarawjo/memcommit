@@ -6,8 +6,8 @@ import json
 
 import pytest
 
-from memcommit.application.operations.ground.contracts import GROUND_TEXT_LIMIT
-from memcommit.application.operations.ground.dialogue import (
+from memcommit.application.operations.ground_workbench.ground.contracts import GROUND_TEXT_LIMIT
+from memcommit.application.operations.ground_workbench.ground.dialogue import (
     GROUND_DIALOGUE_OPERATION,
     GROUND_DIALOGUE_QUESTION_LIMIT,
     GROUND_DIALOGUE_RESPONSE_CHAR_LIMIT,

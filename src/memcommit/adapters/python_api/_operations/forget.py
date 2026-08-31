@@ -33,8 +33,8 @@ from memcommit.application.operations.semantic_updates.curate_integrate.forget.a
 )
 from memcommit.application.operations.semantic_updates.curate_integrate.forget.review import ForgetReviewError
 from memcommit.application.operations.semantic_updates.curate_integrate.forget.runtime import MemoryStoreForgetSourcePort
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError
 from memcommit.persistence.store import ConcurrentContextUpdateError
 

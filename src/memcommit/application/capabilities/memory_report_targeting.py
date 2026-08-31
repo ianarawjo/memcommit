@@ -18,7 +18,7 @@ from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
-from memcommit.application.operations.profile.config import ProfileRegistry
+from memcommit.application.operations.profiles.profile.config import ProfileRegistry
 from memcommit.application.operations.history_recovery.inspection.trace.application import (
     collect_memory_history_candidates,
 )

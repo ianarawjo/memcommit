@@ -8,13 +8,13 @@ from memcommit.adapters.python_api.errors import (
     SemanticAuthorityError,
     SemanticStorageError,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileConfigError,
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 
 
 def active_profile_registry(runtime: ClientRuntime) -> ProfileRegistry | None:

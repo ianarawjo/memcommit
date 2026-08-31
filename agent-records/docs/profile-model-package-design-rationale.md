@@ -2,7 +2,7 @@
 
 ## Motivation
 
-`memcommit.application.operations.profile.model` combined ordinary Profile
+`memcommit.application.operations.profiles.profile.model` combined ordinary Profile
 lifecycle, Authority Grant resolution, Study import and publication, and the
 filesystem primitives shared by all three. The 4,143-line module had no single
 large execution function; it had grown because 132 top-level definitions with
@@ -11,7 +11,7 @@ identify the owner of a Profile behavior or review a focused change.
 
 ## Package contract
 
-The canonical import remains `memcommit.application.operations.profile.model`.
+The canonical import remains `memcommit.application.operations.profiles.profile.model`.
 The former module is now a package whose `__init__.py` re-exports the existing
 public and compatibility names. Existing CLI, Python API, application, and test
 callers therefore retain their import spelling and receive the same class and
@@ -28,7 +28,7 @@ The implementation is grouped as follows:
   rename, and removal.
 
 Current Study construction belongs to
-`memcommit.application.operations.init_study.profile`: its model, package,
+`memcommit.application.operations.system_study_tools.init_study.profile`: its model, package,
 composition, and publication modules own the initialization-only data flow.
 The former Profile-model names resolve lazily to those canonical objects for
 compatibility, but Profile lifecycle no longer contains their implementation.

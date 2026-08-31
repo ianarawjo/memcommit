@@ -12,20 +12,20 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import pytest
 
-import memcommit.application.operations.profile.model as profiles_module
-from memcommit.adapters.console.commands.profile.picker import (
+import memcommit.application.operations.profiles.profile.model as profiles_module
+from memcommit.adapters.console.commands.profiles.profile.picker import (
     ProfilePickerAction,
     ProfilePickerEntry,
     _creation_review,
     choose_profile,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     load_profile_registry,
     profile_registry_file,
     profile_store_dir,
     profile_stores_dir,
 )
-from memcommit.application.operations.profile.model import ProfileError, create_profile
+from memcommit.application.operations.profiles.profile.model import ProfileError, create_profile
 from memcommit.persistence.store import MemoryStore
 
 

@@ -37,7 +37,7 @@ from memcommit.application.capabilities.save_context_from_selection.runtime impo
     MemoryStoreSaveContextFromSelectionPort,
     execute_save_context_from_selection,
 )
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -45,7 +45,7 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant
+from memcommit.application.operations.profiles.profile.model import create_authority_grant
 from memcommit.application.operations.search_explain.retrieve_answer.search.application import (
     SearchRequest,
     SearchResponse,

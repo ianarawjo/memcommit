@@ -56,7 +56,7 @@ def _store_snapshot(root: Path) -> tuple[int, str]:
 
 def _child() -> None:
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.application.operations.profile.config import load_profile_registry
+    from memcommit.application.operations.profiles.profile.config import load_profile_registry
     from memcommit.persistence.store import MemoryStore, STORE_DIR
 
     registry = load_profile_registry()

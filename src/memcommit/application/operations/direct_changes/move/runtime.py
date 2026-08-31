@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from memcommit.application.operations.copy_and_move.application import (
+from memcommit.application.capabilities.memory_transfer.application import (
     MoveMemoriesRequest,
     MoveMemoriesResult,
 )
-from memcommit.application.operations.copy_and_move.runtime import (
+from memcommit.application.capabilities.memory_transfer.runtime import (
     MemoryStoreCopyAndMovePort,
 )
 from memcommit.application.operations.direct_changes.move.application import run_move

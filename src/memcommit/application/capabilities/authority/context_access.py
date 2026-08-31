@@ -16,8 +16,8 @@ from memcommit.core.context import (
     QueryContextRef,
 )
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.operations.profile.config import AuthorityGrant, ProfileRegistry, load_profile_registry
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.config import AuthorityGrant, ProfileRegistry, load_profile_registry
+from memcommit.application.operations.profiles.profile.model import (
     GrantedContextView,
     ProfileError,
     authority_grant_snapshot_lock,

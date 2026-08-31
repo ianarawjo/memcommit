@@ -37,8 +37,8 @@ from memcommit.adapters.console.commands.semantic_updates.curate_integrate.forge
 from memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget.workbench import (
     run_forget_review_workbench,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.providers.types import SemanticProvider
 from memcommit.providers.subscription import QueryProviderError
 from memcommit.application.capabilities.semantic.changes import ProposedChange

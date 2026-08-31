@@ -32,7 +32,7 @@ def test_production_summarize_consumers_use_the_operation_owner() -> None:
         "src/memcommit/application/operations/semantic_updates/derive/distill/application.py",
         "src/memcommit/application/operations/semantic_updates/derive/distill/runtime.py",
         "src/memcommit/study_scenarios/legacy/prewarm/generation/summarize_exact_matrix.py",
-        "src/memcommit/application/operations/ground/distill.py",
+        "src/memcommit/application/operations/ground_workbench/ground/distill.py",
         "src/memcommit/adapters/console/commands/search_explain/synthesize/summarize/scope_label.py",
         "src/memcommit/adapters/console/commands/search_explain/synthesize/summarize/presentation.py",
         "src/memcommit/adapters/console/commands/search_explain/synthesize/summarize/workbench/presentation.py",

@@ -29,8 +29,8 @@ from memcommit.application.operations.direct_changes.delete.application import (
     run_direct_item_delete,
 )
 from memcommit.application.operations.direct_changes.delete.runtime import MemoryStoreDeletePort
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError
 from memcommit.application.capabilities.authority.write_protection import WriteProtectionError
 

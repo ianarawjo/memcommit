@@ -13,7 +13,7 @@ from memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever
 from memcommit.adapters.console.commands.semantic_updates.foundation.update import (
     command_codec as update_command_review,
 )
-from memcommit.adapters.console.commands.branch import (
+from memcommit.adapters.console.commands.create_copy_connect.branch import (
     command_codec as branch_command_review,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup import (

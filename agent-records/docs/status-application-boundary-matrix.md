@@ -22,13 +22,13 @@ checkpoint facts, and performs no provider or mutation lifecycle.
 
 | Callable | Current owner | Intended layer | Inputs/result | Effects | Authority/cache boundary | Evidence |
 | --- | --- | --- | --- | --- | --- | --- |
-| `inspect_status` | `memcommit.application.operations.status.application` | Application | `StatusRequest` + `StatusSourcePort` → `StatusResult` | Through injected read port only | Owns bounded preview/history policy; no cache/session/receipt | direct application tests |
-| `MemoryStoreStatusSource.freeze` | `memcommit.application.operations.status.runtime` | Infrastructure adapter | typed reach → `FrozenStatusFrame` | Store/Profile/Grant/checkpoint reads | Resolves READ before content projection; one registry generation | runtime, recursive, Grant tests |
-| `execute_status` | `memcommit.application.operations.status.runtime` | Composition | request + explicit Store → typed result | Same read effects as source port | No terminal import or output | runtime no-output test |
-| `render_status` | `memcommit.adapters.console.commands.status.presentation` | CLI presenter | typed result + display flags → text | stdout only | Cannot load Store, resolve authority, or change scope | CLI output tests |
+| `inspect_status` | `memcommit.application.operations.browse_navigate.status.application` | Application | `StatusRequest` + `StatusSourcePort` → `StatusResult` | Through injected read port only | Owns bounded preview/history policy; no cache/session/receipt | direct application tests |
+| `MemoryStoreStatusSource.freeze` | `memcommit.application.operations.browse_navigate.status.runtime` | Infrastructure adapter | typed reach → `FrozenStatusFrame` | Store/Profile/Grant/checkpoint reads | Resolves READ before content projection; one registry generation | runtime, recursive, Grant tests |
+| `execute_status` | `memcommit.application.operations.browse_navigate.status.runtime` | Composition | request + explicit Store → typed result | Same read effects as source port | No terminal import or output | runtime no-output test |
+| `render_status` | `memcommit.adapters.console.commands.browse_navigate.status.presentation` | CLI presenter | typed result + display flags → text | stdout only | Cannot load Store, resolve authority, or change scope | CLI output tests |
 | `commands.status.cmd` | Typer adapter | CLI parsing/error boundary | flags → request and presenter | Store construction and terminal error reporting | Delegates all substantive read policy | command regressions |
 
-The read policy is owned by `memcommit.application.operations.status`, while the
+The read policy is owned by `memcommit.application.operations.browse_navigate.status`, while the
 plain terminal projection is command-owned beside the Status Typer adapter. No
 facade remains at the former internal `adapters.interfaces.cli.status` path.
 The former top-level application and runtime paths remain true module aliases so

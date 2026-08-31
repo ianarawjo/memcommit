@@ -24,7 +24,7 @@ from memcommit.application.operations.semantic_updates.curate_integrate.meld.mod
     MeldCheckpointReceipt,
     MeldSession,
 )
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
     resolve_granted_context_view,

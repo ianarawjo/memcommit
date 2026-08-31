@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.add import command as add_command
+from memcommit.adapters.console.commands.create_copy_connect.add import command as add_command
 from memcommit.core.context import AutoCheckpoint, Memory
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityFinding,

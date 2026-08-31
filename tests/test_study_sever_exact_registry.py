@@ -14,7 +14,7 @@ from memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever
 from memcommit.adapters.console.entrypoint import app
 from memcommit.configuration.config import Config
 from memcommit.core.context import Memory
-from memcommit.application.operations.profile.config import (
+from memcommit.application.operations.profiles.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,

@@ -8,20 +8,20 @@ import uuid
 
 import pytest
 
-import memcommit.application.operations.init.application as context_init_application
-from memcommit.application.operations.init.application import (
+import memcommit.application.operations.create_copy_connect.init.application as context_init_application
+from memcommit.application.operations.create_copy_connect.init.application import (
     ContextInitError,
     ContextInitRequest,
     CreatedContext,
     plan_context_init,
     run_context_init,
 )
-import memcommit.application.operations.init.runtime as context_init_runtime
-from memcommit.application.operations.init.runtime import (
+import memcommit.application.operations.create_copy_connect.init.runtime as context_init_runtime
+from memcommit.application.operations.create_copy_connect.init.runtime import (
     execute_context_init,
     prepare_context_init,
 )
-from memcommit.adapters.console.commands.init.choose_name import (
+from memcommit.adapters.console.commands.create_copy_connect.init.choose_name import (
     ContextInitTuiSetup,
     run_context_init_tui,
 )
@@ -323,7 +323,7 @@ def test_context_init_tui_cancel_returns_no_request():
 def test_context_init_console_owns_setup_and_receipt_without_facades():
     repository_root = Path(__file__).resolve().parents[1]
     command_root = (
-        repository_root / "src/memcommit/adapters/console/commands/init"
+        repository_root / "src/memcommit/adapters/console/commands/create_copy_connect/init"
     )
     retired_tui_root = (
         repository_root

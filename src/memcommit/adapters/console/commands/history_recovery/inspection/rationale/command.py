@@ -76,8 +76,8 @@ from memcommit.application.operations.history_recovery.inspection.rationale.scop
     rationale_memory_history,
     resolve_rationale_target,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
-from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.profiles.profile.config import ProfileConfigError
+from memcommit.application.operations.profiles.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError, connect_semantic_provider
 from memcommit.persistence.store import MemoryStore
 

@@ -27,7 +27,7 @@ from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindWorkbenchSession,
     create_quality_find_workbench,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
+from memcommit.application.operations.profiles.profile.config import ProfileRegistry
 from memcommit.persistence.store import MemoryStore
 
 

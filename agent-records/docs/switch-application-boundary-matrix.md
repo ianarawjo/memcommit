@@ -13,8 +13,8 @@ process-local `P` picker importing another command's implementation.
 
 This slice separates three contracts without changing their meaning:
 
-1. `operations/switch/application.py` owns one typed current-pointer transition;
-2. `operations/switch/runtime.py` supplies Store and Grant infrastructure; and
+1. `operations/browse_navigate/switch/application.py` owns one typed current-pointer transition;
+2. `operations/browse_navigate/switch/runtime.py` supplies Store and Grant infrastructure; and
 3. the command-owned setup and receipt adapters parse, select, and render
    without reconstructing locator, authority, or CAS policy.
 
@@ -51,7 +51,7 @@ mem switch --previous | --next
 
 mem switch
   -> frozen local/Grant navigation catalog
-  -> commands/switch/setup.py
+  -> commands/browse_navigate/switch/setup.py
   -> terminal.components.context_picker
   -> selected name only
   -> the same SwitchContextRequest and application/runtime path
@@ -67,7 +67,7 @@ therefore enters the same application path. `checkout -b` remains the separate
 Branch operation.
 
 The console-specific input and output adapters are co-located under
-`memcommit.adapters.console.commands.switch`: `command.py` owns orchestration,
+`memcommit.adapters.console.commands.browse_navigate.switch`: `command.py` owns orchestration,
 `setup.py` translates one shared-picker selection into a typed request, and
 `receipt.py` owns successful human-readable output. The former operation-specific
 TUI and CLI interface paths are removed without facades. The shared Context
@@ -80,17 +80,17 @@ change interaction, authority, or the current-pointer contract.
 
 | Concern | Owner after extraction | Contract |
 | --- | --- | --- |
-| Typer grammar, cancellation, and error presentation | `commands/switch/command.py` | Captures current once, routes an optional TUI selection, invokes the typed use case, and renders the result. |
-| Interactive Switch shape | `commands/switch/setup.py` | Converts one frozen picker result into `SwitchContextRequest`; it performs no load, authorization, or write. |
+| Typer grammar, cancellation, and error presentation | `commands/browse_navigate/switch/command.py` | Captures current once, routes an optional TUI selection, invokes the typed use case, and renders the result. |
+| Interactive Switch shape | `commands/browse_navigate/switch/setup.py` | Converts one frozen picker result into `SwitchContextRequest`; it performs no load, authorization, or write. |
 | Shared Context tree, direct-item preview, focus, and clipboard | Terminal `components/operation_context_scope_editor/state/tree.py` plus `components/context_picker` | The terminal state package owns frozen navigation while core retains typed targets; the picker projects and returns a Context name or read-only targeting value without owning an operational role or Store continuation. |
 | Legacy picker imports | `commands/shared/context_picker.py` | Behavior-free compatibility exports only; production callers use the neutral owner directly. |
-| Global versus explicit-relative name semantics | `operations/switch/application.py` | Bare names remain canonical global names. Only `.`, `..`, `./...`, and `../...` resolve against the command-start current snapshot. |
-| Previous/next navigation meaning | `current_context_navigation.py` + `operations/switch/application.py` | Uses bounded actual pointer-transition history, never lexical catalog adjacency; direct selection clears forward history. |
-| Exact lexical-parent requirement | `operations/switch/application.py` through `SwitchContextPort.local_context_exists` | A missing lexical parent is never inferred from an Embed edge. |
-| Local/Grant READ resolution and target loading | `operations/switch/runtime.py` | A visible public name is selectable only when its exact route authorizes ordinary READ. QUERY-only rows remain orientation-only. |
+| Global versus explicit-relative name semantics | `operations/browse_navigate/switch/application.py` | Bare names remain canonical global names. Only `.`, `..`, `./...`, and `../...` resolve against the command-start current snapshot. |
+| Previous/next navigation meaning | `current_context_navigation.py` + `operations/browse_navigate/switch/application.py` | Uses bounded actual pointer-transition history, never lexical catalog adjacency; direct selection clears forward history. |
+| Exact lexical-parent requirement | `operations/browse_navigate/switch/application.py` through `SwitchContextPort.local_context_exists` | A missing lexical parent is never inferred from an Embed edge. |
+| Local/Grant READ resolution and target loading | `operations/browse_navigate/switch/runtime.py` | A visible public name is selectable only when its exact route authorizes ordinary READ. QUERY-only rows remain orientation-only. |
 | Local target/current CAS | `MemoryStore.set_current_context_if` | Binds the target UID/digest and the command-start current pointer. |
 | Granted current publication | `authority_grant_snapshot_lock` plus `set_current_virtual_context_if` | Reauthorizes the exact public route under the registry lock before writing the virtual pointer. |
-| Success rendering | `commands/switch/receipt.py` | Preserves `Switched to context ...` and `Already on ...` output. |
+| Success rendering | `commands/browse_navigate/switch/receipt.py` | Preserves `Switched to context ...` and `Already on ...` output. |
 
 ## Operation contract matrix
 
@@ -107,7 +107,7 @@ change interaction, authority, or the current-pointer contract.
 | `EFFECT-01` checkpoint/Undo | intentional exclusion | Only the process-global current pointer changes. Contexts and checkpoints are unchanged, and navigation is not part of Context Undo/Redo. |
 | `TUI-02` interaction | `CHARACTERIZED` | Shared tree/focus/preview/clipboard behavior remains covered by the Switch picker suite. |
 | `TUI-C04` Context targeting | `CHARACTERIZED` | Core owns operation-neutral tree/reach/target values; the complete prompt-toolkit picker has the terminal component owner. |
-| `TUI-A01` operation adapter | `CHARACTERIZED` | `commands/switch/setup.py` owns the Switch label/default/result-to-request translation only. |
+| `TUI-A01` operation adapter | `CHARACTERIZED` | `commands/browse_navigate/switch/setup.py` owns the Switch label/default/result-to-request translation only. |
 | `HELP-01` discovery | unchanged | Existing command forms and help wording remain authoritative. |
 
 ## Ground boundary

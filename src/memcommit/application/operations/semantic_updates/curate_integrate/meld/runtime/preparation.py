@@ -47,8 +47,8 @@ from memcommit.application.operations.semantic_updates.curate_integrate.meld.pre
     MeldStartResult,
     run_meld_start,
 )
-from memcommit.application.operations.profile.config import load_profile_registry
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.config import load_profile_registry
+from memcommit.application.operations.profiles.profile.model import (
     authority_grant_snapshot_lock,
 )
 from memcommit.core.context import AutoCheckpoint, Context

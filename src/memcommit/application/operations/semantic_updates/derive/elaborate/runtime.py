@@ -13,7 +13,7 @@ from memcommit.application.capabilities.authority.context_access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.application.operations.profile.model import (
+from memcommit.application.operations.profiles.profile.model import (
     authority_grant_snapshot_lock,
 )
 from memcommit.application.operations.semantic_updates.foundation.update.model import GrantedUpdateTarget

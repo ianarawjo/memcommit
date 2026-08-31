@@ -25,6 +25,7 @@ CAPABILITY_ENTRIES = {
     "history",
     "memory_issue_analysis",
     "memory_report_targeting.py",
+    "memory_transfer",
     "name_suggestions.py",
     "local_target_lookup.py",
     "ops.py",

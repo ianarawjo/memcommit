@@ -21,7 +21,7 @@ from memcommit.providers.profile_routes import (
     resolve_active_provider_policy,
     set_active_profile_route,
 )
-from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry
+from memcommit.application.operations.profiles.profile.config import ProfileEntry, ProfileRegistry
 
 
 class MachineConfig:
