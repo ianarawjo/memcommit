@@ -9,9 +9,9 @@ from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.update.model import AddOperation, EditOperation, UpdateSession
 from memcommit.application.operations.update.application import apply_update
 from memcommit.application.operations.update.model import UpdatePlan
-from memcommit.application.operations.update.materialization import (
+from memcommit.application.operations.update.application import (
     UpdateApplicationError,
-    prepare_update_application,
+    apply_staged_update_plan,
 )
 
 
@@ -84,7 +84,7 @@ def test_applies_edits_and_additions_to_detached_owner_post_images():
     child._store_digest = "child-load-digest"
     addition = _add(target)
 
-    result = prepare_update_application(
+    result = apply_staged_update_plan(
         _session(
             target,
             _edit(child, child_memory, "new child"),
@@ -143,7 +143,7 @@ def test_additions_append_in_session_order_and_edits_preserve_item_order():
     addition_one = _add(target, memory_uid=str(uuid.uuid4()))
     addition_two = _add(target, memory_uid=str(uuid.uuid4()))
 
-    result = prepare_update_application(
+    result = apply_staged_update_plan(
         _session(
             target,
             addition_one,
@@ -167,7 +167,7 @@ def test_empty_staged_plan_returns_no_owners_without_mutating_target():
     target.add(memory)
     before = target.to_dict()
 
-    result = prepare_update_application(_session(target), target)
+    result = apply_staged_update_plan(_session(target), target)
 
     assert result.affected_owners == ()
     assert result.post_images == ()
@@ -182,7 +182,7 @@ def test_only_staged_sessions_can_be_applied(status):
         UpdateApplicationError,
         match="requires a staged update session",
     ):
-        prepare_update_application(_session(target, status=status), target)
+        apply_staged_update_plan(_session(target, status=status), target)
 
 
 def test_session_must_name_the_supplied_target_root():
@@ -190,7 +190,7 @@ def test_session_must_name_the_supplied_target_root():
     other = Context(uid="other", name="participant/other-fork")
 
     with pytest.raises(UpdateApplicationError, match="does not match"):
-        prepare_update_application(_session(target), other)
+        apply_staged_update_plan(_session(target), other)
 
 
 @pytest.mark.parametrize(
@@ -220,7 +220,7 @@ def test_every_operation_owner_uid_and_name_are_preflighted(
     )
 
     with pytest.raises(UpdateApplicationError):
-        prepare_update_application(_session(target, operation), target)
+        apply_staged_update_plan(_session(target, operation), target)
 
     assert memory.content == "old"
 
@@ -244,7 +244,7 @@ def test_a_late_invalid_operation_leaves_every_original_owner_unchanged():
     )
 
     with pytest.raises(UpdateApplicationError, match="staged old content"):
-        prepare_update_application(
+        apply_staged_update_plan(
             _session(
                 target,
                 _edit(target, root_memory, "new root"),
@@ -288,7 +288,7 @@ def test_edit_cannot_modify_memory_or_query_context_references(read_only_item):
     )
 
     with pytest.raises(UpdateApplicationError, match="cannot be modified"):
-        prepare_update_application(_session(target, operation), target)
+        apply_staged_update_plan(_session(target, operation), target)
 
     assert target.memories[read_only_item.uid] is read_only_item
 
@@ -317,9 +317,9 @@ def test_edit_requires_an_existing_direct_memory_with_matching_old_content():
     )
 
     with pytest.raises(UpdateApplicationError, match="does not exist"):
-        prepare_update_application(_session(target, missing), target)
+        apply_staged_update_plan(_session(target, missing), target)
     with pytest.raises(UpdateApplicationError, match="staged old content"):
-        prepare_update_application(_session(target, stale), target)
+        apply_staged_update_plan(_session(target, stale), target)
 
     assert memory.content == "current"
 
@@ -348,7 +348,7 @@ def test_addition_rejects_collision_with_any_direct_owner_item(existing_item):
     target.add(existing_item)
 
     with pytest.raises(UpdateApplicationError, match="already exists"):
-        prepare_update_application(
+        apply_staged_update_plan(
             _session(
                 target,
                 _add(target, memory_uid=existing_item.uid),
@@ -365,7 +365,7 @@ def test_duplicate_operation_target_is_rejected_before_application():
     target.add(memory)
 
     with pytest.raises(UpdateApplicationError, match="more than once"):
-        prepare_update_application(
+        apply_staged_update_plan(
             _session(
                 target,
                 _edit(target, memory, "new one"),

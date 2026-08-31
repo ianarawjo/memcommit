@@ -12,9 +12,9 @@ from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, MemoryRef, QueryContextRef
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.model import RemoveOperation, UpdateError, UpdateSession, plan_update
-from memcommit.application.operations.update.materialization import (
+from memcommit.application.operations.update.application import (
     UpdateApplicationError,
-    prepare_update_application,
+    apply_staged_update_plan,
 )
 
 
@@ -259,7 +259,7 @@ def test_remove_application_rejects_refs_and_stale_old_content() -> None:
         reason="invalid",
     )
     with pytest.raises(UpdateApplicationError, match="cannot be removed"):
-        prepare_update_application(session(read_only), target)
+        apply_staged_update_plan(session(read_only), target)
 
     memory = ops.add(target, "current")
     stale = RemoveOperation(
@@ -271,5 +271,5 @@ def test_remove_application_rejects_refs_and_stale_old_content() -> None:
         reason="invalid",
     )
     with pytest.raises(UpdateApplicationError, match="staged old content"):
-        prepare_update_application(session(stale), target)
+        apply_staged_update_plan(session(stale), target)
     assert target.ordered_uids() == [reference.uid, memory.uid]

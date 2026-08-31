@@ -15,7 +15,7 @@ from memcommit.application.operations.update.model import (
     count_operations,
     required_update_context_uses,
 )
-from memcommit.application.operations.update.resolution_adapter import (
+from memcommit.adapters.console.commands.update.workbench.presentation import (
     UpdateResolutionWorkbenchAdapter,
 )
 

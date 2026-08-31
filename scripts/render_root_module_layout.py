@@ -159,7 +159,7 @@ COMPATIBILITY_TARGET_OVERRIDES = {
     "dedup_runtime": "memcommit.application.operations.dedun.runtime",
     "exact_dedup": "memcommit.application.operations.dedup.application",
     "exact_dedup_application": "memcommit.application.operations.dedup.application",
-    "update_application": "memcommit.application.operations.update.materialization",
+    "update_application": "memcommit.application.operations.update.application",
 }
 
 
@@ -238,10 +238,12 @@ OPERATION_TARGETS = {
     "share": "memcommit.application.operations.share.model",
     "summarize": "memcommit.application.operations.summarize.model",
     "update": "memcommit.application.operations.update.model",
-    "update_application_flow": "memcommit.application.operations.update.execution",
-    "update_endpoints": "memcommit.application.operations.update.endpoints",
-    "update_receipt_store": "memcommit.application.operations.update.receipt_store",
-    "update_resolution_adapter": "memcommit.application.operations.update.resolution_adapter",
+    "update_application_flow": "memcommit.adapters.console.commands.update.workbench.application",
+    "update_endpoints": "memcommit.adapters.console.commands.update.endpoint_operands",
+    "update_receipt_store": (
+        "memcommit.persistence.operations.update.receipt_repository"
+    ),
+    "update_resolution_adapter": "memcommit.adapters.console.commands.update.workbench.presentation",
 }
 
 

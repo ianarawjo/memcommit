@@ -14,7 +14,9 @@ from memcommit.application.operations.update.model import (
     count_operations,
     plan_update,
 )
-from memcommit.application.operations.update.materialization import prepare_update_application
+from memcommit.application.operations.update.application import (
+    apply_staged_update_plan,
+)
 
 
 FIXTURE_PATH = (
@@ -306,7 +308,7 @@ def test_compact_task1_fixture_plans_and_applies_exactly_four_changes() -> None:
     ]
     assert provider.calls == 1
 
-    application = prepare_update_application(session, target)
+    application = apply_staged_update_plan(session, target)
 
     assert target.to_dict() == target_before
     post_images = {

@@ -19,21 +19,29 @@ owner post-images as an `UpdateResult`. A composing operation can therefore
 apply Update to its own working Target without constructing a terminal
 `UpdateSession`, opening an Update review, or publishing durable state.
 
-`materialization.py` retains the exact preflight and detached-copy mechanics.
-Its historical `prepare_update_application(UpdateSession, Context)` entry
-remains a compatibility adapter for direct `mem update`, while new operation
-composition enters through `application.apply_update`. `publication.py`
-retains freshness, authority, multi-owner transaction, checkpoint, and durable
-receipt responsibilities. The Store exposes only a thin compatibility facade
-to that application-owned boundary.
+`application.py` now owns both exact `UpdatePlan` application and the narrow
+`UpdateSession`-to-plan adapter; the duplicate `materialization.py` layer was
+removed. `apply_update` remains the session-independent composition entry,
+while `apply_staged_update_plan` validates and applies a direct command's
+staged plan to detached Target state. Publication, persistence, inspection,
+and recovery remain outside this pure boundary.
 
-The remaining terminal-independent modules are named by responsibility:
-`execution.py` sequences an exact decision to Apply, `publication.py` resolves
-endpoint stores and publishes the exact effects, and `history.py` inspects or
-restores retained publication evidence. There is no granted-Source or granted-
+The former `execution.py` wrapper was also removed. Direct Update has only one
+console-owned decision—Apply the displayed exact session or cancel—so the
+command passes the accepted session straight to the application publication
+coordinator. There is no granted-Source or granted-
 Target Update application. A Grant is endpoint access/provenance carried into
 the same Update; it changes physical Store routing, name projection, and lock
 topology, not the operation's semantic or lifecycle route.
+
+Console operand normalization and workbench projection are deliberately not
+part of that terminal-independent set. `endpoint_operands.py` under the Update
+console command owns positional/option/current-Context spelling and produces
+canonical Source and Target names. `workbench/presentation.py` projects an
+already typed `UpdateSession` into the common Resolution view. Neither module
+may plan, authorize, materialize, publish, or retain an Update, and the
+application package no longer contains the former `endpoints.py` or
+`resolution_adapter.py` presentation adapters.
 
 This first composition boundary changes no semantic plan, preflight, CAS,
 authority, checkpoint, review, or zero-operation behavior. It is intentionally
@@ -50,7 +58,7 @@ session contains exact changes, not a complete ambiguity/redundancy/conflict
 artifact, and the local decision-free route has no issue-resolution iteration.
 
 The correct integration point for richer operations is the detached Target
-post-image created by `materialization.prepare_update_application`. A composing
+post-image created by `application.apply_update`. A composing
 operation may analyze that complete post-image and iterate its own proposal,
 but direct Update remains a local patch primitive: one provider-built proposal,
 one report, and one Apply action. Escape cancels the interactive invocation; it
@@ -115,26 +123,38 @@ Target.
 ## Unified publication boundary
 
 Every staged session enters one `apply_staged_update(active_store, session)`
-boundary. It revalidates a granted Source for `READ`, revalidates a granted
-Target for the exact plan's `READ` plus mutation uses, freezes all participating
-records, performs one common materialization/preflight, and uses one common
-checkpoint, receipt, rollback, and post-application verification body. The
-console application-flow port therefore accepts one applier instead of routing
-among local, granted-Source, and granted-Target callbacks.
+application coordinator. It freezes and revalidates a granted Source for
+`READ`, revalidates a granted Target for the exact plan's `READ` plus mutation
+uses, and authorizes every public owner. Once those use-case decisions are
+fixed, it calls
+`persistence.operations.update.publication_repository.publish_update_transaction`.
+The persistence transaction owns Store selection, physical-name projection,
+locks, CAS, checkpoints, atomic writes, rollback, terminal receipt publication,
+and post-write verification. It accepts already authorized endpoint accesses
+and cannot independently broaden their permissions.
 
 Endpoint differences remain explicit but mechanical. A frozen
 `GrantedContextBinding` selects an authority Store and maps a public owner name
 to its physical authority name; local bindings select the active Store and the
-identity mapping. The publication boundary chooses a lock topology that spans
-the actual participant Stores, then calls the same locked application body.
+identity mapping. The persistence transaction chooses a lock topology that
+spans the actual participant Stores, then calls the same locked application body.
 Authority checkpoints contain physical names so authority history can restore
 them, while the participant Update receipt retains public names for inspection.
 
+Immutable terminal session receipts are stored by
+`persistence.operations.update.receipt_repository.UpdateReceiptRepository`.
+That repository validates UID-addressed paths, terminal lifecycle evidence,
+immutability, ordering, and the paired active-slot save rollback. Console
+Impact/Review readers consume the repository; the application operation no
+longer owns filesystem paths or serialized receipt retention.
+
 The former `granted_source.py` and `granted_target.py` modules were removed.
 Their read/write application algorithms were not retained as hidden branches.
-Authority-aware Undo/Redo and freshness inspection moved to `history.py`,
-because those are retained-evidence responsibilities rather than alternate
-Update applications. The serialized `source.access` and `target.access` fields,
+Retained-evidence responsibilities are split by effect. Read-only freshness
+classification lives in `update/inspection.py`; authority-aware Undo/Redo
+lives in `application.capabilities.command_recovery.update`, beside command
+stack route selection and restore result contracts. The serialized
+`source.access` and `target.access` fields,
 and the Python session attributes named `granted_source` and `granted_target`,
 remain compatible for existing receipts; their value type is now the operation-
 neutral `GrantedContextBinding` owned by `application.context_access`.

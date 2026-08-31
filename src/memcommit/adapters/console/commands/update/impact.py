@@ -30,7 +30,9 @@ from memcommit.application.operations.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
 )
-from memcommit.application.operations.update.endpoints import resolve_update_endpoints
+from memcommit.adapters.console.commands.update.endpoint_operands import (
+    resolve_update_endpoints,
+)
 from memcommit.application.operations.update.model import (
     UpdateError,
     plan_update,
@@ -72,10 +74,12 @@ def open_saved_update_impact(
     *,
     session_uid: str | None,
 ) -> None:
-    from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
+    from memcommit.persistence.operations.update.receipt_repository import (
+        UpdateReceiptRepository,
+    )
 
     current = store.load_staged_update() or store.load_impact_plan()
-    receipts = UpdateReceiptStore(store)
+    receipts = UpdateReceiptRepository(store)
     retained = receipts.list()
     if current is None and not retained:
         raise ValueError(

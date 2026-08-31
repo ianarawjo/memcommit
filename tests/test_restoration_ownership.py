@@ -49,6 +49,7 @@ def test_commands_do_not_own_restoration_route_selection() -> None:
 def test_restoration_modules_have_no_terminal_dependency() -> None:
     for relative_path in (
         "src/memcommit/application/capabilities/command_recovery/execution.py",
+        "src/memcommit/application/capabilities/command_recovery/update.py",
         "src/memcommit/application/operations/revert/application.py",
         "src/memcommit/application/operations/revert/restoration.py",
         "src/memcommit/application/operations/revert/runtime.py",

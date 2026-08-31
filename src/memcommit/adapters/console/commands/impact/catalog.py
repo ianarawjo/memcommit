@@ -32,7 +32,9 @@ from memcommit.core.context_targeting.uid_locator import (
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
+from memcommit.persistence.operations.update.receipt_repository import (
+    UpdateReceiptRepository,
+)
 
 
 IMPACT_SESSION_KINDS = ("atomize", "meld", "sever", "update")
@@ -177,7 +179,7 @@ def _update_entry(store: MemoryStore) -> SessionPickerEntry | None:
 
 
 def _retained_update_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]:
-    receipts = UpdateReceiptStore(store)
+    receipts = UpdateReceiptRepository(store)
     current = store.load_staged_update() or store.load_impact_plan()
     current_uid = current.uid if current is not None else None
     return tuple(

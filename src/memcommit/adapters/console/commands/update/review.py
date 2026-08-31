@@ -6,8 +6,10 @@ from memcommit.adapters.console.commands.review.report import show_operation_rev
 from memcommit.application.capabilities.reviewing.report import ReviewReportController
 from memcommit.application.operations.review.model import ReviewError
 from memcommit.application.operations.update.model import UpdateSession
-from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
-from memcommit.application.operations.update.resolution_adapter import (
+from memcommit.persistence.operations.update.receipt_repository import (
+    UpdateReceiptRepository,
+)
+from memcommit.adapters.console.commands.update.workbench.presentation import (
     UpdateResolutionWorkbenchAdapter,
 )
 from memcommit.core.context_targeting.uid_locator import (
@@ -38,7 +40,7 @@ def open_update_review(
     snapshot: bool,
 ) -> None:
     current = store.load_staged_update() or store.load_impact_plan()
-    retained = UpdateReceiptStore(store).list()
+    retained = UpdateReceiptRepository(store).list()
     if current is None and not retained:
         raise ReviewError(
             "No saved Update or Impact plan exists. Run 'mem impact' first."

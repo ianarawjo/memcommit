@@ -16,7 +16,7 @@ from memcommit.adapters.console.terminal.core.theme import (
     semantic_color_rgb,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.update.history import inspect_update
+from memcommit.application.operations.update.inspection import inspect_update
 from memcommit.application.capabilities.reviewing.memory_diff import (
     MemoryChange,
     memory_diff_lines,

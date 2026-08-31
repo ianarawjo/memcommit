@@ -37,7 +37,9 @@ from memcommit.adapters.console.commands.sever.sessions import (
 from memcommit.application.operations.sever.session_store import SeverSessionStore
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
+from memcommit.persistence.operations.update.receipt_repository import (
+    UpdateReceiptRepository,
+)
 from memcommit.application.operations.review.model import ReviewError
 from memcommit.core.context_targeting.uid_locator import (
     UidLocatorError,
@@ -174,7 +176,7 @@ def _retained_update_entries(
 ) -> tuple[SessionPickerEntry, ...]:
     """Project immutable completed receipts not already represented as active."""
 
-    receipts = UpdateReceiptStore(store)
+    receipts = UpdateReceiptRepository(store)
     current = store.load_staged_update() or store.load_impact_plan()
     current_uid = current.uid if current is not None else None
     entries: list[SessionPickerEntry] = []

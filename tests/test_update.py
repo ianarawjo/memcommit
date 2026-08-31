@@ -36,7 +36,9 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionWorkbenchAction,
 )
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
-from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
+from memcommit.persistence.operations.update.receipt_repository import (
+    UpdateReceiptRepository,
+)
 from memcommit.application.operations.update.model import (
     UPDATE_INLINE_MEMORY_SCHEMA_VERSION,
     UPDATE_GOAL_FOCUS_SCHEMA_VERSION,
@@ -1476,7 +1478,7 @@ def test_tty_update_escape_cancels_without_target_change_or_receipt(
     assert staged.status == "staged"
     assert staged.application is None
     with pytest.raises(FileNotFoundError):
-        UpdateReceiptStore(store).load(staged.uid)
+        UpdateReceiptRepository(store).load(staged.uid)
     target_after = store.load_direct(TASK1_TARGET_CHILD)
     assert target_after.memories[target_memory.uid].content == (
         target_before.memories[target_memory.uid].content
@@ -2573,7 +2575,7 @@ def test_applied_update_rotates_to_a_new_request_without_replace(
     assert "UPDATE APPLIED" in second.output
     assert store.load_staged_update().target_name == "other-target"
     assert len(provider.calls) == 2
-    retained = UpdateReceiptStore(store).load(first_session.uid)
+    retained = UpdateReceiptRepository(store).load(first_session.uid)
     assert retained == first_session
 
 
@@ -2633,7 +2635,7 @@ def test_distinct_inline_update_on_same_target_starts_a_new_work_unit(
     assert current.uid != first_session.uid
     assert current.inline_source_content == "all should be fish names"
     assert len(provider.calls) == 2
-    assert UpdateReceiptStore(store).load(first_session.uid) == first_session
+    assert UpdateReceiptRepository(store).load(first_session.uid) == first_session
 
     repeated = runner.invoke(
         app,
@@ -2676,7 +2678,7 @@ def test_new_update_planning_failure_leaves_previous_applied_receipt_active(
     assert failed.exit_code == 1
     assert "Update error" in failed.stderr
     assert store.load_staged_update() == first_session
-    assert UpdateReceiptStore(store).load(first_session.uid) == first_session
+    assert UpdateReceiptRepository(store).load(first_session.uid) == first_session
     assert len(provider.calls) == 2
 
 

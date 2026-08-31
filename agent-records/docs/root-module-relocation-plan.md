@@ -260,9 +260,9 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.uid_locator | shared-concept-implementation | relocate-without-alias | memcommit.core.context_targeting.uid_locator | 6 |
 | memcommit.understanding | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.semantic.understanding | 10 |
 | memcommit.update | operation-implementation | relocate-without-alias | memcommit.application.operations.update.model | 33 |
-| memcommit.update_application | historical-compatibility-facade | remove | memcommit.application.operations.update.materialization | 1 |
-| memcommit.update_application_flow | operation-implementation | relocate-without-alias | memcommit.application.operations.update.execution | 1 |
-| memcommit.update_endpoints | operation-implementation | relocate-without-alias | memcommit.application.operations.update.endpoints | 2 |
-| memcommit.update_receipt_store | operation-implementation | relocate-without-alias | memcommit.application.operations.update.receipt_store | 5 |
-| memcommit.update_resolution_adapter | operation-implementation | relocate-without-alias | memcommit.application.operations.update.resolution_adapter | 3 |
+| memcommit.update_application | historical-compatibility-facade | remove | memcommit.application.operations.update.application | 1 |
+| memcommit.update_application_flow | operation-implementation | relocate-without-alias | memcommit.adapters.console.commands.update.workbench.application | 1 |
+| memcommit.update_endpoints | operation-implementation | relocate-without-alias | memcommit.adapters.console.commands.update.endpoint_operands | 2 |
+| memcommit.update_receipt_store | operation-implementation | relocate-without-alias | memcommit.persistence.operations.update.receipt_repository | 5 |
+| memcommit.update_resolution_adapter | operation-implementation | relocate-without-alias | memcommit.adapters.console.commands.update.workbench.presentation | 3 |
 | memcommit.write_protection | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.authority.write_protection | 7 |

@@ -209,7 +209,7 @@ class _CompanionSessionRestorationMixin:
         session = self.load_staged_update()
         if session is None:
             # Granted-target Contexts live in the authority Profile; their
-            # participant receipt is coordinated by restore_granted_update.
+            # participant receipt is coordinated by restore_update_command.
             return None
         digest = operation_digest(session.operations)
         expected_unit_uid = f"update:{session.uid}:{digest}"

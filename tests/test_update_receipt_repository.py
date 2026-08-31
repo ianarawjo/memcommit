@@ -1,4 +1,4 @@
-"""Durable Update receipt retention across active singleton replacement."""
+"""Durable Update receipt repository across active singleton replacement."""
 
 from __future__ import annotations
 
@@ -13,7 +13,9 @@ from memcommit.adapters.console.commands.impact.catalog import impact_session_en
 from memcommit.adapters.console.commands.review.sessions import review_session_entries
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.model import plan_update
-from memcommit.application.operations.update.receipt_store import UpdateReceiptStore
+from memcommit.persistence.operations.update.receipt_repository import (
+    UpdateReceiptRepository,
+)
 
 
 runner = CliRunner(mix_stderr=False)
@@ -55,7 +57,7 @@ def test_completed_update_remains_reviewable_after_next_stage(isolated_store):
     store.save_staged_update(second)
 
     assert store.load_staged_update() == second
-    assert UpdateReceiptStore(store).load(applied.uid) == applied
+    assert UpdateReceiptRepository(store).load(applied.uid) == applied
     reviewed = runner.invoke(
         app,
         ["review", "update", "--session", applied.uid[:8], "--snapshot"],
@@ -94,7 +96,7 @@ def test_terminal_pair_rolls_back_active_slot_when_receipt_save_fails(
     staged = _staged_update(store)
     store.save_staged_update(staged)
     monkeypatch.setattr(
-        UpdateReceiptStore,
+        UpdateReceiptRepository,
         "save_terminal",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             OSError("simulated receipt failure")

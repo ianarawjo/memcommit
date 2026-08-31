@@ -45,7 +45,7 @@ from memcommit.application.operations.update.model import (
     SourceReference,
     UpdateSession,
 )
-from memcommit.application.operations.update.resolution_adapter import (
+from memcommit.adapters.console.commands.update.workbench.presentation import (
     UpdateResolutionWorkbenchAdapter,
 )
 

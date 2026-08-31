@@ -3,12 +3,18 @@
 ## Status
 
 `memcommit.application.capabilities.flow` owns the minimal operation-neutral phase order
-`PREPARED → REVIEWED/CANCELLED → APPLIED`. Update consumes it through
-`memcommit.application.operations.update.execution.UpdateApplicationFlowPort`;
-Sever is the second consumer through
+`PREPARED → REVIEWED/CANCELLED → APPLIED`. Sever consumes it through
 `memcommit.application.operations.sever.application.SeverSessionApplicationFlowPort`;
-Meld is the third consumer through
+Meld consumes it through
 `memcommit.application.operations.meld.application.MeldApplicationFlowPort`.
+
+Update deliberately no longer consumes this abstraction. Direct Update has
+one console-owned decision—Apply the exact displayed proposal or cancel—and no
+review revision or operation-neutral intermediate phase to adapt. Its command
+therefore asks the Update workbench for that decision and calls the single
+application publication coordinator directly. This keeps common flow useful
+where it represents a real operation lifecycle without manufacturing an
+`execution.py` layer for a two-branch terminal control.
 
 These vertical slices establish that the phase contract can serve target
 mutation, require-new result creation, and multi-owner reconciliation. They
@@ -57,32 +63,16 @@ must revalidate the exact reviewed value and durably publish its operation's
 receipt, or publish no effect. The common flow cannot manufacture CAS,
 rollback, checkpoints, or Undo merely from a generic callback.
 
-## Update adapter
+## Update boundary
 
-The Update adapter is terminal-independent and receives all integrations as
-injected callables. The command composes it with the existing review function
-and the three existing persistence functions.
-
-| Reviewed Update ownership | Existing transaction selected |
-| --- | --- |
-| local Target | `MemoryStore.apply_staged_update` |
-| granted Source, local Target | `apply_granted_source_staged_update` |
-| granted Target | `apply_granted_staged_update` |
-
-A granted Target takes precedence when both endpoints are granted because it
-identifies the Context graph that will actually be mutated. A granted Source
-alone remains read-only evidence and routes to the local Target transaction.
-
-Noninteractive Update returns the staged session as its reviewed value, which
-preserves the existing plain CLI behavior. Interactive review may return a new
-staged session after comment incorporation; only that returned revision enters
-Apply. Cancellation leaves the staged session available and does not call any
-applier.
-
-The adapter verifies that the returned Update is `APPLIED`, has an application
-receipt, and differs from the reviewed session only by lifecycle status and
-that receipt. The persistence functions retain their stronger in-transaction
-freshness and receipt validation.
+Interactive Update displays one exact staged proposal through its console
+workbench. `APPLY` passes that unchanged session to
+`application.operations.update.publication.apply_staged_update`; Escape or
+terminal cancellation returns without entering publication. Noninteractive
+callers submit the exact staged session directly. The publication coordinator
+still verifies the applied lifecycle and receipt after its operation-owned
+transaction, so removing the generic flow adapter weakens no application or
+persistence invariant.
 
 ## Sever adapter
 
@@ -152,8 +142,8 @@ inside the existing operation dispatcher.
   the shared application flow.
 - Review presentation and ownership-aware review policy remain separate from
   the operation-neutral phase order.
-- The three Update persistence transactions retain their current locks,
-  authority checks, CAS, rollback, checkpoint, and receipt implementations.
+- Update retains its single ownership-neutral application publication route,
+  including authority checks, CAS, rollback, checkpoints, and receipts.
 - Undo and Redo continue to consume Update checkpoint receipts; the shared
   flow neither implements nor weakens recovery.
 - Sever keeps its `SELF-SAVE` versus `OTHER-SAVE` location rule: self-save
@@ -170,9 +160,8 @@ inside the existing operation dispatcher.
 ## Verification and next consumer
 
 Pure flow tests cover ordering, cancellation, missing values, and Apply
-failure. Update adapter tests cover all ownership routes, revised-session
-handoff, cancellation, invalid lifecycle values, and mismatched receipts. The
-existing Update suite exercises the connected path across local and granted
+failure for the remaining consumers. Update command tests cover its direct
+Apply/cancel handoff. The existing Update suite exercises the connected path across local and granted
 application, no-op, stale CAS, multi-owner rollback, checkpoints, idempotence,
 Undo, and Redo.
 

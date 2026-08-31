@@ -26,7 +26,9 @@ from memcommit.application.operations.sever.resolution_adapter import (
     sever_memory_changes,
 )
 from memcommit.application.operations.update.model import UpdateSession
-from memcommit.application.operations.update.resolution_adapter import UpdateResolutionWorkbenchAdapter
+from memcommit.adapters.console.commands.update.workbench.presentation import (
+    UpdateResolutionWorkbenchAdapter,
+)
 
 
 @dataclass(frozen=True)

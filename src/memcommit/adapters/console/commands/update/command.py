@@ -7,7 +7,6 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.application.authorization import ContextUse, authorize_context_use
-from memcommit.application.capabilities.flow import run_application_flow
 from memcommit.adapters.console.terminal.components.command_wait import (
     CommandWaitView,
     run_command_wait,
@@ -74,11 +73,8 @@ from memcommit.application.operations.update.model import (
     session_matches,
     update_operations_are_authorized,
 )
-from memcommit.application.operations.update.execution import (
-    UpdateApplicationFlowPort,
-)
 from memcommit.application.operations.update.publication import apply_staged_update
-from memcommit.application.operations.update.endpoints import (
+from memcommit.adapters.console.commands.update.endpoint_operands import (
     choose_update_endpoint_operands,
     resolve_update_endpoints,
 )
@@ -985,19 +981,11 @@ def cmd(
         if session.goal_focus is not None:
             revalidate_goal_focus(store, session.goal_focus)
 
-        application = run_application_flow(
+        reviewed = _decide_direct_update(
             session,
-            port=UpdateApplicationFlowPort(
-                applier=lambda reviewed: apply_staged_update(store, reviewed),
-                application_decider=lambda prepared: (
-                    _decide_direct_update(
-                        prepared,
-                        analysis_origin=update_analysis_origin,
-                    )
-                ),
-            ),
+            analysis_origin=update_analysis_origin,
         )
-        if application.status == "CANCELLED":
+        if reviewed is None:
             current = store.load_staged_update() or session
             typer.echo(
                 f"UPDATE CANCELLED · {current.source_name} → {current.target_name}"
@@ -1007,9 +995,7 @@ def cmd(
                 "NO TARGET CHANGES · staged proposal retained · Resume with mem update."
             )
             return
-        applied = application.applied
-        if applied is None:
-            raise RuntimeError("Update application produced no durable receipt.")
+        applied = apply_staged_update(store, reviewed)
     except (
         OSError,
         ProfileConfigError,

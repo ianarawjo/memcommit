@@ -69,7 +69,7 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_scope_preset,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.update.endpoints import (
+from memcommit.adapters.console.commands.update.endpoint_operands import (
     choose_update_endpoint_operands,
 )
 

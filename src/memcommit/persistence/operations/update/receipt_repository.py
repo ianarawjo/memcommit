@@ -1,4 +1,4 @@
-"""Immutable terminal Update receipts retained beside the active singleton."""
+"""Repository for immutable terminal Update receipts."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from memcommit.persistence.store import MemoryStore
 
 
-class UpdateReceiptStore:
+class UpdateReceiptRepository:
     """UID-addressed terminal evidence; never a resumable Update work slot."""
 
     def __init__(self, store: MemoryStore):

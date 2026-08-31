@@ -87,11 +87,11 @@ class _UpdateStateStoreMixin:
                     raise ConcurrentContextUpdateError(
                         "The active update record changed before it could be saved."
                     )
-            from memcommit.application.operations.update.receipt_store import (
-                UpdateReceiptStore,
+            from memcommit.persistence.operations.update.receipt_repository import (
+                UpdateReceiptRepository,
             )
 
-            receipts = UpdateReceiptStore(self)
+            receipts = UpdateReceiptRepository(self)
             if current is not None and current.status in {"applied", "undone"}:
                 # Migrate the last singleton receipt before any newer Update
                 # can replace it, including receipts created by older builds.
@@ -103,11 +103,11 @@ class _UpdateStateStoreMixin:
 
     def _save_active_terminal_update(self, session, *, receipts=None) -> None:
         """Publish the active terminal session and immutable receipt as a pair."""
-        from memcommit.application.operations.update.receipt_store import (
-            UpdateReceiptStore,
+        from memcommit.persistence.operations.update.receipt_repository import (
+            UpdateReceiptRepository,
         )
 
-        receipts = receipts or UpdateReceiptStore(self)
+        receipts = receipts or UpdateReceiptRepository(self)
         previous = self._load_update_session(self.staged_update_file)
         self._save_update_session(self.staged_update_file, session)
         try:

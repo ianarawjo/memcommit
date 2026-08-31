@@ -1,15 +1,10 @@
-"""Pure Update-plan projection for the common resolution workbench.
-
-Update has no issue-resolution artifact or per-change review obligation. Its
-planned changes are evidence for one exact Apply action. Proposal iteration
-belongs to a composing operation such as Meld, not this adapter.
-"""
+"""Project exact Update plans into the common console Resolution workbench."""
 
 from __future__ import annotations
 
 from memcommit.application.capabilities.resolution.workbench import (
-    ResolutionDetailBlock,
     ResolutionContextLocation,
+    ResolutionDetailBlock,
     ResolutionItem,
     ResolutionMetric,
     ResolutionOverviewSection,
@@ -53,31 +48,15 @@ def _operation_item(
                 f"[{operation.owner_context_uid}]"
             ),
         ),
-        ResolutionDetailBlock(
-            heading="MEMORY UID",
-            text=operation.memory_uid,
-        ),
+        ResolutionDetailBlock(heading="MEMORY UID", text=operation.memory_uid),
     ]
     if isinstance(operation, (EditOperation, RemoveOperation)):
-        blocks.append(
-            ResolutionDetailBlock(
-                heading="BEFORE",
-                text=operation.old_content,
-            )
-        )
+        blocks.append(ResolutionDetailBlock(heading="BEFORE", text=operation.old_content))
     if isinstance(operation, (EditOperation, AddOperation)):
-        blocks.append(
-            ResolutionDetailBlock(
-                heading="AFTER",
-                text=operation.new_content,
-            )
-        )
+        blocks.append(ResolutionDetailBlock(heading="AFTER", text=operation.new_content))
     blocks.extend(
         (
-            ResolutionDetailBlock(
-                heading="REASON",
-                text=operation.reason,
-            ),
+            ResolutionDetailBlock(heading="REASON", text=operation.reason),
             ResolutionDetailBlock(
                 heading="SOURCE REFERENCES",
                 text=_source_references(operation.source_refs),
@@ -97,11 +76,7 @@ def _operation_item(
             if session_status == "undone"
             else "PLANNED"
         ),
-        # Update changes have no REQUIRED/OPTIONAL issue priority. ``CHANGE``
-        # keeps the generic detail header distinct from lifecycle status.
         priority="CHANGE",
-        # The common Items and Viewer rows already render ``kind``. Keeping it
-        # out of the title avoids labels such as ``ADD 73 · ADD …``.
         title=f"{operation.owner_context_name} Memory [{operation.memory_uid}]",
         summary=operation.reason,
         role="CHANGE",
@@ -168,7 +143,6 @@ class UpdateResolutionWorkbenchAdapter:
                 "still describes the exact reversible transition."
             ),
         }.get(session.status, "This Update records exact target Memory changes.")
-        overview_sections = (ResolutionOverviewSection("plan", "PLAN", overview),)
         return ResolutionWorkbenchView(
             operation="UPDATE",
             artifact_uid=session.uid,
@@ -187,7 +161,7 @@ class UpdateResolutionWorkbenchAdapter:
                 ResolutionContextLocation("TARGET", session.target_name),
             ),
             overview=overview,
-            overview_sections=overview_sections,
+            overview_sections=(ResolutionOverviewSection("plan", "PLAN", overview),),
             list_label="PLANNED CHANGES",
             items=items,
             empty_message="No planned changes are recorded in this Update artifact.",
@@ -212,4 +186,8 @@ class UpdateResolutionWorkbenchAdapter:
 
 def project_update_resolution(session: UpdateSession) -> ResolutionWorkbenchView:
     """Return a read-only common projection of one exact Update plan."""
+
     return UpdateResolutionWorkbenchAdapter(session).view()
+
+
+__all__ = ["UpdateResolutionWorkbenchAdapter", "project_update_resolution"]
