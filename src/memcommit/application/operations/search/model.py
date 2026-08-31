@@ -27,6 +27,9 @@ from memcommit.application.capabilities.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )
+from memcommit.application.capabilities.durable_uid_resolution import (
+    DurableUidCandidate,
+)
 
 
 SEARCH_CORPUS_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
@@ -122,6 +125,30 @@ class SearchMatch:
             not _valid_related_query(self.related_query, allow_empty=False)
         ):
             raise ValueError("Related Search matches require a bounded related query.")
+
+
+def search_candidate_uid_catalog(
+    candidates: Sequence[SearchCandidate],
+) -> tuple[DurableUidCandidate[SearchCandidate], ...]:
+    """Project one already-authorized Search frame into durable identities."""
+
+    identities: list[DurableUidCandidate[SearchCandidate]] = []
+    for candidate in candidates:
+        candidate_uids = [candidate.item.uid]
+        if (
+            isinstance(candidate.item, MemoryRef)
+            and candidate.item.target_memory_uid != candidate.item.uid
+        ):
+            candidate_uids.append(candidate.item.target_memory_uid)
+        identities.extend(
+            DurableUidCandidate(
+                uid=uid,
+                kind=candidate.kind,
+                value=candidate,
+            )
+            for uid in candidate_uids
+        )
+    return tuple(identities)
 
 
 def _strict_json_object(pairs: list[tuple[str, object]]) -> dict[str, object]:

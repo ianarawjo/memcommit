@@ -88,6 +88,7 @@
       },
       "find": {
         "evidence": [
+          "agent-records/docs/durable-uid-resolution-design-rationale.md",
           "agent-records/docs/find-application-boundary-matrix.md",
           "agent-records/docs/find-search-compact-scope-design-rationale.md",
           "agent-records/docs/retrieve-answer-save-panel-design-rationale.md",
@@ -192,6 +193,7 @@
       },
       "query": {
         "evidence": [
+          "agent-records/docs/durable-uid-resolution-design-rationale.md",
           "agent-records/docs/federated-query-design-rationale.md",
           "agent-records/docs/query-callable-boundary-matrix.md",
           "agent-records/docs/query-answer-application-boundary-matrix.md",
@@ -327,6 +329,7 @@
       "trace": {
         "evidence": [
           "agent-records/docs/checkpoint-read-history-design-rationale.md",
+          "agent-records/docs/durable-uid-resolution-design-rationale.md",
           "agent-records/docs/trace-application-boundary-matrix.md",
           "agent-records/docs/trace-application-boundary-design-rationale.md",
           "agent-records/docs/trace-lineage-normal-form-design-rationale.md",
@@ -390,6 +393,7 @@
     "MIXED": {
       "search": {
         "evidence": [
+          "agent-records/docs/durable-uid-resolution-design-rationale.md",
           "agent-records/docs/find-search-application-boundary-matrix.md",
           "agent-records/docs/find-search-compact-scope-design-rationale.md",
           "agent-records/docs/retrieve-answer-save-panel-design-rationale.md",

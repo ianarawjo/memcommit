@@ -7,6 +7,10 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.application.capabilities.durable_uid_resolution import (
+    DurableUidCandidate,
+    try_resolve_durable_uid,
+)
 from memcommit.persistence.command_ledger.attempts import annotate_memory_report_attempt
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
@@ -268,10 +272,25 @@ def cmd(
             )
         explicit_context = context_name is not None
         if selector is not None and not explicit_context:
-            explicit_target = resolve_explicit_context_history_target(
+            context_identity = try_resolve_durable_uid(
+                tuple(
+                    DurableUidCandidate(
+                        uid=context.uid,
+                        kind="context",
+                        value=ContextTarget(context.name),
+                    )
+                    for context in store.load_direct_context_graph_strict()
+                ),
                 selector,
-                current_context=context_snapshot.current_name,
-                available_context_names=store.list_context_names(),
+            )
+            explicit_target = (
+                context_identity.values[0]
+                if context_identity is not None
+                else resolve_explicit_context_history_target(
+                    selector,
+                    current_context=context_snapshot.current_name,
+                    available_context_names=store.list_context_names(),
+                )
             )
             if isinstance(explicit_target, ContextTarget):
                 trace_result = execute_trace(

@@ -25,6 +25,7 @@ class FindMatchResult:
     item_uid: str
     content: str
     spans: tuple[FindSpanResult, ...]
+    matched_uids: tuple[str, ...] = ()
     source_context_name: str | None = None
     source_context_uid: str | None = None
     source_memory_uid: str | None = None
@@ -40,6 +41,7 @@ class FindResult:
     ignore_case: bool
     scanned_item_count: int
     occurrence_count: int
+    identity_match_count: int
     matches: tuple[FindMatchResult, ...]
 
 

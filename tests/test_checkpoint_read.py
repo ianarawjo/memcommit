@@ -129,8 +129,13 @@ def test_local_context_can_read_an_exact_checkpoint_window(isolated_store):
         checkpoint_uids[0],
         checkpoint_uids[2],
     ]
+    comparison = result.comparison(checkpoint_uids[0], checkpoint_uids[2])
+    assert comparison.from_checkpoint.uid == checkpoint_uids[0]
+    assert comparison.to_checkpoint.uid == checkpoint_uids[2]
     with pytest.raises(CheckpointReadAuthorizationError, match="outside"):
         result.record(checkpoint_uids[1])
+    with pytest.raises(CheckpointReadAuthorizationError, match="outside"):
+        result.comparison(checkpoint_uids[0], checkpoint_uids[1])
 
 
 def test_granted_reference_is_an_exact_checkpoint_set(isolated_store):

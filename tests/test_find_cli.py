@@ -44,6 +44,21 @@ def test_find_plain_matches_every_literal_occurrence(isolated_store) -> None:
     assert "SPANS" not in result.output
 
 
+def test_find_plain_accepts_the_printed_memory_uid_prefix(isolated_store) -> None:
+    context = ops.init("find/uid")
+    memory = ops.add(context, "The UID is not copied into this content.")
+    store = MemoryStore()
+    store.save(context)
+    store.set_current(context.name)
+
+    result = runner.invoke(app, ["find", memory.uid[:8]])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert "MATCHED 1 · OCCURRENCES 0 · UID MATCHES 1" in result.output
+    assert f"[{memory.uid[:8]}]" in result.output
+    assert memory.content in result.output
+
+
 def test_find_row_distinguishes_match_order_from_frozen_source_position(
     isolated_store,
 ) -> None:

@@ -41,6 +41,11 @@ def find_result_header_lines(
         if all_readable_contexts
         else " + ".join(result.request.target_names)
     )
+    identity_summary = (
+        f" · UID MATCHES {result.identity_match_count}"
+        if result.identity_match_count
+        else ""
+    )
     return (
         "FIND RESULTS",
         (
@@ -57,6 +62,7 @@ def find_result_header_lines(
             f"SCANNED {result.scanned_item_count}"
             f" · MATCHED {len(result.matches)}"
             f" · OCCURRENCES {result.occurrence_count}"
+            f"{identity_summary}"
             f"{showing}"
         ),
     )

@@ -31,6 +31,7 @@ from memcommit.application.operations.trace.application import (
     FrozenTraceSubject,
     TraceResult,
 )
+from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()
@@ -42,6 +43,18 @@ CONTEXT_UID = "44444444-4444-4444-8444-444444444444"
 CREATE_CHECKPOINT_UID = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
 EDIT_CHECKPOINT_UID = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
 RESTORE_CHECKPOINT_UID = "cccccccc-cccc-4ccc-8ccc-cccccccccccc"
+
+
+def test_trace_accepts_a_context_uid_as_a_context_identity(isolated_store):
+    initialized = runner.invoke(app, ["init", "context-uid-trace"])
+    assert initialized.exit_code == 0, initialized.output
+    context = MemoryStore().load_direct("context-uid-trace")
+
+    result = runner.invoke(app, ["trace", context.uid])
+
+    assert result.exit_code == 0, result.output
+    assert "TRACE · context-uid-trace" in result.output
+    assert "[CONTEXT] · 1 OPERATION" in result.output
 
 
 def _state(uid: str, content: str, position: int = 0) -> MemoryState:

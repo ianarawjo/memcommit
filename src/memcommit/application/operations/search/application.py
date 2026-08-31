@@ -5,6 +5,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
+from memcommit.application.capabilities.durable_uid_resolution import (
+    DurableUidAmbiguityError,
+    is_unresolved_uid_selector,
+    try_resolve_durable_uid,
+)
 from memcommit.core.context import Memory, MemoryRef, QueryContextRef
 from memcommit.application.operations.search.model import (
     SearchError,
@@ -12,6 +17,7 @@ from memcommit.application.operations.search.model import (
     SearchCandidate,
     SearchMatch,
     rank_candidates,
+    search_candidate_uid_catalog,
 )
 
 
@@ -311,6 +317,25 @@ def run_search(
 
     current_source = source_port.freeze_current(request)
     _observe(observer, "INPUTS_FROZEN")
+    try:
+        identity = try_resolve_durable_uid(
+            search_candidate_uid_catalog(current_source.candidates),
+            request.query,
+        )
+    except DurableUidAmbiguityError as error:
+        raise SearchError(str(error)) from error
+    if identity is not None:
+        matches = [
+            SearchMatch(candidate=candidate)
+            for candidate in identity.values[: request.limit]
+        ]
+        return SearchResponse(
+            request=request,
+            mode="CURRENT",
+            results=tuple(_current_result(match) for match in matches),
+        )
+    if is_unresolved_uid_selector(request.query.strip()):
+        return SearchResponse(request=request, mode="CURRENT", results=())
     _observe(observer, "CONNECTING_PROVIDER")
     provider = provider_factory()
     _observe(observer, "SEARCHING")

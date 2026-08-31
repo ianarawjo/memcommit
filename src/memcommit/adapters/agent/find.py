@@ -94,6 +94,7 @@ def _result(result) -> JsonObject:
         "ignore_case": result.ignore_case,
         "scanned_item_count": result.scanned_item_count,
         "occurrence_count": result.occurrence_count,
+        "identity_match_count": result.identity_match_count,
         "matches": [
             {
                 "context_name": match.context_name,
@@ -104,6 +105,7 @@ def _result(result) -> JsonObject:
                 "source_context_name": match.source_context_name,
                 "source_context_uid": match.source_context_uid,
                 "source_memory_uid": match.source_memory_uid,
+                "matched_uids": list(match.matched_uids),
                 "spans": [
                     {"start": span.start, "end": span.end, "text": span.text}
                     for span in match.spans

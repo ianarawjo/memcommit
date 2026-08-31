@@ -17,7 +17,10 @@ from memcommit.application.operations.query.ordinary_application import (
     run_ordinary_query,
 )
 from memcommit.application.operations.query.ordinary_runtime import execute_ordinary_query
-from memcommit.application.operations.search.model import SearchCandidate
+from memcommit.application.operations.search.model import (
+    SearchArtifact,
+    SearchCandidate,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -93,6 +96,55 @@ def test_run_ordinary_query_freezes_then_answers_once_without_terminal():
     assert response.reference_document is not None
     assert response.answer == response.reference_document.text
     assert "The frozen evidence supports the answer. [1]" in response.answer
+
+
+def test_run_ordinary_query_resolves_uid_with_a_typed_reference_and_no_provider():
+    candidate = _candidate("Identity-selected answer evidence.")
+    events = []
+
+    def provider_factory():
+        events.append("provider")
+        raise AssertionError("A standalone UID lookup must not use a provider.")
+
+    response = run_ordinary_query(
+        OrdinaryQueryRequest(candidate.item.uid, ("notes",)),
+        source_port=_Source((candidate,)),
+        provider_factory=provider_factory,
+        observer=events.append,
+    )
+
+    assert events == ["INPUTS_FROZEN"]
+    assert response.grounded is True
+    assert response.reference_document is not None
+    assert f"UID {candidate.item.uid} identifies memory" in response.answer
+    assert "Identity-selected answer evidence." in response.answer
+
+
+def test_run_ordinary_query_resolves_a_printed_non_uuid_artifact_prefix():
+    artifact = SearchArtifact(
+        uid="rationale:11111111-1111-4111-8111-111111111111",
+        artifact_kind="rationale",
+        title="Why this Memory exists",
+        content="Retained rationale evidence.",
+    )
+    candidate = SearchCandidate(
+        candidate_id="c000001",
+        kind="artifact",
+        context_uid="context-1",
+        context_names=("notes",),
+        item=artifact,
+        search_text=artifact.content,
+    )
+
+    response = run_ordinary_query(
+        OrdinaryQueryRequest(artifact.uid[:8], ("notes",)),
+        source_port=_Source((candidate,)),
+        provider_factory=lambda: pytest.fail("Artifact UID must stay local"),
+    )
+
+    assert response.grounded is True
+    assert f"UID {artifact.uid} identifies artifact" in response.answer
+    assert "Why this Memory exists" in response.answer
 
 
 def test_empty_frozen_query_returns_without_constructing_provider():

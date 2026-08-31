@@ -31,6 +31,18 @@ class CheckpointHistoryRevision:
 
 
 @dataclass(frozen=True, slots=True)
+class CheckpointHistoryComparison:
+    """Two exact retained checkpoint result states in caller-supplied order."""
+
+    from_checkpoint: HistoryCheckpoint
+    to_checkpoint: HistoryCheckpoint
+    from_record: Mapping[str, Any]
+    to_record: Mapping[str, Any]
+    from_snapshot: Mapping[str, Any]
+    to_snapshot: Mapping[str, Any]
+
+
+@dataclass(frozen=True, slots=True)
 class CheckpointHistorySlice:
     """One frozen checkpoint catalog and its canonical state timeline.
 
@@ -155,6 +167,34 @@ class CheckpointHistorySlice:
             after_snapshot=after,
         )
 
+    def comparison(
+        self,
+        from_checkpoint_uid: str,
+        to_checkpoint_uid: str,
+    ) -> CheckpointHistoryComparison:
+        """Return two complete checkpoint result states for direct comparison."""
+
+        from_checkpoint, to_checkpoint = self.reference(
+            (from_checkpoint_uid, to_checkpoint_uid)
+        )
+        from_record = self._records_by_uid[from_checkpoint_uid]
+        to_record = self._records_by_uid[to_checkpoint_uid]
+        from_snapshot = from_record.get("snapshot")
+        to_snapshot = to_record.get("snapshot")
+        if not isinstance(from_snapshot, Mapping) or not isinstance(
+            to_snapshot,
+            Mapping,
+        ):
+            raise HistoryError("Checkpoint comparison requires complete snapshots.")
+        return CheckpointHistoryComparison(
+            from_checkpoint=from_checkpoint,
+            to_checkpoint=to_checkpoint,
+            from_record=from_record,
+            to_record=to_record,
+            from_snapshot=from_snapshot,
+            to_snapshot=to_snapshot,
+        )
+
 
 def build_checkpoint_history_slice(
     source: HistoryEvidenceSource,
@@ -191,6 +231,7 @@ def build_checkpoint_history_slice(
 
 
 __all__ = [
+    "CheckpointHistoryComparison",
     "CheckpointHistoryRevision",
     "CheckpointHistorySlice",
     "build_checkpoint_history_slice",

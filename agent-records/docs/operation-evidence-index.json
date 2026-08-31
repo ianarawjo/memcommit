@@ -89,6 +89,7 @@
     "diff": [
       "agent-records/docs/checkpoint-read-history-design-rationale.md",
       "agent-records/docs/checkpoint-revision-diff-design-rationale.md",
+      "agent-records/docs/durable-uid-resolution-design-rationale.md",
       "agent-records/docs/mem-history-search-design-rationale.md"
     ],
         "distill": [
@@ -129,6 +130,7 @@
       "agent-records/docs/evaluation-application-ownership-design-rationale.md"
     ],
     "find": [
+      "agent-records/docs/durable-uid-resolution-design-rationale.md",
       "agent-records/docs/find-application-boundary-matrix.md",
       "agent-records/docs/find-search-compact-scope-design-rationale.md",
       "agent-records/docs/retrieve-answer-save-panel-design-rationale.md",
@@ -258,6 +260,7 @@
       "agent-records/docs/mem-pwd-design-rationale.md"
     ],
     "query": [
+      "agent-records/docs/durable-uid-resolution-design-rationale.md",
       "agent-records/docs/federated-query-design-rationale.md",
       "agent-records/docs/query-callable-boundary-matrix.md",
       "agent-records/docs/query-answer-application-boundary-matrix.md",
@@ -307,6 +310,7 @@
       "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md"
     ],
     "search": [
+      "agent-records/docs/durable-uid-resolution-design-rationale.md",
       "agent-records/docs/find-search-application-boundary-matrix.md",
       "agent-records/docs/find-search-compact-scope-design-rationale.md",
       "agent-records/docs/retrieve-answer-save-panel-design-rationale.md",
@@ -350,6 +354,7 @@
     ],
     "trace": [
       "agent-records/docs/checkpoint-read-history-design-rationale.md",
+      "agent-records/docs/durable-uid-resolution-design-rationale.md",
       "agent-records/docs/trace-application-boundary-matrix.md",
       "agent-records/docs/trace-application-boundary-design-rationale.md",
       "agent-records/docs/trace-lineage-normal-form-design-rationale.md",

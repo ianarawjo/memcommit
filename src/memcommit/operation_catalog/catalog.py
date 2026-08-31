@@ -168,7 +168,7 @@ _OPERATIONS = (
     ),
     _operation(
         "diff",
-        "Show one checkpoint-versus-previous diff or the active Update.",
+        "Compare checkpoint states, one revision, or the active Update.",
         "One Context checkpoint or active Update -> diff report",
         ExecutionKind.DETERMINISTIC,
         "Read-only",

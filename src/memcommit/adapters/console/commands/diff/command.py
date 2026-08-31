@@ -25,7 +25,17 @@ from memcommit.application.capabilities.reviewing.memory_diff import (
 from memcommit.application.capabilities.history.query.checkpoint_history_slicing import (
     build_checkpoint_history_slice,
 )
+from memcommit.application.capabilities.authority.checkpoint_read import (
+    authorize_checkpoint_read,
+)
+from memcommit.application.capabilities.authority.checkpoint_read_model import (
+    CheckpointRead,
+)
+from memcommit.application.capabilities.authority.context_access import (
+    resolve_context_access,
+)
 from memcommit.adapters.console.terminal.components.history.checkpoint_diff import (
+    render_checkpoint_comparison_cli,
     render_checkpoint_revision_cli,
 )
 from memcommit.adapters.console.terminal.components.history.presentation import (
@@ -395,6 +405,12 @@ def cmd(
             help=("Existing Context, or CHECKPOINT when --context is supplied")
         ),
     ] = None,
+    other_checkpoint: Annotated[
+        str | None,
+        typer.Argument(
+            help="Second CHECKPOINT for an explicit checkpoint-to-checkpoint diff",
+        ),
+    ] = None,
     context_name: Annotated[
         str | None,
         typer.Option(
@@ -440,6 +456,20 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
+    if other_checkpoint is not None and checkpoint_uid is not None:
+        typer.secho(
+            "Diff error: pass two checkpoint operands without --checkpoint.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    if other_checkpoint is not None and target is None:  # pragma: no cover - Typer.
+        typer.secho(
+            "Diff error: checkpoint comparison requires two checkpoint operands.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
     if target is not None and context_name is not None and checkpoint_uid is not None:
         typer.secho(
             "Diff error: pass the checkpoint either as the operand or with "
@@ -456,6 +486,92 @@ def cmd(
         # Read-only Diff must not create a Profile merely to discover that no
         # active Update or current Context exists yet.
         current_context = None
+
+    if other_checkpoint is not None:
+        assert target is not None
+        try:
+            if context_name is not None:
+                canonical_context = resolve_context_locator(
+                    context_name,
+                    current=current_context,
+                )
+                access = resolve_context_access(
+                    store,
+                    canonical_context,
+                    current_name=current_context,
+                    required_permission="READ",
+                )
+                history = build_checkpoint_history_slice(
+                    access.store,
+                    access.context_name,
+                )
+                entries = checkpoint_picker_entries(history.physical_entries)
+                from_entry = resolve_exact_or_unique_uid(
+                    entries,
+                    target,
+                    uid=lambda candidate: candidate.uid,
+                    label="Checkpoint",
+                )
+                to_entry = resolve_exact_or_unique_uid(
+                    entries,
+                    other_checkpoint,
+                    uid=lambda candidate: candidate.uid,
+                    label="Checkpoint",
+                )
+            else:
+                from_target = resolve_local_checkpoint_target(store, target)
+                to_target = resolve_local_checkpoint_target(store, other_checkpoint)
+                if from_target.context_name != to_target.context_name:
+                    raise ValueError(
+                        "Checkpoint comparison requires two checkpoints from "
+                        "the same Context."
+                    )
+                canonical_context = from_target.context_name
+                access = resolve_context_access(
+                    store,
+                    canonical_context,
+                    current_name=current_context,
+                    required_permission="READ",
+                )
+                history = build_checkpoint_history_slice(
+                    access.store,
+                    access.context_name,
+                )
+                entries = checkpoint_picker_entries(history.physical_entries)
+                from_entry = resolve_exact_or_unique_uid(
+                    entries,
+                    from_target.checkpoint_uid,
+                    uid=lambda candidate: candidate.uid,
+                    label="Checkpoint",
+                )
+                to_entry = resolve_exact_or_unique_uid(
+                    entries,
+                    to_target.checkpoint_uid,
+                    uid=lambda candidate: candidate.uid,
+                    label="Checkpoint",
+                )
+            authorized_history = authorize_checkpoint_read(
+                access,
+                CheckpointRead.reference(
+                    history.context_uid,
+                    (from_entry.uid, to_entry.uid),
+                ),
+                history,
+            )
+            typer.echo(
+                render_checkpoint_comparison_cli(
+                    authorized_history.comparison(from_entry.uid, to_entry.uid),
+                    context_name=canonical_context,
+                    stat=stat,
+                    raw=raw,
+                    verbose=verbose,
+                )
+            )
+        except (OSError, RuntimeError, ValueError) as error:
+            typer.secho(f"Diff error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
+        return
+
     checkpoint_selector = checkpoint_uid
     context_locator = context_name
     if context_name is not None and target is not None:
@@ -506,7 +622,16 @@ def cmd(
                 context_locator,
                 current=current_context,
             )
-            history = build_checkpoint_history_slice(store, canonical_context)
+            access = resolve_context_access(
+                store,
+                canonical_context,
+                current_name=current_context,
+                required_permission="READ",
+            )
+            history = build_checkpoint_history_slice(
+                access.store,
+                access.context_name,
+            )
             entries = checkpoint_picker_entries(history.physical_entries)
             if not entries:
                 raise ValueError(f"Context '{canonical_context}' has no checkpoints.")
@@ -519,6 +644,11 @@ def cmd(
                     uid=lambda candidate: candidate.uid,
                     label="Checkpoint",
                 )
+            )
+            authorize_checkpoint_read(
+                access,
+                CheckpointRead.reference(history.context_uid, (entry.uid,)),
+                history,
             )
             typer.echo(
                 render_checkpoint_revision_cli(

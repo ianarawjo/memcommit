@@ -63,9 +63,17 @@ Diff exposes the same checkpoint revision outside a TTY. `mem diff CONTEXT`
 uses the newest retained checkpoint when no selector is supplied, while
 `mem diff CHECKPOINT --context CONTEXT` and
 `mem diff CONTEXT --checkpoint CHECKPOINT` select an exact UID or unambiguous
-prefix. The Context is required for this explicit form because checkpoint
-prefixes are resolved only inside the frozen owning history; this prevents a
-short UID from silently selecting an unrelated Context's artifact.
+prefix. `mem diff FROM_CHECKPOINT TO_CHECKPOINT` compares the complete result
+states of two exact checkpoints. Their ordinary-local owners may be inferred
+from globally unique prefixes, or `--context CONTEXT` may freeze the owner
+explicitly, but both checkpoints must belong to the same Context.
+
+The pair form preserves argument order as `FROM → TO`; it does not reorder the
+states by timestamp. Before reading either snapshot it requests one exact
+`CheckpointRead.reference((from_uid, to_uid))` window and renders through the
+bounded authorized History projection. This is distinct from the single
+checkpoint form, whose implicit before-state remains that revision's persisted
+`command_before`, preceding checkpoint, or empty creation baseline.
 
 `--stat`, `--raw`, and `--verbose` refine that selected checkpoint instead of
 switching back to the process-wide active Update slot. Stat reports the exact
@@ -93,19 +101,20 @@ prefers the current Context or the newest history.
 ## One-shot Diff boundary
 
 `mem diff` has no TTY-only history browser. A Context target returns its newest
-checkpoint revision, an explicit checkpoint target returns that exact
-revision, and no target returns the one saved Update record. The same command
-therefore has identical semantic output in a terminal, pipe, test runner, or
-agent-mediated invocation. A terminal may still scroll a long report, but
-scrolling does not create a target-selection state.
+checkpoint revision, one explicit checkpoint returns that exact revision, two
+explicit checkpoints compare their complete result states, and no target
+returns the one saved Update record. The same command therefore has identical
+semantic output in a terminal, pipe, test runner, or agent-mediated invocation.
+A terminal may still scroll a long report, but scrolling does not create a
+target-selection state.
 
-Every checkpoint report labels its unit as
-`CHECKPOINT · THIS CHECKPOINT VS PREVIOUS`. Diff answers what changed at one
-revision; it never presents the checkpoint catalog as though that catalog were
-part of the comparison. Earlier checkpoint discovery and whole-Context
+A single-checkpoint report labels its unit as
+`CHECKPOINT · THIS CHECKPOINT VS PREVIOUS`; a pair labels it
+`CHECKPOINT · CHECKPOINT VS CHECKPOINT` and prints exact `FROM` and `TO`
+identities. Neither form presents the checkpoint catalog as though that catalog
+were part of the comparison. Earlier checkpoint discovery and whole-Context
 chronology belong to `mem trace CONTEXT`, whose rows expose exact checkpoint
-identities that can be passed back to Diff. This keeps shared rendering without
-collapsing two different report subjects into one interaction.
+identities that can be passed back to Diff.
 
 ## Revert target scope and approval
 

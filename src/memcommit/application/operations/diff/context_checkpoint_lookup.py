@@ -9,7 +9,13 @@ from memcommit.application.capabilities.context_locator import (
     resolve_context_locator,
     suggest_context_locators,
 )
+from memcommit.application.capabilities.durable_uid_resolution import (
+    DurableUidAmbiguityError,
+    DurableUidCandidate,
+    try_resolve_durable_uid,
+)
 from memcommit.application.capabilities.name_suggestions import did_you_mean_suffix
+from memcommit.core.context import Context
 from memcommit.core.context_targeting.model import CheckpointTarget, ContextTarget
 from memcommit.core.context_targeting.uid_locator import (
     is_memory_uid_selector,
@@ -21,6 +27,8 @@ class LocalCheckpointCatalog(Protocol):
     """The narrow store surface needed to freeze checkpoint identities."""
 
     def list_context_names(self) -> list[str]: ...
+
+    def load_direct(self, name: str) -> Context: ...
 
     def list_checkpoints(self, name: str) -> list[dict]: ...
 
@@ -88,13 +96,12 @@ def resolve_local_context_checkpoint_target(
             return ContextTarget(context_name)
         raise ValueError(f"Context '{context_name}' is unavailable.")
 
-    targets = (
-        freeze_local_checkpoint_targets(store, context_names=names)
-        if is_memory_uid_selector(operand)
-        else ()
-    )
+    targets = freeze_local_checkpoint_targets(store, context_names=names)
+    uid_shaped = is_memory_uid_selector(operand)
     checkpoint_matches = tuple(
-        target for target in targets if target.checkpoint_uid.startswith(operand)
+        target
+        for target in targets
+        if uid_shaped and target.checkpoint_uid.startswith(operand)
     )
     if context_exists and checkpoint_matches:
         raise ValueError(
@@ -103,13 +110,39 @@ def resolve_local_context_checkpoint_target(
         )
     if context_exists:
         return ContextTarget(context_name)
-    if checkpoint_matches:
-        return resolve_exact_or_unique_uid(
-            targets,
-            operand,
-            uid=lambda target: target.checkpoint_uid,
-            label="Checkpoint",
+    if uid_shaped:
+        candidates: tuple[
+            DurableUidCandidate[ContextTarget | CheckpointTarget], ...
+        ] = tuple(
+            DurableUidCandidate(
+                uid=store.load_direct(name).uid,
+                kind="context",
+                value=ContextTarget(name),
+            )
+            for name in names
+        ) + tuple(
+            DurableUidCandidate(
+                uid=target.checkpoint_uid,
+                kind="checkpoint",
+                value=target,
+            )
+            for target in targets
         )
+        try:
+            identity = try_resolve_durable_uid(candidates, operand)
+        except DurableUidAmbiguityError as error:
+            raise ValueError(
+                f"Diff target {operand!r} matches multiple Context/checkpoint "
+                "identities; disambiguate with --context or --checkpoint."
+            ) from error
+        if identity is not None:
+            coordinates = tuple(dict.fromkeys(identity.values))
+            if len(coordinates) != 1:
+                raise ValueError(
+                    f"Diff target {operand!r} matches multiple Context/checkpoint "
+                    "coordinates; disambiguate with --context or --checkpoint."
+                )
+            return coordinates[0]
     suggestions = suggest_context_locators(
         operand,
         current=current,

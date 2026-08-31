@@ -102,6 +102,7 @@ def find(
             ignore_case=request.ignore_case,
             scanned_item_count=result.scanned_item_count,
             occurrence_count=result.occurrence_count,
+            identity_match_count=result.identity_match_count,
             matches=tuple(
                 FindMatchResult(
                     context_name=match.source.context_name,
@@ -117,6 +118,7 @@ def find(
                         )
                         for span in match.spans
                     ),
+                    matched_uids=match.matched_uids,
                     source_context_name=match.source.source_context_name,
                     source_context_uid=match.source.source_context_uid,
                     source_memory_uid=match.source.source_memory_uid,

@@ -338,6 +338,27 @@ def test_search_all_rejects_explicit_context(isolated_store, monkeypatch):
     assert "--all/-a cannot be combined with --context/-c" in result.stderr
 
 
+def test_search_cli_accepts_a_memory_uid_without_connecting_provider(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context = ops.init("search/uid")
+    memory = ops.add(context, "Identity-selected Search evidence.")
+    store.save(context)
+    store.set_current(context.name)
+    monkeypatch.setattr(
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
+        lambda: pytest.fail("UID Search must not connect a provider"),
+    )
+
+    result = runner.invoke(app, ["search", memory.uid[:8]])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert f"[memory {memory.uid[:8]}]" in result.output
+    assert "Identity-selected Search evidence." in result.output
+
+
 def test_search_cli_multi_roots_keep_descendants_and_embeds_independent(
     isolated_store,
     monkeypatch,

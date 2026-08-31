@@ -383,6 +383,13 @@ def run_find_workbench(
                 f"{len(result.matches)} {memory_label}"
                 f" · {result.occurrence_count} {occurrence_label}"
             )
+            if result.identity_match_count:
+                uid_label = (
+                    "UID MATCH"
+                    if result.identity_match_count == 1
+                    else "UID MATCHES"
+                )
+                status += f" · {result.identity_match_count} {uid_label}"
         else:
             memory_label = "MEMORY" if result.scanned_item_count == 1 else "MEMORIES"
             status = f"NO MATCHES · {result.scanned_item_count} {memory_label} SCANNED"

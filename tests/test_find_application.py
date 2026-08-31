@@ -99,6 +99,46 @@ def test_frozen_source_positions_cover_the_complete_searchable_frame():
     assert result.matches[0].source.source_position == 2
 
 
+def test_literal_uid_selects_the_authorized_item_without_fabricating_a_text_span():
+    uid = "11111111-1111-4111-8111-111111111111"
+    request = FindRequest(pattern=uid[:8], target_names=("scope",))
+
+    result = run_find(
+        request,
+        source_port=_Source((_memory("content without its identity", uid=uid),)),
+    )
+
+    assert result.occurrence_count == 0
+    assert result.identity_match_count == 1
+    assert result.matches[0].matched_uids == (uid,)
+    assert result.matches[0].spans == ()
+
+
+def test_literal_source_uid_selects_an_authorized_memory_reference_row():
+    source_uid = "22222222-2222-4222-8222-222222222222"
+    item = FindSourceItem(
+        context_name="scope",
+        context_uid="context-1",
+        kind="memory_ref",
+        item_uid="11111111-1111-4111-8111-111111111111",
+        source_position=1,
+        content="Referenced content without either identity.",
+        source_context_name="source",
+        source_context_uid="context-2",
+        source_memory_uid=source_uid,
+    )
+
+    result = run_find(
+        FindRequest(pattern=source_uid[:8], target_names=("scope",)),
+        source_port=_Source((item,)),
+    )
+
+    assert result.identity_match_count == 1
+    assert result.matches[0].source is item
+    assert result.matches[0].matched_uids == (source_uid,)
+    assert result.matches[0].spans == ()
+
+
 def test_frozen_source_rejects_result_relative_positions():
     with pytest.raises(FindError, match="cover the frozen frame"):
         FrozenFindSource(

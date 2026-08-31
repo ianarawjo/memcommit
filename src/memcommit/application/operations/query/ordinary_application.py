@@ -5,7 +5,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
+from memcommit.application.capabilities.durable_uid_resolution import (
+    DurableUidAmbiguityError,
+    is_unresolved_uid_selector,
+    try_resolve_durable_uid,
+)
 from memcommit.application.operations.search.answer_references import (
+    NumberedSearchAnswerReference,
     SearchAnswerReferenceDocument,
 )
 from memcommit.application.operations.query.evidence import (
@@ -18,7 +24,10 @@ from memcommit.application.operations.query.answer import (
     complete_ordinary_query_answer,
     prepare_ordinary_query_answer,
 )
-from memcommit.application.operations.search.model import SearchCandidate
+from memcommit.application.operations.search.model import (
+    SearchCandidate,
+    search_candidate_uid_catalog,
+)
 
 
 OrdinaryQueryStage = Literal[
@@ -150,6 +159,44 @@ def run_ordinary_query(
         return OrdinaryQueryResponse(
             request,
             f"{frozen.label}\n  (no grounded answer found)",
+            False,
+        )
+
+    try:
+        identity = try_resolve_durable_uid(
+            search_candidate_uid_catalog(frozen.candidates),
+            request.question,
+        )
+    except DurableUidAmbiguityError as error:
+        raise ValueError(str(error)) from error
+    if identity is not None:
+        selected_candidates = identity.values
+        evidence = compact_reference_content(
+            compact_artifact_references(
+                visible_result_evidence(selected_candidates),
+                selected_candidates,
+            )
+        )
+        references = tuple(
+            NumberedSearchAnswerReference(index, item)
+            for index, item in enumerate(evidence, start=1)
+        )
+        body = "\n".join(
+            f"UID {identity.uid} identifies {candidate.kind} in Context "
+            f"{candidate.context_name}. [{index}]"
+            for index, candidate in enumerate(selected_candidates, start=1)
+        )
+        document = SearchAnswerReferenceDocument(body=body, references=references)
+        return OrdinaryQueryResponse(
+            request=request,
+            answer=document.text,
+            grounded=True,
+            reference_document=document,
+        )
+    if is_unresolved_uid_selector(request.question.strip()):
+        return OrdinaryQueryResponse(
+            request,
+            f"{frozen.label}\n  (no readable item matches that UID)",
             False,
         )
 

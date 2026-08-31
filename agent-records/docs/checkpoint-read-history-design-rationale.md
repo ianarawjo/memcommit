@@ -69,12 +69,13 @@ external Grant.
 
 ## Adapter and audit boundary
 
-This change establishes the application and persistence contract, but does not
-invent command-line syntax for authoring `CheckpointRead` scopes. Existing
-granted Trace remains blocked because its current report expects a complete
-History graph; neither a Reference nor a later Embed necessarily authorizes
-that complete graph. A later Trace or Diff adapter must request and render a
-bounded window explicitly before it can expose granted retained History.
+This contract does not invent command-line syntax for authoring
+`CheckpointRead` scopes. Existing granted Trace remains blocked because its
+current report expects a complete History graph; neither a Reference nor a
+later Embed necessarily authorizes that complete graph. Diff's two-checkpoint
+form now requests an exact Reference pair and renders its comparison through
+`AuthorizedCheckpointHistory`. Other granted History adapters must likewise
+request and render a bounded window before exposing retained evidence.
 
 The command-attempt ledger and Study action ledger remain independent durable
 audit streams. They may annotate that a command ran or record a study

@@ -17,6 +17,7 @@ from memcommit.adapters.console.terminal.core.text import (
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_action_style
 from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange, memory_diff_lines
 from memcommit.application.capabilities.history.query.checkpoint_history_slicing import (
+    CheckpointHistoryComparison,
     CheckpointHistorySlice,
 )
 
@@ -455,6 +456,77 @@ def render_checkpoint_revision_cli(
         f"CONTEXT     {context_name}\n"
         + "".join(text for _style, text in fragments).rstrip()
     )
+
+
+def render_checkpoint_comparison_cli(
+    comparison: CheckpointHistoryComparison,
+    *,
+    context_name: str,
+    stat: bool = False,
+    raw: bool = False,
+    verbose: bool = False,
+) -> str:
+    """Render two exact retained result states in explicit FROM → TO order."""
+
+    if not isinstance(comparison, CheckpointHistoryComparison):
+        raise TypeError("Checkpoint comparison rendering requires a frozen pair.")
+    from_checkpoint_uid = comparison.from_checkpoint.uid
+    to_checkpoint_uid = comparison.to_checkpoint.uid
+    changes, result_count, reordered = _checkpoint_revision_items(
+        comparison.from_snapshot,
+        comparison.to_snapshot,
+    )
+    counts = {
+        treatment: sum(change.treatment == treatment for change in changes)
+        for treatment in ("KEEP", "ADD", "EDIT", "REMOVE")
+    }
+
+    def action(record: Mapping[str, Any]) -> str:
+        value = record.get("command")
+        return value if isinstance(value, str) and value else "checkpoint"
+
+    header = [
+        "UNIT        CHECKPOINT · CHECKPOINT VS CHECKPOINT",
+        f"FROM        {from_checkpoint_uid}",
+        f"TO          {to_checkpoint_uid}",
+        f"CONTEXT     {context_name}",
+        f"FROM ACTION {action(comparison.from_record)}",
+        f"TO ACTION   {action(comparison.to_record)}",
+        f"RESULT      {_direct_item_count(result_count)}",
+        (
+            "SUMMARY     "
+            f"{counts['KEEP']} kept · {counts['ADD']} added · "
+            f"{counts['EDIT']} edited · {counts['REMOVE']} removed"
+        ),
+    ]
+    if stat:
+        return "\n".join(header)
+    if raw:
+        body = _raw_revision_lines(changes, context_name=context_name)
+        return "\n".join((*header, "", *body))
+
+    fragments: StyleAndTextTuples = []
+    for change in changes:
+        fragments.extend(
+            _render_revision_item(
+                change,
+                location=f"{from_checkpoint_uid}..{to_checkpoint_uid}",
+                verbose_uid=verbose,
+            )
+        )
+    if not changes:
+        fragments.append(("class:report-neutral", " (empty direct Context)\n"))
+    if reordered:
+        fragments.append(
+            (
+                "class:report-neutral",
+                "\n ORDER · retained direct items changed position; result "
+                "rows remain authoritative.\n",
+            )
+        )
+    return "\n".join((*header, "")) + "".join(
+        text for _style, text in fragments
+    ).rstrip()
 
 
 def checkpoint_diff_detail_renderer(

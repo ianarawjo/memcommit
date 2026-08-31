@@ -17,7 +17,10 @@ from memcommit.application.operations.search.application import (
     run_search,
 )
 from memcommit.application.operations.search.runtime import execute_search
-from memcommit.application.operations.search.model import SearchCandidate
+from memcommit.application.operations.search.model import (
+    SearchArtifact,
+    SearchCandidate,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -85,6 +88,52 @@ def test_run_search_returns_typed_current_result_without_terminal():
     assert response.results[0].content == "One authorized search result."
     assert response.results[0].source_memory_uid == "memory-1"
     assert response.results[0].current_match is not None
+
+
+def test_run_search_resolves_uid_without_constructing_a_provider():
+    candidate = _candidate("Identity-selected content.")
+    events = []
+
+    def provider_factory():
+        events.append("provider")
+        raise AssertionError("A UID lookup must not construct a provider.")
+
+    response = run_search(
+        SearchRequest(candidate.item.uid, ("notes",)),
+        source_port=_CurrentSource((candidate,)),
+        provider_factory=provider_factory,
+        observer=events.append,
+    )
+
+    assert events == ["INPUTS_FROZEN"]
+    assert [result.uid for result in response.results] == [candidate.item.uid]
+    assert response.results[0].content == "Identity-selected content."
+
+
+def test_run_search_resolves_a_printed_non_uuid_artifact_prefix():
+    artifact = SearchArtifact(
+        uid="rationale:11111111-1111-4111-8111-111111111111",
+        artifact_kind="rationale",
+        title="Why this Memory exists",
+        content="Retained rationale evidence.",
+    )
+    candidate = SearchCandidate(
+        candidate_id="c000001",
+        kind="artifact",
+        context_uid="context-1",
+        context_names=("notes",),
+        item=artifact,
+        search_text=artifact.content,
+    )
+
+    response = run_search(
+        SearchRequest(artifact.uid[:8], ("notes",)),
+        source_port=_CurrentSource((candidate,)),
+        provider_factory=lambda: pytest.fail("Artifact UID must stay local"),
+    )
+
+    assert [result.uid for result in response.results] == [artifact.uid]
+    assert response.results[0].kind == "artifact"
 
 
 def test_run_search_freezes_empty_current_frame_before_provider_factory():

@@ -524,6 +524,31 @@ def test_query_positional_context_item_runs_ordinary_query(
     assert calls == [(("ordinary", content),)]
 
 
+def test_query_positional_context_accepts_a_memory_uid_without_provider(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context = ops.init("ordinary-uid")
+    memory = ops.add(context, "Identity-selected Query evidence.")
+    store.save(context)
+    store.set_current(context.name)
+    monkeypatch.setattr(
+        "memcommit.adapters.console.commands.query.command.connect_query_provider",
+        lambda provider: pytest.fail("UID Query must not connect a provider"),
+    )
+    monkeypatch.setattr(
+        "memcommit.adapters.console.commands.query.command.connect_codex_chatgpt_provider",
+        lambda: pytest.fail("UID Query must not connect a provider"),
+    )
+
+    result = runner.invoke(app, ["query", context.name, memory.uid[:8]])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert f"UID {memory.uid} identifies memory" in result.output
+    assert "Identity-selected Query evidence." in result.output
+
+
 def test_branch_merge_remove_and_revert_keep_only_the_pointer(isolated_store):
     store = MemoryStore()
     ref, source_uid = _attach_query_source(store)

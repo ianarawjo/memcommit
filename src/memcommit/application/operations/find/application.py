@@ -6,6 +6,12 @@ import re
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
+from memcommit.application.capabilities.durable_uid_resolution import (
+    DurableUidAmbiguityError,
+    DurableUidCandidate,
+    try_resolve_durable_uid,
+)
+
 
 FindMode = Literal["LITERAL", "REGEX"]
 FindItemKind = Literal["memory", "memory_ref"]
@@ -149,14 +155,21 @@ class FindSpan:
 
 @dataclass(frozen=True, slots=True)
 class FindMatch:
-    """All non-overlapping matches in one frozen Memory-shaped item."""
+    """Content occurrences and/or one durable identity match in a source item."""
 
     source: FindSourceItem
     spans: tuple[FindSpan, ...]
+    matched_uids: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
-        if not self.spans:
-            raise FindError("A Find match requires at least one span.")
+        if not self.spans and not self.matched_uids:
+            raise FindError("A Find match requires content or UID evidence.")
+        if (
+            not isinstance(self.matched_uids, tuple)
+            or any(not isinstance(uid, str) or not uid for uid in self.matched_uids)
+            or len(set(self.matched_uids)) != len(self.matched_uids)
+        ):
+            raise FindError("Find UID matches must contain distinct identities.")
         previous_end = -1
         for span in self.spans:
             if (
@@ -178,6 +191,10 @@ class FindResult:
     @property
     def occurrence_count(self) -> int:
         return sum(len(match.spans) for match in self.matches)
+
+    @property
+    def identity_match_count(self) -> int:
+        return sum(len(match.matched_uids) for match in self.matches)
 
 
 class FindSourcePort(Protocol):
@@ -219,6 +236,32 @@ def run_find(
     frozen = source_port.freeze(request)
     if not isinstance(frozen, FrozenFindSource):
         raise FindError("Find source returned an invalid frozen frame.")
+    identity_by_position: dict[int, tuple[str, ...]] = {}
+    if request.mode == "LITERAL":
+        identity_candidates: list[DurableUidCandidate[FindSourceItem]] = []
+        for item in frozen.items:
+            identity_uids = [item.item_uid]
+            if (
+                item.source_memory_uid is not None
+                and item.source_memory_uid != item.item_uid
+            ):
+                # Reference rows expose both the relationship and Source
+                # Memory identities; either printed UID must round-trip.
+                identity_uids.append(item.source_memory_uid)
+            identity_candidates.extend(
+                DurableUidCandidate(uid=uid, kind=item.kind, value=item)
+                for uid in identity_uids
+            )
+        try:
+            identity = try_resolve_durable_uid(
+                tuple(identity_candidates),
+                request.pattern,
+            )
+        except DurableUidAmbiguityError as error:
+            raise FindInputError(str(error)) from error
+        if identity is not None:
+            for item in identity.values:
+                identity_by_position[item.source_position] = (identity.uid,)
     matches: list[FindMatch] = []
     for item in frozen.items:
         spans = tuple(
@@ -229,8 +272,15 @@ def run_find(
             )
             for match in compiled.finditer(item.content)
         )
-        if spans:
-            matches.append(FindMatch(source=item, spans=spans))
+        matched_uids = identity_by_position.get(item.source_position, ())
+        if spans or matched_uids:
+            matches.append(
+                FindMatch(
+                    source=item,
+                    spans=spans,
+                    matched_uids=matched_uids,
+                )
+            )
     return FindResult(
         request=request,
         scanned_item_count=len(frozen.items),

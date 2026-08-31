@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.core.context import Context
+from memcommit.core.context import AutoCheckpoint, Context
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.model import plan_update
 
@@ -268,6 +268,19 @@ def test_diff_context_operand_returns_latest_checkpoint_without_selection(
     assert "CONTEXT     campus-wiki" in result.output
 
 
+def test_diff_context_operand_accepts_context_uid(isolated_store):
+    store = MemoryStore()
+    _stage(store)
+    target = store.load_direct("campus-wiki")
+    checkpoint = store.checkpoint(target, command="checkpoint")
+
+    result = runner.invoke(app, ["diff", target.uid[:8], "--stat"])
+
+    assert result.exit_code == 0, result.output
+    assert f"CHECKPOINT  {checkpoint.uid}" in result.output
+    assert "CONTEXT     campus-wiki" in result.output
+
+
 def test_diff_context_operand_renders_latest_checkpoint_stat_noninteractively(
     isolated_store,
 ):
@@ -323,6 +336,58 @@ def test_diff_context_and_checkpoint_option_support_raw_output(isolated_store):
     assert "diff --mem campus-wiki#" in result.output
     assert "--- " in result.output
     assert "+++ " in result.output
+
+
+def test_diff_accepts_two_checkpoint_uids_and_compares_their_result_states(
+    isolated_store,
+):
+    store = MemoryStore()
+    context = ops.init("checkpoint-pair")
+    memory = ops.add(context, "Before wording")
+    store.save(
+        context,
+        AutoCheckpoint(command="add", args={}, description="First state"),
+    )
+    from_uid = store.list_checkpoints(context.name)[0]["uid"]
+    ops.edit(context, memory.uid, "After wording")
+    store.save(
+        context,
+        AutoCheckpoint(command="edit", args={}, description="Second state"),
+    )
+    to_uid = store.list_checkpoints(context.name)[0]["uid"]
+
+    result = runner.invoke(app, ["diff", from_uid[:8], to_uid[:8]])
+
+    assert result.exit_code == 0, result.output
+    assert "UNIT        CHECKPOINT · CHECKPOINT VS CHECKPOINT" in result.output
+    assert f"FROM        {from_uid}" in result.output
+    assert f"TO          {to_uid}" in result.output
+    assert "CONTEXT     checkpoint-pair" in result.output
+    assert "- [EDIT]" in result.output
+    assert "Before wording" in result.output
+    assert "+ [EDIT]" in result.output
+    assert "After wording" in result.output
+
+
+def test_diff_two_checkpoint_uids_require_one_owner_context(isolated_store):
+    store = MemoryStore()
+    checkpoint_uids = []
+    for name in ("pair/one", "pair/two"):
+        context = ops.init(name)
+        ops.add(context, name)
+        store.save(
+            context,
+            AutoCheckpoint(command="add", args={}, description=name),
+        )
+        checkpoint_uids.append(store.list_checkpoints(name)[0]["uid"])
+
+    result = runner.invoke(
+        app,
+        ["diff", checkpoint_uids[0][:8], checkpoint_uids[1][:8]],
+    )
+
+    assert result.exit_code == 1
+    assert "same Context" in result.stderr
 
 
 def test_diff_bare_checkpoint_prefix_infers_its_unique_context(isolated_store):

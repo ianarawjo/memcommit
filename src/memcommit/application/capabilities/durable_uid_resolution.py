@@ -1,9 +1,8 @@
 """Resolve durable UID selectors inside one caller-authorized candidate frame.
 
-The resolver deliberately does not enumerate storage.  Each operation freezes
+The resolver deliberately does not enumerate storage. Each operation freezes
 the identities it is allowed to disclose, then supplies only that bounded
-catalog here.  This keeps exact and prefix behavior common without turning a
-UID into a way to probe another Profile, Grant, or operation's private state.
+catalog here.
 """
 
 from __future__ import annotations
@@ -66,13 +65,7 @@ def try_resolve_durable_uid(
     candidates: tuple[DurableUidCandidate[T], ...],
     selector: str,
 ) -> DurableUidResolution[T] | None:
-    """Resolve exact identity first, then one unambiguous public UID prefix.
-
-    Multiple candidates may carry the same UID when an authorized frame
-    contains several occurrences of the same durable subject.  That is one
-    identity, not an ambiguity, so every occurrence is returned.  A prefix
-    that expands to different full UIDs fails closed.
-    """
+    """Resolve exact identity first, then one unambiguous public UID prefix."""
 
     if not isinstance(selector, str) or not selector.strip():
         return None
@@ -80,10 +73,6 @@ def try_resolve_durable_uid(
     exact = tuple(candidate for candidate in candidates if candidate.uid == value)
     if exact:
         return DurableUidResolution(value, value, exact)
-
-    # Prefix interpretation stays inside the supplied authorized frame, so it
-    # can honor the same eight-character display form for UUID and non-UUID
-    # durable identities without opening a global identifier namespace.
     if len(value) < _PUBLIC_UID_PREFIX_LENGTH or any(
         character.isspace() for character in value
     ):

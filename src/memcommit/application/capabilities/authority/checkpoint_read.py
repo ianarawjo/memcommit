@@ -11,6 +11,7 @@ from memcommit.application.capabilities.authority.checkpoint_read_model import (
 )
 from memcommit.application.capabilities.authority.context_access import ContextAccess
 from memcommit.application.capabilities.history.query.checkpoint_history_slicing import (
+    CheckpointHistoryComparison,
     CheckpointHistoryRevision,
     CheckpointHistorySlice,
     build_checkpoint_history_slice,
@@ -63,6 +64,17 @@ class AuthorizedCheckpointHistory:
     def transitions(self, checkpoint_uid: str) -> tuple[MemoryTransition, ...]:
         self._require_checkpoint(checkpoint_uid)
         return self._history.transitions(checkpoint_uid)
+
+    def comparison(
+        self,
+        from_checkpoint_uid: str,
+        to_checkpoint_uid: str,
+    ) -> CheckpointHistoryComparison:
+        """Compare two complete result states inside this exact read window."""
+
+        self._require_checkpoint(from_checkpoint_uid)
+        self._require_checkpoint(to_checkpoint_uid)
+        return self._history.comparison(from_checkpoint_uid, to_checkpoint_uid)
 
 
 def _candidate_checkpoint_reads(
