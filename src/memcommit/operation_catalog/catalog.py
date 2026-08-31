@@ -7,6 +7,7 @@ from memcommit.operation_catalog.details import DETAILS_BY_OPERATION
 from memcommit.operation_catalog.families import (
     OPERATION_FAMILY_BY_OPERATION,
     operation_family,
+    operation_family_section,
 )
 from memcommit.operation_catalog.model import ExecutionKind, OperationDescriptor
 
@@ -27,9 +28,11 @@ def _operation(
         raise RuntimeError(
             f"Operation Help BEST FOR is missing for {name!r}."
         ) from error
+    section = operation_family_section(name)
     return OperationDescriptor(
         name=name,
         family=operation_family(name).id,
+        section=None if section is None else section.id,
         summary=summary,
         flow=flow,
         execution=execution,

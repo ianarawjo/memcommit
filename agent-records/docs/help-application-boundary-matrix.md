@@ -31,8 +31,10 @@ guard. Reviewed translated operation Summary and
 Best For copy lives beside the canonical English records under
 `memcommit.operation_catalog.translations`, with
 language selection in `operation_catalog.localization`. The 11 operation
-families, their order, intent descriptions, and translated family copy are
-owned by the same top-level catalog; console Help projects them as categories.
+families, their order, intent descriptions, optional complete family sections,
+and translated family copy are owned by the same top-level catalog. The Help
+application projects those records as renderer-neutral family groups; console
+Help consumes that application grouping rather than rebuilding it.
 Help-only concept, locator, and key guidance remains in
 `commands.help.localized_copy`. The former
 `interfaces.tui.operations.help` tree and the inverse `help_inventory` command
@@ -59,7 +61,7 @@ not broaden Help's Store or provider access.
 | Route | Entry | Application path | Projection | Effect | Evidence |
 | --- | --- | --- | --- | --- | --- |
 | Plain `mem help` | `adapters.console.commands.help.command.cmd` in a non-TTY | `command_entries` takes `list_operation_help()` once | Plain alphabetized inventory plus CLI-owned forms, maturity tags, and canonical expanded details | None | `test_help_catalog.py`, `test_help_application.py` |
-| Interactive `mem help` | Same command in a TTY | Same frozen application snapshot | Grouped/A–Z browser; selected Form then shared exact-command argument editor | The editor closes before a separately recorded child command invocation; cancel has no effect | `test_help_command_handoff.py` and the ordered Help handoff captures |
+| Interactive `mem help` | Same command in a TTY | Flat operation snapshot plus `list_operation_help_groups()` | Grouped/A–Z browser; History visibly separates non-focusable Inspection and Recovery sections; selected Form then shared exact-command argument editor | The editor closes before a separately recorded child command invocation; cancel has no effect | `test_help_catalog.py`, `test_help_command_handoff.py`, and the ordered Help captures |
 | Natural-language `mem help REQUEST` | Same command with one positional request in TTY or non-TTY | `prepare_help_lookup` freezes and preflights the complete catalog before `connect_help_provider`; `execute_help_lookup` requires exactly three distinct exact IDs | Three existing collapsed Help rows in semantic order: `mem NAME`, summary, and `WHEN`; no ordinal, browser, why, confidence, forms, or generated prose | None | `test_help_lookup_application.py`, `test_help_lookup_cli.py`, `test_help_lookup_provider_policy.py` |
 | Selected CLI detail | One `CommandEntry` from the snapshot | Catalog meaning already bound to the entry | Common meaning composed with registered CLI syntax | None | `test_help_catalog.py` |
 | Python list | `MemCommitClient.list_operations()` | `_operations.help.list_operations` → `list_operation_help` | `HelpCatalogResult` of immutable DTOs, including compact typed-detail references | None | `test_help_public_api.py`, import-boundary tests |
@@ -70,9 +72,11 @@ not broaden Help's Store or provider access.
 
 ## Invariants
 
-1. The application list is alphabetized, unique, immutable, and complete for
-   all 66 visible public operations. Every operation belongs to exactly one
-   top-level catalog family.
+1. The flat application list is alphabetized, unique, immutable, and complete
+   for all 66 visible public operations. The grouped application list preserves
+   catalog family and section order. Every operation belongs to exactly one
+   top-level catalog family; an optional section set must exactly partition its
+   family without changing order.
 2. Describe accepts one exact public operation name and detail lookup accepts
    one exact operation-local detail ID; neither performs fuzzy, alias, case, or
    whitespace normalization.
@@ -86,10 +90,10 @@ not broaden Help's Store or provider access.
    summary; `ON_DEMAND` content is not injected into every tool description.
 5. No generic notes bag or second prose registry exists. Full detail payloads
    are retrieved through the same application boundary by exact ID.
-6. CLI forms, aliases, and responsive layout remain interface values. Family
-   identity, ordered membership, and intent originate in the top-level
+6. CLI forms, aliases, responsive layout, divider glyphs, and focus remain
+   interface values. Family and section identity, ordered membership, and intent originate in the top-level
    operation catalog; version-1 Python and agent Help records do not yet expose
-   the new family field.
+   the family or section fields.
 7. Bare CLI, Python, agent, and MCP Help must succeed without creating a
    missing Store and without constructing or calling a provider. Only a
    nonblank positional CLI request authorizes the bounded semantic selector.

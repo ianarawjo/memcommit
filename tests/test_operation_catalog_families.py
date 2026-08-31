@@ -1,11 +1,17 @@
 """Product-level operation-family catalog contracts."""
 
-from memcommit.adapters.console.commands.help.inventory import HELP_CATEGORY_GROUPS
+from memcommit.adapters.console.commands.help.inventory import (
+    HELP_CATEGORY_GROUPS,
+    HELP_CATEGORY_SECTIONS,
+    HELP_SECTION_BY_COMMAND,
+)
 from memcommit.operation_catalog import (
     OPERATION_BY_NAME,
     OPERATION_FAMILIES,
     OPERATION_FAMILY_BY_OPERATION,
+    OPERATION_FAMILY_SECTION_BY_OPERATION,
     OperationFamilyId,
+    OperationFamilySectionId,
     operation_family,
     validate_family_translation_coverage,
 )
@@ -26,10 +32,21 @@ def test_operation_descriptors_carry_their_catalog_family_identity() -> None:
         for name, descriptor in OPERATION_BY_NAME.items()
     )
     assert operation_family("trace").id is OperationFamilyId.HISTORY_RECOVERY
+    assert (
+        OPERATION_BY_NAME["trace"].section
+        is OperationFamilySectionId.HISTORY_INSPECTION
+    )
+    assert (
+        OPERATION_BY_NAME["checkpoint"].section
+        is OperationFamilySectionId.HISTORY_RECOVERY
+    )
+    assert OPERATION_BY_NAME["compare"].section is None
 
 
 def test_history_family_preserves_the_reviewed_affordance_order() -> None:
-    assert operation_family("trace").operation_names == (
+    history = operation_family("trace")
+
+    assert history.operation_names == (
         "log",
         "diff",
         "trace",
@@ -39,11 +56,48 @@ def test_history_family_preserves_the_reviewed_affordance_order() -> None:
         "redo",
         "revert",
     )
+    assert tuple(
+        (section.id, section.title, section.operation_names)
+        for section in history.sections
+    ) == (
+        (
+            OperationFamilySectionId.HISTORY_INSPECTION,
+            "INSPECTION",
+            ("log", "diff", "trace", "rationale"),
+        ),
+        (
+            OperationFamilySectionId.HISTORY_RECOVERY,
+            "RECOVERY",
+            ("checkpoint", "undo", "redo", "revert"),
+        ),
+    )
+    assert set(OPERATION_FAMILY_SECTION_BY_OPERATION) == set(
+        history.operation_names
+    )
+    assert all(
+        not family.sections
+        for family in OPERATION_FAMILIES
+        if family.id is not OperationFamilyId.HISTORY_RECOVERY
+    )
 
 
 def test_console_help_projects_the_shared_family_catalog() -> None:
     assert HELP_CATEGORY_GROUPS == tuple(
         (family.title, family.operation_names) for family in OPERATION_FAMILIES
+    )
+    assert HELP_CATEGORY_SECTIONS == {
+        "HISTORY & RECOVERY": (
+            ("INSPECTION", ("log", "diff", "trace", "rationale")),
+            ("RECOVERY", ("checkpoint", "undo", "redo", "revert")),
+        )
+    }
+    assert HELP_SECTION_BY_COMMAND["trace"] == (
+        "HISTORY & RECOVERY",
+        "INSPECTION",
+    )
+    assert HELP_SECTION_BY_COMMAND["revert"] == (
+        "HISTORY & RECOVERY",
+        "RECOVERY",
     )
 
 

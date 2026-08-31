@@ -21,10 +21,12 @@ catalog subset but does not generate substitute Help prose.
 
 ## Contract
 
-`memcommit.application.operations.help.application` owns four read-only application actions:
+`memcommit.application.operations.help.application` owns five read-only application actions:
 
 - `list_operation_help()` returns one immutable alphabetized snapshot of all
   public operations;
+- `list_operation_help_groups()` returns the same operations in catalog family
+  order, including any complete ordered family sections;
 - `describe_operation(name)` returns the exact catalog record for one public
   operation and rejects blank, padded, case-changed, or unknown names;
 - `list_operation_details(name)` returns compact typed detail references for
@@ -74,12 +76,20 @@ behavior, and production adapters depend on the canonical package directly.
 
 ## Interface projections
 
-The CLI/TUI Help inventory takes one application snapshot and then combines it
-with interface-owned command forms and categories. Typer registration still
+The CLI/TUI Help inventory takes the flat and grouped application snapshots,
+then combines them with interface-owned command forms. Family and section
+membership are therefore application projections of the top-level catalog,
+not terminal-authored categories. Typer registration still
 uses each catalog summary as static command metadata; this is interface
 assembly, not a second Help execution path. Wide/compact layout, grouping,
 focus, syntax forms, and shell-selection behavior remain owned by the terminal
 adapter. The terminal chooses how to render a comparison, but not its meaning.
+
+In BY KIND, `HISTORY & RECOVERY` remains one family and retains its existing
+description. The terminal inserts neutral, non-focusable `INSPECTION` and
+`RECOVERY` divider rows from the grouped application snapshot. Command
+selection stays one continuous sequence across the divider, so the visual
+subdivision does not introduce a hidden interaction layer. A–Z remains flat.
 
 When a positional request is supplied, `mem help REQUEST` bypasses the full
 browser, performs one lookup, and renders each selected operation through the

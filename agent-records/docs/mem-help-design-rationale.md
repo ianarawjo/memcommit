@@ -255,6 +255,14 @@ prompt-toolkit selector:
   Context-to-Context operations together when they answer the same user goal,
   while each operation's expanded `FLOW`, `EXECUTION`, and `RANGE` remain the
   authoritative scope contract.
+  `HISTORY & RECOVERY` remains one category because all eight operations use
+  recorded history as their subject, but its catalog-owned section structure
+  makes the interaction difference explicit. `INSPECTION` contains `log`,
+  `diff`, `trace`, and `rationale`; `RECOVERY` contains `checkpoint`, `undo`,
+  `redo`, and `revert`. BY KIND renders each section title on a thin internal
+  rule after the unchanged family description. These rules are presentation
+  only: they are not focus stops, command order and Up/Down traversal remain
+  continuous, expansion remains operation-owned, and A–Z stays unsectioned.
   Every BY KIND box includes one short intent description. Pure deterministic
   groups say `NO LLM`; semantic transformations and Ground say `LLM-BASED`;
   route-dependent groups say `MIXED`. System and Study tools omit an execution

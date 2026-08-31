@@ -32,6 +32,15 @@ every public operation belongs to exactly one family, and every descriptor
 carries that family's identity. Console Help derives its existing category
 maps and ordering from those records rather than authoring a second registry.
 
+A family may additionally declare complete ordered sections when its members
+share a broad affordance but not one immediate interaction. `HISTORY &
+RECOVERY` is divided into `INSPECTION` (`log`, `diff`, `trace`, `rationale`)
+and `RECOVERY` (`checkpoint`, `undo`, `redo`, `revert`). Section membership
+must flatten to the family's exact operation order, and each affected
+descriptor carries the stable section identity. This distinguishes observing
+recorded lineage from establishing or applying a recovery boundary without
+inventing two unrelated top-level families.
+
 The Help operation remains under `memcommit.application.operations.help` and
 depends on the catalog in one direction. Its composer still combines stable
 operation meaning with interface-supplied command forms; the catalog imports
@@ -54,6 +63,9 @@ with exposed operations, but the relocation does not make prose an executable
 source of behavior.
 
 This change preserves the public operation set and existing Help family order.
+Family sections are descriptive affordance structure; they do not imply a
+shared executable history service or change any operation's authority,
+determinism, or mutation contract.
 It does not yet move the 66 application or console operation packages under
 physical family directories, and it does not yet introduce executable trait
 declarations for authority, history, provider, session, or mutation

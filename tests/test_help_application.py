@@ -12,7 +12,12 @@ from memcommit.application.operations.help.application import (
     describe_operation,
     describe_operation_detail,
     list_operation_help,
+    list_operation_help_groups,
     list_operation_details,
+)
+from memcommit.operation_catalog import (
+    OperationFamilyId,
+    OperationFamilySectionId,
 )
 
 
@@ -28,6 +33,49 @@ def test_list_returns_one_alphabetized_complete_immutable_snapshot():
     assert len(first) == 66
     assert len({operation.name for operation in first}) == len(first)
     assert first == second
+
+
+def test_grouped_list_preserves_catalog_family_and_history_section_order():
+    groups = list_operation_help_groups()
+    history = next(
+        group
+        for group in groups
+        if group.family.id is OperationFamilyId.HISTORY_RECOVERY
+    )
+
+    assert isinstance(groups, tuple)
+    assert len(groups) == 11
+    assert tuple(operation.name for operation in history.operations) == (
+        "log",
+        "diff",
+        "trace",
+        "rationale",
+        "checkpoint",
+        "undo",
+        "redo",
+        "revert",
+    )
+    assert tuple(
+        (
+            section_group.section.id,
+            tuple(operation.name for operation in section_group.operations),
+        )
+        for section_group in history.sections
+    ) == (
+        (
+            OperationFamilySectionId.HISTORY_INSPECTION,
+            ("log", "diff", "trace", "rationale"),
+        ),
+        (
+            OperationFamilySectionId.HISTORY_RECOVERY,
+            ("checkpoint", "undo", "redo", "revert"),
+        ),
+    )
+    assert all(
+        not group.sections
+        for group in groups
+        if group.family.id is not OperationFamilyId.HISTORY_RECOVERY
+    )
 
 
 def test_describe_returns_the_exact_catalog_contract():

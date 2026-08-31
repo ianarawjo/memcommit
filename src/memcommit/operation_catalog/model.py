@@ -6,7 +6,10 @@ from dataclasses import dataclass
 from enum import Enum
 import re
 
-from memcommit.operation_catalog.families import OperationFamilyId
+from memcommit.operation_catalog.families import (
+    OperationFamilyId,
+    OperationFamilySectionId,
+)
 
 
 class ExecutionKind(str, Enum):
@@ -147,6 +150,7 @@ class OperationDescriptor:
 
     name: str
     family: OperationFamilyId
+    section: OperationFamilySectionId | None
     summary: str
     flow: str
     execution: ExecutionKind
@@ -165,6 +169,12 @@ class OperationDescriptor:
     def __post_init__(self) -> None:
         if not isinstance(self.family, OperationFamilyId):
             raise TypeError("Operation family must use a stable family identity.")
+        if self.section is not None and not isinstance(
+            self.section, OperationFamilySectionId
+        ):
+            raise TypeError(
+                "Operation family section must use a stable identity when present."
+            )
         for field_name in ("name", "summary", "flow", "effect"):
             value = getattr(self, field_name)
             if not value.strip():

@@ -7,8 +7,10 @@ from dataclasses import dataclass
 import typer
 
 from memcommit.operation_catalog import OperationDescriptor
-from memcommit.operation_catalog.families import OPERATION_FAMILIES
-from memcommit.application.operations.help.application import list_operation_help
+from memcommit.application.operations.help.application import (
+    list_operation_help,
+    list_operation_help_groups,
+)
 from memcommit.adapters.console.commands.help.localized_copy import (
     validate_help_translation_coverage,
 )
@@ -140,25 +142,51 @@ HELP_COMMON_KEYS = (
     ),
 )
 
+_HELP_APPLICATION_GROUPS = list_operation_help_groups()
 HELP_CATEGORY_GROUPS = tuple(
-    (family.title, family.operation_names) for family in OPERATION_FAMILIES
+    (
+        group.family.title,
+        tuple(operation.name for operation in group.operations),
+    )
+    for group in _HELP_APPLICATION_GROUPS
 )
 HELP_CATEGORY_DESCRIPTIONS = {
-    family.title: (family.execution_label, family.description)
-    for family in OPERATION_FAMILIES
+    group.family.title: (
+        group.family.execution_label,
+        group.family.description,
+    )
+    for group in _HELP_APPLICATION_GROUPS
+}
+HELP_CATEGORY_SECTIONS = {
+    group.family.title: tuple(
+        (
+            section_group.section.title,
+            tuple(operation.name for operation in section_group.operations),
+        )
+        for section_group in group.sections
+    )
+    for group in _HELP_APPLICATION_GROUPS
+    if group.sections
 }
 HELP_CATEGORY_BY_COMMAND = {
-    operation_name: family.title
-    for family in OPERATION_FAMILIES
-    for operation_name in family.operation_names
+    operation.name: group.family.title
+    for group in _HELP_APPLICATION_GROUPS
+    for operation in group.operations
+}
+HELP_SECTION_BY_COMMAND = {
+    operation.name: (group.family.title, section_group.section.title)
+    for group in _HELP_APPLICATION_GROUPS
+    for section_group in group.sections
+    for operation in section_group.operations
 }
 HELP_CATEGORY_ORDER = {
-    family.title: index for index, family in enumerate(OPERATION_FAMILIES)
+    group.family.title: index
+    for index, group in enumerate(_HELP_APPLICATION_GROUPS)
 }
 HELP_COMMAND_ORDER = {
-    operation_name: operation_index
-    for family in OPERATION_FAMILIES
-    for operation_index, operation_name in enumerate(family.operation_names)
+    operation.name: operation_index
+    for group in _HELP_APPLICATION_GROUPS
+    for operation_index, operation in enumerate(group.operations)
 }
 
 COMMAND_FORMS = {

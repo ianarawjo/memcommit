@@ -377,6 +377,84 @@ def test_adjacent_command_records_use_connectors_without_background_bands():
     )
 
 
+def test_history_box_renders_two_noninteractive_sections_without_changing_rows():
+    root, context = _root_context()
+    try:
+        by_name = {entry.name: entry for entry in command_entries(context)}
+    finally:
+        context.close()
+    operation_names = (
+        "log",
+        "diff",
+        "trace",
+        "rationale",
+        "checkpoint",
+        "undo",
+        "redo",
+        "revert",
+    )
+    fragments = _help_group_fragments(
+        [
+            (index, by_name[operation_name])
+            for index, operation_name in enumerate(operation_names)
+        ],
+        title="HISTORY & RECOVERY",
+        width=180,
+        focused=True,
+        selected_index=2,
+        expanded_index=None,
+        selected_form=None,
+    )
+    rendered = "".join(text for _style, text in fragments)
+    lines = rendered.splitlines()
+    inspection_index = next(
+        index for index, line in enumerate(lines) if "── INSPECTION " in line
+    )
+    recovery_index = next(
+        index for index, line in enumerate(lines) if "── RECOVERY " in line
+    )
+    log_index = next(index for index, line in enumerate(lines) if "mem log " in line)
+    rationale_index = next(
+        index for index, line in enumerate(lines) if "mem rationale " in line
+    )
+    checkpoint_index = next(
+        index for index, line in enumerate(lines) if "mem checkpoint " in line
+    )
+
+    assert all(terminal_cell_width(line) == 180 for line in lines)
+    assert "MIXED · Inspect provenance and recorded changes." in rendered
+    assert inspection_index < log_index < rationale_index < recovery_index
+    assert recovery_index < checkpoint_index
+    assert sum("── INSPECTION " in line for line in lines) == 1
+    assert sum("── RECOVERY " in line for line in lines) == 1
+    assert any(
+        style == "class:help-section-label bold" and text == "INSPECTION"
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:help-section-label bold" and text == "RECOVERY"
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:help-command.selected bold" and "mem trace" in text
+        for style, text in fragments
+    )
+    a_z_rendered = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, by_name["trace"]), (1, by_name["checkpoint"])],
+            title="A–Z",
+            width=180,
+            focused=True,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+    )
+    assert "INSPECTION" not in a_z_rendered
+    assert "RECOVERY" not in a_z_rendered
+
+
 def test_every_help_category_explains_its_intent_and_execution_basis():
     root, context = _root_context()
     try:

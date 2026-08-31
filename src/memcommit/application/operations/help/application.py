@@ -2,12 +2,37 @@
 
 from __future__ import annotations
 
-from memcommit.operation_catalog import OPERATION_BY_NAME, OperationDescriptor
+from dataclasses import dataclass
+
+from memcommit.operation_catalog import (
+    OPERATION_BY_NAME,
+    OPERATION_FAMILIES,
+    OperationDescriptor,
+    OperationFamily,
+    OperationFamilySection,
+)
 from memcommit.operation_catalog.model import OperationHelpDetail
 
 
 class HelpApplicationInputError(ValueError):
     """A Help query did not identify one exact public operation."""
+
+
+@dataclass(frozen=True, slots=True)
+class OperationHelpSectionGroup:
+    """One catalog section with its complete ordered operation records."""
+
+    section: OperationFamilySection
+    operations: tuple[OperationDescriptor, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class OperationHelpFamilyGroup:
+    """One catalog family projected for renderer-neutral Help discovery."""
+
+    family: OperationFamily
+    operations: tuple[OperationDescriptor, ...]
+    sections: tuple[OperationHelpSectionGroup, ...]
 
 
 def list_operation_help() -> tuple[OperationDescriptor, ...]:
@@ -23,6 +48,31 @@ def list_operation_help() -> tuple[OperationDescriptor, ...]:
             OPERATION_BY_NAME.values(),
             key=lambda operation: (operation.name.casefold(), operation.name),
         )
+    )
+
+
+def list_operation_help_groups() -> tuple[OperationHelpFamilyGroup, ...]:
+    """Return the public operations in catalog family and section order."""
+
+    return tuple(
+        OperationHelpFamilyGroup(
+            family=family,
+            operations=tuple(
+                OPERATION_BY_NAME[operation_name]
+                for operation_name in family.operation_names
+            ),
+            sections=tuple(
+                OperationHelpSectionGroup(
+                    section=section,
+                    operations=tuple(
+                        OPERATION_BY_NAME[operation_name]
+                        for operation_name in section.operation_names
+                    ),
+                )
+                for section in family.sections
+            ),
+        )
+        for family in OPERATION_FAMILIES
     )
 
 
@@ -77,8 +127,11 @@ def _operation(operation_name: str) -> OperationDescriptor:
 
 __all__ = [
     "HelpApplicationInputError",
+    "OperationHelpFamilyGroup",
+    "OperationHelpSectionGroup",
     "describe_operation",
     "describe_operation_detail",
+    "list_operation_help_groups",
     "list_operation_help",
     "list_operation_details",
 ]

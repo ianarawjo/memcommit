@@ -7,6 +7,7 @@ import textwrap
 import typer
 
 from memcommit.adapters.console.terminal.core.text_layout import (
+    elide_terminal_text,
     pad_terminal_text,
     terminal_cell_width,
     wrap_terminal_text,
@@ -24,6 +25,7 @@ from memcommit.adapters.console.commands.help.inventory import (
     HELP_CATEGORY_BY_COMMAND,
     HELP_CATEGORY_DESCRIPTIONS,
     HELP_CATEGORY_ORDER,
+    HELP_SECTION_BY_COMMAND,
     HELP_COMMAND_ORDER,
     HELP_COMMON_KEYS,
     HELP_COMMON_LOCATORS,
@@ -281,11 +283,38 @@ def _help_group_fragments(
                     (border_style, vertical + "\n"),
                 ]
             )
+    active_section: str | None = None
     label_lines = {
         index: tuple(display_escape_text(line) for line in _entry_label_lines(entry))
         for index, entry in entries
     }
     for index, entry in entries:
+        section = HELP_SECTION_BY_COMMAND.get(entry.name)
+        section_title = (
+            section[1] if section is not None and section[0] == title else None
+        )
+        if section_title is not None and section_title != active_section:
+            label = elide_terminal_text(
+                display_escape_text(section_title),
+                max(1, content_width - terminal_cell_width("──  ")),
+            )
+            divider_prefix = f"── {label} "
+            divider_tail = "─" * max(
+                0,
+                content_width - terminal_cell_width(divider_prefix),
+            )
+            fragments.extend(
+                [
+                    (border_style, vertical),
+                    ("", " "),
+                    ("class:help-connector", "── "),
+                    ("class:help-section-label bold", label),
+                    ("class:help-connector", " " + divider_tail),
+                    ("", " "),
+                    (border_style, vertical + "\n"),
+                ]
+            )
+            active_section = section_title
         expanded = index == expanded_index
         owns_selection = index == selected_index
         command_focused = focused and owns_selection and selected_form is None

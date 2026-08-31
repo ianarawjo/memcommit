@@ -770,6 +770,7 @@ def run_help_selector(
                         "form": "fg:#cad3f5",
                         "category": "bold",
                         "help-command": "bold",
+                        "help-section-label": "bold",
                         "help-group": "",
                         "help-group.focused": "fg:#8bd5ff bold",
                         "help-guide.border": "",
