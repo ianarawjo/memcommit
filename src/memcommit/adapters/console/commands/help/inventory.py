@@ -17,7 +17,6 @@ from memcommit.adapters.console.commands.help.localized_copy import (
 
 COMMAND_ANNOTATIONS = {
     "config": "legacy",
-    "eval": "legacy",
 }
 
 # Exact alternate spellings stay executable but share their canonical
@@ -31,7 +30,7 @@ COMMAND_DISPLAY_ALIASES = {
 # Related spellings can live under another command group while remaining
 # visible in the canonical operation's detail. They are kept separate from
 # owned forms so parser-validation and editable-command semantics stay explicit.
-COMMAND_RELATED_FORMS = {}
+COMMAND_RELATED_FORMS: dict[str, tuple[str, ...]] = {}
 
 HELP_CORE_CONCEPTS = (
     (
@@ -395,8 +394,7 @@ COMMAND_FORMS = {
         "mem embed [memory_selector] --from [source_context] --into [target_context] --after [item]",
     ),
     "eval": (
-        "mem eval semantic status (show retained semantic campaign status)",
-        "mem eval semantic run [campaign] (run a semantic evaluation campaign)",
+        "mem eval (show the reserved PARTIAL shell; no evaluation subcommands)",
     ),
     "find": (
         "mem find (interactive provider-free pattern, Context scope, and complete results)",

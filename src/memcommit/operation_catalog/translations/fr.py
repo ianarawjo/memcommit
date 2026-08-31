@@ -92,8 +92,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Réutiliser une Memory ou un Context dans un autre Context en suivant les modifications ultérieures de la Source.",
     ),
     "eval": _copy(
-        "Exécuter et consulter les campagnes d’évaluation sémantique existantes.",
-        "Utiliser le banc d’évaluation de recherche existant pendant la refonte de l’interface générale d’évaluation.",
+        "Réserver le nom de l’opération Eval pour un futur flux d’évaluation.",
+        "Reconnaître la surface Eval réservée tant que son contrat d’application reste indéfini.",
     ),
     "find": _copy(
         "Trouver dans les Memories lisibles un texte exact ou des correspondances d’expression régulière explicite (regex).",

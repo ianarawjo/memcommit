@@ -20,9 +20,7 @@ from memcommit.application.operations.semantic_updates.foundation.update.applica
 
 
 FIXTURE_PATH = (
-    Path(__file__).resolve().parents[1]
-    / "src" / "memcommit" / "application" / "capabilities" / "evaluation"
-    / "fixtures"
+    Path(__file__).parent / "fixtures" / "update"
     / "update.json"
 )
 

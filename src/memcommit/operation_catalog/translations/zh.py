@@ -91,8 +91,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "在另一个 Context 中复用 Memory 或 Context，并跟随 Source 后续变化时。",
     ),
     "eval": _copy(
-        "运行并查看现有的语义评估活动。",
-        "在通用评估接口重构期间使用现有研究评估工具时。",
+        "为未来的评估工作流保留 Eval 操作名称。",
+        "在应用契约尚未定义时识别保留的 Eval 界面。",
     ),
     "find": _copy(
         "在可读 Memory 中查找精确文本或明确的正则表达式（regex）匹配。",

@@ -574,9 +574,9 @@ reuse does not merge their semantic units.
 The initial fixtures live at:
 
 ```text
-memcommit/eval/fixtures/ambiguity.json
-memcommit/eval/fixtures/conflict.json
-memcommit/eval/fixtures/duplicates.json
+application/capabilities/memory_issue_analysis/fixtures/ambiguity.json
+application/capabilities/memory_issue_analysis/fixtures/conflict.json
+application/capabilities/memory_issue_analysis/fixtures/duplicates.json
 ```
 
 The ambiguity fixture covers the complete `3 × 3` cross-product of

@@ -37,7 +37,7 @@ complete exact post-image Fit
 ```
 
 The sole authored rule and exact-case source is
-`memcommit/eval/fixtures/resolve.json`. `memcommit.resolve_rules` validates it
+`application/operations/quality_resolution/repair/resolve/fixtures/resolve.json`. `memcommit.resolve_rules` validates it
 with duplicate-key rejection, derives every expected post-image from its exact
 effects, and projects every rule, canonical case, and known-wrong result into
 both production semantic prompts. This matrix records ownership and coverage;
@@ -115,7 +115,7 @@ before, after, ordered result, rule list, rationale, and known-wrong result.
 
 | Concern | Application owner | Invariant |
 | --- | --- | --- |
-| Exact rules and cases | `memcommit.resolve_rules` plus `memcommit/eval/fixtures/resolve.json` | one versioned source is shared by production prompts and regression tests; all cases enter the prompt |
+| Exact rules and cases | `memcommit.resolve_rules` plus `application/operations/quality_resolution/repair/resolve/fixtures/resolve.json` | one versioned source is shared by production prompts and regression tests; all cases enter the prompt |
 | CLI target normalization | `memcommit.resolve_targeting` composed from `memcommit.core.context_targeting` | mixed Context, UUID-shaped Memory, qualified Memory, `--context`, and `--memory` forms produce exactly one canonical Context and an optional exact mutable set before provider construction; bare Memory owner discovery is local-only |
 | Request target | `ResolveRequest.target_fit` | MAY is the default resolution floor; YES is a separately frozen strict resolution target |
 | Finding intake | `application.operations.quality_resolution.repair.resolve.finding_handoff` | a compatible frozen finding is re-expressed as a Resolve request without transferring mutation authority; shared finding evidence does not depend back on Resolve |

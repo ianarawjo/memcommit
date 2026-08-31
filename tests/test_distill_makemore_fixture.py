@@ -30,7 +30,7 @@ FIXTURE_PATH = (
     / "src" / "memcommit"
     / "application"
     / "capabilities"
-    / "evaluation"
+    / "semantic"
     / "fixtures"
     / "distill_makemore.json"
 )

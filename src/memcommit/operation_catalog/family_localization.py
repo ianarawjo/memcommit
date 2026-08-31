@@ -23,7 +23,7 @@ FAMILY_DESCRIPTION_TRANSLATIONS = {
         "HISTORY & RECOVERY": "Examiner la provenance et les changements enregistrés. Restaurer un état antérieur au moyen d’opérations d’historique explicites.",
         "PROFILES": "Sélectionner et administrer des stores Profile locaux complets et leurs noms gérés.",
         "SHARING & PROTECTION": "Transmettre des Contexts possédés et protéger les écritures de Memory, Context ou Profile.",
-        "SYSTEM & STUDY TOOLS": "Configurer MemCommit et préparer ou exécuter des utilitaires d’étude et d’évaluation.",
+        "SYSTEM & STUDY TOOLS": "Configurer MemCommit, préparer des études et découvrir la surface Eval réservée.",
     },
     "ZH": {
         "BROWSE & NAVIGATE": "检查当前位置和可用 Context，然后在 Context 命名空间中移动。",
@@ -38,7 +38,7 @@ FAMILY_DESCRIPTION_TRANSLATIONS = {
         "HISTORY & RECOVERY": "检查来源和已记录变化，并通过明确的历史 operation 恢复较早状态。",
         "PROFILES": "选择和管理完整的本地 Profile store 及其受管名称。",
         "SHARING & PROTECTION": "交付自己拥有的 Context，并保护 Memory、Context 或 Profile 写入。",
-        "SYSTEM & STUDY TOOLS": "配置 MemCommit，并准备或运行研究与评估工具。",
+        "SYSTEM & STUDY TOOLS": "配置 MemCommit、准备研究，并查看保留的 Eval 界面。",
     },
     "KO": {
         "BROWSE & NAVIGATE": "현재 위치와 사용할 수 있는 Context를 확인하고 Context namespace를 이동합니다.",
@@ -53,7 +53,7 @@ FAMILY_DESCRIPTION_TRANSLATIONS = {
         "HISTORY & RECOVERY": "provenance와 기록된 변경을 확인하고 명시적인 history operation으로 이전 상태를 복원합니다.",
         "PROFILES": "완전한 로컬 Profile store와 관리되는 이름을 선택하고 관리합니다.",
         "SHARING & PROTECTION": "소유한 Context를 전달하고 Memory, Context 또는 Profile 쓰기를 보호합니다.",
-        "SYSTEM & STUDY TOOLS": "MemCommit을 설정하고 연구 및 evaluation 도구를 준비하거나 실행합니다.",
+        "SYSTEM & STUDY TOOLS": "MemCommit을 설정하고 연구를 준비하며 예약된 Eval surface를 확인합니다.",
     },
     "MN": {
         "BROWSE & NAVIGATE": "Одоогийн байрлал болон боломжтой Context-уудыг шалгаад Context namespace дотор шилжинэ.",
@@ -68,7 +68,7 @@ FAMILY_DESCRIPTION_TRANSLATIONS = {
         "HISTORY & RECOVERY": "Provenance болон бүртгэгдсэн өөрчлөлтийг шалгаж, тодорхой history operation-оор өмнөх төлөвийг сэргээнэ.",
         "PROFILES": "Бүрэн локал Profile store болон удирдлагатай нэрсийг сонгож, захирна.",
         "SHARING & PROTECTION": "Өөрийн Context-г хүргэж, Memory, Context эсвэл Profile бичилтийг хамгаална.",
-        "SYSTEM & STUDY TOOLS": "MemCommit-г тохируулж, судалгаа болон evaluation хэрэгслийг бэлтгэх эсвэл ажиллуулна.",
+        "SYSTEM & STUDY TOOLS": "MemCommit-г тохируулж, судалгаа бэлтгэн, хадгалсан Eval surface-г харуулна.",
     },
 }
 

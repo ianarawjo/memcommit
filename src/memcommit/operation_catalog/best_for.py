@@ -66,8 +66,8 @@ BEST_FOR_BY_OPERATION = {
         "Source changes."
     ),
     "eval": (
-        "Using the existing research evaluation harness while the general "
-        "evaluation interface is redesigned."
+        "Recognizing the reserved Eval surface while its future application "
+        "contract is still undefined."
     ),
     "find": (
         "Locating exact words, identifiers, or text patterns within a selected "

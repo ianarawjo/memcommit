@@ -1,5 +1,9 @@
 # Provider-neutral duplicate relation evaluation
 
+> Historical record: this campaign was removed with the executable semantic
+> Eval harness. Eval now remains only as a reserved `PARTIAL` shell; see
+> [`evaluation-application-ownership-design-rationale.md`](evaluation-application-ownership-design-rationale.md).
+
 ## Decision
 
 Duplicate evaluation is the second bounded semantic operation in the shared

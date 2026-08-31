@@ -899,7 +899,7 @@ the final digest comparison rejects any intervening Source change.
 ## Golden regression contract
 
 The machine-readable seed corpus is
-`memcommit/eval/fixtures/atomize.json`. It adapts the clozemaking one-view
+`application/operations/semantic_updates/derive/atomize/fixtures/atomize.json`. It adapts the clozemaking one-view
 format as:
 
 ```text
@@ -915,8 +915,8 @@ expected.qa                 = canonical source-occurrence Q/A ledger,
 Ordinary Profiles continue to quote the eligible golden cases as production
 calibration. Study Profiles use the same named rules and strict decoder but do
 not quote Atomize, Ambiguity, or Conflict fixture cases in live task turns.
-That rules-only boundary is independent from evaluation, which still consumes
-the selected calibration corpus, and is documented in
+That rules-only boundary is independent from the retired Eval campaign surface
+and is documented in
 [`study-semantic-prompt-policy-design-rationale.md`](study-semantic-prompt-policy-design-rationale.md).
 Saved Study analysis schema 6 and exact prewarm schema 2 bind the prompt-policy
 ID so an older full-example result cannot silently stand in for a rules-only

@@ -5,11 +5,11 @@ from __future__ import annotations
 from copy import deepcopy
 from enum import Enum
 from functools import lru_cache
+from importlib import resources
 import json
 from typing import get_args
 import unicodedata
 
-from memcommit.application.capabilities.evaluation.resources import fixture_resource
 from memcommit.application.capabilities.history.reconstruction.memory_effect_derivation import (
     MemoryHistoryEventKind,
 )
@@ -263,7 +263,9 @@ def _validate_case(raw: object, *, rule_ids: set[str]) -> str:
 @lru_cache(maxsize=1)
 def _loaded_ruleset() -> dict[str, object]:
     try:
-        resource = fixture_resource(RATIONALE_RULESET_FIXTURE)
+        resource = resources.files(__package__).joinpath(
+            "fixtures", RATIONALE_RULESET_FIXTURE
+        )
         raw = json.loads(
             resource.read_text(encoding="utf-8"),
             object_pairs_hook=_strict_object,

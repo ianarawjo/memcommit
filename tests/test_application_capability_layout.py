@@ -21,7 +21,6 @@ CAPABILITY_ENTRIES = {
     "context_operand_classification.py",
     "context_scope_loading.py",
     "context_snapshot.py",
-    "evaluation",
     "flow.py",
     "history",
     "memory_issue_analysis",

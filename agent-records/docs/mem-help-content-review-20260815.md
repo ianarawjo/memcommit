@@ -63,9 +63,9 @@ Category descriptions shown in the runtime BY KIND view:
 - **Sharing & Protection — NO LLM:** Deliver owned Contexts and protect Memory,
   Context, or Profile writes. / **공유 및 보호 — LLM 미사용:** 소유한 Context를
   전달하고 Memory·Context·Profile의 쓰기를 보호합니다.
-- **System & Study Tools:** Configure MemCommit and prepare or run study and
-  evaluation utilities. / **시스템 및 Study 도구:** MemCommit을 설정하고
-  Study 및 평가 도구를 준비하거나 실행합니다.
+- **System & Study Tools:** Configure MemCommit, prepare studies, and discover
+  the reserved Eval surface. / **시스템 및 Study 도구:** MemCommit을 설정하고
+  Study를 준비하며 예약된 Eval surface를 확인합니다.
 
 Review invariant: revise the English row first, then keep the Korean row
 semantically aligned. Approved wording should be moved into the canonical Help

@@ -31,7 +31,7 @@ FIXTURE_PATH = (
     / "src" / "memcommit"
     / "application"
     / "capabilities"
-    / "evaluation"
+    / "memory_issue_analysis"
     / "fixtures"
     / "ambiguity.json"
 )

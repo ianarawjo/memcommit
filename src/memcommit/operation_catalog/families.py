@@ -358,7 +358,7 @@ OPERATION_FAMILIES = (
         title="SYSTEM & STUDY TOOLS",
         operation_names=("help", "provider", "config", "init-study", "eval"),
         description=(
-            "Configure MemCommit and prepare or run study and evaluation utilities."
+            "Configure MemCommit, prepare studies, and discover the reserved Eval surface."
         ),
         execution_label=None,
     ),

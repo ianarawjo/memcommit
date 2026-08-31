@@ -1,69 +1,66 @@
-# Eval operation and authored fixture ownership
+# Reserved Eval shell and fixture ownership
 
 ## Decision
 
-Executable campaign behavior belongs to the displayed Eval operation under
-`memcommit.application.operations.eval`. `semantic_campaign.py` owns replayable
-ambiguity and duplicate campaigns, `operation_gate_campaign.py` owns the
-operation-gate campaign, and the older developer-only Forget/Integrate runner
-and deterministic scoring code live beside those engines.
+`eval` remains a public `PARTIAL` operation name, but it has no executable
+evaluation application yet. The console package keeps only a reservation
+callback and `memcommit.application.operations.eval` keeps only its package
+marker. The former semantic campaign, operation-gate campaign, scoring,
+provider-selection, ledger presentation, and hidden `mem dev eval` routes are
+removed.
 
-The package `memcommit.application.capabilities.evaluation` now owns only the
-authored JSON resources and the narrow `fixture_path`/`fixture_resource`
-accessors. It is not a second executable Eval implementation. This split makes
-`mem help` navigation direct without pretending that all JSON files are used
-only by Eval.
+This is an intentional empty boundary, not a compatibility facade. `mem eval`
+prints that the operation is reserved, `mem eval --help` exposes no campaign
+subcommands, and the removed `mem eval semantic ...` grammar fails as unknown.
+Future Eval work must define a new application contract instead of silently
+reviving one of the retired research harnesses.
 
-## Why the fixtures do not all belong to Eval
+## Fixture ownership
 
-The directory contains three materially different resource roles:
+The former shared `application.capabilities.evaluation` resource package mixed
+runtime prompt inputs, test-only corpora, and Eval-only campaign data. Those
+roles now have distinct owners:
 
-- Eval-only campaign corpora: `operation_gates*.json` and their locks,
-  `ambiguity_holdout.json` and its lock, plus the ambiguity/duplicates
-  calibration corpus when replayed by `mem eval run`.
-- Production prompt/rule resources: `atomize.json`, `duplicates.json`,
-  `ambiguity.json`, `conflict.json`, `comparison_summary.json`,
-  `rationale.json`, `resolve.json`, and `distill_makemore.json`.
-- Research or contract-only resources currently read only by tests:
-  `distill_goal_holdout.json`, `distill_makemore_holdout.json`, and
-  `update.json`. The old developer Eval runner additionally reads
-  `forget.json` and `integrate.json`.
+| Resource role | Owner |
+| --- | --- |
+| Ambiguity, conflict, and duplicate prompt calibration | `application.capabilities.memory_issue_analysis/fixtures/` |
+| Atomize prompt calibration | `application.operations.semantic_updates.derive.atomize/fixtures/` |
+| Compare compact-summary rules | `application.operations.search_explain.synthesize.compare/fixtures/` |
+| Rationale rules and examples | `application.operations.history_recovery.inspection.rationale/fixtures/` |
+| Resolve exact rules and examples | `application.operations.quality_resolution.repair.resolve/fixtures/` |
+| Shared Distill/Makemore prompt examples | `application.capabilities.semantic/fixtures/` |
+| Prompt-unseen Distill/Makemore and Update regression inputs | `tests/fixtures/` |
 
-Production prompt consumers use these resources at request construction, not
-after a command merely for scoring. Atomize validates its authored profile and
-adds Atomize plus ambiguity/conflict calibration cases. Find Duplicates,
-Ambiguities, and Conflicts add their corresponding cases. Compare, Rationale,
-and Resolve add normative rules and optionally authored cases. Distill and
-Makemore render the reviewed bidirectional example families into their provider
-instructions. The shared semantic prompt policy omits authored examples in
-Study turns while retaining the normative rules where applicable.
+Each production consumer now resolves its resource from its own package with
+`importlib.resources`. There is no general `fixture_resource` accessor and no
+production import through Eval.
 
-Because those files influence real provider input, moving the whole fixture
-directory into `operations.eval` would make production operations depend on a
-peer operation. The resource-only capability is the temporary honest owner.
-A future split may give each operation its own rules and cases, with only true
-cross-operation corpora remaining shared, but that requires coordinated
-packaging and prompt-version migration rather than a directory rename.
+Eval-only ambiguity holdout and operation-gate corpora, their locks, and the
+old Forget/Integrate benchmark corpora were deleted with their engines. Their
+only callers were removed Eval routes. Existing user data under `~/.mem/eval`
+is deliberately not inspected, migrated, or deleted: removing code-owned
+campaign support does not authorize destruction of retained local records.
 
-## Boundaries
+## Why keep the shell
 
-The Eval console imports campaign engines only from
-`memcommit.application.operations.eval`; the hidden legacy developer command
-imports its runner there as well. Production operations import only the
-resource accessor, never an Eval campaign engine. Engine defaults resolve
-packaged fixture paths through that accessor, while callers may still pass an
-explicit fixture path for a campaign run.
+Keeping both the console and application operation directories preserves the
+one-to-one public operation topology and leaves an explicit place for a later
+Eval design. Marking the operation `PARTIAL` makes that incompleteness visible
+without presenting historical campaign code as the application that future
+Eval must become.
 
-There is no compatibility facade for the former
-`memcommit.application.capabilities.evaluation.semantic_campaign`,
-`operation_gate_campaign`, `runner`, or `scoring` paths. Retaining them would
-leave two apparent owners. Fixture bytes and package-data location are
-unchanged, so retained fixture digests and calibration locks stay valid.
+Removing the entire route was rejected because the name is intentionally
+reserved. Keeping the campaign engines behind an inert command was also
+rejected because importable implementation would leave an ambiguous owner and
+could be mistaken for the supported contract. Keeping production prompt
+fixtures under a generic evaluation capability was rejected because those
+files affect live operation prompts and therefore belong with their actual
+runtime consumers.
 
-## Limitations
+## Historical boundary
 
-The name `capabilities.evaluation` remains broader than its new resource-only
-role. Renaming or splitting that package is deferred until every production
-fixture receives an operation-specific ownership decision. The legacy
-Forget/Integrate runner is kept operational but is not evidence that those
-fixtures define the current Forget or Meld/Integrate application contracts.
+The older semantic-Eval records remain as implementation history, but they no
+longer describe callable behavior. This note and the focused Eval boundary
+matrix are the current ownership record. Eval remains `UNREVIEWED` in the
+separate operation route-classification ledger; Help-facing `PARTIAL` maturity
+is not a route-classification judgment.

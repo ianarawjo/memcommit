@@ -39,7 +39,7 @@ FIXTURE_DIR = (
     / "memcommit"
     / "application"
     / "capabilities"
-    / "evaluation"
+    / "memory_issue_analysis"
     / "fixtures"
 )
 

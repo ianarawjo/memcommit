@@ -679,7 +679,8 @@ def test_every_help_category_explains_its_intent_and_execution_basis():
     assert "deterministic program logic" in deterministic
     assert "LLM-BASED · Use semantic decisions" in semantic
     assert "abstract ideas into reviewable common ground" in ground
-    assert "Configure MemCommit and prepare or run study" in system
+    assert "Configure MemCommit, prepare studies" in system
+    assert "reserved Eval surface" in system
     assert "MIXED · Configure" not in system
     assert "NO LLM" not in a_z
     assert "LLM-BASED" not in a_z
@@ -1115,7 +1116,9 @@ def test_final_help_categories_match_their_reviewed_runtime_boundaries():
     assert "backend semantic operations should use" in provider.best_for
     assert provider.maturity == "PARTIAL"
     assert "legacy low-level interface" in config.best_for
-    assert "existing semantic evaluation campaigns" in eval_operation.summary
+    assert eval_operation.summary.startswith("Reserve the Eval operation name")
+    assert eval_operation.maturity == "PARTIAL"
+    assert "does not call a provider" in eval_operation.effect
 
 
 def test_final_help_categories_expose_exact_on_demand_details():
@@ -1123,7 +1126,7 @@ def test_final_help_categories_expose_exact_on_demand_details():
     [revert_routes] = operation_help("revert").details
     [profile_management] = operation_help("profile").details
     [provider_actions] = operation_help("provider").details
-    [evaluation_scope] = operation_help("eval").details
+    [reserved_shell] = operation_help("eval").details
 
     assert log_routes.title == "LOG ROUTES"
     assert [option.label for option in log_routes.options] == [
@@ -1155,13 +1158,12 @@ def test_final_help_categories_expose_exact_on_demand_details():
     assert "synthetic strict-schema" in provider_options["PROBE"].guidance
     assert "without opening an editor" in provider_options["OVERVIEW"].guidance
     assert "inherited" in provider_options["RESET"].guidance
-    assert evaluation_scope.title == "EVALUATION SCOPE"
-    assert "general evaluation interface remains future work" in (
-        evaluation_scope.explanation
-    )
+    assert reserved_shell.title == "RESERVED SHELL"
+    assert "no executable subcommands" in reserved_shell.body
+    assert "provider calls" in reserved_shell.body
 
 
-def test_eval_and_config_are_compactly_marked_legacy():
+def test_eval_uses_maturity_while_config_uses_compatibility_annotation():
     root, context = _root_context()
     try:
         entries = {entry.name: entry for entry in command_entries(context)}
@@ -1169,4 +1171,5 @@ def test_eval_and_config_are_compactly_marked_legacy():
         context.close()
 
     assert entries["config"].annotation == "legacy"
-    assert entries["eval"].annotation == "legacy"
+    assert entries["eval"].annotation is None
+    assert entries["eval"].operation_help.maturity == "PARTIAL"

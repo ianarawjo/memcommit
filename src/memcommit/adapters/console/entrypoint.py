@@ -450,7 +450,7 @@ app.add_typer(
     help=operation_summary("profile"),
 )
 app.add_typer(
-    dev.app, name="dev", help="Developer tools (eval, diagnostics).", hidden=True
+    dev.app, name="dev", help="Developer diagnostics and fixture utilities.", hidden=True
 )
 
 

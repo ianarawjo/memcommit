@@ -1,4 +1,4 @@
-"""mem dev — developer tools for evaluation and testing (hidden from main help)."""
+"""mem dev — hidden developer diagnostics and fixture utilities."""
 import copy
 from pathlib import Path
 from typing import Annotated
@@ -11,15 +11,13 @@ from memcommit.application.capabilities.context_locator import resolve_context_l
 
 app = typer.Typer(
     cls=CanonicalCommandGroup,
-    help="Developer tools: evals, diagnostics.",
+    help="Developer diagnostics and fixture utilities.",
 )
 query_source_app = typer.Typer(
     cls=CanonicalCommandGroup,
     help="Install concealed sources for the query-only research prototype."
 )
 app.add_typer(query_source_app, name="query-source")
-
-_SUPPORTED_COMMANDS = ("forget", "integrate")
 
 _FAKE_SYSTEM_PROMPT = """\
 You are a test-data generator for a memory store.
@@ -229,39 +227,3 @@ def dev_fake(
         fg=typer.colors.GREEN,
     )
 
-
-@app.command("eval")
-def dev_eval(
-    command: Annotated[str, typer.Option("--command", "-c", help=f"Semantic benchmark to evaluate: {_SUPPORTED_COMMANDS}")],
-    llm: Annotated[str, typer.Option("--llm", "-m", help="Ollama model name (e.g. llama3.2)")],
-    runs: Annotated[int, typer.Option("--runs", "-n", help="Number of runs per test case")] = 3,
-) -> None:
-    """
-    Run a frozen semantic benchmark against a given LLM model.
-
-    Reports per-case precision, recall, and stability (consistency across runs).
-    Useful for vetting a new model before using it as a semantic backend. A
-    benchmark name may identify a retired public command.
-
-    \b
-    Example:
-        mem dev eval --command forget --llm llama3.2 --runs 3
-    """
-    if command not in _SUPPORTED_COMMANDS:
-        typer.secho(
-            f"Error: unsupported command '{command}'. Choose from: {', '.join(_SUPPORTED_COMMANDS)}",
-            fg=typer.colors.RED, err=True,
-        )
-        raise typer.Exit(1)
-
-    from memcommit.application.capabilities.semantic.llm import LLMError
-    from memcommit.application.operations.eval.runner import run_forget_eval, run_integrate_eval
-
-    try:
-        if command == "forget":
-            run_forget_eval(llm_model=llm, runs=runs, print_fn=typer.echo)
-        elif command == "integrate":
-            run_integrate_eval(llm_model=llm, runs=runs, print_fn=typer.echo)
-    except LLMError as e:
-        typer.secho(f"LLM error: {e}", fg=typer.colors.RED, err=True)
-        raise typer.Exit(1)

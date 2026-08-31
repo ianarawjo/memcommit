@@ -227,10 +227,11 @@ _OPERATIONS = (
     ),
     _operation(
         "eval",
-        "Run and inspect the existing semantic evaluation campaigns.",
-        "Fixed evaluation fixtures -> retained campaign results",
+        "Reserve the Eval operation name for a future evaluation workflow.",
+        "Reserved command name -> no executable evaluation operation",
         ExecutionKind.MIXED,
-        "Changes evaluation ledgers, not Context content",
+        "Prints reservation guidance; does not call a provider or change stored data",
+        maturity="PARTIAL",
     ),
     _operation(
         "find",

@@ -4,10 +4,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import lru_cache
+from importlib import resources
 import json
-
-from memcommit.application.capabilities.evaluation.resources import fixture_resource
-
 
 REFERENCE_EXAMPLES_MARKER = "DISTILL / MAKEMORE REFERENCE EXAMPLES:\n"
 REFERENCE_FIXTURE_NAME = "distill_makemore.json"
@@ -63,7 +61,9 @@ def load_distill_makemore_reference_families(
     """Load and strictly validate the packaged prompt-visible examples once."""
 
     try:
-        raw = fixture_resource(REFERENCE_FIXTURE_NAME).read_text(encoding="utf-8")
+        raw = resources.files(__package__).joinpath(
+            "fixtures", REFERENCE_FIXTURE_NAME
+        ).read_text(encoding="utf-8")
         value = json.loads(raw, object_pairs_hook=_strict_object)
     except (OSError, UnicodeDecodeError, ValueError, json.JSONDecodeError) as error:
         raise DistillMakemoreReferenceError(

@@ -63,14 +63,16 @@ def test_copy_move_and_eval_have_public_operation_packages() -> None:
         assert (package / "application.py").is_file()
         assert (package / "runtime.py").is_file()
     eval_package = APPLICATION_OPERATIONS / "eval"
-    assert (eval_package / "semantic_campaign.py").is_file()
-    assert (eval_package / "operation_gate_campaign.py").is_file()
+    assert (eval_package / "__init__.py").is_file()
+    assert {path.name for path in eval_package.glob("*.py")} == {"__init__.py"}
+    eval_console = CONSOLE_COMMANDS / "eval"
+    assert (eval_console / "__init__.py").is_file()
+    assert (eval_console / "command.py").is_file()
     evaluation_capability = (
         REPOSITORY_ROOT
         / "src/memcommit/application/capabilities/evaluation"
     )
-    assert not (evaluation_capability / "semantic_campaign.py").exists()
-    assert not (evaluation_capability / "operation_gate_campaign.py").exists()
+    assert not any(evaluation_capability.glob("*.py"))
 
 
 def test_console_adapters_do_not_reclaim_application_mutations() -> None:

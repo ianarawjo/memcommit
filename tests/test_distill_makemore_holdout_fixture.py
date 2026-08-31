@@ -11,9 +11,7 @@ from memcommit.application.capabilities.semantic.generative_reduction_reference 
 
 
 HOLDOUT_PATH = (
-    Path(__file__).parents[1]
-    / "src" / "memcommit" / "application" / "capabilities" / "evaluation"
-    / "fixtures"
+    Path(__file__).parent / "fixtures" / "semantic"
     / "distill_makemore_holdout.json"
 )
 

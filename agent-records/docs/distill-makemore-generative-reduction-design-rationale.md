@@ -75,7 +75,7 @@ Makemore Example visibly implements the full input frame.
 
 ## Quoted three-family reference corpus
 
-`memcommit/eval/fixtures/distill_makemore.json` is the authored calibration
+`application/capabilities/semantic/fixtures/distill_makemore.json` is the authored calibration
 and prompt-reference source. It stores complete Rule and Example Memory texts
 for three unrelated families:
 
@@ -242,7 +242,7 @@ zero Target Memories with no checkpoint.
   status remain unchanged.
 
 The three-family corpus is consumed calibration, not an independent holdout.
-`memcommit/eval/fixtures/distill_makemore_holdout.json` therefore freezes four
+`tests/fixtures/semantic/distill_makemore_holdout.json` therefore freezes four
 prompt-unseen families: mixed English/Korean subfamilies, ordered Fibonacci
 continuation, operational cleanliness hierarchy, and diagnostic cleanliness
 hierarchy. Production reference loading never reads that file, and regression
@@ -356,7 +356,7 @@ measurements; selecting only one governing parent would report a larger ratio
 but would conceal the requested supporting topology.
 
 The cumulative Goal cases are frozen separately in
-`memcommit/eval/fixtures/distill_goal_holdout.json`. This fixture records the
+`tests/fixtures/semantic/distill_goal_holdout.json`. This fixture records the
 complete translated review Memories, their CC0 dataset provenance and sampling
 seed, the exact natural-language Goals, and semantic acceptance readings. It is
 not loaded by the production prompt.

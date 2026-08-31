@@ -1,5 +1,10 @@
 # Semantic evaluation harness design rationale
 
+> Historical record: this harness and its `mem eval semantic` route were
+> removed when Eval became a reserved `PARTIAL` shell. See
+> [`evaluation-application-ownership-design-rationale.md`](evaluation-application-ownership-design-rationale.md)
+> for the current boundary.
+
 ## Decision
 
 memcommit will have a case-driven semantic evaluation and execution harness in
@@ -93,7 +98,8 @@ with only a teacher-generated reference is not called Gold.
 
 ## Exact status of the current ambiguity fixture
 
-The ten cases in `memcommit/eval/fixtures/ambiguity.json` are initial
+The ten cases now owned by
+`application/capabilities/memory_issue_analysis/fixtures/ambiguity.json` are initial
 calibration examples for the 3x3 `interpretation`-by-`clarification` boundary,
 plus one Context-resolution contrast. The file itself states that these are
 reviewed calibration contract examples rather than an independent held-out

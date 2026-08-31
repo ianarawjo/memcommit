@@ -457,9 +457,8 @@ deterministic instead of emitting a terminal-control interface.
 Ordinary commands carry no implementation label. Repeating `implemented` on
 nearly every row adds noise without helping a person choose a command. A
 parenthesized status annotation is reserved for exceptional compatibility
-state. `config (legacy)` remains a low-level stored-setting interface, while
-`eval (legacy)` remains the fixed research campaign harness pending a general
-evaluation interface. Both remain callable. A separate exact-spelling annotation groups an executable hidden
+state. `config (legacy)` remains a callable low-level stored-setting
+interface. A separate exact-spelling annotation groups an executable hidden
 spelling with its canonical operation, as in `list (ls)` and
 `delete (remove)`; it does not classify a conditional dispatcher such as
 `checkout` as an alias. Retired commands such as `integrate` are omitted
@@ -467,10 +466,13 @@ instead of occupying an inventory row that suggests they can still be selected.
 Ordinary TUI entry is described inside expanded Forms instead of repeating a
 badge across the inventory.
 
-One implementation-scope exception may use a compact bracketed maturity tag.
+Implementation-scope exceptions may use a compact bracketed maturity tag.
 `import [PARTIAL]` keeps Import's ordinary Summary and `USE WHEN` readable in
 the collapsed inventory, while its expanded `CURRENT LIMITATION` detail states
 exactly which transfers exist and which broader import/export routes do not.
+`eval [PARTIAL]` reserves the public operation name while exposing no campaign
+subcommands; its expanded `RESERVED SHELL` detail states that provider,
+Context, and ledger behavior are absent.
 This tag is Help-facing product maturity, not an operation-route judgment: it
 must not be interpreted as, or copied into, the separate `CLOSED`, `MIXED`,
 `LEGACY`, `N/A`, and `UNREVIEWED` evidence ledger.

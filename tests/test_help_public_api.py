@@ -145,4 +145,5 @@ def test_client_projects_final_category_routes_as_typed_details(tmp_path):
         "REMOVE STUDY",
     ]
     assert eval_scope.discovery == "ON_DEMAND"
-    assert "Profile-independent evaluation ledger" in eval_scope.explanation
+    assert eval_scope.title == "RESERVED SHELL"
+    assert "no executable subcommands" in eval_scope.body

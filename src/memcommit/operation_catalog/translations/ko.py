@@ -92,8 +92,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Source의 이후 변경을 따라가면서 Memory나 Context를 다른 Context에서 재사용할 때.",
     ),
     "eval": _copy(
-        "기존 semantic evaluation campaign을 실행하고 확인합니다.",
-        "일반 evaluation 인터페이스를 재설계하는 동안 기존 연구용 evaluation harness를 사용할 때.",
+        "향후 evaluation workflow를 위해 Eval operation 이름을 예약해 둡니다.",
+        "아직 application contract가 정의되지 않은 예약 Eval surface를 확인할 때.",
     ),
     "find": _copy(
         "읽을 수 있는 Memory에서 정확한 텍스트 또는 명시적인 정규식(regex) 일치를 찾습니다.",

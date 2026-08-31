@@ -4,10 +4,8 @@ from __future__ import annotations
 
 from copy import deepcopy
 from functools import lru_cache
+from importlib import resources
 import json
-
-from memcommit.application.capabilities.evaluation.resources import fixture_resource
-
 
 COMPARISON_SUMMARY_RULESET_VERSION = "compact-peer-relation-v3"
 COMPARISON_SUMMARY_RULESET_FIXTURE = "comparison_summary.json"
@@ -162,7 +160,9 @@ def _validate_case(raw: object, *, rule_ids: set[str]) -> str:
 @lru_cache(maxsize=1)
 def _loaded_ruleset() -> dict[str, object]:
     try:
-        resource = fixture_resource(COMPARISON_SUMMARY_RULESET_FIXTURE)
+        resource = resources.files(__package__).joinpath(
+            "fixtures", COMPARISON_SUMMARY_RULESET_FIXTURE
+        )
         raw = json.loads(
             resource.read_text(encoding="utf-8"),
             object_pairs_hook=_strict_object,

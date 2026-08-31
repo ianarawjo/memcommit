@@ -12,9 +12,9 @@ import json
 import unicodedata
 from collections.abc import Mapping
 from dataclasses import dataclass
+from importlib import resources
 from typing import Callable
 
-from memcommit.application.capabilities.evaluation.resources import fixture_resource
 from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     find_exact_duplicate_groups,
@@ -194,7 +194,7 @@ def _pair_payload(pairs: list[MemoryPair]) -> list[dict[str, str]]:
 def _load_calibration_cases(filename: str) -> list[object]:
     """Load versioned examples shared by prompts and fixture contract tests."""
     try:
-        resource = fixture_resource(filename)
+        resource = resources.files(__package__).joinpath("fixtures", filename)
         data = json.loads(
             resource.read_text(encoding="utf-8"),
             object_pairs_hook=_strict_json_object,

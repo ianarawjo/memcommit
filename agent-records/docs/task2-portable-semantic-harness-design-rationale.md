@@ -1,5 +1,10 @@
 # Task 2 portable semantic harness design rationale
 
+> Historical record: this portable harness was removed with the executable
+> semantic Eval surface. Eval now remains only as a reserved `PARTIAL` shell;
+> see
+> [`evaluation-application-ownership-design-rationale.md`](evaluation-application-ownership-design-rationale.md).
+
 ## Goal
 
 Task 2 is the first end-to-end portability target for semantic operations. A
@@ -36,8 +41,8 @@ calibration routes were retired on the same date after this recorded experiment
 had reached its conclusion and no production command depended on them. Their
 frozen lock manifests, run/parity/status CLI surfaces, and focused pytest
 contracts are no longer maintained. The enclosing `mem eval semantic` route
-remains for unrelated campaigns; the ordinary Task 2 Study fixtures and
-production Compare relation grouping also remain.
+was later removed as well; the ordinary Task 2 Study fixtures and production
+Compare relation grouping remain.
 
 Immutable ledger JSON and the historical measurements in this note remain as
 research evidence. Git history is the source for reconstructing the exact

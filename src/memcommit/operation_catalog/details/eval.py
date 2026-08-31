@@ -1,37 +1,24 @@
-"""Detailed Help topics owned by legacy Eval."""
+"""Detailed Help topic for the reserved Eval shell."""
 
 from memcommit.operation_catalog.model import (
     DetailDiscovery,
-    OperationComparisonDetail,
-    OperationComparisonOption,
+    HelpDetailKind,
+    OperationTextDetail,
 )
 
 
 EVAL_DETAILS = (
-    OperationComparisonDetail(
+    OperationTextDetail(
         id="evaluation-scope",
         operation="eval",
-        title="EVALUATION SCOPE",
-        use_when="Understanding the boundary of the existing research harness.",
+        title="RESERVED SHELL",
+        use_when="Checking the current boundary of the unfinished Eval operation.",
         discovery=DetailDiscovery.ON_DEMAND,
-        explanation=(
-            "This legacy surface operates on fixed research fixtures and a "
-            "Profile-independent evaluation ledger. It does not evaluate or "
-            "change the current Context; a general evaluation interface remains "
-            "future work."
-        ),
-        options=(
-            OperationComparisonOption(
-                label="STATUS",
-                guidance="Inspect retained campaign results without a provider call.",
-            ),
-            OperationComparisonOption(
-                label="RUN",
-                guidance=(
-                    "Run a fixed semantic campaign, which may contact a provider "
-                    "and writes only the evaluation ledger."
-                ),
-            ),
+        detail_kind=HelpDetailKind.LIMITATION,
+        body=(
+            "Eval currently preserves only its public command and application "
+            "package names. It has no executable subcommands, campaign engine, "
+            "provider calls, Context effects, or evaluation ledger behavior."
         ),
     ),
 )
