@@ -294,7 +294,7 @@ def cmd(
                 "Natural-language query; omit in a terminal to open the "
                 "interactive search with compact exact-Context Scope, "
                 "Browse-only Profile/multiple selection, independent range "
-                "and Embed choices, and checked-result COPY/REFERENCE/EMBED Save As"
+                "and Embed choices, and checked-result COPY/REFERENCE/EMBED Save"
             ),
         ),
     ] = None,

@@ -71,6 +71,13 @@ from memcommit.application.operations.search_explain.retrieve_answer.query.ordin
 from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_runtime import (
     execute_ordinary_query,
 )
+from memcommit.application.operations.search_explain.retrieve_answer.query.save_answer import (
+    SaveQueryAnswerError,
+    SaveQueryAnswerRequest,
+)
+from memcommit.application.operations.search_explain.retrieve_answer.query.save_answer_runtime import (
+    execute_save_query_answer,
+)
 from memcommit.application.operations.search_explain.retrieve_answer.query.reference_application import (
     QueryReferenceRequest,
 )
@@ -208,7 +215,7 @@ def _open_query_workbench(
         traversal.include_descendants if traversal is not None else True
     )
     initial_embeds = traversal.follow_embeds if traversal is not None else True
-    run_query_workbench(
+    workbench_result = run_query_workbench(
         names,
         current_context=displayed_current,
         initial_context=access.display_name,
@@ -226,6 +233,25 @@ def _open_query_workbench(
         annotations=annotations,
         initial_language=language,
         help_binder=bind_session_help,
+        local_context_names=tuple(store.list_context_names()),
+        validate_save_location=store.assert_context_creatable,
+    )
+    if workbench_result is None or workbench_result.status != "SAVE":
+        return
+    assert workbench_result.response is not None
+    assert workbench_result.save_location is not None
+    saved = execute_save_query_answer(
+        SaveQueryAnswerRequest(
+            response=workbench_result.response,
+            destination_name=workbench_result.save_location,
+        ),
+        store=store,
+    )
+    typer.secho(
+        "Saved complete Query answer in new Context "
+        f"'{display_escape_text(saved.context_name)}' "
+        f"[{saved.context_uid[:8]}].",
+        fg=typer.colors.GREEN,
     )
 
 
@@ -493,6 +519,7 @@ def cmd(
             ProfileConfigError,
             ProfileError,
             QueryProviderError,
+            SaveQueryAnswerError,
             GrantedQuerySourceError,
             RuntimeError,
             ValueError,
@@ -538,6 +565,7 @@ def cmd(
             ProfileConfigError,
             ProfileError,
             QueryProviderError,
+            SaveQueryAnswerError,
             RuntimeError,
             ValueError,
         ) as error:

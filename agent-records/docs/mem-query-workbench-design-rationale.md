@@ -1,5 +1,12 @@
 # Interactive Query workbench design rationale
 
+> **2026-08-31 shared SAVE update:** A completed Query answer now exposes the
+> same single `SAVE` frame grammar as Find and Search, without a `MODE` row.
+> Query owns a separate typed answer-save contract because generated output is
+> not an existing Source Memory. Statements below that Query has no durable
+> publication or success action are historical. See
+> `retrieve-answer-save-panel-design-rationale.md`.
+
 Last verified: 2026-08-26.
 
 ## Problem
@@ -70,8 +77,8 @@ terminal wrapping and does not persist a memcommit artifact.
 
 - Workbench selection, draft, answer, authorized Source catalog, and focus are
   process-local.
-- Query has no durable publication stage and no success action after Answer;
-  therefore a To Do frame would be false workflow chrome.
+- Query saves only the complete disclosed Answer as one new Memory; it never
+  reopens concealed QUERY-only Sources while publishing the local Context.
 - Ordinary Browse freezes `ReadableContextCatalog`, including effectively
   READ-granted public names with their exact access bindings.
 - Query View Browse freezes public grant metadata only. Provider construction
@@ -102,7 +109,8 @@ terminal wrapping and does not persist a memcommit artifact.
 The screen, presentation adapter, model, and Query View scope control live under
 `memcommit.adapters.console.commands.search_explain.retrieve_answer.query.workbench`. Ordinary compact selection stays
 owned by `memcommit.adapters.console.terminal.components.operation_context_scope_editor.readable_scope_editor`. Terminal-independent
-requests and execution live in `memcommit.application.operations.search_explain.retrieve_answer.query`; no operation
+requests and execution live in
+`memcommit.application.operations.search_explain.retrieve_answer.query`; no operation
 application module imports prompt-toolkit or command code.
 
 ## Verification

@@ -34,12 +34,15 @@ def _imports(path: Path) -> tuple[str, ...]:
 def test_query_workbench_has_no_foreign_command_dependency() -> None:
     workbench = COMMAND_ROOT / "workbench"
     owner_prefix = "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.workbench"
+    family_component_prefix = (
+        "memcommit.adapters.console.commands.search_explain.retrieve_answer.components"
+    )
     offenders = [
         (str(path.relative_to(ROOT)), module)
         for path in workbench.rglob("*.py")
         for module in _imports(path)
         if module.startswith("memcommit.adapters.console.commands.")
-        and not module.startswith(owner_prefix)
+        and not module.startswith((owner_prefix, family_component_prefix))
     ]
 
     assert offenders == []

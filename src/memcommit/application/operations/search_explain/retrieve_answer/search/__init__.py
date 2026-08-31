@@ -1,1 +1,1 @@
-"""Operation-owned semantic Search boundary and selection-save adapter."""
+"""Operation-owned semantic Search and selected-result adaptation."""

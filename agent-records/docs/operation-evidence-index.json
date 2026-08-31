@@ -131,6 +131,7 @@
     "find": [
       "agent-records/docs/find-application-boundary-matrix.md",
       "agent-records/docs/find-search-compact-scope-design-rationale.md",
+      "agent-records/docs/retrieve-answer-save-panel-design-rationale.md",
       "agent-records/docs/search-find-replace-design-rationale.md"
     ],
     "find-ambiguities": [
@@ -262,6 +263,7 @@
       "agent-records/docs/query-answer-application-boundary-matrix.md",
       "agent-records/docs/query-reference-application-boundary-matrix.md",
       "agent-records/docs/query-case-derived-answer-design-rationale.md",
+      "agent-records/docs/retrieve-answer-save-panel-design-rationale.md",
       "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
     ],
     "rationale": [
@@ -307,6 +309,7 @@
     "search": [
       "agent-records/docs/find-search-application-boundary-matrix.md",
       "agent-records/docs/find-search-compact-scope-design-rationale.md",
+      "agent-records/docs/retrieve-answer-save-panel-design-rationale.md",
       "agent-records/docs/save-context-from-selection-design-rationale.md",
       "agent-records/docs/search-find-replace-design-rationale.md"
     ],

@@ -27,8 +27,21 @@ GrantedQueryRunner: TypeAlias = Callable[
 
 @dataclass(frozen=True)
 class QueryWorkbenchResult:
-    status: Literal["CLOSED"]
+    status: Literal["CLOSED", "SAVE"]
     response: QueryWorkbenchResponse | None = None
+    save_location: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.status == "CLOSED":
+            if self.save_location is not None:
+                raise ValueError("A closed Query workbench cannot request a save.")
+            return
+        if (
+            self.response is None
+            or not isinstance(self.save_location, str)
+            or not self.save_location.strip()
+        ):
+            raise ValueError("Query SAVE requires an answer and exact location.")
 
 
 @dataclass(frozen=True)

@@ -782,10 +782,10 @@ def test_checked_result_returns_exact_save_request(mode, right_keys):
         def send_after_search() -> None:
             pipe_input.send_text("accessibility\r")
             time.sleep(0.15)
-            # Check result, choose the requested Save As mode, replace the
-            # exact Save Location, then activate the reviewed To Do row.
+            # Check the result, choose a mode, replace the exact Save Location,
+            # cross the inline Browse row, then activate SAVE's Action row.
             pipe_input.send_text(
-                f"\r\t{right_keys}\t\x15task/results/accessibility\t\r"
+                f"\r\t{right_keys}\t\x15task/results/accessibility\t\t\r"
             )
 
         sender = threading.Thread(target=send_after_search)

@@ -1,5 +1,15 @@
 # Interactive Find search and scope rationale
 
+> **2026-08-31 shared SAVE update:** Find and Search now share one conditional
+> `SAVE` frame owned by
+> `adapters.console.commands.search_explain.retrieve_answer.components`.
+> It renders `CONTENT`, `MODE`, direct `LOCATION` plus transient `BROWSE`, and
+> `ACTION` in one box. The separate `SAVE AS`, parent-browser, Save Location,
+> and `TO DO` frames and visible `PARENT CONTEXT`/`REPARENT` vocabulary below
+> are historical. Find results are checkable and use the same
+> `save_context_from_selection` capability as Search. See
+> `retrieve-answer-save-panel-design-rationale.md`.
+
 > **Authorization contract updated 2026-08-30.** Permission claims below that use `EMBED`, `DERIVE`, `COMBINE`, `EXPORT`, `ACCEPT_DERIVED`, or `SAVE_*` describe the retired contract preserved for design history. The current contract uses `QUERY`, `CREATE`, `READ`, `UPDATE`, and `DELETE`; `READ` covers readable semantic use and Embed traversal, while `SHARE` remains a separate endpoint capability. See `granted-derived-ownership-design-rationale.md`.
 
 > **2026-08-30 Save As update:** The current workbench offers `COPY`,
@@ -196,7 +206,7 @@ queries remain unavailable for a selected granted root because READ authority
 does not expose checkpoint history.
 
 Search, target, scope, tree expansion, provider results, and checked state stay
-process-local unless the person activates the exact `TO DO` row. The stored
+process-local unless the person activates the exact `ACTION` row. The stored
 checkpoint records source identities and the query needed to explain the
 curation, but no search preference or provider dialogue is persisted. Existing
 one-shot current/history routing and provider output validation remain the
@@ -209,7 +219,7 @@ retain local values; EMBED keeps a content-free Grant binding and reauthorizes
 READ when later resolving the live Source. Grant identity, revision, and READ
 use are revalidated through the write boundary.
 
-The user-facing operation is consistently named `SAVE AS`. New checkpoints
+The user-facing frame is consistently named `SAVE`. New checkpoints
 use the canonical `save_context_from_selection` field; historical
 `search_materialization` records retain their stored spelling and are not
 rewritten by this naming migration.

@@ -38,6 +38,15 @@ from memcommit.application.operations.search_explain.retrieve_answer.find.applic
     FindResult,
 )
 from memcommit.application.operations.search_explain.retrieve_answer.find.runtime import execute_find
+from memcommit.application.operations.search_explain.retrieve_answer.find.save_context import (
+    save_context_request_from_find,
+)
+from memcommit.application.capabilities.save_context_from_selection.application import (
+    SaveContextFromSelectionError,
+)
+from memcommit.application.capabilities.save_context_from_selection.runtime import (
+    execute_save_context_from_selection,
+)
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
@@ -208,8 +217,31 @@ def cmd(
                 execute=execute,
                 clipboard_writer=write_system_clipboard,
                 initial_all_readable_contexts=all_contexts,
+                local_context_names=tuple(store.list_context_names()),
+                validate_save_location=store.assert_context_creatable,
             )
             result = None if outcome is None else outcome.result
+            if outcome is not None and outcome.status == "SAVE":
+                assert outcome.save_as is not None
+                assert outcome.save_location is not None
+                saved = execute_save_context_from_selection(
+                    save_context_request_from_find(
+                        outcome.result,
+                        outcome.selected_match_indices,
+                        mode=outcome.save_as,
+                        destination_name=outcome.save_location,
+                        catalog=catalog,
+                    ),
+                    store=store,
+                    catalog=catalog,
+                )
+                typer.secho(
+                    f"Saved {len(saved.item_uids)} checked Find match(es) as "
+                    f"{saved.mode} in new Context "
+                    f"'{display_escape_text(saved.context_name)}' "
+                    f"[{saved.context_uid[:8]}]; sources unchanged.",
+                    fg=typer.colors.GREEN,
+                )
         else:
             assert request is not None
             result = execute(request)
@@ -245,6 +277,7 @@ def cmd(
         OSError,
         ProfileConfigError,
         ProfileError,
+        SaveContextFromSelectionError,
         RuntimeError,
         TypeError,
         ValueError,

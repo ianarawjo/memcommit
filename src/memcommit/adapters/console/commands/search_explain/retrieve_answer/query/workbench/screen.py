@@ -6,6 +6,7 @@ from collections.abc import Callable, Mapping, Sequence
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.filters import Condition, has_focus
+from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.keys import Keys
@@ -25,6 +26,10 @@ from prompt_toolkit.widgets import Frame, TextArea
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.readable_scope_editor import (
     CompactReadableScopeControl,
 )
+from memcommit.adapters.console.commands.search_explain.retrieve_answer.components import (
+    RetrieveAnswerSavePanel,
+)
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import suggest_fresh_context_name
 from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.components.background_turn import BackgroundExecutorTurn
@@ -89,6 +94,17 @@ from memcommit.adapters.console.commands.search_explain.retrieve_answer.query.wo
 )
 
 
+def _query_save_location_stem(context_name: str, question: str) -> str:
+    words = "-".join(question.strip().split()) or "query-answer"
+    safe = "".join(
+        "-" if character in "/\\:" or ord(character) < 32 else character
+        for character in words
+    ).strip("-.")
+    if not safe:
+        safe = "query-answer"
+    return f"{context_name}/answers/{safe[:48].rstrip('-.') or 'query-answer'}"
+
+
 def run_query_workbench(
     context_names: Sequence[str],
     *,
@@ -108,6 +124,8 @@ def run_query_workbench(
     require_tty: bool = True,
     clipboard_writer: Callable[[str], None] | None = None,
     help_binder: Callable[..., object] | None = None,
+    local_context_names: Sequence[str] | None = None,
+    validate_save_location: Callable[[str], object] | None = None,
 ) -> QueryWorkbenchResult:
     """Open a process-local Query surface without connecting before Enter."""
 
@@ -132,6 +150,13 @@ def run_query_workbench(
         raise ValueError("Initial Query scope choices must be booleans.")
     if not isinstance(initial_language, str) or not initial_language:
         raise ValueError("Query language must be nonblank.")
+    local_catalog = tuple(
+        dict.fromkeys(
+            context_names if local_context_names is None else local_context_names
+        )
+    )
+    if any(not isinstance(name, str) or not name for name in local_catalog):
+        raise ValueError("Query local Context names must be nonblank text.")
 
     source_options = [HorizontalChoiceOption("ORDINARY", "VISIBLE CONTEXTS")]
     if targets:
@@ -193,13 +218,35 @@ def run_query_workbench(
         read_only=Condition(lambda: background_turn.busy),
         name="query-question",
     )
+    save_panel = RetrieveAnswerSavePanel(
+        content_summary=lambda: "COMPLETE QUERY ANSWER",
+        action_label=lambda _mode: "SAVE COMPLETE ANSWER",
+        initial_location=suggest_fresh_context_name(
+            _query_save_location_stem(initial_context, "query-answer"),
+            local_catalog,
+        ),
+        context_names=local_catalog,
+        current_context=(
+            current_context if current_context in local_catalog else None
+        ),
+        validate_location=validate_save_location,
+        input_name="query-save-location",
+        on_status=update_status,
+    )
+    save_location_edit = {"edited": False, "programmatic": False}
+
+    def save_location_changed(_buffer) -> None:
+        if not save_location_edit["programmatic"]:
+            save_location_edit["edited"] = True
+
+    save_panel.name.input.buffer.on_text_changed += save_location_changed
 
     def granted_mode() -> bool:
         return source_choice.selected_uid == "GRANTED"
 
     source_type_control: FormattedTextControl
 
-    def render_source_type() -> list[tuple[str, str]]:
+    def render_source_type() -> StyleAndTextTuples:
         return render_horizontal_choice(
             source_choice,
             title="SOURCE",
@@ -292,6 +339,8 @@ def run_query_workbench(
             )
         elif query_view_scope is not None and query_view_scope.browser_open:
             navigation = "↑/↓ move · Enter/Space select · Esc close Browse"
+        elif save_panel.browser_open:
+            navigation = "↑/↓ move · ←/→ tree · Enter place · Esc close Browse"
         else:
             navigation = (
                 "↑/↓ move/cross · ←/→ adjust · Enter activate · "
@@ -309,11 +358,18 @@ def run_query_workbench(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
+    save_container = ConditionalContainer(
+        save_panel.container,
+        filter=Condition(
+            lambda: response is not None and not background_turn.busy
+        ),
+    )
     root = build_tui_frame(
         TuiRegion(header),
         TuiRegion(scope_frame),
         TuiRegion(question_frame),
         TuiRegion(answer_frame),
+        TuiRegion(save_container),
         TuiRegion(footer),
     )
     app: Application[QueryWorkbenchResult] = Application(
@@ -441,7 +497,7 @@ def run_query_workbench(
         try:
             if granted_mode():
                 assert query_view_scope is not None
-                request = GrantedQueryRequest(
+                granted_request = GrantedQueryRequest(
                     target=query_view_scope.selected_target(),
                     question=question_area.text.strip(),
                     language=initial_language,
@@ -449,10 +505,10 @@ def run_query_workbench(
                 )
 
                 def work() -> QueryWorkbenchResponse:
-                    next_response = run_granted(request)
+                    next_response = run_granted(granted_request)
                     if (
                         not isinstance(next_response, GrantedQueryResponse)
-                        or next_response.request != request
+                        or next_response.request != granted_request
                     ):
                         raise ValueError(
                             "Query inputs changed while the request was running. "
@@ -462,7 +518,7 @@ def run_query_workbench(
 
             else:
                 request_targets, request_descendants = ordinary_scope.request_scope()
-                request = OrdinaryQueryRequest(
+                ordinary_request = OrdinaryQueryRequest(
                     question=question_area.text.strip(),
                     target_names=request_targets,
                     include_descendants=request_descendants,
@@ -470,10 +526,10 @@ def run_query_workbench(
                 )
 
                 def work() -> QueryWorkbenchResponse:
-                    next_response = run_ordinary(request)
+                    next_response = run_ordinary(ordinary_request)
                     if (
                         not isinstance(next_response, OrdinaryQueryResponse)
-                        or next_response.request != request
+                        or next_response.request != ordinary_request
                     ):
                         raise ValueError(
                             "Query inputs changed while the request was running. "
@@ -490,6 +546,25 @@ def run_query_workbench(
             copy_receipt = None
             answer_focus.reset()
             answer_window.vertical_scroll = 0
+            if not save_location_edit["edited"]:
+                source_name = (
+                    next_response.request.target.public_name
+                    if isinstance(next_response, GrantedQueryResponse)
+                    else next_response.request.target_names[0]
+                )
+                save_location_edit["programmatic"] = True
+                try:
+                    save_panel.set_location(
+                        suggest_fresh_context_name(
+                            _query_save_location_stem(
+                                source_name,
+                                next_response.request.question,
+                            ),
+                            local_catalog,
+                        )
+                    )
+                finally:
+                    save_location_edit["programmatic"] = False
             status["value"] = "ANSWER READY"
 
         def fail(error: Exception) -> None:
@@ -516,6 +591,28 @@ def run_query_workbench(
         event.app.layout.focus(answer_control)
         return "HANDLED"
 
+    def _apply_save(event) -> SurfaceActionResult:
+        if background_turn.busy:
+            status["value"] = "Wait for the current Query to finish."
+            return "HANDLED"
+        if response is None:
+            status["value"] = "ASK A QUESTION BEFORE SAVING"
+            return "HANDLED"
+        try:
+            destination = save_panel.validate_candidate()
+        except (OSError, TypeError, ValueError) as error:
+            status["value"] = str(error)
+            event.app.layout.focus(save_panel.name.input)
+            return "HANDLED"
+        event.app.exit(
+            result=QueryWorkbenchResult(
+                "SAVE",
+                response,
+                destination,
+            )
+        )
+        return "HANDLED"
+
     def visible_surfaces() -> tuple[FocusSurface, ...]:
         if not granted_mode() and ordinary_scope.browser_open:
             return (ordinary_scope.browser_surface(uid_prefix="query-scope"),)
@@ -525,12 +622,14 @@ def run_query_workbench(
             and query_view_scope.browser_open
         ):
             return (query_view_scope.browser_surface(uid_prefix="query-view"),)
+        if save_panel.browser_open:
+            return (save_panel.browser_surface(uid_prefix="query-save"),)
         scope_surfaces = (
             query_view_scope.normal_surfaces(uid_prefix="query-view")
             if granted_mode() and query_view_scope is not None
             else ordinary_scope.normal_surfaces(uid_prefix="query-scope")
         )
-        return (
+        surfaces = [
             FocusSurface(
                 "source-type",
                 source_type_control,
@@ -552,11 +651,20 @@ def run_query_workbench(
                 activate=_focus_question,
                 on_vertical_enter=_enter_answer,
             ),
-        )
+        ]
+        if response is not None and not background_turn.busy:
+            surfaces.extend(
+                save_panel.normal_surfaces(
+                    activate_action=_apply_save,
+                    uid_prefix="query-save",
+                )
+            )
+        return tuple(surfaces)
 
     surface_focus = SurfaceFocusController(visible_surfaces)
     bind_surface_navigation(bindings, surface_focus)
     ordinary_scope.bind_keybindings(bindings)
+    save_panel.bind_keybindings(bindings)
     if query_view_scope is not None:
         query_view_scope.bind_keybindings(bindings)
 
@@ -606,9 +714,15 @@ def run_query_workbench(
             | has_focus(query_view_scope.range_control)
             | has_focus(query_view_scope.catalog_control)
         )
-    read_only_focus = (scope_focus | has_focus(answer_control)) & ~has_focus(
-        ordinary_scope.input
+    save_focus = (
+        has_focus(save_panel.name.input)
+        | has_focus(save_panel.browse_control)
+        | has_focus(save_panel.tree_control)
+        | has_focus(save_panel.action_control)
     )
+    read_only_focus = (
+        scope_focus | has_focus(answer_control) | save_focus
+    ) & ~has_focus(ordinary_scope.input) & ~has_focus(save_panel.name.input)
     if query_view_scope is not None:
         read_only_focus = read_only_focus & ~has_focus(query_view_scope.input)
     if help_binder is not None:
@@ -697,6 +811,7 @@ def run_query_workbench(
         "backspace",
         filter=read_only_focus
         & ~has_focus(ordinary_scope.tree_control)
+        & ~has_focus(save_panel.tree_control)
         & (
             ~has_focus(query_view_scope.catalog_control)
             if query_view_scope is not None
@@ -727,6 +842,9 @@ def run_query_workbench(
             event.app.invalidate()
             return
         if query_view_scope is not None and query_view_scope.close_browser(event):
+            event.app.invalidate()
+            return
+        if save_panel.close_browser(event):
             event.app.invalidate()
             return
         dispatch_tui_back(event, _return_to_question, close=close)

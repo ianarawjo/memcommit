@@ -1,0 +1,5 @@
+Saved 1 checked Search result(s) as REFERENCE in new Context 'task/archive/search-result' [2d51e120]; sources unchanged.                                                            
+SEARCH SAVE COMPLETE · task/archive/search-result                                                                                                                                   
+PRESS ENTER FOR READ-ONLY SEARCH VERIFICATION                                                                                                                                       
+SEARCH READ-ONLY RESULT · Needle: accessible entrance is on the east side.                                                                                                          
+SEARCH SOURCE UNCHANGED · True

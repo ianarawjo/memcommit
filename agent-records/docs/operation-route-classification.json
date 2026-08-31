@@ -90,9 +90,10 @@
         "evidence": [
           "agent-records/docs/find-application-boundary-matrix.md",
           "agent-records/docs/find-search-compact-scope-design-rationale.md",
+          "agent-records/docs/retrieve-answer-save-panel-design-rationale.md",
           "agent-records/docs/search-find-replace-design-rationale.md"
         ],
-        "reason": "CLI, TUI, Python, and agent routes share one provider-free readable-source freeze and complete literal or explicit-regex span result with no cache, session, or effect."
+        "reason": "CLI, TUI, Python, and agent routes share one provider-free readable-source freeze and complete literal or explicit-regex span result. The interactive checked-result save is a separate reviewed typed application edge and leaves its readable Sources unchanged."
       },
       "find-ambiguities": {
         "evidence": [
@@ -196,9 +197,10 @@
           "agent-records/docs/query-answer-application-boundary-matrix.md",
           "agent-records/docs/query-reference-application-boundary-matrix.md",
           "agent-records/docs/query-case-derived-answer-design-rationale.md",
+          "agent-records/docs/retrieve-answer-save-panel-design-rationale.md",
           "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
         ],
-        "reason": "Ordinary, granted, and query-only families plus CLI, TUI, public, and agent projections have a verified operation package."
+        "reason": "Ordinary, granted, and query-only families plus CLI, TUI, public, and agent projections have a verified operation package. The interactive answer save crosses a separate typed require-new application edge without reopening QUERY-only Sources."
       },
       "reference": {
         "evidence": [
@@ -390,10 +392,11 @@
         "evidence": [
           "agent-records/docs/find-search-application-boundary-matrix.md",
           "agent-records/docs/find-search-compact-scope-design-rationale.md",
+          "agent-records/docs/retrieve-answer-save-panel-design-rationale.md",
           "agent-records/docs/save-context-from-selection-design-rationale.md",
           "agent-records/docs/search-find-replace-design-rationale.md"
         ],
-        "reason": "Search analysis and the first shared selection-save caller are verified, but the newly shared capability has not yet completed a callable-wide review across future consumers such as Find."
+        "reason": "Search analysis and the shared selection-save boundary now have verified Search and Find callers, but the newly broadened capability has not yet completed a callable-wide review across every exposed adapter."
       },
       "update": {
         "evidence": [

@@ -36,8 +36,6 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
 )
 from memcommit.adapters.console.terminal.components.horizontal_choice import (
     HorizontalChoiceOption,
-    HorizontalChoiceState,
-    render_horizontal_choice,
 )
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
@@ -62,8 +60,8 @@ from memcommit.adapters.console.commands.search_explain.retrieve_answer.search.r
     SearchResultViewRow,
     render_grouped_search_results,
 )
-from memcommit.adapters.console.terminal.components.save_location import (
-    SaveLocationView,
+from memcommit.adapters.console.commands.search_explain.retrieve_answer.components import (
+    RetrieveAnswerSavePanel,
 )
 from memcommit.adapters.console.terminal.components.plain_text_clipboard import (
     PlainTextClipboardReceipt,
@@ -78,10 +76,7 @@ from memcommit.adapters.console.terminal.components.focus import (
     SurfaceMoveResult,
     bind_surface_navigation,
 )
-from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import (
-    ContextNameControl,
-    suggest_fresh_context_name,
-)
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import suggest_fresh_context_name
 from memcommit.adapters.console.terminal.components.selection import (
     FlatMultiSelectionState,
     SelectionOption,
@@ -158,7 +153,7 @@ class SearchResultsClipboardProjection:
 
 @dataclass(frozen=True)
 class SearchWorkbenchResult:
-    """Close state or one reviewed Save As request."""
+    """Close state or one reviewed Save request."""
 
     status: Literal["CLOSED", "SAVE"]
     response: SearchResponse | None = None
@@ -364,26 +359,6 @@ def run_search_workbench(
     if any(not isinstance(name, str) or not name for name in local_catalog):
         raise ValueError("Search local Context names must be nonblank text.")
 
-    save_as_choice = HorizontalChoiceState(
-        (
-            HorizontalChoiceOption(
-                "COPY",
-                "COPY",
-                "Create independent Memory values with fresh identities.",
-            ),
-            HorizontalChoiceOption(
-                "REFERENCE",
-                "REFERENCE",
-                "Retain immutable read-only snapshots of the selected values.",
-            ),
-            HorizontalChoiceOption(
-                "EMBED",
-                "EMBED",
-                "Create read-only live links that follow their Source Memories.",
-            ),
-        ),
-        selected_uid="COPY",
-    )
     response: SearchResponse | None = None
     result_selection: FlatMultiSelectionState | None = None
     status = {"value": "ENTER A QUERY"}
@@ -426,25 +401,51 @@ def run_search_workbench(
         _search_save_location_stem(initial_target, "search"),
         local_catalog,
     )
-    save_location = ContextNameControl.create(
-        SaveLocationView(
-            value=initial_save_location,
-            state="NEW CONTEXT",
-            detail="Checked results create this exact new local Context.",
-            validate=validate_save_location,
-            context_names=local_catalog,
-            current_context=current if current in local_catalog else None,
+    save_panel = RetrieveAnswerSavePanel(
+        content_summary=lambda: (
+            f"{len(result_selection.selected_uids)} CHECKED SEARCH RESULT(S)"
+            if result_selection is not None
+            else "CHECK SEARCH RESULTS TO SAVE"
         ),
+        action_label=lambda mode: (
+            f"SAVE {len(result_selection.selected_uids)} CHECKED AS {mode}"
+            if result_selection is not None
+            else "SAVE CHECKED SEARCH RESULTS"
+        ),
+        initial_location=initial_save_location,
+        context_names=local_catalog,
+        current_context=current if current in local_catalog else None,
+        validate_location=validate_save_location,
         input_name="search-save-location",
-        parent_height=1,
+        on_status=scope_status,
+        mode_options=(
+            HorizontalChoiceOption(
+                "COPY",
+                "COPY",
+                "Create independent Memory values with fresh identities.",
+            ),
+            HorizontalChoiceOption(
+                "REFERENCE",
+                "REFERENCE",
+                "Retain immutable read-only snapshots of the selected values.",
+            ),
+            HorizontalChoiceOption(
+                "EMBED",
+                "EMBED",
+                "Create read-only live links that follow their Source Memories.",
+            ),
+        ),
+        initial_mode="COPY",
     )
+    save_mode_control = save_panel.mode_control
+    assert save_mode_control is not None
     save_location_edit = {"edited": False, "programmatic": False}
 
     def save_location_changed(_buffer) -> None:
         if not save_location_edit["programmatic"]:
             save_location_edit["edited"] = True
 
-    save_location.input.buffer.on_text_changed += save_location_changed
+    save_panel.name.input.buffer.on_text_changed += save_location_changed
 
     def render_results() -> list[tuple[str, str]]:
         if response is None or result_selection is None:
@@ -487,41 +488,6 @@ def run_search_workbench(
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
 
-    def render_save_as() -> list[tuple[str, str]]:
-        return render_horizontal_choice(
-            save_as_choice,
-            title="MODE",
-            focused=app.layout.has_focus(save_as_control),
-            show_description=False,
-        )
-
-    save_as_control = FormattedTextControl(
-        render_save_as,
-        focusable=True,
-        show_cursor=False,
-    )
-
-    def render_todo() -> list[tuple[str, str]]:
-        checked = len(result_selection.selected_uids) if result_selection else 0
-        focused = app.layout.has_focus(todo_control)
-        value = f"SAVE {checked} CHECKED AS {save_as_choice.selected_uid}"
-        fragments: list[tuple[str, str]] = []
-        if focused:
-            fragments.append(("[SetCursorPosition]", ""))
-        fragments.append(
-            (
-                "class:memcommit.choice.active.focused" if focused else "",
-                f"{'> ' if focused else '  '}{safe_terminal_text(value)}",
-            )
-        )
-        return fragments
-
-    todo_control = FormattedTextControl(
-        render_todo,
-        focusable=True,
-        show_cursor=False,
-    )
-
     header = Window(
         FormattedTextControl(" MEM SEARCH"),
         height=Dimension.exact(1),
@@ -541,17 +507,6 @@ def run_search_workbench(
         title=lambda: _results_frame_title(background_turn),
         height=Dimension(min=7, weight=2),
     )
-    save_as_frame = Frame(
-        Window(save_as_control, wrap_lines=True),
-        title="SAVE AS",
-        height=Dimension.exact(4),
-    )
-    todo_frame = Frame(
-        Window(todo_control, wrap_lines=True),
-        title="TO DO · ENTER TO SAVE",
-        height=Dimension.exact(3),
-    )
-
     def render_footer() -> str | list[tuple[str, str]]:
         if background_turn.busy:
             return (
@@ -583,15 +538,10 @@ def run_search_workbench(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    # SAVE AS is an outcome action, not search setup. Keep the complete group
-    # out of both the canvas and keyboard topology until a successful search
-    # has produced at least one result.
-    save_as_panel = ConditionalContainer(
-        build_tui_frame(
-            TuiRegion(save_as_frame),
-            TuiRegion(save_location.container),
-            TuiRegion(todo_frame),
-        ),
+    # SAVE is an outcome action, not search setup. Keep it out of the canvas
+    # and keyboard topology until a completed search has a nonempty result.
+    save_container = ConditionalContainer(
+        save_panel.container,
         filter=Condition(
             lambda: _search_save_as_available(
                 response,
@@ -604,7 +554,7 @@ def run_search_workbench(
         TuiRegion(scope_frame),
         TuiRegion(search_frame),
         TuiRegion(results_frame),
-        TuiRegion(save_as_panel),
+        TuiRegion(save_container),
         TuiRegion(footer),
     )
     app: Application[SearchWorkbenchResult] = Application(
@@ -637,14 +587,6 @@ def run_search_workbench(
     bind_focused_frame_style(
         results_frame,
         is_focused=lambda: app.layout.has_focus(results_control),
-    )
-    bind_focused_frame_style(
-        save_as_frame,
-        is_focused=lambda: app.layout.has_focus(save_as_control),
-    )
-    bind_focused_frame_style(
-        todo_frame,
-        is_focused=lambda: app.layout.has_focus(todo_control),
     )
 
     def clear_results(message: str) -> None:
@@ -709,11 +651,7 @@ def run_search_workbench(
             scroll_page_down(event)
         event.app.invalidate()
 
-    tree_focus = (
-        has_focus(save_location.tree_control)
-        if save_location.tree_control is not None
-        else Condition(lambda: False)
-    )
+    save_tree_focus = has_focus(save_panel.tree_control)
     scope_focus = (
         has_focus(scope.input)
         | has_focus(scope.browse_control)
@@ -724,12 +662,18 @@ def run_search_workbench(
     search_return_focus = (
         scope_focus
         | has_focus(results_control)
-        | has_focus(save_as_control)
-        | has_focus(todo_control)
-        | tree_focus
+        | has_focus(save_mode_control)
+        | has_focus(save_panel.name.input)
+        | has_focus(save_panel.browse_control)
+        | has_focus(save_panel.action_control)
+        | save_tree_focus
     )
     non_search_focus = search_return_focus
-    read_non_search_focus = non_search_focus & ~has_focus(scope.input)
+    read_non_search_focus = (
+        non_search_focus
+        & ~has_focus(scope.input)
+        & ~has_focus(save_panel.name.input)
+    )
     bind_session_help(
         bindings,
         filter=read_non_search_focus,
@@ -802,7 +746,7 @@ def run_search_workbench(
             if not save_location_edit["edited"]:
                 save_location_edit["programmatic"] = True
                 try:
-                    save_location.set_text(
+                    save_panel.set_location(
                         suggest_fresh_context_name(
                             _search_save_location_stem(
                                 response.request.target_names[0],
@@ -891,44 +835,6 @@ def run_search_workbench(
     def _copy_all_results(event) -> None:
         copy_results(event, whole_result_set=True)
 
-    def _move_save_as(_event, delta: int) -> SurfaceMoveResult:
-        return "MOVED" if save_as_choice.move(delta) else "BOUNDARY"
-
-    def _activate_save_as(event) -> SurfaceActionResult:
-        event.app.layout.focus(save_location.input)
-        save_location.input.buffer.cursor_position = len(save_location.text)
-        status["value"] = (
-            f"{save_as_choice.selected_uid} · REVIEW THE EXACT SAVE LOCATION"
-        )
-        return "HANDLED"
-
-    @bindings.add("right", filter=has_focus(save_as_control), eager=True)
-    def _save_as_right(event) -> None:
-        save_as_choice.move(1)
-        event.app.invalidate()
-
-    @bindings.add("left", filter=has_focus(save_as_control), eager=True)
-    def _save_as_left(event) -> None:
-        save_as_choice.move(-1)
-        event.app.invalidate()
-
-    def _move_save_location(event, delta: int) -> SurfaceMoveResult:
-        if delta < 0 and save_location.tree_control is not None:
-            event.app.layout.focus(save_location.tree_control)
-            status["value"] = "CHOOSE A PARENT CONTEXT · ENTER TO REPARENT"
-            return "CONSUMED"
-        return "BOUNDARY"
-
-    def _activate_save_location(event) -> SurfaceActionResult:
-        try:
-            save_location.validate_candidate()
-        except (OSError, TypeError, ValueError) as error:
-            status["value"] = str(error)
-            return "HANDLED"
-        event.app.layout.focus(todo_control)
-        status["value"] = "SAVE LOCATION VALID · ENTER TO SAVE"
-        return "HANDLED"
-
     def _apply_save(event) -> SurfaceActionResult:
         if background_turn.busy:
             status["value"] = "Wait for the current search to finish."
@@ -956,76 +862,29 @@ def run_search_workbench(
             status["value"] = "A CHECKED RESULT HAS NO SOURCE MEMORY IDENTITY"
             return "HANDLED"
         try:
-            destination = save_location.validate_candidate()
+            destination = save_panel.validate_candidate()
         except (OSError, TypeError, ValueError) as error:
             status["value"] = str(error)
-            event.app.layout.focus(save_location.input)
+            event.app.layout.focus(save_panel.name.input)
             return "HANDLED"
+        mode = save_panel.selected_mode
+        assert mode is not None
         event.app.exit(
             result=SearchWorkbenchResult(
                 "SAVE",
                 response,
                 selected_indices,
-                cast(SaveContextMode, save_as_choice.selected_uid),
+                cast(SaveContextMode, mode),
                 destination,
             )
         )
         return "HANDLED"
 
-    if save_location.tree_control is not None:
-        parent_tree = save_location.parent_locator
-        assert parent_tree is not None
-
-        @bindings.add("up", filter=tree_focus, eager=True)
-        def _save_tree_up(event) -> None:
-            parent_tree.move(-1)
-            event.app.invalidate()
-
-        @bindings.add("down", filter=tree_focus, eager=True)
-        def _save_tree_down(event) -> None:
-            state = parent_tree.state.tree
-            before = state.selected_row_index()
-            parent_tree.move(1)
-            if state.selected_row_index() == before:
-                event.app.layout.focus(save_location.input)
-            event.app.invalidate()
-
-        @bindings.add("left", filter=tree_focus, eager=True)
-        def _save_tree_left(event) -> None:
-            parent_tree.collapse()
-            event.app.invalidate()
-
-        @bindings.add("right", filter=tree_focus, eager=True)
-        def _save_tree_right(event) -> None:
-            parent_tree.expand()
-            event.app.invalidate()
-
-        @bindings.add("enter", filter=tree_focus, eager=True)
-        def _save_tree_choose(event) -> None:
-            try:
-                candidate = save_location.choose_cursor_as_parent()
-            except (TypeError, ValueError) as error:
-                status["value"] = str(error)
-            else:
-                event.app.layout.focus(save_location.input)
-                status["value"] = f"PARENT SELECTED · REVIEW {candidate}"
-            event.app.invalidate()
-
-        @bindings.add("tab", filter=tree_focus, eager=True)
-        @bindings.add("s-tab", filter=tree_focus, eager=True)
-        @bindings.add("backspace", filter=tree_focus, eager=True)
-        def _leave_save_tree(event) -> None:
-            event.app.layout.focus(save_location.input)
-            event.app.invalidate()
-
-    @bindings.add("c-j", filter=has_focus(save_location.input), eager=True)
-    def _reject_save_location_newline(event) -> None:
-        status["value"] = "SAVE LOCATION STAYS ON ONE LINE"
-        event.app.invalidate()
-
     def visible_surfaces() -> tuple[FocusSurface, ...]:
         if scope.browser_open:
             return (scope.browser_surface(uid_prefix="search-scope"),)
+        if save_panel.browser_open:
+            return (save_panel.browser_surface(uid_prefix="search-save"),)
         surfaces = [
             *scope.normal_surfaces(uid_prefix="search-scope"),
             FocusSurface(
@@ -1045,25 +904,9 @@ def run_search_workbench(
         ]
         if response is not None and response.results:
             surfaces.extend(
-                (
-                    FocusSurface(
-                        "save-as",
-                        save_as_control,
-                        move_vertical=_move_save_as,
-                        activate=_activate_save_as,
-                    ),
-                    FocusSurface(
-                        "save-location",
-                        save_location.input,
-                        move_vertical=_move_save_location,
-                        activate=_activate_save_location,
-                    ),
-                    FocusSurface(
-                        "todo",
-                        todo_control,
-                        move_vertical=lambda _event, _delta: "BOUNDARY",
-                        activate=_apply_save,
-                    ),
+                save_panel.normal_surfaces(
+                    activate_action=_apply_save,
+                    uid_prefix="search-save",
                 )
             )
         return tuple(surfaces)
@@ -1071,6 +914,7 @@ def run_search_workbench(
     surface_focus = SurfaceFocusController(visible_surfaces)
     bind_surface_navigation(bindings, surface_focus)
     scope.bind_keybindings(bindings)
+    save_panel.bind_keybindings(bindings)
 
     @bindings.add("tab", filter=has_focus(scope.tree_control), eager=True)
     @bindings.add("s-tab", filter=has_focus(scope.tree_control), eager=True)
@@ -1088,7 +932,11 @@ def run_search_workbench(
 
     @bindings.add(
         "backspace",
-        filter=(read_non_search_focus & ~tree_focus & ~has_focus(scope.tree_control)),
+        filter=(
+            read_non_search_focus
+            & ~save_tree_focus
+            & ~has_focus(scope.tree_control)
+        ),
         eager=True,
     )
     def _back_to_search(event) -> None:
@@ -1097,11 +945,6 @@ def run_search_workbench(
         event.app.invalidate()
 
     def _return_to_search(event) -> bool:
-        if save_location.tree_control is not None and event.app.layout.has_focus(
-            save_location.tree_control
-        ):
-            event.app.layout.focus(save_location.input)
-            return True
         if event.app.layout.has_focus(search_area):
             return False
         event.app.layout.focus(search_area)
@@ -1110,7 +953,7 @@ def run_search_workbench(
 
     @bindings.add("escape", eager=True)
     def _escape(event) -> None:
-        if not scope.close_browser(event):
+        if not scope.close_browser(event) and not save_panel.close_browser(event):
             dispatch_tui_back(event, _return_to_search, close=close)
         event.app.invalidate()
 
