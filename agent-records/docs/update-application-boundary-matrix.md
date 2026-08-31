@@ -62,11 +62,12 @@ the public compatibility facade, while its implementation follows five Update
 concepts:
 
 - `changes.py` owns source-linked ADD, EDIT, and REMOVE records, their strict
-  parsing, operation digest, and derived Grant permission requirements;
+  parsing, operation digest, and required Target Context uses;
 - `receipts.py` owns frozen Context fingerprints and checkpoint/application
   receipts;
-- `inputs.py` owns inline Source identity, Grant bindings, Source/Target
-  candidates, focused-Memory selection, and exhaustive input collection;
+- `inputs.py` owns inline Source identity, Source/Target candidates,
+  focused-Memory selection, and exhaustive input collection. The operation-
+  neutral frozen Grant binding lives under `application.context_access`;
 - `plan.py` owns the session-independent exact Target and operation contract;
 - `result.py` owns detached affected-owner post-images returned to composing
   application operations;
@@ -81,6 +82,33 @@ needed. The split deliberately does not alter serialized schemas, provider
 payloads, cache identity, application behavior, or the operation-owned
 application boundary described above. Explicit facade exports preserve the
 former 40-name public surface while making physical ownership testable.
+
+## Context-use-constrained planning
+
+Update authorizes Source `READ` and Target `READ` before provider connection.
+The Target authorization also returns its complete ordinary-use set, from
+which planning derives the available mutation vocabulary: `CREATE`, `UPDATE`,
+and `DELETE`. The prompt and JSON schema expose only those effects. A forbidden
+array has `maxItems: 0`, and decoding independently rejects any forbidden
+effect, so a provider cannot substitute another mutation merely to bypass a
+missing capability. A Target with no mutation use fails before provider
+connection.
+
+This ordering makes authorization an input to planning instead of a late
+publication veto. Installed or cached plans are reused only when their exact
+effects fit the current Target authorization; otherwise Update replans through
+the constrained contract. Publication still reauthorizes the exact staged
+effects under the Grant snapshot lock because provider latency and persisted
+plans are not authorization leases. Local Contexts expose the complete use set,
+so their existing provider contract and serialized session shape are unchanged.
+
+`ContextUseAuthorization` deliberately carries both the resolved
+`ContextAccess` and the complete allowed set. A separate permission-query API
+would permit planning and validation to observe different Grant snapshots; one
+authorization result keeps the successful check and the planning vocabulary
+together. `READ` implies the weaker mediated `QUERY` use, while `QUERY` alone
+does not disclose content and therefore cannot serve as an Update Source or
+Target.
 
 ## Frozen behavior
 

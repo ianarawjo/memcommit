@@ -32,7 +32,10 @@ from memcommit.source_projection.model import (
     SourceState,
     context_access_facts,
 )
-from memcommit.application.operations.update.model import GrantedUpdateTarget, granted_target_digest
+from memcommit.application.context_access import (
+    GrantedContextBinding,
+    granted_context_binding_digest,
+)
 
 
 @dataclass(frozen=True)
@@ -272,20 +275,18 @@ def context_access_display_facts(
     )
 
 
-def freeze_granted_context_binding(access: ContextAccess) -> GrantedUpdateTarget:
+def freeze_granted_context_binding(access: ContextAccess) -> GrantedContextBinding:
     """Freeze the complete control-plane identity behind one public view.
 
-    ``GrantedUpdateTarget`` remains the serialized compatibility name, but the
-    receipt itself is operation-neutral: read artifacts need the same grant,
-    Profile, attachment, resource, and authority-Context preconditions as an
-    update target.
+    Read and mutation artifacts need the same Grant, Profile, attachment,
+    resource, and authority-Context preconditions.
     """
 
     view = access.view
     if view is None or access.attachment_name is None:
         raise ValueError("Expected a granted Context binding.")
     grant = view.grant
-    return GrantedUpdateTarget(
+    return GrantedContextBinding(
         public_name=access.display_name,
         grantee_profile_uid=view.grantee.uid,
         authority_profile_uid=view.authority.uid,
@@ -293,14 +294,14 @@ def freeze_granted_context_binding(access: ContextAccess) -> GrantedUpdateTarget
         attachment_context_name=access.attachment_name,
         grant_uid=grant.uid,
         grant_revision=grant.revision,
-        grant_digest=granted_target_digest(grant.to_dict()),
+        grant_digest=granted_context_binding_digest(grant.to_dict()),
         resource_uid=grant.resource_uid,
         resource_name=grant.resource_name,
         authority_context_name=view.authority_context_name,
         permissions=grant.permissions,
     )
 def revalidate_granted_context_binding(
-    binding: GrantedUpdateTarget,
+    binding: GrantedContextBinding,
     *,
     required_permission: str = "READ",
     registry: ProfileRegistry | None = None,

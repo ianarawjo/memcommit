@@ -44,7 +44,16 @@ def test_read_grant_also_authorizes_query_but_query_does_not_disclose_content(
     isolated_store,
 ):
     store = MemoryStore()
-    authorize_context_use(_access(store, ("READ",)), ContextUse.QUERY)
+    authorization = authorize_context_use(
+        _access(store, ("READ",)),
+        ContextUse.QUERY,
+    )
+
+    assert authorization.allowed == frozenset(
+        {ContextUse.READ, ContextUse.QUERY}
+    )
+    assert authorization.permits(ContextUse.READ)
+    assert not authorization.permits(ContextUse.UPDATE)
 
     with pytest.raises(ProfileError, match="does not allow read access"):
         authorize_context_use(_access(store, ("QUERY",)), ContextUse.READ)
@@ -54,15 +63,24 @@ def test_mutation_uses_are_checked_exactly_and_local_contexts_need_no_grant(
     isolated_store,
 ):
     store = MemoryStore()
-    authorize_context_use(
+    local = authorize_context_use(
         _access(store, None),
         tuple(ContextUse),
     )
+    assert local.allowed == frozenset(ContextUse)
 
     granted = _access(store, ("READ", "CREATE", "UPDATE"))
-    authorize_context_use(
+    authorization = authorize_context_use(
         granted,
         (ContextUse.READ, ContextUse.CREATE, ContextUse.UPDATE),
+    )
+    assert authorization.allowed == frozenset(
+        {
+            ContextUse.QUERY,
+            ContextUse.CREATE,
+            ContextUse.READ,
+            ContextUse.UPDATE,
+        }
     )
     with pytest.raises(ProfileError, match="does not allow delete access"):
         authorize_context_use(granted, ContextUse.DELETE)

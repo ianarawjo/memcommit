@@ -2352,7 +2352,7 @@ def test_granted_update_undo_and_redo_restore_exact_authority_unit(
     assert redone_session.application == undone_session.application
 
 
-def test_granted_update_checks_create_permission_before_first_write(
+def test_granted_update_plans_only_effects_allowed_before_provider_call(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -2373,9 +2373,15 @@ def test_granted_update_checks_create_permission_before_first_write(
         for name in (wiki.name, "campus-wiki/services")
     }
 
+    schemas = []
+
     class Provider:
-        def complete(self, prompt, **_kwargs):
-            return _edit_and_add_plan(prompt)
+        def complete(self, prompt, *, output_schema=None, **_kwargs):
+            schemas.append(output_schema)
+            plan = json.loads(_edit_and_add_plan(prompt))
+            if output_schema["properties"]["additions"]["maxItems"] == 0:
+                plan["additions"] = []
+            return json.dumps(plan)
 
     monkeypatch.setattr(
         "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
@@ -2394,17 +2400,20 @@ def test_granted_update_checks_create_permission_before_first_write(
         ["update", "--from", source.name, "--to", wiki.name],
     )
 
-    assert update.exit_code == 1
-    assert "does not allow create access" in update.stderr
-    assert {
-        name: authority_store.load_direct(name).to_dict() for name in authority_before
-    } == authority_before
-    assert authority_store.list_checkpoints(wiki.name) == []
+    assert update.exit_code == 0, update.output + update.stderr
+    assert schemas[0]["properties"]["edits"]["maxItems"] > 0
+    assert schemas[0]["properties"]["additions"]["maxItems"] == 0
+    assert schemas[0]["properties"]["removals"]["maxItems"] > 0
+    assert authority_store.load_direct(wiki.name).to_dict() != authority_before[wiki.name]
+    assert authority_store.load_direct("campus-wiki/services").to_dict() == (
+        authority_before["campus-wiki/services"]
+    )
+    assert len(authority_store.list_checkpoints(wiki.name)) == 1
     assert authority_store.list_checkpoints("campus-wiki/services") == []
-    assert active_store.load_staged_update().status == "staged"
+    assert active_store.load_staged_update().status == "applied"
 
 
-def test_granted_update_requires_explicit_delete_for_removal(
+def test_granted_update_omits_unavailable_delete_during_planning(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -2422,9 +2431,12 @@ def test_granted_update_requires_explicit_delete_for_removal(
     )
     root_before = authority_store.load_direct(wiki.name).to_dict()
 
+    schemas = []
+
     class Provider:
-        def complete(self, prompt, **_kwargs):
-            return _removal_plan(prompt)
+        def complete(self, _prompt, *, output_schema=None, **_kwargs):
+            schemas.append(output_schema)
+            return json.dumps({"edits": [], "additions": [], "removals": []})
 
     monkeypatch.setattr(
         "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
@@ -2440,13 +2452,14 @@ def test_granted_update_requires_explicit_delete_for_removal(
     )
 
     assert impact.exit_code == 0, impact.output
-    assert "REQUIRED TO APPLY · READ + DELETE" in impact.output
-    assert "GRANT PERMISSIONS · BLOCKED" in impact.output
-    assert update.exit_code == 1
-    assert "does not allow delete access" in update.stderr
+    assert schemas[0]["properties"]["edits"]["maxItems"] > 0
+    assert schemas[0]["properties"]["additions"]["maxItems"] > 0
+    assert schemas[0]["properties"]["removals"]["maxItems"] == 0
+    assert "REQUIRED TO APPLY · READ + DELETE" not in impact.output
+    assert update.exit_code == 0, update.output + update.stderr
     assert authority_store.load_direct(wiki.name).to_dict() == root_before
     assert authority_store.list_checkpoints(wiki.name) == []
-    assert active_store.load_staged_update().status == "staged"
+    assert active_store.load_staged_update().status == "applied"
 
 
 def test_granted_update_does_not_special_case_a_legacy_baseline_name(

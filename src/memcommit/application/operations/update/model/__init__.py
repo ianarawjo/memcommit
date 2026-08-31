@@ -14,6 +14,8 @@ from .changes import (
     UpdateOperation,
     operation_digest,
     required_grant_permissions,
+    required_update_context_uses,
+    update_operations_are_authorized,
 )
 from .inputs import (
     INLINE_UPDATE_CONTEXT_NAME,
@@ -95,5 +97,7 @@ __all__ = (
     "operation_digest",
     "plan_update",
     "required_grant_permissions",
+    "required_update_context_uses",
+    "update_operations_are_authorized",
     "session_matches",
 )

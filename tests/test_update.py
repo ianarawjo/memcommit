@@ -24,6 +24,7 @@ from memcommit.core.context import (
     QueryContextRef,
 )
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
+from memcommit.application.authorization import ContextUse
 from memcommit.application.capabilities.semantic.goal_focus import inline_goal_focus
 from memcommit.application.capabilities.semantic.goal_focus_runtime import (
     freeze_goal_focus_operand,
@@ -48,6 +49,7 @@ from memcommit.application.operations.update.model import (
     collect_update_inputs,
     inline_update_context,
     plan_update,
+    required_update_context_uses,
     session_matches,
 )
 
@@ -76,6 +78,83 @@ class PlanProvider:
         if isinstance(response, dict) and set(response) == {"edits", "additions"}:
             response = {**response, "removals": []}
         return response if isinstance(response, str) else json.dumps(response)
+
+
+def test_update_planning_is_constrained_by_authorized_target_uses():
+    source = ops.init("authorized/update/source")
+    ops.add(source, "The south entrance is now open.")
+    target = ops.init("authorized/update/target")
+    ops.add(target, "The south entrance is closed.")
+    provider = PlanProvider({"edits": [], "additions": [], "removals": []})
+
+    session = plan_update(
+        source,
+        target,
+        lambda: provider,
+        allowed_target_uses={ContextUse.READ, ContextUse.UPDATE},
+    )
+
+    prompt, _operation, schema = provider.calls[0]
+    assert "Target authorization permits only edit operations" in prompt
+    assert schema["properties"]["edits"]["maxItems"] == 1
+    assert schema["properties"]["additions"]["maxItems"] == 0
+    assert schema["properties"]["removals"]["maxItems"] == 0
+    assert required_update_context_uses(session.operations) == frozenset(
+        {ContextUse.READ}
+    )
+
+
+def test_update_rejects_provider_effect_outside_authorized_target_uses():
+    source = ops.init("authorized/update/source")
+    source_memory = ops.add(source, "The south entrance is now open.")
+    target = ops.init("authorized/update/target")
+    target_memory = ops.add(target, "The south entrance is closed.")
+    response = {
+        "edits": [],
+        "additions": [
+            {
+                "target_context_id": "c000001",
+                "new_content": "A new memory.",
+                "source_ids": ["s000001"],
+                "reason": "This should not bypass CREATE authority.",
+            }
+        ],
+        "removals": [],
+    }
+
+    with pytest.raises(UpdateError, match="outside its authorized Context uses"):
+        plan_update(
+            source,
+            target,
+            lambda: PlanProvider(response),
+            allowed_target_uses={ContextUse.READ, ContextUse.UPDATE},
+        )
+
+    assert source_memory.uid in source.memories
+    assert target_memory.uid in target.memories
+
+
+def test_update_without_authorized_target_mutation_fails_before_provider():
+    source = ops.init("authorized/update/source")
+    ops.add(source, "The south entrance is now open.")
+    target = ops.init("authorized/update/target")
+    ops.add(target, "The south entrance is closed.")
+    connected = False
+
+    def provider_factory():
+        nonlocal connected
+        connected = True
+        return PlanProvider({"edits": [], "additions": [], "removals": []})
+
+    with pytest.raises(UpdateError, match="permits no create, update, or delete"):
+        plan_update(
+            source,
+            target,
+            provider_factory,
+            allowed_target_uses={ContextUse.READ},
+        )
+
+    assert not connected
 
 
 def _one_edit_response(prompt):

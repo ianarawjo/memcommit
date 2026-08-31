@@ -8,6 +8,8 @@ import uuid
 from dataclasses import dataclass
 from typing import Literal, TypeAlias
 
+from memcommit.application.authorization import ContextUse
+
 
 class UpdateError(RuntimeError):
     """Safe, user-facing semantic update error."""
@@ -322,17 +324,42 @@ def _operation_from_dict(value: object) -> UpdateOperation:
             reason=_require_string(data["reason"], "removal reason"),
         )
     raise ValueError("Invalid update operation type.")
+def required_update_context_uses(
+    operations: tuple[UpdateOperation, ...],
+) -> frozenset[ContextUse]:
+    """Return the exact Target uses needed to apply one Update plan."""
+
+    required = {ContextUse.READ}
+    if any(isinstance(operation, EditOperation) for operation in operations):
+        required.add(ContextUse.UPDATE)
+    if any(isinstance(operation, AddOperation) for operation in operations):
+        required.add(ContextUse.CREATE)
+    if any(isinstance(operation, RemoveOperation) for operation in operations):
+        required.add(ContextUse.DELETE)
+    return frozenset(required)
+
+
+def update_operations_are_authorized(
+    operations: tuple[UpdateOperation, ...],
+    allowed: frozenset[ContextUse],
+) -> bool:
+    """Return whether one exact plan fits a frozen Target authorization."""
+
+    if any(not isinstance(use, ContextUse) for use in allowed):
+        raise TypeError("Expected ContextUse values for Update authorization.")
+    return required_update_context_uses(operations) <= allowed
+
+
 def required_grant_permissions(
     operations: tuple[UpdateOperation, ...],
 ) -> tuple[str, ...]:
-    """Return the exact granted permissions needed to apply a plan."""
+    """Return the legacy string projection of required Target uses."""
 
-    required = {"READ"}
-    if any(isinstance(operation, EditOperation) for operation in operations):
-        required.add("UPDATE")
-    if any(isinstance(operation, AddOperation) for operation in operations):
-        required.add("CREATE")
-    if any(isinstance(operation, RemoveOperation) for operation in operations):
-        required.add("DELETE")
-    order = ("READ", "CREATE", "UPDATE", "DELETE")
-    return tuple(permission for permission in order if permission in required)
+    required = required_update_context_uses(operations)
+    order = (
+        ContextUse.READ,
+        ContextUse.CREATE,
+        ContextUse.UPDATE,
+        ContextUse.DELETE,
+    )
+    return tuple(use.value for use in order if use in required)

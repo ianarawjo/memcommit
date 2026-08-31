@@ -5,9 +5,9 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 
-from memcommit.application.operations.profile.config import (
-    ProfileConfigError,
-    canonical_grant_permissions,
+from memcommit.application.context_access import (
+    GrantedContextBinding,
+    granted_context_binding_digest,
 )
 from memcommit.application.capabilities.semantic.disclosure import (
     SemanticDisclosureError,
@@ -50,146 +50,10 @@ def inline_update_context(content: str) -> Context:
     context = Context(uid=context_uid, name=INLINE_UPDATE_CONTEXT_NAME)
     context.add(Memory(uid=memory_uid, content=content))
     return context
-@dataclass(frozen=True)
-class GrantedUpdateTarget:
-    """Frozen control-plane identity for one granted update target."""
-
-    public_name: str
-    grantee_profile_uid: str
-    authority_profile_uid: str
-    attachment_context_uid: str
-    attachment_context_name: str
-    grant_uid: str
-    grant_revision: int
-    grant_digest: str
-    resource_uid: str
-    resource_name: str
-    authority_context_name: str
-    permissions: tuple[str, ...]
-
-    def to_dict(self) -> dict[str, object]:
-        return {
-            "kind": "GRANTED_CONTEXT",
-            "public_name": self.public_name,
-            "grantee_profile_uid": self.grantee_profile_uid,
-            "authority_profile_uid": self.authority_profile_uid,
-            "attachment": {
-                "uid": self.attachment_context_uid,
-                "name": self.attachment_context_name,
-            },
-            "grant": {
-                "uid": self.grant_uid,
-                "revision": self.grant_revision,
-                "digest": self.grant_digest,
-                "permissions": list(self.permissions),
-            },
-            "resource": {
-                "uid": self.resource_uid,
-                "name": self.resource_name,
-            },
-            "authority_context_name": self.authority_context_name,
-        }
-
-    @classmethod
-    def from_dict(cls, value: object) -> GrantedUpdateTarget:
-        data = _require_exact_keys(
-            value,
-            {
-                "kind",
-                "public_name",
-                "grantee_profile_uid",
-                "authority_profile_uid",
-                "attachment",
-                "grant",
-                "resource",
-                "authority_context_name",
-            },
-            "granted update target",
-        )
-        if data["kind"] != "GRANTED_CONTEXT":
-            raise ValueError("Invalid granted update target kind.")
-        attachment = _require_exact_keys(
-            data["attachment"],
-            {"uid", "name"},
-            "granted update attachment",
-        )
-        grant = _require_exact_keys(
-            data["grant"],
-            {"uid", "revision", "digest", "permissions"},
-            "granted update grant",
-        )
-        resource = _require_exact_keys(
-            data["resource"],
-            {"uid", "name"},
-            "granted update resource",
-        )
-        revision = grant["revision"]
-        permissions = grant["permissions"]
-        if not isinstance(revision, int) or isinstance(revision, bool) or revision < 1:
-            raise ValueError("Invalid granted update grant revision.")
-        if (
-            not isinstance(permissions, list)
-            or not permissions
-            or any(not isinstance(item, str) or not item for item in permissions)
-            or len(set(permissions)) != len(permissions)
-        ):
-            raise ValueError("Invalid granted update permissions.")
-        try:
-            canonical_permissions = canonical_grant_permissions(
-                permissions,
-                allow_legacy=True,
-            )
-        except ProfileConfigError as error:
-            raise ValueError("Invalid granted update permissions.") from error
-        if not _is_sha256(grant["digest"]):
-            raise ValueError("Invalid granted update grant digest.")
-        return cls(
-            public_name=_require_string(
-                data["public_name"],
-                "granted update public name",
-            ),
-            grantee_profile_uid=_require_uuid(
-                data["grantee_profile_uid"],
-                "granted update grantee Profile uid",
-            ),
-            authority_profile_uid=_require_uuid(
-                data["authority_profile_uid"],
-                "granted update authority Profile uid",
-            ),
-            attachment_context_uid=_require_string(
-                attachment["uid"],
-                "granted update attachment Context uid",
-            ),
-            attachment_context_name=_require_string(
-                attachment["name"],
-                "granted update attachment Context name",
-            ),
-            grant_uid=_require_uuid(
-                grant["uid"],
-                "granted update grant uid",
-            ),
-            grant_revision=revision,
-            grant_digest=grant["digest"],
-            resource_uid=_require_string(
-                resource["uid"],
-                "granted update resource uid",
-            ),
-            resource_name=_require_string(
-                resource["name"],
-                "granted update resource name",
-            ),
-            authority_context_name=_require_string(
-                data["authority_context_name"],
-                "granted update authority Context name",
-            ),
-            permissions=canonical_permissions,
-        )
-
-
-def granted_target_digest(value: object) -> str:
-    """Digest one validated registry grant record for a saved target binding."""
-
-    return _sha256_json(value)
+# Historical imports remain valid while operation packages migrate to the
+# operation-neutral Context-access owner.
+GrantedUpdateTarget = GrantedContextBinding
+granted_target_digest = granted_context_binding_digest
 @dataclass(frozen=True)
 class SourceCandidate:
     candidate_id: str

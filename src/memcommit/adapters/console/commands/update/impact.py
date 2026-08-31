@@ -6,6 +6,7 @@ import sys
 
 import typer
 
+from memcommit.application.authorization import ContextUse, authorize_context_use
 from memcommit.adapters.console.commands.impact.sessions import (
     ImpactSessionPresentation,
     run_saved_impact_handoff_loop,
@@ -33,7 +34,9 @@ from memcommit.application.operations.update.endpoints import resolve_update_end
 from memcommit.application.operations.update.model import (
     UpdateError,
     plan_update,
+    required_update_context_uses,
     session_matches,
+    update_operations_are_authorized,
 )
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique_uid
@@ -154,6 +157,11 @@ def run_directional_update_impact(
             endpoints.target_name,
             current_name=current_name,
         )
+        authorize_context_use(source_access, ContextUse.READ)
+        target_authorization = authorize_context_use(
+            target_access,
+            ContextUse.READ,
+        )
         source_store = (
             GrantedReadStore(source_access) if source_access.is_granted else store
         )
@@ -205,6 +213,16 @@ def run_directional_update_impact(
                 granted_target=granted_target,
             )
         )
+        if (
+            update_prewarm_match is not None
+            and not update_operations_are_authorized(
+                update_prewarm_match.session.operations,
+                target_authorization.allowed,
+            )
+        ):
+            # Installed analysis is only valid when its exact effects still
+            # fit the Target Grant. Let constrained planning replace it.
+            update_prewarm_match = None
         if update_prewarm_match is not None:
             session = update_prewarm_match.session.with_status("impact")
             label = update_prewarm_match.origin.replace("_", " ")
@@ -232,7 +250,13 @@ def run_directional_update_impact(
                     granted_target=granted_target,
                     source_memory_selector=source_memory,
                     target_memory_selector=target_memory,
+                    allowed_target_uses=target_authorization.allowed,
                 )
+
+        authorize_context_use(
+            target_access,
+            required_update_context_uses(session.operations),
+        )
 
         # Provider latency is not an authorization lease. Re-resolve both
         # endpoints and rebuild both projections before publishing the plan.
@@ -250,6 +274,11 @@ def run_directional_update_impact(
                 current_name=current_name,
                 required_permission="READ",
                 registry=registry,
+            )
+            authorize_context_use(current_source_access, ContextUse.READ)
+            authorize_context_use(
+                current_target_access,
+                required_update_context_uses(session.operations),
             )
             current_source_store = (
                 GrantedReadStore(

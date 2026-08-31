@@ -6,6 +6,7 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.application.authorization import ContextUse, authorize_context_use
 from memcommit.application.capabilities.flow import run_application_flow
 from memcommit.adapters.console.terminal.components.command_wait import (
     CommandWaitView,
@@ -75,7 +76,9 @@ from memcommit.application.operations.update.model import (
     collect_update_inputs,
     inline_update_context,
     plan_update,
+    required_update_context_uses,
     session_matches,
+    update_operations_are_authorized,
 )
 from memcommit.application.operations.update.execution import (
     UpdateApplicationFlowPort,
@@ -293,6 +296,7 @@ def _plan_update_with_wait(
     target_memory_selector: str | None = None,
     inline_source_content: str | None = None,
     goal_focus: FrozenGoalFocus | None = None,
+    allowed_target_uses: frozenset[ContextUse],
 ) -> UpdateSession:
     """Plan one complete Update while sharing the interactive command wait."""
 
@@ -315,6 +319,7 @@ def _plan_update_with_wait(
             target_memory_selector=target_memory_selector,
             inline_source_content=inline_source_content,
             goal_focus=goal_focus,
+            allowed_target_uses=allowed_target_uses,
         )
 
     return run_command_wait(
@@ -653,6 +658,7 @@ def cmd(
                 endpoints.source_name,
                 current_name=current_name,
             )
+            authorize_context_use(source_access, ContextUse.READ)
             resolved_target_name = endpoints.target_name
             source_store = (
                 GrantedReadStore(source_access) if source_access.is_granted else store
@@ -670,6 +676,10 @@ def cmd(
             store,
             resolved_target_name,
             current_name=current_name,
+        )
+        target_authorization = authorize_context_use(
+            target_access,
+            ContextUse.READ,
         )
         if inline_source_content is not None and target_access.is_granted:
             raise UpdateError(
@@ -835,6 +845,10 @@ def cmd(
                 and cached.source_memory_uid == requested_inputs.source_memory_uid
                 and cached.target_memory_uid == requested_inputs.target_memory_uid
                 and cached.goal_focus == goal_focus
+                and update_operations_are_authorized(
+                    cached.operations,
+                    target_authorization.allowed,
+                )
                 and session_matches(
                     cached,
                     source,
@@ -890,6 +904,17 @@ def cmd(
                         granted_target=granted_target,
                     )
                 )
+                if (
+                    update_prewarm_match is not None
+                    and not update_operations_are_authorized(
+                        update_prewarm_match.session.operations,
+                        target_authorization.allowed,
+                    )
+                ):
+                    # A prewarm is reusable only when it fits the Target's
+                    # current mutation vocabulary. Replan with the constrained
+                    # schema instead of surfacing a late permission failure.
+                    update_prewarm_match = None
                 if update_prewarm_match is not None:
                     session = update_prewarm_match.session.with_status("staged")
                     update_analysis_origin = update_prewarm_match.origin
@@ -917,7 +942,12 @@ def cmd(
                         target_memory_selector=target_memory,
                         inline_source_content=inline_source_content,
                         goal_focus=goal_focus,
+                        allowed_target_uses=target_authorization.allowed,
                     )
+            authorize_context_use(
+                target_access,
+                required_update_context_uses(session.operations),
+            )
             # Bind the staged intent to the active record observed above.
             # This prevents two update processes from silently replacing one
             # another between planning and local application.
