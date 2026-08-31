@@ -22,10 +22,6 @@ from memcommit.application.capabilities.semantic.memory_scope import (
 from .changes import (
     SourceReference,
     UpdateError,
-    _is_sha256,
-    _require_exact_keys,
-    _require_string,
-    _require_uuid,
     _sha256_json,
     _sha256_text,
 )
