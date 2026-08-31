@@ -33,13 +33,16 @@ carries that family's identity. Console Help derives its existing category
 maps and ordering from those records rather than authoring a second registry.
 
 A family may additionally declare complete ordered sections when its members
-share a broad affordance but not one immediate interaction. `HISTORY &
-RECOVERY` is divided into `INSPECTION` (`log`, `diff`, `trace`, `rationale`)
-and `RECOVERY` (`checkpoint`, `undo`, `redo`, `revert`). Section membership
-must flatten to the family's exact operation order, and each affected
-descriptor carries the stable section identity. This distinguishes observing
-recorded lineage from establishing or applying a recovery boundary without
-inventing two unrelated top-level families.
+share a broad affordance but not one immediate interaction. `SEARCH & EXPLAIN`
+is divided into `QUERY` (`find`, `search`, `query`) and `SUMMARY & COMPARISON`
+(`summarize`, `compare`). Compare moves here from the former `CHECK, COMPARE &
+REVIEW` family because it projects how two selected Contexts align and differ;
+it is adjacent to one-Context summarization rather than to quality and
+conformance checks. The remaining family is displayed as `CHECK & REVIEW`.
+`HISTORY & RECOVERY` is likewise divided into `INSPECTION` (`log`, `diff`,
+`trace`, `rationale`) and `RECOVERY` (`checkpoint`, `undo`, `redo`, `revert`).
+Section membership must flatten to the family's exact operation order, and
+each affected descriptor carries the stable section identity.
 
 The Help operation remains under `memcommit.application.operations.help` and
 depends on the catalog in one direction. Its composer still combines stable
@@ -62,10 +65,12 @@ remain owned by each operation's implementation. Tests compare the catalog
 with exposed operations, but the relocation does not make prose an executable
 source of behavior.
 
-This change preserves the public operation set and existing Help family order.
+This change preserves the public operation set and top-level Help family order.
+It changes Compare's family membership and the Check family's display title,
+but not Compare's execution, forms, authority, or result contract.
 Family sections are descriptive affordance structure; they do not imply a
-shared executable history service or change any operation's authority,
-determinism, or mutation contract.
+shared executable query, comparison, or history service and do not change any
+operation's authority, determinism, or mutation contract.
 It does not yet move the 66 application or console operation packages under
 physical family directories, and it does not yet introduce executable trait
 declarations for authority, history, provider, session, or mutation

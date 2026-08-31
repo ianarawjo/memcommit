@@ -26,6 +26,8 @@ class OperationFamilyId(str, Enum):
 class OperationFamilySectionId(str, Enum):
     """Stable identity for an intentional subdivision of one family."""
 
+    SEARCH_QUERY = "SEARCH_QUERY"
+    SEARCH_SUMMARY_COMPARISON = "SEARCH_SUMMARY_COMPARISON"
     HISTORY_INSPECTION = "HISTORY_INSPECTION"
     HISTORY_RECOVERY = "HISTORY_RECOVERY"
 
@@ -145,12 +147,25 @@ OPERATION_FAMILIES = (
     OperationFamily(
         id=OperationFamilyId.SEARCH_EXPLAIN,
         title="SEARCH & EXPLAIN",
-        operation_names=("find", "search", "query", "summarize"),
+        operation_names=("find", "search", "query", "summarize", "compare"),
         description=(
             "Find exact text directly, or use LLM-based semantic retrieval, "
-            "answering, and summarization within the selected authorized scope."
+            "answering, summarization, and comparison within the selected "
+            "authorized scope."
         ),
         execution_label="MIXED",
+        sections=(
+            OperationFamilySection(
+                id=OperationFamilySectionId.SEARCH_QUERY,
+                title="QUERY",
+                operation_names=("find", "search", "query"),
+            ),
+            OperationFamilySection(
+                id=OperationFamilySectionId.SEARCH_SUMMARY_COMPARISON,
+                title="SUMMARY & COMPARISON",
+                operation_names=("summarize", "compare"),
+            ),
+        ),
     ),
     OperationFamily(
         id=OperationFamilyId.DETERMINISTIC_CONTENT_CHANGES,
@@ -195,9 +210,8 @@ OPERATION_FAMILIES = (
     ),
     OperationFamily(
         id=OperationFamilyId.CHECK_COMPARE_REVIEW,
-        title="CHECK, COMPARE & REVIEW",
+        title="CHECK & REVIEW",
         operation_names=(
-            "compare",
             "find-duplicates",
             "find-redundancies",
             "find-ambiguities",
@@ -209,7 +223,7 @@ OPERATION_FAMILIES = (
             "check-conformance",
         ),
         description=(
-            "Check compatibility, differences, quality, or expected impact. "
+            "Check compatibility, quality, or expected impact. "
             "Review saved reports or evidence from operations that already completed."
         ),
         execution_label="MIXED",

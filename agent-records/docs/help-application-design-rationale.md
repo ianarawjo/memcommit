@@ -85,11 +85,15 @@ assembly, not a second Help execution path. Wide/compact layout, grouping,
 focus, syntax forms, and shell-selection behavior remain owned by the terminal
 adapter. The terminal chooses how to render a comparison, but not its meaning.
 
-In BY KIND, `HISTORY & RECOVERY` remains one family and retains its existing
-description. The terminal inserts neutral, non-focusable `INSPECTION` and
-`RECOVERY` divider rows from the grouped application snapshot. Command
-selection stays one continuous sequence across the divider, so the visual
-subdivision does not introduce a hidden interaction layer. A–Z remains flat.
+In BY KIND, `SEARCH & EXPLAIN` separates `QUERY` (`find`, `search`, `query`)
+from `SUMMARY & COMPARISON` (`summarize`, `compare`). Compare therefore leaves
+the quality-check family, whose display title becomes `CHECK & REVIEW` without
+changing its stable family identity. `HISTORY & RECOVERY` retains its existing
+description and separates `INSPECTION` from `RECOVERY`. The terminal inserts
+all four neutral, non-focusable divider rows from the grouped application
+snapshot. Command selection stays continuous across each divider, so the
+visual subdivision does not introduce a hidden interaction layer. A–Z remains
+flat.
 
 When a positional request is supplied, `mem help REQUEST` bypasses the full
 browser, performs one lookup, and renders each selected operation through the

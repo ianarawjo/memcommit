@@ -255,14 +255,21 @@ prompt-toolkit selector:
   Context-to-Context operations together when they answer the same user goal,
   while each operation's expanded `FLOW`, `EXECUTION`, and `RANGE` remain the
   authoritative scope contract.
+  `SEARCH & EXPLAIN` has two catalog-owned sections. `QUERY` contains `find`,
+  `search`, and `query`; `SUMMARY & COMPARISON` contains `summarize` and
+  `compare`. Summarize and Compare both produce read-only interpretive views of
+  selected Context material, differing principally in one-source versus
+  two-source shape. Compare therefore no longer appears among quality and
+  conformance checks; that later category is displayed as `CHECK & REVIEW`.
   `HISTORY & RECOVERY` remains one category because all eight operations use
   recorded history as their subject, but its catalog-owned section structure
   makes the interaction difference explicit. `INSPECTION` contains `log`,
   `diff`, `trace`, and `rationale`; `RECOVERY` contains `checkpoint`, `undo`,
   `redo`, and `revert`. BY KIND renders each section title on a thin internal
-  rule after the unchanged family description. These rules are presentation
-  only: they are not focus stops, command order and Up/Down traversal remain
-  continuous, expansion remains operation-owned, and A–Z stays unsectioned.
+  rule after its family description. Search uses the same rule projection.
+  These rules are presentation only: they are not focus stops, command order
+  and Up/Down traversal remain continuous, expansion remains operation-owned,
+  and A–Z stays unsectioned.
   Every BY KIND box includes one short intent description. Pure deterministic
   groups say `NO LLM`; semantic transformations and Ground say `LLM-BASED`;
   route-dependent groups say `MIXED`. System and Study tools omit an execution

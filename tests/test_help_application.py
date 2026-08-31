@@ -35,8 +35,13 @@ def test_list_returns_one_alphabetized_complete_immutable_snapshot():
     assert first == second
 
 
-def test_grouped_list_preserves_catalog_family_and_history_section_order():
+def test_grouped_list_preserves_catalog_family_and_section_order():
     groups = list_operation_help_groups()
+    search = next(
+        group
+        for group in groups
+        if group.family.id is OperationFamilyId.SEARCH_EXPLAIN
+    )
     history = next(
         group
         for group in groups
@@ -45,6 +50,29 @@ def test_grouped_list_preserves_catalog_family_and_history_section_order():
 
     assert isinstance(groups, tuple)
     assert len(groups) == 11
+    assert tuple(operation.name for operation in search.operations) == (
+        "find",
+        "search",
+        "query",
+        "summarize",
+        "compare",
+    )
+    assert tuple(
+        (
+            section_group.section.id,
+            tuple(operation.name for operation in section_group.operations),
+        )
+        for section_group in search.sections
+    ) == (
+        (
+            OperationFamilySectionId.SEARCH_QUERY,
+            ("find", "search", "query"),
+        ),
+        (
+            OperationFamilySectionId.SEARCH_SUMMARY_COMPARISON,
+            ("summarize", "compare"),
+        ),
+    )
     assert tuple(operation.name for operation in history.operations) == (
         "log",
         "diff",
@@ -74,7 +102,8 @@ def test_grouped_list_preserves_catalog_family_and_history_section_order():
     assert all(
         not group.sections
         for group in groups
-        if group.family.id is not OperationFamilyId.HISTORY_RECOVERY
+        if group.family.id
+        not in {OperationFamilyId.SEARCH_EXPLAIN, OperationFamilyId.HISTORY_RECOVERY}
     )
 
 

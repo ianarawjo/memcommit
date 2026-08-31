@@ -301,7 +301,7 @@ def test_collapsed_by_kind_row_connects_summary_and_when_without_extra_height():
 
     fragments = _help_group_fragments(
         [(0, entry)],
-        title="CHECK, COMPARE & REVIEW",
+        title="SEARCH & EXPLAIN",
         width=180,
         focused=True,
         selected_index=0,
@@ -340,14 +340,14 @@ def test_adjacent_command_records_use_connectors_without_background_bands():
         entries = [
             entry
             for entry in command_entries(context)
-            if entry.name in {"compare", "review"}
+            if entry.name in {"find-duplicates", "review"}
         ]
     finally:
         context.close()
 
     fragments = _help_group_fragments(
         list(enumerate(entries)),
-        title="CHECK, COMPARE & REVIEW",
+        title="CHECK & REVIEW",
         width=180,
         focused=False,
         selected_index=0,
@@ -365,7 +365,7 @@ def test_adjacent_command_records_use_connectors_without_background_bands():
         for style, text in fragments
     )
     assert any(
-        style == "class:help-group bold" and text == " CHECK, COMPARE & REVIEW "
+        style == "class:help-group bold" and text == " CHECK & REVIEW "
         for style, text in fragments
     )
     category_copy = [
@@ -374,6 +374,65 @@ def test_adjacent_command_records_use_connectors_without_background_bands():
     assert category_copy
     assert all(
         style == "class:help-category-description bold" for style, _ in category_copy
+    )
+
+
+def test_search_box_groups_query_before_summary_and_comparison() -> None:
+    root, context = _root_context()
+    try:
+        by_name = {entry.name: entry for entry in command_entries(context)}
+    finally:
+        context.close()
+    operation_names = ("find", "search", "query", "summarize", "compare")
+    fragments = _help_group_fragments(
+        [
+            (index, by_name[operation_name])
+            for index, operation_name in enumerate(operation_names)
+        ],
+        title="SEARCH & EXPLAIN",
+        width=180,
+        focused=True,
+        selected_index=3,
+        expanded_index=None,
+        selected_form=None,
+    )
+    rendered = "".join(text for _style, text in fragments)
+    lines = rendered.splitlines()
+    query_section = next(
+        index for index, line in enumerate(lines) if "── QUERY " in line
+    )
+    summary_section = next(
+        index
+        for index, line in enumerate(lines)
+        if "── SUMMARY & COMPARISON " in line
+    )
+    find_index = next(index for index, line in enumerate(lines) if "mem find " in line)
+    query_index = next(
+        index for index, line in enumerate(lines) if "mem query " in line
+    )
+    summarize_index = next(
+        index for index, line in enumerate(lines) if "mem summarize " in line
+    )
+    compare_index = next(
+        index for index, line in enumerate(lines) if "mem compare " in line
+    )
+
+    assert all(terminal_cell_width(line) == 180 for line in lines)
+    assert "summarization, and comparison" in rendered
+    assert query_section < find_index < query_index < summary_section
+    assert summary_section < summarize_index < compare_index
+    assert any(
+        style == "class:help-section-label bold" and text == "QUERY"
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:help-section-label bold"
+        and text == "SUMMARY & COMPARISON"
+        for style, text in fragments
+    )
+    assert any(
+        style == "class:help-command.selected bold" and "mem summarize" in text
+        for style, text in fragments
     )
 
 
@@ -677,7 +736,7 @@ def test_collapsed_narrow_row_connects_wrapped_summary_and_when_blocks():
         text
         for _style, text in _help_group_fragments(
             [(0, entry)],
-            title="CHECK, COMPARE & REVIEW",
+            title="SEARCH & EXPLAIN",
             width=90,
             focused=False,
             selected_index=0,
