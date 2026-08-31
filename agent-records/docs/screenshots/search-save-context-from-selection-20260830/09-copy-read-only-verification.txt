@@ -1,0 +1,8 @@
+Saved 1 checked Search result(s) as COPY in new Context 'task/results/copy' [12a0f874]; sources unchanged.                                                                          
+SAVE RECEIPT COMPLETE · COPY · task/results/copy                                                                                                                                    
+PRESS ENTER FOR READ-ONLY RESULT VERIFICATION                                                                                                                                       
+READ-ONLY RESULT · COPY · INDEPENDENT MEMORY                                                                                                                                        
+CONTENT · Accessible entrance is on the east side.                                                                                                                                  
+FRESH UID · True                                                                                                                                                                    
+CURRENT CONTEXT · task/source                                                                                                                                                       
+SOURCE UNCHANGED · True

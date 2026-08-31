@@ -324,6 +324,7 @@
       },
       "trace": {
         "evidence": [
+          "agent-records/docs/checkpoint-read-history-design-rationale.md",
           "agent-records/docs/trace-application-boundary-matrix.md",
           "agent-records/docs/trace-application-boundary-design-rationale.md",
           "agent-records/docs/trace-lineage-normal-form-design-rationale.md",
@@ -389,9 +390,10 @@
         "evidence": [
           "agent-records/docs/find-search-application-boundary-matrix.md",
           "agent-records/docs/find-search-compact-scope-design-rationale.md",
+          "agent-records/docs/save-context-from-selection-design-rationale.md",
           "agent-records/docs/search-find-replace-design-rationale.md"
         ],
-        "reason": "Search and materialization are verified, but the current Search dialogue route remains outside the reviewed application boundary."
+        "reason": "Search analysis and the first shared selection-save caller are verified, but the newly shared capability has not yet completed a callable-wide review across future consumers such as Find."
       },
       "update": {
         "evidence": [

@@ -1,0 +1,3 @@
+Saved 1 checked Search result(s) as COPY in new Context 'task/results/copy' [12a0f874]; sources unchanged.                                                                          
+SAVE RECEIPT COMPLETE · COPY · task/results/copy                                                                                                                                    
+PRESS ENTER FOR READ-ONLY RESULT VERIFICATION

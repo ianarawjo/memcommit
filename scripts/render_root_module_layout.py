@@ -85,6 +85,12 @@ RETIRED_ROOT_MODULES = {
     "find_answer_dialogue": (
         "retired with the uncalled conversational Search answer path"
     ),
+    "find_materialization_application": (
+        "retired when selected-result saving moved to the shared application capability"
+    ),
+    "find_materialization_runtime": (
+        "retired when selected-result saving moved to the shared application capability"
+    ),
     "find_scope_evidence": (
         "retired after ordinary Query retained only its one-shot evidence projection"
     ),

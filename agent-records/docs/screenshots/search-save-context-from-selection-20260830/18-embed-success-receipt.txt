@@ -1,0 +1,3 @@
+Saved 1 checked Search result(s) as EMBED in new Context 'task/results/embed' [0addb4df]; sources unchanged.                                                                        
+SAVE RECEIPT COMPLETE · EMBED · task/results/embed                                                                                                                                  
+PRESS ENTER FOR READ-ONLY RESULT VERIFICATION

@@ -409,7 +409,7 @@ COMMAND_FORMS = {
         'mem find -a "[text]" (all readable Contexts in the active Profile)',
     ),
     "search": (
-        "mem search (interactive semantic search, checked COPY/REFERENCE, and Save Location)",
+        "mem search (interactive semantic search, checked COPY/REFERENCE/EMBED, and Save Location)",
         'mem search "[query]" (semantic search in the direct current Context)',
         'mem search -r "[query]" (namespace descendants and embedded Contexts)',
         'mem search --context [context] "[query]" (direct explicit Context root)',

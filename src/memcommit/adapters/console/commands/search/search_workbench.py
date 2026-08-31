@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
-from typing import AbstractSet, Literal
+from typing import Literal, cast
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.filters import Condition, has_focus
@@ -94,6 +94,9 @@ from memcommit.application.operations.search.application import (
     SearchResponse,
     SearchResult,
 )
+from memcommit.application.capabilities.save_context_from_selection.application import (
+    SaveContextMode,
+)
 from memcommit.source_projection.model import SourceForm
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,
@@ -143,15 +146,6 @@ def _search_result_selection_label(
     return f"{number} [{result.uid[:8]}] {content} [{' · '.join(location)}]"
 
 
-def _has_granted_materialization_source(
-    results: Sequence["SearchResult"],
-    granted_context_names: AbstractSet[str],
-) -> bool:
-    """Keep authority decisions independent from presentation annotations."""
-
-    return any(result.context_name in granted_context_names for result in results)
-
-
 @dataclass(frozen=True)
 class SearchResultsClipboardProjection:
     """One focused Search result or the complete frozen ranked result set."""
@@ -164,19 +158,19 @@ class SearchResultsClipboardProjection:
 
 @dataclass(frozen=True)
 class SearchWorkbenchResult:
-    """Close state or one reviewed materialization request."""
+    """Close state or one reviewed Save As request."""
 
-    status: Literal["CLOSED", "MATERIALIZE"]
+    status: Literal["CLOSED", "SAVE"]
     response: SearchResponse | None = None
     selected_result_indices: tuple[int, ...] = ()
-    materialize_as: Literal["COPY", "REFERENCE"] | None = None
+    save_as: SaveContextMode | None = None
     save_location: str | None = None
 
     def __post_init__(self) -> None:
         if self.status == "CLOSED":
             if (
                 self.selected_result_indices
-                or self.materialize_as is not None
+                or self.save_as is not None
                 or self.save_location is not None
             ):
                 raise ValueError("A closed Search workbench cannot request a save.")
@@ -184,7 +178,7 @@ class SearchWorkbenchResult:
         if (
             self.response is None
             or not self.selected_result_indices
-            or self.materialize_as not in {"COPY", "REFERENCE"}
+            or self.save_as not in {"COPY", "REFERENCE", "EMBED"}
             or not isinstance(self.save_location, str)
             or not self.save_location.strip()
         ):
@@ -322,7 +316,6 @@ def run_search_workbench(
     limit: int,
     run_search: SearchRunner,
     annotations: Mapping[str, SourceDisplayValue] | None = None,
-    granted_context_names: AbstractSet[str] = frozenset(),
     local_context_names: Sequence[str] | None = None,
     validate_save_location: SearchSaveLocationValidator | None = None,
     app_input: Input | None = None,
@@ -365,16 +358,13 @@ def run_search_workbench(
             normalize_source_display_tokens(annotation)
     except (TypeError, ValueError) as error:
         raise ValueError("Search received an invalid Context annotation.") from error
-    granted_catalog = frozenset(granted_context_names)
-    if not granted_catalog <= set(catalog):
-        raise ValueError("Search granted Context names are outside the catalog.")
     local_catalog = tuple(
         dict.fromkeys(catalog if local_context_names is None else local_context_names)
     )
     if any(not isinstance(name, str) or not name for name in local_catalog):
         raise ValueError("Search local Context names must be nonblank text.")
 
-    materialize_choice = HorizontalChoiceState(
+    save_as_choice = HorizontalChoiceState(
         (
             HorizontalChoiceOption(
                 "COPY",
@@ -384,7 +374,12 @@ def run_search_workbench(
             HorizontalChoiceOption(
                 "REFERENCE",
                 "REFERENCE",
-                "Create read-only live pointers to locally owned Memories.",
+                "Retain immutable read-only snapshots of the selected values.",
+            ),
+            HorizontalChoiceOption(
+                "EMBED",
+                "EMBED",
+                "Create read-only live links that follow their Source Memories.",
             ),
         ),
         selected_uid="COPY",
@@ -492,16 +487,16 @@ def run_search_workbench(
         right_margins=[ScrollbarMargin(display_arrows=True)],
     )
 
-    def render_materialize() -> list[tuple[str, str]]:
+    def render_save_as() -> list[tuple[str, str]]:
         return render_horizontal_choice(
-            materialize_choice,
+            save_as_choice,
             title="MODE",
-            focused=app.layout.has_focus(materialize_control),
+            focused=app.layout.has_focus(save_as_control),
             show_description=False,
         )
 
-    materialize_control = FormattedTextControl(
-        render_materialize,
+    save_as_control = FormattedTextControl(
+        render_save_as,
         focusable=True,
         show_cursor=False,
     )
@@ -509,7 +504,7 @@ def run_search_workbench(
     def render_todo() -> list[tuple[str, str]]:
         checked = len(result_selection.selected_uids) if result_selection else 0
         focused = app.layout.has_focus(todo_control)
-        value = f"SAVE {checked} CHECKED AS {materialize_choice.selected_uid}"
+        value = f"SAVE {checked} CHECKED AS {save_as_choice.selected_uid}"
         fragments: list[tuple[str, str]] = []
         if focused:
             fragments.append(("[SetCursorPosition]", ""))
@@ -547,7 +542,7 @@ def run_search_workbench(
         height=Dimension(min=7, weight=2),
     )
     save_as_frame = Frame(
-        Window(materialize_control, wrap_lines=True),
+        Window(save_as_control, wrap_lines=True),
         title="SAVE AS",
         height=Dimension.exact(4),
     )
@@ -645,7 +640,7 @@ def run_search_workbench(
     )
     bind_focused_frame_style(
         save_as_frame,
-        is_focused=lambda: app.layout.has_focus(materialize_control),
+        is_focused=lambda: app.layout.has_focus(save_as_control),
     )
     bind_focused_frame_style(
         todo_frame,
@@ -729,7 +724,7 @@ def run_search_workbench(
     search_return_focus = (
         scope_focus
         | has_focus(results_control)
-        | has_focus(materialize_control)
+        | has_focus(save_as_control)
         | has_focus(todo_control)
         | tree_focus
     )
@@ -896,25 +891,25 @@ def run_search_workbench(
     def _copy_all_results(event) -> None:
         copy_results(event, whole_result_set=True)
 
-    def _move_materialize(_event, delta: int) -> SurfaceMoveResult:
-        return "MOVED" if materialize_choice.move(delta) else "BOUNDARY"
+    def _move_save_as(_event, delta: int) -> SurfaceMoveResult:
+        return "MOVED" if save_as_choice.move(delta) else "BOUNDARY"
 
-    def _activate_materialize(event) -> SurfaceActionResult:
+    def _activate_save_as(event) -> SurfaceActionResult:
         event.app.layout.focus(save_location.input)
         save_location.input.buffer.cursor_position = len(save_location.text)
         status["value"] = (
-            f"{materialize_choice.selected_uid} · REVIEW THE EXACT SAVE LOCATION"
+            f"{save_as_choice.selected_uid} · REVIEW THE EXACT SAVE LOCATION"
         )
         return "HANDLED"
 
-    @bindings.add("right", filter=has_focus(materialize_control), eager=True)
-    def _materialize_right(event) -> None:
-        materialize_choice.move(1)
+    @bindings.add("right", filter=has_focus(save_as_control), eager=True)
+    def _save_as_right(event) -> None:
+        save_as_choice.move(1)
         event.app.invalidate()
 
-    @bindings.add("left", filter=has_focus(materialize_control), eager=True)
-    def _materialize_left(event) -> None:
-        materialize_choice.move(-1)
+    @bindings.add("left", filter=has_focus(save_as_control), eager=True)
+    def _save_as_left(event) -> None:
+        save_as_choice.move(-1)
         event.app.invalidate()
 
     def _move_save_location(event, delta: int) -> SurfaceMoveResult:
@@ -934,7 +929,7 @@ def run_search_workbench(
         status["value"] = "SAVE LOCATION VALID · ENTER TO SAVE"
         return "HANDLED"
 
-    def _apply_materialization(event) -> SurfaceActionResult:
+    def _apply_save(event) -> SurfaceActionResult:
         if background_turn.busy:
             status["value"] = "Wait for the current search to finish."
             return "HANDLED"
@@ -960,11 +955,6 @@ def run_search_workbench(
         if any(result.source_memory_uid is None for result in selected_results):
             status["value"] = "A CHECKED RESULT HAS NO SOURCE MEMORY IDENTITY"
             return "HANDLED"
-        if materialize_choice.selected_uid == "REFERENCE" and (
-            _has_granted_materialization_source(selected_results, granted_catalog)
-        ):
-            status["value"] = "REFERENCE REQUIRES LOCALLY OWNED SOURCE MEMORIES"
-            return "HANDLED"
         try:
             destination = save_location.validate_candidate()
         except (OSError, TypeError, ValueError) as error:
@@ -973,10 +963,10 @@ def run_search_workbench(
             return "HANDLED"
         event.app.exit(
             result=SearchWorkbenchResult(
-                "MATERIALIZE",
+                "SAVE",
                 response,
                 selected_indices,
-                materialize_choice.selected_uid,
+                cast(SaveContextMode, save_as_choice.selected_uid),
                 destination,
             )
         )
@@ -1057,10 +1047,10 @@ def run_search_workbench(
             surfaces.extend(
                 (
                     FocusSurface(
-                        "materialize",
-                        materialize_control,
-                        move_vertical=_move_materialize,
-                        activate=_activate_materialize,
+                        "save-as",
+                        save_as_control,
+                        move_vertical=_move_save_as,
+                        activate=_activate_save_as,
                     ),
                     FocusSurface(
                         "save-location",
@@ -1072,7 +1062,7 @@ def run_search_workbench(
                         "todo",
                         todo_control,
                         move_vertical=lambda _event, _delta: "BOUNDARY",
-                        activate=_apply_materialization,
+                        activate=_apply_save,
                     ),
                 )
             )

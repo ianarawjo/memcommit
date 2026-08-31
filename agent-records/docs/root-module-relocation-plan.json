@@ -1025,26 +1025,26 @@
       "role": "historical-compatibility-facade"
     },
     {
-      "action": "remove",
-      "canonical_target": "memcommit.application.operations.search.materialization_application",
-      "canonical_target_path": "memcommit/application/operations/search/materialization_application.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 0,
       "lines": 10,
       "module": "memcommit.find_materialization_application",
       "path": "memcommit/find_materialization_application.py",
-      "reason": "historical forwarding imports are intentionally unsupported",
-      "role": "historical-compatibility-facade"
+      "reason": "retired when selected-result saving moved to the shared application capability",
+      "role": "retired-prototype"
     },
     {
-      "action": "remove",
-      "canonical_target": "memcommit.application.operations.search.materialization_runtime",
-      "canonical_target_path": "memcommit/application/operations/search/materialization_runtime.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 0,
       "lines": 8,
       "module": "memcommit.find_materialization_runtime",
       "path": "memcommit/find_materialization_runtime.py",
-      "reason": "historical forwarding imports are intentionally unsupported",
-      "role": "historical-compatibility-facade"
+      "reason": "retired when selected-result saving moved to the shared application capability",
+      "role": "retired-prototype"
     },
     {
       "action": "remove",
@@ -2745,9 +2745,9 @@
   "root_module_count": 249,
   "schema_version": 1,
   "summary": {
-    "historical-compatibility-facade": 95,
+    "historical-compatibility-facade": 93,
     "operation-implementation": 69,
-    "retired-prototype": 19,
+    "retired-prototype": 21,
     "root-boundary": 1,
     "shared-concept-implementation": 65
   }

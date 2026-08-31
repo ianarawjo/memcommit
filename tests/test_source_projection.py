@@ -1,9 +1,5 @@
 import click
 
-from memcommit.adapters.console.commands.search.search_workbench import (
-    SearchResult,
-    _has_granted_materialization_source,
-)
 from memcommit.application.capabilities.authority.granted_context_navigation import (
     grant_navigation_annotation,
     grant_navigation_capability_labels,
@@ -277,15 +273,3 @@ def test_shared_context_tree_places_grant_before_the_public_name():
     assert rendered.endswith("· GRANT public  READ")
     assert ("class:source-ownership", "GRANT") in fragments
     assert ("class:source-capability", "READ") in fragments
-
-
-def test_find_authority_gate_uses_frozen_names_not_display_wording():
-    result = SearchResult(
-        context_name="public/source",
-        kind="memory",
-        uid="memory-1",
-        content="evidence",
-    )
-
-    assert _has_granted_materialization_source((result,), {"public/source"})
-    assert not _has_granted_materialization_source((result,), set())

@@ -8,8 +8,8 @@ This is the exact path-only classification of the formerly flat
 route closure remains solely in the operation evidence ledger.
 
 - Baseline modules: 153
-- Active canonical mappings: 140
-- Retired baseline modules: 13
+- Active canonical mappings: 139
+- Retired baseline modules: 14
 - Command entry packages: 61
 - Shared command mechanisms: 40
 
@@ -62,7 +62,6 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.find_conflicts` | `memcommit.adapters.console.commands.find_conflicts.command` | command-entry | `find_conflicts` |
 | `memcommit.commands.find_duplicates` | `memcommit.adapters.console.commands.find_redundancies.command` | command-entry | `find_redundancies` |
 | `memcommit.commands.find_exact_duplicates` | `memcommit.adapters.console.commands.find_duplicates.command` | command-entry | `find_duplicates` |
-| `memcommit.commands.find_materialization` | `memcommit.adapters.console.commands.search.materialization` | command-owned-support | `search` |
 | `memcommit.commands.find_query_provider_policy` | `memcommit.providers.operation_connections` | infrastructure-support | `providers` |
 | `memcommit.commands.find_search_workbench` | `memcommit.adapters.console.commands.search.search_workbench` | command-owned-support | `search` |
 | `memcommit.commands.findings_render` | `memcommit.adapters.console.terminal.components.quality_find.rendering` | shared-terminal-component | `terminal` |

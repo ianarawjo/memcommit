@@ -7,9 +7,9 @@ were directly under memcommit at baseline commit 885e62c0.
 
 | Role | Modules |
 | --- | ---: |
-| historical-compatibility-facade | 95 |
+| historical-compatibility-facade | 93 |
 | operation-implementation | 69 |
-| retired-prototype | 19 |
+| retired-prototype | 21 |
 | root-boundary | 1 |
 | shared-concept-implementation | 65 |
 
@@ -110,8 +110,8 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.find_answer_dialogue | retired-prototype | retire | none (retired) | 3 |
 | memcommit.find_answer_references | operation-implementation | relocate-without-alias | memcommit.application.operations.search.answer_references | 6 |
 | memcommit.find_application | historical-compatibility-facade | remove | memcommit.application.operations.search.application | 0 |
-| memcommit.find_materialization_application | historical-compatibility-facade | remove | memcommit.application.operations.search.materialization_application | 0 |
-| memcommit.find_materialization_runtime | historical-compatibility-facade | remove | memcommit.application.operations.search.materialization_runtime | 0 |
+| memcommit.find_materialization_application | retired-prototype | retire | none (retired) | 0 |
+| memcommit.find_materialization_runtime | retired-prototype | retire | none (retired) | 0 |
 | memcommit.find_runtime | historical-compatibility-facade | remove | memcommit.application.operations.search.runtime | 0 |
 | memcommit.find_scope_evidence | retired-prototype | retire | none (retired) | 2 |
 | memcommit.find_turn_dialogue | retired-prototype | retire | none (retired) | 1 |

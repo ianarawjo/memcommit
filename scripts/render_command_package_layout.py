@@ -130,6 +130,9 @@ RETIRED_BASELINE_MODULES = {
     "find_chat_shell": (
         "retired with the uncalled conversational Search prototype"
     ),
+    "find_materialization": (
+        "retired when selected-result saving moved to the shared application capability"
+    ),
     "ground_named_shell": (
         "retired with the unpublished named Ground session interface"
     ),
@@ -161,7 +164,6 @@ OWNED_SUPPORT_TARGETS = {
     "compare_targeting": "compare.targeting",
     "comparison_execution": "compare.execution",
     "conflict_resolve_handoff": "resolve.finding_handoff",
-    "find_materialization": "search.materialization",
     "find_search_workbench": "search.search_workbench",
     "forget_setup_workbench": "forget.setup",
     "ground_shell": "ground.shell",

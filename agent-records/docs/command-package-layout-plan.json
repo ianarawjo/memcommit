@@ -1,5 +1,5 @@
 {
-  "active_module_count": 140,
+  "active_module_count": 139,
   "baseline_commit": "f8c54a56",
   "baseline_module_count": 153,
   "entry_package_count": 61,
@@ -380,13 +380,6 @@
         "cmd"
       ],
       "role": "command-entry"
-    },
-    {
-      "canonical_module": "memcommit.adapters.console.commands.search.materialization",
-      "legacy_module": "memcommit.commands.find_materialization",
-      "owner": "search",
-      "public_exports": [],
-      "role": "command-owned-support"
     },
     {
       "canonical_module": "memcommit.providers.operation_connections",
@@ -1117,6 +1110,7 @@
     "memcommit.commands.duplicate_dedup_handoff",
     "memcommit.commands.endpoint_setup_flows",
     "memcommit.commands.find_chat_shell",
+    "memcommit.commands.find_materialization",
     "memcommit.commands.ground_named_shell",
     "memcommit.commands.ground_session_picker",
     "memcommit.commands.meld_target_picker",

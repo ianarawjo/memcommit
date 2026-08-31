@@ -2,6 +2,14 @@
 
 > **Authorization contract updated 2026-08-30.** Permission claims below that use `EMBED`, `DERIVE`, `COMBINE`, `EXPORT`, `ACCEPT_DERIVED`, or `SAVE_*` describe the retired contract preserved for design history. The current contract uses `QUERY`, `CREATE`, `READ`, `UPDATE`, and `DELETE`; `READ` covers readable semantic use and Embed traversal, while `SHARE` remains a separate endpoint capability. See `granted-derived-ownership-design-rationale.md`.
 
+> **2026-08-30 Save As update:** The current workbench offers `COPY`,
+> `REFERENCE`, and `EMBED`. REFERENCE is an immutable Memory snapshot; EMBED is
+> the live relationship. The write boundary is now the shared
+> `memcommit.application.capabilities.save_context_from_selection` capability,
+> and all three modes require only `ContextUse.READ` from a granted Source.
+> Historical materialization names and derived-use requirements below describe
+> the superseded implementation.
+
 > **2026-08-20 presentation update:** This document preserves the semantic
 > Search and materialization decisions made while the operation still used the
 > public name Find. The persistent `TARGETS` tree, separate target-cardinality
@@ -44,7 +52,7 @@ result:
 3. `SCOPE`, with independent `TARGET SELECTION`, `CONTEXT RANGE`, and
    `EMBEDDED CONTEXTS` choices; and
 4. `RESULTS`, one checkable row per canonical ranked result;
-5. `SAVE AS`, with an exact `COPY` or `REFERENCE` mode;
+5. `SAVE AS`, with an exact `COPY`, `REFERENCE`, or `EMBED` mode;
 6. `SAVE LOCATION`, the shared direct exact-name field and frozen local parent
    browser; and
 7. `TO DO`, the explicit create action for the checked set.
@@ -155,15 +163,15 @@ used by mutation commands: one result set may combine local and independently
 granted Sources. The footer reports `COPIED` or a nonfatal `COPY FAILED` while
 the same result remains focused.
 
-`COPY` and `REFERENCE` are intentionally Save As modes, not semantic
-keep/drop decisions. `COPY` creates one fresh Memory identity per checked
-source using the exact reviewed value. `REFERENCE` delegates to the same live,
-read-only pointer primitive as `mem reference`: it stores the directly owned
-source Context UID and Memory UID, not a content copy. Both modes create one
-new local Context, leave every Source unchanged, preserve ranked selection
-order, and write one automatic `find` checkpoint containing the query, mode,
-source identities, and output identities. Save Location is require-new and
-never changes the current Context.
+`COPY`, `REFERENCE`, and `EMBED` are intentionally Save As modes, not semantic
+keep/drop decisions. COPY creates one fresh Memory identity per checked Source
+using the exact reviewed value. REFERENCE stores an immutable read-only
+snapshot with Source identity and content digest. EMBED stores a live,
+read-only Source Context/Memory relationship. Every mode creates one new local
+Context, leaves every Source unchanged, preserves ranked selection order, and
+writes one automatic source-operation checkpoint containing the search input,
+mode, Source identities, and output identities. Save Location is require-new
+and never changes the current Context.
 
 Immediately before publication, each checked row is resolved from its frozen
 source Context UID and Memory UID and its current content must still equal the
@@ -196,25 +204,24 @@ semantic execution boundaries.
 
 Only current-state owned Memory and resolved MemoryRef rows can be saved as a
 new Context. History, query-only, and retained-artifact rows remain evidence
-views. REFERENCE is restricted to locally owned sources because the durable
-pointer contract does not grant the destination continuing authority over a
-remote Grant resource. COPY from a granted source requires `DERIVE`, `EXPORT`,
-`SAVE_ANALYSIS`, and `COMBINE` when multiple authority domains contribute;
-grant identity and permission are revalidated through the write boundary.
+views. A READ-granted Source supports every Save As mode. COPY and REFERENCE
+retain local values; EMBED keeps a content-free Grant binding and reauthorizes
+READ when later resolving the live Source. Grant identity, revision, and READ
+use are revalidated through the write boundary.
 
 The user-facing operation is consistently named `SAVE AS`. New checkpoints
-use the canonical `search_materialization` field; historical records retain
-their stored spelling and are not rewritten by this naming migration.
+use the canonical `save_context_from_selection` field; historical
+`search_materialization` records retain their stored spelling and are not
+rewritten by this naming migration.
 
-The workbench now submits one `SearchMaterializationRequest` to the
-terminal-independent application boundary. That boundary validates the exact
-CURRENT response, checked row set, mode, destination, prepared-plan identity,
-and final receipt shape without importing Store, provider, CLI, or TUI code.
-`MemoryStoreSearchMaterializationPort` owns live source resolution, derived-use
-authority, output construction, source locks, require-new publication,
-checkpointing, and rollback. The workbench no longer invokes persistence
-mechanics directly, and the command-owned materialization adapter calls this
-use case without a compatibility facade.
+The workbench returns a reviewed Save As intent. The Search-specific
+`save_context_request_from_search` adapter converts those exact CURRENT rows
+into `SaveContextFromSelectionRequest`; the shared capability then validates
+the selected set, mode, destination, prepared-plan identity, and final receipt
+shape without importing Search, Store presentation, provider, CLI, or TUI
+code. `MemoryStoreSaveContextFromSelectionPort` owns live Source resolution,
+`ContextUse.READ` authorization, output construction, Source locks,
+require-new publication, checkpointing, and rollback.
 
 ## Reuse and limitations
 

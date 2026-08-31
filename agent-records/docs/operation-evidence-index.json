@@ -36,6 +36,7 @@
     ],
     "checkpoint": [
       "agent-records/docs/checkpoint-application-boundary-matrix.md",
+      "agent-records/docs/checkpoint-read-history-design-rationale.md",
       "agent-records/docs/checkpoint-targeting-design-rationale.md",
       "agent-records/docs/context-locator-design-rationale.md"
     ],
@@ -86,6 +87,7 @@
       "agent-records/docs/unified-delete-selector-design-rationale.md"
     ],
     "diff": [
+      "agent-records/docs/checkpoint-read-history-design-rationale.md",
       "agent-records/docs/checkpoint-revision-diff-design-rationale.md",
       "agent-records/docs/mem-history-search-design-rationale.md"
     ],
@@ -214,6 +216,7 @@
       "agent-records/docs/mem-write-protection-design-rationale.md"
     ],
     "log": [
+      "agent-records/docs/checkpoint-read-history-design-rationale.md",
       "agent-records/docs/command-attempt-ledger-design-rationale.md",
       "agent-records/docs/mem-history-search-design-rationale.md"
     ],
@@ -242,6 +245,7 @@
       "agent-records/docs/copy-and-move-design-rationale.md"
     ],
     "profile": [
+      "agent-records/docs/checkpoint-read-history-design-rationale.md",
       "agent-records/docs/context-name-portability-design-rationale.md",
       "agent-records/docs/mem-profile-design-rationale.md",
       "agent-records/docs/study-action-ledger-design-rationale.md"
@@ -261,6 +265,7 @@
       "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
     ],
     "rationale": [
+      "agent-records/docs/checkpoint-read-history-design-rationale.md",
       "agent-records/docs/read-report-lifecycle-design-rationale.md",
       "agent-records/docs/mem-trace-rationale-design-rationale.md",
       "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
@@ -302,6 +307,7 @@
     "search": [
       "agent-records/docs/find-search-application-boundary-matrix.md",
       "agent-records/docs/find-search-compact-scope-design-rationale.md",
+      "agent-records/docs/save-context-from-selection-design-rationale.md",
       "agent-records/docs/search-find-replace-design-rationale.md"
     ],
     "sever": [
@@ -340,6 +346,7 @@
       "agent-records/docs/mem-switch-navigation-history-design-rationale.md"
     ],
     "trace": [
+      "agent-records/docs/checkpoint-read-history-design-rationale.md",
       "agent-records/docs/trace-application-boundary-matrix.md",
       "agent-records/docs/trace-application-boundary-design-rationale.md",
       "agent-records/docs/trace-lineage-normal-form-design-rationale.md",

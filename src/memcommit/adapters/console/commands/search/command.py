@@ -16,12 +16,11 @@ from memcommit.application.capabilities.authority.context_access import (
 from memcommit.adapters.console.commands.search.search_workbench import (
     run_search_workbench,
 )
-from memcommit.application.operations.search.materialization_application import (
-    SearchMaterializationError,
-    SearchMaterializationRequest,
+from memcommit.application.capabilities.save_context_from_selection.application import (
+    SaveContextFromSelectionError,
 )
-from memcommit.application.operations.search.materialization_runtime import (
-    execute_search_materialization,
+from memcommit.application.capabilities.save_context_from_selection.runtime import (
+    execute_save_context_from_selection,
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.application.capabilities.authority.readable_contexts import (
@@ -46,6 +45,9 @@ from memcommit.application.operations.search.application import (
     SearchStage,
 )
 from memcommit.application.operations.search.runtime import execute_search
+from memcommit.application.operations.search.save_context import (
+    save_context_request_from_search,
+)
 from memcommit.providers.operation_connections import connect_search_provider
 from memcommit.providers.subscription import QueryProviderError
 from memcommit.application.operations.search.model import (
@@ -253,32 +255,32 @@ def _open_search_workbench(
             request,
         ),
         annotations=annotations,
-        granted_context_names=granted_names,
         local_context_names=tuple(store.list_context_names()),
         validate_save_location=store.assert_context_creatable,
     )
     # Compatibility capture stubs used by read-only callers historically
-    # returned None; only the typed MATERIALIZE result crosses the write edge.
-    if workbench_result is None or workbench_result.status != "MATERIALIZE":
+    # returned None; only the typed SAVE result crosses the write edge.
+    if workbench_result is None or workbench_result.status != "SAVE":
         return
     assert workbench_result.response is not None
-    assert workbench_result.materialize_as is not None
+    assert workbench_result.save_as is not None
     assert workbench_result.save_location is not None
-    materialized = execute_search_materialization(
-        SearchMaterializationRequest(
-            response=workbench_result.response,
-            selected_result_indices=workbench_result.selected_result_indices,
-            mode=workbench_result.materialize_as,
+    saved = execute_save_context_from_selection(
+        save_context_request_from_search(
+            workbench_result.response,
+            workbench_result.selected_result_indices,
+            mode=workbench_result.save_as,
             destination_name=workbench_result.save_location,
+            catalog=catalog,
         ),
         store=store,
         catalog=catalog,
     )
     typer.secho(
-        f"Saved {len(materialized.item_uids)} checked Search result(s) as "
-        f"{materialized.mode} in new Context "
-        f"'{display_escape_text(materialized.context_name)}' "
-        f"[{materialized.context_uid[:8]}]; sources unchanged.",
+        f"Saved {len(saved.item_uids)} checked Search result(s) as "
+        f"{saved.mode} in new Context "
+        f"'{display_escape_text(saved.context_name)}' "
+        f"[{saved.context_uid[:8]}]; sources unchanged.",
         fg=typer.colors.GREEN,
     )
 
@@ -292,7 +294,7 @@ def cmd(
                 "Natural-language query; omit in a terminal to open the "
                 "interactive search with compact exact-Context Scope, "
                 "Browse-only Profile/multiple selection, independent range "
-                "and Embed choices, and checked-result COPY/REFERENCE Save As"
+                "and Embed choices, and checked-result COPY/REFERENCE/EMBED Save As"
             ),
         ),
     ] = None,
@@ -472,7 +474,7 @@ def cmd(
                 workbench_options["initial_targets"] = target_names
             _open_search_workbench(store, access, **workbench_options)
         except (
-            SearchMaterializationError,
+            SaveContextFromSelectionError,
             SearchError,
             QueryProviderError,
             FileNotFoundError,

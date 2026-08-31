@@ -755,7 +755,11 @@ def test_search_keeps_lower_and_upper_y_as_text():
     assert requests[0].query == "yY parking"
 
 
-def test_checked_result_copy_returns_exact_materialization_request():
+@pytest.mark.parametrize(
+    ("mode", "right_keys"),
+    (("COPY", ""), ("REFERENCE", "\x1b[C"), ("EMBED", "\x1b[C\x1b[C")),
+)
+def test_checked_result_returns_exact_save_request(mode, right_keys):
     def search(request: SearchRequest) -> SearchResponse:
         return SearchResponse(
             request,
@@ -778,9 +782,11 @@ def test_checked_result_copy_returns_exact_materialization_request():
         def send_after_search() -> None:
             pipe_input.send_text("accessibility\r")
             time.sleep(0.15)
-            # Check result, visit COPY, replace the exact Save Location, then
-            # activate the reviewed To Do row.
-            pipe_input.send_text("\r\t\t\x15task/results/accessibility\t\r")
+            # Check result, choose the requested Save As mode, replace the
+            # exact Save Location, then activate the reviewed To Do row.
+            pipe_input.send_text(
+                f"\r\t{right_keys}\t\x15task/results/accessibility\t\r"
+            )
 
         sender = threading.Thread(target=send_after_search)
         sender.start()
@@ -799,7 +805,7 @@ def test_checked_result_copy_returns_exact_materialization_request():
         )
         sender.join()
 
-    assert result.status == "MATERIALIZE"
+    assert result.status == "SAVE"
     assert result.selected_result_indices == (0,)
-    assert result.materialize_as == "COPY"
+    assert result.save_as == mode
     assert result.save_location == "task/results/accessibility"

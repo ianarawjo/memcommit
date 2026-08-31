@@ -1,0 +1,8 @@
+Saved 1 checked Search result(s) as EMBED in new Context 'task/results/embed' [0addb4df]; sources unchanged.                                                                        
+SAVE RECEIPT COMPLETE · EMBED · task/results/embed                                                                                                                                  
+PRESS ENTER FOR READ-ONLY RESULT VERIFICATION                                                                                                                                       
+READ-ONLY RESULT · EMBED · LIVE EMBED                                                                                                                                               
+SOURCE · task/source:e8819556                                                                                                                                                       
+RESOLVED CONTENT · Accessible entrance is on the east side.                                                                                                                         
+CURRENT CONTEXT · task/source                                                                                                                                                       
+SOURCE UNCHANGED · True
