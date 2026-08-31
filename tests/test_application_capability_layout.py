@@ -66,7 +66,13 @@ def test_application_root_has_only_operations_and_capabilities() -> None:
         path.name for path in APPLICATION.iterdir() if path.name != "__pycache__"
     }
 
-    assert visible == {"__init__.py", "capabilities", "operations"}
+    assert visible == {
+        "__init__.py",
+        "authorization",
+        "capabilities",
+        "context_access",
+        "operations",
+    }
     assert {
         path.name for path in CAPABILITIES.iterdir() if path.name != "__pycache__"
     } == (CAPABILITY_ENTRIES)

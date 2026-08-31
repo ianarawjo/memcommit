@@ -284,7 +284,6 @@ def test_search_all_and_short_alias_freeze_every_readable_context(
         store.save(context)
     store.set_current(first.name)
     observed: list[SearchRequest] = []
-    authorized: list[tuple[str, ...]] = []
 
     def run_request(_store, _catalog, request):
         observed.append(request)
@@ -293,12 +292,6 @@ def test_search_all_and_short_alias_freeze_every_readable_context(
     monkeypatch.setattr(
         "memcommit.adapters.console.commands.search.command._run_search_request",
         run_request,
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.authorize_combination",
-        lambda accesses: authorized.append(
-            tuple(access.display_name for access in accesses)
-        ),
     )
 
     for option in ("--all", "-a"):
@@ -321,10 +314,6 @@ def test_search_all_and_short_alias_freeze_every_readable_context(
             follow_embeds=False,
             limit=5,
         ),
-    ]
-    assert authorized == [
-        (first.name, second.name),
-        (first.name, second.name),
     ]
 
 

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
+from memcommit.application.authorization import ContextUse, authorize_context_use
 from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     revalidate_granted_context_binding,
@@ -60,6 +61,7 @@ def apply_granted_source_staged_update(
             required_permission="READ",
             registry=registry,
         )
+        authorize_context_use(source_access, ContextUse.READ)
         with source_access.store._context_write_locks(authority_source_names):
             source_store = GrantedReadStore(
                 source_access,

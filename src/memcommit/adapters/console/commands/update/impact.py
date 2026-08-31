@@ -24,9 +24,6 @@ from memcommit.application.capabilities.authority.context_access import (
     freeze_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.application.authorization.source_use import (
-    authorize_derived_transfer,
-)
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import (
     ProfileError,
@@ -157,7 +154,6 @@ def run_directional_update_impact(
             endpoints.target_name,
             current_name=current_name,
         )
-        authorize_derived_transfer(source_access, target_access)
         source_store = (
             GrantedReadStore(source_access) if source_access.is_granted else store
         )

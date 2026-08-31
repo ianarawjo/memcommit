@@ -39,7 +39,7 @@ def cmd(
             "--context",
             "-c",
             metavar="CONTEXT",
-            help="Existing UPDATE+DERIVE Context that owns the Memory",
+            help="Existing READ+UPDATE Context that owns the Memory",
         ),
     ] = None,
 ) -> None:

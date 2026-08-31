@@ -40,9 +40,6 @@ from memcommit.adapters.console.commands.audit.review import (
 from memcommit.adapters.console.commands.audit.endpoint_setup import choose_audit_setup
 from memcommit.core.context import Context
 from memcommit.application.operations.conformance.model import ConformanceError
-from memcommit.application.authorization.source_use import (
-    authorize_analysis_save,
-)
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     FindingsError,
     FindingsProvider,
@@ -147,9 +144,6 @@ def _interactive_source(store: MemoryStore, *, current_name: str | None):
     if selected_name is None:
         return None
     selected_access = catalog.access_for(selected_name)
-    # Audit retains source-derived content and provider judgments. READ alone
-    # is sufficient for one-shot Find, but not for this durable artifact.
-    authorize_analysis_save((selected_access,), retention="RETAINED")
     return selected_access, catalog.load_direct(selected_name)
 
 
@@ -256,7 +250,6 @@ def cmd(
                 current_name=context_snapshot.current_name,
                 required_permission="READ",
             )
-            authorize_analysis_save((access,), retention="RETAINED")
             ctx = (
                 GrantedReadStore(access).load_direct(access.display_name)
                 if access.is_granted

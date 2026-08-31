@@ -195,7 +195,7 @@ def cmd(
                             port.store,
                             source_item,
                             current_name=port.current_context_name,
-                            required_permission="EMBED",
+                            required_permission="READ",
                         )
                     except FileNotFoundError:
                         pass
@@ -226,7 +226,7 @@ def cmd(
                         port.store,
                         parsed_source.context_locator,
                         current_name=port.current_context_name,
-                        required_permission="EMBED",
+                        required_permission="READ",
                     )
                     if access.is_granted:
                         # An explicit public owner is the only Grant-aware

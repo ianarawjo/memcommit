@@ -9,9 +9,9 @@ were directly under memcommit at baseline commit 885e62c0.
 | --- | ---: |
 | historical-compatibility-facade | 95 |
 | operation-implementation | 69 |
-| retired-prototype | 18 |
+| retired-prototype | 19 |
 | root-boundary | 1 |
-| shared-concept-implementation | 66 |
+| shared-concept-implementation | 65 |
 
 ## Modules
 
@@ -85,7 +85,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.dedup_runtime | historical-compatibility-facade | remove | memcommit.application.operations.dedun.runtime | 0 |
 | memcommit.delete_application | historical-compatibility-facade | remove | memcommit.application.operations.delete.application | 0 |
 | memcommit.delete_runtime | historical-compatibility-facade | remove | memcommit.application.operations.delete.runtime | 0 |
-| memcommit.derived_policy | shared-concept-implementation | relocate-without-alias | memcommit.application.authorization.source_use | 26 |
+| memcommit.derived_policy | retired-prototype | retire | none (retired) | 26 |
 | memcommit.direct_item_duplicates | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.reviewing.direct_item_duplicates | 8 |
 | memcommit.distill | operation-implementation | relocate-without-alias | memcommit.application.operations.distill.model | 8 |
 | memcommit.distill_application | historical-compatibility-facade | remove | memcommit.application.operations.distill.application | 0 |

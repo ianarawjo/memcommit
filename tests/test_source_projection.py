@@ -54,18 +54,18 @@ def test_source_display_uses_one_axis_order_and_canonical_vocabulary():
         reach=SourceReach.VIA_EMBED,
         form=SourceForm.MEMORY_REF,
         states=(SourceState.NOT_INCLUDED, SourceState.DANGLING),
-        permissions=("READ", "DERIVE", "QUERY"),
+        permissions=("READ", "QUERY"),
     )
 
     assert source_display_text(facts, include_permissions=True) == (
-        "READ GRANT · PERMISSIONS READ + DERIVE + QUERY · "
+        "READ GRANT · PERMISSIONS READ + QUERY · "
         "VIA EMBED · memory ref · DANGLING · NOT INCLUDED"
     )
 
     assert source_object_label(facts) == "memory ref"
     assert source_object_label(facts, title=True) == "Memory ref"
     assert source_annotation_text(facts, include_permissions=True) == (
-        "READ GRANT · PERMISSIONS READ + DERIVE + QUERY · "
+        "READ GRANT · PERMISSIONS READ + QUERY · "
         "VIA EMBED · DANGLING · NOT INCLUDED"
     )
 
@@ -237,16 +237,9 @@ def test_grant_navigation_separates_ownership_from_compact_capabilities():
         (
             "CREATE",
             "READ",
-            "EMBED",
             "UPDATE",
             "DELETE",
             "QUERY",
-            "DERIVE",
-            "COMBINE",
-            "EXPORT",
-            "ACCEPT_DERIVED",
-            "SAVE_BOUND_ANALYSIS",
-            "SAVE_ANALYSIS",
         )
     )
 
@@ -257,9 +250,8 @@ def test_grant_navigation_separates_ownership_from_compact_capabilities():
             "UPDATE",
             "DELETE",
             "QUERY",
-            "EXPORT",
         )
-    ) == ("READ", "QUERY", "EDIT", "DELETE", "EXPORT")
+    ) == ("READ", "QUERY", "EDIT", "DELETE")
     assert [token.role for token in tokens] == [
         SourceTokenRole.OWNERSHIP,
         SourceTokenRole.CAPABILITY,
@@ -267,7 +259,7 @@ def test_grant_navigation_separates_ownership_from_compact_capabilities():
     assert render_source_display_tokens(tokens) == [
         ("class:source-ownership", "GRANT"),
         ("", " · "),
-        ("class:source-capability", "READ + QUERY + EDIT + DELETE + EXPORT"),
+        ("class:source-capability", "READ + QUERY + EDIT + DELETE"),
     ]
 
 
@@ -277,14 +269,14 @@ def test_shared_context_tree_places_grant_before_the_public_name():
     fragments = render_context_tree_rows(
         state,
         lambda _row, _cursor: ContextTreeRowDecoration(
-            annotation=grant_navigation_annotation(("READ", "EXPORT"))
+            annotation=grant_navigation_annotation(("READ",))
         ),
     )
 
     rendered = "".join(text for _style, text in fragments)
-    assert rendered.endswith("· GRANT public  READ + EXPORT")
+    assert rendered.endswith("· GRANT public  READ")
     assert ("class:source-ownership", "GRANT") in fragments
-    assert ("class:source-capability", "READ + EXPORT") in fragments
+    assert ("class:source-capability", "READ") in fragments
 
 
 def test_find_authority_gate_uses_frozen_names_not_display_wording():

@@ -30,7 +30,7 @@ from memcommit.source_projection.presentation import source_display_text
 from memcommit.persistence.store import MemoryStore
 
 
-_REQUIRED = ("READ", "DERIVE", "EXPORT", "SAVE_ANALYSIS")
+_REQUIRED = ("READ",)
 
 
 def _fixture(isolated_store, tmp_path, monkeypatch):
@@ -53,7 +53,7 @@ def _fixture(isolated_store, tmp_path, monkeypatch):
     )
     authority_store = MemoryStore(root=profile_store_dir(authority))
     source = ops.init("authority/source")
-    memory = ops.add(source, "Retain this exact export-authorized version.")
+    memory = ops.add(source, "Retain this exact readable version.")
     authority_store.save(source)
 
     registry = ProfileRegistry(
@@ -109,13 +109,13 @@ def test_granted_memory_reference_tui_separates_source_and_local_roles(
     )
     assert setup.selected_memory_source == "shared/source"
     assert "GRANT" in annotation
-    assert "READ + EXPORT" in annotation
+    assert "READ" in annotation
     assert "REFERENCE" in annotation
     assert inspected.name == "shared/source"
     assert inspected.memories[memory.uid].content == memory.content
 
 
-def test_granted_memory_reference_tui_excludes_incomplete_permission_bundle(
+def test_granted_memory_reference_tui_excludes_query_only_source(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -127,7 +127,7 @@ def test_granted_memory_reference_tui_excludes_incomplete_permission_bundle(
     )
     update_authority_grant(
         grant.uid,
-        permissions=("READ", "DERIVE", "EXPORT"),
+        permissions=("QUERY",),
     )
 
     setup = build_reference_tui_setup(_granted_port(store))

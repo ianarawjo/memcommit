@@ -38,7 +38,7 @@ from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
 runner = CliRunner(mix_stderr=False)
-_REQUIRED = ("READ", "DERIVE", "EXPORT", "SAVE_ANALYSIS")
+_REQUIRED = ("READ",)
 
 
 def _fixture(isolated_store, tmp_path, monkeypatch):
@@ -61,7 +61,7 @@ def _fixture(isolated_store, tmp_path, monkeypatch):
     )
     authority_store = MemoryStore(root=profile_store_dir(authority))
     source = ops.init("authority/source")
-    memory = ops.add(source, "Retain this exact export-authorized version.")
+    memory = ops.add(source, "Retain this exact readable version.")
     authority_store.save(source)
 
     registry = ProfileRegistry(
@@ -142,28 +142,17 @@ def test_explicit_granted_memory_reference_retains_bytes_and_grant_provenance(
     assert checkpoint["args"]["granted_source"] == record["grant_source"]
 
 
-@pytest.mark.parametrize(
-    ("permissions", "missing"),
-    (
-        (("READ",), "DERIVE"),
-        (("READ", "DERIVE"), "EXPORT"),
-        (("READ", "DERIVE", "SAVE_ANALYSIS"), "EXPORT"),
-        (("READ", "DERIVE", "EXPORT"), "SAVE_ANALYSIS"),
-    ),
-)
-def test_granted_reference_requires_export_and_retained_analysis_permissions(
+def test_granted_reference_rejects_query_only_source(
     isolated_store,
     tmp_path,
     monkeypatch,
-    permissions,
-    missing,
 ):
     store, _authority, workspace, _local, _source, memory, grant = _fixture(
         isolated_store,
         tmp_path,
         monkeypatch,
     )
-    update_authority_grant(grant.uid, permissions=permissions)
+    update_authority_grant(grant.uid, permissions=("QUERY",))
     before = store.load_direct(workspace.name).to_dict()
 
     result = runner.invoke(
@@ -172,7 +161,7 @@ def test_granted_reference_requires_export_and_retained_analysis_permissions(
     )
 
     assert result.exit_code == 1
-    assert missing in result.stderr
+    assert "does not allow read access" in result.stderr
     assert store.load_direct(workspace.name).to_dict() == before
     assert store.list_checkpoints(workspace.name) == []
 
@@ -197,7 +186,7 @@ def test_granted_reference_apply_revalidates_grant_and_source_snapshot(
         workspace.name,
     )
     grant_plan = port.freeze(request)
-    update_authority_grant(grant.uid, permissions=(*_REQUIRED, "COMBINE"))
+    update_authority_grant(grant.uid, permissions=_REQUIRED)
 
     with pytest.raises(ProfileError, match="changed during this command"):
         port.apply(grant_plan)
@@ -265,7 +254,7 @@ def test_granted_reference_freeze_holds_grant_through_authority_read(
                         "import update_authority_grant\n"
                         "print('DOWNGRADE STARTED', flush=True)\n"
                         "update_authority_grant("
-                        "sys.argv[1], permissions=('READ',))\n"
+                        "sys.argv[1], permissions=('QUERY',))\n"
                         "print('DOWNGRADE COMPLETE', flush=True)\n"
                     ),
                     grant.uid,
@@ -297,14 +286,14 @@ def test_granted_reference_freeze_holds_grant_through_authority_read(
 
     # Once the downgrade wins a later snapshot, permission rejection happens
     # before another authority Source read can disclose the bytes.
-    with pytest.raises(ProfileError, match="DERIVE|EXPORT|SAVE_ANALYSIS"):
+    with pytest.raises(ProfileError, match="does not allow read access"):
         MemoryStoreReferencePort.capture(
             store,
             allow_granted_sources=True,
         ).freeze(ReferenceRequest(memory.uid, "shared/source", workspace.name))
     assert authority_read_count == 1
 
-    with pytest.raises(ProfileError, match="changed during this command"):
+    with pytest.raises(ProfileError, match="does not allow read access"):
         port.apply(plan)
     assert authority_read_count == 1
     assert store.list_checkpoints(workspace.name) == []
@@ -338,7 +327,7 @@ def test_retained_granted_reference_survives_source_edit_and_grant_revocation(
     changed = authority_store.load_direct(source.name)
     changed.replace(Memory(uid=memory.uid, content="Authority changed later."))
     authority_store.save(changed)
-    update_authority_grant(grant.uid, permissions=("READ",))
+    update_authority_grant(grant.uid, permissions=("QUERY",))
 
     retained = store.load(workspace.name).memories[reference.uid]
     assert isinstance(retained, MemoryRef)
@@ -411,10 +400,10 @@ def test_public_and_agent_routes_classify_grant_denial_as_authority(
         tmp_path,
         monkeypatch,
     )
-    update_authority_grant(grant.uid, permissions=("READ",))
+    update_authority_grant(grant.uid, permissions=("QUERY",))
     client = MemCommitClient()
 
-    with pytest.raises(ReferenceAuthorityError, match="DERIVE"):
+    with pytest.raises(ReferenceAuthorityError, match="does not allow read access"):
         client.reference_memory(
             memory.uid,
             source_context="shared/source",

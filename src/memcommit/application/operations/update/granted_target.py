@@ -8,7 +8,9 @@ from dataclasses import dataclass, replace
 from datetime import datetime
 from typing import Literal
 
+from memcommit.application.authorization import ContextUse, authorize_context_use
 from memcommit.application.capabilities.authority.context_access import (
+    ContextAccess,
     GrantedReadStore,
     freeze_granted_context_binding,
     revalidate_granted_context_binding,
@@ -196,7 +198,7 @@ def restore_granted_update(
     expected_unit_uid = f"update:{session.uid}:{session.application.operation_digest}"
     with authority_grant_snapshot_lock() as registry:
         access = _resolve_exact_access(active_store, binding, registry)
-        _validate_operation_permissions(session, registry)
+        _validate_operation_permissions(session, registry, access=access)
         active_store._assert_profile_write_allowed()
         result = access.store.restore_recent_context_command(
             direction,
@@ -269,17 +271,19 @@ def _resolve_exact_access(
 def _validate_operation_permissions(
     session: UpdateSession,
     registry: ProfileRegistry,
+    *,
+    access: ContextAccess,
 ) -> None:
     binding = session.granted_target
     if binding is None:
         raise UpdateError("Expected a granted update target.")
-    if not set(required_grant_permissions(session.operations)).issubset(
-        binding.permissions
-    ):
-        raise ProfileError(
-            "The frozen grant does not contain every permission required by "
-            "the planned operations."
-        )
+    authorize_context_use(
+        access,
+        tuple(
+            ContextUse(permission)
+            for permission in required_grant_permissions(session.operations)
+        ),
+    )
     for operation in session.operations:
         view = resolve_granted_context_view(
             operation.owner_context_name,
@@ -338,7 +342,7 @@ def apply_granted_staged_update(
 
     with authority_grant_snapshot_lock() as registry:
         access = _resolve_exact_access(active_store, binding, registry)
-        _validate_operation_permissions(session, registry)
+        _validate_operation_permissions(session, registry, access=access)
         authority_store = access.store
         if source_binding is None:
             source_access = None

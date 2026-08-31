@@ -750,15 +750,15 @@
       "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.authorization.source_use",
-      "canonical_target_path": "memcommit/application/authorization/source_use.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 26,
       "lines": 116,
       "module": "memcommit.derived_policy",
       "path": "memcommit/derived_policy.py",
-      "reason": "implementation belongs to a reusable named concept",
-      "role": "shared-concept-implementation"
+      "reason": "retired when ordinary Grant authority contracted to QUERY, CREATE, READ, UPDATE, and DELETE",
+      "role": "retired-prototype"
     },
     {
       "action": "relocate-without-alias",
@@ -2747,8 +2747,8 @@
   "summary": {
     "historical-compatibility-facade": 95,
     "operation-implementation": 69,
-    "retired-prototype": 18,
+    "retired-prototype": 19,
     "root-boundary": 1,
-    "shared-concept-implementation": 66
+    "shared-concept-implementation": 65
   }
 }

@@ -12,9 +12,6 @@ from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.application.authorization.source_use import (
-    authorize_combination,
-)
 from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.core.context import Context, Memory
@@ -227,10 +224,6 @@ def freeze_quality_find_source(
             include_query_routes=False,
         )
         names = tuple(catalog.list_context_names())
-        accesses = tuple(catalog.access_for(name) for name in names)
-        # Provider inference derives from every frozen contributor. Grant
-        # authority must therefore be checked before any Source is disclosed.
-        authorize_combination(accesses)
         return QualityFindSourceFrame.create(
             tuple(catalog.load_direct(name) for name in names),
             context_names=names,
@@ -240,7 +233,6 @@ def freeze_quality_find_source(
             profile_selected=True,
         )
 
-    authorize_combination((access,))
     context = (
         GrantedReadStore(access, registry=registry).load_direct(access.display_name)
         if access.is_granted

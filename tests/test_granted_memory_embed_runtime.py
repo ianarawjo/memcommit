@@ -78,7 +78,7 @@ def _fixture(isolated_store, tmp_path, monkeypatch):
         resource_name=advisor.name,
         attachment_name=workspace.name,
         public_name=advisor.name,
-        permissions=("READ", "EMBED"),
+        permissions=("READ",),
         recursive=True,
     )
     return (
@@ -175,36 +175,24 @@ def test_granted_memory_embed_revocation_fails_closed_and_keeps_pointer(
     assert embedded.exit_code == 0, embedded.output + embedded.stderr
     before = store.load_direct(workspace.name).to_dict()
 
-    update_authority_grant(grant.uid, permissions=("READ",))
+    update_authority_grant(grant.uid, permissions=("QUERY",))
 
-    with pytest.raises(ProfileError, match="does not allow embed access"):
+    with pytest.raises(ProfileError, match="does not allow read access"):
         store.load(workspace.name)
     assert store.load_direct(workspace.name).to_dict() == before
 
 
-@pytest.mark.parametrize("permissions", [("READ",), ("EMBED",)])
-def test_incomplete_grant_atoms_are_denied_before_authority_memory_is_opened(
+def test_query_only_grant_is_denied_before_authority_memory_is_opened(
     isolated_store,
     tmp_path,
     monkeypatch,
-    permissions,
 ) -> None:
     store, authority, workspace, advisor, memory, *_rest, grant = _fixture(
         isolated_store,
         tmp_path,
         monkeypatch,
     )
-    if permissions == ("READ",):
-        update_authority_grant(grant.uid, permissions=permissions)
-    else:
-        # The public configuration API correctly forbids EMBED without READ.
-        # Corrupt the durable registry deliberately to prove execution also
-        # fails closed before it can open authority Memory bytes.
-        path = profile_registry_file()
-        raw = json.loads(path.read_text())
-        grant_record = next(item for item in raw["grants"] if item["uid"] == grant.uid)
-        grant_record["permissions"] = list(permissions)
-        path.write_text(json.dumps(raw, indent=2) + "\n")
+    update_authority_grant(grant.uid, permissions=("QUERY",))
 
     authority_reads: list[str] = []
     original_load_direct = MemoryStore.load_direct
@@ -245,11 +233,7 @@ def test_context_embed_requires_read_before_opening_authority_record(
         tmp_path,
         monkeypatch,
     )
-    path = profile_registry_file()
-    raw = json.loads(path.read_text())
-    grant_record = next(item for item in raw["grants"] if item["uid"] == grant.uid)
-    grant_record["permissions"] = ["EMBED"]
-    path.write_text(json.dumps(raw, indent=2) + "\n")
+    update_authority_grant(grant.uid, permissions=("QUERY",))
 
     authority_reads: list[str] = []
     original_load_direct = MemoryStore.load_direct
@@ -268,7 +252,7 @@ def test_context_embed_requires_read_before_opening_authority_record(
     )
 
     assert denied.exit_code == 1
-    assert "READ" in denied.stderr
+    assert "read access" in denied.stderr
     assert authority_reads == []
     assert store.load_direct(workspace.name).ordered_uids() == []
     assert store.list_checkpoints(workspace.name) == []
@@ -313,9 +297,9 @@ def test_granted_memory_embed_rechecks_permission_after_review(
         MemoryEmbedRequest(memory.uid[:8], advisor.name, workspace.name)
     )
 
-    update_authority_grant(grant.uid, permissions=("READ",))
+    update_authority_grant(grant.uid, permissions=("QUERY",))
 
-    with pytest.raises(ProfileError, match="does not allow embed access"):
+    with pytest.raises(ProfileError, match="does not allow read access"):
         port.apply_memory(plan)
     assert store.load_direct(workspace.name).ordered_uids() == []
     assert store.list_checkpoints(workspace.name) == []
@@ -354,8 +338,8 @@ def test_public_and_agent_memory_embed_share_grant_authority_contract(
     assert agent["result"]["mode"] == "LIVE"
     assert len(store.load_direct(workspace.name).ordered_uids()) == 2
 
-    update_authority_grant(grant.uid, permissions=("READ",))
-    with pytest.raises(EmbedAuthorityError, match="does not allow embed access"):
+    update_authority_grant(grant.uid, permissions=("QUERY",))
+    with pytest.raises(EmbedAuthorityError, match="does not allow read access"):
         client.embed_memory(
             third.uid[:8],
             source_context=advisor.name,
@@ -651,7 +635,7 @@ def test_harmless_grant_revision_keeps_exact_live_memory_binding(
 
     _registry, revised = update_authority_grant(
         grant.uid,
-        permissions=("READ", "EMBED"),
+        permissions=("READ",),
     )
     assert revised.revision > grant.revision
     loaded = store.load(workspace.name)

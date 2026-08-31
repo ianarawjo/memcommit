@@ -195,7 +195,7 @@ def test_plain_init_study_builds_coffee_without_a_baseline_or_prewarm(
         "task-3/friend-cafe",
     }
     assert "READ" in grants["task-1/customer-perspectives"].permissions
-    assert "COMBINE" in grants["task-2/operational-perspectives"].permissions
+    assert grants["task-2/operational-perspectives"].permissions == ("READ",)
     assert grants["task-3/friend-cafe"].permissions == ("SHARE",)
     assert len(grants["task-3/friend-cafe"].contexts) == 1
     endpoint = resolve_share_endpoint("task-3/friend-cafe")

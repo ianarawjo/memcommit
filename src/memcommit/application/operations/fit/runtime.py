@@ -35,9 +35,6 @@ from memcommit.core.context_targeting.resolution import (
 from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
-from memcommit.application.authorization.source_use import (
-    authorize_combination,
-)
 from memcommit.application.operations.fit.ground_report import (
     FitError,
     FitProvider,
@@ -166,35 +163,10 @@ def _memory_digest(memory: Memory) -> str:
     return hashlib.sha256(memory.content.encode("utf-8")).hexdigest()
 
 
-def _literal_combination_access(store: MemoryStore) -> ContextAccess:
-    """Represent caller-supplied text as a separate local combination domain."""
-
-    return ContextAccess(
-        store=store,
-        context_name="<fit-literal-propositions>",
-        display_name="<fit-literal-propositions>",
-        attachment_name=None,
-        permission="READ",
-    )
-
-
-def _authorize_fit_combination(
-    accesses: tuple[ContextAccess, ...],
-    *,
-    store: MemoryStore,
-    has_literals: bool,
-) -> None:
-    values = (
-        (*accesses, _literal_combination_access(store)) if has_literals else accesses
-    )
-    authorize_combination(values)
-
-
 def _revalidate_fit_sources(
     frozen: tuple[_FrozenFitSource, ...],
     *,
     store: MemoryStore,
-    has_literals: bool,
 ) -> None:
     """Recheck identities, content, and Grant authority before publication."""
 
@@ -221,11 +193,6 @@ def _revalidate_fit_sources(
             current_accesses.append(access)
             current_contexts.append(context)
 
-        _authorize_fit_combination(
-            tuple(current_accesses),
-            store=store,
-            has_literals=has_literals,
-        )
         for source, context in zip(frozen, current_contexts, strict=True):
             if context.uid != source.context_uid:
                 raise FitSourceError(
@@ -424,17 +391,6 @@ def run_stored_source_fit(
     for locator in request.context_locators:
         select_context(locator)
 
-    accesses = tuple(accumulators[key].access for key in access_order)
-    has_literals = bool(
-        request.background
-        or any(isinstance(row, FitProposition) for row in ordered_rows)
-    )
-    _authorize_fit_combination(
-        accesses,
-        store=store,
-        has_literals=has_literals,
-    )
-
     memory_alias_index = 0
 
     def next_alias() -> str:
@@ -485,7 +441,6 @@ def run_stored_source_fit(
     _revalidate_fit_sources(
         frozen,
         store=store,
-        has_literals=has_literals,
     )
     return replace(result, input_origins=tuple(origins))
 

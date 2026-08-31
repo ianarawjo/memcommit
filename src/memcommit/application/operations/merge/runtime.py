@@ -22,7 +22,6 @@ from memcommit.core.context_targeting.resolution import expand_lexical_context_n
 from memcommit.application.capabilities.authority.granted_context_navigation import (
     freeze_granted_context_navigation,
 )
-from memcommit.application.authorization.source_use import authorize_derived_transfer
 from memcommit.application.operations.merge.application import (
     FrozenMergePlan,
     MergeAddition,
@@ -378,7 +377,6 @@ class MemoryStoreMergePort(MergePort):
         )
         source = self._load_source(source_access)
         target = target_access.store.load_for_update(target_access.context_name)
-        authorize_derived_transfer(source_access, target_access)
         if (
             target.uid == source.uid
             and source_access.store.store_dir == target_access.store.store_dir
@@ -550,7 +548,6 @@ class MemoryStoreMergePort(MergePort):
             target_display_name = display_target_name_by_source[source.name]
             target_access = target_access_by_display.get(target_display_name)
             authorization_target = target_access or target_root_access
-            authorize_derived_transfer(frame.access, authorization_target)
             cross_profile = (
                 frame.access.store.store_dir != target_root_access.store.store_dir
             )

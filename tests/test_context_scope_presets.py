@@ -18,7 +18,6 @@ from memcommit.adapters.console.coordination.context_scope_options import (
 from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryResponse,
 )
-from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 
@@ -282,7 +281,6 @@ def test_query_all_and_short_alias_freeze_every_readable_context(
         store.save(context)
     store.set_current(first.name)
     observed = []
-    authorized = []
 
     def execute(request, *, catalog, **_kwargs):
         observed.append((request, tuple(catalog.list_context_names())))
@@ -296,13 +294,6 @@ def test_query_all_and_short_alias_freeze_every_readable_context(
     monkeypatch.setattr(
         query_command, "render_ordinary_query_response", lambda _r: None
     )
-    monkeypatch.setattr(
-        query_command,
-        "authorize_combination",
-        lambda accesses: authorized.append(
-            tuple(access.display_name for access in accesses)
-        ),
-    )
 
     for option in ("--all", "-a"):
         result = runner.invoke(app, ["query", option, "What is recorded?"])
@@ -314,7 +305,6 @@ def test_query_all_and_short_alias_freeze_every_readable_context(
         expected_names,
     ]
     assert [entry[1] for entry in observed] == [expected_names, expected_names]
-    assert authorized == [expected_names, expected_names]
 
 
 def test_query_all_rejects_explicit_context_and_query_only_form(
@@ -338,30 +328,3 @@ def test_query_all_rejects_explicit_context_and_query_only_form(
     assert "--all/-a cannot be combined with --context/-c" in explicit.output
     assert query_only.exit_code == 2
     assert "ordinary one-question form" in query_only.output
-
-
-def test_query_all_authority_failure_precedes_provider_execution(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    context = ops.init("query/source")
-    store.save(context)
-    store.set_current(context.name)
-    monkeypatch.setattr(
-        query_command,
-        "authorize_combination",
-        lambda _accesses: (_ for _ in ()).throw(ProfileError("combine denied")),
-    )
-    monkeypatch.setattr(
-        query_command,
-        "execute_ordinary_query",
-        lambda *_args, **_kwargs: (_ for _ in ()).throw(
-            AssertionError("provider execution must remain disconnected")
-        ),
-    )
-
-    result = runner.invoke(app, ["query", "--all", "What is recorded?"])
-
-    assert result.exit_code == 1
-    assert "combine denied" in result.output

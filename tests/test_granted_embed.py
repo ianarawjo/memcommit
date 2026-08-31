@@ -88,7 +88,7 @@ def _fixture(isolated_store, tmp_path, monkeypatch):
         resource_name=advisor.name,
         attachment_name=workspace.name,
         public_name=advisor.name,
-        permissions=("READ", "EMBED"),
+        permissions=("READ",),
         recursive=True,
     )
     create_authority_grant(
@@ -107,14 +107,14 @@ def _granted_record(store: MemoryStore, target_name: str, child_uid: str):
     return store.load_direct(target_name).to_dict()["memories"][child_uid]
 
 
-def test_embed_permission_requires_read() -> None:
-    with pytest.raises(ProfileConfigError, match="EMBED requires READ"):
+def test_embed_is_not_a_grant_permission() -> None:
+    with pytest.raises(ProfileConfigError, match="Unsupported grant permission"):
         canonical_grant_permissions(("EMBED",))
 
-    assert canonical_grant_permissions(("EMBED", "READ")) == (
-        "READ",
-        "EMBED",
-    )
+    assert canonical_grant_permissions(
+        ("EMBED", "READ"),
+        allow_legacy=True,
+    ) == ("READ",)
 
 
 def test_granted_embed_persists_only_a_live_reauthorizing_link(
@@ -240,7 +240,7 @@ def test_recursive_list_and_show_open_attached_read_projection(
     assert _advisor.uid not in store.load_direct(workspace.name).memories
 
 
-def test_live_context_embed_does_not_cross_nested_read_only_override(
+def test_live_context_embed_crosses_nested_read_override(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -281,12 +281,10 @@ def test_live_context_embed_does_not_cross_nested_read_only_override(
     embedded = runner.invoke(app, ["embed", advisor.name, "--into", workspace.name])
     assert embedded.exit_code == 0, embedded.output + embedded.stderr
 
-    # Loading the durable live Embed uses the stricter traversal mode. The
-    # parent remains readable, but its READ-only nested edge cannot inherit the
-    # parent's EMBED permission.
+    # Live Embed is a traversal shape over the same READ-authorized bytes.
     resolved = store.load(workspace.name).memories[advisor.uid]
     assert isinstance(resolved, Context)
-    assert private_pointer.uid not in resolved.memories
+    assert private_pointer.uid in resolved.memories
     assert [
         item.content for item in resolved.iter_items() if isinstance(item, Memory)
     ] == [advice.content]
@@ -304,7 +302,7 @@ def test_recursive_find_browses_attached_read_but_search_omits_provider_disclosu
     )
     update_authority_grant(
         grant.uid,
-        permissions=("READ", "EMBED", "DERIVE", "COMBINE"),
+        permissions=("READ",),
     )
     unrelated_workspace = ops.init("unrelated-workspace")
     store.save(unrelated_workspace)
@@ -317,7 +315,7 @@ def test_recursive_find_browses_attached_read_but_search_omits_provider_disclosu
         resource_name=unrelated_advisor.name,
         attachment_name=unrelated_workspace.name,
         public_name=unrelated_advisor.name,
-        permissions=("READ", "EMBED", "DERIVE", "COMBINE"),
+        permissions=("READ",),
         recursive=True,
     )
 
@@ -412,9 +410,9 @@ def test_granted_embed_revocation_fails_recursive_load_but_keeps_pointer(
     assert embedded.exit_code == 0, embedded.stderr
     before = _granted_record(store, workspace.name, advisor.uid)
 
-    update_authority_grant(grant.uid, permissions=("READ",))
+    update_authority_grant(grant.uid, permissions=("QUERY",))
 
-    with pytest.raises(ProfileError, match="does not allow embed access"):
+    with pytest.raises(ProfileError, match="does not allow read access"):
         store.load(workspace.name)
     after = _granted_record(store, workspace.name, advisor.uid)
     assert after == before
@@ -442,7 +440,7 @@ def test_granted_embed_survives_a_revision_that_retains_same_binding(
 
     _registry, revised = update_authority_grant(
         grant.uid,
-        permissions=("READ", "EMBED", "DERIVE"),
+        permissions=("READ",),
     )
 
     assert revised.revision == grant.revision + 1
@@ -463,7 +461,7 @@ def test_granted_embed_rejects_missing_permission_query_override_and_granted_tar
         tmp_path,
         monkeypatch,
     )
-    update_authority_grant(grant.uid, permissions=("READ",))
+    update_authority_grant(grant.uid, permissions=("QUERY",))
 
     denied = runner.invoke(app, ["embed", "advisor", "--into", "workspace"])
     concealed = runner.invoke(
@@ -476,9 +474,9 @@ def test_granted_embed_rejects_missing_permission_query_override_and_granted_tar
     )
 
     assert denied.exit_code == 1
-    assert "does not allow embed access" in denied.stderr
+    assert "does not allow read access" in denied.stderr
     assert concealed.exit_code == 1
-    assert "does not allow embed access" in concealed.stderr
+    assert "does not allow read access" in concealed.stderr
     assert granted_target.exit_code == 1
     assert "does not exist locally" in granted_target.stderr
     assert advisor.uid not in store.load_direct(workspace.name).memories
@@ -528,7 +526,7 @@ def test_granted_embed_tui_catalog_exposes_authority_without_broadening_target(
     assert "advisor/private" in setup.child_names
     assert "advisor/private" not in setup.child_selectable_names
     assert setup.into_names == (workspace.name,)
-    assert "EMBED" in source_display_text(annotations["advisor"])
+    assert source_display_text(annotations["advisor"]) == "GRANT · READ"
 
 
 def test_granted_embed_undo_and_redo_restore_the_typed_link(

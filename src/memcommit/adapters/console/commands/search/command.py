@@ -34,9 +34,6 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.application.authorization.source_use import (
-    authorize_combination,
-)
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
@@ -433,10 +430,6 @@ def cmd(
             accesses = tuple(
                 all_readable_catalog.access_for(name) for name in target_names
             )
-        # Semantic retrieval is derived use even for one selected Context;
-        # multiple ownership domains additionally require COMBINE. Keep this
-        # before provider construction so READ-only Grants remain browse-only.
-        authorize_combination(accesses)
     except (
         FileNotFoundError,
         OSError,

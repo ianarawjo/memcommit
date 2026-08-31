@@ -135,11 +135,12 @@ class GrantedUpdateTarget:
         ):
             raise ValueError("Invalid granted update permissions.")
         try:
-            canonical_permissions = canonical_grant_permissions(permissions)
+            canonical_permissions = canonical_grant_permissions(
+                permissions,
+                allow_legacy=True,
+            )
         except ProfileConfigError as error:
             raise ValueError("Invalid granted update permissions.") from error
-        if tuple(permissions) != canonical_permissions:
-            raise ValueError("Invalid granted update permission order.")
         if not _is_sha256(grant["digest"]):
             raise ValueError("Invalid granted update grant digest.")
         return cls(

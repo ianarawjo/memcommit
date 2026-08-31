@@ -4,9 +4,9 @@
 
 The operation-neutral Grant and write-authority modules lived in a root-level
 `memcommit.authority` package beside architectural layers. Their callers use
-them to decide whether application use cases may read, derive, combine, retain,
-or mutate Context and Memory state, so the root placement obscured their role
-as shared application policy.
+them to resolve granted Contexts and protect authorized Context use and
+mutation, so the root placement obscured their role as shared application
+policy.
 
 ## Decision
 
@@ -22,8 +22,10 @@ case.
 
 ## Boundary and limitation
 
-`access.py`, `derived_policy.py`, and `study_operation_policy.py` primarily
-express or coordinate application authorization. `storage_permissions.py` and
+`access.py` and `study_operation_policy.py` primarily express or coordinate
+application authority. The former `derived_policy.py` was later retired when
+Grant authorization was reduced to enforceable Context uses in
+`application.authorization.context_use`. `storage_permissions.py` and
 the durable registry mechanics in `write_protection.py` also contain POSIX,
 locking, JSON, and filesystem persistence details. They move intact in this
 step so the package relocation does not become a behavior-changing split.
@@ -35,8 +37,8 @@ already free of persistence dependencies.
 
 ## Invariants
 
-- Existing Grant, derived-use, retained-analysis, and write-protection
-  decisions remain unchanged.
+- The historical relocation itself preserved the then-current Grant and
+  write-protection decisions; later policy changes are recorded separately.
 - Internal callers use `memcommit.application.capabilities.authority` as the canonical
   package path.
 - The application package initializer remains import-light.

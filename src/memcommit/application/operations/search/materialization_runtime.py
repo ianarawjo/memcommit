@@ -14,11 +14,6 @@ from memcommit.application.capabilities.authority.context_access import (
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.application.authorization.source_use import (
-    authorize_analysis_save,
-    authorize_combination,
-    authorize_derived_transfer,
-)
 from memcommit.application.operations.search.application import SearchResponse
 from memcommit.application.operations.search.materialization_application import (
     SearchMaterializationError,
@@ -58,16 +53,6 @@ class _StoreSearchMaterializationToken:
     local_bindings: tuple[tuple[str, str, str], ...]
     external_sources: tuple[tuple[str, str, str, str], ...]
     external_accesses: dict[tuple[str, str], ContextAccess]
-
-
-def _local_output_access(store: MemoryStore, name: str) -> ContextAccess:
-    return ContextAccess(
-        store=store,
-        context_name=name,
-        display_name=name,
-        attachment_name=None,
-        permission="CREATE",
-    )
 
 
 def _source_public_name(
@@ -158,18 +143,6 @@ def _unique_accesses(sources: tuple[_ResolvedSource, ...]) -> tuple[ContextAcces
     return tuple(values)
 
 
-def _combination_has_multiple_domains(accesses: tuple[ContextAccess, ...]) -> bool:
-    domains = {
-        (
-            ("grant", access.view.grant.uid, access.view.grant.resource_uid)
-            if access.is_granted and access.view is not None
-            else ("local", str(access.store.store_dir), access.context_name)
-        )
-        for access in accesses
-    }
-    return len(domains) > 1
-
-
 class MemoryStoreSearchMaterializationPort(SearchMaterializationPort):
     """Prepare and publish one Search result under Store and Grant locks."""
 
@@ -193,30 +166,18 @@ class MemoryStoreSearchMaterializationPort(SearchMaterializationPort):
             request.selected_result_indices,
         )
         accesses = _unique_accesses(sources)
-        output_access = _local_output_access(self._store, request.destination_name)
-
         if request.mode == "REFERENCE" and any(
             access.is_granted for access in accesses
         ):
             raise SearchMaterializationError(
                 "REFERENCE requires locally owned source Memories; use COPY for "
-                "an export-authorized Grant result."
+                "a readable Grant result."
             )
-        if request.mode == "COPY":
-            authorize_combination(accesses)
-            authorize_analysis_save(accesses, retention="RETAINED")
-            for access in accesses:
-                authorize_derived_transfer(access, output_access)
-
-        multiple_domains = _combination_has_multiple_domains(accesses)
         checks: list[tuple[ContextAccess, tuple[str, ...]]] = []
         for access in accesses:
             if not access.is_granted:
                 continue
-            permissions = ["READ", "DERIVE", "EXPORT", "SAVE_ANALYSIS"]
-            if multiple_domains:
-                permissions.append("COMBINE")
-            checks.append((access, tuple(permissions)))
+            checks.append((access, ("READ",)))
 
         output = Context(uid=str(uuid.uuid4()), name=request.destination_name)
         output_uids: list[str] = []

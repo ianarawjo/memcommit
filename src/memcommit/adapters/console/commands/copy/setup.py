@@ -35,9 +35,7 @@ from memcommit.source_projection.presentation import (
 )
 
 
-_RETAINED_COPY_PERMISSIONS = frozenset(
-    {"READ", "DERIVE", "EXPORT", "SAVE_ANALYSIS"}
-)
+_RETAINED_COPY_PERMISSIONS = frozenset({"READ"})
 
 
 def _copy_granted_sources(

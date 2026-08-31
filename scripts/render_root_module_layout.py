@@ -75,6 +75,10 @@ RETIRED_ROOT_MODULES = {
         "retired after its isolated routing prototype proved unused by shipped "
         "console commands"
     ),
+    "derived_policy": (
+        "retired when ordinary Grant authority contracted to QUERY, CREATE, "
+        "READ, UPDATE, and DELETE"
+    ),
     "flow_placeholder": (
         "retired with the per-Memory Query catalog and its presentation assets"
     ),
@@ -257,7 +261,6 @@ CONCEPT_TARGETS = {
     "context_naming": "memcommit.core.context_targeting.naming",
     "context_snapshot": "memcommit.application.capabilities.context_snapshot",
     "current_context_navigation": "memcommit.core.context_navigation",
-    "derived_policy": "memcommit.application.authorization.source_use",
     "direct_item_duplicates": "memcommit.application.capabilities.reviewing.direct_item_duplicates",
     "distill_elaborate_reference": "memcommit.application.capabilities.semantic.generative_reduction_reference",
     "duplicate_pipeline": "memcommit.application.capabilities.semantic.classification.duplicates",

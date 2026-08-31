@@ -40,7 +40,6 @@ from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.application.operations.profile.config import (
-    AuthorityGrant,
     ProfileConfigError,
 )
 from memcommit.application.operations.profile.model import ProfileError
@@ -968,33 +967,6 @@ def _permission_text(permissions: tuple[str, ...]) -> str:
     return " + ".join(permissions)
 
 
-def _boundary_value(permission: str, permissions: set[str]) -> str:
-    return "allowed" if permission in permissions else "blocked"
-
-
-def _derived_boundary_lines(
-    grant: AuthorityGrant,
-    *,
-    indent: str = "  ",
-) -> tuple[str, ...]:
-    permissions = set(grant.permissions)
-    return (
-        indent
-        + "Source boundary: "
-        + f"DERIVE {_boundary_value('DERIVE', permissions)} · "
-        + f"COMBINE {_boundary_value('COMBINE', permissions)} · "
-        + f"EXPORT {_boundary_value('EXPORT', permissions)}",
-        indent
-        + "Target/artifact boundary: "
-        + "ACCEPT_DERIVED "
-        + _boundary_value("ACCEPT_DERIVED", permissions)
-        + " · SAVE_BOUND_ANALYSIS "
-        + _boundary_value("SAVE_BOUND_ANALYSIS", permissions)
-        + " · SAVE_ANALYSIS "
-        + _boundary_value("SAVE_ANALYSIS", permissions),
-    )
-
-
 def _granted_access_notes(access: ContextAccess) -> tuple[str, ...]:
     view = access.view
     if view is None:
@@ -1019,7 +991,6 @@ def _granted_access_notes(access: ContextAccess) -> tuple[str, ...]:
             granted=True,
             readable="READ" in grant.permissions,
         ),
-        *_derived_boundary_lines(grant),
     )
 
 
@@ -1058,8 +1029,6 @@ def _emit_grant_notes(attachment_name: str) -> None:
                 registry=registry,
             )
         )
-        for line in _derived_boundary_lines(grant, indent="    "):
-            typer.echo(line)
 
 
 def render_index(ctx: Context, *, recursive: bool = False) -> None:

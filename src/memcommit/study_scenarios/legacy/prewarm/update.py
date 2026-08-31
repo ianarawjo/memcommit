@@ -19,9 +19,6 @@ from memcommit.providers.policy import (
 )
 from memcommit.core.context import Context
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.application.authorization.source_use import (
-    authorize_derived_transfer,
-)
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
@@ -1008,7 +1005,6 @@ def install_declared_update_prewarms(
             required_permission="READ",
             registry=registry_snapshot,
         )
-        authorize_derived_transfer(source_access, target_access)
         source_store = (
             GrantedReadStore(source_access, registry=registry_snapshot)
             if source_access.is_granted

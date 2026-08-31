@@ -29,14 +29,10 @@ from memcommit.application.operations.update.model import GrantedUpdateTarget
 
 GRANTED_MAKEMORE_AMBIENT_PERMISSIONS = (
     "READ",
-    "EMBED",
-    "DERIVE",
-    "COMBINE",
 )
 GRANTED_MAKEMORE_ADD_PERMISSIONS = (
     *GRANTED_MAKEMORE_AMBIENT_PERMISSIONS,
-    "EXPORT",
-    "SAVE_ANALYSIS",
+    "CREATE",
 )
 
 

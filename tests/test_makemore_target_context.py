@@ -40,7 +40,11 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
+from memcommit.application.operations.profile.model import (
+    ProfileError,
+    create_authority_grant,
+    update_authority_grant,
+)
 from memcommit.persistence.store import MemoryStore, context_record_digest
 from tests.makemore_validation_support import (
     passing_makemore_validation_response,
@@ -512,7 +516,7 @@ def test_physical_ground_uses_only_the_existing_destination_lane_as_ambient(
     assert result.makemore.analysis.cases[0].target_context_refs == ("t1",)
 
 
-def test_granted_embed_requires_read_embed_derive_and_combine_before_provider(
+def test_granted_ambient_uses_read_and_apply_requires_create(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -551,7 +555,7 @@ def test_granted_embed_requires_read_embed_derive_and_combine_before_provider(
         resource_name=advisor.name,
         attachment_name=target.name,
         public_name="shared/advisor-examples",
-        permissions=("READ", "EMBED", "DERIVE", "COMBINE"),
+        permissions=("READ",),
     )
     access = resolve_context_access(
         store,
@@ -589,12 +593,12 @@ def test_granted_embed_requires_read_embed_derive_and_combine_before_provider(
         }
     ]
     assert prepared.result.analysis.cases[0].target_context_refs == ("t1",)
-    with pytest.raises(MakemoreError, match="EXPORT.*SAVE_ANALYSIS"):
+    with pytest.raises(MakemoreError, match="CREATE"):
         apply_prepared_makemore_add(prepared, store=store)
     assert len(store.load_direct(target.name).order) == 1
 
     preflight_provider = TargetAwareProvider()
-    with pytest.raises(MakemoreError, match="EXPORT.*SAVE_ANALYSIS"):
+    with pytest.raises(MakemoreError, match="CREATE"):
         prepare_makemore_add(
             store=store,
             request=frozen_source.request,
@@ -609,11 +613,7 @@ def test_granted_embed_requires_read_embed_derive_and_combine_before_provider(
         grant.uid,
         permissions=(
             "READ",
-            "EMBED",
-            "DERIVE",
-            "COMBINE",
-            "EXPORT",
-            "SAVE_ANALYSIS",
+            "CREATE",
         ),
     )
     add_provider = TargetAwareProvider()
@@ -627,9 +627,9 @@ def test_granted_embed_requires_read_embed_derive_and_combine_before_provider(
     )
     assert apply_prepared_makemore_add(addable, store=store).count == 1
 
-    update_authority_grant(grant.uid, permissions=("READ", "EMBED"))
+    update_authority_grant(grant.uid, permissions=("QUERY",))
     blocked_provider = TargetAwareProvider()
-    with pytest.raises(MakemoreError, match="COMBINE.*DERIVE"):
+    with pytest.raises(ProfileError, match="does not allow read access"):
         prepare_makemore_add(
             store=store,
             request=frozen_source.request,

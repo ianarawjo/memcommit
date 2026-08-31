@@ -509,12 +509,6 @@ _TASK_3_AUTHORITY = (
 
 _SOURCE_PERMISSIONS = (
     "READ",
-    "EMBED",
-    "DERIVE",
-    "COMBINE",
-    "EXPORT",
-    "SAVE_BOUND_ANALYSIS",
-    "SAVE_ANALYSIS",
 )
 
 
@@ -683,7 +677,7 @@ def _scenario_digest() -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
-COFFEE_DIGEST = "630a753c1a6352fe66b2125eb456ec7201526208e8f84cc63d3270c556891ecf"
+COFFEE_DIGEST = "d00cdd0c419c20a7295d57338ba608130074afc3c67a03e23bbf5fea9f213589"
 if _scenario_digest() != COFFEE_DIGEST:
     # The concise public name still identifies one pinned experiment. A data
     # change must deliberately refresh the recorded digest.

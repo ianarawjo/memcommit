@@ -75,7 +75,7 @@ def _fixture(isolated_store, tmp_path, monkeypatch):
         resource_name=source.name,
         attachment_name=target.name,
         public_name="advisor",
-        permissions=("READ", "EMBED"),
+        permissions=("READ",),
     )
     return local, target, first_marker, second_marker, source, memory, grant
 
@@ -100,7 +100,7 @@ def test_granted_memory_source_catalog_is_authorized_without_broadening_into(
     assert "advisor" in setup.memory_source_names
     assert "advisor" in setup.memory_source_selectable_names
     assert "advisor" in setup.memory_source_granted_names
-    assert source_display_text(annotations["advisor"]) == "GRANT · READ · EMBED"
+    assert source_display_text(annotations["advisor"]) == "GRANT · READ"
     preview = port.inspect_memory_source("advisor")
     assert preview.name == "advisor"
     assert preview.uid == source.uid
@@ -111,7 +111,7 @@ def test_granted_memory_source_catalog_is_authorized_without_broadening_into(
     assert "advisor" not in local_only.memory_source_names
 
 
-def test_read_only_grant_is_visible_but_not_a_memory_embed_source(
+def test_query_only_grant_is_visible_but_not_a_memory_embed_source(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -121,7 +121,7 @@ def test_read_only_grant_is_visible_but_not_a_memory_embed_source(
         tmp_path,
         monkeypatch,
     )
-    update_authority_grant(grant.uid, permissions=("READ",))
+    update_authority_grant(grant.uid, permissions=("QUERY",))
 
     setup = build_embed_tui_setup(
         MemoryStoreEmbedPort.capture(store, allow_granted_sources=True)
@@ -131,7 +131,7 @@ def test_read_only_grant_is_visible_but_not_a_memory_embed_source(
     assert "advisor" not in setup.memory_source_selectable_names
     assert "advisor" not in setup.memory_source_granted_names
     assert source_display_text(dict(setup.memory_source_annotations)["advisor"]) == (
-        "GRANT · READ"
+        "GRANT · QUERY"
     )
 
 

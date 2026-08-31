@@ -256,16 +256,9 @@ def _assert_grant_templates(task, manifest, context_uids):
         assert campus["permissions"] == [
             "CREATE",
             "READ",
-            "EMBED",
             "UPDATE",
             "DELETE",
             "QUERY",
-            "DERIVE",
-            "COMBINE",
-            "EXPORT",
-            "ACCEPT_DERIVED",
-            "SAVE_BOUND_ANALYSIS",
-            "SAVE_ANALYSIS",
         ]
         assert campus["provider"] == "codex_chatgpt"
         assert campus["public_name"] == "campus-wiki"
@@ -287,15 +280,7 @@ def _assert_grant_templates(task, manifest, context_uids):
         assert details["provider"] == "codex_chatgpt"
         assert details["attachment"]["grant_key"] == campus["key"]
     elif task == 2:
-        advisor_permissions = [
-            "READ",
-            "EMBED",
-            "DERIVE",
-            "COMBINE",
-            "EXPORT",
-            "SAVE_BOUND_ANALYSIS",
-            "SAVE_ANALYSIS",
-        ]
+        advisor_permissions = ["READ"]
         assert grants["task-2-advisor1-view"]["permissions"] == advisor_permissions
         assert grants["task-2-advisor2-view"]["permissions"] == advisor_permissions
         guidelines = grants["task-2-proposal-guidelines-query"]
@@ -316,12 +301,6 @@ def _assert_grant_templates(task, manifest, context_uids):
             "permissions"
         ] == [
             "READ",
-            "EMBED",
-            "DERIVE",
-            "COMBINE",
-            "EXPORT",
-            "SAVE_BOUND_ANALYSIS",
-            "SAVE_ANALYSIS",
         ]
         assert {
             grant["attachment"]["context"]["name"] for grant in grants.values()

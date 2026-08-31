@@ -1,5 +1,7 @@
 # Interactive Find search and scope rationale
 
+> **Authorization contract updated 2026-08-30.** Permission claims below that use `EMBED`, `DERIVE`, `COMBINE`, `EXPORT`, `ACCEPT_DERIVED`, or `SAVE_*` describe the retired contract preserved for design history. The current contract uses `QUERY`, `CREATE`, `READ`, `UPDATE`, and `DELETE`; `READ` covers readable semantic use and Embed traversal, while `SHARE` remains a separate endpoint capability. See `granted-derived-ownership-design-rationale.md`.
+
 > **2026-08-20 presentation update:** This document preserves the semantic
 > Search and materialization decisions made while the operation still used the
 > public name Find. The persistent `TARGETS` tree, separate target-cardinality

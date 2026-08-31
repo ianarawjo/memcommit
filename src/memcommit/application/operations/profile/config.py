@@ -26,36 +26,35 @@ STUDY_RUN_AUTHORITY_SOURCE_KIND = "STUDY_RUN_GRANTED_MEMORY"
 _PROFILE_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}\Z")
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 GRANT_RESOURCE_CONTEXT_TREE = "CONTEXT_TREE"
-GRANT_PERMISSIONS = frozenset(
+CONTEXT_USES = frozenset(
     {
         "CREATE",
         "READ",
-        "EMBED",
         "UPDATE",
         "DELETE",
         "QUERY",
+    }
+)
+GRANT_ENDPOINT_CAPABILITIES = frozenset({"SHARE"})
+GRANT_PERMISSIONS = CONTEXT_USES | GRANT_ENDPOINT_CAPABILITIES
+LEGACY_GRANT_PERMISSIONS = frozenset(
+    {
+        "EMBED",
         "DERIVE",
         "COMBINE",
         "EXPORT",
         "ACCEPT_DERIVED",
         "SAVE_BOUND_ANALYSIS",
         "SAVE_ANALYSIS",
-        "SHARE",
+        "SESSION_LOG",
     }
 )
 _GRANT_PERMISSION_ORDER = (
     "CREATE",
     "READ",
-    "EMBED",
     "UPDATE",
     "DELETE",
     "QUERY",
-    "DERIVE",
-    "COMBINE",
-    "EXPORT",
-    "ACCEPT_DERIVED",
-    "SAVE_BOUND_ANALYSIS",
-    "SAVE_ANALYSIS",
     "SHARE",
 )
 
@@ -208,7 +207,11 @@ def validate_grant_resource_name(value: object) -> str:
     return value
 
 
-def canonical_grant_permissions(value: object) -> tuple[str, ...]:
+def canonical_grant_permissions(
+    value: object,
+    *,
+    allow_legacy: bool = False,
+) -> tuple[str, ...]:
     """Return a unique, stable permission tuple for one grant."""
 
     if not isinstance(value, (list, tuple, set, frozenset)) or not value:
@@ -220,37 +223,24 @@ def canonical_grant_permissions(value: object) -> tuple[str, ...]:
         permission = raw.strip().upper()
         if permission == "EDIT":
             permission = "UPDATE"
-        if permission == "SESSION_LOG":
-            # Saved Query transcripts no longer exist, but rejecting an older
-            # registry would prevent every Profile operation. Preserve the old
-            # implied QUERY authority while dropping the retention capability.
-            permission = "QUERY"
+        if permission in LEGACY_GRANT_PERMISSIONS:
+            if not allow_legacy:
+                raise ProfileConfigError(
+                    f"Unsupported grant permission: {raw!r}."
+                )
+            # A stored legacy registry must remain loadable after the permission
+            # vocabulary contracts. SESSION_LOG historically implied QUERY;
+            # every other retired capability added no ordinary Context use.
+            if permission == "SESSION_LOG":
+                normalized.add("QUERY")
+            continue
         if permission not in GRANT_PERMISSIONS:
             raise ProfileConfigError(f"Unsupported grant permission: {raw!r}.")
         normalized.add(permission)
-    if normalized & {"DERIVE", "ACCEPT_DERIVED"} and "READ" not in normalized:
-        raise ProfileConfigError(
-            "Derive and accept-derived grants require READ permission."
-        )
-    if (
-        normalized & {"COMBINE", "EXPORT", "SAVE_BOUND_ANALYSIS", "SAVE_ANALYSIS"}
-        and "DERIVE" not in normalized
-    ):
-        raise ProfileConfigError(
-            "Combine, export, and analysis-save grants require DERIVE permission."
-        )
-    if "ACCEPT_DERIVED" in normalized and not normalized & {
-        "CREATE",
-        "UPDATE",
-        "DELETE",
-    }:
-        raise ProfileConfigError(
-            "ACCEPT_DERIVED requires a create, update, or delete permission."
-        )
     if normalized & {"CREATE", "UPDATE", "DELETE"} and "READ" not in normalized:
         raise ProfileConfigError("Create, update, and delete grants require READ.")
-    if "EMBED" in normalized and "READ" not in normalized:
-        raise ProfileConfigError("EMBED requires READ permission.")
+    if not normalized:
+        raise ProfileConfigError("Grant permissions contain no supported use.")
     return tuple(item for item in _GRANT_PERMISSION_ORDER if item in normalized)
 
 
@@ -621,7 +611,10 @@ def load_profile_registry() -> ProfileRegistry:
                 resource_uid=resource_uid,
                 resource_name=resource_name,
                 public_name=validate_grant_resource_name(raw.get("public_name")),
-                permissions=canonical_grant_permissions(raw.get("permissions")),
+                permissions=canonical_grant_permissions(
+                    raw.get("permissions"),
+                    allow_legacy=True,
+                ),
                 contexts=tuple(contexts),
             )
         )

@@ -675,7 +675,7 @@ def test_context_fit_rejects_any_direct_memory_change(isolated_store):
         )
 
 
-def test_granted_fit_requires_derive_before_provider(
+def test_granted_fit_uses_ordinary_read_authority(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -692,27 +692,27 @@ def test_granted_fit_requires_derive_before_provider(
         calls += 1
         return _FitProvider()
 
-    with pytest.raises(ProfileError, match="DERIVE"):
-        run_stored_source_fit(
-            FitStoredSourcesRequest(
-                propositions=(),
-                context_locators=("shared/fit-source",),
-            ),
-            store=store,
-            provider_factory=provider_factory,
-        )
-    assert calls == 0
+    result = run_stored_source_fit(
+        FitStoredSourcesRequest(
+            propositions=(),
+            context_locators=("shared/fit-source",),
+        ),
+        store=store,
+        provider_factory=provider_factory,
+    )
+    assert calls == 1
+    assert result.analysis.assessment.verdict == "YES"
 
 
-def test_granted_fit_requires_combine_with_literal_and_then_succeeds(
+def test_granted_fit_combines_readable_source_with_literal(
     isolated_store,
     tmp_path,
     monkeypatch,
 ):
-    store, _source, memories, grant = _granted_context(
+    store, _source, memories, _grant = _granted_context(
         tmp_path,
         monkeypatch,
-        ("READ", "DERIVE"),
+        ("READ",),
     )
     request = FitStoredSourcesRequest(
         propositions=(FitProposition("p1", "Visitors use the lobby."),),
@@ -730,31 +730,12 @@ def test_granted_fit_requires_combine_with_literal_and_then_succeeds(
         calls += 1
         return _FitProvider()
 
-    with pytest.raises(ProfileError, match="COMBINE"):
-        run_stored_source_fit(
-            request,
-            store=store,
-            provider_factory=provider_factory,
-        )
-    assert calls == 0
-
-    update_authority_grant(
-        grant.uid,
-        permissions=("READ", "DERIVE", "COMBINE"),
-    )
     result = run_stored_source_fit(
-        FitStoredSourcesRequest(
-            propositions=(FitProposition("p1", "Visitors use the lobby."),),
-            memory_sources=(
-                FitMemorySourceRequest(
-                    memories[0].uid[:8],
-                    context_locator="shared/fit-source",
-                ),
-            ),
-        ),
+        request,
         store=store,
-        provider_factory=lambda: _FitProvider(),
+        provider_factory=provider_factory,
     )
+    assert calls == 1
     assert result.analysis.assessment.verdict == "YES"
 
 
@@ -766,13 +747,13 @@ def test_granted_fit_revalidates_exact_grant_after_provider(
     store, _source, _memories, grant = _granted_context(
         tmp_path,
         monkeypatch,
-        ("READ", "DERIVE"),
+        ("READ",),
     )
 
     def revise_grant() -> None:
         update_authority_grant(
             grant.uid,
-            permissions=("READ", "DERIVE"),
+            permissions=("READ",),
         )
 
     with pytest.raises(ProfileError, match="grant changed"):

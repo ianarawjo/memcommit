@@ -23,10 +23,6 @@ from memcommit.application.capabilities.context_snapshot import (
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.authorization.source_use import (
-    authorize_analysis_save,
-    authorize_derived_transfer,
-)
 from memcommit.application.operations.reference.application import (
     ContextReferenceRequest,
     ContextReferenceResult,
@@ -184,8 +180,6 @@ class MemoryStoreReferencePort(ReferencePort):
         local_name = self._canonical(locator)
         if self._store.context_exists(local_name):
             access = self._source_access(locator)
-            authorize_derived_transfer(access, target_access)
-            authorize_analysis_save((access,), retention="RETAINED")
             return access, access.store.load_direct(access.context_name)
         if not self._allow_granted_sources:
             raise FileNotFoundError(f"Context '{local_name}' does not exist.")
@@ -206,8 +200,6 @@ class MemoryStoreReferencePort(ReferencePort):
                 required_permission="READ",
                 registry=registry,
             )
-            authorize_derived_transfer(access, target_access)
-            authorize_analysis_save((access,), retention="RETAINED")
             source = access.store.load_direct(access.context_name)
         return access, source
 
@@ -224,9 +216,8 @@ class MemoryStoreReferencePort(ReferencePort):
                 f"Target Context '{into_name}' does not exist locally."
             )
 
-        # A Reference is retained after its Grant disappears. Validate the
-        # export and retention permissions in the same Grant snapshot used to
-        # open authority content.
+        # A Reference is retained after its Grant disappears. Freeze the exact
+        # READ Grant snapshot used to open the authority content.
         target_access = self._local_target_access(into_name)
         source_access, source = self._freeze_memory_source(
             request.source_locator,

@@ -35,11 +35,6 @@ from memcommit.providers.policy import (
 )
 from memcommit.core.context import Context
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.application.authorization.source_use import (
-    analysis_retention,
-    authorize_analysis_save,
-    authorize_combination,
-)
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
@@ -1301,18 +1296,6 @@ def install_declared_compare_prewarms(
             raise StudyPrewarmRegistryError(
                 "Declared Compare prewarm does not match the current Sources."
             )
-        authorize_combination(accesses)
-        retention = (
-            analysis_retention(accesses)
-            if any(access.is_granted for access in accesses)
-            else None
-        )
-        if any(access.is_granted for access in accesses) and retention is None:
-            raise StudyPrewarmRegistryError(
-                "Declared Compare prewarm cannot be retained under current Grants."
-            )
-        if retention is not None:
-            authorize_analysis_save(accesses, retention=retention)
         if publish:
             record_declared_installation(
                 store,

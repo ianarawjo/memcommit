@@ -262,7 +262,7 @@ def copy_and_move_exact_command_review(
         effects = (
             f"Copy {count} direct Source {noun} into '{request.into_locator}'.",
             (
-                "Owned or export-authorized Sources stay unchanged; outputs "
+                "Owned or READ-granted Sources stay unchanged; outputs "
                 "receive new independent local UIDs."
             ),
             _gap_effect(gap, item_count),

@@ -78,12 +78,12 @@ class LocalMemoryStoreDistillSourcePort:
             *(item.context_name for item in source.frame.sources),
         }
         if any(not self.store.context_exists(name) for name in names):
-            # READ alone is not permission to derive or retain new Rules. A
-            # later grant adapter must authorize DERIVE/EXPORT and retention
-            # before the provider sees authority-owned content.
+            # This first adapter stores only local Source bindings. Granted
+            # Distill needs an authority-aware frozen token before the provider
+            # may receive those otherwise READ-authorized bytes.
             raise DistillError(
                 "Distill currently requires an entirely local Source frame; "
-                "granted Context distillation is not yet authorized."
+                "granted Context distillation is not yet implemented."
             )
         bindings = tuple(
             (
@@ -346,9 +346,9 @@ class MemoryStoreDistillOutputPort:
         if request.result.goal_focus is not None:
             revalidate_goal_focus(self.store, request.result.goal_focus)
 
-        # The first durable slice supports local Context frames only. Grant
-        # output needs DERIVE/EXPORT plus retained-analysis authority and must
-        # not silently fall back to a local copy without those checks.
+        # The first durable slice supports local Context frames only. A granted
+        # Source needs an authority-aware frozen token and must not silently
+        # fall back to an unbound local copy.
         context_names = tuple(
             dict.fromkeys(
                 [analysis.source.context_name]

@@ -11,8 +11,8 @@ from memcommit.source_projection.presentation import SourceDisplayValue
 class CopyAndMoveTuiSetup:
     """Frozen role-specific Source and Target catalogs for one launch.
 
-    ``source_names`` may contain explicitly export-authorized public Grant
-    names for Copy. ``local_source_names`` is the only catalog searched for an
+    ``source_names`` may contain explicitly READ-granted public names for
+    Copy. ``local_source_names`` is the only catalog searched for an
     unqualified Memory UID and is also the complete Move Source catalog. The
     Target catalog stays independently owned and local for both operations.
     """

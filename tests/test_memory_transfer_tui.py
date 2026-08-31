@@ -99,7 +99,7 @@ def _granted_copy_fixture(isolated_store, tmp_path, monkeypatch):
         resource_name=source.name,
         attachment_name=workspace.name,
         public_name="shared/source",
-        permissions=("READ", "DERIVE", "EXPORT", "SAVE_ANALYSIS"),
+        permissions=("READ",),
     )
     create_authority_grant(
         authority_name=authority.name,
@@ -107,7 +107,7 @@ def _granted_copy_fixture(isolated_store, tmp_path, monkeypatch):
         resource_name=no_retention.name,
         attachment_name=workspace.name,
         public_name="shared/no-retention",
-        permissions=("READ", "DERIVE", "EXPORT"),
+        permissions=("READ",),
     )
     return store, source, memory, target, marker, local_source
 
@@ -275,7 +275,7 @@ def test_granted_copy_tui_separates_readable_sources_from_local_roles(
     copy_annotations = dict(copy_setup.source_annotations)
 
     assert "shared/source" in copy_setup.source_names
-    assert "shared/no-retention" not in copy_setup.source_names
+    assert "shared/no-retention" in copy_setup.source_names
     assert "shared/source" not in copy_setup.local_source_names
     assert "shared/source" not in copy_setup.into_names
     assert set(copy_setup.into_names) == {
@@ -286,6 +286,9 @@ def test_granted_copy_tui_separates_readable_sources_from_local_roles(
     assert "GRANT" in source_display_text(copy_annotations["shared/source"])
     assert "COPY + RETAIN" in source_display_text(
         copy_annotations["shared/source"]
+    )
+    assert "COPY + RETAIN" in source_display_text(
+        copy_annotations["shared/no-retention"]
     )
     assert "shared/source" not in move_setup.source_names
     assert move_setup.source_names == move_setup.local_source_names

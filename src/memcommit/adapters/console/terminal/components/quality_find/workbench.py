@@ -75,9 +75,6 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.application.authorization.source_use import (
-    authorize_combination,
-)
 from memcommit.application.capabilities.memory_issue_analysis.source import (
     QualityFindSourceFrame,
 )
@@ -760,9 +757,6 @@ def run_interactive_quality_find(
     # Resolve every effective checked row through the same frozen catalog used
     # by setup. Descendant projection has already happened in the visible tree,
     # so execution must not apply a second hidden expansion.
-    accesses = tuple(catalog.access_for(name) for name in receipt.context_names)
-    if len(accesses) > 1:
-        authorize_combination(accesses)
     contexts = tuple(catalog.load_direct(name) for name in receipt.context_names)
     source = QualityFindSourceFrame.create(
         contexts,

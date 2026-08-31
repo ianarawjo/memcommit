@@ -1,5 +1,7 @@
 # `mem trace`, `mem rationale`, and saved atomize provenance
 
+> **Authorization contract updated 2026-08-30.** Permission claims below that use `EMBED`, `DERIVE`, `COMBINE`, `EXPORT`, `ACCEPT_DERIVED`, or `SAVE_*` describe the retired contract preserved for design history. The current contract uses `QUERY`, `CREATE`, `READ`, `UPDATE`, and `DELETE`; `READ` covers readable semantic use and Embed traversal, while `SHARE` remains a separate endpoint capability. See `granted-derived-ownership-design-rationale.md`.
+
 > **Atomize route update (2026-08-30):** Trace and Rationale continue to read
 > Atomize analysis/application evidence, but the producing console route is
 > now one-shot `mem atomize [TARGET]`; Atomize `--save`/`--save-as` examples

@@ -28,9 +28,6 @@ from memcommit.application.capabilities.authority.context_access import (
     resolve_context_access,
 )
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.authorization.source_use import (
-    authorize_combination,
-)
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     find_exact_duplicate_groups,
 )
@@ -103,7 +100,6 @@ def _source(
         )
         for name in canonical
     )
-    authorize_combination(accesses)
     contexts = tuple(
         (
             GrantedReadStore(access, registry=registry).load_direct(access.display_name)

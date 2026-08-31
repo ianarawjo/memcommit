@@ -53,9 +53,6 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.application.authorization.source_use import (
-    authorize_derived_transfer,
-)
 from memcommit.application.operations.update.granted_source import (
     apply_granted_source_staged_update,
 )
@@ -700,8 +697,6 @@ def cmd(
             if target_access.is_granted
             else None
         )
-        if source_access is not None:
-            authorize_derived_transfer(source_access, target_access)
         requested_inputs = collect_update_inputs(
             source,
             target,

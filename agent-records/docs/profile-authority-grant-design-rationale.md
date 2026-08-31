@@ -34,16 +34,21 @@ the authority-owned receiver store; the registry remains capability metadata.
 
 ## Permission contract
 
-Permissions are independent capabilities:
+Ordinary granted-Context permissions are Context uses:
 
 | Permission | Task-side operation |
 | --- | --- |
-| `READ` | list or show ordinary Memories admitted by the view |
+| `QUERY` | ask through the mediated query interface without receiving source text |
+| `READ` | list, show, query, or otherwise use ordinary Memories admitted by the view |
 | `CREATE` | add a direct Memory; requires `READ` |
 | `UPDATE` | edit a direct Memory; `EDIT` is a CLI input alias; requires `READ` |
 | `DELETE` | remove a direct item; requires `READ` |
-| `QUERY` | ask a provider over an authorized Context-level View without receiving source text |
 | `SHARE` | deliver one exactly reviewed ordinary Context or lexical subtree snapshot as a receiver-owned consent unit; grants no receiver read access |
+
+`READ` implies `QUERY`, but `QUERY` does not disclose raw Memory content and
+therefore does not imply `READ`. `CREATE`, `UPDATE`, and `DELETE` remain
+independent concrete effects. `SHARE` is a separate delivery endpoint
+capability, not an ordinary Context use.
 
 These permissions currently govern direct items inside existing Contexts.
 They do not delegate Context lifecycle operations such as `init`, `rename`,
@@ -97,7 +102,7 @@ the templates as real registry Grants. No intermediate Profile is registered.
 | --- | --- | --- | --- |
 | 1 | `participant/construction-updates` | `task-1-campus-authority`: `campus-wiki`, including construction details | wiki `READ+CREATE+UPDATE+DELETE+QUERY`; nested details `QUERY` |
 | 2 | `participant/proposal-workspace` | `task-2-proposal-authority`: `advisor1`, `advisor2`, submission guidelines | advisors `READ`; guidelines `QUERY` |
-| 3 | `local/personal-memory`, `local/guardrails` | `task-3-healthcare-authority`: `remote/government/healthcare-agent/info-request/transmission-guidance`, `questions-and-answers` | healthcare agent `SHARE`; public transmission guidance `READ+DERIVE+COMBINE+EXPORT+SAVE_BOUND_ANALYSIS+SAVE_ANALYSIS`; questions-and-answers `QUERY` |
+| 3 | `local/personal-memory`, `local/guardrails` | `task-3-healthcare-authority`: `remote/government/healthcare-agent/info-request/transmission-guidance`, `questions-and-answers` | healthcare agent `SHARE`; public transmission guidance `READ`; questions-and-answers `QUERY` |
 
 `task-1-campus-authority` is intentionally task-specific. A future shared
 campus authority may be appropriate for a different experiment, but this
@@ -164,9 +169,9 @@ security.
 
 This is a local research permission boundary, not operating-system isolation.
 The same OS user can read managed Profile files directly. Granted views do
-not yet support Context lifecycle commands, `impact`, or `update` as a
-cross-store target. A granted Memory mutation records its checkpoint and
-grant audit metadata in the authority store; task-side `undo` does not span
+not delegate Context lifecycle commands. A granted Memory mutation records
+its checkpoint and grant audit metadata in the authority store; task-side
+`undo` does not span
 stores, so recovery currently requires selecting the authority Profile.
 Provider-backed `QUERY` remains the only supported way to open query-only
 content from a task Profile. Production use should move the authority store

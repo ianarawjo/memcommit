@@ -40,10 +40,6 @@ from memcommit.persistence.store import MemoryStore
 
 GRANT_PERMISSIONS = (
     "READ",
-    "DERIVE",
-    "COMBINE",
-    "EXPORT",
-    "SAVE_ANALYSIS",
 )
 
 

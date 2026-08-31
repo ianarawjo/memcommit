@@ -175,16 +175,9 @@ TASK_SPECS = {
                 permissions=(
                     "CREATE",
                     "READ",
-                    "EMBED",
                     "UPDATE",
                     "DELETE",
                     "QUERY",
-                    "DERIVE",
-                    "COMBINE",
-                    "EXPORT",
-                    "ACCEPT_DERIVED",
-                    "SAVE_BOUND_ANALYSIS",
-                    "SAVE_ANALYSIS",
                 ),
                 grantee_parent_context="participant/construction-updates",
                 excluded_contexts=("campus-wiki/construction-details",),
@@ -234,15 +227,7 @@ TASK_SPECS = {
                 permissions=(
                     ("QUERY",)
                     if permission == "QUERY"
-                    else (
-                        "READ",
-                        "EMBED",
-                        "DERIVE",
-                        "COMBINE",
-                        "EXPORT",
-                        "SAVE_BOUND_ANALYSIS",
-                        "SAVE_ANALYSIS",
-                    )
+                    else ("READ",)
                 ),
                 grantee_parent_context="participant/proposal-workspace",
                 provider=("codex_chatgpt" if permission == "QUERY" else None),
@@ -322,15 +307,7 @@ TASK_SPECS = {
                 public_name=(
                     "remote/government/healthcare-agent/info-request/transmission-guidance"
                 ),
-                permissions=(
-                    "READ",
-                    "EMBED",
-                    "DERIVE",
-                    "COMBINE",
-                    "EXPORT",
-                    "SAVE_BOUND_ANALYSIS",
-                    "SAVE_ANALYSIS",
-                ),
+                permissions=("READ",),
                 grantee_parent_context="local/personal-memory",
             ),
             BundleGrantTemplate(

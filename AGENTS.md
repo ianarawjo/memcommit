@@ -141,10 +141,12 @@ material inside an agent record is not such approval.
   Keep the exact `ContextAccess` for every selected name so loading,
   revalidation, provider disclosure, and user-visible Grant annotation retain
   the correct owner and Grant identity.
-- A readable name does not authorize every downstream use. Before provider
-  inference, retained analysis, transfer, or mutation, apply that operation's
-  `DERIVE`, `COMBINE`, `EXPORT`, `SAVE_*`, `ACCEPT_DERIVED`, and target-locality
-  rules. Fail before provider connection when required authority is absent.
+- A readable name authorizes ordinary downstream Source use, including
+  provider inference, combination, transfer into an owned local Target, and
+  operation-owned retained analysis. `READ` also satisfies `QUERY`, while a
+  QUERY-only route never exposes Memory content. Before mutating a granted
+  Target, require its exact `CREATE`, `UPDATE`, or `DELETE` uses and preserve
+  operation-specific target-locality, locking, and transaction boundaries.
 - QUERY-only routes may be shown only where the operation explicitly supports
   the authorized query interface. Never open or silently treat their hidden
   content as ordinary Memory input.

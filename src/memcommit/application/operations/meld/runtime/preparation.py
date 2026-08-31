@@ -11,12 +11,6 @@ from memcommit.application.capabilities.authority.context_access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.application.authorization.source_use import (
-    analysis_retention,
-    authorize_analysis_save,
-    authorize_combination,
-    authorize_derived_transfer,
-)
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution import (
     connect_memory_relation_provider,
     ensure_memory_relation_analysis,
@@ -252,9 +246,6 @@ def _prepare_initial_meld(
         current_name=current_name,
         required_permission="READ",
     )
-    if left_access is not None:
-        authorize_combination((left_access, right_access))
-
     if request.mode == "DIRECTIONAL":
         if inline:
             if right_access.is_granted:
@@ -263,16 +254,6 @@ def _prepare_initial_meld(
                 )
         else:
             assert left_access is not None
-            authorize_derived_transfer(left_access, right_access)
-            retention = analysis_retention((left_access, right_access))
-            if retention is None:
-                raise error_type(
-                    "The directional Meld cannot retain its reviewed analysis."
-                )
-            authorize_analysis_save(
-                (left_access, right_access),
-                retention=retention,
-            )
         target_access = right_access
     else:
         assert left_access is not None
@@ -294,8 +275,6 @@ def _prepare_initial_meld(
             )
             if target_access.is_granted:
                 raise error_type("Symmetric Meld requires a local Result Context.")
-        authorize_derived_transfer(left_access, target_access)
-        authorize_derived_transfer(right_access, target_access)
 
     project = request.mode == "SYMMETRIC"
     right = load_meld_source(

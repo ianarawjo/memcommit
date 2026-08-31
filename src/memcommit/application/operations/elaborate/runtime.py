@@ -13,9 +13,6 @@ from memcommit.application.capabilities.authority.context_access import (
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.application.authorization.source_use import (
-    authorize_combination,
-)
 from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,
 )
@@ -105,7 +102,7 @@ def _frame_for(
 
 
 class MemoryStoreElaboratePort(ElaborateSourcePort):
-    """Freeze one UPDATE+DERIVE target and reject drift before Apply."""
+    """Freeze one READ+UPDATE target and reject drift before Apply."""
 
     def __init__(self, store: MemoryStore, *, current_name: str | None):
         self._store = store
@@ -126,7 +123,6 @@ class MemoryStoreElaboratePort(ElaborateSourcePort):
                 registry=registry,
                 active_store=self._store,
             )
-            authorize_combination((access,))
             return access
 
     def freeze(self, request: ElaborateRequest) -> FrozenElaborateSource:
@@ -142,10 +138,6 @@ class MemoryStoreElaboratePort(ElaborateSourcePort):
                 required_permission="UPDATE",
                 registry=registry,
             )
-            # Elaborate combines the target with its ordinary direct-Memory
-            # neighbors as read-only support. A granted target therefore needs
-            # DERIVE authority before any provider connection is opened.
-            authorize_combination((access,))
             context = access.store.load_direct(access.context_name)
             target = ops.resolve_direct_memory(context, locator.memory_selector)
             binding = (
@@ -224,7 +216,7 @@ class MemoryStoreElaboratePort(ElaborateSourcePort):
         }
         with authorized_context_mutation(
             access,
-            required_permissions=("DERIVE",),
+            required_permissions=("UPDATE",),
         ):
             checkpoint = access.store.save(
                 context,

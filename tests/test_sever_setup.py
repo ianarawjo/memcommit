@@ -96,7 +96,7 @@ def test_query_only_row_is_visible_but_not_selectable_for_either_input() -> None
                 "public-guidance",
                 SourceDisplayFacts(
                     access=SourceAccess.READ_GRANT,
-                    permissions=("READ", "DERIVE"),
+                    permissions=("READ",),
                 ),
             ),
         ),

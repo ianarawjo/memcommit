@@ -179,14 +179,8 @@ def test_ls_projects_read_view_and_masks_narrower_query_view(
     assert "Authority views:" in root.output
     assert "task-1-campus-authority" in root.output
     assert "Permissions: CREATE + READ + UPDATE" in root.output
-    assert (
-        "Source boundary: DERIVE blocked · COMBINE blocked · EXPORT blocked"
-        in root.output
-    )
-    assert (
-        "Target/artifact boundary: ACCEPT_DERIVED blocked · "
-        "SAVE_BOUND_ANALYSIS blocked · SAVE_ANALYSIS blocked" in root.output
-    )
+    assert "Source boundary:" not in root.output
+    assert "Target/artifact boundary:" not in root.output
     assert view.exit_code == 0, view.output
     assert "Access: READ GRANT · PERMISSIONS CREATE + READ + UPDATE" in view.output
     assert "READ ONLY · FROM task-1-campus-authority" in view.output

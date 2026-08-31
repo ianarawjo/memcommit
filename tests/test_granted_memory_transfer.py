@@ -46,7 +46,7 @@ from memcommit.application.operations.profile.model import (
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
-_COPY_PERMISSIONS = ("READ", "DERIVE", "EXPORT", "SAVE_ANALYSIS")
+_COPY_PERMISSIONS = ("READ",)
 runner = CliRunner(mix_stderr=False)
 
 
@@ -55,7 +55,7 @@ def _grant_fixture(
     monkeypatch,
     *,
     permissions=_COPY_PERMISSIONS,
-    source_contents=("Export-authorized source",),
+    source_contents=("Readable granted source",),
 ):
     monkeypatch.setenv("HOME", str(tmp_path))
     active_store = MemoryStore()
@@ -167,7 +167,7 @@ def test_granted_copy_creates_fresh_retained_memory_and_checkpoint_provenance(
     assert str(authority_store.store_dir) not in json.dumps(authority)
 
 
-def test_granted_copy_requires_retained_analysis_permission_without_publication(
+def test_granted_copy_uses_ordinary_read_authority(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -175,20 +175,19 @@ def test_granted_copy_requires_retained_analysis_permission_without_publication(
     store, _authority_store, _source, (memory,), target, _grant = _grant_fixture(
         tmp_path,
         monkeypatch,
-        permissions=("READ", "DERIVE", "EXPORT"),
+        permissions=("READ",),
     )
 
-    with pytest.raises(ProfileError, match="SAVE_ANALYSIS"):
-        run_copy(
-            CopyMemoriesRequest(
-                (f"shared/source:{memory.uid}",),
-                into_locator=target.name,
-            ),
-            port=_granted_port(store),
-        )
+    result = run_copy(
+        CopyMemoriesRequest(
+            (f"shared/source:{memory.uid}",),
+            into_locator=target.name,
+        ),
+        port=_granted_port(store),
+    )
 
-    assert store.load_direct(target.name).memories == {}
-    assert store.list_checkpoints(target.name) == []
+    assert result.count == 1
+    assert len(store.list_checkpoints(target.name)) == 1
 
 
 def test_granted_copy_requires_an_explicit_public_owner(
@@ -213,7 +212,7 @@ def test_granted_copy_requires_an_explicit_public_owner(
     assert store.load_direct(target.name).memories == {}
 
 
-def test_mixed_local_and_granted_copy_requires_combine(
+def test_mixed_local_and_granted_copy_uses_read_authority(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -226,19 +225,18 @@ def test_mixed_local_and_granted_copy_requires_combine(
     local_memory = ops.add(local, "Locally owned contributor")
     store.save(local)
 
-    with pytest.raises(ProfileError, match="COMBINE"):
-        run_copy(
-            CopyMemoriesRequest(
-                (
-                    f"shared/source:{granted.uid}",
-                    f"{local.name}:{local_memory.uid}",
-                ),
-                into_locator=target.name,
+    result = run_copy(
+        CopyMemoriesRequest(
+            (
+                f"shared/source:{granted.uid}",
+                f"{local.name}:{local_memory.uid}",
             ),
-            port=_granted_port(store),
-        )
+            into_locator=target.name,
+        ),
+        port=_granted_port(store),
+    )
 
-    assert store.load_direct(target.name).memories == {}
+    assert result.count == 2
 
 
 def test_mixed_copy_with_combine_preserves_reviewed_order(
@@ -249,7 +247,7 @@ def test_mixed_copy_with_combine_preserves_reviewed_order(
     store, _authority_store, _source, (granted,), target, _grant = _grant_fixture(
         tmp_path,
         monkeypatch,
-        permissions=(*_COPY_PERMISSIONS, "COMBINE"),
+        permissions=_COPY_PERMISSIONS,
     )
     local = ops.init("task-root/local-source")
     local_memory = ops.add(local, "Locally owned contributor")
@@ -283,7 +281,7 @@ def test_qualified_grant_does_not_broaden_later_bare_uid_resolution(
     store, _authority_store, _source, (granted,), target, _grant = _grant_fixture(
         tmp_path,
         monkeypatch,
-        permissions=(*_COPY_PERMISSIONS, "COMBINE"),
+        permissions=_COPY_PERMISSIONS,
     )
     local = ops.init("task-root/local-source")
     # Deliberately reuse the authority Memory UID across ownership domains. A
@@ -380,7 +378,7 @@ def test_granted_move_is_explicitly_rejected_before_any_change(
 
     with pytest.raises(
         MemoryTransferAuthorityError,
-        match="EXPORT permits a retained Copy, not deletion",
+        match="READ permits a Copy, not deletion",
     ):
         run_move(
             MoveMemoriesRequest(
@@ -520,7 +518,7 @@ def test_cli_routes_enable_explicit_granted_copy_and_explain_granted_move(
     assert copied.exit_code == 0, copied.output + copied.stderr
     assert len(store.load_direct(target.name).memories) == 1
     assert denied.exit_code == 1
-    assert "EXPORT permits a retained Copy, not deletion" in denied.stderr
+    assert "READ permits a Copy, not deletion" in denied.stderr
     assert "Copy it into a local Context first" in denied.stderr
 
 
@@ -540,7 +538,7 @@ def test_public_and_agent_routes_preserve_authority_category_and_root_isolation(
     assert receipt.items[0].source_context_name == "shared/source"
     with pytest.raises(
         PublicMemoryTransferAuthorityError,
-        match="EXPORT permits a retained Copy, not deletion",
+        match="READ permits a Copy, not deletion",
     ):
         client.move_memories((locator,), into_context=target.name)
 

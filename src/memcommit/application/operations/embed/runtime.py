@@ -151,13 +151,11 @@ class MemoryStoreEmbedPort(EmbedPort):
         return self._store.load_direct(name)
 
     def inspect_memory_source(self, name: str) -> Context:
-        """Load one direct Memory Source under the TUI's READ+EMBED role."""
+        """Load one direct Memory Source under ordinary READ authority."""
 
         access = self._source_access(name)
         if access.is_granted:
-            # A selectable Grant row must not make authority bytes browseable
-            # under EMBED alone. Revalidate both atoms at every lazy preview.
-            with authorized_context_operation(((access, ("READ", "EMBED")),)):
+            with authorized_context_operation(((access, ("READ",)),)):
                 source = access.store.load_direct(access.context_name)
         else:
             source = access.store.load_direct(access.context_name)
@@ -179,13 +177,13 @@ class MemoryStoreEmbedPort(EmbedPort):
                 context_name=local_name,
                 display_name=local_name,
                 attachment_name=None,
-                permission="EMBED",
+                permission="READ",
             )
         return resolve_context_access(
             self._store,
             locator,
             current_name=self._current_name,
-            required_permission="EMBED",
+            required_permission="READ",
         )
 
     @staticmethod
@@ -209,11 +207,7 @@ class MemoryStoreEmbedPort(EmbedPort):
         """Return raw identity bytes and the public Context used for validation."""
 
         if access.is_granted:
-            # EMBED is a relationship capability, not an alternative content
-            # visibility grant. Validate READ before opening even a direct
-            # authority record, including against a corrupted registry that
-            # bypassed permission-dependency validation.
-            with authorized_context_operation(((access, ("READ", "EMBED")),)):
+            with authorized_context_operation(((access, ("READ",)),)):
                 raw = access.store.load_direct(access.context_name)
         else:
             raw = access.store.load_direct(access.context_name)
@@ -387,10 +381,9 @@ class MemoryStoreEmbedPort(EmbedPort):
                 "Memory Embed Source and Target must be distinct Contexts."
             )
         if source_access.is_granted:
-            # Freeze must not open authority bytes under an EMBED-only or stale
-            # view. Hold the exact Grant snapshot while capturing the raw
-            # direct Source record that the later Apply receipt will bind.
-            with authorized_context_operation(((source_access, ("READ", "EMBED")),)):
+            # Hold the exact READ Grant snapshot while capturing the raw direct
+            # Source record that the later Apply receipt will bind.
+            with authorized_context_operation(((source_access, ("READ",)),)):
                 source = source_access.store.load_direct(source_access.context_name)
         else:
             source = source_access.store.load_direct(source_access.context_name)
@@ -438,7 +431,7 @@ class MemoryStoreEmbedPort(EmbedPort):
                 "Memory Embed Source and Target must be distinct Contexts."
             )
         if source_access.is_granted:
-            with authorized_context_operation(((source_access, ("READ", "EMBED")),)):
+            with authorized_context_operation(((source_access, ("READ",)),)):
                 source = source_access.store.load_direct(source_access.context_name)
         else:
             source = source_access.store.load_direct(source_access.context_name)
@@ -533,7 +526,7 @@ class MemoryStoreEmbedPort(EmbedPort):
         if access.is_granted:
             # Keep the Grant registry and exact authority Source locked until
             # the local target CAS publishes the content-free relationship.
-            with authorized_context_operation(((access, ("READ", "EMBED")),)):
+            with authorized_context_operation(((access, ("READ",)),)):
                 with access.store.locked_context_snapshot(
                     access.context_name,
                     expected_uid=plan.source_uid,
@@ -635,7 +628,7 @@ class MemoryStoreEmbedPort(EmbedPort):
         if access.is_granted:
             # The registry lock closes revoke-after-check, while the authority
             # source lock keeps the reviewed identity exact through local CAS.
-            with authorized_context_operation(((access, ("READ", "EMBED")),)):
+            with authorized_context_operation(((access, ("READ",)),)):
                 with access.store.locked_context_snapshot(
                     access.context_name,
                     expected_uid=plan.child_uid,

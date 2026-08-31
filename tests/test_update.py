@@ -459,7 +459,7 @@ def test_granted_update_uses_the_same_report_apply(monkeypatch):
             resource_uid=source.uid,
             resource_name=source.name,
             authority_context_name=source.name,
-            permissions=("READ", "DERIVE", "EXPORT"),
+            permissions=("READ",),
         ),
     )
     captured = []

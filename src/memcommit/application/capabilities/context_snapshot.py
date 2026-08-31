@@ -297,10 +297,9 @@ def snapshot_record_with_frozen_memory_embeds(
         if not isinstance(direct_item, MemoryRef) or direct_item.is_snapshot:
             continue
         if direct_item.is_granted:
-            # A recursive Context Reference has only traversal authority for
-            # this live edge. Freezing its resolved bytes here would turn
-            # EMBED into retained EXPORT, so keep the content-free binding
-            # opaque and revocable inside the retained package.
+            # Preserve the live authority boundary. Freezing resolved bytes
+            # here would silently change this revocable relationship into a
+            # retained value, so keep its content-free binding opaque.
             continue
         resolved_item = resolved.memories.get(uid)
         if not isinstance(resolved_item, MemoryRef) or resolved_item.target is None:

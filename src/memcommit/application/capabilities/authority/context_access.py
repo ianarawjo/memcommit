@@ -95,9 +95,9 @@ def granted_context_link(
     view = access.view
     if view is None or access.attachment_name is None:
         raise ValueError("Granted Context links require granted access.")
-    if "EMBED" not in view.grant.permissions:
+    if "READ" not in view.grant.permissions:
         raise ProfileError(
-            f"Grant {view.grant.uid[:8]} does not allow embed access "
+            f"Grant {view.grant.uid[:8]} does not allow read access "
             f"to {access.display_name!r}."
         )
     return GrantedContextLink(
@@ -168,12 +168,12 @@ def load_granted_context_link(
         link.public_name,
         attachment_name=link.attachment_context_name,
         attachment_uid=link.attachment_context_uid,
-        required_permission="EMBED",
+        required_permission="READ",
         registry=registry,
     )
     view = access.view
     assert view is not None
-    _require_granted_permissions(access, ("READ", "EMBED"))
+    _require_granted_permissions(access, ("READ",))
     grant = view.grant
     if (
         grant.uid != link.grant_uid
@@ -220,12 +220,12 @@ def load_granted_memory_source(
         source.public_name,
         attachment_name=source.attachment_context_name,
         attachment_uid=source.attachment_context_uid,
-        required_permission="EMBED",
+        required_permission="READ",
         registry=registry,
     )
     view = access.view
     assert view is not None
-    _require_granted_permissions(access, ("READ", "EMBED"))
+    _require_granted_permissions(access, ("READ",))
     grant = view.grant
     if (
         grant.uid != source.grant_uid
@@ -607,12 +607,9 @@ class GrantedReadStore:
         self._grant = access.view.grant
         self._attachment = access.attachment_name
         self._registry = registry or load_profile_registry()
-        # Ordinary browsing follows every effective READ edge. A durable live
-        # Embed is a narrower relationship contract: every recursively crossed
-        # override must independently retain both visibility and Embed consent.
-        self._required_traversal_permissions = (
-            ("READ", "EMBED") if traversal_mode == "EMBED" else ("READ",)
-        )
+        # Both ordinary browsing and durable live links disclose the same raw
+        # Context bytes. ``EMBED`` remains a traversal shape, not a Grant atom.
+        self._required_traversal_permissions = ("READ",)
         self._all_grants = grants_for_attachment(
             attachment_name=self._attachment,
             registry=self._registry,

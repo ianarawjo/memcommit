@@ -15,11 +15,6 @@ from memcommit.providers.policy import (
 )
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.application.authorization.source_use import (
-    authorize_analysis_save,
-    authorize_combination,
-    authorize_derived_transfer,
-)
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
@@ -473,11 +468,6 @@ def install_declared_sever_prewarms(
             prepared,
             registry_snapshot=registry_snapshot,
         )
-        output_access = _local_output_access(store, prepared.output_name)
-        authorize_combination((source_access, criteria_access))
-        authorize_derived_transfer(source_access, output_access)
-        authorize_derived_transfer(criteria_access, output_access)
-        authorize_analysis_save((source_access, criteria_access), retention="RETAINED")
         _fresh_review(prepared, source=source, criteria=criteria)
         if publish:
             record_declared_installation(

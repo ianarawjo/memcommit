@@ -889,43 +889,7 @@ def _prefix_study_grant_template(
                 permissions.append("DELETE")
             if "QUERY" not in permissions:
                 permissions.append("QUERY")
-            for permission in (
-                "EMBED",
-                "DERIVE",
-                "COMBINE",
-                "EXPORT",
-                "ACCEPT_DERIVED",
-                "SAVE_BOUND_ANALYSIS",
-                "SAVE_ANALYSIS",
-            ):
-                if permission not in permissions:
-                    permissions.append(permission)
         result.setdefault("provider", "codex_chatgpt")
-    elif key in {
-        "task-2-advisor1-view",
-        "task-2-advisor2-view",
-    }:
-        permissions = result.get("permissions")
-        if isinstance(permissions, list):
-            # Existing baselines remain importable, but each new Study run
-            # receives the current source-side derivation contract.
-            for permission in (
-                "EMBED",
-                "DERIVE",
-                "COMBINE",
-                "EXPORT",
-                "SAVE_BOUND_ANALYSIS",
-                "SAVE_ANALYSIS",
-            ):
-                if permission not in permissions:
-                    permissions.append(permission)
-
-    if key == "task-3-healthcare-transmission-guidance-view":
-        permissions = result.get("permissions")
-        if isinstance(permissions, list) and "EMBED" not in permissions:
-            # Editable baselines created before revocable links remain usable,
-            # while new Study runs expose the current Task 3 source contract.
-            permissions.append("EMBED")
 
     authority_context = result.get("authority_context")
     if isinstance(authority_context, dict) and isinstance(

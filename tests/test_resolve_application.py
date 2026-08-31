@@ -26,7 +26,6 @@ from memcommit.adapters.agent.resolve import (
     RESOLVE_AGENT_TOOL_NAME,
 )
 from memcommit.adapters.agent.registry import build_default_agent_tool_registry
-from memcommit.adapters.console.commands.resolve.analysis import render_resolve_plain
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -1726,7 +1725,7 @@ def test_granted_resolve_intersects_requested_and_granted_effects(
         isolated_store,
         tmp_path,
         monkeypatch,
-        ("READ", "DERIVE", "UPDATE"),
+        ("READ", "UPDATE"),
     )
     client = MemCommitClient(
         semantic_provider_factory=ResolveFixtureProvider,
@@ -1759,7 +1758,7 @@ def test_granted_finding_handoff_reauthorizes_requested_effects(
         isolated_store,
         tmp_path,
         monkeypatch,
-        ("READ", "DERIVE", "UPDATE"),
+        ("READ", "UPDATE"),
     )
     provider = ResolveFindingFixtureProvider()
     client = MemCommitClient(semantic_provider_factory=lambda: provider)
@@ -1774,11 +1773,10 @@ def test_granted_finding_handoff_reauthorizes_requested_effects(
     assert provider.operations[0] == "find_conflicts"
 
 
-def test_granted_resolve_without_derive_never_connects_provider(
+def test_granted_resolve_uses_read_and_requested_update_authority(
     isolated_store,
     tmp_path,
     monkeypatch,
-    capsys,
 ):
     _authority_store, _grant = _granted_resolve_fixture(
         isolated_store,
@@ -1797,24 +1795,9 @@ def test_granted_resolve_without_derive_never_connects_provider(
         semantic_provider_factory=provider,
     ).resolve_context("shared/schedule")
 
-    assert result.status == "NEEDS_AUTHORITY"
+    assert result.status == "PROPOSAL"
     assert result.allowed_effects == ("UPDATE",)
-    assert calls == 0
-    local = MemoryStore()
-    analysis = run_resolve(
-        ResolveRequest("shared/schedule"),
-        frame_port=MemoryStoreResolvePort(
-            local,
-            current_name=local.current_context_name(),
-        ),
-        semantic_port=ProviderResolveSemanticPort(),
-        provider_factory=provider,
-    )
-    render_resolve_plain(analysis)
-    assert capsys.readouterr().out == (
-        "RESOLVE · shared/schedule\n"
-        "NEEDS AUTHORITY · Grant authority is missing: DERIVE\n"
-    )
+    assert calls == 1
 
 
 def test_explicit_root_resolve_does_not_inherit_host_grants(
@@ -1826,7 +1809,7 @@ def test_explicit_root_resolve_does_not_inherit_host_grants(
         isolated_store,
         tmp_path,
         monkeypatch,
-        ("READ", "DERIVE", "UPDATE"),
+        ("READ", "UPDATE"),
     )
     calls = 0
 
@@ -1853,7 +1836,7 @@ def test_granted_resolve_revalidates_revocation_before_apply(
         isolated_store,
         tmp_path,
         monkeypatch,
-        ("READ", "DERIVE", "UPDATE"),
+        ("READ", "UPDATE"),
     )
     client = MemCommitClient(
         semantic_provider_factory=ResolveFixtureProvider,
@@ -1861,7 +1844,7 @@ def test_granted_resolve_revalidates_revocation_before_apply(
     analysis = client.resolve_context("shared/schedule")
     before = authority_store.load_direct("schedule").to_dict()
 
-    update_authority_grant(grant.uid, permissions=("READ", "DERIVE"))
+    update_authority_grant(grant.uid, permissions=("READ",))
 
     with pytest.raises(SemanticAuthorityError):
         client.apply_resolve(

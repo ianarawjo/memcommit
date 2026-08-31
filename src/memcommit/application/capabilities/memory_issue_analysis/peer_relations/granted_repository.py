@@ -15,6 +15,7 @@ from memcommit.application.capabilities.authority.context_access import (
     revalidate_granted_context_binding,
 )
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
+    AnalysisRetention,
     MemoryRelationAnalysis,
     MemoryRelationError,
     memory_relation_canonical_digest,
@@ -25,10 +26,6 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evi
     project_memory_relation_context as _project_memory_relation_context,
 )
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.application.authorization.source_use import (
-    AnalysisRetention,
-    authorize_analysis_save,
-)
 from memcommit.persistence.store import MemoryStore, _write_json_atomic
 from memcommit.application.operations.update.model import GrantedUpdateTarget
 
@@ -183,7 +180,6 @@ def save_granted_memory_relation_artifact(
     values = tuple(accesses)
     if len(values) != 2:
         raise ValueError("Compare persistence requires two source accesses.")
-    authorize_analysis_save(values, retention=retention)
     bindings = tuple(
         freeze_granted_context_binding(access) if access.is_granted else None
         for access in values

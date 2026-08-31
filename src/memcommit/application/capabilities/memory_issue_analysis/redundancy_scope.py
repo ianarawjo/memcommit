@@ -12,9 +12,6 @@ from memcommit.application.capabilities.authority.context_access import (
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.application.capabilities.authority.readable_contexts import ReadableContextCatalog
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.authorization.source_use import (
-    authorize_combination,
-)
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     ExactDuplicateGroup,
 )
@@ -87,7 +84,6 @@ def freeze_redundancy_scope(
     ):
         raise TypeError("Find Redundancies requires Context access and boolean reach.")
     if not include_descendants:
-        authorize_combination((access,))
         context = (
             GrantedReadStore(access, registry=registry).load_direct(access.display_name)
             if access.is_granted
@@ -111,11 +107,6 @@ def freeze_redundancy_scope(
         ContextScope.create((access.display_name,), include_descendants=True),
         catalog.list_context_names(),
     )
-    accesses = tuple(catalog.access_for(name) for name in names)
-    # Each Context is a separate provider disclosure. A granted sibling needs
-    # DERIVE, but the command does not need COMBINE merely to enumerate it.
-    for frame_access in accesses:
-        authorize_combination((frame_access,))
     return QualityFindSourceFrame.create(
         tuple(catalog.load_direct(name) for name in names),
         context_names=names,

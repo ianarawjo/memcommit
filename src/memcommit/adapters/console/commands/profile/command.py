@@ -36,6 +36,7 @@ from memcommit.application.operations.profile.config import (
     AuthorityGrant,
     ProfileConfigError,
     ProfileRegistry,
+    canonical_grant_permissions,
     load_profile_registry,
     profile_store_dir,
 )
@@ -877,9 +878,8 @@ def grant_create_cmd(
         typer.Option(
             "--allow",
             help=(
-                "Permission to grant; repeat CREATE, READ, EMBED, UPDATE/EDIT, "
-                "DELETE, QUERY, DERIVE, COMBINE, EXPORT, "
-                "ACCEPT_DERIVED, SAVE_BOUND_ANALYSIS, SAVE_ANALYSIS, or SHARE"
+                "Permission to grant; repeat QUERY, CREATE, READ, "
+                "UPDATE/EDIT, DELETE, or SHARE"
             ),
         ),
     ],
@@ -915,6 +915,7 @@ def grant_create_cmd(
             )
             is ContextScopePreset.RECURSIVE
         )
+        permissions = list(canonical_grant_permissions(permissions))
         registry, grant = create_authority_grant(
             authority_name=authority,
             grantee_name=grantee,
@@ -969,6 +970,7 @@ def grant_update_cmd(
         _fail(ProfileError("Choose either --refresh-scope or --root-only."))
     recursive = True if refresh_scope else False if root_only else None
     try:
+        permissions = list(canonical_grant_permissions(permissions))
         registry, grant = update_authority_grant(
             selector,
             permissions=permissions,

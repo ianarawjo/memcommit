@@ -27,11 +27,6 @@ from memcommit.core.context import (
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.authorization.source_use import (
-    authorize_analysis_save,
-    authorize_combination,
-    authorize_derived_transfer,
-)
 from memcommit.providers.subscription import (
     QueryProviderError,
     QueryProviderTimeoutError,
@@ -333,18 +328,6 @@ class MemoryStoreSeverInputPort:
             raise SeverApplicationError(
                 f"Output Context '{request.output_name}' already exists."
             )
-        output_access = (
-            source_access
-            if self_save
-            else _local_output_access(self._store, request.output_name)
-        )
-        authorize_combination((source_access, criteria_access))
-        authorize_derived_transfer(source_access, output_access)
-        authorize_derived_transfer(criteria_access, output_access)
-        authorize_analysis_save(
-            (source_access, criteria_access),
-            retention="RETAINED",
-        )
         frozen = FrozenSeverInputs(
             source=capture_sever_binding(
                 source_access,

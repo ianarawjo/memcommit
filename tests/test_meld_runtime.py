@@ -377,26 +377,6 @@ def test_memory_focused_directional_restart_reuses_prewarm_and_cas_replaces_with
     )
     monkeypatch.setattr(
         meld_session_launch,
-        "authorize_combination",
-        lambda values: None,
-    )
-    monkeypatch.setattr(
-        meld_session_launch,
-        "authorize_derived_transfer",
-        lambda source, target: None,
-    )
-    monkeypatch.setattr(
-        meld_session_launch,
-        "analysis_retention",
-        lambda values: "LOCAL",
-    )
-    monkeypatch.setattr(
-        meld_session_launch,
-        "authorize_analysis_save",
-        lambda values, **kwargs: None,
-    )
-    monkeypatch.setattr(
-        meld_session_launch,
         "load_meld_source",
         lambda access, **kwargs: (
             incoming if access.context_name == incoming.name else baseline

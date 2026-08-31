@@ -190,7 +190,7 @@ class MemoryStoreResolvePort:
             denied = tuple(
                 effect for effect in requested if effect not in grant_permissions
             )
-            missing_authority = () if "DERIVE" in grant_permissions else ("DERIVE",)
+            missing_authority = ()
             binding = freeze_granted_context_binding(access)
         digest = context_record_digest(authority)
         return FrozenResolveFrame(
@@ -255,7 +255,7 @@ class MemoryStoreResolvePort:
         access = self._revalidated_access(frame)
         if access.view is not None:
             permissions = set(access.view.grant.permissions)
-            required = {"READ", "DERIVE", *frame.allowed_effects}
+            required = {"READ", *frame.allowed_effects}
             missing = tuple(sorted(required - permissions))
             if missing:
                 raise ResolveAuthorityError(
@@ -268,7 +268,6 @@ class MemoryStoreResolvePort:
         effects = {effect.kind for effect in candidate.effects}
         return (
             "READ",
-            "DERIVE",
             *(effect for effect in _EFFECT_PERMISSION_ORDER if effect in effects),
         )
 

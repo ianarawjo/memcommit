@@ -423,7 +423,7 @@ def _granted_copy_fixture(tmp_path, monkeypatch):
         resource_name=source.name,
         attachment_name=attachment.name,
         public_name="shared/source",
-        permissions=("READ", "DERIVE", "EXPORT", "SAVE_ANALYSIS"),
+        permissions=("READ",),
     )
     access = resolve_context_access(
         active_store,

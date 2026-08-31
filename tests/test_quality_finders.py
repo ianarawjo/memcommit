@@ -28,7 +28,6 @@ from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 
@@ -1013,13 +1012,6 @@ def test_quality_finder_all_aliases_freeze_one_profile_wide_source(
             f"memcommit.adapters.console.commands.{module_name}.command.connect_codex_chatgpt_provider",
             lambda: provider,
         )
-    authorized = []
-    monkeypatch.setattr(
-        "memcommit.application.capabilities.memory_issue_analysis.source.authorize_combination",
-        lambda accesses: authorized.append(
-            tuple(access.display_name for access in accesses)
-        ),
-    )
 
     ambiguity = runner.invoke(app, ["find-ambiguities", "--all"])
     conflict = runner.invoke(app, ["find-conflicts", "-a"])
@@ -1042,8 +1034,6 @@ def test_quality_finder_all_aliases_freeze_one_profile_wide_source(
     assert [
         [memory["content"] for memory in call[3]["memories"]] for call in provider.calls
     ] == [expected_contents, expected_contents]
-    expected_names = (first.name, second.name)
-    assert authorized == [expected_names, expected_names]
     assert store.current_context_name() == first.name
 
 
@@ -1064,30 +1054,6 @@ def test_quality_finder_all_rejects_explicit_context(
 
     assert result.exit_code == 1
     assert "--all/-a cannot be combined with an explicit Context" in result.output
-
-
-def test_quality_finder_all_authority_failure_precedes_provider_connection(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    context = ops.init("quality/source")
-    ops.add(context, "A provider-visible Memory.")
-    store.save(context)
-    store.set_current(context.name)
-    monkeypatch.setattr(
-        "memcommit.application.capabilities.memory_issue_analysis.source.authorize_combination",
-        lambda _accesses: (_ for _ in ()).throw(ProfileError("combine denied")),
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_ambiguities.command.connect_codex_chatgpt_provider",
-        ForbiddenProvider(),
-    )
-
-    result = runner.invoke(app, ["find-ambiguities", "--all"])
-
-    assert result.exit_code == 1
-    assert "combine denied" in result.output
 
 
 @pytest.mark.parametrize(

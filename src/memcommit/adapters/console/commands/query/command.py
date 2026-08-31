@@ -58,9 +58,6 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_context_traversal,
     resolve_scope_preset,
 )
-from memcommit.application.authorization.source_use import (
-    authorize_combination,
-)
 from memcommit.application.operations.query.answer import OrdinaryQueryCorpusTooLarge
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
@@ -125,10 +122,6 @@ def _query_ordinary_context(
         # Multiple explicit roots need the shared Profile catalog only as a
         # namespace. The request below still freezes exactly the named roots.
         catalog = freeze_profile_readable_context_catalog(store, accesses[0])
-    frozen_accesses = tuple(catalog.access_for(name) for name in target_names)
-    # Provider inference is a derived use even for one granted Source; combining
-    # more than one ownership domain additionally requires COMBINE.
-    authorize_combination(frozen_accesses)
     request = OrdinaryQueryRequest(
         question=question,
         target_names=target_names,
@@ -193,12 +186,6 @@ def _open_query_workbench(
     }
 
     def run_ordinary(request: OrdinaryQueryRequest):
-        # The visible Profile/multi-target control combines Sources in one
-        # semantic frame. Recheck DERIVE/COMBINE at the execution boundary,
-        # after the exact checked names have been frozen.
-        accesses = tuple(catalog.access_for(name) for name in request.target_names)
-        if len(accesses) > 1:
-            authorize_combination(accesses)
         return execute_ordinary_query(
             request,
             store=store,

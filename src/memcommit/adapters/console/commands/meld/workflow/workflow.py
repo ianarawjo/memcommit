@@ -36,12 +36,6 @@ from memcommit.application.operations.meld.model import (
 )
 from memcommit.application.operations.meld.preparation import MeldRestartRequest
 from memcommit.application.operations.meld.preparation import MeldStartRequest
-from memcommit.application.authorization.source_use import (
-    analysis_retention,
-    authorize_analysis_save,
-    authorize_combination,
-    authorize_derived_transfer,
-)
 from memcommit.adapters.console.commands.meld.workbench import run_meld_shell
 from memcommit.adapters.console.commands.meld.sessions import (
     MeldSessionCatalogEntry,
@@ -50,7 +44,6 @@ from memcommit.adapters.console.commands.meld.sessions import (
 from memcommit.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
-from memcommit.application.operations.profile.model import ProfileError
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
 from memcommit.persistence.store import (
@@ -787,7 +780,6 @@ def execute_meld_command(
     revises_turn = request.revises_turn
     expand = request.expand
     create_target = False
-    left_access: ContextAccess | None = None
     right_access: ContextAccess | None = None
     if requested_mode == "DIRECTIONAL":
         right_access = _resolve_meld_source(
@@ -801,22 +793,10 @@ def execute_meld_command(
                     "Inline-Memory Meld currently requires a local BASELINE/Target."
                 )
         else:
-            left_access = _resolve_meld_source(
+            _resolve_meld_source(
                 store,
                 left_name,
                 current_name=current_name,
-            )
-            authorize_combination((left_access, right_access))
-            authorize_derived_transfer(left_access, right_access)
-            retention = analysis_retention((left_access, right_access))
-            if retention is None:
-                raise ProfileError(
-                    "The directional Meld cannot save analysis under the "
-                    "available Grants."
-                )
-            authorize_analysis_save(
-                (left_access, right_access),
-                retention=retention,
             )
 
     if requested_mode == "SYMMETRIC" and not store.context_exists(target_name):
@@ -835,7 +815,7 @@ def execute_meld_command(
         )
         session = store.load_meld_session(target.uid)
     if requested_mode == "SYMMETRIC" and session is None:
-        left_access = _resolve_meld_source(
+        _resolve_meld_source(
             store,
             left_name,
             current_name=current_name,
@@ -866,9 +846,6 @@ def execute_meld_command(
                 "Symmetric granted-source Meld currently requires a local "
                 "participant target."
             )
-        authorize_combination((left_access, right_access))
-        authorize_derived_transfer(left_access, target_access)
-        authorize_derived_transfer(right_access, target_access)
     request_matches_saved = session is not None and _meld_request_matches_saved_session(
         session,
         requested_mode=requested_mode,

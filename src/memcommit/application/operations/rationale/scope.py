@@ -14,7 +14,6 @@ from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.application.authorization.source_use import authorize_combination
 from memcommit.application.capabilities.history.verification import (
     MemoryState,
 )
@@ -145,28 +144,6 @@ def rationale_scope_from_catalog(
         contexts=contexts,
         context_accesses=tuple((name, read_store.access_for(name)) for name in names),
     )
-
-
-def authorize_rationale_inference(scope: RationaleScope) -> None:
-    """Authorize contextual inference only when it crosses ownership domains."""
-
-    accesses = scope.contributor_accesses
-    if not any(access.is_granted for access in accesses):
-        return
-    domains = {
-        (
-            (
-                "grant",
-                access.view.grant.uid,
-                access.view.grant.resource_uid,
-            )
-            if access.is_granted and access.view is not None
-            else ("local", str(access.store.store_dir), access.context_name)
-        )
-        for access in accesses
-    }
-    if len(domains) > 1:
-        authorize_combination(accesses)
 
 
 def rationale_candidates(

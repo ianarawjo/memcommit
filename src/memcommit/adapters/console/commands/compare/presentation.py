@@ -13,10 +13,8 @@ from memcommit.adapters.console.terminal.core.text_layout import (
     elide_terminal_text,
     single_line_terminal_text,
 )
-from memcommit.application.authorization.source_use import (
-    AnalysisRetention,
-)
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
+    AnalysisRetention,
     MemoryRelationAnalysis,
 )
 

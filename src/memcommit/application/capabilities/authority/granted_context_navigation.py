@@ -37,7 +37,6 @@ _GRANT_NAVIGATION_CAPABILITY_ORDER = (
     "QUERY",
     "EDIT",
     "DELETE",
-    "EXPORT",
     "SHARE",
 )
 
@@ -49,8 +48,8 @@ def grant_navigation_capability_labels(
 
     Context navigation distinguishes the operations a person can recognize at
     a glance. The exact tuple remains on the Grant and remains authoritative;
-    dependent DERIVE, COMBINE, retention, and embedding atoms are deliberately
-    not duplicated in this orientation-only summary.
+    SHARE remains visible as a separate delivery capability rather than an
+    ordinary Context use.
     """
 
     permission_set = frozenset(permissions)
@@ -61,7 +60,6 @@ def grant_navigation_capability_labels(
         # DELETE remains separate because it has a materially different risk.
         "EDIT": bool(permission_set & {"CREATE", "UPDATE"}),
         "DELETE": "DELETE" in permission_set,
-        "EXPORT": "EXPORT" in permission_set,
         "SHARE": "SHARE" in permission_set,
     }
     labels = tuple(

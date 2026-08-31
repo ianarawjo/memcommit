@@ -43,7 +43,7 @@ class MemoryTransferPlacement:
 
 @dataclass(frozen=True, slots=True)
 class CopyMemoriesRequest:
-    """Copy exact local or export-authorized Memories into one local Context."""
+    """Copy exact local or READ-granted Memories into one local Context."""
 
     memory_locators: tuple[str, ...]
     into_locator: str | None = None

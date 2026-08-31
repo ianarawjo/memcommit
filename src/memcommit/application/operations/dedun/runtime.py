@@ -85,7 +85,7 @@ class MemoryStoreDedunPort:
         if access.view is None:
             return
         missing = sorted(
-            {"READ", "DERIVE", "DELETE"} - set(access.view.grant.permissions)
+            {"READ", "DELETE"} - set(access.view.grant.permissions)
         )
         if missing:
             raise DedunAuthorityError(
@@ -212,7 +212,7 @@ class MemoryStoreDedunPort:
         access = self._revalidated_access(plan)
         with authorized_context_mutation(
             access,
-            required_permissions=("READ", "DERIVE", "DELETE"),
+            required_permissions=("READ", "DELETE"),
         ):
             # Scan and mutation share the command lock so a new inbound pointer
             # cannot appear between reference validation and deletion.
@@ -607,7 +607,7 @@ def apply_recursive_dedun_scope(
     )
     with authorized_context_mutation(
         root_access,
-        required_permissions=("READ", "DERIVE", "DELETE"),
+        required_permissions=("READ", "DELETE"),
     ):
         checkpoints = active_store.save_context_command_batch(
             entries,

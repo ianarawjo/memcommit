@@ -15,9 +15,6 @@ class ReferenceError(RuntimeError):
 # at the operation contract instead of letting adapters choose weaker subsets.
 GRANTED_MEMORY_REFERENCE_PERMISSIONS = (
     "READ",
-    "DERIVE",
-    "EXPORT",
-    "SAVE_ANALYSIS",
 )
 
 

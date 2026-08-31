@@ -18,11 +18,6 @@ from memcommit.application.capabilities.authority.context_access import (
 from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
-from memcommit.application.authorization.source_use import (
-    authorize_analysis_save,
-    authorize_combination,
-    authorize_derived_transfer,
-)
 from memcommit.application.operations.copy_and_move.application import (
     CopyMemoriesRequest,
     CopyMemoriesResult,
@@ -367,28 +362,14 @@ def _unique_source_accesses(
     return tuple(accesses)
 
 
-def _access_domain(access: ContextAccess) -> tuple[str, ...]:
-    if access.is_granted and access.view is not None:
-        return (
-            "grant",
-            access.view.grant.uid,
-            access.view.grant.resource_uid,
-        )
-    return ("local", str(access.store.store_dir), access.context_name)
-
-
 def _authority_checks(
     accesses: tuple[ContextAccess, ...],
 ) -> tuple[tuple[ContextAccess, tuple[str, ...]], ...]:
-    multiple_domains = len({_access_domain(access) for access in accesses}) > 1
     checks: list[tuple[ContextAccess, tuple[str, ...]]] = []
     for access in accesses:
         if not access.is_granted:
             continue
-        permissions = ["READ", "DERIVE", "EXPORT", "SAVE_ANALYSIS"]
-        if multiple_domains:
-            permissions.append("COMBINE")
-        checks.append((access, tuple(permissions)))
+        checks.append((access, ("READ",)))
     return tuple(checks)
 
 
@@ -530,10 +511,10 @@ class MemoryStoreCopyAndMovePort:
                     )
                 if kind == "MOVE":
                     raise MemoryTransferAuthorityError(
-                        f"Move cannot use granted Source {public_name!r}: EXPORT "
-                        "permits a retained Copy, not deletion or cross-Profile "
-                        "ownership transfer. Copy it into a local Context first, "
-                        "then move the local copy."
+                        f"Move cannot use granted Source {public_name!r}: READ "
+                        "permits a Copy, not deletion or cross-Profile ownership "
+                        "transfer. Copy it into a local Context first, then move "
+                        "the local copy."
                     )
                 context = access.store.load_direct(access.context_name)
                 additions.append(
@@ -674,11 +655,6 @@ class MemoryStoreCopyAndMovePort:
         )
         frames_by_name = {frame.display_name: frame for frame in frames}
         accesses = _unique_source_accesses(memories, frames_by_name)
-        target_access = into.access
-        authorize_combination(accesses)
-        authorize_analysis_save(accesses, retention="RETAINED")
-        for access in accesses:
-            authorize_derived_transfer(access, target_access)
         authority_checks = _authority_checks(accesses)
         placement = _placement_for_context(
             into.context,

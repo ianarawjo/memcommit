@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
+    AnalysisRetention,
     MEMORY_RELATION_RULESET_VERSION,
     MemoryRelationAnalysis,
     MemoryRelationError,
@@ -31,18 +32,11 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evi
     project_memory_relation_context as _project_memory_relation_context,
 )
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.application.authorization.source_use import (
-    AnalysisRetention,
-    analysis_retention,
-    authorize_analysis_save,
-    authorize_combination,
-)
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     load_granted_memory_relation_artifact,
     save_granted_memory_relation_artifact,
 )
 from memcommit.application.operations.profile.model import (
-    ProfileError,
     authority_grant_snapshot_lock,
 )
 from memcommit.providers.policy import (
@@ -110,13 +104,6 @@ def load_memory_relation_context(
     return project_memory_relation_context(context)
 
 
-def _missing_durable_analysis_error() -> ProfileError:
-    return ProfileError(
-        "Symmetric Meld must save its ordered Compare basis, but the available "
-        "Grants do not share SAVE_ANALYSIS or SAVE_BOUND_ANALYSIS authority."
-    )
-
-
 def ensure_memory_relation_analysis(
     *,
     store: MemoryStore,
@@ -145,7 +132,6 @@ def ensure_memory_relation_analysis(
     """
 
     accesses = (reference_access, compared_access)
-    authorize_combination(accesses)
     granted = any(access.is_granted for access in accesses)
     bindings = tuple(
         freeze_granted_context_binding(access) if access.is_granted else None
@@ -215,14 +201,6 @@ def ensure_memory_relation_analysis(
             origin="SAVED_REUSE",
         )
 
-    retention = analysis_retention(accesses) if granted else None
-    if require_durable and granted and retention is None:
-        # Fail before provider connection: an unsaved basis cannot become a
-        # reproducible target-bound symmetric Meld session.
-        raise _missing_durable_analysis_error()
-    if retention is not None:
-        authorize_analysis_save(accesses, retention=retention)
-
     equivalent_analysis = (
         equivalent(comparison_input) if equivalent is not None and not refresh else None
     )
@@ -284,7 +262,6 @@ def ensure_memory_relation_analysis(
                             registry=registry,
                         )
                     )
-                authorize_combination(current_accesses)
                 current_reference = load_memory_relation_context(
                     current_accesses[0],
                     include_descendants=include_descendants[0],
@@ -346,20 +323,15 @@ def ensure_memory_relation_analysis(
                     "A granted comparison source changed while Compare was "
                     "analyzing it; no result was published."
                 )
-            current_retention = analysis_retention(current_accesses)
-            if require_durable and current_retention is None:
-                raise _missing_durable_analysis_error()
-            if current_retention is not None:
-                save_granted_memory_relation_artifact(
-                    store,
-                    analysis,
-                    current_accesses,
-                    retention=current_retention,
-                    expected_analysis_uid=(
-                        existing.uid if existing is not None else None
-                    ),
-                    expected_analysis_version=existing_version,
-                )
+            current_retention: AnalysisRetention = "RETAINED"
+            save_granted_memory_relation_artifact(
+                store,
+                analysis,
+                current_accesses,
+                retention=current_retention,
+                expected_analysis_uid=(existing.uid if existing is not None else None),
+                expected_analysis_version=existing_version,
+            )
         return MemoryRelationExecutionResult(
             analysis=analysis,
             reused=equivalent_analysis is not None,

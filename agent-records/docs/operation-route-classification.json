@@ -48,7 +48,7 @@
           "agent-records/docs/granted-derived-ownership-design-rationale.md",
           "agent-records/docs/copy-and-move-design-rationale.md"
         ],
-        "reason": "CLI, Embed-shaped multi-Memory TUI, Python, and agent routes share one provider-free ordered direct-Memory plan, including explicit export-and-retain Grant bindings, local-only Target placement, mandatory fresh output UIDs, atomic checkpoint, and Undo/Redo boundary."
+        "reason": "CLI, Embed-shaped multi-Memory TUI, Python, and agent routes share one provider-free ordered direct-Memory plan, including exact READ Grant bindings, local-only Target placement, mandatory fresh output UIDs, atomic checkpoint, and Undo/Redo boundary."
       },
             "distill": {
                 "evidence": [
@@ -84,7 +84,7 @@
           "agent-records/docs/mem-embed-placement-design-rationale.md",
           "agent-records/docs/memory-reference-embed-semantics-design-rationale.md"
         ],
-        "reason": "Context and Memory live-link CLI/TUI, Python, and agent routes share typed placement, local or READ+EMBED Grant Source freeze, content-free live authority bindings, CAS Apply, and checkpoint contracts through one terminal-independent operation boundary."
+        "reason": "Context and Memory live-link CLI/TUI, Python, and agent routes share typed placement, local or READ-granted Source freeze, content-free live authority bindings, CAS Apply, and checkpoint contracts through one terminal-independent operation boundary."
       },
       "find": {
         "evidence": [
@@ -206,7 +206,7 @@
           "agent-records/docs/memory-reference-embed-semantics-design-rationale.md",
           "agent-records/docs/reference-callable-boundary-matrix.md"
         ],
-        "reason": "CLI, TUI, Python, and agent routes share one provider-free frozen local or explicit export-and-retain Grant Memory Source, local Target snapshot, content-digest revalidation, atomic checkpoint, and immutable stored-value contract."
+        "reason": "CLI, TUI, Python, and agent routes share one provider-free frozen local or explicit READ-granted Memory Source, local Target snapshot, content-digest revalidation, atomic checkpoint, and immutable stored-value contract."
       },
       "replace": {
         "evidence": [

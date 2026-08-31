@@ -954,7 +954,7 @@ def test_granted_dedup_requires_derive_and_delete_before_review(
     monkeypatch,
 ):
     local, _authority_store, target, _first, _second, _grant, handoff = (
-        _granted_dedup_fixture(tmp_path, monkeypatch, ("READ", "DERIVE"))
+        _granted_dedup_fixture(tmp_path, monkeypatch, ("READ",))
     )
 
     with pytest.raises(DedunAuthorityError, match="DELETE"):
@@ -975,12 +975,12 @@ def test_granted_dedup_revalidates_delete_through_apply(
         _granted_dedup_fixture(
             tmp_path,
             monkeypatch,
-            ("READ", "DERIVE", "DELETE"),
+            ("READ", "DELETE"),
         )
     )
     port = MemoryStoreDedunPort(local, current_name="workspace")
     plan = prepare_dedun(DedunRequest((handoff,)), port=port)
-    update_authority_grant(grant.uid, permissions=("READ", "DERIVE"))
+    update_authority_grant(grant.uid, permissions=("READ",))
 
     with pytest.raises(DedunAuthorityError):
         apply_dedun(plan, recommended_dedun_selections(plan), port=port)

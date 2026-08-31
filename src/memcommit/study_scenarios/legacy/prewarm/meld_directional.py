@@ -28,12 +28,6 @@ from memcommit.providers.policy import (
 )
 from memcommit.core.context import Context
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.application.authorization.source_use import (
-    analysis_retention,
-    authorize_analysis_save,
-    authorize_combination,
-    authorize_derived_transfer,
-)
 from memcommit.application.operations.meld.model import (
     MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
     MeldError,
@@ -716,14 +710,6 @@ def _current_request(
         required_permission="READ",
         registry=registry_snapshot,
     )
-    authorize_combination((incoming_access, baseline_access))
-    authorize_derived_transfer(incoming_access, baseline_access)
-    retention = analysis_retention((incoming_access, baseline_access))
-    if retention is None:
-        raise StudyPrewarmRegistryError(
-            "Directional Meld prewarm cannot retain analysis under current Grants."
-        )
-    authorize_analysis_save((incoming_access, baseline_access), retention=retention)
     incoming = _load_complete_context(
         incoming_access, registry_snapshot=registry_snapshot
     )

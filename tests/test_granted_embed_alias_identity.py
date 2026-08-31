@@ -74,7 +74,7 @@ def _two_alias_fixture(
         resource_name=source.name,
         attachment_name=target.name,
         public_name=first_alias,
-        permissions=("READ", "EMBED"),
+        permissions=("READ",),
     )
     create_authority_grant(
         authority_name=authority.name,
@@ -82,7 +82,7 @@ def _two_alias_fixture(
         resource_name=source.name,
         attachment_name=target.name,
         public_name=second_alias,
-        permissions=("READ", "EMBED"),
+        permissions=("READ",),
     )
     return local, target, source, first_alias, second_alias
 

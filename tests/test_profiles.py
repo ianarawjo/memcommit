@@ -66,8 +66,14 @@ runner = CliRunner(mix_stderr=False)
 
 
 def test_legacy_session_log_permission_normalizes_to_one_shot_query():
-    assert canonical_grant_permissions(("QUERY", "SESSION_LOG")) == ("QUERY",)
-    assert canonical_grant_permissions(("SESSION_LOG",)) == ("QUERY",)
+    assert canonical_grant_permissions(
+        ("QUERY", "SESSION_LOG"),
+        allow_legacy=True,
+    ) == ("QUERY",)
+    assert canonical_grant_permissions(
+        ("SESSION_LOG",),
+        allow_legacy=True,
+    ) == ("QUERY",)
 
 
 def _tree_digest(root: Path) -> str:
@@ -388,7 +394,7 @@ def test_init_study_selects_the_initialized_complete_profile(
     assert "task-1/participant/construction-updates" in contexts.stdout
     assert "task-1/campus-wiki" in contexts.stdout
     assert (
-        "GRANT  task-1/campus-wiki  READ + QUERY + EDIT + DELETE + EXPORT"
+        "GRANT  task-1/campus-wiki  READ + QUERY + EDIT + DELETE"
         in contexts.stdout
     )
     assert "task-1/campus-wiki/construction-details" in contexts.stdout
@@ -486,7 +492,7 @@ def test_init_study_selects_the_initialized_complete_profile(
     assert switched.returncode == 0, switched.stderr
     task_two_contexts = _subprocess_mem(tmp_path, "contexts")
     assert "task-2/advisor1" in task_two_contexts.stdout
-    assert "GRANT  task-2/advisor1  READ + EXPORT" in task_two_contexts.stdout
+    assert "GRANT  task-2/advisor1  READ" in task_two_contexts.stdout
     read_only_add = _subprocess_mem(
         tmp_path,
         "add",
@@ -510,10 +516,10 @@ def test_init_study_selects_the_initialized_complete_profile(
     assert "task-1/campus-wiki" in virtual_names
     assert "task-1/campus-wiki/route-changes" in virtual_names
     assert source_display_text(annotations["task-1/campus-wiki"]) == (
-        "GRANT · READ + QUERY + EDIT + DELETE + EXPORT"
+        "GRANT · READ + QUERY + EDIT + DELETE"
     )
     assert source_display_text(annotations["task-2/advisor1"]) == (
-        "GRANT · READ + EXPORT"
+        "GRANT · READ"
     )
     assert (
         source_display_text(annotations["task-2/proposal-submission-guidelines"])

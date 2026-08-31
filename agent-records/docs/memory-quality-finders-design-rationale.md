@@ -1,5 +1,7 @@
 # Memory quality finders
 
+> **Authorization contract updated 2026-08-30.** Permission claims below that use `EMBED`, `DERIVE`, `COMBINE`, `EXPORT`, `ACCEPT_DERIVED`, or `SAVE_*` describe the retired contract preserved for design history. The current contract uses `QUERY`, `CREATE`, `READ`, `UPDATE`, and `DELETE`; `READ` covers readable semantic use and Embed traversal, while `SHARE` remains a separate endpoint capability. See `granted-derived-ownership-design-rationale.md`.
+
 This note specifies the implemented command and data contract. For the
 reconstructed discussion that led to the labels, the rejected alternatives,
 the ambiguity `3 × 3` matrix, the relationship to the earlier `fit` idea, and

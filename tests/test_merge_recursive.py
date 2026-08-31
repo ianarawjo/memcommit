@@ -416,7 +416,7 @@ def test_recursive_merge_copies_a_read_granted_subtree_as_local_values(
         resource_name=root.name,
         attachment_name=attachment.name,
         public_name="advisor",
-        permissions=("READ", "DERIVE", "EXPORT"),
+        permissions=("READ",),
         recursive=True,
     )
 

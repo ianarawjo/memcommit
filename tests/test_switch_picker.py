@@ -726,7 +726,7 @@ def test_picker_context_clipboard_item_and_visible_branch_are_distinct():
         "selected": "task-1",
         "current": "task-1/participant",
         "annotations": {
-            "task-1/campus-wiki": grant_navigation_annotation(("READ", "EXPORT")),
+            "task-1/campus-wiki": grant_navigation_annotation(("READ",)),
         },
         "memories_by_context": memories,
         "visible_memory_contexts": {"task-1/description"},
@@ -747,7 +747,7 @@ def test_picker_context_clipboard_item_and_visible_branch_are_distinct():
         "      ▾ task-1/description",
         "    · [memory 2db26309] A long description that must remain one clipboard line.",
         "  *   ▸ task-1/participant",
-        "      ▸ GRANT task-1/campus-wiki  READ + EXPORT",
+        "      ▸ GRANT task-1/campus-wiki  READ",
     ]
     assert "task-1/participant/route-changes" not in branch.text
     assert "task-2" not in branch.text

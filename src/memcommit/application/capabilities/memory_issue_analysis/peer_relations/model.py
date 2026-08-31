@@ -62,6 +62,7 @@ MemoryRelationKind = Literal[
 ]
 MemoryRelationStatus = Literal["RESOLVED", "UNRESOLVED"]
 MemoryRelationIssuePriority = Literal["REQUIRED", "HELPFUL"]
+AnalysisRetention = Literal["GRANT_BOUND", "RETAINED"]
 
 _SIDES = {"REFERENCE", "COMPARED"}
 _RELATIONS = {

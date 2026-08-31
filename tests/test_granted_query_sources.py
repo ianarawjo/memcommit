@@ -95,7 +95,7 @@ def _read_authority_grants(
     tmp_path,
     monkeypatch,
     *,
-    permissions=("READ", "DERIVE", "COMBINE"),
+    permissions=("READ",),
 ):
     """Create two readable Sources attached to one distracting local workspace."""
 
@@ -537,43 +537,6 @@ def test_repeated_read_grants_freeze_exactly_the_named_ordinary_sources(
     assert all(public_name in result.output for _, public_name, _ in source_specs)
     assert attachment.name not in result.output
     assert local_distraction not in result.output
-
-
-@pytest.mark.parametrize(
-    ("permissions", "multiple", "expected_permission"),
-    (
-        (("READ",), False, "DERIVE"),
-        (("READ", "DERIVE"), True, "COMBINE"),
-    ),
-)
-def test_read_grant_query_fails_before_provider_without_derived_authority(
-    isolated_store,
-    tmp_path,
-    monkeypatch,
-    permissions,
-    multiple,
-    expected_permission,
-):
-    _attachment, _local_distraction, source_specs = _read_authority_grants(
-        isolated_store,
-        tmp_path,
-        monkeypatch,
-        permissions=permissions,
-    )
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.query.command.connect_codex_chatgpt_provider",
-        lambda: (_ for _ in ()).throw(
-            AssertionError("authority failure must precede provider construction")
-        ),
-    )
-    argv = ["query", "What do the authorized Sources say?"]
-    for _source_name, public_name, _content in source_specs[: 2 if multiple else 1]:
-        argv.extend(("--context", public_name))
-
-    result = runner.invoke(app, argv)
-
-    assert result.exit_code == 1
-    assert expected_permission in result.stderr
 
 
 def _federated_authority_grants(isolated_store, tmp_path, monkeypatch):

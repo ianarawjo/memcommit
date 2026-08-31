@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 
 import memcommit.application.capabilities.ops as ops
+from memcommit.application.authorization import ContextUse, authorize_context_use
 from memcommit.application.operations.add.application import (
     AddedMemory,
     AddRequest,
@@ -128,6 +129,7 @@ class MemoryStoreAddTargetPort(AddTargetPort):
             current_name=self._current_name,
             required_permission="CREATE",
         )
+        authorize_context_use(access, ContextUse.CREATE)
         context = access.store.load_direct(access.context_name)
         return FrozenAddTarget(
             context_name=access.display_name,
@@ -144,6 +146,7 @@ class MemoryStoreAddTargetPort(AddTargetPort):
         if not isinstance(token, _StoreAddTargetToken):
             raise ValueError("The frozen Add target binding is invalid.")
         access = token.access
+        authorize_context_use(access, ContextUse.CREATE)
         store = access.store
         context = store.load_direct(access.context_name)
         if context.uid != target.context_uid:

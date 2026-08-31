@@ -18,7 +18,6 @@ from memcommit.application.operations.compare.provider_contract import (
     summarize_comparison,
 )
 from memcommit.core.context import Context
-from memcommit.application.authorization.source_use import authorize_combination
 from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import MemoryStore
 
@@ -39,7 +38,6 @@ def run_comparison_summary(
     """Synthesize, revalidate, and return without retaining an artifact."""
 
     accesses = (reference_access, compared_access)
-    authorize_combination(accesses)
     bindings = tuple(
         freeze_granted_context_binding(access) if access.is_granted else None
         for access in accesses
@@ -75,7 +73,6 @@ def run_comparison_summary(
                     registry=registry,
                 )
             )
-        authorize_combination(current_accesses)
         current_reference = context_loader(
             current_accesses[0],
             include_descendants=include_descendants[0],
