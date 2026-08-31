@@ -210,7 +210,7 @@ separated Apply row is the single explicit mutation boundary. The complete
 report remains a Review concern and
 does not reappear as a second confirmation screen.
 
-An answerable compact item also exposes one directly writable
+By default, an answerable compact item also exposes one directly writable
 `DIRECTION OR NOTE · OPTIONAL` box after its authored choices. `Response` was
 rejected as ambiguous interaction copy: it does not say that a person may
 propose another direction or qualify a checked choice. The visible border is
@@ -227,9 +227,18 @@ operation adapter still decides whether text refines a semantic turn or
 supplies exact custom result wording. Both the choice and guidance stay
 process-local until Continue consumes them; closing the execution surface does
 not create a saved draft. Existing custom result text is not mistaken for
-newly pending guidance. Resolve, Merge, Dedun, and any other exact action
-without an item-response contract omit this box rather than accepting text
-they cannot honor.
+newly pending guidance. Merge, Dedun, and any other exact action without an
+item-response contract omit this box rather than accepting text they cannot
+honor.
+
+Resolve explicitly opts into a narrower variant because its text is not an
+independent note: it is the semantic value of choice 2. The shared shell places
+the one-line `YOUR INTENT` affordance immediately after that choice, but does
+not add it to the Up/Down row sequence. Enter on choice 2 opens editor mode;
+Enter or Escape freezes the draft on choice 2, while Up and Down freeze it and
+move directly to choices 1 and 3. A blank draft never satisfies readiness.
+This mode is presentation mechanics only and is not inherited by other compact
+callers without an explicit operation-owned contract.
 
 ## Common contract
 
@@ -552,22 +561,21 @@ target-bound and therefore do not expose a misleading save-as control.
 
 ### Resolve
 
-Resolve keeps terminal outcomes such as `ALREADY_FIT`, `NEEDS_INPUT`, and
-`NEEDS_AUTHORITY` in the shared read-only Viewer. A verified Fit-repair
-proposal instead projects its one independently checked candidate into the
-same compact execution form as Meld. The candidate is visibly selected, and
-the separate Apply row is the sole confirmation. This is also the form opened
-by a conflict Find handoff, so that handoff does not revive Resolve's former
-large Viewer/Responses/Items/To Do stack.
+Resolve keeps `NO_ISSUES` and `NEEDS_AUTHORITY` as read-only outcomes. It first
+loads or runs the complete Audit, then derives one direction per actionable
+Audit item. An answerable item opens a Resolve-owned compact decision surface
+with ACCEPT THIS DIRECTION, ADJUST WITH YOUR INTENT, and LEAVE UNRESOLVED.
+Multiple items retain `< n/total >` plus selectable PREV and NEXT controls
+immediately above FINALIZE DECISIONS; the intent choice alone opens its
+attached inline editor without making that editor another navigation row.
 
-The compact adapter neither regenerates candidates nor writes storage. It
-returns the selected candidate UID to the Resolve application callback, which
-applies the already verified process-local analysis after authority and
-freshness revalidation. Candidate and revision identity still bind the
-application contract even though the TUI does not add a second exact-command
-review page. Multiple Pareto-incomparable candidate selection remains outside
-this single-candidate compact route rather than being implied by positional
-choice order.
+The compact adapter neither plans mutations nor writes storage. It returns one
+typed decision per Audit item. Resolve binds those decisions to the Audit
+snapshot and frozen revision, projects accepted or person-authored meanings
+into one process-local Source, and calls ordinary Update once over the complete
+Target. LEAVE UNRESOLVED remains audit/control state and never becomes Source
+evidence. Publication occurs only after the complete detached post-image
+passes the full Audit gate, including the same Conformance Rules when present.
 
 ## Invariants
 

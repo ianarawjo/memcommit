@@ -6,10 +6,12 @@ import hashlib
 import json
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.authorization.context_operation import (
+    authorized_context_mutation,
+)
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
-    authorized_context_mutation,
     freeze_granted_context_binding,
     grant_checkpoint_args,
     revalidate_granted_context_binding,
@@ -22,7 +24,6 @@ from memcommit.application.operations.resolve.application import (
     RESOLVE_CONTRACT_VERSION,
     FrozenResolveFrame,
     ResolveAuthorityError,
-    ResolveCandidate,
     ResolveConflictError,
     ResolveEffectKind,
     ResolveError,
@@ -30,7 +31,15 @@ from memcommit.application.operations.resolve.application import (
     ResolveReceipt,
     ResolveRequest,
 )
-from memcommit.application.operations.resolve.rules import RESOLVE_RULESET_VERSION
+from memcommit.application.operations.resolve.decisions import (
+    ResolveFinalizedInput,
+)
+from memcommit.application.operations.update.model import (
+    AddOperation,
+    EditOperation,
+    RemoveOperation,
+    UpdatePlan,
+)
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
@@ -52,7 +61,6 @@ def _revision(
 ) -> str:
     payload = {
         "contract": RESOLVE_CONTRACT_VERSION,
-        "ruleset": RESOLVE_RULESET_VERSION,
         "context": {
             "uid": context_uid,
             "name": context_name,
@@ -62,7 +70,6 @@ def _revision(
         "actionable_uids": list(actionable_uids),
         "requested_effects": list(request.requested_effects),
         "guidance": request.guidance,
-        "target_fit": request.target_fit,
     }
     return hashlib.sha256(
         json.dumps(
@@ -263,13 +270,16 @@ class MemoryStoreResolvePort:
                 )
         self._require_current(frame, access)
 
-    @staticmethod
-    def _required_permissions(candidate: ResolveCandidate) -> tuple[str, ...]:
-        effects = {effect.kind for effect in candidate.effects}
-        return (
-            "READ",
-            *(effect for effect in _EFFECT_PERMISSION_ORDER if effect in effects),
-        )
+    def load_target(self, frame: FrozenResolveFrame) -> Context:
+        """Return the exact detached authority Context bound by ``frame``."""
+
+        if not isinstance(frame, FrozenResolveFrame):
+            raise TypeError("Resolve Target loading requires a frozen frame.")
+        access = self._revalidated_access(frame)
+        current = self._require_current(frame, access)
+        target = Context.from_dict(current.to_dict())
+        target._store_digest = current._store_digest
+        return target
 
     @staticmethod
     def _inbound_references(
@@ -291,41 +301,84 @@ class MemoryStoreResolvePort:
                     inbound.append((context.name, item.uid))
         return tuple(inbound)
 
-    def apply(
+    def apply_update_plan(
         self,
         frame: FrozenResolveFrame,
-        candidate: ResolveCandidate,
+        plan: UpdatePlan,
+        *,
+        unresolved_issue_uids: tuple[str, ...] = (),
+        finalized_inputs: tuple[ResolveFinalizedInput, ...] = (),
     ) -> ResolveReceipt:
+        """Publish one exact Update-generated plan through Resolve's lock."""
+
         if not isinstance(frame, FrozenResolveFrame) or not isinstance(
-            candidate, ResolveCandidate
+            plan, UpdatePlan
         ):
-            raise TypeError("Resolve Apply requires a reviewed frame and candidate.")
-        if any(
-            effect.kind not in frame.allowed_effects for effect in candidate.effects
+            raise TypeError("Resolve Apply requires a frozen frame and UpdatePlan.")
+        if plan.target_uid != frame.context_uid or plan.target_name != frame.context_name:
+            raise ResolveConflictError(
+                "Resolve UpdatePlan does not name its frozen target Context."
+            )
+        if (
+            not isinstance(unresolved_issue_uids, tuple)
+            or len(set(unresolved_issue_uids)) != len(unresolved_issue_uids)
+            or any(not isinstance(uid, str) or not uid for uid in unresolved_issue_uids)
         ):
+            raise ResolveError("Resolve unresolved Issue identities are invalid.")
+        if not isinstance(finalized_inputs, tuple) or any(
+            not isinstance(value, ResolveFinalizedInput)
+            for value in finalized_inputs
+        ):
+            raise TypeError("Resolve finalized inputs must use the typed contract.")
+
+        effect_by_type = {
+            AddOperation: "CREATE",
+            EditOperation: "UPDATE",
+            RemoveOperation: "DELETE",
+        }
+        effect_labels = tuple(
+            effect_by_type.get(type(operation)) for operation in plan.operations
+        )
+        if any(label is None for label in effect_labels):
+            raise ResolveError("Resolve UpdatePlan contains an unsupported operation.")
+        if any(label not in frame.allowed_effects for label in effect_labels):
             raise ResolveAuthorityError(
-                "Resolve candidate exceeds the reviewed effect capabilities."
+                "Resolve UpdatePlan exceeds the finalized effect capabilities."
             )
         if any(
-            effect.owner_context_uid != frame.context_uid
-            or effect.owner_context_name != frame.context_name
-            for effect in candidate.effects
+            operation.owner_context_uid != frame.context_uid
+            or operation.owner_context_name != frame.context_name
+            for operation in plan.operations
         ):
             raise ResolveConflictError(
-                "Resolve candidate names an owner outside its reviewed Context."
+                "Resolve UpdatePlan names an owner outside its frozen Context."
             )
-        access = self._revalidated_access(frame)
-        required_permissions = self._required_permissions(candidate)
+
+        required_permissions = (
+            "READ",
+            *(
+                effect
+                for effect in _EFFECT_PERMISSION_ORDER
+                if effect in effect_labels
+            ),
+        )
+        if not plan.operations:
+            # A force-only Resolve still writes its audit checkpoint. Require
+            # one reviewed mutation capability instead of treating that write
+            # as though READ authority alone permitted it.
+            required_permissions = ("READ", frame.allowed_effects[0])
         deleted_uids = {
-            effect.memory_uid for effect in candidate.effects if effect.kind == "DELETE"
+            operation.memory_uid
+            for operation in plan.operations
+            if isinstance(operation, RemoveOperation)
         }
+        access = self._revalidated_access(frame)
         with authorized_context_mutation(
             access,
             required_permissions=required_permissions,
         ):
-            # The command lock makes the inbound-reference scan, Context CAS,
-            # and checkpoint one ordered command. A concurrent writer cannot
-            # insert a new pointer between the scan and the deletion.
+            # Resolve owns publication and audit, while Update owns the exact
+            # plan. Keep the source scan, CAS, and checkpoint in one lock.
             with access.store._command_write_lock():  # noqa: SLF001
                 current = access.store.load_for_update(access.context_name)
                 if (
@@ -346,116 +399,92 @@ class MemoryStoreResolvePort:
                         for owner, reference_uid in inbound
                     )
                     raise ResolveConflictError(
-                        "Resolve cannot delete Memories with inbound references "
-                        f"in version 1: {locations}."
+                        "Resolve cannot delete Memories with inbound references: "
+                        + locations
                     )
-                for effect in candidate.effects:
-                    current_item = current.memories.get(effect.memory_uid)
-                    if effect.kind == "CREATE":
+                for operation in plan.operations:
+                    current_item = current.memories.get(operation.memory_uid)
+                    if isinstance(operation, AddOperation):
                         if current_item is not None:
                             raise ResolveConflictError(
-                                "Resolve CREATE uid already exists in the target."
+                                "Resolve addition uid already exists in the target."
                             )
-                        assert effect.new_content is not None
-                        current.add(Memory(effect.memory_uid, effect.new_content))
-                    elif effect.kind == "UPDATE":
+                        current.add(Memory(operation.memory_uid, operation.new_content))
+                    elif isinstance(operation, EditOperation):
                         if (
                             not isinstance(current_item, Memory)
-                            or current_item.content != effect.old_content
+                            or current_item.content != operation.old_content
                         ):
                             raise ResolveConflictError(
-                                "Resolve UPDATE target no longer matches its pre-image."
+                                "Resolve edit target no longer matches its pre-image."
                             )
-                        assert effect.new_content is not None
-                        current.replace(Memory(effect.memory_uid, effect.new_content))
+                        current.replace(
+                            Memory(operation.memory_uid, operation.new_content)
+                        )
                     else:
+                        assert isinstance(operation, RemoveOperation)
                         if (
                             not isinstance(current_item, Memory)
-                            or current_item.content != effect.old_content
+                            or current_item.content != operation.old_content
                         ):
                             raise ResolveConflictError(
-                                "Resolve DELETE target no longer matches its pre-image."
+                                "Resolve removal target no longer matches its pre-image."
                             )
-                        current.remove(effect.memory_uid)
+                        current.remove(operation.memory_uid)
+
                 checkpoint = access.store._save_command_locked(  # noqa: SLF001
                     current,
                     AutoCheckpoint(
                         command="resolve",
                         args={
                             "contract": RESOLVE_CONTRACT_VERSION,
-                            "ruleset": RESOLVE_RULESET_VERSION,
                             "revision": frame.revision,
-                            "target_fit": frame.request.target_fit,
-                            "candidate_uid": candidate.uid,
-                            "candidate_summary": candidate.summary,
-                            "classification": candidate.classification,
-                            "resolution_level": candidate.resolution_level,
-                            "rule_ids": list(candidate.rule_ids),
-                            "grounded": candidate.grounded,
-                            "verification_reason": candidate.verification_reason,
-                            "issues": [
-                                {
-                                    "uid": issue.uid,
-                                    "kind": issue.kind,
-                                    "memory_uids": list(issue.memory_uids),
-                                    "selected_interpretation": (
-                                        issue.selected_interpretation
-                                    ),
-                                    "basis_memory_uids": list(issue.basis_memory_uids),
-                                    "assumptions": list(issue.assumptions),
-                                    "reason": issue.reason,
-                                }
-                                for issue in candidate.issues
-                            ],
-                            "fit": {
-                                "question_id": candidate.fit.question_id,
-                                "verdict": candidate.fit.verdict,
-                                "reason": candidate.fit.reason,
-                                "considered_proposition_ids": list(
-                                    candidate.fit.considered_proposition_ids
-                                ),
-                                "material_proposition_ids": list(
-                                    candidate.fit.material_proposition_ids
-                                ),
-                            },
+                            "update_plan_uid": plan.uid,
+                            "update_plan_digest": plan.digest,
                             "effects": [
-                                effect.canonical_value() for effect in candidate.effects
+                                operation.to_dict() for operation in plan.operations
                             ],
+                            "finalized_inputs": [
+                                value.to_dict() for value in finalized_inputs
+                            ],
+                            "unresolved_issue_uids": list(unresolved_issue_uids),
                             "guidance": frame.request.guidance,
                             **grant_checkpoint_args(access),
                         },
                         description=(
-                            f"Resolved {len(candidate.effects)} Memory effect(s) "
-                            f"with candidate [{candidate.uid[-8:]}]"
+                            f"Resolved {len(plan.operations)} Memory effect(s) "
+                            "from finalized decisions"
                         ),
                     ),
                     expected_context_digest=frame.context_digest,
                 )
                 if checkpoint is None:
                     raise ResolveError(
-                        "Resolve Apply produced no checkpoint for a nonempty plan."
+                        "Resolve Apply produced no checkpoint for its UpdatePlan."
                     )
+
         return ResolveReceipt(
             context_uid=frame.context_uid,
             context_name=frame.display_name,
             revision=frame.revision,
-            candidate_uid=candidate.uid,
+            plan_uid=plan.uid,
             checkpoint_uid=checkpoint.uid,
             created_uids=tuple(
-                effect.memory_uid
-                for effect in candidate.effects
-                if effect.kind == "CREATE"
+                operation.memory_uid
+                for operation in plan.operations
+                if isinstance(operation, AddOperation)
             ),
             updated_uids=tuple(
-                effect.memory_uid
-                for effect in candidate.effects
-                if effect.kind == "UPDATE"
+                operation.memory_uid
+                for operation in plan.operations
+                if isinstance(operation, EditOperation)
             ),
             deleted_uids=tuple(
-                effect.memory_uid
-                for effect in candidate.effects
-                if effect.kind == "DELETE"
+                operation.memory_uid
+                for operation in plan.operations
+                if isinstance(operation, RemoveOperation)
             ),
+            unresolved_issue_uids=unresolved_issue_uids,
         )
 
 

@@ -9,6 +9,7 @@ from memcommit.adapters.python_api import (
     MemCommitClient,
     ResolveAnalysisResult,
     ResolveApplyResult,
+    ResolveDecisionInput,
     SemanticAuthorityError,
     SemanticConflictError,
     SemanticContextError,
@@ -35,7 +36,7 @@ from memcommit.application.capabilities.memory_issue_analysis.handoff import (
 )
 
 
-RESOLVE_AGENT_CONTRACT_VERSION = 2
+RESOLVE_AGENT_CONTRACT_VERSION = 4
 RESOLVE_AGENT_TOOL_NAME = "memcommit_resolve"
 RESOLVE_AGENT_ANALYSIS_CACHE_LIMIT = 64
 ResolveAgentKind = Literal["analyze", "apply"]
@@ -59,6 +60,43 @@ def _selectors(value: object) -> tuple[str, ...]:
     return selectors
 
 
+def _decisions(value: object) -> tuple[ResolveDecisionInput, ...]:
+    if not isinstance(value, list):
+        raise AgentRequestError("decisions must be an array.")
+    result: list[ResolveDecisionInput] = []
+    for index, item in enumerate(value):
+        record = object_value(item, label=f"decisions[{index}]")
+        exact_fields(
+            record,
+            required={"issue_uid", "kind"},
+            optional={"intent"},
+            label=f"decisions[{index}]",
+        )
+        kind = record["kind"]
+        if kind not in {"CONFIRM", "INTENT", "FORCE"}:
+            raise AgentRequestError(
+                f"decisions[{index}].kind must be CONFIRM, INTENT, or FORCE."
+            )
+        result.append(
+            ResolveDecisionInput(
+                issue_uid=text_value(
+                    record["issue_uid"],
+                    field=f"decisions[{index}].issue_uid",
+                ),
+                kind=kind,
+                intent=(
+                    text_value(
+                        record["intent"],
+                        field=f"decisions[{index}].intent",
+                    )
+                    if "intent" in record
+                    else ""
+                ),
+            )
+        )
+    return tuple(result)
+
+
 def _parse_request(payload: object) -> tuple[ResolveAgentKind, dict[str, object]]:
     value = object_value(payload, label="Resolve request")
     version = value.get("version")
@@ -79,13 +117,12 @@ def _parse_request(payload: object) -> tuple[ResolveAgentKind, dict[str, object]
         "allow_create",
         "allow_delete",
         "guidance",
-        "target_fit",
         "finding_handoff",
     }
     required = {"version", "kind"}
     optional = common
     if kind == "apply":
-        required |= {"candidate_uid", "expected_revision"}
+        required |= {"decisions", "expected_revision"}
     exact_fields(
         value,
         required=required,
@@ -112,10 +149,7 @@ def _parse_request(payload: object) -> tuple[ResolveAgentKind, dict[str, object]
             if "guidance" in value
             else ""
         ),
-        "target_fit": value.get("target_fit", "MAY"),
     }
-    if arguments["target_fit"] not in {"MAY", "YES"}:
-        raise AgentRequestError("target_fit must be MAY or YES.")
     if "finding_handoff" in value:
         try:
             handoff = QualityFindingHandoff.from_dict(value["finding_handoff"])
@@ -129,7 +163,7 @@ def _parse_request(payload: object) -> tuple[ResolveAgentKind, dict[str, object]
         arguments["finding_handoff"] = handoff
     if kind == "apply":
         arguments.update(
-            candidate_uid=text_value(value["candidate_uid"], field="candidate_uid"),
+            decisions=_decisions(value["decisions"]),
             expected_revision=text_value(
                 value["expected_revision"],
                 field="expected_revision",
@@ -144,55 +178,22 @@ def _analysis_result(result: ResolveAnalysisResult) -> JsonObject:
         "context_uid": result.context_uid,
         "revision": result.revision,
         "status": result.status,
-        "initial_fit": result.initial_fit,
-        "initial_fit_reason": result.initial_fit_reason,
         "question": result.question,
-        "target_fit": result.target_fit,
         "requested_effects": list(result.requested_effects),
         "allowed_effects": list(result.allowed_effects),
         "denied_effects": list(result.denied_effects),
-        "candidates": [
+        "issues": [
             {
-                "uid": candidate.uid,
-                "summary": candidate.summary,
-                "classification": candidate.classification,
-                "resolution_level": candidate.resolution_level,
-                "rule_ids": list(candidate.rule_ids),
-                "grounded": candidate.grounded,
-                "issues": [
-                    {
-                        "uid": issue.uid,
-                        "kind": issue.kind,
-                        "memory_uids": list(issue.memory_uids),
-                        "selected_interpretation": issue.selected_interpretation,
-                        "basis_memory_uids": list(issue.basis_memory_uids),
-                        "assumptions": list(issue.assumptions),
-                        "reason": issue.reason,
-                    }
-                    for issue in candidate.issues
-                ],
-                "cost": {
-                    "deletes": candidate.deletes,
-                    "creates": candidate.creates,
-                    "updates": candidate.updates,
-                    "changed_units": candidate.changed_units,
-                },
-                "verification_reason": candidate.verification_reason,
-                "fit_verdict": candidate.fit_verdict,
-                "fit_reason": candidate.fit_reason,
-                "effects": [
-                    {
-                        "kind": effect.kind,
-                        "memory_uid": effect.memory_uid,
-                        "before": effect.before,
-                        "after": effect.after,
-                        "source_memory_uids": list(effect.source_memory_uids),
-                        "reason": effect.reason,
-                    }
-                    for effect in candidate.effects
-                ],
+                "uid": issue.uid,
+                "audit_key": issue.audit_key,
+                "kind": issue.kind,
+                "classification": issue.classification,
+                "memory_uids": list(issue.memory_uids),
+                "proposed_direction": issue.proposed_direction,
+                "reason": issue.reason,
+                "question": issue.question,
             }
-            for candidate in result.candidates
+            for issue in result.issues
         ],
         "effect": "NONE",
     }
@@ -203,11 +204,12 @@ def _apply_result(result: ResolveApplyResult) -> JsonObject:
         "context_name": result.context_name,
         "context_uid": result.context_uid,
         "revision": result.revision,
-        "candidate_uid": result.candidate_uid,
+        "plan_uid": result.plan_uid,
         "checkpoint_uid": result.checkpoint_uid,
         "created_uids": list(result.created_uids),
         "updated_uids": list(result.updated_uids),
         "deleted_uids": list(result.deleted_uids),
+        "unresolved_issue_uids": list(result.unresolved_issue_uids),
         "effect": "CHECKPOINT",
     }
 
@@ -235,7 +237,7 @@ _PUBLIC_ERRORS: tuple[tuple[type[SemanticError], str, str, bool], ...] = (
     (
         SemanticConflictError,
         "concurrent_update",
-        "The Resolve frame or exact candidate changed.",
+        "The Resolve frame or finalized decisions changed.",
         False,
     ),
     (
@@ -254,20 +256,14 @@ _PUBLIC_ERRORS: tuple[tuple[type[SemanticError], str, str, bool], ...] = (
 
 
 class ResolveAgentAdapter:
-    """Expose analysis and next-turn exact Apply through one agent tool.
-
-    A verified grounded analysis is retained only in this adapter process.  A
-    following Apply can therefore use the exact typed plan the agent already
-    showed instead of asking a nondeterministic provider to reproduce it.
-    Stateless replay remains the fail-closed fallback after process restart.
-    """
+    """Expose complete-Audit decisions and next-turn Update-backed Apply."""
 
     def __init__(self, client: MemCommitClient) -> None:
         if not isinstance(client, MemCommitClient):
             raise TypeError("ResolveAgentAdapter requires a MemCommitClient.")
         self._client = client
         self._analyses: dict[
-            tuple[str, str],
+            str,
             tuple[ResolveAnalysisResult, dict[str, object]],
         ] = {}
 
@@ -290,7 +286,6 @@ class ResolveAgentAdapter:
                 "allow_create",
                 "allow_delete",
                 "guidance",
-                "target_fit",
                 "finding_handoff",
             )
         )
@@ -300,11 +295,8 @@ class ResolveAgentAdapter:
         analysis: ResolveAnalysisResult,
         arguments: dict[str, object],
     ) -> None:
-        for candidate in analysis.candidates:
-            self._analyses[(analysis.revision, candidate.uid)] = (
-                analysis,
-                dict(arguments),
-            )
+        if analysis.issues:
+            self._analyses[analysis.revision] = (analysis, dict(arguments))
         while len(self._analyses) > RESOLVE_AGENT_ANALYSIS_CACHE_LIMIT:
             # The cache is a short next-turn bridge, not a durable session log.
             self._analyses.pop(next(iter(self._analyses)))
@@ -327,11 +319,11 @@ class ResolveAgentAdapter:
                 retryable=False,
             )
         try:
-            candidate_uid = arguments.pop("candidate_uid", None)
+            decisions = arguments.pop("decisions", ())
             expected_revision = arguments.pop("expected_revision", None)
             cached = (
-                self._analyses.get((expected_revision, candidate_uid))
-                if isinstance(expected_revision, str) and isinstance(candidate_uid, str)
+                self._analyses.get(expected_revision)
+                if isinstance(expected_revision, str)
                 else None
             )
             request_arguments = dict(arguments)
@@ -342,23 +334,13 @@ class ResolveAgentAdapter:
                     cached[0], cached[1], request_arguments
                 )
             ):
-                cached_candidate = next(
-                    candidate
-                    for candidate in cached[0].candidates
-                    if candidate.uid == candidate_uid
-                )
-                if not cached_candidate.grounded:
-                    raise SemanticInputError(
-                        "An ASSUMED Resolve interpretation is process-local "
-                        "working context and cannot be applied."
-                    )
                 result = _apply_result(
                     self._client.apply_resolve(
                         cached[0],
-                        candidate_uid=candidate_uid,
+                        decisions=decisions,
                     )
                 )
-                self._analyses.pop((expected_revision, candidate_uid), None)
+                self._analyses.pop(expected_revision, None)
                 return {
                     "version": RESOLVE_AGENT_CONTRACT_VERSION,
                     "ok": True,
@@ -385,17 +367,10 @@ class ResolveAgentAdapter:
                 self._remember(analysis, request_arguments)
                 result = _analysis_result(analysis)
             else:
-                assert isinstance(candidate_uid, str)
-                if not any(
-                    candidate.uid == candidate_uid for candidate in analysis.candidates
-                ):
-                    raise SemanticConflictError(
-                        "The reviewed Resolve candidate was not regenerated."
-                    )
                 result = _apply_result(
                     self._client.apply_resolve(
                         analysis,
-                        candidate_uid=candidate_uid,
+                        decisions=decisions,
                     )
                 )
         except SemanticError as error:
@@ -449,13 +424,10 @@ def resolve_agent_tool_schema() -> JsonObject:
     return {
         "name": RESOLVE_AGENT_TOOL_NAME,
         "description": (
-            "Analyze one complete exact Context for one automatic grounded or "
-            "assumed Issue interpretation plan, "
-            "or apply that exact typed plan on the next turn using its revision "
-            "and candidate UID; a restarted process falls back to fail-closed "
-            "regeneration. UPDATE and CREATE are enabled by default; "
-            "DELETE requires explicit opt-in and grounding guidance. ASSUMED plans "
-            "are process-local and cannot be applied."
+            "Load or run one complete Context Audit, derive a conservative direction "
+            "for every Audit item, then apply one decision per item on the next turn. "
+            "Resolve turns accepted directions and exact intent into a process-local "
+            "Source; the ordinary Update planner generates one whole-Context plan."
         ),
         "parameters": {
             "type": "object",
@@ -472,13 +444,23 @@ def resolve_agent_tool_schema() -> JsonObject:
                 "allow_create": {"type": "boolean", "default": True},
                 "allow_delete": {"type": "boolean", "default": False},
                 "guidance": text,
-                "target_fit": {
-                    "type": "string",
-                    "enum": ["MAY", "YES"],
-                    "default": "MAY",
-                },
                 "finding_handoff": quality_finding_handoff_agent_schema(),
-                "candidate_uid": text,
+                "decisions": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": False,
+                        "required": ["issue_uid", "kind"],
+                        "properties": {
+                            "issue_uid": text,
+                            "kind": {
+                                "type": "string",
+                                "enum": ["CONFIRM", "INTENT", "FORCE"],
+                            },
+                            "intent": text,
+                        },
+                    },
+                },
                 "expected_revision": text,
             },
         },

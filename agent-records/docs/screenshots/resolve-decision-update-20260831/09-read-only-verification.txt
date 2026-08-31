@@ -1,0 +1,23 @@
+MEM RESOLVE · 1/2 · PLANNING EXACT MEMORY CHANGES . · 0s
+UPDATE PROVIDER GATE · PRESS U
+MEM RESOLVE · 1/2 · PLANNING EXACT MEMORY CHANGES .. · 0su
+MEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE . · 0s
+POST-IMAGE AUDIT GATE · PRESS C
+MEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE … · 1s c
+RESOLVE · capture/resolve
+APPLIED · UPDATE 2 · AUDIT ISSUES 0
+CHECKPOINT · 6e50ab18-762b-468b-ba55-1730a34d8997
+REVIEW · mem review resolve --receipt 6e50ab18-762b-468b-ba55-1730a34d8997
+RECOVERY · mem undo
+CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION
+v
+
+READ-ONLY RESULT VERIFICATION
+  [11111111-0000-4000-8000-000000000111] General greetings end with a period; named greetings may omit punctuation.
+  [22222222-0000-4000-8000-000000000112] Named greetings may omit punctuation.
+  [33333333-0000-4000-8000-000000000113] Non-named greetings follow the house punctuation rule.
+  CHECKPOINT COMMAND · resolve
+  FINALIZED INPUTS · [{"issue_uid": "audit-item-dd8ce0e71fa94b7dcaa626e722349d178e765a0044e509c25d0d2b164b55961a", "kind": "CONFIRM", "content": "Named greetings remain exceptions
+to the general rule."}, {"issue_uid": "audit-item-e0595ea919c19b5af9ce6b786ab615d4eca008f00e313c6739a5402eb2907d98", "kind": "INTENT", "content": "The exception applies only to nam
+ed greetings."}]
+  UNRESOLVED ISSUE COUNT · 0

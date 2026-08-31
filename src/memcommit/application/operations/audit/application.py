@@ -32,9 +32,10 @@ from memcommit.application.operations.check_conformance.model import (
     check_context_conformance,
 )
 from memcommit.application.operations.check_conformance.runtime import (
+    FrozenContextConformance,
     freeze_context_conformance,
 )
-from memcommit.core.context import Context
+from memcommit.core.context import Context, Memory
 from memcommit.providers.types import CompletionRun, ProviderIdentity
 
 
@@ -114,6 +115,103 @@ def record_quality_audit(
     repository.create(QualityAuditSession.from_dict(session.to_dict()))
 
 
+def _conformance_matches(
+    session: QualityAuditSession,
+    frozen_rules: FrozenContextConformance | None,
+) -> bool:
+    """Match an explicitly requested Rules frame without weakening Audit reuse."""
+
+    if frozen_rules is None:
+        # With no newly supplied Rules operand, the newest exact-source Audit is
+        # reusable as recorded, including its optional fourth check.
+        return True
+    conformance = session.conformance
+    if conformance is None:
+        return False
+    return (
+        conformance.rules_label == frozen_rules.rules_name
+        and tuple((rule.uid, rule.content) for rule in conformance.rules)
+        == tuple((rule.uid, rule.content) for rule in frozen_rules.rules)
+    )
+
+
+def find_current_quality_audit(
+    repository: AuditRecordRepository,
+    ctx: Context,
+    *,
+    conformance_rules: Context | None = None,
+) -> QualityAuditSession | None:
+    """Return the newest Audit over the exact current direct-Memory frame."""
+
+    source = QualityAuditSource.from_context(ctx)
+    frozen_rules = (
+        None
+        if conformance_rules is None
+        else freeze_context_conformance(source.context(), conformance_rules)
+    )
+    matches = tuple(
+        session
+        for session in repository.list()
+        if session.source.context_uid == source.context_uid
+        and session.source.context_digest == source.context_digest
+        and _conformance_matches(session, frozen_rules)
+    )
+    if not matches:
+        return None
+    return max(matches, key=lambda session: (session.created_at, session.uid))
+
+
+def get_or_run_quality_audit(
+    ctx: Context,
+    provider_factory: Callable[[], FindingsProvider],
+    repository: AuditRecordRepository,
+    *,
+    conformance_rules: Context | None = None,
+    on_check: Callable[[QualityAuditKind, int, int], None] | None = None,
+    on_conformance: Callable[[], None] | None = None,
+) -> QualityAuditSession:
+    """Reuse one exact completed Audit or atomically publish a fresh result."""
+
+    current = find_current_quality_audit(
+        repository,
+        ctx,
+        conformance_rules=conformance_rules,
+    )
+    if current is not None:
+        return current
+    session = run_quality_audit(
+        ctx,
+        provider_factory,
+        conformance_rules=conformance_rules,
+        on_check=on_check,
+        on_conformance=on_conformance,
+    )
+    record_quality_audit(repository, session)
+    return session
+
+
+def audit_conformance_rules_context(
+    session: QualityAuditSession,
+) -> Context | None:
+    """Reconstruct the exact frozen Rules frame for a post-image Audit."""
+
+    conformance = session.conformance
+    if conformance is None:
+        return None
+    rules = Context(
+        uid=str(
+            uuid.uuid5(
+                uuid.NAMESPACE_URL,
+                f"memcommit:audit-rules:{conformance.digest}",
+            )
+        ),
+        name=conformance.rules_label,
+    )
+    for rule in conformance.rules:
+        rules.add(Memory(rule.uid, rule.content))
+    return rules
+
+
 def run_quality_audit(
     ctx: Context,
     provider_factory: Callable[[], FindingsProvider],
@@ -177,4 +275,11 @@ def run_quality_audit(
     )
 
 
-__all__ = ["create_quality_audit", "record_quality_audit", "run_quality_audit"]
+__all__ = [
+    "audit_conformance_rules_context",
+    "create_quality_audit",
+    "find_current_quality_audit",
+    "get_or_run_quality_audit",
+    "record_quality_audit",
+    "run_quality_audit",
+]

@@ -5,10 +5,11 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.context_access import (
-    resolve_context_access,
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
+    try_resolve_context_access_or_local_memory,
 )
-from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
 from memcommit.application.capabilities.local_target_lookup import (
     LocalDirectMemoryLocatorStore,
@@ -17,10 +18,9 @@ from memcommit.application.capabilities.local_target_lookup import (
 )
 from memcommit.core.context_targeting.model import (
     DirectMemoryLocator,
-    ExistingContextOperand,
+    DirectMemoryTarget,
 )
 from memcommit.core.context_targeting.resolution import (
-    parse_auto_typed_context_memory_operand,
     parse_direct_memory_locator,
 )
 from memcommit.application.operations.resolve.application import ResolveError
@@ -51,76 +51,77 @@ def normalize_resolve_cli_targets(
     start current Context, and all resulting Contexts must agree.
     """
 
-    context_locators: list[str] = []
+    context_names: list[str] = []
     memory_locators: list[DirectMemoryLocator] = []
+    context_candidates = freeze_profile_context_access_candidates(
+        store,
+        current_name=current_context_name,
+    )
+
+    def add_context_operand(operand: str) -> str:
+        resolved = resolve_existing_context_access(
+            store,
+            operand,
+            current_name=current_context_name,
+            required_permission="READ",
+            candidates=context_candidates,
+        )
+        context_names.append(resolved.name)
+        return resolved.name
 
     if context_locator is not None:
-        context_locators.append(context_locator)
+        add_context_operand(context_locator)
 
     def add_memory_operand(operand: str) -> None:
         locator = parse_direct_memory_locator(operand)
-        memory_locators.append(locator)
         if locator.context_locator is not None:
-            context_locators.append(locator.context_locator)
+            owner_name = add_context_operand(locator.context_locator)
+            locator = DirectMemoryLocator(locator.memory_selector, owner_name)
+        memory_locators.append(locator)
 
     for operand in auto_operands:
-        parsed = parse_auto_typed_context_memory_operand(operand)
-        if isinstance(parsed, DirectMemoryLocator):
-            memory_locators.append(parsed)
-            if parsed.context_locator is not None:
-                context_locators.append(parsed.context_locator)
-        else:
-            assert isinstance(parsed, ExistingContextOperand)
-            short_target = None
-            if is_memory_uid_prefix(parsed.locator):
-                canonical = resolve_context_locator(
-                    parsed.locator,
-                    current=current_context_name,
+        if ":" in operand:
+            add_memory_operand(operand)
+            continue
+        target = try_resolve_context_access_or_local_memory(
+            store,
+            operand,
+            current_name=current_context_name,
+            candidates=context_candidates,
+        )
+        if isinstance(target, DirectMemoryTarget):
+            context_names.append(target.context_name)
+            memory_locators.append(
+                DirectMemoryLocator(target.memory_uid, target.context_name)
+            )
+            continue
+        if target is not None:
+            context_names.append(target.name)
+            continue
+        short_target = (
+            try_resolve_short_local_direct_memory_locator(
+                store,
+                operand,
+                current=current_context_name,
+            )
+            if is_memory_uid_prefix(operand)
+            else None
+        )
+        if short_target is not None:
+            context_names.append(short_target.context_name)
+            memory_locators.append(
+                DirectMemoryLocator(
+                    short_target.memory_uid,
+                    short_target.context_name,
                 )
-                exact_context = store.context_exists(canonical)
-                if not exact_context:
-                    try:
-                        resolve_context_access(
-                            store,
-                            canonical,
-                            current_name=current_context_name,
-                            required_permission="READ",
-                        )
-                    except FileNotFoundError:
-                        pass
-                    else:
-                        exact_context = True
-                short_target = (
-                    None
-                    if exact_context
-                    else try_resolve_short_local_direct_memory_locator(
-                        store,
-                        parsed.locator,
-                        current=current_context_name,
-                    )
-                )
-            if short_target is None:
-                # A nonlocal name may still be a readable Grant. Resolve's
-                # authority port retains the final existence decision.
-                context_locators.append(parsed.locator)
-            else:
-                context_locators.append(short_target.context_name)
-                memory_locators.append(
-                    DirectMemoryLocator(
-                        short_target.memory_uid,
-                        short_target.context_name,
-                    )
-                )
+            )
+            continue
+        add_context_operand(operand)
 
     for operand in memory_operands:
         add_memory_operand(operand)
 
-    canonical_contexts = list(
-        dict.fromkeys(
-            resolve_context_locator(locator, current=current_context_name)
-            for locator in context_locators
-        )
-    )
+    canonical_contexts = list(dict.fromkeys(context_names))
     if canonical_contexts:
         selectors = tuple(locator.memory_selector for locator in memory_locators)
     else:

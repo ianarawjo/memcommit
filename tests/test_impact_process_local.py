@@ -31,7 +31,6 @@ from memcommit.application.operations.distill.model import (
 )
 from memcommit.application.operations.distill.application import DistillResult
 from memcommit.application.operations.distill.goal_fit import DistillGoalFit
-from memcommit.application.operations.fit.judgment import FitAssessment
 from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
     FrozenForgetSource,
@@ -40,16 +39,26 @@ from memcommit.application.operations.forget.application import (
 from memcommit.application.operations.resolve.application import (
     FrozenResolveFrame,
     ResolveAnalysis,
-    ResolveCandidate,
-    ResolveCost,
-    ResolveEffect,
     ResolveFrameMemory,
     ResolveIssue,
     ResolveRequest,
 )
+from memcommit.application.operations.audit.application import create_quality_audit
+from memcommit.application.operations.audit.model import (
+    QUALITY_AUDIT_RULESETS,
+    QualityAuditCheck,
+    QualityAuditProvenance,
+)
+from memcommit.application.capabilities.memory_issue_analysis.model import (
+    AmbiguityReport,
+    ConflictFinding,
+    ConflictReport,
+    DuplicateReport,
+)
 from memcommit.application.operations.summarize.model import collect_summary_frame
 from memcommit.application.operations.summarize.application import FrozenSummarySource
 from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.providers.types import ProviderIdentity
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
 
@@ -120,83 +129,35 @@ class _DistillProvider:
 
 
 class _ResolveProvider:
+    identity = ProviderIdentity(provider="test", model="resolve-model")
+
     def complete(self, prompt, *, operation, output_schema=None):
-        if operation == "fit_propositions":
-            payload = json.loads(prompt.split("FIT PROPOSITION PAYLOAD:\n", 1)[1])
-            judgments = []
-            for question in payload["questions"]:
-                aliases = [
-                    item["proposition_id"]
-                    for item in (*question["background"], *question["propositions"])
-                ]
-                initial = question["question_id"] == "resolve-initial"
-                judgments.append(
-                    {
-                        "question_id": question["question_id"],
-                        "verdict": "NO" if initial else "YES",
-                        "reason": (
-                            "The original times conflict."
-                            if initial
-                            else "The revised frame is compatible."
-                        ),
-                        "considered_proposition_ids": aliases,
-                        "material_proposition_ids": aliases if initial else [],
-                        "consistent_reading": "",
-                        "inconsistent_reading": "",
-                    }
-                )
-            return json.dumps(
-                {"overview": "Complete Fit coverage.", "judgments": judgments}
-            )
-        if operation == "resolve_candidates":
+        if operation in {"find_duplicates", "find_ambiguities"}:
+            return json.dumps({"findings": []})
+        if operation == "find_conflicts":
+            payload = json.loads(prompt.split("QUALITY FIND PAYLOAD:\n", 1)[1])
             return json.dumps(
                 {
-                    "question": "Which schedule scope should be authoritative?",
-                    "candidates": [
+                    "findings": [
                         {
-                            "summary": "Scope the second schedule.",
-                            "classification": "EXACT_GROUNDING",
-                            "resolution_level": "YES",
-                            "rule_ids": ["R04_EXACT_GROUNDING"],
-                            "issues": [
-                                {
-                                    "issue_id": "schedule-scope",
-                                    "kind": "TEMPORAL",
-                                    "memory_ids": ["m1", "m2"],
-                                    "selected_interpretation": (
-                                        "The schedules apply on different days."
-                                    ),
-                                    "basis_ids": ["m1", "m2"],
-                                    "assumptions": [],
-                                    "reason": "The edit exposes the day scope.",
-                                }
-                            ],
-                            "effects": [
-                                {
-                                    "kind": "UPDATE",
-                                    "target_id": "m2",
-                                    "new_content": "The office opens at 9 on weekends.",
-                                    "source_ids": ["m1", "m2"],
-                                    "reason": "The weekend scope preserves both claims.",
-                                }
-                            ],
+                            "pair_id": payload["pairs"][0]["pair_id"],
+                            "conflict": "YES",
+                            "reason": "The statements need an explicit day scope.",
+                            "question": "Which schedule applies on which day?",
                         }
                     ],
                 }
             )
-        if operation == "resolve_candidate_verification":
-            payload = json.loads(prompt.split("VERIFY PAYLOAD:\n", 1)[1])
+        if operation == "resolve_audit_directions":
+            payload = json.loads(prompt.split("RESOLVE AUDIT PAYLOAD:\n", 1)[1])
             return json.dumps(
                 {
-                    "reviews": [
+                    "directions": [
                         {
-                            "candidate_id": candidate["candidate_id"],
-                            "grounded": True,
-                            "preserves_information": True,
-                            "delete_justified": True,
-                            "reason": "The candidate uses only cited Source content.",
+                            "item_id": item["item_id"],
+                            "direction": "The schedules apply on different days.",
                         }
-                        for candidate in payload["candidates"]
+                        for item in payload["audit"]["items"]
                     ]
                 }
             )
@@ -271,79 +232,89 @@ def _distill_result() -> DistillResult:
 
 
 def _resolve_analysis() -> ResolveAnalysis:
+    context_uid = "00000000-0000-4000-8000-000000000201"
+    first_uid = "00000000-0000-4000-8000-000000000211"
+    second_uid = "00000000-0000-4000-8000-000000000212"
+    context = Context(uid=context_uid, name="impact/resolve")
+    first = Memory(uid=first_uid, content="The office opens at 8.")
+    second = Memory(uid=second_uid, content="The office opens at 9.")
+    context.add(first)
+    context.add(second)
+    def provenance(kind):
+        return QualityAuditProvenance(
+            operation=f"find_{kind}",
+            provider_called=True,
+            identity=ProviderIdentity(provider="test", model="resolve-model"),
+        )
+    audit = create_quality_audit(
+        context,
+        (
+            QualityAuditCheck(
+                "duplicates",
+                QUALITY_AUDIT_RULESETS["duplicates"],
+                DuplicateReport(memory_count=2, findings=()),
+                provenance("duplicates"),
+            ),
+            QualityAuditCheck(
+                "ambiguities",
+                QUALITY_AUDIT_RULESETS["ambiguities"],
+                AmbiguityReport(memory_count=2, findings=()),
+                provenance("ambiguities"),
+            ),
+            QualityAuditCheck(
+                "conflicts",
+                QUALITY_AUDIT_RULESETS["conflicts"],
+                ConflictReport(
+                    memory_count=2,
+                    pair_count=1,
+                    findings=(
+                        ConflictFinding(
+                            first,
+                            second,
+                            "YES",
+                            "The statements need an explicit day scope.",
+                            "Which schedule applies on which day?",
+                        ),
+                    ),
+                ),
+                provenance("conflicts"),
+            ),
+        ),
+    )
     request = ResolveRequest("impact/resolve")
     frame = FrozenResolveFrame(
         request=request,
-        context_uid="context-1",
+        context_uid=context_uid,
         context_name="impact/resolve",
         display_name="impact/resolve",
         context_digest="digest",
         revision="revision",
         memories=(
-            ResolveFrameMemory("m1", "memory-1", "The office opens at 8."),
-            ResolveFrameMemory("m2", "memory-2", "The office opens at 9."),
+            ResolveFrameMemory("m1", first_uid, first.content),
+            ResolveFrameMemory("m2", second_uid, second.content),
         ),
-        actionable_uids=("memory-1", "memory-2"),
+        actionable_uids=(first_uid, second_uid),
         allowed_effects=("UPDATE", "CREATE"),
     )
 
-    def candidate(uid: str, target: str, new_content: str) -> ResolveCandidate:
-        return ResolveCandidate(
-            uid=uid,
-            summary="Scope one schedule statement.",
-            classification="EXACT_GROUNDING",
-            resolution_level="YES",
-            rule_ids=("R04_EXACT_GROUNDING",),
-            issues=(
-                ResolveIssue(
-                    uid="schedule-scope",
-                    kind="TEMPORAL",
-                    memory_uids=("memory-1", "memory-2"),
-                    selected_interpretation=("The schedules apply on different days."),
-                    basis_memory_uids=("memory-1", "memory-2"),
-                    assumptions=(),
-                    reason="The edit exposes the day scope.",
-                ),
-            ),
-            effects=(
-                ResolveEffect(
-                    kind="UPDATE",
-                    owner_context_uid=frame.context_uid,
-                    owner_context_name=frame.display_name,
-                    memory_uid=target,
-                    old_content=(
-                        "The office opens at 8."
-                        if target == "memory-1"
-                        else "The office opens at 9."
-                    ),
-                    new_content=new_content,
-                    source_memory_uids=("memory-1", "memory-2"),
-                    reason="The explicit day scope makes the frame compatible.",
-                ),
-            ),
-            grounded=True,
-            verification_reason="The complete revised frame independently Fits.",
-            fit=FitAssessment(
-                question_id=f"verify-{uid}",
-                verdict="YES",
-                reason="The complete revised frame is compatible.",
-                considered_proposition_ids=("p1", "p2"),
-                material_proposition_ids=(),
-            ),
-            cost=ResolveCost(deletes=0, creates=0, updates=1, changed_units=1),
-        )
-
-    first = candidate(
-        "candidate-1",
-        "memory-2",
-        "The office opens at 9 on weekends.",
-    )
     return ResolveAnalysis(
         frame=frame,
-        status="PROPOSAL",
-        initial_fit=None,
-        candidates=(first,),
-        question="Use the automatic schedule interpretation?",
+        status="NEEDS_INPUT",
+        audit=audit,
+        question="Finalize one decision for every Audit item.",
+        issues=(
+            ResolveIssue(
+                uid="schedule-scope",
+                audit_key=f"CONFLICT:{first_uid}:{second_uid}",
+                audit_snapshot_digest=audit.snapshot_digest,
+                kind="CONFLICT",
+                classification="YES",
+                memory_uids=(first_uid, second_uid),
+                proposed_direction="The schedules apply on different days.",
+                reason="The statements need an explicit day scope.",
+                question="Which schedule applies on which day?",
+            ),
+        ),
     )
 
 
@@ -382,32 +353,24 @@ def test_distill_impact_marks_the_result_not_created_and_source_unchanged() -> N
     assert "[ APPLY? ]" not in rendered
 
 
-def test_resolve_impact_projects_one_exact_verified_candidate_diff() -> None:
+def test_resolve_impact_has_no_effect_plan_before_decisions() -> None:
     rendered = render_impact_session_snapshot(
-        resolve_impact_presentation(
-            _resolve_analysis(),
-            candidate_uid=None,
-        )
+        resolve_impact_presentation(_resolve_analysis())
     )
 
-    assert "IMPACT · RESOLVE · SAME SOURCE" in rendered
-    assert "- The office opens at 9." in rendered
-    assert "+ The office opens at 9 on weekends." in rendered
+    assert "IMPACT · RESOLVE · DECISIONS FIRST" in rendered
+    assert "UPDATE PLAN" in rendered
+    assert "NOT BUILT" in rendered
+    assert "The schedules apply on different days." in rendered
     assert "[ APPLY? ]" not in rendered
 
 
-def test_resolve_impact_projects_the_automatic_plan_without_a_choice_set() -> None:
+def test_resolve_impact_explains_the_decision_first_boundary() -> None:
     rendered = render_impact_session_snapshot(
-        resolve_impact_presentation(
-            _resolve_analysis(),
-            candidate_uid=None,
-        )
+        resolve_impact_presentation(_resolve_analysis())
     )
 
-    assert "IMPACT · RESOLVE · SAME SOURCE" in rendered
-    assert "automatic, independently Fit-verified interpretation plan" in rendered
-    assert "candidate-1" not in rendered
-    assert "candidate-2" not in rendered
+    assert "No mutation plan exists before Resolve decisions are finalized." in rendered
     assert "[ APPLY? ]" not in rendered
 
 
@@ -480,7 +443,7 @@ def test_distill_route_leaves_the_proposed_result_uncreated(
     assert context_record_digest(store.load_direct(source.name)) == before
 
 
-def test_resolve_route_projects_verified_effects_without_applying(
+def test_resolve_route_projects_decision_inputs_without_planning_or_applying(
     isolated_store,
     monkeypatch,
 ) -> None:
@@ -504,8 +467,10 @@ def test_resolve_route_projects_verified_effects_without_applying(
     )
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert "IMPACT · RESOLVE · SAME SOURCE" in result.output
-    assert "The office opens at 9 on weekends." in result.output
+    assert "IMPACT · RESOLVE · DECISIONS FIRST" in result.output
+    assert "The schedules apply on different days." in result.output
+    assert "UPDATE PLAN" in result.output
+    assert "NOT BUILT" in result.output
     assert context_record_digest(store.load_direct(source.name)) == before
     assert tuple(store.list_checkpoints(source.name)) == checkpoints
 

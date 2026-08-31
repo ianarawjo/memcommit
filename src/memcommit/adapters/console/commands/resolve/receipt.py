@@ -15,12 +15,12 @@ def _line(label: str, value: str) -> None:
 def render_resolve_receipt(
     receipt: ResolveReceipt,
     *,
-    fit_verdict: str,
+    verification: str | None = None,
 ) -> None:
     """Render one durable exact Apply receipt."""
 
-    if fit_verdict not in {"MAY", "YES"}:
-        raise ValueError("An applied Resolve receipt requires Fit MAY or YES.")
+    if verification is None:
+        verification = "POST-IMAGE CHECKED"
     typer.secho(
         f"RESOLVE · {display_escape_text(receipt.context_name)}",
         bold=True,
@@ -33,7 +33,11 @@ def render_resolve_receipt(
     effects = " · ".join(
         f"{kind} {count}" for kind, count in effect_counts if count
     )
-    _line("APPLIED", f"{effects} · FIT {fit_verdict}")
+    if not effects:
+        effects = "NO MEMORY CHANGES"
+    _line("APPLIED", f"{effects} · {verification}")
+    if receipt.unresolved_issue_uids:
+        _line("UNRESOLVED", str(len(receipt.unresolved_issue_uids)))
     _line("CHECKPOINT", receipt.checkpoint_uid)
     _line(
         "REVIEW",

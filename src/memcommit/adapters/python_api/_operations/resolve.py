@@ -19,11 +19,9 @@ from memcommit.adapters.python_api.errors import (
 from memcommit.adapters.python_api.resolve import (
     ResolveAnalysisResult,
     ResolveApplyResult,
-    ResolveCandidateResult,
-    ResolveEffectResult,
+    ResolveDecisionInput,
     ResolveIssueResult,
 )
-from memcommit.application.operations.fit.judgment import FitJudgmentError
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
@@ -37,10 +35,17 @@ from memcommit.application.operations.resolve.application import (
     ResolveAuthorityError,
     ResolveConflictError,
     ResolveError,
-    ResolveFitTarget,
     ResolveRequest,
-    apply_resolve as apply_core_resolve,
     run_resolve,
+)
+from memcommit.application.operations.resolve.decisions import (
+    ResolveDecision,
+    apply_resolve_update,
+    plan_resolve_update,
+)
+from memcommit.application.capabilities.memory_issue_analysis.model import FindingsError
+from memcommit.application.operations.update.model import (
+    UpdateError,
 )
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
@@ -54,6 +59,7 @@ from memcommit.application.operations.resolve.semantic import (
     ProviderResolveSemanticPort,
 )
 from memcommit.persistence.store import ConcurrentContextUpdateError
+from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 
 
 def _port(runtime: ClientRuntime) -> MemoryStoreResolvePort:
@@ -92,57 +98,22 @@ def _public(analysis: ResolveAnalysis) -> ResolveAnalysisResult:
         context_uid=analysis.frame.context_uid,
         revision=analysis.frame.revision,
         status=analysis.status,
-        initial_fit=(
-            analysis.initial_fit.verdict if analysis.initial_fit is not None else None
-        ),
-        initial_fit_reason=(
-            analysis.initial_fit.reason if analysis.initial_fit is not None else None
-        ),
         question=analysis.question,
-        target_fit=analysis.frame.request.target_fit,
         requested_effects=tuple(analysis.frame.request.requested_effects),
         allowed_effects=tuple(analysis.frame.allowed_effects),
         denied_effects=tuple(analysis.frame.denied_effects),
-        candidates=tuple(
-            ResolveCandidateResult(
-                uid=candidate.uid,
-                summary=candidate.summary,
-                classification=candidate.classification,
-                resolution_level=candidate.resolution_level,
-                rule_ids=candidate.rule_ids,
-                issues=tuple(
-                    ResolveIssueResult(
-                        uid=issue.uid,
-                        kind=issue.kind,
-                        memory_uids=issue.memory_uids,
-                        selected_interpretation=issue.selected_interpretation,
-                        basis_memory_uids=issue.basis_memory_uids,
-                        assumptions=issue.assumptions,
-                        reason=issue.reason,
-                    )
-                    for issue in candidate.issues
-                ),
-                effects=tuple(
-                    ResolveEffectResult(
-                        kind=effect.kind,
-                        memory_uid=effect.memory_uid,
-                        before=effect.old_content,
-                        after=effect.new_content,
-                        source_memory_uids=effect.source_memory_uids,
-                        reason=effect.reason,
-                    )
-                    for effect in candidate.effects
-                ),
-                grounded=candidate.grounded,
-                verification_reason=candidate.verification_reason,
-                fit_verdict=candidate.fit.verdict,
-                fit_reason=candidate.fit.reason,
-                deletes=candidate.cost.deletes,
-                creates=candidate.cost.creates,
-                updates=candidate.cost.updates,
-                changed_units=candidate.cost.changed_units,
+        issues=tuple(
+            ResolveIssueResult(
+                uid=issue.uid,
+                audit_key=issue.audit_key,
+                kind=issue.kind,
+                classification=issue.classification,
+                memory_uids=issue.memory_uids,
+                proposed_direction=issue.proposed_direction,
+                reason=issue.reason,
+                question=issue.question,
             )
-            for candidate in analysis.candidates
+            for issue in analysis.review_issues
         ),
         _application_analysis=analysis,
     )
@@ -156,10 +127,9 @@ def resolve_context(
     allow_create: bool = True,
     allow_delete: bool = False,
     guidance: str = "",
-    target_fit: ResolveFitTarget = "MAY",
     expected_revision: str | None = None,
 ) -> ResolveAnalysisResult:
-    """Generate and verify one automatic full-frame interpretation plan."""
+    """Return conflicts and conservative understandings for human decisions."""
 
     try:
         if isinstance(memory_selectors, (str, bytes)):
@@ -170,7 +140,6 @@ def resolve_context(
             allow_create=allow_create,
             allow_delete=allow_delete,
             guidance=guidance,
-            target_fit=target_fit,
         )
     except (ResolveError, TypeError, ValueError) as error:
         raise_public(SemanticInputError, error)
@@ -184,7 +153,6 @@ def resolve_conflict_finding(
     allow_create: bool = True,
     allow_delete: bool = False,
     guidance: str = "",
-    target_fit: ResolveFitTarget = "MAY",
     expected_revision: str | None = None,
 ) -> ResolveAnalysisResult:
     """Resolve one exact conflict receipt through the normal fresh authority frame."""
@@ -195,7 +163,6 @@ def resolve_conflict_finding(
             allow_create=allow_create,
             allow_delete=allow_delete,
             guidance=guidance,
-            target_fit=target_fit,
         )
     except (QualityFindingHandoffError, ResolveError, TypeError, ValueError) as error:
         raise_public(SemanticInputError, error)
@@ -222,7 +189,6 @@ def _run_request(
                 allow_create=request.allow_create,
                 allow_delete=request.allow_delete,
                 guidance=request.guidance,
-                target_fit=request.target_fit,
                 source_precondition=request.source_precondition,
             )
         except (ResolveError, TypeError, ValueError) as error:
@@ -232,7 +198,9 @@ def _run_request(
             request,
             frame_port=port,
             semantic_port=ProviderResolveSemanticPort(),
-            provider_factory=lambda: safe_semantic_provider(runtime),
+            audit_repository=JsonAuditRecordRepository(runtime.store),
+            audit_provider_factory=lambda: safe_semantic_provider(runtime),
+            direction_provider_factory=lambda: safe_semantic_provider(runtime),
             expected_revision=expected_revision,
         )
     except ResolveAuthorityError as error:
@@ -247,7 +215,7 @@ def _run_request(
         raise_public(SemanticProviderFailure, error)
     except SemanticProviderFailure:
         raise
-    except (FitJudgmentError, ResolveError) as error:
+    except ResolveError as error:
         raise_public(SemanticExecutionError, error)
     except OSError as error:
         raise_public(SemanticStorageError, error)
@@ -258,28 +226,38 @@ def apply_resolve(
     runtime: ClientRuntime,
     analysis: ResolveAnalysisResult,
     *,
-    candidate_uid: str,
+    decisions: Sequence[ResolveDecisionInput],
 ) -> ResolveApplyResult:
-    """Apply one exact candidate from a reviewed public analysis object."""
+    """Generate and apply one verified UpdatePlan from finalized decisions."""
 
     if not isinstance(analysis, ResolveAnalysisResult):
         raise SemanticInputError("Resolve Apply requires a ResolveAnalysisResult.")
-    if not isinstance(candidate_uid, str) or not candidate_uid:
-        raise SemanticInputError("Resolve Apply requires a candidate uid.")
+    if isinstance(decisions, (str, bytes)):
+        raise SemanticInputError("Resolve decisions must be a sequence.")
+    try:
+        core_decisions = tuple(
+            ResolveDecision(value.issue_uid, value.kind, value.intent)
+            for value in decisions
+        )
+    except (AttributeError, ResolveError, TypeError, ValueError) as error:
+        raise_public(SemanticInputError, error)
     port = _port(runtime)
     try:
-        receipt = apply_core_resolve(
+        proposal = plan_resolve_update(
             analysis._application_analysis,
-            candidate_uid,
+            core_decisions,
             frame_port=port,
+            update_provider_factory=lambda: safe_semantic_provider(runtime),
+            audit_provider_factory=lambda: safe_semantic_provider(runtime),
         )
+        receipt = apply_resolve_update(proposal, frame_port=port)
     except ResolveAuthorityError as error:
         raise_public(SemanticAuthorityError, error)
     except (ResolveConflictError, ConcurrentContextUpdateError) as error:
         raise_public(SemanticConflictError, error)
     except (ProfileConfigError, ProfileError) as error:
         raise_public(SemanticAuthorityError, error)
-    except ResolveError as error:
+    except (FindingsError, UpdateError, ResolveError) as error:
         raise_public(SemanticInputError, error)
     except OSError as error:
         raise_public(SemanticStorageError, error)
@@ -289,11 +267,12 @@ def apply_resolve(
         context_name=receipt.context_name,
         context_uid=receipt.context_uid,
         revision=receipt.revision,
-        candidate_uid=receipt.candidate_uid,
+        plan_uid=receipt.plan_uid,
         checkpoint_uid=receipt.checkpoint_uid,
         created_uids=receipt.created_uids,
         updated_uids=receipt.updated_uids,
         deleted_uids=receipt.deleted_uids,
+        unresolved_issue_uids=receipt.unresolved_issue_uids,
     )
 
 

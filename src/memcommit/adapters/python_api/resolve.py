@@ -10,43 +10,24 @@ if TYPE_CHECKING:
 
 
 @dataclass(frozen=True)
-class ResolveEffectResult:
-    kind: str
-    memory_uid: str
-    before: str | None
-    after: str | None
-    source_memory_uids: tuple[str, ...]
-    reason: str
-
-
-@dataclass(frozen=True)
 class ResolveIssueResult:
     uid: str
+    audit_key: str
     kind: str
+    classification: str
     memory_uids: tuple[str, ...]
-    selected_interpretation: str
-    basis_memory_uids: tuple[str, ...]
-    assumptions: tuple[str, ...]
+    proposed_direction: str
     reason: str
+    question: str
 
 
 @dataclass(frozen=True)
-class ResolveCandidateResult:
-    uid: str
-    summary: str
-    classification: str
-    resolution_level: str
-    rule_ids: tuple[str, ...]
-    issues: tuple[ResolveIssueResult, ...]
-    effects: tuple[ResolveEffectResult, ...]
-    grounded: bool
-    verification_reason: str
-    fit_verdict: str
-    fit_reason: str
-    deletes: int
-    creates: int
-    updates: int
-    changed_units: int
+class ResolveDecisionInput:
+    """One public finalized response to an Issue returned by Resolve."""
+
+    issue_uid: str
+    kind: str
+    intent: str = ""
 
 
 @dataclass(frozen=True)
@@ -55,14 +36,11 @@ class ResolveAnalysisResult:
     context_uid: str
     revision: str
     status: str
-    initial_fit: str | None
-    initial_fit_reason: str | None
     question: str
-    target_fit: str
     requested_effects: tuple[str, ...]
     allowed_effects: tuple[str, ...]
     denied_effects: tuple[str, ...]
-    candidates: tuple[ResolveCandidateResult, ...]
+    issues: tuple[ResolveIssueResult, ...]
     _application_analysis: "ResolveAnalysis" = field(repr=False, compare=False)
 
 
@@ -71,17 +49,17 @@ class ResolveApplyResult:
     context_name: str
     context_uid: str
     revision: str
-    candidate_uid: str
+    plan_uid: str
     checkpoint_uid: str
     created_uids: tuple[str, ...]
     updated_uids: tuple[str, ...]
     deleted_uids: tuple[str, ...]
+    unresolved_issue_uids: tuple[str, ...] = ()
 
 
 __all__ = [
     "ResolveAnalysisResult",
     "ResolveApplyResult",
-    "ResolveCandidateResult",
-    "ResolveEffectResult",
+    "ResolveDecisionInput",
     "ResolveIssueResult",
 ]

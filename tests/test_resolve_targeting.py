@@ -9,20 +9,20 @@ from memcommit.application.operations.resolve.targeting import normalize_resolve
 from memcommit.persistence.store import MemoryStore
 
 
-class _UnusedStore:
-    def context_exists(self, _name: str) -> bool:
-        raise AssertionError("Context-backed normalization must not scan the store.")
-
-    def load_direct(self, _name: str):
-        raise AssertionError("Context-backed normalization must not scan the store.")
-
-    def load_direct_context_graph_strict(self):
-        raise AssertionError("Context-backed normalization must not scan the store.")
-
-
-def test_resolve_targets_classify_context_and_memory_auto_operands() -> None:
+def test_resolve_targets_classify_context_and_memory_auto_operands(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    source = ops.init("practice/source")
+    memory = Memory(
+        uid="abcdef12-1111-4111-8111-111111111111",
+        content="focused",
+    )
+    source.add(memory)
+    store.save(source)
+    store.save(ops.init("practice"))
     targets = normalize_resolve_cli_targets(
-        _UnusedStore(),
+        store,
         ("practice/source", "abcdef12"),
         context_locator=None,
         memory_operands=(),
@@ -30,12 +30,22 @@ def test_resolve_targets_classify_context_and_memory_auto_operands() -> None:
     )
 
     assert targets.context_name == "practice/source"
-    assert targets.memory_selectors == ("abcdef12",)
+    assert targets.memory_selectors == (memory.uid,)
 
 
-def test_resolve_targets_share_one_relative_context_snapshot() -> None:
+def test_resolve_targets_share_one_relative_context_snapshot(isolated_store) -> None:
+    store = MemoryStore()
+    source = ops.init("work/source")
+    source.add(
+        Memory(
+            uid="abcdef12-1111-4111-8111-111111111111",
+            content="focused",
+        )
+    )
+    store.save(source)
+    store.save(ops.init("work/current"))
     targets = normalize_resolve_cli_targets(
-        _UnusedStore(),
+        store,
         ("../source:abcdef12",),
         context_locator="work/source",
         memory_operands=(),
@@ -80,10 +90,40 @@ def test_resolve_targets_accept_short_prefix_as_auto_or_explicit_memory(
     assert explicit.memory_selectors == ("abcd",)
 
 
-def test_resolve_targets_reject_distinct_contexts() -> None:
+def test_resolve_targets_accept_context_uid_as_context_not_memory(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    source = ops.init("work/source")
+    store.save(source)
+
+    targets = normalize_resolve_cli_targets(
+        store,
+        (source.uid[:8],),
+        context_locator=None,
+        memory_operands=(),
+        current_context_name=None,
+    )
+
+    assert targets.context_name == source.name
+    assert targets.memory_selectors == ()
+
+
+def test_resolve_targets_reject_distinct_contexts(isolated_store) -> None:
+    store = MemoryStore()
+    store.save(ops.init("work/source"))
+    other = ops.init("work/other")
+    other.add(
+        Memory(
+            uid="abcdef12-1111-4111-8111-111111111111",
+            content="focused",
+        )
+    )
+    store.save(other)
+    store.save(ops.init("work/current"))
     with pytest.raises(ResolveError, match="select multiple Contexts"):
         normalize_resolve_cli_targets(
-            _UnusedStore(),
+            store,
             ("work/source", "work/other:abcdef12"),
             context_locator=None,
             memory_operands=(),

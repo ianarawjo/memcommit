@@ -1,0 +1,14 @@
+ RESOLVE · < 2/2 >
+ CONFLICT · [22222222] “Named greetings may omit punctuation.” ↔ [33333333] “All greetings follow the house punctuation rule.”
+ Which greetings are in the exception?
+  1 · ACCEPT THIS DIRECTION · The exception applies only to named greetings.
+✓ 2 · ADJUST WITH YOUR INTENT · Enter the direction this should follow.
+      YOUR INTENT  │ ›                                                │
+  3 · LEAVE UNRESOLVED · Exclude this item from Update input and retain it as unresolved.
+
+
+  [← PREV]        2/2        [NEXT →]
+
+  FINALIZE DECISIONS · 1/2
+
+ Type your intent · Enter save · ↑/↓ save and choose · Esc freeze

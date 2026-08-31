@@ -1,4 +1,4 @@
-"""Generate and explicitly apply grounded Fit-repair candidates."""
+"""Collect decisions for a complete Audit and apply one whole-Context Update."""
 
 from __future__ import annotations
 
@@ -6,16 +6,24 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.adapters.console import is_interactive_terminal
+from memcommit.adapters.console.clipboard import write_system_clipboard
+from memcommit.adapters.console.commands.resolve.workbench import (
+    run_resolve_tui,
+)
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
-from memcommit.application.operations.fit.judgment import FitJudgmentError
 from memcommit.adapters.console.commands.resolve.analysis import render_resolve_plain
 from memcommit.adapters.console.commands.resolve.receipt import render_resolve_receipt
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.capabilities.operand_resolution import (
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
+)
 from memcommit.providers.subscription import (
     QueryProviderError,
     connect_semantic_provider,
@@ -23,12 +31,16 @@ from memcommit.providers.subscription import (
 from memcommit.application.operations.resolve.application import (
     ResolveError,
     ResolveRequest,
-    apply_resolve,
     run_resolve,
+)
+from memcommit.application.operations.resolve.decisions import (
+    apply_resolve_update,
+    plan_resolve_update,
 )
 from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.application.operations.resolve.semantic import (
     ProviderResolveSemanticPort,
+    all_audit_issue_keys,
 )
 from memcommit.application.operations.resolve.targeting import (
     normalize_resolve_cli_targets,
@@ -41,6 +53,7 @@ from memcommit.application.operations.resolve.finding_handoff import (
     conflict_handoff_to_resolve_request,
 )
 from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 
 
 def cmd(
@@ -72,13 +85,22 @@ def cmd(
             ),
         ),
     ] = None,
+    against: Annotated[
+        Optional[str],
+        typer.Option(
+            "--against",
+            "--rule",
+            metavar="RULES_CONTEXT",
+            help="Optional local Rules Context for the fourth Audit section",
+        ),
+    ] = None,
     allow_create: Annotated[
         bool,
         typer.Option(
             "--allow-create/--no-create",
             help=(
-                "Allow the automatic interpretation plan to add grounded direct "
-                "Memories; enabled by default"
+                "Allow finalized Resolve input to add supported direct Memories; "
+                "enabled by default"
             ),
         ),
     ] = True,
@@ -86,23 +108,16 @@ def cmd(
         bool,
         typer.Option(
             "--allow-delete",
-            help="Permit guidance-grounded deletion candidates",
+            help="Permit a supported removal in the finalized UpdatePlan",
         ),
     ] = False,
     guidance: Annotated[
         Optional[str],
         typer.Option(
             "--guidance",
-            help="Grounding instruction or fact available to candidate generation",
+            help="Additional context available while deriving Audit directions",
         ),
     ] = None,
-    yes: Annotated[
-        bool,
-        typer.Option(
-            "--yes",
-            help="Require an exact YES resolution whose post-image also Fits as YES",
-        ),
-    ] = False,
     finding_handoff: Annotated[
         Optional[str],
         typer.Option(
@@ -110,43 +125,20 @@ def cmd(
             help="Canonical conflict handoff JSON emitted by find-conflicts",
         ),
     ] = None,
-    candidate_uid: Annotated[
-        Optional[str],
-        typer.Option(
-            "--candidate",
-            help="Exact full candidate id from a reviewed Resolve analysis",
-        ),
-    ] = None,
-    expected_revision: Annotated[
-        Optional[str],
-        typer.Option(
-            "--expected-revision",
-            help="Reviewed Context revision required to apply",
-        ),
-    ] = None,
-    apply_now: Annotated[
-        bool,
-        typer.Option(
-            "--apply",
-            help="Apply the exact regenerated candidate after Fit verification",
-        ),
-    ] = False,
 ) -> None:
-    """Make one complete Memory frame Fit through grounded minimum changes."""
+    """Resolve a complete Audit from finalized intent through one Update plan."""
 
     try:
-        if apply_now:
-            if candidate_uid is None or expected_revision is None:
-                raise ResolveError(
-                    "Resolve --apply requires --candidate and --expected-revision."
-                )
-        elif candidate_uid is not None or expected_revision is not None:
-            raise ResolveError(
-                "Resolve --candidate and --expected-revision require --apply."
-            )
-
         store = MemoryStore(create=False)
         snapshot = ContextOperandSnapshot.capture(store)
+        rules_ctx = None
+        if against is not None:
+            rules_name = resolve_existing_context_operand(
+                freeze_local_context_operand_candidates(store),
+                against,
+                current=snapshot.current_name,
+            ).name
+            rules_ctx = store.load_direct(rules_name)
         if finding_handoff is not None:
             if context_name is not None or auto_operands or memory_operands:
                 raise ResolveError(
@@ -158,7 +150,6 @@ def cmd(
                 allow_create=allow_create,
                 allow_delete=allow_delete,
                 guidance=guidance or "",
-                target_fit="YES" if yes else "MAY",
             )
         else:
             targets = normalize_resolve_cli_targets(
@@ -174,7 +165,6 @@ def cmd(
                 allow_create=allow_create,
                 allow_delete=allow_delete,
                 guidance=guidance or "",
-                target_fit="YES" if yes else "MAY",
             )
         port = MemoryStoreResolvePort(
             store,
@@ -189,50 +179,65 @@ def cmd(
                 request,
                 frame_port=port,
                 semantic_port=ProviderResolveSemanticPort(),
-                provider_factory=connect_semantic_provider,
-                expected_revision=expected_revision,
+                audit_repository=JsonAuditRecordRepository(store),
+                audit_provider_factory=connect_semantic_provider,
+                direction_provider_factory=connect_semantic_provider,
+                conformance_rules=rules_ctx,
             )
-            progress.update("repair ready", step=1)
+            progress.update("Audit directions ready", step=1)
 
-        if apply_now:
-            assert candidate_uid is not None
-            receipt = apply_resolve(
-                analysis,
-                candidate_uid,
-                frame_port=port,
-            )
-            candidate = next(
-                candidate
-                for candidate in analysis.candidates
-                if candidate.uid == receipt.candidate_uid
-            )
-            render_resolve_receipt(
-                receipt,
-                fit_verdict=candidate.fit.verdict,
-            )
+        if not analysis.review_issues or not is_interactive_terminal():
+            render_resolve_plain(analysis)
+            if analysis.review_issues:
+                typer.echo("DECISIONS REQUIRED · reopen Resolve in an interactive terminal.")
             return
 
-        # A PROPOSAL is already the operation-owned, independently Fit-verified
-        # unique judgment. Resolve is an execution command, so that judgment is
-        # applied atomically here; the full reasoning remains available later
-        # through the immutable checkpoint Review.
-        if analysis.status == "PROPOSAL":
-            candidate = analysis.candidates[0]
-            receipt = apply_resolve(
-                analysis,
-                candidate.uid,
-                frame_port=port,
-            )
-            render_resolve_receipt(
-                receipt,
-                fit_verdict=candidate.fit.verdict,
-            )
+        decisions = run_resolve_tui(
+            analysis,
+            clipboard_writer=write_system_clipboard,
+        )
+        if decisions is None:
             return
+        with CommandProgress(
+            "RESOLVE",
+            "building whole-Context Update plan",
+            total=2,
+        ) as progress:
+            def connect_update():
+                progress.update("planning exact memory changes", step=1)
+                return connect_semantic_provider()
 
-        render_resolve_plain(analysis)
+            def connect_verifier():
+                progress.update("checking complete post-image", step=2)
+                return connect_semantic_provider()
+
+            proposal = plan_resolve_update(
+                analysis,
+                decisions,
+                frame_port=port,
+                update_provider_factory=connect_update,
+                audit_provider_factory=connect_verifier,
+            )
+        if proposal.blocking_audit_keys:
+            raise ResolveError(
+                "The Update post-image contains "
+                f"{len(proposal.blocking_audit_keys)} unforced Audit issue(s); "
+                "nothing was applied. Reopen Resolve with the new evidence."
+            )
+        receipt = apply_resolve_update(proposal, frame_port=port)
+        render_resolve_receipt(
+            receipt,
+            verification=(
+                f"AUDIT ISSUES {len(all_audit_issue_keys(proposal.post_audit))}"
+                + (
+                    f" · {len(receipt.unresolved_issue_uids)} FORCED"
+                    if receipt.unresolved_issue_uids
+                    else ""
+                )
+            ),
+        )
     except (
         FileNotFoundError,
-        FitJudgmentError,
         OSError,
         ProfileConfigError,
         ProfileError,

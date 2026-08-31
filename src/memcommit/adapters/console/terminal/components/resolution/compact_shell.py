@@ -75,6 +75,11 @@ def run_compact_resolution_decisions(
     response_text: Callable[[str], str] | None = None,
     stage_response: Callable[[str, str], None] | None = None,
     response_validator: Callable[[str], None] | None = None,
+    response_option_uid: Callable[[str], str | None] | None = None,
+    response_title: str = "DIRECTION OR NOTE · OPTIONAL",
+    header_label: str | None = None,
+    activation_hint: str = "select/apply",
+    show_item_navigation: bool = False,
     build_continue_action: Callable[[str | None], ResolutionWorkbenchAction | None],
     continue_label: Callable[[], str],
     destination: SaveLocationView | None = None,
@@ -143,10 +148,19 @@ def run_compact_resolution_decisions(
             focusable=True,
             focus_on_click=True,
             wrap_lines=False,
-            width=Dimension(min=24, preferred=96, max=96),
+            width=(
+                Dimension(min=24, preferred=48, max=56)
+                if response_option_uid is not None
+                else Dimension(min=24, preferred=96, max=96)
+            ),
             height=Dimension.exact(1),
             dont_extend_width=True,
             name="compact-resolution-response",
+            style=(
+                "class:memcommit.choice.active"
+                if response_option_uid is not None
+                else ""
+            ),
         )
         if stage_response is not None
         else None
@@ -173,17 +187,43 @@ def run_compact_resolution_decisions(
             and stage_response is not None
         )
 
+    def response_supported(item: ResolutionItem | None) -> bool:
+        return (
+            response_available(item)
+            and response_option_uid is not None
+            and item is not None
+            and response_option_uid(item.uid) is not None
+        )
+
+    def response_selected(item: ResolutionItem | None) -> bool:
+        return bool(
+            response_available(item)
+            and (
+                response_option_uid is None
+                or (
+                    response_supported(item)
+                    and item is not None
+                    and selected_for(item) == response_option_uid(item.uid)
+                )
+            )
+        )
+
     def action_rows() -> tuple[SelectionOption, ...]:
         rows: list[SelectionOption] = []
-        if response_available(active_item()):
-            rows.append(
-                SelectionOption("action:RESPONSE", "Direction or note")
-            )
+        if response_option_uid is None and response_available(active_item()):
+            rows.append(SelectionOption("action:RESPONSE", "Direction or note"))
         if destination is not None:
             rows.append(
                 SelectionOption(
                     "action:CHANGE_DESTINATION",
                     f"Change {destination.label.lower()}",
+                )
+            )
+        if show_item_navigation and len(items) > 1:
+            rows.extend(
+                (
+                    SelectionOption("action:PREV", "Previous item"),
+                    SelectionOption("action:NEXT", "Next item"),
                 )
             )
         rows.append(SelectionOption("action:CONTINUE", continue_label()))
@@ -236,16 +276,37 @@ def run_compact_resolution_decisions(
         )
         if not required:
             return base
-        answered = sum(
+
+        def is_answered(item: ResolutionItem) -> bool:
+            selected_uid = selected_for(item)
+            if (
+                response_option_uid is not None
+                and response_text is not None
+                and selected_uid == response_option_uid(item.uid)
+            ):
+                return bool(response_text(item.uid).strip())
+            return selected_uid is not None or item.response_state == "ANSWERED"
+
+        answered_count = sum(
             1
             for item in required
-            if selected_for(item) is not None or item.response_state == "ANSWERED"
+            if is_answered(item)
         )
-        readiness = " READY" if answered == len(required) else ""
-        return f"{base} · {answered}/{len(required)}{readiness}"
+        readiness = " READY" if answered_count == len(required) else ""
+        return f"{base} · {answered_count}/{len(required)}{readiness}"
 
     def render_header() -> list[tuple[str, str]]:
         view = supplier()
+        if header_label is not None:
+            position = (
+                f" · < {item_index['value'] + 1}/{len(items)} >" if items else ""
+            )
+            return [
+                (
+                    "class:report-label",
+                    f" {safe_terminal_text(header_label).strip()}{position}\n",
+                )
+            ]
         if items:
             position = f"< {item_index['value'] + 1}/{len(items)} >"
             state = "NEEDS INPUT"
@@ -259,7 +320,20 @@ def run_compact_resolution_decisions(
             )
         ]
 
-    def render_body() -> list[tuple[str, str]]:
+    def response_choice_index(item: ResolutionItem | None) -> int | None:
+        if not response_supported(item) or item is None or response_option_uid is None:
+            return None
+        target_uid = response_option_uid(item.uid)
+        return next(
+            (
+                index
+                for index, option in enumerate(item.options)
+                if option.uid == target_uid
+            ),
+            None,
+        )
+
+    def render_intro() -> list[tuple[str, str]]:
         fragments: list[tuple[str, str]] = []
         if destination is not None:
             fragments.append(
@@ -288,42 +362,66 @@ def run_compact_resolution_decisions(
                 fragments.append(
                     ("class:report-neutral", f" {safe_terminal_text(item.question)}\n")
                 )
-        option_rows = visible_rows()[: len(item.options) if item is not None else 0]
-        if option_rows:
-            choice_uid = selected_for(item) if item is not None else None
-            cursor_uid = (
-                option_rows[row_index["value"]].uid
-                if row_index["value"] < len(option_rows)
-                else (
-                    f"choice:{choice_uid}"
-                    if choice_uid is not None
-                    else option_rows[0].uid
-                )
-            )
+        return fragments
+
+    def render_choice_range(*, after_response: bool) -> list[tuple[str, str]]:
+        item = active_item()
+        if item is None:
+            return []
+        response_index = response_choice_index(item)
+        if response_index is None:
+            indexes = range(len(item.options)) if not after_response else range(0)
+        elif after_response:
+            indexes = range(response_index + 1, len(item.options))
+        else:
+            indexes = range(0, response_index + 1)
+        fragments: list[tuple[str, str]] = []
+        selected_uid = selected_for(item)
+        content_width = max(30, get_app().output.get_size().columns - 4)
+        for index in indexes:
+            option = item.options[index]
+            row = SelectionOption(f"choice:{option.uid}", _choice_text(item, index))
             state = FlatSelectionState(
-                option_rows,
-                cursor_uid=cursor_uid,
+                (row,),
+                cursor_uid=row.uid,
                 selected_uid=(
-                    f"choice:{choice_uid}" if choice_uid is not None else None
+                    row.uid if selected_uid == option.uid else None
                 ),
                 allow_empty=True,
             )
             fragments.extend(
                 render_vertical_choice_rows(
                     state,
-                    focused=row_index["value"] < len(option_rows),
-                    content_width=max(30, get_app().output.get_size().columns - 4),
+                    focused=(
+                        row_index["value"] == index
+                        and not (
+                            response_area is not None
+                            and get_app().layout.has_focus(response_area)
+                        )
+                    ),
+                    content_width=content_width,
                     numbered=False,
                     blank_between=False,
                 )
             )
+        if not after_response and response_index is not None:
+            # This Window and the choice-bound editor are adjacent HSplit
+            # children. A final newline creates an empty terminal row between
+            # choice 2 and its editor, so let the next child own that row break.
+            for fragment_index in range(len(fragments) - 1, -1, -1):
+                style, text = fragments[fragment_index]
+                if not text:
+                    continue
+                if text.endswith("\n"):
+                    fragments[fragment_index] = (style, text[:-1])
+                break
         return fragments
 
     def render_actions() -> list[tuple[str, str]]:
         fragments: list[tuple[str, str]] = []
         item = active_item()
         action_offset = len(item.options) if item is not None else 0
-        if response_available(item):
+        if response_option_uid is None and response_available(item):
             action_offset += 1
         if destination is not None:
             focused = row_index["value"] == action_offset
@@ -334,6 +432,35 @@ def run_compact_resolution_decisions(
                 )
             )
             action_offset += 1
+        if show_item_navigation and len(items) > 1:
+            previous_focused = row_index["value"] == action_offset
+            next_focused = row_index["value"] == action_offset + 1
+            position = f"{item_index['value'] + 1}/{len(items)}"
+            fragments.extend(
+                (
+                    ("", "\n  "),
+                    (
+                        focused_control_style(
+                            focused=previous_focused,
+                            selected=previous_focused,
+                        ),
+                        "[← PREV]",
+                    ),
+                    (
+                        "class:report-neutral",
+                        f"        {position}        ",
+                    ),
+                    (
+                        focused_control_style(
+                            focused=next_focused,
+                            selected=next_focused,
+                        ),
+                        "[NEXT →]",
+                    ),
+                    ("", "\n"),
+                )
+            )
+            action_offset += 2
         focused = row_index["value"] == action_offset
         fragments.extend(
             (
@@ -352,41 +479,138 @@ def run_compact_resolution_decisions(
         if destination_editing["value"]:
             return " Enter use exact name · Esc return · Ctrl-C cancel"
         if response_area is not None and get_app().layout.has_focus(response_area):
-            return " Type a direction or note · Enter/↓ next · ↑ previous · Esc leave"
-        return " ←/→ issue · ↑/↓ move · Enter select/apply · Esc close"
+            return " Type your intent · Enter save · ↑/↓ save and choose · Esc freeze"
+        return (
+            " ←/→ issue · ↑/↓ move · Enter "
+            + safe_terminal_text(activation_hint)
+            + " · Esc close"
+        )
 
     header_control = FormattedTextControl(render_header)
-    body_control = FormattedTextControl(render_body, focusable=True, show_cursor=False)
+    body_control = FormattedTextControl(
+        lambda: render_intro() + render_choice_range(after_response=False),
+        focusable=True,
+        show_cursor=False,
+    )
+    trailing_choice_control = FormattedTextControl(
+        lambda: render_choice_range(after_response=True),
+        focusable=False,
+        show_cursor=False,
+    )
     action_control = FormattedTextControl(
         render_actions,
         focusable=True,
         show_cursor=False,
     )
     footer_control = FormattedTextControl(render_footer)
-    response_frame = (
-        build_focused_frame(
-            response_area,
-            title="DIRECTION OR NOTE · OPTIONAL",
-            is_focused=lambda: get_app().layout.has_focus(response_area),
-            height=Dimension.exact(3),
-            style="class:report-neutral",
+    def render_frozen_response() -> list[tuple[str, str]]:
+        item = active_item()
+        value = (
+            response_text(item.uid).strip()
+            if item is not None and response_text is not None
+            else ""
+        )
+        content = safe_terminal_text(value) if value else "Type here…"
+        if len(content) > 46:
+            content = content[:43].rstrip() + "..."
+        value_style = "class:report-neutral" if value else "class:loading-placeholder"
+        return [
+            ("class:report-label", f"      {safe_terminal_text(response_title)}  │ "),
+            (value_style, f"› {content:<46}"),
+            ("class:report-neutral", " │\n"),
+        ]
+
+    frozen_response_control = FormattedTextControl(render_frozen_response)
+    editing_response_row = (
+        VSplit(
+            [
+                Window(
+                    FormattedTextControl(
+                        lambda: [
+                            (
+                                "class:report-label",
+                                f"      {safe_terminal_text(response_title)}  │ ",
+                            )
+                        ]
+                    ),
+                    dont_extend_width=True,
+                ),
+                response_area,
+                Window(
+                    FormattedTextControl(
+                        lambda: [("class:report-label", " │")]
+                    ),
+                    width=Dimension.exact(2),
+                    dont_extend_width=True,
+                ),
+                Window(),
+            ],
+            height=Dimension.exact(1),
         )
         if response_area is not None
         else None
     )
-    inline_response_row = (
-        ConditionalContainer(
-            VSplit([response_frame, Window()]),
-            filter=Condition(lambda: response_available(active_item())),
+    if response_option_uid is None:
+        response_frame = (
+            build_focused_frame(
+                response_area,
+                title="DIRECTION OR NOTE · OPTIONAL",
+                is_focused=lambda: get_app().layout.has_focus(response_area),
+                height=Dimension.exact(3),
+                style="class:report-neutral",
+            )
+            if response_area is not None
+            else None
         )
-        if response_frame is not None
-        else None
-    )
+        inline_response_row = (
+            ConditionalContainer(
+                VSplit([response_frame, Window()]),
+                filter=Condition(lambda: response_available(active_item())),
+            )
+            if response_frame is not None
+            else None
+        )
+    else:
+        inline_response_row = (
+            HSplit(
+                [
+                    ConditionalContainer(
+                        editing_response_row,
+                        filter=has_focus(response_area),
+                    ),
+                    ConditionalContainer(
+                        Window(
+                            frozen_response_control,
+                            height=Dimension.exact(1),
+                            dont_extend_height=True,
+                        ),
+                        filter=~has_focus(response_area),
+                    ),
+                ]
+            )
+            if editing_response_row is not None and response_area is not None
+            else None
+        )
     decision_children = [
         Window(body_control, wrap_lines=True, dont_extend_height=True),
     ]
     if inline_response_row is not None:
-        decision_children.append(inline_response_row)
+        if response_option_uid is None:
+            decision_children.append(inline_response_row)
+        else:
+            decision_children.append(
+                ConditionalContainer(
+                    inline_response_row,
+                    filter=Condition(lambda: response_supported(active_item())),
+                )
+            )
+    decision_children.append(
+        Window(
+            trailing_choice_control,
+            wrap_lines=True,
+            dont_extend_height=True,
+        )
+    )
     decision_children.append(
         Window(action_control, wrap_lines=True, dont_extend_height=True)
     )
@@ -443,9 +667,9 @@ def run_compact_resolution_decisions(
         item = active_item()
         option_count = len(item.options) if item is not None else 0
         if (
-            response_area is not None
+            response_option_uid is None
+            and response_area is not None
             and response_available(item)
-            and item is not None
             and row_index["value"] == option_count
         ):
             sync_response_field()
@@ -470,6 +694,11 @@ def run_compact_resolution_decisions(
         stage_option(item.uid, option.uid)
         row_index["value"] = index
         status["value"] = f"Selected · {safe_terminal_text(option.label)}"
+        if (
+            response_option_uid is not None
+            and option.uid == response_option_uid(item.uid)
+        ):
+            open_response()
 
     def activate() -> None:
         item = active_item()
@@ -484,8 +713,14 @@ def run_compact_resolution_decisions(
             )
         elif action_uid == "action:CHANGE_DESTINATION":
             open_destination()
-        else:
+        elif action_uid == "action:PREV":
+            move_item(-1)
+        elif action_uid == "action:NEXT":
+            move_item(1)
+        elif action_uid == "action:RESPONSE":
             open_response()
+        else:  # pragma: no cover - action rows are closed above
+            status["value"] = "That action is unavailable."
 
     def sync_response_field() -> None:
         item = active_item()
@@ -529,7 +764,7 @@ def run_compact_resolution_decisions(
         status["value"] = ""
 
     def open_response() -> None:
-        if response_area is None:
+        if response_area is None or not response_selected(active_item()):
             return
         sync_response_field()
         status["value"] = ""
@@ -551,7 +786,10 @@ def run_compact_resolution_decisions(
         )
 
     if response_area is not None:
-        response_area.buffer.on_text_changed += lambda _buffer: stage_inline_response()
+        if response_option_uid is None:
+            response_area.buffer.on_text_changed += (
+                lambda _buffer: stage_inline_response()
+            )
         sync_response_field()
 
     def open_destination() -> None:
@@ -627,16 +865,18 @@ def run_compact_resolution_decisions(
 
     @bindings.add("escape", filter=response_keys_active, eager=True)
     def _response_back(event) -> None:
-        # Escape leaves the live field without closing the operation. The
-        # latest valid text is already process-local; an invalid tail is
-        # restored from that staged value before returning to row navigation.
-        sync_response_field()
-        event.app.layout.focus(body_control)
+        if response_option_uid is None:
+            # The generic compact shell retains its established note-field
+            # behavior. Resolve opts into the choice-bound frozen draft below.
+            sync_response_field()
+            event.app.layout.focus(body_control)
+        else:
+            leave_response(0)
         event.app.invalidate()
 
     @bindings.add("enter", filter=response_keys_active, eager=True)
     def _response_submit(event) -> None:
-        leave_response(1)
+        leave_response(0 if response_option_uid is not None else 1)
         event.app.invalidate()
 
     @bindings.add("up", filter=response_keys_active, eager=True)

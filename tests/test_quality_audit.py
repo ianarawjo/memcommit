@@ -55,6 +55,8 @@ from memcommit.adapters.console.terminal.components.semantic_viewer import (
 )
 from memcommit.application.operations.audit.application import (
     create_quality_audit,
+    find_current_quality_audit,
+    get_or_run_quality_audit,
     run_quality_audit,
 )
 from memcommit.application.operations.audit.model import (
@@ -239,6 +241,48 @@ def test_run_quality_audit_calls_all_three_independent_finders_once():
     assert all(
         check.provenance.identity.model == "audit-model" for check in session.checks
     )
+
+
+def test_get_or_run_audit_reuses_the_exact_saved_source_without_provider(
+    isolated_store,
+):
+    ctx, first, second = _context()
+    saved = _finding_session(ctx, first, second)
+    sessions = JsonAuditRecordRepository(MemoryStore())
+    sessions.create(saved)
+
+    current = find_current_quality_audit(sessions, ctx)
+    reused = get_or_run_quality_audit(
+        ctx,
+        lambda: (_ for _ in ()).throw(
+            AssertionError("an exact saved Audit must be reused")
+        ),
+        sessions,
+    )
+
+    assert current is not None
+    assert current.uid == saved.uid
+    assert reused.uid == saved.uid
+
+
+def test_get_or_run_audit_rechecks_all_sections_after_source_change(isolated_store):
+    ctx, first, second = _context()
+    saved = _finding_session(ctx, first, second)
+    sessions = JsonAuditRecordRepository(MemoryStore())
+    sessions.create(saved)
+    ops.add(ctx, "Holiday access follows a separate schedule.")
+    EmptyAuditProvider.calls = []
+
+    refreshed = get_or_run_quality_audit(ctx, EmptyAuditProvider, sessions)
+
+    assert refreshed.uid != saved.uid
+    assert refreshed.source.context_digest != saved.source.context_digest
+    assert EmptyAuditProvider.calls == [
+        "find_duplicates",
+        "find_ambiguities",
+        "find_conflicts",
+    ]
+    assert len(sessions.list()) == 2
 
 
 def test_audit_initial_checks_never_supply_a_full_screen_return_view(monkeypatch):

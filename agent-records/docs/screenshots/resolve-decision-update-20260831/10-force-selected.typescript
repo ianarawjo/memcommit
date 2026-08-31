@@ -1,0 +1,62 @@
+$ mem resolve capture/resolve
+PTY · 180×52 · PROFILE isolated · CURRENT capture/resolve
+MEM RESOLVE · 1/1 · BUILDING AND CHECKING REPAIR . · 0sMEM RESOLVE · 1/1 · AUDIT DIRECTIONS READY . · 0s                                                       [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m RESOLVE · < 1/1 >[0m
+[0m CONFLICT · [11111111] “Named greetings always end with a period.” ↔ [22222222] “Named greetings may omit punctuation.”[0m
+[0;38;2;244;245;247m Which rule governs named greetings?[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m  1 · ACCEPT THIS DIRECTION · Named greetings remain exceptions to the general rule.[0m
+[0m  2 · ADJUST WITH YOUR INTENT · Enter the direction this should follow.[0m
+[0;38;2;244;245;247;1m      YOUR INTENT  │ [0;38;2;165;173;203m› Type here…                                    [0;38;2;244;245;247m │[0m
+[0m  3 · LEAVE UNRESOLVED · Exclude this item from Update input and retain it as unresolved.[0m
+[0m [0m
+
+[0m  FINALIZE DECISIONS · 0/1[0m
+[0m [0m
+[0m ←/→ issue · ↑/↓ move · Enter select/finalize · Esc close[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m [47A[0m[?25l[A[0m  1 · ACCEPT THIS DIRECTION · Named greetings remain exceptions to the general rule.[0m
+
+
+[0;38;2;16;36;47;48;2;139;213;255;1m✓ 3 · LEAVE UNRESOLVED · Exclude this item from Update input and retain it as unresolved.[0m
+
+
+[23C[0m1[2C READY[0m
+
+[C[0mSelected · 3 · LEAVE[CUNRESOLVED[0m[K[10A[32D[0m

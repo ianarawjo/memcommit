@@ -10,8 +10,11 @@ from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
 )
 from memcommit.application.operations.resolve.application import (
-    apply_resolve,
     run_resolve,
+)
+from memcommit.application.operations.resolve.decisions import (
+    apply_resolve_update,
+    plan_resolve_update,
 )
 from memcommit.application.operations.resolve.finding_handoff import (
     conflict_handoff_to_resolve_request,
@@ -19,7 +22,9 @@ from memcommit.application.operations.resolve.finding_handoff import (
 from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
 from memcommit.application.operations.resolve.semantic import (
     ProviderResolveSemanticPort,
+    all_audit_issue_keys,
 )
+from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.persistence.store import MemoryStore
 from memcommit.providers.subscription import connect_semantic_provider
 
@@ -43,27 +48,55 @@ def run_conflict_resolve_handoff(
             request,
             frame_port=port,
             semantic_port=ProviderResolveSemanticPort(),
-            provider_factory=connect_semantic_provider,
+            audit_repository=JsonAuditRecordRepository(store),
+            audit_provider_factory=connect_semantic_provider,
+            direction_provider_factory=connect_semantic_provider,
         )
         progress.update("repair ready", step=1)
-    receipt = run_resolve_tui(
+    decisions = run_resolve_tui(
         analysis,
-        apply_candidate=lambda selected: apply_resolve(
-            analysis,
-            selected,
-            frame_port=port,
-        ),
         clipboard_writer=write_system_clipboard,
     )
-    if receipt is not None:
-        candidate = next(
-            candidate
-            for candidate in analysis.candidates
-            if candidate.uid == receipt.candidate_uid
+    if decisions is not None:
+        with CommandProgress(
+            "RESOLVE",
+            "building whole-Context Update plan",
+            total=2,
+        ) as progress:
+            def connect_update():
+                progress.update("planning exact memory changes", step=1)
+                return connect_semantic_provider()
+
+            def connect_verifier():
+                progress.update("checking complete post-image", step=2)
+                return connect_semantic_provider()
+
+            proposal = plan_resolve_update(
+                analysis,
+                decisions,
+                frame_port=port,
+                update_provider_factory=connect_update,
+                audit_provider_factory=connect_verifier,
+            )
+        if proposal.blocking_audit_keys:
+            raise RuntimeError(
+                "Resolve Update post-image still contains unforced Audit issues; "
+                "nothing was applied."
+            )
+        receipt = apply_resolve_update(
+            proposal,
+            frame_port=port,
         )
         render_resolve_receipt(
             receipt,
-            fit_verdict=candidate.fit.verdict,
+            verification=(
+                f"AUDIT ISSUES {len(all_audit_issue_keys(proposal.post_audit))}"
+                + (
+                    f" · {len(receipt.unresolved_issue_uids)} FORCED"
+                    if receipt.unresolved_issue_uids
+                    else ""
+                )
+            ),
         )
 
 

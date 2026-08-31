@@ -29,6 +29,18 @@ class SafeSemanticProvider:
     def __init__(self, delegate: object) -> None:
         self._delegate = delegate
 
+    @property
+    def identity(self):
+        """Preserve provider provenance required by durable semantic records."""
+
+        return getattr(self._delegate, "identity", None)
+
+    @property
+    def last_run(self):
+        """Expose the delegate's latest exact call after completion."""
+
+        return getattr(self._delegate, "last_run", None)
+
     def complete(self, prompt, *, operation, output_schema=None):
         try:
             complete = getattr(self._delegate, "complete")

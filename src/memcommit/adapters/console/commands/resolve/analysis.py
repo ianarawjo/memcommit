@@ -23,14 +23,25 @@ def _title(analysis: ResolveAnalysis) -> None:
 
 
 def render_resolve_plain(analysis: ResolveAnalysis) -> None:
-    """Render one compact outcome or externally replayable proposal."""
+    """Render one compact outcome without inventing a non-interactive decision."""
 
     _title(analysis)
 
-    if analysis.status == "ALREADY_FIT":
-        if analysis.initial_fit is None:
-            raise TypeError("An already-Fit Resolve analysis requires its judgment.")
-        _line("FIT", f"{analysis.initial_fit.verdict} · NO CHANGE")
+    if analysis.review_issues:
+        memory_by_uid = {
+            memory.uid: memory.content for memory in analysis.frame.memories
+        }
+        _line("NEEDS DECISIONS", str(len(analysis.review_issues)))
+        for position, issue in enumerate(analysis.review_issues, 1):
+            relation = " ↔ ".join(
+                f"[{uid[:8]}] {memory_by_uid[uid]}" for uid in issue.memory_uids
+            ) or issue.classification
+            _line(f"{issue.kind} {position}", relation)
+            _line("DIRECTION", issue.proposed_direction)
+        return
+
+    if analysis.status == "NO_ISSUES":
+        _line("RESOLVED", "NO ACTIONABLE AUDIT ISSUE · NO CHANGE")
         return
 
     if analysis.status in {"NEEDS_INPUT", "NEEDS_AUTHORITY"}:
@@ -38,31 +49,7 @@ def render_resolve_plain(analysis: ResolveAnalysis) -> None:
         _line(label, analysis.question or "Resolve cannot continue.")
         return
 
-    if analysis.status == "ASSUMED":
-        candidate = analysis.candidates[0]
-        _line("TEMPORARY INTERPRETATION", candidate.summary)
-        for assumption in (
-            assumption
-            for issue in candidate.issues
-            for assumption in issue.assumptions
-        ):
-            _line("ASSUMPTION", assumption, color=typer.colors.YELLOW)
-        if analysis.question:
-            _line("NEEDS INPUT", analysis.question)
-        _line("NO CHANGE", "Grounding is required before Apply")
-        return
-
-    candidate = analysis.candidates[0]
-    _line(
-        "READY TO APPLY",
-        f"{candidate.summary} · FIT {candidate.fit.verdict}",
-    )
-    _line("CANDIDATE", candidate.uid)
-    _line(
-        "APPLY",
-        "rerun with --candidate <full-id> --expected-revision "
-        f"{analysis.frame.revision} --apply",
-    )
+    _line("NO CHANGE", analysis.question or "No Audit decision is available.")
 
 
 __all__ = ["render_resolve_plain"]

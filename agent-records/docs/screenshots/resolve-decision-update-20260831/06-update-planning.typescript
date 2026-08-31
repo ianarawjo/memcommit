@@ -1,0 +1,103 @@
+$ mem resolve capture/resolve
+PTY · 180×52 · PROFILE isolated · CURRENT capture/resolve
+MEM RESOLVE · 1/1 · BUILDING AND CHECKING REPAIR . · 0sMEM RESOLVE · 1/1 · AUDIT DIRECTIONS READY . · 0s                                                       [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m RESOLVE · < 1/2 >[0m
+[0m CONFLICT · [11111111] “Named greetings always end with a period.” ↔ [22222222] “Named greetings may omit punctuation.”[0m
+[0;38;2;244;245;247m Which rule governs named greetings?[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m  1 · ACCEPT THIS DIRECTION · Named greetings remain exceptions to the general rule.[0m
+[0m  2 · ADJUST WITH YOUR INTENT · Enter the direction this should follow.[0m
+[0;38;2;244;245;247;1m      YOUR INTENT  │ [0;38;2;165;173;203m› Type here…                                    [0;38;2;244;245;247m │[0m
+[0m  3 · LEAVE UNRESOLVED · Exclude this item from Update input and retain it as unresolved.[0m
+[0m [0m
+
+[0m  [← PREV][0;38;2;244;245;247m        1/2        [0m[NEXT →][0m
+
+[0m  FINALIZE DECISIONS · 0/2[0m
+[0m [0m
+[0m ←/→ issue · ↑/↓ move · Enter select/finalize · Esc close[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m [47A[0m[?25l[A[0;38;2;16;36;47;48;2;139;213;255;1m✓[0m
+
+
+
+
+
+
+
+[23C[0m1[0m
+
+[C[0mSelected · 1 · ACCEPT THIS DIRECTION[0m[K[9A[37D[0m[?25l[A[0;38;2;16;36;47;48;2;139;213;255m✓ 1 · ACCEPT THIS DIRECTION · Named greetings remain exceptions to the general rule.[0m
+
+
+
+
+
+[29C[0;38;2;16;36;47;48;2;139;213;255;1m[NEXT →][0m
+
+
+
+[C[0m←/→ issue · ↑/↓ move · Enter select/finalize · Esc close[13A[57D[0m[?25l[13C[0;38;2;244;245;247;1m2[0m
+[13C[0m22222222[19Cmay omit punc[Cuation.” ↔ [33333333] “All gre[Ctings follow the house punctuation rule.”[0m
+[7C[0;38;2;244;245;247mgre[Ctings are in the [Cxception?[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m  1 · ACCEPT THIS DIRECTION · The exception applies only to named greetings.[0m[K[0m
+
+
+
+
+
+[18C[0;38;2;244;245;247m2[10C[0m[NEXT →][5A[37D[0m[?25l[A[0m  1 · ACCEPT THIS DIRECTION · The exception applies only to named greetings.[0m
+[0;38;2;16;36;47;48;2;139;213;255m✓ 2 · ADJUST WITH YOUR INTENT · Enter the direction this should follow.[0m
+[21C[0;38;2;16;36;47;48;2;139;213;255m›                                               [0;38;2;244;245;247;1m │[0m
+
+
+
+
+
+
+
+[C[0mType yo[Cr[Cintent · Enter save · ↑/↓ save and[Cchoose · Esc freeze[8A[42D[0m[?12l[?25h[?25l[2D[0;38;2;16;36;47;48;2;139;213;255m The exception applies only to named greetings. [0m[?12l[?25h[?25l[47D[0;38;2;244;245;247m› The exception applies only to named greetings. │[0m
+
+
+
+
+
+[0;38;2;16;36;47;48;2;139;213;255;1m  FINALIZE DECISIONS · 2/2 READY[0m
+
+[C[0m←/→ iss[Ce[C· ↑/↓ move · Enter select/finalize[C· Esc close[0m[K[13A[57D[0m[J[0m[?7h[?1049l[?2004lMEM RESOLVE · 1/2 · BUILDING WHOLE-CONTEXT UPDATE PLAN . · 0sMEM RESOLVE · 1/2 · PLANNING EXACT MEMORY CHANGES . · 0s     
+UPDATE PROVIDER GATE · PRESS U
+MEM RESOLVE · 1/2 · PLANNING EXACT MEMORY CHANGES .. · 0s

@@ -10,18 +10,18 @@ def test_resolve_receipt_names_exact_checkpoint_review(capsys) -> None:
         context_uid="context-uid",
         context_name="practice/greetings",
         revision="revision-1",
-        candidate_uid="candidate-uid",
+        plan_uid="update-plan-uid",
         checkpoint_uid=checkpoint_uid,
         created_uids=(),
         updated_uids=("updated-uid",),
         deleted_uids=(),
     )
 
-    render_resolve_receipt(receipt, fit_verdict="YES")
+    render_resolve_receipt(receipt, verification="CONFLICTS 0")
 
     assert capsys.readouterr().out == (
         "RESOLVE · practice/greetings\n"
-        "APPLIED · UPDATE 1 · FIT YES\n"
+        "APPLIED · UPDATE 1 · CONFLICTS 0\n"
         f"CHECKPOINT · {checkpoint_uid}\n"
         "REVIEW · mem review resolve --receipt "
         f"{checkpoint_uid}\n"
