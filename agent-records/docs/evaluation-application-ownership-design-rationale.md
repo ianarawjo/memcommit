@@ -5,7 +5,7 @@
 `eval` remains a public `PARTIAL` operation name, but it has no executable
 evaluation application yet. The console package keeps only a reservation
 callback and
-`memcommit.application.operations.system_study_tools.eval` keeps only its
+`memcommit.application.operations.eval` keeps only its
 package marker. The former semantic campaign, operation-gate campaign, scoring,
 provider-selection, ledger presentation, and hidden `mem dev eval` routes are
 removed.
@@ -25,10 +25,10 @@ roles now have distinct owners:
 | Resource role | Owner |
 | --- | --- |
 | Ambiguity, conflict, and duplicate prompt calibration | `application.capabilities.memory_issue_analysis/fixtures/` |
-| Atomize prompt calibration | `application.operations.semantic_updates.derive.atomize/fixtures/` |
-| Compare compact-summary rules | `application.operations.search_explain.synthesize.compare/fixtures/` |
-| Rationale rules and examples | `application.operations.history_recovery.inspection.rationale/fixtures/` |
-| Resolve exact rules and examples | `application.operations.quality_resolution.repair.resolve/fixtures/` |
+| Atomize prompt calibration | `application.operations.atomize/fixtures/` |
+| Compare compact-summary rules | `application.operations.compare/fixtures/` |
+| Rationale rules and examples | `application.operations.rationale/fixtures/` |
+| Resolve exact rules and examples | `application.operations.resolve/fixtures/` |
 | Shared Distill/Makemore prompt examples | `application.capabilities.semantic/fixtures/` |
 | Prompt-unseen Distill/Makemore and Update regression inputs | `tests/fixtures/` |
 

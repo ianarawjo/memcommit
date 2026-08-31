@@ -13,7 +13,7 @@ from pathlib import Path
 REPOSITORY = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPOSITORY / "src"))
 
-from memcommit.application.operations.browse_navigate.rename.history_repair import (  # noqa: E402
+from memcommit.application.operations.rename.history_repair import (  # noqa: E402
     apply_rename_history_repair,
     plan_rename_history_repair,
 )

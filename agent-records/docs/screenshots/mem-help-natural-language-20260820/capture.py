@@ -145,7 +145,7 @@ def _capture_thinking_path(executable: str) -> None:
 
 
 def _capture_study_copy_block(executable: str) -> None:
-    from memcommit.application.operations.system_study_tools.help.application import describe_operation
+    from memcommit.application.operations.help.application import describe_operation
 
     request = describe_operation("query").summary
     child, recorder = _spawn_lookup(executable, request)
@@ -177,7 +177,7 @@ def _verify_color_capable_help(executable: str) -> None:
 
 def main() -> None:
     sys.path.insert(0, str(ROOT / "src"))
-    from memcommit.adapters.console.commands.system_study_tools.help.study_copy_guard import (
+    from memcommit.adapters.console.commands.help.study_copy_guard import (
         active_profile_is_study,
     )
 

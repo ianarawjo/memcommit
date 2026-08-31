@@ -14,10 +14,10 @@ from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory, MemoryRef
 from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import comparison_analysis_path
-from memcommit.application.operations.create_copy_connect.embed.application import MemoryEmbedRequest
-from memcommit.application.operations.create_copy_connect.embed.runtime import MemoryStoreEmbedPort
+from memcommit.application.operations.embed.application import MemoryEmbedRequest
+from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
 from memcommit.adapters.agent.embed import EmbedAgentAdapter
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -25,15 +25,15 @@ from memcommit.application.operations.profiles.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profiles.profile.model import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     create_authority_grant,
     delete_authority_grant,
     update_authority_grant,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.create_copy_connect.reference.application import ContextReferenceRequest
-from memcommit.application.operations.create_copy_connect.reference.runtime import execute_context_reference
+from memcommit.application.operations.reference.application import ContextReferenceRequest
+from memcommit.application.operations.reference.runtime import execute_context_reference
 
 
 runner = CliRunner(mix_stderr=False)
@@ -504,7 +504,7 @@ def test_compare_rejects_granted_live_embed_before_provider_connection(
     )
     assert embedded.exit_code == 0, embedded.output + embedded.stderr
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.synthesize.compare.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.compare.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("Compare must reject before provider connection"),
     )
 
@@ -549,7 +549,7 @@ def test_impact_rejects_granted_live_embed_before_provider_connection(
     )
     assert embedded.exit_code == 0, embedded.output + embedded.stderr
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.semantic_updates.foundation.update.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
         lambda: pytest.fail("Impact must reject before provider connection"),
     )
 

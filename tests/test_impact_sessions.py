@@ -8,15 +8,15 @@ from dataclasses import replace
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.operation_lifecycle.impact.command as impact_command
-import memcommit.adapters.console.commands.operation_lifecycle.impact.sessions as impact_sessions
-import memcommit.adapters.console.commands.semantic_updates.foundation.update.command as update_command
-import memcommit.adapters.console.commands.semantic_updates.foundation.update.impact as update_impact
+import memcommit.adapters.console.commands.impact.command as impact_command
+import memcommit.adapters.console.commands.impact.sessions as impact_sessions
+import memcommit.adapters.console.commands.update.command as update_command
+import memcommit.adapters.console.commands.update.impact as update_impact
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.system_study_tools.help.command import COMMAND_FORMS
-from memcommit.adapters.console.commands.operation_lifecycle.impact.registry import IMPACT_ROUTES, ImpactLifecycle
-from memcommit.adapters.console.commands.operation_lifecycle.impact.sessions import (
+from memcommit.adapters.console.commands.help.command import COMMAND_FORMS
+from memcommit.adapters.console.commands.impact.registry import IMPACT_ROUTES, ImpactLifecycle
+from memcommit.adapters.console.commands.impact.sessions import (
     render_impact_session_snapshot,
     update_impact_presentation,
 )
@@ -24,7 +24,7 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
     SessionOpenReceipt,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.semantic_updates.foundation.update.model import plan_update
+from memcommit.application.operations.update.model import plan_update
 
 
 runner = CliRunner(mix_stderr=False)

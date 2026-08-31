@@ -27,10 +27,10 @@ from memcommit.core.context import (
     QueryContextRef,
 )
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
-from memcommit.application.operations.translation.translate.provider_catalog import (
+from memcommit.application.operations.translate.provider_catalog import (
     update_catalog_from_translation_plan,
 )
-from memcommit.application.operations.translation.translate.runtime import plan_translation
+from memcommit.application.operations.translate.runtime import plan_translation
 from memcommit.persistence.store.translation_catalog import (
     load_translation_catalog,
     save_translation_catalog,

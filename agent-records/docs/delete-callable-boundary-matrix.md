@@ -11,7 +11,7 @@ behind the same terminal-independent operation package while retaining their
 different approval, receipt, and recovery contracts.
 
 Delete's console-specific adapters are co-located under
-`memcommit.adapters.console.commands.direct_changes.delete`: `command.py` owns orchestration,
+`memcommit.adapters.console.commands.delete`: `command.py` owns orchestration,
 `review.py` owns the irreversible Context warning, `receipt.py` owns direct-item
 and Context success projections, and `picker.py` owns the operation-specific
 composition over the shared Context/Memory picker. The former
@@ -24,14 +24,14 @@ existing PTY evidence are unchanged.
 
 | Callable | Owner | Input → output | Allowed effects | Required invariant | State |
 | --- | --- | --- | --- | --- | --- |
-| `memcommit.application.operations.direct_changes.delete.application.run_direct_item_delete` | application | selector + frozen runtime → `DirectItemDeleteResult` | delegates exactly one authorized mutation | full item UID is frozen before mutation; complete receipt names one checkpoint | `VERIFIED` |
-| `memcommit.application.operations.direct_changes.delete.application.prepare_context_delete` | application | existing Context locator + runtime → `FrozenContextDeletePlan` | target identity and record read only | canonical name, UID, record digest, irreversible effects, and plan digest form one review identity | `VERIFIED` |
-| `memcommit.application.operations.direct_changes.delete.application.apply_context_delete` | application | reviewed plan + owning runtime → `ContextDeleteResult` | delegates one exact permanent deletion | approval is not a boolean application input; Apply consumes the reviewed exact identity or fails stale | `VERIFIED` |
+| `memcommit.application.operations.delete.application.run_direct_item_delete` | application | selector + frozen runtime → `DirectItemDeleteResult` | delegates exactly one authorized mutation | full item UID is frozen before mutation; complete receipt names one checkpoint | `VERIFIED` |
+| `memcommit.application.operations.delete.application.prepare_context_delete` | application | existing Context locator + runtime → `FrozenContextDeletePlan` | target identity and record read only | canonical name, UID, record digest, irreversible effects, and plan digest form one review identity | `VERIFIED` |
+| `memcommit.application.operations.delete.application.apply_context_delete` | application | reviewed plan + owning runtime → `ContextDeleteResult` | delegates one exact permanent deletion | approval is not a boolean application input; Apply consumes the reviewed exact identity or fails stale | `VERIFIED` |
 | `memcommit.application.capabilities.local_target_lookup.resolve_local_direct_item_locator` | shared targeting | bare or qualified local UID selector → exact `DirectItemTarget` | strict ordinary-local direct-record reads | bare lookup has no Current priority; exactly one direct owner coordinate; no nested, snapshot, or Grant content | `VERIFIED` |
-| `memcommit.application.operations.direct_changes.delete.runtime.MemoryStoreDeletePort.freeze_item` | infrastructure | direct-item selector → authorized frozen target | Store/Profile/Grant reads | bare local UID and picker paths converge on one exact shared coordinate; ambiguity fails closed; explicit Grant owners retain DELETE authorization | `VERIFIED` |
-| `memcommit.application.operations.direct_changes.delete.runtime.MemoryStoreDeletePort.remove_item` | infrastructure | frozen item → checkpointed result | one authorized Context save and `remove` checkpoint | full UID, owner UID/digest, Grant revision, protection, and Store CAS remain valid through save | `VERIFIED` |
-| `memcommit.application.operations.direct_changes.delete.runtime.MemoryStoreDeletePort.freeze_context` | infrastructure | ordinary local locator → frozen plan | local Store read | relative locator resolves once; a Grant never authorizes deletion of the authority Context | `VERIFIED` |
-| `memcommit.application.operations.direct_changes.delete.runtime.MemoryStoreDeletePort.delete_context` | infrastructure | frozen plan → lifecycle result | exact Context/history deletion, artifact cleanup, Profile lifecycle event | `delete_context_if` compares name, UID, and digest; descendants survive; committed cleanup failure returns a non-retryable committed receipt | `VERIFIED` |
+| `memcommit.application.operations.delete.runtime.MemoryStoreDeletePort.freeze_item` | infrastructure | direct-item selector → authorized frozen target | Store/Profile/Grant reads | bare local UID and picker paths converge on one exact shared coordinate; ambiguity fails closed; explicit Grant owners retain DELETE authorization | `VERIFIED` |
+| `memcommit.application.operations.delete.runtime.MemoryStoreDeletePort.remove_item` | infrastructure | frozen item → checkpointed result | one authorized Context save and `remove` checkpoint | full UID, owner UID/digest, Grant revision, protection, and Store CAS remain valid through save | `VERIFIED` |
+| `memcommit.application.operations.delete.runtime.MemoryStoreDeletePort.freeze_context` | infrastructure | ordinary local locator → frozen plan | local Store read | relative locator resolves once; a Grant never authorizes deletion of the authority Context | `VERIFIED` |
+| `memcommit.application.operations.delete.runtime.MemoryStoreDeletePort.delete_context` | infrastructure | frozen plan → lifecycle result | exact Context/history deletion, artifact cleanup, Profile lifecycle event | `delete_context_if` compares name, UID, and digest; descendants survive; committed cleanup failure returns a non-retryable committed receipt | `VERIFIED` |
 | `commands.delete.review` / `commands.delete.receipt` | console presentation | typed plan/result → warning or terminal receipt | stdout/stderr only | human warning lists every irreversible effect; a committed cleanup warning still says deletion happened | `VERIFIED` |
 | `commands.delete.picker` | console picker composition | frozen local catalog + typed callback → picker receipt | terminal interaction and process-local focus only | display text is never re-parsed as a target; shared picker owns navigation mechanics | `VERIFIED` |
 | `commands.delete.cmd` | console composition | variadic argv/TTY → ordered application requests and presentation | interface intake, optional shared human confirmation, independently committed application effects | every selector is frozen before Apply; one current snapshot resolves every relative Context spelling; duplicates and owner/child overlap fail before mutation; `--force` skips only the human Context confirmation | `VERIFIED` |
@@ -78,8 +78,8 @@ domain/Store. Application and runtime import no Typer, prompt-toolkit, command,
 or interface module. The public facade does not call the CLI, and the
 application does not call the public facade.
 
-The implementation is owned by `memcommit.application.operations.direct_changes.delete.application` and
-`memcommit.application.operations.direct_changes.delete.runtime`. The former top-level module paths are
+The implementation is owned by `memcommit.application.operations.delete.application` and
+`memcommit.application.operations.delete.runtime`. The former top-level module paths are
 intentionally unavailable after the repository-wide historical Python import
 cleanup; internal callers and monkeypatch targets use these canonical owners.
 

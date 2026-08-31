@@ -36,8 +36,8 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.gra
 from memcommit.providers.policy import (
     resolve_codex_evaluation_policy,
 )
-from memcommit.application.operations.profiles.profile.config import load_profile_registry
-from memcommit.application.operations.profiles.profile.model import authority_grant_snapshot_lock
+from memcommit.application.operations.profile.config import load_profile_registry
+from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,

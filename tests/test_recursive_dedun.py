@@ -15,13 +15,13 @@ from memcommit.application.capabilities.command_recovery import (
     build_command_stacks,
 )
 from memcommit.core.context import MemoryRef
-from memcommit.application.operations.quality_resolution.repair.dedun.runtime import (
+from memcommit.application.operations.dedun.runtime import (
     apply_recursive_dedun_scope,
     freeze_recursive_dedun_scope,
     prepare_recursive_dedun_scope,
 )
-from memcommit.application.operations.quality_resolution.repair.dedun.application import DedunConflictError
-from memcommit.application.operations.quality_resolution.repair.dedun.runtime import MemoryStoreDedunPort
+from memcommit.application.operations.dedun.application import DedunConflictError
+from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     DuplicateReport,
     FindingsError,
@@ -213,7 +213,7 @@ def test_recursive_dedun_applies_semantic_groups_per_context(
     store.set_current(root.name)
     provider = SemanticGroupProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.quality_resolution.diagnose.find_redundancies.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.find_redundancies.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -279,7 +279,7 @@ def test_recursive_dedun_later_analysis_failure_publishes_no_context(
         return DuplicateReport(memory_count=len(context.memories), findings=())
 
     monkeypatch.setattr(
-        "memcommit.application.operations.quality_resolution.diagnose.find_redundancies.application.analyze_memory_redundancies",
+        "memcommit.application.operations.find_redundancies.application.analyze_memory_redundancies",
         analyze,
     )
 

@@ -10,9 +10,9 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command as query_command
+import memcommit.adapters.console.commands.query.command as query_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -20,7 +20,7 @@ from memcommit.application.operations.profiles.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profiles.profile.model import (
+from memcommit.application.operations.profile.model import (
     create_authority_grant,
     delete_authority_grant,
 )
@@ -214,7 +214,7 @@ def test_canonical_query_view_name_does_not_depend_on_current_context(
             return "Use the tunnel after 18:00."
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_query_provider",
+        "memcommit.adapters.console.commands.query.command.connect_query_provider",
         lambda _provider: Provider(),
     )
     result = runner.invoke(
@@ -253,11 +253,11 @@ def test_canonical_query_target_does_not_open_authority_before_provider(
         raise AssertionError("authority content opened before provider connection")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_query_provider",
+        "memcommit.adapters.console.commands.query.command.connect_query_provider",
         unavailable,
     )
     monkeypatch.setattr(
-        "memcommit.application.operations.search_explain.retrieve_answer.query.granted_runtime.resolve_granted_context_view",
+        "memcommit.application.operations.query.granted_runtime.resolve_granted_context_view",
         forbidden,
     )
     argv = (
@@ -297,11 +297,11 @@ def test_query_only_context_option_uses_the_named_view_not_its_local_attachment(
             return "Use only the authorized recipient requirements."
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_query_provider",
+        "memcommit.adapters.console.commands.query.command.connect_query_provider",
         lambda _provider: Provider(),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.query.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("QUERY-only --context must not use ordinary Query")
         ),
@@ -328,7 +328,7 @@ def test_explicit_read_grant_remains_the_ordinary_query_source(
     )
     calls = []
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.query.command.connect_codex_chatgpt_provider",
         lambda: _OrdinaryAnswerProvider(calls),
     )
 
@@ -515,7 +515,7 @@ def test_repeated_read_grants_freeze_exactly_the_named_ordinary_sources(
     )
     calls = []
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.query.command.connect_codex_chatgpt_provider",
         lambda: _OrdinaryAnswerProvider(calls),
     )
     expected = tuple((public_name, content) for _, public_name, content in source_specs)
@@ -608,7 +608,7 @@ def test_granted_query_is_one_shot_and_creates_no_transcript_storage(
             return "Use the tunnel after 18:00."
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_query_provider",
+        "memcommit.adapters.console.commands.query.command.connect_query_provider",
         lambda _provider: Provider(),
     )
     result = runner.invoke(
@@ -636,7 +636,7 @@ def test_legacy_explicit_attachment_form_keeps_the_same_granted_target(
             return "Use the tunnel after 18:00."
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_query_provider",
+        "memcommit.adapters.console.commands.query.command.connect_query_provider",
         lambda _provider: Provider(),
     )
     result = runner.invoke(
@@ -670,7 +670,7 @@ def test_granted_query_without_question_requires_an_interactive_terminal(
             raise AssertionError("a missing question must not query the provider")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_query_provider",
+        "memcommit.adapters.console.commands.query.command.connect_query_provider",
         lambda _provider: Provider(),
     )
     result = runner.invoke(app, ["query", "construction-details"])
@@ -702,7 +702,7 @@ def test_granted_query_always_queries_the_complete_view(
             return "Use the west entrance."
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_query_provider",
+        "memcommit.adapters.console.commands.query.command.connect_query_provider",
         lambda _provider: Provider(),
     )
     result = runner.invoke(
@@ -742,7 +742,7 @@ def test_parent_query_federates_only_provider_selected_descendants(
             return "Answer."
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_query_provider",
+        "memcommit.adapters.console.commands.query.command.connect_query_provider",
         lambda _provider: Provider(),
     )
     result = runner.invoke(
@@ -775,7 +775,7 @@ def test_revocation_during_provider_call_prevents_answer_disclosure(
             return "Answer from a now-revoked view."
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_query_provider",
+        "memcommit.adapters.console.commands.query.command.connect_query_provider",
         lambda _provider: Provider(),
     )
     result = runner.invoke(
@@ -826,7 +826,7 @@ def test_granted_query_uses_complete_root_bound_translation_catalog(
             return "오후 6시 이후입니다."
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_query_provider",
+        "memcommit.adapters.console.commands.query.command.connect_query_provider",
         lambda _provider: Provider(),
     )
     result = runner.invoke(

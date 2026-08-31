@@ -14,16 +14,16 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 def test_copy_and_move_own_separate_application_entrypoints() -> None:
     copy_application = importlib.import_module(
-        "memcommit.application.operations.create_copy_connect.copy.application"
+        "memcommit.application.operations.copy.application"
     )
     move_application = importlib.import_module(
-        "memcommit.application.operations.direct_changes.move.application"
+        "memcommit.application.operations.move.application"
     )
     shared_contracts = importlib.import_module(
         "memcommit.application.capabilities.memory_transfer.application"
     )
-    copy_runtime = importlib.import_module("memcommit.application.operations.create_copy_connect.copy.runtime")
-    move_runtime = importlib.import_module("memcommit.application.operations.direct_changes.move.runtime")
+    copy_runtime = importlib.import_module("memcommit.application.operations.copy.runtime")
+    move_runtime = importlib.import_module("memcommit.application.operations.move.runtime")
 
     assert copy_application.run_copy.__module__ == copy_application.__name__
     assert move_application.run_move.__module__ == move_application.__name__
@@ -56,11 +56,7 @@ def test_copy_and_move_own_commands_while_transfer_mechanics_stay_coordinated() 
     interfaces = REPOSITORY_ROOT / "src/memcommit/adapters/interfaces"
 
     for command in ("copy", "move"):
-        root = console / "commands" / (
-            Path("create_copy_connect") / command
-            if command == "copy"
-            else Path("direct_changes") / command
-        )
+        root = console / "commands" / command
         assert (root / "__init__.py").is_file()
         assert (root / "command.py").is_file()
         assert (root / "setup.py").is_file()
@@ -81,7 +77,7 @@ def test_copy_and_move_own_commands_while_transfer_mechanics_stay_coordinated() 
 
 
 def test_branch_remains_a_separate_context_creation_operation() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/create_copy_connect/branch/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/branch/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module

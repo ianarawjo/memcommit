@@ -2,7 +2,7 @@
 
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.system_study_tools.eval.command as command
+import memcommit.adapters.console.commands.eval.command as command
 
 
 runner = CliRunner()

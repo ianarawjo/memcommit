@@ -8,26 +8,26 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.search_explain.retrieve_answer.search.answer_references import (
+from memcommit.application.operations.search.answer_references import (
     SearchAnswerEvidence,
     SearchAnswerSentence,
     build_search_answer_reference_document,
 )
-from memcommit.adapters.console.commands.search_explain.retrieve_answer.query.presentation import (
+from memcommit.adapters.console.commands.query.presentation import (
     render_granted_query_response,
     render_ordinary_query_response,
     render_query_reference_response,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.query.granted_application import (
+from memcommit.application.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryResponse,
     GrantedQueryTarget,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application import (
+from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.query.reference_application import (
+from memcommit.application.operations.query.reference_application import (
     QueryReferenceRequest,
     QueryReferenceResponse,
 )
@@ -129,8 +129,6 @@ def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters
         / "adapters"
         / "console"
         / "commands"
-        / "search_explain"
-        / "retrieve_answer"
         / "query"
         / "command.py"
     )
@@ -149,7 +147,7 @@ def test_query_command_uses_cli_and_terminal_interfaces_without_local_presenters
     }
 
     assert (
-        "from memcommit.adapters.console.commands.search_explain.retrieve_answer.query.presentation import ("
+        "from memcommit.adapters.console.commands.query.presentation import ("
         in source
     )
     assert (
@@ -172,8 +170,6 @@ def test_query_plain_presentation_has_no_store_provider_or_command_dependency():
         / "adapters"
         / "console"
         / "commands"
-        / "search_explain"
-        / "retrieve_answer"
         / "query"
         / "presentation.py"
     )

@@ -12,7 +12,7 @@ presence of any Grant in the session and not the ownership of the Source.
 
 ## Operation ownership
 
-`memcommit.application.operations.semantic_updates.foundation.update.application` is the callable
+`memcommit.application.operations.update.application` is the callable
 application boundary for deterministic, non-persisting local Update. It
 accepts an exact session-independent `UpdatePlan` and returns detached Target
 owner post-images as an `UpdateResult`. A composing operation can therefore
@@ -67,7 +67,7 @@ responses, or proposal revision.
 
 ### Physical model ownership
 
-The historical `memcommit.application.operations.semantic_updates.foundation.update.model` import remains
+The historical `memcommit.application.operations.update.model` import remains
 the public compatibility facade, while its implementation follows five Update
 concepts:
 

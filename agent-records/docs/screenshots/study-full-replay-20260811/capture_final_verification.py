@@ -35,7 +35,7 @@ def main() -> None:
     from memcommit.application.capabilities.context_scope_loading import (
         load_context_scope,
     )
-    from memcommit.application.operations.profiles.profile.config import load_profile_registry
+    from memcommit.application.operations.profile.config import load_profile_registry
     from memcommit.application.operations.sever.session_store import SeverSessionStore
     from memcommit.persistence.store import MemoryStore
 

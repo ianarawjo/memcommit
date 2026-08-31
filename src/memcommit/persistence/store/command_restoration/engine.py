@@ -273,11 +273,11 @@ class _CommandRestorationEngineMixin:
                     raise ConcurrentContextUpdateError(
                         "The active Update receipt changed during restoration."
                     )
-                from memcommit.application.operations.semantic_updates.foundation.update.model import UpdateSession
+                from memcommit.application.operations.update.model import UpdateSession
 
                 self._save_update_session(path, UpdateSession.from_dict(value))
             return
-        from memcommit.application.operations.semantic_updates.curate_integrate.sever.session_store import (
+        from memcommit.application.operations.sever.session_store import (
             SeverSessionStore,
         )
 

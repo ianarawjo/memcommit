@@ -6,7 +6,7 @@ import json
 
 import pytest
 
-from memcommit.application.operations.semantic_updates.derive.distill.goal_fit import (
+from memcommit.application.operations.distill.goal_fit import (
     DISTILL_GOAL_FIT_OPERATION,
     DISTILL_GOAL_FIT_PAYLOAD_MARKER,
     DistillGoalFitError,

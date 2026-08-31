@@ -4,11 +4,11 @@ import pytest
 
 from memcommit.application.authorization import ContextUse, authorize_context_use
 from memcommit.application.capabilities.authority.context_access import ContextAccess
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     canonical_grant_permissions,
 )
-from memcommit.application.operations.profiles.profile.model import ProfileError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 

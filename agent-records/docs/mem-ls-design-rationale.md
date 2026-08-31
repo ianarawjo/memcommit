@@ -574,9 +574,9 @@ The implementation is covered by tests for:
 
 Implementation:
 
-- [`memcommit/application/operations/browse_navigate/list/application.py`](../../src/memcommit/application/operations/browse_navigate/list/application.py)
-- [`memcommit/application/operations/browse_navigate/list/runtime.py`](../../src/memcommit/application/operations/browse_navigate/list/runtime.py)
-- [`memcommit/adapters/console/commands/browse_navigate/list/command.py`](../../src/memcommit/adapters/console/commands/browse_navigate/list/command.py)
+- [`memcommit/application/operations/list/application.py`](../../src/memcommit/application/operations/list/application.py)
+- [`memcommit/application/operations/list/runtime.py`](../../src/memcommit/application/operations/list/runtime.py)
+- [`memcommit/adapters/console/commands/list/command.py`](../../src/memcommit/adapters/console/commands/list/command.py)
 - [`memcommit/adapters/console/clipboard.py`](../../src/memcommit/adapters/console/clipboard.py)
 - [`memcommit/persistence/store/context_memory/`](../../src/memcommit/persistence/store/context_memory/)
 - [`tests/test_commands.py`](../../tests/test_commands.py)

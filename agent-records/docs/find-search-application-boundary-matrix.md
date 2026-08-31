@@ -47,7 +47,7 @@ is removed rather than retained as an inverse compatibility facade.
 ## Package ownership
 
 The canonical semantic Search vertical lives under
-`memcommit.application.operations.search_explain.retrieve_answer.search`. `application.py` and `runtime.py` own the
+`memcommit.application.operations.search`. `application.py` and `runtime.py` own the
 provider-backed read-only analysis request, frozen readable Source, ranking,
 and current-result execution. `save_context.py` translates reviewed Search
 rows into the operation-neutral
@@ -58,11 +58,11 @@ Search analysis therefore cannot publish, while Find or another result-bearing
 operation can later reuse the same save boundary without importing Search.
 
 The historical Find-named Search and materialization facades are removed.
-Importing `memcommit.application.operations.search_explain.retrieve_answer.search` alone remains lazy and does
+Importing `memcommit.application.operations.search` alone remains lazy and does
 not assemble either Search execution or the selection-save capability.
 
 This package is intentionally separate from provider-free Find under
-`memcommit.application.operations.search_explain.retrieve_answer.find`. The relocation changes no readable authority,
+`memcommit.application.operations.find`. The relocation changes no readable authority,
 provider disclosure, ranking, current-only result, selection, saving,
 checkpoint, rollback, or public projection behavior. The current-only Search
 work and its removal of implicit temporal routing remain in the same canonical
@@ -201,7 +201,7 @@ commit self-contained.
    public operation adapter now owns Store/Profile bootstrap and stable typed
    errors; operation-specific provider configuration remains infrastructure.
 3. The interactive workbench and result presenter are physically hosted under
-   `memcommit.adapters.console.commands.search_explain.retrieve_answer.search`; application data and execution
+   `memcommit.adapters.console.commands.search`; application data and execution
    remain outside that adapter owner.
 4. Conversational refinement, Search-owned answer generation, and
    outside-Context confirmation are retired. Ordinary Query retains its own

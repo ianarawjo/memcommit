@@ -65,9 +65,9 @@ with one operation UID, so `mem undo` restores the command as one unit.
 ## Operation ownership
 
 The provider-free read-only analysis is owned by
-`memcommit.application.operations.quality_resolution.diagnose.find_duplicates.application`; it freezes
+`memcommit.application.operations.find_duplicates.application`; it freezes
 Context identity and complete record digests beside the exact groups. The
-applying boundary at `memcommit.application.operations.quality_resolution.repair.dedup.application`
+applying boundary at `memcommit.application.operations.dedup.application`
 consumes that typed analysis and owns only authority, freshness, inbound
 Reference validation, mutation, checkpoints, and receipts. Both CLI and public
 Python therefore follow `Find Duplicates analysis → Dedup Apply`, matching the
@@ -82,7 +82,7 @@ Duplicates, semantic Dedun, and quality-finding routes share that mechanic.
 ## Semantic redundancy finder and Dedun
 
 Semantic redundancy planning and Apply now live entirely under
-`memcommit.application.operations.quality_resolution.repair.dedun`. The package owns its application,
+`memcommit.application.operations.dedun`. The package owns its application,
 relation analysis and direct-or-recursive runtime modules; it no longer borrows the
 `operations.dedup` name. This naming relocation does not make semantic
 inference part of exact Dedup or change either operation's evidence, Apply, or

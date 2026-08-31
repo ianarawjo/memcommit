@@ -12,19 +12,19 @@ adapters.
 
 Meld now names its terminal-independent contracts by pipeline responsibility:
 
-- `memcommit.application.operations.semantic_updates.curate_integrate.meld.preparation` owns the common typed
+- `memcommit.application.operations.meld.preparation` owns the common typed
   Source/target boundary for a new or replacement pipeline. The opaque expected
   version is an initial-condition difference, not a second application.
-- `memcommit.application.operations.semantic_updates.curate_integrate.meld.planning` owns one frozen cached or
+- `memcommit.application.operations.meld.planning` owns one frozen cached or
   provider-backed semantic planning turn, repair, and all-or-nothing
   publication.
-- `memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_iteration` owns saved
+- `memcommit.application.operations.meld.proposal_iteration` owns saved
   snapshots, exact issue/option responses, pending turns, defer,
   provider-free preservation, and destination changes.
-- `memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_projection` projects the
+- `memcommit.application.operations.meld.proposal_projection` projects the
   durable proposal session into the common read-only workbench.
-- `memcommit.application.operations.semantic_updates.curate_integrate.meld.apply` owns reviewed Apply routing.
-  `memcommit.application.operations.semantic_updates.curate_integrate.meld.runtime` supplies Source access,
+- `memcommit.application.operations.meld.apply` owns reviewed Apply routing.
+  `memcommit.application.operations.meld.runtime` supplies Source access,
   preparation, proposal-iteration persistence, cache, checkpoint, recovery,
   and mutation adapters.
 
@@ -190,7 +190,7 @@ the interface, then converted that ordinal back to provider text in the CLI.
 The CLI's scripted `--choice` path did the same independently, while Python and
 agent callers could submit only free-form text. The corrected boundary carries
 the exact option UID into
-`memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_iteration`; only that operation layer
+`memcommit.application.operations.meld.proposal_iteration`; only that operation layer
 reads its frozen option text. Python exposes option UID and requires the
 expected version for every comment, while the agent requires
 `expected_version` for comment, preserve, defer, and Apply. Apply alone accepts

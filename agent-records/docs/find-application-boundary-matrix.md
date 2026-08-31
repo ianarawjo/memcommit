@@ -34,7 +34,7 @@ agent memcommit_find ----------------/          |
 ## Package ownership
 
 The canonical provider-free implementation now lives under
-`memcommit.application.operations.search_explain.retrieve_answer.find`. `application.py` owns the exact request,
+`memcommit.application.operations.find`. `application.py` owns the exact request,
 frozen Source frame, span and result contracts, pattern validation, and
 complete non-overlapping matching. `runtime.py` owns readable catalog
 composition, lexical and embedded reach, MemoryRef resolution, and the Store
@@ -43,7 +43,7 @@ agent and presentation adapters import those operation-owned modules
 directly.
 
 The human console vertical is co-located under
-`memcommit.adapters.console.commands.search_explain.retrieve_answer.find`: `command.py` owns orchestration,
+`memcommit.adapters.console.commands.find`: `command.py` owns orchestration,
 `presentation.py` and `source_row.py` own result projection, while `workbench/`
 owns the interactive request setup opened only when the pattern is omitted.
 The former CLI and operation-specific TUI interface
@@ -56,7 +56,7 @@ The historical `memcommit.literal_find_application` and
 `memcommit.literal_find_runtime` paths remain behavior-free module-identity
 aliases. Old imports, monkeypatch targets, and serialized globals therefore
 resolve to the same canonical module, while importing
-`memcommit.application.operations.search_explain.retrieve_answer.find` alone remains lazy.
+`memcommit.application.operations.find` alone remains lazy.
 
 This relocation names the implementation owner without changing public Find
 semantics. It does not absorb semantic Search's `memcommit.find_application`

@@ -12,14 +12,14 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.adapters.console.commands.search_explain.retrieve_answer.components.save_panel import (
+from memcommit.adapters.console.terminal.components.retrieve_answer_save.save_panel import (
     RetrieveAnswerSavePanel,
 )
-from memcommit.adapters.console.commands.search_explain.retrieve_answer.find.workbench import (
+from memcommit.adapters.console.commands.find.workbench import (
     FindTuiSetup,
     run_find_workbench,
 )
-from memcommit.adapters.console.commands.search_explain.retrieve_answer.query.workbench import (
+from memcommit.adapters.console.commands.query.workbench import (
     run_query_workbench,
 )
 from memcommit.application.capabilities.authority.context_access import (
@@ -31,23 +31,23 @@ from memcommit.application.capabilities.authority.readable_contexts import (
 from memcommit.application.capabilities.save_context_from_selection.runtime import (
     execute_save_context_from_selection,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.find.application import (
+from memcommit.application.operations.find.application import (
     FindRequest,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.find.runtime import (
+from memcommit.application.operations.find.runtime import (
     execute_find,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.find.save_context import (
+from memcommit.application.operations.find.save_context import (
     save_context_request_from_find,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application import (
+from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.query.save_answer import (
+from memcommit.application.operations.query.save_answer import (
     SaveQueryAnswerRequest,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.query.save_answer_runtime import (
+from memcommit.application.operations.query.save_answer_runtime import (
     execute_save_query_answer,
 )
 from memcommit.core.context import Memory
@@ -197,10 +197,10 @@ def test_query_workbench_returns_answer_save_request_after_answer() -> None:
 
 def test_shared_save_panel_has_one_visible_location_vocabulary() -> None:
     relative_paths = (
-        "src/memcommit/adapters/console/commands/search_explain/retrieve_answer/components/save_panel.py",
-        "src/memcommit/adapters/console/commands/search_explain/retrieve_answer/find/workbench/screen.py",
-        "src/memcommit/adapters/console/commands/search_explain/retrieve_answer/search/search_workbench.py",
-        "src/memcommit/adapters/console/commands/search_explain/retrieve_answer/query/workbench/screen.py",
+        "src/memcommit/adapters/console/terminal/components/retrieve_answer_save/save_panel.py",
+        "src/memcommit/adapters/console/commands/find/workbench/screen.py",
+        "src/memcommit/adapters/console/commands/search/search_workbench.py",
+        "src/memcommit/adapters/console/commands/query/workbench/screen.py",
     )
     sources = "\n".join(
         (REPOSITORY_ROOT / path).read_text(encoding="utf-8")

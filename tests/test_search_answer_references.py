@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.application.operations.search_explain.retrieve_answer.search.answer_references import (
+from memcommit.application.operations.search.answer_references import (
     SearchAnswerEvidence,
     SearchAnswerReferenceError,
     SearchAnswerSentence,

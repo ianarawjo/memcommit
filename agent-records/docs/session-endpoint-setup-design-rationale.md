@@ -360,7 +360,7 @@ The implementation has three layers:
    draft state.
 3. Compare, Update, Meld, and Sever adapters own role specs, typed receipts,
    semantic validation, and orchestration. Sever owns that projection directly
-   in `memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.endpoint_setup`; the shared component
+   in `memcommit.adapters.console.commands.sever.endpoint_setup`; the shared component
    remains operation-neutral.
 
 The Endpoint Setup composition lives under

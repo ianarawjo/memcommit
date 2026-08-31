@@ -5,19 +5,19 @@ from __future__ import annotations
 import pytest
 from typer.testing import CliRunner
 
-from memcommit.adapters.console.commands.ground_workbench.ground.command.workflow import (
+from memcommit.adapters.console.commands.ground.command.workflow import (
     create as ground_create_workflow,
     open as ground_open_workflow,
 )
 from memcommit.application.capabilities import ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.ground_workbench.ground.shell import GroundShellResult
-from memcommit.application.operations.ground_workbench.ground.dialogue import (
+from memcommit.adapters.console.commands.ground.shell import GroundShellResult
+from memcommit.application.operations.ground.dialogue import (
     GroundDialogueError,
     GroundDialogueNewContextSuggestion,
     GroundDialogueProposal,
 )
-from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
+from memcommit.application.operations.ground.workspace_runtime import (
     load_ground_workspace,
 )
 from memcommit.persistence.store import MemoryStore

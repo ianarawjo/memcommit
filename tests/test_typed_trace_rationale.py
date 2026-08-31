@@ -8,11 +8,11 @@ from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory, MemoryRef
-from memcommit.application.operations.history_recovery.inspection.rationale.rules import (
+from memcommit.application.operations.rationale.rules import (
     RationaleLimitUnit,
     RationaleNarrativeStatus,
 )
-from memcommit.application.operations.history_recovery.inspection.rationale.semantic import (
+from memcommit.application.operations.rationale.semantic import (
     RationaleNarrativeProjection,
 )
 from memcommit.persistence.store import MemoryStore
@@ -123,11 +123,11 @@ def test_reference_rationale_explains_relation_then_target_provenance(
     assert invoke("embed", memory.uid, "--from", "source").exit_code == 0
     reference = _reference(store, "parent")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.history_recovery.inspection.rationale.command.connect_semantic_provider",
+        "memcommit.adapters.console.commands.rationale.command.connect_semantic_provider",
         lambda: object(),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.history_recovery.inspection.rationale.command.synthesize_rationale_provenance",
+        "memcommit.adapters.console.commands.rationale.command.synthesize_rationale_provenance",
         lambda *args, **kwargs: RationaleNarrativeProjection(
             status=RationaleNarrativeStatus.AVAILABLE,
             text="The target was added directly as retained source evidence.",
@@ -166,7 +166,7 @@ def test_snapshot_reference_rationale_never_opens_live_target_provenance(
         raise AssertionError("snapshot rationale connected a provider")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.history_recovery.inspection.rationale.command.connect_semantic_provider",
+        "memcommit.adapters.console.commands.rationale.command.connect_semantic_provider",
         forbidden,
     )
     assert invoke("edit", f"source:{memory.uid}", "later source value").exit_code == 0

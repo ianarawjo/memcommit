@@ -6,14 +6,14 @@ from types import SimpleNamespace
 
 import pytest
 
-import memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_iteration as resolution_application
-from memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_iteration import (
+import memcommit.application.operations.meld.proposal_iteration as resolution_application
+from memcommit.application.operations.meld.proposal_iteration import (
     MeldResolutionError,
     MeldResolutionTurnRequest,
     meld_resolution_case,
     prepare_meld_resolution_turn,
 )
-from memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_iteration import MeldSessionSnapshot
+from memcommit.application.operations.meld.proposal_iteration import MeldSessionSnapshot
 
 
 def _snapshot() -> MeldSessionSnapshot:

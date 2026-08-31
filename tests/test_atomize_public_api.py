@@ -24,11 +24,11 @@ from memcommit import (
     AtomizeStructuralApplyResult,
     MemCommitClient,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+from memcommit.application.operations.atomize.domain import (
     create_atomize_analysis,
     impact_atomize,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.runtime import (
+from memcommit.application.operations.atomize.runtime import (
     capture_atomize_execution_snapshot,
 )
 from memcommit.adapters.python_api.errors import AtomizeExecutionError
@@ -215,7 +215,7 @@ def test_exact_hidden_prewarm_is_materialized_without_provider(
         output_context_name=context.name,
     )
     monkeypatch.setattr(
-        "memcommit.application.operations.semantic_updates.derive.atomize.analysis_runtime.find_declared_atomize_prewarm",
+        "memcommit.application.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
         lambda *, store, context: match,
     )
     client = MemCommitClient(
@@ -237,7 +237,7 @@ def test_refresh_dominates_prepared_preference_and_calls_provider(
 ):
     client, _store, context, _memory, provider = _client_and_context()
     monkeypatch.setattr(
-        "memcommit.application.operations.semantic_updates.derive.atomize.analysis_runtime.find_declared_atomize_prewarm",
+        "memcommit.application.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
         lambda **_kwargs: pytest.fail("refresh looked up a prepared analysis"),
     )
 
@@ -593,7 +593,7 @@ def test_public_client_keeps_structural_atomize_assembly_lazy(tmp_path):
                     "from pathlib import Path",
                     "from memcommit.adapters.python_api import AtomizeInputError, MemCommitClient",
                     "assert 'memcommit.adapters.python_api._operations.atomize' not in sys.modules",
-                    "assert 'memcommit.application.operations.semantic_updates.derive.atomize.analysis_runtime' not in sys.modules",
+                    "assert 'memcommit.application.operations.atomize.analysis_runtime' not in sys.modules",
                     "client = MemCommitClient(root=Path(os.environ['MEMCOMMIT_ATOMIZE_IMPORT_ROOT']), create=True)",
                     "assert 'memcommit.adapters.python_api._operations.atomize' not in sys.modules",
                     "try:",
@@ -603,7 +603,7 @@ def test_public_client_keeps_structural_atomize_assembly_lazy(tmp_path):
                     "else:",
                     "    raise AssertionError('invalid Atomize input succeeded')",
                     "assert 'memcommit.adapters.python_api._operations.atomize' in sys.modules",
-                    "assert 'memcommit.application.operations.semantic_updates.derive.atomize.analysis_runtime' in sys.modules",
+                    "assert 'memcommit.application.operations.atomize.analysis_runtime' in sys.modules",
                     "assert 'memcommit.adapters.python_api._operations.atomize_grounding' not in sys.modules",
                 )
             ),

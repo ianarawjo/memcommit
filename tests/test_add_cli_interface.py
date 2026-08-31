@@ -6,7 +6,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.system_study_tools.help.command import COMMAND_FORMS
+from memcommit.adapters.console.commands.help.command import COMMAND_FORMS
 from memcommit.persistence.store import MemoryStore
 
 

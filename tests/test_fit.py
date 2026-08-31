@@ -6,31 +6,31 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.quality_resolution.validate.fit.command as fit_command
+import memcommit.adapters.console.commands.fit.command as fit_command
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.quality_resolution.validate.fit.ground_report import (
+from memcommit.application.operations.fit.ground_report import (
     FIT_SCHEMA_VERSION,
     FitError,
     FitExample,
     FitRule,
     fit_ground_examples,
 )
-from memcommit.application.operations.quality_resolution.validate.fit.coherence import (
+from memcommit.application.operations.fit.coherence import (
     FIT_COHERENCE_OPERATION,
     FIT_COHERENCE_PAYLOAD_MARKER,
 )
-from memcommit.application.operations.quality_resolution.validate.fit.runtime import (
+from memcommit.application.operations.fit.runtime import (
     execute_and_save_ground_fit,
 )
-from memcommit.application.operations.quality_resolution.validate.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
-from memcommit.application.operations.quality_resolution.validate.fit.store import FitStore
+from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
+from memcommit.application.operations.fit.store import FitStore
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.ground_workbench.ground.workspace_application import (
+from memcommit.application.operations.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
 )
-from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
+from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
     load_ground_workspace,

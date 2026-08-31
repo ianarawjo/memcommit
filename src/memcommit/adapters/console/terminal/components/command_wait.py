@@ -79,8 +79,8 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
 from memcommit.application.capabilities.authority.granted_context_navigation import (
     freeze_granted_context_navigation,
 )
-from memcommit.application.operations.profiles.profile.config import ProfileConfigError
-from memcommit.application.operations.profiles.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.source_projection.model import SourceDisplayFacts, SourceState
 from memcommit.source_projection.presentation import (
     SourceDisplayValue,

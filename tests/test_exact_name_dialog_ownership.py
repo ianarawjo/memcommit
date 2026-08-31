@@ -73,7 +73,7 @@ def test_canonical_source_matches_pre_move_source_after_import_normalization() -
 def test_import_workbench_uses_the_console_tui_owned_dialog() -> None:
     source_path = (
         REPOSITORY_ROOT
-        / "src/memcommit/adapters/console/commands/create_copy_connect/resource_import/workbench.py"
+        / "src/memcommit/adapters/console/commands/resource_import/workbench.py"
     )
     tree = ast.parse(source_path.read_text(encoding="utf-8"), filename=str(source_path))
 

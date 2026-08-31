@@ -5,12 +5,12 @@ from __future__ import annotations
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.application.operations.create_copy_connect.add.application import (
+from memcommit.application.operations.add.application import (
     AddedMemory,
     AddRequest,
     AddResult,
 )
-from memcommit.adapters.console.commands.create_copy_connect.add.workbench import (
+from memcommit.adapters.console.commands.add.workbench import (
     AddDraftState,
     AddWorkbenchSetup,
     run_add_workbench,

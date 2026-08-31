@@ -8,11 +8,11 @@ transaction: one require-new Context or one missing-parent batch is created,
 checkpointed, and selected under a current-Context compare-and-swap. The
 problem was ownership rather than missing safety. CLI arguments, optional TUI
 name input, creation planning, checkpoint policy, Store execution, and console
-rendering all lived in `commands/create_copy_connect/init/command.py`.
+rendering all lived in `commands/init/command.py`.
 
 This extraction moves the use case behind one typed application request and
 result while preserving that Store transaction. Its implementation is now
-owned by `memcommit.application.operations.create_copy_connect.init`; the former top-level application
+owned by `memcommit.application.operations.init`; the former top-level application
 and runtime paths remain true module aliases for compatibility. This ownership
 relocation changes no request, result, validation, checkpoint, transaction,
 output, or interaction behavior. A later shared naming update
@@ -21,7 +21,7 @@ shape; it changes neither the ordinary Context schema nor checkpoint schema,
 and existing legacy names remain readable.
 
 The console-specific input and output adapters are co-located under
-`memcommit.adapters.console.commands.create_copy_connect.init`: `command.py` owns orchestration,
+`memcommit.adapters.console.commands.init`: `command.py` owns orchestration,
 `choose_name.py` owns the optional exact-name editor, and `receipt.py` owns successful
 human-readable output. The former operation-specific TUI and CLI interface
 paths are removed without facades. The shared Context name editor and its draft
@@ -67,13 +67,13 @@ typed data; it is not yet a stable public Python API.
 
 | Concern | Owner after extraction | Contract |
 | --- | --- | --- |
-| CLI argument parsing and cancellation text | `commands/create_copy_connect/init/command.py` | No request is executed after TUI cancellation. |
-| Suggested exact-name editing | `commands/create_copy_connect/init/choose_name.py` over the shared Context name editor | Returns a request only; creates, loads, switches, and persists nothing. |
-| Successful human-readable output | `commands/create_copy_connect/init/receipt.py` | Preserves the established single and `--parents` receipts. |
-| Parent-prefix expansion | `operations/create_copy_connect/init/application.py` | Ordered lexical prefixes end at the requested leaf. No embedded-Context relation is created. |
-| Require-new versus reuse policy | `operations/create_copy_connect/init/application.py` | Exact mode requires the sole Context to be new; `--parents` may reuse any valid existing prefix, including the leaf. |
-| Initial checkpoint arguments and descriptions | `operations/create_copy_connect/init/application.py` | Exact mode records `name`; parent mode additionally records `parents` and `requested_name` for every created prefix. |
-| Context construction and name validation | `operations/create_copy_connect/init/runtime.py` over `context_naming.py` | Production uses the existing in-memory `ops.init` factory and the shared new-identity validator, including the UUID-selector reservation. |
+| CLI argument parsing and cancellation text | `commands/init/command.py` | No request is executed after TUI cancellation. |
+| Suggested exact-name editing | `commands/init/choose_name.py` over the shared Context name editor | Returns a request only; creates, loads, switches, and persists nothing. |
+| Successful human-readable output | `commands/init/receipt.py` | Preserves the established single and `--parents` receipts. |
+| Parent-prefix expansion | `operations/init/application.py` | Ordered lexical prefixes end at the requested leaf. No embedded-Context relation is created. |
+| Require-new versus reuse policy | `operations/init/application.py` | Exact mode requires the sole Context to be new; `--parents` may reuse any valid existing prefix, including the leaf. |
+| Initial checkpoint arguments and descriptions | `operations/init/application.py` | Exact mode records `name`; parent mode additionally records `parents` and `requested_name` for every created prefix. |
+| Context construction and name validation | `operations/init/runtime.py` over `context_naming.py` | Production uses the existing in-memory `ops.init` factory and the shared new-identity validator, including the UUID-selector reservation. |
 | Locks, symlink checks, atomic batch rollback, and current CAS | `MemoryStore.create_missing_contexts` | All names remain locked through creation, rollback, and the final state write. |
 
 ## Durable invariants

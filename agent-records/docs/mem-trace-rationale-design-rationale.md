@@ -411,7 +411,7 @@ placement is itself necessary to understand the provenance.
 
 ### Versioned natural-provenance rules and exact cases
 
-`application/operations/history_recovery/inspection/rationale/fixtures/rationale.json` is the sole authored Rationale ruleset.
+`application/operations/rationale/fixtures/rationale.json` is the sole authored Rationale ruleset.
 `memcommit.rationale_rules` strictly checks its version, named rules, complete
 Trace case shapes, exact expected narratives, linked rule IDs, bounds, and
 known-wrong narratives. `rationale_ruleset_prompt_payload()` then places every

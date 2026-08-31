@@ -34,7 +34,7 @@ class _AtomizeStateStoreMixin:
 
     def load_atomize_analysis(self, context_uid: str):
         """Return one Context's latest saved atomize preview, or None."""
-        from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+        from memcommit.application.operations.atomize.domain import (
             AtomizeAnalysisSession,
             AtomizeImpactError,
         )
@@ -68,7 +68,7 @@ class _AtomizeStateStoreMixin:
     def save_atomize_analysis(self, session) -> None:
         """Atomically persist a validated, non-applying atomize preview."""
 
-        from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+        from memcommit.application.operations.atomize.domain import (
             AtomizeAnalysisSession,
         )
 
@@ -81,7 +81,7 @@ class _AtomizeStateStoreMixin:
     def _save_atomize_analysis_locked(self, session) -> None:
         """Persist one analysis while its Context-scoped CAS lock is held."""
 
-        from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+        from memcommit.application.operations.atomize.domain import (
             AtomizeAnalysisSession,
             AtomizeImpactError,
         )
@@ -133,10 +133,10 @@ class _AtomizeStateStoreMixin:
 
     def load_atomize_workbench(self, analysis):
         """Load mutable state only against one exact saved analysis."""
-        from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+        from memcommit.application.operations.atomize.domain import (
             AtomizeAnalysisSession,
         )
-        from memcommit.application.operations.semantic_updates.derive.atomize.records import (
+        from memcommit.application.operations.atomize.records import (
             AtomizeRecordError,
             AtomizeReviewRecord,
             atomize_review_issue_projection,
@@ -190,7 +190,7 @@ class _AtomizeStateStoreMixin:
     @_profile_write_guarded
     def save_atomize_workbench(self, session) -> None:
         """Atomically persist one Context-bound mutable workbench."""
-        from memcommit.application.operations.semantic_updates.derive.atomize.records import (
+        from memcommit.application.operations.atomize.records import (
             AtomizeReviewRecord,
         )
 
@@ -201,7 +201,7 @@ class _AtomizeStateStoreMixin:
 
     def _save_atomize_workbench_locked(self, session) -> None:
         """Persist one workbench while its Context-scoped CAS lock is held."""
-        from memcommit.application.operations.semantic_updates.derive.atomize.records import (
+        from memcommit.application.operations.atomize.records import (
             AtomizeRecordError,
             AtomizeReviewRecord,
             atomize_review_issue_projection,
@@ -270,11 +270,11 @@ class _AtomizeStateStoreMixin:
     def archive_atomize_session(self, analysis, workbench) -> bool:
         """Retain one displaced analysis/workbench pair under its analysis UID."""
 
-        from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+        from memcommit.application.operations.atomize.domain import (
             AtomizeAnalysisSession,
             AtomizeImpactError,
         )
-        from memcommit.application.operations.semantic_updates.derive.atomize.records import (
+        from memcommit.application.operations.atomize.records import (
             AtomizeRecordError,
             AtomizeReviewRecord,
             atomize_review_issue_projection,
@@ -370,11 +370,11 @@ class _AtomizeStateStoreMixin:
     ):
         """Load one immutable displaced Atomize pair and its exact path."""
 
-        from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+        from memcommit.application.operations.atomize.domain import (
             AtomizeAnalysisSession,
             AtomizeImpactError,
         )
-        from memcommit.application.operations.semantic_updates.derive.atomize.records import (
+        from memcommit.application.operations.atomize.records import (
             AtomizeRecordError,
             AtomizeReviewRecord,
             atomize_review_issue_projection,

@@ -9,7 +9,7 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 
 from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
-from memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.endpoint_setup import (
+from memcommit.adapters.console.commands.sever.endpoint_setup import (
     SeverEndpointSelection,
     SeverSetupReceipt,
     SeverTuiSetup,
@@ -284,11 +284,11 @@ def test_granted_source_cannot_be_presented_as_a_local_self_save() -> None:
 
 def test_sever_setup_is_command_owned_without_compatibility_facades() -> None:
     assert choose_sever_setup.__module__ == (
-        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.endpoint_setup"
+        "memcommit.adapters.console.commands.sever.endpoint_setup"
     )
     assert not (
         REPOSITORY_ROOT
-        / "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/sever/setup_shell.py"
+        / "src/memcommit/adapters/console/commands/sever/setup_shell.py"
     ).exists()
     former_interface = (
         REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/tui/operations/sever"

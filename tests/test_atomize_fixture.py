@@ -13,8 +13,6 @@ FIXTURE_PATH = (
     / "memcommit"
     / "application"
     / "operations"
-    / "semantic_updates"
-    / "derive"
     / "atomize"
     / "fixtures"
     / "atomize.json"

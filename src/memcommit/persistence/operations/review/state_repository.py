@@ -20,7 +20,7 @@ class _ReviewStateStoreMixin:
     @staticmethod
     def _load_review_session(path: Path):
         """Load and strictly validate the active semantic review."""
-        from memcommit.application.operations.operation_lifecycle.review.model import (
+        from memcommit.application.operations.review.model import (
             ReviewError,
             ReviewSession,
         )
@@ -65,7 +65,7 @@ class _ReviewStateStoreMixin:
     def load_review_session_source(self, session_uid: str) -> Context:
         """Load the immutable direct-Context frame bound to one Review UID."""
 
-        from memcommit.application.operations.operation_lifecycle.review.model import direct_context_digest
+        from memcommit.application.operations.review.model import direct_context_digest
 
         session = self.load_review_session_by_uid(session_uid)
         path = self._review_session_source_path(session_uid)
@@ -96,7 +96,7 @@ class _ReviewStateStoreMixin:
     def _retain_review_session_source(self, session) -> bool:
         """Persist the initial source frame once when it is still available."""
 
-        from memcommit.application.operations.operation_lifecycle.review.model import direct_context_digest
+        from memcommit.application.operations.review.model import direct_context_digest
 
         path = self._review_session_source_path(session.uid)
         if path.exists() or path.is_symlink():
@@ -168,7 +168,7 @@ class _ReviewStateStoreMixin:
     @_profile_write_guarded
     def save_review_session(self, session) -> None:
         """Atomically save one validated semantic review session."""
-        from memcommit.application.operations.operation_lifecycle.review.model import (
+        from memcommit.application.operations.review.model import (
             ReviewError,
             ReviewSession,
         )

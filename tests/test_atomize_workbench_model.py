@@ -8,7 +8,7 @@ import uuid
 
 import pytest
 
-from memcommit.application.operations.semantic_updates.derive.atomize.records import (
+from memcommit.application.operations.atomize.records import (
     ATOMIZE_WORKBENCH_SCHEMA_VERSION,
     AtomizeRecordError,
     AtomizeReviewIssue,

@@ -32,7 +32,7 @@ trivial canonical-to-canonical comparisons.
 
 The installed `mem` entry point, command names and options, canonical Python
 modules, public operation behavior, and durable memcommit data schemas are not
-changed. Command entry packages such as `memcommit.adapters.console.commands.create_copy_connect.add` also remain;
+changed. Command entry packages such as `memcommit.adapters.console.commands.add` also remain;
 only their former flat support-module siblings are removed.
 
 ## Alternatives

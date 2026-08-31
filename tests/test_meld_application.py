@@ -6,8 +6,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import MELD_OWNER_AWARE_SCHEMA_VERSION
-from memcommit.application.operations.semantic_updates.curate_integrate.meld.apply import (
+from memcommit.application.operations.meld.model import MELD_OWNER_AWARE_SCHEMA_VERSION
+from memcommit.application.operations.meld.apply import (
     MeldApplicationError,
     MeldApplyReceipt,
     MeldApplyRequest,

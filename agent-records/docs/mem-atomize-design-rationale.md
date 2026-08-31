@@ -899,7 +899,7 @@ the final digest comparison rejects any intervening Source change.
 ## Golden regression contract
 
 The machine-readable seed corpus is
-`application/operations/semantic_updates/derive/atomize/fixtures/atomize.json`. It adapts the clozemaking one-view
+`application/operations/atomize/fixtures/atomize.json`. It adapts the clozemaking one-view
 format as:
 
 ```text

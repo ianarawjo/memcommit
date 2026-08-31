@@ -1,0 +1,80 @@
+"""Process-local setup and close values for deterministic Find."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Literal
+
+from memcommit.application.capabilities.save_context_from_selection.application import (
+    SaveContextMode,
+)
+from memcommit.application.operations.find.application import FindResult
+from memcommit.source_projection.presentation import SourceDisplayValue
+
+
+@dataclass(frozen=True, slots=True)
+class FindTuiSetup:
+    names: tuple[str, ...]
+    current_name: str
+    initial_targets: tuple[str, ...]
+    annotations: tuple[tuple[str, SourceDisplayValue], ...] = ()
+
+    def __post_init__(self) -> None:
+        if (
+            not self.names
+            or len(set(self.names)) != len(self.names)
+            or any(not isinstance(name, str) or not name for name in self.names)
+        ):
+            raise ValueError("Find TUI requires a distinct readable catalog.")
+        if self.current_name not in self.names:
+            raise ValueError("Find TUI current Context is outside the catalog.")
+        if (
+            not self.initial_targets
+            or len(set(self.initial_targets)) != len(self.initial_targets)
+            or any(name not in self.names for name in self.initial_targets)
+        ):
+            raise ValueError("Find TUI targets are outside the catalog.")
+        annotations = dict(self.annotations)
+        if len(annotations) != len(self.annotations) or set(annotations) - set(
+            self.names
+        ):
+            raise ValueError("Find TUI annotations are outside the catalog.")
+
+
+@dataclass(frozen=True, slots=True)
+class FindTuiOutcome:
+    result: FindResult
+    status: Literal["CLOSED", "SAVE"] = "CLOSED"
+    selected_match_indices: tuple[int, ...] = ()
+    save_as: SaveContextMode | None = None
+    save_location: str | None = None
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.result, FindResult):
+            raise ValueError("Find TUI requires one complete typed result.")
+        if self.status == "CLOSED":
+            if (
+                self.selected_match_indices
+                or self.save_as is not None
+                or self.save_location is not None
+            ):
+                raise ValueError("A closed Find TUI cannot request a save.")
+            return
+        if (
+            not self.selected_match_indices
+            or self.save_as not in {"COPY", "REFERENCE", "EMBED"}
+            or not isinstance(self.save_location, str)
+            or not self.save_location.strip()
+            or len(set(self.selected_match_indices))
+            != len(self.selected_match_indices)
+            or any(
+                isinstance(index, bool)
+                or not isinstance(index, int)
+                or not 0 <= index < len(self.result.matches)
+                for index in self.selected_match_indices
+            )
+        ):
+            raise ValueError("Find SAVE requires reviewed match choices.")
+
+
+__all__ = ["FindTuiOutcome", "FindTuiSetup"]

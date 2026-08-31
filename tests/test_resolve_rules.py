@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from memcommit.application.operations.quality_resolution.repair.resolve.rules import (
+from memcommit.application.operations.resolve.rules import (
     RESOLVE_RULESET_VERSION,
     resolve_ruleset,
     resolve_ruleset_prompt_payload,

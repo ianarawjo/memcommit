@@ -16,7 +16,7 @@ second product identity without protecting any data.
 
 ## Selected boundary
 
-The `memcommit.application.operations.ground_workbench.ground.model` package and the
+The `memcommit.application.operations.ground.model` package and the
 Ground-session Store have been removed. Physical Ground now has these owners:
 
 - `ground/workspace_model.py` owns the Context-rooted manifest and workspace

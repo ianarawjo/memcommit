@@ -13,10 +13,10 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_atomize_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.semantic_updates.derive.atomize
+import memcommit.application.operations.atomize
 
-assert "memcommit.application.operations.semantic_updates.derive.atomize.application" not in sys.modules
-assert "memcommit.application.operations.semantic_updates.derive.atomize.runtime" not in sys.modules
+assert "memcommit.application.operations.atomize.application" not in sys.modules
+assert "memcommit.application.operations.atomize.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -30,8 +30,8 @@ def test_primary_atomize_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/atomize.py",
         "src/memcommit/adapters/python_api/_operations/atomize.py",
-        "src/memcommit/adapters/console/commands/semantic_updates/derive/atomize/command.py",
-        "src/memcommit/application/operations/semantic_updates/derive/atomize/runtime.py",
+        "src/memcommit/adapters/console/commands/atomize/command.py",
+        "src/memcommit/application/operations/atomize/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -44,18 +44,18 @@ def test_primary_atomize_has_no_grounding_execution_dependency() -> None:
     primary = "\n".join(
         (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         for relative_path in (
-            "src/memcommit/application/operations/semantic_updates/derive/atomize/application.py",
-            "src/memcommit/application/operations/semantic_updates/derive/atomize/runtime.py",
+            "src/memcommit/application/operations/atomize/application.py",
+            "src/memcommit/application/operations/atomize/runtime.py",
         )
     )
     analysis_application = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/semantic_updates/derive/atomize/analysis_application.py"
+        / "src/memcommit/application/operations/atomize/analysis_application.py"
     ).read_text(encoding="utf-8")
     assert "memcommit.atomize_analysis_application" not in primary
     assert "memcommit.atomize_grounding_application" not in primary
     assert "class AtomizeAnalysisOpenRequest" in analysis_application
     assert not (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/semantic_updates/derive/atomize/grounding_application.py"
+        / "src/memcommit/application/operations/atomize/grounding_application.py"
     ).exists()

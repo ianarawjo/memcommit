@@ -2,7 +2,7 @@
 
 > **2026-08-31 shared SAVE update:** Find and Search now share one conditional
 > `SAVE` frame owned by
-> `adapters.console.commands.search_explain.retrieve_answer.components`.
+> `adapters.console.commands.components`.
 > It renders `CONTENT`, `MODE`, direct `LOCATION` plus transient `BROWSE`, and
 > `ACTION` in one box. The separate `SAVE AS`, parent-browser, Save Location,
 > and `TO DO` frames and visible `PARENT CONTEXT`/`REPARENT` vocabulary below

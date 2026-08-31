@@ -7,7 +7,7 @@ import json
 import uuid
 from dataclasses import dataclass
 
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     canonical_grant_permissions,
 )

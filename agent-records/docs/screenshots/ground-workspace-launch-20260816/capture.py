@@ -56,14 +56,14 @@ def _isolate_store(root: Path) -> None:
 def _run_child() -> None:
     from typer.testing import CliRunner
 
-    from memcommit.adapters.console.commands.ground_workbench.ground.command.workflow import (
+    from memcommit.adapters.console.commands.ground.command.workflow import (
         apply as ground_apply_workflow,
         create as ground_create_workflow,
     )
     import memcommit.application.capabilities.ops as ops
     from memcommit.adapters.console.entrypoint import app
-    from memcommit.application.operations.ground_workbench.ground.dialogue import GroundDialogueProposal
-    from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
+    from memcommit.application.operations.ground.dialogue import GroundDialogueProposal
+    from memcommit.application.operations.ground.workspace_runtime import (
         load_ground_workspace,
     )
     from memcommit.persistence.store import MemoryStore

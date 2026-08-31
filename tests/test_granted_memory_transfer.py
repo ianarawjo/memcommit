@@ -24,10 +24,10 @@ from memcommit.application.capabilities.memory_transfer.application import (
     MemoryTransferStalePlanError,
     MoveMemoriesRequest,
 )
-from memcommit.application.operations.create_copy_connect.copy.application import run_copy
+from memcommit.application.operations.copy.application import run_copy
 from memcommit.application.capabilities.memory_transfer.runtime import MemoryStoreCopyAndMovePort
-from memcommit.application.operations.direct_changes.move.application import run_move
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.move.application import run_move
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -36,7 +36,7 @@ from memcommit.application.operations.profiles.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profiles.profile.model import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     create_authority_grant,
     create_profile,

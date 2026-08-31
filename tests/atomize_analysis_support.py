@@ -4,16 +4,16 @@ from __future__ import annotations
 
 from typing import Callable
 
-from memcommit.application.operations.semantic_updates.derive.atomize.analysis_application import (
+from memcommit.application.operations.atomize.analysis_application import (
     AtomizeAnalysisOpenRequest,
     AtomizeAnalysisOpenResult,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.analysis_runtime import (
+from memcommit.application.operations.atomize.analysis_runtime import (
     ATOMIZE_AGGREGATE_TIMEOUT_SECONDS,
     _connect_aggregate_atomize_provider,
     execute_atomize_analysis_open,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+from memcommit.application.operations.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeFrameOrigin,
     AtomizeProvider,

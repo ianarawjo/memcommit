@@ -109,77 +109,10 @@ ENTRY_TARGETS = {
 }
 
 
-# Public command names and historical baseline stems are intentionally kept
-# separate from physical package ownership. The catalog family is the stable
-# first path component for classified operations on the console side.
-COMMAND_PACKAGE_TARGETS = {
-    "status": "browse_navigate.status",
-    "pwd": "browse_navigate.pwd",
-    "contexts": "browse_navigate.contexts",
-    "list": "browse_navigate.list",
-    "show": "browse_navigate.show",
-    "switch": "browse_navigate.switch",
-    "checkout": "browse_navigate.checkout",
-    "rename": "browse_navigate.rename",
-    "init": "create_copy_connect.init",
-    "add": "create_copy_connect.add",
-    "copy": "create_copy_connect.copy",
-    "branch": "create_copy_connect.branch",
-    "resource_import": "create_copy_connect.resource_import",
-    "reference": "create_copy_connect.reference",
-    "embed": "create_copy_connect.embed",
-    "find": "search_explain.retrieve_answer.find",
-    "search": "search_explain.retrieve_answer.search",
-    "query": "search_explain.retrieve_answer.query",
-    "summarize": "search_explain.synthesize.summarize",
-    "compare": "search_explain.synthesize.compare",
-    "edit": "direct_changes.edit",
-    "move": "direct_changes.move",
-    "replace": "direct_changes.replace",
-    "chunk": "direct_changes.chunk",
-    "delete": "direct_changes.delete",
-    "clear": "direct_changes.clear",
-    "merge": "direct_changes.merge",
-    "remove": "direct_changes.remove",
-    "update": "semantic_updates.foundation.update",
-    "atomize": "semantic_updates.derive.atomize",
-    "distill": "semantic_updates.derive.distill",
-    "makemore": "semantic_updates.derive.makemore",
-    "forget": "semantic_updates.curate_integrate.forget",
-    "sever": "semantic_updates.curate_integrate.sever",
-    "meld": "semantic_updates.curate_integrate.meld",
-    "translate": "translation.translate",
-    "find_duplicates": "quality_resolution.diagnose.find_duplicates",
-    "find_redundancies": "quality_resolution.diagnose.find_redundancies",
-    "find_ambiguities": "quality_resolution.diagnose.find_ambiguities",
-    "find_conflicts": "quality_resolution.diagnose.find_conflicts",
-    "audit": "quality_resolution.diagnose.audit",
-    "dedup": "quality_resolution.repair.dedup",
-    "dedun": "quality_resolution.repair.dedun",
-    "resolve": "quality_resolution.repair.resolve",
-    "fit": "quality_resolution.validate.fit",
-    "check_conformance": "quality_resolution.validate.check_conformance",
-    "impact": "operation_lifecycle.impact",
-    "review": "operation_lifecycle.review",
-    "ground": "ground_workbench.ground",
-    "log": "history_recovery.inspection.log",
-    "diff": "history_recovery.inspection.diff",
-    "trace": "history_recovery.inspection.trace",
-    "rationale": "history_recovery.inspection.rationale",
-    "checkpoint": "history_recovery.recovery.checkpoint",
-    "undo": "history_recovery.recovery.undo",
-    "redo": "history_recovery.recovery.redo",
-    "revert": "history_recovery.recovery.revert",
-    "profile": "profiles.profile",
-    "share": "sharing_protection.share",
-    "lock": "sharing_protection.lock",
-    "unlock": "sharing_protection.unlock",
-    "help": "system_study_tools.help",
-    "provider": "system_study_tools.provider",
-    "config": "system_study_tools.config",
-    "init_study": "system_study_tools.init_study",
-    "eval": "system_study_tools.eval",
-}
+# Public command names and historical baseline stems remain distinct, but the
+# canonical command packages are flat. Catalog families organize affordances;
+# they are deliberately not import-path components.
+COMMAND_PACKAGE_TARGETS: dict[str, str] = {}
 
 
 ENTRY_MODULE_OVERRIDES = {
@@ -309,11 +242,11 @@ SPECIAL_SUPPORT_TARGETS = {
 
 
 MODULE_TARGET_PATH_OVERRIDES = {
-    "memcommit.adapters.console.commands.ground_workbench.ground.shell": (
-        "src/memcommit/adapters/console/commands/ground_workbench/ground/shell/__init__.py"
+    "memcommit.adapters.console.commands.ground.shell": (
+        "src/memcommit/adapters/console/commands/ground/shell/__init__.py"
     ),
-    "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command": (
-        "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/meld/command.py"
+    "memcommit.adapters.console.commands.meld.command": (
+        "src/memcommit/adapters/console/commands/meld/command.py"
     ),
 }
 

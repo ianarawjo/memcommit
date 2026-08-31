@@ -20,16 +20,16 @@ from memcommit.adapters.python_api.errors import (
 )
 from memcommit.adapters.python_api.search import SearchItemResult, SearchResult
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.operations.search_explain.retrieve_answer.search.application import (
+from memcommit.application.operations.search.application import (
     SearchRequest,
     SearchResponse,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.search.runtime import execute_search
+from memcommit.application.operations.search.runtime import execute_search
 from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import HistoryError
 from memcommit.application.capabilities.history.query.semantic_history_query import HistorySearchError
-from memcommit.application.operations.profiles.profile.config import ProfileConfigError
-from memcommit.application.operations.profiles.profile.model import ProfileError
-from memcommit.application.operations.search_explain.retrieve_answer.search.model import SearchError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.search.model import SearchError
 
 
 def _current_name(runtime: ClientRuntime) -> str | None:

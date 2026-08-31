@@ -56,7 +56,6 @@ def test_merge_application_does_not_import_an_interface_adapter():
         PACKAGE
         / "application"
         / "operations"
-        / "direct_changes"
         / "merge"
         / "application.py"
     )
@@ -72,7 +71,7 @@ def test_meld_resolution_does_not_import_runtime_or_interfaces():
     forbidden = (
         "memcommit.adapters.console.commands",
         "memcommit.adapters.interfaces",
-        "memcommit.application.operations.semantic_updates.curate_integrate.meld.runtime",
+        "memcommit.application.operations.meld.runtime",
         "memcommit.store",
         "prompt_toolkit",
         "typer",
@@ -81,8 +80,6 @@ def test_meld_resolution_does_not_import_runtime_or_interfaces():
         PACKAGE
         / "application"
         / "operations"
-        / "semantic_updates"
-        / "curate_integrate"
         / "meld"
         / "proposal_iteration.py"
     )
@@ -100,8 +97,6 @@ def test_meld_interfaces_enter_the_operation_owned_resolution_boundary():
         / "adapters"
         / "console"
         / "commands"
-        / "semantic_updates"
-        / "curate_integrate"
         / "meld"
         / "workflow"
         / "workflow.py"
@@ -111,8 +106,8 @@ def test_meld_interfaces_enter_the_operation_owned_resolution_boundary():
     )
     agent_imports = _imports(PACKAGE / "adapters" / "agent" / "meld.py")
 
-    assert "memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_iteration" in command_imports
-    assert "memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_iteration" in public_imports
+    assert "memcommit.application.operations.meld.proposal_iteration" in command_imports
+    assert "memcommit.application.operations.meld.proposal_iteration" in public_imports
     assert "memcommit.adapters.python_api" in agent_imports
 
 
@@ -122,7 +117,6 @@ def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
         / "adapters"
         / "console"
         / "commands"
-        / "direct_changes"
         / "merge"
         / "command.py"
     )
@@ -131,30 +125,27 @@ def test_merge_cli_and_tui_depend_on_the_typed_application_contract():
         / "adapters"
         / "console"
         / "commands"
-        / "direct_changes"
         / "merge"
         / "workbench"
         / "conflicts.py"
     )
 
-    assert "memcommit.application.operations.direct_changes.merge.application" in cli_imports
-    assert "memcommit.application.operations.direct_changes.merge.application" in tui_imports
+    assert "memcommit.application.operations.merge.application" in cli_imports
+    assert "memcommit.application.operations.merge.application" in tui_imports
     assert not any(
         module.startswith("memcommit.adapters.console.commands")
-        and not module.startswith("memcommit.adapters.console.commands.direct_changes.merge")
+        and not module.startswith("memcommit.adapters.console.commands.merge")
         for module in tui_imports
     )
 
 
 def test_resolve_adapters_keep_one_application_owner():
-    application_name = "memcommit.application.operations.quality_resolution.repair.resolve.application"
+    application_name = "memcommit.application.operations.resolve.application"
     tui_path = (
         PACKAGE
         / "adapters"
         / "console"
         / "commands"
-        / "quality_resolution"
-        / "repair"
         / "resolve"
         / "workbench"
         / "screen.py"
@@ -164,8 +155,6 @@ def test_resolve_adapters_keep_one_application_owner():
         / "adapters"
         / "console"
         / "commands"
-        / "quality_resolution"
-        / "repair"
         / "resolve"
         / "command.py"
     )
@@ -194,7 +183,7 @@ def test_resolve_adapters_keep_one_application_owner():
     assert application_name in tui_imports
     assert application_name in cli_imports
     assert application_name in public_imports
-    command_owner = "memcommit.adapters.console.commands.quality_resolution.repair.resolve"
+    command_owner = "memcommit.adapters.console.commands.resolve"
     assert not any(
         module.startswith("memcommit.adapters.console.commands")
         and not module.startswith(
@@ -216,7 +205,7 @@ def test_resolve_adapters_keep_one_application_owner():
 
 
 def test_dedun_is_immediate_not_a_resolution_adapter():
-    application_name = "memcommit.application.operations.quality_resolution.repair.dedun.application"
+    application_name = "memcommit.application.operations.dedun.application"
     application_path = (
         PACKAGE / Path(*application_name.removeprefix("memcommit.").split("."))
     ).with_suffix(".py")
@@ -225,8 +214,6 @@ def test_dedun_is_immediate_not_a_resolution_adapter():
         / "adapters"
         / "console"
         / "commands"
-        / "quality_resolution"
-        / "repair"
         / "dedun"
     )
     execution_imports = _imports(
@@ -234,8 +221,6 @@ def test_dedun_is_immediate_not_a_resolution_adapter():
         / "adapters"
         / "console"
         / "commands"
-        / "quality_resolution"
-        / "diagnose"
         / "find_redundancies"
         / "command.py"
     )

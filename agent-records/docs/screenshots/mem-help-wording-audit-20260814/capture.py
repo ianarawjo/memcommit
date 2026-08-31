@@ -41,7 +41,7 @@ def main() -> None:
 
     # Import after the capture environment is configured so this script audits
     # the same source checkout used by the installed `mem` entry point.
-    from memcommit.adapters.console.commands.system_study_tools.help.command import HELP_CATEGORY_GROUPS
+    from memcommit.adapters.console.commands.help.command import HELP_CATEGORY_GROUPS
     from memcommit.operation_catalog import OPERATION_HELP_BY_NAME
 
     OUT.mkdir(parents=True, exist_ok=True)

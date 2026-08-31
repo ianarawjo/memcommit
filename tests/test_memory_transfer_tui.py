@@ -11,13 +11,13 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.adapters.console.commands.create_copy_connect.copy import command as copy_command
-from memcommit.adapters.console.commands.create_copy_connect.copy.setup import (
+from memcommit.adapters.console.commands.copy import command as copy_command
+from memcommit.adapters.console.commands.copy.setup import (
     build_copy_tui_setup,
     choose_copy_setup,
 )
-from memcommit.adapters.console.commands.direct_changes.move import command as move_command
-from memcommit.adapters.console.commands.direct_changes.move.setup import (
+from memcommit.adapters.console.commands.move import command as move_command
+from memcommit.adapters.console.commands.move.setup import (
     build_move_tui_setup,
     choose_move_setup,
 )
@@ -28,7 +28,7 @@ from memcommit.adapters.console.terminal.components.copy_and_move import (
 )
 from memcommit.core.context import Context, Memory, MemoryRef
 from memcommit.adapters.console.terminal.components.direct_item_placement import DirectItemGap
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -36,15 +36,15 @@ from memcommit.application.operations.profiles.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profiles.profile.model import create_authority_grant
+from memcommit.application.operations.profile.model import create_authority_grant
 from memcommit.source_projection.presentation import source_display_text
 from memcommit.application.capabilities.memory_transfer.application import (
     CopyMemoriesRequest,
     MoveMemoriesRequest,
 )
-from memcommit.application.operations.create_copy_connect.copy.application import run_copy
+from memcommit.application.operations.copy.application import run_copy
 from memcommit.application.capabilities.memory_transfer.runtime import MemoryStoreCopyAndMovePort
-from memcommit.application.operations.direct_changes.move.application import run_move
+from memcommit.application.operations.move.application import run_move
 from memcommit.persistence.store import MemoryStore
 
 

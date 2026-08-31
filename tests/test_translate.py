@@ -21,7 +21,7 @@ from memcommit.application.capabilities.history.query.memory_history_slicing imp
 )
 from memcommit.providers.subscription import QueryProviderError
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
-from memcommit.application.operations.translation.translate.runtime import (
+from memcommit.application.operations.translate.runtime import (
     TRANSLATE_CORPUS_CHAR_LIMIT,
     TRANSLATION_TARGET_CHAR_LIMIT,
     TranslateError,
@@ -86,7 +86,7 @@ def _saved_context(
 
 def _patch_provider(monkeypatch, provider):
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.translation.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -774,7 +774,7 @@ def test_cli_rejects_destination_collision_and_conflicting_modes_pre_provider(
         raise AssertionError("provider must not be connected")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.translation.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
         forbidden,
     )
     collision = runner.invoke(
@@ -837,7 +837,7 @@ def test_cli_empty_context_is_provider_free(
         raise AssertionError("provider must not be connected")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.translation.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
         forbidden,
     )
     result = runner.invoke(app, ["translate"])
@@ -878,7 +878,7 @@ def test_cli_without_current_context_is_provider_free(
         raise AssertionError("provider must not be connected")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.translation.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
         forbidden,
     )
     result = runner.invoke(app, ["translate"])
@@ -1001,7 +1001,7 @@ def test_cli_does_not_publish_destination_if_source_changes_before_creation(
         return result
 
     monkeypatch.setattr(
-        "memcommit.application.operations.translation.translate.create_translated_context.derive_translation_context",
+        "memcommit.application.operations.translate.create_translated_context.derive_translation_context",
         derive_then_save_concurrently,
     )
     result = runner.invoke(

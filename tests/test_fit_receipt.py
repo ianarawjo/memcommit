@@ -8,30 +8,30 @@ from types import SimpleNamespace
 import click
 from click.testing import CliRunner
 
-from memcommit.application.operations.quality_resolution.validate.fit.ground_report import (
+from memcommit.application.operations.fit.ground_report import (
     FitExample,
     FitJudgment,
     FitReport,
     FitRule,
 )
-from memcommit.application.operations.quality_resolution.validate.fit.judgment import (
+from memcommit.application.operations.fit.judgment import (
     FitAnalysis,
     FitAssessment,
     FitProposition,
     FitQuestion,
 )
-from memcommit.application.operations.quality_resolution.validate.fit.application import (
+from memcommit.application.operations.fit.application import (
     FitInputOrigin,
     FitPropositionsResult,
     FitResult,
 )
-from memcommit.application.operations.quality_resolution.validate.fit.coherence import (
+from memcommit.application.operations.fit.coherence import (
     FitCoherenceFinding,
     FitCoherenceSubject,
     FitContextFrame,
     FitContextMemory,
 )
-from memcommit.adapters.console.commands.quality_resolution.validate.fit.render import (
+from memcommit.adapters.console.commands.fit.render import (
     render_fit_plain,
     render_proposition_fit_plain,
 )
@@ -39,7 +39,7 @@ from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,
 )
-from memcommit.adapters.console.commands.quality_resolution.validate.fit.presentation import (
+from memcommit.adapters.console.commands.fit.presentation import (
     _coherence_issue_lines,
     _coherence_participant_label,
     fit_result_text,

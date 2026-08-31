@@ -22,16 +22,16 @@ from memcommit.adapters.python_api.errors import (
 )
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.operations.quality_resolution.repair.dedup.application import (
+from memcommit.application.operations.dedup.application import (
     ExactDedupConflictError,
     ExactDedupError,
     apply_exact_dedup_scope,
 )
-from memcommit.application.operations.quality_resolution.diagnose.find_duplicates.application import (
+from memcommit.application.operations.find_duplicates.application import (
     analyze_exact_duplicate_scope,
 )
-from memcommit.application.operations.profiles.profile.config import ProfileConfigError
-from memcommit.application.operations.profiles.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError
 
 def dedup(

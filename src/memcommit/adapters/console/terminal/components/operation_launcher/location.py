@@ -9,7 +9,7 @@ from memcommit.adapters.console.terminal.components.operation_launcher import La
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionPickerLocation,
 )
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,

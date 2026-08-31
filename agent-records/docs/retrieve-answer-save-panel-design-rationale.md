@@ -7,19 +7,22 @@ operations. Their interactive outcomes previously diverged: Search exposed
 separate `SAVE AS`, parent-browser, Save Location, and `TO DO` frames, while
 Find and Query had no durable outcome action. `PARENT CONTEXT` also described
 an implementation mechanic rather than the person's goal. The three operation
-packages were physically separate even though this is the narrowest family in
+packages are independent even though this is the narrowest catalog family in
 which their common result interaction belongs.
 
 ## Package boundary
 
 The canonical console packages are
-`memcommit.adapters.console.commands.search_explain.retrieve_answer.{find,search,query}`
+`memcommit.adapters.console.commands.{find,search,query}`
 and the corresponding application packages are
-`memcommit.application.operations.search_explain.retrieve_answer.{find,search,query}`.
-Only family-specific presentation composition lives under
-`retrieve_answer/components`; operation-neutral exact-name, Context-tree,
-selection, focus, frame, and palette mechanics remain under the shared terminal
-components. Application code never imports the console family.
+`memcommit.application.operations.{find,search,query}`.
+The shared SAVE composition lives under
+`memcommit.adapters.console.terminal.components.retrieve_answer_save`;
+operation-neutral exact-name, Context-tree, selection, focus, frame, and
+palette mechanics remain in their narrower shared terminal components. Shared
+readable Source-name resolution lives under
+`application.capabilities.save_context_from_selection.source_resolution`.
+Application code never imports the console component.
 
 ## Visible SAVE contract
 

@@ -37,7 +37,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.pro
     ComparisonProviderError,
     analyze_comparison,
 )
-from memcommit.application.operations.search_explain.synthesize.compare.sessions import (
+from memcommit.application.operations.compare.sessions import (
     ComparisonSessionConflictError,
     ComparisonSessionInputError,
     ComparisonSessionUnavailableError,
@@ -51,7 +51,7 @@ from memcommit.application.capabilities.context_locator import resolve_context_l
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     load_granted_comparison_artifact,
 )
-from memcommit.application.operations.profiles.profile.model import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
 )

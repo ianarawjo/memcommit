@@ -75,7 +75,7 @@ def _update() -> None:
 
 
 def _branch() -> None:
-    from memcommit.adapters.console.commands.create_copy_connect.branch.endpoint_setup import choose_branch_creation
+    from memcommit.adapters.console.commands.branch.endpoint_setup import choose_branch_creation
 
     _print_terminal()
     result = choose_branch_creation(

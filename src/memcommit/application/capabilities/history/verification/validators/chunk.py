@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.application.operations.direct_changes.chunk.domain import chunk_content
+from memcommit.application.operations.chunk.domain import chunk_content
 
 
 def _checkpoint_chunk_options(args: dict) -> dict[str, object] | None:

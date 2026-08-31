@@ -8,10 +8,10 @@ import json
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.operations.translation.translate.provider_catalog import (
+from memcommit.application.operations.translate.provider_catalog import (
     update_catalog_from_translation_plan,
 )
-from memcommit.application.operations.translation.translate.runtime import plan_translation
+from memcommit.application.operations.translate.runtime import plan_translation
 from memcommit.core.context import AutoCheckpoint, Context
 from memcommit.core.memory_translation import (
     MemoryTranslationCatalog,

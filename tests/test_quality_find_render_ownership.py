@@ -40,10 +40,10 @@ def test_quality_find_render_is_the_only_physical_owner() -> None:
 
 def test_quality_find_commands_import_the_shared_console_owner() -> None:
     for filename in (
-        "quality_resolution/diagnose/find_ambiguities/command.py",
-        "quality_resolution/diagnose/find_conflicts/command.py",
-        "quality_resolution/diagnose/find_duplicates/command.py",
-        "quality_resolution/diagnose/find_redundancies/command.py",
+        "find_ambiguities/command.py",
+        "find_conflicts/command.py",
+        "find_duplicates/command.py",
+        "find_redundancies/command.py",
     ):
         source = (PACKAGE / "adapters" / "console" / "commands" / filename).read_text(
             encoding="utf-8"

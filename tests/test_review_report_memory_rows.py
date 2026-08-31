@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from memcommit.adapters.console.commands.operation_lifecycle.review.report import render_review_report_snapshot
+from memcommit.adapters.console.commands.review.report import render_review_report_snapshot
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionDetailBlock,
     ResolutionItem,

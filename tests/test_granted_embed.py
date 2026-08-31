@@ -16,9 +16,9 @@ from memcommit.application.capabilities.authority.context_access import (
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
-from memcommit.application.operations.create_copy_connect.embed.runtime import MemoryStoreEmbedPort
-from memcommit.adapters.console.commands.create_copy_connect.embed.workbench import build_embed_tui_setup
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
+from memcommit.adapters.console.commands.embed.workbench import build_embed_tui_setup
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileConfigError,
@@ -29,16 +29,16 @@ from memcommit.application.operations.profiles.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profiles.profile.model import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     create_authority_grant,
     delete_authority_grant,
     update_authority_grant,
 )
-from memcommit.application.operations.create_copy_connect.reference.application import (
+from memcommit.application.operations.reference.application import (
     ContextReferenceRequest,
 )
-from memcommit.application.operations.create_copy_connect.reference.runtime import execute_context_reference
+from memcommit.application.operations.reference.runtime import execute_context_reference
 from memcommit.source_projection.presentation import source_display_text
 from memcommit.persistence.store import MemoryStore
 
@@ -351,7 +351,7 @@ def test_recursive_find_browses_attached_read_but_search_omits_provider_disclosu
 
     provider = Provider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
     semantic_direct = runner.invoke(

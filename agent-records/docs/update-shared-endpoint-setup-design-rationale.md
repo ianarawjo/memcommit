@@ -4,7 +4,7 @@
 
 Update's new-session Source/Target selection now uses
 `memcommit.adapters.console.terminal.components.endpoint_setup` through a narrow
-command-owned workbench under `adapters/console/commands/semantic_updates/foundation/update`. The former
+command-owned workbench under `adapters/console/commands/update`. The former
 `interfaces/tui/operations/update` path is removed without a compatibility
 facade because its models, labels, validation, and exact-command review were
 all Update-specific. Explicit operands, provider planning, cache lookup,

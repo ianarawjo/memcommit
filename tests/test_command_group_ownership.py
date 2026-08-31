@@ -32,13 +32,13 @@ REMOVED_INTERFACE_PATH = (
     / "command_group.py"
 )
 CANONICAL_CONSUMERS = (
-    "commands/system_study_tools/config/command.py",
+    "commands/config/command.py",
     "diagnostics/dev/command.py",
-    "commands/operation_lifecycle/impact/command.py",
-    "commands/profiles/profile/command.py",
-    "commands/profiles/profile/group.py",
-    "commands/system_study_tools/provider/command.py",
-    "commands/system_study_tools/eval/command.py",
+    "commands/impact/command.py",
+    "commands/profile/command.py",
+    "commands/profile/group.py",
+    "commands/provider/command.py",
+    "commands/eval/command.py",
     "coordination/write_protection.py",
     "coordination/root_group.py",
 )

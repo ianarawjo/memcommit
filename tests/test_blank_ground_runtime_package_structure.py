@@ -2,21 +2,21 @@ from importlib import import_module
 
 
 def test_blank_ground_runtime_separates_four_live_responsibilities() -> None:
-    runtime = import_module("memcommit.adapters.console.commands.ground_workbench.ground.shell.runtime")
+    runtime = import_module("memcommit.adapters.console.commands.ground.shell.runtime")
     entry = import_module(
-        "memcommit.adapters.console.commands.ground_workbench.ground.shell.runtime.entry"
+        "memcommit.adapters.console.commands.ground.shell.runtime.entry"
     )
     session = import_module(
-        "memcommit.adapters.console.commands.ground_workbench.ground.shell.runtime.session"
+        "memcommit.adapters.console.commands.ground.shell.runtime.session"
     )
     drafting = import_module(
-        "memcommit.adapters.console.commands.ground_workbench.ground.shell.runtime.grounding_drafting"
+        "memcommit.adapters.console.commands.ground.shell.runtime.grounding_drafting"
     )
     contexts = import_module(
-        "memcommit.adapters.console.commands.ground_workbench.ground.shell.runtime.context_selection"
+        "memcommit.adapters.console.commands.ground.shell.runtime.context_selection"
     )
     terminal = import_module(
-        "memcommit.adapters.console.commands.ground_workbench.ground.shell.runtime.terminal_interaction"
+        "memcommit.adapters.console.commands.ground.shell.runtime.terminal_interaction"
     )
 
     assert runtime.run_ground_shell is entry.run_ground_shell
@@ -28,7 +28,7 @@ def test_blank_ground_runtime_separates_four_live_responsibilities() -> None:
 
 def test_blank_ground_application_separates_interaction_owners() -> None:
     application = import_module(
-        "memcommit.adapters.console.commands.ground_workbench.ground.shell.runtime."
+        "memcommit.adapters.console.commands.ground.shell.runtime."
         "terminal_interaction.application"
     )
     entrypoint = import_module(f"{application.__name__}.entrypoint")

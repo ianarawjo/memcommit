@@ -10,9 +10,9 @@ import sys
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.application.operations.history_recovery.inspection.trace.application as trace_application
-import memcommit.application.operations.history_recovery.inspection.trace.runtime as trace_runtime
-from memcommit.application.operations.history_recovery.inspection.trace.application import (
+import memcommit.application.operations.trace.application as trace_application
+import memcommit.application.operations.trace.runtime as trace_runtime
+from memcommit.application.operations.trace.application import (
     ContextHistorySlice,
     MemoryHistory,
     FrozenTraceSubject,
@@ -26,7 +26,7 @@ from memcommit.application.operations.history_recovery.inspection.trace.applicat
     list_trace_targets,
     run_trace,
 )
-from memcommit.application.operations.history_recovery.inspection.trace.runtime import (
+from memcommit.application.operations.trace.runtime import (
     execute_trace,
     load_trace_target_catalog,
 )
@@ -208,13 +208,13 @@ def test_rationale_consumes_history_without_importing_trace_application():
         for name in _direct_imports(rationale_root / filename)
     )
 
-    assert "memcommit.application.operations.history_recovery.inspection.trace.application" not in imports
+    assert "memcommit.application.operations.trace.application" not in imports
     assert any(
         name.startswith("memcommit.application.capabilities.history")
         for name in imports
     )
     assert not any(
-        name.startswith("memcommit.application.operations.history_recovery.inspection.trace")
+        name.startswith("memcommit.application.operations.trace")
         for name in imports
     )
 

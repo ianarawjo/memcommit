@@ -9,7 +9,7 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_review_command_owns_snapshot_without_interface_facade() -> None:
-    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/operation_lifecycle/review"
+    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/review"
 
     assert (command_root / "snapshot.py").is_file()
     assert not (
@@ -34,15 +34,15 @@ def test_terminal_review_contracts_have_one_shared_console_owner() -> None:
 
 def test_review_atomize_and_impact_import_the_shared_contract_directly() -> None:
     relative_paths = (
-        "src/memcommit/adapters/console/commands/operation_lifecycle/review/command.py",
-        "src/memcommit/adapters/console/commands/operation_lifecycle/review/snapshot.py",
-        "src/memcommit/adapters/console/commands/semantic_updates/derive/atomize/review.py",
-        "src/memcommit/adapters/console/commands/semantic_updates/derive/atomize/impact.py",
+        "src/memcommit/adapters/console/commands/review/command.py",
+        "src/memcommit/adapters/console/commands/review/snapshot.py",
+        "src/memcommit/adapters/console/commands/atomize/review.py",
+        "src/memcommit/adapters/console/commands/atomize/impact.py",
     )
 
     for relative_path in relative_paths:
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "memcommit.adapters.interfaces.tui.workbenches.review" not in source
-    assert "memcommit.adapters.console.commands.operation_lifecycle.review.snapshot" in (
-        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/operation_lifecycle/review/command.py"
+    assert "memcommit.adapters.console.commands.review.snapshot" in (
+        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/review/command.py"
     ).read_text(encoding="utf-8")

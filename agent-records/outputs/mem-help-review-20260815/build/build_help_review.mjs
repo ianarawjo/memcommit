@@ -13,7 +13,7 @@ const extractScript = String.raw`
 import json
 import subprocess
 
-from memcommit.adapters.console.commands.system_study_tools.help_inventory import HELP_CATEGORY_GROUPS, COMMAND_FORMS
+from memcommit.adapters.console.commands.help_inventory import HELP_CATEGORY_GROUPS, COMMAND_FORMS
 from memcommit.help_catalog import OPERATION_HELP_BY_NAME
 
 rows = []
@@ -38,7 +38,7 @@ dirty = bool(subprocess.check_output(
     [
         "git", "status", "--porcelain", "--",
         "memcommit/help_catalog/catalog.py",
-        "memcommit/adapters/console/commands/system_study_tools/help_inventory.py",
+        "memcommit/adapters/console/commands/help_inventory.py",
     ],
     text=True,
 ).strip())
@@ -182,7 +182,7 @@ const snapshotRows = extracted.rows.map((row) => [
   row.range,
   row.forms.join("\n"),
   "memcommit/help_catalog/catalog.py",
-  "memcommit/adapters/console/commands/system_study_tools/help_inventory.py",
+  "memcommit/adapters/console/commands/help_inventory.py",
 ]);
 snapshot.getRange(`A${firstDataRow}:J${lastDataRow}`).values = snapshotRows;
 applyBodyFormat(snapshot.getRange(`A${firstDataRow}:J${lastDataRow}`), palette.current);

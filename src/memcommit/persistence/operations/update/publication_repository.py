@@ -18,8 +18,8 @@ from memcommit.application.context_access import (
     GrantedContextBinding,
     authority_context_name,
 )
-from memcommit.application.operations.semantic_updates.foundation.update.application import apply_staged_update_plan
-from memcommit.application.operations.semantic_updates.foundation.update.model import (
+from memcommit.application.operations.update.application import apply_staged_update_plan
+from memcommit.application.operations.update.model import (
     EditOperation,
     RemoveOperation,
     UpdateApplicationReceipt,

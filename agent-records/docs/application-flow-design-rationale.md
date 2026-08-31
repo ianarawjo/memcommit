@@ -4,9 +4,9 @@
 
 `memcommit.application.capabilities.flow` owns the minimal operation-neutral phase order
 `PREPARED → REVIEWED/CANCELLED → APPLIED`. Sever consumes it through
-`memcommit.application.operations.semantic_updates.curate_integrate.sever.application.SeverSessionApplicationFlowPort`;
+`memcommit.application.operations.sever.application.SeverSessionApplicationFlowPort`;
 Meld consumes it through
-`memcommit.application.operations.semantic_updates.curate_integrate.meld.application.MeldApplicationFlowPort`.
+`memcommit.application.operations.meld.application.MeldApplicationFlowPort`.
 
 Update deliberately no longer consumes this abstraction. Direct Update has
 one console-owned decision—Apply the exact displayed proposal or cancel—and no
@@ -67,7 +67,7 @@ rollback, checkpoints, or Undo merely from a generic callback.
 
 Interactive Update displays one exact staged proposal through its console
 workbench. `APPLY` passes that unchanged session to
-`application.operations.semantic_updates.foundation.update.publication.apply_staged_update`; Escape or
+`application.operations.update.publication.apply_staged_update`; Escape or
 terminal cancellation returns without entering publication. Noninteractive
 callers submit the exact staged session directly. The publication coordinator
 still verifies the applied lifecycle and receipt after its operation-owned

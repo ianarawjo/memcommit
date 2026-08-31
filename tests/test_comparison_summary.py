@@ -8,14 +8,14 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.search_explain.synthesize.compare.command as compare_command
+import memcommit.adapters.console.commands.compare.command as compare_command
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonInput
 from memcommit.core.context import MemoryRef
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import comparison_analysis_path
-from memcommit.application.operations.search_explain.synthesize.compare.compare_summary import ComparisonSummaryError
-from memcommit.application.operations.search_explain.synthesize.compare.provider_contract import summarize_comparison
+from memcommit.application.operations.compare.compare_summary import ComparisonSummaryError
+from memcommit.application.operations.compare.provider_contract import summarize_comparison
 from memcommit.providers.policy import ResolvedProviderPolicy
 from memcommit.providers.profile_routes import (
     ProfileProviderRoutesError,

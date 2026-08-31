@@ -12,7 +12,7 @@ matrix classifies callables that cross application, authority, provider, or
 public-interface boundaries. Query has no durability boundary.
 
 Query's console-specific adapters are co-located under
-`memcommit.adapters.console.commands.search_explain.retrieve_answer.query`: `command.py` owns Store/catalog
+`memcommit.adapters.console.commands.query`: `command.py` owns Store/catalog
 composition and route selection, `presentation.py` owns non-interactive answer
 output, and `workbench/` owns Query-specific process-local models, typed Answer
 and clipboard projection, Query View scope, and the prompt-toolkit screen. The

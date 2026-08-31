@@ -9,7 +9,7 @@ import sys
 
 import pytest
 
-from memcommit.application.operations.browse_navigate.contexts.application import ContextCatalogEntry
+from memcommit.application.operations.contexts.application import ContextCatalogEntry
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -36,23 +36,23 @@ def test_context_catalog_entry_keeps_grant_metadata_typed() -> None:
 
 
 def test_contexts_command_imports_the_operation_runtime() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/browse_navigate/contexts/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/contexts/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module
         for node in ast.walk(tree)
         if isinstance(node, ast.ImportFrom) and node.module is not None
     }
-    assert "memcommit.application.operations.browse_navigate.contexts.application" in imports
-    assert "memcommit.application.operations.browse_navigate.contexts.runtime" in imports
+    assert "memcommit.application.operations.contexts.application" in imports
+    assert "memcommit.application.operations.contexts.runtime" in imports
     assert "memcommit.core.context_targeting.catalog" not in imports
     assert "memcommit.core.context_targeting.resolution" not in imports
 
 
 def test_contexts_operation_has_no_terminal_dependency() -> None:
     for relative_path in (
-        "src/memcommit/application/operations/browse_navigate/contexts/application.py",
-        "src/memcommit/application/operations/browse_navigate/contexts/runtime.py",
+        "src/memcommit/application/operations/contexts/application.py",
+        "src/memcommit/application/operations/contexts/runtime.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "import typer" not in source
@@ -62,12 +62,12 @@ def test_contexts_operation_has_no_terminal_dependency() -> None:
 def test_contexts_operation_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.browse_navigate.contexts
+import memcommit.application.operations.contexts
 
 assert not [
     name
     for name in sys.modules
-    if name.startswith("memcommit.application.operations.browse_navigate.contexts.")
+    if name.startswith("memcommit.application.operations.contexts.")
 ]
 """
     subprocess.run([sys.executable, "-c", program], cwd=REPOSITORY_ROOT, check=True)

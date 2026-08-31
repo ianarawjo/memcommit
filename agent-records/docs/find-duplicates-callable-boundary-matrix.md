@@ -15,7 +15,7 @@ the applying Dedup boundary.
 | Public Python | `MemCommitClient.find_duplicates(context_name, include_descendants=...)` | the same `FindDuplicatesRequest` and application callable | aggregate `ExactDuplicateFindResult` plus per-Context results; no mutation |
 
 Both routes converge on the operation-aligned
-`memcommit.application.operations.quality_resolution.diagnose.find_duplicates.application` boundary, which
+`memcommit.application.operations.find_duplicates.application` boundary, which
 owns the exact report and direct-or-lexical analysis while reusing the pure
 `reviewing.direct_item_duplicates` detector. Applying Dedup consumes this same
 frozen analysis once rather than rediscovering groups. Adapters do not construct a

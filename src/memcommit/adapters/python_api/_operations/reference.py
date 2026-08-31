@@ -13,15 +13,15 @@ from memcommit.adapters.python_api.errors import (
     ReferenceInputError,
     ReferenceStorageError,
 )
-from memcommit.application.operations.profiles.profile.config import ProfileConfigError
-from memcommit.application.operations.profiles.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.adapters.python_api.reference import ContextReferenceResult, MemoryReferenceResult
-from memcommit.application.operations.create_copy_connect.reference.application import (
+from memcommit.application.operations.reference.application import (
     ContextReferenceRequest,
     ReferenceError as ApplicationReferenceError,
     ReferenceRequest,
 )
-from memcommit.application.operations.create_copy_connect.reference.runtime import (
+from memcommit.application.operations.reference.runtime import (
     execute_context_reference,
     execute_reference,
 )

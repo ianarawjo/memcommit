@@ -21,7 +21,7 @@ import threading
 import time
 
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
-from memcommit.adapters.console.commands.search_explain.synthesize.compare.execution import load_comparison_context
+from memcommit.adapters.console.commands.compare.execution import load_comparison_context
 from memcommit.application.capabilities.authority.readable_contexts import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
@@ -51,7 +51,7 @@ from memcommit.study_scenarios.legacy.prewarm.generation.compare_graph import (
 from memcommit.providers.policy import (
     resolve_codex_evaluation_policy,
 )
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,

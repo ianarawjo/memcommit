@@ -8,23 +8,23 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
-from memcommit.application.operations.direct_changes.edit.application import EditRequest, FrozenEditPlan
+from memcommit.application.operations.edit.application import EditRequest, FrozenEditPlan
 from memcommit.adapters.console.terminal.components.command_editor import (
     format_exact_command,
 )
-from memcommit.adapters.console.commands.direct_changes.edit.workbench import (
+from memcommit.adapters.console.commands.edit.workbench import (
     EditTuiSetup,
     parse_edit_command_argv,
     run_edit_tui,
 )
-from memcommit.adapters.console.commands.direct_changes.edit.workbench.screen import (
+from memcommit.adapters.console.commands.edit.workbench.screen import (
     edit_exact_command_review,
 )
-from memcommit.adapters.console.commands.create_copy_connect.reference.workbench import (
+from memcommit.adapters.console.commands.reference.workbench import (
     ReferenceTuiSetup,
     run_reference_tui,
 )
-from memcommit.application.operations.create_copy_connect.reference.application import (
+from memcommit.application.operations.reference.application import (
     ContextReferenceRequest,
     FrozenContextReferencePlan,
     FrozenReferencePlan,

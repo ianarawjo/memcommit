@@ -22,7 +22,7 @@ from memcommit.adapters.console.terminal.core.text import (
 )
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_action_style
 from memcommit.application.capabilities.reviewing.memory_diff import memory_diff_lines, update_operation_change
-from memcommit.application.operations.semantic_updates.foundation.update.model import UpdateSession
+from memcommit.application.operations.update.model import UpdateSession
 
 
 @dataclass(frozen=True)

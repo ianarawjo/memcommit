@@ -121,8 +121,8 @@ resolved target is a Context.
 
 ## Application and callable boundary
 
-Both effects now enter `memcommit.application.operations.direct_changes.delete.application` through
-`memcommit.application.operations.direct_changes.delete.runtime` rather than being implemented by the
+Both effects now enter `memcommit.application.operations.delete.application` through
+`memcommit.application.operations.delete.runtime` rather than being implemented by the
 command module. The former top-level paths remain true module aliases for
 compatibility. Direct-item removal first compiles either a bare UID or a picker
 receipt into the same operation-neutral exact `DirectItemTarget`, then freezes

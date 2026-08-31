@@ -3,9 +3,9 @@ from __future__ import annotations
 import click
 from click.testing import CliRunner
 
-from memcommit.adapters.console.commands.browse_navigate.show.presentation import render_show
+from memcommit.adapters.console.commands.show.presentation import render_show
 from memcommit.adapters.console.terminal.core.theme import memory_object_color_rgb
-from memcommit.application.operations.browse_navigate.show.application import (
+from memcommit.application.operations.show.application import (
     ShowContextSnapshot,
     ShowMemory,
     ShowMemoryReference,

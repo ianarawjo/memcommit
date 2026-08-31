@@ -208,7 +208,7 @@ does.
 ## Exact rule and example ledger
 
 The clozemaking-style authored source is
-`application/operations/quality_resolution/repair/resolve/fixtures/resolve.json`. It contains named rules, exact ordered
+`application/operations/resolve/fixtures/resolve.json`. It contains named rules, exact ordered
 Source Memories, exact effects with before/after values, the exact ordered
 post-image, expected post-Fit, and known-wrong post-images with violated rule
 IDs. `memcommit.resolve_rules` validates duplicate keys, field sets, rule

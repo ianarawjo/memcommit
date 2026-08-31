@@ -10,7 +10,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.keys import Keys
 import pytest
 
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     study_run_identity,
 )

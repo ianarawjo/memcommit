@@ -235,7 +235,7 @@ def _fixture(home: Path) -> None:
     from memcommit.application.operations.atomize.domain import create_atomize_analysis, impact_atomize
     from memcommit.adapters.console.commands.atomize.sessions import atomize_session_entries
     from memcommit.configuration.config import Config
-    from memcommit.application.operations.profiles.profile.config import (
+    from memcommit.application.operations.profile.config import (
         ProfileEntry,
         ProfileRegistry,
         STUDY_RUN_PARTICIPANT_SOURCE_KIND,

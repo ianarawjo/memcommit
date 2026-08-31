@@ -7,9 +7,9 @@ import json
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.history_recovery.inspection.trace import command as trace_command
-from memcommit.adapters.console.commands.history_recovery.inspection.trace import projection as trace_projection
-from memcommit.adapters.console.commands.history_recovery.inspection.trace.projection import (
+from memcommit.adapters.console.commands.trace import command as trace_command
+from memcommit.adapters.console.commands.trace import projection as trace_projection
+from memcommit.adapters.console.commands.trace.projection import (
     format_compact_trace_report,
     trace_document_fragments,
 )
@@ -27,7 +27,7 @@ from memcommit.application.capabilities.history.reconstruction.memory_effect_der
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistory,
 )
-from memcommit.application.operations.history_recovery.inspection.trace.application import (
+from memcommit.application.operations.trace.application import (
     FrozenTraceSubject,
     TraceResult,
 )

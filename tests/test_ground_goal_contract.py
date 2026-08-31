@@ -6,7 +6,7 @@ import pytest
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.ground_workbench.ground.contracts import (
+from memcommit.application.operations.ground.contracts import (
     GROUND_GOAL_WORD_LIMIT,
     GroundError,
     validate_ground_goal,

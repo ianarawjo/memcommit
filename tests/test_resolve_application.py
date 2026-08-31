@@ -11,7 +11,7 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.quality_resolution.repair.resolve.command as resolve_command
+import memcommit.adapters.console.commands.resolve.command as resolve_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.python_api import (
     MemCommitClient,
@@ -26,7 +26,7 @@ from memcommit.adapters.agent.resolve import (
     RESOLVE_AGENT_TOOL_NAME,
 )
 from memcommit.adapters.agent.registry import build_default_agent_tool_registry
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -34,16 +34,16 @@ from memcommit.application.operations.profiles.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profiles.profile.model import (
+from memcommit.application.operations.profile.model import (
     create_authority_grant,
     update_authority_grant,
 )
-from memcommit.adapters.console.commands.quality_resolution.repair.resolve.workbench import (
+from memcommit.adapters.console.commands.resolve.workbench import (
     project_resolve_analysis,
     resolve_candidate_exact_review,
     run_resolve_tui,
 )
-from memcommit.application.operations.quality_resolution.repair.resolve.application import (
+from memcommit.application.operations.resolve.application import (
     ResolveConflictError,
     ResolveError,
     ResolveRequest,
@@ -51,14 +51,14 @@ from memcommit.application.operations.quality_resolution.repair.resolve.applicat
     apply_resolve,
     run_resolve,
 )
-from memcommit.application.operations.quality_resolution.repair.resolve.runtime import MemoryStoreResolvePort
-from memcommit.application.operations.quality_resolution.repair.resolve.rules import (
+from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
+from memcommit.application.operations.resolve.rules import (
     resolve_ruleset_prompt_payload,
 )
-from memcommit.application.operations.quality_resolution.repair.resolve.semantic import (
+from memcommit.application.operations.resolve.semantic import (
     ProviderResolveSemanticPort,
 )
-from memcommit.application.operations.operation_lifecycle.review.model import direct_context_digest
+from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.persistence.store import MemoryStore
 
 

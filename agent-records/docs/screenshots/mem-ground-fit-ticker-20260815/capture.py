@@ -130,7 +130,7 @@ def _save_next(store, previous, revised) -> None:
 
 
 def _add_example(store, session, contexts, company: str, ticker: str):
-    from memcommit.application.operations.ground_workbench.ground.model import propose_ground_example
+    from memcommit.application.operations.ground.model import propose_ground_example
 
     revised = propose_ground_example(
         session,
@@ -146,7 +146,7 @@ def _add_example(store, session, contexts, company: str, ticker: str):
 
 def _prepare_store(root: Path):
     import memcommit.application.capabilities.ops as ops
-    from memcommit.application.operations.ground_workbench.ground.model import (
+    from memcommit.application.operations.ground.model import (
         GroundTargetSpec,
         bind_ground_workbench,
         create_ground_session,
@@ -298,11 +298,11 @@ def _write_evidence(*, ledger, reports, final_session, stale_checks) -> None:
 
 
 def _run_child(store_root: Path) -> None:
-    from memcommit.adapters.console.commands.ground_workbench.ground.named_shell import (
+    from memcommit.adapters.console.commands.ground.named_shell import (
         render_named_ground_memories_pane,
     )
     from memcommit.application.operations.fit.store import FitStore
-    from memcommit.application.operations.ground_workbench.ground.model import review_ground_item
+    from memcommit.application.operations.ground.model import review_ground_item
     from memcommit.providers.subscription import CodexChatGPTProvider
     from memcommit.persistence.store import ground_session_record_digest
 

@@ -18,7 +18,7 @@ from memcommit.adapters.python_api.errors import (
     DeleteInputError,
     DeleteStorageError,
 )
-from memcommit.application.operations.direct_changes.delete.application import (
+from memcommit.application.operations.delete.application import (
     ContextDeleteRequest,
     DeleteError,
     DeleteInputError as InternalDeleteInputError,
@@ -28,9 +28,9 @@ from memcommit.application.operations.direct_changes.delete.application import (
     prepare_context_delete as prepare_internal_context_delete,
     run_direct_item_delete,
 )
-from memcommit.application.operations.direct_changes.delete.runtime import MemoryStoreDeletePort
-from memcommit.application.operations.profiles.profile.config import ProfileConfigError
-from memcommit.application.operations.profiles.profile.model import ProfileError
+from memcommit.application.operations.delete.runtime import MemoryStoreDeletePort
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError
 from memcommit.application.capabilities.authority.write_protection import WriteProtectionError
 

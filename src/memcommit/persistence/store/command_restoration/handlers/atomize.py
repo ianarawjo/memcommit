@@ -26,10 +26,10 @@ class _AtomizeRestorationMixin:
     def _restore_atomize_context_creation_command_locked(self, unit, direction: str):
         """Undo/Redo one final Atomize Save As output and its Source receipt."""
 
-        from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+        from memcommit.application.operations.atomize.domain import (
             AtomizeAnalysisSession,
         )
-        from memcommit.application.operations.semantic_updates.derive.atomize.records import (
+        from memcommit.application.operations.atomize.records import (
             atomize_review_record_digest,
         )
         from memcommit.application.capabilities.command_recovery import (

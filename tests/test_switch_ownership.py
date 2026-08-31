@@ -13,9 +13,9 @@ REPOSITORY_ROOT = Path(__file__).parents[1]
 def test_switch_package_import_does_not_eagerly_load_implementation_modules() -> None:
     program = (
         "import sys\n"
-        "import memcommit.application.operations.browse_navigate.switch\n"
-        "assert 'memcommit.application.operations.browse_navigate.switch.application' not in sys.modules\n"
-        "assert 'memcommit.application.operations.browse_navigate.switch.runtime' not in sys.modules\n"
+        "import memcommit.application.operations.switch\n"
+        "assert 'memcommit.application.operations.switch.application' not in sys.modules\n"
+        "assert 'memcommit.application.operations.switch.runtime' not in sys.modules\n"
     )
 
     subprocess.run(

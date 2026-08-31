@@ -18,8 +18,8 @@ validation and rendering as well.
 
 ## Selected layout
 
-The historical implementation split `memcommit.adapters.console.commands.ground_workbench.ground.shell`
-and the now-removed `memcommit.adapters.console.commands.ground_workbench.ground.named_shell`
+The historical implementation split `memcommit.adapters.console.commands.ground.shell`
+and the now-removed `memcommit.adapters.console.commands.ground.named_shell`
 into three implementation roles:
 
 - `proposal.py` owns the typed blank-Ground proposal, dialogue-response

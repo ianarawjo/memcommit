@@ -10,11 +10,11 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.profiles.profile.command as profile_command
+import memcommit.adapters.console.commands.profile.command as profile_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.profiles.profile.picker import ProfilePickerAction
+from memcommit.adapters.console.commands.profile.picker import ProfilePickerAction
 from memcommit.core.context import Memory
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     PROFILE_REGISTRY_SCHEMA_VERSION,
     ProfileConfigError,
     ProfileEntry,
@@ -24,7 +24,7 @@ from memcommit.application.operations.profiles.profile.config import (
     profile_store_dir,
     virtual_authoring_registry,
 )
-from memcommit.application.operations.profiles.profile.model import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     _write_registry,
     create_authority_grant,
@@ -372,11 +372,11 @@ def test_interactive_removal_reloads_and_stays_in_profile_selector(
         return None
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profiles.profile.command._interactive_terminal",
+        "memcommit.adapters.console.commands.profile.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profiles.profile.command.choose_profile", select
+        "memcommit.adapters.console.commands.profile.command.choose_profile", select
     )
 
     result = runner.invoke(app, ["profile"])
@@ -484,7 +484,7 @@ def test_registry_write_failure_restores_prepared_store_and_checkpoint(
         raise OSError("simulated registry write failure")
 
     monkeypatch.setattr(
-        "memcommit.application.operations.profiles.profile.model._storage._write_registry",
+        "memcommit.application.operations.profile.model._storage._write_registry",
         fail_registry_write,
     )
 

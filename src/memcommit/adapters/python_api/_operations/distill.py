@@ -17,9 +17,9 @@ from memcommit.adapters.python_api.errors import (
     SemanticStorageError,
 )
 from memcommit.adapters.python_api.semantic import DistillApplyResult, DistillProposal
-from memcommit.application.operations.semantic_updates.derive.distill.model import DistillError
-from memcommit.application.operations.semantic_updates.derive.distill.application import DistillApplyRequest, DistillRequest
-from memcommit.application.operations.semantic_updates.derive.distill.runtime import execute_distill, execute_distill_apply
+from memcommit.application.operations.distill.model import DistillError
+from memcommit.application.operations.distill.application import DistillApplyRequest, DistillRequest
+from memcommit.application.operations.distill.runtime import execute_distill, execute_distill_apply
 from memcommit.providers.subscription import QueryProviderError
 
 

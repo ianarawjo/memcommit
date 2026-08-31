@@ -18,14 +18,14 @@ from memcommit.adapters.python_api.errors import (
     EmbedInputError,
     EmbedStorageError,
 )
-from memcommit.application.operations.create_copy_connect.embed.application import (
+from memcommit.application.operations.embed.application import (
     EmbedError as ApplicationEmbedError,
     EmbedRequest,
     MemoryEmbedRequest,
 )
-from memcommit.application.operations.create_copy_connect.embed.runtime import execute_embed, execute_memory_embed
-from memcommit.application.operations.profiles.profile.config import ProfileConfigError
-from memcommit.application.operations.profiles.profile.model import ProfileError
+from memcommit.application.operations.embed.runtime import execute_embed, execute_memory_embed
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError
 
 

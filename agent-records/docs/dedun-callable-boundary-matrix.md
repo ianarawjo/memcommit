@@ -16,7 +16,7 @@ participates in DUN.
 | Agent/MCP | `memcommit_dedun` | the same public Python routes | JSON-safe plan or checkpoint result |
 
 Canonical application ownership is
-`memcommit.application.operations.quality_resolution.repair.dedun`: `analysis` groups confirmed relations
+`memcommit.application.operations.dedun`: `analysis` groups confirmed relations
 through the shared connected-component capability, while `runtime` owns both
 direct and recursive Store application. The console package contains only the
 immediate `dedun` command adapter. The separate

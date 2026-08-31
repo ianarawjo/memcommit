@@ -38,7 +38,7 @@ def _write_isolated_mem_wrapper(directory: Path) -> Path:
 import os
 from pathlib import Path
 
-import memcommit.application.operations.profiles.profile.config as profile_config
+import memcommit.application.operations.profile.config as profile_config
 
 capture_store = Path(os.environ["MEMCOMMIT_CAPTURE_STORE"])
 capture_profiles = Path(os.environ["MEMCOMMIT_CAPTURE_PROFILES"])

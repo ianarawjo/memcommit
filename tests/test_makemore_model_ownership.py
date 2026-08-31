@@ -4,15 +4,15 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from memcommit.application.operations.semantic_updates.derive.makemore.case_validation import (
+from memcommit.application.operations.makemore.case_validation import (
     _validate_makemore_cases,
 )
-from memcommit.application.operations.semantic_updates.derive.makemore.model import (
+from memcommit.application.operations.makemore.model import (
     MakemoreAnalysis,
     analyze_makemore,
     validate_makemore_provider_plan,
 )
-from memcommit.application.operations.semantic_updates.derive.makemore.proposal_grounding_validation import (
+from memcommit.application.operations.makemore.proposal_grounding_validation import (
     _decode_target_context_refs,
     _reject_target_restatements,
 )
@@ -41,7 +41,7 @@ def test_makemore_responsibilities_have_concept_owned_modules() -> None:
 def test_makemore_application_imports_execution_from_its_owner() -> None:
     source = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/semantic_updates/derive/makemore/application.py"
+        / "src/memcommit/application/operations/makemore/application.py"
     ).read_text(encoding="utf-8")
 
     assert "makemore.generation import analyze_makemore" in source
@@ -51,7 +51,7 @@ def test_makemore_application_imports_execution_from_its_owner() -> None:
 def test_grounding_validation_does_not_own_conformance_or_fit() -> None:
     source = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/semantic_updates/derive/makemore/"
+        / "src/memcommit/application/operations/makemore/"
         "proposal_grounding_validation.py"
     ).read_text(encoding="utf-8")
 

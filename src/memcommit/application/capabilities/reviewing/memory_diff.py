@@ -11,7 +11,7 @@ import difflib
 import re
 from dataclasses import dataclass
 
-from memcommit.application.operations.semantic_updates.foundation.update.model import AddOperation, EditOperation, RemoveOperation, UpdateOperation
+from memcommit.application.operations.update.model import AddOperation, EditOperation, RemoveOperation, UpdateOperation
 
 
 @dataclass(frozen=True)

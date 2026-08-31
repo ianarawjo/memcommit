@@ -8,15 +8,15 @@ from pathlib import Path
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.adapters.console.commands.direct_changes.replace.proposal import render_replace_plan
-from memcommit.adapters.console.commands.direct_changes.replace.receipt import (
+from memcommit.adapters.console.commands.replace.proposal import render_replace_plan
+from memcommit.adapters.console.commands.replace.receipt import (
     render_replace_apply_result,
 )
-from memcommit.adapters.console.commands.direct_changes.replace.workbench import (
+from memcommit.adapters.console.commands.replace.workbench import (
     ReplaceTuiSetup,
     run_replace_tui,
 )
-from memcommit.application.operations.direct_changes.replace.application import (
+from memcommit.application.operations.replace.application import (
     FrozenReplaceContext,
     FrozenReplacePlan,
     FrozenReplaceSource,
@@ -168,7 +168,7 @@ def test_replace_tui_projects_descendants_as_exact_checked_execution_set() -> No
 def test_replace_tui_uses_primary_screen_and_erases_when_done() -> None:
     path = (
         Path(__file__).parents[1]
-        / "src/memcommit/adapters/console/commands/direct_changes/replace/workbench/screen.py"
+        / "src/memcommit/adapters/console/commands/replace/workbench/screen.py"
     )
     module = ast.parse(path.read_text(encoding="utf-8"))
     application_calls = [
@@ -193,7 +193,7 @@ def test_replace_tui_uses_primary_screen_and_erases_when_done() -> None:
 
 def test_replace_console_owns_workbench_proposal_and_receipt_without_facades() -> None:
     repository_root = Path(__file__).resolve().parents[1]
-    command_root = repository_root / "src/memcommit/adapters/console/commands/direct_changes/replace"
+    command_root = repository_root / "src/memcommit/adapters/console/commands/replace"
 
     assert (command_root / "workbench/model.py").is_file()
     assert (command_root / "workbench/screen.py").is_file()

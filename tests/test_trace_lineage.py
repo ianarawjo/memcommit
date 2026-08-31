@@ -23,7 +23,7 @@ from memcommit.application.capabilities.history.query.memory_history_slicing imp
     collect_memory_history_candidates,
     reconstruct_memory_history,
 )
-from memcommit.application.operations.history_recovery.inspection.trace.reference_lineage import (
+from memcommit.application.operations.trace.reference_lineage import (
     build_reference_trace,
 )
 from memcommit.application.capabilities import ops

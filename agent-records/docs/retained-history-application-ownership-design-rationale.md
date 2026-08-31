@@ -40,8 +40,8 @@ Its physical responsibilities are named for what they do:
 - `query/` owns Context and Memory slicing plus semantic History queries.
 - `verification/` owns retained-frame and operation-specific receipt checks.
 
-`application.operations.history_recovery.inspection.log`, `application.operations.history_recovery.inspection.trace`, and
-`application.operations.history_recovery.inspection.rationale` own their request/result semantics and
+`application.operations.log`, `application.operations.trace`, and
+`application.operations.rationale` own their request/result semantics and
 consume these History values. Log now has a typed Profile operation-timeline
 boundary; the existing Context checkpoint and Memory routes remain compatible
 while the broader Profile-default UX is decided separately.
@@ -52,11 +52,11 @@ The former package was removed rather than retained as a facade. Its remaining
 parts moved to their actual owners:
 
 - immutable applied checkpoint evidence belongs to
-  `application.operations.operation_lifecycle.review.applied_checkpoint`; terminal formatting
-  belongs to `adapters.console.commands.operation_lifecycle.review.applied_checkpoint_report`;
+  `application.operations.review.applied_checkpoint`; terminal formatting
+  belongs to `adapters.console.commands.review.applied_checkpoint_report`;
 - History row display DTOs and styling belong to
   `adapters.console.terminal.components.history.display`;
-- checkpoint-unit mutation belongs to `application.operations.history_recovery.recovery.revert`;
+- checkpoint-unit mutation belongs to `application.operations.revert`;
 - Undo/Redo models, stack reconstruction, receipt metadata, and route selection
   belong to `application.capabilities.command_recovery`;
 - Context snapshots and the checkpoint catalog remain independent application

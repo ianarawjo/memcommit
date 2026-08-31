@@ -17,14 +17,14 @@ own operation lifecycle.
 ## Implementation ownership
 
 The canonical terminal-independent Help implementation lives under
-`memcommit.application.operations.system_study_tools.help`. `application.py` owns exact, provider-free catalog
+`memcommit.application.operations.help`. `application.py` owns exact, provider-free catalog
 listing and detail lookup. `lookup_application.py` owns the frozen whole-catalog
 semantic selection plan and validates the provider's exact three-name result;
 provider connection remains outside the package in the terminal adapter.
 Production CLI, Python, agent, and MCP routes import those owners directly.
 
 The Help terminal adapter now has one physical owner under
-`memcommit.adapters.console.commands.system_study_tools.help`. `command.py` owns plain output and
+`memcommit.adapters.console.commands.help`. `command.py` owns plain output and
 the interactive browser, `command_handoff.py` owns the fixed-operation editor
 and child argv launch, and `study_copy_guard.py` owns the Study-only input
 guard. Reviewed translated operation Summary and
@@ -50,7 +50,7 @@ The historical `memcommit.help_application` and
 `memcommit.help_lookup_application` paths remain behavior-free module-identity
 aliases. They preserve existing imports, monkeypatch targets, and serialized
 globals without creating parallel implementations. Importing
-`memcommit.application.operations.system_study_tools.help` alone remains lazy.
+`memcommit.application.operations.help` alone remains lazy.
 
 This relocation changes physical ownership only. It does not change catalog
 copy, exact-name validation, natural-language prompt or result cardinality,

@@ -11,7 +11,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.create_copy_connect.add import command as add_command
+from memcommit.adapters.console.commands.add import command as add_command
 from memcommit.core.context import AutoCheckpoint, Memory
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityFinding,
@@ -20,13 +20,13 @@ from memcommit.application.capabilities.memory_issue_analysis.model import (
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
     reconstruct_memory_history,
 )
-from memcommit.application.operations.history_recovery.inspection.rationale.model import build_rationale
-from memcommit.application.operations.history_recovery.inspection.rationale.semantic import (
+from memcommit.application.operations.rationale.model import build_rationale
+from memcommit.application.operations.rationale.semantic import (
     rationale_provenance_payload,
 )
-from memcommit.application.operations.operation_lifecycle.review.model import create_ambiguity_review
+from memcommit.application.operations.review.model import create_ambiguity_review
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.semantic_updates.foundation.update.model import plan_update
+from memcommit.application.operations.update.model import plan_update
 
 
 runner = CliRunner()

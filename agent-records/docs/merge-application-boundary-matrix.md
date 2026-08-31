@@ -50,7 +50,7 @@ application boundary.
 ## Extracted ownership
 
 The implementation is canonically grouped under one vertical package,
-`memcommit.application.operations.direct_changes.merge`: `application.py` owns the typed use case and
+`memcommit.application.operations.merge`: `application.py` owns the typed use case and
 `runtime.py` owns Store and Grant composition. Keeping these implementations as
 flat root modules would continue package-root growth and separate one operation
 from its canonical CLI and TUI adapters. A global horizontal application/runtime
@@ -61,7 +61,7 @@ The former top-level application and runtime paths were initially retained as
 module-identity aliases, then removed on 2026-08-27 after the compatibility
 intent was withdrawn. Imports, monkeypatches, and serialized Python globals
 must now name the canonical owner. The package initializer stays lazy so
-importing `memcommit.application.operations.direct_changes.merge` alone does not eagerly load
+importing `memcommit.application.operations.merge` alone does not eagerly load
 application or Store composition.
 
 This is an ownership-only relocation. It changes no direct/descendant meaning,
@@ -71,7 +71,7 @@ membership. Existing ordered terminal captures therefore remain valid and are
 not refreshed for the move.
 
 On 2026-08-28 the operation-specific console adapters were also co-located
-under `memcommit.adapters.console.commands.direct_changes.merge`. The former
+under `memcommit.adapters.console.commands.merge`. The former
 `adapters.interfaces.cli.merge` module and
 `adapters.interfaces.tui.operations.merge` package described transport
 mechanics rather than a stable owner, even though the Merge command was their

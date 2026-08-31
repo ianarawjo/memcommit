@@ -14,8 +14,8 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.search_explain.synthesize.compare.command as compare_command
-import memcommit.adapters.console.commands.search_explain.synthesize.compare.sessions as compare_sessions_module
+import memcommit.adapters.console.commands.compare.command as compare_command
+import memcommit.adapters.console.commands.compare.sessions as compare_sessions_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonInput, comparison_canonical_digest
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
@@ -32,9 +32,9 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.rep
     load_comparison_analysis,
     save_comparison_analysis,
 )
-from memcommit.adapters.console.commands.search_explain.synthesize.compare.command import render_comparison
-from memcommit.adapters.console.commands.search_explain.synthesize.compare.endpoint_setup import CompareSetupReceipt
-from memcommit.adapters.console.commands.search_explain.synthesize.compare.sessions import (
+from memcommit.adapters.console.commands.compare.command import render_comparison
+from memcommit.adapters.console.commands.compare.endpoint_setup import CompareSetupReceipt
+from memcommit.adapters.console.commands.compare.sessions import (
     choose_comparison_session,
     comparison_session_entries,
 )
@@ -45,8 +45,8 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
 )
 from memcommit.persistence.store import MemoryStore
 from memcommit.providers.subscription import CodexChatGPTProvider
-from memcommit.application.operations.create_copy_connect.reference.application import ContextReferenceRequest
-from memcommit.application.operations.create_copy_connect.reference.runtime import execute_context_reference
+from memcommit.application.operations.reference.application import ContextReferenceRequest
+from memcommit.application.operations.reference.runtime import execute_context_reference
 
 
 runner = CliRunner()
@@ -433,7 +433,7 @@ def _task2_contexts(store: MemoryStore):
 
 def _patch_provider(monkeypatch, provider) -> None:
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.synthesize.compare.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.compare.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -1786,7 +1786,7 @@ def test_compare_sessions_catalog_and_bare_picker_are_provider_free(
     store.save(unrelated)
     store.set_current(unrelated.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.synthesize.compare.command.choose_comparison_session",
+        "memcommit.adapters.console.commands.compare.command.choose_comparison_session",
         lambda _store, *, ledger: SessionOpenReceipt(
             kind="compare",
             key=entry.key,
@@ -1798,7 +1798,7 @@ def test_compare_sessions_catalog_and_bare_picker_are_provider_free(
         raise AssertionError("saved Compare selection must be provider-free")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.synthesize.compare.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.compare.command.connect_codex_chatgpt_provider",
         provider_must_not_connect,
     )
     resumed = runner.invoke(app, ["compare", "--sessions"])
@@ -1816,7 +1816,7 @@ def test_compare_sessions_empty_and_forged_receipts_fail_closed(
 ):
     store = MemoryStore()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.synthesize.compare.sessions.choose_session",
+        "memcommit.adapters.console.commands.compare.sessions.choose_session",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             AssertionError("empty catalog must not open the picker")
         ),
@@ -1836,7 +1836,7 @@ def test_compare_sessions_empty_and_forged_receipts_fail_closed(
     monkeypatch.setattr(compare_sessions_module.sys, "stdout", TTY())
     new_receipt = SessionNewReceipt(kind="compare", argv=("mem", "compare"))
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.synthesize.compare.sessions.choose_session",
+        "memcommit.adapters.console.commands.compare.sessions.choose_session",
         lambda entries, **kwargs: (
             new_receipt
             if entries == () and kwargs["new_receipt"] == new_receipt
@@ -1858,7 +1858,7 @@ def test_compare_sessions_empty_and_forged_receipts_fail_closed(
         expected_analysis_uid=None,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.synthesize.compare.sessions.choose_session",
+        "memcommit.adapters.console.commands.compare.sessions.choose_session",
         lambda *_args, **_kwargs: SessionOpenReceipt(
             kind="compare",
             key=analysis.uid,
@@ -1898,11 +1898,11 @@ def test_compare_session_selection_revalidates_sources_without_refresh(
         )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.synthesize.compare.command.choose_comparison_session",
+        "memcommit.adapters.console.commands.compare.command.choose_comparison_session",
         change_source,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.synthesize.compare.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.compare.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("stale selection must not refresh")
         ),

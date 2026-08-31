@@ -37,7 +37,7 @@ def _configure_isolated_profile_root(root: Path) -> None:
     """Redirect the complete Profile/store boundary without changing HOME."""
 
     import memcommit.configuration.config as config_module
-    import memcommit.application.operations.profiles.profile.config as profile_config
+    import memcommit.application.operations.profile.config as profile_config
 
     authoring = root / "authoring"
     control = root / "profile-control"

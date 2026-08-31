@@ -15,16 +15,16 @@ Reference route enters the same typed application/runtime boundary.
 
 | Concern or route | Owner | Invariant |
 | --- | --- | --- |
-| Snapshot requests, frozen plans, and durable receipts | `memcommit.application.operations.create_copy_connect.reference.application` | Memory and Context units are explicitly typed independently of terminal, Store, provider, and adapter state. |
-| Locator snapshot, Source package, authority binding, content digest, Source locks, Target CAS, checkpoint | `memcommit.application.operations.create_copy_connect.reference.runtime` | Every contributing local Context or exact Grant/authority Memory binding and the Target are frozen from one current-name snapshot and publish atomically. |
+| Snapshot requests, frozen plans, and durable receipts | `memcommit.application.operations.reference.application` | Memory and Context units are explicitly typed independently of terminal, Store, provider, and adapter state. |
+| Locator snapshot, Source package, authority binding, content digest, Source locks, Target CAS, checkpoint | `memcommit.application.operations.reference.runtime` | Every contributing local Context or exact Grant/authority Memory binding and the Target are frozen from one current-name snapshot and publish atomically. |
 | Immutable stored values | `memcommit.core.context.MemoryRef`, `memcommit.context_snapshot.ContextSnapshotRef`, `memcommit.application.capabilities.ops` | `memory_snapshot_ref` stores one Memory; `context_snapshot_ref` stores a validated versioned Context package. Neither dereferences live storage after publication. |
-| CLI composition | `memcommit.adapters.console.commands.create_copy_connect.reference.command` | `CONTEXT:UID` explicitly names one local or public Grant Memory owner; a bare UID/prefix searches ordinary-local direct owners only. With no ITEM, `--from` names a local Context Source; with a Memory ITEM, it remains an explicit local-or-public owner qualifier. `--into` and `--to` are equivalent Target spellings and duplicates fail before Store access. Other operands are local Context locators and `-d/-r` controls their scope. |
-| Interactive setup | `memcommit.adapters.console.commands.create_copy_connect.reference.workbench` | Explicit Context/Memory unit -> unit-owned Source control -> Context scope when applicable -> local Target -> reviewed exact command; Memory mode admits authorized public Sources while Context mode remains local, and the workbench owns no persistence. |
+| CLI composition | `memcommit.adapters.console.commands.reference.command` | `CONTEXT:UID` explicitly names one local or public Grant Memory owner; a bare UID/prefix searches ordinary-local direct owners only. With no ITEM, `--from` names a local Context Source; with a Memory ITEM, it remains an explicit local-or-public owner qualifier. `--into` and `--to` are equivalent Target spellings and duplicates fail before Store access. Other operands are local Context locators and `-d/-r` controls their scope. |
+| Interactive setup | `memcommit.adapters.console.commands.reference.workbench` | Explicit Context/Memory unit -> unit-owned Source control -> Context scope when applicable -> local Target -> reviewed exact command; Memory mode admits authorized public Sources while Context mode remains local, and the workbench owns no persistence. |
 | Stable Python API | `memcommit.adapters.python_api._operations.reference`, `memcommit.adapters.python_api.client` | `reference_memory` and `reference_context` return unit-specific typed receipts and share the public Reference error taxonomy; only an active-Profile client may consult Grants, while an explicitly rooted client remains local-only. |
 | Agent | `memcommit.adapters.agent.reference`, default registry | Version 2 is a strict tagged `memory`/`context` union with the same application result envelope. |
 | Read-only inspection | Show/List source projection | Snapshot and live Embed labels differ; snapshot content remains readable after Source change or deletion. |
 
-The focused `memcommit.application.operations.create_copy_connect.reference` package is the canonical owner of
+The focused `memcommit.application.operations.reference` package is the canonical owner of
 the durable Memory and Context Reference use case. Production API, CLI, and TUI
 adapters import its application and runtime modules directly. The previous
 flat `memcommit.reference_application` and `memcommit.reference_runtime` paths
@@ -33,7 +33,7 @@ intentionally drops old import, monkeypatch, and serialized-global lookup while
 leaving the operation request and durable Reference formats unchanged.
 
 Query Reference remains a Query-owned read boundary under
-`memcommit.application.operations.search_explain.retrieve_answer.query`. It selects concealed Source material for one
+`memcommit.application.operations.query`. It selects concealed Source material for one
 answer and publishes no durable snapshot, so sharing the word “reference” does
 not make it part of this package. Conversely, Memory and Context Reference stay
 together here because both freeze retained immutable bytes and publish one

@@ -31,7 +31,7 @@ there is intentionally no profile-wide “last Scope” preference.
 - `core.context_navigation` owns bounded previous/next current-Context history
   as pure state transitions. It is a peer Context concept rather than a target
   locator or scope resolver.
-- `application.operations.history_recovery.inspection.diff.context_checkpoint_lookup` freezes and searches
+- `application.operations.diff.context_checkpoint_lookup` freezes and searches
   the ordinary-local Context/checkpoint namespace used only by Diff operands.
 - `persistence.store.context_memory.catalog_model` owns typed ordinary-record
   scan results and physical omission diagnostics used by catalog persistence.
@@ -46,7 +46,7 @@ there is intentionally no profile-wide “last Scope” preference.
   ordinary-local direct graph for Memory or item coordinates, completes a
   local auto-typed Context/Memory target, and offers the all-direct-item owner
   lookup needed by Show. Pure locator grammar remains in core `resolution.py`.
-- `application.operations.search_explain.retrieve_answer.search.corpus` loads one or more searchable roots
+- `application.operations.search.corpus` loads one or more searchable roots
   and independently controls embedded-Context traversal and authorized
   activity artifacts for Search, Find, and ordinary Query. It belongs to the
   Search operation because those roots are immediately projected into

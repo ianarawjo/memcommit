@@ -90,11 +90,10 @@ def test_search_and_query_commands_import_the_shared_policy_owner():
         / "console"
         / "commands"
     )
-    retrieve_answer = commands / "search_explain" / "retrieve_answer"
-    search_source = (retrieve_answer / "search" / "command.py").read_text(
+    search_source = (commands / "search" / "command.py").read_text(
         encoding="utf-8"
     )
-    query_source = (retrieve_answer / "query" / "command.py").read_text(
+    query_source = (commands / "query" / "command.py").read_text(
         encoding="utf-8"
     )
 
@@ -102,12 +101,12 @@ def test_search_and_query_commands_import_the_shared_policy_owner():
     assert owner in search_source
     assert owner in query_source
     assert (
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.provider_policy"
+        "memcommit.adapters.console.commands.search.provider_policy"
         not in search_source
     )
     assert (
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.provider_policy" not in query_source
+        "memcommit.adapters.console.commands.search.provider_policy" not in query_source
     )
     assert (
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.provider_policy" not in query_source
+        "memcommit.adapters.console.commands.query.provider_policy" not in query_source
     )

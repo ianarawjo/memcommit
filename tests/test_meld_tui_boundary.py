@@ -5,8 +5,8 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
-import memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.workbench.workbench as meld_workbench
-from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld import command as meld_command
+import memcommit.adapters.console.commands.meld.workbench.workbench as meld_workbench
+from memcommit.adapters.console.commands.meld import command as meld_command
 from memcommit.adapters.console.terminal.components.peer_relations.presentation import (
     render_peer_relation_analysis,
 )
@@ -28,10 +28,10 @@ def test_meld_uses_operation_neutral_peer_relation_presentation() -> None:
         in imported_modules
     )
     assert (
-        "memcommit.adapters.console.commands.search_explain.synthesize.compare.presentation"
+        "memcommit.adapters.console.commands.compare.presentation"
         not in imported_modules
     )
-    assert "memcommit.adapters.console.commands.search_explain.synthesize.compare.command" not in imported_modules
+    assert "memcommit.adapters.console.commands.compare.command" not in imported_modules
 
 
 def test_meld_workbench_has_one_live_host() -> None:

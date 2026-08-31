@@ -8,7 +8,7 @@ import pytest
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import Memory
-from memcommit.application.operations.direct_changes.merge.application import (
+from memcommit.application.operations.merge.application import (
     FrozenMergePlan,
     MergeAddition,
     MergeContextResult,
@@ -22,7 +22,7 @@ from memcommit.application.operations.direct_changes.merge.application import (
     prepare_merge,
     run_merge,
 )
-from memcommit.application.operations.direct_changes.merge.runtime import execute_merge
+from memcommit.application.operations.merge.runtime import execute_merge
 from memcommit.persistence.store import MemoryStore
 
 

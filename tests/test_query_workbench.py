@@ -9,25 +9,25 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import typer
 
-import memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command as query_command
-from memcommit.application.operations.search_explain.retrieve_answer.search.answer_references import (
+import memcommit.adapters.console.commands.query.command as query_command
+from memcommit.application.operations.search.answer_references import (
     SearchAnswerEvidence,
     SearchAnswerSentence,
     build_search_answer_reference_document,
 )
-from memcommit.adapters.console.commands.search_explain.retrieve_answer.query.workbench import (
+from memcommit.adapters.console.commands.query.workbench import (
     QueryAnswerFocus,
     project_query_answer_clipboard,
     query_answer_stop_count,
     render_query_answer_fragments,
     run_query_workbench,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.query.granted_application import (
+from memcommit.application.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryResponse,
     GrantedQueryTarget,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application import (
+from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
     OrdinaryQueryResponse,
 )
@@ -63,7 +63,7 @@ def test_blank_query_workbench_does_not_connect_before_submission():
 def test_query_scope_uses_transient_browse_without_todo_or_transcripts():
     source = (
         Path(__file__).parents[1]
-        / "src/memcommit/adapters/console/commands/search_explain/retrieve_answer/query/workbench/screen.py"
+        / "src/memcommit/adapters/console/commands/query/workbench/screen.py"
     ).read_text(encoding="utf-8")
     assert "CompactReadableScopeControl" in source
     assert "SAVED TRANSCRIPTS" not in source

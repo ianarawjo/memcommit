@@ -4,19 +4,19 @@ from dataclasses import replace
 
 from typer.testing import CliRunner
 
-from memcommit.adapters.console.commands.ground_workbench.ground.command.workflow import (
+from memcommit.adapters.console.commands.ground.command.workflow import (
     create as ground_create_workflow,
     open as ground_open_workflow,
 )
 import memcommit.adapters.console.terminal.components.operation_launcher.location as launcher_location_module
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.ground_workbench.ground.workspace.catalog import (
+from memcommit.adapters.console.commands.ground.workspace.catalog import (
     list_ground_workspace_draft_catalog,
     list_ground_workspace_catalog,
     reload_selected_ground_workspace_draft,
     reload_selected_ground_workspace,
 )
-from memcommit.adapters.console.commands.ground_workbench.ground.shell import (
+from memcommit.adapters.console.commands.ground.shell import (
     GroundShellProposal,
     GroundShellResult,
 )
@@ -26,18 +26,18 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
 from memcommit.adapters.console.terminal.components.operation_launcher.location import (
     session_picker_location,
 )
-from memcommit.application.operations.ground_workbench.ground.workspace_draft import GroundWorkspaceDraft
-from memcommit.application.operations.ground_workbench.ground.workspace_draft_store import (
+from memcommit.application.operations.ground.workspace_draft import GroundWorkspaceDraft
+from memcommit.application.operations.ground.workspace_draft_store import (
     GroundWorkspaceDraftStore,
 )
-from memcommit.application.operations.ground_workbench.ground.workspace_application import (
+from memcommit.application.operations.ground.workspace_application import (
     CreateGroundWorkspaceRequest,
 )
-from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
+from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     ground_workspace_exists,
 )
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_UID,
     ProfileEntry,
     ProfileRegistry,

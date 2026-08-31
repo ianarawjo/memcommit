@@ -13,7 +13,7 @@ from memcommit.adapters.python_api import (
     MemCommitClient,
     OperationHelpResult,
 )
-from memcommit.application.operations.system_study_tools.help.application import (
+from memcommit.application.operations.help.application import (
     list_operation_details,
     list_operation_help,
 )

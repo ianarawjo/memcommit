@@ -7,7 +7,7 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.create_copy_connect.branch.receipt import BranchCreationReceipt
+from memcommit.adapters.console.commands.branch.receipt import BranchCreationReceipt
 from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
     reconstruct_memory_history,
@@ -266,7 +266,7 @@ def test_interactive_receipt_can_request_the_subtree(isolated_store, monkeypatch
     store = MemoryStore()
     _source_hierarchy(store)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.create_copy_connect.branch.command.choose_branch_creation",
+        "memcommit.adapters.console.commands.branch.command.choose_branch_creation",
         lambda *args, **kwargs: BranchCreationReceipt(
             source_name="source",
             target_name="experiment",
@@ -317,7 +317,7 @@ def test_subtree_branch_rejects_new_descendant_after_snapshot(
         return result
 
     monkeypatch.setattr(
-        "memcommit.application.operations.create_copy_connect.branch.runtime.ops.branch_subtree",
+        "memcommit.application.operations.branch.runtime.ops.branch_subtree",
         add_descendant_then_branch,
     )
 
@@ -352,7 +352,7 @@ def test_subtree_branch_rejects_changed_descendant_history(
         return result
 
     monkeypatch.setattr(
-        "memcommit.application.operations.create_copy_connect.branch.runtime.ops.branch_subtree",
+        "memcommit.application.operations.branch.runtime.ops.branch_subtree",
         checkpoint_child_then_branch,
     )
 

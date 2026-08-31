@@ -249,7 +249,7 @@ class _ContextRenameMixin:
     def _read_meld_records_for_rename(self) -> dict[str, dict[str, object]]:
         """Load every target-keyed Meld artifact into rename freshness."""
 
-        from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import MeldError, MeldSession
+        from memcommit.application.operations.meld.model import MeldError, MeldSession
 
         root = self.meld_sessions_dir
         if not root.exists():
@@ -486,7 +486,7 @@ class _ContextRenameMixin:
         from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
             comparison_canonical_digest,
         )
-        from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import MeldError, MeldSession
+        from memcommit.application.operations.meld.model import MeldError, MeldSession
 
         def rewrite_meld_binding(binding: object) -> bool:
             if not isinstance(binding, dict):

@@ -34,7 +34,7 @@ if str(ROOT) not in sys.path:
 
 def _prepare_topology(home: Path):
     from memcommit.core.context import Context, Memory
-    from memcommit.application.operations.profiles.profile.config import (
+    from memcommit.application.operations.profile.config import (
         AUTHORING_PROFILE_NAME,
         AUTHORING_PROFILE_UID,
         GRANT_RESOURCE_CONTEXT_TREE,
@@ -134,14 +134,14 @@ def _received_names(receiver_store) -> tuple[str, ...]:
 def _run_child(home: Path, kind: str) -> None:
     import typer
 
-    from memcommit.adapters.console.commands.sharing_protection.share.command import cmd
+    from memcommit.adapters.console.commands.share.command import cmd
     from memcommit.core.context import Context
-    from memcommit.application.operations.profiles.profile.config import (
+    from memcommit.application.operations.profile.config import (
         ProfileRegistry,
         load_profile_registry,
         profile_registry_file,
     )
-    from memcommit.application.operations.sharing_protection.share.model import ShareError, deliver_prepared_share, prepare_share
+    from memcommit.application.operations.share.model import ShareError, deliver_prepared_share, prepare_share
 
     sender_store, receiver_store, root = _prepare_topology(home)
     columns, rows = os.get_terminal_size()

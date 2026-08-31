@@ -36,7 +36,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.gra
     load_granted_memory_relation_artifact,
     save_granted_memory_relation_artifact,
 )
-from memcommit.application.operations.profiles.profile.model import (
+from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,
 )
 from memcommit.providers.policy import (
@@ -46,7 +46,7 @@ from memcommit.providers.subscription import CodexChatGPTProvider
 from memcommit.persistence.store import MemoryStore
 
 if TYPE_CHECKING:
-    from memcommit.application.operations.profiles.profile.config import ProfileRegistry
+    from memcommit.application.operations.profile.config import ProfileRegistry
 
 
 MEMORY_RELATION_AGGREGATE_TIMEOUT_SECONDS = int(

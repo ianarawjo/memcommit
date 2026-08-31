@@ -10,51 +10,51 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.semantic_updates.derive.distill.command as distill_command
-import memcommit.application.operations.semantic_updates.derive.distill.application as distill_application
+import memcommit.adapters.console.commands.distill.command as distill_command
+import memcommit.application.operations.distill.application as distill_application
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.system_study_tools.help.command import COMMAND_FORMS
+from memcommit.adapters.console.commands.help.command import COMMAND_FORMS
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.semantic_updates.derive.distill.model import (
+from memcommit.application.operations.distill.model import (
     DISTILL_OPERATION,
     DISTILL_PAYLOAD_MARKER,
     DistillError,
     analyze_distill,
     distill_execution_policy,
 )
-from memcommit.application.operations.semantic_updates.derive.distill.goal_fit import (
+from memcommit.application.operations.distill.goal_fit import (
     DISTILL_GOAL_FIT_OPERATION,
     DISTILL_GOAL_FIT_PAYLOAD_MARKER,
 )
-from memcommit.application.operations.semantic_updates.derive.distill.application import (
+from memcommit.application.operations.distill.application import (
     DistillApplyRequest,
     DistillRequest,
 )
-from memcommit.application.operations.semantic_updates.derive.distill.config import DistillSemanticConfig
-from memcommit.application.operations.semantic_updates.derive.distill.runtime import (
+from memcommit.application.operations.distill.config import DistillSemanticConfig
+from memcommit.application.operations.distill.runtime import (
     execute_distill,
     execute_distill_apply,
 )
-from memcommit.application.operations.ground_workbench.ground.distill import (
+from memcommit.application.operations.ground.distill import (
     apply_ground_distill_result,
     execute_ground_distill,
     freeze_ground_distill,
 )
-from memcommit.application.operations.ground_workbench.ground.workspace_application import (
+from memcommit.application.operations.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
 )
-from memcommit.application.operations.ground_workbench.ground.workspace_runtime import (
+from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
     load_ground_workspace,
 )
-from memcommit.application.operations.ground_workbench.ground.workspace_history import (
+from memcommit.application.operations.ground.workspace_history import (
     build_ground_workspace_command_stack,
     undo_ground_workspace_command,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.search_explain.synthesize.summarize.model import collect_summary_frame
+from memcommit.application.operations.summarize.model import collect_summary_frame
 
 
 runner = CliRunner()

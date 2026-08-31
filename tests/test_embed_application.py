@@ -6,7 +6,7 @@ from dataclasses import replace
 
 import pytest
 
-from memcommit.application.operations.create_copy_connect.embed.application import (
+from memcommit.application.operations.embed.application import (
     EmbedError,
     EmbedPlacement,
     EmbedRequest,

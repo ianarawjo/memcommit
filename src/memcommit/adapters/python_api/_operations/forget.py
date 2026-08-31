@@ -19,7 +19,7 @@ from memcommit.adapters.python_api.forget import (
     ForgetCandidateResult,
     ForgetReviewResult,
 )
-from memcommit.application.operations.semantic_updates.curate_integrate.forget.application import (
+from memcommit.application.operations.forget.application import (
     ForgetAnalysisRequest,
     ForgetApplicationError,
     ForgetApplyRequest,
@@ -31,10 +31,10 @@ from memcommit.application.operations.semantic_updates.curate_integrate.forget.a
     run_forget_revision,
     run_forget_selection,
 )
-from memcommit.application.operations.semantic_updates.curate_integrate.forget.review import ForgetReviewError
-from memcommit.application.operations.semantic_updates.curate_integrate.forget.runtime import MemoryStoreForgetSourcePort
-from memcommit.application.operations.profiles.profile.config import ProfileConfigError
-from memcommit.application.operations.profiles.profile.model import ProfileError
+from memcommit.application.operations.forget.review import ForgetReviewError
+from memcommit.application.operations.forget.runtime import MemoryStoreForgetSourcePort
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError
 from memcommit.persistence.store import ConcurrentContextUpdateError
 

@@ -8,15 +8,15 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command import (
+from memcommit.adapters.console.commands.search.command import (
     _run_search_request,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.search.corpus import load_readable_search_roots
+from memcommit.application.operations.search.corpus import load_readable_search_roots
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_readable_context_catalog,
 )
-from memcommit.adapters.console.commands.search_explain.retrieve_answer.search.search_workbench import (
+from memcommit.adapters.console.commands.search.search_workbench import (
     SearchRequest,
     SearchResponse,
 )
@@ -28,10 +28,10 @@ from memcommit.core.context import (
     MemoryRef,
     QueryContextRef,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.search.application import (
+from memcommit.application.operations.search.application import (
     supplement_namespace_branch_coverage,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.search.model import (
+from memcommit.application.operations.search.model import (
     SearchError,
     SearchCandidate,
     SearchMatch,
@@ -203,7 +203,7 @@ def test_interactive_searches_multiple_exact_targets_in_one_provider_turn(
     catalog = freeze_readable_context_catalog(store, access)
     provider = KeywordProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
     request = SearchRequest(
@@ -246,7 +246,7 @@ def test_explicit_search_repeats_context_for_the_same_multi_root_request(
         return SearchResponse(request=request, mode="CURRENT", results=())
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command._run_search_request",
+        "memcommit.adapters.console.commands.search.command._run_search_request",
         run_request,
     )
     result = runner.invoke(
@@ -290,7 +290,7 @@ def test_search_all_and_short_alias_freeze_every_readable_context(
         return SearchResponse(request=request, mode="CURRENT", results=())
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command._run_search_request",
+        "memcommit.adapters.console.commands.search.command._run_search_request",
         run_request,
     )
 
@@ -323,7 +323,7 @@ def test_search_all_rejects_explicit_context(isolated_store, monkeypatch):
     store.save(context)
     store.set_current(context.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command._run_search_request",
+        "memcommit.adapters.console.commands.search.command._run_search_request",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(
             AssertionError("invalid Search scope must not execute")
         ),
@@ -369,7 +369,7 @@ def test_search_cli_multi_roots_keep_descendants_and_embeds_independent(
     def exposed_memories(*scope_args: str) -> set[str]:
         provider = KeywordProvider()
         monkeypatch.setattr(
-            "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+            "memcommit.adapters.console.commands.search.command.connect_search_provider",
             lambda: provider,
         )
         result = runner.invoke(
@@ -833,7 +833,7 @@ def test_search_cli_recurses_renders_local_content_and_does_not_checkpoint(
     checkpoints_before = store.list_checkpoints("facilities-reference")
     provider = KeywordProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
 
@@ -875,7 +875,7 @@ def test_search_cli_recursive_searches_materialized_namespace_descendants(
     store.set_current(root.name)
     provider = KeywordProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
 
@@ -924,7 +924,7 @@ def test_search_cli_labels_related_fallback_when_primary_matches_are_empty(
             )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: RelatedProvider(),
     )
 
@@ -957,11 +957,11 @@ def test_search_cli_tty_prints_static_results_without_opening_chat(
     store.set_current(ctx.name)
     provider = KeywordProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command._interactive_terminal",
+        "memcommit.adapters.console.commands.search.command._interactive_terminal",
         lambda: True,
     )
     result = runner.invoke(app, ["search", "cafe"])
@@ -983,11 +983,11 @@ def test_search_without_query_opens_blank_interactive_search_in_a_tty(
     store.set_current(ctx.name)
     opened = []
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command._interactive_terminal",
+        "memcommit.adapters.console.commands.search.command._interactive_terminal",
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command._open_search_workbench",
+        "memcommit.adapters.console.commands.search.command._open_search_workbench",
         lambda store, access, **options: opened.append(
             (store.store_dir, access.display_name, options)
         ),
@@ -1069,11 +1069,11 @@ def test_search_cli_tty_static_results_include_namespace_descendants(
     store.save(child)
     store.set_current(root.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: KeywordProvider(),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command._interactive_terminal",
+        "memcommit.adapters.console.commands.search.command._interactive_terminal",
         lambda: True,
     )
 
@@ -1120,7 +1120,7 @@ def test_search_cli_groups_contexts_and_aligns_multiline_content(
             )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: InterleavedProvider(),
     )
 
@@ -1157,7 +1157,7 @@ def test_search_cli_groups_memory_ref_and_renders_target_inline(
     store.save(parent)
     store.set_current(parent.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: KeywordProvider(),
     )
 
@@ -1183,7 +1183,7 @@ def test_search_cli_explicit_context_does_not_switch_current(
     store.save(active)
     store.set_current("active")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: KeywordProvider(),
     )
 
@@ -1215,7 +1215,7 @@ def test_search_cli_query_ref_hit_prints_hint_without_hidden_content(
     store.save(parent)
     store.set_current("facilities-reference")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: KeywordProvider(),
     )
 
@@ -1252,7 +1252,7 @@ def test_query_ref_hint_shell_quotes_untrusted_names(
     )
     store.set_current(parent.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: KeywordProvider(),
     )
 
@@ -1268,7 +1268,7 @@ def test_search_cli_errors_for_missing_context_without_current_or_bad_limit(
     monkeypatch,
 ):
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
         lambda: pytest.fail("provider should not be called"),
     )
 

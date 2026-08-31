@@ -13,14 +13,14 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_fit_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.quality_resolution.validate.fit
+import memcommit.application.operations.fit
 
-assert "memcommit.application.operations.quality_resolution.validate.fit.application" not in sys.modules
-assert "memcommit.application.operations.quality_resolution.validate.fit.runtime" not in sys.modules
-assert "memcommit.application.operations.quality_resolution.validate.fit.ground_report" not in sys.modules
-assert "memcommit.application.operations.quality_resolution.validate.fit.judgment" not in sys.modules
-assert "memcommit.application.operations.quality_resolution.validate.fit.coherence" not in sys.modules
-assert "memcommit.application.operations.quality_resolution.validate.fit.store" not in sys.modules
+assert "memcommit.application.operations.fit.application" not in sys.modules
+assert "memcommit.application.operations.fit.runtime" not in sys.modules
+assert "memcommit.application.operations.fit.ground_report" not in sys.modules
+assert "memcommit.application.operations.fit.judgment" not in sys.modules
+assert "memcommit.application.operations.fit.coherence" not in sys.modules
+assert "memcommit.application.operations.fit.store" not in sys.modules
 """
 
     subprocess.run(
@@ -34,16 +34,16 @@ def test_production_fit_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/fit.py",
         "src/memcommit/adapters/python_api/_operations/resolve.py",
-        "src/memcommit/adapters/console/commands/quality_resolution/validate/fit/command.py",
-        "src/memcommit/adapters/console/commands/quality_resolution/diagnose/find_conflicts/command.py",
-        "src/memcommit/adapters/console/commands/quality_resolution/repair/resolve/impact.py",
-        "src/memcommit/adapters/console/commands/quality_resolution/repair/resolve/command.py",
-        "src/memcommit/application/operations/semantic_updates/derive/makemore/model.py",
-        "src/memcommit/application/operations/ground_workbench/ground/workspace_fit.py",
-        "src/memcommit/application/operations/quality_resolution/validate/fit/application.py",
-        "src/memcommit/application/operations/quality_resolution/validate/fit/runtime.py",
-        "src/memcommit/application/operations/quality_resolution/repair/resolve/application.py",
-        "src/memcommit/application/operations/quality_resolution/repair/resolve/semantic.py",
+        "src/memcommit/adapters/console/commands/fit/command.py",
+        "src/memcommit/adapters/console/commands/find_conflicts/command.py",
+        "src/memcommit/adapters/console/commands/resolve/impact.py",
+        "src/memcommit/adapters/console/commands/resolve/command.py",
+        "src/memcommit/application/operations/makemore/model.py",
+        "src/memcommit/application/operations/ground/workspace_fit.py",
+        "src/memcommit/application/operations/fit/application.py",
+        "src/memcommit/application/operations/fit/runtime.py",
+        "src/memcommit/application/operations/resolve/application.py",
+        "src/memcommit/application/operations/resolve/semantic.py",
     )
     legacy_imports = (
         "from memcommit.fit import",

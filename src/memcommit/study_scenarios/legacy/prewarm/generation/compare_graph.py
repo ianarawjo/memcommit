@@ -58,8 +58,8 @@ from memcommit.study_scenarios.legacy.prewarm.compare_compact import (
     run_compact_compare,
 )
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import analyze_comparison
-from memcommit.application.operations.profiles.profile.config import load_profile_registry
-from memcommit.application.operations.profiles.profile.model import _study_practice_contexts
+from memcommit.application.operations.profile.config import load_profile_registry
+from memcommit.application.operations.profile.model import _study_practice_contexts
 from memcommit.providers.types import (
     CODEX_CHATGPT_PROVIDER,
     CODEX_REASONING_EFFORTS,

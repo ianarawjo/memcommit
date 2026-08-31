@@ -12,9 +12,9 @@ from memcommit.adapters.console.terminal.components.command_editor.model import 
 from memcommit.adapters.console.terminal.components.command_editor.approval import approve_exact_command
 from memcommit.adapters.console.terminal.components.exact_name_dialog import choose_exact_name
 from memcommit.adapters.console.terminal.components.flat_selection_dialog import choose_flat_option
-from memcommit.adapters.console.commands.create_copy_connect.resource_import.workbench import freeze_import_source_catalog
+from memcommit.adapters.console.commands.resource_import.workbench import freeze_import_source_catalog
 from memcommit.adapters.console.terminal.components.primitives import ExactNameFieldView
-from memcommit.application.operations.profiles.profile.config import ProfileEntry, ProfileRegistry
+from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry
 from memcommit.adapters.console.terminal.components.selection import SelectionOption
 
 

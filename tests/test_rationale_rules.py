@@ -22,13 +22,13 @@ from memcommit.application.capabilities.history.reconstruction.memory_effect_der
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistory,
 )
-from memcommit.application.operations.history_recovery.inspection.rationale.rules import (
+from memcommit.application.operations.rationale.rules import (
     RATIONALE_RULESET_VERSION,
     RationaleLimitUnit,
     rationale_ruleset,
     rationale_ruleset_prompt_payload,
 )
-from memcommit.application.operations.history_recovery.inspection.rationale.semantic import (
+from memcommit.application.operations.rationale.semantic import (
     RATIONALE_PROVENANCE_OPERATION,
     RATIONALE_PROVENANCE_REPAIR_OPERATION,
     RationaleSynthesisError,
@@ -47,7 +47,7 @@ def _freeze_general_prompt_policy(monkeypatch):
     """Keep ruleset unit tests independent of the developer's active Profile."""
 
     monkeypatch.setattr(
-        "memcommit.application.operations.history_recovery.inspection.rationale.semantic.resolve_semantic_prompt_policy",
+        "memcommit.application.operations.rationale.semantic.resolve_semantic_prompt_policy",
         lambda: GENERAL_SEMANTIC_PROMPT_POLICY,
     )
 
@@ -544,7 +544,7 @@ def test_cli_gap_receipt_and_json_are_provider_free(isolated_store, monkeypatch)
     store.save(context)
     store.set_current(context.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.history_recovery.inspection.rationale.command.connect_semantic_provider",
+        "memcommit.adapters.console.commands.rationale.command.connect_semantic_provider",
         lambda: pytest.fail("CLI gap receipt connected a provider"),
     )
     selector = f"{context.name}:{memory.uid}"
@@ -608,7 +608,7 @@ def test_cli_renders_a_natural_language_receipt_for_remove_and_undo(
     case = _case("direct-add-remove-undo")
     expected = case["expected"]["provenance"]
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.history_recovery.inspection.rationale.command.connect_semantic_provider",
+        "memcommit.adapters.console.commands.rationale.command.connect_semantic_provider",
         lambda: _CapturingProvider(expected),
     )
     assert runner.invoke(app, ["init", "lifecycle"]).exit_code == 0
@@ -635,7 +635,7 @@ def test_compare_source_rationale_uses_the_same_semantic_rules(
     monkeypatch,
     capsys,
 ):
-    from memcommit.adapters.console.commands.search_explain.synthesize.compare import command as compare_command
+    from memcommit.adapters.console.commands.compare import command as compare_command
 
     assert runner.invoke(app, ["init", "compare-source"]).exit_code == 0
     assert runner.invoke(app, ["add", "Source claim."]).exit_code == 0

@@ -23,16 +23,16 @@ from memcommit.adapters.python_api.resolve import (
     ResolveEffectResult,
     ResolveIssueResult,
 )
-from memcommit.application.operations.quality_resolution.validate.fit.judgment import FitJudgmentError
+from memcommit.application.operations.fit.judgment import FitJudgmentError
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.application.operations.profiles.profile.model import ProfileError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError
-from memcommit.application.operations.quality_resolution.repair.resolve.application import (
+from memcommit.application.operations.resolve.application import (
     ResolveAnalysis,
     ResolveAuthorityError,
     ResolveConflictError,
@@ -46,11 +46,11 @@ from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,
 )
-from memcommit.application.operations.quality_resolution.repair.resolve.finding_handoff import (
+from memcommit.application.operations.resolve.finding_handoff import (
     conflict_handoff_to_resolve_request,
 )
-from memcommit.application.operations.quality_resolution.repair.resolve.runtime import MemoryStoreResolvePort
-from memcommit.application.operations.quality_resolution.repair.resolve.semantic import (
+from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
+from memcommit.application.operations.resolve.semantic import (
     ProviderResolveSemanticPort,
 )
 from memcommit.persistence.store import ConcurrentContextUpdateError

@@ -272,7 +272,7 @@ def _atomize_evidence(
         valid_review_item = review_item_uid == memory_uid
         expected_digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
     else:
-        from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+        from memcommit.application.operations.atomize.domain import (
             atomize_declared_frame_digest,
         )
 

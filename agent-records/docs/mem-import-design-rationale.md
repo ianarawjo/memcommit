@@ -24,7 +24,7 @@ references remain separate lineage or live-access mechanisms.
 ## Application ownership
 
 The canonical application package is
-`memcommit.application.operations.create_copy_connect.resource_import`. The name mirrors the public
+`memcommit.application.operations.resource_import`. The name mirrors the public
 `mem import` operation while avoiding Python's reserved `import` keyword.
 Within that package, `contracts.py` owns the immutable preview and result
 types, while `profile.py`, `context.py`, and `memory.py` own the three resource
@@ -37,7 +37,7 @@ removed when the complete operation topology was adopted. Current callers use
 the resource-owning modules in the canonical package directly. The former
 Profile-model baseline names remain lazy aliases, but clean baseline selection,
 digesting, staging, publication, and rollback are canonically owned by
-`create_copy_connect.resource_import.profile`. This keeps the public command's
+`application.operations.resource_import.profile`. This keeps the public command's
 complete Profile flow together and prevents the Study lifecycle from owning a
 general import primitive.
 

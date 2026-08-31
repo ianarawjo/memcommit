@@ -9,22 +9,22 @@ import sys
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PAIRS = (
-    ("memcommit.atomize", "memcommit.application.operations.semantic_updates.derive.atomize.domain"),
+    ("memcommit.atomize", "memcommit.application.operations.atomize.domain"),
     (
         "memcommit.atomize_workbench",
-        "memcommit.application.operations.semantic_updates.derive.atomize.records",
+        "memcommit.application.operations.atomize.records",
     ),
     (
         "memcommit.atomize_normal_form",
-        "memcommit.application.operations.semantic_updates.derive.atomize.normal_form",
+        "memcommit.application.operations.atomize.normal_form",
     ),
     (
         "memcommit.atomize_result_adapter",
-        "memcommit.application.operations.semantic_updates.derive.atomize.result_adapter",
+        "memcommit.application.operations.atomize.result_adapter",
     ),
     (
         "memcommit.atomize_resolution_adapter",
-        "memcommit.application.operations.semantic_updates.derive.atomize.resolution_adapter",
+        "memcommit.application.operations.atomize.resolution_adapter",
     ),
 )
 
@@ -33,7 +33,7 @@ def test_atomize_package_keeps_support_modules_lazy() -> None:
     canonical_names = tuple(canonical for _legacy, canonical in MODULE_PAIRS)
     program = f"""
 import sys
-import memcommit.application.operations.semantic_updates.derive.atomize
+import memcommit.application.operations.atomize
 
 for name in {canonical_names!r}:
     assert name not in sys.modules
@@ -72,21 +72,21 @@ def test_atomize_support_imports_follow_the_canonical_dependency_direction() -> 
 def test_atomize_production_consumers_use_canonical_support_modules() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/atomize.py",
-        "src/memcommit/adapters/console/commands/semantic_updates/derive/atomize/command.py",
-        "src/memcommit/adapters/console/commands/semantic_updates/derive/atomize/impact.py",
-        "src/memcommit/adapters/console/commands/semantic_updates/derive/atomize/review.py",
-        "src/memcommit/adapters/console/commands/semantic_updates/derive/atomize/records.py",
-        "src/memcommit/adapters/console/commands/operation_lifecycle/impact/command.py",
-        "src/memcommit/adapters/console/commands/operation_lifecycle/review/command.py",
-        "src/memcommit/application/operations/semantic_updates/derive/atomize/analysis_application.py",
-        "src/memcommit/application/operations/semantic_updates/derive/atomize/analysis_runtime.py",
-        "src/memcommit/application/operations/semantic_updates/derive/atomize/application.py",
-        "src/memcommit/application/operations/semantic_updates/derive/atomize/runtime.py",
+        "src/memcommit/adapters/console/commands/atomize/command.py",
+        "src/memcommit/adapters/console/commands/atomize/impact.py",
+        "src/memcommit/adapters/console/commands/atomize/review.py",
+        "src/memcommit/adapters/console/commands/atomize/records.py",
+        "src/memcommit/adapters/console/commands/impact/command.py",
+        "src/memcommit/adapters/console/commands/review/command.py",
+        "src/memcommit/application/operations/atomize/analysis_application.py",
+        "src/memcommit/application/operations/atomize/analysis_runtime.py",
+        "src/memcommit/application/operations/atomize/application.py",
+        "src/memcommit/application/operations/atomize/runtime.py",
         "src/memcommit/application/capabilities/ops.py",
         "src/memcommit/application/capabilities/history/verification",
         "src/memcommit/application/capabilities/history/reconstruction/memory_effect_derivation.py",
         "src/memcommit/application/capabilities/history/query/memory_history_slicing.py",
-        "src/memcommit/application/operations/operation_lifecycle/review/model.py",
+        "src/memcommit/application/operations/review/model.py",
         "src/memcommit/persistence/operations/atomize",
         "src/memcommit/persistence/store/context_memory",
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
@@ -107,8 +107,8 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
 
 def test_atomize_view_adapters_remain_read_only_projections() -> None:
     for relative_path in (
-        "src/memcommit/application/operations/semantic_updates/derive/atomize/result_adapter.py",
-        "src/memcommit/application/operations/semantic_updates/derive/atomize/resolution_adapter.py",
+        "src/memcommit/application/operations/atomize/result_adapter.py",
+        "src/memcommit/application/operations/atomize/resolution_adapter.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "MemoryStore" not in source

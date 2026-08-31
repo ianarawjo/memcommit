@@ -85,7 +85,7 @@ from memcommit.core.context import QueryContextRef
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
 )
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     ProfileEntry,
     ProfileRegistry,

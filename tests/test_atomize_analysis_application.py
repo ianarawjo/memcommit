@@ -9,15 +9,15 @@ from pathlib import Path
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+from memcommit.application.operations.atomize.domain import (
     AtomizeImpactError,
     create_atomize_analysis,
     impact_atomize,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.analysis_application import (
+from memcommit.application.operations.atomize.analysis_application import (
     AtomizeAnalysisOpenRequest,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.analysis_runtime import (
+from memcommit.application.operations.atomize.analysis_runtime import (
     execute_atomize_analysis_open,
 )
 from memcommit.core.context import Memory
@@ -117,7 +117,7 @@ def test_runtime_looks_up_hidden_prepared_analysis_before_provider(
         output_context_name="atomize/prepared-output",
     )
     monkeypatch.setattr(
-        "memcommit.application.operations.semantic_updates.derive.atomize.analysis_runtime.find_declared_atomize_prewarm",
+        "memcommit.application.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
         lambda *, store, context: match,
     )
 
@@ -145,7 +145,7 @@ def test_disallowed_prepared_lookup_falls_through_to_provider(
     store = MemoryStore()
     context = _context(store)
     monkeypatch.setattr(
-        "memcommit.application.operations.semantic_updates.derive.atomize.analysis_runtime.find_declared_atomize_prewarm",
+        "memcommit.application.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
         lambda **_kwargs: pytest.fail("disallowed prepared lookup was attempted"),
     )
     prepared = create_atomize_analysis(
@@ -229,8 +229,8 @@ def test_analysis_application_and_runtime_import_no_terminal_adapters():
     root = Path(__file__).resolve().parents[1]
     forbidden = ("typer", "prompt_toolkit", "memcommit.adapters.console.commands")
     for relative in (
-        "src/memcommit/application/operations/semantic_updates/derive/atomize/analysis_application.py",
-        "src/memcommit/application/operations/semantic_updates/derive/atomize/analysis_runtime.py",
+        "src/memcommit/application/operations/atomize/analysis_application.py",
+        "src/memcommit/application/operations/atomize/analysis_runtime.py",
     ):
         tree = ast.parse((root / relative).read_text(encoding="utf-8"))
         imports = []

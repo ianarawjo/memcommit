@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 import uuid
 
-from memcommit.application.operations.semantic_updates.foundation.update.model import UpdateSession
+from memcommit.application.operations.update.model import UpdateSession
 
 
 if TYPE_CHECKING:

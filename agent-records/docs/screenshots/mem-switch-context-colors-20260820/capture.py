@@ -55,7 +55,7 @@ def _store_snapshot(root: Path) -> tuple[int, str]:
 
 def _create_profile():
     import memcommit.application.capabilities.ops as ops
-    from memcommit.application.operations.profiles.profile.config import (
+    from memcommit.application.operations.profile.config import (
         AUTHORING_PROFILE_NAME,
         AUTHORING_PROFILE_UID,
         ProfileEntry,
@@ -63,7 +63,7 @@ def _create_profile():
         profile_registry_file,
         profile_store_dir,
     )
-    from memcommit.application.operations.profiles.profile.model import create_authority_grant
+    from memcommit.application.operations.profile.model import create_authority_grant
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()

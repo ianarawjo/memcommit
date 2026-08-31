@@ -25,7 +25,7 @@ from memcommit.application.capabilities.memory_issue_analysis.relation_analysis 
 from memcommit.application.capabilities.memory_issue_analysis.source import (
     QualityFindSourceFrame,
 )
-from memcommit.application.operations.profiles.profile.config import ProfileRegistry
+from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     create_quality_find_workbench,
 )

@@ -36,7 +36,7 @@ _BASE.ROWS = ROWS
 
 def _initialize() -> tuple[str, str, str]:
     import memcommit.application.capabilities.ops as ops
-    from memcommit.application.operations.profiles.profile.config import (
+    from memcommit.application.operations.profile.config import (
         AUTHORING_PROFILE_NAME,
         AUTHORING_PROFILE_UID,
         ProfileEntry,
@@ -44,7 +44,7 @@ def _initialize() -> tuple[str, str, str]:
         profile_registry_file,
         profile_store_dir,
     )
-    from memcommit.application.operations.profiles.profile.model import create_authority_grant
+    from memcommit.application.operations.profile.model import create_authority_grant
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()
@@ -104,7 +104,7 @@ def _run_child() -> None:
 
         from memcommit.adapters.console.entrypoint import app
         from memcommit.core.context import Memory
-        from memcommit.application.operations.profiles.profile.config import load_profile_registry, profile_store_dir
+        from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir
         from memcommit.persistence.store import MemoryStore
 
         print("PTY", os.get_terminal_size().columns, os.get_terminal_size().lines)

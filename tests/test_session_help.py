@@ -12,7 +12,7 @@ from prompt_toolkit.layout import FormattedTextControl, Layout, Window
 from prompt_toolkit.output import DummyOutput
 from prompt_toolkit.widgets import TextArea
 
-from memcommit.adapters.console.commands.system_study_tools.help.command import CommandEntry
+from memcommit.adapters.console.commands.help.command import CommandEntry
 from memcommit.adapters.console.terminal.components.session_help import SessionHelpController
 
 

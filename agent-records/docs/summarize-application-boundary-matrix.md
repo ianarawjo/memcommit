@@ -62,7 +62,7 @@ shared Grant rules.
 ## Package ownership
 
 The canonical terminal-independent owners now live under
-`memcommit.application.operations.search_explain.synthesize.summarize`. `application.py` owns the typed request,
+`memcommit.application.operations.summarize`. `application.py` owns the typed request,
 frozen Source, provider-session protocol, freshness check, and read-only
 result. `runtime.py` owns Store and Grant projection, exact Study lookup,
 configured-provider composition, and the production execution adapters.
@@ -72,12 +72,12 @@ consumers import those operation-owned modules directly.
 The historical `memcommit.summarize_application` and
 `memcommit.summarize_runtime` paths remain behavior-free module-identity
 aliases for import-order, monkeypatch, and serialized-global compatibility.
-Importing `memcommit.application.operations.search_explain.synthesize.summarize` alone remains lazy. New production
+Importing `memcommit.application.operations.summarize` alone remains lazy. New production
 code uses the canonical package paths; compatibility aliases do not become a
 second implementation owner.
 
 The console-specific adapters are now co-located under
-`memcommit.adapters.console.commands.search_explain.synthesize.summarize`: `command.py` owns orchestration,
+`memcommit.adapters.console.commands.summarize`: `command.py` owns orchestration,
 `presentation.py` owns plain typed-result output, and `workbench/` owns the
 process-local setup, semantic Viewer projection, clipboard projection, and
 interactive screen adapter. The former operation-specific CLI and TUI interface
@@ -102,7 +102,7 @@ Python production caller
        -> run_summarize
 
 mem summarize argv
-  -> memcommit.adapters.console.commands.search_explain.synthesize.summarize.command.cmd
+  -> memcommit.adapters.console.commands.summarize.command.cmd
   -> resolve direct or recursive semantic scope
   -> run_summarize_with_store(request, store, current snapshot, provider session)
   -> MemoryStoreSummarySourcePort
@@ -122,7 +122,7 @@ mem summarize argv
 
 | Callable | Current owner | Intended layer | Inputs/result | External effects | Authority/disclosure | Cache/receipt | Config/secrets | Callers | Evidence | Migration state |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `memcommit.application.operations.search_explain.synthesize.summarize.application:run_summarize` | Summarize operation application module | Application | `SummarizeRequest` + ports -> `SummarizeResult` | Through injected ports only | Source port freezes READ-authorized evidence before exact lookup or provider session | Optional exact prepared lookup; no durable local result | Receives injected lookup/session; reads no config or secret directly | CLI now; future Python/agent adapters | `tests/test_summarize_application.py` | `VERIFIED` internal boundary |
+| `memcommit.application.operations.summarize.application:run_summarize` | Summarize operation application module | Application | `SummarizeRequest` + ports -> `SummarizeResult` | Through injected ports only | Source port freezes READ-authorized evidence before exact lookup or provider session | Optional exact prepared lookup; no durable local result | Receives injected lookup/session; reads no config or secret directly | CLI now; future Python/agent adapters | `tests/test_summarize_application.py` | `VERIFIED` internal boundary |
 | `SummarizeRequest` / `SummarizeResult` | Summarize application module | Application contract | Typed request and read-only typed result | None | Carries locator/reach in and public source facts out; no Grant or credential object | Exposes digest/count, not a durable receipt | None | Application and adapters | Direct application tests | `CHARACTERIZED`, internal |
 | `SummarySourcePort.freeze` | Protocol in application module; `MemoryStoreSummarySourcePort` implementation | Application port / infrastructure adapter | Request -> frozen `SummaryFrame` + opaque token | Context/Profile/Grant reads in production implementation | Resolves locator and READ before Memory content can reach provider; a recursive local root uses one catalog containing local and READ-granted public names | None | No provider secret | `run_summarize` | CLI, direct production, recursive/direct, mixed local/granted, and granted-projection tests | `VERIFIED` production adapter; shared Grant location deferred |
 | `SummarySourcePort.revalidate` | Protocol in application module; `MemoryStoreSummarySourcePort` implementation | Application port / infrastructure adapter | Frozen source -> current frame | Context/Profile/Grant reads | Revalidates every selected granted public-name binding, the selected Context identities, and source digest before result publication | None | None | `run_summarize` | local source-change, mixed-scope Grant revocation, and Grant-revision tests | `VERIFIED` production adapter; shared Grant location deferred |
@@ -133,9 +133,9 @@ mem summarize argv
 | `summarize_frame` | `memcommit.summarize` | Operation semantic service; finer split deferred | `SummaryFrame` + provider -> `UnderstandingSummary` | One injected provider call for nonempty frame | Sends only frozen aliases, public Context names, and ordinary Memory content | No cache/receipt | Provider already configured by caller | `run_summarize` | schema, unknown-alias, empty, and size-policy tests | `KEEP`; provider call/decoder split not yet justified |
 | `SemanticProvider.complete` compatibility connector | provider protocol and existing infrastructure | Infrastructure port and adapters | prompt/schema -> raw completion | Network or subprocess, credentials, timeout | Existing allowlists, endpoint checks, bounds, and error redaction apply | Provider run metadata only; no Summarize receipt | Existing typed config plus secret environment | About 20 command modules; Summarize only changed to injection | Provider command tests and provider rationale | `DEFER`; do not move globally in this slice |
 | `UnderstandingSummary` and source-linked parser/schema | shared understanding core | Domain/shared semantic contract | validated text + Memory identities | None | Rejects unknown or unsupported source aliases | None | None | Atomize, Compare, Summarize | `tests/test_summarize.py` and related operation tests | `KEEP` |
-| Compare understanding block | `memcommit.adapters.console.commands.search_explain.synthesize.compare.presentation:render_comparison` | Compare console projection | `UnderstandingSummary` -> labelled terminal lines | Terminal output only in caller | Escapes presentation; no authority decision | None | None | Compare plain adapter; Summarize deliberately renders the same typed text as its unlabelled artifact body | CLI output tests | `INLINED`; the shared helper was removed after Compare became its only caller, while heading ownership remains operation-specific |
-| `render_summarize_plain` | `memcommit.adapters.console.commands.search_explain.synthesize.summarize.presentation` | Console result presenter | `SummarizeResult` -> terminal output | stdout rendering | No authority or provider decision | None | None | Summarize command | exact output tests | `VERIFIED` |
-| `project_summarize_result` / `project_summarize_outcome` / `project_summarize_clipboard` / `run_summarize_tui` | `memcommit.adapters.console.commands.search_explain.synthesize.summarize.workbench` | Independently tested terminal component | frozen readable setup + staged range + injected execute -> one result, complete direct/recursive pair, or cancellation | prompt-toolkit setup/result presentation | Component authority and no-partial-pair invariants remain tested, but it has no direct `mem summarize` launcher | Per-scope Study artifacts remain independent | None | Component tests only | projection, selection, copy, and historical PTY evidence | `UNREACHABLE` from the direct command; removal or reuse deferred |
+| Compare understanding block | `memcommit.adapters.console.commands.compare.presentation:render_comparison` | Compare console projection | `UnderstandingSummary` -> labelled terminal lines | Terminal output only in caller | Escapes presentation; no authority decision | None | None | Compare plain adapter; Summarize deliberately renders the same typed text as its unlabelled artifact body | CLI output tests | `INLINED`; the shared helper was removed after Compare became its only caller, while heading ownership remains operation-specific |
+| `render_summarize_plain` | `memcommit.adapters.console.commands.summarize.presentation` | Console result presenter | `SummarizeResult` -> terminal output | stdout rendering | No authority or provider decision | None | None | Summarize command | exact output tests | `VERIFIED` |
+| `project_summarize_result` / `project_summarize_outcome` / `project_summarize_clipboard` / `run_summarize_tui` | `memcommit.adapters.console.commands.summarize.workbench` | Independently tested terminal component | frozen readable setup + staged range + injected execute -> one result, complete direct/recursive pair, or cancellation | prompt-toolkit setup/result presentation | Component authority and no-partial-pair invariants remain tested, but it has no direct `mem summarize` launcher | Per-scope Study artifacts remain independent | None | Component tests only | projection, selection, copy, and historical PTY evidence | `UNREACHABLE` from the direct command; removal or reuse deferred |
 | `commands.summarize.cmd` | Typer command entry adapter | CLI parsing and error boundary | argv/current CLI state -> exit/output | Store construction, current snapshot, progress, one result projection, and injected OS clipboard write | Delegates Store/Grant and semantic sequence to the shared runtime; copy occurs only after result revalidation | No Summary receipt; `--copy` creates no structured stage | Existing provider bootstrap and platform clipboard adapter | `mem` console entry | CLI/runtime parity, one-route output, copy, and retired-flag rejection tests | `MIGRATED` for orchestration and presentation composition |
 
 ## Operation matrix

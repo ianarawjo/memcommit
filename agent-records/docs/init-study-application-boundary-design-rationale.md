@@ -2,7 +2,7 @@
 
 ## Selected boundary
 
-`operations/system_study_tools/init_study/model.py` owns the public result type and
+`operations/init_study/model.py` owns the public result type and
 `application.py` selects `coffee` or `legacy` and coordinates the workflow.
 The Profile-building implementation is grouped under `init_study/profile/`:
 `model.py` owns its internal source/package values, `package.py` reads and

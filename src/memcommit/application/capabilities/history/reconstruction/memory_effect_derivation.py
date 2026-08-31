@@ -19,7 +19,7 @@ from memcommit.application.capabilities.history.history_evidence_source import (
 )
 from memcommit.persistence.store import context_record_digest
 from memcommit.application.capabilities.history.reconstruction.memory_state_delta import direct_memory_deltas
-from memcommit.application.operations.translation.translate.runtime import TRANSLATION_TARGET_CHAR_LIMIT
+from memcommit.application.operations.translate.runtime import TRANSLATION_TARGET_CHAR_LIMIT
 from memcommit.application.capabilities.history.verification import (
     MemoryHistoryChildEvidence,
     MemoryHistoryCommandContext,
@@ -594,7 +594,7 @@ def _explicit_memory_history_events(
     normal_form_absorptions: dict[str, str] = {}
     if schema_version == TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION:
         try:
-            from memcommit.application.operations.semantic_updates.derive.atomize.domain import AtomizeNormalFormAudit
+            from memcommit.application.operations.atomize.domain import AtomizeNormalFormAudit
 
             normal_form = AtomizeNormalFormAudit.from_dict(metadata.get("normal_form"))
         except (RuntimeError, TypeError, ValueError):

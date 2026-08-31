@@ -28,7 +28,7 @@ from memcommit.providers.policy import (
 )
 from memcommit.core.context import Context
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import (
+from memcommit.application.operations.meld.model import (
     MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
     MeldError,
     MeldFrame,
@@ -36,13 +36,13 @@ from memcommit.application.operations.semantic_updates.curate_integrate.meld.mod
     MeldSession,
     directional_comparison_basis_assessment,
 )
-from memcommit.application.operations.semantic_updates.curate_integrate.meld.provider.contract import (
+from memcommit.application.operations.meld.provider.contract import (
     MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION,
 )
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     recursive_comparison_projection,
 )
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,

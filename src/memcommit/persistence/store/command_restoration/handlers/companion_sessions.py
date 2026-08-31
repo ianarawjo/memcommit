@@ -39,8 +39,8 @@ class _CompanionSessionRestorationMixin:
             or record.get("output") != change.context_name
         ):
             raise ValueError("Self-save Sever checkpoint has no valid session receipt.")
-        from memcommit.application.operations.semantic_updates.curate_integrate.sever.model import SeverApplication
-        from memcommit.application.operations.semantic_updates.curate_integrate.sever.session_store import (
+        from memcommit.application.operations.sever.model import SeverApplication
+        from memcommit.application.operations.sever.session_store import (
             SeverSessionStore,
         )
 
@@ -138,7 +138,7 @@ class _CompanionSessionRestorationMixin:
             or session.target.context_name != target_name
         ):
             raise ValueError("Meld session does not match the restored command.")
-        from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import (
+        from memcommit.application.operations.meld.model import (
             MELD_OWNER_AWARE_SCHEMA_VERSION,
             MeldCheckpointReceipt,
         )
@@ -204,7 +204,7 @@ class _CompanionSessionRestorationMixin:
         direction: str,
     ) -> tuple[Path, dict[str, object], dict[str, object]] | None:
         """Prepare the active local Update receipt coupled to its checkpoints."""
-        from memcommit.application.operations.semantic_updates.foundation.update.model import operation_digest
+        from memcommit.application.operations.update.model import operation_digest
 
         session = self.load_staged_update()
         if session is None:

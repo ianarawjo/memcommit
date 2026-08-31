@@ -22,7 +22,7 @@ from memcommit.adapters.python_api.errors import (
     SemanticInputError,
     SemanticStorageError,
 )
-from memcommit.application.operations.quality_resolution.repair.dedun.application import (
+from memcommit.application.operations.dedun.application import (
     DedunAuthorityError,
     DedunConflictError,
     DedunError,
@@ -31,13 +31,13 @@ from memcommit.application.operations.quality_resolution.repair.dedun.applicatio
     apply_dedun as apply_core_dedun,
     prepare_dedun,
 )
-from memcommit.application.operations.quality_resolution.repair.dedun.runtime import MemoryStoreDedunPort
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
+from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.application.operations.profiles.profile.model import ProfileError
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
     QualityFindingHandoffError,

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.console.commands.search_explain.retrieve_answer.query import provider_policy as compatibility
+from memcommit.adapters.console.commands.query import provider_policy as compatibility
 from memcommit.providers import operation_connections as policy
 from memcommit.providers.operation_connections import QUERY_PROVIDER_POLICY
 

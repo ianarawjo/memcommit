@@ -10,12 +10,12 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.adapters.console.commands.create_copy_connect.reference.workbench import (
+from memcommit.adapters.console.commands.reference.workbench import (
     ReferenceTuiSetup,
     build_reference_tui_setup,
     choose_reference_setup,
 )
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -23,9 +23,9 @@ from memcommit.application.operations.profiles.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profiles.profile.model import create_authority_grant, update_authority_grant
-from memcommit.application.operations.create_copy_connect.reference.application import FrozenReferencePlan, ReferenceRequest
-from memcommit.application.operations.create_copy_connect.reference.runtime import MemoryStoreReferencePort
+from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
+from memcommit.application.operations.reference.application import FrozenReferencePlan, ReferenceRequest
+from memcommit.application.operations.reference.runtime import MemoryStoreReferencePort
 from memcommit.source_projection.presentation import source_display_text
 from memcommit.persistence.store import MemoryStore
 

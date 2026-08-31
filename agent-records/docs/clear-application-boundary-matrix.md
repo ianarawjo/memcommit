@@ -9,10 +9,10 @@ syntax compatibility only.
 
 | Concern | Owner | Boundary |
 | --- | --- | --- |
-| Request and durable/no-change result | `memcommit.application.operations.direct_changes.clear.application` | Terminal-independent typed contract |
-| Context resolution and authority | `memcommit.application.operations.direct_changes.clear.runtime` | One captured current name and exact `ContextAccess` |
-| Recursive catalog freeze and atomic save | `memcommit.application.operations.direct_changes.clear.runtime` | Complete local subtree or no publication |
-| Error and receipt rendering | `memcommit.adapters.console.commands.direct_changes.clear.command` | Typer-only adapter |
+| Request and durable/no-change result | `memcommit.application.operations.clear.application` | Terminal-independent typed contract |
+| Context resolution and authority | `memcommit.application.operations.clear.runtime` | One captured current name and exact `ContextAccess` |
+| Recursive catalog freeze and atomic save | `memcommit.application.operations.clear.runtime` | Complete local subtree or no publication |
+| Error and receipt rendering | `memcommit.adapters.console.commands.clear.command` | Typer-only adapter |
 
 ## Invariants
 

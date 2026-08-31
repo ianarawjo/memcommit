@@ -19,7 +19,7 @@ an Atomize sub-workflow.
 ## Removed compatibility boundary
 
 The former read/restore-only compatibility surface is also removed. There is
-no `memcommit.application.operations.semantic_updates.derive.atomize.grounding` model package, Store
+no `memcommit.application.operations.atomize.grounding` model package, Store
 path or reader, Context-deletion hook, retained-history validator, companion
 Undo/Redo restoration, or exact-command reconstruction for Atomize Grounding.
 Keeping those readers made persistence, history, deletion, and restoration

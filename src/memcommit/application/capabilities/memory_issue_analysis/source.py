@@ -12,8 +12,8 @@ from memcommit.application.capabilities.authority.context_access import (
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.application.operations.profiles.profile.config import ProfileRegistry
-from memcommit.application.operations.operation_lifecycle.review.model import direct_context_digest
+from memcommit.application.operations.profile.config import ProfileRegistry
+from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_profile_readable_context_catalog,

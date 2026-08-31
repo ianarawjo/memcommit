@@ -4,16 +4,16 @@ from click import Group, Option
 from typer.main import get_command
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld import (
+from memcommit.adapters.console.commands.meld import (
     command_codec as meld_command_review,
 )
-from memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever import (
+from memcommit.adapters.console.commands.sever import (
     command_codec as sever_command_review,
 )
-from memcommit.adapters.console.commands.semantic_updates.foundation.update import (
+from memcommit.adapters.console.commands.update import (
     command_codec as update_command_review,
 )
-from memcommit.adapters.console.commands.create_copy_connect.branch import (
+from memcommit.adapters.console.commands.branch import (
     command_codec as branch_command_review,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup import (

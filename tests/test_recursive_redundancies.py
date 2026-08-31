@@ -52,7 +52,7 @@ def test_cli_recursive_redundancies_analyzes_each_context_independently(
         return DuplicateReport(memory_count=1, findings=())
 
     monkeypatch.setattr(
-        "memcommit.application.operations.quality_resolution.diagnose.find_redundancies.application.analyze_memory_redundancies",
+        "memcommit.application.operations.find_redundancies.application.analyze_memory_redundancies",
         analyze,
     )
 
@@ -87,7 +87,7 @@ def test_cli_recursive_redundancies_publishes_no_report_after_later_failure(
         return DuplicateReport(memory_count=len(context.memories), findings=())
 
     monkeypatch.setattr(
-        "memcommit.application.operations.quality_resolution.diagnose.find_redundancies.application.analyze_memory_redundancies",
+        "memcommit.application.operations.find_redundancies.application.analyze_memory_redundancies",
         analyze,
     )
 

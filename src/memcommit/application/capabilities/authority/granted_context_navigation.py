@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     load_profile_registry,
     profile_store_dir,
 )

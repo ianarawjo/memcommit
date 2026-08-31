@@ -46,7 +46,6 @@ def test_real_creation_and_permission_boundaries_remain_explicit() -> None:
         / "adapters"
         / "console"
         / "commands"
-        / "ground_workbench"
         / "ground"
         / "shell"
     )

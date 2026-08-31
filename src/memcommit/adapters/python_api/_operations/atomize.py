@@ -28,22 +28,22 @@ from memcommit.adapters.python_api.errors import (
     AtomizeProviderFailure,
     AtomizeStorageError,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.domain import AtomizeImpactError
-from memcommit.application.operations.semantic_updates.derive.atomize.analysis_application import (
+from memcommit.application.operations.atomize.domain import AtomizeImpactError
+from memcommit.application.operations.atomize.analysis_application import (
     AtomizeAnalysisApplicationError,
     AtomizeAnalysisOpenRequest,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.analysis_runtime import (
+from memcommit.application.operations.atomize.analysis_runtime import (
     execute_atomize_analysis_open,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.application import (
+from memcommit.application.operations.atomize.application import (
     AtomizeApplicationError,
     AtomizeOutputPlanRequest,
     AtomizeRecordApplyRequest,
     AtomizeSaveAsRequest,
     AtomizeExecutionSnapshot,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.runtime import (
+from memcommit.application.operations.atomize.runtime import (
     capture_current_atomize_execution_snapshot_at_version,
     capture_atomize_execution_snapshot,
     capture_atomize_execution_snapshot_at_version,
@@ -51,7 +51,7 @@ from memcommit.application.operations.semantic_updates.derive.atomize.runtime im
     execute_atomize_save_as,
     execute_atomize_record_apply,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.records import (
+from memcommit.application.operations.atomize.records import (
     AtomizeRecordError,
     project_atomize_review_findings,
 )

@@ -8,9 +8,9 @@ import click
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.quality_resolution.validate.fit.command as fit_command
+import memcommit.adapters.console.commands.fit.command as fit_command
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.quality_resolution.validate.fit.judgment import (
+from memcommit.application.operations.fit.judgment import (
     FIT_JUDGMENT_PAYLOAD_MARKER,
     FitJudgmentError,
     FitProposition,
@@ -18,8 +18,8 @@ from memcommit.application.operations.quality_resolution.validate.fit.judgment i
     judge_fit,
     prepare_fit_judgments,
 )
-from memcommit.application.operations.quality_resolution.validate.fit.application import FitPropositionsRequest
-from memcommit.application.operations.quality_resolution.validate.fit.runtime import run_proposition_fit
+from memcommit.application.operations.fit.application import FitPropositionsRequest
+from memcommit.application.operations.fit.runtime import run_proposition_fit
 
 
 class FitProvider:

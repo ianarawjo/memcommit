@@ -10,18 +10,18 @@ import uuid
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.operations.search_explain.retrieve_answer.query.granted_application import (
+from memcommit.application.operations.query.granted_application import (
     GrantedQueryRequest,
     GrantedQueryResponse,
     GrantedQueryTarget,
     PreparedGrantedQuery,
     run_granted_query_read,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.query.granted_runtime import (
+from memcommit.application.operations.query.granted_runtime import (
     execute_granted_query_read,
     execute_granted_query_request,
 )
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -29,7 +29,7 @@ from memcommit.application.operations.profiles.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profiles.profile.model import (
+from memcommit.application.operations.profile.model import (
     ProfileError,
     create_authority_grant,
     delete_authority_grant,
@@ -218,9 +218,9 @@ def test_granted_query_application_and_runtime_have_no_interface_dependency():
         return tuple(values)
 
     application_imports = imports(
-        root / "src/memcommit/application/operations/search_explain/retrieve_answer/query/granted_application.py"
+        root / "src/memcommit/application/operations/query/granted_application.py"
     )
-    runtime_imports = imports(root / "src/memcommit/application/operations/search_explain/retrieve_answer/query/granted_runtime.py")
+    runtime_imports = imports(root / "src/memcommit/application/operations/query/granted_runtime.py")
     forbidden = ("typer", "prompt_toolkit", "memcommit.adapters.console.commands")
 
     assert not any(name.startswith(forbidden) for name in application_imports)
@@ -232,15 +232,15 @@ def test_granted_query_application_and_runtime_have_no_interface_dependency():
 
 def test_production_adapters_import_granted_query_from_operation_owners():
     root = Path(__file__).parents[1]
-    command = (root / "src/memcommit/adapters/console/commands/search_explain/retrieve_answer/query/command.py").read_text(encoding="utf-8")
+    command = (root / "src/memcommit/adapters/console/commands/query/command.py").read_text(encoding="utf-8")
     workbench_model = (
         root
-        / "src/memcommit/adapters/console/commands/search_explain/retrieve_answer/query/workbench/model.py"
+        / "src/memcommit/adapters/console/commands/query/workbench/model.py"
     ).read_text(encoding="utf-8")
 
-    assert "from memcommit.application.operations.search_explain.retrieve_answer.query.granted_application import (" in command
-    assert "from memcommit.application.operations.search_explain.retrieve_answer.query.granted_runtime import (" in command
+    assert "from memcommit.application.operations.query.granted_application import (" in command
+    assert "from memcommit.application.operations.query.granted_runtime import (" in command
     assert (
-        "from memcommit.application.operations.search_explain.retrieve_answer.query.granted_application import ("
+        "from memcommit.application.operations.query.granted_application import ("
         in workbench_model
     )

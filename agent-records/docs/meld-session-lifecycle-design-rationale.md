@@ -88,7 +88,7 @@ rollback. Interfaces do not compute or interpret versions.
 
 ## Physical model ownership
 
-The public `memcommit.application.operations.semantic_updates.curate_integrate.meld.model` import remains a
+The public `memcommit.application.operations.meld.model` import remains a
 compatibility facade, but its implementation is split by responsibility:
 
 - `source_snapshot.py` freezes source Memories, Context identities, roles,
@@ -113,7 +113,7 @@ placeholder modules in this ownership-only relocation.
 
 ## Physical runtime ownership
 
-The public `memcommit.application.operations.semantic_updates.curate_integrate.meld.runtime` import remains a
+The public `memcommit.application.operations.meld.runtime` import remains a
 compatibility facade, but its Store, Grant, provider, and checkpoint adapters
 are split into four Meld-specific owners:
 

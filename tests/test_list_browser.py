@@ -7,8 +7,8 @@ import inspect
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.browse_navigate.contexts import command as contexts
-from memcommit.adapters.console.commands.browse_navigate.list import command as list_command
+from memcommit.adapters.console.commands.contexts import command as contexts
+from memcommit.adapters.console.commands.list import command as list_command
 
 
 runner = CliRunner()

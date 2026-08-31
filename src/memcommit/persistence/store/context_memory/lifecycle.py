@@ -316,7 +316,7 @@ class _ContextLifecycleMixin:
             delete_translation_catalog_paths,
             translation_catalog_paths_for_context,
         )
-        from memcommit.application.operations.history_recovery.inspection.rationale.cache import (
+        from memcommit.application.operations.rationale.cache import (
             delete_rationale_inference_paths,
             rationale_inference_paths_for_context,
         )

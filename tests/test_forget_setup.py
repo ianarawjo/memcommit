@@ -5,10 +5,10 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.application.operations.semantic_updates.curate_integrate.forget.runtime as forget_runtime
+import memcommit.application.operations.forget.runtime as forget_runtime
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget import command as forget_command
-from memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget.setup import (
+from memcommit.adapters.console.commands.forget import command as forget_command
+from memcommit.adapters.console.commands.forget.setup import (
     ForgetSetupResult,
     choose_forget_setup,
 )

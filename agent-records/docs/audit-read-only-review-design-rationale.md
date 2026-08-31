@@ -74,7 +74,7 @@ review contract.
 ## Console presentation ownership
 
 Audit's console-specific pieces are co-located under
-`memcommit.adapters.console.commands.quality_resolution.diagnose.audit`: `command.py` owns CLI operands,
+`memcommit.adapters.console.commands.audit`: `command.py` owns CLI operands,
 authority checks, progress projection, application invocation, and publication
 of the completed Session; `receipt.py` owns the compact saved-result receipt,
 `endpoint_setup.py` owns Source selection, `session_catalog.py` owns the saved-session
@@ -92,7 +92,7 @@ setup module.
 ## Application ownership
 
 Audit's application-specific model, execution, and persistence port live under
-`memcommit.application.operations.quality_resolution.diagnose.audit`.
+`memcommit.application.operations.audit`.
 `model.py` owns the durable Source, Check, Session, schema validation, and record
 digest; `application.py` freezes one Source, runs the three quality finders plus
 optional Conformance as one complete operation, and publishes only a validated

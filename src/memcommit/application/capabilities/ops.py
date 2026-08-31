@@ -35,7 +35,7 @@ from memcommit.core.context import (
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 
 if TYPE_CHECKING:
-    from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+    from memcommit.application.operations.atomize.domain import (
         AtomizeImpactReport,
         AtomizeProvider,
     )
@@ -45,16 +45,16 @@ if TYPE_CHECKING:
         DuplicateReport,
         FindingsProvider,
     )
-    from memcommit.application.operations.quality_resolution.diagnose.find_duplicates.application import (
+    from memcommit.application.operations.find_duplicates.application import (
         ExactDuplicateReport,
     )
-    from memcommit.application.operations.search_explain.retrieve_answer.search.model import (
+    from memcommit.application.operations.search.model import (
         PromptProvider,
         SearchMatch,
     )
     from memcommit.application.capabilities.semantic.llm import LLMClient
     from memcommit.application.capabilities.semantic.changes import ProposedChange
-    from memcommit.application.operations.translation.translate.runtime import (
+    from memcommit.application.operations.translate.runtime import (
         DerivedTranslationApplyResult,
         TranslationApplyResult,
         TranslationPlan,
@@ -779,7 +779,7 @@ def merge(source: Context, target: Context) -> list[Information]:
 def analyze_forget(ctx: Context, query: str, llm: object):
     """Analyze Forget through the operation-owned provider module."""
 
-    from memcommit.application.operations.semantic_updates.curate_integrate.forget.provider import (
+    from memcommit.application.operations.forget.provider import (
         analyze_forget as _analyze_forget,
     )
 
@@ -793,7 +793,7 @@ def forget(
 ) -> tuple[list[ProposedChange], list[dict[str, object]]]:
     """Return Forget proposals without mutating the Source Context."""
 
-    from memcommit.application.operations.semantic_updates.curate_integrate.forget.provider import forget as _forget
+    from memcommit.application.operations.forget.provider import forget as _forget
 
     return _forget(ctx, query, llm)
 
@@ -806,7 +806,7 @@ def revise_forget(
 ) -> tuple[list[ProposedChange], list[dict[str, object]]]:
     """Revise Forget proposals through the operation-owned provider module."""
 
-    from memcommit.application.operations.semantic_updates.curate_integrate.forget.provider import (
+    from memcommit.application.operations.forget.provider import (
         revise_forget as _revise_forget,
     )
 
@@ -945,7 +945,7 @@ def impact_atomize(
     memory_selector: str | None = None,
 ) -> "AtomizeImpactReport":
     """Preview direct-Memory atomization without mutating *ctx*."""
-    from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+    from memcommit.application.operations.atomize.domain import (
         impact_atomize as _impact_atomize,
     )
 
@@ -979,7 +979,7 @@ def find_duplicates(
     ctx: Context,
 ) -> "ExactDuplicateReport":
     """Find byte-identical direct-Memory groups without provider inference."""
-    from memcommit.application.operations.quality_resolution.diagnose.find_duplicates.application import (
+    from memcommit.application.operations.find_duplicates.application import (
         analyze_exact_duplicates,
     )
 
@@ -1142,7 +1142,7 @@ def search(
     ``additional_roots`` lets a store-aware caller freeze lexical namespace
     descendants without teaching this in-memory operation about persistence.
     """
-    from memcommit.application.operations.search_explain.retrieve_answer.search.model import (
+    from memcommit.application.operations.search.model import (
         SearchError,
         collect_candidates_from_roots,
         rank_candidates,
@@ -1177,7 +1177,7 @@ def translate(
     allocate_operation_uid: bool = True,
 ) -> "TranslationPlan":
     """Plan translations of directly owned Memories without mutating ctx."""
-    from memcommit.application.operations.translation.translate.runtime import plan_translation
+    from memcommit.application.operations.translate.runtime import plan_translation
 
     return plan_translation(
         ctx,
@@ -1193,7 +1193,7 @@ def apply_translation(
     plan: "TranslationPlan",
 ) -> "TranslationApplyResult":
     """Apply one exact translation plan to its unchanged direct Context."""
-    from memcommit.application.operations.translation.translate.runtime import (
+    from memcommit.application.operations.translate.runtime import (
         apply_translation as apply_plan,
     )
 
@@ -1206,7 +1206,7 @@ def derive_translation_context(
     destination_name: str,
 ) -> "DerivedTranslationApplyResult":
     """Apply one exact plan as replacements in a new derived Context."""
-    from memcommit.application.operations.translation.translate.runtime import (
+    from memcommit.application.operations.translate.runtime import (
         derive_translation_context as derive,
     )
 
@@ -1229,7 +1229,7 @@ def chunk(
 ) -> tuple[Memory, list[Memory]]:
     """Compatibility adapter for operation-owned Chunk planning."""
 
-    from memcommit.application.operations.direct_changes.chunk.application import chunk as plan_chunk
+    from memcommit.application.operations.chunk.application import chunk as plan_chunk
 
     return plan_chunk(
         ctx,

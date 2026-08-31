@@ -10,15 +10,15 @@ import sys
 def test_query_operation_package_import_is_lazy():
     program = """
 import sys
-import memcommit.application.operations.search_explain.retrieve_answer.query
+import memcommit.application.operations.query
 
 blocked = (
-    "memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application",
-    "memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_runtime",
-    "memcommit.application.operations.search_explain.retrieve_answer.query.granted_application",
-    "memcommit.application.operations.search_explain.retrieve_answer.query.granted_runtime",
-    "memcommit.application.operations.search_explain.retrieve_answer.query.reference_application",
-    "memcommit.application.operations.search_explain.retrieve_answer.query.reference_runtime",
+    "memcommit.application.operations.query.ordinary_application",
+    "memcommit.application.operations.query.ordinary_runtime",
+    "memcommit.application.operations.query.granted_application",
+    "memcommit.application.operations.query.granted_runtime",
+    "memcommit.application.operations.query.reference_application",
+    "memcommit.application.operations.query.reference_runtime",
 )
 assert not any(name in sys.modules for name in blocked)
 """

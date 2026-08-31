@@ -13,20 +13,20 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_dedup_and_dedun_use_command_aligned_canonical_paths() -> None:
     source_root = REPOSITORY_ROOT / "src/memcommit"
 
-    assert (source_root / "application/operations/quality_resolution/repair/dedup/application.py").is_file()
-    assert (source_root / "application/operations/quality_resolution/repair/dedun/application.py").is_file()
-    assert (source_root / "application/operations/quality_resolution/repair/dedun/analysis.py").is_file()
-    assert (source_root / "application/operations/quality_resolution/repair/dedun/runtime.py").is_file()
-    assert not (source_root / "application/operations/quality_resolution/repair/dedun/planning.py").exists()
-    assert not (source_root / "application/operations/quality_resolution/repair/dedun/scope.py").exists()
-    assert not (source_root / "adapters/console/commands/quality_resolution/repair/dedun/presentation.py").exists()
-    assert not (source_root / "adapters/console/commands/quality_resolution/repair/dedun/workbench.py").exists()
+    assert (source_root / "application/operations/dedup/application.py").is_file()
+    assert (source_root / "application/operations/dedun/application.py").is_file()
+    assert (source_root / "application/operations/dedun/analysis.py").is_file()
+    assert (source_root / "application/operations/dedun/runtime.py").is_file()
+    assert not (source_root / "application/operations/dedun/planning.py").exists()
+    assert not (source_root / "application/operations/dedun/scope.py").exists()
+    assert not (source_root / "adapters/console/commands/dedun/presentation.py").exists()
+    assert not (source_root / "adapters/console/commands/dedun/workbench.py").exists()
     assert not (
         source_root / "adapters/console/commands/consolidate/command.py"
     ).exists()
     assert not (
         source_root
-        / "adapters/console/commands/quality_resolution/diagnose/find_redundancies/dedup_handoff.py"
+        / "adapters/console/commands/find_redundancies/dedup_handoff.py"
     ).exists()
     assert (source_root / "adapters/python_api/_operations/dedup.py").is_file()
     assert (source_root / "adapters/python_api/_operations/dedun.py").is_file()
@@ -60,10 +60,10 @@ def test_legacy_public_result_names_are_thin_dedun_aliases() -> None:
 def test_dedun_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.quality_resolution.repair.dedun
+import memcommit.application.operations.dedun
 
-assert "memcommit.application.operations.quality_resolution.repair.dedun.application" not in sys.modules
-assert "memcommit.application.operations.quality_resolution.repair.dedun.runtime" not in sys.modules
+assert "memcommit.application.operations.dedun.application" not in sys.modules
+assert "memcommit.application.operations.dedun.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -75,13 +75,13 @@ assert "memcommit.application.operations.quality_resolution.repair.dedun.runtime
 
 def test_production_dedun_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/application/operations/semantic_updates/derive/atomize/normal_form.py",
+        "src/memcommit/application/operations/atomize/normal_form.py",
         "src/memcommit/adapters/python_api/dedun.py",
         "src/memcommit/adapters/python_api/_operations/dedun.py",
-        "src/memcommit/adapters/console/commands/quality_resolution/diagnose/find_duplicates/command.py",
+        "src/memcommit/adapters/console/commands/find_duplicates/command.py",
         "src/memcommit/adapters/console/terminal/components/quality_find/workbench.py",
-        "src/memcommit/application/operations/quality_resolution/repair/dedun/analysis.py",
-        "src/memcommit/application/operations/quality_resolution/repair/dedun/runtime.py",
+        "src/memcommit/application/operations/dedun/analysis.py",
+        "src/memcommit/application/operations/dedun/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -92,18 +92,18 @@ def test_production_dedun_consumers_use_the_operation_owner() -> None:
 
 def test_dedun_and_exact_dedup_remain_separate_owners() -> None:
     application = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/quality_resolution/repair/dedun/application.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/dedun/application.py"
     ).read_text(encoding="utf-8")
     runtime = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/quality_resolution/repair/dedun/runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/dedun/runtime.py"
     ).read_text(encoding="utf-8")
     exact = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/quality_resolution/repair/dedup/application.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/dedup/application.py"
     ).read_text(encoding="utf-8")
     analysis = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/quality_resolution/repair/dedun/analysis.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/dedun/analysis.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.dedun_scope" not in application + runtime
-    assert "memcommit.application.operations.quality_resolution.repair.dedun" not in exact
+    assert "memcommit.application.operations.dedun" not in exact
     assert "connected_relation_components" in analysis

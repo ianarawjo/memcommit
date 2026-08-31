@@ -2,7 +2,7 @@
 
 ## Problem
 
-`memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command` combined the Typer operand
+`memcommit.adapters.console.commands.meld.command` combined the Typer operand
 contract, route selection, saved-session and provider orchestration, TUI
 handoff, and terminal rendering in one 2,496-line module. The largest function,
 `cmd`, also performed both option validation and the complete post-validation
@@ -33,7 +33,7 @@ Presentation does not import entrypoint or workflow.
 
 ## Compatibility invariants
 
-The import path `memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command` remains a
+The import path `memcommit.adapters.console.commands.meld.command` remains a
 thin module facade that re-exports every prior top-level command function.
 Assignments to historical integration and test seams are forwarded to the
 submodule that owns the name, preserving callers that replace provider,

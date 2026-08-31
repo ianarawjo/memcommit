@@ -9,17 +9,17 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.command as sever_command
+import memcommit.adapters.console.commands.sever.command as sever_command
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.operations.semantic_updates.curate_integrate.sever.model import (
+from memcommit.application.operations.sever.model import (
     SeverApplication,
     SeverCandidate,
     SeverContextBinding,
     SeverMemory,
     SeverSession,
 )
-import memcommit.application.operations.semantic_updates.curate_integrate.sever.application as sever_application
-from memcommit.application.operations.semantic_updates.curate_integrate.sever.application import (
+import memcommit.application.operations.sever.application as sever_application
+from memcommit.application.operations.sever.application import (
     FrozenSeverInputs,
     SeverAnalysisProgress,
     SeverAnalysisRequest,
@@ -40,9 +40,9 @@ from memcommit.application.operations.semantic_updates.curate_integrate.sever.ap
     run_sever_session_open,
     run_sever_session_start,
 )
-from memcommit.application.operations.semantic_updates.curate_integrate.sever.provider import SEVER_PAYLOAD_MARKER
-import memcommit.application.operations.semantic_updates.curate_integrate.sever.runtime as sever_runtime
-from memcommit.application.operations.semantic_updates.curate_integrate.sever.runtime import (
+from memcommit.application.operations.sever.provider import SEVER_PAYLOAD_MARKER
+import memcommit.application.operations.sever.runtime as sever_runtime
+from memcommit.application.operations.sever.runtime import (
     execute_sever_analysis,
     execute_sever_apply,
     execute_sever_session_apply,
@@ -51,7 +51,7 @@ from memcommit.application.operations.semantic_updates.curate_integrate.sever.ru
     execute_sever_session_open,
     execute_sever_session_start,
 )
-from memcommit.application.operations.semantic_updates.curate_integrate.sever.session_store import SeverSessionStore
+from memcommit.application.operations.sever.session_store import SeverSessionStore
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 

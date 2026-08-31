@@ -30,12 +30,12 @@ and operation-specific permission checks while keeping `pwd` deterministic.
 
 ## Layer boundary
 
-- `operations/browse_navigate/pwd/application.py` owns the terminal-independent reader
+- `operations/pwd/application.py` owns the terminal-independent reader
   protocol, typed result, and missing/invalid-state failures.
-- `operations/browse_navigate/pwd/runtime.py` adapts one explicit `MemoryStore` without
+- `operations/pwd/runtime.py` adapts one explicit `MemoryStore` without
   creating the Store or loading Context contents.
-- `commands/browse_navigate/pwd/presentation.py` renders the typed result as one line.
-- `commands/browse_navigate/pwd/command.py` is the Typer error/exit-code and composition boundary.
+- `commands/pwd/presentation.py` renders the typed result as one line.
+- `commands/pwd/command.py` is the Typer error/exit-code and composition boundary.
 
 The plain presenter is co-located with the command because it is specific to
 the `mem pwd` console surface rather than a cross-interface adapter. The former

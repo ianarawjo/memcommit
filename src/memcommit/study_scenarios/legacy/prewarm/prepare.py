@@ -32,7 +32,7 @@ from memcommit.study_scenarios.legacy.prewarm.generation.compare_graph import (
 from memcommit.providers.policy import (
     resolve_operation_provider_policy,
 )
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     profile_control_dir,
@@ -255,7 +255,7 @@ def inspect_study_prewarm_compatibility(
 
 
 def _current_update_schema_version() -> int:
-    from memcommit.application.operations.semantic_updates.foundation.update.model import UPDATE_SCHEMA_VERSION
+    from memcommit.application.operations.update.model import UPDATE_SCHEMA_VERSION
 
     return UPDATE_SCHEMA_VERSION
 

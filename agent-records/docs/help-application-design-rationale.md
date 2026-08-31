@@ -21,7 +21,7 @@ catalog subset but does not generate substitute Help prose.
 
 ## Contract
 
-`memcommit.application.operations.system_study_tools.help.application` owns five read-only application actions:
+`memcommit.application.operations.help.application` owns five read-only application actions:
 
 - `list_operation_help()` returns one immutable alphabetized snapshot of all
   public operations;
@@ -50,7 +50,7 @@ detail before choosing a tool. The application boundary imports only the
 connect a provider, read authority, use a cache, create a session, or publish a
 receipt.
 
-`memcommit.application.operations.system_study_tools.help.lookup_application` owns that bounded semantic
+`memcommit.application.operations.help.lookup_application` owns that bounded semantic
 selection. It freezes the complete public catalog, treats the request and
 catalog as untrusted provider data, and accepts only an ordered array of
 exactly three distinct operation names. Each candidate exposes the model to

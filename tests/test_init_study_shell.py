@@ -8,7 +8,7 @@ from types import SimpleNamespace
 import click
 import typer
 
-import memcommit.adapters.console.commands.system_study_tools.init_study.study_shell as study_shell
+import memcommit.adapters.console.commands.init_study.study_shell as study_shell
 
 
 def _tty_stream():

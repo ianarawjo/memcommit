@@ -40,7 +40,7 @@ Python facade and agent projection point inward without importing either
 terminal adapter. The Skill remains host guidance rather than an Add
 implementation or callable; no wire transport is currently shipped.
 
-The canonical implementation owner is `memcommit.application.operations.create_copy_connect.add`: its
+The canonical implementation owner is `memcommit.application.operations.add`: its
 `application` module owns the terminal-independent request, validation, port,
 and receipt contracts, while its `runtime` module owns the Store and Grant
 adapter. The historical `memcommit.add_application` and

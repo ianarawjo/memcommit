@@ -13,10 +13,10 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_resolve_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.quality_resolution.repair.resolve
+import memcommit.application.operations.resolve
 
-assert "memcommit.application.operations.quality_resolution.repair.resolve.application" not in sys.modules
-assert "memcommit.application.operations.quality_resolution.repair.resolve.runtime" not in sys.modules
+assert "memcommit.application.operations.resolve.application" not in sys.modules
+assert "memcommit.application.operations.resolve.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -30,18 +30,18 @@ def test_production_resolve_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/resolve.py",
         "src/memcommit/adapters/python_api/_operations/resolve.py",
-        "src/memcommit/adapters/console/commands/quality_resolution/repair/resolve/command.py",
-        "src/memcommit/adapters/console/commands/quality_resolution/repair/resolve/analysis.py",
-        "src/memcommit/adapters/console/commands/quality_resolution/repair/resolve/receipt.py",
-        "src/memcommit/adapters/console/commands/quality_resolution/repair/resolve/workbench/presentation.py",
-        "src/memcommit/adapters/console/commands/quality_resolution/repair/resolve/workbench/screen.py",
-        "src/memcommit/adapters/console/commands/quality_resolution/repair/resolve/finding_handoff.py",
-        "src/memcommit/adapters/console/commands/quality_resolution/diagnose/find_conflicts/command.py",
-        "src/memcommit/adapters/console/commands/quality_resolution/repair/resolve/impact.py",
-        "src/memcommit/application/operations/quality_resolution/repair/resolve/finding_handoff.py",
-        "src/memcommit/application/operations/quality_resolution/repair/resolve/semantic.py",
-        "src/memcommit/application/operations/quality_resolution/repair/resolve/targeting.py",
-        "src/memcommit/application/operations/quality_resolution/repair/resolve/runtime.py",
+        "src/memcommit/adapters/console/commands/resolve/command.py",
+        "src/memcommit/adapters/console/commands/resolve/analysis.py",
+        "src/memcommit/adapters/console/commands/resolve/receipt.py",
+        "src/memcommit/adapters/console/commands/resolve/workbench/presentation.py",
+        "src/memcommit/adapters/console/commands/resolve/workbench/screen.py",
+        "src/memcommit/adapters/console/commands/resolve/finding_handoff.py",
+        "src/memcommit/adapters/console/commands/find_conflicts/command.py",
+        "src/memcommit/adapters/console/commands/resolve/impact.py",
+        "src/memcommit/application/operations/resolve/finding_handoff.py",
+        "src/memcommit/application/operations/resolve/semantic.py",
+        "src/memcommit/application/operations/resolve/targeting.py",
+        "src/memcommit/application/operations/resolve/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -57,11 +57,11 @@ def test_shared_quality_finding_handoff_does_not_depend_on_resolve() -> None:
         / "src/memcommit/application/capabilities/memory_issue_analysis/handoff.py"
     ).read_text(encoding="utf-8")
 
-    assert "memcommit.application.operations.quality_resolution.repair.resolve" not in source
+    assert "memcommit.application.operations.resolve" not in source
 
 
 def test_resolve_console_owns_analysis_receipt_and_workbench_without_facades() -> None:
-    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/quality_resolution/repair/resolve"
+    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/resolve"
     retired_tui_root = (
         REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/tui/operations/resolve"
     )

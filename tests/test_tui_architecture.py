@@ -10,7 +10,7 @@ ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "src" / "memcommit"
 CONSOLE_TERMINAL = PACKAGE / "adapters" / "console" / "terminal"
 ALLOWED_COMMAND_PRESENTATION_IMPORTS = {
-    "memcommit.adapters.console.commands.search_explain.synthesize.compare.presentation",
+    "memcommit.adapters.console.commands.compare.presentation",
 }
 
 
@@ -115,8 +115,6 @@ def test_summarize_command_tui_only_composes_shared_workbench() -> None:
         / "adapters"
         / "console"
         / "commands"
-        / "search_explain"
-        / "synthesize"
         / "summarize"
         / "workbench"
     )
@@ -206,7 +204,6 @@ def test_add_tui_delegates_common_interaction_mechanics() -> None:
         / "adapters"
         / "console"
         / "commands"
-        / "create_copy_connect"
         / "add"
         / "workbench"
         / "screen.py"
@@ -251,7 +248,6 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
         / "adapters"
         / "console"
         / "commands"
-        / "create_copy_connect"
         / "reference"
         / "workbench"
         / "screen.py"
@@ -263,7 +259,6 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
         / "adapters"
         / "console"
         / "commands"
-        / "direct_changes"
         / "edit"
         / "workbench"
         / "screen.py",
@@ -271,7 +266,6 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
         / "adapters"
         / "console"
         / "commands"
-        / "create_copy_connect"
         / "embed"
         / "workbench"
         / "screen.py",

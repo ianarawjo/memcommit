@@ -6,7 +6,7 @@ import hashlib
 import uuid
 from dataclasses import replace
 
-from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
+from memcommit.application.operations.atomize.domain import (
     ATOMIZE_RULESET_VERSION,
     AtomizeAnalysisItem,
     AtomizeAnalysisSession,
@@ -16,10 +16,10 @@ from memcommit.application.operations.semantic_updates.derive.atomize.domain imp
     AtomizeQualityIssue,
     AtomizeReading,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.resolution_adapter import (
+from memcommit.application.operations.atomize.resolution_adapter import (
     AtomizeResolutionWorkbenchAdapter,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.records import (
+from memcommit.application.operations.atomize.records import (
     create_atomize_review_record,
 )
 from memcommit.core.context import Context, Memory
@@ -28,8 +28,8 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell imp
     session_review_action_view,
     session_todo_view,
 )
-from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import MeldAssessment, MeldSession
-from memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_projection import (
+from memcommit.application.operations.meld.model import MeldAssessment, MeldSession
+from memcommit.application.operations.meld.proposal_projection import (
     MeldResolutionWorkbenchAdapter,
 )
 from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
@@ -37,7 +37,7 @@ from memcommit.adapters.console.terminal.components.responses.resolution import 
     response_draft_from_item,
     response_target_from_item,
 )
-from memcommit.application.operations.semantic_updates.foundation.update.model import (
+from memcommit.application.operations.update.model import (
     AddOperation,
     ContextFingerprint,
     EditOperation,
@@ -45,7 +45,7 @@ from memcommit.application.operations.semantic_updates.foundation.update.model i
     SourceReference,
     UpdateSession,
 )
-from memcommit.adapters.console.commands.semantic_updates.foundation.update.workbench.presentation import (
+from memcommit.adapters.console.commands.update.workbench.presentation import (
     UpdateResolutionWorkbenchAdapter,
 )
 

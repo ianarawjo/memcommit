@@ -7,7 +7,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.operation_lifecycle.review.report import (
+from memcommit.adapters.console.commands.review.report import (
     render_review_report_snapshot,
     run_review_report_shell,
 )
@@ -17,9 +17,9 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionWorkbenchView,
 )
 from memcommit.application.capabilities.reviewing.report import ReviewReportController
-from memcommit.adapters.console.commands.semantic_updates.foundation.update.review import update_review_report
+from memcommit.adapters.console.commands.update.review import update_review_report
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.semantic_updates.foundation.update.model import (
+from memcommit.application.operations.update.model import (
     AddOperation,
     ContextFingerprint,
     SourceReference,

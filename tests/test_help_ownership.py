@@ -13,10 +13,10 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_help_operation_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.system_study_tools.help
+import memcommit.application.operations.help
 
-assert "memcommit.application.operations.system_study_tools.help.application" not in sys.modules
-assert "memcommit.application.operations.system_study_tools.help.lookup_application" not in sys.modules
+assert "memcommit.application.operations.help.application" not in sys.modules
+assert "memcommit.application.operations.help.lookup_application" not in sys.modules
 """
 
     subprocess.run(
@@ -30,8 +30,8 @@ def test_production_help_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/help.py",
         "src/memcommit/adapters/agent/help.py",
-        "src/memcommit/adapters/console/commands/system_study_tools/help/command.py",
-        "src/memcommit/application/operations/system_study_tools/help/lookup_application.py",
+        "src/memcommit/adapters/console/commands/help/command.py",
+        "src/memcommit/application/operations/help/lookup_application.py",
     )
     legacy_imports = (
         "from memcommit.help_application import",
@@ -54,7 +54,7 @@ def test_operation_translations_belong_to_the_catalog() -> None:
     ).read_text(encoding="utf-8")
     help_copy = (
         REPOSITORY_ROOT
-        / "src/memcommit/adapters/console/commands/system_study_tools/help/localized_copy.py"
+        / "src/memcommit/adapters/console/commands/help/localized_copy.py"
     ).read_text(encoding="utf-8")
 
     catalog_copy = catalog_localization + family_localization
@@ -68,11 +68,11 @@ def test_operation_translations_belong_to_the_catalog() -> None:
 
 def test_help_owner_preserves_catalog_and_injected_provider_boundaries() -> None:
     application_source = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/system_study_tools/help/application.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/help/application.py"
     ).read_text(encoding="utf-8")
     lookup_source = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/system_study_tools/help/lookup_application.py"
+        / "src/memcommit/application/operations/help/lookup_application.py"
     ).read_text(encoding="utf-8")
     combined = application_source + lookup_source
 
@@ -83,7 +83,7 @@ def test_help_owner_preserves_catalog_and_injected_provider_boundaries() -> None
     assert "provider.complete" not in application_source
     assert "provider.complete" in lookup_source
     assert "connect_help_provider" not in lookup_source
-    assert "memcommit.application.operations.system_study_tools.help.application" in lookup_source
+    assert "memcommit.application.operations.help.application" in lookup_source
 
 
 def test_selected_public_help_loads_only_exact_catalog_application(
@@ -99,8 +99,8 @@ result = MemCommitClient(root=root).describe_operation('compare')
 assert result.name == 'compare'
 assert not root.exists()
 assert 'memcommit.adapters.python_api._operations.help' in sys.modules
-assert 'memcommit.application.operations.system_study_tools.help.application' in sys.modules
-assert 'memcommit.application.operations.system_study_tools.help.lookup_application' not in sys.modules
+assert 'memcommit.application.operations.help.application' in sys.modules
+assert 'memcommit.application.operations.help.lookup_application' not in sys.modules
 assert 'memcommit.help_application' not in sys.modules
 assert 'memcommit.help_lookup_application' not in sys.modules
 """

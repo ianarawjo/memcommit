@@ -10,14 +10,14 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Memory, MemoryRef
-from memcommit.application.operations.create_copy_connect.reference.application import (
+from memcommit.application.operations.reference.application import (
     FrozenReferencePlan,
     ReferenceError,
     ReferenceRequest,
     ReferenceResult,
     run_reference,
 )
-from memcommit.application.operations.create_copy_connect.reference.runtime import MemoryStoreReferencePort
+from memcommit.application.operations.reference.runtime import MemoryStoreReferencePort
 from memcommit.persistence.store import MemoryStore
 
 
@@ -200,7 +200,7 @@ def test_bare_cli_reference_enters_and_can_cancel_interactive_setup(
     isolated_store,
     monkeypatch,
 ):
-    import memcommit.adapters.console.commands.create_copy_connect.reference.command as reference_cli
+    import memcommit.adapters.console.commands.reference.command as reference_cli
 
     monkeypatch.setattr(reference_cli, "is_interactive_terminal", lambda: True)
     monkeypatch.setattr(reference_cli, "choose_reference_setup", lambda _port: None)

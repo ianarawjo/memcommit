@@ -16,17 +16,17 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.operations.semantic_updates.derive.atomize.application import (
+from memcommit.application.operations.atomize.application import (
     AtomizeInPlaceRequest,
     atomize_application_audit,
 )
-from memcommit.application.operations.semantic_updates.derive.atomize.runtime import (
+from memcommit.application.operations.atomize.runtime import (
     MemoryStoreAtomizeOutputPort,
     capture_atomize_execution_snapshot,
     execute_atomize_in_place,
 )
 from tests.atomize_analysis_support import open_or_create_atomize_review_record
-from memcommit.adapters.console.commands.semantic_updates.derive.atomize.command import cmd as atomize_command
+from memcommit.adapters.console.commands.atomize.command import cmd as atomize_command
 from memcommit.core.context import AutoCheckpoint, Memory
 from memcommit.persistence.store import MemoryStore
 
@@ -226,7 +226,7 @@ def test_in_place_execution_reuses_an_applied_scope_unless_refreshed(isolated_st
 @pytest.fixture(autouse=True)
 def _normal_form_provider(monkeypatch):
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
         _AllAtomicProvider,
     )
 
@@ -468,8 +468,8 @@ def test_atomize_application_and_runtime_do_not_import_terminal_adapters():
     root = Path(__file__).resolve().parents[1]
     forbidden = ("typer", "prompt_toolkit", "memcommit.adapters.console.commands")
     for relative in (
-        "src/memcommit/application/operations/semantic_updates/derive/atomize/application.py",
-        "src/memcommit/application/operations/semantic_updates/derive/atomize/runtime.py",
+        "src/memcommit/application/operations/atomize/application.py",
+        "src/memcommit/application/operations/atomize/runtime.py",
     ):
         tree = ast.parse((root / relative).read_text(encoding="utf-8"))
         imports = []

@@ -13,10 +13,10 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_show_operation_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.browse_navigate.show
+import memcommit.application.operations.show
 
-assert "memcommit.application.operations.browse_navigate.show.application" not in sys.modules
-assert "memcommit.application.operations.browse_navigate.show.runtime" not in sys.modules
+assert "memcommit.application.operations.show.application" not in sys.modules
+assert "memcommit.application.operations.show.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -29,9 +29,9 @@ assert "memcommit.application.operations.browse_navigate.show.runtime" not in sy
 def test_production_show_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/show.py",
-        "src/memcommit/adapters/console/commands/browse_navigate/show/command.py",
-        "src/memcommit/adapters/console/commands/browse_navigate/show/presentation.py",
-        "src/memcommit/application/operations/browse_navigate/show/runtime.py",
+        "src/memcommit/adapters/console/commands/show/command.py",
+        "src/memcommit/adapters/console/commands/show/presentation.py",
+        "src/memcommit/application/operations/show/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -46,10 +46,10 @@ def test_production_show_consumers_use_the_operation_owner() -> None:
 
 def test_show_owner_retains_read_only_effect_boundary() -> None:
     application_source = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/browse_navigate/show/application.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/show/application.py"
     ).read_text(encoding="utf-8")
     runtime_source = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/browse_navigate/show/runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/show/runtime.py"
     ).read_text(encoding="utf-8")
     combined = application_source + runtime_source
 

@@ -192,7 +192,7 @@ def _analysis_attachments(
     component: set[str],
     events: Iterable[MemoryHistoryEvent],
 ) -> tuple[tuple[MemoryHistoryAnalysis, ...], list[str]]:
-    from memcommit.application.operations.semantic_updates.derive.atomize.domain import atomize_analysis_matches_context
+    from memcommit.application.operations.atomize.domain import atomize_analysis_matches_context
 
     try:
         session = store.load_atomize_analysis(ctx.uid)

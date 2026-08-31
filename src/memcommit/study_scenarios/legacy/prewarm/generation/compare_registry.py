@@ -25,7 +25,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.rep
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     load_granted_comparison_artifact,
 )
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     load_profile_registry,
     profile_store_dir,
     study_run_identity,

@@ -39,7 +39,7 @@ def _require_visible(recorder, *expected: str) -> None:
 
 
 def _study_ledger():
-    from memcommit.application.operations.profiles.profile.config import load_profile_registry
+    from memcommit.application.operations.profile.config import load_profile_registry
     from memcommit.persistence.store import MemoryStore
     from memcommit.persistence.command_ledger.study_actions import StudyActionLedger
 
@@ -71,7 +71,7 @@ def _verify_latest_compare_attempt() -> None:
 
 def main() -> None:
     sys.path.insert(0, str(ROOT / "src"))
-    from memcommit.application.operations.profiles.profile.config import load_profile_registry
+    from memcommit.application.operations.profile.config import load_profile_registry
 
     if load_profile_registry().active.name != PROFILE_NAME:
         raise RuntimeError(f"Expected active replay Profile {PROFILE_NAME!r}.")

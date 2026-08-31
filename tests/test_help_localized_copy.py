@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.console.commands.system_study_tools.help.command import (
+from memcommit.adapters.console.commands.help.command import (
     CommandEntry,
     _help_command_rows,
 )
-from memcommit.adapters.console.commands.system_study_tools.help.localized_copy import (
+from memcommit.adapters.console.commands.help.localized_copy import (
     category_description,
     validate_help_translation_coverage,
 )

@@ -14,7 +14,7 @@ from memcommit.adapters.console.terminal.components.history.update_checkpoint im
     update_subtree_locations,
 )
 from memcommit.adapters.console.terminal.components.history.picker import HistoryDetailView
-from memcommit.application.operations.semantic_updates.foundation.update.model import (
+from memcommit.application.operations.update.model import (
     UpdateApplicationReceipt,
     UpdateCheckpointReceipt,
     operation_digest,

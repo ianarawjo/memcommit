@@ -57,7 +57,7 @@ def _prepare_compare_store(root: Path):
 
 
 def _run_ground_child(_store_root: Path) -> None:
-    from memcommit.adapters.console.commands.ground_workbench.ground.shell import run_ground_shell
+    from memcommit.adapters.console.commands.ground.shell import run_ground_shell
 
     print("$ mem ground", flush=True)
     print(

@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from memcommit.adapters.console.commands.search_explain.retrieve_answer.find.presentation import (
+from memcommit.adapters.console.commands.find.presentation import (
     DEFAULT_FIND_PREVIEW_MATCHES,
     find_result_header_lines,
     project_find_match,
     render_find_result,
 )
-from memcommit.application.operations.search_explain.retrieve_answer.find.application import (
+from memcommit.application.operations.find.application import (
     FrozenFindSource,
     FindRequest,
     FindSourceItem,

@@ -6,10 +6,10 @@ import uuid
 import pytest
 
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.application.operations.semantic_updates.foundation.update.model import AddOperation, EditOperation, UpdateSession
-from memcommit.application.operations.semantic_updates.foundation.update.application import apply_update
-from memcommit.application.operations.semantic_updates.foundation.update.model import UpdatePlan
-from memcommit.application.operations.semantic_updates.foundation.update.application import (
+from memcommit.application.operations.update.model import AddOperation, EditOperation, UpdateSession
+from memcommit.application.operations.update.application import apply_update
+from memcommit.application.operations.update.model import UpdatePlan
+from memcommit.application.operations.update.application import (
     UpdateApplicationError,
     apply_staged_update_plan,
 )

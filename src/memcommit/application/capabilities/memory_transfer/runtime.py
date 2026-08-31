@@ -37,8 +37,8 @@ from memcommit.application.capabilities.memory_transfer.application import (
     validate_copy_request,
     validate_move_request,
 )
-from memcommit.application.operations.profiles.profile.config import profile_store_dir
-from memcommit.application.operations.profiles.profile.model import authority_grant_snapshot_lock
+from memcommit.application.operations.profile.config import profile_store_dir
+from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     MemoryStore,

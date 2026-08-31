@@ -17,9 +17,9 @@ from memcommit.application.capabilities.memory_transfer.application import (
     MemoryTransferStalePlanError,
     MoveMemoriesRequest,
 )
-from memcommit.application.operations.create_copy_connect.copy.application import run_copy
+from memcommit.application.operations.copy.application import run_copy
 from memcommit.application.capabilities.memory_transfer.runtime import MemoryStoreCopyAndMovePort
-from memcommit.application.operations.direct_changes.move.application import run_move
+from memcommit.application.operations.move.application import run_move
 from memcommit.persistence.store import MemoryStore
 
 

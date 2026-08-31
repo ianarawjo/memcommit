@@ -13,10 +13,10 @@ separately under Find Duplicates, Find Redundancies, and Dedun.
 | Public Python | `MemCommitClient.dedup(context_name, include_descendants=...)` | `adapters.python_api._operations.dedup.dedup`, then the same scope boundary | typed aggregate `ExactDedupResult` with per-Context effects |
 
 Both routes enter the same read-only analysis owned by
-`memcommit.application.operations.quality_resolution.diagnose.find_duplicates.application`, whose pure
+`memcommit.application.operations.find_duplicates.application`, whose pure
 role-aware detector remains in `reviewing.direct_item_duplicates`. Dedup then
 passes that exact typed result to the Apply-only boundary in
-`memcommit.application.operations.quality_resolution.repair.dedup.application`; Apply never rediscovers
+`memcommit.application.operations.dedup.application`; Apply never rediscovers
 the groups. The temporary internal
 `memcommit.application.operations.exact_dedup` path is removed without a
 facade so the canonical package matches `mem dedup`. Recursive reach enumerates lexical names only,
@@ -51,14 +51,14 @@ second application implementations.
 
 ## Ownership relocation boundary
 
-`memcommit.application.operations.quality_resolution.diagnose.find_duplicates.application` owns the
+`memcommit.application.operations.find_duplicates.application` owns the
 provider-free exact report and direct-or-lexical analysis. Applying Dedup owns
 only mutation validation, receipts, checkpoints, and atomic publication under
-`memcommit.application.operations.quality_resolution.repair.dedup.application`. CLI and public Python
+`memcommit.application.operations.dedup.application`. CLI and public Python
 compose those owners explicitly in that order.
 
 Semantic redundancy contracts consumed by Dedun and composite operations are
-owned separately by `memcommit.application.operations.quality_resolution.repair.dedun.application`,
+owned separately by `memcommit.application.operations.dedun.application`,
 `.analysis`, and `.runtime`.
 
 This split does not make Find Duplicates and Dedup aliases. Find Duplicates is

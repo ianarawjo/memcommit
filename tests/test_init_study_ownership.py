@@ -27,7 +27,7 @@ def _top_level_function_names(relative_path: str) -> set[str]:
 def test_init_study_command_imports_the_operation_owned_application() -> None:
     path = (
         REPOSITORY_ROOT
-        / "src/memcommit/adapters/console/commands/system_study_tools/init_study/command.py"
+        / "src/memcommit/adapters/console/commands/init_study/command.py"
     )
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
@@ -40,25 +40,25 @@ def test_init_study_command_imports_the_operation_owned_application() -> None:
         "generate_study_profile_name",
         "init_coffee_study_profile",
         "init_legacy_study_profile",
-    } <= imports["memcommit.application.operations.system_study_tools.init_study.application"]
+    } <= imports["memcommit.application.operations.init_study.application"]
     assert not {
         "init_coffee_study_profile",
         "init_legacy_study_profile",
-    }.intersection(imports["memcommit.application.operations.profiles.profile.model"])
+    }.intersection(imports["memcommit.application.operations.profile.model"])
 
 
 def test_init_study_profile_construction_has_one_canonical_owner() -> None:
     study_lifecycle_functions = _top_level_function_names(
-        "src/memcommit/application/operations/profiles/profile/model/study.py"
+        "src/memcommit/application/operations/profile/model/study.py"
     )
     composition_functions = _top_level_function_names(
-        "src/memcommit/application/operations/system_study_tools/init_study/profile/composition.py"
+        "src/memcommit/application/operations/init_study/profile/composition.py"
     )
     publication_functions = _top_level_function_names(
-        "src/memcommit/application/operations/system_study_tools/init_study/profile/publication.py"
+        "src/memcommit/application/operations/init_study/profile/publication.py"
     )
     package_functions = _top_level_function_names(
-        "src/memcommit/application/operations/system_study_tools/init_study/profile/package.py"
+        "src/memcommit/application/operations/init_study/profile/package.py"
     )
 
     assert "_snapshot_legacy_scenario" in composition_functions
@@ -72,28 +72,28 @@ def test_init_study_profile_construction_has_one_canonical_owner() -> None:
         "_study_packages",
     }.intersection(study_lifecycle_functions)
     assert not _top_level_function_names(
-        "src/memcommit/application/operations/system_study_tools/init_study/composition.py"
+        "src/memcommit/application/operations/init_study/composition.py"
     )
     assert not _top_level_function_names(
-        "src/memcommit/application/operations/system_study_tools/init_study/publication.py"
+        "src/memcommit/application/operations/init_study/publication.py"
     )
 
 
 def test_old_init_study_construction_imports_are_compatibility_aliases() -> None:
     program = (
-        "from memcommit.application.operations.system_study_tools.init_study.profile.composition "
+        "from memcommit.application.operations.init_study.profile.composition "
         "import _compose_study_run_pair as canonical_composition\n"
-        "from memcommit.application.operations.system_study_tools.init_study.composition "
+        "from memcommit.application.operations.init_study.composition "
         "import _compose_study_run_pair as old_composition\n"
-        "from memcommit.application.operations.system_study_tools.init_study.profile.publication "
+        "from memcommit.application.operations.init_study.profile.publication "
         "import _publish_study_run_pair as canonical_publication\n"
-        "from memcommit.application.operations.system_study_tools.init_study.publication "
+        "from memcommit.application.operations.init_study.publication "
         "import _publish_study_run_pair as old_publication\n"
-        "from memcommit.application.operations.system_study_tools.init_study.profile.package "
+        "from memcommit.application.operations.init_study.profile.package "
         "import _study_packages as canonical_packages\n"
-        "from memcommit.application.operations.profiles.profile.model.study "
+        "from memcommit.application.operations.profile.model.study "
         "import _study_packages as old_direct_packages\n"
-        "from memcommit.application.operations.profiles.profile.model "
+        "from memcommit.application.operations.profile.model "
         "import _study_packages as old_aggregate_packages\n"
         "assert old_composition is canonical_composition\n"
         "assert old_publication is canonical_publication\n"
@@ -111,14 +111,14 @@ def test_old_init_study_construction_imports_are_compatibility_aliases() -> None
 def test_init_study_package_import_is_lazy() -> None:
     program = (
         "import sys\n"
-        "import memcommit.application.operations.system_study_tools.init_study\n"
-        "assert 'memcommit.application.operations.system_study_tools.init_study.application' not in sys.modules\n"
-        "assert 'memcommit.application.operations.system_study_tools.init_study.composition' not in sys.modules\n"
-        "assert 'memcommit.application.operations.system_study_tools.init_study.publication' not in sys.modules\n"
-        "assert 'memcommit.application.operations.system_study_tools.init_study.profile.model' not in sys.modules\n"
-        "assert 'memcommit.application.operations.system_study_tools.init_study.profile.package' not in sys.modules\n"
-        "assert 'memcommit.application.operations.system_study_tools.init_study.profile.composition' not in sys.modules\n"
-        "assert 'memcommit.application.operations.system_study_tools.init_study.profile.publication' not in sys.modules\n"
+        "import memcommit.application.operations.init_study\n"
+        "assert 'memcommit.application.operations.init_study.application' not in sys.modules\n"
+        "assert 'memcommit.application.operations.init_study.composition' not in sys.modules\n"
+        "assert 'memcommit.application.operations.init_study.publication' not in sys.modules\n"
+        "assert 'memcommit.application.operations.init_study.profile.model' not in sys.modules\n"
+        "assert 'memcommit.application.operations.init_study.profile.package' not in sys.modules\n"
+        "assert 'memcommit.application.operations.init_study.profile.composition' not in sys.modules\n"
+        "assert 'memcommit.application.operations.init_study.profile.publication' not in sys.modules\n"
     )
 
     subprocess.run(

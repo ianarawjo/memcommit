@@ -9,20 +9,20 @@ from prompt_toolkit.output import DummyOutput
 
 from memcommit.core.context import Context, Memory
 from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
-from memcommit.application.operations.semantic_updates.derive.distill.model import DistillAnalysis, DistilledRule
-from memcommit.application.operations.semantic_updates.derive.distill.goal_fit import DistillGoalFit
-from memcommit.application.operations.semantic_updates.derive.distill.application import (
+from memcommit.application.operations.distill.model import DistillAnalysis, DistilledRule
+from memcommit.application.operations.distill.goal_fit import DistillGoalFit
+from memcommit.application.operations.distill.application import (
     DistillRequest,
     DistillResult,
 )
-from memcommit.adapters.console.commands.semantic_updates.derive.distill.workbench import (
+from memcommit.adapters.console.commands.distill.workbench import (
     DistillTuiSetup,
     project_distill_clipboard,
     project_distill_result,
     run_distill_tui,
 )
-from memcommit.application.operations.search_explain.synthesize.summarize.model import collect_summary_scope
-from memcommit.application.operations.search_explain.synthesize.summarize.application import FrozenSummarySource
+from memcommit.application.operations.summarize.model import collect_summary_scope
+from memcommit.application.operations.summarize.application import FrozenSummarySource
 
 
 def _result(*, descendants: bool = False) -> DistillResult:
@@ -302,7 +302,7 @@ def test_distill_tui_y_and_uppercase_y_copy_rule_then_all() -> None:
 def test_distill_console_owns_proposal_receipt_and_workbench_without_facades() -> None:
     repository_root = Path(__file__).resolve().parents[1]
     command_root = (
-        repository_root / "src/memcommit/adapters/console/commands/semantic_updates/derive/distill"
+        repository_root / "src/memcommit/adapters/console/commands/distill"
     )
     retired_tui_root = (
         repository_root / "src/memcommit/adapters/interfaces/tui/operations/distill"

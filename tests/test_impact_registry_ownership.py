@@ -8,8 +8,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "src" / "memcommit"
-OWNER_MODULE = "memcommit.application.operations.operation_lifecycle.impact.model"
-ADAPTER_MODULE = "memcommit.adapters.console.commands.operation_lifecycle.impact.registry"
+OWNER_MODULE = "memcommit.application.operations.impact.model"
+ADAPTER_MODULE = "memcommit.adapters.console.commands.impact.registry"
 
 
 def test_route_catalog_is_owned_by_the_impact_application_package() -> None:
@@ -17,7 +17,6 @@ def test_route_catalog_is_owned_by_the_impact_application_package() -> None:
         PACKAGE
         / "application"
         / "operations"
-        / "operation_lifecycle"
         / "impact"
         / "model.py"
     )
@@ -26,7 +25,6 @@ def test_route_catalog_is_owned_by_the_impact_application_package() -> None:
         / "adapters"
         / "console"
         / "commands"
-        / "operation_lifecycle"
         / "impact"
         / "registry.py"
     )
@@ -98,7 +96,6 @@ def test_impact_command_installs_the_application_catalog_through_its_adapter() -
         / "adapters"
         / "console"
         / "commands"
-        / "operation_lifecycle"
         / "impact"
         / "command.py"
     ).read_text(encoding="utf-8")
@@ -113,10 +110,9 @@ def test_console_registry_does_not_restate_application_route_records() -> None:
         / "adapters"
         / "console"
         / "commands"
-        / "operation_lifecycle"
         / "impact"
         / "registry.py"
     ).read_text(encoding="utf-8")
 
     assert "ImpactRoute(" not in source
-    assert "from memcommit.application.operations.operation_lifecycle.impact" in source
+    assert "from memcommit.application.operations.impact" in source

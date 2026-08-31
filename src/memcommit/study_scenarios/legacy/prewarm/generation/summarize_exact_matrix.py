@@ -27,7 +27,7 @@ from memcommit.configuration.config import Config
 from memcommit.providers.policy import (
     resolve_codex_evaluation_policy,
 )
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     load_profile_registry,
     profile_store_dir,
     study_run_identity,
@@ -48,12 +48,12 @@ from memcommit.study_scenarios.legacy.prewarm.summarize import (
     build_summarize_prewarm_artifact,
     summarize_prewarm_key,
 )
-from memcommit.application.operations.search_explain.synthesize.summarize.model import (
+from memcommit.application.operations.summarize.model import (
     SummaryFrame,
     summarize_frame,
 )
-from memcommit.application.operations.search_explain.synthesize.summarize.application import SummarizeRequest
-from memcommit.application.operations.search_explain.synthesize.summarize.runtime import (
+from memcommit.application.operations.summarize.application import SummarizeRequest
+from memcommit.application.operations.summarize.runtime import (
     MemoryStoreSummarySourcePort,
 )
 

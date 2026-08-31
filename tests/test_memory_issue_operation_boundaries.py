@@ -13,13 +13,13 @@ from memcommit.application.capabilities.memory_issue_analysis.model import (
 from memcommit.application.capabilities.memory_issue_analysis.source import (
     QualityFindSourceFrame,
 )
-from memcommit.application.operations.quality_resolution.diagnose.find_ambiguities.application import (
+from memcommit.application.operations.find_ambiguities.application import (
     analyze_find_ambiguities,
 )
-from memcommit.application.operations.quality_resolution.diagnose.find_conflicts.application import (
+from memcommit.application.operations.find_conflicts.application import (
     analyze_find_conflicts,
 )
-from memcommit.application.operations.quality_resolution.diagnose.find_duplicates.application import (
+from memcommit.application.operations.find_duplicates.application import (
     ExactDuplicateReport,
     FindDuplicatesRequest,
     find_duplicates,
@@ -88,15 +88,15 @@ def test_find_duplicates_application_owns_readable_scope_resolution(tmp_path) ->
 def test_dedup_consumes_find_duplicates_analysis_without_rediscovery() -> None:
     find_source = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/quality_resolution/diagnose/find_duplicates/application.py"
+        / "src/memcommit/application/operations/find_duplicates/application.py"
     ).read_text(encoding="utf-8")
     dedup_source = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/quality_resolution/repair/dedup/application.py"
+        / "src/memcommit/application/operations/dedup/application.py"
     ).read_text(encoding="utf-8")
 
-    assert "memcommit.application.operations.quality_resolution.repair.dedup" not in find_source
-    assert "memcommit.application.operations.quality_resolution.diagnose.find_duplicates" in dedup_source
+    assert "memcommit.application.operations.dedup" not in find_source
+    assert "memcommit.application.operations.find_duplicates" in dedup_source
     assert "find_exact_duplicate_groups" not in dedup_source
 
 
@@ -110,8 +110,6 @@ def test_console_find_routes_import_named_application_boundaries() -> None:
         path = (
             REPOSITORY_ROOT
             / "src/memcommit/adapters/console/commands"
-            / "quality_resolution"
-            / "diagnose"
             / operation
             / "command.py"
         )
@@ -122,7 +120,7 @@ def test_console_find_routes_import_named_application_boundaries() -> None:
             if isinstance(node, ast.ImportFrom) and node.module is not None
         }
         assert (
-            f"memcommit.application.operations.quality_resolution.diagnose.{operation}.application"
+            f"memcommit.application.operations.{operation}.application"
             in imports
         )
         assert "memcommit.application.capabilities.ops" not in imports
@@ -138,8 +136,6 @@ def test_find_application_modules_have_no_terminal_dependency() -> None:
         path = (
             REPOSITORY_ROOT
             / "src/memcommit/application/operations"
-            / "quality_resolution"
-            / "diagnose"
             / operation
             / "application.py"
         )

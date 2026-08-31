@@ -8,7 +8,7 @@ reconstruction under retained history because Log, Trace, Rationale, Reference,
 restoration, and mutation verification all touched parts of that code. They did
 not distinguish shared retained evidence from the Trace-specific interpretation
 reused by those callers, or extract the Trace use case into
-`application.operations.history_recovery.inspection.trace`.
+`application.operations.trace`.
 
 As a result, the console command itself selected among Context, Memory,
 MemoryRef, and granted-current reports; resolved READ and retained-history
@@ -19,7 +19,7 @@ lineage variants were Trace semantics without a terminal-independent owner.
 
 ## Decision
 
-`memcommit.application.operations.history_recovery.inspection.trace` owns the Trace use case. Its boundary
+`memcommit.application.operations.trace` owns the Trace use case. Its boundary
 has two entry contracts:
 
 1. `list_trace_targets` accepts a typed local Context-range request and returns

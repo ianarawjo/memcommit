@@ -11,7 +11,7 @@ import json
 import pytest
 import memcommit.application.capabilities.semantic.prompt_policy as semantic_prompt_policy_module
 import memcommit.persistence.store as store_module
-from memcommit.application.operations.profiles.profile.config import virtual_authoring_registry
+from memcommit.application.operations.profile.config import virtual_authoring_registry
 
 
 class _RationaleFixtureProvider:
@@ -48,7 +48,7 @@ def replace_rationale_subscription_provider(monkeypatch):
     """No ordinary test may accidentally start a live Rationale provider turn."""
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.history_recovery.inspection.rationale.command.connect_semantic_provider",
+        "memcommit.adapters.console.commands.rationale.command.connect_semantic_provider",
         _RationaleFixtureProvider,
     )
 

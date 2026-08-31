@@ -3,28 +3,28 @@ from __future__ import annotations
 import json
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.adapters.console.commands.operation_lifecycle.impact.process_local import (
+from memcommit.adapters.console.commands.impact.process_local import (
     distill_impact_presentation,
     makemore_impact_presentation,
 )
-from memcommit.adapters.console.commands.operation_lifecycle.impact.sessions import render_impact_session_snapshot
-from memcommit.application.operations.semantic_updates.derive.distill.model import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
-from memcommit.application.operations.semantic_updates.derive.distill.application import DistillRequest
-from memcommit.application.operations.semantic_updates.derive.distill.runtime import execute_distill
-from memcommit.application.operations.semantic_updates.derive.makemore.model import (
+from memcommit.adapters.console.commands.impact.sessions import render_impact_session_snapshot
+from memcommit.application.operations.distill.model import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
+from memcommit.application.operations.distill.application import DistillRequest
+from memcommit.application.operations.distill.runtime import execute_distill
+from memcommit.application.operations.makemore.model import (
     MAKEMORE_OPERATION,
     MAKEMORE_PAYLOAD_MARKER,
     MakemoreTargetContext,
     MakemoreTargetContextItem,
 )
-from memcommit.application.operations.semantic_updates.derive.makemore.application import MakemoreRequest
-from memcommit.application.operations.semantic_updates.derive.makemore.runtime import execute_makemore
-from memcommit.adapters.console.commands.semantic_updates.derive.distill.proposal import distill_result_text
-from memcommit.adapters.console.commands.semantic_updates.derive.makemore.proposal import makemore_result_text
-from memcommit.adapters.console.commands.semantic_updates.derive.distill.workbench import (
+from memcommit.application.operations.makemore.application import MakemoreRequest
+from memcommit.application.operations.makemore.runtime import execute_makemore
+from memcommit.adapters.console.commands.distill.proposal import distill_result_text
+from memcommit.adapters.console.commands.makemore.proposal import makemore_result_text
+from memcommit.adapters.console.commands.distill.workbench import (
     project_distill_clipboard,
 )
-from memcommit.adapters.console.commands.semantic_updates.derive.makemore.viewer import project_makemore_clipboard
+from memcommit.adapters.console.commands.makemore.viewer import project_makemore_clipboard
 from memcommit.persistence.store import MemoryStore
 from tests.makemore_validation_support import (
     passing_makemore_validation_response,

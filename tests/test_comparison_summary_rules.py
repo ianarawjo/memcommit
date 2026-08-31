@@ -8,9 +8,9 @@ import pytest
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonInput
-from memcommit.application.operations.search_explain.synthesize.compare.compare_summary import ComparisonSummaryError
-from memcommit.application.operations.search_explain.synthesize.compare.provider_contract import summarize_comparison
-from memcommit.application.operations.search_explain.synthesize.compare.compare_rules import (
+from memcommit.application.operations.compare.compare_summary import ComparisonSummaryError
+from memcommit.application.operations.compare.provider_contract import summarize_comparison
+from memcommit.application.operations.compare.compare_rules import (
     COMPARISON_SUMMARY_RULESET_VERSION,
     COMPARISON_SUMMARY_WORD_LIMIT,
     comparison_summary_ruleset,

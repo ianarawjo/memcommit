@@ -7,15 +7,15 @@ from types import SimpleNamespace
 
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.operation_lifecycle.review.command as review_command
-import memcommit.adapters.console.commands.operation_lifecycle.review.sessions as review_sessions
+import memcommit.adapters.console.commands.review.command as review_command
+import memcommit.adapters.console.commands.review.sessions as review_sessions
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
 )
-from memcommit.application.operations.operation_lifecycle.review.model import (
+from memcommit.application.operations.review.model import (
     ReviewSession,
     direct_context_digest,
 )
@@ -244,8 +244,8 @@ def test_applied_sever_selection_still_opens_read_only_review(
     isolated_store,
     monkeypatch,
 ):
-    import memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.command as sever_command
-    import memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.review as sever_review
+    import memcommit.adapters.console.commands.sever.command as sever_command
+    import memcommit.adapters.console.commands.sever.review as sever_review
 
     session_uid = str(uuid.uuid4())
     picker_entry = _entry(
@@ -303,8 +303,8 @@ def test_applied_meld_selection_still_opens_read_only_review(
     isolated_store,
     monkeypatch,
 ):
-    from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld import command as meld_command
-    import memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.review as meld_review
+    from memcommit.adapters.console.commands.meld import command as meld_command
+    import memcommit.adapters.console.commands.meld.review as meld_review
 
     session_uid = str(uuid.uuid4())
     catalog_entry = SimpleNamespace(

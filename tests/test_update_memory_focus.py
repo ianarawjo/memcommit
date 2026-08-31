@@ -8,10 +8,10 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.semantic_updates.foundation.update.command as update_command
+import memcommit.adapters.console.commands.update.command as update_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.semantic_updates.foundation.update.model import UpdateError, UpdateSession, plan_update, session_matches
+from memcommit.application.operations.update.model import UpdateError, UpdateSession, plan_update, session_matches
 
 
 class _Provider:

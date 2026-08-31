@@ -42,9 +42,9 @@ def _build_store(store_root: Path):
 
 
 def _search_harness(store_root: Path) -> None:
-    import memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command as search_command
+    import memcommit.adapters.console.commands.search.command as search_command
     from memcommit.application.capabilities.authority.context_access import resolve_context_access
-    from memcommit.application.operations.search_explain.retrieve_answer.search.application import SearchResponse, SearchResult
+    from memcommit.application.operations.search.application import SearchResponse, SearchResult
     from memcommit.persistence.store import MemoryStore
 
     store, source, memory = _build_store(store_root)
@@ -96,13 +96,13 @@ def _search_harness(store_root: Path) -> None:
 
 
 def _find_harness(store_root: Path) -> None:
-    from memcommit.adapters.console.commands.search_explain.retrieve_answer.find.workbench import FindTuiSetup, run_find_workbench
+    from memcommit.adapters.console.commands.find.workbench import FindTuiSetup, run_find_workbench
     from memcommit.application.capabilities.authority.context_access import resolve_context_access
     from memcommit.application.capabilities.authority.readable_contexts import freeze_readable_context_catalog
     from memcommit.application.capabilities.save_context_from_selection.runtime import execute_save_context_from_selection
-    from memcommit.application.operations.search_explain.retrieve_answer.find.application import FindRequest
-    from memcommit.application.operations.search_explain.retrieve_answer.find.runtime import execute_find
-    from memcommit.application.operations.search_explain.retrieve_answer.find.save_context import save_context_request_from_find
+    from memcommit.application.operations.find.application import FindRequest
+    from memcommit.application.operations.find.runtime import execute_find
+    from memcommit.application.operations.find.save_context import save_context_request_from_find
     from memcommit.persistence.store import MemoryStore
 
     store, source, _memory = _build_store(store_root)
@@ -155,10 +155,10 @@ def _find_harness(store_root: Path) -> None:
 
 
 def _query_harness(store_root: Path) -> None:
-    from memcommit.adapters.console.commands.search_explain.retrieve_answer.query.workbench import run_query_workbench
-    from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application import OrdinaryQueryResponse
-    from memcommit.application.operations.search_explain.retrieve_answer.query.save_answer import SaveQueryAnswerRequest
-    from memcommit.application.operations.search_explain.retrieve_answer.query.save_answer_runtime import execute_save_query_answer
+    from memcommit.adapters.console.commands.query.workbench import run_query_workbench
+    from memcommit.application.operations.query.ordinary_application import OrdinaryQueryResponse
+    from memcommit.application.operations.query.save_answer import SaveQueryAnswerRequest
+    from memcommit.application.operations.query.save_answer_runtime import execute_save_query_answer
     from memcommit.persistence.store import MemoryStore
 
     store, source, _memory = _build_store(store_root)

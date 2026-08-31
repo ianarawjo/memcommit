@@ -39,7 +39,7 @@ def _run_child() -> None:
 
     import memcommit.application.capabilities.ops as ops
     from memcommit.adapters.console.commands.merge.command import cmd as merge_command
-    from memcommit.adapters.console.commands.browse_navigate.show.command import cmd as show_command
+    from memcommit.adapters.console.commands.show.command import cmd as show_command
     from memcommit.core.context import Memory
     from memcommit.persistence.store import MemoryStore
 

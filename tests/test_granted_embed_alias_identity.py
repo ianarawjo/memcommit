@@ -13,9 +13,9 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context
-from memcommit.application.operations.create_copy_connect.embed.application import EmbedRequest
-from memcommit.application.operations.create_copy_connect.embed.runtime import MemoryStoreEmbedPort
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.embed.application import EmbedRequest
+from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort
+from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     ProfileEntry,
@@ -23,7 +23,7 @@ from memcommit.application.operations.profiles.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profiles.profile.model import create_authority_grant
+from memcommit.application.operations.profile.model import create_authority_grant
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 

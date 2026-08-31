@@ -19,12 +19,12 @@ from memcommit.adapters.python_api.errors import (
     SemanticStorageError,
 )
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.operations.quality_resolution.diagnose.find_duplicates.application import (
+from memcommit.application.operations.find_duplicates.application import (
     FindDuplicatesRequest,
     find_duplicates,
 )
-from memcommit.application.operations.profiles.profile.config import ProfileConfigError
-from memcommit.application.operations.profiles.profile.model import ProfileError
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
 
 
 def find_duplicates_exact(

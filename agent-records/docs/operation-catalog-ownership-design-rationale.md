@@ -56,7 +56,7 @@ execution, not two separate operation kinds.
 Section membership must flatten to the family's exact operation order, and
 each affected descriptor carries the stable section identity.
 
-The Help operation remains under `memcommit.application.operations.system_study_tools.help` and
+The Help operation remains under `memcommit.application.operations.help` and
 depends on the catalog in one direction. Its composer still combines stable
 operation meaning with interface-supplied command forms; the catalog imports
 neither Help nor an adapter.
@@ -78,16 +78,14 @@ with exposed operations, but the relocation does not make prose an executable
 source of behavior.
 
 This change preserves the public operation set and each operation's execution,
-forms, authority, and result contract while changing discovery membership and
-the canonical package paths for classified operations.
+forms, authority, result contract, and direct package identity while changing
+discovery membership.
 Family sections are descriptive affordance structure; they do not imply a
 shared executable retrieval, synthesis, or history service and do not change
 any operation's authority, determinism, or mutation contract.
-The classified application and console packages now mirror this family and
-section topology physically. Unclassified operations remain direct children
-of their respective operation or command root. No compatibility package is
-kept at a moved flat internal path; repository callers and generated layout
-plans use the canonical family path. This physical grouping does not introduce
-executable trait declarations for authority, history, provider, session, or
-mutation requirements. No implementation remains under
+Application and console operation packages remain direct children of their
+respective roots. The catalog is the sole owner of family and section
+membership; package paths do not repeat that presentation taxonomy and do not
+introduce executable trait declarations for authority, history, provider,
+session, or mutation requirements. No implementation remains under
 `memcommit.application.operations.operation_catalog`.

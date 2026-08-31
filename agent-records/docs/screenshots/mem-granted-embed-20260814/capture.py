@@ -32,7 +32,7 @@ base.CAPTURE_DIR = CAPTURE_DIR
 
 def _create_profile(home: Path):
     import memcommit.application.capabilities.ops as ops
-    from memcommit.application.operations.profiles.profile.config import (
+    from memcommit.application.operations.profile.config import (
         AUTHORING_PROFILE_NAME,
         AUTHORING_PROFILE_UID,
         ProfileEntry,
@@ -40,7 +40,7 @@ def _create_profile(home: Path):
         profile_registry_file,
         profile_store_dir,
     )
-    from memcommit.application.operations.profiles.profile.model import create_authority_grant
+    from memcommit.application.operations.profile.model import create_authority_grant
     from memcommit.persistence.store import MemoryStore
 
     store = MemoryStore()

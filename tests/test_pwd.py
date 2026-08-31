@@ -8,15 +8,15 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.operations.browse_navigate.pwd.application as current_context_application
+import memcommit.application.operations.pwd.application as current_context_application
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.browse_navigate.pwd.application import (
+from memcommit.application.operations.pwd.application import (
     CurrentContextError,
     NoCurrentContextError,
     get_current_context,
 )
-from memcommit.application.operations.browse_navigate.pwd.runtime import read_current_context
+from memcommit.application.operations.pwd.runtime import read_current_context
 from memcommit.persistence.store import MemoryStore
 
 

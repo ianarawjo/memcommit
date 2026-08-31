@@ -13,10 +13,10 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_embed_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.create_copy_connect.embed
+import memcommit.application.operations.embed
 
-assert "memcommit.application.operations.create_copy_connect.embed.application" not in sys.modules
-assert "memcommit.application.operations.create_copy_connect.embed.runtime" not in sys.modules
+assert "memcommit.application.operations.embed.application" not in sys.modules
+assert "memcommit.application.operations.embed.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -29,9 +29,9 @@ assert "memcommit.application.operations.create_copy_connect.embed.runtime" not 
 def test_production_embed_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/embed.py",
-        "src/memcommit/adapters/console/commands/create_copy_connect/embed/command.py",
-        "src/memcommit/adapters/console/commands/create_copy_connect/embed/workbench/screen.py",
-        "src/memcommit/application/operations/create_copy_connect/embed/runtime.py",
+        "src/memcommit/adapters/console/commands/embed/command.py",
+        "src/memcommit/adapters/console/commands/embed/workbench/screen.py",
+        "src/memcommit/application/operations/embed/runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -43,13 +43,13 @@ def test_production_embed_consumers_use_the_operation_owner() -> None:
 
 def test_reference_and_embed_remain_separate_operation_packages() -> None:
     for relative_path in (
-        "src/memcommit/application/operations/create_copy_connect/reference/application.py",
-        "src/memcommit/application/operations/create_copy_connect/reference/runtime.py",
-        "src/memcommit/application/operations/create_copy_connect/embed/application.py",
-        "src/memcommit/application/operations/create_copy_connect/embed/runtime.py",
+        "src/memcommit/application/operations/reference/application.py",
+        "src/memcommit/application/operations/reference/runtime.py",
+        "src/memcommit/application/operations/embed/application.py",
+        "src/memcommit/application/operations/embed/runtime.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         if "/reference/" in relative_path:
-            assert "memcommit.application.operations.create_copy_connect.embed" not in source
+            assert "memcommit.application.operations.embed" not in source
         else:
-            assert "memcommit.application.operations.create_copy_connect.reference" not in source
+            assert "memcommit.application.operations.reference" not in source

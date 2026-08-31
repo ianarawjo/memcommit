@@ -9,7 +9,7 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_edit_command_owns_its_workbench_without_a_tui_facade() -> None:
-    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/direct_changes/edit"
+    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/edit"
     retired_root = (
         REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/tui/operations/edit"
     )

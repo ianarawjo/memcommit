@@ -8,15 +8,15 @@ import sys
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-CANONICAL_NAME = "memcommit.application.operations.semantic_updates.foundation.update.application"
+CANONICAL_NAME = "memcommit.application.operations.update.application"
 
 
 def test_update_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.semantic_updates.foundation.update
+import memcommit.application.operations.update
 
-assert "memcommit.application.operations.semantic_updates.foundation.update.application" not in sys.modules
+assert "memcommit.application.operations.update.application" not in sys.modules
 """
 
     subprocess.run(
@@ -33,8 +33,8 @@ def test_production_update_consumers_use_the_operation_owner() -> None:
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
         "src/memcommit/persistence/store/checkpoint",
         "src/memcommit/persistence/store/command_restoration",
-        "src/memcommit/application/operations/semantic_updates/foundation/update/publication.py",
-        "src/memcommit/application/operations/semantic_updates/foundation/update/inspection.py",
+        "src/memcommit/application/operations/update/publication.py",
+        "src/memcommit/application/operations/update/inspection.py",
     )
 
     for relative_path in relative_paths:
@@ -47,12 +47,12 @@ def test_production_update_consumers_use_the_operation_owner() -> None:
 
 def test_update_does_not_invent_an_operation_runtime() -> None:
     assert not (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/semantic_updates/foundation/update/runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/update/runtime.py"
     ).exists()
 
 
 def test_update_has_no_endpoint_specific_application_modules() -> None:
-    update_root = REPOSITORY_ROOT / "src/memcommit/application/operations/semantic_updates/foundation/update"
+    update_root = REPOSITORY_ROOT / "src/memcommit/application/operations/update"
 
     assert not (update_root / "granted_source.py").exists()
     assert not (update_root / "granted_target.py").exists()
@@ -61,7 +61,7 @@ def test_update_has_no_endpoint_specific_application_modules() -> None:
 def test_update_publication_separates_coordination_from_transaction() -> None:
     application_source = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/semantic_updates/foundation/update/publication.py"
+        / "src/memcommit/application/operations/update/publication.py"
     ).read_text(encoding="utf-8")
     transaction_source = (
         REPOSITORY_ROOT
@@ -84,7 +84,7 @@ def test_update_publication_separates_coordination_from_transaction() -> None:
 def test_update_receipts_have_one_persistence_repository() -> None:
     assert not (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/semantic_updates/foundation/update/receipt_store.py"
+        / "src/memcommit/application/operations/update/receipt_store.py"
     ).exists()
     repository = (
         REPOSITORY_ROOT
@@ -96,7 +96,7 @@ def test_update_receipts_have_one_persistence_repository() -> None:
 
 def test_update_history_is_split_by_read_and_recovery_responsibility() -> None:
     update_root = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/semantic_updates/foundation/update"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/update"
     )
     assert not (update_root / "history.py").exists()
 
@@ -112,7 +112,7 @@ def test_update_history_is_split_by_read_and_recovery_responsibility() -> None:
 
 
 def test_update_model_facade_preserves_concept_owned_modules() -> None:
-    from memcommit.application.operations.semantic_updates.foundation.update.model import (
+    from memcommit.application.operations.update.model import (
         AddOperation,
         UpdateApplicationReceipt,
         UpdateInputs,

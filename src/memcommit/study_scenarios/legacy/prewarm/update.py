@@ -19,7 +19,7 @@ from memcommit.providers.policy import (
 )
 from memcommit.core.context import Context
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
-from memcommit.application.operations.profiles.profile.config import (
+from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
@@ -49,7 +49,7 @@ from memcommit.study_scenarios.legacy.prewarm.quality import (
 from memcommit.study_scenarios.legacy.prewarm.scope_equivalence import (
     ordered_scope_evidence_relation,
 )
-from memcommit.application.operations.semantic_updates.foundation.update.model import (
+from memcommit.application.operations.update.model import (
     UPDATE_PROVIDER_CONTRACT_VERSION,
     UPDATE_SCHEMA_VERSION,
     GrantedUpdateTarget,

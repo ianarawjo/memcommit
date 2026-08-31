@@ -26,10 +26,10 @@ packages. Their shared data vocabulary and Store transaction kernel use the
 conventional paired name `copy_and_move`:
 
 ```text
-memcommit/application/operations/create_copy_connect/copy/
+memcommit/application/operations/copy/
   application.py
   runtime.py
-memcommit/application/operations/direct_changes/move/
+memcommit/application/operations/move/
   application.py
   runtime.py
 memcommit/application/capabilities/memory_transfer/
@@ -226,8 +226,8 @@ Memory.
 ## Callable and presentation boundaries
 
 CLI, public Python, agent, and MCP routes enter Copy through
-`memcommit.application.operations.create_copy_connect.copy` and Move through
-`memcommit.application.operations.direct_changes.move`. Both ports subclass the shared
+`memcommit.application.operations.copy` and Move through
+`memcommit.application.operations.move`. Both ports subclass the shared
 `memcommit.application.capabilities.memory_transfer.runtime.MemoryStoreCopyAndMovePort`
 kernel. Typed values remain shared, while operation ordering and receipt
 validation stay independently owned. Machine routes do not parse terminal
@@ -235,9 +235,9 @@ output and report that no semantic provider was used.
 
 The console surface nevertheless has two command owners. Copy's grammar,
 Grant-aware setup, execution handoff, and fresh-UID receipt live under
-`adapters.console.commands.create_copy_connect.copy`; Move's grammar, local-owner setup, link
+`adapters.console.commands.copy`; Move's grammar, local-owner setup, link
 policy, execution handoff, and mixed-effect receipt live under
-`adapters.console.commands.direct_changes.move`. They share only the direct-Memory selection,
+`adapters.console.commands.move`. They share only the direct-Memory selection,
 Target-gap placement, editable exact-command, common operand, and placement
 receipt mechanics under `adapters.console.coordination.copy_and_move`. The former
 combined CLI module and operation-specific TUI package are removed without

@@ -9,7 +9,7 @@ import click
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.history_recovery.inspection.log import command as log_command
+from memcommit.adapters.console.commands.log import command as log_command
 from memcommit.core.context import Memory
 from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
@@ -153,7 +153,7 @@ def test_semantic_log_prints_locally_resolved_checkpoint(
     invoke("init", "notes")
     invoke("add", "one")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.history_recovery.inspection.log.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.log.command.connect_codex_chatgpt_provider",
         lambda: CheckpointPlanProvider(),
     )
 
@@ -174,7 +174,7 @@ def test_manual_filter_applies_before_latest_semantic_reduction(
     invoke("checkpoint", "reviewed baseline")
     invoke("add", "newer automatic state")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.history_recovery.inspection.log.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.log.command.connect_codex_chatgpt_provider",
         lambda: CheckpointPlanProvider(),
     )
 

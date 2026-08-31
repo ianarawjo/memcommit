@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from memcommit.application.operations.search_explain.retrieve_answer.find.application import (
+from memcommit.application.operations.find.application import (
     FrozenFindSource,
     FindError,
     FindInputError,
@@ -157,10 +157,10 @@ def test_find_application_does_not_depend_on_reference_presentation():
         return tuple(modules)
 
     application_imports = imported_modules(
-        root / "src/memcommit/application/operations/search_explain/retrieve_answer/find/application.py"
+        root / "src/memcommit/application/operations/find/application.py"
     )
     projection_imports = imported_modules(
-        root / "src/memcommit/adapters/console/commands/search_explain/retrieve_answer/find/source_row.py"
+        root / "src/memcommit/adapters/console/commands/find/source_row.py"
     )
 
     assert not any(
@@ -169,7 +169,7 @@ def test_find_application_does_not_depend_on_reference_presentation():
         )
         for name in application_imports
     )
-    assert "memcommit.application.operations.search_explain.retrieve_answer.find.application" in projection_imports
+    assert "memcommit.application.operations.find.application" in projection_imports
     assert "memcommit.source_projection.model" in projection_imports
     assert not any(
         name.startswith(

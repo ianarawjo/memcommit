@@ -26,7 +26,7 @@ through operation code.
 Files used by one entry live beside that command and drop the repeated prefix:
 
 ```text
-commands/semantic_updates/derive/atomize/
+commands/atomize/
   __init__.py
   command.py
   impact.py
@@ -86,7 +86,7 @@ named after their public entries. The relocation changes no CLI spelling or
 analysis behavior and retains no alias package for the former internal names.
 
 Reference's interactive setup likewise lives under
-`adapters/console/commands/create_copy_connect/reference/workbench/`. It selects the Reference
+`adapters/console/commands/reference/workbench/`. It selects the Reference
 unit, Source, Context scope, and local Target and freezes the reviewed exact
 command, so it is command-owned console composition rather than a generic TUI
 operation. The move preserves its model, Store-port composition, screen, and
@@ -136,30 +136,30 @@ mechanics live in the sibling `adapters/console/coordination/copy_and_move`
 package. A `commands/copy_and_move` package is unnecessary because it would
 look like a third executable command. At the application layer, Copy and Move
 each own their public preparation/execution boundary while the paired
-`application.operations.copy_and_move` package owns only shared typed values
-and Store mechanics.
+`application.capabilities.memory_transfer` package owns only shared typed
+values and Store mechanics.
 
-## Catalog-family relocation
+## Flat operation package layout
 
-On 2026-08-31 the classified operation packages moved under the catalog's
-family and section paths on both the application and console sides. Search,
-Direct Changes, Semantic Updates, Translation, Quality & Resolution,
-Operation Lifecycle, and History & Recovery therefore have symmetric lookup
-paths. The move changes package ownership and imports only; command names,
-callbacks, requests, authority, Store transactions, provider turns, receipts,
-and presentation behavior are retained.
+On 2026-08-31 the classified operation packages briefly mirrored the catalog's
+family and section paths. Repository inspection showed that the hierarchy made
+the executable owner harder to locate and tied source movement to descriptive
+reclassification. Application and console packages therefore use symmetric
+flat operation paths again. The change affects package ownership and imports
+only; command names, callbacks, requests, authority, Store transactions,
+provider turns, receipts, and presentation behavior are retained.
 
 Impact exposed an important boundary during the relocation. Its operation and
 route classification now live under
-`application.operations.operation_lifecycle.impact`; the console package owns
+`application.operations.impact`; the console package owns
 Typer registration, process-local session wiring, and rendering. This prevents
 the application meaning of Impact from being defined by a console registry.
 
 ## Compatibility boundary
 
 Within the canonical console tree, every entry package continues to publish its
-intended CLI object. For example, `memcommit.adapters.console.commands.create_copy_connect.add.cmd` and
-`memcommit.adapters.console.commands.semantic_updates.derive.atomize.cmd` remain valid while internal code imports the
+intended CLI object. For example, `memcommit.adapters.console.commands.add.cmd` and
+`memcommit.adapters.console.commands.atomize.cmd` remain valid while internal code imports the
 implementation-owning `.command` module directly.
 
 Ground additionally preserves imports from its historical `.command` module
@@ -177,10 +177,11 @@ entry-owned or shared canonical module directly. The later outer relocation
 also removes the complete `memcommit.commands` namespace; no compatibility
 facade retains either its entry-package or flat support paths.
 
-Moved flat internal operation packages are not retained as compatibility
-facades. The catalog family and optional section are part of the canonical
-internal path; generated plans, repository callers, monkeypatch targets, and
-architecture tests move together. Public CLI spellings are unchanged.
+Former family and section paths are not retained as compatibility facades.
+Catalog membership is descriptive metadata rather than an internal path
+component; generated plans, repository callers, monkeypatch targets, and
+architecture tests use direct operation packages. Public CLI spellings are
+unchanged.
 
 The Python entry package names intentionally retain the pre-existing module
 stems in this path-only pass. Historical mismatches between a Python module

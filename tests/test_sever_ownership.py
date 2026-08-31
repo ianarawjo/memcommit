@@ -13,14 +13,14 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_sever_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.semantic_updates.curate_integrate.sever
+import memcommit.application.operations.sever
 
-assert "memcommit.application.operations.semantic_updates.curate_integrate.sever.application" not in sys.modules
-assert "memcommit.application.operations.semantic_updates.curate_integrate.sever.runtime" not in sys.modules
-assert "memcommit.application.operations.semantic_updates.curate_integrate.sever.model" not in sys.modules
-assert "memcommit.application.operations.semantic_updates.curate_integrate.sever.provider" not in sys.modules
-assert "memcommit.application.operations.semantic_updates.curate_integrate.sever.session_store" not in sys.modules
-assert "memcommit.application.operations.semantic_updates.curate_integrate.sever.resolution_adapter" not in sys.modules
+assert "memcommit.application.operations.sever.application" not in sys.modules
+assert "memcommit.application.operations.sever.runtime" not in sys.modules
+assert "memcommit.application.operations.sever.model" not in sys.modules
+assert "memcommit.application.operations.sever.provider" not in sys.modules
+assert "memcommit.application.operations.sever.session_store" not in sys.modules
+assert "memcommit.application.operations.sever.resolution_adapter" not in sys.modules
 """
 
     subprocess.run(
@@ -32,21 +32,21 @@ assert "memcommit.application.operations.semantic_updates.curate_integrate.sever
 
 def test_production_sever_consumers_use_the_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/adapters/console/commands/operation_lifecycle/impact/command.py",
-        "src/memcommit/adapters/console/commands/operation_lifecycle/impact/catalog.py",
-        "src/memcommit/adapters/console/commands/operation_lifecycle/impact/sessions.py",
-        "src/memcommit/adapters/console/commands/operation_lifecycle/review/command.py",
-        "src/memcommit/adapters/console/commands/operation_lifecycle/review/sessions.py",
-        "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/sever/command.py",
-        "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/sever/impact.py",
-        "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/sever/review.py",
-        "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/sever/sessions.py",
-        "src/memcommit/application/operations/semantic_updates/curate_integrate/sever/application.py",
-        "src/memcommit/application/operations/semantic_updates/curate_integrate/sever/provider.py",
-        "src/memcommit/application/operations/semantic_updates/curate_integrate/sever/resolution_adapter.py",
+        "src/memcommit/adapters/console/commands/impact/command.py",
+        "src/memcommit/adapters/console/commands/impact/catalog.py",
+        "src/memcommit/adapters/console/commands/impact/sessions.py",
+        "src/memcommit/adapters/console/commands/review/command.py",
+        "src/memcommit/adapters/console/commands/review/sessions.py",
+        "src/memcommit/adapters/console/commands/sever/command.py",
+        "src/memcommit/adapters/console/commands/sever/impact.py",
+        "src/memcommit/adapters/console/commands/sever/review.py",
+        "src/memcommit/adapters/console/commands/sever/sessions.py",
+        "src/memcommit/application/operations/sever/application.py",
+        "src/memcommit/application/operations/sever/provider.py",
+        "src/memcommit/application/operations/sever/resolution_adapter.py",
         "src/memcommit/study_scenarios/legacy/prewarm/sever.py",
-        "src/memcommit/application/operations/semantic_updates/curate_integrate/sever/session_store.py",
-        "src/memcommit/application/operations/semantic_updates/curate_integrate/sever/runtime.py",
+        "src/memcommit/application/operations/sever/session_store.py",
+        "src/memcommit/application/operations/sever/runtime.py",
         "src/memcommit/persistence/operations",
         "src/memcommit/persistence/store/context_memory",
         "src/memcommit/persistence/store/record_restore_checkpoint.py",

@@ -7,7 +7,7 @@ from typer.testing import CliRunner
 
 from memcommit.application.capabilities import ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.create_copy_connect.add import command as add
+from memcommit.adapters.console.commands.add import command as add
 from memcommit.adapters.console.terminal.components import paste_input
 from memcommit.adapters.console.terminal.components.paste_input import PasteCancelled, capture_paste
 from memcommit.core.context import Memory

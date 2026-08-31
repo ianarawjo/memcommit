@@ -2,7 +2,7 @@
 
 import typer
 
-from memcommit.adapters.console.commands.browse_navigate import (
+from memcommit.adapters.console.commands import (
     checkout,
     contexts,
     list as list_command,
@@ -12,7 +12,7 @@ from memcommit.adapters.console.commands.browse_navigate import (
     status,
     switch,
 )
-from memcommit.adapters.console.commands.create_copy_connect import (
+from memcommit.adapters.console.commands import (
     add,
     branch,
     copy,
@@ -21,21 +21,21 @@ from memcommit.adapters.console.commands.create_copy_connect import (
     reference,
     resource_import,
 )
-from memcommit.adapters.console.commands.ground_workbench import ground
-from memcommit.adapters.console.commands.profiles import profile
-from memcommit.adapters.console.commands.sharing_protection import (
+from memcommit.adapters.console.commands import ground
+from memcommit.adapters.console.commands import profile
+from memcommit.adapters.console.commands import (
     lock,
     share,
     unlock,
 )
-from memcommit.adapters.console.commands.system_study_tools import (
+from memcommit.adapters.console.commands import (
     config,
     eval,
     help,
     init_study,
     provider,
 )
-from memcommit.adapters.console.commands.direct_changes import (
+from memcommit.adapters.console.commands import (
     chunk,
     clear,
     delete,
@@ -45,57 +45,57 @@ from memcommit.adapters.console.commands.direct_changes import (
     remove,
     replace,
 )
-from memcommit.adapters.console.commands.history_recovery.inspection import (
+from memcommit.adapters.console.commands import (
     diff,
     log,
     rationale,
     trace,
 )
-from memcommit.adapters.console.commands.history_recovery.recovery import (
+from memcommit.adapters.console.commands import (
     checkpoint,
     redo,
     revert,
     undo,
 )
-from memcommit.adapters.console.commands.operation_lifecycle import impact, review
-from memcommit.adapters.console.commands.quality_resolution.diagnose import (
+from memcommit.adapters.console.commands import impact, review
+from memcommit.adapters.console.commands import (
     audit,
     find_ambiguities,
     find_conflicts,
     find_duplicates,
     find_redundancies,
 )
-from memcommit.adapters.console.commands.quality_resolution.repair import (
+from memcommit.adapters.console.commands import (
     dedun,
     dedup,
     resolve,
 )
-from memcommit.adapters.console.commands.quality_resolution.validate import (
+from memcommit.adapters.console.commands import (
     check_conformance,
     fit,
 )
-from memcommit.adapters.console.commands.search_explain.retrieve_answer import (
+from memcommit.adapters.console.commands import (
     find,
     query,
     search,
 )
-from memcommit.adapters.console.commands.search_explain.synthesize import (
+from memcommit.adapters.console.commands import (
     compare,
     summarize,
 )
-from memcommit.adapters.console.commands.semantic_updates.curate_integrate import (
+from memcommit.adapters.console.commands import (
     forget,
     meld,
     sever,
 )
-from memcommit.adapters.console.commands.semantic_updates.derive import (
+from memcommit.adapters.console.commands import (
     atomize,
     distill,
     elaborate,
     makemore,
 )
-from memcommit.adapters.console.commands.semantic_updates.foundation import update
-from memcommit.adapters.console.commands.translation import translate
+from memcommit.adapters.console.commands import update
+from memcommit.adapters.console.commands import translate
 from memcommit.adapters.console.coordination.root_group import MemCommandGroup
 from memcommit.adapters.console.diagnostics import dev
 from memcommit.operation_catalog import operation_summary

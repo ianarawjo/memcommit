@@ -12,7 +12,7 @@ mutation lifecycle.
 ## Package ownership
 
 The canonical terminal-independent implementation now lives under
-`memcommit.application.operations.browse_navigate.show`. `application.py` owns the typed request, frozen
+`memcommit.application.operations.show`. `application.py` owns the typed request, frozen
 Context and item result contracts, direct selection, and read-only validation;
 `runtime.py` owns current-snapshot and locator resolution, readable catalog and
 Grant projection, traversal, direct-item lookup, and Store-backed freezing.
@@ -20,14 +20,14 @@ CLI, Python, agent, MCP, and presentation adapters import those modules
 directly.
 
 The plain console projection is co-located with its command at
-`memcommit.adapters.console.commands.browse_navigate.show.presentation`. It owns only the
+`memcommit.adapters.console.commands.show.presentation`. It owns only the
 typed-result-to-terminal rendering boundary; target resolution and readable
 authority remain in the operation application and runtime.
 
 The historical `memcommit.show_application` and `memcommit.show_runtime`
 paths remain behavior-free module-identity aliases. They preserve old imports,
 monkeypatch targets, and serialized globals without creating a second
-implementation owner, and importing `memcommit.application.operations.browse_navigate.show` alone remains
+implementation owner, and importing `memcommit.application.operations.show` alone remains
 lazy.
 
 This relocation changes physical ownership only. It does not alter readable

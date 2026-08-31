@@ -4,7 +4,7 @@ import click
 from typer.main import get_command
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.system_study_tools.help.command import (
+from memcommit.adapters.console.commands.help.command import (
     HELP_CATEGORY_DESCRIPTIONS,
     HELP_CATEGORY_GROUPS,
     _help_group_fragments,
@@ -15,7 +15,7 @@ from memcommit.operation_catalog import (
     ExecutionKind,
     operation_help,
 )
-from memcommit.application.operations.system_study_tools.help.composer import compose_operation_help
+from memcommit.application.operations.help.composer import compose_operation_help
 from memcommit.operation_catalog.best_for import (
     BEST_FOR_BY_OPERATION,
 )

@@ -4,9 +4,9 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 import pytest
 
-import memcommit.adapters.console.commands.quality_resolution.diagnose.audit.command as audit_command
+import memcommit.adapters.console.commands.audit.command as audit_command
 import memcommit.application.capabilities.ops as ops
-from memcommit.adapters.console.commands.quality_resolution.diagnose.audit.endpoint_setup import (
+from memcommit.adapters.console.commands.audit.endpoint_setup import (
     audit_endpoint_setup_spec,
     choose_audit_setup,
 )

@@ -104,5 +104,5 @@ def test_former_command_imports_are_unavailable() -> None:
 
 
 def test_canonical_support_module_remains_importable() -> None:
-    module = import_module("memcommit.adapters.console.commands.semantic_updates.derive.atomize.records")
-    assert module.__spec__.name == "memcommit.adapters.console.commands.semantic_updates.derive.atomize.records"
+    module = import_module("memcommit.adapters.console.commands.atomize.records")
+    assert module.__spec__.name == "memcommit.adapters.console.commands.atomize.records"

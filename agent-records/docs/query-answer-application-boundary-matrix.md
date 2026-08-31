@@ -7,10 +7,10 @@ Last verified: 2026-08-23.
 ## Decision
 
 Ordinary Query's read-only answer is an application use case, not a CLI or TUI
-method. `memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application` owns the exact
+method. `memcommit.application.operations.query.ordinary_application` owns the exact
 request, frozen-source contract, provider-ordering invariant, typed response,
 and reference-document assembly.
-`memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_runtime` adapts `MemoryStore` and a frozen
+`memcommit.application.operations.query.ordinary_runtime` adapts `MemoryStore` and a frozen
 readable Context catalog to that use case. Console and workbench code only
 resolve controls, select a provider factory, project progress, and present the
 result.
