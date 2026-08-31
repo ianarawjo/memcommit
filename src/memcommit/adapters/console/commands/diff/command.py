@@ -16,9 +16,7 @@ from memcommit.adapters.console.terminal.core.theme import (
     semantic_color_rgb,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.update.granted_target import (
-    inspect_granted_update,
-)
+from memcommit.application.operations.update.history import inspect_update
 from memcommit.application.capabilities.reviewing.memory_diff import (
     MemoryChange,
     memory_diff_lines,
@@ -43,9 +41,7 @@ from memcommit.application.operations.update.model import (
     EditOperation,
     RemoveOperation,
     UpdateSession,
-    applied_session_matches,
     count_operations,
-    session_matches,
 )
 
 
@@ -556,21 +552,8 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    inspection_status = "current"
-    if session.granted_source is not None or session.granted_target is not None:
-        inspection_status = inspect_granted_update(store, session).status
-        fresh = inspection_status == "current"
-    else:
-        fresh = False
-        try:
-            source = store.load(session.source_name)
-            target = store.load(session.target_name)
-            if session.status == "applied":
-                fresh = applied_session_matches(session, source, target)
-            else:
-                fresh = session_matches(session, source, target)
-        except (OSError, ValueError):
-            fresh = False
+    inspection_status = inspect_update(store, session).status
+    fresh = inspection_status == "current"
 
     if not fresh:
         timing = (

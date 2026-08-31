@@ -6,13 +6,14 @@ from dataclasses import replace
 
 import typer
 
+from memcommit.application.authorization import ContextUse
 from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     render_resolution_workbench_snapshot,
 )
 from memcommit.application.operations.update.model import (
     UpdateSession,
     count_operations,
-    required_grant_permissions,
+    required_update_context_uses,
 )
 from memcommit.application.operations.update.resolution_adapter import (
     UpdateResolutionWorkbenchAdapter,
@@ -107,7 +108,17 @@ def render_plan(
             "RELEVANCE ONLY"
         )
     if session.granted_target is not None:
-        required = required_grant_permissions(session.operations)
+        required_uses = required_update_context_uses(session.operations)
+        required = tuple(
+            use.value
+            for use in (
+                ContextUse.READ,
+                ContextUse.CREATE,
+                ContextUse.UPDATE,
+                ContextUse.DELETE,
+            )
+            if use in required_uses
+        )
         granted = set(session.granted_target.permissions)
         ready = set(required).issubset(granted)
         typer.echo(

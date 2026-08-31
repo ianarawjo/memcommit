@@ -134,8 +134,8 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.granted_provenance | shared-concept-implementation | relocate-without-alias | memcommit.application.operations.trace.granted_view | 2 |
 | memcommit.granted_query_application | historical-compatibility-facade | remove | memcommit.application.operations.query.granted_application | 0 |
 | memcommit.granted_query_runtime | historical-compatibility-facade | remove | memcommit.application.operations.query.granted_runtime | 0 |
-| memcommit.granted_source_update_application | operation-implementation | relocate-without-alias | memcommit.application.operations.update.granted_source | 1 |
-| memcommit.granted_update_application | operation-implementation | relocate-without-alias | memcommit.application.operations.update.granted_target | 5 |
+| memcommit.granted_source_update_application | operation-implementation | relocate-without-alias | memcommit.application.context_access.model | 1 |
+| memcommit.granted_update_application | operation-implementation | relocate-without-alias | memcommit.application.operations.update.publication | 5 |
 | memcommit.ground | retired-prototype | retire | none (retired) | 26 |
 | memcommit.ground_context_catalog | operation-implementation | relocate-without-alias | memcommit.application.operations.ground.context_catalog | 1 |
 | memcommit.ground_dialogue | operation-implementation | relocate-without-alias | memcommit.application.operations.ground.dialogue | 1 |

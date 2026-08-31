@@ -26,9 +26,7 @@ class UpdateApplicationFlowPort:
     expose only granted-Target approval.
     """
 
-    local_applier: UpdateApplier
-    granted_source_applier: UpdateApplier
-    granted_target_applier: UpdateApplier
+    applier: UpdateApplier
     application_decider: UpdateDecisionReviewer | None = None
     authority_reviewer: UpdateDecisionReviewer | None = None
 
@@ -72,18 +70,13 @@ class UpdateApplicationFlowPort:
         return reviewed
 
     def apply(self, decided: UpdateSession) -> UpdateSession:
-        """Dispatch by the mutation owner, then verify the durable receipt."""
+        """Publish through Update's single endpoint-aware application path."""
 
         if not isinstance(decided, UpdateSession) or decided.status != "staged":
             raise UpdateApplicationFlowError(
                 "Update Apply requires the exact staged decisions."
             )
-        if decided.granted_target is not None:
-            applied = self.granted_target_applier(decided)
-        elif decided.granted_source is not None:
-            applied = self.granted_source_applier(decided)
-        else:
-            applied = self.local_applier(decided)
+        applied = self.applier(decided)
         if (
             not isinstance(applied, UpdateSession)
             or applied.status != "applied"

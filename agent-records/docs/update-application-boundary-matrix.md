@@ -22,16 +22,18 @@ apply Update to its own working Target without constructing a terminal
 `materialization.py` retains the exact preflight and detached-copy mechanics.
 Its historical `prepare_update_application(UpdateSession, Context)` entry
 remains a compatibility adapter for direct `mem update`, while new operation
-composition enters through `application.apply_update`. The Store and the
-local-, granted-Target-, and granted-Source publication paths retain freshness,
-authority, multi-owner transaction, checkpoint, and durable receipt
-responsibilities.
+composition enters through `application.apply_update`. `publication.py`
+retains freshness, authority, multi-owner transaction, checkpoint, and durable
+receipt responsibilities. The Store exposes only a thin compatibility facade
+to that application-owned boundary.
 
 The remaining terminal-independent modules are named by responsibility:
-`execution.py` sequences an exact decision to Apply, `granted_target.py` owns a Target
-whose authority Store is mutated, and `granted_source.py` owns a granted
-read-only Source feeding a local Target. These are mechanical renames only;
-they do not add Memory Issue verification or change source/target authority.
+`execution.py` sequences an exact decision to Apply, `publication.py` resolves
+endpoint stores and publishes the exact effects, and `history.py` inspects or
+restores retained publication evidence. There is no granted-Source or granted-
+Target Update application. A Grant is endpoint access/provenance carried into
+the same Update; it changes physical Store routing, name projection, and lock
+topology, not the operation's semantic or lifecycle route.
 
 This first composition boundary changes no semantic plan, preflight, CAS,
 authority, checkpoint, review, or zero-operation behavior. It is intentionally
@@ -110,6 +112,33 @@ together. `READ` implies the weaker mediated `QUERY` use, while `QUERY` alone
 does not disclose content and therefore cannot serve as an Update Source or
 Target.
 
+## Unified publication boundary
+
+Every staged session enters one `apply_staged_update(active_store, session)`
+boundary. It revalidates a granted Source for `READ`, revalidates a granted
+Target for the exact plan's `READ` plus mutation uses, freezes all participating
+records, performs one common materialization/preflight, and uses one common
+checkpoint, receipt, rollback, and post-application verification body. The
+console application-flow port therefore accepts one applier instead of routing
+among local, granted-Source, and granted-Target callbacks.
+
+Endpoint differences remain explicit but mechanical. A frozen
+`GrantedContextBinding` selects an authority Store and maps a public owner name
+to its physical authority name; local bindings select the active Store and the
+identity mapping. The publication boundary chooses a lock topology that spans
+the actual participant Stores, then calls the same locked application body.
+Authority checkpoints contain physical names so authority history can restore
+them, while the participant Update receipt retains public names for inspection.
+
+The former `granted_source.py` and `granted_target.py` modules were removed.
+Their read/write application algorithms were not retained as hidden branches.
+Authority-aware Undo/Redo and freshness inspection moved to `history.py`,
+because those are retained-evidence responsibilities rather than alternate
+Update applications. The serialized `source.access` and `target.access` fields,
+and the Python session attributes named `granted_source` and `granted_target`,
+remain compatible for existing receipts; their value type is now the operation-
+neutral `GrantedContextBinding` owned by `application.context_access`.
+
 ## Frozen behavior
 
 | Case | Execution-decision behavior | Durable effect | Recovery |
@@ -136,8 +165,8 @@ checkpoint solely to make operations look alike.
   typed Goal focus, operations, and session revision before Apply. The stored
   session uses compare-and-swap when it is marked applied. Goal is
   a relevance/output criterion, never Source evidence.
-- Local and granted application revalidate the frozen inputs and relevant Grant
-  before the first Target write.
+- The single publication boundary revalidates the frozen inputs and every
+  relevant Grant before the first Target write.
 - Every owner is preflighted before mutation. If an ordinary write raises, the
   command restores already-written owners and removes checkpoints created by
   that failed attempt before returning the error.

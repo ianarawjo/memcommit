@@ -42,6 +42,7 @@ from memcommit.application.capabilities.context_operand_classification import (
     classify_context_or_inline_text_operand,
 )
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
+from memcommit.application.context_access import GrantedContextBinding
 from memcommit.core.context_targeting.model import InlineTextOperand
 from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
 from memcommit.application.capabilities.semantic.goal_focus_runtime import (
@@ -54,12 +55,6 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.application.operations.update.granted_source import (
-    apply_granted_source_staged_update,
-)
-from memcommit.application.operations.update.granted_target import (
-    apply_granted_staged_update,
-)
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import (
@@ -69,7 +64,6 @@ from memcommit.providers.subscription import (
 from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
 from memcommit.application.operations.update.model import (
-    GrantedUpdateTarget,
     UpdateError,
     UpdateSession,
     applied_session_matches,
@@ -83,6 +77,7 @@ from memcommit.application.operations.update.model import (
 from memcommit.application.operations.update.execution import (
     UpdateApplicationFlowPort,
 )
+from memcommit.application.operations.update.publication import apply_staged_update
 from memcommit.application.operations.update.endpoints import (
     choose_update_endpoint_operands,
     resolve_update_endpoints,
@@ -290,8 +285,8 @@ def _plan_update_with_wait(
     *,
     source_descendants: bool,
     target_descendants: bool,
-    granted_source: GrantedUpdateTarget | None,
-    granted_target: GrantedUpdateTarget | None,
+    granted_source: GrantedContextBinding | None,
+    granted_target: GrantedContextBinding | None,
     source_memory_selector: str | None = None,
     target_memory_selector: str | None = None,
     inline_source_content: str | None = None,
@@ -993,13 +988,7 @@ def cmd(
         application = run_application_flow(
             session,
             port=UpdateApplicationFlowPort(
-                local_applier=lambda reviewed: store.apply_staged_update(reviewed),
-                granted_source_applier=lambda reviewed: (
-                    apply_granted_source_staged_update(store, reviewed)
-                ),
-                granted_target_applier=lambda reviewed: (
-                    apply_granted_staged_update(store, reviewed)
-                ),
+                applier=lambda reviewed: apply_staged_update(store, reviewed),
                 application_decider=lambda prepared: (
                     _decide_direct_update(
                         prepared,

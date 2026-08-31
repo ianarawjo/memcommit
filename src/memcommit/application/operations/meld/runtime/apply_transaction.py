@@ -29,9 +29,6 @@ from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,
     resolve_granted_context_view,
 )
-from memcommit.application.operations.update.granted_target import (
-    _remove_checkpoint,
-)
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
@@ -696,8 +693,7 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
                                 rollback_error = rollback_error or candidate
                         for receipt in created:
                             try:
-                                _remove_checkpoint(
-                                    store,
+                                store._remove_checkpoint_uid_locked(
                                     receipt.context_name,
                                     receipt.checkpoint_uid,
                                 )
@@ -941,8 +937,7 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
                                 rollback_error = rollback_error or candidate
                         for authority_name, receipt in created:
                             try:
-                                _remove_checkpoint(
-                                    authority_store,
+                                authority_store._remove_checkpoint_uid_locked(
                                     authority_name,
                                     receipt.checkpoint_uid,
                                 )
@@ -1145,8 +1140,7 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
                         except Exception as candidate:
                             rollback_error = candidate
                         try:
-                            _remove_checkpoint(
-                                authority_store,
+                            authority_store._remove_checkpoint_uid_locked(
                                 target_lock_name,
                                 checkpoint.uid,
                             )

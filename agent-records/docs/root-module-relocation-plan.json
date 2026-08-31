@@ -1290,8 +1290,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.operations.update.granted_source",
-      "canonical_target_path": "memcommit/application/operations/update/granted_source.py",
+      "canonical_target": "memcommit.application.context_access.model",
+      "canonical_target_path": "memcommit/application/context_access/model.py",
       "inbound_package_importers": 1,
       "lines": 233,
       "module": "memcommit.granted_source_update_application",
@@ -1301,8 +1301,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.operations.update.granted_target",
-      "canonical_target_path": "memcommit/application/operations/update/granted_target.py",
+      "canonical_target": "memcommit.application.operations.update.publication",
+      "canonical_target_path": "memcommit/application/operations/update/publication.py",
       "inbound_package_importers": 5,
       "lines": 632,
       "module": "memcommit.granted_update_application",

@@ -6,7 +6,9 @@ from memcommit.application.capabilities.command_recovery import (
     CommandRestoreResult,
     restore_context_command,
 )
-from memcommit.application.operations.update.granted_target import restore_granted_update
+from memcommit.application.operations.update.history import (
+    restore_update_publication as restore_granted_update,
+)
 from memcommit.persistence.store import MemoryStore
 
 

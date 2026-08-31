@@ -9,6 +9,7 @@ from collections.abc import Iterable
 from typing import Callable, Protocol
 
 from memcommit.application.authorization import ContextUse
+from memcommit.application.context_access import GrantedContextBinding
 from memcommit.application.capabilities.semantic.goal_focus import FrozenGoalFocus
 from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
@@ -32,7 +33,6 @@ from .changes import (
     _strict_json_object,
 )
 from .inputs import (
-    GrantedUpdateTarget,
     SourceCandidate,
     UpdateInputs,
     collect_update_inputs,
@@ -615,8 +615,8 @@ def plan_update(
     status: UpdateStatus = "impact",
     source_include_descendants: bool = False,
     target_include_descendants: bool = False,
-    granted_source: GrantedUpdateTarget | None = None,
-    granted_target: GrantedUpdateTarget | None = None,
+    granted_source: GrantedContextBinding | None = None,
+    granted_target: GrantedContextBinding | None = None,
     source_memory_selector: str | None = None,
     target_memory_selector: str | None = None,
     inline_source_content: str | None = None,

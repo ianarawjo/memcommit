@@ -9,6 +9,7 @@ from memcommit.application.capabilities.semantic.goal_focus import (
     FrozenGoalFocus,
     GoalFocusError,
 )
+from memcommit.application.context_access import GrantedContextBinding
 from memcommit.core.context import Context
 
 from .changes import (
@@ -25,7 +26,6 @@ from .changes import (
     operation_digest,
 )
 from .inputs import (
-    GrantedUpdateTarget,
     _fingerprint_contexts,
     _inline_update_source_digest,
     collect_update_inputs,
@@ -60,8 +60,8 @@ class UpdateSession:
     source_memory_uid: str | None = None
     target_memory_uid: str | None = None
     inline_source_content: str | None = None
-    granted_source: GrantedUpdateTarget | None = None
-    granted_target: GrantedUpdateTarget | None = None
+    granted_source: GrantedContextBinding | None = None
+    granted_target: GrantedContextBinding | None = None
     goal_focus: FrozenGoalFocus | None = None
     application: UpdateApplicationReceipt | None = None
 
@@ -266,7 +266,7 @@ class UpdateSession:
         granted_source = (
             None
             if schema_version < 5 or source["access"] is None
-            else GrantedUpdateTarget.from_dict(source["access"])
+            else GrantedContextBinding.from_dict(source["access"])
         )
         granted_target = (
             None
@@ -274,7 +274,7 @@ class UpdateSession:
             else (
                 None
                 if target["access"] is None
-                else GrantedUpdateTarget.from_dict(target["access"])
+                else GrantedContextBinding.from_dict(target["access"])
             )
         )
         if not _is_sha256(source["digest"]) or not _is_sha256(target["digest"]):
@@ -535,8 +535,8 @@ def session_matches(
     source: Context,
     target: Context,
     *,
-    granted_source: GrantedUpdateTarget | None = None,
-    granted_target: GrantedUpdateTarget | None = None,
+    granted_source: GrantedContextBinding | None = None,
+    granted_target: GrantedContextBinding | None = None,
 ) -> bool:
     """Return whether an impact plan still describes the exact A/B inputs."""
     if (
@@ -572,8 +572,8 @@ def applied_session_matches(
     source: Context,
     target: Context,
     *,
-    granted_source: GrantedUpdateTarget | None = None,
-    granted_target: GrantedUpdateTarget | None = None,
+    granted_source: GrantedContextBinding | None = None,
+    granted_target: GrantedContextBinding | None = None,
 ) -> bool:
     """Return whether A and the locally applied B still match the receipt."""
     application = session.application

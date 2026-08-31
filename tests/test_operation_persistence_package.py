@@ -84,7 +84,6 @@ EXPECTED_METHODS = {
         "save_staged_update",
         "_save_active_terminal_update",
         "apply_staged_update",
-        "_apply_staged_update_command_locked",
     },
     "operations/review/state_repository.py": {
         "_load_review_session",
@@ -165,7 +164,7 @@ def test_operation_persistence_methods_have_one_focused_owner() -> None:
     }
     assert actual == EXPECTED_METHODS
     all_methods = [method for methods in actual.values() for method in methods]
-    assert len(all_methods) == len(set(all_methods)) == 95
+    assert len(all_methods) == len(set(all_methods)) == 94
 
 
 def test_memory_store_composes_operation_repositories_in_dependency_order() -> None:

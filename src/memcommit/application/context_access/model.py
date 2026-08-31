@@ -168,6 +168,38 @@ class GrantedContextBinding:
         )
 
 
+def authority_context_name(
+    binding: GrantedContextBinding,
+    public_name: str,
+) -> str:
+    """Map one public Context inside a frozen Grant to its physical name."""
+
+    if not isinstance(binding, GrantedContextBinding):
+        raise TypeError("Expected a granted Context binding.")
+    if not (
+        public_name == binding.public_name
+        or public_name.startswith(binding.public_name + "/")
+    ):
+        raise ValueError("The public Context is outside the granted namespace.")
+    return binding.resource_name + public_name[len(binding.public_name) :]
+
+
+def public_context_name(
+    binding: GrantedContextBinding,
+    authority_name: str,
+) -> str:
+    """Map one physical Context inside a frozen Grant to its public name."""
+
+    if not isinstance(binding, GrantedContextBinding):
+        raise TypeError("Expected a granted Context binding.")
+    if not (
+        authority_name == binding.resource_name
+        or authority_name.startswith(binding.resource_name + "/")
+    ):
+        raise ValueError("The authority Context is outside the granted namespace.")
+    return binding.public_name + authority_name[len(binding.resource_name) :]
+
+
 def granted_context_binding_digest(value: object) -> str:
     """Digest one validated registry Grant record for a frozen binding."""
 
@@ -180,4 +212,9 @@ def granted_context_binding_digest(value: object) -> str:
     return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
 
 
-__all__ = ["GrantedContextBinding", "granted_context_binding_digest"]
+__all__ = [
+    "GrantedContextBinding",
+    "authority_context_name",
+    "granted_context_binding_digest",
+    "public_context_name",
+]

@@ -33,8 +33,8 @@ def test_production_update_consumers_use_the_operation_owner() -> None:
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
         "src/memcommit/persistence/store/checkpoint",
         "src/memcommit/persistence/store/command_restoration",
-        "src/memcommit/application/operations/update/granted_target.py",
-        "src/memcommit/application/operations/update/granted_source.py",
+        "src/memcommit/application/operations/update/publication.py",
+        "src/memcommit/application/operations/update/history.py",
     )
 
     for relative_path in relative_paths:
@@ -49,6 +49,13 @@ def test_update_does_not_invent_an_operation_runtime() -> None:
     assert not (
         REPOSITORY_ROOT / "src/memcommit/application/operations/update/runtime.py"
     ).exists()
+
+
+def test_update_has_no_endpoint_specific_application_modules() -> None:
+    update_root = REPOSITORY_ROOT / "src/memcommit/application/operations/update"
+
+    assert not (update_root / "granted_source.py").exists()
+    assert not (update_root / "granted_target.py").exists()
 
 
 def test_update_model_facade_preserves_concept_owned_modules() -> None:

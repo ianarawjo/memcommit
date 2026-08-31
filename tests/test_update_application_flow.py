@@ -80,18 +80,17 @@ def _mutation_staged() -> UpdateSession:
 
 
 @pytest.mark.parametrize(
-    ("granted_source", "granted_target", "expected"),
+    ("granted_source", "granted_target"),
     (
-        (False, False, "local"),
-        (True, False, "granted-source"),
-        (False, True, "granted-target"),
-        (True, True, "granted-target"),
+        (False, False),
+        (True, False),
+        (False, True),
+        (True, True),
     ),
 )
-def test_update_flow_dispatches_by_the_actual_mutation_owner(
+def test_update_flow_uses_one_applier_for_every_endpoint_combination(
     granted_source: bool,
     granted_target: bool,
-    expected: str,
 ):
     session = _staged()
     marker = cast(GrantedUpdateTarget, object())
@@ -100,18 +99,16 @@ def test_update_flow_dispatches_by_the_actual_mutation_owner(
         granted_source=marker if granted_source else None,
         granted_target=marker if granted_target else None,
     )
-    calls: list[str] = []
+    calls: list[UpdateSession] = []
 
-    def apply(label: str, reviewed: UpdateSession) -> UpdateSession:
-        calls.append(label)
+    def apply(reviewed: UpdateSession) -> UpdateSession:
+        calls.append(reviewed)
         return _applied(reviewed)
 
     result = run_application_flow(
         session,
         port=UpdateApplicationFlowPort(
-            local_applier=lambda reviewed: apply("local", reviewed),
-            granted_source_applier=lambda reviewed: apply("granted-source", reviewed),
-            granted_target_applier=lambda reviewed: apply("granted-target", reviewed),
+            applier=apply,
             authority_reviewer=lambda reviewed: reviewed,
         ),
     )
@@ -119,16 +116,12 @@ def test_update_flow_dispatches_by_the_actual_mutation_owner(
     assert result.status == "APPLIED"
     assert result.decided is session
     assert result.applied is not None and result.applied.status == "applied"
-    assert calls == [expected]
+    assert calls == [session]
 
 
 def test_update_flow_has_no_intermediate_decision_or_cancel_phase():
     session = _staged()
-    port = UpdateApplicationFlowPort(
-        local_applier=_applied,
-        granted_source_applier=_unexpected,
-        granted_target_applier=_unexpected,
-    )
+    port = UpdateApplicationFlowPort(applier=_applied)
 
     result = run_application_flow(session, port=port)
 
@@ -142,9 +135,7 @@ def test_direct_application_decider_runs_for_a_local_mutation():
     session = _mutation_staged()
     reviewed = []
     port = UpdateApplicationFlowPort(
-        local_applier=_applied,
-        granted_source_applier=_unexpected,
-        granted_target_applier=_unexpected,
+        applier=_applied,
         application_decider=lambda current: reviewed.append(current) or current,
     )
 
@@ -158,9 +149,7 @@ def test_direct_application_decider_also_owns_a_zero_operation_receipt():
     session = _staged()
     decided = []
     port = UpdateApplicationFlowPort(
-        local_applier=_applied,
-        granted_source_applier=_unexpected,
-        granted_target_applier=_unexpected,
+        applier=_applied,
         application_decider=lambda current: decided.append(current) or current,
     )
 
@@ -179,9 +168,7 @@ def test_direct_application_decision_cannot_replace_the_semantic_plan():
         operations=(),
     )
     port = UpdateApplicationFlowPort(
-        local_applier=_applied,
-        granted_source_applier=_unexpected,
-        granted_target_applier=_unexpected,
+        applier=_applied,
         application_decider=lambda _current: revised,
     )
 
@@ -192,9 +179,7 @@ def test_direct_application_decision_cannot_replace_the_semantic_plan():
 def test_direct_application_decision_cannot_change_the_target_boundary():
     session = _mutation_staged()
     port = UpdateApplicationFlowPort(
-        local_applier=_unexpected,
-        granted_source_applier=_unexpected,
-        granted_target_applier=_unexpected,
+        applier=_unexpected,
         application_decider=lambda current: replace(
             current,
             target_name="different",
@@ -210,9 +195,7 @@ def test_granted_target_keeps_only_exact_authority_approval():
     session = replace(_mutation_staged(), granted_target=marker)
     reviewed = []
     port = UpdateApplicationFlowPort(
-        local_applier=_unexpected,
-        granted_source_applier=_unexpected,
-        granted_target_applier=_applied,
+        applier=_applied,
         authority_reviewer=lambda current: reviewed.append(current) or current,
     )
 
@@ -225,9 +208,7 @@ def test_granted_target_keeps_only_exact_authority_approval():
 def test_granted_target_authority_review_cannot_replace_the_plan():
     session = replace(_mutation_staged(), granted_target=_grant_marker())
     port = UpdateApplicationFlowPort(
-        local_applier=_unexpected,
-        granted_source_applier=_unexpected,
-        granted_target_applier=_unexpected,
+        applier=_unexpected,
         authority_reviewer=lambda current: replace(current, uid=str(uuid.uuid4())),
     )
 
@@ -239,9 +220,7 @@ def test_update_flow_rejects_a_receipt_for_a_different_review():
     session = _staged()
     different = replace(session, target_name="other-target")
     port = UpdateApplicationFlowPort(
-        local_applier=lambda _reviewed: _applied(different),
-        granted_source_applier=_unexpected,
-        granted_target_applier=_unexpected,
+        applier=lambda _reviewed: _applied(different),
     )
 
     with pytest.raises(UpdateApplicationFlowError, match="outside the decided"):
@@ -250,11 +229,7 @@ def test_update_flow_rejects_a_receipt_for_a_different_review():
 
 def test_update_flow_rejects_non_staged_input():
     session = _staged()
-    port = UpdateApplicationFlowPort(
-        local_applier=_unexpected,
-        granted_source_applier=_unexpected,
-        granted_target_applier=_unexpected,
-    )
+    port = UpdateApplicationFlowPort(applier=_unexpected)
 
     with pytest.raises(UpdateApplicationFlowError, match="requires a staged"):
         run_application_flow(
