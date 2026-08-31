@@ -42,11 +42,11 @@ def test_operation_descriptors_carry_their_catalog_family_identity() -> None:
     )
     assert (
         OPERATION_BY_NAME["compare"].section
-        is OperationFamilySectionId.SEARCH_SUMMARY_COMPARISON
+        is OperationFamilySectionId.SEARCH_SYNTHESIZE
     )
 
 
-def test_search_family_groups_query_before_summary_and_comparison() -> None:
+def test_search_family_groups_retrieval_and_answering_before_synthesis() -> None:
     search = operation_family("query")
 
     assert search.id is OperationFamilyId.SEARCH_EXPLAIN
@@ -62,13 +62,13 @@ def test_search_family_groups_query_before_summary_and_comparison() -> None:
         for section in search.sections
     ) == (
         (
-            OperationFamilySectionId.SEARCH_QUERY,
-            "QUERY",
+            OperationFamilySectionId.SEARCH_RETRIEVE_ANSWER,
+            "RETRIEVE & ANSWER",
             ("find", "search", "query"),
         ),
         (
-            OperationFamilySectionId.SEARCH_SUMMARY_COMPARISON,
-            "SUMMARY & COMPARISON",
+            OperationFamilySectionId.SEARCH_SYNTHESIZE,
+            "SYNTHESIZE",
             ("summarize", "compare"),
         ),
     )
@@ -123,8 +123,8 @@ def test_console_help_projects_the_shared_family_catalog() -> None:
     )
     assert HELP_CATEGORY_SECTIONS == {
         "SEARCH & EXPLAIN": (
-            ("QUERY", ("find", "search", "query")),
-            ("SUMMARY & COMPARISON", ("summarize", "compare")),
+            ("RETRIEVE & ANSWER", ("find", "search", "query")),
+            ("SYNTHESIZE", ("summarize", "compare")),
         ),
         "HISTORY & RECOVERY": (
             ("INSPECTION", ("log", "diff", "trace", "rationale")),
@@ -139,14 +139,17 @@ def test_console_help_projects_the_shared_family_catalog() -> None:
         "HISTORY & RECOVERY",
         "RECOVERY",
     )
-    assert HELP_SECTION_BY_COMMAND["query"] == ("SEARCH & EXPLAIN", "QUERY")
+    assert HELP_SECTION_BY_COMMAND["query"] == (
+        "SEARCH & EXPLAIN",
+        "RETRIEVE & ANSWER",
+    )
     assert HELP_SECTION_BY_COMMAND["summarize"] == (
         "SEARCH & EXPLAIN",
-        "SUMMARY & COMPARISON",
+        "SYNTHESIZE",
     )
     assert HELP_SECTION_BY_COMMAND["compare"] == (
         "SEARCH & EXPLAIN",
-        "SUMMARY & COMPARISON",
+        "SYNTHESIZE",
     )
 
 

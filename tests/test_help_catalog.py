@@ -377,7 +377,7 @@ def test_adjacent_command_records_use_connectors_without_background_bands():
     )
 
 
-def test_search_box_groups_query_before_summary_and_comparison() -> None:
+def test_search_box_groups_retrieval_and_answering_before_synthesis() -> None:
     root, context = _root_context()
     try:
         by_name = {entry.name: entry for entry in command_entries(context)}
@@ -398,13 +398,13 @@ def test_search_box_groups_query_before_summary_and_comparison() -> None:
     )
     rendered = "".join(text for _style, text in fragments)
     lines = rendered.splitlines()
-    query_section = next(
-        index for index, line in enumerate(lines) if "── QUERY " in line
+    retrieve_section = next(
+        index for index, line in enumerate(lines) if "── RETRIEVE & ANSWER " in line
     )
-    summary_section = next(
+    synthesize_section = next(
         index
         for index, line in enumerate(lines)
-        if "── SUMMARY & COMPARISON " in line
+        if "── SYNTHESIZE " in line
     )
     find_index = next(index for index, line in enumerate(lines) if "mem find " in line)
     query_index = next(
@@ -419,15 +419,15 @@ def test_search_box_groups_query_before_summary_and_comparison() -> None:
 
     assert all(terminal_cell_width(line) == 180 for line in lines)
     assert "summarization, and comparison" in rendered
-    assert query_section < find_index < query_index < summary_section
-    assert summary_section < summarize_index < compare_index
+    assert retrieve_section < find_index < query_index < synthesize_section
+    assert synthesize_section < summarize_index < compare_index
     assert any(
-        style == "class:help-section-label bold" and text == "QUERY"
+        style == "class:help-section-label bold" and text == "RETRIEVE & ANSWER"
         for style, text in fragments
     )
     assert any(
         style == "class:help-section-label bold"
-        and text == "SUMMARY & COMPARISON"
+        and text == "SYNTHESIZE"
         for style, text in fragments
     )
     assert any(

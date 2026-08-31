@@ -44,7 +44,7 @@
                                                                                                                                                                                     
 ┏ SEARCH & EXPLAIN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
 ┃ MIXED · Find exact text directly, or use LLM-based semantic retrieval, answering, summarization, and comparison within the selected authorized scope.                           ┃ 
-┃ ── QUERY ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── ┃ 
+┃ ── RETRIEVE & ANSWER ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── ┃ 
 ┃ ▸ mem find ─┬ Find exact text or explicit regular-expression (regex) matches in readable Memories.                                                                              ┃ 
 ┃             └ WHEN · Locating exact words, identifiers, or text patterns within a selected Context scope.                                                                       ┃ 
 ┃ ▸ mem search ─┬ Semantically rank Memories relevant to a natural-language request across selected Contexts.                                                                     ┃v

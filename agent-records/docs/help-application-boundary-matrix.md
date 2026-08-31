@@ -61,7 +61,7 @@ not broaden Help's Store or provider access.
 | Route | Entry | Application path | Projection | Effect | Evidence |
 | --- | --- | --- | --- | --- | --- |
 | Plain `mem help` | `adapters.console.commands.help.command.cmd` in a non-TTY | `command_entries` takes `list_operation_help()` once | Plain alphabetized inventory plus CLI-owned forms, maturity tags, and canonical expanded details | None | `test_help_catalog.py`, `test_help_application.py` |
-| Interactive `mem help` | Same command in a TTY | Flat operation snapshot plus `list_operation_help_groups()` | Grouped/A–Z browser; Search separates Query from Summary & Comparison, History separates Inspection from Recovery, and each divider is non-focusable; selected Form then shared exact-command argument editor | The editor closes before a separately recorded child command invocation; cancel has no effect | `test_help_catalog.py`, `test_help_command_handoff.py`, and the ordered Help captures |
+| Interactive `mem help` | Same command in a TTY | Flat operation snapshot plus `list_operation_help_groups()` | Grouped/A–Z browser; Search separates Retrieve & Answer from Synthesize, History separates Inspection from Recovery, and each divider is non-focusable; selected Form then shared exact-command argument editor | The editor closes before a separately recorded child command invocation; cancel has no effect | `test_help_catalog.py`, `test_help_command_handoff.py`, and the ordered Help captures |
 | Natural-language `mem help REQUEST` | Same command with one positional request in TTY or non-TTY | `prepare_help_lookup` freezes and preflights the complete catalog before `connect_help_provider`; `execute_help_lookup` requires exactly three distinct exact IDs | Three existing collapsed Help rows in semantic order: `mem NAME`, summary, and `WHEN`; no ordinal, browser, why, confidence, forms, or generated prose | None | `test_help_lookup_application.py`, `test_help_lookup_cli.py`, `test_help_lookup_provider_policy.py` |
 | Selected CLI detail | One `CommandEntry` from the snapshot | Catalog meaning already bound to the entry | Common meaning composed with registered CLI syntax | None | `test_help_catalog.py` |
 | Python list | `MemCommitClient.list_operations()` | `_operations.help.list_operations` → `list_operation_help` | `HelpCatalogResult` of immutable DTOs, including compact typed-detail references | None | `test_help_public_api.py`, import-boundary tests |
@@ -76,8 +76,8 @@ not broaden Help's Store or provider access.
    for all 66 visible public operations. The grouped application list preserves
    catalog family and section order. Every operation belongs to exactly one
    top-level catalog family; an optional section set must exactly partition its
-   family without changing order. Compare belongs to Search's Summary &
-   Comparison section, while quality, impact, conformance, and saved-evidence
+   family without changing order. Compare belongs to Search's Synthesize
+   section, while quality, impact, conformance, and saved-evidence
    operations remain under Check & Review.
 2. Describe accepts one exact public operation name and detail lookup accepts
    one exact operation-local detail ID; neither performs fuzzy, alias, case, or

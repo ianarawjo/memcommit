@@ -1,4 +1,4 @@
-"""Capture Query and Summary/Comparison sections in the real Help browser."""
+"""Capture Retrieve/Answer and Synthesize sections in the real Help browser."""
 
 from __future__ import annotations
 
@@ -99,17 +99,17 @@ def main() -> None:
 
         child.send("\t" * 2)
         _BASE._wait_for_visible(child, recorder, "┏ SEARCH & EXPLAIN ")
-        _BASE._wait_for_visible(child, recorder, "── QUERY ")
+        _BASE._wait_for_visible(child, recorder, "── RETRIEVE & ANSWER ")
         assert "summarization, and comparison" in _visible_text(recorder)
         _assert_focused_command(recorder, "mem find")
-        _assert_neutral_section(recorder, "QUERY")
+        _assert_neutral_section(recorder, "RETRIEVE & ANSWER")
         _BASE._snapshot(recorder, "02-query-focused")
 
         child.send("\x1b[B" * 3)
-        _BASE._wait_for_visible(child, recorder, "── SUMMARY & COMPARISON ")
+        _BASE._wait_for_visible(child, recorder, "── SYNTHESIZE ")
         _assert_focused_command(recorder, "mem summarize")
-        _assert_neutral_section(recorder, "QUERY")
-        _assert_neutral_section(recorder, "SUMMARY & COMPARISON")
+        _assert_neutral_section(recorder, "RETRIEVE & ANSWER")
+        _assert_neutral_section(recorder, "SYNTHESIZE")
         _BASE._snapshot(recorder, "03-summary-focused")
 
         child.send("\x1b[B")

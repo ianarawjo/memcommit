@@ -255,12 +255,13 @@ prompt-toolkit selector:
   Context-to-Context operations together when they answer the same user goal,
   while each operation's expanded `FLOW`, `EXECUTION`, and `RANGE` remain the
   authoritative scope contract.
-  `SEARCH & EXPLAIN` has two catalog-owned sections. `QUERY` contains `find`,
-  `search`, and `query`; `SUMMARY & COMPARISON` contains `summarize` and
-  `compare`. Summarize and Compare both produce read-only interpretive views of
-  selected Context material, differing principally in one-source versus
-  two-source shape. Compare therefore no longer appears among quality and
-  conformance checks; that later category is displayed as `CHECK & REVIEW`.
+  `SEARCH & EXPLAIN` has two catalog-owned sections named for affordances rather
+  than child operations. `RETRIEVE & ANSWER` contains `find`, `search`, and
+  `query`; each begins with an information need and returns matching evidence
+  or a grounded answer. `SYNTHESIZE` contains `summarize` and `compare`; each
+  constructs a new whole-frame interpretation, over one selected Context or
+  two. Compare therefore no longer appears among quality and conformance
+  checks; that later category is displayed as `CHECK & REVIEW`.
   `HISTORY & RECOVERY` remains one category because all eight operations use
   recorded history as their subject, but its catalog-owned section structure
   makes the interaction difference explicit. `INSPECTION` contains `log`,

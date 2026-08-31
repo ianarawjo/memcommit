@@ -35,14 +35,14 @@
                                                                                                                                                                                     
 ┏ SEARCH & EXPLAIN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
 ┃ MIXED · Find exact text directly, or use LLM-based semantic retrieval, answering, summarization, and comparison within the selected authorized scope.                           ┃ 
-┃ ── QUERY ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── ┃ 
+┃ ── RETRIEVE & ANSWER ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── ┃ 
 ┃ ▸ mem find ─┬ Find exact text or explicit regular-expression (regex) matches in readable Memories.                                                                              ┃ 
 ┃             └ WHEN · Locating exact words, identifiers, or text patterns within a selected Context scope.                                                                       ┃ 
 ┃ ▸ mem search ─┬ Semantically rank Memories relevant to a natural-language request across selected Contexts.                                                                     ┃ 
 ┃               └ WHEN · Finding relevant Memories through meaning and context, including related content without obvious keyword overlap.                                        ┃ 
 ┃ ▸ mem query ─┬ Generate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view.                                                         ┃ 
 ┃              └ WHEN · Getting a grounded natural-language answer instead of a list of matching Memories.                                                                        ┃ 
-┃ ── SUMMARY & COMPARISON ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── ┃ 
+┃ ── SYNTHESIZE ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── ┃ 
 ┃ ▸ mem summarize ─┬ Show an LLM-derived overview of ordinary Memories in a readable Context scope.                                                                               ┃ 
 ┃                  └ WHEN · Obtaining a concise overview of a Context or subtree.                                                                                                 ┃ 
 ┃ ▸ mem compare ─┬ Compare Memories in two Contexts and report what they share, what differs, and what appears only on one side.                                                  ┃ 

@@ -1,9 +1,10 @@
-# `mem help` Query and Summary/Comparison capture log
+# `mem help` Retrieve/Answer and Synthesize capture log
 
 This ordered capture verifies the catalog- and application-owned subdivision
-of `SEARCH & EXPLAIN`. `QUERY` contains `find`, `search`, and `query`; `SUMMARY
-& COMPARISON` contains `summarize` and `compare`. Compare no longer appears in
-the quality-check family, whose display title is now `CHECK & REVIEW`.
+of `SEARCH & EXPLAIN`. `RETRIEVE & ANSWER` contains `find`, `search`, and
+`query`; `SYNTHESIZE` contains `summarize` and `compare`. The labels describe
+the shared affordance instead of restating operation names. Compare no longer
+appears in the quality-check family, whose display title is `CHECK & REVIEW`.
 
 ## Reproduction frame
 
@@ -25,8 +26,8 @@ the quality-check family, whose display title is now `CHECK & REVIEW`.
 | Image | Preceding input | Visible state | Durable mutation |
 | --- | --- | --- | --- |
 | `01-by-kind-entry.png` | Run `mem help` | Initial BY KIND Help entry at `BROWSE & NAVIGATE` | None |
-| `02-query-focused.png` | `Tab` ×2 | `SEARCH & EXPLAIN` focused with `mem find` under the `QUERY` divider | None |
-| `03-summary-focused.png` | `Down` ×3 | Continuous traversal reaches `mem summarize` under `SUMMARY & COMPARISON`; both dividers are visible and neutral | None |
+| `02-query-focused.png` | `Tab` ×2 | `SEARCH & EXPLAIN` focused with `mem find` under the `RETRIEVE & ANSWER` divider | None |
+| `03-summary-focused.png` | `Down` ×3 | Continuous traversal reaches `mem summarize` under `SYNTHESIZE`; both dividers are visible and neutral | None |
 | `04-compare-focused.png` | `Down` | The next operation is `mem compare` in the same section | None |
 | `05-compare-expanded.png` | `Right` | Compare retains its existing Flow, Execution, Effect, Range, and Forms | None |
 | `06-check-review-focused.png` | `Tab` ×3 | The later quality and conformance family is focused as `CHECK & REVIEW`, beginning with `find-duplicates` rather than Compare | None |

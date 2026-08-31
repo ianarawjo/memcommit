@@ -65,11 +65,11 @@ def test_grouped_list_preserves_catalog_family_and_section_order():
         for section_group in search.sections
     ) == (
         (
-            OperationFamilySectionId.SEARCH_QUERY,
+            OperationFamilySectionId.SEARCH_RETRIEVE_ANSWER,
             ("find", "search", "query"),
         ),
         (
-            OperationFamilySectionId.SEARCH_SUMMARY_COMPARISON,
+            OperationFamilySectionId.SEARCH_SYNTHESIZE,
             ("summarize", "compare"),
         ),
     )

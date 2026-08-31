@@ -89,7 +89,7 @@
 [0m                                                                                                                                                                                   [0m
 [0;38;5;117;1m┏ SEARCH & EXPLAIN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
 [C[0m [0;1mMIXED · Find exact text directly, or use LLM-based semantic retrieval, answering, summarization, and comparison within the selected authorized scope.[0m
-[C[0m [0;38;5;243m── [0;1mQUERY[0;38;5;243m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[C[0m [0;38;5;243m── [0;1mRETRIEVE & ANSWER[0;38;5;243m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
 [C[0;38;5;234;48;5;117;1m ▸ mem find ─┬ Find exact text or explicit regular-expression (regex) matches in readable Memories.                                                                              [0m
 [C[0;38;5;234;48;5;117;1m             └ WHEN · Locating exact words, identifiers, or text patterns within a selected Context scope.                                                                       [0m
 [9C[0;1mearch ─[0;38;5;243m┬ [0mSem[Cntically[2Cank Memori[Cs rel[Cvant [Co a natural-[Canguage request across [2Clected[CContexts.       [C           [C   [C        [C        [C  [C        [162D[0m[42A[14C[0;38;5;243m└ [0mWHEN ·[CInspecting th[C structure and direct conte[2Cs of a Context.  [C  [C  [C          [C   [C     [C          [C    [C        [C        [0m
@@ -124,14 +124,14 @@
 [0m                                                                                                                                                                                   [0m
 [0;38;5;117;1m┏ SEARCH & EXPLAIN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
 [0;38;5;117;1m┃[0m [0;1mMIXED · Find exact text directly, or use LLM-based semantic retrieval, answering, summarization, and comparison within the selected authorized scope.[27C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m [0;38;5;243m── [0;1mQUERY[0;38;5;243m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m [0;38;5;243m── [0;1mRETRIEVE & ANSWER[0;38;5;243m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[7C[0;1mfind ─[0;38;5;243m┬ [0mFind [Cx[Cct t[Cxt or[Cexplicit regula[C-expr[Cssio[C (r[Cgex) m[Ctches in[Creadabl[C Memories.    [C          [63C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[13C[0;38;5;243m└ [0mWHEN · Locat[4Cexact words, identif[Cers, or text pat[Cerns within a selec[2Cd[CC[Cntext scop[C. [70C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;1m ▸ mem search ─[0;38;5;243m┬ [0mSemantically rank Memories relevant to a natural-language request across selected Contexts.                                                                     [0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;1m               [0;38;5;243m└ [0mWHEN · Finding relevant Memories through meaning and context, including related content without obvious keyword overlap.                                        [0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;1m ▸ mem query ─[0;38;5;243m┬ [0mGenerate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view.                                                         [0;38;5;117;1m┃[0m
 [C[0;1m              [0;38;5;243m└ [0mWHEN · Getting a grounded natural-language answer instead of a list of matching Memories.                                             [0m
-[5C[0;1mS[CMMARY & COMPARISON[0;38;5;243m [0m
+[5C[0;1mSYNTH[CSIZE[0;38;5;243m ───────[0m
 [8C[0;38;5;234;48;5;117;1msummarize ─┬[CShow an LLM-derived ove[Cview of ordinary Memories[Cin a readabl[C Cont[Cxt scop[C. [0m
 [14C[0;38;5;234;48;5;117;1m     └[CWHEN · Obtaining[Ca concise overview of a Contex[C o[C [Cubtree.[C [C        [C       [C      [0m
 [8C[0;1mcompare ─[0;38;5;243m┬ [0mCompare Memo[Cies[Cin two Contexts and repor[C what they sha[2C, what differ[C, and what appears[Conly[Con[Cone[Cside.[128D[0m[42A[14C[0;38;5;243m│[C[0mowner-pre[Cerving block[C.       [C   [C      [C        [C  [C [C        [0m
@@ -164,14 +164,14 @@
 [0m                                                                                                                                                                                   [0m
 [0;38;5;117;1m┏ SEARCH & EXPLAIN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
 [0;38;5;117;1m┃[0m [0;1mMIXED · Find exact text directly, or use LLM-based semantic retrieval, answering, summarization, and comparison within the selected authorized scope.[0m                           [0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m [0;38;5;243m── [0;1mQUERY[0;38;5;243m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m [0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m [0;38;5;243m── [0;1mRETRIEVE & ANSWER[0;38;5;243m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m [0;38;5;117;1m┃[0m
 [C[0;1m ▸ mem find ─[0;38;5;243m┬ [0mFind exact text or explicit regular-expression (regex) matches in readable Memories.                                                   [0m
 [C[0;1m             [0;38;5;243m└ [0mWHEN · Locating exact words, identifiers, or text patterns within a selected Context scope.                                                                      [0m
 [8C[0;1msearch ─[0;38;5;243m┬ [0mSemantically rank Memor[Ces relevant to a natural-langu[Cge request [Ccross[Cs[Clect[Cd Contexts.[0m
 [14C[0;1m  [0;38;5;243m└ [0mWHEN[C· Finding relevant Memories through meaning [Cnd contex[C, including related content without[Cobvious[Ckeyword[Coverlap.[0m
 [8C[0;1mque[Cy ─[0;38;5;243m┬ [0mGenera[Ce [Cn LLM-based answer from readable Context k[Cowledge or an[2Cuthoriz[Cd [Concealed query-only[Cview.[0m
 [15C[0;38;5;243m└ [0mWHEN · Getting a grounded natural-lang[Cage answer[Ci[Cstead of a[Clist of matching Memories.       [C       [C       [C        [0m
-[C[0m [0;38;5;243m── [0;1mSUMMARY & COMPARISON[0;38;5;243m ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[C[0m [0;38;5;243m── [0;1mSYNTHESIZE[0;38;5;243m ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
 [2C[0;1m▸[Cmem[Csummarize ─[0;38;5;243m┬ [0mShow an LLM-de[Cive[C overview of ordinary Memor[Ce[C in a re[Cdable[CContext scope.       [0m
 [C[0;1m                  [0;38;5;243m└ [0mWHEN · Obtaining a concise overview of a Context or subtree.                                                                                                [0m
 [8C[0;38;5;234;48;5;117;1mco[Cp[2Ce ─┬ Compare Memories [Cn tw[C Cont[Cxts and report what they sha[2C, what[Cdiff[Crs, and what[Cappears[Conly[Con[Cone[Cside.[0m
@@ -201,14 +201,14 @@
 [0m                                                                                                                                                                                   [0m
 [0;38;5;117;1m┏ SEARCH & EXPLAIN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
 [0;38;5;117;1m┃[0m [0;1mMIXED · Find exact text directly, or use LLM-based semantic retrieval, answering, summarization, and comparison within the selected authorized scope.[27C[0;38;5;117;1m┃[0m
-[0;38;5;117;1m┃[0m [0;38;5;243m── [0;1mQUERY[0;38;5;243m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m [0;38;5;243m── [0;1mRETRIEVE & ANSWER[0;38;5;243m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[C[0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;1m ▸ mem find ─[0;38;5;243m┬ [0mFind exact text or explicit regular-expression (regex) matches in readable Memories.                                                                              [0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;1m             [0;38;5;243m└ [0mWHEN · Locating exact words, identifiers, or text patterns within a selected Context scope.                                                                       [0;38;5;117;1m┃[0m
 [0;38;5;117;1m┃[0;1m ▸ mem search ─[0;38;5;243m┬ [0mSemantically rank Memories relevant to a natural-language request across selected Contexts.                                                                     [0;38;5;117;1m┃[0m
 [C[0;1m               [0;38;5;243m└ [0mWHEN · Finding relevant Memories through meaning and context, including related content without obvious keyword overlap.             [0m
 [C[0;1m ▸ mem query ─[0;38;5;243m┬ [0mGenerate an LLM-based answer from readable Context knowledge or an authorized concealed query-only view.                                                        [0m
 [2C[0;1m [C   [C    [C  [0;38;5;243m└ [0mWHEN · Get[Cing[Ca grounded natural-language a[Cswer inste[Cd of a list of matching Memories.[0m
-[C[0m [0;38;5;243m── [0;1mSUMMARY & COMPARISON[0;38;5;243m ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[C[0m [0;38;5;243m── [0;1mSYNTHESIZE[C[0;38;5;243m─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
 [9C[0;1mummarize ─[0;38;5;243m┬ [0mShow [Cn LLM-derived overview of ordinary Memories in a[3Cadable Context scop[C.[C         [0m
 [16C[0;1m   [0;38;5;243m└ [0mWHEN · Obtaining [C concise overview of a Co[Ctext or subtree.        [C       [C       [C       [C       [C       [C        [0m
 [2C[0;1m▾[5Ccompare ─[0;38;5;243m┬ [0mCompare Memories in[Ctwo Contexts an[C report wha[2Cthey share, what differs, and wh[Ct appea[Cs [5Con one[Cside.[0m

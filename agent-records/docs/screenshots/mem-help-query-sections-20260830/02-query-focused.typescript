@@ -89,7 +89,7 @@
 [0m                                                                                                                                                                                   [0m
 [0;38;5;117;1m┏ SEARCH & EXPLAIN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
 [C[0m [0;1mMIXED · Find exact text directly, or use LLM-based semantic retrieval, answering, summarization, and comparison within the selected authorized scope.[0m
-[C[0m [0;38;5;243m── [0;1mQUERY[0;38;5;243m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
+[C[0m [0;38;5;243m── [0;1mRETRIEVE & ANSWER[0;38;5;243m ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[0m
 [C[0;38;5;234;48;5;117;1m ▸ mem find ─┬ Find exact text or explicit regular-expression (regex) matches in readable Memories.                                                                              [0m
 [C[0;38;5;234;48;5;117;1m             └ WHEN · Locating exact words, identifiers, or text patterns within a selected Context scope.                                                                       [0m
 [9C[0;1mearch ─[0;38;5;243m┬ [0mSem[Cntically[2Cank Memori[Cs rel[Cvant [Co a natural-[Canguage request across [2Clected[CContexts.       [C           [C   [C        [C        [C  [C        [162D[0m

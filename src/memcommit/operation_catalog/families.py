@@ -26,8 +26,8 @@ class OperationFamilyId(str, Enum):
 class OperationFamilySectionId(str, Enum):
     """Stable identity for an intentional subdivision of one family."""
 
-    SEARCH_QUERY = "SEARCH_QUERY"
-    SEARCH_SUMMARY_COMPARISON = "SEARCH_SUMMARY_COMPARISON"
+    SEARCH_RETRIEVE_ANSWER = "SEARCH_RETRIEVE_ANSWER"
+    SEARCH_SYNTHESIZE = "SEARCH_SYNTHESIZE"
     HISTORY_INSPECTION = "HISTORY_INSPECTION"
     HISTORY_RECOVERY = "HISTORY_RECOVERY"
 
@@ -156,13 +156,13 @@ OPERATION_FAMILIES = (
         execution_label="MIXED",
         sections=(
             OperationFamilySection(
-                id=OperationFamilySectionId.SEARCH_QUERY,
-                title="QUERY",
+                id=OperationFamilySectionId.SEARCH_RETRIEVE_ANSWER,
+                title="RETRIEVE & ANSWER",
                 operation_names=("find", "search", "query"),
             ),
             OperationFamilySection(
-                id=OperationFamilySectionId.SEARCH_SUMMARY_COMPARISON,
-                title="SUMMARY & COMPARISON",
+                id=OperationFamilySectionId.SEARCH_SYNTHESIZE,
+                title="SYNTHESIZE",
                 operation_names=("summarize", "compare"),
             ),
         ),
