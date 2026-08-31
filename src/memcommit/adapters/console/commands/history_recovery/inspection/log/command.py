@@ -46,7 +46,9 @@ from memcommit.adapters.console.terminal.components.history.display import (
 )
 from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import (
     HistoryError,
-    build_history,
+)
+from memcommit.application.capabilities.history.query.checkpoint_history_slicing import (
+    build_checkpoint_history_slice,
 )
 from memcommit.application.capabilities.history.query.semantic_history_query import (
     HistorySearchError,
@@ -522,15 +524,23 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    context = store.load_direct(name)
-    all_entries = store.list_checkpoints(name)
+    try:
+        history = build_checkpoint_history_slice(store, name)
+    except HistoryError as error:
+        typer.secho(
+            f"Log error: {error}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    all_entries = list(history.physical_entries)
     entries = all_entries
     if manual:
         entries = [e for e in entries if not e.get("auto", False)]
 
     if query is not None:
         try:
-            timeline = build_history(store, name)
+            timeline = history.timeline
             if manual:
                 # Restrict result candidates before semantic reduction. If
                 # filtering happened afterward, an automatic head selected
@@ -580,5 +590,5 @@ def cmd(
     render_checkpoint_rows(
         entries,
         context_name=name,
-        context_uid=context.uid,
+        context_uid=history.context_uid,
     )

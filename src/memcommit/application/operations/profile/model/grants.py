@@ -21,6 +21,20 @@ from memcommit.application.operations.profile.config import (
     validate_grant_permission,
     validate_grant_resource_name,
 )
+from memcommit.application.capabilities.authority.checkpoint_read_model import (
+    CheckpointEmbed,
+    CheckpointRead,
+    CheckpointReference,
+    CheckpointReadValueError,
+    canonical_checkpoint_reads,
+)
+from memcommit.application.capabilities.history.query.checkpoint_history_slicing import (
+    build_checkpoint_history_slice,
+)
+from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import (
+    HistoryError,
+)
+from memcommit.persistence.store import MemoryStore
 
 from ._storage import (
     ProfileError as ProfileError,
@@ -89,6 +103,61 @@ def _grant_scope(
     )
 
 
+def _grant_checkpoint_reads(
+    value: object,
+    *,
+    permissions: tuple[str, ...],
+    contexts: tuple[GrantContextBinding, ...],
+) -> tuple[CheckpointRead, ...]:
+    try:
+        reads = canonical_checkpoint_reads(value)
+    except CheckpointReadValueError as error:
+        raise ProfileError(str(error)) from error
+    if reads and "READ" not in permissions:
+        raise ProfileError("Checkpoint reads require READ permission.")
+    context_uids = {context.uid for context in contexts}
+    if any(read.context_uid not in context_uids for read in reads):
+        raise ProfileError(
+            "Checkpoint read names a Context outside its Grant scope."
+        )
+    return reads
+
+
+def _assert_checkpoint_reads_retained(
+    authority: ProfileEntry,
+    contexts: tuple[GrantContextBinding, ...],
+    reads: tuple[CheckpointRead, ...],
+) -> None:
+    """Reject a newly authored right whose immutable anchor is already absent."""
+
+    if not reads:
+        return
+    names_by_uid = {context.uid: context.name for context in contexts}
+    store = MemoryStore(
+        root=profile_store_dir(authority),
+        create=False,
+        resolve_granted_links=False,
+    )
+    histories = {}
+    try:
+        for read in reads:
+            history = histories.get(read.context_uid)
+            if history is None:
+                history = build_checkpoint_history_slice(
+                    store,
+                    names_by_uid[read.context_uid],
+                )
+                histories[read.context_uid] = history
+            if isinstance(read.scope, CheckpointReference):
+                history.reference(read.scope.checkpoint_uids)
+            elif isinstance(read.scope, CheckpointEmbed):
+                history.after(read.scope.checkpoint_uid)
+    except (KeyError, HistoryError) as error:
+        raise ProfileError(
+            f"Checkpoint read does not name retained authority History: {error}"
+        ) from error
+
+
 def _assert_grantee_attachment(
     grantee: ProfileEntry,
     attachment_name: str,
@@ -145,6 +214,7 @@ def create_authority_grant(
     public_name: str | None = None,
     recursive: bool = False,
     grant_uid: str | None = None,
+    checkpoint_reads: object = (),
 ) -> tuple[ProfileRegistry, AuthorityGrant]:
     """Create one exact cross-Profile Context view under the registry lock."""
 
@@ -175,6 +245,12 @@ def create_authority_grant(
         )
         for binding in scope:
             validate_portable_context_name(binding.name)
+        canonical_reads = _grant_checkpoint_reads(
+            checkpoint_reads,
+            permissions=canonical_permissions,
+            contexts=scope,
+        )
+        _assert_checkpoint_reads_retained(authority, scope, canonical_reads)
         attachment = _assert_grantee_attachment(grantee, attachment_name)
         public = public_name or resource_name
         public = validate_portable_context_name(public)
@@ -207,6 +283,7 @@ def create_authority_grant(
             public_name=public,
             permissions=canonical_permissions,
             contexts=scope,
+            checkpoint_reads=canonical_reads,
         )
         updated = ProfileRegistry(
             generation=max(1, registry.generation + 1),
@@ -224,6 +301,7 @@ def update_authority_grant(
     *,
     permissions: object,
     recursive: bool | None = None,
+    checkpoint_reads: object | None = None,
 ) -> tuple[ProfileRegistry, AuthorityGrant]:
     """Replace one grant's permissions and optionally refresh its exact scope."""
 
@@ -262,6 +340,16 @@ def update_authority_grant(
             )
             for binding in scope:
                 validate_portable_context_name(binding.name)
+        canonical_reads = _grant_checkpoint_reads(
+            (
+                existing.checkpoint_reads
+                if checkpoint_reads is None
+                else checkpoint_reads
+            ),
+            permissions=canonical_permissions,
+            contexts=scope,
+        )
+        _assert_checkpoint_reads_retained(authority, scope, canonical_reads)
         replacement = AuthorityGrant(
             uid=existing.uid,
             revision=existing.revision + 1,
@@ -275,6 +363,7 @@ def update_authority_grant(
             public_name=existing.public_name,
             permissions=canonical_permissions,
             contexts=scope,
+            checkpoint_reads=canonical_reads,
         )
         updated = ProfileRegistry(
             generation=max(1, registry.generation + 1),

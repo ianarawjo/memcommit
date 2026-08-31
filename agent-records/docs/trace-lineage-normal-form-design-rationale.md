@@ -91,9 +91,12 @@ Grant is deliberately absent from the ancestry relation vocabulary. A Grant
 may annotate or authorize an `EMBEDS` route, but its attachment Context is not
 a parent and its public name is not a lineage edge. READ-granted current
 content therefore keeps the existing current-view Trace result; it does not
-silently authorize the owner's checkpoint log. Synchronizing granted retained
-history would require an explicit authority contract and is not inferred from
-the new graph.
+silently authorize the owner's checkpoint log. The later explicit
+[`CheckpointRead`](checkpoint-read-history-design-rationale.md) contract can
+authorize an exact Reference or same-Context anchored Embed window, but it is
+still an access boundary over this graph rather than an ancestry relation.
+Existing granted Trace remains blocked until its adapter can request and
+render such a bounded graph projection.
 
 Relationship targets are non-selectable in an owner's direct-Memory catalog.
 An Embed edge can make a target inspectable through its own authorized route,

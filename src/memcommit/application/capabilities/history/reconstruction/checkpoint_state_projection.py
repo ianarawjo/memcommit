@@ -414,6 +414,22 @@ def build_history(
         physical = store.list_checkpoints(context_name)
     except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
         raise HistoryError(str(error)) from error
+    return reconstruct_checkpoint_timeline(current_context, physical)
+
+
+def reconstruct_checkpoint_timeline(
+    current_context: Context,
+    physical: list[dict[str, Any]],
+) -> HistoryTimeline:
+    """Normalize one frozen Context/checkpoint evidence set into a timeline.
+
+    History queries that also need exact checkpoint records can read Store
+    inputs once and pass the same checkpoint evidence here. The record and
+    state projections therefore cannot independently re-read different
+    checkpoint generations during one application call.
+    """
+
+    context_name = current_context.name
     entries, physical_uids = flatten_checkpoint_entries(physical)
     context_uid = current_context.uid
     empty_record: dict[str, object] = {

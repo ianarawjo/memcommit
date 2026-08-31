@@ -22,6 +22,9 @@ from memcommit.application.capabilities.reviewing.memory_diff import (
     memory_diff_lines,
     update_operation_change,
 )
+from memcommit.application.capabilities.history.query.checkpoint_history_slicing import (
+    build_checkpoint_history_slice,
+)
 from memcommit.adapters.console.terminal.components.history.checkpoint_diff import (
     render_checkpoint_revision_cli,
 )
@@ -503,8 +506,8 @@ def cmd(
                 context_locator,
                 current=current_context,
             )
-            checkpoints = store.list_checkpoints(canonical_context)
-            entries = checkpoint_picker_entries(checkpoints)
+            history = build_checkpoint_history_slice(store, canonical_context)
+            entries = checkpoint_picker_entries(history.physical_entries)
             if not entries:
                 raise ValueError(f"Context '{canonical_context}' has no checkpoints.")
             entry = (
@@ -519,7 +522,7 @@ def cmd(
             )
             typer.echo(
                 render_checkpoint_revision_cli(
-                    checkpoints,
+                    history,
                     entry,
                     context_name=canonical_context,
                     stat=stat,

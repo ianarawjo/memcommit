@@ -16,6 +16,9 @@ from memcommit.adapters.console.terminal.core.text import (
 )
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_action_style
 from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange, memory_diff_lines
+from memcommit.application.capabilities.history.query.checkpoint_history_slicing import (
+    CheckpointHistorySlice,
+)
 
 
 @dataclass(frozen=True)
@@ -221,23 +224,40 @@ def _render_revision_item(
 
 
 def checkpoint_revision_detail_renderer(
-    checkpoints: Sequence[Mapping[str, Any]],
+    checkpoints: Sequence[Mapping[str, Any]] | CheckpointHistorySlice,
     *,
     verbose_uids: bool = False,
 ):
     """Render one revision diff together with its complete resulting state."""
+    checkpoint_records = (
+        checkpoints.physical_entries
+        if isinstance(checkpoints, CheckpointHistorySlice)
+        else checkpoints
+    )
     records = {
         checkpoint["uid"]: checkpoint
-        for checkpoint in checkpoints
+        for checkpoint in checkpoint_records
         if isinstance(checkpoint.get("uid"), str)
     }
-    before_by_uid = _before_snapshots(checkpoints)
+    before_by_uid = (
+        None
+        if isinstance(checkpoints, CheckpointHistorySlice)
+        else _before_snapshots(checkpoints)
+    )
 
     def render(entry: HistoryPickerItem) -> StyleAndTextTuples | HistoryDetailView:
         checkpoint = records[entry.uid]
+        if isinstance(checkpoints, CheckpointHistorySlice):
+            revision = checkpoints.revision(entry.uid)
+            before_snapshot = revision.before_snapshot
+            after_snapshot = revision.after_snapshot
+        else:
+            assert before_by_uid is not None
+            before_snapshot = before_by_uid[entry.uid]
+            after_snapshot = checkpoint.get("snapshot")
         revision_items, result_count, reordered = _checkpoint_revision_items(
-            before_by_uid[entry.uid],
-            checkpoint.get("snapshot"),
+            before_snapshot,
+            after_snapshot,
         )
         command = checkpoint.get("command")
         action = command if isinstance(command, str) and command else "checkpoint"
@@ -369,7 +389,7 @@ def _raw_revision_lines(
 
 
 def render_checkpoint_revision_cli(
-    checkpoints: Sequence[Mapping[str, Any]],
+    checkpoints: Sequence[Mapping[str, Any]] | CheckpointHistorySlice,
     entry: HistoryPickerItem,
     *,
     context_name: str,
@@ -379,15 +399,27 @@ def render_checkpoint_revision_cli(
 ) -> str:
     """Render one exact checkpoint revision without opening a terminal picker."""
 
+    checkpoint_records = (
+        checkpoints.physical_entries
+        if isinstance(checkpoints, CheckpointHistorySlice)
+        else checkpoints
+    )
     records = {
         checkpoint["uid"]: checkpoint
-        for checkpoint in checkpoints
+        for checkpoint in checkpoint_records
         if isinstance(checkpoint.get("uid"), str)
     }
     checkpoint = records[entry.uid]
+    if isinstance(checkpoints, CheckpointHistorySlice):
+        revision = checkpoints.revision(entry.uid)
+        before_snapshot = revision.before_snapshot
+        after_snapshot = revision.after_snapshot
+    else:
+        before_snapshot = _before_snapshots(checkpoints)[entry.uid]
+        after_snapshot = checkpoint.get("snapshot")
     changes, result_count, _reordered = _checkpoint_revision_items(
-        _before_snapshots(checkpoints)[entry.uid],
-        checkpoint.get("snapshot"),
+        before_snapshot,
+        after_snapshot,
     )
     counts = {
         treatment: sum(change.treatment == treatment for change in changes)
@@ -426,7 +458,7 @@ def render_checkpoint_revision_cli(
 
 
 def checkpoint_diff_detail_renderer(
-    checkpoints: Sequence[Mapping[str, Any]],
+    checkpoints: Sequence[Mapping[str, Any]] | CheckpointHistorySlice,
 ):
     """Compatibility name for the shared complete revision renderer."""
 
@@ -435,7 +467,7 @@ def checkpoint_diff_detail_renderer(
 
 def checkpoint_restore_detail_renderer(
     current_snapshot: Mapping[str, Any],
-    checkpoints: Sequence[Mapping[str, Any]],
+    checkpoints: Sequence[Mapping[str, Any]] | CheckpointHistorySlice,
 ):
     """Compatibility adapter; Revert now reviews the checkpoint revision."""
 

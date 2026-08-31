@@ -15,8 +15,15 @@ from pathlib import Path
 import re
 import uuid
 
+from memcommit.application.capabilities.authority.checkpoint_read_model import (
+    CheckpointRead,
+    CheckpointReadValueError,
+    canonical_checkpoint_reads,
+)
 
-PROFILE_REGISTRY_SCHEMA_VERSION = 3
+
+PROFILE_REGISTRY_SCHEMA_VERSION = 4
+REMOVED_PROFILE_REGISTRY_SCHEMA_VERSION = 3
 GRANT_PROFILE_REGISTRY_SCHEMA_VERSION = 2
 LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION = 1
 AUTHORING_PROFILE_UID = "00000000-0000-0000-0000-000000000001"
@@ -284,6 +291,7 @@ class AuthorityGrant:
     public_name: str
     permissions: tuple[str, ...]
     contexts: tuple[GrantContextBinding, ...]
+    checkpoint_reads: tuple[CheckpointRead, ...] = ()
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -299,6 +307,10 @@ class AuthorityGrant:
             "public_name": self.public_name,
             "permissions": list(self.permissions),
             "contexts": [context.to_dict() for context in self.contexts],
+            "checkpoint_reads": [
+                checkpoint_read.to_dict()
+                for checkpoint_read in self.checkpoint_reads
+            ],
         }
 
 
@@ -443,6 +455,7 @@ def load_profile_registry() -> ProfileRegistry:
     if schema_version not in {
         LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION,
         GRANT_PROFILE_REGISTRY_SCHEMA_VERSION,
+        REMOVED_PROFILE_REGISTRY_SCHEMA_VERSION,
         PROFILE_REGISTRY_SCHEMA_VERSION,
     }:
         raise ProfileConfigError("Unsupported profile registry schema version.")
@@ -492,7 +505,7 @@ def load_profile_registry() -> ProfileRegistry:
         raise ProfileConfigError("Active profile is not registered.")
 
     raw_removed_profile_uids = value.get("removed_profile_uids", [])
-    if schema_version != PROFILE_REGISTRY_SCHEMA_VERSION:
+    if schema_version < REMOVED_PROFILE_REGISTRY_SCHEMA_VERSION:
         if "removed_profile_uids" in value:
             raise ProfileConfigError(
                 "Older profile registries cannot contain removed Profiles."
@@ -522,7 +535,7 @@ def load_profile_registry() -> ProfileRegistry:
         raise ProfileConfigError("Profile grants must be a list.")
     grants: list[AuthorityGrant] = []
     for raw in raw_grants:
-        if not isinstance(raw, dict) or set(raw) != {
+        grant_fields = {
             "uid",
             "revision",
             "authority_profile_uid",
@@ -535,7 +548,14 @@ def load_profile_registry() -> ProfileRegistry:
             "public_name",
             "permissions",
             "contexts",
-        }:
+        }
+        if schema_version >= PROFILE_REGISTRY_SCHEMA_VERSION or (
+            raw.get("checkpoint_reads") == []
+            if isinstance(raw, dict)
+            else False
+        ):
+            grant_fields.add("checkpoint_reads")
+        if not isinstance(raw, dict) or set(raw) != grant_fields:
             raise ProfileConfigError("Profile grant entry is invalid.")
         revision = raw.get("revision")
         if not isinstance(revision, int) or isinstance(revision, bool) or revision < 1:
@@ -594,6 +614,26 @@ def load_profile_registry() -> ProfileRegistry:
             raise ProfileConfigError(
                 "Grant scope contains a Context outside its resource tree."
             )
+        try:
+            checkpoint_reads = canonical_checkpoint_reads(
+                raw.get("checkpoint_reads", [])
+            )
+        except CheckpointReadValueError as error:
+            raise ProfileConfigError(str(error)) from error
+        context_uids = {context.uid for context in contexts}
+        if any(
+            checkpoint_read.context_uid not in context_uids
+            for checkpoint_read in checkpoint_reads
+        ):
+            raise ProfileConfigError(
+                "Checkpoint read names a Context outside its Grant scope."
+            )
+        permissions = canonical_grant_permissions(
+            raw.get("permissions"),
+            allow_legacy=True,
+        )
+        if checkpoint_reads and "READ" not in permissions:
+            raise ProfileConfigError("Checkpoint reads require READ permission.")
         grants.append(
             AuthorityGrant(
                 uid=_canonical_uid(raw.get("uid"), field="Grant uid"),
@@ -611,11 +651,9 @@ def load_profile_registry() -> ProfileRegistry:
                 resource_uid=resource_uid,
                 resource_name=resource_name,
                 public_name=validate_grant_resource_name(raw.get("public_name")),
-                permissions=canonical_grant_permissions(
-                    raw.get("permissions"),
-                    allow_legacy=True,
-                ),
+                permissions=permissions,
                 contexts=tuple(contexts),
+                checkpoint_reads=checkpoint_reads,
             )
         )
     if len({grant.uid for grant in grants}) != len(grants):
