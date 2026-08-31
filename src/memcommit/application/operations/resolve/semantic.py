@@ -167,6 +167,32 @@ def _audit_items(
                     )
                 )
 
+    fit = audit.fit
+    if fit is not None and fit.verdict in {"MAY", "NO"}:
+        members = fit.material_memory_uids
+        if include(members):
+            key = "FIT:" + ":".join(members)
+            result.append(
+                _AuditDirectionItem(
+                    uid=_item_uid(audit, key),
+                    audit_key=key,
+                    kind="FIT",
+                    classification=fit.verdict,
+                    memory_uids=members,
+                    reason=fit.reason,
+                    question=(
+                        "Which ordinary reading should the Context preserve?"
+                        if fit.verdict == "MAY"
+                        else "How should these Memories change so they can jointly hold?"
+                    ),
+                    detail={
+                        "overview": fit.overview,
+                        "consistent_reading": fit.consistent_reading,
+                        "inconsistent_reading": fit.inconsistent_reading,
+                    },
+                )
+            )
+
     conformance = audit.conformance
     if conformance is not None:
         rule_by_uid = {rule.uid: rule for rule in conformance.rules}
@@ -435,6 +461,8 @@ def all_audit_issue_keys(audit: QualityAuditSession) -> tuple[str, ...]:
                 _pair_key("CONFLICT", item.left.uid, item.right.uid)
                 for item in report.findings
             )
+    if audit.fit is not None and audit.fit.verdict in {"MAY", "NO"}:
+        keys.append("FIT:" + ":".join(audit.fit.material_memory_uids))
     if audit.conformance is not None:
         keys.extend(
             f"CONFORMANCE:{item.rule_uid}"

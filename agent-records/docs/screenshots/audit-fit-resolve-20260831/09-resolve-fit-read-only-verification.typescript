@@ -1,0 +1,87 @@
+$ mem resolve study/audit-fit
+PTY · 180×52 · PROFILE isolated · CURRENT study/audit-fit
+MEM RESOLVE · 1/1 · BUILDING AND CHECKING REPAIR . · 0sMEM RESOLVE · 1/1 · AUDIT DIRECTIONS READY . · 0s                                                       [?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;244;245;247;1m RESOLVE · < 1/1 >[0m
+[0m FIT · [11111111] “The main entrance opens at 08:00.” ↔ [33333333] “The main entrance remains closed until 09:00.”[0m
+[0;38;2;244;245;247m Which ordinary reading should the Context preserve?[0m
+[0;38;2;16;36;47;48;2;139;213;255;1m  1 · ACCEPT THIS DIRECTION · State which entrance each schedule governs.[0m
+[0m  2 · ADJUST WITH YOUR INTENT · Enter the direction this should follow.[0m
+[0;38;2;244;245;247;1m      YOUR INTENT  │ [0;38;2;165;173;203m› Type here…                                    [0;38;2;244;245;247m │[0m
+[0m  3 · LEAVE UNRESOLVED · Exclude this item from Update input and retain it as unresolved.[0m
+[0m [0m
+
+[0m  FINALIZE DECISIONS · 0/1[0m
+[0m [0m
+[0m ←/→ issue · ↑/↓ move · Enter select/finalize · Esc close[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[0m [47A[0m[5 q[?25l[A[0m  1 · ACCEPT THIS DIRECTION · State which entrance each schedule governs.[0m
+
+
+[0;38;2;16;36;47;48;2;139;213;255;1m✓ 3 · LEAVE UNRESOLVED · Exclude this item from Update input and retain it as unresolved.[0m
+
+
+[23C[0m1[2C READY[0m
+
+[C[0mSelected · 3 · LEAVE[CUNRESOLVED[0m[K[10A[32D[0m[?25l[0m
+
+
+
+
+[0;38;2;16;36;47;48;2;139;213;255m✓ 3 · LEAVE UNRESOLVED · Exclude this item from Update input and retain it as unresolved.[0m
+
+
+[0;38;2;16;36;47;48;2;139;213;255;1m  FINALIZE DECISIONS · 1/1 READY[0m
+
+[C[0m←/→ issue · ↑/↓ move[C· Enter select/finalize · Esc close[11A[57D[0m[J[0m[?7h[?1049l[?2004l[0 qMEM RESOLVE · 1/2 · BUILDING WHOLE-CONTEXT UPDATE PLAN . · 0sMEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE . · 0s      MEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE . · 0sMEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE . · 0sMEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE . · 0s
+POST-IMAGE FIT AUDIT GATE · PRESS C
+MEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE .. · 0sc
+                                                        [1mRESOLVE · study/audit-fit[0m
+APPLIED · NO MEMORY CHANGES · AUDIT ISSUES 1 · 1 FORCED[0m
+UNRESOLVED · 1[0m
+CHECKPOINT · 0bc56f4a-1a9c-4212-b4ac-13ea79448830[0m
+REVIEW · mem review resolve --receipt 0bc56f4a-1a9c-4212-b4ac-13ea79448830[0m
+RECOVERY · mem undo[0m
+CAPTURE GATE · PRESS V FOR POST-RESOLVE CONTEXT
+v
+READ-ONLY VERIFICATION
+  CONTEXT DIGEST UNCHANGED · True
+  CHECKPOINT COMMAND · resolve
+  UNRESOLVED ISSUE COUNT · 1
+  FIT PROVIDER CALLS · 2

@@ -16,6 +16,11 @@ from typing import Literal
 
 from memcommit.core.context import Context, Memory
 from memcommit.application.operations.check_conformance.model import ConformanceReport
+from memcommit.application.operations.fit.judgment import (
+    FIT_JUDGMENT_CONTRACT_VERSION,
+    FIT_JUDGMENT_OPERATION,
+    FitVerdict,
+)
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityFinding,
     AmbiguityReport,
@@ -29,9 +34,10 @@ from memcommit.providers.types import ProviderIdentity
 from memcommit.application.operations.review.model import direct_context_digest
 
 
-# Audit was not distributed while its response-bearing draft schemas existed,
-# so the read-only record starts at version 1 without a runtime legacy decoder.
-QUALITY_AUDIT_SCHEMA_VERSION = 1
+# Schema 1 is retained as a review-only compatibility shape. Schema 2 adds the
+# whole-Context Fit judgment required by current multi-Memory Audit consumers.
+QUALITY_AUDIT_SCHEMA_VERSION = 2
+QUALITY_AUDIT_LEGACY_SCHEMA_VERSION = 1
 QUALITY_AUDIT_KINDS = ("duplicates", "ambiguities", "conflicts")
 QUALITY_AUDIT_RULESETS = {
     "duplicates": QUALITY_RULESET_VERSIONS["find_duplicates"],
@@ -291,6 +297,148 @@ class QualityAuditProvenance:
         return self.identity.display_name()
 
 
+@dataclass(frozen=True)
+class QualityAuditFit:
+    """One whole-Context Fit judgment retained beside finder reports.
+
+    Fit is set-level evidence rather than a pair or single-Memory finding.  The
+    exact considered frame is retained so a MAY/NO result can become one
+    Resolve item without fabricating independent per-Memory judgments.
+    """
+
+    uid: str
+    created_at: str
+    verdict: FitVerdict
+    reason: str
+    overview: str
+    considered_memory_uids: tuple[str, ...]
+    material_memory_uids: tuple[str, ...]
+    consistent_reading: str
+    inconsistent_reading: str
+    provenance: QualityAuditProvenance
+    contract_version: str = FIT_JUDGMENT_CONTRACT_VERSION
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "uid": self.uid,
+            "created_at": self.created_at,
+            "verdict": self.verdict,
+            "reason": self.reason,
+            "overview": self.overview,
+            "considered_memory_uids": list(self.considered_memory_uids),
+            "material_memory_uids": list(self.material_memory_uids),
+            "consistent_reading": self.consistent_reading,
+            "inconsistent_reading": self.inconsistent_reading,
+            "provenance": self.provenance.to_dict(),
+            "contract_version": self.contract_version,
+        }
+
+    @classmethod
+    def from_dict(
+        cls,
+        value: object,
+        *,
+        source_memory_uids: tuple[str, ...],
+    ) -> "QualityAuditFit":
+        data = _exact_dict(
+            value,
+            {
+                "uid",
+                "created_at",
+                "verdict",
+                "reason",
+                "overview",
+                "considered_memory_uids",
+                "material_memory_uids",
+                "consistent_reading",
+                "inconsistent_reading",
+                "provenance",
+                "contract_version",
+            },
+            "Audit Fit",
+        )
+        considered = data["considered_memory_uids"]
+        material = data["material_memory_uids"]
+        if not isinstance(considered, list) or not isinstance(material, list):
+            raise QualityAuditError("Audit Fit Memory coverage must be arrays.")
+        if any(not isinstance(uid, str) for uid in (*considered, *material)):
+            raise QualityAuditError("Audit Fit Memory identities must be text.")
+        considered_uids = tuple(considered)
+        material_uids = tuple(material)
+        if considered_uids != source_memory_uids:
+            raise QualityAuditError(
+                "Audit Fit must consider every frozen Source Memory exactly once."
+            )
+        if len(material_uids) != len(set(material_uids)) or any(
+            uid not in considered_uids for uid in material_uids
+        ):
+            raise QualityAuditError("Audit Fit material Memories are invalid.")
+        # Canonical Source order keeps the set-level issue key stable even if a
+        # provider returns its material subset in a different order.
+        if material_uids != tuple(uid for uid in considered_uids if uid in material_uids):
+            raise QualityAuditError(
+                "Audit Fit material Memories must retain frozen Source order."
+            )
+        verdict = data["verdict"]
+        if verdict not in {"YES", "MAY", "NO"}:
+            raise QualityAuditError("Audit Fit verdict is invalid.")
+        consistent = _string(
+            data["consistent_reading"],
+            "Audit Fit consistent reading",
+            empty=True,
+        )
+        inconsistent = _string(
+            data["inconsistent_reading"],
+            "Audit Fit inconsistent reading",
+            empty=True,
+        )
+        if verdict == "YES":
+            if material_uids or consistent or inconsistent:
+                raise QualityAuditError(
+                    "A YES Audit Fit cannot retain material Memories or split readings."
+                )
+        elif not material_uids:
+            raise QualityAuditError(
+                "A MAY or NO Audit Fit must identify material Memories."
+            )
+        if verdict == "MAY":
+            if not consistent.strip() or not inconsistent.strip():
+                raise QualityAuditError(
+                    "A MAY Audit Fit must retain both ordinary readings."
+                )
+        elif consistent or inconsistent:
+            raise QualityAuditError(
+                "Only a MAY Audit Fit may retain split ordinary readings."
+            )
+        provenance = QualityAuditProvenance.from_dict(data["provenance"])
+        if (
+            provenance.operation != FIT_JUDGMENT_OPERATION
+            or not provenance.provider_called
+        ):
+            raise QualityAuditError(
+                "Audit Fit provenance must name its provider judgment."
+            )
+        if data["contract_version"] != FIT_JUDGMENT_CONTRACT_VERSION:
+            raise QualityAuditError("Unsupported Audit Fit contract.")
+        result = cls(
+            uid=_canonical_uuid(data["uid"], "Audit Fit uid"),
+            created_at=_string(data["created_at"], "Audit Fit creation time", limit=100),
+            verdict=verdict,
+            reason=_string(data["reason"], "Audit Fit reason"),
+            overview=_string(data["overview"], "Audit Fit overview"),
+            considered_memory_uids=considered_uids,
+            material_memory_uids=material_uids,
+            consistent_reading=consistent,
+            inconsistent_reading=inconsistent,
+            provenance=provenance,
+        )
+        try:
+            datetime.fromisoformat(result.created_at)
+        except ValueError as error:
+            raise QualityAuditError("Invalid Audit Fit creation time.") from error
+        return result
+
+
 def _report_to_dict(
     kind: QualityAuditKind, report: QualityAuditReport
 ) -> dict[str, object]:
@@ -520,6 +668,7 @@ class QualityAuditSession:
     created_at: str
     source: QualityAuditSource
     checks: tuple[QualityAuditCheck, ...]
+    fit: QualityAuditFit | None = None
     conformance: ConformanceReport | None = None
 
     @property
@@ -532,6 +681,7 @@ class QualityAuditSession:
             "created_at": self.created_at,
             "source": self.source.to_dict(),
             "checks": [check.to_dict() for check in self.checks],
+            "fit": None if self.fit is None else self.fit.to_dict(),
             "conformance": (
                 self.conformance.to_dict() if self.conformance is not None else None
             ),
@@ -551,20 +701,28 @@ class QualityAuditSession:
     def from_dict(cls, value: object) -> "QualityAuditSession":
         if not isinstance(value, dict):
             raise QualityAuditError("Invalid Audit session.")
-        if value.get("schema_version") != QUALITY_AUDIT_SCHEMA_VERSION:
+        schema_version = value.get("schema_version")
+        if schema_version not in {
+            QUALITY_AUDIT_LEGACY_SCHEMA_VERSION,
+            QUALITY_AUDIT_SCHEMA_VERSION,
+        }:
             raise QualityAuditError("Unsupported Audit session schema version.")
+        keys = {
+            "schema_version",
+            "uid",
+            "created_at",
+            "source",
+            "checks",
+            "conformance",
+        }
+        if schema_version == QUALITY_AUDIT_SCHEMA_VERSION:
+            keys.add("fit")
         data = _exact_dict(
             value,
-            {
-                "schema_version",
-                "uid",
-                "created_at",
-                "source",
-                "checks",
-                "conformance",
-            },
+            keys,
             "Audit session",
         )
+        raw_fit = data.get("fit")
         raw_conformance = data["conformance"]
         source = QualityAuditSource.from_dict(data["source"])
         source_by_uid = {
@@ -618,6 +776,16 @@ class QualityAuditSession:
                 raise QualityAuditError(
                     "Audit Conformance does not cover the exact frozen Source."
                 )
+        fit = (
+            None
+            if raw_fit is None
+            else QualityAuditFit.from_dict(
+                raw_fit,
+                source_memory_uids=tuple(item.uid for item in source.memories),
+            )
+        )
+        if fit is not None and expected_memory_count < 2:
+            raise QualityAuditError("Audit Fit requires at least two Source Memories.")
         conflict_report = checks[2].report
         assert isinstance(conflict_report, ConflictReport)
         if (
@@ -633,6 +801,7 @@ class QualityAuditSession:
             created_at=_string(data["created_at"], "Audit creation time", limit=100),
             source=source,
             checks=checks,
+            fit=fit,
             conformance=conformance,
         )
         try:

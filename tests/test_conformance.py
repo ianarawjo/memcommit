@@ -39,6 +39,10 @@ from memcommit.adapters.console.commands.audit.review import (
     render_quality_audit_review_snapshot,
 )
 from memcommit.application.operations.audit.model import QualityAuditSession
+from memcommit.application.operations.fit.judgment import (
+    FIT_JUDGMENT_OPERATION,
+    FIT_JUDGMENT_PAYLOAD_MARKER,
+)
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.persistence.store import context_record_digest
 
@@ -811,6 +815,28 @@ class AuditProvider:
         type(self).calls.append(operation)
         if operation.startswith("find_"):
             return '{"findings": []}'
+        if operation == FIT_JUDGMENT_OPERATION:
+            payload = json.loads(prompt.split(FIT_JUDGMENT_PAYLOAD_MARKER, 1)[1])
+            aliases = [
+                item["proposition_id"]
+                for item in payload["questions"][0]["propositions"]
+            ]
+            return json.dumps(
+                {
+                    "overview": "The complete Example Context is compatible.",
+                    "judgments": [
+                        {
+                            "question_id": "fit",
+                            "verdict": "YES",
+                            "reason": "Both ticker examples can jointly hold.",
+                            "considered_proposition_ids": aliases,
+                            "material_proposition_ids": [],
+                            "consistent_reading": "",
+                            "inconsistent_reading": "",
+                        }
+                    ],
+                }
+            )
         assert operation == CONTEXT_CONFORMANCE_OPERATION
         return json.dumps(
             {
@@ -848,11 +874,12 @@ def test_audit_optionally_embeds_the_same_context_conformance_report():
         "find_duplicates",
         "find_ambiguities",
         "find_conflicts",
+        FIT_JUDGMENT_OPERATION,
         CONTEXT_CONFORMANCE_OPERATION,
     ]
     assert session.conformance is not None
     assert session.conformance.context_judgments[0].status == "CONFORMS"
-    assert "SAVED · 4/4 CHECKS" in render_quality_audit_review_snapshot(session)
+    assert "SAVED · 5/5 CHECKS" in render_quality_audit_review_snapshot(session)
     assert (
         QualityAuditSession.from_dict(session.to_dict()).conformance
         == session.conformance
@@ -860,7 +887,7 @@ def test_audit_optionally_embeds_the_same_context_conformance_report():
 
 
 @pytest.mark.parametrize("rules_option", ["--against", "--rule"])
-def test_audit_cli_rules_alias_saves_one_read_only_four_check_report(
+def test_audit_cli_rules_alias_saves_one_read_only_five_check_report(
     isolated_store,
     monkeypatch,
     rules_option,
@@ -895,7 +922,7 @@ def test_audit_cli_rules_alias_saves_one_read_only_four_check_report(
     )
 
     assert result.exit_code == 0, result.output
-    assert "SAVED · 4/4 CHECKS" in result.output
+    assert "SAVED · 5/5 CHECKS" in result.output
     assert "CONFORMANCE · FINISHED" in result.output
     saved = JsonAuditRecordRepository(store).list()
     assert len(saved) == 1

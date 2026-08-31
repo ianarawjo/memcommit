@@ -36,6 +36,16 @@ Conflict, Impact, Makemore, Ground, API, CLI, and presentation consumers
 import these operation-owned modules directly. Cross-operation reuse does not
 make those consumers co-owners of Fit's YES/MAY/NO meaning.
 
+Audit is a direct consumer of `fit.judgment`, not of the standalone Fit CLI or
+receipt flow. For every frozen direct Source containing at least two Memories,
+Audit asks one question over the complete ordered set and stores complete
+coverage, the material subset, split readings, and provider provenance in its
+own immutable snapshot. Resolve projects `MAY` or `NO` as exactly one
+Audit-bound `FIT` item; `YES` projects nothing. The candidate Meld pipeline
+enters and repeats the same rule through its initial and post-image Audits.
+None of these consumers may reinterpret Fit as factual truth or as an
+unconditional Apply gate.
+
 The former `memcommit.fit`, `memcommit.fit_judgment`,
 `memcommit.fit_coherence`, `memcommit.fit_store`,
 `memcommit.fit_application`, and `memcommit.fit_runtime` paths are
@@ -157,6 +167,12 @@ labels, order, and punctuation; there is no presentation-mode route.
     operands become Contexts only through frozen readable-catalog membership.
     New UUID-selector-shaped root Context identities are rejected at their
     shared creation boundary; legacy roots require explicit Context selection.
+15. Audit Fit uses one complete direct-Memory frame. A current multi-Memory
+    Audit cannot be reused by Resolve or Meld without that section; one-Memory
+    Audits skip Fit because the judgment requires at least two propositions.
+16. A `MAY` or `NO` Audit Fit produces one set-level solve target keyed by its
+    ordered material Memory identities. It never expands into pairwise or
+    per-Memory findings, and `YES` produces no target.
 
 ## Shared components and intentional limits
 

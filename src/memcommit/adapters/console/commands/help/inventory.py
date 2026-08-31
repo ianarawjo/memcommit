@@ -658,7 +658,7 @@ COMMAND_FORMS = {
     ),
     "review": (
         "mem review (enter the interactive Review session)",
-        "mem review audit (open a saved three-finder Audit)",
+        "mem review audit (open a saved finder and whole-Context Fit Audit)",
         "mem review compare (open a saved Compare report)",
         "mem review meld (open terminal evidence for an applied Meld)",
         "mem review sever (open terminal evidence for an applied Sever)",

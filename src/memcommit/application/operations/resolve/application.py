@@ -29,6 +29,7 @@ ResolveIssueKind = Literal[
     "REDUNDANCY",
     "AMBIGUITY",
     "CONFLICT",
+    "FIT",
     "CONFORMANCE",
 ]
 ResolveStatus = Literal[
@@ -282,6 +283,7 @@ class ResolveIssue:
             "REDUNDANCY",
             "AMBIGUITY",
             "CONFLICT",
+            "FIT",
             "CONFORMANCE",
         }:
             raise ResolveError("Resolve Issue kind is invalid.")

@@ -10,6 +10,7 @@ freeze one complete direct Context and exact authority
         v
 find newest exact saved Audit ── missing/stale ──> run + save complete Audit
         |                                      (duplicate, ambiguity, conflict,
+        |                                       whole-Context Fit,
         |                                       optional Rule conformance)
         v
 derive one non-mutating direction for every actionable Audit item
@@ -38,7 +39,7 @@ Resolve atomic publication              no write
 | Concern | Canonical owner | Boundary |
 | --- | --- | --- |
 | Resolve request and frozen frame | `application.operations.resolve.application` | One exact direct Context, complete direct Memory frame, exact actionable identities and effect capabilities |
-| Issue discovery and persistence | `application.operations.audit` | Audit runs its three independent checks and optional Conformance check, retains exact provenance, and stores one immutable completed snapshot |
+| Issue discovery and persistence | `application.operations.audit` | Audit runs three independent finder checks, one whole-Context Fit judgment for a multi-Memory Source, and optional Conformance; it retains exact provenance and stores one immutable completed snapshot |
 | Direction synthesis | `application.operations.resolve.semantic` | Projects every actionable Audit item unchanged and asks for exactly one conservative direction; it cannot rediscover, merge, omit, or mutate findings |
 | Human decisions | `application.operations.resolve.decisions` | Exactly one typed `CONFIRM`, `INTENT`, or `FORCE` decision per frozen Audit item |
 | Process-local Source projection | `application.operations.resolve.decisions` | Every confirmed direction and supplied intent enters one Source frame; FORCE is control state and never evidence |
@@ -57,13 +58,14 @@ Resolve atomic publication              no write
 | --- | --- | --- |
 | Resolve enters through Audit | `get_or_run_quality_audit` matches Context UID plus exact direct-Memory digest | An exact saved Audit is reused; a missing or stale Audit is rerun completely and saved before directions are shown |
 | Audit judgments stay Audit-owned | Resolve direction payload carries immutable item identities, classifications, reasons, questions, and members | The direction provider cannot add, remove, merge, split, or reclassify an Audit item |
+| Fit remains set-level | Audit retains complete ordered coverage and the material subset; Resolve projects only `MAY` or `NO` | One Fit judgment becomes exactly one `FIT` item, never pairwise or per-Memory findings; `YES` produces no item |
 | No automatic resolution | Direction output is a proposal and has no mutation schema or authority | No human decision means no Update planning or Apply |
 | One decision per item | `finalize_resolve_decisions` compares exact item identities | Missing, duplicate, or unknown decision fails before Update provider construction |
 | Decisions bind to one snapshot and revision | Every issue contains the Audit snapshot digest; the decision set contains the frozen Resolve revision | A changed Audit, Context, or capability frame fails closed |
 | Complete Target planning | Resolve passes all accepted input together and the entire loaded Target to `plan_update` once | No per-item partial plan is published |
 | Update solely owns mutations | Resolve consumes `UpdateSession.plan`; it has no candidate/effect generator | Invalid Update operations fail at Update or Resolve publication boundaries |
 | FORCE is not evidence | FORCE is omitted from the process-local Source Context | A force-only turn produces an empty UpdatePlan and may write only the reviewed unresolved checkpoint |
-| Full detached verification | Exact plan is applied, recomposed, then audited as one complete post-image | Any new or non-permitted duplicate, ambiguity, conflict, or Conformance issue blocks Apply |
+| Full detached verification | Exact plan is applied, recomposed, then audited as one complete post-image | Any new or non-permitted duplicate, ambiguity, conflict, Fit, or Conformance issue blocks Apply |
 | Exact FORCE exception | Only the same frozen Audit key may remain | A different relation, Memory member, Rule judgment, or issue kind is new and blocking |
 | Incidental repair is allowed | The verifier judges the actual complete post-image | A forced item no longer present is omitted from unresolved receipt state |
 | Sparse atomic publication | Owner, capability, pre-image, digest, and inbound-reference checks run under the mutation boundary | Failure publishes no partial Update effect or Resolve checkpoint |
@@ -104,7 +106,8 @@ note field until their own application contracts adopt Resolve semantics.
 - Audit tests prove exact saved-snapshot reuse and complete rerun after a
   direct-Memory change.
 - Direction decoder tests require exact coverage of Duplicate, Ambiguity,
-  Conflict, and optional Conformance items and reject mutation-shaped output.
+  Conflict, one set-level Fit item when applicable, and optional Conformance
+  items, and reject mutation-shaped output.
 - Decision tests cover exact completeness, one combined process-local Source,
   FORCE exclusion, and retained checkpoint evidence.
 - Update integration tests prove one whole-Target planning call and detached
@@ -115,6 +118,8 @@ note field until their own application contracts adopt Resolve semantics.
   input row, blank-intent readiness, previous/next actions, and finalization.
 - Color-capable 180x52 PTY captures record entry, every decision/input
   transition, Update, post-image Audit, receipts, and read-only verification.
+  The focused Fit branch is recorded under
+  `agent-records/docs/screenshots/audit-fit-resolve-20260831/`.
 
 ## Current limitations
 
@@ -122,6 +127,8 @@ note field until their own application contracts adopt Resolve semantics.
   Update plan that targets an embedded or second Context owner.
 - A clean post-image Audit is not a truth proof. It is the exact bounded gate
   for this Resolve Apply.
+- Fit is not a separate hard gate. A `MAY` or `NO` follows the same exact-item
+  decision path, including an explicit FORCE exception for that same key.
 - Conformance participates only when the reused source Audit contains it or
   the invocation supplies an explicit Rules Context.
 - Decision drafts are not a persisted session schema. Only a completed Audit

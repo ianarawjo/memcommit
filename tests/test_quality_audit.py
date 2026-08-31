@@ -1,8 +1,10 @@
-"""Durable three-finder Audit orchestration, report, and Review contracts."""
+"""Durable finder-plus-Fit Audit orchestration, report, and Review contracts."""
 
 from __future__ import annotations
 
 from dataclasses import replace
+import json
+import uuid
 
 import click
 import pytest
@@ -64,9 +66,14 @@ from memcommit.application.operations.audit.model import (
     QUALITY_AUDIT_SCHEMA_VERSION,
     QualityAuditCheck,
     QualityAuditError,
+    QualityAuditFit,
     QualityAuditProvenance,
     QualityAuditSession,
     quality_audit_record_digest,
+)
+from memcommit.application.operations.fit.judgment import (
+    FIT_JUDGMENT_OPERATION,
+    FIT_JUDGMENT_PAYLOAD_MARKER,
 )
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.persistence.store import MemoryStore
@@ -82,7 +89,7 @@ class EmptyAuditProvider:
         self.identity = ProviderIdentity(provider="test", model="audit-model")
         self.last_run = None
 
-    def complete(self, _prompt, *, operation, output_schema=None):
+    def complete(self, prompt, *, operation, output_schema=None):
         del output_schema
         self.calls.append(operation)
         self.last_run = CompletionRun(
@@ -91,6 +98,28 @@ class EmptyAuditProvider:
             upstream_model="audit-model",
             upstream_provider="test",
         )
+        if operation == FIT_JUDGMENT_OPERATION:
+            payload = json.loads(prompt.split(FIT_JUDGMENT_PAYLOAD_MARKER, 1)[1])
+            aliases = tuple(
+                item["proposition_id"]
+                for item in payload["questions"][0]["propositions"]
+            )
+            return json.dumps(
+                {
+                    "overview": "The complete Context is jointly compatible.",
+                    "judgments": [
+                        {
+                            "question_id": "fit",
+                            "verdict": "YES",
+                            "reason": "The Memories can jointly hold.",
+                            "considered_proposition_ids": list(aliases),
+                            "material_proposition_ids": [],
+                            "consistent_reading": "",
+                            "inconsistent_reading": "",
+                        }
+                    ],
+                }
+            )
         return '{"findings": []}'
 
 
@@ -110,6 +139,7 @@ def _provenance(kind):
 
 
 def _finding_session(ctx, first, second):
+    identity = ProviderIdentity(provider="test", model="audit-model")
     return create_quality_audit(
         ctx,
         (
@@ -166,6 +196,22 @@ def _finding_session(ctx, first, second):
                 _provenance("conflicts"),
             ),
         ),
+        fit=QualityAuditFit(
+            uid=str(uuid.uuid4()),
+            created_at="2026-08-31T00:00:00+00:00",
+            verdict="YES",
+            reason="The complete frozen Memory set can jointly hold.",
+            overview="The complete Context is jointly compatible.",
+            considered_memory_uids=(first.uid, second.uid),
+            material_memory_uids=(),
+            consistent_reading="",
+            inconsistent_reading="",
+            provenance=QualityAuditProvenance(
+                FIT_JUDGMENT_OPERATION,
+                True,
+                identity,
+            ),
+        ),
     )
 
 
@@ -175,12 +221,13 @@ def test_audit_record_schema_contains_no_response_contract():
 
     value = session.to_dict()
 
-    assert value["schema_version"] == QUALITY_AUDIT_SCHEMA_VERSION == 1
+    assert value["schema_version"] == QUALITY_AUDIT_SCHEMA_VERSION == 2
+    assert value["fit"]["verdict"] == "YES"
     assert "responses" not in value
     assert not hasattr(session, "responses")
 
 
-@pytest.mark.parametrize("schema_version", [2, 3])
+@pytest.mark.parametrize("schema_version", [3, 4])
 def test_audit_rejects_undistributed_draft_schemas(schema_version):
     ctx, first, second = _context()
     value = _finding_session(ctx, first, second).to_dict()
@@ -211,7 +258,7 @@ def test_audit_setup_is_one_context_and_one_run_action():
     )
 
 
-def test_run_quality_audit_calls_all_three_independent_finders_once():
+def test_run_quality_audit_calls_all_finders_and_whole_context_fit_once():
     ctx, _first, _second = _context()
     EmptyAuditProvider.calls = []
     stages = []
@@ -226,6 +273,7 @@ def test_run_quality_audit_calls_all_three_independent_finders_once():
         "find_duplicates",
         "find_ambiguities",
         "find_conflicts",
+        FIT_JUDGMENT_OPERATION,
     ]
     assert stages == [
         ("duplicates", 1, 3),
@@ -240,6 +288,11 @@ def test_run_quality_audit_calls_all_three_independent_finders_once():
     assert all(check.report.memory_count == 2 for check in session.checks)
     assert all(
         check.provenance.identity.model == "audit-model" for check in session.checks
+    )
+    assert session.fit is not None
+    assert session.fit.verdict == "YES"
+    assert session.fit.considered_memory_uids == tuple(
+        memory.uid for memory in session.source.memories
     )
 
 
@@ -281,6 +334,7 @@ def test_get_or_run_audit_rechecks_all_sections_after_source_change(isolated_sto
         "find_duplicates",
         "find_ambiguities",
         "find_conflicts",
+        FIT_JUDGMENT_OPERATION,
     ]
     assert len(sessions.list()) == 2
 
@@ -324,12 +378,14 @@ def test_audit_initial_checks_never_supply_a_full_screen_return_view(monkeypatch
         "find_duplicates",
         "find_ambiguities",
         "find_conflicts",
+        FIT_JUDGMENT_OPERATION,
     ]
     assert stages == [
-        ("WAIT", "AUDIT", "finding redundancies", 3),
+        ("WAIT", "AUDIT", "finding redundancies", 4),
         ("UPDATE", "finding redundancies", 1),
         ("UPDATE", "finding ambiguities", 2),
         ("UPDATE", "finding conflicts", 3),
+        ("UPDATE", "checking whole-Context Fit", 4),
     ]
 
 
@@ -345,7 +401,7 @@ def test_audit_review_is_one_complete_answer_free_document():
     )
 
     assert "MEM AUDIT" in rendered
-    assert "SAVED · 3/3 CHECKS · READ-ONLY REPORT" in rendered
+    assert "SAVED · 4/4 CHECKS · READ-ONLY REPORT" in rendered
     assert "SNAPSHOT ·" in rendered
     assert "SOURCE MEMORY 1/2" not in rendered
     assert first.content in rendered
@@ -359,6 +415,7 @@ def test_audit_review_is_one_complete_answer_free_document():
     ) in rendered
     assert "AMBIGUITIES · 1/2 MEMORIES FLAGGED" in rendered
     assert "CONFLICTS · 2/2 MEMORIES INVOLVED · 1/1 PAIRS FLAGGED" in rendered
+    assert "FIT · YES" in rendered
     assert "WHY THESE MEMORIES ARE SEMANTICALLY REDUNDANT" not in rendered
     assert "QUESTION · Which audience uses this schedule?" in rendered
     assert "QUESTION · Which time is authoritative?" in rendered
@@ -374,6 +431,7 @@ def test_audit_review_is_one_complete_answer_free_document():
         "FINDING",
         "CHECK",
         "FINDING",
+        "FIT",
         "PROVENANCE",
         "BOUNDARY",
     ]
@@ -540,7 +598,7 @@ def test_review_audit_snapshot_reopens_exact_saved_report(isolated_store):
 
     assert result.exit_code == 0
     assert "MEM AUDIT" in result.stdout
-    assert "SAVED · 3/3 CHECKS" in result.stdout
+    assert "SAVED · 4/4 CHECKS" in result.stdout
     assert "REDUNDANCIES · FINISHED · 2 MEMORIES CHECKED" in result.stdout
     assert "AMBIGUITIES · FINISHED · 1/2 MEMORIES FLAGGED" in result.stdout
     assert "CONFLICTS · FINISHED · 2/2 MEMORIES INVOLVED" in result.stdout
@@ -558,7 +616,7 @@ def test_review_audit_snapshot_accepts_displayed_session_prefix(isolated_store):
 
     assert result.exit_code == 0, result.output
     assert f"SESSION [{session.uid[:8]}]" in result.stdout
-    assert "SAVED · 3/3 CHECKS" in result.stdout
+    assert "SAVED · 4/4 CHECKS" in result.stdout
 
 
 def test_review_audit_rejects_an_ambiguous_session_prefix(isolated_store):
@@ -578,7 +636,7 @@ def test_review_audit_rejects_an_ambiguous_session_prefix(isolated_store):
     assert "pass a longer UID" in result.output
 
 
-def test_audit_help_names_all_three_finders():
+def test_audit_help_names_finders_and_whole_context_fit():
     result = runner.invoke(app, ["audit", "--help"])
 
     assert result.exit_code == 0
@@ -586,6 +644,7 @@ def test_audit_help_names_all_three_finders():
     assert "duplicate" in output
     assert "ambiguity" in output
     assert "conflict" in output
+    assert "fit" in output
 
 
 def test_audit_receipt_colors_only_quality_labels_and_preserves_plain_text():
@@ -609,7 +668,7 @@ def test_audit_receipt_colors_only_quality_labels_and_preserves_plain_text():
     assert no_color.exit_code == 0, no_color.output
     assert click.unstyle(colored.output) == plain.output == no_color.output
     assert plain.output == (
-        "Audit saved: 3 quality checks.\n"
+        "Audit saved: 4 quality checks.\n"
         "Source: audit/source · 2 memories\n"
         "\n"
         "REDUNDANCIES   2 MEMORIES CHECKED · 1 GROUP · 1 PROPOSED ABSORPTION\n"
@@ -625,6 +684,7 @@ def test_audit_receipt_colors_only_quality_labels_and_preserves_plain_text():
         f"[MEMORY {second.uid[:8]}] “{second.content}” · "
         "WHY · The opening states cannot both hold. · "
         "QUESTION · Which time is authoritative?\n"
+        "FIT            YES · WHOLE CONTEXT JOINTLY COMPATIBLE\n"
         "\n"
         "Review full audit:\n"
         f"mem review audit --session {session.uid}\n"
@@ -735,7 +795,7 @@ def test_audit_receipt_preview_expands_colliding_memory_uid_prefixes():
     assert f"[MEMORY {second.uid}]" in result.output
 
 
-def test_audit_command_runs_all_three_and_saves_before_snapshot(
+def test_audit_command_runs_finders_and_fit_then_saves_before_snapshot(
     isolated_store,
     monkeypatch,
 ):
@@ -759,11 +819,12 @@ def test_audit_command_runs_all_three_and_saves_before_snapshot(
         "find_duplicates",
         "find_ambiguities",
         "find_conflicts",
+        FIT_JUDGMENT_OPERATION,
     ]
     saved = JsonAuditRecordRepository(store).list()
     assert len(saved) == 1
     assert saved[0].source.context_name == ctx.name
-    assert "SAVED · 3/3 CHECKS" in result.stdout
+    assert "SAVED · 4/4 CHECKS" in result.stdout
 
 
 def test_flagless_audit_uses_current_context_and_prints_saved_session_receipt(
@@ -795,13 +856,14 @@ def test_flagless_audit_uses_current_context_and_prints_saved_session_receipt(
     result = runner.invoke(app, ["audit"])
 
     assert result.exit_code == 0, result.output
-    assert "Audit saved: 3 quality checks." in result.output
+    assert "Audit saved: 4 quality checks." in result.output
     assert "Source: audit/source · 2 memories" in result.output
     assert (
         "REDUNDANCIES   2 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS"
     ) in result.output
     assert "AMBIGUITIES    0/2 MEMORIES FLAGGED" in result.output
     assert "CONFLICTS      0/2 MEMORIES INVOLVED · 0/1 PAIRS FLAGGED" in result.output
+    assert "FIT            YES · WHOLE CONTEXT JOINTLY COMPATIBLE" in result.output
     assert "Review full audit:\nmem review audit --session" in result.output
     assert "Source unchanged. No checkpoint created." not in result.output
     saved = JsonAuditRecordRepository(store).list()

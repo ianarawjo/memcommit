@@ -31,6 +31,13 @@ they do not invoke each other. A workbench response or handoff is typed evidence
 for a subsequent operation, never permission for this capability to mutate a
 Context.
 
+Audit additionally composes the separate operation-owned Fit judgment over the
+complete frozen direct-Memory set. That composition does not turn Fit into a
+fourth finder: Duplicate, Ambiguity, and Conflict retain their own evidence
+units, while Fit retains one set-level YES/MAY/NO result. Resolve and candidate
+Meld may expose a `MAY` or `NO` result as one actionable Audit item without
+moving its semantic ownership into this capability.
+
 ## Alternatives and boundary
 
 A monolithic call that always ran every issue check was rejected because a
@@ -44,7 +51,6 @@ This change preserves the existing provider contracts and serialized type
 vocabulary. It does not yet make one unified provider turn for all issue kinds.
 The separately reviewed exhaustive peer ledger now lives under
 `memory_issue_analysis.peer_relations`, so Compare and Meld share the analysis
-without depending on one another. Update's existing verification path remains
-unchanged: its required post-image Audit/Resolve iteration is recorded in
-`peer-relation-analysis-design-rationale.md` and is not approximated by a
-hidden validation call.
+without depending on one another. Update remains unchanged; explicit Resolve
+and candidate Meld orchestration own their detached post-image Audit iteration
+instead of approximating it with a hidden validation call inside Update.

@@ -3,8 +3,9 @@
 ## Problem
 
 A saved Audit is an historical evidence artifact: it contains one frozen Source
-snapshot, three independently typed quality checks, optional Conformance, and
-their provenance. Its terminal Review had inherited the common answerable
+snapshot, three independently typed quality checks, one whole-Context Fit
+judgment when at least two Memories exist, optional Conformance, and their
+provenance. Its terminal Review had inherited the common answerable
 Resolution Session, which exposed choices, a `RESPONSE` composer, Items, and To
 Do even though Audit has no follow-up semantic turn or Apply operation. That
 presentation made finding questions look like requests for user decisions and
@@ -22,8 +23,9 @@ contains, in order:
 2. one header section per Duplicate, Ambiguity, and Conflict check, followed by
    one independently navigable section for every positive result, represented as the
    same source-linked logical line used by Find;
-3. optional Conformance, then provider/ruleset provenance; and
-4. the explicit model-assistance and no-effect boundary.
+3. one set-level Fit section when the Source contains at least two Memories;
+4. optional Conformance, then provider/ruleset provenance; and
+5. the explicit model-assistance and no-effect boundary.
 
 Source bodies remain complete, including Memories with no positive finding,
 but they no longer become one focus stop and heading per Memory. A positive
@@ -83,31 +85,34 @@ The former
 `memcommit.adapters.interfaces.tui.operations.audit` package and the former
 `commands.audit.sessions` module are removed rather than retained as facades.
 `mem review audit` imports the narrow command-owned modules directly.
-This is an ownership-only relocation: setup interaction, catalog reads and
-ordering, report content, Viewer behavior, exceptions, and the zero-write
-boundary are unchanged. The existing Audit terminal captures therefore remain
-behaviorally valid; their reproduction script now imports the command-owned
-setup module.
+The earlier ownership relocation did not change interaction mechanics. Adding
+Fit does change report content and check counts, so the focused Fit capture set
+under `agent-records/docs/screenshots/audit-fit-resolve-20260831/` supersedes
+the earlier three-check images for current behavior.
 
 ## Application ownership
 
 Audit's application-specific model, execution, and persistence port live under
 `memcommit.application.operations.audit`.
 `model.py` owns the durable Source, Check, Session, schema validation, and record
-digest; `application.py` freezes one Source, runs the three quality finders plus
-optional Conformance as one complete operation, and publishes only a validated
+digest; `application.py` freezes one Source, runs the three quality finders,
+then one whole-Context Fit judgment for a multi-Memory Source, plus optional
+Conformance as one complete operation, and publishes only a validated
 record through `repository.py`'s `AuditRecordRepository` port. The concrete
 `persistence.operations.audit.record_repository.JsonAuditRecordRepository`
 owns private immutable UID-addressed JSON records. The read-only console projector
-composes the shared Memory Issue report views directly; Audit has no Resolution
-projection, response model, option grammar, or CAS update route. The reusable
+composes the shared Memory Issue report views directly; Audit itself has no
+response model, option grammar, or CAS update route. Resolve may project an
+Audit Fit `MAY` or `NO` as one downstream actionable item without changing the
+read-only Audit. The reusable
 analysis, report, and workbench contracts live directly under
 `application.capabilities.memory_issue_analysis`.
 
 Optional Conformance is preflighted inside the Audit application before any
 provider connection. Console progress is supplied through callbacks, but the
-console no longer assembles or re-creates the fourth-check Session itself. This
-keeps all configured checks over one frozen Source and returns exactly one fully
+console no longer assembles or re-creates the Session itself. Fit receives
+every frozen direct Memory exactly once and remains distinct from the three
+finder schemas. This keeps all configured checks over one frozen Source and returns exactly one fully
 validated Session; a failed check publishes no partial Audit. The former
 `application.capabilities.reviewing.quality.audit` and `audit_store` modules are
 removed without compatibility facades because they were provisional internal
@@ -116,10 +121,12 @@ later moved out of the presentation-oriented `reviewing` namespace and named
 `memory_issue_analysis`: its outputs are model-assisted issue candidates for
 review, not proof of a generalized quality judgment.
 
-The response-bearing draft was never distributed. On 2026-08-30 its runtime
-compatibility was removed instead of turning an unreleased shape into a durable
-contract: the sole read-only schema starts at version 1, strict decoding rejects
-the discarded drafts, and no migration or compatibility facade is provided.
+The response-bearing draft was never distributed. Schema version 1 remains a
+readable historical three-finder/optional-Conformance record. Schema version 2
+adds the typed Fit section. A multi-Memory version-1 record can still be opened
+for historical review, but it is not reused by current Resolve or Meld because
+it lacks the required whole-set judgment; they run and save a current Audit
+instead. Strict decoding still rejects the discarded response-bearing drafts.
 `QualityAuditSession` is frozen,
 `JsonAuditRecordRepository.create` is create-only, and an existing UID cannot
 be replaced. Historical screenshots remain evidence of the
@@ -138,4 +145,8 @@ immutable records, receipts, and the cross-operation command ledger.
   Contexts, Memories, checkpoints, or provider state.
 - The Viewer reports the saved model judgments; it does not claim that an
   absent finding proves quality.
+- Fit is ordinary-reading compatibility, not factual verification, relevance,
+  usefulness, or proof that the complete Context is true.
+- `YES` adds no Resolve item. `MAY` and `NO` each become at most one set-level
+  downstream item whose members are the material Memories retained by Fit.
 - Audit records contain no response or disposition fields.

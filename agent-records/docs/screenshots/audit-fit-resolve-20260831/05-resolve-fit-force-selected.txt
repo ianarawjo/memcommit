@@ -1,0 +1,12 @@
+ RESOLVE · < 1/1 >
+ FIT · [11111111] “The main entrance opens at 08:00.” ↔ [33333333] “The main entrance remains closed until 09:00.”
+ Which ordinary reading should the Context preserve?
+  1 · ACCEPT THIS DIRECTION · State which entrance each schedule governs.
+  2 · ADJUST WITH YOUR INTENT · Enter the direction this should follow.
+      YOUR INTENT  │ › Type here…                                     │
+✓ 3 · LEAVE UNRESOLVED · Exclude this item from Update input and retain it as unresolved.
+
+
+  FINALIZE DECISIONS · 1/1 READY
+
+ Selected · 3 · LEAVE UNRESOLVED

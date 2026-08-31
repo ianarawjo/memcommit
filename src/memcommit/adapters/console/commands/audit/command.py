@@ -80,7 +80,8 @@ def _run_quality_audit_checks(
 ) -> QualityAuditSession:
     """Run the frozen checks behind one shared transient progress line."""
 
-    total_checks = 4 if conformance_rules is not None else 3
+    fit_enabled = len(ctx.memories) >= 2
+    total_checks = 3 + int(fit_enabled) + int(conformance_rules is not None)
 
     def work(progress: CommandWaitProgress) -> QualityAuditSession:
         def update_progress(kind: QualityAuditKind, step: int, _total: int) -> None:
@@ -94,9 +95,14 @@ def _run_quality_audit_checks(
             provider_factory,
             conformance_rules=conformance_rules,
             on_check=update_progress,
+            on_fit=(
+                lambda: progress.update("checking whole-Context Fit", step=4)
+                if fit_enabled
+                else None
+            ),
             on_conformance=lambda: progress.update(
                 "checking conformance",
-                step=4,
+                step=4 + int(fit_enabled),
             ),
         )
 
@@ -190,7 +196,7 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    """Run quality checks and optional Rule Conformance, then save one Audit."""
+    """Run quality checks, whole-Context Fit, and optional Rule Conformance."""
 
     try:
         context_name = choose_context_operand(

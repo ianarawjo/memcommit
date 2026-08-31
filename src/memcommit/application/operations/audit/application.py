@@ -22,6 +22,7 @@ from memcommit.application.operations.audit.model import (
     QualityAuditError,
     QualityAuditKind,
     QualityAuditProvenance,
+    QualityAuditFit,
     QualityAuditReport,
     QualityAuditSession,
     QualityAuditSource,
@@ -34,6 +35,11 @@ from memcommit.application.operations.check_conformance.model import (
 from memcommit.application.operations.check_conformance.runtime import (
     FrozenContextConformance,
     freeze_context_conformance,
+)
+from memcommit.application.operations.fit.judgment import (
+    FIT_JUDGMENT_OPERATION,
+    FitProposition,
+    judge_fit,
 )
 from memcommit.core.context import Context, Memory
 from memcommit.providers.types import CompletionRun, ProviderIdentity
@@ -88,6 +94,7 @@ def create_quality_audit(
     ctx: Context,
     checks: tuple[QualityAuditCheck, ...],
     *,
+    fit: QualityAuditFit | None = None,
     conformance: ConformanceReport | None = None,
     uid: str | None = None,
     created_at: str | None = None,
@@ -101,6 +108,7 @@ def create_quality_audit(
         or datetime.now(timezone.utc).isoformat(timespec="seconds"),
         source=source,
         checks=checks,
+        fit=fit,
         conformance=conformance,
     )
     return QualityAuditSession.from_dict(session.to_dict())
@@ -123,7 +131,7 @@ def _conformance_matches(
 
     if frozen_rules is None:
         # With no newly supplied Rules operand, the newest exact-source Audit is
-        # reusable as recorded, including its optional fourth check.
+        # reusable as recorded, including its optional Conformance check.
         return True
     conformance = session.conformance
     if conformance is None:
@@ -154,6 +162,9 @@ def find_current_quality_audit(
         for session in repository.list()
         if session.source.context_uid == source.context_uid
         and session.source.context_digest == source.context_digest
+        # Schema-v1 records remain reviewable, but a multi-Memory Audit without
+        # its whole-set Fit section is not reusable for current Resolve/Meld.
+        and (len(source.memories) < 2 or session.fit is not None)
         and _conformance_matches(session, frozen_rules)
     )
     if not matches:
@@ -168,6 +179,7 @@ def get_or_run_quality_audit(
     *,
     conformance_rules: Context | None = None,
     on_check: Callable[[QualityAuditKind, int, int], None] | None = None,
+    on_fit: Callable[[], None] | None = None,
     on_conformance: Callable[[], None] | None = None,
 ) -> QualityAuditSession:
     """Reuse one exact completed Audit or atomically publish a fresh result."""
@@ -184,6 +196,7 @@ def get_or_run_quality_audit(
         provider_factory,
         conformance_rules=conformance_rules,
         on_check=on_check,
+        on_fit=on_fit,
         on_conformance=on_conformance,
     )
     record_quality_audit(repository, session)
@@ -218,13 +231,14 @@ def run_quality_audit(
     *,
     conformance_rules: Context | None = None,
     on_check: Callable[[QualityAuditKind, int, int], None] | None = None,
+    on_fit: Callable[[], None] | None = None,
     on_conformance: Callable[[], None] | None = None,
 ) -> QualityAuditSession:
     """Run every configured Audit check over one frozen direct Context frame."""
 
     source = QualityAuditSource.from_context(ctx)
     frozen = source.context()
-    # Validate the optional fourth frame before any provider connection so an
+    # Validate the optional Rules frame before any provider connection so an
     # invalid Rules Context cannot leave an expensive partial Audit in flight.
     frozen_conformance = (
         None
@@ -257,6 +271,42 @@ def run_quality_audit(
             )
         )
 
+    fit = None
+    frozen_memories = tuple(
+        item for item in frozen.iter_items() if isinstance(item, Memory)
+    )
+    if len(frozen_memories) >= 2:
+        if on_fit is not None:
+            on_fit()
+        capture = _CapturingProviderFactory(provider_factory)
+        aliases = tuple(
+            f"m{index:06d}" for index in range(1, len(frozen_memories) + 1)
+        )
+        fit_analysis = judge_fit(
+            tuple(
+                FitProposition(alias, memory.content, role="MEMORY")
+                for alias, memory in zip(aliases, frozen_memories, strict=True)
+            ),
+            provider=capture(),
+        )
+        material_aliases = set(fit_analysis.assessment.material_proposition_ids)
+        fit = QualityAuditFit(
+            uid=fit_analysis.uid,
+            created_at=fit_analysis.created_at,
+            verdict=fit_analysis.assessment.verdict,
+            reason=fit_analysis.assessment.reason,
+            overview=fit_analysis.overview,
+            considered_memory_uids=tuple(memory.uid for memory in frozen_memories),
+            material_memory_uids=tuple(
+                memory.uid
+                for alias, memory in zip(aliases, frozen_memories, strict=True)
+                if alias in material_aliases
+            ),
+            consistent_reading=fit_analysis.assessment.consistent_reading,
+            inconsistent_reading=fit_analysis.assessment.inconsistent_reading,
+            provenance=capture.provenance(FIT_JUDGMENT_OPERATION),
+        )
+
     conformance = None
     if frozen_conformance is not None:
         if on_conformance is not None:
@@ -271,6 +321,7 @@ def run_quality_audit(
     return create_quality_audit(
         frozen,
         tuple(checks),
+        fit=fit,
         conformance=conformance,
     )
 

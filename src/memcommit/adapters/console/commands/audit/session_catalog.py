@@ -31,7 +31,14 @@ def audit_session_entries(
     entries: list[SessionPickerEntry] = []
     for session in sessions.list():
         counts = {check.kind: len(check.report.findings) for check in session.checks}
-        check_total = 4 if session.conformance is not None else 3
+        check_total = (
+            len(session.checks)
+            + int(session.fit is not None)
+            + int(session.conformance is not None)
+        )
+        fit_suffix = (
+            f" · FIT {session.fit.verdict}" if session.fit is not None else ""
+        )
         conformance_suffix = (
             f" · CONF {session.conformance.issue_count}"
             if session.conformance is not None
@@ -48,7 +55,7 @@ def audit_session_entries(
                 ),
                 subtitle=(
                     f"DUP {counts['duplicates']} · AMB {counts['ambiguities']} · "
-                    f"CONFLICT {counts['conflicts']}{conformance_suffix}"
+                    f"CONFLICT {counts['conflicts']}{fit_suffix}{conformance_suffix}"
                 ),
                 group=session.source.context_name,
                 sort_timestamp=_timestamp(session, sessions),
@@ -60,8 +67,9 @@ def audit_session_entries(
                         f"Direct Memories {len(session.source.memories)}",
                         (
                             "Duplicate, Ambiguity, Conflict"
+                            + (", and whole-Context Fit" if session.fit is not None else "")
                             + (
-                                ", and Conformance"
+                                ", plus Conformance"
                                 if session.conformance is not None
                                 else ""
                             )

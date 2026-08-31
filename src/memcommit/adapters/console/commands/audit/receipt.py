@@ -15,6 +15,7 @@ from memcommit.adapters.console.terminal.core.text import (
 )
 from memcommit.adapters.console.terminal.core.theme import (
     semantic_color_rgb,
+    semantic_judgment_role,
     semantic_quality_role,
 )
 from memcommit.application.operations.audit.model import QualityAuditSession
@@ -52,7 +53,7 @@ def render_quality_audit_receipt(session: QualityAuditSession) -> None:
     """Print the saved artifact with each finder's truthful result unit."""
 
     typer.secho("Audit saved:", bold=True, nl=False)
-    typer.echo(f" {len(session.checks)} quality checks.")
+    typer.echo(f" {len(session.checks) + int(session.fit is not None)} quality checks.")
     memory_count = len(session.source.memories)
     memory_label = "memory" if memory_count == 1 else "memories"
     typer.secho("Source:", bold=True, nl=False)
@@ -99,6 +100,27 @@ def render_quality_audit_receipt(session: QualityAuditSession) -> None:
         remaining = len(report_view.items) - _AUDIT_RECEIPT_PREVIEW_LIMIT
         if remaining > 0:
             typer.echo(f"  … {remaining} more")
+
+    fit = session.fit
+    if fit is not None:
+        typer.secho("FIT", bold=True, nl=False)
+        typer.echo(" " * 12, nl=False)
+        role = semantic_judgment_role(fit.verdict)
+        if role is None:  # pragma: no cover - Audit validates the Fit union.
+            raise ValueError("Unsupported Audit Fit verdict.")
+        typer.secho(
+            fit.verdict,
+            fg=semantic_color_rgb(role),
+            bold=True,
+            nl=False,
+        )
+        if fit.verdict == "YES":
+            typer.echo(" · WHOLE CONTEXT JOINTLY COMPATIBLE")
+        else:
+            typer.echo(
+                f" · {len(fit.material_memory_uids)}/{memory_count} MEMORIES MATERIAL"
+                f" · WHY · {display_escape_text(fit.reason)}"
+            )
 
     typer.echo()
     typer.secho("Review full audit:", bold=True)

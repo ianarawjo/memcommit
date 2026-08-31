@@ -13,7 +13,10 @@ from memcommit.adapters.console.commands.audit.session_catalog import (
 )
 from memcommit.adapters.console.commands.review.sessions import select_report_session
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.adapters.console.terminal.core.theme import semantic_quality_role
+from memcommit.adapters.console.terminal.core.theme import (
+    semantic_judgment_role,
+    semantic_quality_role,
+)
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     semantic_role_style,
 )
@@ -102,12 +105,21 @@ def quality_audit_review_document(
             operation_label=f"AUDIT · {label}",
         )
 
-    check_total = 4 if session.conformance is not None else 3
+    check_total = (
+        len(session.checks)
+        + int(session.fit is not None)
+        + int(session.conformance is not None)
+    )
     summary_text = (
         "All Memory-issue finders completed over the same saved direct Context "
         "snapshot. Each section retains its own Memory, pair, group, or "
         "absorption unit."
     )
+    if session.fit is not None:
+        summary_text += (
+            " Fit judged the complete direct-Memory set as one role-neutral "
+            "compatibility question."
+        )
     if session.conformance is not None:
         summary_text += (
             " Conformance evaluated the same Source against "
@@ -118,6 +130,8 @@ def quality_audit_review_document(
         f"{quality_find_report_summary_text(report_views[check.kind])}"
         for check in session.checks
     )
+    if session.fit is not None:
+        checks_text += f"\nFIT · FINISHED · {session.fit.verdict}"
     if session.conformance is not None:
         checks_text += (
             "\nCONFORMANCE · FINISHED · "
@@ -229,6 +243,48 @@ def quality_audit_review_document(
                 )
             )
 
+    fit = session.fit
+    if fit is not None:
+        verdict_role = semantic_judgment_role(fit.verdict)
+        if verdict_role is None:  # pragma: no cover - Audit validates this union.
+            raise ValueError("Unsupported Audit Fit verdict.")
+        source_by_uid = {memory.uid: memory for memory in session.source.memories}
+        fit_fragments: list[tuple[str, str]] = [
+            ("class:report-neutral", " "),
+            ("class:report-label", "FIT · "),
+            (semantic_role_style(verdict_role), fit.verdict + "\n"),
+            ("class:viewer-body", f" {_inline(fit.reason)}\n"),
+        ]
+        if fit.material_memory_uids:
+            fit_fragments.append(("class:report-label", " MATERIAL · "))
+            for ordinal, uid in enumerate(fit.material_memory_uids):
+                if ordinal:
+                    fit_fragments.append(("class:report-neutral", " / "))
+                memory = source_by_uid[uid]
+                fit_fragments.extend(
+                    [
+                        ("class:report-label", f"[{safe_terminal_text(uid[:8])}] "),
+                        ("class:memory-object", _inline(memory.content)),
+                    ]
+                )
+            fit_fragments.append(("class:report-neutral", "\n"))
+        if fit.verdict == "MAY":
+            fit_fragments.extend(
+                [
+                    ("class:report-label", " COMPATIBLE READING · "),
+                    ("class:viewer-body", _inline(fit.consistent_reading) + "\n"),
+                    ("class:report-label", " INCOMPATIBLE READING · "),
+                    ("class:viewer-body", _inline(fit.inconsistent_reading) + "\n"),
+                ]
+            )
+        sections.append(
+            SemanticViewerSection(
+                "AUDIT:FIT",
+                "FIT",
+                SemanticViewerBlock(tuple(fit_fragments)),
+            )
+        )
+
     conformance = session.conformance
     if conformance is not None:
         rule_by_uid = {rule.uid: rule for rule in conformance.rules}
@@ -248,6 +304,10 @@ def quality_audit_review_document(
         f"{check.provenance.display_name()}"
         for check in session.checks
     ]
+    if fit is not None:
+        provenance_lines.append(
+            f"FIT · {fit.contract_version} · {fit.provenance.display_name()}"
+        )
     if conformance is not None:
         identity = conformance.provider_identity
         assert identity is not None
@@ -270,7 +330,8 @@ def quality_audit_review_document(
             "BOUNDARY",
             (
                 "This saved Audit is a model-assisted finding record, not proof "
-                "that the Source is free of Memory issues. This Viewer cannot "
+                "that the Source is free of Memory issues or objectively true. "
+                "Fit records ordinary-reading compatibility only. This Viewer cannot "
                 "select a reading, write a response, rerun a finder, or apply a "
                 "Memory change."
             ),

@@ -22,7 +22,8 @@ decision, verification, authority, and final publication boundaries.
 freeze one exact direct Context and mutation capabilities
 -> load the newest Audit matching its exact direct-Memory snapshot
 -> if none matches, run and save the complete Audit
-   (redundancy, ambiguity, conflict, optional Rule conformance)
+   (redundancy, ambiguity, conflict, whole-Context Fit,
+    optional Rule conformance)
 -> derive exactly one non-mutating direction for every actionable Audit item
 -> collect exactly one ACCEPT, INTENT, or LEAVE UNRESOLVED decision per item
 -> bind the decisions to the Audit snapshot and Context revision
@@ -44,9 +45,17 @@ Resolve matches a saved Audit by exact Context UID and direct-Memory digest.
 With an explicit Rules operand it additionally requires the exact frozen Rule
 UID/content frame. Without a newly supplied Rules operand, the newest matching
 Audit is reused as recorded, including its optional Conformance section. A
-missing or stale record causes all three Audit finders—and Conformance when
-requested—to run and the completed immutable record to be saved before the
-decision UI appears.
+missing or stale record causes all three Audit finders, whole-Context Fit for a
+multi-Memory Source, and Conformance when requested to run before the completed
+immutable record is saved and the decision UI appears. A matching historical
+Audit without Fit remains reviewable but is not reused for a current
+multi-Memory Resolve run.
+
+Fit retains one judgment over the complete ordered Memory set. `YES` adds no
+Resolve item. `MAY` or `NO` adds exactly one `FIT` item whose members are the
+ordered material Memories named by the judgment. Resolve does not split it
+into pairwise conflicts or one item per Memory, and the direction provider may
+not change its verdict or membership.
 
 The Resolve provider receives the complete Context plus the exact immutable
 Audit items. Its output schema requires one direction for every supplied item
@@ -126,14 +135,18 @@ application over that post-image. If the source Audit included Conformance,
 the exact recorded Rules frame is reconstructed for the post-image check.
 
 A remaining issue is allowed only when its exact semantic key belongs to a
-LEAVE UNRESOLVED decision. Every other duplicate, ambiguity, conflict, or Rule
-judgment—including a new issue involving another Memory—blocks publication.
+LEAVE UNRESOLVED decision. Every other duplicate, ambiguity, conflict, Fit, or
+Rule judgment—including a new issue involving another Memory—blocks
+publication.
 An unresolved decision is written to the receipt only when that exact key still
 appears; incidental repair removes it from unresolved state.
 
 This gate proves neither global truth nor that the model inferred the person's
-intent. It proves only that the reviewed post-image has no unpermitted Audit
-issue under the same bounded checks.
+intent. Fit is ordinary-reading compatibility, not factual verification. The
+gate proves only that the reviewed post-image has no unpermitted Audit issue
+under the same bounded checks. It is not a special `Fit == YES` hard gate:
+the same exact `FIT` key may remain only through the ordinary explicit
+LEAVE UNRESOLVED decision.
 
 ## Authority, freshness, and publication
 
@@ -181,8 +194,8 @@ other Memories and relationships. The finalized inputs are therefore sent in
 one Update against the complete Target, followed by one complete Audit.
 
 Re-running conflict discovery directly inside Resolve was rejected because it
-would bypass Audit's application ownership and omit redundancy, ambiguity, and
-Conformance. Treating LEAVE UNRESOLVED text as Source was rejected because a
+would bypass Audit's application ownership and omit redundancy, ambiguity,
+Fit, and Conformance. Treating LEAVE UNRESOLVED text as Source was rejected because a
 request to tolerate uncertainty must never authorize changes.
 
 Making the intent field a fourth navigation row was rejected because it turns

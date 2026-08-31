@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM AUDIT                                                                                                                                                                       ^┃
+┃ SAVED · 4/4 CHECKS · READ-ONLY REPORT                                                                                                                                            ┃
+┃ SESSION [cccccccc] · CREATED 2026-08-31T12:00:01+00:00                                                                                                                           ┃
+┃ SUMMARY · All Memory-issue finders completed over the same saved direct Context snapshot. Each section retains its own Memory, pair, group, or absorption unit. Fit judged the c ┃
+┃omplete direct-Memory set as one role-neutral compatibility question.                                                                                                             ┃
+┃ CHECKS · REDUNDANCIES · FINISHED · 3 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS / AMBIGUITIES · FINISHED · 0/3 MEMORIES FLAGGED / CONFLICTS · FINISHED · 0/3 MEMORIES  ┃
+┃INVOLVED · 0/3 PAIRS FLAGGED / FIT · FINISHED · MAY                                                                                                                               ┃
+┃ SOURCE · study/audit-fit · 3 direct Memories as captured when this Audit ran. Descendants and embedded Contexts were not analyzed.                                               ┃
+┃ SNAPSHOT · [11111111] The main entrance opens at 08:00. / [22222222] The loading dock opens at 07:00. / [33333333] The main entrance remains closed until 09:00.                 ┃
+┃ REDUNDANCIES · 3 MEMORIES CHECKED · 0 GROUPS · 0 PROPOSED ABSORPTIONS · [SOURCE study/audit-fit]                                                                                 ┃
+┃ No redundancy evidence in this analysis.                                                                                                                                         ┃
+┃ AMBIGUITIES · 0/3 MEMORIES FLAGGED · [SOURCE study/audit-fit]                                                                                                                    ┃
+┃ No ambiguity findings in this analysis.                                                                                                                                          ┃
+┃ CONFLICTS · 0/3 MEMORIES INVOLVED · 0/3 PAIRS FLAGGED · [SOURCE study/audit-fit]                                                                                                 ┃
+┃ No conflict findings in this analysis.                                                                                                                                           ┃
+┃ FIT · MAY                                                                                                                                                                        ┃
+┃ The first and third Memories may govern the same entrance.                                                                                                                       ┃
+┃ MATERIAL · [11111111] The main entrance opens at 08:00. / [33333333] The main entrance remains closed until 09:00.                                                               ┃
+┃ COMPATIBLE READING · The times govern different entrances.                                                                                                                       ┃
+┃ INCOMPATIBLE READING · Both times govern the main entrance.                                                                                                                      ┃
+┃ PROVENANCE                                                                                                                                                                       ┃
+┃ REDUNDANCIES · duplicates-v1-draft · capture:audit-fit / AMBIGUITIES · ambiguity-v1-draft · capture:audit-fit / CONFLICTS · conflict-v2-draft · capture:audit-fit / FIT · propos ┃
+┃ition-fit-v1 · capture:audit-fit                                                                                                                                                  ┃
+┃ BOUNDARY                                                                                                                                                                         ┃
+┃ This saved Audit is a model-assisted finding record, not proof that the Source is free of Memory issues or objectively true. Fit records ordinary-reading compatibility only. Th ┃
+┃is Viewer cannot select a reading, write a response, rerun a finder, or apply a Memory change.                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ AUDIT REVIEW · ↑/↓ section · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

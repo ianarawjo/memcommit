@@ -10,8 +10,8 @@ about preserving `AI` was stronger than the example `Axiom AI Technologies →
 AAT` supported.
 
 Conformance is therefore a separate read-only semantic operation. It is
-available directly through `mem check-conformance` and as an optional fourth
-section of `mem audit`. Both adapters call the same typed core; Audit does not
+available directly through `mem check-conformance` and as an optional fifth
+section of a multi-Memory `mem audit`. Both adapters call the same typed core; Audit does not
 invoke the CLI command as a subprocess or reinterpret its rendered text.
 
 ## Rule/Context Conformance
@@ -168,23 +168,23 @@ and retained-analysis authority contracts before rollout.
 
 ## Audit composition and compatibility
 
-Normal `mem audit --context TARGET` retains its existing three independent
-quality checks. Supplying `--against RULES` or its role-named `--rule RULES`
-alias adds the same Context Conformance
-report as an optional fourth saved section:
+Normal `mem audit --context TARGET` runs its three independent quality checks
+and, when the frozen Source has at least two Memories, one whole-Context Fit
+judgment. Supplying `--against RULES` or its role-named `--rule RULES` alias
+adds the same Context Conformance report as an optional final saved section:
 
 ```text
-Duplicate -> Ambiguity -> Conflict -> Conformance
+Duplicate -> Ambiguity -> Conflict -> Fit -> Conformance
 ```
 
-The three quality report types and response ledger remain unchanged.
-Conformance is a distinct optional typed section because forcing its
-Rule-versus-Target schema into the pair/single-Memory finding union would
-corrupt the existing review contract. Audit schema version 2 adds the optional
-section; version-1 three-check records remain readable and reopen as `3/3`.
-Version-2 records with Conformance reopen as `4/4` and expose the complete Rule
-judgments in the report overview. Conformance judgments are read-only in this
-slice and do not become fabricated duplicate/ambiguity/conflict review items.
+The three quality report types remain unchanged. Fit and Conformance are
+distinct typed sections because forcing a set-level or Rule-versus-Target
+schema into the pair/single-Memory finding union would corrupt the review
+contract. Audit schema version 2 adds Fit; version-1 records remain readable
+with their recorded Conformance section but are not reused for a current
+multi-Memory Resolve/Meld run. A current multi-Memory Audit reopens as `4/4`,
+or `5/5` with Conformance. Conformance judgments do not become fabricated
+duplicate/ambiguity/conflict/Fit judgments.
 
 ## Execution and safety invariants
 
@@ -195,8 +195,9 @@ slice and do not become fabricated duplicate/ambiguity/conflict review items.
   input failure.
 - Neither direct Conformance nor Audit changes a Ground, Context, Rule, or
   Memory and neither creates a checkpoint.
-- Audit validates optional Conformance setup before opening any of its four
-  provider turns.
+- Audit validates optional Conformance setup before opening any provider turn;
+  a multi-Memory Audit then performs three finder calls, Fit, and optional
+  Conformance in that order.
 - Durable Audit requires recorded provider identity and exact Source equality.
 - A Ground workspace is revalidated after Rule/Context Conformance before its
   report is returned.

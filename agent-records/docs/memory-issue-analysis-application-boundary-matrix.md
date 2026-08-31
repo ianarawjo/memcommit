@@ -26,9 +26,11 @@ presentation phase that not every consumer shares. It is removed without a
 compatibility alias. Find, Audit, Atomize normal-form validation, and semantic
 classification import the narrow analysis owner directly; they do not invoke a
 peer `find-*` application merely to reuse a judgment primitive. Compare and
-Meld import the exhaustive `peer_relations` owner directly. Update has no
-Compare dependency; a later operation-owned post-image Audit/Resolve loop is
-required before it can safely consume issue findings.
+Meld import the exhaustive `peer_relations` owner directly. Audit composes the
+three capability-owned finder reports with the separately operation-owned
+whole-Context Fit judgment. Resolve and the candidate Meld pipeline consume
+that immutable aggregate and repeat it after detached Update planning; Update
+itself gains no hidden issue or Fit gate.
 
 ## Named operation routes
 
@@ -64,6 +66,9 @@ provider hook was stale and has been removed from the route contract.
   this capability and are not alternate import surfaces.
 - Meld's relation analysis is capability-owned while its disposition,
   proposal, session, and Apply behavior remains operation-owned.
-- Update does not gain an invisible issue gate. Its current plan/application
-  lifecycle stays unchanged until findings can participate in a typed revision
-  iteration.
+- Audit Fit remains owned by `operations.fit.judgment`, not this capability.
+  `MAY` or `NO` is projected downstream as one set-level item rather than
+  fabricated pairwise finder evidence.
+- Update does not gain an invisible issue gate. Resolve and candidate Meld own
+  their explicit detached post-image Audit loops around the unchanged Update
+  planner/application lifecycle.

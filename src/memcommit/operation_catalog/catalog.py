@@ -64,8 +64,8 @@ _OPERATIONS = (
     ),
     _operation(
         "audit",
-        "Run Duplicate, Ambiguity, and Conflict checks plus optional Rule "
-        "Conformance, save the result, and print its Review receipt.",
+        "Run Duplicate, Ambiguity, Conflict, and whole-Context Fit checks plus "
+        "optional Rule Conformance, save the result, and print its Review receipt.",
         "Context + Rules? -> saved Audit report",
         ExecutionKind.SEMANTIC,
         "No Context content changes",
