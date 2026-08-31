@@ -67,7 +67,7 @@ def _operation_app():
 
     from memcommit.adapters.console.commands.makemore.command import cmd as makemore_cmd
     from memcommit.adapters.console.commands.review.command import cmd as review_cmd
-    from memcommit.application.operations.operation_catalog import operation_summary
+    from memcommit.operation_catalog import operation_summary
 
     app = typer.Typer()
     app.command("makemore", help=operation_summary("makemore"))(makemore_cmd)

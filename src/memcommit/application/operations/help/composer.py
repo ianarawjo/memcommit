@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable
 
-from memcommit.application.operations.operation_catalog.model import OperationHelp
+from memcommit.operation_catalog.model import OperationDescriptor
 
 
 @dataclass(frozen=True)
@@ -20,13 +20,13 @@ class HelpRow:
 class ComposedOperationHelp:
     """Renderer-neutral detail assembled from common and CLI-owned sources."""
 
-    operation: OperationHelp
+    operation: OperationDescriptor
     overview: tuple[HelpRow, ...]
     cli_forms: tuple[str, ...]
 
 
 def compose_operation_help(
-    operation: OperationHelp,
+    operation: OperationDescriptor,
     *,
     cli_forms: Iterable[str] = (),
 ) -> ComposedOperationHelp:

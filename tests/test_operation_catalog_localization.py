@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.application.operations.operation_catalog import OPERATION_HELP_BY_NAME
-from memcommit.application.operations.operation_catalog.localization import (
+from memcommit.operation_catalog import OPERATION_BY_NAME
+from memcommit.operation_catalog.localization import (
     OPERATION_CATALOG_LANGUAGES,
     OperationCatalogLanguage,
     localized_operation_copy,
@@ -14,11 +14,11 @@ from memcommit.application.operations.operation_catalog.localization import (
 
 
 def test_every_language_covers_the_canonical_operation_catalog() -> None:
-    validate_operation_translation_coverage(set(OPERATION_HELP_BY_NAME))
+    validate_operation_translation_coverage(set(OPERATION_BY_NAME))
 
 
 def test_english_copy_comes_from_the_canonical_catalog() -> None:
-    canonical = OPERATION_HELP_BY_NAME["atomize"]
+    canonical = OPERATION_BY_NAME["atomize"]
 
     localized = localized_operation_copy("EN", "atomize")
 
@@ -48,5 +48,5 @@ def test_non_english_copy_is_selected_from_its_language_catalog(
 
 
 def test_unknown_operation_is_rejected_by_the_canonical_catalog() -> None:
-    with pytest.raises(KeyError, match="No Operation Help is registered"):
+    with pytest.raises(KeyError, match="No public operation is registered"):
         localized_operation_copy("KO", "not-an-operation")

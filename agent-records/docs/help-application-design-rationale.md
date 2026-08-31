@@ -5,7 +5,7 @@
 Study feedback identified operation discovery as an entry-point problem: a
 person or agent should be able to learn what an operation means, when to use
 it, and whether it is deterministic or semantic without reading command
-implementation files. MemCommit now has one audited 65-operation catalog
+implementation files. MemCommit now has one audited 66-operation catalog
 and a substantial CLI/TUI browser, but only terminal presentation consumed the
 catalog as a complete operation. Python and agent callers had no equivalent
 stable discovery route.
@@ -33,8 +33,8 @@ catalog subset but does not generate substitute Help prose.
   comparison, limitation, access boundary, or semantic boundary by its stable
   operation-local ID.
 
-Each record retains name, summary, flow, execution kind, effect, range, and the
-reviewed use situation. `use_when` is the public discovery name for the
+Each record retains name, family, summary, flow, execution kind, effect, range,
+and the reviewed use situation. `use_when` is the public discovery name for the
 existing `best_for` value, which remains as a compatibility field. An operation
 may also carry structured detailed comparisons: one title and explanation plus
 named alternatives with guidance. These comparisons cover adjacent operation
@@ -93,7 +93,8 @@ behavior and do not connect a provider.
 
 `MemCommitClient.list_operations()`, `describe_operation()`,
 `list_operation_details()`, and `describe_operation_detail()` project the same
-records to immutable public DTOs. Operation records carry compact detail
+records to immutable public DTOs. The version-1 DTO deliberately retains its
+existing flat shape and does not yet expose the new family field. Operation records carry compact detail
 references; a full comparison or prose body is loaded only by its exact detail
 query. These methods deliberately do not touch the client's frozen Store or
 provider dependencies.
@@ -147,7 +148,7 @@ effect, range, use-when, or detailed comparison meaning. A generic free-form
 boundary from syntax, warning, rationale, or implementation commentary.
 Structured comparisons and typed prose details instead preserve the decision
 shape and boundary kind across interfaces. Per-operation modules under
-`application/operations/operation_catalog/details/` keep growing content
+`operation_catalog/details/` keep growing content
 reviewable without turning the main operation catalog into a long mixed-purpose
 file; one explicit registry
 checks ownership and duplicate IDs. MCP and Skills project only what their

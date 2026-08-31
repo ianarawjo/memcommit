@@ -46,18 +46,24 @@ def test_production_help_consumers_use_the_operation_owner() -> None:
 def test_operation_translations_belong_to_the_catalog() -> None:
     catalog_localization = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/operation_catalog/localization.py"
+        / "src/memcommit/operation_catalog/localization.py"
+    ).read_text(encoding="utf-8")
+    family_localization = (
+        REPOSITORY_ROOT
+        / "src/memcommit/operation_catalog/family_localization.py"
     ).read_text(encoding="utf-8")
     help_copy = (
         REPOSITORY_ROOT
         / "src/memcommit/adapters/console/commands/help/localized_copy.py"
     ).read_text(encoding="utf-8")
 
-    assert "memcommit.adapters" not in catalog_localization
-    assert "prompt_toolkit" not in catalog_localization
-    assert "typer" not in catalog_localization
+    catalog_copy = catalog_localization + family_localization
+    assert "memcommit.adapters" not in catalog_copy
+    assert "prompt_toolkit" not in catalog_copy
+    assert "typer" not in catalog_copy
     assert "OPERATION_TRANSLATIONS" not in help_copy
-    assert "_CATEGORY_DESCRIPTIONS" in help_copy
+    assert "FAMILY_DESCRIPTION_TRANSLATIONS" not in help_copy
+    assert "_CATEGORY_DESCRIPTIONS" not in help_copy
 
 
 def test_help_owner_preserves_catalog_and_injected_provider_boundaries() -> None:

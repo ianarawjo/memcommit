@@ -10,24 +10,23 @@ from memcommit.adapters.console.commands.help.localized_copy import (
     category_description,
     validate_help_translation_coverage,
 )
-from memcommit.application.operations.operation_catalog import (
-    OPERATION_HELP_BY_NAME,
+from memcommit.operation_catalog import (
+    OPERATION_BY_NAME,
     operation_help,
 )
 
 
 def test_help_copy_validates_catalog_and_interface_language_coverage() -> None:
-    validate_help_translation_coverage(set(OPERATION_HELP_BY_NAME))
+    validate_help_translation_coverage(set(OPERATION_BY_NAME))
 
 
-def test_help_category_copy_remains_console_owned() -> None:
-    english = "Use semantic analysis to transform content."
-
-    assert category_description("EN", "SEMANTIC TRANSFORMATIONS", english) == english
+def test_help_projects_catalog_owned_family_copy() -> None:
+    assert category_description("EN", "SEMANTIC TRANSFORMATIONS").startswith(
+        "Uses LLM semantic analysis"
+    )
     assert category_description(
         "KO",
         "SEMANTIC TRANSFORMATIONS",
-        english,
     ).startswith("LLM semantic analysis")
 
 

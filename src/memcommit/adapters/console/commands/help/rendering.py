@@ -12,11 +12,11 @@ from memcommit.adapters.console.terminal.core.text_layout import (
     wrap_terminal_text,
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.application.operations.operation_catalog import (
+from memcommit.operation_catalog import (
     OperationComparisonDetail,
     OperationTextDetail,
 )
-from memcommit.application.operations.operation_catalog.localization import (
+from memcommit.operation_catalog.localization import (
     localized_operation_copy,
 )
 from memcommit.application.operations.help.composer import compose_operation_help
@@ -259,14 +259,13 @@ def _help_group_fragments(
     vertical = "┃" if focused else "│"
     category_copy = HELP_CATEGORY_DESCRIPTIONS.get(title)
     if category_copy is not None:
-        classification, description = category_copy
+        classification, _description = category_copy
         prefix = f"{classification} · " if classification is not None else ""
         lines = _wrap_prefixed_terminal_text(
             prefix,
             category_description(
                 language,
                 title,
-                description,
             ),
             width=content_width,
         )

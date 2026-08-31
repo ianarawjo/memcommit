@@ -245,8 +245,9 @@ prompt-toolkit selector:
   inspect first, then navigate or create, then perform semantic work, with
   destructive or broad cleanup actions last. Primary commands and any
   separately presented compatibility commands remain adjacent. This order
-  comes from `HELP_CATEGORY_GROUPS`; the renderer must not alphabetize it
-  again. `A–Z` alone provides lexical lookup.
+  comes from the top-level operation-family catalog; Help's
+  `HELP_CATEGORY_GROUPS` is a compatibility projection of that order. The
+  renderer must not alphabetize it again. `A–Z` alone provides lexical lookup.
   Categories follow user intent rather than resource type alone. Browse and
   creation come first; search, deterministic changes, semantic transformations,
   checking/review, the distinct Ground workbench, history, Profiles, access,
@@ -567,9 +568,9 @@ either underlying command.
 
 ## Consistency boundary
 
-The small interface-neutral `OperationHelp` catalog owns each public
-operation's canonical summary plus four deliberately bounded semantic fields:
-flow, execution kind, effect, and an optional range. The root Typer
+The top-level interface-neutral `OperationDescriptor` catalog owns each public
+operation's family and canonical summary plus four deliberately bounded
+semantic fields: flow, execution kind, effect, and an optional range. The root Typer
 registration reads its summary from that catalog, and command inventory
 construction fails closed if either coverage or the registered summary
 diverges. Callback docstrings remain implementation documentation; they are
@@ -585,7 +586,7 @@ results. Detailed algorithms and design tradeoffs remain in focused rationale
 notes. These boundaries keep routine CLI changes from requiring a parallel
 semantic policy update.
 
-The pure Help composer combines `OperationHelp` with interface-owned material.
+The pure Help composer combines `OperationDescriptor` with interface-owned material.
 The expanded TUI entry projects the common flow, execution, effect, and range
 before its exact CLI Forms. Selected full Help renders the same overview and
 Forms before Typer's complete syntax reference. Plain non-TTY inventory stays
@@ -632,8 +633,9 @@ and invocation boundaries requires a separate reviewed parity pass rather than
 an unchecked fallback.
 
 All four non-English operation catalogs are checked in under
-`application/operations/operation_catalog/translations` and must cover exactly
-the same 65 visible operation names. Help-specific interface guidance remains
+`operation_catalog/translations` and must cover exactly the same 66 visible
+operation names. Family descriptions and translations share that top-level
+owner; Help-specific concept, locator, key, and interaction guidance remains
 with the console Help adapter and has its own cross-language key coverage.
 Runtime provider translation is deliberately not used: two participants
 choosing the same language must see the same copy.

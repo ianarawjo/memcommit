@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import Protocol, Sequence
 
 from memcommit.application.operations.help.application import list_operation_help
-from memcommit.application.operations.operation_catalog.model import DetailDiscovery, OperationHelp
+from memcommit.operation_catalog.model import DetailDiscovery, OperationDescriptor
 from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     ExecutionMode,
@@ -56,7 +56,7 @@ class HelpLookupPlan:
     """One validated whole-catalog lookup ready for provider execution."""
 
     request: str
-    operations: tuple[OperationHelp, ...]
+    operations: tuple[OperationDescriptor, ...]
     result_count: int
     prompt: str
     output_schema: dict[str, object]
@@ -73,7 +73,7 @@ def _strict_json_object(
     return result
 
 
-def _operation_payload(operation: OperationHelp) -> dict[str, object]:
+def _operation_payload(operation: OperationDescriptor) -> dict[str, object]:
     selection_details = [
         {
             "id": detail.id,
@@ -98,7 +98,7 @@ def _operation_payload(operation: OperationHelp) -> dict[str, object]:
 
 def _lookup_payload(
     request: str,
-    operations: Sequence[OperationHelp],
+    operations: Sequence[OperationDescriptor],
     result_count: int,
 ) -> dict[str, object]:
     return {
@@ -109,7 +109,7 @@ def _lookup_payload(
 
 
 def _output_schema(
-    operations: Sequence[OperationHelp],
+    operations: Sequence[OperationDescriptor],
     result_count: int,
 ) -> dict[str, object]:
     return {
@@ -170,7 +170,7 @@ def _build_prompt(payload: dict[str, object]) -> str:
 def prepare_help_lookup(
     request: str,
     *,
-    operations: Sequence[OperationHelp] | None = None,
+    operations: Sequence[OperationDescriptor] | None = None,
 ) -> HelpLookupPlan:
     """Freeze and preflight one complete Help catalog before provider access."""
 
@@ -184,7 +184,7 @@ def prepare_help_lookup(
             f"{HELP_LOOKUP_REQUEST_LIMIT} characters."
         )
     frozen = tuple(list_operation_help() if operations is None else operations)
-    if not frozen or any(not isinstance(item, OperationHelp) for item in frozen):
+    if not frozen or any(not isinstance(item, OperationDescriptor) for item in frozen):
         raise HelpLookupError(
             "Help lookup requires a nonempty typed operation catalog."
         )
@@ -230,7 +230,7 @@ def prepare_help_lookup(
 def execute_help_lookup(
     plan: HelpLookupPlan,
     provider: HelpLookupProvider,
-) -> tuple[OperationHelp, ...]:
+) -> tuple[OperationDescriptor, ...]:
     """Return validated catalog records in the provider-selected order."""
 
     if not isinstance(plan, HelpLookupPlan):

@@ -6,7 +6,8 @@ from dataclasses import dataclass
 
 import typer
 
-from memcommit.application.operations.operation_catalog import OperationHelp
+from memcommit.operation_catalog import OperationDescriptor
+from memcommit.operation_catalog.families import OPERATION_FAMILIES
 from memcommit.application.operations.help.application import list_operation_help
 from memcommit.adapters.console.commands.help.localized_copy import (
     validate_help_translation_coverage,
@@ -139,185 +140,25 @@ HELP_COMMON_KEYS = (
     ),
 )
 
-HELP_CATEGORY_GROUPS = (
-    (
-        "BROWSE & NAVIGATE",
-        (
-            "status",
-            "pwd",
-            "contexts",
-            "list",
-            "show",
-            "switch",
-            "checkout",
-            "rename",
-        ),
-    ),
-    (
-        "CREATE, COPY & CONNECT",
-        (
-            "init",
-            "add",
-            "copy",
-            "branch",
-            "import",
-            "reference",
-            "embed",
-        ),
-    ),
-    (
-        "SEARCH & EXPLAIN",
-        (
-            "find",
-            "search",
-            "query",
-            "summarize",
-        ),
-    ),
-    (
-        "DETERMINISTIC CONTENT CHANGES",
-        (
-            "edit",
-            "move",
-            "replace",
-            "chunk",
-            "delete",
-            "clear",
-            "merge",
-            "dedup",
-        ),
-    ),
-    (
-        "SEMANTIC TRANSFORMATIONS",
-        (
-            "atomize",
-            "distill",
-            "elaborate",
-            "makemore",
-            "translate",
-            "forget",
-            "resolve",
-            "dedun",
-            "update",
-            "meld",
-            "sever",
-        ),
-    ),
-    (
-        "CHECK, COMPARE & REVIEW",
-        (
-            "compare",
-            "find-duplicates",
-            "find-redundancies",
-            "find-ambiguities",
-            "find-conflicts",
-            "audit",
-            "impact",
-            "review",
-            "fit",
-            "check-conformance",
-        ),
-    ),
-    (
-        "GROUND WORKBENCH",
-        ("ground",),
-    ),
-    (
-        "HISTORY & RECOVERY",
-        (
-            "log",
-            "diff",
-            "trace",
-            "rationale",
-            "checkpoint",
-            "undo",
-            "redo",
-            "revert",
-        ),
-    ),
-    (
-        "PROFILES",
-        ("profile",),
-    ),
-    (
-        "SHARING & PROTECTION",
-        ("share", "lock", "unlock"),
-    ),
-    (
-        "SYSTEM & STUDY TOOLS",
-        ("help", "provider", "config", "init-study", "eval"),
-    ),
+HELP_CATEGORY_GROUPS = tuple(
+    (family.title, family.operation_names) for family in OPERATION_FAMILIES
 )
-
-# Category copy explains the user's intended activity. Execution labels remain
-# concise orientation rather than a promise that every form has one route.
 HELP_CATEGORY_DESCRIPTIONS = {
-    "BROWSE & NAVIGATE": (
-        "NO LLM",
-        "Inspect the current location and available Contexts, then move through "
-        "the Context namespace.",
-    ),
-    "CREATE, COPY & CONNECT": (
-        "NO LLM",
-        "Create Contexts or Memories, copy or import resources, or connect "
-        "existing material.",
-    ),
-    "SEARCH & EXPLAIN": (
-        "MIXED",
-        "Find exact text directly, or use LLM-based semantic retrieval, answering, "
-        "and summarization within the selected authorized scope.",
-    ),
-    "DETERMINISTIC CONTENT CHANGES": (
-        "NO LLM",
-        "Apply explicit inputs and reviewed choices through deterministic program "
-        "logic to change content.",
-    ),
-    "SEMANTIC TRANSFORMATIONS": (
-        "LLM-BASED",
-        "Uses LLM semantic analysis to restructure, derive, translate, curate, or "
-        "reconcile content.",
-    ),
-    "CHECK, COMPARE & REVIEW": (
-        "MIXED",
-        "Check compatibility, differences, quality, or expected impact. Review "
-        "saved reports or evidence from operations that already completed.",
-    ),
-    "GROUND WORKBENCH": (
-        "LLM-BASED",
-        "Turn abstract ideas into reviewable common ground by developing a Goal, "
-        "Rules, and example Memories together.",
-    ),
-    "HISTORY & RECOVERY": (
-        "MIXED",
-        "Inspect provenance and recorded changes. Restore an earlier state through "
-        "explicit history operations.",
-    ),
-    "PROFILES": (
-        "NO LLM",
-        "Select and administer complete local Profile stores and their managed names.",
-    ),
-    "SHARING & PROTECTION": (
-        "NO LLM",
-        "Deliver owned Contexts and protect Memory, Context, or Profile writes.",
-    ),
-    "SYSTEM & STUDY TOOLS": (
-        None,
-        "Configure MemCommit and prepare or run study and evaluation utilities.",
-    ),
+    family.title: (family.execution_label, family.description)
+    for family in OPERATION_FAMILIES
 }
-
 HELP_CATEGORY_BY_COMMAND = {
-    command_name: category
-    for category, command_names in HELP_CATEGORY_GROUPS
-    for command_name in command_names
+    operation_name: family.title
+    for family in OPERATION_FAMILIES
+    for operation_name in family.operation_names
 }
 HELP_CATEGORY_ORDER = {
-    category: index for index, (category, _commands) in enumerate(HELP_CATEGORY_GROUPS)
+    family.title: index for index, family in enumerate(OPERATION_FAMILIES)
 }
 HELP_COMMAND_ORDER = {
-    command_name: command_index
-    for _category, command_names in HELP_CATEGORY_GROUPS
-    for command_index, command_name in enumerate(command_names)
+    operation_name: operation_index
+    for family in OPERATION_FAMILIES
+    for operation_index, operation_name in enumerate(family.operation_names)
 }
 
 COMMAND_FORMS = {
@@ -910,7 +751,7 @@ class CommandEntry:
     command: object
     forms: tuple[str, ...]
     aliases: tuple[str, ...] = ()
-    operation_help: OperationHelp | None = None
+    operation_help: OperationDescriptor | None = None
     maturity: str | None = None
 
 

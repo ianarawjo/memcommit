@@ -20,9 +20,9 @@ from memcommit.application.operations.help.application import (
     list_operation_help,
     list_operation_details as list_application_details,
 )
-from memcommit.application.operations.operation_catalog import (
+from memcommit.operation_catalog import (
     OperationComparisonDetail,
-    OperationHelp,
+    OperationDescriptor,
     OperationHelpDetail,
     OperationTextDetail,
 )
@@ -79,7 +79,7 @@ def _project_detail(detail: OperationHelpDetail) -> HelpDetailResult:
     raise TypeError("Unsupported Operation Help detail type.")
 
 
-def _project(operation: OperationHelp) -> OperationHelpResult:
+def _project(operation: OperationDescriptor) -> OperationHelpResult:
     return OperationHelpResult(
         name=operation.name,
         summary=operation.summary,

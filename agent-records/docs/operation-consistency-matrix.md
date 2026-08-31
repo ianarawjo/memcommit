@@ -8,7 +8,7 @@ Initial repository-wide contract map, reviewed 2026-08-15.
 
 This document is a work ledger, not a claim that all listed operations already
 conform. It starts from the canonical visible operation set in
-`memcommit.application.operations.operation_catalog.catalog`. A contract becomes `VERIFIED` only after its
+`memcommit.operation_catalog.catalog`. A contract becomes `VERIFIED` only after its
 applicable operations, intentional exceptions, tests, and interface evidence
 have been reviewed together.
 

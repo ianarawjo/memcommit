@@ -10,21 +10,21 @@ from memcommit.adapters.console.commands.help.command import (
     _help_group_fragments,
     command_entries,
 )
-from memcommit.application.operations.operation_catalog import (
-    OPERATION_HELP_BY_NAME,
+from memcommit.operation_catalog import (
+    OPERATION_BY_NAME,
     ExecutionKind,
     operation_help,
 )
 from memcommit.application.operations.help.composer import compose_operation_help
-from memcommit.application.operations.operation_catalog.best_for import (
+from memcommit.operation_catalog.best_for import (
     BEST_FOR_BY_OPERATION,
 )
-from memcommit.application.operations.operation_catalog.details import (
+from memcommit.operation_catalog.details import (
     ALL_OPERATION_DETAILS,
     DETAILS_BY_OPERATION,
 )
 from memcommit.adapters.console.terminal.core.text_layout import terminal_cell_width
-from memcommit.application.operations.operation_catalog.localization import (
+from memcommit.operation_catalog.localization import (
     OPERATION_CATALOG_LANGUAGES as HELP_LANGUAGES,
 )
 
@@ -46,21 +46,21 @@ def test_catalog_covers_every_visible_top_level_operation_exactly():
     finally:
         context.close()
 
-    assert set(OPERATION_HELP_BY_NAME) == visible
+    assert set(OPERATION_BY_NAME) == visible
 
 
 def test_every_operation_has_one_reviewed_best_for_value():
-    assert set(BEST_FOR_BY_OPERATION) == set(OPERATION_HELP_BY_NAME)
+    assert set(BEST_FOR_BY_OPERATION) == set(OPERATION_BY_NAME)
     assert all(
         operation.best_for == BEST_FOR_BY_OPERATION[name]
         and operation.use_when == operation.best_for
         and operation.best_for.strip()
-        for name, operation in OPERATION_HELP_BY_NAME.items()
+        for name, operation in OPERATION_BY_NAME.items()
     )
 
 
 def test_detailed_help_topics_reference_only_visible_operations():
-    assert set(DETAILS_BY_OPERATION) <= set(OPERATION_HELP_BY_NAME)
+    assert set(DETAILS_BY_OPERATION) <= set(OPERATION_BY_NAME)
 
 
 def test_typed_detail_registry_has_stable_unique_ids_and_discovery_summaries():
@@ -173,7 +173,7 @@ def test_init_has_one_structured_parent_context_comparison():
 def test_registered_cli_summaries_share_the_catalog_source():
     root, context = _root_context()
     try:
-        for name, expected in OPERATION_HELP_BY_NAME.items():
+        for name, expected in OPERATION_BY_NAME.items():
             command = root.get_command(context, name)
             assert command is not None
             assert command.help == expected.summary

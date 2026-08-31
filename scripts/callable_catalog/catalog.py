@@ -492,8 +492,6 @@ def _help_operations(repository: Path) -> tuple[str, ...]:
         repository
         / "src"
         / "memcommit"
-        / "application"
-        / "operations"
         / "operation_catalog"
         / "catalog.py"
     )

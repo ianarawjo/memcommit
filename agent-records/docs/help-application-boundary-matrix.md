@@ -4,7 +4,7 @@ Last reviewed: 2026-08-28.
 
 ## Closure statement
 
-Every currently implemented Help route reads the same 65-operation semantic
+Every currently implemented Help route reads the same 66-operation semantic
 catalog through a terminal-independent discovery boundary. Exact catalog
 queries remain provider-free. The optional natural-language CLI route adds one
 bounded provider-backed ID-selection turn, then renders only canonical catalog
@@ -29,9 +29,11 @@ the interactive browser, `command_handoff.py` owns the fixed-operation editor
 and child argv launch, and `study_copy_guard.py` owns the Study-only input
 guard. Reviewed translated operation Summary and
 Best For copy lives beside the canonical English records under
-`memcommit.application.operations.operation_catalog.translations`, with
-language selection in `operation_catalog.localization`. Help-only category,
-concept, locator, and key guidance remains in
+`memcommit.operation_catalog.translations`, with
+language selection in `operation_catalog.localization`. The 11 operation
+families, their order, intent descriptions, and translated family copy are
+owned by the same top-level catalog; console Help projects them as categories.
+Help-only concept, locator, and key guidance remains in
 `commands.help.localized_copy`. The former
 `interfaces.tui.operations.help` tree and the inverse `help_inventory` command
 facade are intentionally absent.
@@ -69,7 +71,8 @@ not broaden Help's Store or provider access.
 ## Invariants
 
 1. The application list is alphabetized, unique, immutable, and complete for
-   all 65 visible public operations.
+   all 66 visible public operations. Every operation belongs to exactly one
+   top-level catalog family.
 2. Describe accepts one exact public operation name and detail lookup accepts
    one exact operation-local detail ID; neither performs fuzzy, alias, case, or
    whitespace normalization.
@@ -83,8 +86,10 @@ not broaden Help's Store or provider access.
    summary; `ON_DEMAND` content is not injected into every tool description.
 5. No generic notes bag or second prose registry exists. Full detail payloads
    are retrieved through the same application boundary by exact ID.
-6. CLI forms, aliases, categories, and responsive layout remain interface
-   values and do not enter Python or agent semantic records.
+6. CLI forms, aliases, and responsive layout remain interface values. Family
+   identity, ordered membership, and intent originate in the top-level
+   operation catalog; version-1 Python and agent Help records do not yet expose
+   the new family field.
 7. Bare CLI, Python, agent, and MCP Help must succeed without creating a
    missing Store and without constructing or calling a provider. Only a
    nonblank positional CLI request authorizes the bounded semantic selector.

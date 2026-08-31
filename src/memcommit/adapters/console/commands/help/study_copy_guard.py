@@ -7,8 +7,8 @@ import unicodedata
 from dataclasses import dataclass
 from typing import Literal, Sequence
 
-from memcommit.application.operations.operation_catalog.model import OperationHelp
-from memcommit.application.operations.operation_catalog.localization import (
+from memcommit.operation_catalog.model import OperationDescriptor
+from memcommit.operation_catalog.localization import (
     OPERATION_CATALOG_LANGUAGES,
     OperationCatalogLanguage,
     localized_operation_copy,
@@ -69,7 +69,7 @@ def _longest_exact_token_run(
 
 
 def authored_study_help_fields(
-    operations: Sequence[OperationHelp],
+    operations: Sequence[OperationDescriptor],
 ) -> tuple[StudyHelpAuthoredField, ...]:
     """Freeze every localized Description/When value a participant can copy."""
 

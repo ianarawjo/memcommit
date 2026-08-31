@@ -73,7 +73,7 @@ from memcommit.adapters.console.commands import (
     update,
 )
 from memcommit.adapters.console.coordination.root_group import MemCommandGroup
-from memcommit.application.operations.operation_catalog import operation_summary
+from memcommit.operation_catalog import operation_summary
 
 _HELP_CONTEXT_SETTINGS = {
     # Click child Contexts inherit this root setting, so aliases and nested

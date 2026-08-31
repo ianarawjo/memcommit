@@ -10,7 +10,7 @@ from scripts.callable_catalog.catalog import (
     render_operation_markdown,
     render_summary_json,
 )
-from memcommit.application.operations.operation_catalog import OPERATION_HELP_BY_NAME
+from memcommit.operation_catalog import OPERATION_BY_NAME
 
 
 REPOSITORY = Path(__file__).parents[1]
@@ -43,14 +43,14 @@ def test_catalog_records_private_nested_and_inbound_call_evidence() -> None:
     snapshot = _snapshot()
     by_identifier = {record.identifier: record for record in snapshot.callables}
     operation_builder = by_identifier[
-        "memcommit.application.operations.operation_catalog.catalog:_operation"
+        "memcommit.operation_catalog.catalog:_operation"
     ]
 
     assert operation_builder.visibility == "private"
     assert operation_builder.export_status == "not-exported"
-    assert len(operation_builder.inbound_references) == len(OPERATION_HELP_BY_NAME)
+    assert len(operation_builder.inbound_references) == len(OPERATION_BY_NAME)
     assert {reference.caller for reference in operation_builder.inbound_references} == {
-        "memcommit.application.operations.operation_catalog.catalog:<module>"
+        "memcommit.operation_catalog.catalog:<module>"
     }
     assert any(record.visibility == "local" for record in snapshot.callables)
 
@@ -59,7 +59,7 @@ def test_operation_routes_cover_every_help_operation_and_cli_entry() -> None:
     snapshot = _snapshot()
     by_operation = {record.operation: record for record in snapshot.operations}
 
-    assert set(by_operation) == set(OPERATION_HELP_BY_NAME)
+    assert set(by_operation) == set(OPERATION_BY_NAME)
     assert all(record.cli_entry != "MISSING" for record in snapshot.operations)
     assert by_operation["checkout"].cli_entry == (
         "memcommit.adapters.console.commands.checkout:cmd"
@@ -276,7 +276,7 @@ def test_curated_classification_covers_all_operations_conservatively() -> None:
     # The authored classification registry owns route states and their totals.
     # This consumer checks coverage and representative evidence without copying
     # aggregate counts that become stale whenever another route is reviewed.
-    assert set(classified) == set(OPERATION_HELP_BY_NAME)
+    assert set(classified) == set(OPERATION_BY_NAME)
     assert len(classified) == len(set(classified))
     assert {"embed", "forget", "reference"} <= states["CLOSED"]
     assert "update" in states["MIXED"]
