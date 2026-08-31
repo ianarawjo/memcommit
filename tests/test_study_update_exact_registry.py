@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.configuration.config as config_module
 import memcommit.application.capabilities.ops as ops
-from memcommit.adapters.console.commands.update import command as update_command
+from memcommit.adapters.console.commands.semantic_updates.foundation.update import command as update_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.configuration.config import Config
 from memcommit.core.context import Context, Memory
@@ -32,7 +32,7 @@ from memcommit.study_scenarios.legacy.prewarm.update import (
     is_installed_update_prewarm,
     record_equivalent_update_prewarm,
 )
-from memcommit.application.operations.update.model import (
+from memcommit.application.operations.semantic_updates.foundation.update.model import (
     AddOperation,
     UpdateSession,
     collect_update_inputs,
@@ -177,7 +177,7 @@ def test_exact_update_impact_materializes_hidden_receipt_without_provider(
     )
     assert store.load_impact_plan() is None
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.foundation.update.impact.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("hidden exact Update receipt opened a provider")
         ),

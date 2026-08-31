@@ -13,9 +13,11 @@ class OperationFamilyId(str, Enum):
     BROWSE_NAVIGATE = "BROWSE_NAVIGATE"
     CREATE_COPY_CONNECT = "CREATE_COPY_CONNECT"
     SEARCH_EXPLAIN = "SEARCH_EXPLAIN"
-    DETERMINISTIC_CONTENT_CHANGES = "DETERMINISTIC_CONTENT_CHANGES"
-    SEMANTIC_TRANSFORMATIONS = "SEMANTIC_TRANSFORMATIONS"
-    CHECK_COMPARE_REVIEW = "CHECK_COMPARE_REVIEW"
+    DIRECT_CHANGES = "DIRECT_CHANGES"
+    SEMANTIC_UPDATES = "SEMANTIC_UPDATES"
+    TRANSLATION = "TRANSLATION"
+    QUALITY_RESOLUTION = "QUALITY_RESOLUTION"
+    OPERATION_LIFECYCLE = "OPERATION_LIFECYCLE"
     GROUND_WORKBENCH = "GROUND_WORKBENCH"
     HISTORY_RECOVERY = "HISTORY_RECOVERY"
     PROFILES = "PROFILES"
@@ -28,6 +30,12 @@ class OperationFamilySectionId(str, Enum):
 
     SEARCH_RETRIEVE_ANSWER = "SEARCH_RETRIEVE_ANSWER"
     SEARCH_SYNTHESIZE = "SEARCH_SYNTHESIZE"
+    SEMANTIC_UPDATE_FOUNDATION = "SEMANTIC_UPDATE_FOUNDATION"
+    SEMANTIC_UPDATE_DERIVE = "SEMANTIC_UPDATE_DERIVE"
+    SEMANTIC_UPDATE_CURATE_INTEGRATE = "SEMANTIC_UPDATE_CURATE_INTEGRATE"
+    QUALITY_RESOLUTION_DIAGNOSE = "QUALITY_RESOLUTION_DIAGNOSE"
+    QUALITY_RESOLUTION_REPAIR = "QUALITY_RESOLUTION_REPAIR"
+    QUALITY_RESOLUTION_VALIDATE = "QUALITY_RESOLUTION_VALIDATE"
     HISTORY_INSPECTION = "HISTORY_INSPECTION"
     HISTORY_RECOVERY = "HISTORY_RECOVERY"
 
@@ -168,8 +176,8 @@ OPERATION_FAMILIES = (
         ),
     ),
     OperationFamily(
-        id=OperationFamilyId.DETERMINISTIC_CONTENT_CHANGES,
-        title="DETERMINISTIC CONTENT CHANGES",
+        id=OperationFamilyId.DIRECT_CHANGES,
+        title="DIRECT CHANGES",
         operation_names=(
             "edit",
             "move",
@@ -178,7 +186,6 @@ OPERATION_FAMILIES = (
             "delete",
             "clear",
             "merge",
-            "dedup",
         ),
         description=(
             "Apply explicit inputs and reviewed choices through deterministic "
@@ -187,44 +194,102 @@ OPERATION_FAMILIES = (
         execution_label="NO LLM",
     ),
     OperationFamily(
-        id=OperationFamilyId.SEMANTIC_TRANSFORMATIONS,
-        title="SEMANTIC TRANSFORMATIONS",
+        id=OperationFamilyId.SEMANTIC_UPDATES,
+        title="SEMANTIC UPDATES",
         operation_names=(
+            "update",
             "atomize",
             "distill",
             "elaborate",
             "makemore",
-            "translate",
             "forget",
-            "resolve",
-            "dedun",
-            "update",
-            "meld",
             "sever",
+            "meld",
         ),
         description=(
-            "Uses LLM semantic analysis to restructure, derive, translate, "
-            "curate, or reconcile content."
+            "Use semantic decisions to update, derive, curate, or integrate "
+            "content through operation-owned review and Apply boundaries."
+        ),
+        execution_label="LLM-BASED",
+        sections=(
+            OperationFamilySection(
+                id=OperationFamilySectionId.SEMANTIC_UPDATE_FOUNDATION,
+                title="FOUNDATION",
+                operation_names=("update",),
+            ),
+            OperationFamilySection(
+                id=OperationFamilySectionId.SEMANTIC_UPDATE_DERIVE,
+                title="DERIVE",
+                operation_names=("atomize", "distill", "elaborate", "makemore"),
+            ),
+            OperationFamilySection(
+                id=OperationFamilySectionId.SEMANTIC_UPDATE_CURATE_INTEGRATE,
+                title="CURATE & INTEGRATE",
+                operation_names=("forget", "sever", "meld"),
+            ),
+        ),
+    ),
+    OperationFamily(
+        id=OperationFamilyId.TRANSLATION,
+        title="TRANSLATION",
+        operation_names=("translate",),
+        description=(
+            "Create reusable language views or materializations while preserving "
+            "the selected Source content."
         ),
         execution_label="LLM-BASED",
     ),
     OperationFamily(
-        id=OperationFamilyId.CHECK_COMPARE_REVIEW,
-        title="CHECK & REVIEW",
+        id=OperationFamilyId.QUALITY_RESOLUTION,
+        title="QUALITY & RESOLUTION",
         operation_names=(
             "find-duplicates",
             "find-redundancies",
             "find-ambiguities",
             "find-conflicts",
             "audit",
-            "impact",
-            "review",
+            "dedup",
+            "dedun",
+            "resolve",
             "fit",
             "check-conformance",
         ),
         description=(
-            "Check compatibility, quality, or expected impact. "
-            "Review saved reports or evidence from operations that already completed."
+            "Diagnose quality issues, repair exact or semantic problems, and "
+            "validate compatibility or rule conformance."
+        ),
+        execution_label="MIXED",
+        sections=(
+            OperationFamilySection(
+                id=OperationFamilySectionId.QUALITY_RESOLUTION_DIAGNOSE,
+                title="DIAGNOSE",
+                operation_names=(
+                    "find-duplicates",
+                    "find-redundancies",
+                    "find-ambiguities",
+                    "find-conflicts",
+                    "audit",
+                ),
+            ),
+            OperationFamilySection(
+                id=OperationFamilySectionId.QUALITY_RESOLUTION_REPAIR,
+                title="REPAIR",
+                operation_names=("dedup", "dedun", "resolve"),
+            ),
+            OperationFamilySection(
+                id=OperationFamilySectionId.QUALITY_RESOLUTION_VALIDATE,
+                title="VALIDATE",
+                operation_names=("fit", "check-conformance"),
+            ),
+        ),
+    ),
+    OperationFamily(
+        id=OperationFamilyId.OPERATION_LIFECYCLE,
+        title="OPERATION LIFECYCLE",
+        operation_names=("impact", "review"),
+        description=(
+            "Inspect a planned operation before Apply or examine retained "
+            "evidence after execution."
         ),
         execution_label="MIXED",
     ),

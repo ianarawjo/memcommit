@@ -48,12 +48,12 @@ from memcommit.study_scenarios.legacy.prewarm.summarize import (
     build_summarize_prewarm_artifact,
     summarize_prewarm_key,
 )
-from memcommit.application.operations.summarize.model import (
+from memcommit.application.operations.search_explain.synthesize.summarize.model import (
     SummaryFrame,
     summarize_frame,
 )
-from memcommit.application.operations.summarize.application import SummarizeRequest
-from memcommit.application.operations.summarize.runtime import (
+from memcommit.application.operations.search_explain.synthesize.summarize.application import SummarizeRequest
+from memcommit.application.operations.search_explain.synthesize.summarize.runtime import (
     MemoryStoreSummarySourcePort,
 )
 

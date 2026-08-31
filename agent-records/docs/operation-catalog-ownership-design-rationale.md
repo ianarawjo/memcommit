@@ -10,7 +10,7 @@ though application use cases and console, Python, and agent adapters all
 consume the same MemCommit affordance.
 
 The stronger operation-family fact was split off in console Help:
-`HELP_CATEGORY_GROUPS` alone assigned all 66 operations to 11 ordered
+`HELP_CATEGORY_GROUPS` alone assigned all 66 operations to ordered
 families. Consequently application code, other adapters, catalog tooling, and
 debugging checks could see operation descriptions but not the same family
 membership that Help displayed.
@@ -25,7 +25,7 @@ records. `OperationDescriptor` is the canonical record name; the historical
 `OperationHelp` and `OPERATION_HELP_BY_NAME` spellings remain aliases within
 the new owner, not separate implementations.
 
-Move the 11 ordered family records into `operation_catalog.families`. Each
+Move the ordered family records into `operation_catalog.families`. Each
 family has a stable identifier, display title, ordered operation membership,
 intent description, and aggregate execution label. The catalog validates that
 every public operation belongs to exactly one family, and every descriptor
@@ -38,10 +38,19 @@ is divided by affordance rather than by operation name. `RETRIEVE & ANSWER`
 contains `find`, `search`, and `query`: each starts from an information need
 and returns matching evidence or an answer grounded in it. `SYNTHESIZE`
 contains `summarize` and `compare`: each starts from a selected whole Context
-frame and constructs a new interpretation of one frame or two. Compare moves
-here from the former `CHECK, COMPARE & REVIEW` family because it is a
-two-frame synthesis rather than a quality or conformance check. The remaining
-family is displayed as `CHECK & REVIEW`.
+frame and constructs a new interpretation of one frame or two. Compare is a
+two-frame synthesis rather than a quality or conformance check.
+
+The completed 13-family classification separates `DIRECT CHANGES` from
+`SEMANTIC UPDATES`, gives `TRANSLATION` its own affordance, and separates
+`QUALITY & RESOLUTION` from the unsplit `OPERATION LIFECYCLE`. Semantic Update
+sections are `FOUNDATION` (`update`), `DERIVE` (`atomize`, `distill`,
+`elaborate`, `makemore`), and `CURATE & INTEGRATE` (`forget`, `sever`, `meld`).
+Quality sections are `DIAGNOSE` (the four quality finders plus `audit`),
+`REPAIR` (`dedup`, `dedun`, `resolve`), and `VALIDATE` (`fit`,
+`check-conformance`). `OPERATION LIFECYCLE` deliberately has no internal
+sections: `impact` and `review` are the before/after views around operation
+execution, not two separate operation kinds.
 `HISTORY & RECOVERY` is likewise divided into `INSPECTION` (`log`, `diff`,
 `trace`, `rationale`) and `RECOVERY` (`checkpoint`, `undo`, `redo`, `revert`).
 Section membership must flatten to the family's exact operation order, and
@@ -68,15 +77,17 @@ remain owned by each operation's implementation. Tests compare the catalog
 with exposed operations, but the relocation does not make prose an executable
 source of behavior.
 
-This change preserves the public operation set and top-level Help family order.
-It changes Compare's family membership and the Check family's display title,
-but not Compare's execution, forms, authority, or result contract.
+This change preserves the public operation set and each operation's execution,
+forms, authority, and result contract while changing discovery membership and
+the canonical package paths for classified operations.
 Family sections are descriptive affordance structure; they do not imply a
 shared executable retrieval, synthesis, or history service and do not change
 any operation's authority, determinism, or mutation contract.
-It does not yet move the 66 application or console operation packages under
-physical family directories, and it does not yet introduce executable trait
-declarations for authority, history, provider, session, or mutation
-requirements. Those changes can follow family by family after their shared
-contracts are verified. No implementation remains under
+The classified application and console packages now mirror this family and
+section topology physically. Unclassified operations remain direct children
+of their respective operation or command root. No compatibility package is
+kept at a moved flat internal path; repository callers and generated layout
+plans use the canonical family path. This physical grouping does not introduce
+executable trait declarations for authority, history, provider, session, or
+mutation requirements. No implementation remains under
 `memcommit.application.operations.operation_catalog`.

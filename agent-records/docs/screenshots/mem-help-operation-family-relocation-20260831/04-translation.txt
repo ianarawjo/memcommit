@@ -1,0 +1,52 @@
+ mem help · command inventory                                                                                                                                                       
+┌────────────────────────────────────────────────────────────────────────────────| HELP LANGUAGE |─────────────────────────────────────────────────────────────────────────────────┐
+│  LANGUAGE · [ ✓ EN ]  [   FR ]  [   ZH ]  [   KO ]  [   MN ] · ←/→ TO SELECT                                                                                                     │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────| INVENTORY VIEW |────────────────────────────────────────────────────────────────────────────────┐
+│  VIEW · [ ✓ BY KIND ]  [   A–Z ] · ←/→ TO SELECT                                                                                                                                 │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+│ ▸ mem move ─┬ Move one or more directly owned Memories into another existing local Context.                                                                                     │^
+│             └ WHEN · Changing which local Context directly owns selected Memories while preserving their content and identity.                                                  │ 
+│ ▸ mem replace ─┬ Immediately replace every literal or explicit regular-expression match in ordinary local Memories as one Undoable command.                                     │ 
+│                └ WHEN · Correcting, renaming, or redacting exact text throughout a known local Context scope.                                                                   │ 
+│ ▸ mem chunk ─┬ Mechanically split all splittable direct Memories in one Context, or one selected Memory, at configured sentence, clause, structural, literal, or size           │ 
+│              │ boundaries.                                                                                                                                                      │ 
+│              └ WHEN · One or more direct Memories already have clear sentence or structural boundaries that should become separate Memories.                                    │ 
+│ ▸ mem delete ───┬ Select Contexts or direct items to delete, or name them by locator, name, or UID.                                                                             │ 
+│     (remove)    └ WHEN · Removing a specific Context or item that is no longer needed.                                                                                          │ 
+│ ▸ mem clear ─┬ Immediately remove all direct items from one Context or, with --recursive, its local lexical subtree; Undo can restore the command.                              │ 
+│              └ WHEN · Emptying a Context or local lexical subtree while retaining every Context.                                                                                │ 
+│ ▸ mem merge ─┬ Add Source-only items to a selected Target, leave exact matches unchanged, and choose Source or Target for stored-item conflicts.                                │ 
+│              └ WHEN · Appending Source-only items or bringing a copied or branched Context into a selected Target Context without semantic synthesis.                           │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┌ SEMANTIC UPDATES ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ 
+│ LLM-BASED · Use semantic decisions to update, derive, curate, or integrate content through operation-owned review and Apply boundaries.                                         │ 
+│ ── FOUNDATION ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── │ 
+│ ▸ mem update ─┬ Update a Target Context from a Source Context, resolving required execution decisions before atomic Apply.                                                      │ 
+│               └ WHEN · Updating an existing Context using newly verified Memories.                                                                                              │ 
+│ ── DERIVE ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── │ 
+│ ▸ mem atomize ─┬ Immediately atomize the current Context into independently reviewable Memories and save the full analysis for Review.                                          │ 
+│                └ WHEN · Untangling requirements or claims that were written together so each can be reviewed and revised independently.                                         │ 
+│ ▸ mem distill ─┬ Derive higher-level Rules or condition propositions from Case or Example propositions in a bounded Context, optionally guided by a Goal.                       │ 
+│                └ WHEN · Inferring more general Rules or condition propositions from several concrete cases or examples.                                                         │ 
+│ ▸ mem elaborate ─┬ Append a supported continuation after one existing Memory without rewriting its original content.                                                            │ 
+│                  └ WHEN · Making one existing Memory more explicit by continuing after its unchanged original text.                                                             │ 
+│ ▸ mem makemore ─┬ Expand an abstract Goal, Rule, or condition into multiple more specific candidate propositions.                                                               │ 
+│                 └ WHEN · Generating several more concrete candidate Rules or Cases from an abstract concept or condition.                                                       │ 
+│ ── CURATE & INTEGRATE ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── │ 
+│ ▸ mem forget ─┬ Apply one complete keep/edit/delete decision batch for an instruction.                                                                                          │ 
+│               └ WHEN · Removing or rewriting Memories according to a natural-language instruction whose meaning must be interpreted.                                            │ 
+│ ▸ mem sever ─┬ Save a Result by selecting, transforming, or excluding Source Memories according to a Criteria Context.                                                          │ 
+│              └ WHEN · Selecting or transforming Source content according to defined criteria.                                                                                   │ 
+│ ▸ mem meld ─┬ Semantically incorporate an incoming Context into an authoritative baseline, or derive a separate Result from two equal peers.                                    │ 
+│             └ WHEN · Combining two bodies of work when overlap, conflicts, and newly synthesized content must be reviewed semantically.                                         │ 
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ 
+                                                                                                                                                                                    
+┏ TRANSLATION ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ 
+┃ LLM-BASED · Create reusable language views or materializations while preserving the selected Source content.                                                                    ┃ 
+┃ ▸ mem translate ─┬ Generate and save a reusable translated view of one Context or Memory while preserving the original content.                                                 ┃ 
+┃     [PARTIAL]    └ WHEN · Reading or reusing Memory content in another language without replacing the original.                                                                 ┃ 
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛v
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+ ↑/↓ move (hold accelerates)  → expand/forms  ← back  Enter open forms  Tab next kind  H full help  Q/Esc close

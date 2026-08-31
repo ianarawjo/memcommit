@@ -11,16 +11,16 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, Memory
 from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
-from memcommit.application.operations.edit.application import EditRequest, FrozenEditPlan
+from memcommit.application.operations.direct_changes.edit.application import EditRequest, FrozenEditPlan
 from memcommit.adapters.console.terminal.components.command_editor import (
     format_exact_command,
 )
-from memcommit.adapters.console.commands.edit.workbench import (
+from memcommit.adapters.console.commands.direct_changes.edit.workbench import (
     EditTuiSetup,
     parse_edit_command_argv,
     run_edit_tui,
 )
-from memcommit.adapters.console.commands.edit.workbench.screen import (
+from memcommit.adapters.console.commands.direct_changes.edit.workbench.screen import (
     edit_exact_command_review,
 )
 from memcommit.persistence.store import MemoryStore
@@ -246,7 +246,7 @@ def test_bare_cli_edit_enters_and_can_cancel_interactive_setup(
     isolated_store,
     monkeypatch,
 ):
-    import memcommit.adapters.console.commands.edit.command as edit_command
+    import memcommit.adapters.console.commands.direct_changes.edit.command as edit_command
 
     monkeypatch.setattr(edit_command, "is_interactive_terminal", lambda: True)
     monkeypatch.setattr(
@@ -389,8 +389,8 @@ def test_cli_edit_creates_one_post_edit_checkpoint(isolated_store):
 
 
 def test_exact_edit_rejects_drift_after_interactive_freeze(isolated_store):
-    from memcommit.application.operations.edit.application import EditRequest, run_edit
-    from memcommit.application.operations.edit.runtime import MemoryStoreEditPort
+    from memcommit.application.operations.direct_changes.edit.application import EditRequest, run_edit
+    from memcommit.application.operations.direct_changes.edit.runtime import MemoryStoreEditPort
 
     invoke("init", "notes")
     invoke("add", "old content")

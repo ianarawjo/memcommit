@@ -8,16 +8,16 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.makemore.command as makemore_command
+import memcommit.adapters.console.commands.semantic_updates.derive.makemore.command as makemore_command
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.makemore.model import (
+from memcommit.application.operations.semantic_updates.derive.makemore.model import (
     MAKEMORE_OPERATION,
     MAKEMORE_PAYLOAD_MARKER,
     MakemoreError,
 )
-from memcommit.application.operations.makemore.application import MakemoreRequest
-from memcommit.application.operations.makemore.runtime import execute_makemore
+from memcommit.application.operations.semantic_updates.derive.makemore.application import MakemoreRequest
+from memcommit.application.operations.semantic_updates.derive.makemore.runtime import execute_makemore
 from memcommit.persistence.store import MemoryStore
 from tests.makemore_validation_support import (
     passing_makemore_validation_response,

@@ -22,7 +22,7 @@ class _UpdateStateStoreMixin:
     @staticmethod
     def _load_update_session(path: Path):
         """Load and validate one cached semantic update session."""
-        from memcommit.application.operations.update.model import UpdateSession
+        from memcommit.application.operations.semantic_updates.foundation.update.model import UpdateSession
 
         if not path.exists():
             return None
@@ -44,7 +44,7 @@ class _UpdateStateStoreMixin:
     @staticmethod
     def _save_update_session(path: Path, session) -> None:
         """Atomically persist one validated semantic update session."""
-        from memcommit.application.operations.update.model import UpdateSession
+        from memcommit.application.operations.semantic_updates.foundation.update.model import UpdateSession
 
         if not isinstance(session, UpdateSession):
             raise TypeError("Expected an UpdateSession.")
@@ -129,7 +129,7 @@ class _UpdateStateStoreMixin:
     def apply_staged_update(self, session):
         """Compatibility facade for Update's application-owned publication."""
 
-        from memcommit.application.operations.update.publication import (
+        from memcommit.application.operations.semantic_updates.foundation.update.publication import (
             apply_staged_update,
         )
 

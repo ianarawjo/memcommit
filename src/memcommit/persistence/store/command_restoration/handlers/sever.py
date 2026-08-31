@@ -30,11 +30,11 @@ class _SeverRestorationMixin:
             CommandRestoreResult,
             command_restore_metadata,
         )
-        from memcommit.application.operations.sever.model import (
+        from memcommit.application.operations.semantic_updates.curate_integrate.sever.model import (
             SeverApplication,
             sever_record_digest,
         )
-        from memcommit.application.operations.sever.session_store import (
+        from memcommit.application.operations.semantic_updates.curate_integrate.sever.session_store import (
             SeverSessionStore,
         )
 

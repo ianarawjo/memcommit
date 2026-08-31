@@ -115,7 +115,7 @@ def test_provider_refresh_never_overwrites_verified_curated_text(
     )
     provider = _Provider("PROVIDER: ")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translation.translate.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -198,7 +198,7 @@ def test_reset_reveals_provider_layer_without_changing_memory(
     context, memory = _source(store)
     provider = _Provider("자동: ")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translation.translate.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     assert runner.invoke(app, ["translate", "--to", "ko"]).exit_code == 0
@@ -258,7 +258,7 @@ def test_verified_provider_catalog_is_not_applied_as_untouched_batch(
     _, memory = _source(store)
     provider = _Provider("자동: ")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translation.translate.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     assert runner.invoke(app, ["translate", "--to", "ko"]).exit_code == 0
@@ -289,7 +289,7 @@ def test_unchanged_export_import_preserves_provider_provenance(
     context, memory = _source(store)
     provider = _Provider("자동: ")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translation.translate.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     assert runner.invoke(app, ["translate", "--to", "ko"]).exit_code == 0
@@ -326,7 +326,7 @@ def test_import_rejects_a_stale_exported_catalog_revision(
     _, memory = _source(MemoryStore())
     provider = _Provider("자동: ")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translation.translate.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     assert runner.invoke(app, ["translate", "--to", "ko"]).exit_code == 0
@@ -434,7 +434,7 @@ def test_long_semantic_target_remains_recorded_in_applied_trace(
     context, memory = _source(store)
     provider = _Provider("Translated: ")
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.translate.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.translation.translate.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     target = (

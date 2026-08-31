@@ -13,12 +13,12 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_compare_operation_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.compare
+import memcommit.application.operations.search_explain.synthesize.compare
 
 assert not [
     name
     for name in sys.modules
-    if name.startswith("memcommit.application.operations.compare.")
+    if name.startswith("memcommit.application.operations.search_explain.synthesize.compare.")
 ]
 assert "memcommit.comparison" not in sys.modules
 assert "memcommit.comparison_store" not in sys.modules
@@ -33,10 +33,10 @@ assert "memcommit.comparison_store" not in sys.modules
 
 def test_production_summary_consumers_use_operation_owner() -> None:
     relative_paths = (
-        "src/memcommit/adapters/console/commands/compare/command.py",
-        "src/memcommit/application/operations/compare/compare_summary.py",
-        "src/memcommit/application/operations/compare/provider_contract.py",
-        "src/memcommit/application/operations/compare/application.py",
+        "src/memcommit/adapters/console/commands/search_explain/synthesize/compare/command.py",
+        "src/memcommit/application/operations/search_explain/synthesize/compare/compare_summary.py",
+        "src/memcommit/application/operations/search_explain/synthesize/compare/provider_contract.py",
+        "src/memcommit/application/operations/search_explain/synthesize/compare/application.py",
     )
     legacy_imports = (
         "from memcommit.comparison_summary import",
@@ -61,7 +61,7 @@ def test_compare_summary_owner_does_not_absorb_deep_compare_or_presentation() ->
     package_source = "\n".join(
         (
             REPOSITORY_ROOT
-            / "src/memcommit/application/operations/compare"
+            / "src/memcommit/application/operations/search_explain/synthesize/compare"
             / module
         ).read_text(encoding="utf-8")
         for module in summary_modules
@@ -77,7 +77,7 @@ def test_compare_summary_owner_does_not_absorb_deep_compare_or_presentation() ->
 
 
 def test_deep_relation_judgment_is_not_owned_by_compare_operation() -> None:
-    compare_root = REPOSITORY_ROOT / "src/memcommit/application/operations/compare"
+    compare_root = REPOSITORY_ROOT / "src/memcommit/application/operations/search_explain/synthesize/compare"
 
     # An ignored ``__pycache__`` directory may survive a source relocation in
     # an already-used checkout; physical ownership is defined by Python source.
@@ -123,16 +123,20 @@ def test_compare_vocabulary_is_an_identity_preserving_capability_alias() -> None
 
 def test_meld_and_update_do_not_depend_on_compare_operation() -> None:
     operations_root = REPOSITORY_ROOT / "src/memcommit/application/operations"
+    operation_paths = {
+        "meld": operations_root / "semantic_updates" / "curate_integrate" / "meld",
+        "update": operations_root / "semantic_updates" / "foundation" / "update",
+    }
     source_by_operation = {
         operation: "\n".join(
             path.read_text(encoding="utf-8")
-            for path in sorted((operations_root / operation).rglob("*.py"))
+            for path in sorted(root.rglob("*.py"))
         )
-        for operation in ("meld", "update")
+        for operation, root in operation_paths.items()
     }
 
     assert all(
-        "memcommit.application.operations.compare" not in source
+        "memcommit.application.operations.search_explain.synthesize.compare" not in source
         for source in source_by_operation.values()
     )
     assert (
@@ -143,8 +147,8 @@ def test_meld_and_update_do_not_depend_on_compare_operation() -> None:
 
 def test_meld_has_no_compare_operation_presentation_or_prewarm_dependency() -> None:
     meld_roots = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/meld",
-        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/meld",
+        REPOSITORY_ROOT / "src/memcommit/application/operations/semantic_updates/curate_integrate/meld",
+        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/meld",
     )
     source = "\n".join(
         path.read_text(encoding="utf-8")
@@ -152,7 +156,7 @@ def test_meld_has_no_compare_operation_presentation_or_prewarm_dependency() -> N
         for path in sorted(root.rglob("*.py"))
     )
 
-    assert "memcommit.application.operations.compare" not in source
-    assert "memcommit.adapters.console.commands.compare" not in source
+    assert "memcommit.application.operations.search_explain.synthesize.compare" not in source
+    assert "memcommit.adapters.console.commands.search_explain.synthesize.compare" not in source
     assert "study_scenarios.legacy.prewarm.compare" not in source
     assert "study_scenarios.legacy.prewarm.peer_relations" in source

@@ -8,19 +8,19 @@ import pytest
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
-from memcommit.application.operations.query.ordinary_application import (
+from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application import (
     OrdinaryQueryRequest,
 )
-from memcommit.application.operations.query.ordinary_runtime import (
+from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_runtime import (
     execute_ordinary_query,
 )
 from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_readable_context_catalog,
 )
-from memcommit.application.operations.search.answer_references import (
+from memcommit.application.operations.search_explain.retrieve_answer.search.answer_references import (
     SearchAnswerEvidence,
 )
-from memcommit.application.operations.query.answer import (
+from memcommit.application.operations.search_explain.retrieve_answer.query.answer import (
     OrdinaryQueryAnswerError,
     OrdinaryQueryCorpusTooLarge,
     build_ordinary_query_reference_document,

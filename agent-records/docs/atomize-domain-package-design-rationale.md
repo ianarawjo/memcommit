@@ -21,7 +21,7 @@ focused edit require understanding the entire operation kernel.
 
 ## Selected boundary
 
-`memcommit.application.operations.atomize.domain` is now a package with five
+`memcommit.application.operations.semantic_updates.derive.atomize.domain` is now a package with five
 implementation modules:
 
 - `model.py` owns operation-neutral values, rules, report records, and the
@@ -36,7 +36,7 @@ implementation modules:
   form evidence records.
 
 The package `__init__.py` remains a thin compatibility facade. Existing imports
-from `memcommit.application.operations.atomize.domain` keep the same callable
+from `memcommit.application.operations.semantic_updates.derive.atomize.domain` keep the same callable
 and value surface while new implementation code can import its narrow owner.
 
 ## Historical conversational Grounding model boundary
@@ -56,7 +56,7 @@ receipts, and aggregate validation. It is now a concept-owned package:
   proposal materialization, and application-state reconciliation.
 
 The dependency direction remains `session -> changes -> review -> bindings` for
-legacy record decoding. `memcommit.application.operations.atomize.grounding`
+legacy record decoding. `memcommit.application.operations.semantic_updates.derive.atomize.grounding`
 is the schema facade used by Store history and restoration. The former Context
 mutation owner, `grounding_runtime.py`, no longer exists; no active caller may
 prepare or apply a new Grounding change set.

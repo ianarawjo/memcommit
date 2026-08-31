@@ -6,23 +6,23 @@ import json
 from pathlib import Path
 import re
 
-import memcommit.application.operations.distill.model as distill_module
-import memcommit.application.operations.makemore.generation as makemore_generation
+import memcommit.application.operations.semantic_updates.derive.distill.model as distill_module
+import memcommit.application.operations.semantic_updates.derive.makemore.generation as makemore_generation
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER, analyze_distill
+from memcommit.application.operations.semantic_updates.derive.distill.model import DISTILL_PAYLOAD_MARKER, analyze_distill
 from memcommit.application.capabilities.semantic.generative_reduction_reference import (
     REFERENCE_EXAMPLES_MARKER,
     REFERENCE_FAMILY_IDS,
     load_distill_makemore_reference_families,
 )
-from memcommit.application.operations.makemore.model import MAKEMORE_PAYLOAD_MARKER
-from memcommit.application.operations.makemore.application import MakemoreRequest
-from memcommit.application.operations.makemore.runtime import execute_makemore
+from memcommit.application.operations.semantic_updates.derive.makemore.model import MAKEMORE_PAYLOAD_MARKER
+from memcommit.application.operations.semantic_updates.derive.makemore.application import MakemoreRequest
+from memcommit.application.operations.semantic_updates.derive.makemore.runtime import execute_makemore
 from memcommit.application.capabilities.semantic.prompt_policy import GENERAL_SEMANTIC_PROMPT_POLICY
 from tests.makemore_validation_support import (
     passing_makemore_validation_response,
 )
-from memcommit.application.operations.summarize.model import collect_summary_frame
+from memcommit.application.operations.search_explain.synthesize.summarize.model import collect_summary_frame
 
 
 FIXTURE_PATH = (

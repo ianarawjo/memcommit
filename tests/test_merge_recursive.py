@@ -12,14 +12,14 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.merge.application import (
+from memcommit.application.operations.direct_changes.merge.application import (
     MergeDecision,
     MergeReach,
     MergeRequest,
     prepare_merge,
     run_merge,
 )
-from memcommit.application.operations.merge.runtime import MemoryStoreMergePort, execute_merge
+from memcommit.application.operations.direct_changes.merge.runtime import MemoryStoreMergePort, execute_merge
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,

@@ -80,11 +80,11 @@ def test_reference_cli_has_one_command_owned_implementation() -> None:
 def test_query_reference_remains_owned_by_the_query_operation() -> None:
     application = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/query/reference_application.py"
+        / "src/memcommit/application/operations/search_explain/retrieve_answer/query/reference_application.py"
     ).read_text(encoding="utf-8")
     runtime = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/query/reference_runtime.py"
+        / "src/memcommit/application/operations/search_explain/retrieve_answer/query/reference_runtime.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.application.operations.reference" not in application

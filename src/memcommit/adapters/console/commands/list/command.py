@@ -50,7 +50,7 @@ from memcommit.application.operations.list.runtime import (
     profile_readable_display_uids,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.update.model import GrantedUpdateTarget
+from memcommit.application.operations.semantic_updates.foundation.update.model import GrantedUpdateTarget
 from memcommit.application.capabilities.authority.study_operation_policy import (
     analysis_boundary_label,
 )

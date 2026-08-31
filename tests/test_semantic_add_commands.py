@@ -7,18 +7,18 @@ import json
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.distill.command as distill_command
-import memcommit.adapters.console.commands.distill.impact as distill_impact
-import memcommit.adapters.console.commands.makemore.command as makemore_command
-import memcommit.adapters.console.commands.makemore.impact as makemore_impact
+import memcommit.adapters.console.commands.semantic_updates.derive.distill.command as distill_command
+import memcommit.adapters.console.commands.semantic_updates.derive.distill.impact as distill_impact
+import memcommit.adapters.console.commands.semantic_updates.derive.makemore.command as makemore_command
+import memcommit.adapters.console.commands.semantic_updates.derive.makemore.impact as makemore_impact
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.distill.model import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
-from memcommit.application.operations.distill.goal_fit import (
+from memcommit.application.operations.semantic_updates.derive.distill.model import DISTILL_OPERATION, DISTILL_PAYLOAD_MARKER
+from memcommit.application.operations.semantic_updates.derive.distill.goal_fit import (
     DISTILL_GOAL_FIT_OPERATION,
     DISTILL_GOAL_FIT_PAYLOAD_MARKER,
 )
-from memcommit.application.operations.makemore.model import MAKEMORE_OPERATION, MAKEMORE_PAYLOAD_MARKER
+from memcommit.application.operations.semantic_updates.derive.makemore.model import MAKEMORE_OPERATION, MAKEMORE_PAYLOAD_MARKER
 from memcommit.persistence.store import MemoryStore, context_record_digest
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 from tests.makemore_validation_support import (

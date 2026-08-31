@@ -43,7 +43,7 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionWorkbenchView,
     resolution_overview_text,
 )
-from memcommit.application.operations.review.model import (
+from memcommit.application.operations.operation_lifecycle.review.model import (
     REVIEW_RESPONSE_CHAR_LIMIT,
 )
 

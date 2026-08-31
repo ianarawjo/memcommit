@@ -7,12 +7,12 @@ import json
 import memcommit.application.capabilities.ops as ops
 import pytest
 from memcommit.core.context import Memory
-from memcommit.application.operations.search.model import (
+from memcommit.application.operations.search_explain.retrieve_answer.search.model import (
     SearchCandidate,
     rank_candidates,
 )
 from memcommit.application.capabilities.semantic_execution import SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
-from memcommit.application.operations.translate.runtime import plan_translation
+from memcommit.application.operations.translation.translate.runtime import plan_translation
 
 
 def _large_text(marker: str) -> str:

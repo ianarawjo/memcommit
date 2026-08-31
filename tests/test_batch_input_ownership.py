@@ -11,7 +11,7 @@ import memcommit.adapters.console.coordination.batch_input_source as batch_input
 from memcommit.adapters.console.commands.add.input_records import (
     parse_input_records as parse_add_input_records,
 )
-from memcommit.adapters.console.commands.edit.input_records import (
+from memcommit.adapters.console.commands.direct_changes.edit.input_records import (
     parse_input_records as parse_edit_input_records,
 )
 
@@ -43,6 +43,7 @@ def test_batch_input_has_one_source_owner_and_command_local_grammars() -> None:
         / "adapters"
         / "console"
         / "commands"
+        / "direct_changes"
         / "edit"
         / "input_records.py"
     ).is_file()
@@ -105,14 +106,16 @@ def test_add_and_edit_commands_import_their_exact_owners() -> None:
         / "commands"
     )
     add_source = (command_root / "add" / "command.py").read_text(encoding="utf-8")
-    edit_source = (command_root / "edit" / "command.py").read_text(encoding="utf-8")
+    edit_source = (
+        command_root / "direct_changes" / "edit" / "command.py"
+    ).read_text(encoding="utf-8")
 
     assert (
         "from memcommit.adapters.console.commands.add.input_records import "
         "parse_input_records" in add_source
     )
     assert (
-        "from memcommit.adapters.console.commands.edit.input_records import "
+        "from memcommit.adapters.console.commands.direct_changes.edit.input_records import "
         "parse_input_records" in edit_source
     )
     for source in (add_source, edit_source):

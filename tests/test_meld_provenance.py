@@ -7,9 +7,9 @@ from collections.abc import Callable
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.operations.meld.runtime import meld_checkpoint_record
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.runtime import meld_checkpoint_record
 from memcommit.core.context import AutoCheckpoint, Context, Memory
-from memcommit.application.operations.meld.model import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import (
     MeldChangeSet,
     MeldMember,
     MeldProposal,

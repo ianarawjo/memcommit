@@ -21,13 +21,13 @@ def test_help_copy_validates_catalog_and_interface_language_coverage() -> None:
 
 
 def test_help_projects_catalog_owned_family_copy() -> None:
-    assert category_description("EN", "SEMANTIC TRANSFORMATIONS").startswith(
-        "Uses LLM semantic analysis"
+    assert category_description("EN", "SEMANTIC UPDATES").startswith(
+        "Use semantic decisions"
     )
     assert category_description(
         "KO",
-        "SEMANTIC TRANSFORMATIONS",
-    ).startswith("LLM semantic analysis")
+        "SEMANTIC UPDATES",
+    ).startswith("operation이 소유한 review")
 
 
 def test_help_row_combines_command_form_with_catalog_translation() -> None:

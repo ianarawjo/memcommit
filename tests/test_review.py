@@ -11,15 +11,15 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.review.command as review_command
-import memcommit.adapters.console.commands.review.resolution_shell as review_resolution_shell
+import memcommit.adapters.console.commands.operation_lifecycle.review.command as review_command
+import memcommit.adapters.console.commands.operation_lifecycle.review.resolution_shell as review_resolution_shell
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.review.snapshot import (
+from memcommit.adapters.console.commands.operation_lifecycle.review.snapshot import (
     render_review_snapshot,
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.coordination.review import RESPONSE_LABEL
-from memcommit.adapters.console.commands.review.resolution_shell import (
+from memcommit.adapters.console.commands.operation_lifecycle.review.resolution_shell import (
     review_resolution_view,
     run_review_resolution_shell,
 )
@@ -28,7 +28,7 @@ from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityFinding,
     AmbiguityReport,
 )
-from memcommit.application.operations.review.model import (
+from memcommit.application.operations.operation_lifecycle.review.model import (
     ReviewError,
     ReviewSession,
     create_ambiguity_review,
@@ -358,7 +358,7 @@ def test_cli_creates_snapshot_resumes_without_provider_and_never_mutates(
 
     provider = PayloadProvider(respond)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.review.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.operation_lifecycle.review.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -374,7 +374,7 @@ def test_cli_creates_snapshot_resumes_without_provider_and_never_mutates(
     review_path = isolated_store / "review-session.json"
     review_before = review_path.read_bytes()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.review.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.operation_lifecycle.review.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("replacement guard must run before provider"),
     )
     repeated = runner.invoke(
@@ -387,7 +387,7 @@ def test_cli_creates_snapshot_resumes_without_provider_and_never_mutates(
     assert review_path.read_bytes() == review_before
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.review.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.operation_lifecycle.review.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("resume must not reconnect"),
     )
     resumed = runner.invoke(app, ["review", "--snapshot"])
@@ -424,7 +424,7 @@ def test_cli_refuses_stale_saved_review(isolated_store, monkeypatch):
         }
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.review.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.operation_lifecycle.review.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     assert (
@@ -456,7 +456,7 @@ def test_explicit_replace_recovers_from_a_corrupt_saved_review(
     (isolated_store / "review-session.json").write_text("{invalid")
     provider = PayloadProvider(lambda payload: {"findings": []})
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.review.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.operation_lifecycle.review.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -489,7 +489,7 @@ def test_terminal_ambiguity_review_rotates_distinct_frame_and_retains_source(
     store.save(second_context)
     provider = PayloadProvider(lambda _payload: {"findings": []})
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.review.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.operation_lifecycle.review.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 

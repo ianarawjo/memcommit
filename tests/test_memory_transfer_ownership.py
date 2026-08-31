@@ -17,13 +17,13 @@ def test_copy_and_move_own_separate_application_entrypoints() -> None:
         "memcommit.application.operations.copy.application"
     )
     move_application = importlib.import_module(
-        "memcommit.application.operations.move.application"
+        "memcommit.application.operations.direct_changes.move.application"
     )
     shared_contracts = importlib.import_module(
         "memcommit.application.operations.copy_and_move.application"
     )
     copy_runtime = importlib.import_module("memcommit.application.operations.copy.runtime")
-    move_runtime = importlib.import_module("memcommit.application.operations.move.runtime")
+    move_runtime = importlib.import_module("memcommit.application.operations.direct_changes.move.runtime")
 
     assert copy_application.run_copy.__module__ == copy_application.__name__
     assert move_application.run_move.__module__ == move_application.__name__
@@ -56,7 +56,11 @@ def test_copy_and_move_own_commands_while_transfer_mechanics_stay_coordinated() 
     interfaces = REPOSITORY_ROOT / "src/memcommit/adapters/interfaces"
 
     for command in ("copy", "move"):
-        root = console / "commands" / command
+        root = console / "commands" / (
+            Path(command)
+            if command == "copy"
+            else Path("direct_changes") / command
+        )
         assert (root / "__init__.py").is_file()
         assert (root / "command.py").is_file()
         assert (root / "setup.py").is_file()

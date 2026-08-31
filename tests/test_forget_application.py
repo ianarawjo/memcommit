@@ -10,9 +10,9 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.forget import command as forget_command
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget import command as forget_command
 from memcommit.core.context import AutoCheckpoint
-from memcommit.adapters.console.commands.forget import receipt as forget_cli
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget import receipt as forget_cli
 from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
     semantic_color_rgb,

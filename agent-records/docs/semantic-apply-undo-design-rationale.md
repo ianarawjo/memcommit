@@ -1,7 +1,7 @@
 # Semantic apply and command-unit Undo
 
 Undo and Redo now enter separate operation adapters under
-`memcommit.application.operations.undo` and `memcommit.application.operations.redo`. Their common
+`memcommit.application.operations.history_recovery.recovery.undo` and `memcommit.application.operations.history_recovery.recovery.redo`. Their common
 granted-versus-local stack selection lives in
 `memcommit.application.capabilities.command_recovery.execution`; command modules retain only syntax, error
 mapping, and receipt presentation. This shares the authority fallback

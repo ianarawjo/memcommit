@@ -42,6 +42,16 @@ def test_grouped_list_preserves_catalog_family_and_section_order():
         for group in groups
         if group.family.id is OperationFamilyId.SEARCH_EXPLAIN
     )
+    semantic_updates = next(
+        group
+        for group in groups
+        if group.family.id is OperationFamilyId.SEMANTIC_UPDATES
+    )
+    quality = next(
+        group
+        for group in groups
+        if group.family.id is OperationFamilyId.QUALITY_RESOLUTION
+    )
     history = next(
         group
         for group in groups
@@ -49,13 +59,56 @@ def test_grouped_list_preserves_catalog_family_and_section_order():
     )
 
     assert isinstance(groups, tuple)
-    assert len(groups) == 11
+    assert len(groups) == 13
     assert tuple(operation.name for operation in search.operations) == (
         "find",
         "search",
         "query",
         "summarize",
         "compare",
+    )
+    assert tuple(
+        (
+            section_group.section.id,
+            tuple(operation.name for operation in section_group.operations),
+        )
+        for section_group in semantic_updates.sections
+    ) == (
+        (OperationFamilySectionId.SEMANTIC_UPDATE_FOUNDATION, ("update",)),
+        (
+            OperationFamilySectionId.SEMANTIC_UPDATE_DERIVE,
+            ("atomize", "distill", "elaborate", "makemore"),
+        ),
+        (
+            OperationFamilySectionId.SEMANTIC_UPDATE_CURATE_INTEGRATE,
+            ("forget", "sever", "meld"),
+        ),
+    )
+    assert tuple(
+        (
+            section_group.section.id,
+            tuple(operation.name for operation in section_group.operations),
+        )
+        for section_group in quality.sections
+    ) == (
+        (
+            OperationFamilySectionId.QUALITY_RESOLUTION_DIAGNOSE,
+            (
+                "find-duplicates",
+                "find-redundancies",
+                "find-ambiguities",
+                "find-conflicts",
+                "audit",
+            ),
+        ),
+        (
+            OperationFamilySectionId.QUALITY_RESOLUTION_REPAIR,
+            ("dedup", "dedun", "resolve"),
+        ),
+        (
+            OperationFamilySectionId.QUALITY_RESOLUTION_VALIDATE,
+            ("fit", "check-conformance"),
+        ),
     )
     assert tuple(
         (
@@ -103,7 +156,12 @@ def test_grouped_list_preserves_catalog_family_and_section_order():
         not group.sections
         for group in groups
         if group.family.id
-        not in {OperationFamilyId.SEARCH_EXPLAIN, OperationFamilyId.HISTORY_RECOVERY}
+        not in {
+            OperationFamilyId.SEARCH_EXPLAIN,
+            OperationFamilyId.SEMANTIC_UPDATES,
+            OperationFamilyId.QUALITY_RESOLUTION,
+            OperationFamilyId.HISTORY_RECOVERY,
+        }
     )
 
 

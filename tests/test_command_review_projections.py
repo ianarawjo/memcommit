@@ -4,13 +4,13 @@ from click import Group, Option
 from typer.main import get_command
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.meld import (
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld import (
     command_codec as meld_command_review,
 )
-from memcommit.adapters.console.commands.sever import (
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever import (
     command_codec as sever_command_review,
 )
-from memcommit.adapters.console.commands.update import (
+from memcommit.adapters.console.commands.semantic_updates.foundation.update import (
     command_codec as update_command_review,
 )
 from memcommit.adapters.console.commands.branch import (

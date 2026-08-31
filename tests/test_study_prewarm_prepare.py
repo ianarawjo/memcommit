@@ -9,7 +9,7 @@ import memcommit.application.capabilities.memory_issue_analysis.peer_relations.m
 import memcommit.application.capabilities.ops as ops
 import memcommit.study_scenarios.legacy.prewarm.compare as compare_prewarm_module
 import memcommit.study_scenarios.legacy.prewarm.update as update_prewarm_module
-import memcommit.application.operations.update.model as update_module
+import memcommit.application.operations.semantic_updates.foundation.update.model as update_module
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonAnalysis,
     ComparisonInput,
@@ -27,7 +27,7 @@ from memcommit.study_scenarios.legacy.prewarm.registry import (
     publish_artifact,
     replace_operation_artifacts,
 )
-from memcommit.application.operations.update.model import AddOperation, UpdateSession, collect_update_inputs
+from memcommit.application.operations.semantic_updates.foundation.update.model import AddOperation, UpdateSession, collect_update_inputs
 
 
 def _analysis(reference, compared) -> ComparisonAnalysis:

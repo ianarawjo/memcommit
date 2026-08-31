@@ -681,11 +681,11 @@ def _module_owner_matches(module: str, tokens: tuple[str, ...]) -> bool:
 
 
 def _operation_package_matches(module: str, tokens: tuple[str, ...]) -> bool:
-    return any(
-        module == f"memcommit.application.operations.{token}"
-        or module.startswith(f"memcommit.application.operations.{token}.")
-        for token in tokens
-    )
+    prefix = "memcommit.application.operations."
+    if not module.startswith(prefix):
+        return False
+    package_parts = module.removeprefix(prefix).split(".")
+    return any(token in package_parts for token in tokens)
 
 
 def _matrix_matches(path: Path, operation: str, tokens: tuple[str, ...]) -> bool:

@@ -24,7 +24,7 @@ from memcommit.application.capabilities.context_snapshot import (
     ContextSnapshotRef,
     context_snapshot_digest,
 )
-from memcommit.application.operations.dedun.application import (
+from memcommit.application.operations.quality_resolution.repair.dedun.application import (
     DedunAuthorityError,
     DedunConflictError,
     DedunError,
@@ -34,7 +34,7 @@ from memcommit.application.operations.dedun.application import (
     prepare_dedun,
     recommended_dedun_selections,
 )
-from memcommit.application.operations.dedun.runtime import MemoryStoreDedunPort
+from memcommit.application.operations.quality_resolution.repair.dedun.runtime import MemoryStoreDedunPort
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
     find_exact_duplicate_groups,
 )
@@ -70,7 +70,7 @@ from memcommit.application.operations.profile.model import (
     create_authority_grant,
     update_authority_grant,
 )
-from memcommit.application.operations.review.model import direct_context_digest
+from memcommit.application.operations.operation_lifecycle.review.model import direct_context_digest
 from memcommit.persistence.store import MemoryStore
 
 

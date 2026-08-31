@@ -19,7 +19,7 @@ from memcommit.application.operations.copy_and_move.application import (
 )
 from memcommit.application.operations.copy.application import run_copy
 from memcommit.application.operations.copy_and_move.runtime import MemoryStoreCopyAndMovePort
-from memcommit.application.operations.move.application import run_move
+from memcommit.application.operations.direct_changes.move.application import run_move
 from memcommit.persistence.store import MemoryStore
 
 

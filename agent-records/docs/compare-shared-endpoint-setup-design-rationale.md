@@ -4,7 +4,7 @@
 
 Compare's new-session A/B selection now uses
 `memcommit.adapters.console.terminal.components.endpoint_setup` through a narrow
-adapter under `adapters/console/commands/compare`. The former
+adapter under `adapters/console/commands/search_explain/synthesize/compare`. The former
 `interfaces/tui/operations/compare` path is removed without a compatibility
 facade. Explicit Compare operands, saved-session selection, provider analysis,
 cache lookup, analysis persistence, and result workbench behavior retain their

@@ -9,10 +9,10 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.impact.catalog import impact_session_entries
-from memcommit.adapters.console.commands.review.sessions import review_session_entries
+from memcommit.adapters.console.commands.operation_lifecycle.impact.catalog import impact_session_entries
+from memcommit.adapters.console.commands.operation_lifecycle.review.sessions import review_session_entries
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.update.model import plan_update
+from memcommit.application.operations.semantic_updates.foundation.update.model import plan_update
 from memcommit.persistence.operations.update.receipt_repository import (
     UpdateReceiptRepository,
 )

@@ -19,7 +19,7 @@ from memcommit.operation_catalog import (
 
 def test_every_public_operation_belongs_to_exactly_one_family() -> None:
     assert len(OPERATION_BY_NAME) == 66
-    assert len(OPERATION_FAMILIES) == 11
+    assert len(OPERATION_FAMILIES) == 13
     assert set(OPERATION_FAMILY_BY_OPERATION) == set(OPERATION_BY_NAME)
     assert sum(
         len(family.operation_names) for family in OPERATION_FAMILIES
@@ -74,7 +74,88 @@ def test_search_family_groups_retrieval_and_answering_before_synthesis() -> None
     )
     assert operation_family("compare") is search
     assert "compare" not in operation_family("review").operation_names
-    assert operation_family("review").title == "CHECK & REVIEW"
+    assert operation_family("review").title == "OPERATION LIFECYCLE"
+
+
+def test_update_is_the_foundation_for_specialized_semantic_updates() -> None:
+    family = operation_family("update")
+
+    assert family.id is OperationFamilyId.SEMANTIC_UPDATES
+    assert family.operation_names == (
+        "update",
+        "atomize",
+        "distill",
+        "elaborate",
+        "makemore",
+        "forget",
+        "sever",
+        "meld",
+    )
+    assert tuple(
+        (section.id, section.title, section.operation_names)
+        for section in family.sections
+    ) == (
+        (
+            OperationFamilySectionId.SEMANTIC_UPDATE_FOUNDATION,
+            "FOUNDATION",
+            ("update",),
+        ),
+        (
+            OperationFamilySectionId.SEMANTIC_UPDATE_DERIVE,
+            "DERIVE",
+            ("atomize", "distill", "elaborate", "makemore"),
+        ),
+        (
+            OperationFamilySectionId.SEMANTIC_UPDATE_CURATE_INTEGRATE,
+            "CURATE & INTEGRATE",
+            ("forget", "sever", "meld"),
+        ),
+    )
+    assert operation_family("translate").id is OperationFamilyId.TRANSLATION
+
+
+def test_quality_pairs_diagnosis_with_repair_and_validation() -> None:
+    family = operation_family("find-duplicates")
+
+    assert family.id is OperationFamilyId.QUALITY_RESOLUTION
+    assert tuple(
+        (section.id, section.title, section.operation_names)
+        for section in family.sections
+    ) == (
+        (
+            OperationFamilySectionId.QUALITY_RESOLUTION_DIAGNOSE,
+            "DIAGNOSE",
+            (
+                "find-duplicates",
+                "find-redundancies",
+                "find-ambiguities",
+                "find-conflicts",
+                "audit",
+            ),
+        ),
+        (
+            OperationFamilySectionId.QUALITY_RESOLUTION_REPAIR,
+            "REPAIR",
+            ("dedup", "dedun", "resolve"),
+        ),
+        (
+            OperationFamilySectionId.QUALITY_RESOLUTION_VALIDATE,
+            "VALIDATE",
+            ("fit", "check-conformance"),
+        ),
+    )
+    assert operation_family("dedup") is family
+    assert operation_family("dedun") is family
+    assert operation_family("resolve") is family
+
+
+def test_impact_and_review_are_unsplit_operation_lifecycle_peers() -> None:
+    family = operation_family("impact")
+
+    assert family.id is OperationFamilyId.OPERATION_LIFECYCLE
+    assert family.operation_names == ("impact", "review")
+    assert not family.sections
+    assert operation_family("review") is family
 
 
 def test_history_family_preserves_the_reviewed_affordance_order() -> None:
@@ -105,15 +186,20 @@ def test_history_family_preserves_the_reviewed_affordance_order() -> None:
             ("checkpoint", "undo", "redo", "revert"),
         ),
     )
-    sectioned_operations = set(history.operation_names) | set(
-        operation_family("query").operation_names
+    sectioned_families = (
+        operation_family("query"),
+        operation_family("update"),
+        operation_family("find-duplicates"),
+        history,
     )
+    sectioned_operations = {
+        name for family in sectioned_families for name in family.operation_names
+    }
     assert set(OPERATION_FAMILY_SECTION_BY_OPERATION) == sectioned_operations
     assert all(
         not family.sections
         for family in OPERATION_FAMILIES
-        if family.id
-        not in {OperationFamilyId.SEARCH_EXPLAIN, OperationFamilyId.HISTORY_RECOVERY}
+        if family not in sectioned_families
     )
 
 
@@ -125,6 +211,25 @@ def test_console_help_projects_the_shared_family_catalog() -> None:
         "SEARCH & EXPLAIN": (
             ("RETRIEVE & ANSWER", ("find", "search", "query")),
             ("SYNTHESIZE", ("summarize", "compare")),
+        ),
+        "SEMANTIC UPDATES": (
+            ("FOUNDATION", ("update",)),
+            ("DERIVE", ("atomize", "distill", "elaborate", "makemore")),
+            ("CURATE & INTEGRATE", ("forget", "sever", "meld")),
+        ),
+        "QUALITY & RESOLUTION": (
+            (
+                "DIAGNOSE",
+                (
+                    "find-duplicates",
+                    "find-redundancies",
+                    "find-ambiguities",
+                    "find-conflicts",
+                    "audit",
+                ),
+            ),
+            ("REPAIR", ("dedup", "dedun", "resolve")),
+            ("VALIDATE", ("fit", "check-conformance")),
         ),
         "HISTORY & RECOVERY": (
             ("INSPECTION", ("log", "diff", "trace", "rationale")),
@@ -151,6 +256,28 @@ def test_console_help_projects_the_shared_family_catalog() -> None:
         "SEARCH & EXPLAIN",
         "SYNTHESIZE",
     )
+    assert HELP_SECTION_BY_COMMAND["update"] == (
+        "SEMANTIC UPDATES",
+        "FOUNDATION",
+    )
+    assert HELP_SECTION_BY_COMMAND["meld"] == (
+        "SEMANTIC UPDATES",
+        "CURATE & INTEGRATE",
+    )
+    assert HELP_SECTION_BY_COMMAND["find-redundancies"] == (
+        "QUALITY & RESOLUTION",
+        "DIAGNOSE",
+    )
+    assert HELP_SECTION_BY_COMMAND["dedun"] == (
+        "QUALITY & RESOLUTION",
+        "REPAIR",
+    )
+    assert HELP_SECTION_BY_COMMAND["fit"] == (
+        "QUALITY & RESOLUTION",
+        "VALIDATE",
+    )
+    assert "impact" not in HELP_SECTION_BY_COMMAND
+    assert "review" not in HELP_SECTION_BY_COMMAND
 
 
 def test_family_translations_cover_the_shared_catalog() -> None:

@@ -21,20 +21,20 @@ from memcommit.application.operations.profile.model import (
     delete_authority_grant,
     update_authority_grant,
 )
-from memcommit.application.operations.sever.model import SeverCandidate, SeverSession
-from memcommit.application.operations.sever.application import (
+from memcommit.application.operations.semantic_updates.curate_integrate.sever.model import SeverCandidate, SeverSession
+from memcommit.application.operations.semantic_updates.curate_integrate.sever.application import (
     SeverAnalysisRequest,
     SeverAnalysisResult,
     SeverApplicationError,
     SeverPersistedApplyRequest,
 )
-from memcommit.application.operations.sever.runtime import (
+from memcommit.application.operations.semantic_updates.curate_integrate.sever.runtime import (
     MemoryStoreSeverInputPort,
     MemoryStoreSeverOutputPort,
     execute_sever_session_apply,
     execute_sever_session_start,
 )
-from memcommit.application.operations.sever.session_store import SeverSessionStore
+from memcommit.application.operations.semantic_updates.curate_integrate.sever.session_store import SeverSessionStore
 from memcommit.persistence.store import MemoryStore
 
 

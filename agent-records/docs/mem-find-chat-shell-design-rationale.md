@@ -280,7 +280,7 @@ Context headings.
 ## Search-result presentation ownership
 
 The grouped text presenter is now owned directly by
-`memcommit.adapters.console.commands.search.result_present`. Moving the
+`memcommit.adapters.console.commands.search_explain.retrieve_answer.search.result_present`. Moving the
 implementation back beside its only consumers changes no grouping, ordering,
 text, escaping, signatures, defaults, or exceptions. The former
 `memcommit.adapters.interfaces.cli.search_results` path is removed rather than

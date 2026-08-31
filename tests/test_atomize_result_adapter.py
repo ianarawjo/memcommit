@@ -8,7 +8,7 @@ from dataclasses import replace
 
 import pytest
 
-from memcommit.application.operations.atomize.domain import (
+from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
     ATOMIZE_RULESET_VERSION,
     AtomizeAnalysisItem,
     AtomizeAnalysisSession,
@@ -18,7 +18,7 @@ from memcommit.application.operations.atomize.domain import (
     AtomizeQualityIssue,
     AtomizeReading,
 )
-from memcommit.application.operations.atomize.result_adapter import (
+from memcommit.application.operations.semantic_updates.derive.atomize.result_adapter import (
     AtomizeResultWorkbenchAdapter,
     atomize_result_artifact_digest,
     project_atomize_result,

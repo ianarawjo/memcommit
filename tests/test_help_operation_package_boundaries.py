@@ -16,8 +16,16 @@ APPLICATION_OPERATIONS = (
 
 
 def test_changed_help_operations_have_independent_console_packages() -> None:
-    for operation in ("checkout", "list", "lock", "unlock", "rename", "revert"):
-        package = CONSOLE_COMMANDS / operation
+    operation_paths = {
+        "checkout": "checkout",
+        "list": "list",
+        "lock": "lock",
+        "unlock": "unlock",
+        "rename": "rename",
+        "revert": "history_recovery/recovery/revert",
+    }
+    for operation_path in operation_paths.values():
+        package = CONSOLE_COMMANDS / operation_path
         assert (package / "__init__.py").is_file()
         assert (package / "command.py").is_file()
 
@@ -26,15 +34,16 @@ def test_changed_help_operations_have_independent_console_packages() -> None:
 
 
 def test_changed_application_effects_have_operation_packages() -> None:
-    for operation in (
-        "checkpoint",
+    operation_paths = (
+        "history_recovery/recovery/checkpoint",
         "list",
         "lock",
         "unlock",
         "rename",
-        "revert",
-    ):
-        package = APPLICATION_OPERATIONS / operation
+        "history_recovery/recovery/revert",
+    )
+    for operation_path in operation_paths:
+        package = APPLICATION_OPERATIONS / operation_path
         assert (package / "__init__.py").is_file()
         assert (package / "application.py").is_file()
         assert (package / "runtime.py").is_file()
@@ -49,8 +58,8 @@ def test_changed_application_effects_have_operation_packages() -> None:
 
 
 def test_copy_move_and_eval_have_public_operation_packages() -> None:
-    for operation in ("copy", "move"):
-        package = APPLICATION_OPERATIONS / operation
+    for operation_path in ("copy", "direct_changes/move"):
+        package = APPLICATION_OPERATIONS / operation_path
         assert (package / "application.py").is_file()
         assert (package / "runtime.py").is_file()
     eval_package = APPLICATION_OPERATIONS / "eval"
@@ -68,7 +77,10 @@ def test_console_adapters_do_not_reclaim_application_mutations() -> None:
     prohibited = {
         "list": ("resolve_context_access", "freeze_readable_context_catalog"),
         "rename": ("plan_context_rename", "rename_contexts("),
-        "revert": ("store.revert(", "store.revert_checkpoint_unit("),
+        "history_recovery/recovery/revert": (
+            "store.revert(",
+            "store.revert_checkpoint_unit(",
+        ),
     }
     for operation, snippets in prohibited.items():
         source = (CONSOLE_COMMANDS / operation / "command.py").read_text(

@@ -12,24 +12,24 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.makemore.command as makemore_command
-import memcommit.application.operations.makemore.application as makemore_application
+import memcommit.adapters.console.commands.semantic_updates.derive.makemore.command as makemore_command
+import memcommit.application.operations.semantic_updates.derive.makemore.application as makemore_application
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.conformance.model import (
+from memcommit.application.operations.quality_resolution.validate.check_conformance.model import (
     CONTEXT_CONFORMANCE_OPERATION,
 )
-from memcommit.application.operations.makemore.model import (
+from memcommit.application.operations.semantic_updates.derive.makemore.model import (
     MAKEMORE_OPERATION,
     MAKEMORE_PAYLOAD_MARKER,
     MakemoreError,
     MakemoreMode,
     MakemoreQualityPolicy,
 )
-from memcommit.application.operations.makemore.application import MakemoreRequest
-from memcommit.application.operations.makemore.config import MakemoreSemanticConfig
-from memcommit.application.operations.makemore.runtime import execute_makemore
-from memcommit.application.operations.fit.judgment import (
+from memcommit.application.operations.semantic_updates.derive.makemore.application import MakemoreRequest
+from memcommit.application.operations.semantic_updates.derive.makemore.config import MakemoreSemanticConfig
+from memcommit.application.operations.semantic_updates.derive.makemore.runtime import execute_makemore
+from memcommit.application.operations.quality_resolution.validate.fit.judgment import (
     FIT_JUDGMENT_OPERATION,
     FIT_JUDGMENT_PAYLOAD_MARKER,
 )
@@ -51,7 +51,7 @@ from memcommit.application.operations.ground.workspace_history import (
     build_ground_workspace_command_stack,
     undo_ground_workspace_command,
 )
-from memcommit.adapters.console.commands.makemore.viewer import (
+from memcommit.adapters.console.commands.semantic_updates.derive.makemore.viewer import (
     project_makemore_clipboard,
     project_makemore_result,
     run_makemore_tui,
@@ -842,7 +842,7 @@ def test_makemore_shared_viewer_copies_one_proposal_or_all() -> None:
 
 def test_makemore_console_keeps_projection_without_a_mode_router() -> None:
     repository_root = Path(__file__).resolve().parents[1]
-    command_root = repository_root / "src/memcommit/adapters/console/commands/makemore"
+    command_root = repository_root / "src/memcommit/adapters/console/commands/semantic_updates/derive/makemore"
     retired_tui_root = (
         repository_root / "src/memcommit/adapters/interfaces/tui/operations/makemore"
     )

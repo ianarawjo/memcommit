@@ -10,14 +10,14 @@ import uuid
 import pytest
 
 from memcommit.core.context import Context, Memory
-import memcommit.application.operations.query.ordinary_application as query_application
-from memcommit.application.operations.query.ordinary_application import (
+import memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application as query_application
+from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application import (
     FrozenOrdinaryQuerySource,
     OrdinaryQueryRequest,
     run_ordinary_query,
 )
-from memcommit.application.operations.query.ordinary_runtime import execute_ordinary_query
-from memcommit.application.operations.search.model import SearchCandidate
+from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_runtime import execute_ordinary_query
+from memcommit.application.operations.search_explain.retrieve_answer.search.model import SearchCandidate
 from memcommit.persistence.store import MemoryStore
 
 
@@ -296,10 +296,10 @@ def test_runtime_executes_exact_scope_without_output_or_source_mutation(
 def test_ordinary_query_application_and_runtime_have_no_interface_dependency():
     root = Path(__file__).parents[1]
     application = ast.parse(
-        (root / "src/memcommit/application/operations/query/ordinary_application.py").read_text()
+        (root / "src/memcommit/application/operations/search_explain/retrieve_answer/query/ordinary_application.py").read_text()
     )
     runtime = ast.parse(
-        (root / "src/memcommit/application/operations/query/ordinary_runtime.py").read_text()
+        (root / "src/memcommit/application/operations/search_explain/retrieve_answer/query/ordinary_runtime.py").read_text()
     )
 
     def imports(tree):
@@ -321,23 +321,23 @@ def test_ordinary_query_application_and_runtime_have_no_interface_dependency():
 
 def test_production_adapters_import_ordinary_query_from_new_owner():
     root = Path(__file__).parents[1]
-    command = (root / "src/memcommit/adapters/console/commands/query/command.py").read_text()
+    command = (root / "src/memcommit/adapters/console/commands/search_explain/retrieve_answer/query/command.py").read_text()
     workbench_model = (
         root
-        / "src/memcommit/adapters/console/commands/query/workbench/model.py"
+        / "src/memcommit/adapters/console/commands/search_explain/retrieve_answer/query/workbench/model.py"
     ).read_text()
 
     assert (
-        "from memcommit.application.operations.query.ordinary_application import ("
+        "from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application import ("
         in command
     )
     assert "OrdinaryQueryRequest" in command
     assert (
-        "from memcommit.application.operations.query.ordinary_runtime import ("
+        "from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_runtime import ("
         in command
     )
     assert "execute_ordinary_query" in command
     assert (
-        "from memcommit.application.operations.query.ordinary_application import ("
+        "from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application import ("
         in workbench_model
     )

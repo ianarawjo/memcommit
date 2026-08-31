@@ -381,11 +381,11 @@ class TestHelp:
     def test_by_kind_preserves_workflow_order_while_a_z_sorts_names(self):
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["atomize"]
-            == "SEMANTIC TRANSFORMATIONS"
+            == "SEMANTIC UPDATES"
         )
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["forget"]
-            == "SEMANTIC TRANSFORMATIONS"
+            == "SEMANTIC UPDATES"
         )
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["reference"]
@@ -393,15 +393,15 @@ class TestHelp:
         )
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["merge"]
-            == "DETERMINISTIC CONTENT CHANGES"
+            == "DIRECT CHANGES"
         )
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["dedup"]
-            == "DETERMINISTIC CONTENT CHANGES"
+            == "QUALITY & RESOLUTION"
         )
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["replace"]
-            == "DETERMINISTIC CONTENT CHANGES"
+            == "DIRECT CHANGES"
         )
         names = (
             "clear",

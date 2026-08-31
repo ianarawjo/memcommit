@@ -27,7 +27,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.evi
 )
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.persistence.store import MemoryStore, _write_json_atomic
-from memcommit.application.operations.update.model import GrantedUpdateTarget
+from memcommit.application.operations.semantic_updates.foundation.update.model import GrantedUpdateTarget
 
 
 _SCHEMA_VERSION = 1

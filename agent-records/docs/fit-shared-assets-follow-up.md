@@ -29,7 +29,7 @@ Pipes and `NO_COLOR` preserve the exact ANSI-free text.
 ## Current boundary
 
 - The command owns composition and its terminal-safe receipt projection under
-  `adapters.console.commands.fit`; the retired `interfaces.cli` staging package
+  `adapters.console.commands.quality_resolution.validate.fit`; the retired `interfaces.cli` staging package
   retains no presentation facade.
 - General Fit remains process-local and creates no durable receipt. Stored
   input origins remain typed application data for authority and exact

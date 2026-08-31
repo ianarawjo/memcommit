@@ -13,10 +13,10 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_merge_package_import_is_lazy() -> None:
     source = """
 import sys
-import memcommit.application.operations.merge
+import memcommit.application.operations.direct_changes.merge
 
-assert "memcommit.application.operations.merge.application" not in sys.modules
-assert "memcommit.application.operations.merge.runtime" not in sys.modules
+assert "memcommit.application.operations.direct_changes.merge.application" not in sys.modules
+assert "memcommit.application.operations.direct_changes.merge.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -27,7 +27,7 @@ assert "memcommit.application.operations.merge.runtime" not in sys.modules
 
 
 def test_merge_command_owns_setup_resolution_receipt_and_workbench() -> None:
-    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/merge"
+    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/direct_changes/merge"
 
     assert (command_root / "endpoint_setup.py").is_file()
     assert (command_root / "resolution.py").is_file()
@@ -45,7 +45,7 @@ def test_merge_command_owns_setup_resolution_receipt_and_workbench() -> None:
 
 
 def test_merge_command_does_not_import_removed_interface_facades() -> None:
-    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/merge"
+    command_root = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/direct_changes/merge"
     source = "\n".join(
         path.read_text(encoding="utf-8") for path in sorted(command_root.rglob("*.py"))
     )

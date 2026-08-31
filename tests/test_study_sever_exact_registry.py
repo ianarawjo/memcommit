@@ -10,7 +10,7 @@ from typer.testing import CliRunner
 import memcommit.configuration.config as config_module
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
-from memcommit.adapters.console.commands.sever.command import _capture_binding, _start
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.command import _capture_binding, _start
 from memcommit.adapters.console.entrypoint import app
 from memcommit.configuration.config import Config
 from memcommit.core.context import Memory
@@ -19,12 +19,12 @@ from memcommit.application.operations.profile.config import (
     ProfileRegistry,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
 )
-from memcommit.application.operations.sever.model import (
+from memcommit.application.operations.semantic_updates.curate_integrate.sever.model import (
     SeverCandidate,
     SeverSession,
     sever_frame_digest,
 )
-from memcommit.application.operations.sever.session_store import SeverSessionStore
+from memcommit.application.operations.semantic_updates.curate_integrate.sever.session_store import SeverSessionStore
 from memcommit.persistence.store import MemoryStore
 from memcommit.study_scenarios.legacy.prewarm.registry import (
     StudyPrewarmRegistryError,
@@ -223,7 +223,7 @@ def test_exact_sever_cli_discloses_prewarm_origin(
         registry_snapshot=registry,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.sever.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(AssertionError("provider must not connect")),
     )
 

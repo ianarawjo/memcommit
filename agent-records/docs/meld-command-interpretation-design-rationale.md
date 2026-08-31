@@ -17,7 +17,7 @@ CLI spelling and Meld's operation contracts.
 
 ## Selected boundary
 
-`memcommit.adapters.console.commands.meld.interpretation` is the sole
+`memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.interpretation` is the sole
 owner of Meld CLI form interpretation.  The console path is now:
 
 ```text

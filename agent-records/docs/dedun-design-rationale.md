@@ -66,9 +66,9 @@ invocation itself is the console Apply boundary.
 ## Canonical ownership
 
 The public split is reflected in the implementation layout. Provider-free
-exact cleanup is owned by `memcommit.application.operations.dedup`, while the
+exact cleanup is owned by `memcommit.application.operations.quality_resolution.repair.dedup`, while the
 complete DUN request and typed effect contract are owned by
-`memcommit.application.operations.dedun.application`, confirmed relations are
+`memcommit.application.operations.quality_resolution.repair.dedun.application`, confirmed relations are
 grouped in `analysis` through the shared semantic-execution relation capability,
 and `runtime` owns both direct and recursive Store publication. The console
 package contains only the immediate command adapter; the old operation-specific

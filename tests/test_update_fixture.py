@@ -7,14 +7,14 @@ import uuid
 from pathlib import Path
 
 from memcommit.core.context import Context, Memory, QueryContextRef
-from memcommit.application.operations.update.model import (
+from memcommit.application.operations.semantic_updates.foundation.update.model import (
     AddOperation,
     EditOperation,
     RemoveOperation,
     count_operations,
     plan_update,
 )
-from memcommit.application.operations.update.application import (
+from memcommit.application.operations.semantic_updates.foundation.update.application import (
     apply_staged_update_plan,
 )
 

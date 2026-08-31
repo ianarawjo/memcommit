@@ -7,16 +7,16 @@ import hashlib
 import json
 from typing import Literal, Protocol
 
-from memcommit.application.operations.makemore.model import (
+from memcommit.application.operations.semantic_updates.derive.makemore.model import (
     MakemoreError,
     MakemoreProvider,
 )
-from memcommit.application.operations.makemore.application import (
+from memcommit.application.operations.semantic_updates.derive.makemore.application import (
     MakemoreRequest,
     MakemoreResult,
 )
-from memcommit.application.operations.makemore.runtime import execute_makemore
-from memcommit.application.operations.makemore.target_context import (
+from memcommit.application.operations.semantic_updates.derive.makemore.runtime import execute_makemore
+from memcommit.application.operations.semantic_updates.derive.makemore.target_context import (
     FrozenMakemoreTargetContext,
     GRANTED_MAKEMORE_ADD_PERMISSIONS,
     authorized_frozen_makemore_target,

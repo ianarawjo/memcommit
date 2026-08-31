@@ -6,17 +6,17 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.search.corpus import (
+from memcommit.application.operations.search_explain.retrieve_answer.search.corpus import (
     collect_readable_search_candidates,
     load_readable_search_roots,
 )
 from memcommit.core.context import AutoCheckpoint
-from memcommit.application.operations.meld.model import MeldSession
-from memcommit.application.operations.rationale.cache import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import MeldSession
+from memcommit.application.operations.history_recovery.inspection.rationale.cache import (
     CachedRationaleInference,
     save_rationale_inference,
 )
-from memcommit.application.operations.search.model import SearchArtifact
+from memcommit.application.operations.search_explain.retrieve_answer.search.model import SearchArtifact
 from memcommit.persistence.store import MemoryStore
 
 
@@ -97,7 +97,7 @@ def test_query_single_argument_answers_from_ordinary_search_artifact(
     _saved_meld_trace(store)
     provider = _QueryAnswerProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.query.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 

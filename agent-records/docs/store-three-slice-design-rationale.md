@@ -86,7 +86,7 @@ split assigns them as follows:
   `operations/atomize/state_repository.py` own their corresponding persisted
   working state; and
 - `operations/audit/record_repository.py` owns immutable completed Audit records,
-  while `application.operations.audit.repository` owns the repository port.
+  while `application.operations.quality_resolution.diagnose.audit.repository` owns the repository port.
 
 `MemoryStore` composes the common infrastructure, Context/Memory owner, operation
 repository mixins, and checkpoint/restoration owner directly. There is no

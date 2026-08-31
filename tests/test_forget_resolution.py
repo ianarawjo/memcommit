@@ -6,7 +6,7 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.adapters.console.commands.forget import command as forget_command
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget import command as forget_command
 from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     resolution_report_fragments,
     resolution_viewer_fragments,
@@ -15,11 +15,11 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell imp
     session_todo_view,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.adapters.console.commands.forget.workbench.presentation import (
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget.workbench.presentation import (
     ForgetResolutionWorkbenchAdapter,
     forget_memory_changes,
 )
-from memcommit.application.operations.forget.review import ForgetReview
+from memcommit.application.operations.semantic_updates.curate_integrate.forget.review import ForgetReview
 from memcommit.adapters.console.terminal.components.impact import ImpactController
 from memcommit.providers.types import ProviderIdentity
 from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation, ResolutionWorkbenchAction
@@ -395,7 +395,7 @@ def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monke
         return action
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.forget.workbench.screen.run_resolution_workbench_shell",
+        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget.workbench.screen.run_resolution_workbench_shell",
         choose,
     )
 
@@ -433,7 +433,7 @@ def test_granted_forget_requires_review_only_when_it_will_publish_a_change(
         return ResolutionWorkbenchAction(kind="ACCEPT")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.forget.workbench.screen.run_resolution_workbench_shell",
+        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget.workbench.screen.run_resolution_workbench_shell",
         choose,
     )
     monkeypatch.setattr(

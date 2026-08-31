@@ -9,11 +9,11 @@ import uuid
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.application.operations.rationale.model as rationale_module
+import memcommit.application.operations.history_recovery.inspection.rationale.model as rationale_module
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import AutoCheckpoint, Memory
-from memcommit.application.operations.rationale.cache import (
+from memcommit.application.operations.history_recovery.inspection.rationale.cache import (
     CachedRationaleInference,
     load_rationale_inference,
     rationale_inference_input_digest,

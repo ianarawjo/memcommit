@@ -110,7 +110,7 @@ remain candidates for later extraction after their contracts are reviewed.
 On 2026-08-29 the Audit-specific slice crossed that staging boundary.
 Its durable model, complete three-or-four-check execution, private CAS session
 store, and Resolution compatibility projection moved to
-`memcommit.application.operations.audit`. Shared finder, report, and workbench
+`memcommit.application.operations.quality_resolution.diagnose.audit`. Shared finder, report, and workbench
 contracts first lived under a provisional reviewing namespace. They now live
 directly under `application.capabilities.memory_issue_analysis`. Audit is a named
 operation that consumes those reusable capabilities; it is not itself a shared

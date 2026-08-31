@@ -388,7 +388,7 @@ agent input is validated before provider construction, while a future composer
 can remain a presentation adapter over the same request.
 
 The console-specific proposal presentation is co-located under
-`memcommit.adapters.console.commands.makemore`. `proposal.py` owns the stable
+`memcommit.adapters.console.commands.semantic_updates.derive.makemore`. `proposal.py` owns the stable
 plain-text projection, `viewer/` owns the read-only semantic document and
 clipboard projection, and `runner.py` selects between those presentations for
 the Ground proposal route. These values are proposals rather than receipts:

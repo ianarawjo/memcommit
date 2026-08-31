@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.application.operations.atomize.domain import _atomize_execution_policy
+from memcommit.application.operations.semantic_updates.derive.atomize.domain import _atomize_execution_policy
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
     COMPARISON_EXECUTION_POLICY,
 )
@@ -10,11 +10,11 @@ from memcommit.application.capabilities.memory_issue_analysis.provider_contract 
     _findings_execution_policy,
 )
 from memcommit.application.capabilities.history.query.semantic_history_query import HISTORY_SEARCH_EXECUTION_POLICY
-from memcommit.application.operations.meld.provider.contract import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.provider.contract import (
     MELD_EXECUTION_POLICY,
 )
-from memcommit.application.operations.rationale.model import RATIONALE_EXECUTION_POLICY
-from memcommit.application.operations.search.model import SEARCH_EXECUTION_POLICY
+from memcommit.application.operations.history_recovery.inspection.rationale.model import RATIONALE_EXECUTION_POLICY
+from memcommit.application.operations.search_explain.retrieve_answer.search.model import SEARCH_EXECUTION_POLICY
 from memcommit.application.capabilities.semantic.selective_curation import (
     CurationBatch,
     CurationItem,
@@ -28,11 +28,11 @@ from memcommit.application.capabilities.semantic_execution import (
     ExecutionStrategy,
     SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT,
 )
-from memcommit.application.operations.summarize.model import SUMMARIZE_EXECUTION_POLICY
-from memcommit.application.operations.translate.runtime import (
+from memcommit.application.operations.search_explain.synthesize.summarize.model import SUMMARIZE_EXECUTION_POLICY
+from memcommit.application.operations.translation.translate.runtime import (
     TRANSLATE_EXECUTION_POLICY,
 )
-from memcommit.application.operations.update.model import UPDATE_EXECUTION_POLICY
+from memcommit.application.operations.semantic_updates.foundation.update.model import UPDATE_EXECUTION_POLICY
 
 
 def test_only_implemented_find_and_translate_policies_advertise_staging():

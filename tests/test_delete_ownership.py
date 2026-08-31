@@ -21,10 +21,10 @@ _LEGACY_DELETE_REQUEST_PICKLE = (
 def test_delete_package_import_does_not_eagerly_load_implementation_modules() -> None:
     source = """
 import sys
-import memcommit.application.operations.delete
+import memcommit.application.operations.direct_changes.delete
 
-assert "memcommit.application.operations.delete.application" not in sys.modules
-assert "memcommit.application.operations.delete.runtime" not in sys.modules
+assert "memcommit.application.operations.direct_changes.delete.application" not in sys.modules
+assert "memcommit.application.operations.direct_changes.delete.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -36,7 +36,7 @@ assert "memcommit.application.operations.delete.runtime" not in sys.modules
 
 def test_delete_console_owns_review_receipt_and_picker_without_facades() -> None:
     command_root = (
-        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/delete"
+        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/direct_changes/delete"
     )
 
     assert (command_root / "review.py").is_file()

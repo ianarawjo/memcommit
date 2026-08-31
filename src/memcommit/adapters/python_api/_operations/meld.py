@@ -24,25 +24,25 @@ from memcommit.adapters.python_api.meld import (
 )
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.operations.meld.model import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import (
     MELD_SCHEMA_VERSION,
     MeldError as CoreMeldError,
     meld_canonical_digest,
 )
-from memcommit.application.operations.meld.apply import MeldApplyRequest
-from memcommit.application.operations.meld.provider.contract import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.apply import MeldApplyRequest
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.provider.contract import (
     MeldProviderError,
 )
-from memcommit.application.operations.meld.proposal_iteration import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_iteration import (
     MeldResolutionError,
     MeldResolutionTurnRequest,
     prepare_meld_resolution_turn,
 )
-from memcommit.application.operations.meld.preparation import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.preparation import (
     MeldRestartError,
     MeldRestartRequest,
 )
-from memcommit.application.operations.meld.runtime import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.runtime import (
     execute_meld_apply,
     execute_meld_preservation,
     execute_prepared_meld_turn,
@@ -53,13 +53,13 @@ from memcommit.application.operations.meld.runtime import (
     load_meld_source,
     prepare_pending_meld_turn,
 )
-from memcommit.application.operations.meld.proposal_iteration import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_iteration import (
     MeldSessionVersionError,
     MeldSessionVersionInputError,
     prepare_meld_preservation_turn,
     require_meld_session_version,
 )
-from memcommit.application.operations.meld.preparation import MeldStartError, MeldStartRequest
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.preparation import MeldStartError, MeldStartRequest
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError
 

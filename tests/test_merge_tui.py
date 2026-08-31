@@ -11,19 +11,19 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.merge.endpoint_setup as merge_setup
-from memcommit.adapters.console.commands.merge.endpoint_setup import (
+import memcommit.adapters.console.commands.direct_changes.merge.endpoint_setup as merge_setup
+from memcommit.adapters.console.commands.direct_changes.merge.endpoint_setup import (
     MergeSetup,
     build_merge_setup,
     choose_merge_request,
     merge_setup_spec,
 )
-from memcommit.adapters.console.commands.merge.workbench.conflicts import (
+from memcommit.adapters.console.commands.direct_changes.merge.workbench.conflicts import (
     merge_resolution_exact_review,
     merge_resolution_spec,
     run_merge_conflict_review,
 )
-from memcommit.adapters.console.commands.merge.workbench.review import (
+from memcommit.adapters.console.commands.direct_changes.merge.workbench.review import (
     merge_exact_command_review,
     merge_plan_exact_command_review,
     project_merge_plan,
@@ -36,7 +36,7 @@ from memcommit.adapters.console.terminal.components.resolution.inline_shell impo
     render_inline_resolution_item,
     run_inline_resolution_workbench,
 )
-from memcommit.application.operations.merge.application import (
+from memcommit.application.operations.direct_changes.merge.application import (
     FrozenMergePlan,
     MergeAddition,
     MergeConflict,
@@ -53,7 +53,7 @@ from memcommit.application.operations.merge.application import (
     prepare_merge,
     run_merge,
 )
-from memcommit.application.operations.merge.runtime import MemoryStoreMergePort
+from memcommit.application.operations.direct_changes.merge.runtime import MemoryStoreMergePort
 from memcommit.adapters.console.terminal.components.selection.model import SelectionOption
 from memcommit.adapters.console.terminal.components.selection.state import FlatSelectionState
 from memcommit.persistence.store import MemoryStore

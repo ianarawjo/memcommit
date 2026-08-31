@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.adapters.console.commands.meld import command
-from memcommit.adapters.console.commands.meld import entrypoint
-import memcommit.adapters.console.commands.meld.interpretation as interpretation
-from memcommit.adapters.console.commands.meld import presentation
-from memcommit.adapters.console.commands.meld.workflow import workflow
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld import command
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld import entrypoint
+import memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.interpretation as interpretation
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld import presentation
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.workflow import workflow
 
 
 class _InterpretationStore:

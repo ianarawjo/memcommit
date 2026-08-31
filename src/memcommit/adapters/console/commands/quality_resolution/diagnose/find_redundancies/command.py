@@ -1,0 +1,517 @@
+"""Shared semantic-redundancy discovery for Find Redundancies and Dedun."""
+
+from __future__ import annotations
+
+from typing import Annotated, Optional
+
+import typer
+
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
+    choose_context_operand,
+)
+from memcommit.application.capabilities.authority.context_access import (
+    resolve_context_access,
+)
+from memcommit.adapters.console.terminal.components.quality_find.rendering import (
+    render_cleanup_member,
+    render_heading,
+)
+from memcommit.adapters.console.terminal.components.progress import CommandProgress
+from memcommit.adapters.console.terminal.components.quality_find.workbench import (
+    annotate_quality_find_attempt,
+)
+from memcommit.adapters.console.terminal.core.text import (
+    display_escape_text,
+)
+from memcommit.adapters.console.terminal.core.identity import (
+    collision_safe_uid_prefixes,
+)
+from memcommit.core.context import Memory
+from memcommit.adapters.console.coordination.context_scope_options import (
+    ContextScopePreset,
+    resolve_scope_preset,
+)
+from memcommit.application.capabilities.memory_issue_analysis.model import (
+    DuplicateFinding,
+    DuplicateReport,
+    FindingsError,
+)
+from memcommit.providers.subscription import (
+    QueryProviderError,
+    connect_codex_chatgpt_provider,
+)
+from memcommit.persistence.store import MemoryStore
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.quality_resolution.repair.dedun.application import (
+    DEDUN_ELIGIBLE_RELATIONS,
+    DedunRequest,
+    apply_dedun,
+    prepare_dedun,
+    recommended_dedun_selections,
+)
+from memcommit.application.operations.quality_resolution.repair.dedun.runtime import MemoryStoreDedunPort
+from memcommit.application.operations.quality_resolution.repair.dedun.runtime import (
+    DedunScopeReceipt,
+    apply_recursive_dedun_scope,
+    freeze_recursive_dedun_scope,
+    prepare_recursive_dedun_scope,
+)
+from memcommit.application.capabilities.semantic_execution.relations import (
+    connected_relation_components,
+)
+from memcommit.application.capabilities.memory_issue_analysis.handoff import (
+    QualityFindingSource,
+)
+from memcommit.application.capabilities.semantic.redundancy_evidence import (
+    redundancy_evidence_json,
+)
+from memcommit.application.capabilities.memory_issue_analysis.redundancy_scope import (
+    RedundancyScopeAnalysis,
+)
+from memcommit.application.operations.quality_resolution.diagnose.find_redundancies.application import (
+    FindRedundanciesRequest,
+    analyze_find_redundancies,
+    prepare_find_redundancies,
+)
+
+
+_RELATION_COLORS = {
+    "EXACT": typer.colors.GREEN,
+    "SURFACE_EQUIVALENT": typer.colors.GREEN,
+    "SEMANTIC_EQUIVALENT": typer.colors.YELLOW,
+}
+
+_RELATION_LABELS = {
+    "EXACT": "EXACT",
+    "SURFACE_EQUIVALENT": "SURFACE EQUIVALENT",
+    "SEMANTIC_EQUIVALENT": "SEMANTIC EQUIVALENT",
+}
+
+
+def _count(value: int, singular: str, plural: str | None = None) -> str:
+    return f"{value} {singular if value == 1 else plural or singular + 's'}"
+
+
+def _connected_redundancy_groups(
+    findings: tuple[DuplicateFinding, ...],
+) -> tuple[tuple[tuple[Memory, ...], tuple[DuplicateFinding, ...]], ...]:
+    """Group the evidence forest without repeating shared member Memories."""
+
+    memory_by_uid: dict[str, Memory] = {}
+    for finding in findings:
+        memory_by_uid.setdefault(finding.left.uid, finding.left)
+        memory_by_uid.setdefault(finding.right.uid, finding.right)
+    components = connected_relation_components(
+        tuple(memory_by_uid),
+        ((finding.left.uid, finding.right.uid) for finding in findings),
+    )
+    return tuple(
+        (
+            tuple(memory_by_uid[uid] for uid in component),
+            tuple(
+                finding
+                for finding in findings
+                if {finding.left.uid, finding.right.uid}.issubset(component)
+            ),
+        )
+        for component in components
+    )
+
+
+def _render_redundancy_groups(
+    report: DuplicateReport,
+) -> None:
+    groups = _connected_redundancy_groups(report.findings)
+    for group_index, (members, evidence) in enumerate(groups, start=1):
+        relations = {finding.relation for finding in evidence}
+        if relations == {"EXACT"}:
+            layer = "DUP / EXACT"
+        elif "EXACT" in relations:
+            layer = "COMPLETE DUN"
+        else:
+            layer = "SEMANTIC DUN"
+        typer.echo()
+        typer.secho(
+            f"  DUN GROUP  {group_index}/{report.group_count} · "
+            f"{_count(len(members), 'Memory', 'Memories')} · {layer}",
+            bold=True,
+        )
+        typer.echo("    CLEANUP MAP · READY FOR REVIEW")
+        uid_prefixes = collision_safe_uid_prefixes(memory.uid for memory in members)
+        for member_index, memory in enumerate(members):
+            role = "SURVIVOR" if member_index == 0 else "ABSORB"
+            render_cleanup_member(
+                role,
+                uid_prefixes[memory.uid],
+                content=memory.content,
+            )
+        for evidence_index, finding in enumerate(evidence, start=1):
+            typer.echo(f"    EVIDENCE {evidence_index} · ", nl=False)
+            typer.secho(
+                _RELATION_LABELS[finding.relation],
+                fg=_RELATION_COLORS.get(finding.relation, typer.colors.YELLOW),
+                bold=True,
+                nl=False,
+            )
+            typer.echo(" · " + display_escape_text(finding.reason))
+
+    for exact_index, group in enumerate(report.exact_item_groups, start=1):
+        group_index = len(groups) + exact_index
+        member_uids = (group.survivor_uid, *group.absorbed_uids)
+        uid_prefixes = collision_safe_uid_prefixes(member_uids)
+        typer.echo()
+        typer.secho(
+            f"  DUN GROUP  {group_index}/{report.group_count} · "
+            f"{_count(len(member_uids), 'direct item')} · DUP / EXACT · "
+            f"{group.item_kind}",
+            bold=True,
+        )
+        typer.echo("    CLEANUP MAP · READY FOR REVIEW")
+        render_cleanup_member(
+            "SURVIVOR",
+            uid_prefixes[group.survivor_uid],
+            content=group.summary,
+        )
+        for uid in group.absorbed_uids:
+            render_cleanup_member(
+                "ABSORB",
+                uid_prefixes[uid],
+                content=group.summary,
+            )
+        typer.echo("    EVIDENCE 1 · ", nl=False)
+        typer.secho("EXACT", fg=typer.colors.GREEN, bold=True, nl=False)
+        typer.echo(" · Same role-specific identity.")
+
+
+def _run(
+    *,
+    context_name: str | None,
+    evidence_json: bool,
+    dedun_handoff: bool,
+    include_descendants: bool = False,
+) -> None:
+    """Run one shared analysis, optionally exposing Dedun's Apply handoff."""
+
+    operation_name = "dedun" if dedun_handoff else "find-redundancies"
+    operation_label = "Dedun" if dedun_handoff else "Find Redundancies"
+    progress_label = "DEDUN" if dedun_handoff else "FIND REDUNDANCIES"
+    store = MemoryStore(create=False)
+    recursive_dedun = None
+    try:
+        context_snapshot = ContextOperandSnapshot.capture(store)
+        if dedun_handoff and include_descendants:
+            access = resolve_context_access(
+                store,
+                context_name,
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
+            )
+            recursive_dedun = freeze_recursive_dedun_scope(store, access)
+            source = recursive_dedun.source
+        else:
+            source = prepare_find_redundancies(
+                store,
+                FindRedundanciesRequest(
+                    context_name=context_name,
+                    include_descendants=include_descendants,
+                ),
+                current_name=context_snapshot.current_name,
+            )
+    except (
+        FileNotFoundError,
+        OSError,
+        ProfileConfigError,
+        ProfileError,
+        RuntimeError,
+        ValueError,
+    ) as error:
+        typer.secho(
+            f"{operation_label} error: " + display_escape_text(str(error)),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
+    try:
+        with CommandProgress(
+            progress_label,
+            "analyzing independent direct Context frames",
+            total=len(source.contexts),
+        ):
+            analysis = analyze_find_redundancies(
+                source,
+                connect_codex_chatgpt_provider,
+            )
+    except (FindingsError, QueryProviderError) as error:
+        typer.secho(
+            f"{operation_label} error: " + display_escape_text(str(error)),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
+    annotate_quality_find_attempt(
+        "duplicates",
+        source,
+        operation_name=operation_name,
+    )
+
+    if evidence_json:
+        for handoff in analysis.handoffs:
+            typer.echo(redundancy_evidence_json(handoff))
+        return
+
+    if dedun_handoff:
+        if source.include_descendants:
+            assert recursive_dedun is not None
+            port = MemoryStoreDedunPort(
+                store,
+                current_name=context_snapshot.current_name,
+                allow_grants=False,
+            )
+            prepared = prepare_recursive_dedun_scope(
+                recursive_dedun,
+                analysis,
+                port=port,
+            )
+            receipt = apply_recursive_dedun_scope(store, prepared)
+            _render_recursive_dedun_receipt(receipt)
+            return
+        frame = analysis.contexts[0]
+        report = frame.report
+        ctx = frame.source.contexts[0]
+        applicable = tuple(
+            handoff
+            for handoff in frame.handoffs
+            if handoff.classification in DEDUN_ELIGIBLE_RELATIONS
+        )
+        context_label = display_escape_text(source.context_names[0])
+        if not applicable and not report.exact_item_groups:
+            typer.echo(f"No redundancies in '{context_label}'.")
+            return
+        port = MemoryStoreDedunPort(
+            store,
+            current_name=context_snapshot.current_name,
+        )
+        plan = prepare_dedun(
+            DedunRequest(
+                applicable,
+                exact_source=QualityFindingSource(
+                    context_uid=ctx.uid,
+                    display_name=source.context_names[0],
+                    direct_memory_digest=source.context_digests[0],
+                ),
+                exact_source_frame_digest=source.digest,
+            ),
+            port=port,
+        )
+        receipt = apply_dedun(
+            plan,
+            recommended_dedun_selections(plan),
+            port=port,
+        )
+        typer.secho(
+            f"Dedun '{context_label}': absorbed {len(receipt.absorbed_uids)} "
+            "redundant direct item(s); kept "
+            f"{len(receipt.survivor_uids)} original UID(s).",
+            fg=typer.colors.GREEN,
+        )
+        typer.echo(
+            "DUN COMPOSITION · "
+            f"{_count(report.redundancy_count, 'evidence link')} = "
+            f"{_count(report.exact_duplicate_count, 'DUP / EXACT link')} + "
+            f"{_count(report.semantic_redundancy_count, 'SEMANTIC DUN link')}"
+        )
+        typer.echo(
+            f"Checkpoint [{receipt.checkpoint_uid[:8]}] · review: "
+            f"mem review dedun --receipt {receipt.checkpoint_uid} · "
+            "recovery: mem undo"
+        )
+        return
+
+    if source.include_descendants:
+        _render_redundancy_scope(analysis)
+        return
+
+    frame = analysis.contexts[0]
+    report = frame.report
+    ctx = frame.source.contexts[0]
+    render_heading(
+        operation_label="Find Redundancies",
+        context_name=display_escape_text(ctx.name),
+        facts=(
+            _count(report.memory_count, "direct memory", "direct memories")
+            + " checked",
+            _count(report.group_count, "group"),
+            _count(report.redundancy_count, "proposed absorption"),
+        ),
+    )
+    if not report.findings and not report.exact_item_groups:
+        return
+    _render_redundancy_groups(report)
+
+
+def _render_redundancy_scope(analysis: RedundancyScopeAnalysis) -> None:
+    source = analysis.source
+    group_count = sum(frame.report.group_count for frame in analysis.contexts)
+    absorption_count = sum(frame.report.redundancy_count for frame in analysis.contexts)
+    render_heading(
+        operation_label="Find Redundancies",
+        context_name=display_escape_text(source.target_names[0]),
+        facts=(
+            _count(len(analysis.contexts), "Context"),
+            _count(analysis.memory_count, "direct memory", "direct memories")
+            + " checked",
+            _count(group_count, "group"),
+            _count(absorption_count, "proposed absorption"),
+        ),
+    )
+    for index, frame in enumerate(analysis.contexts, start=1):
+        typer.echo()
+        typer.secho(
+            f"CONTEXT {index}/{len(analysis.contexts)} · "
+            f"{display_escape_text(frame.context_name)}",
+            bold=True,
+        )
+        typer.echo(
+            "  "
+            + _count(frame.report.memory_count, "direct memory", "direct memories")
+            + " checked · "
+            + _count(frame.report.group_count, "group")
+            + " · "
+            + _count(frame.report.redundancy_count, "proposed absorption")
+        )
+        if frame.report.findings or frame.report.exact_item_groups:
+            _render_redundancy_groups(frame.report)
+        else:
+            typer.echo("  No redundancies.")
+
+
+def _render_recursive_dedun_receipt(receipt: DedunScopeReceipt) -> None:
+    root = display_escape_text(receipt.root_name)
+    if not receipt.absorbed_uids:
+        typer.echo(
+            f"No redundancies under '{root}' "
+            f"({_count(len(receipt.contexts), 'Context')} checked)."
+        )
+        return
+    changed = tuple(frame for frame in receipt.contexts if frame.checkpoint_uid)
+    typer.secho(
+        f"Dedun '{root}' recursively: absorbed "
+        f"{len(receipt.absorbed_uids)} redundant direct item(s) in "
+        f"{len(changed)}/{len(receipt.contexts)} Context(s); kept "
+        f"{len(receipt.survivor_uids)} original UID(s).",
+        fg=typer.colors.GREEN,
+    )
+    for frame in changed:
+        typer.echo(
+            f"CONTEXT · {display_escape_text(frame.context_name)} · "
+            f"{len(frame.absorbed_uids)} absorbed · checkpoint "
+            f"[{frame.checkpoint_uid[:8]}] · review: "
+            f"mem review dedun --receipt {frame.checkpoint_uid}"
+        )
+    assert receipt.operation_uid is not None
+    typer.echo(
+        f"Operation [{receipt.operation_uid[:8]}] · recovery: "
+        "mem undo (one command unit)"
+    )
+
+
+def cmd(
+    context_operand: Annotated[
+        Optional[str],
+        typer.Argument(
+            metavar="CONTEXT",
+            help="Context to inspect (defaults to current)",
+        ),
+    ] = None,
+    context_name: Annotated[
+        Optional[str],
+        typer.Option(
+            "--context",
+            "-c",
+            help="Context to inspect (defaults to current)",
+        ),
+    ] = None,
+    evidence_json: Annotated[
+        bool,
+        typer.Option(
+            "--evidence-json",
+            help="Print one canonical redundancy evidence JSON per finding",
+        ),
+    ] = False,
+    direct: Annotated[
+        bool,
+        typer.Option(
+            "--direct",
+            "-d",
+            help="Inspect the exact Context root only (default)",
+        ),
+    ] = False,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "--recursive",
+            "-r",
+            help=(
+                "Inspect each readable lexical descendant as an independent "
+                "direct semantic frame"
+            ),
+        ),
+    ] = False,
+) -> None:
+    """Report complete DUN evidence; never change Context content."""
+    try:
+        context_name = choose_context_operand(
+            context_operand,
+            option=context_name,
+        )
+        preset = resolve_scope_preset(
+            direct=direct,
+            recursive=recursive,
+            default=ContextScopePreset.DIRECT,
+        )
+    except ValueError as error:
+        typer.secho(
+            "Find Redundancies error: " + display_escape_text(str(error)),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(2)
+    try:
+        _run(
+            context_name=context_name,
+            evidence_json=evidence_json,
+            dedun_handoff=False,
+            include_descendants=preset is ContextScopePreset.RECURSIVE,
+        )
+    except typer.Exit:
+        raise
+    except ValueError as error:
+        typer.secho(
+            "Find Redundancies error: " + display_escape_text(str(error)),
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+
+
+def run_dedun(
+    *,
+    context_name: str | None,
+    evidence_json: bool,
+    include_descendants: bool = False,
+) -> None:
+    """Analyze and immediately apply complete exact-plus-semantic DUN groups."""
+
+    _run(
+        context_name=context_name,
+        evidence_json=evidence_json,
+        dedun_handoff=True,
+        include_descendants=include_descendants,
+    )
+
+
+__all__ = ["cmd", "run_dedun"]

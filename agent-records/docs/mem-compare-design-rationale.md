@@ -446,7 +446,7 @@ that Context. Compare never opens query-only sources.
 ## Explicit workbench, compact default receipt, and exact ledger
 
 Compare owns one console presentation family under
-`memcommit.adapters.console.commands.compare`: the lightweight summary,
+`memcommit.adapters.console.commands.search_explain.synthesize.compare`: the lightweight summary,
 bounded receipt, compact snapshot, and exhaustive ledger. Interactive endpoint
 setup is co-located with that family because line-oriented and prompt-toolkit
 routes are two presentations of the same console operation, not independent

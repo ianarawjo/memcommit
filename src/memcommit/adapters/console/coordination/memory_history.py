@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.core.context import Context
-from memcommit.application.operations.trace.application import (
+from memcommit.application.operations.history_recovery.inspection.trace.application import (
     MemoryHistory,
     reconstruct_memory_history,
 )

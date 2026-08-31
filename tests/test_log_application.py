@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-import memcommit.application.operations.log.application as log_application
-from memcommit.application.operations.log.application import (
+import memcommit.application.operations.history_recovery.inspection.log.application as log_application
+from memcommit.application.operations.history_recovery.inspection.log.application import (
     LogEntry,
     LogRequest,
     LogResult,

@@ -39,7 +39,7 @@ The central commands import the narrow operation-owned open/run functions and
 route to them. Operation adapters may compose the central Impact or Review
 presentation primitives, but application code must not import those console
 adapters. The former
-`application/operations/review/report_adapters.py` violated that direction by
+`application/operations/operation_lifecycle/review/report_adapters.py` violated that direction by
 owning console report projections and is therefore removed rather than kept as
 a compatibility implementation.
 

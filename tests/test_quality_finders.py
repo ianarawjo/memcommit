@@ -694,7 +694,7 @@ def test_cli_redundancy_report_groups_members_once_without_left_right_labels(
         }
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_redundancies.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.quality_resolution.diagnose.find_redundancies.command.connect_codex_chatgpt_provider",
         lambda: PayloadProvider(respond),
     )
 
@@ -793,11 +793,11 @@ def test_cli_ambiguity_and_conflict_reports_use_truthful_compact_units(
 
     provider = PayloadProvider(respond)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_ambiguities.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.quality_resolution.diagnose.find_ambiguities.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_conflicts.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.quality_resolution.diagnose.find_conflicts.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -928,7 +928,7 @@ def test_cli_finders_are_read_only_and_each_use_one_provider_call(
         "find_conflicts",
     ]:
         monkeypatch.setattr(
-            f"memcommit.adapters.console.commands.{module_name}.command.connect_codex_chatgpt_provider",
+            f"memcommit.adapters.console.commands.quality_resolution.diagnose.{module_name}.command.connect_codex_chatgpt_provider",
             lambda: provider,
         )
 
@@ -1009,7 +1009,7 @@ def test_quality_finder_all_aliases_freeze_one_profile_wide_source(
     provider = PayloadProvider(respond)
     for module_name in ("find_ambiguities", "find_conflicts"):
         monkeypatch.setattr(
-            f"memcommit.adapters.console.commands.{module_name}.command.connect_codex_chatgpt_provider",
+            f"memcommit.adapters.console.commands.quality_resolution.diagnose.{module_name}.command.connect_codex_chatgpt_provider",
             lambda: provider,
         )
 
@@ -1080,15 +1080,15 @@ def test_cli_positional_context_does_not_switch_current(
     store.save(target)
     store.set_current(active.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_redundancies.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.quality_resolution.diagnose.find_redundancies.command.connect_codex_chatgpt_provider",
         lambda: PayloadProvider(lambda _operation, _payload: {"findings": []}),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_ambiguities.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.quality_resolution.diagnose.find_ambiguities.command.connect_codex_chatgpt_provider",
         lambda: PayloadProvider(lambda _operation, _payload: {"findings": []}),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_conflicts.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.quality_resolution.diagnose.find_conflicts.command.connect_codex_chatgpt_provider",
         lambda: PayloadProvider(lambda _operation, _payload: {"findings": []}),
     )
 
@@ -1174,7 +1174,7 @@ def test_cli_direct_scope_does_not_open_memory_ref_or_embedded_context_files(
         "find_conflicts",
     ]:
         monkeypatch.setattr(
-            f"memcommit.adapters.console.commands.{module_name}.command.connect_codex_chatgpt_provider",
+            f"memcommit.adapters.console.commands.quality_resolution.diagnose.{module_name}.command.connect_codex_chatgpt_provider",
             lambda: provider,
         )
 
@@ -1231,7 +1231,7 @@ def test_cli_dedun_immediately_applies_eligible_groups_and_prints_review_receipt
 
     provider = PayloadProvider(respond)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_redundancies.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.quality_resolution.diagnose.find_redundancies.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -1289,7 +1289,7 @@ def test_cli_dedun_unions_semantic_memory_and_exact_embed_groups_atomically(
         }
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.find_redundancies.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.quality_resolution.diagnose.find_redundancies.command.connect_codex_chatgpt_provider",
         lambda: PayloadProvider(respond),
     )
 

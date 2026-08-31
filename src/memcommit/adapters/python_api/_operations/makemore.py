@@ -13,9 +13,9 @@ from memcommit.adapters.python_api.errors import (
     SemanticProviderFailure,
 )
 from memcommit.adapters.python_api.semantic import MakemoreProposal
-from memcommit.application.operations.makemore.model import MakemoreError
-from memcommit.application.operations.makemore.application import MakemoreRequest
-from memcommit.application.operations.makemore.runtime import execute_makemore
+from memcommit.application.operations.semantic_updates.derive.makemore.model import MakemoreError
+from memcommit.application.operations.semantic_updates.derive.makemore.application import MakemoreRequest
+from memcommit.application.operations.semantic_updates.derive.makemore.runtime import execute_makemore
 from memcommit.providers.subscription import QueryProviderError
 
 

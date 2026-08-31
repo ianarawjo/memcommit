@@ -91,7 +91,7 @@ from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     quality_finding_handoff,
     quality_finding_handoffs,
 )
-from memcommit.application.operations.dedun.application import DEDUN_ELIGIBLE_RELATIONS
+from memcommit.application.operations.quality_resolution.repair.dedun.application import DEDUN_ELIGIBLE_RELATIONS
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.capabilities.reviewing.read_report import (

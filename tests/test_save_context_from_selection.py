@@ -9,12 +9,12 @@ import uuid
 
 import pytest
 
-import memcommit.adapters.console.commands.search.command as search_command
+import memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command as search_command
 import memcommit.application.capabilities.ops as ops
 import memcommit.application.capabilities.save_context_from_selection.application as save_application
 import memcommit.application.capabilities.save_context_from_selection.runtime as save_runtime
 import memcommit.persistence.store as store_module
-from memcommit.adapters.console.commands.search.search_workbench import (
+from memcommit.adapters.console.commands.search_explain.retrieve_answer.search.search_workbench import (
     SearchWorkbenchResult,
 )
 from memcommit.application.authorization import ContextUse
@@ -46,12 +46,12 @@ from memcommit.application.operations.profile.config import (
     profile_store_dir,
 )
 from memcommit.application.operations.profile.model import create_authority_grant
-from memcommit.application.operations.search.application import (
+from memcommit.application.operations.search_explain.retrieve_answer.search.application import (
     SearchRequest,
     SearchResponse,
     SearchResult,
 )
-from memcommit.application.operations.search.save_context import (
+from memcommit.application.operations.search_explain.retrieve_answer.search.save_context import (
     save_context_request_from_search,
 )
 from memcommit.core.context import Memory, MemoryRef

@@ -108,6 +108,65 @@ ENTRY_TARGETS = {
 }
 
 
+# Public command names and historical baseline stems are intentionally kept
+# separate from physical package ownership. The catalog family is the stable
+# first path component for classified operations on the console side.
+COMMAND_PACKAGE_TARGETS = {
+    "find": "search_explain.retrieve_answer.find",
+    "search": "search_explain.retrieve_answer.search",
+    "query": "search_explain.retrieve_answer.query",
+    "summarize": "search_explain.synthesize.summarize",
+    "compare": "search_explain.synthesize.compare",
+    "edit": "direct_changes.edit",
+    "move": "direct_changes.move",
+    "replace": "direct_changes.replace",
+    "chunk": "direct_changes.chunk",
+    "delete": "direct_changes.delete",
+    "clear": "direct_changes.clear",
+    "merge": "direct_changes.merge",
+    "remove": "direct_changes.remove",
+    "update": "semantic_updates.foundation.update",
+    "atomize": "semantic_updates.derive.atomize",
+    "distill": "semantic_updates.derive.distill",
+    "makemore": "semantic_updates.derive.makemore",
+    "forget": "semantic_updates.curate_integrate.forget",
+    "sever": "semantic_updates.curate_integrate.sever",
+    "meld": "semantic_updates.curate_integrate.meld",
+    "translate": "translation.translate",
+    "find_duplicates": "quality_resolution.diagnose.find_duplicates",
+    "find_redundancies": "quality_resolution.diagnose.find_redundancies",
+    "find_ambiguities": "quality_resolution.diagnose.find_ambiguities",
+    "find_conflicts": "quality_resolution.diagnose.find_conflicts",
+    "audit": "quality_resolution.diagnose.audit",
+    "dedup": "quality_resolution.repair.dedup",
+    "dedun": "quality_resolution.repair.dedun",
+    "resolve": "quality_resolution.repair.resolve",
+    "fit": "quality_resolution.validate.fit",
+    "check_conformance": "quality_resolution.validate.check_conformance",
+    "impact": "operation_lifecycle.impact",
+    "review": "operation_lifecycle.review",
+    "log": "history_recovery.inspection.log",
+    "diff": "history_recovery.inspection.diff",
+    "trace": "history_recovery.inspection.trace",
+    "rationale": "history_recovery.inspection.rationale",
+    "checkpoint": "history_recovery.recovery.checkpoint",
+    "undo": "history_recovery.recovery.undo",
+    "redo": "history_recovery.recovery.redo",
+    "revert": "history_recovery.recovery.revert",
+}
+
+
+def _entry_package_target(stem: str) -> str:
+    command = ENTRY_TARGETS.get(stem, stem)
+    return COMMAND_PACKAGE_TARGETS.get(command, command)
+
+
+def _owned_support_target(target: str) -> str:
+    owner, separator, remainder = target.partition(".")
+    physical_owner = COMMAND_PACKAGE_TARGETS.get(owner, owner)
+    return physical_owner + (separator + remainder if separator else "")
+
+
 RETIRED_BASELINE_MODULES = {
     "consolidate": (
         "retired with Dedun's obsolete exact-review console replay"
@@ -214,8 +273,8 @@ MODULE_TARGET_PATH_OVERRIDES = {
     "memcommit.adapters.console.commands.ground.shell": (
         "src/memcommit/adapters/console/commands/ground/shell/__init__.py"
     ),
-    "memcommit.adapters.console.commands.meld.command": (
-        "src/memcommit/adapters/console/commands/meld/command.py"
+    "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command": (
+        "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/meld/command.py"
     ),
 }
 
@@ -344,7 +403,7 @@ def _baseline_modules() -> set[str]:
 def build_plan() -> dict[str, object]:
     entries: list[dict[str, object]] = []
     for stem, exports in sorted(ENTRY_EXPORTS.items()):
-        target = ENTRY_TARGETS.get(stem, stem)
+        target = _entry_package_target(stem)
         entries.append(
             {
                 "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
@@ -375,7 +434,8 @@ def build_plan() -> dict[str, object]:
             }
         )
     for stem, target in sorted(OWNED_SUPPORT_TARGETS.items()):
-        owner = target.split(".", 1)[0]
+        target = _owned_support_target(target)
+        owner = target.rsplit(".", 1)[0] if "." in target else target
         entries.append(
             {
                 "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
@@ -606,8 +666,8 @@ def main() -> int:
             if not path.is_file() or path.read_text(encoding="utf-8") != rendered:
                 raise SystemExit(f"stale command package layout artifact: {path}")
         for stem, exports in ENTRY_EXPORTS.items():
-            target = ENTRY_TARGETS.get(stem, stem)
-            package_init = COMMANDS / target / "__init__.py"
+            target = _entry_package_target(stem)
+            package_init = COMMANDS.joinpath(*target.split(".")) / "__init__.py"
             if package_init.read_text(encoding="utf-8") != render_entry_init(
                 target, exports
             ):
@@ -619,8 +679,8 @@ def main() -> int:
     OUTPUT_JSON.write_text(rendered_json, encoding="utf-8")
     OUTPUT_MARKDOWN.write_text(rendered_markdown, encoding="utf-8")
     for stem, exports in ENTRY_EXPORTS.items():
-        target = ENTRY_TARGETS.get(stem, stem)
-        (COMMANDS / target / "__init__.py").write_text(
+        target = _entry_package_target(stem)
+        (COMMANDS.joinpath(*target.split(".")) / "__init__.py").write_text(
             render_entry_init(target, exports),
             encoding="utf-8",
         )

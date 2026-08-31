@@ -89,10 +89,12 @@ In BY KIND, `SEARCH & EXPLAIN` separates `RETRIEVE & ANSWER` (`find`, `search`,
 `query`) from `SYNTHESIZE` (`summarize`, `compare`). These titles describe the
 affordance boundary instead of repeating child operation names: the former
 starts from an information need, while the latter interprets one or two whole
-Context frames. Compare therefore leaves the quality-check family, whose
-display title becomes `CHECK & REVIEW` without changing its stable family
-identity. `HISTORY & RECOVERY` retains its existing description and separates
-`INSPECTION` from `RECOVERY`. The terminal inserts all four neutral,
+Context frames. Compare therefore belongs to synthesis rather than quality
+checking. `SEMANTIC UPDATES` separates `FOUNDATION`, `DERIVE`, and
+`CURATE & INTEGRATE`; `QUALITY & RESOLUTION` separates `DIAGNOSE`, `REPAIR`,
+and `VALIDATE`; `HISTORY & RECOVERY` separates `INSPECTION` from `RECOVERY`.
+`OPERATION LIFECYCLE` intentionally renders `impact` and `review` without an
+internal divider. The terminal inserts neutral,
 non-focusable divider rows from the grouped application snapshot. Command
 selection stays continuous across each divider, so the visual subdivision does
 not introduce a hidden interaction layer. A–Z remains flat.

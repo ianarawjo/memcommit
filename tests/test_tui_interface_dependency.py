@@ -9,7 +9,7 @@ from pathlib import Path
 ADAPTERS_ROOT = Path(__file__).parents[1] / "src" / "memcommit" / "adapters"
 TERMINAL_COMPONENTS = ADAPTERS_ROOT / "console" / "terminal" / "components"
 ALLOWED_CONSOLE_PRESENTATION_IMPORTS = {
-    "memcommit.adapters.console.commands.compare.presentation",
+    "memcommit.adapters.console.commands.search_explain.synthesize.compare.presentation",
 }
 
 

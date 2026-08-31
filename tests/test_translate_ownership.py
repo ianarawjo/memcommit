@@ -16,12 +16,12 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_translate_operation_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.translate
+import memcommit.application.operations.translation.translate
 
 assert not [
     name
     for name in sys.modules
-    if name.startswith("memcommit.application.operations.translate.")
+    if name.startswith("memcommit.application.operations.translation.translate.")
 ]
 """
 
@@ -34,17 +34,17 @@ assert not [
 
 def test_production_translate_consumers_use_operation_owners() -> None:
     relative_paths = (
-        "src/memcommit/adapters/console/commands/translate/command.py",
+        "src/memcommit/adapters/console/commands/translation/translate/command.py",
         "src/memcommit/study_scenarios/legacy/bundle.py",
-        "src/memcommit/application/operations/query/granted_source.py",
+        "src/memcommit/application/operations/search_explain/retrieve_answer/query/granted_source.py",
         "src/memcommit/core/memory_translation",
         "src/memcommit/persistence/store/translation_catalog",
-        "src/memcommit/application/operations/translate/application.py",
-        "src/memcommit/application/operations/translate/provider_catalog.py",
-        "src/memcommit/application/operations/translate/curate_translations.py",
-        "src/memcommit/application/operations/translate/exchange_translations.py",
-        "src/memcommit/application/operations/translate/add_translations_to_current_context.py",
-        "src/memcommit/application/operations/translate/create_translated_context.py",
+        "src/memcommit/application/operations/translation/translate/application.py",
+        "src/memcommit/application/operations/translation/translate/provider_catalog.py",
+        "src/memcommit/application/operations/translation/translate/curate_translations.py",
+        "src/memcommit/application/operations/translation/translate/exchange_translations.py",
+        "src/memcommit/application/operations/translation/translate/add_translations_to_current_context.py",
+        "src/memcommit/application/operations/translation/translate/create_translated_context.py",
         "src/memcommit/application/capabilities/ops.py",
         "src/memcommit/application/operations/profile/model",
         "src/memcommit/application/capabilities/history/reconstruction/memory_effect_derivation.py",
@@ -70,7 +70,7 @@ def test_production_translate_consumers_use_operation_owners() -> None:
 
 def test_translate_owners_keep_the_layer_dependency_direction() -> None:
     runtime_source = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/translate/runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/translation/translate/runtime.py"
     ).read_text(encoding="utf-8")
     catalog_source = (
         REPOSITORY_ROOT / "src/memcommit/core/memory_translation/catalog.py"
@@ -81,15 +81,15 @@ def test_translate_owners_keep_the_layer_dependency_direction() -> None:
     ).read_text(encoding="utf-8")
     application_source = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/translate/application.py"
+        / "src/memcommit/application/operations/translation/translate/application.py"
     ).read_text(encoding="utf-8")
     provider_catalog_source = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/translate/provider_catalog.py"
+        / "src/memcommit/application/operations/translation/translate/provider_catalog.py"
     ).read_text(encoding="utf-8")
     context_action_source = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/translate/create_translated_context.py"
+        / "src/memcommit/application/operations/translation/translate/create_translated_context.py"
     ).read_text(encoding="utf-8")
 
     assert "memcommit.application" not in catalog_source
@@ -111,7 +111,7 @@ def test_translate_owners_keep_the_layer_dependency_direction() -> None:
 
 def test_translate_command_is_only_an_io_and_presentation_adapter() -> None:
     path = (
-        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/translate/command.py"
+        REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/translation/translate/command.py"
     )
     source = path.read_text(encoding="utf-8")
     tree = ast.parse(source, filename=str(path))
@@ -121,13 +121,13 @@ def test_translate_command_is_only_an_io_and_presentation_adapter() -> None:
         if isinstance(node, ast.ImportFrom) and node.module is not None
     }
 
-    assert "memcommit.application.operations.translate.application" in imports
+    assert "memcommit.application.operations.translation.translate.application" in imports
     assert (
-        "memcommit.application.operations.translate.create_translated_context"
+        "memcommit.application.operations.translation.translate.create_translated_context"
         in imports
     )
     assert (
-        "memcommit.application.operations.translate.add_translations_to_current_context"
+        "memcommit.application.operations.translation.translate.add_translations_to_current_context"
         in imports
     )
     assert "memcommit.core.context_targeting.loading" not in imports
@@ -143,11 +143,11 @@ def test_translate_command_is_only_an_io_and_presentation_adapter() -> None:
 
 
 def test_translate_request_validation_precedes_store_access() -> None:
-    from memcommit.application.operations.translate.application import (
+    from memcommit.application.operations.translation.translate.application import (
         TranslateRequest,
         prepare_translation,
     )
-    from memcommit.application.operations.translate.runtime import TranslateError
+    from memcommit.application.operations.translation.translate.runtime import TranslateError
 
     class ClosedStore:
         def __getattr__(self, name):

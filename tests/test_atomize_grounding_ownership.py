@@ -13,17 +13,17 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_atomize_grounding_has_no_runtime_or_model_route() -> None:
     retired_paths = (
         "src/memcommit/adapters/agent/atomize_grounding.py",
-        "src/memcommit/adapters/console/commands/atomize/grounding.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/derive/atomize/grounding.py",
         "src/memcommit/adapters/python_api/atomize_grounding.py",
         "src/memcommit/adapters/python_api/_operations/atomize_grounding.py",
-        "src/memcommit/application/operations/atomize/grounding_application.py",
-        "src/memcommit/application/operations/atomize/grounding_provider.py",
-        "src/memcommit/application/operations/atomize/grounding_runtime.py",
-        "src/memcommit/application/operations/atomize/grounding/__init__.py",
-        "src/memcommit/application/operations/atomize/grounding/bindings.py",
-        "src/memcommit/application/operations/atomize/grounding/changes.py",
-        "src/memcommit/application/operations/atomize/grounding/review.py",
-        "src/memcommit/application/operations/atomize/grounding/session.py",
+        "src/memcommit/application/operations/semantic_updates/derive/atomize/grounding_application.py",
+        "src/memcommit/application/operations/semantic_updates/derive/atomize/grounding_provider.py",
+        "src/memcommit/application/operations/semantic_updates/derive/atomize/grounding_runtime.py",
+        "src/memcommit/application/operations/semantic_updates/derive/atomize/grounding/__init__.py",
+        "src/memcommit/application/operations/semantic_updates/derive/atomize/grounding/bindings.py",
+        "src/memcommit/application/operations/semantic_updates/derive/atomize/grounding/changes.py",
+        "src/memcommit/application/operations/semantic_updates/derive/atomize/grounding/review.py",
+        "src/memcommit/application/operations/semantic_updates/derive/atomize/grounding/session.py",
         (
             "src/memcommit/application/capabilities/retained_history/"
             "memory_history_reconstruction/retained_record_verification/"

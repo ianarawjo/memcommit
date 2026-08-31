@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from memcommit.application.operations.diff.context_checkpoint_lookup import (
+from memcommit.application.operations.history_recovery.inspection.diff.context_checkpoint_lookup import (
     resolve_local_checkpoint_target,
     resolve_local_context_checkpoint_target,
 )

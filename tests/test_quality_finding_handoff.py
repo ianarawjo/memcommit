@@ -28,11 +28,11 @@ from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     quality_finding_handoff,
     quality_finding_handoffs,
 )
-from memcommit.application.operations.resolve.finding_handoff import (
+from memcommit.application.operations.quality_resolution.repair.resolve.finding_handoff import (
     conflict_handoff_to_resolve_request,
 )
-from memcommit.application.operations.resolve.application import ResolveError
-from memcommit.application.operations.review.model import direct_context_digest
+from memcommit.application.operations.quality_resolution.repair.resolve.application import ResolveError
+from memcommit.application.operations.operation_lifecycle.review.model import direct_context_digest
 
 
 def _context():

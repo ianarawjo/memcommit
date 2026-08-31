@@ -9,7 +9,7 @@ invariants belong to `memcommit.core.memory_translation`. They describe what a
 same-UID translation catalog means without knowing how a provider, file, or
 terminal works.
 
-`memcommit.application.operations.translate` owns the Translate use cases.
+`memcommit.application.operations.translation.translate` owns the Translate use cases.
 `application` validates and orchestrates typed requests;
 `provider_catalog` converts provider plans to and from the core catalog;
 `curate_translations` owns edit, verify, reset, and catalog-save workflows;

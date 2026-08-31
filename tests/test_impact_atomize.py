@@ -8,9 +8,9 @@ from dataclasses import replace
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.application.operations.atomize.domain as atomize_module
+import memcommit.application.operations.semantic_updates.derive.atomize.domain as atomize_module
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.operations.atomize.domain import (
+from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeImpactError,
     atomize_lint,
@@ -18,7 +18,7 @@ from memcommit.application.operations.atomize.domain import (
     sentence_like_segment_count,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.atomize.records import (
+from memcommit.adapters.console.commands.semantic_updates.derive.atomize.records import (
     revalidate_saved_atomize_analysis,
 )
 from memcommit.core.context import (
@@ -39,10 +39,10 @@ PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"
 def _share_cli_atomize_provider(monkeypatch):
     """Saved Apply uses the same fake endpoint configured for its preview."""
 
-    from memcommit.adapters.console.commands.atomize import impact as atomize_impact
+    from memcommit.adapters.console.commands.semantic_updates.derive.atomize import impact as atomize_impact
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.command.connect_codex_chatgpt_provider",
         lambda: atomize_impact.connect_codex_chatgpt_provider(),
     )
 
@@ -285,7 +285,7 @@ def test_focused_atomize_cli_preserves_unselected_memories(
         }
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.command.connect_codex_chatgpt_provider",
         lambda: AtomizeProvider(respond),
     )
 
@@ -322,11 +322,11 @@ def test_atomize_publishes_split_and_dedun_as_one_undo_unit(
     before = source.to_dict()
     provider = AtomizeNormalFormProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -378,11 +378,11 @@ def test_atomize_normal_form_failure_publishes_no_partial_split(
     checkpoints_before = store.list_checkpoints(source.name)
     provider = RejectingNormalFormProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -407,11 +407,11 @@ def test_focused_atomize_dedun_prefers_unchanged_neighbor(
     store.set_current(source.name)
     provider = AtomizeNormalFormProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -442,7 +442,7 @@ def test_impact_atomize_auto_types_bare_memory_and_finds_its_owner(
     store.set_current(current.name)
     provider = AtomizeProvider(_all_atomic)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -745,7 +745,7 @@ def test_atomize_preview_neutralizes_terminal_control_characters(
         }
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: AtomizeProvider(respond),
     )
 
@@ -984,7 +984,7 @@ def test_cli_preview_is_direct_only_and_saves_only_analysis(
         ),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -1028,7 +1028,7 @@ def test_cli_preview_is_direct_only_and_saves_only_analysis(
     ]
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         ForbiddenProvider(),
     )
     reopened = runner.invoke(
@@ -1056,7 +1056,7 @@ def test_cli_all_shows_atomic_items_and_explicit_context_does_not_switch(
     store.set_current(active.name)
     provider = AtomizeProvider(_all_atomic)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -1089,7 +1089,7 @@ def test_preview_refuses_to_save_if_context_changes_during_provider_call(
         return {"items": [_item(payload["memories"][0]["candidate_id"])]}
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: AtomizeProvider(respond),
     )
 
@@ -1117,7 +1117,7 @@ def test_cli_empty_context_does_not_connect_provider(
     )
     store.set_current(ctx.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         ForbiddenProvider(),
     )
 
@@ -1143,7 +1143,7 @@ def test_cli_rejects_mixed_or_incomplete_impact_forms_before_provider(
     store.save(target)
     store.set_current(source.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         ForbiddenProvider(),
     )
 
@@ -1223,7 +1223,7 @@ def test_saved_atomize_analysis_applies_once_with_recorded_lineage(
         }
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: AtomizeProvider(respond),
     )
     preview = runner.invoke(app, ["impact", "atomize"])
@@ -1338,7 +1338,7 @@ def test_atomize_split_fails_closed_when_catalog_is_incomplete(
         }
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: AtomizeProvider(respond),
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
@@ -1377,7 +1377,7 @@ def test_atomize_save_rejects_unavailable_embedded_context_without_data_loss(
     )
     store.set_current(parent.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: AtomizeProvider(_all_atomic),
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
@@ -1417,7 +1417,7 @@ def test_atomize_apply_uses_direct_memory_ordinals_around_embedded_contexts(
     store.set_current(source.name)
     source_bytes = store._context_file(source.name).read_bytes()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: AtomizeProvider(_all_atomic),
     )
 
@@ -1486,7 +1486,7 @@ def test_atomize_revert_keep_does_not_rearm_an_applied_analysis(
         }
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: AtomizeProvider(respond),
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
@@ -1543,7 +1543,7 @@ def test_saved_atomize_analysis_revalidates_grounding_and_projected_count(
         }
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: AtomizeProvider(respond),
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
@@ -1580,7 +1580,7 @@ def test_atomize_store_rejects_tampered_saved_source_positions(
     store.save(ctx)
     store.set_current(ctx.name)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: AtomizeProvider(_all_atomic),
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0
@@ -1636,7 +1636,7 @@ def test_atomize_save_blocks_stale_analysis_and_inbound_split_reference(
         }
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: AtomizeProvider(respond),
     )
     assert runner.invoke(app, ["impact", "atomize"]).exit_code == 0

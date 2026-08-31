@@ -9,7 +9,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "src" / "memcommit"
-COMMAND_ROOT = PACKAGE / "adapters" / "console" / "commands" / "query"
+COMMAND_ROOT = (
+    PACKAGE
+    / "adapters"
+    / "console"
+    / "commands"
+    / "search_explain"
+    / "retrieve_answer"
+    / "query"
+)
 
 
 def _imports(path: Path) -> tuple[str, ...]:
@@ -25,7 +33,7 @@ def _imports(path: Path) -> tuple[str, ...]:
 
 def test_query_workbench_has_no_foreign_command_dependency() -> None:
     workbench = COMMAND_ROOT / "workbench"
-    owner_prefix = "memcommit.adapters.console.commands.query.workbench"
+    owner_prefix = "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.workbench"
     offenders = [
         (str(path.relative_to(ROOT)), module)
         for path in workbench.rglob("*.py")
@@ -40,7 +48,7 @@ def test_query_workbench_has_no_foreign_command_dependency() -> None:
 def test_query_command_imports_workbench_owner_directly() -> None:
     source = (COMMAND_ROOT / "command.py").read_text(encoding="utf-8")
 
-    assert "from memcommit.adapters.console.commands.query.workbench import (" in source
+    assert "from memcommit.adapters.console.commands.search_explain.retrieve_answer.query.workbench import (" in source
     assert "memcommit.adapters.interfaces.tui.operations.query" not in source
 
 
@@ -57,7 +65,7 @@ def test_query_workbench_package_replaces_the_compatibility_facade() -> None:
 
 
 def test_query_workbench_exports_its_owned_implementations() -> None:
-    owner = importlib.import_module("memcommit.adapters.console.commands.query.workbench")
+    owner = importlib.import_module("memcommit.adapters.console.commands.search_explain.retrieve_answer.query.workbench")
 
     assert owner.run_query_workbench.__module__.endswith(".workbench.screen")
     assert owner.QueryWorkbenchResult.__module__.endswith(".workbench.model")

@@ -37,7 +37,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.pro
     ComparisonProviderError,
     analyze_comparison,
 )
-from memcommit.application.operations.compare.sessions import (
+from memcommit.application.operations.search_explain.synthesize.compare.sessions import (
     ComparisonSessionConflictError,
     ComparisonSessionInputError,
     ComparisonSessionUnavailableError,

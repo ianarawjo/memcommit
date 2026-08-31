@@ -504,7 +504,7 @@ def test_compare_rejects_granted_live_embed_before_provider_connection(
     )
     assert embedded.exit_code == 0, embedded.output + embedded.stderr
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.compare.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search_explain.synthesize.compare.command.connect_codex_chatgpt_provider",
         lambda: pytest.fail("Compare must reject before provider connection"),
     )
 
@@ -549,7 +549,7 @@ def test_impact_rejects_granted_live_embed_before_provider_connection(
     )
     assert embedded.exit_code == 0, embedded.output + embedded.stderr
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.update.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.foundation.update.impact.connect_codex_chatgpt_provider",
         lambda: pytest.fail("Impact must reject before provider connection"),
     )
 

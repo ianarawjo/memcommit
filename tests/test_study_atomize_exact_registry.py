@@ -9,11 +9,11 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.configuration.config as config_module
-import memcommit.application.operations.atomize.domain as atomize_module
-import memcommit.application.operations.atomize.analysis_runtime as atomize_analysis_runtime_module
+import memcommit.application.operations.semantic_updates.derive.atomize.domain as atomize_module
+import memcommit.application.operations.semantic_updates.derive.atomize.analysis_runtime as atomize_analysis_runtime_module
 import memcommit.application.capabilities.ops as ops
 import memcommit.study_scenarios.legacy.prewarm.atomize as atomize_prewarm_module
-from memcommit.application.operations.atomize.domain import (
+from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
     create_atomize_analysis,
     impact_atomize,
 )
@@ -251,7 +251,7 @@ def test_exact_atomize_cli_reuses_analysis_then_verifies_normal_form(
         registry_snapshot=registry,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.command.connect_codex_chatgpt_provider",
         CompositeProvider,
     )
 
@@ -292,7 +292,7 @@ def test_exact_single_memory_focus_reuses_equivalent_atomize_prewarm(
             )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.command.connect_codex_chatgpt_provider",
         RecordingProvider,
     )
 

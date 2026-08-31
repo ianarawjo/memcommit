@@ -46,7 +46,7 @@ it does not become a second source for exact strings.
 ## Package ownership
 
 The canonical terminal-independent owners now live together under
-`memcommit.application.operations.resolve`. `application.py` owns requests, frozen frames,
+`memcommit.application.operations.quality_resolution.repair.resolve`. `application.py` owns requests, frozen frames,
 semantic outcomes, exact-plan validation, and Apply orchestration;
 `finding_handoff.py` owns conversion from one compatible frozen quality
 finding into a Resolve request; and
@@ -68,7 +68,7 @@ or terminal interaction. Consequently the existing ordered PTY evidence
 remains valid and no screenshot refresh is required.
 
 Resolve's console-specific adapters are co-located under
-`memcommit.adapters.console.commands.resolve`: `command.py` owns orchestration,
+`memcommit.adapters.console.commands.quality_resolution.repair.resolve`: `command.py` owns orchestration,
 `analysis.py` owns compact terminal projections for proposals and terminal
 outcomes, `finding_handoff.py` owns the interactive transition from a selected
 Conflict finding into the ordinary Resolve flow, `receipt.py` owns durable
@@ -118,7 +118,7 @@ before, after, ordered result, rule list, rationale, and known-wrong result.
 | Exact rules and cases | `memcommit.resolve_rules` plus `memcommit/eval/fixtures/resolve.json` | one versioned source is shared by production prompts and regression tests; all cases enter the prompt |
 | CLI target normalization | `memcommit.resolve_targeting` composed from `memcommit.core.context_targeting` | mixed Context, UUID-shaped Memory, qualified Memory, `--context`, and `--memory` forms produce exactly one canonical Context and an optional exact mutable set before provider construction; bare Memory owner discovery is local-only |
 | Request target | `ResolveRequest.target_fit` | MAY is the default resolution floor; YES is a separately frozen strict resolution target |
-| Finding intake | `application.operations.resolve.finding_handoff` | a compatible frozen finding is re-expressed as a Resolve request without transferring mutation authority; shared finding evidence does not depend back on Resolve |
+| Finding intake | `application.operations.quality_resolution.repair.resolve.finding_handoff` | a compatible frozen finding is re-expressed as a Resolve request without transferring mutation authority; shared finding evidence does not depend back on Resolve |
 | Source freeze | `MemoryStoreResolvePort.freeze` | complete direct frame, exact mutable UID set, authority, digest, and target-bound revision precede provider connection |
 | Initial judgment | `fit_judgment` through `ProviderResolveSemanticPort` | the complete frame is judged once; initial MAY is still eligible for an exact YES improvement |
 | Planning | `_generation_prompt` | exactly one recommended exact effect plan or one non-interactive stop reason |

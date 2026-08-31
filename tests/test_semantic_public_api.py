@@ -16,9 +16,9 @@ from memcommit.adapters.python_api import (
     SemanticInputError,
     SemanticProviderFailure,
 )
-from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER
-from memcommit.application.operations.makemore.model import MAKEMORE_PAYLOAD_MARKER
-from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
+from memcommit.application.operations.semantic_updates.derive.distill.model import DISTILL_PAYLOAD_MARKER
+from memcommit.application.operations.semantic_updates.derive.makemore.model import MAKEMORE_PAYLOAD_MARKER
+from memcommit.application.operations.quality_resolution.validate.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.persistence.store import MemoryStore
 from tests.makemore_validation_support import (
     passing_makemore_validation_response,

@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 import memcommit.configuration.config as config_module
 import memcommit.application.capabilities.ops as ops
-from memcommit.adapters.console.commands.meld import command as meld_command
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld import command as meld_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonInput,
@@ -26,7 +26,7 @@ from memcommit.application.capabilities.context_scope_loading import load_contex
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     recursive_comparison_projection,
 )
-from memcommit.application.operations.meld.model import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import (
     MeldAssessment,
     MeldProposal,
     MeldSession,

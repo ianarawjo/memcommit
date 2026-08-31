@@ -6,7 +6,7 @@ from memcommit.application.capabilities.history.reconstruction.reference_occurre
     MemoryReferenceHistoryEvent,
     collect_reference_candidates,
 )
-from memcommit.application.operations.trace.reference_lineage import (
+from memcommit.application.operations.history_recovery.inspection.trace.reference_lineage import (
     MemoryReferenceTraceReport,
     build_reference_trace,
 )

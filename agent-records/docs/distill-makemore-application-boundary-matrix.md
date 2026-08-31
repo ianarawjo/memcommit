@@ -18,9 +18,9 @@ components rather than direct-command launchers.
 ## Implementation ownership
 
 Distill and Makemore now keep their executable use cases under distinct
-operation owners: `memcommit.application.operations.distill` owns Distill analysis,
+operation owners: `memcommit.application.operations.semantic_updates.derive.distill` owns Distill analysis,
 Source/Target freezing, provider composition, and atomic Rule publication,
-while `memcommit.application.operations.makemore` owns Makemore generation plus its
+while `memcommit.application.operations.semantic_updates.derive.makemore` owns Makemore generation plus its
 Context-backed atomic Add preparation. Makemore's provider-only runtime stays
 separate from `add_runtime`, so proposal-only public adapters do not acquire a
 storage dependency merely because the standalone CLI can publish. The former
@@ -40,7 +40,7 @@ direction only, so the existing behavior-focused PTY evidence does not require
 a screenshot refresh.
 
 Distill's console-specific adapters are co-located under
-`memcommit.adapters.console.commands.distill`: `command.py` owns orchestration,
+`memcommit.adapters.console.commands.semantic_updates.derive.distill`: `command.py` owns orchestration,
 `proposal.py` owns the complete stable proposal text, `receipt.py` owns the
 bounded automatic-result summary, and `workbench/` owns the optional read-only
 proposal inspection flow. The former `interfaces/cli/distill.py` and

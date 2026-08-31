@@ -6,20 +6,20 @@ import uuid
 
 import pytest
 
-import memcommit.application.operations.summarize.runtime as summarize_runtime
+import memcommit.application.operations.search_explain.synthesize.summarize.runtime as summarize_runtime
 from memcommit.core.context import Context, GrantedContextLink, Memory
 from memcommit.application.capabilities.authority.context_access import ContextAccess
-from memcommit.application.operations.search.corpus import load_readable_search_roots
-from memcommit.application.operations.search.application import SearchRequest
-from memcommit.application.operations.search.runtime import execute_search
-from memcommit.application.operations.meld.model import MeldError, MeldFrame
+from memcommit.application.operations.search_explain.retrieve_answer.search.corpus import load_readable_search_roots
+from memcommit.application.operations.search_explain.retrieve_answer.search.application import SearchRequest
+from memcommit.application.operations.search_explain.retrieve_answer.search.runtime import execute_search
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import MeldError, MeldFrame
 from memcommit.application.capabilities.semantic.disclosure import (
     SemanticDisclosureError,
     require_semantic_disclosure_authority,
 )
-from memcommit.application.operations.sever.application import SeverApplicationError
-from memcommit.application.operations.sever.runtime import capture_sever_binding
-from memcommit.application.operations.summarize.model import (
+from memcommit.application.operations.semantic_updates.curate_integrate.sever.application import SeverApplicationError
+from memcommit.application.operations.semantic_updates.curate_integrate.sever.runtime import capture_sever_binding
+from memcommit.application.operations.search_explain.synthesize.summarize.model import (
     SummarizeError,
     collect_summary_scope,
 )

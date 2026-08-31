@@ -18,7 +18,7 @@ operation interface layer no longer expressed a useful boundary.
 The Query command package now owns four explicit workbench modules:
 
 ```text
-memcommit/adapters/console/commands/query/workbench/
+memcommit/adapters/console/commands/search_explain/retrieve_answer/query/workbench/
   model.py         process-local response, result, clipboard, and runner types
   presentation.py  typed Answer/Reference and clipboard projections
   scope.py         QUERY-granted View selection and federation control

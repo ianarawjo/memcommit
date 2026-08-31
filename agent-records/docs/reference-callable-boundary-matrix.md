@@ -33,7 +33,7 @@ intentionally drops old import, monkeypatch, and serialized-global lookup while
 leaving the operation request and durable Reference formats unchanged.
 
 Query Reference remains a Query-owned read boundary under
-`memcommit.application.operations.query`. It selects concealed Source material for one
+`memcommit.application.operations.search_explain.retrieve_answer.query`. It selects concealed Source material for one
 answer and publishes no durable snapshot, so sharing the word “reference” does
 not make it part of this package. Conversely, Memory and Context Reference stay
 together here because both freeze retained immutable bytes and publish one

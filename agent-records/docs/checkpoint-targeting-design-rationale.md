@@ -58,7 +58,7 @@ history is a separate capability.
 ## Scope and persistence contract
 
 The public operation boundary is now
-`memcommit.application.operations.checkpoint`. The console adapter owns only
+`memcommit.application.operations.history_recovery.recovery.checkpoint`. The console adapter owns only
 the compatibility operand grammar and receipt rendering: it captures the
 current Context once, constructs `CheckpointRequest`, and calls the runtime.
 The application owns DIRECT/RECURSIVE planning and result validation; the

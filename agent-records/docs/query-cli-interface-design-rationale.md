@@ -5,8 +5,8 @@ Last reviewed: 2026-08-26.
 ## Decision
 
 Non-interactive terminal rendering lives beside its command in
-`memcommit.adapters.console.commands.query.presentation`.
-`memcommit.adapters.console.commands.query.command` remains the Typer
+`memcommit.adapters.console.commands.search_explain.retrieve_answer.query.presentation`.
+`memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command` remains the Typer
 composition root: it interprets options, freezes storage/authority inputs,
 chooses ordinary, granted, or legacy-reference execution, wires concrete
 providers, and maps failures to exit codes.

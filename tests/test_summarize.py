@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.clipboard import ClipboardError
-import memcommit.adapters.console.commands.summarize.command as summarize_command
+import memcommit.adapters.console.commands.search_explain.synthesize.summarize.command as summarize_command
 from memcommit.adapters.console.commands.help.command import COMMAND_FORMS
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
@@ -19,7 +19,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.pro
     analyze_comparison,
 )
 from memcommit.core.context import Memory
-from memcommit.application.operations.summarize.model import (
+from memcommit.application.operations.search_explain.synthesize.summarize.model import (
     SUMMARIZE_OPERATION,
     SummarizeError,
     collect_summary_scope,
@@ -114,7 +114,7 @@ def test_mem_summarize_recurses_and_renders_only_shared_understanding(
     store.save(root)
     provider = SummaryProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search_explain.synthesize.summarize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -150,7 +150,7 @@ def test_mem_summarize_direct_excludes_child_memories(
     store.save(root)
     provider = SummaryProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search_explain.synthesize.summarize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -176,7 +176,7 @@ def test_mem_summarize_recursive_includes_unembedded_lexical_descendants(
     store.save(root)
     provider = SummaryProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search_explain.synthesize.summarize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -204,7 +204,7 @@ def test_mem_summarize_rejects_retired_presentation_flags_before_execution(
     monkeypatch,
 ):
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.summarize.command.MemoryStore",
+        "memcommit.adapters.console.commands.search_explain.synthesize.summarize.command.MemoryStore",
         lambda *args, **kwargs: (_ for _ in ()).throw(
             AssertionError("retired flag parsing must not open the Store")
         ),
@@ -223,7 +223,7 @@ def test_mem_summarize_plain_preserves_noninteractive_output(
     store = MemoryStore()
     store.save(ops.init("plain-summary"))
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search_explain.synthesize.summarize.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("empty summary must remain provider-free")
         ),
@@ -307,7 +307,7 @@ def test_mem_summarize_empty_context_is_provider_free(
         raise AssertionError("empty summarize must not connect a provider")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search_explain.synthesize.summarize.command.connect_codex_chatgpt_provider",
         forbidden,
     )
 
@@ -327,7 +327,7 @@ def test_mem_summarize_rejects_unknown_evidence_alias(
     store.save(ctx)
     provider = SummaryProvider(invalid_source=True)
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search_explain.synthesize.summarize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -360,7 +360,7 @@ def test_mem_summarize_rejects_source_change_before_publishing(
             return response
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search_explain.synthesize.summarize.command.connect_codex_chatgpt_provider",
         lambda: MutatingProvider(),
     )
 

@@ -16,12 +16,12 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_operation_package_import_is_lazy(operation: str) -> None:
     program = f"""
 import sys
-import memcommit.application.operations.{operation}
+import memcommit.application.operations.semantic_updates.derive.{operation}
 
 assert not [
     name
     for name in sys.modules
-    if name.startswith("memcommit.application.operations.{operation}.")
+    if name.startswith("memcommit.application.operations.semantic_updates.derive.{operation}.")
 ]
 """
 
@@ -36,18 +36,18 @@ def test_production_consumers_use_operation_owners() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/distill.py",
         "src/memcommit/adapters/python_api/_operations/makemore.py",
-        "src/memcommit/adapters/console/commands/distill/command.py",
-        "src/memcommit/adapters/console/commands/makemore/command.py",
-        "src/memcommit/adapters/console/commands/distill/impact.py",
-        "src/memcommit/adapters/console/commands/makemore/impact.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/derive/distill/command.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/derive/makemore/command.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/derive/distill/impact.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/derive/makemore/impact.py",
         "src/memcommit/application/operations/ground/distill.py",
         "src/memcommit/application/operations/ground/makemore.py",
-        "src/memcommit/adapters/console/commands/makemore/proposal.py",
-        "src/memcommit/adapters/console/commands/makemore/viewer/projection.py",
-        "src/memcommit/adapters/console/commands/makemore/viewer/screen.py",
-        "src/memcommit/application/operations/distill/runtime.py",
-        "src/memcommit/application/operations/makemore/runtime.py",
-        "src/memcommit/application/operations/makemore/add_runtime.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/derive/makemore/proposal.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/derive/makemore/viewer/projection.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/derive/makemore/viewer/screen.py",
+        "src/memcommit/application/operations/semantic_updates/derive/distill/runtime.py",
+        "src/memcommit/application/operations/semantic_updates/derive/makemore/runtime.py",
+        "src/memcommit/application/operations/semantic_updates/derive/makemore/add_runtime.py",
     )
     legacy_imports = (
         "from memcommit.distill_application import",
@@ -66,30 +66,30 @@ def test_distill_and_makemore_keep_distinct_execution_contracts() -> None:
     distill_source = "\n".join(
         (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         for relative_path in (
-            "src/memcommit/application/operations/distill/application.py",
-            "src/memcommit/application/operations/distill/runtime.py",
+            "src/memcommit/application/operations/semantic_updates/derive/distill/application.py",
+            "src/memcommit/application/operations/semantic_updates/derive/distill/runtime.py",
         )
     )
     makemore_application = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/makemore/application.py"
+        / "src/memcommit/application/operations/semantic_updates/derive/makemore/application.py"
     ).read_text(encoding="utf-8")
     makemore_runtime = (
-        REPOSITORY_ROOT / "src/memcommit/application/operations/makemore/runtime.py"
+        REPOSITORY_ROOT / "src/memcommit/application/operations/semantic_updates/derive/makemore/runtime.py"
     ).read_text(encoding="utf-8")
     makemore_add_runtime = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/makemore/add_runtime.py"
+        / "src/memcommit/application/operations/semantic_updates/derive/makemore/add_runtime.py"
     ).read_text(encoding="utf-8")
 
-    assert "memcommit.application.operations.makemore" not in distill_source
-    assert "memcommit.application.operations.distill" not in (
+    assert "memcommit.application.operations.semantic_updates.derive.makemore" not in distill_source
+    assert "memcommit.application.operations.semantic_updates.derive.distill" not in (
         makemore_application + makemore_runtime + makemore_add_runtime
     )
     assert "memorize_semantic_result" not in makemore_runtime
     assert "MemoryStore" not in makemore_runtime
     assert (
-        "from memcommit.application.operations.makemore.runtime import"
+        "from memcommit.application.operations.semantic_updates.derive.makemore.runtime import"
         in makemore_add_runtime
     )
     assert "memorize_semantic_result" in makemore_add_runtime

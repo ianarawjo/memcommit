@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from memcommit.application.operations.atomize.application import (
+    from memcommit.application.operations.semantic_updates.derive.atomize.application import (
         AtomizeExecutionSnapshot,
     )
 

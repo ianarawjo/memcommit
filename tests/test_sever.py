@@ -10,14 +10,14 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.application.operations.sever.runtime as sever_runtime
+import memcommit.application.operations.semantic_updates.curate_integrate.sever.runtime as sever_runtime
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.sever import command as sever_command
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever import command as sever_command
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionNewReceipt,
     SessionOpenReceipt,
 )
-from memcommit.adapters.console.commands.sever.sessions import (
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
 )
@@ -34,18 +34,18 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
 )
-from memcommit.application.operations.sever.model import (
+from memcommit.application.operations.semantic_updates.curate_integrate.sever.model import (
     SEVER_SCHEMA_VERSION,
     SeverApplication,
     SeverSession,
     sever_record_digest,
 )
-from memcommit.application.operations.sever.provider import SEVER_PAYLOAD_MARKER
-from memcommit.application.operations.sever.resolution_adapter import (
+from memcommit.application.operations.semantic_updates.curate_integrate.sever.provider import SEVER_PAYLOAD_MARKER
+from memcommit.application.operations.semantic_updates.curate_integrate.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
     sever_memory_changes,
 )
-from memcommit.application.operations.sever.session_store import SeverSessionStore
+from memcommit.application.operations.semantic_updates.curate_integrate.sever.session_store import SeverSessionStore
 from memcommit.persistence.store import MemoryStore
 
 

@@ -8,29 +8,29 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.elaborate.command as elaborate_command
-import memcommit.adapters.console.commands.elaborate.impact as elaborate_impact
+import memcommit.adapters.console.commands.semantic_updates.derive.elaborate.command as elaborate_command
+import memcommit.adapters.console.commands.semantic_updates.derive.elaborate.impact as elaborate_impact
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.elaborate.application import (
+from memcommit.application.operations.semantic_updates.derive.elaborate.application import (
     ElaborateError,
     ElaborateRequest,
     FrozenElaborateSource,
     elaborate_frame,
     prepare_elaborate,
 )
-from memcommit.application.operations.elaborate.model import (
+from memcommit.application.operations.semantic_updates.derive.elaborate.model import (
     ELABORATE_SEPARATOR,
     ElaborateFrame,
     ElaborateSource,
 )
-from memcommit.application.operations.elaborate.runtime import (
+from memcommit.application.operations.semantic_updates.derive.elaborate.runtime import (
     execute_elaborate,
     prepare_elaborate_with_store,
 )
-from memcommit.application.operations.review.applied_checkpoint import (
+from memcommit.application.operations.operation_lifecycle.review.applied_checkpoint import (
     list_applied_checkpoint_reviews,
 )
-from memcommit.adapters.console.commands.elaborate.impact import (
+from memcommit.adapters.console.commands.semantic_updates.derive.elaborate.impact import (
     render_elaborate_impact,
 )
 from memcommit.persistence.store import MemoryStore

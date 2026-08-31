@@ -65,7 +65,7 @@ Memory contents. No command automatically writes it to a cache or file.
 
 ## Conflict to Resolve
 
-Resolve-owned `application.operations.resolve.finding_handoff` converts one
+Resolve-owned `application.operations.quality_resolution.repair.resolve.finding_handoff` converts one
 handoff to a normal `ResolveRequest` only when the finder analyzed exactly one
 Context and both conflicting Memories are directly owned by it. The request
 uses full Memory UIDs as selectors and carries a `ResolveSourcePrecondition`

@@ -6,9 +6,9 @@ import json
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.application.operations.distill.model import DISTILL_PAYLOAD_MARKER
-from memcommit.application.operations.makemore.model import MAKEMORE_PAYLOAD_MARKER
-from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
+from memcommit.application.operations.semantic_updates.derive.distill.model import DISTILL_PAYLOAD_MARKER
+from memcommit.application.operations.semantic_updates.derive.makemore.model import MAKEMORE_PAYLOAD_MARKER
+from memcommit.application.operations.quality_resolution.validate.fit.judgment import FIT_JUDGMENT_PAYLOAD_MARKER
 from memcommit.adapters.agent.distill import DISTILL_AGENT_TOOL_NAME
 from memcommit.adapters.agent.makemore import (
     MAKEMORE_AGENT_CONTRACT_VERSION,

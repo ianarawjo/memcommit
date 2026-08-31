@@ -16,8 +16,8 @@ from memcommit.adapters.console.commands.copy.setup import (
     build_copy_tui_setup,
     choose_copy_setup,
 )
-from memcommit.adapters.console.commands.move import command as move_command
-from memcommit.adapters.console.commands.move.setup import (
+from memcommit.adapters.console.commands.direct_changes.move import command as move_command
+from memcommit.adapters.console.commands.direct_changes.move.setup import (
     build_move_tui_setup,
     choose_move_setup,
 )
@@ -44,7 +44,7 @@ from memcommit.application.operations.copy_and_move.application import (
 )
 from memcommit.application.operations.copy.application import run_copy
 from memcommit.application.operations.copy_and_move.runtime import MemoryStoreCopyAndMovePort
-from memcommit.application.operations.move.application import run_move
+from memcommit.application.operations.direct_changes.move.application import run_move
 from memcommit.persistence.store import MemoryStore
 
 

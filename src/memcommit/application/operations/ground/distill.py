@@ -9,11 +9,11 @@ import json
 from typing import Iterator, Literal, Protocol
 
 from memcommit.core.context import Context
-from memcommit.application.operations.distill.model import DistillError, DistillProvider
-from memcommit.application.operations.distill.model import (
+from memcommit.application.operations.semantic_updates.derive.distill.model import DistillError, DistillProvider
+from memcommit.application.operations.semantic_updates.derive.distill.model import (
     ensure_distill_goal_fit_allows_add,
 )
-from memcommit.application.operations.distill.application import (
+from memcommit.application.operations.semantic_updates.derive.distill.application import (
     DistillRequest,
     DistillResult,
     run_distill,
@@ -41,11 +41,11 @@ from memcommit.persistence.store import (
     MemoryStore,
     context_record_digest,
 )
-from memcommit.application.operations.summarize.model import (
+from memcommit.application.operations.search_explain.synthesize.summarize.model import (
     SummaryFrame,
     collect_summary_scope,
 )
-from memcommit.application.operations.summarize.application import (
+from memcommit.application.operations.search_explain.synthesize.summarize.application import (
     FrozenSummarySource,
     SummarizeRequest,
 )

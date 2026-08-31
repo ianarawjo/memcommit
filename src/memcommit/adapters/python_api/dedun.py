@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from memcommit.adapters.python_api.dedup import ExactDedupGroupResult
 
 if TYPE_CHECKING:
-    from memcommit.application.operations.dedun.application import FrozenDedunPlan
+    from memcommit.application.operations.quality_resolution.repair.dedun.application import FrozenDedunPlan
 
 
 @dataclass(frozen=True)

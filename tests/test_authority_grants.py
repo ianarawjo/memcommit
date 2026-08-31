@@ -9,9 +9,9 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.search.command as find_command
-import memcommit.adapters.console.commands.query.command as query_command
-import memcommit.adapters.console.commands.rationale.command as rationale_command
+import memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command as find_command
+import memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command as query_command
+import memcommit.adapters.console.commands.history_recovery.inspection.rationale.command as rationale_command
 from memcommit.adapters.python_api import MemCommitClient, ShowContextResult
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.capabilities.authority.context_access import (
@@ -38,8 +38,8 @@ from memcommit.application.operations.profile.model import (
     update_authority_grant,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.summarize.application import SummarizeRequest
-from memcommit.application.operations.summarize.runtime import execute_summarize
+from memcommit.application.operations.search_explain.synthesize.summarize.application import SummarizeRequest
+from memcommit.application.operations.search_explain.synthesize.summarize.runtime import execute_summarize
 
 
 runner = CliRunner(mix_stderr=False)
@@ -291,7 +291,7 @@ def test_summarize_preserves_granted_read_projection_and_binding_freshness(
             )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search_explain.synthesize.summarize.command.connect_codex_chatgpt_provider",
         Provider,
     )
 
@@ -331,7 +331,7 @@ def test_summarize_preserves_granted_read_projection_and_binding_freshness(
             return response
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.summarize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search_explain.synthesize.summarize.command.connect_codex_chatgpt_provider",
         RevisionChangingProvider,
     )
 

@@ -42,7 +42,7 @@ def _owner_aware_meld_change_evidence(
     ):
         return {}, "has a mismatched owner-aware meld checkpoint"
     try:
-        from memcommit.application.operations.meld.model import (
+        from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import (
             MeldChangeSet,
             MeldFrame,
             meld_canonical_digest,
@@ -385,7 +385,7 @@ def _meld_change_evidence(
     }:
         return {}, "has an unsupported meld record"
     try:
-        from memcommit.application.operations.meld.model import (
+        from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import (
             MeldChangeSet,
             meld_canonical_digest,
         )

@@ -116,7 +116,7 @@ def test_update_meld_note_is_visible_only_in_each_expanded_help_record():
             text
             for _style, text in _help_group_fragments(
                 [(0, entries[operation_name])],
-                title="SEMANTIC TRANSFORMATIONS",
+                title="SEMANTIC UPDATES",
                 width=180,
                 focused=True,
                 selected_index=0,
@@ -128,7 +128,7 @@ def test_update_meld_note_is_visible_only_in_each_expanded_help_record():
             text
             for _style, text in _help_group_fragments(
                 [(0, entries[operation_name])],
-                title="SEMANTIC TRANSFORMATIONS",
+                title="SEMANTIC UPDATES",
                 width=180,
                 focused=True,
                 selected_index=0,
@@ -340,14 +340,14 @@ def test_adjacent_command_records_use_connectors_without_background_bands():
         entries = [
             entry
             for entry in command_entries(context)
-            if entry.name in {"find-duplicates", "review"}
+            if entry.name in {"find-duplicates", "find-redundancies"}
         ]
     finally:
         context.close()
 
     fragments = _help_group_fragments(
         list(enumerate(entries)),
-        title="CHECK & REVIEW",
+        title="QUALITY & RESOLUTION",
         width=180,
         focused=False,
         selected_index=0,
@@ -361,15 +361,15 @@ def test_adjacent_command_records_use_connectors_without_background_bands():
     )
     assert any(style == "" and text == "WHEN" for style, text in fragments)
     assert any(
-        style == "class:help-command" and "▸ mem review" in text
+        style == "class:help-command" and "▸ mem find-" in text
         for style, text in fragments
     )
     assert any(
-        style == "class:help-group bold" and text == " CHECK & REVIEW "
+        style == "class:help-group bold" and text == " QUALITY & RESOLUTION "
         for style, text in fragments
     )
     category_copy = [
-        (style, text) for style, text in fragments if "Check compatibility" in text
+        (style, text) for style, text in fragments if "Diagnose quality issues" in text
     ]
     assert category_copy
     assert all(
@@ -434,6 +434,91 @@ def test_search_box_groups_retrieval_and_answering_before_synthesis() -> None:
         style == "class:help-command.selected bold" and "mem summarize" in text
         for style, text in fragments
     )
+
+
+def test_new_semantic_and_quality_sections_render_while_lifecycle_stays_unsplit():
+    root, context = _root_context()
+    try:
+        by_name = {entry.name: entry for entry in command_entries(context)}
+    finally:
+        context.close()
+
+    semantic_names = (
+        "update",
+        "atomize",
+        "distill",
+        "elaborate",
+        "makemore",
+        "forget",
+        "sever",
+        "meld",
+    )
+    semantic = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [
+                (index, by_name[name])
+                for index, name in enumerate(semantic_names)
+            ],
+            title="SEMANTIC UPDATES",
+            width=180,
+            focused=False,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+    )
+    assert semantic.index("── FOUNDATION ") < semantic.index("mem update ")
+    assert semantic.index("mem update ") < semantic.index("── DERIVE ")
+    assert semantic.index("── DERIVE ") < semantic.index("mem atomize ")
+    assert semantic.index("mem makemore ") < semantic.index("── CURATE & INTEGRATE ")
+    assert semantic.index("── CURATE & INTEGRATE ") < semantic.index("mem forget ")
+
+    quality_names = (
+        "find-duplicates",
+        "find-redundancies",
+        "find-ambiguities",
+        "find-conflicts",
+        "audit",
+        "dedup",
+        "dedun",
+        "resolve",
+        "fit",
+        "check-conformance",
+    )
+    quality = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(index, by_name[name]) for index, name in enumerate(quality_names)],
+            title="QUALITY & RESOLUTION",
+            width=180,
+            focused=False,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+    )
+    assert quality.index("── DIAGNOSE ") < quality.index("mem find-")
+    assert quality.index("mem audit ") < quality.index("── REPAIR ")
+    assert quality.index("── REPAIR ") < quality.index("mem dedup ")
+    assert quality.index("mem resolve ") < quality.index("── VALIDATE ")
+    assert quality.index("── VALIDATE ") < quality.index("mem fit ")
+
+    lifecycle = "".join(
+        text
+        for _style, text in _help_group_fragments(
+            [(0, by_name["impact"]), (1, by_name["review"])],
+            title="OPERATION LIFECYCLE",
+            width=180,
+            focused=False,
+            selected_index=0,
+            expanded_index=None,
+            selected_form=None,
+        )
+    )
+    assert lifecycle.index("mem impact ") < lifecycle.index("mem review ")
+    assert "── BEFORE" not in lifecycle
+    assert "── AFTER" not in lifecycle
 
 
 def test_history_box_renders_two_noninteractive_sections_without_changing_rows():
@@ -533,7 +618,7 @@ def test_every_help_category_explains_its_intent_and_execution_basis():
         text
         for _style, text in _help_group_fragments(
             [(0, edit_entry)],
-            title="DETERMINISTIC CONTENT CHANGES",
+            title="DIRECT CHANGES",
             width=120,
             focused=False,
             selected_index=0,
@@ -545,7 +630,7 @@ def test_every_help_category_explains_its_intent_and_execution_basis():
         text
         for _style, text in _help_group_fragments(
             [(0, atomize_entry)],
-            title="SEMANTIC TRANSFORMATIONS",
+            title="SEMANTIC UPDATES",
             width=120,
             focused=False,
             selected_index=0,
@@ -592,7 +677,7 @@ def test_every_help_category_explains_its_intent_and_execution_basis():
 
     assert "NO LLM · Apply explicit inputs" in deterministic
     assert "deterministic program logic" in deterministic
-    assert "LLM-BASED · Uses LLM semantic analysis" in semantic
+    assert "LLM-BASED · Use semantic decisions" in semantic
     assert "abstract ideas into reviewable common ground" in ground
     assert "Configure MemCommit and prepare or run study" in system
     assert "MIXED · Configure" not in system
@@ -656,7 +741,7 @@ def test_every_help_language_localizes_learning_copy_without_renaming_commands()
             text
             for _style, text in _help_group_fragments(
                 [(0, entry)],
-                title="SEMANTIC TRANSFORMATIONS",
+                title="SEMANTIC UPDATES",
                 width=100,
                 focused=True,
                 selected_index=0,
@@ -789,7 +874,7 @@ def test_expanded_tui_entry_projects_composed_meaning_before_cli_forms():
         text
         for _style, text in _help_group_fragments(
             [(0, entry)],
-            title="SEMANTIC TRANSFORMATIONS",
+            title="SEMANTIC UPDATES",
             width=120,
             focused=True,
             selected_index=0,

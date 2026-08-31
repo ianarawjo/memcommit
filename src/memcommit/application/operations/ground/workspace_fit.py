@@ -8,7 +8,7 @@ import json
 from typing import Callable
 
 from memcommit.core.context import Context
-from memcommit.application.operations.fit.ground_report import (
+from memcommit.application.operations.quality_resolution.validate.fit.ground_report import (
     FitError,
     FitExample,
     FitProvider,
@@ -16,7 +16,7 @@ from memcommit.application.operations.fit.ground_report import (
     FitRule,
     fit_ground_examples,
 )
-from memcommit.application.operations.fit.coherence import (
+from memcommit.application.operations.quality_resolution.validate.fit.coherence import (
     FitCoherenceError,
     FitCoherenceSubject,
     FitContextFrame,

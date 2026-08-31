@@ -49,7 +49,7 @@ from memcommit.study_scenarios.legacy.prewarm.quality import (
 from memcommit.study_scenarios.legacy.prewarm.scope_equivalence import (
     ordered_scope_evidence_relation,
 )
-from memcommit.application.operations.update.model import (
+from memcommit.application.operations.semantic_updates.foundation.update.model import (
     UPDATE_PROVIDER_CONTRACT_VERSION,
     UPDATE_SCHEMA_VERSION,
     GrantedUpdateTarget,

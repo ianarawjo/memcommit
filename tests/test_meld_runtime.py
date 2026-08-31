@@ -9,28 +9,36 @@ from types import SimpleNamespace
 import pytest
 
 import memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution as relation_execution
-import memcommit.application.operations.meld.planning as meld_assessment_application
-import memcommit.application.operations.meld.provider.contract as meld_provider_contract
-import memcommit.application.operations.meld.provider.decoder as meld_provider_decoder
-import memcommit.application.operations.meld.provider.execution as meld_provider_execution
-import memcommit.application.operations.meld.provider.projection as meld_provider_projection
-import memcommit.application.operations.meld.provider.request as meld_provider_request
-import memcommit.application.operations.meld.preparation as meld_restart_application
-import memcommit.application.operations.meld.runtime as meld_runtime
-import memcommit.application.operations.meld.runtime.apply_transaction as meld_runtime_apply
-import memcommit.application.operations.meld.runtime.preparation as meld_session_launch
-import memcommit.application.operations.meld.runtime.proposal_iteration as meld_session_review
-import memcommit.application.operations.meld.runtime.source_access as meld_source_bindings
-import memcommit.application.operations.meld.proposal_iteration as meld_session_application
-import memcommit.application.operations.meld.preparation as meld_start_application
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.planning as meld_assessment_application
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.provider.contract as meld_provider_contract
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.provider.decoder as meld_provider_decoder
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.provider.execution as meld_provider_execution
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.provider.projection as meld_provider_projection
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.provider.request as meld_provider_request
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.preparation as meld_restart_application
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.runtime as meld_runtime
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.runtime.apply_transaction as meld_runtime_apply
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.runtime.preparation as meld_session_launch
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.runtime.proposal_iteration as meld_session_review
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.runtime.source_access as meld_source_bindings
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_iteration as meld_session_application
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.preparation as meld_start_application
 from memcommit.application.capabilities.authority.context_access import ContextAccess
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.meld.model import meld_canonical_digest
-from memcommit.application.operations.meld.preparation import MeldRestartRequest
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import meld_canonical_digest
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.preparation import MeldRestartRequest
 
 
 PACKAGE_ROOT = Path(__file__).resolve().parents[1] / "src" / "memcommit"
-MELD_COMMAND_ROOT = PACKAGE_ROOT / "adapters" / "console" / "commands" / "meld"
+MELD_COMMAND_ROOT = (
+    PACKAGE_ROOT
+    / "adapters"
+    / "console"
+    / "commands"
+    / "semantic_updates"
+    / "curate_integrate"
+    / "meld"
+)
 
 
 def _meld_command_source() -> str:

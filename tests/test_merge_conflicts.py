@@ -10,11 +10,11 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.merge.workbench.conflicts import (
+from memcommit.adapters.console.commands.direct_changes.merge.workbench.conflicts import (
     merge_resolution_spec,
 )
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
-from memcommit.application.operations.merge.application import (
+from memcommit.application.operations.direct_changes.merge.application import (
     MergeConflictKind,
     MergeDecision,
     MergeError,
@@ -24,7 +24,7 @@ from memcommit.application.operations.merge.application import (
     prepare_merge,
     resolve_merge_conflicts,
 )
-from memcommit.application.operations.merge.runtime import (
+from memcommit.application.operations.direct_changes.merge.runtime import (
     MemoryStoreMergePort,
     execute_merge,
 )

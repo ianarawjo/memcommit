@@ -10,14 +10,14 @@ import uuid
 import pytest
 
 from memcommit.core.context import Context, Memory, QueryContextRef
-import memcommit.application.operations.search.application as search_application
-from memcommit.application.operations.search.application import (
+import memcommit.application.operations.search_explain.retrieve_answer.search.application as search_application
+from memcommit.application.operations.search_explain.retrieve_answer.search.application import (
     SearchRequest,
     FrozenSearchCurrentSource,
     run_search,
 )
-from memcommit.application.operations.search.runtime import execute_search
-from memcommit.application.operations.search.model import SearchCandidate
+from memcommit.application.operations.search_explain.retrieve_answer.search.runtime import execute_search
+from memcommit.application.operations.search_explain.retrieve_answer.search.model import SearchCandidate
 from memcommit.persistence.store import MemoryStore
 
 
@@ -263,5 +263,5 @@ def test_search_application_has_no_command_typer_or_tui_imports():
     assert forbidden == ()
     assert (
         SearchRequest.__module__
-        == "memcommit.application.operations.search.application"
+        == "memcommit.application.operations.search_explain.retrieve_answer.search.application"
     )

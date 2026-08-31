@@ -16,7 +16,7 @@ from memcommit.adapters.python_api.errors import (
     SemanticStorageError,
 )
 from memcommit.adapters.python_api.semantic import MakemoreProposal
-from memcommit.application.operations.makemore.model import MakemoreError
+from memcommit.application.operations.semantic_updates.derive.makemore.model import MakemoreError
 from memcommit.application.operations.ground.makemore import (
     execute_ground_makemore,
     freeze_ground_makemore,

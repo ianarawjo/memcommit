@@ -43,7 +43,7 @@ def test_delete_approval_does_not_delete_recreated_name(
         return True
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.delete.command.typer.confirm",
+        "memcommit.adapters.console.commands.direct_changes.delete.command.typer.confirm",
         replace_during_approval,
     )
 
@@ -91,7 +91,7 @@ def test_merge_rejects_source_renamed_after_load(isolated_store, monkeypatch):
     _save(store, source)
     owner = _save(store, ops.init("owner"))
     store.set_current(owner.name)
-    from memcommit.application.operations.merge.runtime import plan_context_merge
+    from memcommit.application.operations.direct_changes.merge.runtime import plan_context_merge
 
     def rename_then_plan(candidate, target, **kwargs):
         _rename(store, "old", "new")
@@ -101,7 +101,7 @@ def test_merge_rejects_source_renamed_after_load(isolated_store, monkeypatch):
     # ops.merge helper. Interpose at the new pure planning boundary and retain
     # the same rename-between-load-and-apply safety assertion.
     monkeypatch.setattr(
-        "memcommit.application.operations.merge.runtime.plan_context_merge",
+        "memcommit.application.operations.direct_changes.merge.runtime.plan_context_merge",
         rename_then_plan,
     )
 

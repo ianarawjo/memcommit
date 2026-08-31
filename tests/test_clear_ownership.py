@@ -9,7 +9,7 @@ import sys
 
 import pytest
 
-from memcommit.application.operations.clear.application import ClearRequest, ClearResult
+from memcommit.application.operations.direct_changes.clear.application import ClearRequest, ClearResult
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -32,15 +32,15 @@ def test_clear_request_and_result_are_terminal_independent() -> None:
 
 
 def test_clear_command_delegates_behavior_to_operation_runtime() -> None:
-    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/clear/command.py"
+    path = REPOSITORY_ROOT / "src/memcommit/adapters/console/commands/direct_changes/clear/command.py"
     tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
     imports = {
         node.module
         for node in ast.walk(tree)
         if isinstance(node, ast.ImportFrom) and node.module is not None
     }
-    assert "memcommit.application.operations.clear.application" in imports
-    assert "memcommit.application.operations.clear.runtime" in imports
+    assert "memcommit.application.operations.direct_changes.clear.application" in imports
+    assert "memcommit.application.operations.direct_changes.clear.runtime" in imports
     assert "memcommit.application.capabilities.authority.context_access" not in imports
     assert "memcommit.application.capabilities.authority.readable_contexts" not in imports
     assert "memcommit.core.context_targeting.resolution" not in imports
@@ -58,7 +58,7 @@ def test_clear_entrypoint_uses_the_lazy_command_package_surface() -> None:
         alias.name
         for node in ast.walk(tree)
         if isinstance(node, ast.ImportFrom)
-        and node.module == "memcommit.adapters.console.commands"
+        and node.module == "memcommit.adapters.console.commands.direct_changes"
         for alias in node.names
     }
     clear_attributes = {
@@ -69,15 +69,15 @@ def test_clear_entrypoint_uses_the_lazy_command_package_surface() -> None:
         and node.value.id == "clear"
     }
 
-    assert "memcommit.adapters.console.commands.clear.command" not in direct_imports
+    assert "memcommit.adapters.console.commands.direct_changes.clear.command" not in direct_imports
     assert "clear" in package_imports
     assert "cmd" in clear_attributes
 
 
 def test_clear_operation_has_no_terminal_dependency() -> None:
     for relative_path in (
-        "src/memcommit/application/operations/clear/application.py",
-        "src/memcommit/application/operations/clear/runtime.py",
+        "src/memcommit/application/operations/direct_changes/clear/application.py",
+        "src/memcommit/application/operations/direct_changes/clear/runtime.py",
     ):
         source = (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         assert "import typer" not in source
@@ -87,12 +87,12 @@ def test_clear_operation_has_no_terminal_dependency() -> None:
 def test_clear_operation_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.clear
+import memcommit.application.operations.direct_changes.clear
 
 assert not [
     name
     for name in sys.modules
-    if name.startswith("memcommit.application.operations.clear.")
+    if name.startswith("memcommit.application.operations.direct_changes.clear.")
 ]
 """
     subprocess.run([sys.executable, "-c", program], cwd=REPOSITORY_ROOT, check=True)

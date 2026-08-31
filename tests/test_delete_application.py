@@ -14,7 +14,7 @@ from memcommit.adapters.python_api import (
     MemCommitClient,
 )
 from memcommit.core.context import AutoCheckpoint
-from memcommit.application.operations.delete.application import (
+from memcommit.application.operations.direct_changes.delete.application import (
     ContextDeleteRequest,
     DeleteStalePlanError,
     DirectItemDeleteRequest,
@@ -22,7 +22,7 @@ from memcommit.application.operations.delete.application import (
     prepare_context_delete,
     run_direct_item_delete,
 )
-from memcommit.application.operations.delete.runtime import MemoryStoreDeletePort
+from memcommit.application.operations.direct_changes.delete.runtime import MemoryStoreDeletePort
 from memcommit.adapters.agent.delete import (
     APPLY_CONTEXT_DELETE_AGENT_TOOL_NAME,
     PLAN_CONTEXT_DELETE_AGENT_TOOL_NAME,
@@ -231,8 +231,8 @@ def test_agent_registry_splits_delete_by_effect_and_requires_exact_plan(tmp_path
 @pytest.mark.parametrize(
     "path",
     (
-        "src/memcommit/application/operations/delete/application.py",
-        "src/memcommit/application/operations/delete/runtime.py",
+        "src/memcommit/application/operations/direct_changes/delete/application.py",
+        "src/memcommit/application/operations/direct_changes/delete/runtime.py",
     ),
 )
 def test_delete_boundary_has_no_terminal_dependencies(path):

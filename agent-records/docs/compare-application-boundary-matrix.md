@@ -5,7 +5,7 @@
 ## Lightweight Summary implementation ownership
 
 The default transient Compare path is owned by
-`memcommit.application.operations.compare.compare_summary`, `.compare_rules`,
+`memcommit.application.operations.search_explain.synthesize.compare.compare_summary`, `.compare_rules`,
 `.provider_contract`, and `.application`. The former flat
 `memcommit.comparison_summary*` module paths are identity-preserving
 compatibility aliases so import order, monkeypatches, and pre-relocation pickle

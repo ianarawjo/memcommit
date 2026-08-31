@@ -94,7 +94,7 @@ def test_rationale_context_uses_the_whole_context_trace(
 ):
     _ContextRationaleProvider.calls.clear()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.rationale.command.connect_semantic_provider",
+        "memcommit.adapters.console.commands.history_recovery.inspection.rationale.command.connect_semantic_provider",
         _ContextRationaleProvider,
     )
     _evolving_context()

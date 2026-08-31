@@ -10,7 +10,7 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.update.model import plan_update
+from memcommit.application.operations.semantic_updates.foundation.update.model import plan_update
 
 
 runner = CliRunner(mix_stderr=False)

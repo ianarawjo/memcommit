@@ -13,10 +13,10 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_forget_package_import_is_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.forget
+import memcommit.application.operations.semantic_updates.curate_integrate.forget
 
-assert "memcommit.application.operations.forget.application" not in sys.modules
-assert "memcommit.application.operations.forget.runtime" not in sys.modules
+assert "memcommit.application.operations.semantic_updates.curate_integrate.forget.application" not in sys.modules
+assert "memcommit.application.operations.semantic_updates.curate_integrate.forget.runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -30,10 +30,10 @@ def test_production_forget_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/forget.py",
         "src/memcommit/adapters/python_api/_operations/forget.py",
-        "src/memcommit/adapters/console/commands/forget/command.py",
-        "src/memcommit/adapters/console/commands/forget/impact.py",
-        "src/memcommit/adapters/console/commands/forget/workbench/screen.py",
-        "src/memcommit/application/operations/forget/runtime.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/forget/command.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/forget/impact.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/forget/workbench/screen.py",
+        "src/memcommit/application/operations/semantic_updates/curate_integrate/forget/runtime.py",
     )
 
     for relative_path in relative_paths:

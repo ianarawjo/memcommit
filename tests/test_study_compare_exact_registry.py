@@ -9,13 +9,13 @@ from typer.testing import CliRunner
 
 import memcommit.configuration.config as config_module
 import memcommit.adapters.python_api._operations.compare as compare_operation
-import memcommit.application.operations.meld.runtime.preparation as meld_session_launch
+import memcommit.application.operations.semantic_updates.curate_integrate.meld.runtime.preparation as meld_session_launch
 import memcommit.application.capabilities.ops as ops
 import memcommit.persistence.store as store_module
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.adapters.console.commands.compare.command import render_comparison
-from memcommit.adapters.console.commands.compare.execution import (
+from memcommit.adapters.console.commands.search_explain.synthesize.compare.command import render_comparison
+from memcommit.adapters.console.commands.search_explain.synthesize.compare.execution import (
     ensure_comparison_analysis,
 )
 from memcommit.application.capabilities.authority.context_access import ContextAccess
@@ -35,7 +35,7 @@ from memcommit.application.capabilities.context_scope_loading import load_contex
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     recursive_comparison_projection,
 )
-from memcommit.application.operations.meld.preparation import MeldStartRequest
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.preparation import MeldStartRequest
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
@@ -362,11 +362,11 @@ def test_exact_compare_cli_materializes_hidden_receipt_without_provider(
     )
     assert load_comparison_analysis(reference.uid, compared.uid) is None
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.compare.command.MemoryStore",
+        "memcommit.adapters.console.commands.search_explain.synthesize.compare.command.MemoryStore",
         lambda create=False: store,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.compare.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.search_explain.synthesize.compare.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("hidden exact Compare receipt opened a provider")
         ),

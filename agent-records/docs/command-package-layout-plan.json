@@ -14,34 +14,34 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.atomize.command",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.derive.atomize.command",
       "legacy_module": "memcommit.commands.atomize",
-      "owner": "atomize",
+      "owner": "semantic_updates.derive.atomize",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.atomize.records",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.derive.atomize.records",
       "legacy_module": "memcommit.commands.atomize_sessions",
-      "owner": "atomize",
+      "owner": "semantic_updates.derive.atomize",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.audit.command",
+      "canonical_module": "memcommit.adapters.console.commands.quality_resolution.diagnose.audit.command",
       "legacy_module": "memcommit.commands.audit",
-      "owner": "audit",
+      "owner": "quality_resolution.diagnose.audit",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.audit.session_catalog",
+      "canonical_module": "memcommit.adapters.console.commands.quality_resolution.diagnose.audit.session_catalog",
       "legacy_module": "memcommit.commands.audit_sessions",
-      "owner": "audit",
+      "owner": "quality_resolution.diagnose.audit",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -76,18 +76,18 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.check_conformance.command",
+      "canonical_module": "memcommit.adapters.console.commands.quality_resolution.validate.check_conformance.command",
       "legacy_module": "memcommit.commands.check_conformance",
-      "owner": "check_conformance",
+      "owner": "quality_resolution.validate.check_conformance",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.checkpoint.command",
+      "canonical_module": "memcommit.adapters.console.commands.history_recovery.recovery.checkpoint.command",
       "legacy_module": "memcommit.commands.checkpoint",
-      "owner": "checkpoint",
+      "owner": "history_recovery.recovery.checkpoint",
       "public_exports": [
         "cmd"
       ],
@@ -101,18 +101,18 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.chunk.command",
+      "canonical_module": "memcommit.adapters.console.commands.direct_changes.chunk.command",
       "legacy_module": "memcommit.commands.chunk",
-      "owner": "chunk",
+      "owner": "direct_changes.chunk",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.clear.command",
+      "canonical_module": "memcommit.adapters.console.commands.direct_changes.clear.command",
       "legacy_module": "memcommit.commands.clear",
-      "owner": "clear",
+      "owner": "direct_changes.clear",
       "public_exports": [
         "cmd"
       ],
@@ -140,39 +140,39 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.compare.command",
+      "canonical_module": "memcommit.adapters.console.commands.search_explain.synthesize.compare.command",
       "legacy_module": "memcommit.commands.compare",
-      "owner": "compare",
+      "owner": "search_explain.synthesize.compare",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.compare.sessions",
+      "canonical_module": "memcommit.adapters.console.commands.search_explain.synthesize.compare.sessions",
       "legacy_module": "memcommit.commands.compare_sessions",
-      "owner": "compare",
+      "owner": "search_explain.synthesize.compare",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.compare.endpoint_setup",
+      "canonical_module": "memcommit.adapters.console.commands.search_explain.synthesize.compare.endpoint_setup",
       "legacy_module": "memcommit.commands.compare_setup",
-      "owner": "compare",
+      "owner": "search_explain.synthesize.compare",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.compare.targeting",
+      "canonical_module": "memcommit.adapters.console.commands.search_explain.synthesize.compare.targeting",
       "legacy_module": "memcommit.commands.compare_targeting",
-      "owner": "compare",
+      "owner": "search_explain.synthesize.compare",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.compare.execution",
+      "canonical_module": "memcommit.adapters.console.commands.search_explain.synthesize.compare.execution",
       "legacy_module": "memcommit.commands.comparison_execution",
-      "owner": "compare",
+      "owner": "search_explain.synthesize.compare",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -186,9 +186,9 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.resolve.finding_handoff",
+      "canonical_module": "memcommit.adapters.console.commands.quality_resolution.repair.resolve.finding_handoff",
       "legacy_module": "memcommit.commands.conflict_resolve_handoff",
-      "owner": "resolve",
+      "owner": "quality_resolution.repair.resolve",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -214,9 +214,9 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.trace.context_projection",
+      "canonical_module": "memcommit.adapters.console.commands.history_recovery.inspection.trace.context_projection",
       "legacy_module": "memcommit.commands.context_trace_projection",
-      "owner": "trace",
+      "owner": "history_recovery.inspection.trace",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -230,27 +230,27 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.dedun.command",
+      "canonical_module": "memcommit.adapters.console.commands.quality_resolution.repair.dedun.command",
       "legacy_module": "memcommit.commands.dedun",
-      "owner": "dedun",
+      "owner": "quality_resolution.repair.dedun",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.dedup.command",
+      "canonical_module": "memcommit.adapters.console.commands.quality_resolution.repair.dedup.command",
       "legacy_module": "memcommit.commands.dedup",
-      "owner": "dedup",
+      "owner": "quality_resolution.repair.dedup",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.delete.command",
+      "canonical_module": "memcommit.adapters.console.commands.direct_changes.delete.command",
       "legacy_module": "memcommit.commands.delete",
-      "owner": "delete",
+      "owner": "direct_changes.delete",
       "public_exports": [
         "cmd"
       ],
@@ -266,9 +266,9 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.diff.command",
+      "canonical_module": "memcommit.adapters.console.commands.history_recovery.inspection.diff.command",
       "legacy_module": "memcommit.commands.diff",
-      "owner": "diff",
+      "owner": "history_recovery.inspection.diff",
       "public_exports": [
         "cmd"
       ],
@@ -289,27 +289,27 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.distill.command",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.derive.distill.command",
       "legacy_module": "memcommit.commands.distill",
-      "owner": "distill",
+      "owner": "semantic_updates.derive.distill",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.edit.command",
+      "canonical_module": "memcommit.adapters.console.commands.direct_changes.edit.command",
       "legacy_module": "memcommit.commands.edit",
-      "owner": "edit",
+      "owner": "direct_changes.edit",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.makemore.command",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.derive.makemore.command",
       "legacy_module": "memcommit.commands.elaborate",
-      "owner": "makemore",
+      "owner": "semantic_updates.derive.makemore",
       "public_exports": [
         "cmd"
       ],
@@ -337,45 +337,45 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.search.command",
+      "canonical_module": "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command",
       "legacy_module": "memcommit.commands.find",
-      "owner": "search",
+      "owner": "search_explain.retrieve_answer.search",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find_ambiguities.command",
+      "canonical_module": "memcommit.adapters.console.commands.quality_resolution.diagnose.find_ambiguities.command",
       "legacy_module": "memcommit.commands.find_ambiguities",
-      "owner": "find_ambiguities",
+      "owner": "quality_resolution.diagnose.find_ambiguities",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find_conflicts.command",
+      "canonical_module": "memcommit.adapters.console.commands.quality_resolution.diagnose.find_conflicts.command",
       "legacy_module": "memcommit.commands.find_conflicts",
-      "owner": "find_conflicts",
+      "owner": "quality_resolution.diagnose.find_conflicts",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find_redundancies.command",
+      "canonical_module": "memcommit.adapters.console.commands.quality_resolution.diagnose.find_redundancies.command",
       "legacy_module": "memcommit.commands.find_duplicates",
-      "owner": "find_redundancies",
+      "owner": "quality_resolution.diagnose.find_redundancies",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find_duplicates.command",
+      "canonical_module": "memcommit.adapters.console.commands.quality_resolution.diagnose.find_duplicates.command",
       "legacy_module": "memcommit.commands.find_exact_duplicates",
-      "owner": "find_duplicates",
+      "owner": "quality_resolution.diagnose.find_duplicates",
       "public_exports": [
         "cmd"
       ],
@@ -389,9 +389,9 @@
       "role": "infrastructure-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.search.search_workbench",
+      "canonical_module": "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.search_workbench",
       "legacy_module": "memcommit.commands.find_search_workbench",
-      "owner": "search",
+      "owner": "search_explain.retrieve_answer.search",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -403,9 +403,9 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.fit.command",
+      "canonical_module": "memcommit.adapters.console.commands.quality_resolution.validate.fit.command",
       "legacy_module": "memcommit.commands.fit",
-      "owner": "fit",
+      "owner": "quality_resolution.validate.fit",
       "public_exports": [
         "cmd"
       ],
@@ -419,18 +419,18 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.forget.command",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget.command",
       "legacy_module": "memcommit.commands.forget",
-      "owner": "forget",
+      "owner": "semantic_updates.curate_integrate.forget",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.forget.setup",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget.setup",
       "legacy_module": "memcommit.commands.forget_setup_workbench",
-      "owner": "forget",
+      "owner": "semantic_updates.curate_integrate.forget",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -453,7 +453,7 @@
     {
       "canonical_module": "memcommit.adapters.console.commands.ground.workspace.catalog",
       "legacy_module": "memcommit.commands.ground_workspace_picker",
-      "owner": "ground",
+      "owner": "ground.workspace",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -502,9 +502,9 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.impact.command",
+      "canonical_module": "memcommit.adapters.console.commands.operation_lifecycle.impact.command",
       "legacy_module": "memcommit.commands.impact",
-      "owner": "impact",
+      "owner": "operation_lifecycle.impact",
       "public_exports": [
         "app",
         "cmd"
@@ -512,30 +512,30 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.impact.catalog",
+      "canonical_module": "memcommit.adapters.console.commands.operation_lifecycle.impact.catalog",
       "legacy_module": "memcommit.commands.impact_catalog",
-      "owner": "impact",
+      "owner": "operation_lifecycle.impact",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.impact.process_local",
+      "canonical_module": "memcommit.adapters.console.commands.operation_lifecycle.impact.process_local",
       "legacy_module": "memcommit.commands.impact_process_local",
-      "owner": "impact",
+      "owner": "operation_lifecycle.impact",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.impact.registry",
+      "canonical_module": "memcommit.adapters.console.commands.operation_lifecycle.impact.registry",
       "legacy_module": "memcommit.commands.impact_registry",
-      "owner": "impact",
+      "owner": "operation_lifecycle.impact",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.impact.sessions",
+      "canonical_module": "memcommit.adapters.console.commands.operation_lifecycle.impact.sessions",
       "legacy_module": "memcommit.commands.impact_sessions",
-      "owner": "impact",
+      "owner": "operation_lifecycle.impact",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -583,50 +583,50 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.find.command",
+      "canonical_module": "memcommit.adapters.console.commands.search_explain.retrieve_answer.find.command",
       "legacy_module": "memcommit.commands.literal_find",
-      "owner": "find",
+      "owner": "search_explain.retrieve_answer.find",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.log.command",
+      "canonical_module": "memcommit.adapters.console.commands.history_recovery.inspection.log.command",
       "legacy_module": "memcommit.commands.log",
-      "owner": "log",
+      "owner": "history_recovery.inspection.log",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.meld.command",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command",
       "legacy_module": "memcommit.commands.meld",
-      "owner": "meld",
+      "owner": "semantic_updates.curate_integrate.meld",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.meld.sessions",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.sessions",
       "legacy_module": "memcommit.commands.meld_sessions",
-      "owner": "meld",
+      "owner": "semantic_updates.curate_integrate.meld",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.meld.endpoint_setup",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.endpoint_setup",
       "legacy_module": "memcommit.commands.meld_setup",
-      "owner": "meld",
+      "owner": "semantic_updates.curate_integrate.meld",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.meld.command",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command",
       "legacy_module": "memcommit.commands.meld_shell",
-      "owner": "meld",
+      "owner": "semantic_updates.curate_integrate.meld",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -652,9 +652,9 @@
       "role": "shared-command-mechanism"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.merge.command",
+      "canonical_module": "memcommit.adapters.console.commands.direct_changes.merge.command",
       "legacy_module": "memcommit.commands.merge",
-      "owner": "merge",
+      "owner": "direct_changes.merge",
       "public_exports": [
         "cmd"
       ],
@@ -668,9 +668,9 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.query.provider_policy",
+      "canonical_module": "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.provider_policy",
       "legacy_module": "memcommit.commands.ordinary_query_provider_policy",
-      "owner": "query",
+      "owner": "search_explain.retrieve_answer.query",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -730,25 +730,25 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.query.command",
+      "canonical_module": "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command",
       "legacy_module": "memcommit.commands.query",
-      "owner": "query",
+      "owner": "search_explain.retrieve_answer.query",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.query.workbench",
+      "canonical_module": "memcommit.adapters.console.commands.search_explain.retrieve_answer.query.workbench",
       "legacy_module": "memcommit.commands.query_workbench",
-      "owner": "query",
+      "owner": "search_explain.retrieve_answer.query",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.rationale.command",
+      "canonical_module": "memcommit.adapters.console.commands.history_recovery.inspection.rationale.command",
       "legacy_module": "memcommit.commands.rationale",
-      "owner": "rationale",
+      "owner": "history_recovery.inspection.rationale",
       "public_exports": [
         "cmd"
       ],
@@ -762,9 +762,9 @@
       "role": "shared-application-capability"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.redo.command",
+      "canonical_module": "memcommit.adapters.console.commands.history_recovery.recovery.redo.command",
       "legacy_module": "memcommit.commands.redo",
-      "owner": "redo",
+      "owner": "history_recovery.recovery.redo",
       "public_exports": [
         "cmd"
       ],
@@ -780,9 +780,9 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.remove.command",
+      "canonical_module": "memcommit.adapters.console.commands.direct_changes.remove.command",
       "legacy_module": "memcommit.commands.remove",
-      "owner": "remove",
+      "owner": "direct_changes.remove",
       "public_exports": [
         "cmd"
       ],
@@ -798,9 +798,9 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.replace.command",
+      "canonical_module": "memcommit.adapters.console.commands.direct_changes.replace.command",
       "legacy_module": "memcommit.commands.replace",
-      "owner": "replace",
+      "owner": "direct_changes.replace",
       "public_exports": [
         "cmd"
       ],
@@ -814,9 +814,9 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.resolve.command",
+      "canonical_module": "memcommit.adapters.console.commands.quality_resolution.repair.resolve.command",
       "legacy_module": "memcommit.commands.resolve",
-      "owner": "resolve",
+      "owner": "quality_resolution.repair.resolve",
       "public_exports": [
         "cmd"
       ],
@@ -830,41 +830,41 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.revert.command",
+      "canonical_module": "memcommit.adapters.console.commands.history_recovery.recovery.revert.command",
       "legacy_module": "memcommit.commands.revert",
-      "owner": "revert",
+      "owner": "history_recovery.recovery.revert",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.review.command",
+      "canonical_module": "memcommit.adapters.console.commands.operation_lifecycle.review.command",
       "legacy_module": "memcommit.commands.review",
-      "owner": "review",
+      "owner": "operation_lifecycle.review",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.review.report",
+      "canonical_module": "memcommit.adapters.console.commands.operation_lifecycle.review.report",
       "legacy_module": "memcommit.commands.review_report",
-      "owner": "review",
+      "owner": "operation_lifecycle.review",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.review.resolution_shell",
+      "canonical_module": "memcommit.adapters.console.commands.operation_lifecycle.review.resolution_shell",
       "legacy_module": "memcommit.commands.review_resolution_shell",
-      "owner": "review",
+      "owner": "operation_lifecycle.review",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.review.sessions",
+      "canonical_module": "memcommit.adapters.console.commands.operation_lifecycle.review.sessions",
       "legacy_module": "memcommit.commands.review_sessions",
-      "owner": "review",
+      "owner": "operation_lifecycle.review",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -890,9 +890,9 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.search.result_present",
+      "canonical_module": "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.result_present",
       "legacy_module": "memcommit.commands.search_result_present",
-      "owner": "search",
+      "owner": "search_explain.retrieve_answer.search",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -934,25 +934,25 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.sever.command",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.command",
       "legacy_module": "memcommit.commands.sever",
-      "owner": "sever",
+      "owner": "semantic_updates.curate_integrate.sever",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.sever.sessions",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.sessions",
       "legacy_module": "memcommit.commands.sever_sessions",
-      "owner": "sever",
+      "owner": "semantic_updates.curate_integrate.sever",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.sever.endpoint_setup",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.endpoint_setup",
       "legacy_module": "memcommit.commands.sever_setup_shell",
-      "owner": "sever",
+      "owner": "semantic_updates.curate_integrate.sever",
       "public_exports": [],
       "role": "command-owned-support"
     },
@@ -1005,9 +1005,9 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.summarize.command",
+      "canonical_module": "memcommit.adapters.console.commands.search_explain.synthesize.summarize.command",
       "legacy_module": "memcommit.commands.summarize",
-      "owner": "summarize",
+      "owner": "search_explain.synthesize.summarize",
       "public_exports": [
         "cmd"
       ],
@@ -1023,25 +1023,25 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.trace.command",
+      "canonical_module": "memcommit.adapters.console.commands.history_recovery.inspection.trace.command",
       "legacy_module": "memcommit.commands.trace",
-      "owner": "trace",
+      "owner": "history_recovery.inspection.trace",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.trace.projection",
+      "canonical_module": "memcommit.adapters.console.commands.history_recovery.inspection.trace.projection",
       "legacy_module": "memcommit.commands.trace_projection",
-      "owner": "trace",
+      "owner": "history_recovery.inspection.trace",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.translate.command",
+      "canonical_module": "memcommit.adapters.console.commands.translation.translate.command",
       "legacy_module": "memcommit.commands.translate",
-      "owner": "translate",
+      "owner": "translation.translate",
       "public_exports": [
         "cmd"
       ],
@@ -1062,18 +1062,18 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.undo.command",
+      "canonical_module": "memcommit.adapters.console.commands.history_recovery.recovery.undo.command",
       "legacy_module": "memcommit.commands.undo",
-      "owner": "undo",
+      "owner": "history_recovery.recovery.undo",
       "public_exports": [
         "cmd"
       ],
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.update.command",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.foundation.update.command",
       "legacy_module": "memcommit.commands.update",
-      "owner": "update",
+      "owner": "semantic_updates.foundation.update",
       "public_exports": [
         "cmd"
       ],
@@ -1087,16 +1087,16 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.update.render",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.foundation.update.render",
       "legacy_module": "memcommit.commands.update_render",
-      "owner": "update",
+      "owner": "semantic_updates.foundation.update",
       "public_exports": [],
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.commands.update.endpoint_setup",
+      "canonical_module": "memcommit.adapters.console.commands.semantic_updates.foundation.update.endpoint_setup",
       "legacy_module": "memcommit.commands.update_setup",
-      "owner": "update",
+      "owner": "semantic_updates.foundation.update",
       "public_exports": [],
       "role": "command-owned-support"
     }

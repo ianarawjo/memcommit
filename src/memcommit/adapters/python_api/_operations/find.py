@@ -22,12 +22,12 @@ from memcommit.adapters.python_api.find import (
     FindSpanResult,
 )
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.operations.find.application import (
+from memcommit.application.operations.search_explain.retrieve_answer.find.application import (
     FindError as ApplicationFindError,
     FindInputError as ApplicationFindInputError,
     FindRequest,
 )
-from memcommit.application.operations.find.runtime import execute_find
+from memcommit.application.operations.search_explain.retrieve_answer.find.runtime import execute_find
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 

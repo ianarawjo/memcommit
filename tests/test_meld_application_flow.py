@@ -7,7 +7,7 @@ from types import SimpleNamespace
 import pytest
 
 from memcommit.application.capabilities.flow import run_application_flow
-from memcommit.application.operations.meld.application import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.application import (
     MeldApplicationFlowError,
     MeldApplicationFlowPort,
 )

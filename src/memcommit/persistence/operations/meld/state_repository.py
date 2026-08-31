@@ -39,8 +39,8 @@ class _MeldStateStoreMixin:
 
     def load_meld_choice_branches(self, session):
         """Restore sparse local choices for the exact current assessment."""
-        from memcommit.application.operations.meld.model import MeldSession
-        from memcommit.application.operations.meld.proposal_choices import (
+        from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import MeldSession
+        from memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_choices import (
             MeldChoiceBranchError,
             MeldChoiceBranchSet,
         )
@@ -76,11 +76,11 @@ class _MeldStateStoreMixin:
 
     def save_meld_choice_branches(self, session, branches) -> None:
         """Persist only staged choices; no provider outcome is written here."""
-        from memcommit.application.operations.meld.model import (
+        from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import (
             MeldSession,
             meld_canonical_digest,
         )
-        from memcommit.application.operations.meld.proposal_choices import (
+        from memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_choices import (
             MeldChoiceBranchError,
             MeldChoiceBranchSet,
         )
@@ -137,7 +137,7 @@ class _MeldStateStoreMixin:
 
     def load_meld_resolution_branch(self, key: str):
         """Return one exact validated follow-up branch, if it is saved."""
-        from memcommit.application.operations.meld.proposal_cache import (
+        from memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_cache import (
             MeldResolutionBranch,
             MeldResolutionCacheError,
         )
@@ -168,7 +168,7 @@ class _MeldStateStoreMixin:
 
     def save_meld_resolution_branch(self, branch) -> None:
         """Publish one immutable exact branch without replacing a peer result."""
-        from memcommit.application.operations.meld.proposal_cache import (
+        from memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_cache import (
             MeldResolutionBranch,
             MeldResolutionCacheError,
         )
@@ -271,7 +271,7 @@ class _MeldStateStoreMixin:
     ):
         """Load one immutable displaced terminal Meld session."""
 
-        from memcommit.application.operations.meld.model import MeldError, MeldSession
+        from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import MeldError, MeldSession
 
         path = self._meld_session_history_path(target_context_uid, session_uid)
         if not path.exists():
@@ -328,7 +328,7 @@ class _MeldStateStoreMixin:
 
     def load_meld_session(self, target_context_uid: str):
         """Return the saved meld for one target Context, if present."""
-        from memcommit.application.operations.meld.model import MeldError, MeldSession
+        from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import MeldError, MeldSession
 
         path = self._meld_session_path(target_context_uid)
         if not path.exists():
@@ -361,7 +361,7 @@ class _MeldStateStoreMixin:
         expected_session_digest: str | None = None,
     ) -> None:
         """Persist one meld session with target-scoped optimistic concurrency."""
-        from memcommit.application.operations.meld.model import (
+        from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import (
             MeldError,
             MeldSession,
             meld_canonical_digest,
@@ -431,7 +431,7 @@ class _MeldStateStoreMixin:
         locks, and the exact new Context is rolled back before either lock is
         released if the session cannot be written.
         """
-        from memcommit.application.operations.meld.model import MeldError, MeldSession
+        from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import MeldError, MeldSession
 
         if not isinstance(session, MeldSession):
             raise TypeError("Expected a MeldSession.")

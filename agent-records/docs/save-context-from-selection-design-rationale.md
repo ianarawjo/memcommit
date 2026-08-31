@@ -28,7 +28,7 @@ canonical owner of the shared write. Its application contract receives:
 - one require-new local destination name.
 
 The selecting operation owns conversion to that contract. Search uses
-`application.operations.search.save_context` to reject non-Memory evidence,
+`application.operations.search_explain.retrieve_answer.search.save_context` to reject non-Memory evidence,
 map an authority-private MemoryRef target back to its public Grant name, and
 retain the search query as origin evidence. The shared capability imports no
 Search type and can therefore accept an equivalent Find adapter later.

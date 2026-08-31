@@ -13,8 +13,10 @@ knowing every naming convention.
 ## Decision
 
 Every Python command entry has one package, including entries that currently
-need only one implementation file. Its executable adapter normally lives in
-`commands/<entry>/command.py`; an adapter with independently meaningful CLI
+need only one implementation file. Unclassified entries remain at
+`commands/<entry>/`, while classified entries live at
+`commands/<family>/<section?>/<entry>/`. Its executable adapter normally lives
+in that package's `command.py`; an adapter with independently meaningful CLI
 and workflow responsibilities may instead use a nested
 `commands/<entry>/command/` package. The entry's `__init__.py` publishes only
 the CLI surface used by composition (`cmd`, `app`, or the two write-protection
@@ -24,7 +26,7 @@ through operation code.
 Files used by one entry live beside that command and drop the repeated prefix:
 
 ```text
-commands/atomize/
+commands/semantic_updates/derive/atomize/
   __init__.py
   command.py
   impact.py
@@ -37,9 +39,11 @@ commands/atomize/
 Command-layer mechanics used by more than one entry live under the sibling
 `adapters/console/coordination/` package. This is not a general utility directory: a
 module belongs there only when its console-adapter mechanics genuinely have
-multiple command consumers. Keeping it outside `commands/` makes that tree's
-physical invariant exact: every first-level child is an actual command entry
-package. Application policy remains under `operations/`; operation-owned
+multiple command consumers. Keeping it outside `commands/` keeps cross-command
+mechanics out of the operation tree. A first-level child is now either an
+unclassified command entry or a catalog family container; family containers
+mirror the application-operation topology. Application policy remains under
+`operations/`; operation-owned
 console presentation and interactive setup live beside their command. Shared
 terminal foundations and Viewer/Workbench compositions live in the sibling
 `adapters/console/terminal/` core and component tree. Other neutral concepts
@@ -135,11 +139,27 @@ each own their public preparation/execution boundary while the paired
 `application.operations.copy_and_move` package owns only shared typed values
 and Store mechanics.
 
+## Catalog-family relocation
+
+On 2026-08-31 the classified operation packages moved under the catalog's
+family and section paths on both the application and console sides. Search,
+Direct Changes, Semantic Updates, Translation, Quality & Resolution,
+Operation Lifecycle, and History & Recovery therefore have symmetric lookup
+paths. The move changes package ownership and imports only; command names,
+callbacks, requests, authority, Store transactions, provider turns, receipts,
+and presentation behavior are retained.
+
+Impact exposed an important boundary during the relocation. Its operation and
+route classification now live under
+`application.operations.operation_lifecycle.impact`; the console package owns
+Typer registration, process-local session wiring, and rendering. This prevents
+the application meaning of Impact from being defined by a console registry.
+
 ## Compatibility boundary
 
 Within the canonical console tree, every entry package continues to publish its
 intended CLI object. For example, `memcommit.adapters.console.commands.add.cmd` and
-`memcommit.adapters.console.commands.atomize.cmd` remain valid while internal code imports the
+`memcommit.adapters.console.commands.semantic_updates.derive.atomize.cmd` remain valid while internal code imports the
 implementation-owning `.command` module directly.
 
 Ground additionally preserves imports from its historical `.command` module
@@ -156,6 +176,11 @@ and was removed on 2026-08-27. Repository-owned callers now import the
 entry-owned or shared canonical module directly. The later outer relocation
 also removes the complete `memcommit.commands` namespace; no compatibility
 facade retains either its entry-package or flat support paths.
+
+Moved flat internal operation packages are not retained as compatibility
+facades. The catalog family and optional section are part of the canonical
+internal path; generated plans, repository callers, monkeypatch targets, and
+architecture tests move together. Public CLI spellings are unchanged.
 
 The Python entry package names intentionally retain the pre-existing module
 stems in this path-only pass. Historical mismatches between a Python module

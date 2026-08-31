@@ -26,17 +26,12 @@ def test_commands_root_contains_only_packages() -> None:
         entry["owner"] for entry in PLAN["modules"] if entry["role"] == "command-entry"
     }
     assert len(entry_packages) == PLAN["entry_package_count"]
-    command_packages = {
-        path.name
-        for path in COMMANDS.iterdir()
-        if path.is_dir() and not path.name.startswith("__")
-    }
-    assert "shared" not in command_packages
-    assert command_packages >= entry_packages
-    for package in command_packages:
-        assert (COMMANDS / package / "__init__.py").is_file()
-        command_module = COMMANDS / package / "command.py"
-        command_package = COMMANDS / package / "command" / "__init__.py"
+    assert not (COMMANDS / "shared").exists()
+    for package in entry_packages:
+        package_path = COMMANDS.joinpath(*package.split("."))
+        assert (package_path / "__init__.py").is_file()
+        command_module = package_path / "command.py"
+        command_package = package_path / "command" / "__init__.py"
         assert command_module.is_file() != command_package.is_file()
 
 
@@ -107,5 +102,5 @@ def test_former_command_imports_are_unavailable() -> None:
 
 
 def test_canonical_support_module_remains_importable() -> None:
-    module = import_module("memcommit.adapters.console.commands.atomize.records")
-    assert module.__spec__.name == "memcommit.adapters.console.commands.atomize.records"
+    module = import_module("memcommit.adapters.console.commands.semantic_updates.derive.atomize.records")
+    assert module.__spec__.name == "memcommit.adapters.console.commands.semantic_updates.derive.atomize.records"

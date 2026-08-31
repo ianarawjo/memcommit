@@ -8,7 +8,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from memcommit.application.operations.atomize.domain import (
+from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
     ATOMIZE_PROVIDER_CONTRACT_VERSION,
     ATOMIZE_RULESET_VERSION,
     AtomizeAnalysisSession,
@@ -35,7 +35,7 @@ from memcommit.application.operations.profile.model import (
     _STUDY_PRACTICE_DESCRIPTION_TASK_CONTENT,
     _STUDY_PRACTICE_DESCRIPTION_TASK_UID,
 )
-from memcommit.application.operations.review.model import direct_context_digest
+from memcommit.application.operations.operation_lifecycle.review.model import direct_context_digest
 from memcommit.application.capabilities.semantic.prompt_policy import (
     GENERAL_PROMPT_POLICY_ID,
     STUDY_PROMPT_POLICY_ID,

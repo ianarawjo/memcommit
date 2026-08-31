@@ -249,8 +249,9 @@ prompt-toolkit selector:
   `HELP_CATEGORY_GROUPS` is a compatibility projection of that order. The
   renderer must not alphabetize it again. `A–Z` alone provides lexical lookup.
   Categories follow user intent rather than resource type alone. Browse and
-  creation come first; search, deterministic changes, semantic transformations,
-  checking/review, the distinct Ground workbench, history, Profiles, access,
+  creation come first; search, direct changes, semantic updates, translation,
+  quality and resolution, operation lifecycle, the distinct Ground workbench,
+  history, Profiles, access,
   and system/study utilities follow. This keeps within-Context and
   Context-to-Context operations together when they answer the same user goal,
   while each operation's expanded `FLOW`, `EXECUTION`, and `RANGE` remain the
@@ -261,22 +262,26 @@ prompt-toolkit selector:
   or a grounded answer. `SYNTHESIZE` contains `summarize` and `compare`; each
   constructs a new whole-frame interpretation, over one selected Context or
   two. Compare therefore no longer appears among quality and conformance
-  checks; that later category is displayed as `CHECK & REVIEW`.
+  checks. `SEMANTIC UPDATES` renders `FOUNDATION`, `DERIVE`, and
+  `CURATE & INTEGRATE`; `QUALITY & RESOLUTION` renders `DIAGNOSE`, `REPAIR`,
+  and `VALIDATE`. `OPERATION LIFECYCLE` keeps `impact` and `review` together
+  without an internal rule because they are peer before/after views rather
+  than separate operation kinds.
   `HISTORY & RECOVERY` remains one category because all eight operations use
   recorded history as their subject, but its catalog-owned section structure
   makes the interaction difference explicit. `INSPECTION` contains `log`,
   `diff`, `trace`, and `rationale`; `RECOVERY` contains `checkpoint`, `undo`,
   `redo`, and `revert`. BY KIND renders each section title on a thin internal
-  rule after its family description. Search uses the same rule projection.
+  rule after its family description. Search, Semantic Updates, and Quality &
+  Resolution use the same rule projection.
   These rules are presentation only: they are not focus stops, command order
   and Up/Down traversal remain continuous, expansion remains operation-owned,
   and A–Z stays unsectioned.
   Every BY KIND box includes one short intent description. Pure deterministic
-  groups say `NO LLM`; semantic transformations and Ground say `LLM-BASED`;
+  groups say `NO LLM`; semantic operations and Ground say `LLM-BASED`;
   route-dependent groups say `MIXED`. System and Study tools omit an execution
   label because configuration and research utilities do not form one useful
-  inference class. `DETERMINISTIC CONTENT CHANGES` uses that technical name
-  deliberately and explains it as explicit inputs and reviewed choices applied
+  inference class. `DIRECT CHANGES` explains explicit inputs and reviewed choices applied
   through deterministic program logic. `replace` is reserved in a separate
   planned-category registry while its reviewed command is built. Planned names
   cannot enter `HELP_CATEGORY_GROUPS`, whose stale-entry check deliberately

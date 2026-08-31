@@ -16,9 +16,9 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 import memcommit.configuration.config as config_module
-from memcommit.adapters.console.commands.meld import command as meld_command
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld import command as meld_command
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.adapters.console.commands.meld.endpoint_setup import MeldSetupReceipt
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.endpoint_setup import MeldSetupReceipt
 from memcommit.adapters.console.entrypoint import app
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonInput,
@@ -35,9 +35,9 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.rep
 )
 from memcommit.core.context import Context, MemoryRef
 from memcommit.configuration.config import Config
-from memcommit.adapters.console.commands.compare.command import render_comparison
-from memcommit.adapters.console.commands.meld.command import render_meld_session
-from memcommit.adapters.console.commands.meld.workbench import (
+from memcommit.adapters.console.commands.search_explain.synthesize.compare.command import render_comparison
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command import render_meld_session
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.workbench import (
     MeldShellAction,
     _comparison_issue_resolution_badges,
     _line,
@@ -52,7 +52,7 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell imp
     render_resolution_workbench_snapshot,
     resolution_seeded_report_fragments,
 )
-from memcommit.application.operations.meld.model import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import (
     INLINE_MELD_CONTEXT_NAME,
     MELD_DIRECTIONAL_RELATION_SCHEMA_VERSION,
     MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
@@ -65,23 +65,23 @@ from memcommit.application.operations.meld.model import (
     meld_canonical_digest,
     meld_accounting,
 )
-from memcommit.application.operations.meld.provider.contract import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.provider.contract import (
     MELD_PAYLOAD_MARKER,
     MeldProviderError,
     meld_output_schema,
 )
-from memcommit.application.operations.meld.provider.execution import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.provider.execution import (
     assess_meld_turn,
 )
-from memcommit.application.operations.meld.provider.request import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.provider.request import (
     meld_turn_request_digest,
 )
-from memcommit.application.operations.meld.runtime import prepare_meld_start
-from memcommit.application.operations.meld.preparation import MeldStartRequest
-from memcommit.application.operations.update.model import GrantedUpdateTarget
-from memcommit.application.operations.meld.proposal_choices import MeldChoiceBranchSet
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.runtime import prepare_meld_start
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.preparation import MeldStartRequest
+from memcommit.application.operations.semantic_updates.foundation.update.model import GrantedUpdateTarget
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_choices import MeldChoiceBranchSet
 from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
-from memcommit.application.operations.meld.proposal_projection import (
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_projection import (
     MeldResolutionWorkbenchAdapter,
 )
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
@@ -819,7 +819,7 @@ def _task2_contexts(
 
 def _patch_provider(monkeypatch, provider):
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -2578,7 +2578,7 @@ def test_symmetric_meld_creates_missing_compare_without_switching_current(
 
     provider = Task2CompareProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     current_before = store.current_context_name()
@@ -2606,7 +2606,7 @@ def test_symmetric_meld_refreshes_stale_compare(
     assert prior is not None
     provider = Task2CompareProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     changed = store.load_direct(left.name)
@@ -2641,7 +2641,7 @@ def test_symmetric_meld_creates_exact_order_when_only_reverse_exists(
     reverse = _save_task2_comparison(store, right, left)
     provider = Task2CompareProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -3336,7 +3336,7 @@ def test_symmetric_meld_failed_basis_leaves_new_result_absent(
             raise ComparisonProviderError("comparison basis failed")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command.connect_codex_chatgpt_provider",
         lambda: FailingCompareProvider(),
     )
     missing_name = "task-2/participant/missing-compare-result"

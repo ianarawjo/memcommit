@@ -13,7 +13,7 @@ to change disclosure scope accidentally while refactoring another.
 
 ## Decision
 
-`memcommit.application.operations.search.corpus` owns two searchable-corpus
+`memcommit.application.operations.search_explain.retrieve_answer.search.corpus` owns two searchable-corpus
 preparation steps shared by Search, Find, and ordinary Query:
 
 1. `load_readable_search_roots` validates ordinary roots, optionally expands

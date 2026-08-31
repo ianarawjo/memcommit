@@ -50,13 +50,13 @@ from memcommit.application.capabilities.memory_issue_analysis.redundancy_scope i
     analyze_independent_redundancy_scope,
     freeze_redundancy_scope,
 )
-from memcommit.application.operations.find_ambiguities.application import (
+from memcommit.application.operations.quality_resolution.diagnose.find_ambiguities.application import (
     analyze_find_ambiguities,
 )
-from memcommit.application.operations.find_conflicts.application import (
+from memcommit.application.operations.quality_resolution.diagnose.find_conflicts.application import (
     analyze_find_conflicts,
 )
-from memcommit.application.operations.find_redundancies.application import (
+from memcommit.application.operations.quality_resolution.diagnose.find_redundancies.application import (
     analyze_combined_find_redundancies,
 )
 

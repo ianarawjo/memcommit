@@ -30,7 +30,7 @@ from memcommit.application.capabilities.memory_issue_analysis.workbench import (
     QualityFindWorkbenchError,
     QualityFindWorkbenchSession,
 )
-from memcommit.application.operations.review.model import REVIEW_RESPONSE_CHAR_LIMIT
+from memcommit.application.operations.operation_lifecycle.review.model import REVIEW_RESPONSE_CHAR_LIMIT
 
 
 QUALITY_FINDING_HANDOFF_CONTRACT_VERSION = "quality-finding-handoff-v1"

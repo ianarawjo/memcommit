@@ -16,7 +16,7 @@ presented as a stable Python API.
 
 ## Motivation
 
-Before this extraction, `memcommit.adapters.console.commands.sever.command` was the only complete
+Before this extraction, `memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.command` was the only complete
 execution junction. Domain records, provider decoding, session persistence,
 and review projection already had separate modules, but the command still
 resolved authority, froze frames, consulted the Study cache, constructed the
@@ -81,31 +81,31 @@ SeverPersistedApplyResult
 
 ## Dependency direction
 
-`memcommit.application.operations.sever.model` owns the durable review vocabulary, exact
+`memcommit.application.operations.semantic_updates.curate_integrate.sever.model` owns the durable review vocabulary, exact
 JSON validation, record digests, and Source/Criteria frame bindings.
-`memcommit.application.operations.sever.provider` owns the operation-specific whole-frame
+`memcommit.application.operations.semantic_updates.curate_integrate.sever.provider` owns the operation-specific whole-frame
 prompt and strict selective-curation decoder. Keeping these contracts separate
 from `application` makes the application flow depend on validated Sever values
 without making generic semantic execution or provider connection responsible
 for Sever's decision meaning.
 
-`memcommit.application.operations.sever.session_store` owns only the private session file
+`memcommit.application.operations.semantic_updates.curate_integrate.sever.session_store` owns only the private session file
 layout, locking, and digest CAS. Sever-to-Update translation and Result
-publication remain in `memcommit.application.operations.sever.runtime`, because a private
+publication remain in `memcommit.application.operations.semantic_updates.curate_integrate.sever.runtime`, because a private
 review receipt and an ordinary Context mutation have different recovery and
 authority boundaries. The deterministic in-memory ADD/EDIT/REMOVE projection
-now delegates to `memcommit.application.operations.update.application.apply_update`.
+now delegates to `memcommit.application.operations.semantic_updates.foundation.update.application.apply_update`.
 That shared boundary returns only detached post-images: it does not open an
 Update workbench, persist an Update session, create a checkpoint, or render an
 Update receipt. Sever therefore retains its save-mode, authority, recovery,
 and publication meaning while no longer carrying a second local-update engine.
-`memcommit.application.operations.sever.resolution_adapter` is the pure projection from a
+`memcommit.application.operations.semantic_updates.curate_integrate.sever.resolution_adapter` is the pure projection from a
 validated session into shared Resolution values; keyboard, focus, rendering,
 and terminal lifecycle remain under the interfaces and command layers.
 
-`memcommit.application.operations.sever.application` therefore depends only on the
+`memcommit.application.operations.semantic_updates.curate_integrate.sever.application` therefore depends only on the
 operation-owned model and provider-decoder contracts. It does not import
-terminal or command modules. `memcommit.application.operations.sever.runtime` implements
+terminal or command modules. `memcommit.application.operations.semantic_updates.curate_integrate.sever.runtime` implements
 Store, Grant, cache, provider-attempt, destination-validation, private-session,
 and checkpoint ports. Grant mechanics temporarily remain under
 `memcommit.application.capabilities.authority.context_access`; that transitional dependency is confined to the
@@ -121,7 +121,7 @@ whole-frame curation, authority, session CAS, Apply compensation, terminal
 behavior, and the recorded TUI evidence are unchanged. No screenshot refresh
 is required because no visible or interactive state changed.
 
-`memcommit.adapters.console.commands.sever.command` retains thin `_start` and `_apply` compatibility
+`memcommit.adapters.console.commands.semantic_updates.curate_integrate.sever.command` retains thin `_start` and `_apply` compatibility
 facades because existing internal tests historically called the analysis-only
 and materialization-only paths. The executable command no longer calls the
 session Store's `load` or `save`, calculates record digests, selects a candidate,
@@ -210,7 +210,7 @@ compensation and interrupted recovery.
    origins but does not decide when projection is safe. The Study prewarm
    adapter remains authoritative for that separate cache contract.
 3. The setup workbench remains command-owned under
-   `adapters.console.commands.sever`, while the operation-neutral Resolution
+   `adapters.console.commands.semantic_updates.curate_integrate.sever`, while the operation-neutral Resolution
    Workbench remains shared. No Sever-specific `interfaces.tui.operations`
    package or compatibility facade remains.
 4. The production private-session adapter still uses the existing POSIX

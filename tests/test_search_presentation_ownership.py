@@ -10,7 +10,7 @@ import pytest
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-OWNER_MODULE = "memcommit.adapters.console.commands.search.result_present"
+OWNER_MODULE = "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.result_present"
 REMOVED_MODULE = "memcommit.adapters.interfaces.cli.search_results"
 
 
@@ -36,7 +36,7 @@ def test_removed_interface_presenter_has_no_compatibility_facade() -> None:
 def test_search_presenter_owner_contains_the_behavior() -> None:
     source_path = (
         REPOSITORY_ROOT
-        / "src/memcommit/adapters/console/commands/search/result_present.py"
+        / "src/memcommit/adapters/console/commands/search_explain/retrieve_answer/search/result_present.py"
     )
     source = source_path.read_text(encoding="utf-8")
     tree = ast.parse(source, filename=str(source_path))

@@ -16,11 +16,11 @@ from memcommit.application.context_access import public_context_name
 from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,
 )
-from memcommit.application.operations.update.model import (
+from memcommit.application.operations.semantic_updates.foundation.update.model import (
     UpdateSession,
     required_update_context_uses,
 )
-from memcommit.application.operations.update.publication import (
+from memcommit.application.operations.semantic_updates.foundation.update.publication import (
     authorize_granted_target_operations,
 )
 from memcommit.persistence.store import MemoryStore

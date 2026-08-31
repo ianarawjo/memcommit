@@ -4,8 +4,8 @@ import pytest
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import Memory
-from memcommit.application.operations.resolve.application import ResolveError
-from memcommit.application.operations.resolve.targeting import normalize_resolve_cli_targets
+from memcommit.application.operations.quality_resolution.repair.resolve.application import ResolveError
+from memcommit.application.operations.quality_resolution.repair.resolve.targeting import normalize_resolve_cli_targets
 from memcommit.persistence.store import MemoryStore
 
 

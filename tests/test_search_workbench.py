@@ -11,7 +11,7 @@ from prompt_toolkit.output import DummyOutput
 from memcommit.adapters.console.terminal.components.background_turn import (
     BackgroundExecutorTurn,
 )
-from memcommit.adapters.console.commands.search.search_workbench import (
+from memcommit.adapters.console.commands.search_explain.retrieve_answer.search.search_workbench import (
     SearchRequest,
     SearchResponse,
     SearchResult,

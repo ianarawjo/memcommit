@@ -688,15 +688,15 @@ def test_delete_supports_legacy_non_uuid_context_identity(isolated_store):
 def test_delete_removes_context_scoped_analysis_and_matching_review(
     isolated_store,
 ):
-    from memcommit.application.operations.atomize.domain import (
+    from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
         AtomizeImpactReport,
         AtomizeItem,
         create_atomize_analysis,
     )
-    from memcommit.application.operations.atomize.records import (
+    from memcommit.application.operations.semantic_updates.derive.atomize.records import (
         create_atomize_review_record,
     )
-    from memcommit.application.operations.review.model import create_atomize_review
+    from memcommit.application.operations.operation_lifecycle.review.model import create_atomize_review
 
     store = MemoryStore()
     first = ops.init("first")
@@ -759,7 +759,7 @@ def test_delete_preserves_review_bound_to_another_context(isolated_store):
     from memcommit.application.capabilities.memory_issue_analysis.model import (
         AmbiguityReport,
     )
-    from memcommit.application.operations.review.model import create_ambiguity_review
+    from memcommit.application.operations.operation_lifecycle.review.model import create_ambiguity_review
 
     store = MemoryStore()
     deleted = ops.init("deleted")
@@ -783,17 +783,17 @@ def test_delete_preserves_review_bound_to_another_context(isolated_store):
 
 
 def test_delete_removes_uid_retained_atomize_and_review_evidence(isolated_store):
-    from memcommit.application.operations.atomize.domain import (
+    from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
         AtomizeImpactReport,
         create_atomize_analysis,
     )
-    from memcommit.application.operations.atomize.records import (
+    from memcommit.application.operations.semantic_updates.derive.atomize.records import (
         create_atomize_review_record,
     )
     from memcommit.application.capabilities.memory_issue_analysis.model import (
         AmbiguityReport,
     )
-    from memcommit.application.operations.review.model import create_ambiguity_review
+    from memcommit.application.operations.operation_lifecycle.review.model import create_ambiguity_review
 
     store = MemoryStore()
     deleted = ops.init("history/deleted")

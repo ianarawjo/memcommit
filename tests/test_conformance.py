@@ -7,7 +7,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.operations.conformance.model import (
+from memcommit.application.operations.quality_resolution.validate.check_conformance.model import (
     CONTEXT_CONFORMANCE_OPERATION,
     ConformanceError,
     ConformanceReport,
@@ -15,14 +15,14 @@ from memcommit.application.operations.conformance.model import (
     ConformanceSubject,
     check_context_conformance,
 )
-from memcommit.application.operations.conformance.runtime import (
+from memcommit.application.operations.quality_resolution.validate.check_conformance.runtime import (
     execute_ground_conformance,
     freeze_context_conformance,
     freeze_ground_conformance,
 )
 from memcommit.adapters.console.entrypoint import app
-import memcommit.adapters.console.commands.check_conformance.command as check_conformance_command
-import memcommit.adapters.console.commands.audit.command as audit_command
+import memcommit.adapters.console.commands.quality_resolution.validate.check_conformance.command as check_conformance_command
+import memcommit.adapters.console.commands.quality_resolution.diagnose.audit.command as audit_command
 from memcommit.application.operations.ground.workspace_application import (
     AddGroundWorkspaceMemoryRequest,
     CreateGroundWorkspaceRequest,
@@ -34,11 +34,11 @@ from memcommit.application.operations.ground.workspace_runtime import (
 )
 from memcommit.providers.types import ProviderIdentity
 from memcommit.persistence.store import MemoryStore
-from memcommit.adapters.console.commands.audit.command import _run_quality_audit_checks
-from memcommit.adapters.console.commands.audit.review import (
+from memcommit.adapters.console.commands.quality_resolution.diagnose.audit.command import _run_quality_audit_checks
+from memcommit.adapters.console.commands.quality_resolution.diagnose.audit.review import (
     render_quality_audit_review_snapshot,
 )
-from memcommit.application.operations.audit.model import QualityAuditSession
+from memcommit.application.operations.quality_resolution.diagnose.audit.model import QualityAuditSession
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.persistence.store import context_record_digest
 

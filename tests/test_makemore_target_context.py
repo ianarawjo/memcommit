@@ -10,9 +10,9 @@ import pytest
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.capabilities.authority.context_access import granted_context_link, resolve_context_access
 from memcommit.core.context import Context, QueryContextRef
-from memcommit.application.operations.conformance.model import CONTEXT_CONFORMANCE_OPERATION
-from memcommit.application.operations.makemore.model import MAKEMORE_PAYLOAD_MARKER, MakemoreError
-from memcommit.application.operations.makemore.add_runtime import (
+from memcommit.application.operations.quality_resolution.validate.check_conformance.model import CONTEXT_CONFORMANCE_OPERATION
+from memcommit.application.operations.semantic_updates.derive.makemore.model import MAKEMORE_PAYLOAD_MARKER, MakemoreError
+from memcommit.application.operations.semantic_updates.derive.makemore.add_runtime import (
     apply_prepared_makemore_add,
     freeze_makemore_context_source,
     prepare_makemore_add,
@@ -29,9 +29,9 @@ from memcommit.application.operations.ground.workspace_runtime import (
     execute_ground_workspace_creation,
     execute_ground_workspace_memory_add,
 )
-from memcommit.adapters.console.commands.makemore.proposal import makemore_result_text
-from memcommit.adapters.console.commands.makemore.viewer import project_makemore_result
-from memcommit.application.operations.fit.judgment import FIT_JUDGMENT_OPERATION
+from memcommit.adapters.console.commands.semantic_updates.derive.makemore.proposal import makemore_result_text
+from memcommit.adapters.console.commands.semantic_updates.derive.makemore.viewer import project_makemore_result
+from memcommit.application.operations.quality_resolution.validate.fit.judgment import FIT_JUDGMENT_OPERATION
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,

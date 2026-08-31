@@ -11,10 +11,10 @@ checkpoint-producing command unit and returns the existing typed
 | --- | --- | --- |
 | Command-unit model and stack reconstruction | `memcommit.application.capabilities.command_recovery.model`, `stack_reconstruction` | Recover one safe Profile-global LIFO order from retained checkpoint evidence |
 | Granted-versus-local stack selection | `memcommit.application.capabilities.command_recovery.execution` | Shared fail-closed restoration capability |
-| Undo direction | `memcommit.application.operations.undo.runtime` | Fixed `undo` adapter |
-| Redo direction | `memcommit.application.operations.redo.runtime` | Fixed `redo` adapter |
+| Undo direction | `memcommit.application.operations.history_recovery.recovery.undo.runtime` | Fixed `undo` adapter |
+| Redo direction | `memcommit.application.operations.history_recovery.recovery.redo.runtime` | Fixed `redo` adapter |
 | Receipt rendering | `memcommit.adapters.console.terminal.components.restoration_receipt` | Shared presentation only |
-| CLI errors and syntax | `memcommit.adapters.console.commands.undo.command`, `memcommit.adapters.console.commands.redo.command` | Typer adapters |
+| CLI errors and syntax | `memcommit.adapters.console.commands.history_recovery.recovery.undo.command`, `memcommit.adapters.console.commands.history_recovery.recovery.redo.command` | Typer adapters |
 
 ## Invariants
 
@@ -29,7 +29,7 @@ checkpoint-producing command unit and returns the existing typed
 - Undo and Redo retain distinct operation identities in checkpoints, History,
   Trace, and terminal receipts even though route selection is shared.
 - Revert owns its typed request, Store binding, and direct/recursive
-  checkpoint-unit execution under `memcommit.application.operations.revert`.
+  checkpoint-unit execution under `memcommit.application.operations.history_recovery.recovery.revert`.
   It does not join the command-stack direction selector used by Undo/Redo.
 
 ## Deliberate boundary

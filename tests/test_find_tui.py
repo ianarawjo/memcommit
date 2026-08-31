@@ -5,12 +5,12 @@ from __future__ import annotations
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.adapters.console.commands.find.workbench import (
+from memcommit.adapters.console.commands.search_explain.retrieve_answer.find.workbench import (
     FindTuiOutcome,
     FindTuiSetup,
     run_find_workbench,
 )
-from memcommit.application.operations.find.application import (
+from memcommit.application.operations.search_explain.retrieve_answer.find.application import (
     FrozenFindSource,
     FindRequest,
     FindSourceItem,

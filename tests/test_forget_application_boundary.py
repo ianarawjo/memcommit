@@ -11,7 +11,7 @@ import pytest
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.core.context import AutoCheckpoint, Context, Memory
-from memcommit.application.operations.forget.application import (
+from memcommit.application.operations.semantic_updates.curate_integrate.forget.application import (
     ForgetAnalysisRequest,
     ForgetApplicationError,
     ForgetApplyReceipt,
@@ -24,14 +24,14 @@ from memcommit.application.operations.forget.application import (
     run_forget_revision,
     run_forget_selection,
 )
-from memcommit.application.operations.forget.runtime import (
+from memcommit.application.operations.semantic_updates.curate_integrate.forget.runtime import (
     MemoryStoreForgetSourcePort,
     execute_forget_analysis,
 )
-from memcommit.adapters.console.commands.forget.workbench.presentation import (
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget.workbench.presentation import (
     ForgetResolutionWorkbenchAdapter,
 )
-from memcommit.adapters.console.commands.forget.setup import ForgetSetupResult
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget.setup import ForgetSetupResult
 from memcommit.application.capabilities.semantic.changes import ProposedChange
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
@@ -135,9 +135,9 @@ def _analysis(
 
 def test_forget_application_has_no_command_or_terminal_dependency() -> None:
     relative_paths = (
-        "application/operations/forget/application.py",
-        "application/operations/forget/runtime.py",
-        "application/operations/forget/provider.py",
+        "application/operations/semantic_updates/curate_integrate/forget/application.py",
+        "application/operations/semantic_updates/curate_integrate/forget/runtime.py",
+        "application/operations/semantic_updates/curate_integrate/forget/provider.py",
     )
     for relative_path in relative_paths:
         path = Path(__file__).parents[1] / "src" / "memcommit" / relative_path
@@ -155,13 +155,13 @@ def test_forget_application_has_no_command_or_terminal_dependency() -> None:
 def test_forget_console_package_owns_setup_receipt_and_workbench() -> None:
     repository_root = Path(__file__).parents[1]
     command_root = (
-        repository_root / "src/memcommit/adapters/console/commands/forget"
+        repository_root / "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/forget"
     )
     assert ForgetSetupResult.__module__ == (
-        "memcommit.adapters.console.commands.forget.setup"
+        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget.setup"
     )
     assert ForgetResolutionWorkbenchAdapter.__module__ == (
-        "memcommit.adapters.console.commands.forget.workbench.presentation"
+        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget.workbench.presentation"
     )
     for relative_path in (
         "receipt.py",

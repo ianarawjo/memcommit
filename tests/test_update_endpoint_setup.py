@@ -10,12 +10,12 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 from typer.main import get_command
 
-import memcommit.adapters.console.commands.update.endpoint_setup as update_setup_command
-import memcommit.adapters.console.commands.update.command as update_command
+import memcommit.adapters.console.commands.semantic_updates.foundation.update.endpoint_setup as update_setup_command
+import memcommit.adapters.console.commands.semantic_updates.foundation.update.command as update_command
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.terminal.components.endpoint_setup import EndpointSetupMemory
-from memcommit.adapters.console.commands.update.workbench import (
+from memcommit.adapters.console.commands.semantic_updates.foundation.update.workbench import (
     UpdateEndpointSelection,
     UpdateEndpointSetup,
     choose_update_endpoint_setup,
@@ -50,7 +50,7 @@ def _load(role_uid: str, context_name: str):
 
 def test_update_setup_is_command_owned_without_an_interface_facade() -> None:
     assert UpdateEndpointSetup.__module__ == (
-        "memcommit.adapters.console.commands.update.workbench.model"
+        "memcommit.adapters.console.commands.semantic_updates.foundation.update.workbench.model"
     )
     former_interface = (
         REPOSITORY_ROOT / "src/memcommit/adapters/interfaces/tui/operations/update"

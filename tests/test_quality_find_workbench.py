@@ -695,7 +695,10 @@ def test_explicit_select_commands_route_to_the_shared_quality_workbench(
     store.create_context(ctx)
     store.set_current(ctx.name)
     observed: list[tuple[str | None, str, str | None, bool]] = []
-    module_path = f"memcommit.adapters.console.commands.{module_name}.command"
+    module_path = (
+        "memcommit.adapters.console.commands.quality_resolution.diagnose."
+        f"{module_name}.command"
+    )
 
     monkeypatch.setattr(
         f"{module_path}.interactive_quality_find_available",
@@ -732,7 +735,7 @@ def test_find_redundancies_has_no_initial_selector_route(
     store.set_current(ctx.name)
     observed: list[str] = []
     monkeypatch.setattr(
-        "memcommit.application.operations.find_redundancies.application.analyze_memory_redundancies",
+        "memcommit.application.operations.quality_resolution.diagnose.find_redundancies.application.analyze_memory_redundancies",
         lambda source, *_args, **_kwargs: (
             observed.append(source.name) or DuplicateReport(memory_count=2, findings=())
         ),
@@ -757,7 +760,7 @@ def test_repeated_dedun_bypasses_report_recents_and_target_setup(
     store.create_context(ctx)
     store.set_current(ctx.name)
     monkeypatch.setattr(
-        "memcommit.application.operations.find_redundancies.application.analyze_memory_redundancies",
+        "memcommit.application.operations.quality_resolution.diagnose.find_redundancies.application.analyze_memory_redundancies",
         lambda *_args, **_kwargs: DuplicateReport(memory_count=2, findings=()),
     )
 

@@ -10,7 +10,7 @@ ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "src" / "memcommit"
 CONSOLE_TERMINAL = PACKAGE / "adapters" / "console" / "terminal"
 ALLOWED_COMMAND_PRESENTATION_IMPORTS = {
-    "memcommit.adapters.console.commands.compare.presentation",
+    "memcommit.adapters.console.commands.search_explain.synthesize.compare.presentation",
 }
 
 
@@ -111,7 +111,14 @@ def test_migrated_tui_modules_have_no_legacy_import_path() -> None:
 
 def test_summarize_command_tui_only_composes_shared_workbench() -> None:
     workbench_dir = (
-        PACKAGE / "adapters" / "console" / "commands" / "summarize" / "workbench"
+        PACKAGE
+        / "adapters"
+        / "console"
+        / "commands"
+        / "search_explain"
+        / "synthesize"
+        / "summarize"
+        / "workbench"
     )
     forbidden = {
         "prompt_toolkit.application",
@@ -254,6 +261,7 @@ def test_direct_memory_actions_share_one_selector_composition() -> None:
         / "adapters"
         / "console"
         / "commands"
+        / "direct_changes"
         / "edit"
         / "workbench"
         / "screen.py",

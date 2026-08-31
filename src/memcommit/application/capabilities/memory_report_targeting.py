@@ -19,7 +19,7 @@ from memcommit.application.capabilities.authority.readable_contexts import (
 )
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.application.operations.trace.application import (
+from memcommit.application.operations.history_recovery.inspection.trace.application import (
     collect_memory_history_candidates,
 )
 from memcommit.application.capabilities.history.reconstruction.reference_occurrence_derivation import (

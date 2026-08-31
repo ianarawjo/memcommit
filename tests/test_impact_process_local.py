@@ -8,34 +8,36 @@ import pytest
 import typer
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.distill.impact as distill_impact
-import memcommit.adapters.console.commands.forget.impact as forget_impact
-import memcommit.adapters.console.commands.resolve.impact as resolve_impact
+import memcommit.adapters.console.commands.semantic_updates.derive.distill.impact as distill_impact
+import memcommit.adapters.console.commands.semantic_updates.curate_integrate.forget.impact as forget_impact
+import memcommit.adapters.console.commands.quality_resolution.repair.resolve.impact as resolve_impact
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.impact.process_local import (
+from memcommit.adapters.console.commands.operation_lifecycle.impact.process_local import (
     distill_impact_presentation,
     forget_impact_presentation,
     resolve_impact_presentation,
 )
-from memcommit.adapters.console.commands.impact.registry import IMPACT_ROUTES
-from memcommit.adapters.console.commands.impact.sessions import render_impact_session_snapshot
+from memcommit.adapters.console.commands.operation_lifecycle.impact.registry import (
+    install_impact_routes,
+)
+from memcommit.adapters.console.commands.operation_lifecycle.impact.sessions import render_impact_session_snapshot
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.distill.model import (
+from memcommit.application.operations.semantic_updates.derive.distill.model import (
     DISTILL_OPERATION,
     DISTILL_PAYLOAD_MARKER,
     DistillAnalysis,
     DistilledRule,
 )
-from memcommit.application.operations.distill.application import DistillResult
-from memcommit.application.operations.distill.goal_fit import DistillGoalFit
-from memcommit.application.operations.fit.judgment import FitAssessment
-from memcommit.application.operations.forget.application import (
+from memcommit.application.operations.semantic_updates.derive.distill.application import DistillResult
+from memcommit.application.operations.semantic_updates.derive.distill.goal_fit import DistillGoalFit
+from memcommit.application.operations.quality_resolution.validate.fit.judgment import FitAssessment
+from memcommit.application.operations.semantic_updates.curate_integrate.forget.application import (
     ForgetAnalysisRequest,
     FrozenForgetSource,
     run_forget_analysis,
 )
-from memcommit.application.operations.resolve.application import (
+from memcommit.application.operations.quality_resolution.repair.resolve.application import (
     FrozenResolveFrame,
     ResolveAnalysis,
     ResolveCandidate,
@@ -45,8 +47,8 @@ from memcommit.application.operations.resolve.application import (
     ResolveIssue,
     ResolveRequest,
 )
-from memcommit.application.operations.summarize.model import collect_summary_frame
-from memcommit.application.operations.summarize.application import FrozenSummarySource
+from memcommit.application.operations.search_explain.synthesize.summarize.model import collect_summary_frame
+from memcommit.application.operations.search_explain.synthesize.summarize.application import FrozenSummarySource
 from memcommit.persistence.store import MemoryStore, context_record_digest
 from tests.distill_goal_fit_support import passing_distill_goal_fit_response
 
@@ -347,7 +349,7 @@ def _resolve_analysis() -> ResolveAnalysis:
 
 def test_process_local_registry_requires_an_exact_handler_set() -> None:
     with pytest.raises(ValueError, match="missing"):
-        IMPACT_ROUTES.install(typer.Typer(), {})
+        install_impact_routes(typer.Typer(), {})
 
 
 def test_forget_impact_projects_complete_in_place_diff_without_applying() -> None:

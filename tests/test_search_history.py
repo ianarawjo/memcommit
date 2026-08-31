@@ -8,8 +8,8 @@ import pytest
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.search.command import _run_search_request
-from memcommit.adapters.console.commands.search.search_workbench import SearchRequest
+from memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command import _run_search_request
+from memcommit.adapters.console.commands.search_explain.retrieve_answer.search.search_workbench import SearchRequest
 from memcommit.application.capabilities.authority.context_access import resolve_context_access
 from memcommit.application.capabilities.authority.readable_contexts import (
     freeze_readable_context_catalog,
@@ -75,7 +75,7 @@ def test_time_language_searches_only_current_memories(
     _edited_fixture()
     provider = CurrentNoticeProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
         lambda: provider,
     )
 
@@ -105,7 +105,7 @@ def test_application_request_with_time_language_has_current_mode(
     catalog = freeze_readable_context_catalog(store, access)
     provider = CurrentNoticeProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
         lambda: provider,
     )
     request = SearchRequest(

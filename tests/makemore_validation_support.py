@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import json
 
-from memcommit.application.operations.conformance.model import CONTEXT_CONFORMANCE_OPERATION
-from memcommit.application.operations.fit.judgment import (
+from memcommit.application.operations.quality_resolution.validate.check_conformance.model import CONTEXT_CONFORMANCE_OPERATION
+from memcommit.application.operations.quality_resolution.validate.fit.judgment import (
     FIT_JUDGMENT_OPERATION,
     FIT_JUDGMENT_PAYLOAD_MARKER,
 )

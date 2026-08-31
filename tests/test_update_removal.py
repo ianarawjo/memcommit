@@ -11,8 +11,8 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, MemoryRef, QueryContextRef
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.update.model import RemoveOperation, UpdateError, UpdateSession, plan_update
-from memcommit.application.operations.update.application import (
+from memcommit.application.operations.semantic_updates.foundation.update.model import RemoveOperation, UpdateError, UpdateSession, plan_update
+from memcommit.application.operations.semantic_updates.foundation.update.application import (
     UpdateApplicationError,
     apply_staged_update_plan,
 )
@@ -95,7 +95,7 @@ def test_mem_update_applies_explicit_removal_and_diff_keeps_provenance(
     )
     provider = _RemovalProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.update.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.foundation.update.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 

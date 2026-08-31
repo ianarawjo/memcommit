@@ -1,4 +1,4 @@
-"""Ownership contracts for the command-owned Impact route registry."""
+"""Ownership contracts for application-owned Impact route classification."""
 
 from __future__ import annotations
 
@@ -8,18 +8,33 @@ from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "src" / "memcommit"
-OWNER_MODULE = "memcommit.adapters.console.commands.impact.registry"
+OWNER_MODULE = "memcommit.application.operations.operation_lifecycle.impact.model"
+ADAPTER_MODULE = "memcommit.adapters.console.commands.operation_lifecycle.impact.registry"
 
 
-def test_registry_is_owned_only_by_the_impact_command_package() -> None:
+def test_route_catalog_is_owned_by_the_impact_application_package() -> None:
     owner_path = (
-        PACKAGE / "adapters" / "console" / "commands" / "impact" / "registry.py"
+        PACKAGE
+        / "application"
+        / "operations"
+        / "operation_lifecycle"
+        / "impact"
+        / "model.py"
     )
-    retired_path = PACKAGE / "adapters" / "interfaces" / "cli" / "impact_registry.py"
+    adapter_path = (
+        PACKAGE
+        / "adapters"
+        / "console"
+        / "commands"
+        / "operation_lifecycle"
+        / "impact"
+        / "registry.py"
+    )
 
     assert owner_path.is_file()
-    assert not retired_path.exists()
+    assert adapter_path.is_file()
     assert importlib.import_module(OWNER_MODULE).__name__ == OWNER_MODULE
+    assert importlib.import_module(ADAPTER_MODULE).__name__ == ADAPTER_MODULE
 
 
 def test_route_order_lifecycle_and_help_are_unchanged() -> None:
@@ -77,24 +92,31 @@ def test_route_order_lifecycle_and_help_are_unchanged() -> None:
     )
 
 
-def test_impact_command_imports_its_sibling_registry() -> None:
+def test_impact_command_installs_the_application_catalog_through_its_adapter() -> None:
     source = (
-        PACKAGE / "adapters" / "console" / "commands" / "impact" / "command.py"
+        PACKAGE
+        / "adapters"
+        / "console"
+        / "commands"
+        / "operation_lifecycle"
+        / "impact"
+        / "command.py"
     ).read_text(encoding="utf-8")
 
-    assert (
-        "from memcommit.adapters.console.commands.impact.registry import IMPACT_ROUTES"
-        in source
-    )
-    assert "memcommit.adapters.interfaces.cli.impact_registry" not in source
+    assert "install_impact_routes" in source
+    assert "IMPACT_ROUTES.install" not in source
 
 
-def test_production_code_does_not_reference_the_retired_interface_path() -> None:
-    references = []
-    for path in (PACKAGE / "adapters").rglob("*.py"):
-        if "memcommit.adapters.interfaces.cli.impact_registry" in path.read_text(
-            encoding="utf-8"
-        ):
-            references.append(path.relative_to(ROOT).as_posix())
+def test_console_registry_does_not_restate_application_route_records() -> None:
+    source = (
+        PACKAGE
+        / "adapters"
+        / "console"
+        / "commands"
+        / "operation_lifecycle"
+        / "impact"
+        / "registry.py"
+    ).read_text(encoding="utf-8")
 
-    assert references == []
+    assert "ImpactRoute(" not in source
+    assert "from memcommit.application.operations.operation_lifecycle.impact" in source

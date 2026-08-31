@@ -5,7 +5,7 @@
 Makemore preserves its request, provider, proposal, quality, and serialized
 analysis behavior while assigning generation responsibilities to five named
 modules. Existing imports from
-`memcommit.application.operations.makemore.model` remain compatible for the
+`memcommit.application.operations.semantic_updates.derive.makemore.model` remain compatible for the
 public model surface and the two historical provider entry points.
 
 ## Motivating problem

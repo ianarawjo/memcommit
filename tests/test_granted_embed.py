@@ -351,7 +351,7 @@ def test_recursive_find_browses_attached_read_but_search_omits_provider_disclosu
 
     provider = Provider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_search_provider",
+        "memcommit.adapters.console.commands.search_explain.retrieve_answer.search.command.connect_search_provider",
         lambda: provider,
     )
     semantic_direct = runner.invoke(

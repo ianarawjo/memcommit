@@ -78,23 +78,23 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["pwd"].application_modules
     )
     assert (
-        "memcommit.application.operations.summarize.application"
+        "memcommit.application.operations.search_explain.synthesize.summarize.application"
         in by_operation["summarize"].application_modules
     )
     assert not by_operation["summarize"].tui_modules
     assert "query_ordinary" in by_operation["query"].public_methods
     assert "memcommit.adapters.agent.query" in by_operation["query"].agent_modules
-    for operation, public_method in (
-        ("copy", "copy_memories"),
-        ("move", "move_memories"),
+    for operation, public_method, package in (
+        ("copy", "copy_memories", "copy"),
+        ("move", "move_memories", "direct_changes.move"),
     ):
         route = by_operation[operation]
         assert (
-            f"memcommit.application.operations.{operation}.application"
+            f"memcommit.application.operations.{package}.application"
             in route.application_modules
         )
         assert (
-            f"memcommit.application.operations.{operation}.runtime"
+            f"memcommit.application.operations.{package}.runtime"
             in route.application_modules
         )
         assert (
@@ -120,33 +120,33 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
     assert by_operation["switch"].curated_state == "CLOSED"
     assert by_operation["trace"].curated_state == "CLOSED"
     assert (
-        "memcommit.application.operations.atomize.domain"
+        "memcommit.application.operations.semantic_updates.derive.atomize.domain"
         in by_operation["atomize"].application_modules
     )
     assert (
-        "memcommit.application.operations.compare.application"
+        "memcommit.application.operations.search_explain.synthesize.compare.application"
         in by_operation["compare"].application_modules
     )
     assert (
-        "memcommit.application.operations.dedup.application"
+        "memcommit.application.operations.quality_resolution.repair.dedup.application"
         in by_operation["dedup"].application_modules
     )
     assert (
-        "memcommit.application.operations.find_duplicates.application"
+        "memcommit.application.operations.quality_resolution.diagnose.find_duplicates.application"
         in by_operation["dedup"].application_modules
     )
     assert (
-        "memcommit.application.operations.find_duplicates.application"
+        "memcommit.application.operations.quality_resolution.diagnose.find_duplicates.application"
         in by_operation["find-duplicates"].application_modules
     )
     assert (
-        "memcommit.application.operations.dedup.application"
+        "memcommit.application.operations.quality_resolution.repair.dedup.application"
         not in by_operation["find-duplicates"].application_modules
     )
     assert by_operation["dedup"].public_methods == ("dedup",)
     assert by_operation["find-duplicates"].public_methods == ("find_duplicates",)
     assert (
-        "memcommit.application.operations.fit.judgment"
+        "memcommit.application.operations.quality_resolution.validate.fit.judgment"
         in by_operation["fit"].application_modules
     )
     assert (
@@ -154,39 +154,39 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["help"].application_modules
     )
     assert (
-        "memcommit.application.operations.meld.proposal_iteration"
+        "memcommit.application.operations.semantic_updates.curate_integrate.meld.proposal_iteration"
         in by_operation["meld"].application_modules
     )
     assert (
-        "memcommit.application.operations.query.reference_application"
+        "memcommit.application.operations.search_explain.retrieve_answer.query.reference_application"
         in by_operation["query"].application_modules
     )
     assert (
-        "memcommit.application.operations.sever.model"
+        "memcommit.application.operations.semantic_updates.curate_integrate.sever.model"
         in by_operation["sever"].application_modules
     )
     assert (
-        "memcommit.application.operations.translate.runtime"
+        "memcommit.application.operations.translation.translate.runtime"
         in by_operation["translate"].application_modules
     )
     assert (
-        "memcommit.application.operations.translate.application"
+        "memcommit.application.operations.translation.translate.application"
         in by_operation["translate"].application_modules
     )
     assert (
-        "memcommit.application.operations.translate.exchange_translations"
+        "memcommit.application.operations.translation.translate.exchange_translations"
         in by_operation["translate"].application_modules
     )
     assert (
-        "memcommit.application.operations.translate.create_translated_context"
+        "memcommit.application.operations.translation.translate.create_translated_context"
         in by_operation["translate"].application_modules
     )
     assert (
-        "memcommit.application.operations.trace.application"
+        "memcommit.application.operations.history_recovery.inspection.trace.application"
         in by_operation["trace"].application_modules
     )
     assert (
-        "memcommit.application.operations.trace.runtime"
+        "memcommit.application.operations.history_recovery.inspection.trace.runtime"
         in by_operation["trace"].application_modules
     )
     assert (
@@ -206,11 +206,11 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["trace"].application_modules
     )
     assert (
-        "memcommit.application.operations.chunk.application"
+        "memcommit.application.operations.direct_changes.chunk.application"
         in by_operation["chunk"].application_modules
     )
     assert (
-        "memcommit.application.operations.clear.runtime"
+        "memcommit.application.operations.direct_changes.clear.runtime"
         in by_operation["clear"].application_modules
     )
     assert (
@@ -218,27 +218,27 @@ def test_operation_routes_keep_observed_shape_and_curated_conclusion_separate() 
         in by_operation["contexts"].application_modules
     )
     assert (
-        "memcommit.application.operations.undo.runtime"
+        "memcommit.application.operations.history_recovery.recovery.undo.runtime"
         in by_operation["undo"].application_modules
     )
     assert (
-        "memcommit.application.operations.redo.runtime"
+        "memcommit.application.operations.history_recovery.recovery.redo.runtime"
         in by_operation["redo"].application_modules
     )
     assert (
-        "memcommit.application.operations.distill.application"
+        "memcommit.application.operations.semantic_updates.derive.distill.application"
         in by_operation["distill"].application_modules
     )
     assert (
-        "memcommit.application.operations.distill.runtime"
+        "memcommit.application.operations.semantic_updates.derive.distill.runtime"
         in by_operation["distill"].application_modules
     )
     assert (
-        "memcommit.application.operations.makemore.application"
+        "memcommit.application.operations.semantic_updates.derive.makemore.application"
         in by_operation["makemore"].application_modules
     )
     assert (
-        "memcommit.application.operations.makemore.add_runtime"
+        "memcommit.application.operations.semantic_updates.derive.makemore.add_runtime"
         in by_operation["makemore"].application_modules
     )
     assert (

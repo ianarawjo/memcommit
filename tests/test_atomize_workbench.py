@@ -13,15 +13,15 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.atomize.command as atomize_command
-from memcommit.application.operations.atomize.domain import (
+import memcommit.adapters.console.commands.semantic_updates.derive.atomize.command as atomize_command
+from memcommit.application.operations.semantic_updates.derive.atomize.domain import (
     AtomizeAnalysisSession,
     AtomizeImpactError,
     AtomizeReading,
     create_atomize_analysis,
     impact_atomize,
 )
-from memcommit.application.operations.atomize.records import (
+from memcommit.application.operations.semantic_updates.derive.atomize.records import (
     create_atomize_review_record,
 )
 from tests.atomize_analysis_support import (
@@ -30,14 +30,14 @@ from tests.atomize_analysis_support import (
     open_or_create_atomize_review_record,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.atomize.impact import (
+from memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact import (
     _finding_map,
     _list_text,
     _source_map,
     render_atomize_impact_snapshot,
     run_atomize_impact_shell,
 )
-from memcommit.adapters.console.commands.atomize.records import (
+from memcommit.adapters.console.commands.semantic_updates.derive.atomize.records import (
     atomize_record_entries,
     revalidate_saved_atomize_analysis,
 )
@@ -226,11 +226,11 @@ def _init_context(store: MemoryStore):
 
 def _patch_provider(monkeypatch, provider):
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.impact.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.impact.connect_codex_chatgpt_provider",
         lambda: provider,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -241,7 +241,7 @@ def _default_apply_provider(monkeypatch):
 
     provider = AggregateProvider()
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.command.connect_codex_chatgpt_provider",
         lambda: provider,
     )
 
@@ -551,7 +551,7 @@ def test_atomize_records_reopen_exact_analysis_provider_free(
         raise AssertionError("saved selection must be provider-free")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.atomize.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.derive.atomize.command.connect_codex_chatgpt_provider",
         provider_must_not_connect,
     )
     resumed = runner.invoke(app, ["impact", "atomize", "--session", entry.key])

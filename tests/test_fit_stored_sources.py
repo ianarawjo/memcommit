@@ -8,19 +8,19 @@ import uuid
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.fit.command as fit_command
+import memcommit.adapters.console.commands.quality_resolution.validate.fit.command as fit_command
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.fit.application import (
+from memcommit.application.operations.quality_resolution.validate.fit.application import (
     FitMemorySourceRequest,
     FitStoredSourcesRequest,
 )
-from memcommit.application.operations.fit.judgment import (
+from memcommit.application.operations.quality_resolution.validate.fit.judgment import (
     FIT_JUDGMENT_PAYLOAD_MARKER,
     FitProposition,
 )
-from memcommit.application.operations.fit.runtime import (
+from memcommit.application.operations.quality_resolution.validate.fit.runtime import (
     FitSourceError,
     run_stored_source_fit,
 )

@@ -8,18 +8,18 @@ classification is `CLOSED`.
 
 | Concern | Current owner | Review conclusion |
 | --- | --- | --- |
-| Provider prompt, batching, decode, translation plan | `memcommit.application.operations.translate.runtime` | Operation-owned |
-| Pure in-memory translated Context transformations | `memcommit.application.operations.translate.runtime` | Application-owned operation behavior |
+| Provider prompt, batching, decode, translation plan | `memcommit.application.operations.translation.translate.runtime` | Operation-owned |
+| Pure in-memory translated Context transformations | `memcommit.application.operations.translation.translate.runtime` | Application-owned operation behavior |
 | Same-UID provider/curated catalog meaning and invariants | `memcommit.core.memory_translation.catalog` | Core concept, independent of Translate commands and storage |
 | Durable catalog record codec | `memcommit.persistence.store.translation_catalog.record_format` | Persistence-owned representation |
 | Catalog paths, locks, source revalidation, and CAS publication | `memcommit.persistence.store.translation_catalog.repository` | Persistence-owned storage mechanics |
-| Request validation, targeting, reuse/refresh, provider timing | `memcommit.application.operations.translate.application` | Operation-owned |
-| Provider plan/catalog conversion | `memcommit.application.operations.translate.provider_catalog` | Operation-owned |
-| Catalog seed and curated edit/verify/reset workflow | `memcommit.application.operations.translate.curate_translations` and `application` | Operation-owned |
-| Import/export document policy | `memcommit.application.operations.translate.exchange_translations` | Operation-owned |
-| Add translations to current Context | `memcommit.application.operations.translate.add_translations_to_current_context` | Operation-owned Context action |
-| Create translated Context | `memcommit.application.operations.translate.create_translated_context` | Operation-owned Context action |
-| ANSI rendering and CLI syntax | `memcommit.adapters.console.commands.translate.command` | Correct adapter concern only where presentation-specific |
+| Request validation, targeting, reuse/refresh, provider timing | `memcommit.application.operations.translation.translate.application` | Operation-owned |
+| Provider plan/catalog conversion | `memcommit.application.operations.translation.translate.provider_catalog` | Operation-owned |
+| Catalog seed and curated edit/verify/reset workflow | `memcommit.application.operations.translation.translate.curate_translations` and `application` | Operation-owned |
+| Import/export document policy | `memcommit.application.operations.translation.translate.exchange_translations` | Operation-owned |
+| Add translations to current Context | `memcommit.application.operations.translation.translate.add_translations_to_current_context` | Operation-owned Context action |
+| Create translated Context | `memcommit.application.operations.translation.translate.create_translated_context` | Operation-owned Context action |
+| ANSI rendering and CLI syntax | `memcommit.adapters.console.commands.translation.translate.command` | Correct adapter concern only where presentation-specific |
 
 ## Preserved invariants
 

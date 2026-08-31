@@ -13,10 +13,10 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 def test_existing_atomize_package_keeps_analysis_import_lazy() -> None:
     program = """
 import sys
-import memcommit.application.operations.atomize
+import memcommit.application.operations.semantic_updates.derive.atomize
 
-assert "memcommit.application.operations.atomize.analysis_application" not in sys.modules
-assert "memcommit.application.operations.atomize.analysis_runtime" not in sys.modules
+assert "memcommit.application.operations.semantic_updates.derive.atomize.analysis_application" not in sys.modules
+assert "memcommit.application.operations.semantic_updates.derive.atomize.analysis_runtime" not in sys.modules
 """
 
     subprocess.run(
@@ -29,10 +29,10 @@ assert "memcommit.application.operations.atomize.analysis_runtime" not in sys.mo
 def test_migrated_atomize_analysis_consumers_use_the_operation_owner() -> None:
     relative_paths = (
         "src/memcommit/adapters/python_api/_operations/atomize.py",
-        "src/memcommit/adapters/console/commands/atomize/command.py",
-        "src/memcommit/adapters/console/commands/atomize/impact.py",
-        "src/memcommit/adapters/console/commands/impact/command.py",
-        "src/memcommit/application/operations/atomize/analysis_runtime.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/derive/atomize/command.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/derive/atomize/impact.py",
+        "src/memcommit/adapters/console/commands/operation_lifecycle/impact/command.py",
+        "src/memcommit/application/operations/semantic_updates/derive/atomize/analysis_runtime.py",
     )
 
     for relative_path in relative_paths:
@@ -45,8 +45,8 @@ def test_analysis_does_not_absorb_grounding_application_or_runtime() -> None:
     analysis = "\n".join(
         (REPOSITORY_ROOT / relative_path).read_text(encoding="utf-8")
         for relative_path in (
-            "src/memcommit/application/operations/atomize/analysis_application.py",
-            "src/memcommit/application/operations/atomize/analysis_runtime.py",
+            "src/memcommit/application/operations/semantic_updates/derive/atomize/analysis_application.py",
+            "src/memcommit/application/operations/semantic_updates/derive/atomize/analysis_runtime.py",
         )
     )
 

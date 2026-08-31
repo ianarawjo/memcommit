@@ -4,74 +4,93 @@ import typer
 
 from memcommit.adapters.console.commands import (
     add,
-    audit,
-    atomize,
     branch,
-    checkpoint,
-    check_conformance,
     checkout,
-    chunk,
-    clear,
-    compare,
     config,
     contexts,
     copy,
-    dedup,
-    dedun,
-    delete,
     dev,
-    diff,
-    distill,
-    elaborate,
-    makemore,
-    edit,
     embed,
     eval,
-    find,
-    find_ambiguities,
-    find_conflicts,
-    find_duplicates,
-    find_redundancies,
-    fit,
-    forget,
     ground,
     help,
-    impact,
     import_profile,
     init,
     init_study,
     list as list_command,
     lock,
-    log,
-    meld,
-    move,
     profile,
     provider,
     pwd,
     show,
-    merge,
-    query,
-    rationale,
-    redo,
     reference,
-    replace,
     rename,
-    remove,
-    resolve,
-    review,
-    revert,
-    search,
     share,
-    sever,
     status,
-    summarize,
     switch,
-    trace,
-    translate,
-    undo,
     unlock,
-    update,
 )
+from memcommit.adapters.console.commands.direct_changes import (
+    chunk,
+    clear,
+    delete,
+    edit,
+    merge,
+    move,
+    remove,
+    replace,
+)
+from memcommit.adapters.console.commands.history_recovery.inspection import (
+    diff,
+    log,
+    rationale,
+    trace,
+)
+from memcommit.adapters.console.commands.history_recovery.recovery import (
+    checkpoint,
+    redo,
+    revert,
+    undo,
+)
+from memcommit.adapters.console.commands.operation_lifecycle import impact, review
+from memcommit.adapters.console.commands.quality_resolution.diagnose import (
+    audit,
+    find_ambiguities,
+    find_conflicts,
+    find_duplicates,
+    find_redundancies,
+)
+from memcommit.adapters.console.commands.quality_resolution.repair import (
+    dedun,
+    dedup,
+    resolve,
+)
+from memcommit.adapters.console.commands.quality_resolution.validate import (
+    check_conformance,
+    fit,
+)
+from memcommit.adapters.console.commands.search_explain.retrieve_answer import (
+    find,
+    query,
+    search,
+)
+from memcommit.adapters.console.commands.search_explain.synthesize import (
+    compare,
+    summarize,
+)
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate import (
+    forget,
+    meld,
+    sever,
+)
+from memcommit.adapters.console.commands.semantic_updates.derive import (
+    atomize,
+    distill,
+    elaborate,
+    makemore,
+)
+from memcommit.adapters.console.commands.semantic_updates.foundation import update
+from memcommit.adapters.console.commands.translation import translate
 from memcommit.adapters.console.coordination.root_group import MemCommandGroup
 from memcommit.operation_catalog import operation_summary
 

@@ -27,13 +27,13 @@ assert "memcommit.application.capabilities.reviewing.report" not in sys.modules
 
 def test_production_review_report_consumers_use_the_shared_owner() -> None:
     relative_paths = (
-        "src/memcommit/adapters/console/commands/review/applied_checkpoint_report.py",
-        "src/memcommit/adapters/console/commands/review/report.py",
-        "src/memcommit/adapters/console/commands/atomize/review.py",
-        "src/memcommit/adapters/console/commands/compare/review.py",
-        "src/memcommit/adapters/console/commands/meld/review.py",
-        "src/memcommit/adapters/console/commands/sever/review.py",
-        "src/memcommit/adapters/console/commands/update/review.py",
+        "src/memcommit/adapters/console/commands/operation_lifecycle/review/applied_checkpoint_report.py",
+        "src/memcommit/adapters/console/commands/operation_lifecycle/review/report.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/derive/atomize/review.py",
+        "src/memcommit/adapters/console/commands/search_explain/synthesize/compare/review.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/meld/review.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/curate_integrate/sever/review.py",
+        "src/memcommit/adapters/console/commands/semantic_updates/foundation/update/review.py",
     )
 
     for relative_path in relative_paths:
@@ -43,7 +43,7 @@ def test_production_review_report_consumers_use_the_shared_owner() -> None:
 
     application_source = (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/review/applied_checkpoint.py"
+        / "src/memcommit/application/operations/operation_lifecycle/review/applied_checkpoint.py"
     ).read_text(encoding="utf-8")
     assert "memcommit.adapters.console" not in application_source
     assert "memcommit.application.capabilities.reviewing.report" not in application_source
@@ -74,5 +74,5 @@ def test_shared_review_report_does_not_own_operation_adapters() -> None:
 def test_operation_review_projections_are_not_centralized_under_review() -> None:
     assert not (
         REPOSITORY_ROOT
-        / "src/memcommit/application/operations/review/report_adapters.py"
+        / "src/memcommit/application/operations/operation_lifecycle/review/report_adapters.py"
     ).exists()

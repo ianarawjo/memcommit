@@ -19,9 +19,9 @@ from memcommit.study_scenarios.legacy.prewarm.registry import (
 from memcommit.study_scenarios.legacy.prewarm.summarize import (
     build_summarize_prewarm_artifact,
 )
-from memcommit.application.operations.summarize.model import collect_summary_frame
-from memcommit.application.operations.summarize.application import SummarizeRequest
-from memcommit.application.operations.summarize.runtime import run_summarize_with_store
+from memcommit.application.operations.search_explain.synthesize.summarize.model import collect_summary_frame
+from memcommit.application.operations.search_explain.synthesize.summarize.application import SummarizeRequest
+from memcommit.application.operations.search_explain.synthesize.summarize.runtime import run_summarize_with_store
 from memcommit.application.capabilities.semantic.understanding import UnderstandingSummary
 
 

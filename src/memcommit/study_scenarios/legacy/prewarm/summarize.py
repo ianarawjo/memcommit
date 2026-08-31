@@ -13,7 +13,7 @@ from memcommit.providers.policy import (
     resolve_operation_provider_policy,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.summarize.model import (
+from memcommit.application.operations.search_explain.synthesize.summarize.model import (
     SUMMARIZE_PROVIDER_CONTRACT_VERSION,
     SUMMARIZE_TEXT_LIMIT,
     SummaryFrame,

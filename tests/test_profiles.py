@@ -54,7 +54,7 @@ from memcommit.application.operations.profile.model import (
     resolve_granted_context_view,
     study_profile_groups,
 )
-from memcommit.application.operations.query.granted_source import (
+from memcommit.application.operations.search_explain.retrieve_answer.query.granted_source import (
     load_authority_query_source,
 )
 from memcommit.persistence.store import MemoryStore

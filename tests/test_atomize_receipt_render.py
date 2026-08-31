@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from memcommit.adapters.console.commands.atomize.receipt import render_atomize_apply_result
-from memcommit.application.operations.atomize.application import (
+from memcommit.adapters.console.commands.semantic_updates.derive.atomize.receipt import render_atomize_apply_result
+from memcommit.application.operations.semantic_updates.derive.atomize.application import (
     AtomizeApplicationAudit,
 )
 

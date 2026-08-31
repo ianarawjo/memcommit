@@ -12,27 +12,27 @@ from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.audit.command as audit_command
-from memcommit.adapters.console.commands.audit.receipt import (
+import memcommit.adapters.console.commands.quality_resolution.diagnose.audit.command as audit_command
+from memcommit.adapters.console.commands.quality_resolution.diagnose.audit.receipt import (
     render_quality_audit_receipt,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.audit.command import (
+from memcommit.adapters.console.commands.quality_resolution.diagnose.audit.command import (
     _run_quality_audit_checks,
 )
-from memcommit.adapters.console.commands.audit.review import (
+from memcommit.adapters.console.commands.quality_resolution.diagnose.audit.review import (
     quality_audit_review_document,
     render_quality_audit_review_snapshot,
     run_quality_audit_review,
 )
-from memcommit.adapters.console.commands.audit.session_catalog import (
+from memcommit.adapters.console.commands.quality_resolution.diagnose.audit.session_catalog import (
     audit_session_entries,
 )
 from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     QualityFindSetupReceipt,
     choose_quality_find_setup,
 )
-from memcommit.adapters.console.commands.review.sessions import review_session_entries
+from memcommit.adapters.console.commands.operation_lifecycle.review.sessions import review_session_entries
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     AmbiguityFinding,
     AmbiguityReport,
@@ -53,11 +53,11 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
 from memcommit.adapters.console.terminal.components.semantic_viewer import (
     semantic_document_plain_text,
 )
-from memcommit.application.operations.audit.application import (
+from memcommit.application.operations.quality_resolution.diagnose.audit.application import (
     create_quality_audit,
     run_quality_audit,
 )
-from memcommit.application.operations.audit.model import (
+from memcommit.application.operations.quality_resolution.diagnose.audit.model import (
     QUALITY_AUDIT_RULESETS,
     QUALITY_AUDIT_SCHEMA_VERSION,
     QualityAuditCheck,
@@ -701,7 +701,7 @@ def test_audit_command_runs_all_three_and_saves_before_snapshot(
     store.set_current(ctx.name)
     EmptyAuditProvider.calls = []
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.audit.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.quality_resolution.diagnose.audit.command.connect_codex_chatgpt_provider",
         EmptyAuditProvider,
     )
 
@@ -732,17 +732,17 @@ def test_flagless_audit_uses_current_context_and_prints_saved_session_receipt(
     store.set_current(ctx.name)
     EmptyAuditProvider.calls = []
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.audit.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.quality_resolution.diagnose.audit.command.connect_codex_chatgpt_provider",
         EmptyAuditProvider,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.audit.command.choose_audit_setup",
+        "memcommit.adapters.console.commands.quality_resolution.diagnose.audit.command.choose_audit_setup",
         lambda *_args, **_kwargs: pytest.fail(
             "flagless Audit must not open Source setup"
         ),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.audit.review.run_quality_audit_review",
+        "memcommit.adapters.console.commands.quality_resolution.diagnose.audit.review.run_quality_audit_review",
         lambda *_args, **_kwargs: pytest.fail(
             "Audit execution must not open Review automatically"
         ),

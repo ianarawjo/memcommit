@@ -9,8 +9,8 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.meld.command import _session_command
-from memcommit.adapters.console.commands.meld.sessions import (
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command import _session_command
+from memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.sessions import (
     MeldSessionCatalogError,
     list_meld_session_catalog,
     reload_selected_meld_session,
@@ -19,7 +19,7 @@ from memcommit.adapters.console.terminal.components.operation_launcher.session i
     SessionNewReceipt,
     SessionOpenReceipt,
 )
-from memcommit.application.operations.meld.model import MeldSession
+from memcommit.application.operations.semantic_updates.curate_integrate.meld.model import MeldSession
 from memcommit.persistence.store import MemoryStore
 
 
@@ -195,11 +195,11 @@ def test_meld_session_picker_reopens_without_provider_or_mutation(
         )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.command.choose_session",
+        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command.choose_session",
         choose,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.command.connect_codex_chatgpt_provider",
+        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command.connect_codex_chatgpt_provider",
         lambda: (_ for _ in ()).throw(
             AssertionError("A provider was opened during read-only resume.")
         ),
@@ -235,7 +235,7 @@ def test_meld_session_picker_revalidates_after_selection(
         )
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.meld.command.choose_session",
+        "memcommit.adapters.console.commands.semantic_updates.curate_integrate.meld.command.choose_session",
         choose,
     )
 

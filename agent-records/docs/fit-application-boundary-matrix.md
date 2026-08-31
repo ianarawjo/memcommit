@@ -23,15 +23,15 @@ AUTO-FIT projection is historical and no longer has a runtime route.
 
 ## Operation ownership
 
-`memcommit.application.operations.fit.application` is the canonical owner of Fit's typed
-requests and results, and `memcommit.application.operations.fit.runtime` owns the
+`memcommit.application.operations.quality_resolution.validate.fit.application` is the canonical owner of Fit's typed
+requests and results, and `memcommit.application.operations.quality_resolution.validate.fit.runtime` owns the
 MemoryStore/provider adapter used by the standalone command and physical Ground.
 The same package also owns the supporting contracts:
-`memcommit.application.operations.fit.judgment` owns the reusable role-neutral semantic
-judgment, `memcommit.application.operations.fit.coherence` owns exhaustive Ground graph
-checks, `memcommit.application.operations.fit.ground_report` owns the historical
+`memcommit.application.operations.quality_resolution.validate.fit.judgment` owns the reusable role-neutral semantic
+judgment, `memcommit.application.operations.quality_resolution.validate.fit.coherence` owns exhaustive Ground graph
+checks, `memcommit.application.operations.quality_resolution.validate.fit.ground_report` owns the historical
 Rule–Example report and its public compatibility exports, and
-`memcommit.application.operations.fit.store` owns immutable receipt persistence. Resolve,
+`memcommit.application.operations.quality_resolution.validate.fit.store` owns immutable receipt persistence. Resolve,
 Conflict, Impact, Makemore, Ground, API, CLI, and presentation consumers
 import these operation-owned modules directly. Cross-operation reuse does not
 make those consumers co-owners of Fit's YES/MAY/NO meaning.

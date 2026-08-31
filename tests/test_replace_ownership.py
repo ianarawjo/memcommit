@@ -21,10 +21,10 @@ _LEGACY_REPLACE_REQUEST_PICKLE = (
 def test_replace_package_import_does_not_eagerly_load_implementation_modules() -> None:
     source = """
 import sys
-import memcommit.application.operations.replace
+import memcommit.application.operations.direct_changes.replace
 
-assert "memcommit.application.operations.replace.application" not in sys.modules
-assert "memcommit.application.operations.replace.runtime" not in sys.modules
+assert "memcommit.application.operations.direct_changes.replace.application" not in sys.modules
+assert "memcommit.application.operations.direct_changes.replace.runtime" not in sys.modules
 """
 
     subprocess.run(

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import pytest
-from memcommit.adapters.console.commands.compare.command import (
+from memcommit.adapters.console.commands.search_explain.synthesize.compare.command import (
     CompareCommandError,
     _resolve_endpoint_syntax,
 )
@@ -15,7 +15,7 @@ from memcommit.application.capabilities.context_operand_classification import (
     classify_context_or_inline_text_operand,
 )
 from memcommit.core.context_targeting.model import ExistingContextOperand, InlineTextOperand
-from memcommit.adapters.console.commands.update.endpoint_operands import (
+from memcommit.adapters.console.commands.semantic_updates.foundation.update.endpoint_operands import (
     choose_update_endpoint_operands,
 )
 

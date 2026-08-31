@@ -6,7 +6,7 @@ from typer.main import get_command
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.query.command as query_command
+import memcommit.adapters.console.commands.search_explain.retrieve_answer.query.command as query_command
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
@@ -15,7 +15,7 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.application.operations.query.ordinary_application import (
+from memcommit.application.operations.search_explain.retrieve_answer.query.ordinary_application import (
     OrdinaryQueryResponse,
 )
 from memcommit.persistence.store import MemoryStore

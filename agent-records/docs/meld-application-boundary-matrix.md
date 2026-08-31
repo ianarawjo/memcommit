@@ -20,7 +20,7 @@ independent source of provider, cache, session, or Apply behavior.
 ## Package ownership
 
 The canonical terminal-independent owners now live together under
-`memcommit.application.operations.meld`. `preparation.py` owns the shared
+`memcommit.application.operations.semantic_updates.curate_integrate.meld`. `preparation.py` owns the shared
 Start/Restart request boundary; `planning.py` owns one frozen cached or
 provider-backed semantic planning turn; `proposal_iteration.py` owns saved
 snapshots, exact issue/option responses, preservation, defer, and destination
@@ -53,7 +53,7 @@ existing sessions and prepared artifacts require no migration.
 The historical flat `memcommit.meld_*_application`,
 `memcommit.meld_application_flow`, and `memcommit.meld_runtime` paths retain
 their existing compatibility policy. Importing
-`memcommit.application.operations.meld` alone remains lazy. New production
+`memcommit.application.operations.semantic_updates.curate_integrate.meld` alone remains lazy. New production
 consumers use the responsibility-named canonical paths; compatibility aliases
 are not alternate implementation owners.
 

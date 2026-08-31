@@ -34,7 +34,7 @@ REMOVED_INTERFACE_PATH = (
 CANONICAL_CONSUMERS = (
     "commands/config/command.py",
     "commands/dev/command.py",
-    "commands/impact/command.py",
+    "commands/operation_lifecycle/impact/command.py",
     "commands/profile/command.py",
     "commands/profile/group.py",
     "commands/provider/command.py",

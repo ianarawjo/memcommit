@@ -1,6 +1,6 @@
 # Mem Chunk Design Rationale
 
-Chunk's implementation owner is now the `memcommit.application.operations.chunk` package:
+Chunk's implementation owner is now the `memcommit.application.operations.direct_changes.chunk` package:
 `domain` owns mechanical text splitting, `application` owns direct-Memory
 resolution and replacement construction, and `runtime` owns authorized
 checkpointed publication. The former `memcommit.chunking` path is an identity
