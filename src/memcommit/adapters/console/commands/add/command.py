@@ -33,7 +33,7 @@ from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStor
 
 def _run_interactive_add(
     *,
-    requested_context: str | None,
+    specified_context_locator: str | None,
 ) -> AddResult | None:
     require_interactive_terminal(
         "Interactive Add",
@@ -45,7 +45,7 @@ def _run_interactive_add(
     setup = build_add_workbench_setup(
         store,
         current_name=current_name,
-        requested_context=requested_context,
+        specified_context_locator=specified_context_locator,
     )
     return run_add_workbench(
         setup=setup,
@@ -58,7 +58,7 @@ def _run_direct_add(
     *,
     contents: tuple[str, ...],
     paste: bool,
-    requested_context: str | None,
+    specified_context_locator: str | None,
 ) -> AddResult:
     # Capture global navigation before clipboard intake can yield control.
     # Relative target meaning stays stable for this command.
@@ -68,7 +68,7 @@ def _run_direct_add(
     if paste:
         contents = parse_line_input_records(read_system_clipboard())
     request = AddRequest(
-        context_locator=requested_context,
+        context_locator=specified_context_locator,
         contents=contents,
     )
     return run_add(
@@ -92,7 +92,7 @@ def cmd(
             help="Add each non-empty line from the system clipboard",
         ),
     ] = False,
-    requested_context: Annotated[
+    specified_context_locator: Annotated[
         Optional[str],
         typer.Option(
             "--to",
@@ -114,11 +114,10 @@ def cmd(
         )
         raise typer.Exit(1)
 
-
     try:
         if not contents and not paste:
             result = _run_interactive_add(
-                requested_context=requested_context,
+                specified_context_locator=specified_context_locator,
             )
             if result is None:
                 typer.echo("Add cancelled — no changes made.")
@@ -127,7 +126,7 @@ def cmd(
             result = _run_direct_add(
                 contents=contents,
                 paste=paste,
-                requested_context=requested_context,
+                specified_context_locator=specified_context_locator,
             )
     except (
         AddError,

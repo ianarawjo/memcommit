@@ -41,7 +41,7 @@ def _result(request: AddRequest) -> AddResult:
     )
 
 
-def test_build_workbench_setup_freezes_local_targets_and_requested_selection(
+def test_build_workbench_setup_freezes_local_targets_and_specified_selection(
     isolated_store,
 ) -> None:
     store = MemoryStore()
@@ -52,7 +52,7 @@ def test_build_workbench_setup_freezes_local_targets_and_requested_selection(
     setup = build_add_workbench_setup(
         store,
         current_name="beta",
-        requested_context="alpha",
+        specified_context_locator="alpha",
     )
 
     assert setup.names == ("alpha", "beta")

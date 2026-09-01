@@ -2,10 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.application.context_access.access import (
-    context_access_display_facts,
-    resolve_context_access,
-)
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.context_access.granted_context_navigation import (
     freeze_granted_context_navigation,
 )
@@ -23,21 +20,26 @@ def build_add_workbench_setup(
     store: MemoryStore,
     *,
     current_name: str | None,
-    requested_context: str | None,
+    specified_context_locator: str | None,
 ) -> AddWorkbenchSetup:
     """Freeze visible Context rows and their CREATE availability."""
 
+    # Combine local and granted Context names into one visible target catalog.
     local_context_names = tuple(store.list_context_names())
     granted_contexts = freeze_granted_context_navigation(store)
     granted_context_names = granted_contexts.names
     visible_context_names = set(local_context_names) | set(granted_context_names)
-    selectable_context_names = set(local_context_names)
-    annotations_by_context_name = {
-        context_name: annotation
-        for context_name, annotation in granted_contexts.annotations.items()
+
+    # Local names take precedence, so annotate only grant-only rows.
+    grant_annotations_by_context_name = {
+        context_name: grant_annotation
+        for context_name, grant_annotation in granted_contexts.annotations.items()
         if context_name not in local_context_names
     }
 
+    # Determine which Contexts are selectable for Add: local Contexts qualify
+    # by default, while granted Contexts require CREATE.
+    selectable_context_names = set(local_context_names)
     for context_name in granted_context_names:
         if context_name in local_context_names:
             continue
@@ -52,21 +54,18 @@ def build_add_workbench_setup(
             continue
         selectable_context_names.add(context_access.display_name)
 
+    # Choose the Context initially selected when the workbench opens.
     selected_context_name: str | None = None
-    if requested_context is not None:
+    if specified_context_locator is not None:
         context_access = resolve_existing_context_access(
             store,
-            requested_context,
+            specified_context_locator,
             current_name=current_name,
             required_permission="CREATE",
         ).value
         selected_context_name = context_access.display_name
         visible_context_names.add(selected_context_name)
         selectable_context_names.add(selected_context_name)
-        if context_access.is_granted:
-            annotations_by_context_name[selected_context_name] = (
-                context_access_display_facts(context_access)
-            )
     elif current_name in selectable_context_names:
         selected_context_name = current_name
     elif selectable_context_names:
@@ -82,8 +81,11 @@ def build_add_workbench_setup(
         selected_context=selected_context_name,
         current_context=current_name,
         annotations=tuple(
-            (context_name, annotations_by_context_name[context_name])
-            for context_name in sorted(annotations_by_context_name, key=str.casefold)
+            (context_name, grant_annotations_by_context_name[context_name])
+            for context_name in sorted(
+                grant_annotations_by_context_name,
+                key=str.casefold,
+            )
             if context_name in visible_context_names
         ),
     )
