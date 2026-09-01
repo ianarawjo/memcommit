@@ -2,8 +2,8 @@
 
 ## Motivating problem
 
-The historical `mem add INFO` route was useful for one Memory, while batch
-input split a file or clipboard text into physical lines. It did not offer an
+The historical `mem add INFO` route was useful for one Memory, while separate
+batch options split file or clipboard text into physical lines. It did not offer an
 interactive way to review several independent multiline Memories before one
 durable action. Its Store, authority, checkpoint, and terminal behavior also
 lived together in the command handler, so a future Python or agent adapter
@@ -38,6 +38,13 @@ single-source request must contain exactly one Memory. The application invokes
 one target port once and checks that the durable receipt covers the requested
 contents in the same order.
 
+The same application package owns the line-oriented raw-text grammar. It
+strips each physical line, omits blank lines, and rejects a result with no
+Memory content. A console adapter may read a platform clipboard, but it does
+not decide how that text becomes Memories. Exact positional arguments bypass
+line parsing and retain their supplied text; the shared request validation
+still rejects an empty or whitespace-only argument before target access.
+
 The Store adapter captures the current Context name once at command start.
 Every relative locator is resolved against that snapshot. A review surface
 that may remain open freezes CREATE authority and the exact target Context UID
@@ -49,18 +56,25 @@ checkpoint; no partial result is published by the application.
 
 ## Interface routes
 
-The compatibility routes retain their established meanings:
+The public routes have these meanings:
 
-- `mem add INFO` adds one exact Memory;
-- repeatable `mem add --memory TEXT --memory TEXT` adds one explicit batch;
-- `--input` reads a UTF-8 file or stdin and `--paste` reads the macOS system
-  clipboard; both use nonempty-physical-line parsing; and
+- `mem add MEMORY...` adds one exact Memory per positional shell value;
+- quoting several words keeps them inside one positional Memory;
+- `--paste` reads the macOS system clipboard and applies the application-owned
+  nonempty-physical-line grammar; and
 - `--context` selects a local or CREATE-granted existing Context.
 
 In an interactive terminal, bare `mem add` opens the TUI. Outside a terminal,
-the omitted-source error remains stable for scripts. `--memory` is explicit so
-shell callers and agents can preserve multiline values without depending on
-the TUI or physical-line splitting.
+the omitted-source error remains stable for scripts. Positional Memories and
+`--paste` are mutually exclusive. Shell quoting determines positional Memory
+boundaries, so `mem add my name is` adds three Memories while
+`mem add "my name is"` adds one.
+
+The former `--input FILE|-` route is intentionally removed from Add. Import is
+already publicly marked `PARTIAL`; future plain-text file, arbitrary-document,
+and Skill resource kinds belong to that operation. This change does not expose
+an empty `mem import text` route before its parser, provenance, and Add
+materialization contract are implemented.
 
 The TUI keeps each Memory as an independent process-local draft. `E` opens the
 selected draft, `N` creates another, `D` deletes the selected draft, `Enter`
@@ -80,8 +94,8 @@ authority checks, or application execution. The former
 staging paths are removed rather than retained as facades because both
 presentations are Add-specific and consumed only by this console command.
 
-The presenter consumes only `AddResult`, not the intake mode. Single argument,
-explicit batch, file/stdin, system clipboard, and TUI drafts all render one
+The presenter consumes only `AddResult`, not the intake mode. Positional single
+or batch input, system clipboard, and TUI drafts all render one
 count and resolved Target, every created Memory UID/content pair in durable
 order, and the one Add checkpoint. Intake mode remains checkpoint provenance;
 it is not a reason to hide or reshape the completed durable result. The
@@ -123,14 +137,14 @@ own component.
   specified separately in `add-public-python-api-design-rationale.md`.
 - This slice does not relocate every historical operation screen. It moves
   only component contracts whose existing consumers share the same mechanics.
-- Physical-line file and paste parsing remains intentionally distinct from
-  explicit multiline drafts for backward compatibility.
+- Physical-line clipboard parsing remains intentionally distinct from exact
+  positional values and explicit multiline drafts.
 
 ## Verification
 
 Focused application and TUI tests cover validation-before-target, typed receipt
 coverage, a real Store batch with exactly one checkpoint, target replacement,
-repeatable `--memory`, multiline draft editing, target selection, and
+positional argument boundaries, multiline draft editing, target selection, and
 pre-execution cancellation. The shared-component and existing-consumer suites
 protect Ground, Meld, and Resolution behavior after the ownership move.
 

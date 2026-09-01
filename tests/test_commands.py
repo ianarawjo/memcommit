@@ -550,6 +550,9 @@ class TestHelp:
         assert help_inventory.COMMAND_FORMS["add"][0].startswith(
             'mem add "[memory_content]"'
         )
+        assert help_inventory.COMMAND_FORMS["add"][1].startswith(
+            'mem add "[memory_a]" "[memory_b]"'
+        )
         assert help_inventory.COMMAND_FORMS["edit"][0].startswith(
             'mem edit [UID_or_CONTEXT:UID] "[new_content]"'
         )

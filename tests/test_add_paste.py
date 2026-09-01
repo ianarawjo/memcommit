@@ -141,8 +141,7 @@ def test_add_paste_invalid_clipboard_does_not_mutate(
     "arguments",
     [
         ("inline", "--paste"),
-        ("--input", "-", "--paste"),
-        ("inline", "--input", "-", "--paste"),
+        ("first", "second", "--paste"),
     ],
 )
 def test_add_paste_is_mutually_exclusive_with_other_sources(
@@ -154,5 +153,5 @@ def test_add_paste_is_mutually_exclusive_with_other_sources(
     result = invoke("add", *arguments)
 
     assert result.exit_code == 1
-    assert "exactly one of INFO, --input, or --paste" in result.output
+    assert "positional MEMORY values or --paste, not both" in result.output
     assert direct_memories("intake") == []

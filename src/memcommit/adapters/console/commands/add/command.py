@@ -13,15 +13,12 @@ from memcommit.application.operations.add.application import (
     AddSource,
     run_add,
 )
-from memcommit.application.operations.add.runtime import MemoryStoreAddTargetPort
-from memcommit.adapters.console.commands.add.line_input_records import (
+from memcommit.application.operations.add.input_records import (
     parse_line_input_records,
 )
+from memcommit.application.operations.add.runtime import MemoryStoreAddTargetPort
 from memcommit.adapters.console.commands.add.receipt import render_add_receipt
 from memcommit.adapters.console.clipboard import read_system_clipboard
-from memcommit.adapters.console.coordination.batch_input_source import (
-    read_batch_input_text,
-)
 from memcommit.adapters.console.terminal.components.errors import render_cli_error
 from memcommit.adapters.console.terminal.core.capabilities import (
     is_interactive_terminal,
@@ -36,16 +33,11 @@ from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStor
 
 
 def cmd(
-    info: Annotated[
-        Optional[str],
-        typer.Argument(help="One Memory to store (quote multi-word text)"),
-    ] = None,
-    input_source: Annotated[
-        Optional[str],
-        typer.Option(
-            "--input",
-            "-i",
-            help="Add each non-empty line from a UTF-8 file; use '-' for stdin",
+    memories: Annotated[
+        Optional[list[str]],
+        typer.Argument(
+            metavar="[MEMORY]...",
+            help="Add one Memory per positional value; quote spaces within one Memory",
         ),
     ] = None,
     paste: Annotated[
@@ -55,14 +47,6 @@ def cmd(
             help="Add each non-empty line from the system clipboard",
         ),
     ] = False,
-    memories: Annotated[
-        Optional[list[str]],
-        typer.Option(
-            "--memory",
-            "-m",
-            help="Add one exact Memory; repeat the option to add a batch",
-        ),
-    ] = None,
     requested_context: Annotated[
         Optional[str],
         typer.Option(
@@ -77,31 +61,30 @@ def cmd(
     ] = None,
 ) -> None:
     explicit_memories = tuple(memories or ())
-    source_count = sum(
-        (
-            info is not None,
-            input_source is not None,
-            paste,
-            bool(explicit_memories),
-        )
-    )
-    if source_count > 1 or (source_count == 0 and not is_interactive_terminal()):
+    if explicit_memories and paste:
         typer.secho(
-            "Error: provide exactly one of INFO, --input, or --paste, or use "
-            "repeatable --memory.",
+            "Error: provide positional MEMORY values or --paste, not both.",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1)
+    has_direct_source = bool(explicit_memories) or paste
+    if not has_direct_source and not is_interactive_terminal():
+        typer.secho(
+            "Error: provide one or more positional MEMORY values, or use --paste.",
             fg=typer.colors.RED,
             err=True,
         )
         raise typer.Exit(1)
 
-    # Capture global navigation once before file, stdin, or paste intake can
+    # Capture global navigation once before clipboard or workbench intake can
     # yield control. Relative target meaning stays stable for this command.
     store = MemoryStore()
     current_name = store.current_context_name()
     port = MemoryStoreAddTargetPort(store, current_name=current_name)
 
     try:
-        if source_count == 0:
+        if not has_direct_source:
             setup = build_add_workbench_setup(
                 store,
                 current_name=current_name,
@@ -116,35 +99,31 @@ def cmd(
                 return
             render_add_receipt(workbench_result)
             return
-        if info is not None:
-            request = AddRequest(
-                context_locator=requested_context,
-                contents=(info,),
-                source=AddSource(
-                    mode="SINGLE",
-                    kind="argument",
-                    raw_text=info,
-                    parser="single-memory-v1",
-                ),
-            )
-        elif explicit_memories:
+        if explicit_memories:
+            single = len(explicit_memories) == 1
             request = AddRequest(
                 context_locator=requested_context,
                 contents=explicit_memories,
                 source=AddSource(
-                    mode="EXPLICIT_BATCH",
-                    kind="arguments",
-                    raw_text=json.dumps(
-                        explicit_memories,
-                        ensure_ascii=False,
-                        separators=(",", ":"),
+                    mode="SINGLE" if single else "EXPLICIT_BATCH",
+                    kind="argument" if single else "arguments",
+                    raw_text=(
+                        explicit_memories[0]
+                        if single
+                        else json.dumps(
+                            explicit_memories,
+                            ensure_ascii=False,
+                            separators=(",", ":"),
+                        )
                     ),
-                    parser="explicit-memory-arguments-v1",
+                    parser=(
+                        "single-memory-v1" if single else "explicit-memory-arguments-v1"
+                    ),
                 ),
             )
         elif paste:
             raw_text = read_system_clipboard()
-            contents = tuple(parse_line_input_records(raw_text))
+            contents = parse_line_input_records(raw_text)
             request = AddRequest(
                 context_locator=requested_context,
                 contents=contents,
@@ -155,21 +134,6 @@ def cmd(
                     parser="stripped-nonempty-physical-lines-v1",
                 ),
             )
-        else:
-            assert input_source is not None
-            raw_text = read_batch_input_text(input_source)
-            request = AddRequest(
-                context_locator=requested_context,
-                contents=tuple(parse_line_input_records(raw_text)),
-                source=AddSource(
-                    mode="LINES",
-                    kind="stdin" if input_source == "-" else "utf-8-file",
-                    raw_text=raw_text,
-                    parser="stripped-nonempty-physical-lines-v1",
-                    input_name=input_source,
-                ),
-            )
-
         result = run_add(
             request,
             target_port=port,

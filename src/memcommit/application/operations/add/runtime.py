@@ -72,14 +72,6 @@ def _checkpoint_args(
             "contents": contents,
             **common,
         }
-    if source.mode == "LINES":
-        return {
-            "input": source.input_name,
-            "mode": "lines",
-            "count": len(contents),
-            "contents": contents,
-            **common,
-        }
     return {
         "mode": "explicit" if source.mode == "EXPLICIT_BATCH" else "tui-drafts",
         "count": len(contents),
@@ -94,9 +86,6 @@ def _checkpoint_description(request: AddRequest) -> str:
         return f'Added: "{request.contents[0][:80]}"'
     if source.mode == "PASTE":
         return f"Added {len(request.contents)} memories from system clipboard"
-    if source.mode == "LINES":
-        origin = "stdin" if source.input_name == "-" else repr(source.input_name)
-        return f"Added {len(request.contents)} memories from {origin}"
     if source.mode == "EXPLICIT_BATCH":
         return f"Added {len(request.contents)} explicitly supplied memories"
     return f"Added {len(request.contents)} memories from interactive drafts"

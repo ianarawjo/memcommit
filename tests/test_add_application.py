@@ -18,7 +18,13 @@ from memcommit.application.operations.add.application import (
     FrozenAddTarget,
     run_add,
 )
-from memcommit.application.operations.add.runtime import MemoryStoreAddTargetPort, execute_add
+from memcommit.application.operations.add.input_records import (
+    parse_line_input_records,
+)
+from memcommit.application.operations.add.runtime import (
+    MemoryStoreAddTargetPort,
+    execute_add,
+)
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
@@ -84,6 +90,28 @@ def test_application_rejects_incomplete_batches_before_opening_target(
 
     assert port.frozen == []
     assert port.appended == []
+
+
+def test_application_parses_line_text_into_trimmed_nonempty_records() -> None:
+    assert parse_line_input_records(
+        "  first Memory  \n\n\tsecond Memory\t\r\n세 번째\n"
+    ) == (
+        "first Memory",
+        "second Memory",
+        "세 번째",
+    )
+    assert parse_line_input_records("same\n same \n") == ("same", "same")
+
+
+@pytest.mark.parametrize("text", ["", " \n\t\n"])
+def test_application_rejects_line_text_without_memory_content(text: str) -> None:
+    with pytest.raises(ValueError, match="no non-empty lines"):
+        parse_line_input_records(text)
+
+
+def test_application_line_parser_requires_text() -> None:
+    with pytest.raises(TypeError, match="must be text"):
+        parse_line_input_records(None)  # type: ignore[arg-type]
 
 
 def test_application_layer_has_no_store_command_or_terminal_imports() -> None:

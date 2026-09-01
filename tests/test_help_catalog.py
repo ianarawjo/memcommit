@@ -402,9 +402,7 @@ def test_search_box_groups_retrieval_and_answering_before_synthesis() -> None:
         index for index, line in enumerate(lines) if "── RETRIEVE & ANSWER " in line
     )
     synthesize_section = next(
-        index
-        for index, line in enumerate(lines)
-        if "── SYNTHESIZE " in line
+        index for index, line in enumerate(lines) if "── SYNTHESIZE " in line
     )
     find_index = next(index for index, line in enumerate(lines) if "mem find " in line)
     query_index = next(
@@ -426,8 +424,7 @@ def test_search_box_groups_retrieval_and_answering_before_synthesis() -> None:
         for style, text in fragments
     )
     assert any(
-        style == "class:help-section-label bold"
-        and text == "SYNTHESIZE"
+        style == "class:help-section-label bold" and text == "SYNTHESIZE"
         for style, text in fragments
     )
     assert any(
@@ -456,10 +453,7 @@ def test_new_semantic_and_quality_sections_render_while_lifecycle_stays_unsplit(
     semantic = "".join(
         text
         for _style, text in _help_group_fragments(
-            [
-                (index, by_name[name])
-                for index, name in enumerate(semantic_names)
-            ],
+            [(index, by_name[name]) for index, name in enumerate(semantic_names)],
             title="SEMANTIC UPDATES",
             width=180,
             focused=False,
@@ -1002,7 +996,8 @@ def test_import_keeps_ordinary_copy_and_use_case_with_partial_scope_detail():
     assert detail.kind.value == "LIMITATION"
     assert detail.title == "CURRENT LIMITATION"
     assert "MemCommit-to-MemCommit transfer" in detail.body
-    assert "arbitrary documents or Skills" in detail.body
+    assert "Plain-text files" in detail.body
+    assert "arbitrary documents, Skills" in detail.body
 
 
 def test_import_partial_tag_is_collapsed_while_its_limitation_is_expanded():
@@ -1110,7 +1105,9 @@ def test_final_help_categories_match_their_reviewed_runtime_boundaries():
     assert log.summary == (
         "Print or search recorded Context, Memory, and Profile history."
     )
-    assert diff.flow == "Current/latest or exact checkpoint -> read-only revision Viewer"
+    assert (
+        diff.flow == "Current/latest or exact checkpoint -> read-only revision Viewer"
+    )
     assert undo.summary == "Undo the most recent recorded command as one unit."
     assert "every Context and Memory change" in undo.effect
     assert revert.summary.startswith("Restore the current or an explicit local Context")

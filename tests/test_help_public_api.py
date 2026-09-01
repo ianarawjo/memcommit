@@ -67,7 +67,8 @@ def test_client_projects_import_maturity_and_exact_limitation_detail(tmp_path):
     assert [item.id for item in detail_index.details] == ["current-limitation"]
     assert detail.kind == "LIMITATION"
     assert detail.title == "CURRENT LIMITATION"
-    assert "arbitrary documents or Skills" in detail.body
+    assert "Plain-text files" in detail.body
+    assert "arbitrary documents, Skills" in detail.body
 
 
 def test_client_projects_provider_as_partial(tmp_path):

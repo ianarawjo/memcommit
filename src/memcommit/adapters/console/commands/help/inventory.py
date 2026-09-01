@@ -190,12 +190,11 @@ HELP_COMMAND_ORDER = {
 COMMAND_FORMS = {
     "add": (
         'mem add "[memory_content]" (add one Memory to the current Context)',
+        'mem add "[memory_a]" "[memory_b]" (add one Memory per positional value)',
         "mem add (open the interactive multi-Memory editor)",
-        'mem add --memory "[memory_content]" --memory "[memory_content]" (add an explicit batch)',
-        "mem add --input [file] (add one Memory per non-empty line)",
         "mem add --paste (add clipboard text as one Memory per non-empty line)",
         'mem add "[memory_content]" --to [target_context] (add to an explicit Target)',
-        "mem add --input [file] --to [target_context] (batch-add to an explicit Target)",
+        'mem add "[memory_a]" "[memory_b]" --to [target_context] (add a positional batch to an explicit Target)',
         "mem add --paste --to [target_context] (add clipboard text to an explicit Target)",
     ),
     "copy": (

@@ -608,6 +608,8 @@ def _restored_command(unit: ContextCommandUnit) -> str:
     if unit.command == "add":
         if isinstance(args.get("content"), str):
             return _with_context("mem add <CONTENT>", operand_context)
+        # Historical checkpoints retain the exact retired source spelling so
+        # restoration reports do not rewrite how the original mutation arose.
         if isinstance(args.get("input"), str):
             return _with_context(
                 f"mem add --input {_command_arg(args['input'])}", operand_context

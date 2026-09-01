@@ -73,6 +73,25 @@ def test_add_presenters_are_colocated_with_their_command() -> None:
     )
 
 
+def test_line_input_grammar_is_owned_by_the_add_application() -> None:
+    application_parser = REPOSITORY_ROOT / (
+        "src/memcommit/application/operations/add/input_records.py"
+    )
+    retired_console_parser = REPOSITORY_ROOT / (
+        "src/memcommit/adapters/console/commands/add/line_input_records.py"
+    )
+    command = REPOSITORY_ROOT / (
+        "src/memcommit/adapters/console/commands/add/command.py"
+    )
+
+    assert application_parser.is_file()
+    assert not retired_console_parser.exists()
+    assert (
+        "from memcommit.application.operations.add.input_records import"
+        in command.read_text(encoding="utf-8")
+    )
+
+
 def test_exact_add_does_not_absorb_semantic_result_memorization() -> None:
     operation_root = REPOSITORY_ROOT / "src/memcommit/application/operations/add"
     assert not (operation_root / "semantic_runtime.py").exists()

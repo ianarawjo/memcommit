@@ -20,16 +20,15 @@ adapter invokes dependency-free `/usr/bin/pbpaste` on macOS, rejects process
 failure and non-UTF-8 output, and reports unsupported platforms through
 `ClipboardError`.
 
-The command then applies the same Add-owned physical-line grammar as
-`mem add --input`:
+The command passes that text to Add's application-owned physical-line grammar:
 
 - every non-empty physical line becomes one Memory;
 - leading and trailing whitespace is stripped from each retained line;
 - blank or whitespace-only clipboard text fails before target mutation;
 - all retained Memories are appended in order through one `AddRequest`, one
   authorized save, and one automatic checkpoint; and
-- `INFO`, `--memory`, `--input`, and `--paste` remain mutually exclusive
-  intake choices.
+- positional `MEMORY...` values and `--paste` remain mutually exclusive intake
+  choices.
 
 There is no paste screen, line-count preamble, finish key, cancellation state,
 or second confirmation. Supplying `--paste` is the complete request to read
@@ -44,16 +43,16 @@ Clipboard intake retains `mode="PASTE"` so existing Add checkpoint and trace
 readers continue to recognize the CLI route. New checkpoints record
 `kind="system-clipboard"`, the exact raw UTF-8 text, the shared line-parser
 identifier, its SHA-256 digest, ordered contents, and created Memory UIDs.
-This distinguishes clipboard provenance from file/stdin provenance without
-giving it different Memory or checkpoint materialization semantics.
+This retains clipboard provenance without giving it different Memory or
+checkpoint materialization semantics.
 
 The command captures the current Context name once before reading the
 clipboard, so a relative target keeps one meaning. Unlike the retired
 long-lived interactive surface, clipboard intake does not pre-freeze a target
 UID before the read. Target authority and identity are resolved through the
-normal `run_add` boundary after the clipboard has been read, just as they are
-for file input. The Store adapter still rejects replacement after a target has
-actually been frozen and before it is saved.
+normal `run_add` boundary after the clipboard has been read. The Store adapter
+still rejects replacement after a target has actually been frozen and before
+it is saved.
 
 ## Alternatives and limitations
 
@@ -63,9 +62,11 @@ pastes from the clipboard instead of asking the terminal to capture a future
 paste. It does not imply a paired List operation: `mem ls --copy` produces
 plain text, while only Add interprets clipboard text as new Memories.
 
-Routing this behavior through `mem import` was rejected. Import preserves
-existing memcommit Profile, Context, or Memory identity from another managed
-source; clipboard text creates new Memories and therefore remains Add input.
+Routing clipboard behavior through `mem import` was rejected. Clipboard text
+is a direct user-selected Add source, while files, arbitrary documents, and
+Skills belong to Import's intentionally `PARTIAL` resource surface. Import may
+create new Memories through the Add application after interpreting such a
+resource; it does not own the platform clipboard action.
 
 The shared clipboard adapter is currently macOS-only. Clipboard text is not
 deduplicated, semantically split, normalized beyond physical-line stripping,

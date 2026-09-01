@@ -9,6 +9,7 @@ an interface.
 
 | Callable | Owner | Input → output | Allowed effects | Required invariant | State |
 | --- | --- | --- | --- | --- | --- |
+| `operations.add.input_records.parse_line_input_records` | application intake grammar | raw text → ordered Memory contents | none | strip each physical line, omit blanks, reject an empty result | `VERIFIED` |
 | `operations.add.application.validate_add_request` | application | `AddRequest` → validated request | none | complete nonblank ordered batch before target access | `VERIFIED` |
 | `operations.add.application.prepare_add_target` | application | locator + target port → frozen target | target identity/authority read only | one canonical name and Context UID | `VERIFIED` |
 | `operations.add.application.run_add` | application | request + port → `AddResult` | effects delegated once to port | receipt covers every exact input in order and the frozen target | `VERIFIED` |
@@ -18,7 +19,7 @@ an interface.
 | `commands.add.receipt.render_add_receipt` | Add console receipt | typed result → one count/target, complete ordered Memory list, and checkpoint | stdout only | intake provenance does not alter durable-result presentation; no Store, authority, or mutation decisions | `VERIFIED` |
 | `commands.add.workbench.build_add_workbench_setup` | Add workbench composition | Store + current snapshot + requested target → frozen setup | Store/Profile/Grant reads only | visible rows remain distinct from CREATE-selectable targets; no mutation | `VERIFIED` |
 | `commands.add.workbench.run_add_workbench` | Add interactive workbench | frozen setup + application callback → result/cancel | process-local drafts and terminal I/O; callback only at To Do | cancellation and draft edits do not call application | `VERIFIED` |
-| `commands.add.cmd` | console composition | argv/TTY → typed request and presentation | file/stdin/system-clipboard reads, TUI/CLI, application effects | `--to`, `--context`, and `-c` populate one scalar requested Target; the last occurrence wins and the receipt names the resolved Target; captures current once; file/clipboard line parsing remains interface-owned | `VERIFIED` |
+| `commands.add.cmd` | console composition | argv/TTY → typed request and presentation | system-clipboard reads, TUI/CLI, application effects | each positional argv value is one exact Memory; positional values and `--paste` are exclusive; `--to`, `--context`, and `-c` populate one scalar requested Target; the last occurrence wins and the receipt names the resolved Target | `VERIFIED` |
 | `api.client.MemCommitClient.add_memories` | public Python facade | explicit text sequence + target → `AddMemoriesResult` | one application Add | explicit roots local-only; nonlocal Grant requires active Profile; stable errors | `VERIFIED` |
 | `adapters.agent.add.AddAgentAdapter.invoke` | agent adapter | strict version-1 JSON object → JSON-safe receipt/error | exactly one public Add call after local validation | exact order/duplicates; complete receipt; no automatic mutation retry | `VERIFIED` |
 | `adapters.agent.add.add_agent_tool_schema` | agent adapter | none → fresh function-tool schema | none | strict fields/version; duplicate Memory items remain legal | `VERIFIED` |
@@ -29,7 +30,7 @@ an interface.
 
 | Entry route | Provider/cache/session | Durable success | Failure publication |
 | --- | --- | --- | --- |
-| CLI single, explicit batch, file/stdin, or system clipboard | none | exact Memories and one Add checkpoint | none before completed Store save |
+| CLI positional single/batch or system clipboard | none | exact Memories and one Add checkpoint | none before completed Store save |
 | Add TUI | process-local drafts only | exact reviewed drafts and one Add checkpoint | cancel/edit failure publishes nothing |
 | Public Python | none | explicit ordered sequence and one Add checkpoint | typed error; no partial public receipt |
 | Agent tool adapter | none | same public Add and JSON-safe complete receipt | bounded error; every failure is non-retryable |

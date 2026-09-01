@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 import memcommit.adapters.console.coordination.batch_input_source as batch_input_source
-from memcommit.adapters.console.commands.add.line_input_records import (
+from memcommit.application.operations.add.input_records import (
     parse_line_input_records,
 )
 from memcommit.adapters.console.commands.edit.input_records import (
@@ -19,7 +19,7 @@ from memcommit.adapters.console.commands.edit.input_records import (
 REPOSITORY_ROOT = Path(__file__).parents[1]
 
 
-def test_batch_input_has_one_source_owner_and_command_local_grammars() -> None:
+def test_batch_input_source_and_operation_grammars_have_narrow_owners() -> None:
     source = REPOSITORY_ROOT / "src" / "memcommit"
 
     assert not (source / "adapters" / "interfaces" / "cli" / "batch_input.py").exists()
@@ -31,20 +31,13 @@ def test_batch_input_has_one_source_owner_and_command_local_grammars() -> None:
         source / "adapters" / "console" / "coordination" / "batch_input_source.py"
     ).is_file()
     assert (
-        source
-        / "adapters"
-        / "console"
-        / "commands"
-        / "add"
-        / "line_input_records.py"
+        source / "application" / "operations" / "add" / "input_records.py"
     ).is_file()
+    assert not (
+        source / "adapters" / "console" / "commands" / "add" / "line_input_records.py"
+    ).exists()
     assert (
-        source
-        / "adapters"
-        / "console"
-        / "commands"
-        / "edit"
-        / "input_records.py"
+        source / "adapters" / "console" / "commands" / "edit" / "input_records.py"
     ).is_file()
 
 
@@ -55,7 +48,9 @@ def test_batch_input_source_preserves_stdin_line_endings(monkeypatch) -> None:
     assert batch_input_source.read_batch_input_text("-") == "one\r\ntwo\n"
 
 
-def test_batch_input_source_reads_utf8_file_without_newline_translation(tmp_path) -> None:
+def test_batch_input_source_reads_utf8_file_without_newline_translation(
+    tmp_path,
+) -> None:
     path = tmp_path / "batch.txt"
     path.write_bytes("하나\r\ntwo\n".encode())
 
@@ -63,7 +58,7 @@ def test_batch_input_source_reads_utf8_file_without_newline_translation(tmp_path
 
 
 def test_add_input_records_strip_lines_and_ignore_empty_lines() -> None:
-    assert parse_line_input_records("  one  \r\n\r\n\ttwo\t\n") == ["one", "two"]
+    assert parse_line_input_records("  one  \r\n\r\n\ttwo\t\n") == ("one", "two")
 
 
 def test_add_input_records_reject_an_empty_batch() -> None:
@@ -97,32 +92,26 @@ def test_edit_input_records_keep_the_existing_validation_contract(
 
 def test_add_and_edit_commands_import_their_exact_owners() -> None:
     command_root = (
-        REPOSITORY_ROOT
-        / "src"
-        / "memcommit"
-        / "adapters"
-        / "console"
-        / "commands"
+        REPOSITORY_ROOT / "src" / "memcommit" / "adapters" / "console" / "commands"
     )
     add_source = (command_root / "add" / "command.py").read_text(encoding="utf-8")
-    edit_source = (command_root / "edit" / "command.py").read_text(
-        encoding="utf-8"
-    )
+    edit_source = (command_root / "edit" / "command.py").read_text(encoding="utf-8")
 
     assert (
-        "from memcommit.adapters.console.commands.add.line_input_records import ("
-        in add_source
+        "from memcommit.application.operations.add.input_records import (" in add_source
     )
-    assert (
-        "parse_line_input_records" in add_source
-    )
+    assert "parse_line_input_records" in add_source
     assert (
         "from memcommit.adapters.console.commands.edit.input_records import "
         "parse_input_records" in edit_source
     )
+    assert (
+        "from memcommit.adapters.console.coordination.batch_input_source import"
+        not in add_source
+    )
+    assert (
+        "from memcommit.adapters.console.coordination.batch_input_source import"
+        in edit_source
+    )
     for source in (add_source, edit_source):
-        assert (
-            "from memcommit.adapters.console.coordination.batch_input_source import"
-            in source
-        )
         assert "memcommit.adapters.interfaces.cli.batch_input" not in source

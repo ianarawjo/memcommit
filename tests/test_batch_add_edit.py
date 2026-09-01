@@ -1,4 +1,4 @@
-"""Line-oriented batch add/edit CLI contracts."""
+"""Line-oriented batch Edit CLI contracts."""
 
 from typer.testing import CliRunner
 
@@ -21,118 +21,6 @@ def direct_memories(context_name: str) -> list[Memory]:
     return items
 
 
-def test_batch_add_file_preserves_line_order_and_uses_one_checkpoint(
-    isolated_store,
-    tmp_path,
-):
-    invoke("init", "intake")
-    invoke("add", "existing")
-    store = MemoryStore()
-    checkpoint_count = len(store.list_checkpoints("intake"))
-    source = tmp_path / "notes.txt"
-    source.write_text(
-        "  first fact  \n\n* second fact\r\n세 번째 사실\n",
-        encoding="utf-8",
-    )
-
-    result = invoke("add", "--input", str(source))
-
-    assert result.exit_code == 0
-    memories = direct_memories("intake")
-    assert [memory.content for memory in memories] == [
-        "existing",
-        "first fact",
-        "* second fact",
-        "세 번째 사실",
-    ]
-    checkpoints = store.list_checkpoints("intake")
-    assert len(checkpoints) == checkpoint_count + 1
-    assert "Added 3 Memories to 'intake'." in result.output
-    for memory in memories[1:]:
-        assert f"  [{memory.uid[:8]}] {memory.content}" in result.output
-    assert f"Checkpoint [{checkpoints[0]['uid'][:8]}]." in result.output
-    checkpoint = checkpoints[0]
-    assert checkpoint["command"] == "add"
-    args = checkpoint["args"]
-    assert {key: args[key] for key in ("input", "mode", "count", "contents")} == {
-        "input": str(source),
-        "mode": "lines",
-        "count": 3,
-        "contents": ["first fact", "* second fact", "세 번째 사실"],
-    }
-    assert args["memory_uids"] == [memory.uid for memory in memories[1:]]
-    assert args["source"]["kind"] == "utf-8-file"
-    assert args["source"]["parser"] == ("stripped-nonempty-physical-lines-v1")
-    assert args["source"]["raw_text"] == (
-        "  first fact  \n\n* second fact\r\n세 번째 사실\n"
-    )
-    assert len(args["source"]["sha256"]) == 64
-
-
-def test_batch_add_stdin_keeps_exact_duplicates(isolated_store):
-    invoke("init", "intake")
-    store = MemoryStore()
-    checkpoint_count = len(store.list_checkpoints("intake"))
-
-    result = invoke(
-        "add",
-        "--input",
-        "-",
-        stdin="same fact\n\n same fact \n",
-    )
-
-    assert result.exit_code == 0
-    assert [memory.content for memory in direct_memories("intake")] == [
-        "same fact",
-        "same fact",
-    ]
-    assert len({memory.uid for memory in direct_memories("intake")}) == 2
-    assert len(store.list_checkpoints("intake")) == checkpoint_count + 1
-
-
-def test_batch_add_invalid_inputs_do_not_mutate_or_checkpoint(
-    isolated_store,
-    tmp_path,
-):
-    invoke("init", "intake")
-    invoke("add", "existing")
-    store = MemoryStore()
-    checkpoint_count = len(store.list_checkpoints("intake"))
-    empty = tmp_path / "empty.txt"
-    empty.write_text(" \n\n\t\n", encoding="utf-8")
-
-    conflict = invoke("add", "inline", "--input", str(empty))
-    no_lines = invoke("add", "--input", str(empty))
-    missing = invoke("add", "--input", str(tmp_path / "missing.txt"))
-
-    assert conflict.exit_code == 1
-    assert "exactly one" in conflict.output
-    assert no_lines.exit_code == 1
-    assert "no non-empty lines" in no_lines.output
-    assert missing.exit_code == 1
-    assert "Could not read input" in missing.output
-    assert [memory.content for memory in direct_memories("intake")] == ["existing"]
-    assert len(store.list_checkpoints("intake")) == checkpoint_count
-
-
-def test_batch_add_rejects_invalid_utf8_without_mutation(
-    isolated_store,
-    tmp_path,
-):
-    invoke("init", "intake")
-    store = MemoryStore()
-    checkpoint_count = len(store.list_checkpoints("intake"))
-    source = tmp_path / "invalid.txt"
-    source.write_bytes(b"\xff")
-
-    result = invoke("add", "--input", str(source))
-
-    assert result.exit_code == 1
-    assert "Could not read input" in result.output
-    assert direct_memories("intake") == []
-    assert len(store.list_checkpoints("intake")) == checkpoint_count
-
-
 def test_batch_commands_require_complete_input_forms(
     isolated_store,
     tmp_path,
@@ -145,13 +33,10 @@ def test_batch_commands_require_complete_input_forms(
     empty_edits = tmp_path / "empty-edits.tsv"
     empty_edits.write_text("\n \n", encoding="utf-8")
 
-    no_add_input = invoke("add")
     incomplete_edit = invoke("edit", memory.uid[:8])
     no_edit_input = invoke("edit")
     empty_batch = invoke("edit", "--input", str(empty_edits))
 
-    assert no_add_input.exit_code == 1
-    assert "exactly one" in no_add_input.output
     assert incomplete_edit.exit_code == 1
     assert "SELECTOR and CONTENT" in incomplete_edit.output
     assert no_edit_input.exit_code == 1

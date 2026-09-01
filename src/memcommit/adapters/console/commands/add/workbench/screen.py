@@ -23,7 +23,9 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextSelectorControl,
     ContextSelectorView,
 )
-from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
+from memcommit.adapters.console.terminal.core.capabilities import (
+    require_interactive_terminal,
+)
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.components.focus import (
     FocusSurface,
@@ -121,7 +123,9 @@ def run_add_workbench(
     if require_tty:
         require_interactive_terminal(
             "Interactive Add",
-            snapshot_hint="Pass INFO, --memory, --input, or --paste outside a terminal.",
+            snapshot_hint=(
+                "Pass positional MEMORY values or --paste outside a terminal."
+            ),
         )
     if not isinstance(setup, AddWorkbenchSetup):
         raise TypeError("Add workbench requires an AddWorkbenchSetup.")

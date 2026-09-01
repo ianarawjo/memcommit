@@ -10,7 +10,6 @@ from typing import Literal, Protocol
 AddInputMode = Literal[
     "SINGLE",
     "EXPLICIT_BATCH",
-    "LINES",
     "PASTE",
     "TUI_DRAFTS",
 ]
@@ -28,13 +27,11 @@ class AddSource:
     kind: str
     parser: str
     raw_text: str
-    input_name: str | None = None
 
     def __post_init__(self) -> None:
         if self.mode not in {
             "SINGLE",
             "EXPLICIT_BATCH",
-            "LINES",
             "PASTE",
             "TUI_DRAFTS",
         }:
@@ -47,10 +44,6 @@ class AddSource:
                 raise ValueError(f"Add source {label} must be nonempty text.")
         if not isinstance(self.raw_text, str):
             raise TypeError("Add source raw text must be text.")
-        if self.input_name is not None and (
-            not isinstance(self.input_name, str) or not self.input_name
-        ):
-            raise ValueError("Add source input name must be nonempty text.")
 
 
 @dataclass(frozen=True)

@@ -559,7 +559,7 @@ back to snapshot reconstruction and reports the invalid metadata as a limit.
 
 ## Raw add provenance
 
-New `add`, `add --input`, and `add --paste` checkpoints retain:
+New positional `add` and `add --paste` checkpoints retain:
 
 - ordered created Memory UIDs;
 - input mode and parser version;
@@ -569,11 +569,13 @@ New `add`, `add --input`, and `add --paste` checkpoints retain:
 Memory remains the minimal `{uid, content}` record. Intake provenance belongs
 to the operation checkpoint, not every Memory.
 
-For line-based intake, trace can report the physical source line and item
-ordinal. It labels this `RECORDED` only when the declared UID order matches the
-Context order and the raw-text hash verifies. A damaged hash or reordered UID
-ledger degrades to `RECONSTRUCTED`; it does not continue claiming that an exact
-raw occurrence was retained.
+For clipboard line intake, trace can report the physical source line and item
+ordinal. Historical `add --input` checkpoints remain readable under the same
+recorded parser metadata even though the CLI route is retired. Trace labels
+this `RECORDED` only when the declared UID order matches the Context order and
+the raw-text hash verifies. A damaged hash or reordered UID ledger degrades to
+`RECONSTRUCTED`; it does not continue claiming that an exact raw occurrence was
+retained.
 
 Older checkpoints can often recover normalized order from the snapshot, but
 cannot retroactively prove the exact raw bytes.

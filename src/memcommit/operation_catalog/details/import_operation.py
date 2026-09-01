@@ -20,8 +20,8 @@ IMPORT_DETAILS = (
             "so its broader resource-import role is not yet complete. It accepts "
             "Profiles from an external .mem store or package, and Profiles, "
             "Context trees, or Memories from another registered Profile. "
-            "Conversion from arbitrary documents or Skills, and Export, are "
-            "planned but not yet implemented."
+            "Plain-text files, arbitrary documents, Skills, and Export are "
+            "planned resource kinds but are not yet implemented."
         ),
     ),
 )
