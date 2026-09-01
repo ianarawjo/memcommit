@@ -14,7 +14,6 @@ from memcommit.application.operations.add.application import (
     AddError,
     AddRequest,
     AddResult,
-    AddSource,
     FrozenAddTarget,
     run_add,
 )
@@ -28,15 +27,9 @@ from memcommit.application.operations.add.runtime import (
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
-def _request(*contents: str, mode: str = "TUI_DRAFTS") -> AddRequest:
+def _request(*contents: str) -> AddRequest:
     return AddRequest(
         contents=contents,
-        source=AddSource(
-            mode=mode,
-            kind="test",
-            parser="exact-test-v1",
-            raw_text="\n---\n".join(contents),
-        ),
         context_locator="target",
     )
 
@@ -153,7 +146,11 @@ def test_store_adapter_saves_multiline_batch_in_one_checkpoint(isolated_store) -
     assert len(checkpoints) == before + 1
     assert checkpoints[0]["uid"] == result.checkpoint_uid
     assert checkpoints[0]["command"] == "add"
-    assert checkpoints[0]["args"]["mode"] == "tui-drafts"
+    assert checkpoints[0]["args"]["count"] == 2
+    assert checkpoints[0]["args"]["contents"] == [
+        "First line.\nSecond line.",
+        "Another Memory.",
+    ]
     assert checkpoints[0]["args"]["memory_uids"] == [
         memory.uid for memory in result.memories
     ]

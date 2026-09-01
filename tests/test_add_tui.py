@@ -115,7 +115,6 @@ def test_workbench_e_to_edit_adds_multiple_explicit_multiline_drafts() -> None:
         "Another.",
     )
     assert requests[0].context_locator == "target"
-    assert requests[0].source.mode == "TUI_DRAFTS"
 
 
 def test_workbench_context_selector_changes_exact_add_target() -> None:

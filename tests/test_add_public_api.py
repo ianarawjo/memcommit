@@ -115,8 +115,17 @@ def test_public_add_preserves_order_multiline_duplicates_and_one_checkpoint(
     checkpoints = store.list_checkpoints("notes")
     assert len(checkpoints) == before + 1
     assert checkpoints[0]["uid"] == result.checkpoint_uid
-    assert checkpoints[0]["args"]["mode"] == "explicit"
-    assert checkpoints[0]["args"]["source"]["kind"] == "python-api"
+    assert checkpoints[0]["args"]["count"] == 3
+    assert checkpoints[0]["args"]["contents"] == [
+        "First line.\nSecond line.",
+        "same",
+        "same",
+    ]
+    assert checkpoints[0]["args"]["memory_uids"] == [
+        memory.uid for memory in result.memories
+    ]
+    assert "mode" not in checkpoints[0]["args"]
+    assert "source" not in checkpoints[0]["args"]
 
 
 def test_public_add_resolves_relative_target_from_one_current_snapshot(

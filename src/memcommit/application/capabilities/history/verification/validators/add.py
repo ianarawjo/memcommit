@@ -1,4 +1,4 @@
-"""Validate source-occurrence evidence retained by Add."""
+"""Validate source-occurrence evidence retained by historical Add records."""
 
 from __future__ import annotations
 
@@ -18,12 +18,14 @@ def _source_occurrences(
     if not added_uids:
         return {}
     added = [uid for uid in after.order if uid in added_uids]
+    source = args.get("source")
+    if not isinstance(source, dict):
+        return {}
     mode = args.get("mode")
     mode = mode if isinstance(mode, str) and mode else "single"
     declared_uids = args.get("memory_uids")
-    source = args.get("source")
-    raw_text = source.get("raw_text") if isinstance(source, dict) else None
-    declared_hash = source.get("sha256") if isinstance(source, dict) else None
+    raw_text = source.get("raw_text")
+    declared_hash = source.get("sha256")
     source_integrity = (
         isinstance(raw_text, str)
         and isinstance(declared_hash, str)

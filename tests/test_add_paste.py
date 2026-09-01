@@ -62,8 +62,7 @@ def test_add_paste_reads_clipboard_and_renders_the_complete_saved_batch(
     assert f"Checkpoint [{checkpoints[0]['uid'][:8]}]." in result.output
     assert checkpoints[0]["command"] == "add"
     args = checkpoints[0]["args"]
-    assert {key: args[key] for key in ("mode", "count", "contents")} == {
-        "mode": "paste",
+    assert {key: args[key] for key in ("count", "contents")} == {
         "count": 3,
         "contents": [
             "first private fact",
@@ -72,10 +71,8 @@ def test_add_paste_reads_clipboard_and_renders_the_complete_saved_batch(
         ],
     }
     assert args["memory_uids"] == [memory.uid for memory in memories]
-    assert args["source"]["kind"] == "system-clipboard"
-    assert args["source"]["raw_text"] == payload
-    assert args["source"]["parser"] == ("stripped-nonempty-physical-lines-v1")
-    assert len(args["source"]["sha256"]) == 64
+    assert "mode" not in args
+    assert "source" not in args
 
 
 def test_add_paste_uses_latest_context_contents_after_clipboard_read(
@@ -153,5 +150,8 @@ def test_add_paste_is_mutually_exclusive_with_other_sources(
     result = invoke("add", *arguments)
 
     assert result.exit_code == 1
-    assert "positional MEMORY values or --paste, not both" in result.output
+    assert (
+        "cannot combine direct MEMORY arguments with --paste; use one or the other"
+        in result.output
+    )
     assert direct_memories("intake") == []

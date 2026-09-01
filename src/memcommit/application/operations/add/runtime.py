@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
-
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.authorization import ContextUse, authorize_context_use
 from memcommit.application.operations.add.application import (
@@ -37,58 +35,25 @@ class _StoreAddTargetToken:
         self.access = access
 
 
-def _source_record(request: AddRequest) -> dict[str, str]:
-    source = request.source
-    return {
-        "kind": source.kind,
-        "parser": source.parser,
-        "sha256": hashlib.sha256(source.raw_text.encode("utf-8")).hexdigest(),
-        "raw_text": source.raw_text,
-    }
-
-
 def _checkpoint_args(
     request: AddRequest,
     *,
     memory_uids: list[str],
     access,
 ) -> dict[str, object]:
-    source = request.source
     contents = list(request.contents)
-    common = {
-        "memory_uids": memory_uids,
-        "source": _source_record(request),
-        **grant_checkpoint_args(access),
-    }
-    if source.mode == "SINGLE":
-        return {
-            "content": contents[0],
-            **common,
-        }
-    if source.mode == "PASTE":
-        return {
-            "mode": "paste",
-            "count": len(contents),
-            "contents": contents,
-            **common,
-        }
     return {
-        "mode": "explicit" if source.mode == "EXPLICIT_BATCH" else "tui-drafts",
         "count": len(contents),
         "contents": contents,
-        **common,
+        "memory_uids": memory_uids,
+        **grant_checkpoint_args(access),
     }
 
 
 def _checkpoint_description(request: AddRequest) -> str:
-    source = request.source
-    if source.mode == "SINGLE":
-        return f'Added: "{request.contents[0][:80]}"'
-    if source.mode == "PASTE":
-        return f"Added {len(request.contents)} memories from system clipboard"
-    if source.mode == "EXPLICIT_BATCH":
-        return f"Added {len(request.contents)} explicitly supplied memories"
-    return f"Added {len(request.contents)} memories from interactive drafts"
+    count = len(request.contents)
+    noun = "Memory" if count == 1 else "Memories"
+    return f"Added {count} {noun}"
 
 
 class MemoryStoreAddTargetPort(AddTargetPort):

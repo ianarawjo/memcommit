@@ -37,14 +37,22 @@ same complete form as every other intake: resulting count and Target, every
 created Memory UID/content pair in order, and the checkpoint. Clipboard intake
 does not create a separate privacy or presentation mode.
 
-## Provenance and mutation boundary
+## Checkpoint and mutation boundary
 
-Clipboard intake retains `mode="PASTE"` so existing Add checkpoint and trace
-readers continue to recognize the CLI route. New checkpoints record
-`kind="system-clipboard"`, the exact raw UTF-8 text, the shared line-parser
-identifier, its SHA-256 digest, ordered contents, and created Memory UIDs.
-This retains clipboard provenance without giving it different Memory or
-checkpoint materialization semantics.
+Clipboard intake becomes the same ordered `contents` value as every other Add
+route before the application runs. New Add checkpoints record the normalized
+contents, their created Memory UIDs, and the count, but not whether the adapter
+received them from argv, the clipboard, the TUI, or the Python API. Trace can
+therefore establish that Add created each Memory without presenting the input
+transport as semantic lineage. Existing checkpoints that contain the retired
+source record remain readable and may still expose their historical raw-source
+detail.
+
+This boundary is intentionally narrower than Embed or Import provenance. Those
+operations identify an upstream Context or Memory and must retain its UID and
+digest. Clipboard text has no such durable source identity; storing its raw
+text and hash beside the resulting contents duplicated input mechanics without
+establishing a resource lineage.
 
 The command captures the current Context name once before reading the
 clipboard, so a relative target keeps one meaning. Unlike the retired

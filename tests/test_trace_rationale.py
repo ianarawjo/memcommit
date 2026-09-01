@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import shutil
 
@@ -879,6 +880,7 @@ def test_task1_rationale_keeps_structured_evidence_but_renders_only_provenance(
 
     result = invoke("rationale", target.uid[:8])
     structured = invoke("rationale", target.uid[:8], "--json")
+    trace = invoke("trace", target.uid[:8], "--verbose")
 
     assert result.exit_code == 0
     assert "PROVENANCE\n" in result.output
@@ -889,8 +891,10 @@ def test_task1_rationale_keeps_structured_evidence_but_renders_only_provenance(
     assert "Context(s)" not in result.output
     assert "LIMITS" not in result.output
     assert structured.exit_code == 0
+    assert trace.exit_code == 0
+    assert "Source occurrence:" not in trace.output
     payload = json.loads(structured.output)
-    assert payload["origin_events"][0]["source_occurrence"]["ordinal"] == 7
+    assert payload["origin_events"][0]["source_occurrence"] is None
     assert payload["saved_analysis"]["interpretation"] == "COMPETING"
     budgets = payload["character_budgets"]
     assert payload["inference"] is None
@@ -899,7 +903,7 @@ def test_task1_rationale_keeps_structured_evidence_but_renders_only_provenance(
     assert budgets["provenance_limit"] < budgets["provenance_source"]
 
 
-def test_trace_degrades_corrupt_add_source_or_uid_order_to_reconstructed(
+def test_trace_degrades_legacy_corrupt_add_source_or_uid_order_to_reconstructed(
     isolated_store,
     monkeypatch,
 ):
@@ -915,12 +919,27 @@ def test_trace_degrades_corrupt_add_source_or_uid_order_to_reconstructed(
     memories = [item for item in ctx.iter_items() if isinstance(item, Memory)]
     checkpoint_path = next(
         path
-        for path in (
-            isolated_store / "contexts" / ctx.name / "checkpoints"
-        ).glob("*.json")
+        for path in (isolated_store / "contexts" / ctx.name / "checkpoints").glob(
+            "*.json"
+        )
         if json.loads(path.read_text())["command"] == "add"
     )
     original = json.loads(checkpoint_path.read_text())
+    original["args"]["mode"] = "paste"
+    original["args"]["source"] = {
+        "kind": "system-clipboard",
+        "parser": "stripped-nonempty-physical-lines-v1",
+        "raw_text": "first raw line\nsecond raw line",
+        "sha256": hashlib.sha256(b"first raw line\nsecond raw line").hexdigest(),
+    }
+    checkpoint_path.write_text(json.dumps(original))
+    legacy_report = reconstruct_memory_history(store, ctx, memories[0].uid)
+
+    created = next(event for event in legacy_report.events if event.kind == "CREATED")
+    assert created.evidence == "RECORDED"
+    assert created.source_occurrence is not None
+    assert created.source_occurrence.exact_raw_source
+    assert created.source_occurrence.line_number == 1
 
     corrupt_hash = json.loads(json.dumps(original))
     corrupt_hash["args"]["source"]["sha256"] = "0" * 64

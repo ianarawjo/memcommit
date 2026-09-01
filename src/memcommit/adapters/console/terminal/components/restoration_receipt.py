@@ -616,6 +616,13 @@ def _restored_command(unit: ContextCommandUnit) -> str:
             )
         if args.get("mode") == "paste":
             return _with_context("mem add --paste", operand_context)
+        contents = args.get("contents")
+        if (
+            isinstance(contents, list)
+            and contents
+            and all(isinstance(content, str) for content in contents)
+        ):
+            return _with_context("mem add <MEMORY>...", operand_context)
     if unit.command == "edit":
         if isinstance(args.get("input"), str):
             return _with_context(

@@ -16,10 +16,10 @@ an interface.
 | `operations.add.runtime.MemoryStoreAddTargetPort.freeze` | infrastructure | locator → frozen target/token | Store/Profile/Grant reads | one current snapshot; optional local-only boundary; CREATE authority | `VERIFIED` |
 | `operations.add.runtime.MemoryStoreAddTargetPort.append` | infrastructure | frozen target + request → result | one authorized Context save and Add checkpoint | target UID/digest and Grant revalidation; no overwrite | `VERIFIED` |
 | `operations.add.runtime.execute_add` | infrastructure composition | request + Store → result | same Store effects as port | no terminal or provider dependency | `VERIFIED` |
-| `commands.add.receipt.render_add_receipt` | Add console receipt | typed result → one count/target, complete ordered Memory list, and checkpoint | stdout only | intake provenance does not alter durable-result presentation; no Store, authority, or mutation decisions | `VERIFIED` |
+| `commands.add.receipt.render_add_receipt` | Add console receipt | typed result → one count/target, complete ordered Memory list, and checkpoint | stdout only | adapter intake mechanics do not enter the result; no Store, authority, or mutation decisions | `VERIFIED` |
 | `commands.add.workbench.build_add_workbench_setup` | Add workbench composition | Store + current snapshot + requested target → frozen setup | Store/Profile/Grant reads only | visible rows remain distinct from CREATE-selectable targets; no mutation | `VERIFIED` |
 | `commands.add.workbench.run_add_workbench` | Add interactive workbench | frozen setup + application callback → result/cancel | process-local drafts and terminal I/O; callback only at To Do | cancellation and draft edits do not call application | `VERIFIED` |
-| `commands.add.cmd` | console composition | argv/TTY → typed request and presentation | system-clipboard reads, TUI/CLI, application effects | each positional argv value is one exact Memory; positional values and `--paste` are exclusive; `--to`, `--context`, and `-c` populate one scalar requested Target; the last occurrence wins and the receipt names the resolved Target | `VERIFIED` |
+| `commands.add.cmd` | console composition | argv/TTY → typed request and presentation | system-clipboard reads, TUI/CLI, application effects | each positional argv value is one exact Memory; positional values and `--paste` are exclusive; bare Add requires a TTY before Store/setup construction; `--to`, `--context`, and `-c` populate one scalar requested Target; the last occurrence wins and the receipt names the resolved Target | `VERIFIED` |
 | `api.client.MemCommitClient.add_memories` | public Python facade | explicit text sequence + target → `AddMemoriesResult` | one application Add | explicit roots local-only; nonlocal Grant requires active Profile; stable errors | `VERIFIED` |
 | `adapters.agent.add.AddAgentAdapter.invoke` | agent adapter | strict version-1 JSON object → JSON-safe receipt/error | exactly one public Add call after local validation | exact order/duplicates; complete receipt; no automatic mutation retry | `VERIFIED` |
 | `adapters.agent.add.add_agent_tool_schema` | agent adapter | none → fresh function-tool schema | none | strict fields/version; duplicate Memory items remain legal | `VERIFIED` |
@@ -30,7 +30,7 @@ an interface.
 
 | Entry route | Provider/cache/session | Durable success | Failure publication |
 | --- | --- | --- | --- |
-| CLI positional single/batch or system clipboard | none | exact Memories and one Add checkpoint | none before completed Store save |
+| CLI positional values or system clipboard | none | exact Memories and one uniform Add checkpoint | none before completed Store save |
 | Add TUI | process-local drafts only | exact reviewed drafts and one Add checkpoint | cancel/edit failure publishes nothing |
 | Public Python | none | explicit ordered sequence and one Add checkpoint | typed error; no partial public receipt |
 | Agent tool adapter | none | same public Add and JSON-safe complete receipt | bounded error; every failure is non-retryable |
@@ -61,12 +61,12 @@ are aliases for one scalar requested Target so the command adapter carries one
 Python value rather than reconstructing one domain operand from separate CLI
 variables. As with an ordinary scalar Click/Typer option, the last occurrence
 wins when aliases are repeated or mixed. Every successful Add receipt names the
-resolved Target, including the single-Memory route, so the published result
+resolved Target, including a one-Memory request, so the published result
 makes that final selection visible.
 
 This role alias is deliberately asymmetric. Edit and Remove use
 `--context`/`-c` to qualify the owner of an existing Memory; they do not accept
 `--to`, which would misleadingly imply a destination, movement, or result
 Context. No target authority, locator resolution, or Add materialization
-behavior changes with the aliases. Every input mode now uses the same complete
-receipt; only CLI target selection differs.
+behavior changes with the aliases. Every intake route uses the same complete
+receipt and checkpoint shape; only CLI target selection differs.

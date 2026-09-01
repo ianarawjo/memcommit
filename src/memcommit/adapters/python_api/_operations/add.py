@@ -3,12 +3,10 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-import json
 
 from memcommit.application.operations.add.application import (
     AddError as ApplicationAddError,
     AddRequest,
-    AddSource,
     run_add,
     validate_add_request,
 )
@@ -54,16 +52,6 @@ def add_memories(
             AddRequest(
                 contents=values,
                 context_locator=context_name,
-                source=AddSource(
-                    mode="EXPLICIT_BATCH",
-                    kind="python-api",
-                    parser="exact-memory-sequence-v1",
-                    raw_text=json.dumps(
-                        values,
-                        ensure_ascii=False,
-                        separators=(",", ":"),
-                    ),
-                ),
             )
         )
     except (ApplicationAddError, TypeError, ValueError) as error:

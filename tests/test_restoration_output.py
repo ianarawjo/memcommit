@@ -121,7 +121,7 @@ def test_revert_reports_target_action_and_removed_content(isolated_store):
     assert result.exit_code == 0
     assert "Reverted Context: notes" in plain
     assert "Restored state recorded by: mem add" in plain
-    assert 'Action detail: Added: "keep this"' in plain
+    assert "Action detail: Added 1 Memory" in plain
     assert "Affected Context: notes" in plain
     assert "Affected content: 1 Memory removed" in plain
     memory_label = source_object_label(SourceForm.MEMORY)
@@ -509,6 +509,11 @@ def _command_unit(
             "add",
             {"content": "private text"},
             "mem add <CONTENT> --context work/notes",
+        ),
+        (
+            "add",
+            {"contents": ["first", "second"]},
+            "mem add <MEMORY>... --context work/notes",
         ),
         (
             "edit",

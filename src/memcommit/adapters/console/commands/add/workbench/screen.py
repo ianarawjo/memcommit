@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from collections.abc import Callable
 
 from prompt_toolkit.application import Application
@@ -17,7 +16,6 @@ from prompt_toolkit.styles import merge_styles
 from memcommit.application.operations.add.application import (
     AddRequest,
     AddResult,
-    AddSource,
 )
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector import (
     ContextSelectorControl,
@@ -332,16 +330,9 @@ def run_add_workbench(
             status["value"] = "Press E to enter at least one Memory."
             event.app.layout.focus(draft_pane.text_area)
             return "HANDLED"
-        raw_text = json.dumps(contents, ensure_ascii=False, separators=(",", ":"))
         request = AddRequest(
             context_locator=selector.selection.selected_name,
             contents=contents,
-            source=AddSource(
-                mode="TUI_DRAFTS",
-                kind="interactive-tui",
-                parser="explicit-multiline-drafts-v1",
-                raw_text=raw_text,
-            ),
         )
         try:
             completed = execute(request)

@@ -27,16 +27,17 @@ checkpoint, target-CAS, interface, or receipt contracts. The separate
 provider-derived operation results as Memories because that ADD-shaped effect
 does not implement this exact user-supplied Add operation.
 
-`AddRequest` contains an ordered tuple of exact Memory contents, one intake
-provenance record, and an optional existing-Context locator. `AddResult`
-contains the canonical public target name, frozen Context UID, every created
-Memory UID/content pair, and the one checkpoint UID.
+`AddRequest` contains an ordered tuple of exact Memory contents and an optional
+existing-Context locator. Argument parsing, clipboard reads, and TUI drafts are
+adapter intake mechanics; they do not change the meaning of the Add request.
+`AddResult` contains the canonical public target name, frozen Context UID,
+every created Memory UID/content pair, and the one checkpoint UID.
 
 The application validates the complete batch before opening a target. Empty
 batches, non-text values, and blank Memories fail before any Store call. A
-single-source request must contain exactly one Memory. The application invokes
-one target port once and checks that the durable receipt covers the requested
-contents in the same order.
+request may contain one or more Memories. The application invokes one target
+port once and checks that the durable receipt covers the requested contents in
+the same order.
 
 The same application package owns the line-oriented raw-text grammar. It
 strips each physical line, omits blank lines, and rejects a result with no
@@ -64,11 +65,12 @@ The public routes have these meanings:
   nonempty-physical-line grammar; and
 - `--context` selects a local or CREATE-granted existing Context.
 
-In an interactive terminal, bare `mem add` opens the TUI. Outside a terminal,
-the omitted-source error remains stable for scripts. Positional Memories and
-`--paste` are mutually exclusive. Shell quoting determines positional Memory
-boundaries, so `mem add my name is` adds three Memories while
-`mem add "my name is"` adds one.
+In an interactive terminal, bare `mem add` opens the TUI. The interactive route
+requires a TTY before constructing a Store or workbench setup, so bare Add in a
+pipeline, redirected process, or test host fails without filesystem effects.
+Positional Memories and `--paste` are mutually exclusive. Shell quoting
+determines positional Memory boundaries, so `mem add my name is` adds three
+Memories while `mem add "my name is"` adds one.
 
 The former `--input FILE|-` route is intentionally removed from Add. Import is
 already publicly marked `PARTIAL`; future plain-text file, arbitrary-document,
@@ -94,13 +96,12 @@ authority checks, or application execution. The former
 staging paths are removed rather than retained as facades because both
 presentations are Add-specific and consumed only by this console command.
 
-The presenter consumes only `AddResult`, not the intake mode. Positional single
-or batch input, system clipboard, and TUI drafts all render one
-count and resolved Target, every created Memory UID/content pair in durable
-order, and the one Add checkpoint. Intake mode remains checkpoint provenance;
-it is not a reason to hide or reshape the completed durable result. The
-receipt intentionally has no preview limit, so a large Add produces a long but
-complete proof of what was stored.
+The presenter consumes only `AddResult`. Positional input, system clipboard,
+and TUI drafts all render one count and resolved Target, every created Memory
+UID/content pair in durable order, and the one Add checkpoint. The intake route
+is not retained by the application or checkpoint because it does not describe
+an upstream Memory or Context lineage. The receipt intentionally has no preview
+limit, so a large Add produces a long but complete proof of what was stored.
 
 ## Shared terminal mechanics
 

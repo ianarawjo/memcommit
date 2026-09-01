@@ -131,14 +131,7 @@ def test_memory_projection_keeps_uid_selection_and_json_shape(isolated_store):
                 "description": "Added first wording",
                 "before": [],
                 "after": [first],
-                "source_occurrence": {
-                    "mode": "single",
-                    "ordinal": 1,
-                    "total": 1,
-                    "line_number": None,
-                    "raw_line": None,
-                    "exact_raw_source": False,
-                },
+                "source_occurrence": None,
                 **empty_event_evidence,
             },
             {

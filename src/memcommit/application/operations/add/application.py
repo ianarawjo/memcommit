@@ -4,15 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from dataclasses import field
-from typing import Literal, Protocol
-
-
-AddInputMode = Literal[
-    "SINGLE",
-    "EXPLICIT_BATCH",
-    "PASTE",
-    "TUI_DRAFTS",
-]
+from typing import Protocol
 
 
 class AddError(RuntimeError):
@@ -20,38 +12,10 @@ class AddError(RuntimeError):
 
 
 @dataclass(frozen=True)
-class AddSource:
-    """Exact intake provenance retained with the Add checkpoint."""
-
-    mode: AddInputMode
-    kind: str
-    parser: str
-    raw_text: str
-
-    def __post_init__(self) -> None:
-        if self.mode not in {
-            "SINGLE",
-            "EXPLICIT_BATCH",
-            "PASTE",
-            "TUI_DRAFTS",
-        }:
-            raise ValueError("Add source mode is invalid.")
-        for value, label in (
-            (self.kind, "kind"),
-            (self.parser, "parser"),
-        ):
-            if not isinstance(value, str) or not value.strip():
-                raise ValueError(f"Add source {label} must be nonempty text.")
-        if not isinstance(self.raw_text, str):
-            raise TypeError("Add source raw text must be text.")
-
-
-@dataclass(frozen=True)
 class AddRequest:
     """One stable Add request independent of argv and terminal state."""
 
     contents: tuple[str, ...]
-    source: AddSource
     context_locator: str | None = None
 
 
@@ -111,8 +75,6 @@ def validate_add_request(request: AddRequest) -> AddRequest:
         raise AddError("Every Add Memory must be text.")
     if any(not content.strip() for content in request.contents):
         raise AddError("Every Add Memory must contain nonblank text.")
-    if request.source.mode == "SINGLE" and len(request.contents) != 1:
-        raise AddError("Single Add source must contain exactly one Memory.")
     if request.context_locator is not None and (
         not isinstance(request.context_locator, str) or not request.context_locator
     ):

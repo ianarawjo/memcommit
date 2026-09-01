@@ -34,8 +34,9 @@ def test_cli_positional_values_add_one_ordered_batch(isolated_store) -> None:
     ]
     checkpoints = store.list_checkpoints("target")
     assert len(checkpoints) == before + 1
-    assert checkpoints[0]["args"]["mode"] == "explicit"
+    assert checkpoints[0]["args"]["count"] == 2
     assert checkpoints[0]["args"]["contents"] == ["First", "Second\nline"]
+    assert checkpoints[0]["args"]["memory_uids"] == [memory.uid for memory in added]
     assert "Added 2 Memories to 'target'." in result.output
     assert f"  [{added[0].uid[:8]}] First" in result.output
     assert f"  [{added[1].uid[:8]}] Second\\nline" in result.output
@@ -94,11 +95,14 @@ def test_cli_no_longer_exposes_redundant_or_file_input_options(
     assert not isolated_store.exists()
 
 
-def test_cli_without_source_retains_noninteractive_error(isolated_store) -> None:
+def test_cli_without_input_requires_terminal_before_opening_store(
+    isolated_store,
+) -> None:
     result = runner.invoke(app, ["add"])
 
     assert result.exit_code == 1
-    assert "provide one or more positional MEMORY values" in result.output
+    assert "Interactive Add requires a TTY" in result.output
+    assert "Pass positional MEMORY values or --paste" in result.output
     assert not isolated_store.exists()
 
 
