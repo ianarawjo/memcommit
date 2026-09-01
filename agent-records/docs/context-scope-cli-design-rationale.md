@@ -60,8 +60,8 @@ with multiple roles or independent traversal axes.
   Impact supports them.
 - A shared parser may host several resource kinds, but presets remain valid
   only for kinds with Context scope. Context import accepts them; Profile and
-  Memory import reject them. Replays such as `list --paste` also reject both
-  presets because their scope is already frozen in the copied receipt.
+  Memory import reject them. List accepts the presets for its current Context
+  projection; its plain-text `--copy` does not create a replay request.
 - A bare command may launch its saved-session browser or setup TUI. Operations
   with incomplete explicit endpoints fail rather than falling back to a saved
   session browser. Scope flags apply only to a new request or to visible setup

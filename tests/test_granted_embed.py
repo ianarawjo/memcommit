@@ -9,6 +9,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
+from memcommit.adapters.console.commands.list import command as list_command
 from memcommit.application.context_access.access import (
     GrantedReadStore,
     resolve_context_access,
@@ -204,6 +205,8 @@ def test_recursive_list_and_show_open_attached_read_projection(
     tmp_path,
     monkeypatch,
 ) -> None:
+    copied_text: list[str] = []
+    monkeypatch.setattr(list_command, "write_system_clipboard", copied_text.append)
     store, _authority, workspace, _advisor, advice, _grant = _fixture(
         isolated_store,
         tmp_path,
@@ -235,8 +238,9 @@ def test_recursive_list_and_show_open_attached_read_projection(
     assert "advisor/private" in recursive_show.output
     assert "Concealed review note." not in recursive_list.output
     assert "Concealed review note." not in recursive_show.output
-    assert mixed_copy.exit_code == 1
-    assert "mixed local and granted recursive list" in mixed_copy.stderr
+    assert mixed_copy.exit_code == 0, mixed_copy.output + mixed_copy.stderr
+    assert advice.content in copied_text[0]
+    assert "Concealed review note." not in copied_text[0]
     assert _advisor.uid not in store.load_direct(workspace.name).memories
 
 

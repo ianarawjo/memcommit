@@ -38,7 +38,6 @@ def test_batch_add_file_preserves_line_order_and_uses_one_checkpoint(
     result = invoke("add", "--input", str(source))
 
     assert result.exit_code == 0
-    assert "Added 3 memories" in result.output
     memories = direct_memories("intake")
     assert [memory.content for memory in memories] == [
         "existing",
@@ -48,25 +47,22 @@ def test_batch_add_file_preserves_line_order_and_uses_one_checkpoint(
     ]
     checkpoints = store.list_checkpoints("intake")
     assert len(checkpoints) == checkpoint_count + 1
+    assert "Added 3 Memories to 'intake'." in result.output
+    for memory in memories[1:]:
+        assert f"  [{memory.uid[:8]}] {memory.content}" in result.output
+    assert f"Checkpoint [{checkpoints[0]['uid'][:8]}]." in result.output
     checkpoint = checkpoints[0]
     assert checkpoint["command"] == "add"
     args = checkpoint["args"]
-    assert {
-        key: args[key]
-        for key in ("input", "mode", "count", "contents")
-    } == {
+    assert {key: args[key] for key in ("input", "mode", "count", "contents")} == {
         "input": str(source),
         "mode": "lines",
         "count": 3,
         "contents": ["first fact", "* second fact", "세 번째 사실"],
     }
-    assert args["memory_uids"] == [
-        memory.uid for memory in memories[1:]
-    ]
+    assert args["memory_uids"] == [memory.uid for memory in memories[1:]]
     assert args["source"]["kind"] == "utf-8-file"
-    assert args["source"]["parser"] == (
-        "stripped-nonempty-physical-lines-v1"
-    )
+    assert args["source"]["parser"] == ("stripped-nonempty-physical-lines-v1")
     assert args["source"]["raw_text"] == (
         "  first fact  \n\n* second fact\r\n세 번째 사실\n"
     )
@@ -115,9 +111,7 @@ def test_batch_add_invalid_inputs_do_not_mutate_or_checkpoint(
     assert "no non-empty lines" in no_lines.output
     assert missing.exit_code == 1
     assert "Could not read input" in missing.output
-    assert [memory.content for memory in direct_memories("intake")] == [
-        "existing"
-    ]
+    assert [memory.content for memory in direct_memories("intake")] == ["existing"]
     assert len(store.list_checkpoints("intake")) == checkpoint_count
 
 
@@ -197,9 +191,11 @@ def test_batch_edit_file_is_atomic_preserves_order_and_checkpoints_once(
     assert "1 unchanged memory was skipped" in result.output
     edited_context = store.load("notes")
     assert edited_context.ordered_uids() == order_before
-    assert [
-        memory.content for memory in direct_memories("notes")
-    ] == ["FIRST", "second", "  세 번째\twith tab  "]
+    assert [memory.content for memory in direct_memories("notes")] == [
+        "FIRST",
+        "second",
+        "  세 번째\twith tab  ",
+    ]
     checkpoints = store.list_checkpoints("notes")
     assert len(checkpoints) == checkpoint_count + 1
     checkpoint = checkpoints[0]
@@ -255,10 +251,7 @@ def test_batch_edit_stdin_applies_all_changes_in_one_checkpoint(isolated_store):
         "edit",
         "--input",
         "-",
-        stdin=(
-            f"{memories[0].uid[:8]}\tONE\n"
-            f"{memories[1].uid[:8]}\tTWO\n"
-        ),
+        stdin=(f"{memories[0].uid[:8]}\tONE\n{memories[1].uid[:8]}\tTWO\n"),
     )
 
     assert result.exit_code == 0
@@ -368,10 +361,7 @@ def test_batch_edit_all_noops_make_no_checkpoint(isolated_store, tmp_path):
     checkpoint_count = len(store.list_checkpoints("notes"))
     source = tmp_path / "edits.tsv"
     source.write_text(
-        (
-            f"{memories[0].uid[:8]}\tone\n"
-            f"{memories[1].uid[:8]}\ttwo\n"
-        ),
+        (f"{memories[0].uid[:8]}\tone\n{memories[1].uid[:8]}\ttwo\n"),
         encoding="utf-8",
     )
 
@@ -425,10 +415,7 @@ def test_revert_before_batch_edit_restores_every_changed_memory(
     before_batch = store.list_checkpoints("notes")[0]
     source = tmp_path / "edits.tsv"
     source.write_text(
-        (
-            f"{memories[0].uid[:8]}\tONE\n"
-            f"{memories[1].uid[:8]}\tTWO\n"
-        ),
+        (f"{memories[0].uid[:8]}\tONE\n{memories[1].uid[:8]}\tTWO\n"),
         encoding="utf-8",
     )
     invoke("edit", "--input", str(source))

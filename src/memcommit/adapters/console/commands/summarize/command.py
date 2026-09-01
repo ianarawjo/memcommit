@@ -160,7 +160,7 @@ def cmd(
             )
             raise typer.Exit(1)
         typer.secho(
-            "Copied Summary as plain text; no structured clipboard stage was created.",
+            "Copied Summary as plain text to the system clipboard.",
             fg=typer.colors.GREEN,
             err=True,
         )

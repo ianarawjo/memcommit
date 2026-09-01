@@ -8,10 +8,10 @@ This is the exact path-only classification of the formerly flat
 route closure remains solely in the operation evidence ledger.
 
 - Baseline modules: 153
-- Active canonical mappings: 138
-- Retired baseline modules: 15
+- Active canonical mappings: 137
+- Retired baseline modules: 16
 - Command entry packages: 61
-- Shared command mechanisms: 39
+- Shared command mechanisms: 38
 
 | Legacy module | Canonical module | Role | Owner |
 | --- | --- | --- | --- |
@@ -99,7 +99,6 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.merge` | `memcommit.adapters.console.commands.merge.command` | command-entry | `commands.merge` |
 | `memcommit.commands.operation_launcher_location` | `memcommit.adapters.console.terminal.components.operation_launcher.location` | shared-terminal-component | `terminal` |
 | `memcommit.commands.ordinary_query_provider_policy` | `memcommit.adapters.console.commands.query.provider_policy` | command-owned-support | `query` |
-| `memcommit.commands.paste_input` | `memcommit.adapters.console.terminal.components.paste_input` | shared-terminal-component | `terminal` |
 | `memcommit.commands.profile` | `memcommit.adapters.console.commands.profile.command` | command-entry | `commands.profile` |
 | `memcommit.commands.profile_group` | `memcommit.adapters.console.commands.profile.group` | command-owned-support | `profile` |
 | `memcommit.commands.profile_picker` | `memcommit.adapters.console.commands.profile.picker` | command-owned-support | `profile` |

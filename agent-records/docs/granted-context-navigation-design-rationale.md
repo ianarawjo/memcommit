@@ -110,17 +110,11 @@ proposal-guidelines query route.
 
 An explicit `mem ls --copy` may place READ-visible text on the operating-system
 clipboard, which is an intentional user-controlled disclosure and cannot be
-revoked afterward. The participant Profile's private structured clipboard is
-different: for a granted list it stores only the exact grant binding, copy
-mode, recursive flag, and snapshot digests. `mem ls --paste` must re-resolve
-the same grant and unchanged authority projection before replaying the text.
-It also rebuilds the current Profile-readable UID-prefix namespace without
-opening QUERY-only routes; no unrelated readable UID catalog or authority
-Memory text is retained in the receipt. A changed prefix projection is caught
-by the system-clipboard rendering check, while the authority Source digest
-remains about Source state rather than unrelated display identities.
-It therefore fails after revocation, grant revision, Profile change, or source
-drift instead of retaining a hidden durable copy of authority Memories.
+revoked afterward. List retains no private structured clipboard, grant
+receipt, or replay mode. A later inspection must resolve and authorize its
+Context again with `mem ls`; a durable point-in-time copy belongs in a Context
+Reference instead. QUERY-only routes remain excluded from the rendered and
+copied text.
 
 Compare resolves both the active reference and `--to` peer through the same
 READ boundary. When a selected root contains descendant Contexts, its bounded

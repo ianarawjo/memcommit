@@ -4,8 +4,7 @@
 - Scope: canonical `mem list` with the exact compact `mem ls` spelling,
   immediate namespace
   child navigation, recursive listing with `-R`, `--recursive`, or the
-  beginner-facing `--expand` alias, and dual text/structured `--copy` and
-  `--paste`
+  beginner-facing `--expand` alias, and plain-text `--copy`
 
 ## 1. Purpose
 
@@ -44,7 +43,6 @@ mem ls -R [context]
 mem ls --recursive [context]
 mem ls --expand [context]
 mem ls [context] [-R] --copy [--with-ids]
-mem ls --paste
 ```
 
 `mem list` is the canonical discovery name and `mem ls` is its exact compact
@@ -123,7 +121,7 @@ independently. `Memory`, live Memory Embed, and immutable Memory Reference rows
 contribute to the Memory count; namespace descendants, embedded Contexts,
 Context References, and query-only Context views contribute to the subcontext
 count. In a recursive listing, the header still describes the selected root's
-direct rows, while copy/paste receipts report the separately typed totals for
+direct rows, while the copy receipt reports the separately typed totals for
 the complete visible occurrence tree.
 
 A subcontext's reach precedes its identity:
@@ -220,14 +218,11 @@ owners that preserve the exact same full UID still require `CONTEXT:UID`, since
 no longer UID prefix can separate them; command resolution continues to fail
 closed and reports those full owner coordinates.
 
-The ordinary structured clipboard stores only the chosen prefix for each UID
-already visible in its frozen snapshot, not the unrelated readable UIDs that
-caused it to grow. This preserves exact `--copy --with-ids` and later `--paste`
-text even if an unlisted Context changes. A granted copy retains no authority
-Memory text or UID catalog in the participant receipt: Paste revalidates the
-grant, reloads the current Profile-readable UID namespace, and then verifies
-the system clipboard rendering. A relevant prefix-namespace drift therefore
-fails closed instead of silently replaying a differently identified row.
+The copied annotated text stores only the chosen prefix for each UID already
+visible in that invocation's frozen snapshot, not the unrelated readable UIDs
+that caused it to grow. Copy is a one-way text output: it does not retain that
+snapshot or UID catalog for later replay. A later `mem ls` freezes and renders
+the then-current readable namespace again.
 
 Normal terminal output begins the Memory content beside its selector. Long
 content is wrapped to the current terminal width, and every continuation row
@@ -397,7 +392,7 @@ TTY and non-TTY output therefore share the same text format, authorization,
 and snapshot construction. Embedded Context occurrences, repeated embeds,
 cycles, MemoryRef resolution, opaque query pointers, and readable granted
 descendants continue to use the existing snapshot contract. `--copy`,
-`--with-ids`, and `--paste` are unchanged and never depend on terminal state.
+and `--with-ids` never depend on terminal state. List has no `--paste` mode.
 The cross-command rationale is recorded in
 [`context-listing-design-rationale.md`](context-listing-design-rationale.md).
 
@@ -418,14 +413,11 @@ overlaps with the compact listing use case. Raw storage JSON is not the normal
 output of either command; a future export or developer command would be a
 better place for raw JSON.
 
-## 12. Copy and paste as a frozen result boundary
+## 12. Copy as a plain-text output boundary
 
-`mem ls --copy` creates two synchronized representations of the same list
-result:
-
-1. a human-oriented text rendering is written to the macOS system clipboard;
-   and
-2. a versioned structured snapshot is written to the private mem store.
+`mem ls --copy` writes one human-oriented text rendering of the current List
+result to the macOS system clipboard. It does not create a private staged
+payload, `clipboard.json`, or replayable List snapshot.
 
 The default clipboard rendering omits `[kind uid]` annotations. Context names
 end in `/`, with `DESCENDANT ·` or `VIA EMBED ·` still leading the row;
@@ -439,77 +431,32 @@ the terminal-width-aware hanging-indent layout in both copy modes so a copy
 operation does not remove the local selection cues.
 
 `--with-ids` is a modifier of `--copy`, not an independent list mode. Using it
-without `--copy`, including with `--paste`, is rejected. The success receipt is
-not part of either copied representation. Copy does not save a Context, change
-the current Context, or create a checkpoint. This makes it an output action
-rather than an early target mutation. Copy and Paste receipts likewise report
-Memory and subcontext occurrence totals separately rather than recreating a
-mixed `items` count.
-
-The structured half preserves full UIDs, full Memory text, MemoryRef pointer
-metadata and its frozen resolved display content, embedded Context pointer
-identity, QueryContextRef routing metadata, and canonical object order.
-Namespace-derived rows use a distinct `namespace_context` kind so a frozen
-navigation edge is never later mistaken for a persisted embed. Snapshot schema
-version 2 introduced that kind; version 3 adds the visible-only UID-prefix
-projection derived from the command's complete readable identity catalog.
-Incompatible older staged list records fail closed. Replay also verifies that
-each typed namespace row is exactly one
-segment below its containing Context, so a validly rehashed malformed stage
-cannot move an unrelated Context under that parent. Rendering reapplies the
-Context-first presentation rule. A
-non-recursive copy does not include the contents of a child Context. A
-recursive copy stores only the traversed occurrence tree, including repeated
-diamond paths and finite cycle markers.
+without `--copy` is rejected. The success receipt is not copied. Copy does not
+save a Context, change the current Context, create a checkpoint, or write any
+MemCommit-owned clipboard state. It reports Memory and subcontext occurrence
+totals separately rather than recreating a mixed `items` count.
 
 The clean rendering is intentionally human-readable rather than parseable.
 A Memory whose text resembles a Context name or reference can therefore be
 textually ambiguous after annotations are omitted. No object reconstruction
-depends on that text: the structured stage remains authoritative, while normal
-stdout and `--with-ids` retain visible selectors when a person needs them. The
-two surfaces intentionally use different line layouts, so exact clipboard
-replay is inline rather than a reproduction of visually wrapped stdout.
+depends on that text. Normal stdout and `--with-ids` retain visible selectors
+when a person needs them, and the compact clipboard renderer keeps each Memory
+on one physical line instead of reproducing terminal-width wrapping.
 
-Query-only source content is never opened or copied. A QueryContextRef's public
-name and local routing metadata can be staged because they are already part of
-the parent Context record, but the concealed source text is outside this
-clipboard contract.
+Query-only source content is never opened or copied. READ-visible granted text
+may be copied, including as part of a mixed local and granted recursive result,
+because invoking `--copy` is an explicit user-controlled disclosure of the
+authorized rendered text. Revocation cannot retract plaintext already placed
+on the operating-system clipboard, and MemCommit retains no hidden replay
+receipt afterward.
 
-`mem ls --paste` is a read-only consumer of a structured list snapshot. It
-replays the frozen list in the clean or annotated form selected by the
-producing copy, even if its source Context has since changed or been deleted.
-It can therefore run without a current Context. A positional Context and `-R`
-are rejected with `--paste`: the source and traversal depth were fixed by the
-producing copy. `--copy --paste` is also rejected rather than silently
-overwriting its own input.
-
-The structured record stores SHA-256 digests of both the exact
-system-clipboard text and a canonical serialization of the structured
-selection. Paste rereads the clipboard and accepts the object snapshot only
-when its text, text digest, selection digest, and one of the two permitted
-renderings of the snapshot agree. This detects corruption of non-rendered
-identity and routing fields as well as visible content without storing a
-second presentation flag.
-
-A dedicated inter-process lock spans each complete copy transaction and each
-stage-plus-clipboard validation. Copy invalidates the previous structured
-record before writing either new half; a failed replacement therefore cannot
-reactivate an older object selection that happens to render the same text or
-delete another concurrent copy's newer stage. Arbitrary external clipboard
-text is not guessed into Memory objects.
-
-This content-equivalence check cannot distinguish an external overwrite whose
-bytes are exactly identical to the copied text. A platform-specific clipboard
-change token or custom MIME type could tighten that boundary later, but the
-prototype intentionally uses dependency-free `/usr/bin/pbcopy` and
-`/usr/bin/pbpaste` on macOS.
-
-The word `--paste` remains command-local. Existing `mem add --paste` is the
-interactive bracketed-paste intake flow described in
-[`mem-add-paste-design-rationale.md`](mem-add-paste-design-rationale.md); it
-does not silently switch to structured clipboard consumption. General
-`show/find/add --paste` inputs and actual materialization of staged objects
-need their own command contracts.
+List deliberately has no `--paste`. To inspect current state again, run
+`mem ls` against the Context. To keep a live Context relationship, use
+`mem embed`; to preserve a durable point-in-time snapshot, use `mem reference`.
+`mem add --paste` remains a separate intake contract that reads arbitrary
+UTF-8 system-clipboard text and creates one Memory per non-empty physical line,
+as described in
+[`mem-add-paste-design-rationale.md`](mem-add-paste-design-rationale.md).
 
 ## 13. Deliberate Non-Goals
 
@@ -523,8 +470,8 @@ This change does not:
 - expose raw `context.json` data;
 - change the behavior of `mem show`;
 - automatically embed a path descendant into a Root Context;
-- paste staged objects into a Context or choose new UIDs;
-- add structured `--copy` or `--paste` to `show`, `find`, or other commands;
+- reconstruct MemCommit objects from copied List text;
+- add List-style `--copy` to `show`, `find`, or other commands;
 - support non-macOS system clipboards.
 
 The current prototype discovers children by validating the complete ordinary
@@ -541,7 +488,7 @@ The implementation is covered by tests for:
 - hanging-indent Memory rows at direct and recursive depths;
 - Context-first rendering when a Memory was inserted first;
 - separate Memory and subcontext counts at the selected root and in recursive
-  copy/paste receipts;
+  copy receipts;
 - leading `DESCENDANT` and `VIA EMBED` reach markers in annotated and clean
   Context rows;
 - `aaa/ab` Context and `aaa` Memory content coexisting without ambiguity;
@@ -560,15 +507,15 @@ The implementation is covered by tests for:
 - repeated traversal of a shared Context along both sides of a diamond;
 - resolved MemoryRef content and provenance;
 - existing non-recursive list and embed behavior;
-- clean-by-default and `--with-ids` text/structured dual copy for both
-  `list` and `ls`;
-- inline annotated clipboard replay distinct from wrapped terminal stdout;
+- clean-by-default and `--with-ids` plain-text copy for both `list` and `ls`;
+- inline annotated clipboard text distinct from wrapped terminal stdout;
 - embedded Context, namespace Context, query-only, MemoryRef, and recursive
   clean rendering;
 - rejection of `--with-ids` outside `--copy`;
-- frozen direct and recursive snapshot replay after source mutation/deletion;
+- rejection of the removed `--paste` option;
 - query-only source non-disclosure;
-- stale, missing, corrupt, and failed clipboard states;
+- mixed local and READ-granted recursive copy;
+- failed system-clipboard writes without private stage creation;
 - argument conflicts and operation without a current Context;
 - macOS adapter command, UTF-8, and failure boundaries.
 
@@ -583,9 +530,9 @@ Implementation:
 - [`tests/test_list_clipboard.py`](../../tests/test_list_clipboard.py)
 - [`Root Context design rationale`](root-context-design-rationale.md)
 
-The console package owns command grammar, interactive browsing, clipboard I/O,
-and rendering. `application.operations.list` owns readable-source authority,
-command-start-stable scope freezing, recursive materialization, and the mixed
-local/granted copyability guard. This keeps `list` as the canonical Help
+The console package owns command grammar, clipboard I/O, and rendering.
+`application.operations.list` owns readable-source authority,
+command-start-stable scope freezing, and recursive materialization. This keeps
+`list` as the canonical Help
 operation name instead of retaining the former implementation-only
 `list_memories` package name.

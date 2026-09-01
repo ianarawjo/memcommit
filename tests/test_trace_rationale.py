@@ -852,7 +852,7 @@ def test_task1_rationale_keeps_structured_evidence_but_renders_only_provenance(
     lines[6] = "학생들 - 안내해야 한다 - 실물 카드를 받고나 앱으로."
     lines[13] = "같은 nfc 쓰는데 교직원들만 출입가능하다, 학생들은 여전히 못 들어온다."
     payload = "\n".join(lines)
-    monkeypatch.setattr(add_command, "capture_paste", lambda: payload)
+    monkeypatch.setattr(add_command, "read_system_clipboard", lambda: payload)
     assert invoke("add", "--paste").exit_code == 0
 
     store = MemoryStore()
@@ -906,7 +906,7 @@ def test_trace_degrades_corrupt_add_source_or_uid_order_to_reconstructed(
     assert invoke("init", "source-integrity").exit_code == 0
     monkeypatch.setattr(
         add_command,
-        "capture_paste",
+        "read_system_clipboard",
         lambda: "first raw line\nsecond raw line",
     )
     assert invoke("add", "--paste").exit_code == 0
@@ -914,9 +914,11 @@ def test_trace_degrades_corrupt_add_source_or_uid_order_to_reconstructed(
     ctx = store.load_current_direct()
     memories = [item for item in ctx.iter_items() if isinstance(item, Memory)]
     checkpoint_path = next(
-        (isolated_store / "contexts" / ctx.name / "checkpoints").glob(
-            "*Added-2-memories-from-i*.json"
-        )
+        path
+        for path in (
+            isolated_store / "contexts" / ctx.name / "checkpoints"
+        ).glob("*.json")
+        if json.loads(path.read_text())["command"] == "add"
     )
     original = json.loads(checkpoint_path.read_text())
 

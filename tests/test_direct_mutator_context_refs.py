@@ -66,7 +66,7 @@ def test_add_paste_reload_preserves_unresolved_context_ref(
     monkeypatch,
 ):
     store, name, _, reference_uid = _dangling_parent()
-    monkeypatch.setattr(add_command, "capture_paste", lambda: "pasted")
+    monkeypatch.setattr(add_command, "read_system_clipboard", lambda: "pasted")
 
     result = runner.invoke(app, ["add", "--paste"])
 

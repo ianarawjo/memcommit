@@ -102,14 +102,12 @@ Meld similarly annotates granted source rows, excludes query-only routes, and
 keeps C local. Its current directional mode remains local-only and reports that
 boundary if a visible granted source is selected.
 
-A recursive list rooted locally can now contain both local and granted Memory
-content. The private structured clipboard does not yet have a multi-source,
-multi-grant freshness receipt, so `mem ls -R --copy` rejects such a mixed
-scope whether the granted contributor entered through public lexical placement,
-a persisted Embed, or one displayed attached READ projection. A person can
-copy an exact granted Context using the existing
-grant-bound receipt. Implementing a composite receipt is intentionally left as
-a separate persistence change.
+A recursive list rooted locally can contain both local and granted Memory
+content. `mem ls -R --copy` may copy exactly that authorized rendered scope as
+plain text whether the granted contributor entered through public lexical
+placement, a persisted Embed, or one displayed attached READ projection. This
+is an explicit user-controlled disclosure, not a durable or replayable
+multi-grant receipt; QUERY-only content remains excluded.
 
 This rollout does not make every operation picker grant-aware. Some
 creation workflows intentionally accept only ordinary owned Contexts. Those

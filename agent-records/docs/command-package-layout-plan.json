@@ -1,5 +1,5 @@
 {
-  "active_module_count": 138,
+  "active_module_count": 137,
   "baseline_commit": "f8c54a56",
   "baseline_module_count": 153,
   "entry_package_count": 61,
@@ -668,13 +668,6 @@
       "role": "command-owned-support"
     },
     {
-      "canonical_module": "memcommit.adapters.console.terminal.components.paste_input",
-      "legacy_module": "memcommit.commands.paste_input",
-      "owner": "terminal",
-      "public_exports": [],
-      "role": "shared-terminal-component"
-    },
-    {
       "canonical_module": "memcommit.adapters.console.commands.profile.command",
       "legacy_module": "memcommit.commands.profile",
       "owner": "commands.profile",
@@ -1108,10 +1101,11 @@
     "memcommit.commands.ground_session_picker",
     "memcommit.commands.meld_target_picker",
     "memcommit.commands.memory_report_recents",
+    "memcommit.commands.paste_input",
     "memcommit.commands.session_endpoint_setup",
     "memcommit.commands.shell_init",
     "memcommit.commands.write_protection"
   ],
   "schema_version": 1,
-  "shared_module_count": 39
+  "shared_module_count": 38
 }

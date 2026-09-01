@@ -11,7 +11,6 @@ from memcommit.application.operations.add.application import (
     AddError,
     AddRequest,
     AddSource,
-    prepare_add_target,
     run_add,
 )
 from memcommit.application.operations.add.runtime import MemoryStoreAddTargetPort
@@ -19,14 +18,13 @@ from memcommit.adapters.console.commands.add.line_input_records import (
     parse_line_input_records,
 )
 from memcommit.adapters.console.commands.add.receipt import render_add_receipt
+from memcommit.adapters.console.clipboard import read_system_clipboard
 from memcommit.adapters.console.coordination.batch_input_source import (
     read_batch_input_text,
 )
 from memcommit.adapters.console.terminal.components.errors import render_cli_error
-from memcommit.adapters.console.terminal.core.capabilities import is_interactive_terminal
-from memcommit.adapters.console.terminal.components.paste_input import (
-    PasteCancelled,
-    capture_paste,
+from memcommit.adapters.console.terminal.core.capabilities import (
+    is_interactive_terminal,
 )
 from memcommit.adapters.console.commands.add.workbench import (
     build_add_workbench_setup,
@@ -54,9 +52,7 @@ def cmd(
         bool,
         typer.Option(
             "--paste",
-            help=(
-                "Capture pasted text without echoing it, then add each non-empty line"
-            ),
+            help="Add each non-empty line from the system clipboard",
         ),
     ] = False,
     memories: Annotated[
@@ -118,7 +114,7 @@ def cmd(
             if workbench_result is None:
                 typer.echo("Add cancelled — no changes made.")
                 return
-            render_add_receipt(workbench_result, mode="TUI_DRAFTS")
+            render_add_receipt(workbench_result)
             return
         if info is not None:
             request = AddRequest(
@@ -147,27 +143,14 @@ def cmd(
                 ),
             )
         elif paste:
-            frozen_target = prepare_add_target(
-                requested_context,
-                target_port=port,
-            )
-            try:
-                raw_text = capture_paste()
-            except PasteCancelled:
-                typer.echo("Aborted — no changes made.")
-                return
+            raw_text = read_system_clipboard()
             contents = tuple(parse_line_input_records(raw_text))
-            count = len(contents)
-            noun = "line" if count == 1 else "lines"
-            typer.secho(f"[{count} {noun} pasted]", dim=True)
-            # The explicit paste mode plus its F2/Ctrl-D finish action is the
-            # approval boundary; the resulting Add remains one Undo unit.
             request = AddRequest(
                 context_locator=requested_context,
                 contents=contents,
                 source=AddSource(
                     mode="PASTE",
-                    kind="interactive-paste",
+                    kind="system-clipboard",
                     raw_text=raw_text,
                     parser="stripped-nonempty-physical-lines-v1",
                 ),
@@ -190,7 +173,6 @@ def cmd(
         result = run_add(
             request,
             target_port=port,
-            frozen_target=(frozen_target if paste else None),
         )
     except (
         AddError,
@@ -206,4 +188,4 @@ def cmd(
         render_cli_error(error)
         raise typer.Exit(1)
 
-    render_add_receipt(result, mode=request.source.mode)
+    render_add_receipt(result)

@@ -27,14 +27,17 @@ def test_cli_repeatable_memory_option_adds_one_explicit_batch(isolated_store) ->
     )
 
     assert result.exit_code == 0, result.output
-    assert "Added 2 Memories" in result.output
-    assert [
-        memory.content for memory in store.load_direct("target").memories.values()
-    ] == [
+    added = list(store.load_direct("target").memories.values())
+    assert [memory.content for memory in added] == [
         "First",
         "Second\nline",
     ]
-    assert len(store.list_checkpoints("target")) == before + 1
+    checkpoints = store.list_checkpoints("target")
+    assert len(checkpoints) == before + 1
+    assert "Added 2 Memories to 'target'." in result.output
+    assert f"  [{added[0].uid[:8]}] First" in result.output
+    assert f"  [{added[1].uid[:8]}] Second\\nline" in result.output
+    assert f"Checkpoint [{checkpoints[0]['uid'][:8]}]." in result.output
 
 
 def test_cli_without_source_retains_noninteractive_error(isolated_store) -> None:
@@ -57,10 +60,11 @@ def test_cli_to_names_the_explicit_add_target(isolated_store) -> None:
 
     assert result.exit_code == 0, result.output
     assert not store.load_direct("current").memories
-    assert [
-        memory.content for memory in store.load_direct("target").memories.values()
-    ] == ["Directed Memory"]
-    assert "Directed Memory to 'target'." in result.output
+    added = list(store.load_direct("target").memories.values())
+    assert [memory.content for memory in added] == ["Directed Memory"]
+    assert "Added 1 Memory to 'target'." in result.output
+    assert f"  [{added[0].uid[:8]}] Directed Memory" in result.output
+    assert "Checkpoint [" in result.output
 
 
 @pytest.mark.parametrize(
@@ -88,10 +92,10 @@ def test_cli_target_aliases_use_the_last_value_and_receipt_names_it(
 
     assert result.exit_code == 0, result.output
     assert not store.load_direct("first").memories
-    assert [
-        memory.content for memory in store.load_direct("second").memories.values()
-    ] == ["Added once"]
-    assert "Added once to 'second'." in result.output
+    added = list(store.load_direct("second").memories.values())
+    assert [memory.content for memory in added] == ["Added once"]
+    assert "Added 1 Memory to 'second'." in result.output
+    assert f"  [{added[0].uid[:8]}] Added once" in result.output
 
 
 def test_add_help_groups_target_context_aliases() -> None:

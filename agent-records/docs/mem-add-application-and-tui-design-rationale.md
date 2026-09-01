@@ -3,7 +3,7 @@
 ## Motivating problem
 
 The historical `mem add INFO` route was useful for one Memory, while batch
-input split a file or paste into physical lines. It did not offer an
+input split a file or clipboard text into physical lines. It did not offer an
 interactive way to review several independent multiline Memories before one
 durable action. Its Store, authority, checkpoint, and terminal behavior also
 lived together in the command handler, so a future Python or agent adapter
@@ -39,11 +39,13 @@ one target port once and checks that the durable receipt covers the requested
 contents in the same order.
 
 The Store adapter captures the current Context name once at command start.
-Every relative locator is resolved against that snapshot. It freezes CREATE
-authority and the exact target Context UID before an intake surface that may
-remain open. Immediately before mutation it reloads the target and rejects a
-replacement. All in-memory additions are persisted by one authorized save and
-one Add checkpoint; no partial result is published by the application.
+Every relative locator is resolved against that snapshot. A review surface
+that may remain open freezes CREATE authority and the exact target Context UID
+before approval. Direct CLI inputs, including one immediate system-clipboard
+read, resolve the target through the normal execution boundary. Immediately
+before mutation the runtime reloads a frozen target and rejects a replacement.
+All in-memory additions are persisted by one authorized save and one Add
+checkpoint; no partial result is published by the application.
 
 ## Interface routes
 
@@ -51,7 +53,8 @@ The compatibility routes retain their established meanings:
 
 - `mem add INFO` adds one exact Memory;
 - repeatable `mem add --memory TEXT --memory TEXT` adds one explicit batch;
-- `--input` and `--paste` retain nonempty-physical-line parsing; and
+- `--input` reads a UTF-8 file or stdin and `--paste` reads the macOS system
+  clipboard; both use nonempty-physical-line parsing; and
 - `--context` selects a local or CREATE-granted existing Context.
 
 In an interactive terminal, bare `mem add` opens the TUI. Outside a terminal,
@@ -76,6 +79,14 @@ authority checks, or application execution. The former
 `adapters.interfaces.cli.add` and `adapters.interfaces.tui.operations.add`
 staging paths are removed rather than retained as facades because both
 presentations are Add-specific and consumed only by this console command.
+
+The presenter consumes only `AddResult`, not the intake mode. Single argument,
+explicit batch, file/stdin, system clipboard, and TUI drafts all render one
+count and resolved Target, every created Memory UID/content pair in durable
+order, and the one Add checkpoint. Intake mode remains checkpoint provenance;
+it is not a reason to hide or reshape the completed durable result. The
+receipt intentionally has no preview limit, so a large Add produces a long but
+complete proof of what was stored.
 
 ## Shared terminal mechanics
 

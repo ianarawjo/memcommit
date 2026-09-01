@@ -10,8 +10,8 @@ from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.clipboard as clipboard
 import memcommit.application.capabilities.ops as ops
+from memcommit.adapters.console.commands.list import command as list_command
 from memcommit.adapters.console.commands.meld import command as meld_command
 import memcommit.adapters.console.commands.meld.endpoint_setup as meld_setup_command
 from memcommit.adapters.console.entrypoint import app
@@ -722,6 +722,8 @@ def test_local_namespace_root_reads_granted_and_owned_descendants_together(
     tmp_path,
     monkeypatch,
 ):
+    copied_text: list[str] = []
+    monkeypatch.setattr(list_command, "write_system_clipboard", copied_text.append)
     active, _authority, attachment, _wiki, _grant = _setup_granted_target(
         isolated_store,
         tmp_path,
@@ -747,8 +749,10 @@ def test_local_namespace_root_reads_granted_and_owned_descendants_together(
     assert listed.exit_code == 0, listed.output + listed.stderr
     assert "task-root/participant" in listed.output
     assert "task-root/campus-wiki" in listed.output
-    assert mixed_copy.exit_code == 1
-    assert "mixed local and granted recursive list" in mixed_copy.stderr
+    assert mixed_copy.exit_code == 0, mixed_copy.output + mixed_copy.stderr
+    assert "task-root/participant" in copied_text[0]
+    assert "task-root/campus-wiki" in copied_text[0]
+    assert "west lobby" in copied_text[0]
     assert DETAIL_SECRET not in "\n".join(provider.prompts)
 
 
@@ -1173,12 +1177,12 @@ def test_granted_context_binding_revalidates_exact_view_and_rejects_revocation(
         revalidate_granted_context_binding(binding)
 
 
-def test_granted_list_copy_stages_no_source_text_and_paste_requires_live_grant(
+def test_granted_list_copy_writes_plain_text_without_local_stage(
     isolated_store,
     tmp_path,
     monkeypatch,
 ):
-    active, _authority, source, wiki, grant = _setup_granted_target(
+    active, _authority, source, wiki, _grant = _setup_granted_target(
         isolated_store,
         tmp_path,
         monkeypatch,
@@ -1186,14 +1190,9 @@ def test_granted_list_copy_stages_no_source_text_and_paste_requires_live_grant(
     )
     system_clipboard = {"text": ""}
     monkeypatch.setattr(
-        clipboard,
+        list_command,
         "write_system_clipboard",
         lambda text: system_clipboard.__setitem__("text", text),
-    )
-    monkeypatch.setattr(
-        clipboard,
-        "read_system_clipboard",
-        lambda: system_clipboard["text"],
     )
 
     copied = runner.invoke(
@@ -1208,26 +1207,8 @@ def test_granted_list_copy_stages_no_source_text_and_paste_requires_live_grant(
     assert "Source boundary:" not in copied.output
     assert "Source boundary:" not in system_clipboard["text"]
     assert "west lobby" in system_clipboard["text"]
-    record = json.loads(
-        (active.store_dir / "clipboard.json").read_text(encoding="utf-8")
-    )
-    serialized = json.dumps(record)
-    assert record["schema_version"] == 2
-    assert record["plain_text"] is None
-    assert record["selection"]["kind"] == "GRANTED_LIST_RECEIPT"
-    assert "uid_prefixes" not in record["selection"]
-    assert "west lobby" not in serialized
-    assert "open on weekdays" not in serialized
-
-    pasted = runner.invoke(app, ["ls", "--paste"])
-    assert pasted.exit_code == 0, pasted.output
-    assert "west lobby" in pasted.output
+    assert not (active.store_dir / "clipboard.json").exists()
     assert active.current_context_name() == source.name
-
-    delete_authority_grant(grant.uid)
-    blocked = runner.invoke(app, ["ls", "--paste"])
-    assert blocked.exit_code == 1
-    assert "no longer available under its exact grant" in blocked.stderr
 
 
 def test_list_uid_prefixes_span_local_and_all_readable_granted_contexts(

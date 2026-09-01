@@ -264,7 +264,7 @@ def test_mem_summarize_copy_writes_plain_understanding_without_typed_stage(
         "The Context describes a closure while preserving an explicit "
         "staff-access exception."
     ]
-    assert "no structured clipboard stage was created" in result.output
+    assert "Copied Summary as plain text to the system clipboard." in result.output
     assert not (isolated_store / "clipboard.json").exists()
 
 

@@ -140,6 +140,9 @@ def _owned_support_target(target: str) -> str:
 
 
 RETIRED_BASELINE_MODULES = {
+    "paste_input": (
+        "retired when Add --paste became direct system-clipboard intake"
+    ),
     "consolidate": (
         "retired with Dedun's obsolete exact-review console replay"
     ),
@@ -279,7 +282,6 @@ SHARED_MODULES = {
     "memory_history",
     "memory_picker",
     "operation_launcher_location",
-    "paste_input",
     "quality_find_workbench",
     "readable_context_catalog",
     "resolution_workbench_shell",
@@ -322,7 +324,6 @@ RELOCATED_SHARED_TARGETS = {
     "horizontal_choice": "memcommit.adapters.console.terminal.components.horizontal_choice",
     "memory_picker": "memcommit.adapters.console.terminal.components.memory_report_picker",
     "operation_launcher_location": "memcommit.adapters.console.terminal.components.operation_launcher.location",
-    "paste_input": "memcommit.adapters.console.terminal.components.paste_input",
     "quality_find_workbench": "memcommit.adapters.console.terminal.components.quality_find.workbench",
     "readable_context_catalog": "memcommit.application.context_access.readable_contexts",
     "resolution_workbench_shell": "memcommit.adapters.console.terminal.components.resolution.session_shell",

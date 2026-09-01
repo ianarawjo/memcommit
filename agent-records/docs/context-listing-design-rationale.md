@@ -43,8 +43,10 @@ visible range, clipboard snapshot, and automation contract agree.
 - TTY and non-TTY invocations use the same semantic scope and line-oriented
   renderer. ANSI styling may still mark the current Context when supported.
 - List continues to resolve and authorize its exact operand before freezing
-  direct or recursive output. This change does not broaden Grant authority or
-  alter `--copy`, `--paste`, MemoryRef, cycle, or query-view handling.
+  direct or recursive output. Plain-text `--copy` exposes exactly that
+  authorized projection, while List has no hidden clipboard stage or
+  `--paste` replay. MemoryRef, cycle, and query-view handling remain part of
+  the frozen invocation.
 - Contexts continues to show ordinary local names and valid visible Grant
   routes with the current marker. It remains read-only and never changes the
   current pointer.

@@ -1,122 +1,75 @@
 # `mem add --paste` design rationale
 
-## Intent
+## Motivating problem
 
-`mem add --paste` is an interactive intake mode for notes that are already on
-the clipboard. It keeps a large or sensitive-looking paste from flooding the
-terminal while retaining the existing rule that every non-empty physical line
-becomes one raw Memory record. A line is an intake boundary, not a claim that
-the content is semantically atomic.
+The earlier `mem add --paste` opened a concealed prompt-toolkit intake
+surface. A person still had to paste manually and then press `F2` or
+`Ctrl-D`, even though the option name suggested that Add would consume the
+clipboard directly. Its line counter and second persistent count also added a
+review ceremony that did not change how the batch was parsed or stored.
 
-The terminal view shows only a running summary such as
-`[24 lines pasted]`. It never places the captured payload in the editable
-control, and the command prints only a count after saving. Users can inspect
-the resulting Memories deliberately with `mem ls` or `mem show`.
-
-This is a concealed display boundary, not an access-control boundary. Finishing
-capture with `F2` or `Ctrl-D` is the complete approval to store the full text
-in the Context and its checkpoint like any other Memory. Later commands may
-display it.
+`--paste` now means one explicit, immediate read from the system clipboard.
+List's former structured `--paste` replay was removed separately; Add owns the
+raw text intake meaning of this option.
 
 ## Command contract
 
-```console
-$ mem add --paste
-Paste text; each non-empty line becomes one Memory.
-[0 lines pasted]  F2/Ctrl-D: add  Esc/Ctrl-C: cancel
+`mem add --paste` reads the exact clipboard text through
+`memcommit.adapters.console.clipboard.read_system_clipboard`. The current
+adapter invokes dependency-free `/usr/bin/pbpaste` on macOS, rejects process
+failure and non-UTF-8 output, and reports unsupported platforms through
+`ClipboardError`.
 
-[12 lines pasted]
-Added 12 Memories to 'temp/task-1'.
-```
+The command then applies the same Add-owned physical-line grammar as
+`mem add --input`:
 
-- A bracketed paste is captured without echoing its text.
-- Multiple paste events are appended in arrival order. A missing newline is
-  inserted between separate paste blocks so their edge lines cannot
-  accidentally fuse into one Memory.
-- Blank and whitespace-only lines are ignored.
-- Leading and trailing whitespace is removed from every retained line, exactly
-  as with `mem add --input`.
-- `F2` and `Ctrl-D` finish capture and immediately commit the exact parsed
-  batch; `--paste` plus that finish key are the explicit mutation request.
-- `Escape`, `Ctrl-C`, empty input, or an input error makes no Context change
-  and creates no checkpoint.
-- One finished paste creates all Memories in order and one automatic
-  checkpoint for the operation.
-- That checkpoint retains the parser/mode, ordered created Memory UIDs, exact
-  raw intake text, and its SHA-256 value. `mem trace` can therefore recover a
-  Memory's item ordinal and physical source line without adding fields to the
-  minimal `{uid, content}` Memory record.
-- `INFO`, `--input`, and `--paste` are mutually exclusive input modes.
+- every non-empty physical line becomes one Memory;
+- leading and trailing whitespace is stripped from each retained line;
+- blank or whitespace-only clipboard text fails before target mutation;
+- all retained Memories are appended in order through one `AddRequest`, one
+  authorized save, and one automatic checkpoint; and
+- `INFO`, `--memory`, `--input`, and `--paste` remain mutually exclusive
+  intake choices.
 
-The command remembers the selected Context identity when capture begins, then
-reloads that Context immediately after capture. This preserves updates
-that another process saved while the paste UI was open. If the Context was
-deleted and recreated under the same name, the UID mismatch aborts the
-operation rather than writing into a different workspace.
+There is no paste screen, line-count preamble, finish key, cancellation state,
+or second confirmation. Supplying `--paste` is the complete request to read
+and add the clipboard text. After the save, the ordinary Add receipt uses the
+same complete form as every other intake: resulting count and Target, every
+created Memory UID/content pair in order, and the checkpoint. Clipboard intake
+does not create a separate privacy or presentation mode.
 
-`--paste` requires an interactive terminal. Scripts and pipelines should keep
-using `mem add --input FILE` or `... | mem add --input -`; those modes remain
-deterministic and do not enter the concealed capture surface.
+## Provenance and mutation boundary
 
-Trace labels a new source occurrence `RECORDED` only when the raw-text hash and
-ordered UID ledger verify. If either has been damaged, it reports reconstructed
-order instead of claiming exact raw provenance. Older checkpoints without this
-metadata remain readable but cannot retroactively prove the original bytes.
+Clipboard intake retains `mode="PASTE"` so existing Add checkpoint and trace
+readers continue to recognize the CLI route. New checkpoints record
+`kind="system-clipboard"`, the exact raw UTF-8 text, the shared line-parser
+identifier, its SHA-256 digest, ordered contents, and created Memory UIDs.
+This distinguishes clipboard provenance from file/stdin provenance without
+giving it different Memory or checkpoint materialization semantics.
 
-## Why this is a separate mode
+The command captures the current Context name once before reading the
+clipboard, so a relative target keeps one meaning. Unlike the retired
+long-lived interactive surface, clipboard intake does not pre-freeze a target
+UID before the read. Target authority and identity are resolved through the
+normal `run_add` boundary after the clipboard has been read, just as they are
+for file input. The Store adapter still rejects replacement after a target has
+actually been frozen and before it is saved.
 
-Shell stdin and terminal paste may carry the same bytes, but they express
-different intentions. `--input -` is composable automation and should consume
-stdin directly. `--paste` is a human intake flow: conceal the raw input,
-report its structural size, commit only when the person presses the dedicated
-finish key, and leave a single reversible checkpoint. A second `y/N` would
-repeat intent already expressed by the explicit mode and finish action.
+## Alternatives and limitations
 
-The implementation delegates raw-terminal handling and bracketed-paste parsing
-to `prompt_toolkit`. Memcommit owns only the small state machine around it:
-capture, count, finish, parse, and save. This avoids maintaining
-platform-specific terminal mode and escape-sequence code in the repository.
-Escape and Ctrl-C both cancel capture without returning any concealed payload;
-F2 or Ctrl-D remains the only path that returns the batch for Add.
+Renaming the option to `--clipboard` was considered. Keeping `--paste` avoids
+a compatibility break and now makes its behavior more literal: the command
+pastes from the clipboard instead of asking the terminal to capture a future
+paste. It does not imply a paired List operation: `mem ls --copy` produces
+plain text, while only Add interprets clipboard text as new Memories.
 
-The terminal capture component is owned by
-`memcommit.adapters.console.terminal.components.paste_input`. The historical
-`memcommit.adapters.console.coordination.paste_input` facade is removed, so imports
-and monkeypatches target the canonical component directly. This is an
-ownership-only relocation: key bindings,
-paste normalization, TTY checks, cancellation and failure behavior, and the
-no-payload-echo boundary are unchanged.
+Routing this behavior through `mem import` was rejected. Import preserves
+existing memcommit Profile, Context, or Memory identity from another managed
+source; clipboard text creates new Memories and therefore remains Add input.
 
-The source contract and record grammars have different owners. The shared
-UTF-8 file/stdin reader lives in
-`memcommit.adapters.console.coordination.batch_input_source`; Add's stripped,
-non-empty line grammar lives in `commands.add.line_input_records`, and Edit's
-first-tab grammar lives in `commands.edit.input_records`. The former
-`interfaces.cli.batch_input` owner and intermediate `console.shared.batch_input`
-facade are removed rather than retained as internal compatibility paths. This
-separation does not change newline preservation, UTF-8 or I/O failure handling,
-Add line stripping, or Edit's first-tab/content-preservation behavior.
-
-### Relationship to `mem ls --paste`
-
-`--paste` is intentionally command-local rather than one hidden global input
-mode. `mem add --paste` continues to mean interactive bracketed-paste capture:
-the person enters text in a concealed TTY surface and finishes that surface to
-commit a Context mutation. By contrast, `mem ls --paste` reads and displays
-the frozen structured list snapshot previously created by `mem ls --copy`; it
-does not capture terminal input or mutate a Context.
-
-These forms share the user-level idea of consuming pasted material, but not
-the same source contract. A future generic clipboard protocol must reconcile
-that distinction explicitly instead of silently changing the established Add
-intake behavior.
-
-## Downstream refinement
-
-Paste intake intentionally does not deduplicate, resolve apparent conflicts,
-infer audiences, normalize wording, or choose organizational destinations.
-It also does not decide whether a line contains one focal commitment or
-several. Those decisions belong to separate, reviewable operations described
-in the
-[memory refinement pipeline](memory-refinement-pipeline-design-rationale.md)
-and the [`mem atomize` design](mem-atomize-design-rationale.md).
+The shared clipboard adapter is currently macOS-only. Clipboard text is not
+deduplicated, semantically split, normalized beyond physical-line stripping,
+or reviewed before storage. Those transformations remain separate,
+reviewable operations. The retired
+`memcommit.adapters.console.terminal.components.paste_input` component is
+removed because no command owns its bracketed-paste state machine anymore.

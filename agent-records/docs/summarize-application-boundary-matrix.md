@@ -32,8 +32,8 @@ semantic-execution planning, or understanding models. It adds no ordinary
 Profile-local cache, Summary session, public client facade, agent tool, review,
 or Apply. The Study artifact stays in the pinned shared bundle and materializes
 only the typed process-local result. Its CLI `--copy` route remains a
-post-result plain-text presentation effect and creates no structured clipboard
-stage.
+post-result plain-text presentation effect with no hidden application or
+persistence state.
 
 Summarize's current-Context/direct defaults already form an executable request,
 so `mem summarize` has one line-oriented result route in every terminal. The

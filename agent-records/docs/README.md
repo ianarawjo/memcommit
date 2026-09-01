@@ -88,13 +88,12 @@ classification, and stale generated output.
 ## Clipboard result contract
 
 - [`mem-ls-design-rationale.md`](mem-ls-design-rationale.md) defines
-  `ls/list --copy` as synchronized clean-or-annotated text and typed-result
-  output,
-  `ls/list --paste` as frozen read-only replay, clipboard-overwrite
-  invalidation, and the query-only non-disclosure boundary.
+  `ls/list --copy` as a clean-or-annotated plain-text output action with no
+  hidden staged payload or List replay mode, plus the query-only
+  non-disclosure boundary.
 - [`mem-add-paste-design-rationale.md`](mem-add-paste-design-rationale.md)
-  preserves the distinct interactive bracketed-paste intake contract for
-  `mem add --paste`.
+  defines the distinct direct system-clipboard intake contract for `mem add
+  --paste`.
 
 ## Directional update contract notes
 

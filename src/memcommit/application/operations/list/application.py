@@ -19,11 +19,11 @@ class ListRequest:
     context_locator: str | None
     current_context_name: str | None
     recursive: bool
-    require_copyable_snapshot: bool = False
 
     def __post_init__(self) -> None:
         if self.context_locator is not None and (
-            not isinstance(self.context_locator, str) or not self.context_locator.strip()
+            not isinstance(self.context_locator, str)
+            or not self.context_locator.strip()
         ):
             raise ValueError("List Context locator must be nonblank text.")
         if self.current_context_name is not None and (
@@ -33,8 +33,6 @@ class ListRequest:
             raise ValueError("List current Context name must be nonblank text.")
         if not isinstance(self.recursive, bool):
             raise TypeError("List recursive scope must be boolean.")
-        if not isinstance(self.require_copyable_snapshot, bool):
-            raise TypeError("List copyability requirement must be boolean.")
 
 
 @dataclass(frozen=True, slots=True)
@@ -81,4 +79,3 @@ __all__ = [
     "ListSourcePort",
     "run_list",
 ]
-

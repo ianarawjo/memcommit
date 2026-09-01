@@ -93,7 +93,7 @@ def _checkpoint_description(request: AddRequest) -> str:
     if source.mode == "SINGLE":
         return f'Added: "{request.contents[0][:80]}"'
     if source.mode == "PASTE":
-        return f"Added {len(request.contents)} memories from interactive paste"
+        return f"Added {len(request.contents)} memories from system clipboard"
     if source.mode == "LINES":
         origin = "stdin" if source.input_name == "-" else repr(source.input_name)
         return f"Added {len(request.contents)} memories from {origin}"
@@ -163,10 +163,9 @@ class MemoryStoreAddTargetPort(AddTargetPort):
         store = access.store
         context = store.load_direct(access.context_name)
         if context.uid != target.context_uid:
-            open_surface = "paste mode" if request.source.mode == "PASTE" else "Add"
             raise ConcurrentContextUpdateError(
                 f"Context '{target.context_name}' was replaced while "
-                f"{open_surface} was open; "
+                "Add was open; "
                 "no changes were made."
             )
         memories = ops.add_many(context, list(request.contents))

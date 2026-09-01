@@ -158,6 +158,13 @@ judgment field without reparsing report prose. A color-capable TTY shows
 `YES`, `MAY`, and `NO` through the shared judgment roles; a pipe or `NO_COLOR`
 emits the exact same receipt with no ANSI styling.
 
+The line-oriented Add receipt likewise consumes its typed `AddResult` without
+parsing prose or intake provenance. Only `Added` uses the shared ADD blue,
+each created Memory body uses Memory-object lavender, and `Checkpoint` uses
+retained-history brown; counts, UIDs, Target names, and punctuation remain
+neutral. All input modes retain the same complete plain text when ANSI is
+stripped.
+
 The line-oriented Revert receipt likewise consumes typed restoration facts,
 but owns a compact composition distinct from the checkpoint Viewer. Its
 Revert heading and recovery commands use UNDO, the command that recorded the

@@ -73,33 +73,6 @@ def profile_readable_display_uids(
     return readable_catalog_display_uids(catalog)
 
 
-def _graph_contains_granted_context(
-    context: Context,
-    catalog: ReadableContextCatalog,
-) -> bool:
-    """Detect a granted contributor reached outside lexical expansion."""
-
-    seen: set[str] = set()
-
-    def visit(current: Context) -> bool:
-        if current.uid in seen:
-            return False
-        seen.add(current.uid)
-        for item in current.iter_items():
-            if not isinstance(item, Context):
-                continue
-            if (
-                catalog.context_exists(item.name)
-                and catalog.access_for(item.name).is_granted
-            ):
-                return True
-            if visit(item):
-                return True
-        return False
-
-    return visit(context)
-
-
 class MemoryStoreListSource:
     """Resolve List authority and scope while keeping Store access out of CLI code."""
 
@@ -123,20 +96,6 @@ class MemoryStoreListSource:
             if request.recursive
             else catalog.load_without_attached_reads(access.display_name)
         )
-        if (
-            request.require_copyable_snapshot
-            and request.recursive
-            and not access.is_granted
-            and (
-                catalog.granted_names_below(access.display_name)
-                or _graph_contains_granted_context(context, catalog)
-            )
-        ):
-            raise RuntimeError(
-                "Copying a mixed local and granted recursive list is not yet "
-                "supported. Copy the granted Context explicitly so its exact "
-                "grant receipt can be retained."
-            )
         return ListSelection(
             access=access,
             context=context,

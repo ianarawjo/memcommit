@@ -7,10 +7,7 @@ from prompt_toolkit.utils import get_cwidth
 
 from memcommit.adapters.console.clipboard import (
     ClipboardError,
-    ClipboardPayload,
-    copy_payload,
-    load_payload,
-    selection_digest,
+    write_system_clipboard,
 )
 from memcommit.core.context import (
     Context,
@@ -27,11 +24,8 @@ from memcommit.adapters.console.coordination.context_scope_options import (
 )
 from memcommit.application.context_access.access import (
     ContextAccess,
-    GrantedReadStore,
     attached_grants,
     context_access_display_facts,
-    freeze_granted_context_binding,
-    revalidate_granted_context_binding,
 )
 from memcommit.adapters.console.terminal.core.identity import (
     collision_safe_uid_prefixes,
@@ -47,10 +41,8 @@ from memcommit.application.operations.list.application import ListRequest
 from memcommit.application.operations.list.runtime import (
     context_record_display_uids,
     execute_list,
-    profile_readable_display_uids,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.update.model import GrantedUpdateTarget
 from memcommit.application.authorization.study_operation_policy import (
     analysis_boundary_label,
 )
@@ -75,7 +67,6 @@ from memcommit.source_projection.presentation import (
 
 
 _LIST_SNAPSHOT_VERSION = 3
-_GRANTED_LIST_RECEIPT_VERSION = 2
 _MemoryLayout = Literal["hanging", "inline"]
 _MIN_HANGING_CONTENT_WIDTH = 20
 
@@ -857,96 +848,6 @@ def _occurrence_count_text(memory_count: int, subcontext_count: int) -> str:
     )
 
 
-def _snapshot_source_digest(snapshot: dict[str, object]) -> str:
-    """Digest source state without treating a display-prefix change as content."""
-
-    return selection_digest(
-        {key: value for key, value in snapshot.items() if key != "uid_prefixes"}
-    )
-
-
-def _granted_list_receipt(
-    snapshot: dict[str, object],
-    *,
-    binding: GrantedUpdateTarget,
-    with_ids: bool,
-) -> dict[str, object]:
-    """Persist grant identity and snapshot digests without authority text."""
-
-    return {
-        "kind": "GRANTED_LIST_RECEIPT",
-        "schema_version": _GRANTED_LIST_RECEIPT_VERSION,
-        "binding": binding.to_dict(),
-        "recursive": _require_bool(snapshot, "recursive"),
-        "with_ids": with_ids,
-        "snapshot_sha256": _snapshot_source_digest(snapshot),
-    }
-
-
-def _restore_granted_list_receipt(
-    receipt: dict[str, object],
-) -> tuple[dict[str, object], bool]:
-    expected = {
-        "kind",
-        "schema_version",
-        "binding",
-        "recursive",
-        "with_ids",
-        "snapshot_sha256",
-    }
-    if set(receipt) != expected:
-        raise ClipboardError("The granted list receipt is invalid.")
-    if (
-        receipt.get("kind") != "GRANTED_LIST_RECEIPT"
-        or receipt.get("schema_version") != _GRANTED_LIST_RECEIPT_VERSION
-    ):
-        raise ClipboardError("The granted list receipt is invalid.")
-    recursive = receipt.get("recursive")
-    with_ids = receipt.get("with_ids")
-    expected_digest = receipt.get("snapshot_sha256")
-    if (
-        not isinstance(recursive, bool)
-        or not isinstance(with_ids, bool)
-        or not isinstance(expected_digest, str)
-    ):
-        raise ClipboardError("The granted list receipt is invalid.")
-    try:
-        binding = GrantedUpdateTarget.from_dict(receipt.get("binding"))
-        active_store = MemoryStore(create=False)
-        access = revalidate_granted_context_binding(
-            binding,
-            active_store=active_store,
-        )
-        readable_uids = profile_readable_display_uids(active_store, access)
-        granted_store = GrantedReadStore(access)
-        context_names = tuple(granted_store.list_context_names())
-        context = (
-            granted_store.load(access.display_name)
-            if recursive
-            else granted_store.load_direct(access.display_name)
-        )
-        snapshot = _snapshot_context(
-            context,
-            store=granted_store,
-            context_names=context_names,
-            recursive=recursive,
-            readable_uids=readable_uids,
-        )
-    except (
-        FileNotFoundError,
-        OSError,
-        ProfileConfigError,
-        ProfileError,
-        ValueError,
-    ) as error:
-        raise ClipboardError(
-            "The granted list source is no longer available under its exact grant."
-        ) from error
-    if _snapshot_source_digest(snapshot) != expected_digest:
-        raise ClipboardError("The granted list source changed after it was copied.")
-    return snapshot, with_ids
-
-
 def _emit_snapshot_text(
     text: str,
     *,
@@ -1088,8 +989,7 @@ def cmd(
         typer.Option(
             "--copy",
             help=(
-                "Copy a clean list to the system clipboard and stage its "
-                "structured result; add --with-ids for annotations."
+                "Copy a clean list to the system clipboard; add --with-ids for annotations."
             ),
         ),
     ] = False,
@@ -1100,17 +1000,7 @@ def cmd(
             help=("Include [kind uid] annotations in text copied by --copy."),
         ),
     ] = False,
-    paste_result: Annotated[
-        bool,
-        typer.Option(
-            "--paste",
-            help=(
-                "List the structured result currently paired with the system clipboard."
-            ),
-        ),
-    ] = False,
 ) -> None:
-    scope_flags_supplied = direct or recursive
     try:
         recursive = (
             resolve_scope_preset(
@@ -1127,13 +1017,6 @@ def cmd(
             err=True,
         )
         raise typer.Exit(2)
-    if copy_result and paste_result:
-        typer.secho(
-            "Error: --copy and --paste cannot be used together.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
     if with_ids and not copy_result:
         typer.secho(
             "Error: --with-ids can only be used with --copy.",
@@ -1141,74 +1024,6 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-    if paste_result:
-        if context_name is not None or scope_flags_supplied:
-            typer.secho(
-                "Error: CONTEXT and scope flags cannot be used with --paste; "
-                "the copied result already defines its Contexts and scope.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        try:
-            payload = load_payload(expected_producer="list")
-            if payload.selection.get("kind") == "GRANTED_LIST_RECEIPT":
-                snapshot, copied_with_ids = _restore_granted_list_receipt(
-                    payload.selection
-                )
-                replay_with_ids = copied_with_ids
-                replay_text = _render_snapshot(
-                    snapshot,
-                    with_ids=copied_with_ids,
-                    memory_layout="inline",
-                )
-                if not payload.matches_text(replay_text):
-                    raise ClipboardError(
-                        "The granted list receipt and system clipboard disagree."
-                    )
-                staged_text = replay_text
-            else:
-                snapshot = payload.selection
-                annotated_text = _render_snapshot(
-                    snapshot,
-                    with_ids=True,
-                    memory_layout="inline",
-                )
-                clean_text = _render_snapshot(
-                    snapshot,
-                    with_ids=False,
-                    memory_layout="inline",
-                )
-                if payload.plain_text not in {annotated_text, clean_text}:
-                    raise ClipboardError(
-                        "The structured clipboard text and object snapshot disagree."
-                    )
-                assert payload.plain_text is not None
-                staged_text = payload.plain_text
-                replay_with_ids = staged_text == annotated_text
-        except (ClipboardError, ValueError) as error:
-            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
-            raise typer.Exit(1)
-        _emit_snapshot_text(
-            _render_snapshot(
-                snapshot,
-                with_ids=replay_with_ids,
-                memory_layout="inline",
-                style_relationships=True,
-            )
-        )
-        memory_count, subcontext_count = _snapshot_occurrence_counts(snapshot)
-        source_context = _require_record(snapshot.get("context"))
-        source_name = _require_string(source_context, "name")
-        typer.secho(
-            f"Pasted {_occurrence_count_text(memory_count, subcontext_count)} "
-            f"from '{source_name}' "
-            "(no Context changes).",
-            dim=True,
-            err=True,
-        )
-        return
-
     active_store = MemoryStore()
     current_context_name = active_store.current_context_name()
     try:
@@ -1218,7 +1033,6 @@ def cmd(
                 context_locator=context_name,
                 current_context_name=current_context_name,
                 recursive=recursive,
-                require_copyable_snapshot=copy_result,
             ),
         )
         access = selection.access
@@ -1268,23 +1082,8 @@ def cmd(
             with_ids=with_ids,
             memory_layout="inline",
         )
-        staged_selection = snapshot
-        redact_plain_text = False
-        if access.is_granted:
-            staged_selection = _granted_list_receipt(
-                snapshot,
-                binding=freeze_granted_context_binding(access),
-                with_ids=with_ids,
-            )
-            redact_plain_text = True
-        payload = ClipboardPayload.create(
-            producer="list",
-            plain_text=clipboard_text,
-            selection=staged_selection,
-            redact_plain_text=redact_plain_text,
-        )
         try:
-            copy_payload(payload)
+            write_system_clipboard(clipboard_text)
         except ClipboardError as error:
             typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
             raise typer.Exit(1)
@@ -1292,8 +1091,7 @@ def cmd(
         copied_style = "text with IDs" if with_ids else "clean text"
         typer.secho(
             f"Copied {_occurrence_count_text(memory_count, subcontext_count)}: "
-            f"{copied_style} to the system clipboard; "
-            "structured list staged.",
+            f"{copied_style} to the system clipboard.",
             fg=typer.colors.GREEN,
             err=True,
         )

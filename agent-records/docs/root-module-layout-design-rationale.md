@@ -176,14 +176,16 @@ unit to preserve their privacy and lifecycle invariants; separating the
 prompt-toolkit input wrapper inside `study_actions` is deferred. No facade
 retains the former `memcommit.infrastructure.command_ledger` path.
 
-Finally, system clipboard access and its staged structured payload moved to
+Finally, system clipboard access moved to
 `memcommit.adapters.console.clipboard`. The operating-system clipboard is an
-outward console device rather than storage or application policy; its private
-staging file remains an implementation detail of that adapter. With providers,
-configuration, command ledgers, and clipboard assigned to explicit owners, the
-empty `memcommit.infrastructure` package is removed rather than retained as a
-facade. This decomposition changes import ownership only and preserves the
-clipboard payload, digest, locking, and redaction contracts.
+outward console device rather than storage or application policy. The original
+move also carried List's private structured staging file, digest, locking, and
+redaction contracts into that adapter. Those staging contracts were later
+removed when List became plain-text copy only; the adapter now owns only exact
+UTF-8 system-clipboard reads and writes. With providers, configuration,
+command ledgers, and clipboard assigned to explicit owners, the empty
+`memcommit.infrastructure` package is removed rather than retained as a
+facade.
 
 On 2026-08-28 the application package gained one explicit scope split:
 operation-owned vertical slices remain under `application.operations`, while

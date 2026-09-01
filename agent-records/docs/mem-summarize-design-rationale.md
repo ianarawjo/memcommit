@@ -96,8 +96,8 @@ clipboard after source revalidation. For an interactive `BOTH` result it keeps
 `[CURRENT ONLY]` and `[CURRENT + DESCENDANTS]` as two labelled sections instead
 of silently choosing one, but it does not repeat a second Summary or
 understanding heading inside either scope. It
-omits the command header and execution status, creates no structured mutation
-clipboard stage, and performs no additional provider turn. A copy failure
+omits the command header and execution status, creates no hidden MemCommit
+clipboard state, and performs no additional provider turn. A copy failure
 leaves the rendered result visible and exits with an explicit error. Copying prose derived
 from a granted frame is an explicit user-controlled disclosure outside the
 revocable Grant store; it does not make the prose durable inside MemCommit.
