@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
@@ -59,36 +60,48 @@ def test_cli_to_names_the_explicit_add_target(isolated_store) -> None:
     assert [
         memory.content for memory in store.load_direct("target").memories.values()
     ] == ["Directed Memory"]
+    assert "Directed Memory to 'target'." in result.output
 
 
-def test_cli_rejects_duplicate_add_target_spellings_before_store_access(
+@pytest.mark.parametrize(
+    "target_arguments",
+    (
+        ("--to", "first", "--context", "second"),
+        ("-c", "first", "-c", "second"),
+    ),
+)
+def test_cli_target_aliases_use_the_last_value_and_receipt_names_it(
     isolated_store,
+    target_arguments: tuple[str, ...],
 ) -> None:
+    store = MemoryStore()
+    first = ops.init("first")
+    second = ops.init("second")
+    store.save(first)
+    store.save(second)
+    store.set_current(first.name)
+
     result = runner.invoke(
         app,
-        [
-            "add",
-            "Must not be added",
-            "--to",
-            "first",
-            "--context",
-            "second",
-        ],
+        ["add", "Added once", *target_arguments],
     )
 
-    assert result.exit_code == 1
-    assert "Add target was supplied with more than one option" in result.output
-    assert "--to and --context/-c" in result.output
-    assert not isolated_store.exists()
+    assert result.exit_code == 0, result.output
+    assert not store.load_direct("first").memories
+    assert [
+        memory.content for memory in store.load_direct("second").memories.values()
+    ] == ["Added once"]
+    assert "Added once to 'second'." in result.output
 
 
-def test_add_help_prefers_to_and_retains_context_compatibility() -> None:
+def test_add_help_groups_target_context_aliases() -> None:
     result = runner.invoke(app, ["add", "-h"])
 
     assert result.exit_code == 0
     assert result.output.index("--to") < result.output.index("--context")
-    assert "Compatibility spelling for the Add target" in result.output
-    assert "equivalent to --to" in result.output
+    assert "-c" in result.output
+    assert "Target Context to receive the Memories;" in result.output
+    assert "--context/-c are compatibility aliases" in result.output
 
 
 def test_edit_and_remove_keep_context_c_without_to() -> None:

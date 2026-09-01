@@ -15,9 +15,6 @@ from memcommit.application.operations.add.application import (
     run_add,
 )
 from memcommit.application.operations.add.runtime import MemoryStoreAddTargetPort
-from memcommit.adapters.console.coordination.endpoint_operand import (
-    choose_endpoint_operand,
-)
 from memcommit.adapters.console.commands.add.line_input_records import (
     parse_line_input_records,
 )
@@ -70,36 +67,19 @@ def cmd(
             help="Add one exact Memory; repeat the option to add a batch",
         ),
     ] = None,
-    to_context: Annotated[
+    requested_context: Annotated[
         Optional[str],
         typer.Option(
             "--to",
-            metavar="CONTEXT",
-            help="Target Context to receive the Memories",
-        ),
-    ] = None,
-    context_name: Annotated[
-        Optional[str],
-        typer.Option(
             "--context",
             "-c",
             metavar="CONTEXT",
-            help="Compatibility spelling for the Add target; equivalent to --to",
+            help=(
+                "Target Context to receive the Memories; --context/-c are compatibility aliases"
+            ),
         ),
     ] = None,
 ) -> None:
-    try:
-        requested_context = choose_endpoint_operand(
-            None,
-            role="Add target",
-            options=(("--to", to_context), ("--context/-c", context_name)),
-        )
-    except ValueError as error:
-        # A mutating command must never let argv order silently choose which
-        # destination wins when preferred and compatibility spellings collide.
-        render_cli_error(error)
-        raise typer.Exit(1)
-
     explicit_memories = tuple(memories or ())
     source_count = sum(
         (

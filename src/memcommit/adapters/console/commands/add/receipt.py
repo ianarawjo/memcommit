@@ -11,14 +11,14 @@ from memcommit.adapters.console.terminal.core.text import display_escape_text
 def render_add_receipt(result: AddResult, *, mode: AddInputMode) -> None:
     """Present one completed Add without owning command execution."""
 
+    target = display_escape_text(result.context_name)
     if mode == "SINGLE":
         memory = result.memories[0]
         typer.secho(
-            f"Added [{memory.uid[:8]}] {memory.content}",
+            f"Added [{memory.uid[:8]}] {memory.content} to '{target}'.",
             fg=typer.colors.GREEN,
         )
         return
-    target = display_escape_text(result.context_name)
     if mode == "PASTE":
         typer.secho(
             f"Added {result.count} "

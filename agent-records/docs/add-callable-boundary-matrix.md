@@ -1,6 +1,6 @@
 # Add callable and effect boundary matrix
 
-Last verified: 2026-08-29.
+Last verified: 2026-09-01.
 
 This matrix records ownership and effects for the first writable operation
 exposed through several adapters. A callable's layer determines where it may be
@@ -18,7 +18,7 @@ an interface.
 | `commands.add.receipt.render_add_receipt` | Add console receipt | typed result + intake mode → terminal text | stdout only | no Store, authority, or mutation decisions | `VERIFIED` |
 | `commands.add.workbench.build_add_workbench_setup` | Add workbench composition | Store + current snapshot + requested target → frozen setup | Store/Profile/Grant reads only | visible rows remain distinct from CREATE-selectable targets; no mutation | `VERIFIED` |
 | `commands.add.workbench.run_add_workbench` | Add interactive workbench | frozen setup + application callback → result/cancel | process-local drafts and terminal I/O; callback only at To Do | cancellation and draft edits do not call application | `VERIFIED` |
-| `commands.add.cmd` | console composition | argv/TTY → typed request and presentation | intake reads, TUI/CLI, application effects | `--to` is the preferred Target spelling; `--context`/`-c` remain compatible; duplicate spelling fails before Store access; captures current once; file/paste parsing remains interface-owned | `VERIFIED` |
+| `commands.add.cmd` | console composition | argv/TTY → typed request and presentation | intake reads, TUI/CLI, application effects | `--to`, `--context`, and `-c` populate one scalar requested Target; the last occurrence wins and the receipt names the resolved Target; captures current once; file/paste parsing remains interface-owned | `VERIFIED` |
 | `api.client.MemCommitClient.add_memories` | public Python facade | explicit text sequence + target → `AddMemoriesResult` | one application Add | explicit roots local-only; nonlocal Grant requires active Profile; stable errors | `VERIFIED` |
 | `adapters.agent.add.AddAgentAdapter.invoke` | agent adapter | strict version-1 JSON object → JSON-safe receipt/error | exactly one public Add call after local validation | exact order/duplicates; complete receipt; no automatic mutation retry | `VERIFIED` |
 | `adapters.agent.add.add_agent_tool_schema` | agent adapter | none → fresh function-tool schema | none | strict fields/version; duplicate Memory items remain legal | `VERIFIED` |
@@ -55,15 +55,17 @@ ADD effects do not make their originating operations part of exact Add.
 
 ## CLI Target spelling
 
-Add has one receiving Context, so `--to TARGET` names the operand by its role
-and is the preferred explicit spelling. The established `--context TARGET` and
-`-c TARGET` forms remain compatible because they already identify the same
-CREATE-authorized destination. Supplying `--to` together with either
-compatibility spelling fails before Store construction; argument order must not
-silently retarget a mutation.
+Add has one receiving Context. `--to TARGET`, `--context TARGET`, and `-c TARGET`
+are aliases for one scalar requested Target so the command adapter carries one
+Python value rather than reconstructing one domain operand from separate CLI
+variables. As with an ordinary scalar Click/Typer option, the last occurrence
+wins when aliases are repeated or mixed. Every successful Add receipt names the
+resolved Target, including the single-Memory route, so the published result
+makes that final selection visible.
 
 This role alias is deliberately asymmetric. Edit and Remove use
 `--context`/`-c` to qualify the owner of an existing Memory; they do not accept
 `--to`, which would misleadingly imply a destination, movement, or result
-Context. No target authority, locator resolution, receipt, or Add materialization
-behavior changes with the new spelling.
+Context. No target authority, locator resolution, or Add materialization
+behavior changes with the aliases; only CLI selection and single-Memory receipt
+presentation differ.
