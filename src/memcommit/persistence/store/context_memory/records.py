@@ -173,8 +173,8 @@ def _rewrite_context_pointers(
         elif kind == "granted_context_ref":
             target_name = item.get("name")
             if not isinstance(target_name, str):
-                raise ValueError("Granted Context reference has no valid public name.")
-            # A granted public locator belongs to the authority binding. Local
+                raise ValueError("Granted Context reference has no valid access name.")
+            # A granted access locator belongs to the authority binding. Local
             # namespace rename must never reinterpret or rewrite it.
             previous = selector_names.get(target_name)
             if previous == "query_context_ref":
@@ -194,7 +194,7 @@ def _rewrite_context_pointers(
             # snapshot Source name, and is deliberately not rename-rewritten.
             selector_names[target_name] = "context_ref"
         elif kind == "granted_memory_ref":
-            # A granted public locator is part of the external authority
+            # A granted access locator is part of the external authority
             # binding. Local namespace rename must preserve it byte-for-byte.
             reference = MemoryRef.from_dict(item)
             if not reference.is_granted or not reference.is_live:
@@ -323,7 +323,7 @@ def _rewrite_branched_context_pointers(
         elif kind == "granted_context_ref":
             name = item.get("name")
             if not isinstance(name, str):
-                raise ValueError("Granted Context reference has no valid public name.")
+                raise ValueError("Granted Context reference has no valid access name.")
             # Branch copies the revocable link as-is. Its authority identity is
             # external to the local subtree UID remapping.
             ordinary_names.add(name)

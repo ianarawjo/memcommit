@@ -186,8 +186,7 @@ def freeze_memory_report_readable_catalog(
         selected_access = ContextAccess(
             store=store,
             context_name=selected_name,
-            display_name=selected_name,
-            attachment_name=None,
+            access_name=selected_name,
             permission="READ",
         )
     return freeze_profile_readable_context_catalog(

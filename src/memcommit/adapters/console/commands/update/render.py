@@ -123,7 +123,7 @@ def render_plan(
         ready = set(required).issubset(granted)
         typer.echo(
             "GRANTED TARGET · "
-            f"{session.granted_target.public_name} · "
+            f"{session.granted_target.access_name} · "
             f"grant {session.granted_target.grant_uid[:8]} "
             f"revision {session.granted_target.grant_revision}"
         )

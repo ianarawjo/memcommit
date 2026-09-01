@@ -71,11 +71,9 @@ class MoveMemoriesRequest:
 class FrozenTransferAuthority:
     """Path-free Grant identity retained with one exported Source binding."""
 
-    public_name: str
+    access_name: str
     grantee_profile_uid: str
     authority_profile_uid: str
-    attachment_context_uid: str
-    attachment_context_name: str
     grant_uid: str
     grant_revision: int
     grant_digest: str
@@ -86,11 +84,9 @@ class FrozenTransferAuthority:
 
     def __post_init__(self) -> None:
         text_values = (
-            self.public_name,
+            self.access_name,
             self.grantee_profile_uid,
             self.authority_profile_uid,
-            self.attachment_context_uid,
-            self.attachment_context_name,
             self.grant_uid,
             self.grant_digest,
             self.resource_uid,
@@ -121,13 +117,9 @@ class FrozenTransferAuthority:
 
         return {
             "kind": "GRANTED_CONTEXT",
-            "public_name": self.public_name,
+            "access_name": self.access_name,
             "grantee_profile_uid": self.grantee_profile_uid,
             "authority_profile_uid": self.authority_profile_uid,
-            "attachment": {
-                "uid": self.attachment_context_uid,
-                "name": self.attachment_context_name,
-            },
             "grant": {
                 "uid": self.grant_uid,
                 "revision": self.grant_revision,
@@ -312,7 +304,7 @@ def _validate_plan_common(
         raise MemoryTransferError("Copy/Move plan has duplicate Sources.")
     if any(
         item.source_authority is not None
-        and item.source_authority.public_name != item.source_context_name
+        and item.source_authority.access_name != item.source_context_name
         for item in memories
     ):
         raise MemoryTransferError(

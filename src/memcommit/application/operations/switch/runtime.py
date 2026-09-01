@@ -104,7 +104,7 @@ class MemoryStoreSwitchContextPort:
             required_permission="READ",
         )
         target = (
-            GrantedReadStore(access).load_direct(access.display_name)
+            GrantedReadStore(access).load_direct(access.access_name)
             if access.is_granted
             else self._store.load(context_name)
         )

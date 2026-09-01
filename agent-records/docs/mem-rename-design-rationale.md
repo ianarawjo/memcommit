@@ -2,9 +2,9 @@
 
 ## Status and intent
 
-`mem rename` changes the canonical locator of one existing portable ordinary
-Context namespace without changing the identities or contents of the Contexts
-and Memories inside it:
+`mem rename` changes either the canonical locator of one existing portable
+ordinary Context namespace or a receiver-owned Grant placement. It does not
+change the identities or contents behind either name:
 
 ```text
 mem rename OLD NEW
@@ -45,7 +45,7 @@ semantically coherent.
 
 ## Command and store-plan contract
 
-`OLD` locates an existing ordinary Context. The command captures the current
+`OLD` locates an existing ordinary Context or an exact Grant placement. The command captures the current
 Context once and resolves `OLD` through the shared existing-Context locator
 contract. A bare value is a canonical global name, while `.`, `..`, `./...`,
 and `../...` opt into lexical relative resolution. The resolved source must be
@@ -66,9 +66,9 @@ retain a nonportable descendant suffix during a top-down rollout; that route
 reports the remaining names for later reviewed migration. Both callers freeze
 one read-only plan and apply exactly that plan.
 
-The operation requires an ordinary Context at the exact `OLD` name. It renames
-that Context and every stored ordinary Context whose canonical name begins
-with the slash-boundary prefix `OLD/`:
+For an ordinary Context, the operation requires a Context at the exact `OLD`
+name. It renames that Context and every stored ordinary Context whose canonical
+name begins with the slash-boundary prefix `OLD/`:
 
 ```text
 team/task              -> participant/task
@@ -79,6 +79,23 @@ team/taskish           -> unchanged
 
 The descendant relationship is lexical and deterministic. The command does
 not infer a hierarchy from embedded Context references or Memory contents.
+
+If no local Context owns `OLD`, the active Profile may instead own an exact
+`GrantPlacement` there. Rename then rewrites that placement and every other
+placement under the `OLD/` access subtree. It preserves Grant UIDs, revisions,
+permissions, authority Profile and Context identities, frozen scope, and all
+authority data. Local Contexts retain lookup precedence, and a destination may
+not overlap a local Context or collide with another placement. Registry
+generation is frozen for review and checked again under the registry lock
+before publication.
+
+Live granted Context and Memory links re-resolve by stable Grant UID plus the
+authority Context identity, so they follow the receiver's new access path.
+Reviewed semantic plans and analyses retain the access name as a freshness
+precondition; a placement rename makes those artifacts stale unless their
+own operation defines an explicit locator-migration contract. This mirrors the
+existing rule that Rename migrates only durable formats with a focused,
+schema-validated continuity policy.
 
 ## Identity and content invariants
 
@@ -196,7 +213,7 @@ new locator could falsely imply that it was revalidated.
 
 ## Query-only boundary
 
-Rename operates only on the selected Profile's ordinary Context store. It
+Authority Context rename operates only on the selected Profile's ordinary Context store. It
 does not open or rewrite legacy query-source files or `QueryContextRef`
 records. New study query data is ordinary inside its authority Profile, so an
 authority owner can rename it there; the old frozen grant then fails its
@@ -204,7 +221,7 @@ UID/name check and must be explicitly revoked and recreated. Rename never
 rewrites cross-Profile grants implicitly.
 
 An ordinary destination is not globally rejected merely because an opaque
-query-only source uses the same public name: these are separate authority
+query-only source uses the same access name: these are separate authority
 namespaces in the current prototype. A rename is rejected, however, if its
 ordinary pointer rewrite would leave one direct owner with both an ordinary
 `context_ref` and a `QueryContextRef` under the same child selector name. That
@@ -274,6 +291,8 @@ multi-user publication primitive.
 
 - The operation renames ordinary Context namespaces, not individual Memories.
   A Memory currently has no independent name; changing its content is an edit.
+- The receiver may rename a Grant placement; this does not rename or mutate the
+  authority Context and does not change the Grant.
 - General `mem rename` accepts portable existing Context names. Nonportable
   legacy sources use `mem profile migrate-context` and its Profile/graph-bound
   Apply receipt.

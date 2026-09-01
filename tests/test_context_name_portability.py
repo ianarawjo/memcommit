@@ -435,7 +435,7 @@ def test_namespace_migration_reports_and_then_retires_legacy_descendants(
     )
 
 
-def test_migration_detects_authority_and_attachment_grant_incidents(
+def test_migration_blocks_only_authority_context_grant_incidents(
     monkeypatch,
 ):
     active = SimpleNamespace(uid="active-profile")
@@ -444,7 +444,6 @@ def test_migration_detects_authority_and_attachment_grant_incidents(
         authority_profile_uid=active.uid,
         grantee_profile_uid="other-profile",
         resource_name="unrelated",
-        attachment_context_name="attachment",
         contexts=(SimpleNamespace(name="legacy root/child"),),
     )
     attachment_blocker = SimpleNamespace(
@@ -452,7 +451,6 @@ def test_migration_detects_authority_and_attachment_grant_incidents(
         authority_profile_uid="other-profile",
         grantee_profile_uid=active.uid,
         resource_name="resource",
-        attachment_context_name="legacy root",
         contexts=(SimpleNamespace(name="resource"),),
     )
     unrelated = SimpleNamespace(
@@ -460,7 +458,6 @@ def test_migration_detects_authority_and_attachment_grant_incidents(
         authority_profile_uid="other-profile",
         grantee_profile_uid="third-profile",
         resource_name="legacy root",
-        attachment_context_name="legacy root",
         contexts=(SimpleNamespace(name="legacy root"),),
     )
     registry = SimpleNamespace(
@@ -478,25 +475,14 @@ def test_migration_detects_authority_and_attachment_grant_incidents(
     )
 
     assert frozen is registry
-    assert [grant.uid for grant in blockers] == [
-        "authority-blocker",
-        "attachment-blocker",
-    ]
+    assert [grant.uid for grant in blockers] == ["authority-blocker"]
 
 
-@pytest.mark.parametrize(
-    ("resource_name", "attachment_name"),
-    (("legacy source", "attachment"), ("source", "legacy attachment")),
-)
-def test_new_grants_reject_legacy_resource_or_attachment_names_before_io(
-    resource_name,
-    attachment_name,
-):
+def test_new_grants_reject_legacy_resource_names_before_io():
     with pytest.raises(ValueError, match="not portable"):
         create_authority_grant(
             authority_name="missing-authority",
             grantee_name="missing-grantee",
-            resource_name=resource_name,
-            attachment_name=attachment_name,
+            resource_name="legacy source",
             permissions=("READ",),
         )

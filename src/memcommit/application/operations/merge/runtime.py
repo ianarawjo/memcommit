@@ -297,7 +297,7 @@ class MemoryStoreMergePort(MergePort):
 
     def _load_source(self, access: ContextAccess) -> Context:
         if access.is_granted:
-            return GrantedReadStore(access).load(access.display_name)
+            return GrantedReadStore(access).load(access.access_name)
         return access.store.load_for_update(access.context_name)
 
     @staticmethod
@@ -319,7 +319,7 @@ class MemoryStoreMergePort(MergePort):
         else:
             navigation = freeze_granted_context_navigation(self._store)
             names = self._scope_names(
-                root.display_name,
+                root.access_name,
                 tuple(navigation.readable_names),
             )
         accesses = tuple(
@@ -331,7 +331,7 @@ class MemoryStoreMergePort(MergePort):
             )
             for name in names
         )
-        if not accesses or accesses[0].display_name != root.display_name:
+        if not accesses or accesses[0].access_name != root.access_name:
             raise RuntimeError("Recursive Merge lost its Source root.")
         return accesses
 
@@ -347,7 +347,7 @@ class MemoryStoreMergePort(MergePort):
         else:
             navigation = freeze_granted_context_navigation(self._store)
             names = self._scope_names(
-                root.display_name,
+                root.access_name,
                 tuple(navigation.names),
             )
         accesses = tuple(
@@ -359,7 +359,7 @@ class MemoryStoreMergePort(MergePort):
             )
             for name in names
         )
-        if not accesses or accesses[0].display_name != root.display_name:
+        if not accesses or accesses[0].access_name != root.access_name:
             raise RuntimeError("Recursive Merge lost its Target root.")
         return accesses
 
@@ -406,8 +406,8 @@ class MemoryStoreMergePort(MergePort):
         context_plan = plan_context_merge(
             merge_source,
             target,
-            source_name=source_access.display_name,
-            target_name=target_access.display_name,
+            source_name=source_access.access_name,
+            target_name=target_access.access_name,
             take_source_allowed=_take_source_allowed(target_access),
             target_context_mutable=target_context_mutable,
             protected_target_uids=protected_target_uids,
@@ -424,9 +424,9 @@ class MemoryStoreMergePort(MergePort):
             target_context_mutable=target_context_mutable,
         )
         context_result = MergeContextResult(
-            source_name=source_access.display_name,
+            source_name=source_access.access_name,
             source_uid=source.uid,
-            target_name=target_access.display_name,
+            target_name=target_access.access_name,
             target_uid=target.uid,
             target_created=False,
             additions=context_plan.additions,
@@ -435,10 +435,10 @@ class MemoryStoreMergePort(MergePort):
         )
         return FrozenMergePlan(
             request=request,
-            source_name=source_access.display_name,
+            source_name=source_access.access_name,
             source_uid=source.uid,
             source_digest=source_projection_digest,
-            target_name=target_access.display_name,
+            target_name=target_access.access_name,
             target_uid=target.uid,
             target_digest=target_digest,
             additions=context_plan.additions,
@@ -509,16 +509,16 @@ class MemoryStoreMergePort(MergePort):
             for frame in source_frames
         )
         target_contexts = {
-            access.display_name: access.store.load_for_update(access.context_name)
+            access.access_name: access.store.load_for_update(access.context_name)
             for access in target_accesses
         }
         aligned = align_context_names(
-            tuple(frame.access.display_name for frame in source_frames),
-            source_root=source_root_access.display_name,
-            target_root=target_root_access.display_name,
+            tuple(frame.access.access_name for frame in source_frames),
+            source_root=source_root_access.access_name,
+            target_root=target_root_access.access_name,
         )
         target_access_by_display = {
-            access.display_name: access for access in target_accesses
+            access.access_name: access for access in target_accesses
         }
         canonical_target_names: dict[str, str] = {}
         existing_by_canonical_name: dict[str, Context] = {}
@@ -534,7 +534,7 @@ class MemoryStoreMergePort(MergePort):
                     )
                 canonical_name = (
                     target_root_access.context_name
-                    + target_display_name[len(target_root_access.display_name) :]
+                    + target_display_name[len(target_root_access.access_name) :]
                 )
             else:
                 if target_access.store.store_dir != target_root_access.store.store_dir:
@@ -587,7 +587,7 @@ class MemoryStoreMergePort(MergePort):
             context_plan = plan_context_merge(
                 projected,
                 target,
-                source_name=frame.access.display_name,
+                source_name=frame.access.access_name,
                 target_name=target_display_name,
                 take_source_allowed=_take_source_allowed(authorization_target),
                 target_context_mutable=target_context_mutable,
@@ -627,7 +627,7 @@ class MemoryStoreMergePort(MergePort):
             )
             context_results.append(
                 MergeContextResult(
-                    source_name=frame.access.display_name,
+                    source_name=frame.access.access_name,
                     source_uid=source.uid,
                     target_name=target_display_name,
                     target_uid=target.uid,
@@ -642,10 +642,10 @@ class MemoryStoreMergePort(MergePort):
         root_target = target_frames[0]
         return FrozenMergePlan(
             request=request,
-            source_name=source_root_access.display_name,
+            source_name=source_root_access.access_name,
             source_uid=root_source.context.uid,
             source_digest=root_source.digest,
-            target_name=target_root_access.display_name,
+            target_name=target_root_access.access_name,
             target_uid=root_target.context.uid,
             target_digest=root_target.expected_digest
             or context_record_digest(root_target.context),
@@ -709,7 +709,7 @@ class MemoryStoreMergePort(MergePort):
         checkpoint = AutoCheckpoint(
             command="merge",
             args={
-                "source": source_access.display_name,
+                "source": source_access.access_name,
                 "cross_profile_memory_only": plan.cross_profile_memory_only,
                 "command_contexts": contexts,
                 "merge_tree": {
@@ -727,8 +727,8 @@ class MemoryStoreMergePort(MergePort):
                 **grant_checkpoint_args(target_access),
             },
             description=_merge_checkpoint_description(
-                source_name=source_access.display_name,
-                target_name=target_access.display_name,
+                source_name=source_access.access_name,
+                target_name=target_access.access_name,
                 additions=plan.additions,
                 unchanged_count=len(plan.unchanged),
                 conflicts=plan.conflicts,
@@ -807,11 +807,11 @@ class MemoryStoreMergePort(MergePort):
             raise ValueError("The frozen Merge plan belongs to another runtime.")
         live_source_accesses = self._recursive_source_accesses(token.source_root_access)
         if tuple(
-            (access.display_name, access.context_name, access.store.store_dir)
+            (access.access_name, access.context_name, access.store.store_dir)
             for access in live_source_accesses
         ) != tuple(
             (
-                frame.access.display_name,
+                frame.access.access_name,
                 frame.access.context_name,
                 frame.access.store.store_dir,
             )

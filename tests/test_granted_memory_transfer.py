@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import json
 import uuid
 
@@ -38,7 +40,6 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model import (
     ProfileError,
-    create_authority_grant,
     create_profile,
     delete_authority_grant,
     update_authority_grant,
@@ -92,12 +93,11 @@ def _grant_fixture(
         json.dumps(registry.to_dict(), indent=2) + "\n",
         encoding="utf-8",
     )
-    _, grant = create_authority_grant(
+    _, grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=source.name,
-        attachment_name=attachment.name,
-        public_name="shared/source",
+        access_name="shared/source",
         permissions=permissions,
     )
     return (
@@ -154,7 +154,7 @@ def test_granted_copy_creates_fresh_retained_memory_and_checkpoint_provenance(
     assert row["source_context_digest"] == source_digest
     assert row["source_memory_uid"] == memory.uid
     assert row["output_memory_uid"] == copied[0].uid
-    assert authority["public_name"] == "shared/source"
+    assert authority["access_name"] == "shared/source"
     assert authority["grant"]["uid"] == grant.uid
     assert authority["grant"]["revision"] == grant.revision
     assert authority["authority_profile_uid"] == grant.authority_profile_uid
@@ -479,23 +479,21 @@ def test_grantee_cannot_regrant_public_view_but_can_grant_retained_copy(
         ProfileError,
         match="Authority Context 'shared/source' does not exist",
     ):
-        create_authority_grant(
+        create_authority_grant_with_placement(
             authority_name=AUTHORING_PROFILE_NAME,
             grantee_name=downstream.name,
             resource_name="shared/source",
-            attachment_name=attachment.name,
-            public_name="forwarded/source",
+            access_name="forwarded/source",
             permissions=("READ",),
         )
     # Grant resources are Context trees. An exact granted Memory locator
     # cannot be smuggled through the Context-name field as a second grant.
-    with pytest.raises(ValueError, match="not portable"):
-        create_authority_grant(
+    with pytest.raises(ProfileError, match="Authority Context .* does not exist"):
+        create_authority_grant_with_placement(
             authority_name=AUTHORING_PROFILE_NAME,
             grantee_name=downstream.name,
             resource_name=f"shared/source:{memory.uid}",
-            attachment_name=attachment.name,
-            public_name="forwarded/memory",
+            access_name="forwarded/memory",
             permissions=("READ",),
         )
     assert load_profile_registry().grants == before.grants
@@ -507,12 +505,11 @@ def test_grantee_cannot_regrant_public_view_but_can_grant_retained_copy(
         ),
         port=_granted_port(store),
     )
-    _registry, forwarded = create_authority_grant(
+    _registry, forwarded = create_authority_grant_with_placement(
         authority_name=AUTHORING_PROFILE_NAME,
         grantee_name=downstream.name,
         resource_name=target.name,
-        attachment_name=attachment.name,
-        public_name="forwarded/source",
+        access_name="forwarded/source",
         permissions=("READ",),
     )
 

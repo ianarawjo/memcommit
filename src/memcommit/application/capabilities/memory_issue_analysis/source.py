@@ -234,14 +234,14 @@ def freeze_quality_find_source(
         )
 
     context = (
-        GrantedReadStore(access, registry=registry).load_direct(access.display_name)
+        GrantedReadStore(access, registry=registry).load_direct(access.access_name)
         if access.is_granted
         else access.store.load_direct(access.context_name)
     )
     return QualityFindSourceFrame.create(
         (context,),
-        context_names=(access.display_name,),
-        target_names=(access.display_name,),
+        context_names=(access.access_name,),
+        target_names=(access.access_name,),
         selection_mode="SINGLE",
     )
 

@@ -91,7 +91,7 @@ class MemoryStoreTraceSource:
         # READ exposes current content. Retained owner checkpoints remain a
         # separate authority boundary and must be checked before opening them.
         require_trace_access(
-            access.display_name,
+            access.access_name,
             granted=access.is_granted,
             store_root=self._store.store_dir,
         )
@@ -133,7 +133,7 @@ class MemoryStoreTraceSource:
             for candidate in collect_memory_history_candidates(self._store, context)
         )
         return TraceTargetCatalog(
-            root_context_name=access.display_name,
+            root_context_name=access.access_name,
             context_names=names,
             candidates=candidates,
         )
@@ -233,7 +233,7 @@ class MemoryStoreTraceSource:
             return FrozenTraceSubject(
                 kind="CONTEXT",
                 context_uid=context.uid,
-                context_name=access.display_name,
+                context_name=access.access_name,
                 selected_uid=None,
                 token=_OwnedContextBinding(store=self._store, context=context),
             )

@@ -14,13 +14,13 @@ Task 2 workflow.
 
 ## Navigation contract
 
-- Every granted row puts a fixed `GRANT` ownership marker before its public
+- Every granted row puts a fixed `GRANT` ownership marker before its access
   Context name. Position carries the primary safety meaning: the row is a view
   of another Profile's Context, not a locally owned Context merely decorated
   with extra metadata. The authority Profile remains visible after `FROM`.
 - Static `mem contexts` does not move those rows into a trailing Grant-only
   block. It projects the combined frozen catalog in the same depth-first public
-  hierarchy as a fully expanded Switch tree, so one public name has one stable
+  hierarchy as a fully expanded Switch tree, so one access name has one stable
   neighborhood across the two commands. The explicit `GRANT` prefix remains
   the ownership boundary.
 - Context navigation is an orientation surface, not a permission audit. Its
@@ -48,24 +48,22 @@ Task 2 workflow.
   `READ` permission, never by interpreting the user-facing annotation.
 - A `QUERY`-only route remains visible but non-selectable. It is opened only by
   `mem query`, because ordinary navigation must not disclose its content.
-- Selecting a granted Context stores only its public canonical name as the
+- Selecting a granted Context stores only its canonical access name as the
   current navigation pointer. It never copies or materializes authority
   Memories in the participant Profile.
 - Every command that consumes that current pointer resolves and authorizes the
-  grant again. Revocation, permission loss, attachment replacement, missing
-  authority bindings, or an ambiguous public name fails closed.
-- Explicit public granted names may be resolved from any valid local attachment
-  in the active Profile. This is necessary because the picker shows all views
-  for the Profile, not only views attached directly to the current owned
-  Context. If more than one distinct attachment resolves the same public name,
-  the command rejects it as ambiguous rather than choosing one implicitly.
+  Grant again. Revocation, permission loss, placement replacement, or missing
+  authority bindings fails closed.
+- A Grant placement is a receiver-owned namespace record, not a child of an
+  ordinary local Context. One placement maps one access root to one stable Grant
+  UID. That UID then resolves the authority root and its frozen scope.
 - Explicitly relative Context locators first resolve lexically against the one
   command-start current name, then use that canonical result for the same
-  public Grant lookup. Thus `./advisor1` from an owned `task-2` may resolve the
-  readable public view `task-2/advisor1` even though no local child record was
+  Grant placement lookup. Thus `./advisor1` from an owned `task-2` may resolve the
+  readable access path `task-2/advisor1` even though no local child record was
   materialized. An exact ordinary local record still wins before Grant lookup;
-  relative spelling neither changes ownership nor treats the Grant attachment
-  as a hierarchy edge.
+  relative spelling neither changes ownership nor treats Grant placement as an
+  authority hierarchy edge.
 - Lexical parent navigation continues to prefer owned Contexts. Within a
   granted tree, `..` may return to another READ-granted parent; it never opens a
   query-only override.
@@ -76,8 +74,8 @@ The shared Grant-navigation snapshot is owned by
 `memcommit.application.context_access.granted_context_navigation`.
 It is not a core Context-targeting primitive: freezing the snapshot loads the
 active Profile registry, verifies that the supplied Store belongs to that
-Profile, revalidates each local attachment Context identity, and applies the
-READ-versus-visible-only policy. Pure public-name hierarchy and lexical
+Profile, joins each receiver-owned placement to its exact Grant UID, and applies the
+READ-versus-visible-only policy. Pure access-name hierarchy and lexical
 expansion remain under `core.context_targeting.resolution`, while ordinary
 on-disk Context discovery remains under
 `persistence.store.context_memory.catalog_scan`.
@@ -85,15 +83,15 @@ on-disk Context discovery remains under
 The capability remains shared rather than moving into the Contexts operation.
 Contexts, Switch, setup screens, and other operations all consume the same
 authorized navigation snapshot. This relocation changes imports and dependency
-direction only; public names, compact capability labels, query-only visibility,
-READ selectability, and attachment-UID failure behavior remain unchanged.
+direction only; access names, compact capability labels, query-only visibility,
+READ selectability, and Grant-UID failure behavior remain unchanged.
 
 ## Read and query surfaces
 
 `mem ls`, `mem show`, and `mem status` resolve the current READ grant through
-the bounded `GrantedReadStore`. `mem contexts` marks the public granted name as
+the bounded `GrantedReadStore`. `mem contexts` marks the granted access name as
 current, and Profile inventory accepts it only when the active registry still
-contains an effective READ grant for that public name. Mutating commands use
+contains an effective READ Grant for that access name. Mutating commands use
 the same resolver with their required permission and therefore reject an
 Advisor READ grant.
 
@@ -103,10 +101,9 @@ and the semantic quality operations (`dedun`, `find-ambiguities`, and
 Find includes READ-visible namespace descendants, while a more-specific
 QUERY-only override never becomes candidate evidence. Time-oriented Search
 wording remains inside this current projection and never opens the authority
-store's checkpoints. Query routing recovers the owned attachment
-behind a current READ-granted view so a
-participant may enter an advisor and still invoke the separately authorized
-proposal-guidelines query route.
+store's checkpoints. Query routing uses the active placement catalog behind a
+current READ-granted view, so a participant may enter an advisor and still
+invoke the separately authorized proposal-guidelines query route.
 
 An explicit `mem ls --copy` may place READ-visible text on the operating-system
 clipboard, which is an intentional user-controlled disclosure and cannot be
@@ -170,12 +167,12 @@ journal; approximating that boundary could leave a partial write.
 
 ## Safety and limitations
 
-The persistent current pointer intentionally does not freeze a grant revision.
+The persistent current pointer intentionally does not freeze a Grant revision.
 Like an ordinary current Context name, it is orientation state rather than an
 authorization receipt. Each consuming command freezes the current registry and
-authority identities for its own operation. A replacement grant with the same
-unambiguous public route can therefore become the newly resolved view; a stale
-or revoked route cannot continue exposing its earlier authority content.
+authority identities for its own operation. A persisted live relationship uses
+the stable Grant UID and authority Context identity, so a receiver placement
+rename follows the same Grant rather than silently selecting a replacement.
 
 The compact navigation vocabulary is deliberately not reversible into the
 complete atomic permission tuple. Permission management and authorization
@@ -184,14 +181,14 @@ an operation by parsing `mem contexts`, picker text, color, or compact labels.
 
 Missing-name classification follows the same namespace boundary. A failed
 ordinary Context lookup becomes a Grant-specific error only when an effective
-Grant public name is an exact or lexical-prefix match for the canonical
+Grant access name is an exact or lexical-prefix match for the canonical
 requested name, including a name produced from explicit relative syntax. The
 current local Context supplies lexical orientation only: it is not evidence
 that an unrelated operand names a granted view. This keeps unrelated missing
 local operands consistent across Switch, Embed, and every other consumer of
 the shared access resolver, while preserving permission, frozen-scope, and
 ambiguity errors for names that actually enter a Grant namespace. Persisted
-links and analysis receipts retain their exact attachment UID and Grant
+links and analysis receipts retain their exact Grant UID and authority Context
 binding, so their revalidation bypasses general locator classification: loss
 of that route remains an explicit revocation failure rather than being
 downgraded to an ordinary missing input.

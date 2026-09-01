@@ -242,8 +242,7 @@ def _access(store: MemoryStore, context) -> ContextAccess:
     return ContextAccess(
         store=store,
         context_name=context.name,
-        display_name=context.name,
-        attachment_name=None,
+        access_name=context.name,
         permission="READ",
     )
 

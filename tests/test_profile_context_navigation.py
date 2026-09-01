@@ -42,7 +42,7 @@ def test_profile_navigation_merges_readable_and_opaque_switch_rows(monkeypatch):
 
     navigation = freeze_profile_context_navigation(
         SimpleNamespace(),
-        SimpleNamespace(display_name="shared"),
+        SimpleNamespace(access_name="shared"),
         granted_navigation=grants,
     )
 

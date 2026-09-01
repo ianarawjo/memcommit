@@ -151,7 +151,7 @@ def _interactive_source(store: MemoryStore, *, current_name: str | None):
     }
     selected_name = choose_audit_setup(
         names,
-        current=access.display_name,
+        current=access.access_name,
         annotations=annotations,
     )
     if selected_name is None:
@@ -261,7 +261,7 @@ def cmd(
                 required_permission="READ",
             ).value
             ctx = (
-                GrantedReadStore(access).load_direct(access.display_name)
+                GrantedReadStore(access).load_direct(access.access_name)
                 if access.is_granted
                 else store.load_direct(access.context_name)
             )

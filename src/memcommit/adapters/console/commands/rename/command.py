@@ -1,4 +1,5 @@
-"""Rename one ordinary Context namespace without changing its identities."""
+"""Rename one local Context namespace or granted Context access path."""
+
 from __future__ import annotations
 
 from typing import Annotated
@@ -19,9 +20,9 @@ def cmd(
         typer.Argument(
             metavar="OLD",
             help=(
-                "Existing portable ordinary Context name, or an explicit lexical "
-                "relative selector such as '.', '..', or './child'"
-            )
+                "Existing local Context or exact granted Context access name; local "
+                "Contexts also accept '.', '..', './child', or a UID selector"
+            ),
         ),
     ],
     new: Annotated[
@@ -31,7 +32,7 @@ def cmd(
             help=(
                 "New portable canonical Context name; lexical relative selectors "
                 "are not accepted"
-            )
+            ),
         ),
     ],
     force: Annotated[
@@ -43,7 +44,7 @@ def cmd(
         ),
     ] = False,
 ) -> None:
-    """Rename OLD and every existing OLD/... descendant to NEW/...."""
+    """Rename a local Context namespace or granted Context access path."""
     store = MemoryStore()
     # Resolve the source exactly once against one current-state snapshot. NEW
     # is a new identity locator, so the existing-Context resolver must not
@@ -68,20 +69,30 @@ def cmd(
         raise typer.Exit(1)
 
     if not force:
-        typer.echo(
-            "This will rename ordinary Context namespace "
-            f"'{plan.old_name}' to '{plan.new_name}' "
-            f"({len(plan.bindings)} Context"
-            f"{'s' if len(plan.bindings) != 1 else ''}, including "
-            f"{plan.descendant_count} descendant"
-            f"{'s' if plan.descendant_count != 1 else ''})."
-        )
-        typer.echo(
-            "Ordinary Context references, restorable checkpoint pointers, "
-            "the current Context pointer, and unapplied Meld bindings will "
-            "follow the stable UIDs; query-only Context references are "
-            "unchanged."
-        )
+        if plan.subject == "GRANT_PLACEMENT":
+            typer.echo(
+                f"This will rename granted Context access '{plan.old_name}' to "
+                f"'{plan.new_name}' ({len(plan.bindings)} placed Grant"
+                f"{'s' if len(plan.bindings) != 1 else ''})."
+            )
+            typer.echo(
+                "Authority Context names, permissions, and Grant UIDs are unchanged."
+            )
+        else:
+            typer.echo(
+                "This will rename ordinary Context namespace "
+                f"'{plan.old_name}' to '{plan.new_name}' "
+                f"({len(plan.bindings)} Context"
+                f"{'s' if len(plan.bindings) != 1 else ''}, including "
+                f"{plan.descendant_count} descendant"
+                f"{'s' if plan.descendant_count != 1 else ''})."
+            )
+            typer.echo(
+                "Ordinary Context references, restorable checkpoint pointers, "
+                "the current Context pointer, and unapplied Meld bindings will "
+                "follow the stable UIDs; query-only Context references are "
+                "unchanged."
+            )
         if not typer.confirm("Continue?", default=False):
             typer.echo("Rename cancelled.")
             return
@@ -98,12 +109,19 @@ def cmd(
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    typer.secho(
-        f"Renamed Context namespace '{plan.old_name}' to '{plan.new_name}' "
-        f"({result.renamed_context_count} Context"
-        f"{'s' if result.renamed_context_count != 1 else ''}).",
-        fg=typer.colors.GREEN,
-    )
+    if result.subject == "GRANT_PLACEMENT":
+        message = (
+            f"Renamed granted Context access '{plan.old_name}' to '{plan.new_name}' "
+            f"({result.renamed_placement_count} access path"
+            f"{'s' if result.renamed_placement_count != 1 else ''})."
+        )
+    else:
+        message = (
+            f"Renamed Context namespace '{plan.old_name}' to '{plan.new_name}' "
+            f"({result.renamed_context_count} Context"
+            f"{'s' if result.renamed_context_count != 1 else ''})."
+        )
+    typer.secho(message, fg=typer.colors.GREEN)
 
 
 __all__ = ["cmd"]

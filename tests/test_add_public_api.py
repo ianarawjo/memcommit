@@ -32,6 +32,9 @@ from memcommit.application.operations.profile.model import create_authority_gran
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
+GRANTED_ADD_ACCESS = "granted/campus-authority/campus-notes"
+
+
 def _create_granted_add_fixture(isolated_store, tmp_path, monkeypatch):
     monkeypatch.setenv("HOME", str(tmp_path))
     task_store = MemoryStore()
@@ -65,8 +68,6 @@ def _create_granted_add_fixture(isolated_store, tmp_path, monkeypatch):
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=target.name,
-        attachment_name=attachment.name,
-        public_name="shared/campus-notes",
         permissions=("READ", "CREATE"),
     )
     return task_store, authority_store, target, authority
@@ -184,10 +185,10 @@ def test_active_profile_client_can_add_through_create_grant(
 
     result = MemCommitClient().add_memories(
         ("Created through the public view.",),
-        context_name="shared/campus-notes",
+        context_name=GRANTED_ADD_ACCESS,
     )
 
-    assert result.context_name == "shared/campus-notes"
+    assert result.context_name == GRANTED_ADD_ACCESS
     assert result.context_uid == target.uid
     assert task_store.load_direct("task-root").memories == {}
     assert [
@@ -195,8 +196,8 @@ def test_active_profile_client_can_add_through_create_grant(
         for memory in authority_store.load_direct("campus-notes").memories.values()
     ] == ["Created through the public view."]
     checkpoint = authority_store.list_checkpoints("campus-notes")[0]
-    assert checkpoint["args"]["authority_grant"]["public_context"] == (
-        "shared/campus-notes"
+    assert checkpoint["args"]["authority_grant"]["access_context"] == (
+        GRANTED_ADD_ACCESS
     )
 
 
@@ -215,7 +216,7 @@ def test_explicit_root_does_not_inherit_host_create_grant(
     with pytest.raises(AddContextError, match="not found"):
         client.add_memories(
             ("Must stay local.",),
-            context_name="shared/campus-notes",
+            context_name=GRANTED_ADD_ACCESS,
         )
 
     assert authority_store.load_direct("campus-notes").memories == {}
@@ -236,7 +237,7 @@ def test_nonactive_profile_cannot_follow_active_profile_grant(
     with pytest.raises(AddAuthorityError, match="active Profile"):
         client.add_memories(
             ("Must not cross Profiles.",),
-            context_name="shared/campus-notes",
+            context_name=GRANTED_ADD_ACCESS,
         )
 
     assert authority_store.load_direct("campus-notes").memories == {}

@@ -23,19 +23,23 @@ from memcommit.adapters.console.commands.share.viewer import (
     share_memories_text,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory
-from memcommit.application.capabilities.reviewing.session_navigation import SessionWorkbenchNavigation
+from memcommit.application.capabilities.reviewing.session_navigation import (
+    SessionWorkbenchNavigation,
+)
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
     GRANT_RESOURCE_CONTEXT_TREE,
     AuthorityGrant,
     GrantContextBinding,
+    GrantPlacement,
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
     profile_registry_file,
     profile_store_dir,
 )
+from memcommit.application.operations.profile.model import grant_placement
 from memcommit.persistence.store import MemoryStore, context_record_digest
 from memcommit.application.operations.share.model import (
     ShareError,
@@ -93,12 +97,9 @@ def _study_share_topology(tmp_path, monkeypatch, *, allow_share: bool = True):
         revision=1,
         authority_profile_uid=receiver.uid,
         grantee_profile_uid=sender.uid,
-        attachment_context_uid=attachment.uid,
-        attachment_context_name=attachment.name,
         resource_kind=GRANT_RESOURCE_CONTEXT_TREE,
         resource_uid=endpoint.uid,
         resource_name=endpoint.name,
-        public_name="government/healthcare-agent",
         permissions=(("SHARE",) if allow_share else ("QUERY",)),
         contexts=(GrantContextBinding(uid=endpoint.uid, name=endpoint.name),),
     )
@@ -112,6 +113,13 @@ def _study_share_topology(tmp_path, monkeypatch, *, allow_share: bool = True):
         active_uid=sender.uid,
         profiles=(authoring, sender, receiver),
         grants=(grant,),
+        grant_placements=(
+            GrantPlacement(
+                grant_uid=grant.uid,
+                grantee_profile_uid=sender.uid,
+                access_name="government/healthcare-agent",
+            ),
+        ),
     )
     path = profile_registry_file()
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -167,10 +175,11 @@ def test_direct_share_preserves_version_one_consent_and_uid_identity(
     )
     registry = load_profile_registry()
     grant = registry.grants[0]
+    endpoint = grant_placement(registry, grant).access_name
     source_digest = context_record_digest(source)
     record = {
         "endpoint_grant_uid": grant.uid,
-        "recipient": grant.public_name,
+        "recipient": endpoint,
         "sender_profile_uid": registry.active.uid,
         "source_context_uid": source.uid,
         "source_digest": source_digest,
@@ -201,7 +210,7 @@ def test_direct_share_preserves_version_one_consent_and_uid_identity(
         )
     )
 
-    preview = prepare_share(source.name, grant.public_name)
+    preview = prepare_share(source.name, endpoint)
 
     assert preview.consent_digest == expected_consent_digest
     assert preview.uid == expected_uid
@@ -213,7 +222,8 @@ def test_share_source_accepts_context_uid(tmp_path, monkeypatch):
         tmp_path,
         monkeypatch,
     )
-    endpoint = load_profile_registry().grants[0].public_name
+    registry = load_profile_registry()
+    endpoint = grant_placement(registry, registry.grants[0]).access_name
 
     preview = prepare_share(source.uid[:8], endpoint)
 
@@ -229,8 +239,12 @@ def test_bare_share_opens_tty_flow_and_sends_selected_context(
         tmp_path,
         monkeypatch,
     )
-    share_command = importlib.import_module("memcommit.adapters.console.commands.share.command")
-    share_viewer = importlib.import_module("memcommit.adapters.console.commands.share.viewer")
+    share_command = importlib.import_module(
+        "memcommit.adapters.console.commands.share.command"
+    )
+    share_viewer = importlib.import_module(
+        "memcommit.adapters.console.commands.share.viewer"
+    )
     seen = {}
 
     monkeypatch.setattr(share_command, "_interactive_terminal", lambda: True)
@@ -268,18 +282,14 @@ def test_viewer_endpoint_browse_refreezes_and_applies_the_updated_command(
     )
     receiver_store.create_context(endpoint)
     registry = load_profile_registry()
-    original = registry.grants[0]
     alternate = AuthorityGrant(
         uid=str(uuid.uuid4()),
         revision=1,
         authority_profile_uid=receiver.uid,
         grantee_profile_uid=registry.active.uid,
-        attachment_context_uid=original.attachment_context_uid,
-        attachment_context_name=original.attachment_context_name,
         resource_kind=GRANT_RESOURCE_CONTEXT_TREE,
         resource_uid=endpoint.uid,
         resource_name=endpoint.name,
-        public_name="research/archive-agent",
         permissions=("SHARE",),
         contexts=(GrantContextBinding(uid=endpoint.uid, name=endpoint.name),),
     )
@@ -288,15 +298,29 @@ def test_viewer_endpoint_browse_refreezes_and_applies_the_updated_command(
         active_uid=registry.active_uid,
         profiles=registry.profiles,
         grants=registry.grants + (alternate,),
+        grant_placements=registry.grant_placements
+        + (
+            GrantPlacement(
+                grant_uid=alternate.uid,
+                grantee_profile_uid=registry.active.uid,
+                access_name="research/archive-agent",
+            ),
+        ),
     )
     profile_registry_file().write_text(
         json.dumps(updated_registry.to_dict()) + "\n",
         encoding="utf-8",
     )
 
-    share_command = importlib.import_module("memcommit.adapters.console.commands.share.command")
-    share_flow = importlib.import_module("memcommit.adapters.console.commands.share.flow")
-    share_viewer = importlib.import_module("memcommit.adapters.console.commands.share.viewer")
+    share_command = importlib.import_module(
+        "memcommit.adapters.console.commands.share.command"
+    )
+    share_flow = importlib.import_module(
+        "memcommit.adapters.console.commands.share.flow"
+    )
+    share_viewer = importlib.import_module(
+        "memcommit.adapters.console.commands.share.viewer"
+    )
     original_preview = prepare_share(source.name, "government/healthcare-agent")
     seen = []
 
@@ -344,8 +368,12 @@ def test_complete_share_operands_bypass_tty_viewer(
         tmp_path,
         monkeypatch,
     )
-    share_command = importlib.import_module("memcommit.adapters.console.commands.share.command")
-    share_viewer = importlib.import_module("memcommit.adapters.console.commands.share.viewer")
+    share_command = importlib.import_module(
+        "memcommit.adapters.console.commands.share.command"
+    )
+    share_viewer = importlib.import_module(
+        "memcommit.adapters.console.commands.share.viewer"
+    )
     monkeypatch.setattr(share_command, "_interactive_terminal", lambda: True)
     monkeypatch.setattr(
         share_viewer,
@@ -971,8 +999,12 @@ def test_incomplete_recursive_cli_keeps_range_through_tty_review(
         monkeypatch,
     )
     _add_share_subtree(sender_store, source)
-    share_command = importlib.import_module("memcommit.adapters.console.commands.share.command")
-    share_viewer = importlib.import_module("memcommit.adapters.console.commands.share.viewer")
+    share_command = importlib.import_module(
+        "memcommit.adapters.console.commands.share.command"
+    )
+    share_viewer = importlib.import_module(
+        "memcommit.adapters.console.commands.share.viewer"
+    )
     seen = {}
     monkeypatch.setattr(share_command, "_interactive_terminal", lambda: True)
 

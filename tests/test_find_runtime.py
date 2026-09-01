@@ -16,8 +16,7 @@ def _catalog(store: MemoryStore, name: str) -> ReadableContextCatalog:
         ContextAccess(
             store=store,
             context_name=name,
-            display_name=name,
-            attachment_name=None,
+            access_name=name,
             permission="READ",
         ),
     )

@@ -89,19 +89,9 @@ def build_merge_setup(
         current_name=port.current_context_name,
         required_permission="CREATE",
     ).value
-    # ALL READABLE CONTEXTS is Profile-wide. A granted current Target is only
-    # orientation, so anchor discovery at its local attachment and retain each
-    # Source name's exact frozen READ binding through the common catalog.
-    orientation_name = (
-        target.attachment_name if target.is_granted else target.display_name
-    )
-    orientation = resolve_context_access(
-        port.store,
-        orientation_name,
-        current_name=port.current_context_name,
-        required_permission="READ",
-    )
-    navigation = freeze_profile_context_navigation(port.store, orientation)
+    # ALL READABLE CONTEXTS is Profile-wide. The selected Target fixes only
+    # initial orientation; a Grant Placement has no local attachment object.
+    navigation = freeze_profile_context_navigation(port.store, target)
     source_names = tuple(
         sorted(
             (*navigation.local_names, *navigation.selectable_virtual_names),
@@ -123,10 +113,10 @@ def build_merge_setup(
             )
         except (FileNotFoundError, OSError, RuntimeError, ValueError):
             continue
-        target_selectable.add(access.display_name)
+        target_selectable.add(access.access_name)
     # The explicitly resolved initial Target is authoritative even when its
     # public Grant row was reached through a non-local command-start snapshot.
-    target_selectable.add(target.display_name)
+    target_selectable.add(target.access_name)
     target_names = tuple(sorted(target_selectable, key=str.casefold))
     # Keep the initial draft executable when an alternate exists, but do not
     # turn Source/Target distinctness into a disabled picker row. The reviewed
@@ -135,9 +125,9 @@ def build_merge_setup(
         (
             name
             for name in sorted(source_selectable, key=str.casefold)
-            if name != target.display_name
+            if name != target.access_name
         ),
-        target.display_name,
+        target.access_name,
     )
     return MergeSetup(
         names=source_names,
@@ -145,7 +135,7 @@ def build_merge_setup(
         selected_source=selected,
         target_names=target_names,
         target_selectable_names=frozenset(target_selectable),
-        target_context=target.display_name,
+        target_context=target.access_name,
         initial_recursive=initial_recursive,
         current_context=port.current_context_name,
         annotations=tuple(

@@ -21,6 +21,8 @@ from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_UID,
     AuthorityGrant,
     GrantContextBinding,
+    GrantPlacement,
+    ProfileConfigError,
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
@@ -67,18 +69,14 @@ def _granted_access(
         name=AUTHORING_PROFILE_NAME,
         kind="AUTHORING",
     )
-    attachment_uid = str(uuid.uuid4())
     grant = AuthorityGrant(
         uid=str(uuid.uuid4()),
         revision=1,
         authority_profile_uid=authority.uid,
         grantee_profile_uid=grantee.uid,
-        attachment_context_uid=attachment_uid,
-        attachment_context_name="attachment",
         resource_kind="CONTEXT_TREE",
         resource_uid=context.uid,
         resource_name=context.name,
-        public_name=context.name,
         permissions=("READ",),
         contexts=(GrantContextBinding(uid=context.uid, name=context.name),),
         checkpoint_reads=checkpoint_reads,
@@ -86,14 +84,18 @@ def _granted_access(
     return ContextAccess(
         store=store,
         context_name=context.name,
-        display_name=context.name,
-        attachment_name="attachment",
+        access_name=context.name,
         permission="READ",
         view=GrantedContextView(
             grant=grant,
+            placement=GrantPlacement(
+                grant_uid=grant.uid,
+                grantee_profile_uid=grantee.uid,
+                access_name=context.name,
+            ),
             authority=authority,
             grantee=grantee,
-            requested_name=context.name,
+            access_name=context.name,
             authority_context_name=context.name,
             authority_root=store.store_dir,
         ),
@@ -115,8 +117,7 @@ def test_local_context_can_read_an_exact_checkpoint_window(isolated_store):
     access = ContextAccess(
         store=store,
         context_name=context.name,
-        display_name=context.name,
-        attachment_name=None,
+        access_name=context.name,
         permission="READ",
     )
 
@@ -224,8 +225,7 @@ def test_granted_read_alone_does_not_open_checkpoint_history(isolated_store):
     access = ContextAccess(
         store=probe,  # type: ignore[arg-type]
         context_name=access.context_name,
-        display_name=access.display_name,
-        attachment_name=access.attachment_name,
+        access_name=access.access_name,
         permission=access.permission,
         view=access.view,
     )
@@ -238,7 +238,7 @@ def test_granted_read_alone_does_not_open_checkpoint_history(isolated_store):
     assert probe.checkpoint_reads == 0
 
 
-def test_profile_registry_v4_persists_checkpoint_reads_and_v3_loads_empty(
+def test_profile_registry_v5_persists_checkpoint_reads_and_rejects_v4_grants(
     tmp_path,
     monkeypatch,
 ):
@@ -256,12 +256,9 @@ def test_profile_registry_v4_persists_checkpoint_reads_and_v3_loads_empty(
         revision=1,
         authority_profile_uid=authority.uid,
         grantee_profile_uid=authoring.uid,
-        attachment_context_uid=str(uuid.uuid4()),
-        attachment_context_name="attachment",
         resource_kind="CONTEXT_TREE",
         resource_uid=context_uid,
         resource_name="source",
-        public_name="source",
         permissions=("READ",),
         contexts=(GrantContextBinding(uid=context_uid, name="source"),),
         checkpoint_reads=(checkpoint_read,),
@@ -271,6 +268,13 @@ def test_profile_registry_v4_persists_checkpoint_reads_and_v3_loads_empty(
         active_uid=authoring.uid,
         profiles=(authoring, authority),
         grants=(grant,),
+        grant_placements=(
+            GrantPlacement(
+                grant_uid=grant.uid,
+                grantee_profile_uid=authoring.uid,
+                access_name="granted/authority/source",
+            ),
+        ),
     )
     path = profile_registry_file()
     path.parent.mkdir(parents=True)
@@ -279,11 +283,14 @@ def test_profile_registry_v4_persists_checkpoint_reads_and_v3_loads_empty(
 
     assert load_profile_registry().grants[0].checkpoint_reads == (checkpoint_read,)
 
-    record["schema_version"] = 3
-    record["grants"][0].pop("checkpoint_reads")
+    record["schema_version"] = 4
     path.write_text(json.dumps(record), encoding="utf-8")
 
-    assert load_profile_registry().grants[0].checkpoint_reads == ()
+    with pytest.raises(
+        ProfileConfigError,
+        match="Legacy attached Grants are unsupported",
+    ):
+        load_profile_registry()
 
 
 def test_grant_lifecycle_validates_checkpoint_read_scope_and_read_dependency(
@@ -292,9 +299,7 @@ def test_grant_lifecycle_validates_checkpoint_read_scope_and_read_dependency(
     monkeypatch,
 ):
     monkeypatch.setenv("HOME", str(tmp_path))
-    grantee_store = MemoryStore()
-    attachment = ops.init("attachment")
-    grantee_store.save(attachment)
+    MemoryStore()
     authority = ProfileEntry(uid=str(uuid.uuid4()), name="authority", kind="MANAGED")
     authoring = ProfileEntry(
         uid=AUTHORING_PROFILE_UID,
@@ -317,7 +322,6 @@ def test_grant_lifecycle_validates_checkpoint_read_scope_and_read_dependency(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=source.name,
-        attachment_name=attachment.name,
         permissions=("READ",),
         checkpoint_reads=(
             CheckpointRead.reference(source.uid, (checkpoint_uid,)),

@@ -44,15 +44,15 @@ def load_meld_source(
         reader = GrantedReadStore(access) if access.is_granted else access.store
         context = load_context_scope(
             reader,
-            access.display_name if access.is_granted else access.context_name,
+            access.access_name if access.is_granted else access.context_name,
             include_descendants=True,
         )
     else:
         context = (
             (
-                GrantedReadStore(access).load(access.display_name)
+                GrantedReadStore(access).load(access.access_name)
                 if project
-                else GrantedReadStore(access).load_direct(access.display_name)
+                else GrantedReadStore(access).load_direct(access.access_name)
             )
             if access.is_granted
             else access.store.load_direct(access.context_name)
@@ -112,8 +112,7 @@ def load_bound_meld_contexts(
                 access = ContextAccess(
                     store=store,
                     context_name=frame.context_name,
-                    display_name=frame.context_name,
-                    attachment_name=None,
+                    access_name=frame.context_name,
                     permission="READ",
                 )
             else:

@@ -46,6 +46,7 @@ from memcommit.application.operations.profile.model import (
     create_profile,
     create_authority_grant,
     delete_authority_grant,
+    grant_placement,
     import_profile,
     list_authority_grants,
     list_profiles,
@@ -268,12 +269,13 @@ def _print_grant(registry, grant, *, prefix: str = "") -> None:
     profiles = {profile.uid: profile.name for profile in registry.profiles}
     authority = display_escape_text(profiles[grant.authority_profile_uid])
     grantee = display_escape_text(profiles[grant.grantee_profile_uid])
-    public = display_escape_text(grant.public_name)
+    access_name = display_escape_text(
+        grant_placement(registry, grant).access_name
+    )
     resource = display_escape_text(grant.resource_name)
-    attachment = display_escape_text(grant.attachment_context_name)
     typer.echo(
         f"{prefix}{grant.uid[:8]} · {authority}:{resource} -> "
-        f"{grantee}:{attachment}/{public} · "
+        f"{grantee}:{access_name} · "
         f"{_grant_permissions_label(grant.permissions)} · "
         f"{len(grant.contexts)} Context(s) · revision {grant.revision}"
     )
@@ -781,10 +783,16 @@ def list_cmd() -> None:
                 else ""
             )
         )
+        placements_by_grant_uid = {
+            placement.grant_uid: placement
+            for placement in registry.grant_placements
+            if placement.grantee_profile_uid == profile.uid
+        }
         granted_views = [
-            grant.public_name
+            placements_by_grant_uid[grant.uid].access_name
             for grant in registry.grants
             if grant.grantee_profile_uid == profile.uid
+            and grant.uid in placements_by_grant_uid
         ]
         view_note = (
             " · views=" + ",".join(display_escape_text(name) for name in granted_views)
@@ -869,10 +877,6 @@ def grant_create_cmd(
         str,
         typer.Argument(help="Authority Context-tree root"),
     ],
-    attachment: Annotated[
-        str,
-        typer.Option("--into", help="Existing grantee Context that owns the view"),
-    ],
     permissions: Annotated[
         list[str],
         typer.Option(
@@ -883,10 +887,6 @@ def grant_create_cmd(
             ),
         ),
     ],
-    public_name: Annotated[
-        Optional[str],
-        typer.Option("--as", help="Public view path; defaults to the resource path"),
-    ] = None,
     recursive: Annotated[
         bool,
         typer.Option(
@@ -920,9 +920,7 @@ def grant_create_cmd(
             authority_name=authority,
             grantee_name=grantee,
             resource_name=resource,
-            attachment_name=attachment,
             permissions=permissions,
-            public_name=public_name,
             recursive=recursive,
         )
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
@@ -996,7 +994,13 @@ def grant_delete_cmd(
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
     typer.secho("Revoked authority grant.", fg=typer.colors.GREEN)
-    _print_grant(registry, grant, prefix="  ")
+    profiles = {profile.uid: profile.name for profile in registry.profiles}
+    typer.echo(
+        f"  {grant.uid[:8]} · "
+        f"{display_escape_text(profiles[grant.authority_profile_uid])}:"
+        f"{display_escape_text(grant.resource_name)} -> "
+        f"{display_escape_text(profiles[grant.grantee_profile_uid])}"
+    )
 
 
 @app.command("current")
@@ -1207,10 +1211,6 @@ def _context_migration_grant_blockers(
                 moved(grant.resource_name)
                 or any(moved(binding.name) for binding in grant.contexts)
             )
-        )
-        or (
-            grant.grantee_profile_uid == registry.active.uid
-            and moved(grant.attachment_context_name)
         )
     )
     return registry, blockers

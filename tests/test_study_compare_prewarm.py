@@ -102,8 +102,7 @@ def _accesses(
         ContextAccess(
             store=store,
             context_name=context.name,
-            display_name=context.name,
-            attachment_name=None,
+            access_name=context.name,
             permission="READ",
         )
         for context in contexts

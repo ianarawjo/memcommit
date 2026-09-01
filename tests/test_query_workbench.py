@@ -152,8 +152,7 @@ def test_query_workbench_freezes_compact_visible_scope_on_enter():
 def test_query_workbench_switches_to_typed_query_view_scope():
     target = GrantedQueryTarget(
         grant_uid="grant-one",
-        public_name="campus-wiki/construction-details",
-        attachment_name="task",
+        access_name="campus-wiki/construction-details",
     )
     requests: list[GrantedQueryRequest] = []
 
@@ -189,8 +188,7 @@ def test_query_workbench_switches_to_typed_query_view_scope():
 def test_query_view_rejects_blank_question_without_running():
     target = GrantedQueryTarget(
         grant_uid="grant-one",
-        public_name="construction-details",
-        attachment_name="task",
+        access_name="construction-details",
     )
     requests: list[GrantedQueryRequest] = []
 
@@ -217,7 +215,7 @@ def test_query_view_rejects_blank_question_without_running():
 
 
 def test_typed_granted_contract_requires_question_and_answer():
-    target = GrantedQueryTarget("grant-one", "construction-details", "task")
+    target = GrantedQueryTarget("grant-one", "construction-details")
 
     with pytest.raises(ValueError, match="nonblank Query question"):
         GrantedQueryRequest(target=target, question="")
@@ -227,7 +225,7 @@ def test_typed_granted_contract_requires_question_and_answer():
 
 
 def test_query_workbench_can_start_on_one_typed_query_view():
-    target = GrantedQueryTarget("grant-one", "construction-details", "task")
+    target = GrantedQueryTarget("grant-one", "construction-details")
     requests: list[GrantedQueryRequest] = []
 
     def granted(request: GrantedQueryRequest) -> GrantedQueryResponse:

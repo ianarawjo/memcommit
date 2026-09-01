@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import ast
 import json
 from pathlib import Path
@@ -45,7 +47,6 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant
 from memcommit.application.operations.search.application import (
     SearchRequest,
     SearchResponse,
@@ -265,7 +266,7 @@ def test_runtime_calls_context_use_authorization_before_saving(
     original = save_runtime.authorize_context_use
 
     def authorize(access, use):
-        observed.append((access.display_name, use))
+        observed.append((access.access_name, use))
         return original(access, use)
 
     monkeypatch.setattr(save_runtime, "authorize_context_use", authorize)
@@ -403,12 +404,11 @@ def _granted_fixture(tmp_path, monkeypatch):
     path = profile_registry_file()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(registry.to_dict(), indent=2) + "\n", encoding="utf-8")
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=source.name,
-        attachment_name=attachment.name,
-        public_name="shared/source",
+        access_name="shared/source",
         permissions=("READ",),
     )
     access = resolve_context_access(
@@ -529,7 +529,7 @@ def test_search_tui_submits_one_shared_save_request(isolated_store, monkeypatch)
     assert request.destination_name == destination
     assert request.selection[0].source_memory_uid == memory.uid
     assert selected_store is store
-    assert catalog.access_for(source.name).display_name == source.name
+    assert catalog.access_for(source.name).access_name == source.name
 
 
 def test_shared_save_modules_have_no_command_tui_or_provider_imports():

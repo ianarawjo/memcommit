@@ -1,4 +1,4 @@
-"""Resolve public Context operands into exact local or Grant-aware access."""
+"""Resolve Context operands into exact local or Grant-aware access."""
 
 from __future__ import annotations
 
@@ -52,7 +52,7 @@ def _access_uid(
     registry: ProfileRegistry | None = None,
 ) -> str:
     context = (
-        GrantedReadStore(access, registry=registry).load_direct(access.display_name)
+        GrantedReadStore(access, registry=registry).load_direct(access.access_name)
         if access.is_granted
         else access.store.load_direct(access.context_name)
     )
@@ -65,7 +65,7 @@ def freeze_profile_context_access_candidates(
     current_name: str | None,
     registry: ProfileRegistry | None = None,
 ) -> tuple[ContextOperandCandidate[ContextAccess], ...]:
-    """Freeze every ordinary-local and READ-granted public Context identity."""
+    """Freeze every ordinary-local and READ-granted access identity."""
 
     local_names = tuple(active_store.list_context_names())
     if current_name is not None:
@@ -81,8 +81,7 @@ def freeze_profile_context_access_candidates(
         selected_access = ContextAccess(
             store=active_store,
             context_name=selected_name,
-            display_name=selected_name,
-            attachment_name=None,
+            access_name=selected_name,
             permission="READ",
         )
     else:
@@ -112,7 +111,7 @@ def try_resolve_existing_context_access(
     registry: ProfileRegistry | None = None,
     candidates: tuple[ContextOperandCandidate[ContextAccess], ...] | None = None,
 ) -> ResolvedContextAccess | None:
-    """Resolve an exact public name first, then an authorized Context UID.
+    """Resolve an exact access name first, then an authorized Context UID.
 
     Exact name lookup retains ``resolve_context_access`` diagnostics and Grant
     semantics.  UID lookup is intentionally limited to readable Contexts; a
@@ -134,7 +133,7 @@ def try_resolve_existing_context_access(
         return ResolvedExistingContextOperand(
             selector=operand,
             uid=_access_uid(access, registry=registry),
-            name=access.display_name,
+            name=access.access_name,
             value=access,
         )
 
@@ -156,7 +155,7 @@ def try_resolve_existing_context_access(
         return None
     # The frozen UID catalog proves only that the identity is readable enough
     # to disclose. A mutation or stronger query route must still resolve the
-    # chosen public name under its exact operation permission before use.
+    # chosen access name under its exact operation permission before use.
     access = resolve_context_access(
         active_store,
         resolved.name,

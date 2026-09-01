@@ -27,7 +27,7 @@ def _require_granted_permissions(
         raise ProfileError(
             f"Grant {access.view.grant.uid[:8]} does not allow "
             + " + ".join(missing)
-            + f" access to {access.display_name!r}."
+            + f" access to {access.access_name!r}."
         )
 
 

@@ -19,6 +19,9 @@ from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,
     resolve_share_endpoint,
 )
+from memcommit.application.context_access.granted_view import (
+    active_grant_placements,
+)
 from memcommit.persistence.store import MemoryStore, context_record_digest
 
 
@@ -153,7 +156,7 @@ def _consent_digest(
         source = sources[0]
         record = {
             "endpoint_grant_uid": endpoint.grant.uid,
-            "recipient": endpoint.public_name,
+            "recipient": endpoint.access_name,
             "sender_profile_uid": endpoint.sender.uid,
             "source_context_uid": source.uid,
             "source_digest": source_digests[0],
@@ -166,7 +169,7 @@ def _consent_digest(
         record = {
             "schema_version": 2,
             "endpoint_grant_uid": endpoint.grant.uid,
-            "recipient": endpoint.public_name,
+            "recipient": endpoint.access_name,
             "sender_profile_uid": endpoint.sender.uid,
             "source_root": source_root,
             "include_descendants": True,
@@ -331,7 +334,7 @@ def _prepare_delivery(
                 "schema_version": 2,
                 "share_uid": share_uid,
                 "consent_unit_digest": consent_digest,
-                "endpoint": endpoint.public_name,
+                "endpoint": endpoint.access_name,
                 "endpoint_grant_uid": endpoint.grant.uid,
                 "endpoint_grant_revision": endpoint.grant.revision,
                 "sender_profile_uid": endpoint.sender.uid,
@@ -351,7 +354,7 @@ def _prepare_delivery(
             description = (
                 f"Received Context bundle member {index + 1}/{len(sources)} "
                 f"with {len(memories_by_context[index])} Memories from Profile "
-                f"'{endpoint.sender.name}' through '{endpoint.public_name}'."
+                f"'{endpoint.sender.name}' through '{endpoint.access_name}'."
             )
         else:
             # Keep the version-1 exact receipt byte contract compatible with
@@ -360,7 +363,7 @@ def _prepare_delivery(
                 "schema_version": 1,
                 "share_uid": share_uid,
                 "consent_unit_digest": consent_digest,
-                "endpoint": endpoint.public_name,
+                "endpoint": endpoint.access_name,
                 "endpoint_grant_uid": endpoint.grant.uid,
                 "endpoint_grant_revision": endpoint.grant.revision,
                 "sender_profile_uid": endpoint.sender.uid,
@@ -373,7 +376,7 @@ def _prepare_delivery(
             description = (
                 f"Received one Context with {len(memories_by_context[index])} "
                 f"Memories from Profile '{endpoint.sender.name}' through "
-                f"'{endpoint.public_name}'."
+                f"'{endpoint.access_name}'."
             )
         receiver_entries.append(
             (
@@ -388,7 +391,7 @@ def _prepare_delivery(
 
     preview = SharePreview(
         uid=share_uid,
-        endpoint=endpoint.public_name,
+        endpoint=endpoint.access_name,
         endpoint_grant_uid=endpoint.grant.uid,
         endpoint_grant_revision=endpoint.grant.revision,
         sender_profile_uid=endpoint.sender.uid,
@@ -469,7 +472,7 @@ def _deliver_locked(
 ) -> ShareDelivery:
     endpoint = resolve_share_endpoint(endpoint_name, registry=registry)
     if expected is not None and (
-        endpoint.public_name != expected.endpoint
+        endpoint.access_name != expected.endpoint
         or endpoint.grant.uid != expected.endpoint_grant_uid
         or endpoint.grant.revision != expected.endpoint_grant_revision
         or endpoint.sender.uid != expected.sender_profile_uid
@@ -676,15 +679,14 @@ def list_share_endpoints() -> tuple[str, ...]:
     with authority_grant_snapshot_lock() as registry:
         names = sorted(
             {
-                grant.public_name
-                for grant in registry.grants
-                if grant.grantee_profile_uid == registry.active.uid
-                and "SHARE" in grant.permissions
+                placement.access_name
+                for placement, grant in active_grant_placements(registry=registry)
+                if "SHARE" in grant.permissions
             }
         )
-        # Validate the frozen attachment and receiver-root identities now so a
+        # Validate the frozen Placement and receiver-root identities now so a
         # dead endpoint never becomes a selectable disclosure target.
         return tuple(
-            resolve_share_endpoint(name, registry=registry).public_name
+            resolve_share_endpoint(name, registry=registry).access_name
             for name in names
         )

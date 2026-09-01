@@ -179,7 +179,7 @@ class MemoryStoreDeletePort(DeletePort):
         context = access.store.load_direct(access.context_name)
         item = ops.resolve(context, request.selector)
         return FrozenDirectItemDeleteTarget(
-            context_name=access.display_name,
+            context_name=access.access_name,
             context_uid=context.uid,
             item=_project_item(item),
             token=_ItemToken(self._owner, access, context, item),
@@ -197,8 +197,7 @@ class MemoryStoreDeletePort(DeletePort):
         access = ContextAccess(
             store=self._store,
             context_name=target.context_name,
-            display_name=target.context_name,
-            attachment_name=None,
+            access_name=target.context_name,
             permission="DELETE",
         )
         item = ops.resolve(context, target.item_uid)

@@ -668,7 +668,7 @@ def _load_complete_context(access, *, registry_snapshot: ProfileRegistry) -> Con
     )
     return load_context_scope(
         reader,
-        access.display_name if access.is_granted else access.context_name,
+        access.access_name if access.is_granted else access.context_name,
         include_descendants=True,
     )
 

@@ -12,27 +12,30 @@ from memcommit.application.operations.contexts.application import (
     ContextCatalogEntry,
     ContextsCatalog,
 )
-from memcommit.application.operations.profile.config import load_profile_registry
+from memcommit.application.operations.profile.config import (
+    active_profile_registry_for_store,
+)
+from memcommit.application.context_access.granted_view import active_grant_placements
 from memcommit.persistence.store import MemoryStore
 
 
 def load_contexts_catalog(store: MemoryStore) -> ContextsCatalog:
     """Freeze the active pointer and its local-plus-Grant public hierarchy."""
 
-    # Keep the established empty-local behavior: Contexts is an orientation
-    # view of this Store, not a Profile-wide Grant browser without a local root.
     current = store.current_context_name()
     local_name_values = tuple(store.list_context_names())
-    if not local_name_values:
-        return ContextsCatalog(entries=(), has_local_contexts=False)
 
     granted_navigation = freeze_granted_context_navigation(store)
-    registry = load_profile_registry()
-    profile_names = {profile.uid: profile.name for profile in registry.profiles}
-    active_grants = tuple(
-        grant
-        for grant in registry.grants
-        if grant.grantee_profile_uid == registry.active.uid
+    registry = active_profile_registry_for_store(store.store_dir)
+    profile_names = (
+        {profile.uid: profile.name for profile in registry.profiles}
+        if registry is not None
+        else {}
+    )
+    active_grants = (
+        active_grant_placements(registry=registry)
+        if registry is not None
+        else ()
     )
     local_names = frozenset(local_name_values)
     public_names = order_context_names_by_hierarchy(
@@ -60,17 +63,17 @@ def load_contexts_catalog(store: MemoryStore) -> ContextsCatalog:
             continue
 
         candidates = tuple(
-            grant
-            for grant in active_grants
-            if name == grant.public_name or name.startswith(grant.public_name + "/")
+            (placement, grant)
+            for placement, grant in active_grants
+            if name == placement.access_name
+            or name.startswith(placement.access_name + "/")
         )
         if not candidates:
             continue
-        # The nearest lexical Grant is the effective authority. Attachment
-        # metadata never becomes a hierarchy edge.
-        effective = max(
+        # The nearest lexical Placement selects the effective authority Grant.
+        _effective_placement, effective = max(
             candidates,
-            key=lambda grant: len(grant.public_name.split("/")),
+            key=lambda item: len(item[0].access_name.split("/")),
         )
         entries.append(
             ContextCatalogEntry(
@@ -86,4 +89,7 @@ def load_contexts_catalog(store: MemoryStore) -> ContextsCatalog:
                 ],
             )
         )
-    return ContextsCatalog(entries=tuple(entries), has_local_contexts=True)
+    return ContextsCatalog(
+        entries=tuple(entries),
+        has_local_contexts=bool(local_name_values),
+    )

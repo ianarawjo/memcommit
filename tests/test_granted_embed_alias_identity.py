@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 from concurrent.futures import ThreadPoolExecutor
 import json
 from threading import Barrier
@@ -23,7 +25,6 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
 
 
@@ -68,20 +69,18 @@ def _two_alias_fixture(
 
     first_alias = "source-primary"
     second_alias = "source-secondary"
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=grantee.name,
         resource_name=source.name,
-        attachment_name=target.name,
-        public_name=first_alias,
+        access_name=first_alias,
         permissions=("READ",),
     )
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=grantee.name,
         resource_name=source.name,
-        attachment_name=target.name,
-        public_name=second_alias,
+        access_name=second_alias,
         permissions=("READ",),
     )
     return local, target, source, first_alias, second_alias

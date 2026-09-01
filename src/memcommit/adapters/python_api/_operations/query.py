@@ -143,7 +143,7 @@ def query_ordinary(
                 )
             )
         catalog = freeze_profile_readable_context_catalog(store, accesses[0])
-        target_names = tuple(access.display_name for access in accesses)
+        target_names = tuple(access.access_name for access in accesses)
         if any(not catalog.context_exists(name) for name in target_names):
             raise ProfileError(
                 "A selected Context left the frozen readable Profile view."
@@ -236,8 +236,8 @@ def query_granted(
         matches = tuple(
             target
             for target in targets
-            if public_name == target.public_name
-            or public_name.startswith(target.public_name + "/")
+            if public_name == target.access_name
+            or public_name.startswith(target.access_name + "/")
         )
         if not matches:
             raise QueryContextError(
@@ -245,13 +245,12 @@ def query_granted(
             )
         base_target = max(
             matches,
-            key=lambda target: len(target.public_name.split("/")),
+            key=lambda target: len(target.access_name.split("/")),
         )
         request = GrantedQueryRequest(
             target=GrantedQueryTarget(
                 grant_uid=base_target.grant_uid,
-                public_name=public_name,
-                attachment_name=base_target.attachment_name,
+                access_name=public_name,
             ),
             question=question,
             language=language,

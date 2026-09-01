@@ -62,8 +62,7 @@ def _readable_endpoint_catalog(
         ContextAccess(
             store=store,
             context_name=root_name,
-            display_name=root_name,
-            attachment_name=None,
+            access_name=root_name,
             permission="READ",
         ),
         include_query_routes=False,
@@ -106,8 +105,7 @@ def choose_update_setup(
         ContextAccess(
             store=store,
             context_name=root_name,
-            display_name=root_name,
-            attachment_name=None,
+            access_name=root_name,
             permission="READ",
         ),
         include_query_routes=False,

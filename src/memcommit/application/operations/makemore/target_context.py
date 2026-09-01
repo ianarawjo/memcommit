@@ -92,7 +92,7 @@ def _assert_granted_ambient_permissions(
         raise MakemoreError(
             f"Grant {view.grant.uid[:8]} does not allow "
             + " + ".join(missing)
-            + f" ambient Makemore access to {access.display_name!r}."
+            + f" ambient Makemore access to {access.access_name!r}."
         )
 
 
@@ -102,11 +102,9 @@ def _assert_link_matches_access(
 ) -> None:
     binding = freeze_granted_context_binding(access)
     if (
-        binding.public_name != link.public_name
+        binding.access_name != link.access_name
         or binding.grantee_profile_uid != link.grantee_profile_uid
         or binding.authority_profile_uid != link.authority_profile_uid
-        or binding.attachment_context_uid != link.attachment_context_uid
-        or binding.attachment_context_name != link.attachment_context_name
         or binding.grant_uid != link.grant_uid
         or binding.grant_revision < link.grant_revision_at_creation
         or binding.resource_uid != link.resource_uid
@@ -179,27 +177,27 @@ def freeze_makemore_target_context(
             )
         local_bindings[context.name] = binding
 
-    def load_granted(public_name: str, attachment_name: str) -> tuple[ContextAccess, Context]:
+    def load_granted(access_name: str) -> tuple[ContextAccess, Context]:
         access = resolve_context_access(
             store,
-            public_name,
-            current_name=attachment_name,
+            access_name,
+            current_name=store.current_context_name(),
             required_permission="READ",
         )
         _assert_granted_ambient_permissions(access, required_granted_permissions)
         with authorized_context_operation(((access, required_granted_permissions),)):
-            context = GrantedReadStore(access).load_direct(public_name)
+            context = GrantedReadStore(access).load_direct(access_name)
         binding = FrozenMakemoreGrantedContext(
             binding=freeze_granted_context_binding(access),
             context_uid=context.uid,
             context_digest=context_record_digest(context),
         )
-        previous = granted_bindings.get(public_name)
+        previous = granted_bindings.get(access_name)
         if previous is not None and previous != binding:
             raise MakemoreError(
-                f"Granted Target Context {public_name!r} changed while freezing."
+                f"Granted Target Context {access_name!r} changed while freezing."
             )
-        granted_bindings[public_name] = binding
+        granted_bindings[access_name] = binding
         return access, context
 
     def visit_memory_ref_local(item: MemoryRef) -> None:
@@ -253,19 +251,13 @@ def freeze_makemore_target_context(
                 add_query(item)
             elif item._granted_link is not None:
                 link = item._granted_link
-                access, granted = load_granted(
-                    link.public_name,
-                    link.attachment_context_name,
-                )
+                access, granted = load_granted(link.access_name)
                 _assert_link_matches_access(link, access)
                 if granted.uid != link.context_uid:
                     raise MakemoreError(
                         "The granted Target Context identity changed."
                     )
-                visit_granted(
-                    granted,
-                    attachment_name=link.attachment_context_name,
-                )
+                visit_granted(granted)
             elif store.context_exists(item.name):
                 child = store.load_direct(item.name)
                 if child.uid != item.uid:
@@ -278,7 +270,7 @@ def freeze_makemore_target_context(
                     f"Target ambient embedded Context {item.name!r} is unavailable."
                 )
 
-    def visit_granted(context: Context, *, attachment_name: str) -> None:
+    def visit_granted(context: Context) -> None:
         if context.uid in seen_context_uids:
             return
         seen_context_uids.add(context.uid)
@@ -290,7 +282,7 @@ def freeze_makemore_target_context(
                     memory=item,
                 )
             elif isinstance(item, MemoryRef):
-                access, owner = load_granted(item.target_context_name, attachment_name)
+                access, owner = load_granted(item.target_context_name)
                 _assert_granted_ambient_permissions(
                     access,
                     required_granted_permissions,
@@ -307,9 +299,9 @@ def freeze_makemore_target_context(
             elif isinstance(item, QueryContextRef):
                 add_query(item)
             else:
-                _access, child = load_granted(item.name, attachment_name)
+                _access, child = load_granted(item.name)
                 if child.uid == item.uid:
-                    visit_granted(child, attachment_name=attachment_name)
+                    visit_granted(child)
 
     root = store.load_direct(target.context_name)
     if (
@@ -363,16 +355,16 @@ def _assert_granted_contexts_unchanged(
     accesses: tuple[ContextAccess, ...],
     frozen: FrozenMakemoreTargetContext,
 ) -> None:
-    by_name = {access.display_name: access for access in accesses}
+    by_name = {access.access_name: access for access in accesses}
     for item in frozen.granted_contexts:
-        access = by_name[item.binding.public_name]
-        context = GrantedReadStore(access).load_direct(item.binding.public_name)
+        access = by_name[item.binding.access_name]
+        context = GrantedReadStore(access).load_direct(item.binding.access_name)
         if (
             context.uid != item.context_uid
             or context_record_digest(context) != item.context_digest
         ):
             raise MakemoreError(
-                f"Granted Target ambient Context {item.binding.public_name!r} "
+                f"Granted Target ambient Context {item.binding.access_name!r} "
                 "changed while Makemore was running; no proposal was published."
             )
 

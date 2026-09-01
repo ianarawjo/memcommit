@@ -72,13 +72,13 @@ class CompactQueryViewScopeControl:
             not catalog
             or any(not isinstance(item, GrantedQueryTarget) for item in catalog)
             or len({item.grant_uid for item in catalog}) != len(catalog)
-            or len({item.public_name for item in catalog}) != len(catalog)
+            or len({item.access_name for item in catalog}) != len(catalog)
             or initial_target not in catalog
         ):
             raise ValueError("Query View Browse requires a distinct typed catalog.")
         self.targets = catalog
         self.target_by_uid = {item.grant_uid: item for item in catalog}
-        self.target_by_name = {item.public_name: item for item in catalog}
+        self.target_by_name = {item.access_name: item for item in catalog}
         self.on_change = on_change
         self.on_status = on_status
         self.locked = locked
@@ -90,8 +90,8 @@ class CompactQueryViewScopeControl:
             tuple(
                 SelectionOption(
                     target.grant_uid,
-                    target.public_name,
-                    "QUERY VIEW · ATTACHED TO " + target.attachment_name,
+                    target.access_name,
+                    "QUERY VIEW",
                 )
                 for target in catalog
             ),
@@ -114,7 +114,7 @@ class CompactQueryViewScopeControl:
         )
         self.name = ExactNameInputControl.create(
             ExactNameFieldView(
-                value=initial_target.public_name,
+                value=initial_target.access_name,
                 label="QUERY VIEW",
                 detail="Enter one exact public Query View or use Browse.",
                 validate=self._validate_name,
@@ -235,7 +235,7 @@ class CompactQueryViewScopeControl:
     def summary(self) -> str:
         target = self.selected_target()
         reach = "FEDERATE DESCENDANTS" if self.federate_descendants else "EXACT VIEW"
-        return f"{target.public_name} · {reach}"
+        return f"{target.access_name} · {reach}"
 
     def _validate_name(self, candidate: str) -> None:
         if candidate not in self.target_by_name:
@@ -295,7 +295,7 @@ class CompactQueryViewScopeControl:
         return [
             (
                 "class:source-access",
-                safe_terminal_text("ATTACHED TO " + target.attachment_name),
+                safe_terminal_text("GRANT ACCESS · " + target.access_name),
             )
         ]
 
@@ -374,7 +374,7 @@ class CompactQueryViewScopeControl:
         selected = self.selection.select_cursor(toggle=False)
         if selected is None:
             return "HANDLED"
-        self._set_direct_text(self.target_by_uid[selected].public_name)
+        self._set_direct_text(self.target_by_uid[selected].access_name)
         if selected != before:
             self.on_change("QUERY VIEW CHANGED · PRESS ENTER TO QUERY")
         else:

@@ -357,11 +357,9 @@ def _frozen_transfer_authority(access: ContextAccess) -> FrozenTransferAuthority
         return None
     binding = freeze_granted_context_binding(access)
     return FrozenTransferAuthority(
-        public_name=binding.public_name,
+        access_name=binding.access_name,
         grantee_profile_uid=binding.grantee_profile_uid,
         authority_profile_uid=binding.authority_profile_uid,
-        attachment_context_uid=binding.attachment_context_uid,
-        attachment_context_name=binding.attachment_context_name,
         grant_uid=binding.grant_uid,
         grant_revision=binding.grant_revision,
         grant_digest=binding.grant_digest,
@@ -471,8 +469,7 @@ class MemoryStoreCopyAndMovePort:
                 access=ContextAccess(
                     store=self._store,
                     context_name=context.name,
-                    display_name=context.name,
-                    attachment_name=None,
+                    access_name=context.name,
                     permission="READ",
                 ),
             )
@@ -534,7 +531,7 @@ class MemoryStoreCopyAndMovePort:
                 ).value
                 if not access.is_granted:
                     continue
-                public_name = access.display_name
+                public_name = access.access_name
                 if kind == "MOVE":
                     raise MemoryTransferAuthorityError(
                         f"Move cannot use granted Source {public_name!r}: READ "

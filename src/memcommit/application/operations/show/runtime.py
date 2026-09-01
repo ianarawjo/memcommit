@@ -8,9 +8,7 @@ from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
     context_access_display_facts,
-    project_grants_into_context,
     resolve_context_access,
-    top_level_grants,
 )
 from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
@@ -43,12 +41,14 @@ from memcommit.core.context_targeting.model import (
 from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
 )
-from memcommit.application.context_access.granted_view import grants_for_attachment
 from memcommit.core.context_targeting.resolution import (
     expand_lexical_context_names,
     parse_auto_typed_context_memory_operand,
 )
-from memcommit.application.operations.profile.config import ProfileRegistry
+from memcommit.application.operations.profile.config import (
+    ProfileRegistry,
+    active_profile_registry_for_store,
+)
 from memcommit.application.operations.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
@@ -71,7 +71,6 @@ from memcommit.source_projection.model import (
     SourceForm,
     SourceReach,
     SourceState,
-    context_access_facts,
 )
 from memcommit.persistence.store import MemoryStore
 
@@ -198,8 +197,7 @@ class MemoryStoreShowPort:
         return ContextAccess(
             store=self._store,
             context_name=canonical_name,
-            display_name=canonical_name,
-            attachment_name=None,
+            access_name=canonical_name,
             permission="READ",
         )
 
@@ -232,49 +230,10 @@ class MemoryStoreShowPort:
             if registry is None:
                 raise RuntimeError("Granted Show requires a Profile snapshot.")
             context = GrantedReadStore(access, registry=registry).load(
-                access.display_name
+                access.access_name
             )
         else:
             context = access.store.load(access.context_name)
-            if self._allow_grants and registry is not None:
-                grants = grants_for_attachment(
-                    attachment_name=access.context_name,
-                    registry=registry,
-                )
-                if grants:
-                    context = project_grants_into_context(context, grants)
-                    for grant in grants:
-                        if "READ" in grant.permissions:
-                            item_facts[grant.resource_uid] = context_access_facts(
-                                granted=True,
-                                permission="READ",
-                                permissions=grant.permissions,
-                            )
-                        elif "QUERY" in grant.permissions:
-                            existing = context.memories.get(grant.uid)
-                            if existing is None:
-                                context.add(
-                                    QueryContextRef(
-                                        uid=grant.uid,
-                                        name=grant.public_name,
-                                        target_source_uid=grant.resource_uid,
-                                        provider="authority-grant",
-                                    )
-                                )
-                            elif not (
-                                isinstance(existing, QueryContextRef)
-                                and existing.name == grant.public_name
-                            ):
-                                raise ProfileError(
-                                    "A query-only grant identity collides with "
-                                    "an existing direct item."
-                                )
-                            item_facts[grant.uid] = context_access_facts(
-                                granted=True,
-                                permission="QUERY",
-                                permissions=grant.permissions,
-                                form=SourceForm.QUERY_VIEW,
-                            )
         context_facts = (
             context_access_display_facts(
                 access,
@@ -337,13 +296,13 @@ class MemoryStoreShowPort:
             )
         )
         scope = ContextScope.create(
-            (root_access.display_name,),
+            (root_access.access_name,),
             include_descendants=include_descendants,
         )
         expanded_names = expand_lexical_context_names(scope, catalog_names)
         names = (
-            root_access.display_name,
-            *(name for name in expanded_names if name != root_access.display_name),
+            root_access.access_name,
+            *(name for name in expanded_names if name != root_access.access_name),
         )
 
         contexts: list[ShowContextSnapshot] = []
@@ -356,8 +315,7 @@ class MemoryStoreShowPort:
             return ContextAccess(
                 store=self._store,
                 context_name=public_name,
-                display_name=public_name,
-                attachment_name=None,
+                access_name=public_name,
                 permission="READ",
             )
 
@@ -372,44 +330,6 @@ class MemoryStoreShowPort:
                 else self._store.load(public_name)
             )
             item_facts: dict[str, SourceDisplayFacts] = {}
-            if not access.is_granted and self._allow_grants and registry is not None:
-                grants = grants_for_attachment(
-                    attachment_name=access.context_name,
-                    registry=registry,
-                )
-                if grants:
-                    for grant in top_level_grants(grants):
-                        if "READ" in grant.permissions:
-                            item_facts[grant.resource_uid] = context_access_facts(
-                                granted=True,
-                                permission="READ",
-                                permissions=grant.permissions,
-                            )
-                        elif "QUERY" in grant.permissions:
-                            existing = context.memories.get(grant.uid)
-                            if existing is None:
-                                context.add(
-                                    QueryContextRef(
-                                        uid=grant.uid,
-                                        name=grant.public_name,
-                                        target_source_uid=grant.resource_uid,
-                                        provider="authority-grant",
-                                    )
-                                )
-                            elif not (
-                                isinstance(existing, QueryContextRef)
-                                and existing.name == grant.public_name
-                            ):
-                                raise ProfileError(
-                                    "A query-only grant identity collides with "
-                                    "an existing direct item."
-                                )
-                            item_facts[grant.uid] = context_access_facts(
-                                granted=True,
-                                permission="QUERY",
-                                permissions=grant.permissions,
-                                form=SourceForm.QUERY_VIEW,
-                            )
             return context, item_facts
 
         def visit_snapshot(
@@ -525,7 +445,15 @@ class MemoryStoreShowPort:
         include_descendants: bool,
         follow_embeds: bool,
     ) -> tuple[ShowContextSnapshot, ...]:
-        if not self._allow_grants:
+        registry = (
+            active_profile_registry_for_store(
+                self._store.store_dir,
+                registry=self._registry,
+            )
+            if self._allow_grants
+            else None
+        )
+        if not self._allow_grants or registry is None:
             return (
                 self._recursive_contexts(
                     context_name,
@@ -547,8 +475,7 @@ class MemoryStoreShowPort:
         # snapshot therefore belongs to one authorization generation.
         with authority_grant_snapshot_lock() as live_registry:
             if (
-                self._registry is not None
-                and self._registry.active.uid != live_registry.active.uid
+                registry.active.uid != live_registry.active.uid
             ):
                 raise RuntimeError(
                     "The active Profile changed before Show could freeze access."

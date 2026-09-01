@@ -42,7 +42,7 @@ def _clear_recursive(
         access,
         include_query_routes=False,
     )
-    granted_descendants = readable.granted_names_below(access.display_name)
+    granted_descendants = readable.granted_names_below(access.access_name)
     if granted_descendants:
         raise ProfileError(
             "Recursive clear cannot cross granted Context boundaries: "
@@ -70,7 +70,7 @@ def _clear_recursive(
     changed = tuple(frame for frame in frames if frame[2] > 0)
     if not changed:
         return ClearResult(
-            context_name=access.display_name,
+            context_name=access.access_name,
             recursive=True,
             item_count=0,
             scope_count=len(frames),
@@ -86,12 +86,12 @@ def _clear_recursive(
     changed_count = len(changed)
     description = (
         f"Cleared {total_count} item(s) from {changed_count} Context(s) "
-        f"under '{access.display_name}'"
+        f"under '{access.access_name}'"
     )
     tree_receipt = {
         "version": 1,
         "operation_uid": operation_uid,
-        "root": access.display_name,
+        "root": access.access_name,
         "include_descendants": True,
     }
 
@@ -128,7 +128,7 @@ def _clear_recursive(
         expected_context_catalog=catalog_names,
     )
     return ClearResult(
-        context_name=access.display_name,
+        context_name=access.access_name,
         recursive=True,
         item_count=total_count,
         scope_count=len(frames),
@@ -158,7 +158,7 @@ def execute_clear(
     count = len(context.memories)
     if count == 0:
         return ClearResult(
-            context_name=access.display_name,
+            context_name=access.access_name,
             recursive=False,
             item_count=0,
             scope_count=1,
@@ -176,16 +176,16 @@ def execute_clear(
                 command="clear",
                 args={
                     "count": count,
-                    "context": access.display_name,
+                    "context": access.access_name,
                     **grant_checkpoint_args(access),
                 },
                 description=(
-                    f"Cleared all {count} item(s) from '{access.display_name}'"
+                    f"Cleared all {count} item(s) from '{access.access_name}'"
                 ),
             ),
         )
     return ClearResult(
-        context_name=access.display_name,
+        context_name=access.access_name,
         recursive=False,
         item_count=count,
         scope_count=1,

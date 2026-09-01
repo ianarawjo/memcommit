@@ -92,5 +92,5 @@ def test_audit_command_loads_the_source_selected_by_the_shared_setup(
 
     assert observed["names"] == (current.name, peer.name)
     assert observed["current"] == current.name
-    assert access.display_name == peer.name
+    assert access.access_name == peer.name
     assert selected.name == peer.name

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import json
 import uuid
 
@@ -34,7 +36,6 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model import (
     ProfileError,
-    create_authority_grant,
     update_authority_grant,
 )
 from memcommit.persistence.store import MemoryStore
@@ -121,12 +122,11 @@ def _granted_context(tmp_path, monkeypatch, permissions):
     path = profile_registry_file()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(registry.to_dict()) + "\n", encoding="utf-8")
-    _registry, grant = create_authority_grant(
+    _registry, grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=source.name,
-        attachment_name=attachment.name,
-        public_name="shared/fit-source",
+        access_name="shared/fit-source",
         permissions=permissions,
     )
     return active_store, source, memories, grant

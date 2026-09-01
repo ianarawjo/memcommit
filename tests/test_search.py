@@ -504,12 +504,10 @@ def test_search_rejects_granted_live_embed_before_provider_construction():
             target=memory,
             granted_source=GrantedMemorySource(
                 context_uid=authority.uid,
-                public_name=authority.name,
+                access_name=authority.name,
                 authority_context_name="authority/advisor",
                 authority_profile_uid=str(uuid.uuid4()),
                 grantee_profile_uid=str(uuid.uuid4()),
-                attachment_context_uid=containing.uid,
-                attachment_context_name=containing.name,
                 grant_uid=str(uuid.uuid4()),
                 grant_revision_at_creation=1,
                 resource_uid=authority.uid,
@@ -540,12 +538,10 @@ def test_search_rejects_nested_granted_context_before_provider_construction():
     containing = Context(uid=str(uuid.uuid4()), name="workspace")
     granted._granted_link = GrantedContextLink(
         context_uid=granted.uid,
-        public_name=granted.name,
+        access_name=granted.name,
         authority_context_name="authority/advisor",
         authority_profile_uid=str(uuid.uuid4()),
         grantee_profile_uid=str(uuid.uuid4()),
-        attachment_context_uid=containing.uid,
-        attachment_context_name=containing.name,
         grant_uid=str(uuid.uuid4()),
         grant_revision_at_creation=1,
         resource_uid=granted.uid,
@@ -1014,7 +1010,7 @@ def test_search_without_query_opens_blank_interactive_search_in_a_tty(
     monkeypatch.setattr(
         "memcommit.adapters.console.commands.search.command._open_search_workbench",
         lambda store, access, **options: opened.append(
-            (store.store_dir, access.display_name, options)
+            (store.store_dir, access.access_name, options)
         ),
     )
 

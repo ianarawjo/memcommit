@@ -301,17 +301,20 @@ def _inspection_with_grants(
     inspections = cache if cache is not None else {profile.uid: inspection}
     inspections.setdefault(profile.uid, inspection)
     profile_by_uid = {item.uid: item for item in registry.profiles}
-    local_by_name = {item.name: item for item in inspection.context_inventory}
     seen_contexts: set[tuple[str, str]] = set()
     exact_authority: dict[tuple[str, str], ContextInventory] = {}
     granted_memory_count = 0
 
-    for grant in registry.grants:
+    grants_by_uid = {grant.uid: grant for grant in registry.grants}
+    placed = tuple(
+        (placement, grants_by_uid[placement.grant_uid])
+        for placement in registry.grant_placements
+        if placement.grantee_profile_uid == profile.uid
+        and placement.grant_uid in grants_by_uid
+    )
+    for placement, grant in placed:
         if grant.grantee_profile_uid != profile.uid or "READ" not in grant.permissions:
             continue
-        attachment = local_by_name.get(grant.attachment_context_name)
-        if attachment is None or attachment.uid != grant.attachment_context_uid:
-            raise ProfileError("Grant attachment Context identity changed.")
         authority = profile_by_uid[grant.authority_profile_uid]
         authority_inspection = inspections.get(authority.uid)
         authority_by_name = (
@@ -320,20 +323,21 @@ def _inspection_with_grants(
             else {}
         )
         for binding in grant.contexts:
-            public_name = grant.public_name + binding.name[len(grant.resource_name) :]
+            access_name = (
+                placement.access_name
+                + binding.name[len(grant.resource_name) :]
+            )
             candidates = [
-                candidate
-                for candidate in registry.grants
-                if candidate.grantee_profile_uid == profile.uid
-                and candidate.attachment_context_uid == grant.attachment_context_uid
-                and (
-                    public_name == candidate.public_name
-                    or public_name.startswith(candidate.public_name + "/")
+                (candidate_placement, candidate)
+                for candidate_placement, candidate in placed
+                if (
+                    access_name == candidate_placement.access_name
+                    or access_name.startswith(candidate_placement.access_name + "/")
                 )
             ]
-            effective = max(
+            _effective_placement, effective = max(
                 candidates,
-                key=lambda candidate: len(candidate.public_name.split("/")),
+                key=lambda item: len(item[0].access_name.split("/")),
             )
             if "READ" not in effective.permissions:
                 continue
@@ -458,36 +462,40 @@ def _fsync_directory(path: Path) -> None:
         os.close(descriptor)
 
 
-def _read_granted_public_names(
+def _read_granted_access_names(
     registry: ProfileRegistry,
     profile_uid: str,
 ) -> frozenset[str]:
-    """Return public names whose effective frozen grant includes READ."""
+    """Return access names whose effective frozen Grant includes READ."""
 
     result: set[str] = set()
-    grants = tuple(
-        grant for grant in registry.grants if grant.grantee_profile_uid == profile_uid
+    grants_by_uid = {grant.uid: grant for grant in registry.grants}
+    placed = tuple(
+        (placement, grants_by_uid[placement.grant_uid])
+        for placement in registry.grant_placements
+        if placement.grantee_profile_uid == profile_uid
+        and placement.grant_uid in grants_by_uid
     )
-    for grant in grants:
+    for placement, grant in placed:
         for binding in grant.contexts:
-            public_name = grant.public_name + binding.name[len(grant.resource_name) :]
+            access_name = (
+                placement.access_name
+                + binding.name[len(grant.resource_name) :]
+            )
             candidates = tuple(
-                candidate
-                for candidate in grants
+                (candidate_placement, candidate)
+                for candidate_placement, candidate in placed
                 if (
-                    candidate.attachment_context_uid == grant.attachment_context_uid
-                    and (
-                        public_name == candidate.public_name
-                        or public_name.startswith(candidate.public_name + "/")
-                    )
+                    access_name == candidate_placement.access_name
+                    or access_name.startswith(candidate_placement.access_name + "/")
                 )
             )
-            effective = max(
+            _effective_placement, effective = max(
                 candidates,
-                key=lambda candidate: len(candidate.public_name.split("/")),
+                key=lambda item: len(item[0].access_name.split("/")),
             )
             if "READ" in effective.permissions:
-                result.add(public_name)
+                result.add(access_name)
     return frozenset(result)
 
 

@@ -5697,11 +5697,9 @@ def test_granted_target_ready_meld_retains_final_review_and_escape_cancels():
         assess_meld_turn(session, ZeroChangeDirectionalProvider()),
     )
     session.granted_target = GrantedUpdateTarget(
-        public_name="shared/baseline",
+        access_name="shared/baseline",
         grantee_profile_uid="11111111-1111-4111-8111-111111111111",
         authority_profile_uid="22222222-2222-4222-8222-222222222222",
-        attachment_context_uid="attachment-context",
-        attachment_context_name="shared",
         grant_uid="33333333-3333-4333-8333-333333333333",
         grant_revision=1,
         grant_digest="a" * 64,

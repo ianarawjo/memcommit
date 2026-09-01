@@ -46,13 +46,11 @@ def _is_sha256(value: object) -> bool:
 
 @dataclass(frozen=True)
 class GrantedContextBinding:
-    """Frozen control-plane identity behind one granted public Context."""
+    """Frozen control-plane identity behind one granted Context access."""
 
-    public_name: str
+    access_name: str
     grantee_profile_uid: str
     authority_profile_uid: str
-    attachment_context_uid: str
-    attachment_context_name: str
     grant_uid: str
     grant_revision: int
     grant_digest: str
@@ -64,13 +62,9 @@ class GrantedContextBinding:
     def to_dict(self) -> dict[str, object]:
         return {
             "kind": "GRANTED_CONTEXT",
-            "public_name": self.public_name,
+            "access_name": self.access_name,
             "grantee_profile_uid": self.grantee_profile_uid,
             "authority_profile_uid": self.authority_profile_uid,
-            "attachment": {
-                "uid": self.attachment_context_uid,
-                "name": self.attachment_context_name,
-            },
             "grant": {
                 "uid": self.grant_uid,
                 "revision": self.grant_revision,
@@ -90,10 +84,9 @@ class GrantedContextBinding:
             value,
             {
                 "kind",
-                "public_name",
+                "access_name",
                 "grantee_profile_uid",
                 "authority_profile_uid",
-                "attachment",
                 "grant",
                 "resource",
                 "authority_context_name",
@@ -102,11 +95,6 @@ class GrantedContextBinding:
         )
         if data["kind"] != "GRANTED_CONTEXT":
             raise ValueError("Invalid granted Context binding kind.")
-        attachment = _require_mapping(
-            data["attachment"],
-            {"uid", "name"},
-            "granted Context attachment",
-        )
         grant = _require_mapping(
             data["grant"],
             {"uid", "revision", "digest", "permissions"},
@@ -138,7 +126,7 @@ class GrantedContextBinding:
         if not _is_sha256(grant["digest"]):
             raise ValueError("Invalid granted Context grant digest.")
         return cls(
-            public_name=_require_text(data["public_name"], "granted public name"),
+            access_name=_require_text(data["access_name"], "granted access name"),
             grantee_profile_uid=_require_uid(
                 data["grantee_profile_uid"],
                 "granted grantee Profile uid",
@@ -146,14 +134,6 @@ class GrantedContextBinding:
             authority_profile_uid=_require_uid(
                 data["authority_profile_uid"],
                 "granted authority Profile uid",
-            ),
-            attachment_context_uid=_require_text(
-                attachment["uid"],
-                "granted attachment Context uid",
-            ),
-            attachment_context_name=_require_text(
-                attachment["name"],
-                "granted attachment Context name",
             ),
             grant_uid=_require_uid(grant["uid"], "granted grant uid"),
             grant_revision=revision,
@@ -170,25 +150,25 @@ class GrantedContextBinding:
 
 def authority_context_name(
     binding: GrantedContextBinding,
-    public_name: str,
+    access_name: str,
 ) -> str:
-    """Map one public Context inside a frozen Grant to its physical name."""
+    """Map one access name inside a frozen Grant to its authority name."""
 
     if not isinstance(binding, GrantedContextBinding):
         raise TypeError("Expected a granted Context binding.")
     if not (
-        public_name == binding.public_name
-        or public_name.startswith(binding.public_name + "/")
+        access_name == binding.access_name
+        or access_name.startswith(binding.access_name + "/")
     ):
-        raise ValueError("The public Context is outside the granted namespace.")
-    return binding.resource_name + public_name[len(binding.public_name) :]
+        raise ValueError("The Context is outside the granted access namespace.")
+    return binding.resource_name + access_name[len(binding.access_name) :]
 
 
-def public_context_name(
+def access_context_name(
     binding: GrantedContextBinding,
     authority_name: str,
 ) -> str:
-    """Map one physical Context inside a frozen Grant to its public name."""
+    """Map one authority Context inside a frozen Grant to its access name."""
 
     if not isinstance(binding, GrantedContextBinding):
         raise TypeError("Expected a granted Context binding.")
@@ -197,7 +177,7 @@ def public_context_name(
         or authority_name.startswith(binding.resource_name + "/")
     ):
         raise ValueError("The authority Context is outside the granted namespace.")
-    return binding.public_name + authority_name[len(binding.resource_name) :]
+    return binding.access_name + authority_name[len(binding.resource_name) :]
 
 
 def granted_context_binding_digest(value: object) -> str:
@@ -214,7 +194,7 @@ def granted_context_binding_digest(value: object) -> str:
 
 __all__ = [
     "GrantedContextBinding",
+    "access_context_name",
     "authority_context_name",
     "granted_context_binding_digest",
-    "public_context_name",
 ]

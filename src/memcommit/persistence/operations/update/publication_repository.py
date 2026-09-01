@@ -79,7 +79,7 @@ def _load_endpoint(
     store = _reader(active_store, access, registry=registry)
     return load_context_scope(
         store,
-        binding.public_name if binding is not None else name,
+        binding.access_name if binding is not None else name,
         include_descendants=include_descendants,
     )
 
@@ -156,7 +156,7 @@ def _checkpoint_args(
                     "uid": target_binding.grant_uid,
                     "revision": target_binding.grant_revision,
                     "grantee_profile_uid": target_binding.grantee_profile_uid,
-                    "public_context": target_binding.public_name,
+                    "access_context": target_binding.access_name,
                 },
             }
         )

@@ -78,7 +78,11 @@ def test_public_bare_item_selector_uses_the_shared_cross_context_locator(tmp_pat
     assert store.current_context_name() == "current"
 
 
-def test_context_delete_plan_is_read_only_and_preserves_descendants(tmp_path):
+def test_context_delete_plan_is_read_only_and_preserves_descendants(
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
     store = _store(tmp_path)
     parent = ops.init("project")
     child = ops.init("project/child")
@@ -115,13 +119,16 @@ def test_context_delete_rejects_a_changed_record_before_publication(tmp_path):
         AutoCheckpoint(command="add", args={}, description="changed"),
     )
 
-    with pytest.raises(DeleteStalePlanError, match="changed after deletion was reviewed"):
+    with pytest.raises(
+        DeleteStalePlanError, match="changed after deletion was reviewed"
+    ):
         apply_context_delete(plan, port=port)
 
     assert store.context_exists("victim")
 
 
-def test_public_delete_plan_is_client_bound_and_tamper_evident(tmp_path):
+def test_public_delete_plan_is_client_bound_and_tamper_evident(tmp_path, monkeypatch):
+    monkeypatch.setenv("HOME", str(tmp_path))
     root = tmp_path / "store"
     store = MemoryStore(root=root)
     store.create_context(ops.init("victim"))
@@ -144,6 +151,7 @@ def test_public_context_delete_reports_a_committed_cleanup_warning(
     tmp_path,
     monkeypatch,
 ):
+    monkeypatch.setenv("HOME", str(tmp_path))
     root = tmp_path / "store"
     store = MemoryStore(root=root)
     store.create_context(ops.init("victim"))
@@ -163,7 +171,11 @@ def test_public_context_delete_reports_a_committed_cleanup_warning(
     assert not store.context_exists("victim")
 
 
-def test_agent_registry_splits_delete_by_effect_and_requires_exact_plan(tmp_path):
+def test_agent_registry_splits_delete_by_effect_and_requires_exact_plan(
+    tmp_path,
+    monkeypatch,
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
     root = tmp_path / "store"
     store = MemoryStore(root=root)
     owner = ops.init("owner")

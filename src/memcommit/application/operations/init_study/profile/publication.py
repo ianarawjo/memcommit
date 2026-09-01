@@ -14,6 +14,7 @@ from memcommit.application.operations.profile.config import (
     STUDY_RUN_AUTHORITY_SOURCE_KIND,
     STUDY_RUN_PARTICIPANT_SOURCE_KIND,
     AuthorityGrant,
+    GrantPlacement,
     ProfileConfigError,
     ProfileEntry,
     ProfileRegistry,
@@ -57,7 +58,7 @@ def _materialize_study_grants(
     packages: dict[int, _StudyTaskPackage],
     profiles_by_name: dict[str, ProfileEntry],
     staged_roots: dict[str, Path],
-) -> tuple[AuthorityGrant, ...]:
+) -> tuple[tuple[AuthorityGrant, ...], tuple[GrantPlacement, ...]]:
     """Resolve templates only after every imported Profile has a local UID."""
 
     contexts_by_profile = {
@@ -69,6 +70,7 @@ def _materialize_study_grants(
         for source in package.profiles
     }
     all_grants: list[AuthorityGrant] = []
+    all_placements: list[GrantPlacement] = []
 
     for task in _STUDY_TASKS:
         package = packages[task]
@@ -84,6 +86,7 @@ def _materialize_study_grants(
             ordered_keys.append(key)
 
         resolved: dict[str, AuthorityGrant] = {}
+        placements_by_key: dict[str, GrantPlacement] = {}
         resolving: set[str] = set()
 
         def resolve(key: str) -> AuthorityGrant:
@@ -178,14 +181,12 @@ def _materialize_study_grants(
                         raise ProfileError(
                             f"Task {task} grantee attachment is invalid."
                         )
-                    attached_context = _study_manifest_context(
+                    _study_manifest_context(
                         attachment.get("context"),
                         contexts=grantee_contexts,
                         label=f"Task {task} grant attachment Context",
                     )
-                    attachment_uid = attached_context.uid
-                    attachment_name = attached_context.name
-                    public_name = public_component
+                    access_name = public_component
                 elif attachment_kind == "GRANT_VIEW":
                     if set(attachment) != {"kind", "grant_key", "grant_uid"}:
                         raise ProfileError(
@@ -213,12 +214,10 @@ def _materialize_study_grants(
                         raise ProfileError(
                             f"Task {task} nested grant parent binding is invalid."
                         )
-                    # A GRANT_VIEW is a nested public locator, not a second
-                    # attachment object. Runtime grants attach to the same
-                    # local Context and rely on most-specific public matching.
-                    attachment_uid = parent.attachment_context_uid
-                    attachment_name = parent.attachment_context_name
-                    public_name = f"{parent.public_name}/{public_component}"
+                    parent_placement = placements_by_key[parent_key]
+                    access_name = (
+                        f"{parent_placement.access_name}/{public_component}"
+                    )
                 else:
                     raise ProfileError(f"Task {task} grant attachment is invalid.")
 
@@ -267,14 +266,16 @@ def _materialize_study_grants(
                     revision=1,
                     authority_profile_uid=authority.uid,
                     grantee_profile_uid=grantee.uid,
-                    attachment_context_uid=attachment_uid,
-                    attachment_context_name=attachment_name,
                     resource_kind=GRANT_RESOURCE_CONTEXT_TREE,
                     resource_uid=resource.uid,
                     resource_name=resource.name,
-                    public_name=public_name,
                     permissions=permissions,
                     contexts=scope,
+                )
+                placements_by_key[key] = GrantPlacement(
+                    grant_uid=grant.uid,
+                    grantee_profile_uid=grantee.uid,
+                    access_name=access_name,
                 )
                 resolved[key] = grant
                 return grant
@@ -282,12 +283,16 @@ def _materialize_study_grants(
                 resolving.discard(key)
 
         package_grants = tuple(resolve(key) for key in ordered_keys)
-        public_keys: set[tuple[str, str, str]] = set()
-        for grant in package_grants:
+        package_placements = tuple(placements_by_key[key] for key in ordered_keys)
+        public_keys: set[tuple[str, str]] = set()
+        for grant, placement in zip(
+            package_grants,
+            package_placements,
+            strict=True,
+        ):
             public_key = (
                 grant.grantee_profile_uid,
-                grant.attachment_context_uid,
-                grant.public_name.casefold(),
+                placement.access_name.casefold(),
             )
             if public_key in public_keys:
                 raise ProfileError(f"Task {task} grant public names are duplicated.")
@@ -298,8 +303,8 @@ def _materialize_study_grants(
                 if profile.uid == grant.grantee_profile_uid
             )
             for local_name in contexts_by_profile[grantee_name]:
-                if local_name == grant.public_name or local_name.startswith(
-                    grant.public_name + "/"
+                if local_name == placement.access_name or local_name.startswith(
+                    placement.access_name + "/"
                 ):
                     raise ProfileError(
                         f"Task {task} granted view overlaps a local Context."
@@ -323,10 +328,11 @@ def _materialize_study_grants(
         if len(query_memories) != package.query_view_count:
             raise ProfileError(f"Task {task} query view count is inconsistent.")
         all_grants.extend(package_grants)
+        all_placements.extend(package_placements)
 
     if len({grant.uid for grant in all_grants}) != len(all_grants):
         raise ProfileError("Study grant uids are duplicated across task packages.")
-    return tuple(all_grants)
+    return tuple(all_grants), tuple(all_placements)
 
 
 def _publish_study_profile_batch(
@@ -375,7 +381,7 @@ def _publish_study_profile_batch(
             )
             staged_roots[source.name] = staging
 
-        grants = _materialize_study_grants(
+        grants, grant_placements = _materialize_study_grants(
             packages,
             profiles_by_source_name,
             staged_roots,
@@ -388,9 +394,20 @@ def _publish_study_profile_batch(
             # Bundle grant UIDs are deterministic fixture identities. Each
             # Study needs distinct registry identities so repeated runs can
             # preserve the same topology without colliding with one another.
-            grants = tuple(
-                replace(grant, uid=str(uuid.uuid5(namespace, grant.uid)))
+            replacement_uids = {
+                grant.uid: str(uuid.uuid5(namespace, grant.uid))
                 for grant in grants
+            }
+            grants = tuple(
+                replace(grant, uid=replacement_uids[grant.uid])
+                for grant in grants
+            )
+            grant_placements = tuple(
+                replace(
+                    placement,
+                    grant_uid=replacement_uids[placement.grant_uid],
+                )
+                for placement in grant_placements
             )
         existing_grant_uids = {grant.uid for grant in registry.grants}
         conflicts = [grant.uid for grant in grants if grant.uid in existing_grant_uids]
@@ -404,6 +421,7 @@ def _publish_study_profile_batch(
             profiles=(*registry.profiles, *profiles),
             grants=(*registry.grants, *grants),
             removed_profile_uids=registry.removed_profile_uids,
+            grant_placements=(*registry.grant_placements, *grant_placements),
         )
         cache = {
             profile.uid: inspection
@@ -518,15 +536,26 @@ def _publish_study_run_pair(
                 target = authority if source.role == "AUTHORITY" else participant
                 profiles_by_name[source.name] = target
                 roots_by_name[source.name] = source.store
-        grants = _materialize_study_grants(
+        grants, grant_placements = _materialize_study_grants(
             merged,
             profiles_by_name,
             roots_by_name,
         )
         namespace = uuid.UUID(study_uid)
-        grants = tuple(
-            replace(grant, uid=str(uuid.uuid5(namespace, grant.uid)))
+        replacement_uids = {
+            grant.uid: str(uuid.uuid5(namespace, grant.uid))
             for grant in grants
+        }
+        grants = tuple(
+            replace(grant, uid=replacement_uids[grant.uid])
+            for grant in grants
+        )
+        grant_placements = tuple(
+            replace(
+                placement,
+                grant_uid=replacement_uids[placement.grant_uid],
+            )
+            for placement in grant_placements
         )
         existing_grant_uids = {grant.uid for grant in registry.grants}
         if any(grant.uid in existing_grant_uids for grant in grants):
@@ -543,6 +572,7 @@ def _publish_study_run_pair(
             profiles=(*registry.profiles, participant, authority),
             grants=(*registry.grants, *grants),
             removed_profile_uids=registry.removed_profile_uids,
+            grant_placements=(*registry.grant_placements, *grant_placements),
         )
         participant_inspection = _inspection_with_grants(
             updated,

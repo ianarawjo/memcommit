@@ -172,7 +172,7 @@ def capture_sever_binding(
         if access.is_granted
         else access.store
     )
-    root_name = access.display_name if access.is_granted else access.context_name
+    root_name = access.access_name if access.is_granted else access.context_name
     load_direct = read_store.load_direct
     load_recursive = read_store.load
     scope = ContextScope.create(
@@ -242,10 +242,10 @@ def capture_sever_binding(
     memory_tuple = tuple(memories)
     return SeverContextBinding(
         root_uid=root.uid,
-        root_name=access.display_name,
+        root_name=access.access_name,
         frame_digest=sever_frame_digest(
             root_uid=root.uid,
-            root_name=access.display_name,
+            root_name=access.access_name,
             contexts=context_tuple,
             memories=memory_tuple,
             include_descendants=include_descendants,
@@ -266,8 +266,7 @@ def _local_output_access(store: MemoryStore, name: str) -> ContextAccess:
     return ContextAccess(
         store=store,
         context_name=name,
-        display_name=name,
-        attachment_name=None,
+        access_name=name,
         permission="CREATE",
     )
 
@@ -304,14 +303,14 @@ class MemoryStoreSeverInputPort:
             candidates=candidates,
         ).value
         if (
-            source_access.display_name == criteria_access.display_name
+            source_access.access_name == criteria_access.access_name
             and source_access.store.store_dir == criteria_access.store.store_dir
         ):
             raise SeverApplicationError(
                 "Source and Criteria Contexts must be distinct."
             )
         validate_portable_context_name(request.output_name)
-        same_source_name = request.output_name == source_access.display_name
+        same_source_name = request.output_name == source_access.access_name
         if same_source_name and (
             source_access.is_granted
             or source_access.store.store_dir != self._store.store_dir

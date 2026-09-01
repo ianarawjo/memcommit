@@ -145,7 +145,7 @@ def _fit_access_key(access: ContextAccess) -> tuple[str, ...]:
             access.view.grant.uid,
             access.view.authority.uid,
             access.context_name,
-            access.display_name,
+            access.access_name,
         )
     return ("LOCAL", str(access.store.store_dir.resolve()), access.context_name)
 
@@ -157,7 +157,7 @@ def _load_fit_context_direct(
 ) -> Context:
     if access.is_granted:
         return GrantedReadStore(access, registry=registry).load_direct(
-            access.display_name
+            access.access_name
         )
     return access.store.load_direct(access.context_name)
 
@@ -190,7 +190,7 @@ def _revalidate_fit_sources(
                 context = _load_fit_context_direct(access, registry=registry)
             except FileNotFoundError as error:
                 raise FitSourceError(
-                    f"Fit Source Context {access.display_name!r} disappeared "
+                    f"Fit Source Context {access.access_name!r} disappeared "
                     "during judgment."
                 ) from error
             current_accesses.append(access)
@@ -199,14 +199,14 @@ def _revalidate_fit_sources(
         for source, context in zip(frozen, current_contexts, strict=True):
             if context.uid != source.context_uid:
                 raise FitSourceError(
-                    f"Fit Source Context {source.access.display_name!r} changed "
+                    f"Fit Source Context {source.access.access_name!r} changed "
                     "identity during judgment."
                 )
             if source.whole_context_digest is not None and (
                 context_record_digest(context) != source.whole_context_digest
             ):
                 raise FitSourceError(
-                    f"Fit Source Context {source.access.display_name!r} changed "
+                    f"Fit Source Context {source.access.access_name!r} changed "
                     "during judgment."
                 )
             for memory_uid, digest in source.selected_memory_digests:
@@ -214,7 +214,7 @@ def _revalidate_fit_sources(
                 if not isinstance(memory, Memory) or _memory_digest(memory) != digest:
                     raise FitSourceError(
                         f"Fit Source Memory {memory_uid[:8]!r} in "
-                        f"{source.access.display_name!r} changed during judgment."
+                        f"{source.access.access_name!r} changed during judgment."
                     )
 
     if any(source.granted_binding is not None for source in frozen):
@@ -301,7 +301,7 @@ def run_stored_source_fit(
         )
         if not direct_memories:
             raise FitSourceError(
-                f"Fit Source Context {selected_context.access.display_name!r} "
+                f"Fit Source Context {selected_context.access.access_name!r} "
                 "contains no direct ordinary Memories."
             )
         for memory in direct_memories:
@@ -396,7 +396,7 @@ def run_stored_source_fit(
             FitInputOrigin(
                 alias=alias,
                 kind=row.kind,
-                context_name=row.source.access.display_name,
+                context_name=row.source.access.access_name,
                 context_uid=row.source.context.uid,
                 memory_uid=row.memory.uid,
             )

@@ -19,6 +19,7 @@ from memcommit.application.operations.profile.config import (
     load_profile_registry,
 )
 from memcommit.application.context_access.granted_view import GrantedContextView
+from memcommit.application.context_access.granted_view import active_grant_placements
 from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.store.context_memory.records import context_record_digest
 from memcommit.persistence.store.translation_catalog import (
@@ -91,12 +92,10 @@ class GrantedQuerySourceBinding:
     grant_digest: str
     grantee_profile_uid: str
     authority_profile_uid: str
-    attachment_context_uid: str
-    attachment_context_name: str
     resource_uid: str
     resource_name: str
-    public_name: str
-    requested_name: str
+    placement_access_name: str
+    requested_access_name: str
     language: str
     source_digest: str
 
@@ -105,7 +104,6 @@ class GrantedQuerySourceBinding:
             ("Grant uid", self.grant_uid),
             ("grantee Profile uid", self.grantee_profile_uid),
             ("authority Profile uid", self.authority_profile_uid),
-            ("attachment Context uid", self.attachment_context_uid),
             ("resource Context uid", self.resource_uid),
         ):
             _canonical_uuid(value, field=field)
@@ -122,10 +120,9 @@ class GrantedQuerySourceBinding:
             if not isinstance(value, str) or _DIGEST.fullmatch(value) is None:
                 raise GrantedQuerySourceError(f"Granted Query {field} is invalid.")
         for field, value in (
-            ("attachment Context name", self.attachment_context_name),
             ("resource name", self.resource_name),
-            ("public name", self.public_name),
-            ("requested name", self.requested_name),
+            ("placement access name", self.placement_access_name),
+            ("requested access name", self.requested_access_name),
         ):
             if not isinstance(value, str) or not value:
                 raise GrantedQuerySourceError(f"Granted Query {field} is invalid.")
@@ -215,13 +212,10 @@ def _authority_query_bindings(
     )
     registry = load_profile_registry()
     overrides = tuple(
-        grant
-        for grant in registry.grants
+        (placement, grant)
+        for placement, grant in active_grant_placements(registry=registry)
         if grant.uid != view.grant.uid
-        and grant.grantee_profile_uid == view.grant.grantee_profile_uid
-        and grant.attachment_context_uid == view.grant.attachment_context_uid
-        and grant.attachment_context_name == view.grant.attachment_context_name
-        and grant.public_name.startswith(view.grant.public_name + "/")
+        and placement.access_name.startswith(view.placement.access_name + "/")
     )
 
     # A more-specific public view is an authorization boundary. Parent Query
@@ -231,13 +225,15 @@ def _authority_query_bindings(
         for binding in candidate_bindings
         if not any(
             (
-                view.grant.public_name + binding.name[len(view.grant.resource_name) :]
-                == override.public_name
+                view.placement.access_name
+                + binding.name[len(view.grant.resource_name) :]
+                == override_placement.access_name
             )
             or (
-                view.grant.public_name + binding.name[len(view.grant.resource_name) :]
-            ).startswith(override.public_name + "/")
-            for override in overrides
+                view.placement.access_name
+                + binding.name[len(view.grant.resource_name) :]
+            ).startswith(override_placement.access_name + "/")
+            for override_placement, _override in overrides
         )
     )
 
@@ -331,7 +327,7 @@ def load_authority_query_source(
         {"language": canonical_language, "contexts": digest_contexts}
     )
     return AuthorityQuerySource(
-        name=view.requested_name,
+        name=view.access_name,
         content="\n\n".join(memory.content for memory in selected),
         digest=digest,
     )
@@ -352,12 +348,10 @@ def freeze_granted_query_source_binding(
         grant_digest=_canonical_json_digest(grant.to_dict()),
         grantee_profile_uid=grant.grantee_profile_uid,
         authority_profile_uid=grant.authority_profile_uid,
-        attachment_context_uid=grant.attachment_context_uid,
-        attachment_context_name=grant.attachment_context_name,
         resource_uid=grant.resource_uid,
         resource_name=grant.resource_name,
-        public_name=grant.public_name,
-        requested_name=source.name,
+        placement_access_name=view.placement.access_name,
+        requested_access_name=source.name,
         language=_language(language),
         source_digest=source.digest,
     )

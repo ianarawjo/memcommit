@@ -242,7 +242,7 @@ def cmd(
                         candidates=context_candidates,
                     ).value
                     memory_target = DirectMemoryTarget(
-                        access.display_name,
+                        access.access_name,
                         parsed_source.memory_selector,
                     )
                 else:

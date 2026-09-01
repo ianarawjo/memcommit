@@ -153,7 +153,7 @@ class MemoryStoreForgetSourcePort(ForgetSourcePort):
         context = access.store.load_direct(access.context_name)
         source = FrozenForgetSource(
             context=context,
-            display_name=access.display_name,
+            display_name=access.access_name,
             granted=access.is_granted,
             _runtime_token=_ForgetRuntimeToken(access=access, context=context),
         )
@@ -172,7 +172,7 @@ class MemoryStoreForgetSourcePort(ForgetSourcePort):
             not isinstance(token, _ForgetRuntimeToken)
             or token.context is not source.context
             or token.context.uid != source.context.uid
-            or token.access.display_name != source.display_name
+            or token.access.access_name != source.display_name
             or token.access.is_granted != source.granted
         ):
             raise ValueError("Forget Source does not belong to this runtime binding.")

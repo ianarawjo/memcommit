@@ -412,8 +412,7 @@ def _freeze_meld_tui_setup(
         ContextAccess(
             store=store,
             context_name=root_name,
-            display_name=root_name,
-            attachment_name=None,
+            access_name=root_name,
             permission="READ",
         ),
         include_query_routes=False,

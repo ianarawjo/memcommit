@@ -176,8 +176,7 @@ def revalidate_saved_comparison(
                         ContextAccess(
                             store=store,
                             context_name=frame.context_name,
-                            display_name=frame.context_name,
-                            attachment_name=None,
+                            access_name=frame.context_name,
                             permission="READ",
                         ),
                         include_descendants=include_descendants,

@@ -92,9 +92,9 @@ class MemoryStoreListSource:
         # Direct presentation must not open attached READ sources merely to
         # display authority metadata; recursive presentation deliberately may.
         context = (
-            catalog.load(access.display_name)
+            catalog.load(access.access_name)
             if request.recursive
-            else catalog.load_without_attached_reads(access.display_name)
+            else catalog.load_without_attached_reads(access.access_name)
         )
         return ListSelection(
             access=access,

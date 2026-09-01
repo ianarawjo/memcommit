@@ -32,7 +32,7 @@ from ._storage import (
     _inspection_with_grants as _inspection_with_grants,
     _prepare_profile_deletion_batch as _prepare_profile_deletion_batch,
     _publish_permanent_removal as _publish_permanent_removal,
-    _read_granted_public_names as _read_granted_public_names,
+    _read_granted_access_names as _read_granted_access_names,
     _registry_lock as _registry_lock,
     _source_store as _source_store,
     _write_registry as _write_registry,
@@ -84,7 +84,7 @@ def list_profiles() -> tuple[ProfileRegistry, tuple[StoreInspection, ...]]:
     base = tuple(
         inspect_store(
             profile_store_dir(item),
-            allowed_virtual_currents=_read_granted_public_names(
+            allowed_virtual_currents=_read_granted_access_names(
                 registry,
                 item.uid,
             ),
@@ -122,7 +122,7 @@ def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
             target,
             inspect_store(
                 profile_store_dir(target),
-                allowed_virtual_currents=_read_granted_public_names(
+                allowed_virtual_currents=_read_granted_access_names(
                     registry,
                     target.uid,
                 ),
@@ -136,6 +136,7 @@ def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
             profiles=registry.profiles,
             grants=registry.grants,
             removed_profile_uids=registry.removed_profile_uids,
+            grant_placements=registry.grant_placements,
         )
         _write_registry(updated)
         return updated, inspection, True
@@ -397,6 +398,7 @@ def rename_profile(
             ),
             grants=registry.grants,
             removed_profile_uids=registry.removed_profile_uids,
+            grant_placements=registry.grant_placements,
         )
         try:
             _write_registry(updated)
@@ -488,7 +490,7 @@ def remove_profile(
         # or accepting an already-corrupt Profile as the reviewed target.
         inspect_store(
             store,
-            allowed_virtual_currents=_read_granted_public_names(
+            allowed_virtual_currents=_read_granted_access_names(
                 registry,
                 target.uid,
             ),
@@ -510,6 +512,11 @@ def remove_profile(
             profiles=registry.profiles,
             grants=retained_grants,
             removed_profile_uids=ordered_removed,
+            grant_placements=tuple(
+                placement
+                for placement in registry.grant_placements
+                if placement.grant_uid in {grant.uid for grant in retained_grants}
+            ),
         )
         batch = _prepare_profile_deletion_batch((target,))
         _publish_permanent_removal(

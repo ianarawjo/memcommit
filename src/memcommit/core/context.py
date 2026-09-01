@@ -1,11 +1,20 @@
 """Core Context, Memory, reference, and checkpoint domain values."""
+
 from __future__ import annotations
 
 import hashlib
 import uuid
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Callable, Iterator, Optional, Protocol, TypeAlias, runtime_checkable
+from typing import (
+    Any,
+    Callable,
+    Iterator,
+    Optional,
+    Protocol,
+    TypeAlias,
+    runtime_checkable,
+)
 
 
 @runtime_checkable
@@ -40,12 +49,10 @@ class GrantedMemorySource:
     """
 
     context_uid: str
-    public_name: str
+    access_name: str
     authority_context_name: str
     authority_profile_uid: str
     grantee_profile_uid: str
-    attachment_context_uid: str
-    attachment_context_name: str
     grant_uid: str
     grant_revision_at_creation: int
     resource_uid: str
@@ -55,12 +62,10 @@ class GrantedMemorySource:
     def __post_init__(self) -> None:
         text_fields = (
             self.context_uid,
-            self.public_name,
+            self.access_name,
             self.authority_context_name,
             self.authority_profile_uid,
             self.grantee_profile_uid,
-            self.attachment_context_uid,
-            self.attachment_context_name,
             self.grant_uid,
             self.resource_uid,
             self.resource_name,
@@ -78,12 +83,10 @@ class GrantedMemorySource:
     def to_dict(self) -> dict[str, Any]:
         return {
             "context_uid": self.context_uid,
-            "public_name": self.public_name,
+            "access_name": self.access_name,
             "authority_context_name": self.authority_context_name,
             "authority_profile_uid": self.authority_profile_uid,
             "grantee_profile_uid": self.grantee_profile_uid,
-            "attachment_context_uid": self.attachment_context_uid,
-            "attachment_context_name": self.attachment_context_name,
             "grant_uid": self.grant_uid,
             "grant_revision_at_creation": self.grant_revision_at_creation,
             "resource_uid": self.resource_uid,
@@ -95,12 +98,10 @@ class GrantedMemorySource:
     def from_dict(cls, data: dict[str, Any]) -> "GrantedMemorySource":
         expected = {
             "context_uid",
-            "public_name",
+            "access_name",
             "authority_context_name",
             "authority_profile_uid",
             "grantee_profile_uid",
-            "attachment_context_uid",
-            "attachment_context_name",
             "grant_uid",
             "grant_revision_at_creation",
             "resource_uid",
@@ -111,12 +112,10 @@ class GrantedMemorySource:
             raise ValueError("Granted Memory Source fields are invalid.")
         return cls(
             context_uid=data["context_uid"],
-            public_name=data["public_name"],
+            access_name=data["access_name"],
             authority_context_name=data["authority_context_name"],
             authority_profile_uid=data["authority_profile_uid"],
             grantee_profile_uid=data["grantee_profile_uid"],
-            attachment_context_uid=data["attachment_context_uid"],
-            attachment_context_name=data["attachment_context_name"],
             grant_uid=data["grant_uid"],
             grant_revision_at_creation=data["grant_revision_at_creation"],
             resource_uid=data["resource_uid"],
@@ -162,7 +161,7 @@ class MemoryRef:
         self.granted_source = granted_source
         if granted_source is not None and (
             granted_source.context_uid != target_context_uid
-            or granted_source.public_name != target_context_name
+            or granted_source.access_name != target_context_name
             or granted_source.memory_uid != target_memory_uid
         ):
             raise ValueError(
@@ -253,9 +252,7 @@ class MemoryRef:
         else:
             digest = None
         raw_granted_source = data.get("grant_source")
-        if raw_granted_source is not None and not isinstance(
-            raw_granted_source, dict
-        ):
+        if raw_granted_source is not None and not isinstance(raw_granted_source, dict):
             raise ValueError("Memory relationship Grant Source is invalid.")
         granted_source = (
             GrantedMemorySource.from_dict(raw_granted_source)
@@ -338,12 +335,10 @@ class GrantedContextLink:
     """Revocable authority binding persisted without copied Context content."""
 
     context_uid: str
-    public_name: str
+    access_name: str
     authority_context_name: str
     authority_profile_uid: str
     grantee_profile_uid: str
-    attachment_context_uid: str
-    attachment_context_name: str
     grant_uid: str
     grant_revision_at_creation: int
     resource_uid: str
@@ -352,12 +347,10 @@ class GrantedContextLink:
     def __post_init__(self) -> None:
         text_fields = (
             self.context_uid,
-            self.public_name,
+            self.access_name,
             self.authority_context_name,
             self.authority_profile_uid,
             self.grantee_profile_uid,
-            self.attachment_context_uid,
-            self.attachment_context_name,
             self.grant_uid,
             self.resource_uid,
             self.resource_name,
@@ -375,12 +368,10 @@ class GrantedContextLink:
         return {
             "type": "granted_context_ref",
             "uid": self.context_uid,
-            "name": self.public_name,
+            "name": self.access_name,
             "authority_context_name": self.authority_context_name,
             "authority_profile_uid": self.authority_profile_uid,
             "grantee_profile_uid": self.grantee_profile_uid,
-            "attachment_context_uid": self.attachment_context_uid,
-            "attachment_context_name": self.attachment_context_name,
             "grant_uid": self.grant_uid,
             "grant_revision_at_creation": self.grant_revision_at_creation,
             "resource_uid": self.resource_uid,
@@ -389,14 +380,28 @@ class GrantedContextLink:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "GrantedContextLink":
+        expected = {
+            "type",
+            "uid",
+            "name",
+            "authority_context_name",
+            "authority_profile_uid",
+            "grantee_profile_uid",
+            "grant_uid",
+            "grant_revision_at_creation",
+            "resource_uid",
+            "resource_name",
+        }
+        if not isinstance(data, dict) or set(data) != expected:
+            raise ValueError("Granted Context link fields are invalid.")
+        if data["type"] != "granted_context_ref":
+            raise ValueError("Granted Context link type is invalid.")
         return cls(
             context_uid=data["uid"],
-            public_name=data["name"],
+            access_name=data["name"],
             authority_context_name=data["authority_context_name"],
             authority_profile_uid=data["authority_profile_uid"],
             grantee_profile_uid=data["grantee_profile_uid"],
-            attachment_context_uid=data["attachment_context_uid"],
-            attachment_context_name=data["attachment_context_name"],
             grant_uid=data["grant_uid"],
             grant_revision_at_creation=data["grant_revision_at_creation"],
             resource_uid=data["resource_uid"],
@@ -494,7 +499,9 @@ class Context:
     def replace(self, memory: Memory) -> None:
         """Replace a directly owned Memory in-place, preserving its position."""
         if memory.uid not in self.memories:
-            raise KeyError(f"No memory with uid '{memory.uid}' in context '{self.name}'.")
+            raise KeyError(
+                f"No memory with uid '{memory.uid}' in context '{self.name}'."
+            )
         if not isinstance(self.memories[memory.uid], Memory):
             raise TypeError(f"'{memory.uid}' is not a directly owned Memory.")
         self.memories[memory.uid] = memory
@@ -519,7 +526,9 @@ class Context:
                 # a Context subclass for read traversal but has its own durable
                 # self-contained record and must be classified before a live
                 # Context placement.
-                from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
+                from memcommit.application.capabilities.context_snapshot import (
+                    ContextSnapshotRef,
+                )
 
                 memories[uid] = (
                     info.to_dict()
@@ -632,7 +641,9 @@ class Context:
                 if nested is not None:
                     ctx.add(nested)
             elif item["type"] == "context_snapshot_ref":
-                from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
+                from memcommit.application.capabilities.context_snapshot import (
+                    ContextSnapshotRef,
+                )
 
                 ctx.add(ContextSnapshotRef.from_dict(item))
             elif item["type"] == "granted_context_ref":
@@ -641,15 +652,17 @@ class Context:
                 # Recursive reads supply a reauthorizing loader; it may raise
                 # when the Grant or exact authority identity is unavailable.
                 nested = (
-                    Context(uid=link.context_uid, name=link.public_name)
+                    Context(uid=link.context_uid, name=link.access_name)
                     if granted_loader is None
                     else granted_loader(link)
                 )
                 if nested is not None and nested.uid != link.context_uid:
                     nested = None
                 if nested is not None:
-                    nested.name = link.public_name
-                    nested._granted_link = link
+                    if granted_loader is None:
+                        nested.name = link.access_name
+                    if nested._granted_link is None:
+                        nested._granted_link = link
                     ctx.add(nested)
         return ctx
 
@@ -662,6 +675,7 @@ Information: TypeAlias = Memory | MemoryRef | QueryContextRef | Context
 @dataclass
 class AutoCheckpoint:
     """Passed to store.save() to trigger an automatic post-operation checkpoint."""
+
     command: str
     args: dict[str, Any]
     description: str
@@ -670,6 +684,7 @@ class AutoCheckpoint:
 @dataclass
 class Checkpoint:
     """Point-in-time snapshot of a context's direct state."""
+
     uid: str
     message: str
     timestamp: datetime

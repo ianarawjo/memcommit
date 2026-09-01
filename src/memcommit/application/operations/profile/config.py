@@ -22,7 +22,8 @@ from memcommit.application.authorization.checkpoint_read_model import (
 )
 
 
-PROFILE_REGISTRY_SCHEMA_VERSION = 4
+PROFILE_REGISTRY_SCHEMA_VERSION = 5
+CHECKPOINT_READ_PROFILE_REGISTRY_SCHEMA_VERSION = 4
 REMOVED_PROFILE_REGISTRY_SCHEMA_VERSION = 3
 GRANT_PROFILE_REGISTRY_SCHEMA_VERSION = 2
 LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION = 1
@@ -134,10 +135,14 @@ def study_run_identity(profile: ProfileEntry) -> StudyRunIdentity | None:
         "provider_policy_digest",
     }
     source_fields = frozenset(source)
-    if source_fields not in {
-        frozenset(legacy_fields),
-        frozenset(pinned_fields),
-    } or profile.kind != "MANAGED":
+    if (
+        source_fields
+        not in {
+            frozenset(legacy_fields),
+            frozenset(pinned_fields),
+        }
+        or profile.kind != "MANAGED"
+    ):
         raise ProfileConfigError("Study run Profile provenance is invalid.")
     study_uid = _canonical_uid(source.get("study_uid"), field="Study uid")
     study_name = validate_profile_name(source.get("study_name"))
@@ -232,9 +237,7 @@ def canonical_grant_permissions(
             permission = "UPDATE"
         if permission in LEGACY_GRANT_PERMISSIONS:
             if not allow_legacy:
-                raise ProfileConfigError(
-                    f"Unsupported grant permission: {raw!r}."
-                )
+                raise ProfileConfigError(f"Unsupported grant permission: {raw!r}.")
             # A stored legacy registry must remain loadable after the permission
             # vocabulary contracts. SESSION_LOG historically implied QUERY;
             # every other retired capability added no ordinary Context use.
@@ -283,12 +286,9 @@ class AuthorityGrant:
     revision: int
     authority_profile_uid: str
     grantee_profile_uid: str
-    attachment_context_uid: str
-    attachment_context_name: str
     resource_kind: str
     resource_uid: str
     resource_name: str
-    public_name: str
     permissions: tuple[str, ...]
     contexts: tuple[GrantContextBinding, ...]
     checkpoint_reads: tuple[CheckpointRead, ...] = ()
@@ -299,18 +299,30 @@ class AuthorityGrant:
             "revision": self.revision,
             "authority_profile_uid": self.authority_profile_uid,
             "grantee_profile_uid": self.grantee_profile_uid,
-            "attachment_context_uid": self.attachment_context_uid,
-            "attachment_context_name": self.attachment_context_name,
             "resource_kind": self.resource_kind,
             "resource_uid": self.resource_uid,
             "resource_name": self.resource_name,
-            "public_name": self.public_name,
             "permissions": list(self.permissions),
             "contexts": [context.to_dict() for context in self.contexts],
             "checkpoint_reads": [
-                checkpoint_read.to_dict()
-                for checkpoint_read in self.checkpoint_reads
+                checkpoint_read.to_dict() for checkpoint_read in self.checkpoint_reads
             ],
+        }
+
+
+@dataclass(frozen=True)
+class GrantPlacement:
+    """One grantee-owned name that mounts an authority Grant."""
+
+    grant_uid: str
+    grantee_profile_uid: str
+    access_name: str
+
+    def to_dict(self) -> dict[str, str]:
+        return {
+            "grant_uid": self.grant_uid,
+            "grantee_profile_uid": self.grantee_profile_uid,
+            "access_name": self.access_name,
         }
 
 
@@ -323,6 +335,7 @@ class ProfileRegistry:
     profiles: tuple[ProfileEntry, ...]
     grants: tuple[AuthorityGrant, ...] = ()
     removed_profile_uids: tuple[str, ...] = ()
+    grant_placements: tuple[GrantPlacement, ...] = ()
 
     @property
     def active(self) -> ProfileEntry:
@@ -358,6 +371,9 @@ class ProfileRegistry:
             "profiles": [profile.to_dict() for profile in self.profiles],
             "grants": [grant.to_dict() for grant in self.grants],
             "removed_profile_uids": list(self.removed_profile_uids),
+            "grant_placements": [
+                placement.to_dict() for placement in self.grant_placements
+            ],
         }
 
 
@@ -433,6 +449,7 @@ def virtual_authoring_registry() -> ProfileRegistry:
             ),
         ),
         grants=(),
+        grant_placements=(),
     )
 
 
@@ -456,6 +473,7 @@ def load_profile_registry() -> ProfileRegistry:
         LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION,
         GRANT_PROFILE_REGISTRY_SCHEMA_VERSION,
         REMOVED_PROFILE_REGISTRY_SCHEMA_VERSION,
+        CHECKPOINT_READ_PROFILE_REGISTRY_SCHEMA_VERSION,
         PROFILE_REGISTRY_SCHEMA_VERSION,
     }:
         raise ProfileConfigError("Unsupported profile registry schema version.")
@@ -533,6 +551,11 @@ def load_profile_registry() -> ProfileRegistry:
         raw_grants = []
     if not isinstance(raw_grants, list):
         raise ProfileConfigError("Profile grants must be a list.")
+    if schema_version < PROFILE_REGISTRY_SCHEMA_VERSION and raw_grants:
+        raise ProfileConfigError(
+            "Legacy attached Grants are unsupported; recreate them with "
+            "receiver-owned placements."
+        )
     grants: list[AuthorityGrant] = []
     for raw in raw_grants:
         grant_fields = {
@@ -540,21 +563,13 @@ def load_profile_registry() -> ProfileRegistry:
             "revision",
             "authority_profile_uid",
             "grantee_profile_uid",
-            "attachment_context_uid",
-            "attachment_context_name",
             "resource_kind",
             "resource_uid",
             "resource_name",
-            "public_name",
             "permissions",
             "contexts",
+            "checkpoint_reads",
         }
-        if schema_version >= PROFILE_REGISTRY_SCHEMA_VERSION or (
-            raw.get("checkpoint_reads") == []
-            if isinstance(raw, dict)
-            else False
-        ):
-            grant_fields.add("checkpoint_reads")
         if not isinstance(raw, dict) or set(raw) != grant_fields:
             raise ProfileConfigError("Profile grant entry is invalid.")
         revision = raw.get("revision")
@@ -640,17 +655,9 @@ def load_profile_registry() -> ProfileRegistry:
                 revision=revision,
                 authority_profile_uid=authority_uid,
                 grantee_profile_uid=grantee_uid,
-                attachment_context_uid=_canonical_uid(
-                    raw.get("attachment_context_uid"),
-                    field="Grant attachment Context uid",
-                ),
-                attachment_context_name=validate_grant_resource_name(
-                    raw.get("attachment_context_name")
-                ),
                 resource_kind=resource_kind,
                 resource_uid=resource_uid,
                 resource_name=resource_name,
-                public_name=validate_grant_resource_name(raw.get("public_name")),
                 permissions=permissions,
                 contexts=tuple(contexts),
                 checkpoint_reads=checkpoint_reads,
@@ -658,24 +665,64 @@ def load_profile_registry() -> ProfileRegistry:
         )
     if len({grant.uid for grant in grants}) != len(grants):
         raise ProfileConfigError("Profile grant uids must be unique.")
-    public_keys = [
-        (
-            grant.grantee_profile_uid,
-            grant.attachment_context_uid,
-            grant.public_name.casefold(),
+
+    raw_placements = value.get("grant_placements", [])
+    if schema_version < PROFILE_REGISTRY_SCHEMA_VERSION:
+        if "grant_placements" in value:
+            raise ProfileConfigError(
+                "Older profile registries cannot contain Grant placements."
+            )
+        raw_placements = []
+    if not isinstance(raw_placements, list):
+        raise ProfileConfigError("Grant placements must be a list.")
+    grants_by_uid = {grant.uid: grant for grant in grants}
+    grant_placements: list[GrantPlacement] = []
+    for raw in raw_placements:
+        if not isinstance(raw, dict) or set(raw) != {
+            "grant_uid",
+            "grantee_profile_uid",
+            "access_name",
+        }:
+            raise ProfileConfigError("Grant placement entry is invalid.")
+        grant_uid = _canonical_uid(
+            raw.get("grant_uid"),
+            field="Grant placement Grant uid",
         )
-        for grant in grants
+        grantee_uid = _canonical_uid(
+            raw.get("grantee_profile_uid"),
+            field="Grant placement grantee Profile uid",
+        )
+        grant = grants_by_uid.get(grant_uid)
+        if grant is None or grant.grantee_profile_uid != grantee_uid:
+            raise ProfileConfigError(
+                "Grant placement does not match its authority Grant."
+            )
+        grant_placements.append(
+            GrantPlacement(
+                grant_uid=grant_uid,
+                grantee_profile_uid=grantee_uid,
+                access_name=validate_grant_resource_name(raw.get("access_name")),
+            )
+        )
+    if len({placement.grant_uid for placement in grant_placements}) != len(
+        grant_placements
+    ):
+        raise ProfileConfigError("Each Grant must have exactly one placement.")
+    if {placement.grant_uid for placement in grant_placements} != set(grants_by_uid):
+        raise ProfileConfigError("Every Grant must have exactly one placement.")
+    placement_keys = [
+        (placement.grantee_profile_uid, placement.access_name.casefold())
+        for placement in grant_placements
     ]
-    if len(set(public_keys)) != len(public_keys):
-        raise ProfileConfigError(
-            "Granted public view names must be unique per Profile."
-        )
+    if len(set(placement_keys)) != len(placement_keys):
+        raise ProfileConfigError("Grant access names must be unique per Profile.")
     return ProfileRegistry(
         generation=generation,
         active_uid=active_uid,
         profiles=tuple(profiles),
         grants=tuple(grants),
         removed_profile_uids=removed_profile_uids,
+        grant_placements=tuple(grant_placements),
     )
 
 
@@ -685,6 +732,27 @@ def profile_store_dir(profile: ProfileEntry) -> Path:
     if profile.kind == "AUTHORING":
         return default_store_dir()
     return profile_stores_dir() / profile.uid
+
+
+def active_profile_registry_for_store(
+    store_dir: Path,
+    *,
+    registry: ProfileRegistry | None = None,
+) -> ProfileRegistry | None:
+    """Return Profile authority only when it owns the supplied Store root."""
+
+    root = store_dir.resolve()
+    try:
+        value = registry or load_profile_registry()
+    except ProfileConfigError:
+        if root == default_store_dir().resolve() or root.is_relative_to(
+            profile_stores_dir().resolve()
+        ):
+            raise
+        return None
+    if root != profile_store_dir(value.active).resolve():
+        return None
+    return value
 
 
 def resolve_active_store_dir() -> Path:

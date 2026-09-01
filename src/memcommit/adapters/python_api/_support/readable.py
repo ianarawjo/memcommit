@@ -37,8 +37,7 @@ class LocalReadableCatalog:
         return ContextAccess(
             store=self._store,
             context_name=name,
-            display_name=name,
-            attachment_name=None,
+            access_name=name,
             permission="READ",
         )
 
@@ -96,7 +95,7 @@ def freeze_client_readable_catalog(
                 include_query_routes=include_query_routes,
             )
             for access in accesses:
-                catalog.access_for(access.display_name)
+                catalog.access_for(access.access_name)
             return catalog
         return freeze_readable_context_catalog(
             runtime.store,

@@ -42,12 +42,12 @@ def load_retained_history_context(
     # A Grant attachment authorizes current content projection, not the
     # authority Profile's checkpoints, command receipts, or saved analyses.
     require_trace_access(
-        access.display_name,
+        access.access_name,
         granted=access.is_granted,
         store_root=store.store_dir,
     )
     return RetainedHistoryContext(
-        display_name=access.display_name,
+        display_name=access.access_name,
         storage_name=access.context_name,
         context=store.load_direct(access.context_name),
     )

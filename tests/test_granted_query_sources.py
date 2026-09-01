@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import hashlib
 import json
 import uuid
@@ -21,7 +23,6 @@ from memcommit.application.operations.profile.config import (
     profile_store_dir,
 )
 from memcommit.application.operations.profile.model import (
-    create_authority_grant,
     delete_authority_grant,
 )
 from memcommit.providers.subscription import QueryProviderError
@@ -44,7 +45,7 @@ def _authority_grant(
     tmp_path,
     monkeypatch,
     *,
-    public_name="construction-details",
+    access_name="construction-details",
 ):
     monkeypatch.setenv("HOME", str(tmp_path))
     task_store = MemoryStore()
@@ -79,12 +80,11 @@ def _authority_grant(
         json.dumps(registry.to_dict(), indent=2) + "\n",
         encoding="utf-8",
     )
-    _registry, grant = create_authority_grant(
+    _registry, grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=source_context.name,
-        attachment_name=task_context.name,
-        public_name=public_name,
+        access_name=access_name,
         permissions=("QUERY",),
     )
     return authority_store, source_context, source_memory, grant
@@ -147,12 +147,11 @@ def _read_authority_grants(
         encoding="utf-8",
     )
     for source_name, public_name, _content in source_specs:
-        create_authority_grant(
+        create_authority_grant_with_placement(
             authority_name=authority.name,
             grantee_name=authoring.name,
             resource_name=source_name,
-            attachment_name=attachment.name,
-            public_name=public_name,
+            access_name=public_name,
             permissions=permissions,
         )
     return attachment, local_distraction, source_specs
@@ -199,7 +198,7 @@ def test_canonical_query_view_name_does_not_depend_on_current_context(
         isolated_store,
         tmp_path,
         monkeypatch,
-        public_name=public_name,
+        access_name=public_name,
     )
     store = MemoryStore()
     unrelated = ops.init("practice/unrelated")
@@ -240,7 +239,7 @@ def test_canonical_query_target_does_not_open_authority_before_provider(
         isolated_store,
         tmp_path,
         monkeypatch,
-        public_name=public_name,
+        access_name=public_name,
     )
     opened = False
 
@@ -282,7 +281,7 @@ def test_query_only_context_option_uses_the_named_view_not_its_local_attachment(
         isolated_store,
         tmp_path,
         monkeypatch,
-        public_name=public_name,
+        access_name=public_name,
     )
     task_store = MemoryStore()
     attachment = task_store.load_direct("task-root")
@@ -393,7 +392,8 @@ def test_single_positional_query_view_opens_preselected_workbench(
         lambda _store, **kwargs: observed.append(kwargs),
     )
 
-    result = runner.invoke(app, ["query", grant.public_name])
+    access_name = "construction-details"
+    result = runner.invoke(app, ["query", access_name])
 
     assert result.exit_code == 0, result.output
     assert len(observed) == 1
@@ -402,7 +402,7 @@ def test_single_positional_query_view_opens_preselected_workbench(
     assert observed[0]["traversal"] is None
     target = observed[0]["query_target"]
     assert target.grant_uid == grant.uid
-    assert target.public_name == grant.public_name
+    assert target.access_name == access_name
 
 
 def test_positional_target_scope_flag_initializes_workbench_reach(
@@ -442,7 +442,8 @@ def test_positional_target_rejects_read_query_name_ambiguity(
         monkeypatch,
     )
     store = MemoryStore()
-    local = ops.init(grant.public_name)
+    access_name = "construction-details"
+    local = ops.init(access_name)
     store.save(local)
     monkeypatch.setattr(
         query_command,
@@ -452,7 +453,7 @@ def test_positional_target_rejects_read_query_name_ambiguity(
         ),
     )
 
-    result = runner.invoke(app, ["query", grant.public_name, "What changed?"])
+    result = runner.invoke(app, ["query", access_name, "What changed?"])
 
     assert result.exit_code == 1
     assert "both a readable Context and a query-only View" in result.stderr
@@ -575,20 +576,18 @@ def _federated_authority_grants(isolated_store, tmp_path, monkeypatch):
         json.dumps(registry.to_dict(), indent=2) + "\n",
         encoding="utf-8",
     )
-    _registry, parent = create_authority_grant(
+    _registry, parent = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=wiki.name,
-        attachment_name=task_context.name,
-        public_name="campus-wiki",
+        access_name="campus-wiki",
         permissions=("QUERY",),
     )
-    _registry, child = create_authority_grant(
+    _registry, child = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=details.name,
-        attachment_name=task_context.name,
-        public_name="campus-wiki/construction-details",
+        access_name="campus-wiki/construction-details",
         permissions=("QUERY",),
     )
     return parent, child

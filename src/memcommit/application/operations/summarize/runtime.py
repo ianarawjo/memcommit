@@ -85,7 +85,7 @@ def _load_frame(
         registry=registry,
         include_query_routes=False,
     )
-    root_name = access.display_name
+    root_name = access.access_name
     names = expand_lexical_context_names(
         ContextScope.create(
             (root_name,),

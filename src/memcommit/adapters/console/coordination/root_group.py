@@ -1,4 +1,5 @@
 """Coordinate root Click routing for every top-level ``mem`` command."""
+
 from __future__ import annotations
 
 import os
@@ -41,7 +42,9 @@ class MemCommandGroup(CanonicalCommandGroup):
         command_store_dir = None
         entered_argv: tuple[str, ...] | None = None
         if os.environ.get("MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG") != "1":
-            from memcommit.persistence.command_ledger.attempts import begin_command_attempt
+            from memcommit.persistence.command_ledger.attempts import (
+                begin_command_attempt,
+            )
             from memcommit.persistence.store import MemoryStore
 
             # Typer 0.27 keeps the unresolved command token on the private
@@ -70,22 +73,34 @@ class MemCommandGroup(CanonicalCommandGroup):
         try:
             if active_attempt is not None:
                 from memcommit.application.operations.profile.config import (
+                    ProfileConfigError,
+                    default_store_dir,
                     load_profile_registry,
                     profile_store_dir,
+                    profile_stores_dir,
                 )
                 from memcommit.persistence.command_ledger.study_actions import (
                     begin_study_action_recording,
                 )
 
-                registry = load_profile_registry()
-                process_profile = next(
-                    (
-                        profile
-                        for profile in registry.profiles
-                        if profile_store_dir(profile) == command_store_dir
-                    ),
-                    None,
-                )
+                try:
+                    registry = load_profile_registry()
+                except ProfileConfigError:
+                    command_root = command_store_dir.resolve()
+                    if command_root == default_store_dir().resolve() or (
+                        command_root.is_relative_to(profile_stores_dir().resolve())
+                    ):
+                        raise
+                    process_profile = None
+                else:
+                    process_profile = next(
+                        (
+                            profile
+                            for profile in registry.profiles
+                            if profile_store_dir(profile) == command_store_dir
+                        ),
+                        None,
+                    )
                 if process_profile is not None:
                     active_study_actions = begin_study_action_recording(
                         profile=process_profile,
@@ -115,7 +130,9 @@ class MemCommandGroup(CanonicalCommandGroup):
                 raise click.exceptions.Exit(1) from error
         except BaseException as error:
             if active_attempt is not None:
-                from memcommit.persistence.command_ledger.attempts import finish_command_attempt
+                from memcommit.persistence.command_ledger.attempts import (
+                    finish_command_attempt,
+                )
 
                 if isinstance(error, KeyboardInterrupt):
                     status = "INTERRUPTED"
@@ -124,7 +141,9 @@ class MemCommandGroup(CanonicalCommandGroup):
                     raw_exit_code = getattr(error, "exit_code", None)
                     if raw_exit_code is None and isinstance(error, SystemExit):
                         raw_exit_code = error.code
-                    exit_code = raw_exit_code if isinstance(raw_exit_code, int) else None
+                    exit_code = (
+                        raw_exit_code if isinstance(raw_exit_code, int) else None
+                    )
                     status = "COMPLETED" if exit_code == 0 else "FAILED"
                 try:
                     if active_study_actions is not None:
@@ -159,7 +178,9 @@ class MemCommandGroup(CanonicalCommandGroup):
             raise
         else:
             if active_attempt is not None:
-                from memcommit.persistence.command_ledger.attempts import finish_command_attempt
+                from memcommit.persistence.command_ledger.attempts import (
+                    finish_command_attempt,
+                )
 
                 study_error: BaseException | None = None
                 try:

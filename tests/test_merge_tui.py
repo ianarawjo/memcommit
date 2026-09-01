@@ -744,7 +744,7 @@ def test_tui_setup_uses_profile_readable_breadth_without_query_only_routes(
     observed = []
 
     def freeze_profile(_store, selected_access):
-        observed.append(selected_access.display_name)
+        observed.append(selected_access.access_name)
         return SimpleNamespace(
             local_names=("local-source", "other-local", "target"),
             virtual_names=("granted/query-only", "granted/readable"),
@@ -798,7 +798,7 @@ def test_tui_target_catalog_includes_only_create_authorized_grants(
     def resolve(store, operand, *, current_name, required_permission):
         if operand == "granted/create":
             assert required_permission == "CREATE"
-            return SimpleNamespace(display_name=operand)
+            return SimpleNamespace(access_name=operand)
         if operand == "granted/read":
             raise RuntimeError("READ-only Grant")
         return real_resolve(

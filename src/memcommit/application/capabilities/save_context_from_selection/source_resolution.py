@@ -40,10 +40,11 @@ def resolve_selection_source_public_name(
             f"Referenced source Context '{source_name}' is not readable."
         )
     grant = containing.view.grant
+    placement = containing.view.placement
     if source_name == grant.resource_name:
-        public_name = grant.public_name
+        public_name = placement.access_name
     elif source_name.startswith(grant.resource_name + "/"):
-        public_name = grant.public_name + source_name[len(grant.resource_name) :]
+        public_name = placement.access_name + source_name[len(grant.resource_name) :]
     else:
         raise SaveContextFromSelectionError(
             "The referenced Memory target is outside its readable Grant resource."

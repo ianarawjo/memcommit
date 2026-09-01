@@ -71,7 +71,7 @@ class MemoryStoreEditPort(EditPort):
     ) -> FrozenEditPlan:
         return FrozenEditPlan(
             request=request,
-            context_name=access.display_name,
+            context_name=access.access_name,
             context_uid=context.uid,
             context_digest=context_record_digest(context),
             memory_uid=item.uid,

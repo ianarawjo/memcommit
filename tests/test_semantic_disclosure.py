@@ -34,12 +34,10 @@ def _granted_context(name: str = "public/advisor") -> Context:
     context.add(Memory(uid=_uid(), content="Granted contributor."))
     context._granted_link = GrantedContextLink(
         context_uid=context.uid,
-        public_name=context.name,
+        access_name=context.name,
         authority_context_name="authority/advisor",
         authority_profile_uid=_uid(),
         grantee_profile_uid=_uid(),
-        attachment_context_uid=_uid(),
-        attachment_context_name="workspace",
         grant_uid=_uid(),
         grant_revision_at_creation=1,
         resource_uid=context.uid,
@@ -122,8 +120,7 @@ def test_recursive_sever_rejects_nested_granted_context() -> None:
     access = ContextAccess(
         store=StoreStub(),  # type: ignore[arg-type]
         context_name=local.name,
-        display_name=local.name,
-        attachment_name=None,
+        access_name=local.name,
         permission="READ",
     )
 
@@ -190,8 +187,7 @@ def test_summarize_loading_omits_markerless_attached_read_projection(
     access = ContextAccess(
         store=active_store,  # type: ignore[arg-type]
         context_name=local.name,
-        display_name=local.name,
-        attachment_name=None,
+        access_name=local.name,
         permission="READ",
     )
 
@@ -240,8 +236,7 @@ def test_search_missing_attached_read_free_loader_fails_before_provider() -> Non
     access = ContextAccess(
         store=active_store,  # type: ignore[arg-type]
         context_name=local.name,
-        display_name=local.name,
-        attachment_name=None,
+        access_name=local.name,
         permission="READ",
     )
 

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import json
 import uuid
 
@@ -17,7 +19,6 @@ from memcommit.application.operations.profile.config import (
     profile_store_dir,
 )
 from memcommit.application.operations.profile.model import (
-    create_authority_grant,
     delete_authority_grant,
     update_authority_grant,
 )
@@ -83,12 +84,11 @@ def _granted_review(
         json.dumps(registry.to_dict()) + "\n",
         encoding="utf-8",
     )
-    _registry, grant = create_authority_grant(
+    _registry, grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=authority_input.name,
-        attachment_name=attachment.name,
-        public_name="granted-input",
+        access_name="granted-input",
         permissions=GRANT_PERMISSIONS,
     )
 

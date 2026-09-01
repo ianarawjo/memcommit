@@ -61,7 +61,7 @@ def inspect_update(
                     active_store=active_store,
                 )
                 source_store = GrantedReadStore(source_access, registry=registry)
-                source_name = session.granted_source.public_name
+                source_name = session.granted_source.access_name
             if inline_source is None:
                 source = load_context_scope(
                     source_store,
@@ -89,7 +89,7 @@ def inspect_update(
                     registry=registry,
                 )
                 target_store = GrantedReadStore(target_access, registry=registry)
-                target_name = session.granted_target.public_name
+                target_name = session.granted_target.access_name
             target = load_context_scope(
                 target_store,
                 target_name,

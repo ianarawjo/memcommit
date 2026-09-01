@@ -67,9 +67,9 @@ from memcommit.application.operations.profile.config import (
     profile_store_dir,
 )
 from memcommit.application.operations.profile.model import (
-    create_authority_grant,
     update_authority_grant,
 )
+from tests.grant_placement_support import create_authority_grant_with_placement
 from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.persistence.store import MemoryStore
 
@@ -915,12 +915,11 @@ def _granted_dedup_fixture(tmp_path, monkeypatch, permissions):
     path = profile_registry_file()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(registry.to_dict()) + "\n", encoding="utf-8")
-    _registry, grant = create_authority_grant(
+    _registry, grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=grantee.name,
         resource_name=target.name,
-        attachment_name=attachment.name,
-        public_name="shared/notes",
+        access_name="shared/notes",
         permissions=permissions,
     )
     handoff = QualityFindingHandoff(

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import json
 import uuid
 
@@ -28,7 +30,7 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import ProfileError, create_authority_grant
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 
@@ -84,12 +86,11 @@ def _setup_read_granted_advisors(
     )
     grants = []
     for name in ("advisor1", "advisor2"):
-        _registry, grant = create_authority_grant(
+        _registry, grant = create_authority_grant_with_placement(
             authority_name=authority_entry.name,
             grantee_name=authoring.name,
             resource_name=name,
-            attachment_name=task.name,
-            public_name=f"task-2/{name}",
+            access_name=f"task-2/{name}",
             permissions=("READ",),
         )
         grants.append(grant)
@@ -115,7 +116,7 @@ def test_relative_granted_context_below_local_parent_uses_public_name(
     )
 
     assert source.is_granted is True
-    assert source.display_name == "task-2/advisor1"
+    assert source.access_name == "task-2/advisor1"
     assert source.view is not None
     assert source.view.grant.uid == source_grant.uid
     with pytest.raises(
@@ -376,7 +377,7 @@ def test_recursive_merge_copies_a_read_granted_subtree_as_local_values(
 ):
     monkeypatch.setenv("HOME", str(tmp_path))
     active = MemoryStore()
-    attachment = _create(active, ops.init("task-root"))
+    _create(active, ops.init("task-root"))
     target = _create(active, ops.init("accumulator"))
     active.set_current(target.name)
 
@@ -410,12 +411,11 @@ def test_recursive_merge_copies_a_read_granted_subtree_as_local_values(
         json.dumps(registry.to_dict()) + "\n",
         encoding="utf-8",
     )
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name=authority_entry.name,
         grantee_name=authoring.name,
         resource_name=root.name,
-        attachment_name=attachment.name,
-        public_name="advisor",
+        access_name="advisor",
         permissions=("READ",),
         recursive=True,
     )

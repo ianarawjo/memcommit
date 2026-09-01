@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import json
 from pathlib import Path
 import uuid
@@ -27,7 +29,6 @@ from memcommit.application.operations.profile.config import (
 from memcommit.application.operations.profile.model import (
     ProfileError,
     _write_registry,
-    create_authority_grant,
     list_profiles,
     remove_profile,
     remove_study,
@@ -118,11 +119,10 @@ def _prepare_study_registry(
             profiles=(authoring, participant, authority),
         )
     )
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=participant.name,
         resource_name="source",
-        attachment_name="participant",
         permissions=("READ",),
     )
     return participant, authority
@@ -522,7 +522,7 @@ def test_registry_v3_rejects_removed_authoring_or_active_identity(
         load_profile_registry()
 
 
-def test_registry_v2_loads_with_no_removed_profiles_and_migrates_on_write(
+def test_registry_v2_with_attached_grants_requires_explicit_recreation(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -533,10 +533,8 @@ def test_registry_v2_loads_with_no_removed_profiles_and_migrates_on_write(
     record.pop("removed_profile_uids")
     profile_registry_file().write_text(json.dumps(record), encoding="utf-8")
 
-    legacy = load_profile_registry()
-    assert legacy.removed_profile_uids == ()
-
-    _write_registry(legacy)
-    migrated = json.loads(profile_registry_file().read_text(encoding="utf-8"))
-    assert migrated["schema_version"] == PROFILE_REGISTRY_SCHEMA_VERSION
-    assert migrated["removed_profile_uids"] == []
+    with pytest.raises(
+        ProfileConfigError,
+        match="Legacy attached Grants are unsupported",
+    ):
+        load_profile_registry()

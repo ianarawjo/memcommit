@@ -76,7 +76,6 @@ from memcommit.adapters.console.coordination.context_scope_options import (
 from memcommit.application.operations.query.answer import OrdinaryQueryCorpusTooLarge
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
-    load_profile_registry,
 )
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError
@@ -129,7 +128,7 @@ def _query_ordinary_context(
     )
     if not accesses:
         raise ValueError("Select at least one readable Query Context.")
-    target_names = tuple(access.display_name for access in accesses)
+    target_names = tuple(access.access_name for access in accesses)
     if len(set(target_names)) != len(target_names):
         raise ValueError("Query Context roots must be distinct.")
     if all_contexts:
@@ -186,7 +185,10 @@ def _open_query_workbench(
 
     context_snapshot = ContextOperandSnapshot.capture(store)
     if query_target is not None:
-        selected_name = query_target.attachment_name
+        selected_name = context_snapshot.current_name
+        if selected_name is None:
+            local_names = store.list_context_names()
+            selected_name = local_names[0] if local_names else None
         access = resolve_context_access(
             store,
             selected_name,
@@ -206,7 +208,7 @@ def _open_query_workbench(
     displayed_current = (
         context_snapshot.current_name
         if context_snapshot.current_name in names
-        else access.display_name
+        else access.access_name
     )
     annotations = {
         name: context_access_display_facts(catalog.access_for(name))
@@ -240,7 +242,7 @@ def _open_query_workbench(
     workbench_result = run_query_workbench(
         names,
         current_context=displayed_current,
-        initial_context=access.display_name,
+        initial_context=access.access_name,
         query_targets=query_targets,
         run_ordinary=run_ordinary,
         run_granted=lambda request: execute_granted_query_request(
@@ -464,7 +466,7 @@ def _resolve_positional_query_target(
         keys: set[tuple[str, ...]] = set()
         for value in identity.values:
             key = (
-                ("query-view", value.grant_uid, value.public_name)
+                ("query-view", value.grant_uid, value.access_name)
                 if isinstance(value, GrantedQueryTarget)
                 else ("context", value.uid, value.name)
             )
@@ -474,7 +476,7 @@ def _resolve_positional_query_target(
         if len(coordinates) != 1:
             rendered = "; ".join(
                 (
-                    f"Query View {value.public_name} [{value.grant_uid}]"
+                    f"Query View {value.access_name} [{value.grant_uid}]"
                     if isinstance(value, GrantedQueryTarget)
                     else f"Context {value.name} [{value.uid}]"
                 )
@@ -737,7 +739,7 @@ def cmd(
                 query_context_option = option_target
                 resolved_context_names = ()
             else:
-                resolved_context_names = (option_target.display_name,)
+                resolved_context_names = (option_target.access_name,)
         else:
             resolved_context_names = tuple(
                 resolve_existing_context_access(
@@ -788,7 +790,7 @@ def cmd(
                         )
                     _open_query_workbench(
                         store,
-                        context_name=positional_target.display_name,
+                        context_name=positional_target.access_name,
                         language=language,
                         traversal=(traversal if traversal_flags_supplied else None),
                     )
@@ -799,7 +801,7 @@ def cmd(
                         )
                     _query_ordinary_context(
                         store,
-                        context_names=(positional_target.display_name,),
+                        context_names=(positional_target.access_name,),
                         current_name=context_snapshot.current_name,
                         question=question,
                         traversal=traversal,
@@ -875,34 +877,7 @@ def cmd(
             raise RuntimeError(
                 "No current context. Pass --context or run 'mem init <name>' first."
             )
-        if not store.context_exists(anchor_name):
-            # Legacy two-positional routing needs a local control-plane anchor.
-            # Keep it separate from the already classified semantic Source so
-            # attachment recovery can never retarget an ordinary Query.
-            navigation_registry = load_profile_registry()
-            attachment_identities = {
-                (
-                    grant.attachment_context_uid,
-                    grant.attachment_context_name,
-                )
-                for grant in navigation_registry.grants
-                if grant.grantee_profile_uid == navigation_registry.active.uid
-                and (
-                    anchor_name == grant.public_name
-                    or anchor_name.startswith(grant.public_name + "/")
-                )
-                and store.context_exists(grant.attachment_context_name)
-            }
-            if len(attachment_identities) != 1:
-                raise RuntimeError(
-                    "The current granted view has no unique local query anchor."
-                )
-            attachment_uid, attachment_name = next(iter(attachment_identities))
-            attachment = store.load_direct(attachment_name)
-            if attachment.uid != attachment_uid:
-                raise RuntimeError("The current granted view's query anchor changed.")
-            anchor_name = attachment_name
-        ctx = store.load(anchor_name)
+        ctx = store.load(anchor_name) if store.context_exists(anchor_name) else None
     except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:
         typer.secho(
             f"Error: {display_escape_text(str(error))}",
@@ -913,7 +888,7 @@ def cmd(
 
     resolution_error: KeyError | ValueError | None = None
     try:
-        item = ops.resolve(ctx, selector)
+        item = ops.resolve(ctx, selector) if ctx is not None else None
     except (KeyError, ValueError) as error:
         item = None
         resolution_error = error
@@ -959,37 +934,12 @@ def cmd(
         render_query_reference_response(response)
         return
 
-    # Grant routing metadata is public control-plane state. Inspecting it does
+    # Grant routing metadata is control-plane state. Inspecting it does
     # not open authority content and avoids authenticating for an ordinary
     # item or a selector that has no query-view route at all.
     route_selector = selector
     try:
-        registry = load_profile_registry()
-        matching_grants = [
-            grant
-            for grant in registry.grants
-            if grant.grantee_profile_uid == registry.active.uid
-            and grant.attachment_context_uid == ctx.uid
-            and grant.attachment_context_name == anchor_name
-            and (
-                selector == grant.public_name
-                or selector.startswith(grant.public_name + "/")
-            )
-        ]
-        if matching_grants:
-            routed_grants = matching_grants
-        else:
-            routed_grants = [
-                grant
-                for grant in registry.grants
-                if grant.grantee_profile_uid == registry.active.uid
-                and grant.attachment_context_uid == ctx.uid
-                and grant.attachment_context_name == anchor_name
-                and (
-                    route_selector == grant.public_name
-                    or route_selector.startswith(grant.public_name + "/")
-                )
-            ]
+        query_target = resolve_granted_query_target(store, route_selector)
     except ProfileConfigError as error:
         typer.secho(
             f"Query error: {display_escape_text(str(error))}",
@@ -997,7 +947,7 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-    if not routed_grants:
+    if query_target is None:
         message = (
             str(resolution_error)
             if resolution_error is not None
@@ -1010,28 +960,10 @@ def cmd(
         )
         raise typer.Exit(1)
 
-    effective_grant = max(
-        routed_grants,
-        key=lambda grant: len(grant.public_name.split("/")),
-    )
-    if "QUERY" not in effective_grant.permissions:
-        typer.secho(
-            f"Query error: Grant {effective_grant.uid[:8]} does not allow "
-            "query access to "
-            f"{display_escape_text(route_selector)!r}.",
-            fg=typer.colors.RED,
-            err=True,
-        )
-        raise typer.Exit(1)
-
     assert question is not None
     _query_granted_target(
         store,
-        target=GrantedQueryTarget(
-            grant_uid=effective_grant.uid,
-            public_name=route_selector,
-            attachment_name=anchor_name,
-        ),
+        target=query_target,
         question=question,
         language=language,
         federate_descendants=traversal.include_descendants,

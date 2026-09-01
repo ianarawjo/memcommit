@@ -24,7 +24,6 @@ from memcommit.adapters.console.coordination.context_scope_options import (
 )
 from memcommit.application.context_access.access import (
     ContextAccess,
-    attached_grants,
     context_access_display_facts,
 )
 from memcommit.adapters.console.terminal.core.identity import (
@@ -888,7 +887,7 @@ def _granted_access_notes(access: ContextAccess) -> tuple[str, ...]:
         "  Permissions: " + _permission_text(grant.permissions),
         "  Analysis: "
         + analysis_boundary_label(
-            access.display_name,
+            access.access_name,
             granted=True,
             readable="READ" in grant.permissions,
         ),
@@ -904,32 +903,6 @@ def _local_analysis_notes(
     # checkpoints or command receipts.
     del context_name, store
     return ()
-
-
-def _emit_grant_notes(attachment_name: str) -> None:
-    registry, grants = attached_grants(attachment_name)
-    if not grants:
-        return
-    profiles = {profile.uid: profile.name for profile in registry.profiles}
-    typer.secho("Authority views:", bold=True)
-    for grant in grants:
-        typer.echo(
-            "  "
-            + display_escape_text(grant.public_name)
-            + "/ · from "
-            + display_escape_text(profiles[grant.authority_profile_uid])
-            + f" · grant {grant.uid[:8]} revision {grant.revision}"
-        )
-        typer.echo("    Permissions: " + _permission_text(grant.permissions))
-        typer.echo(
-            "    Analysis: "
-            + analysis_boundary_label(
-                grant.public_name,
-                granted=True,
-                readable="READ" in grant.permissions,
-                registry=registry,
-            )
-        )
 
 
 def render_index(ctx: Context, *, recursive: bool = False) -> None:
@@ -1073,9 +1046,6 @@ def cmd(
             else _local_analysis_notes(access.context_name, active_store)
         ),
     )
-    if not access.is_granted:
-        _emit_grant_notes(access.context_name)
-
     if copy_result:
         clipboard_text = _render_snapshot(
             snapshot,

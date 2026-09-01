@@ -20,6 +20,7 @@ from memcommit.application.operations.fit.judgment import (
 )
 from memcommit.application.operations.fit.application import FitPropositionsRequest
 from memcommit.application.operations.fit.runtime import run_proposition_fit
+from memcommit.persistence.store import MemoryStore
 
 
 class FitProvider:
@@ -182,7 +183,9 @@ def test_prepare_fit_accepts_empty_background_but_not_one_subject() -> None:
 
 def test_mem_fit_accepts_two_literal_propositions_and_prints_yes(
     monkeypatch,
+    isolated_store,
 ) -> None:
+    MemoryStore()
     monkeypatch.setattr(
         fit_command,
         "connect_semantic_provider",
@@ -200,7 +203,8 @@ def test_mem_fit_accepts_two_literal_propositions_and_prints_yes(
     assert click.unstyle(result.output) == "FIT · YES · [TARGETS: PROPOSITION p1, p2]\n"
 
 
-def test_mem_fit_requires_two_operands_and_explicit_ground_mode() -> None:
+def test_mem_fit_requires_two_operands_and_explicit_ground_mode(isolated_store) -> None:
+    MemoryStore()
     one = CliRunner().invoke(app, ["fit", "Only one proposition."])
     mixed = CliRunner().invoke(
         app,

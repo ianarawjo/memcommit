@@ -118,16 +118,16 @@ def analyze_exact_duplicate_scope(
     if not include_descendants:
         stored_context = access.store.load_direct(access.context_name)
         context = (
-            GrantedReadStore(access, registry=registry).load_direct(access.display_name)
+            GrantedReadStore(access, registry=registry).load_direct(access.access_name)
             if access.is_granted
             else stored_context
         )
         return ExactDuplicateScopeReport(
-            root_name=access.display_name,
+            root_name=access.access_name,
             include_descendants=False,
             contexts=(
                 ExactDuplicateContextReport(
-                    context_name=access.display_name,
+                    context_name=access.access_name,
                     context_uid=context.uid,
                     # Apply revalidates the authoritative stored record; a
                     # granted read projection intentionally rewrites names.
@@ -145,11 +145,11 @@ def analyze_exact_duplicate_scope(
         include_query_routes=False,
     )
     names = expand_lexical_context_names(
-        ContextScope.create((access.display_name,), include_descendants=True),
+        ContextScope.create((access.access_name,), include_descendants=True),
         catalog.list_context_names(),
     )
     return ExactDuplicateScopeReport(
-        root_name=access.display_name,
+        root_name=access.access_name,
         include_descendants=True,
         contexts=tuple(
             ExactDuplicateContextReport(

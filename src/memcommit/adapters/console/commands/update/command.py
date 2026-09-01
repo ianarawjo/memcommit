@@ -663,7 +663,7 @@ def cmd(
             source = load_context_scope(
                 source_store,
                 (
-                    source_access.display_name
+                    source_access.access_name
                     if source_access.is_granted
                     else source_access.context_name
                 ),
@@ -683,7 +683,7 @@ def cmd(
         target = load_context_scope(
             target_store,
             (
-                target_access.display_name
+                target_access.access_name
                 if target_access.is_granted
                 else target_access.context_name
             ),

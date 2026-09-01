@@ -271,7 +271,7 @@ def cmd(
             }
             setup_receipt = choose_forget_setup(
                 names,
-                current=access.display_name,
+                current=access.access_name,
                 annotations=annotations,
             )
             if setup_receipt is None:

@@ -159,7 +159,7 @@ def _hydrate_package(package: Mapping[str, object]) -> Context:
                 shell.add(target)
             elif kind == "granted_context_ref":
                 link = GrantedContextLink.from_dict(item)
-                target = Context(uid=link.context_uid, name=link.public_name)
+                target = Context(uid=link.context_uid, name=link.access_name)
                 target._granted_link = link
                 shell.add(target)
             elif kind == "context_snapshot_ref":
@@ -240,7 +240,7 @@ class ContextSnapshotRef(Context):
                 not isinstance(source, GrantedContextBinding)
                 for source in granted_sources
             )
-            or len({source.public_name for source in granted_sources})
+            or len({source.access_name for source in granted_sources})
             != len(granted_sources)
             or any("READ" not in source.permissions for source in granted_sources)
         ):

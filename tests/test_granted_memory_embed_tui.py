@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import json
 import uuid
 
@@ -31,7 +33,7 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
+from memcommit.application.operations.profile.model import update_authority_grant
 from memcommit.source_projection.presentation import source_display_text
 from memcommit.persistence.store import MemoryStore
 
@@ -69,12 +71,11 @@ def _fixture(isolated_store, tmp_path, monkeypatch):
     path = profile_registry_file()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(registry.to_dict(), indent=2) + "\n")
-    _registry, grant = create_authority_grant(
+    _registry, grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=grantee.name,
         resource_name=source.name,
-        attachment_name=target.name,
-        public_name="advisor",
+        access_name="advisor",
         permissions=("READ",),
     )
     return local, target, first_marker, second_marker, source, memory, grant

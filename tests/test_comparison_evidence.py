@@ -69,12 +69,10 @@ def test_granted_live_memory_embed_is_not_local_semantic_evidence() -> None:
             target=source,
             granted_source=GrantedMemorySource(
                 context_uid=owner.uid,
-                public_name=owner.name,
+                access_name=owner.name,
                 authority_context_name="authority/owner",
                 authority_profile_uid=_uid(),
                 grantee_profile_uid=_uid(),
-                attachment_context_uid=_uid(),
-                attachment_context_name="workspace",
                 grant_uid=_uid(),
                 grant_revision_at_creation=1,
                 resource_uid=owner.uid,
@@ -209,12 +207,10 @@ def test_granted_live_context_embed_is_not_local_semantic_evidence() -> None:
     granted.add(Memory(uid=_uid(), content="Granted live claim."))
     granted._granted_link = GrantedContextLink(
         context_uid=granted.uid,
-        public_name=granted.name,
+        access_name=granted.name,
         authority_context_name="authority/shared",
         authority_profile_uid=_uid(),
         grantee_profile_uid=_uid(),
-        attachment_context_uid=_uid(),
-        attachment_context_name="workspace",
         grant_uid=_uid(),
         grant_revision_at_creation=1,
         resource_uid=granted.uid,
@@ -235,12 +231,10 @@ def test_granted_root_keeps_grant_provenance_outside_the_claim_text() -> None:
     granted.add(Memory(uid=_uid(), content="Granted claim."))
     granted._granted_link = GrantedContextLink(
         context_uid=granted.uid,
-        public_name=granted.name,
+        access_name=granted.name,
         authority_context_name="authority/shared",
         authority_profile_uid=_uid(),
         grantee_profile_uid=_uid(),
-        attachment_context_uid=_uid(),
-        attachment_context_name="attachment",
         grant_uid=_uid(),
         grant_revision_at_creation=1,
         resource_uid=_uid(),

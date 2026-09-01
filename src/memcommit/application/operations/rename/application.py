@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Protocol
+from typing import Literal, Protocol
+
+
+RenameSubject = Literal["CONTEXT_NAMESPACE", "GRANT_PLACEMENT"]
 
 
 @dataclass(frozen=True, slots=True)
@@ -23,11 +26,17 @@ class RenameRequest:
 class RenameBinding:
     old_name: str
     new_name: str
-    context_uid: str
+    context_uid: str | None = None
+    grant_uid: str | None = None
+
+    def __post_init__(self) -> None:
+        if (self.context_uid is None) == (self.grant_uid is None):
+            raise ValueError("Rename binding requires one stable identity.")
 
 
 @dataclass(frozen=True, slots=True)
 class RenamePlan:
+    subject: RenameSubject
     old_name: str
     new_name: str
     bindings: tuple[RenameBinding, ...]
@@ -48,9 +57,11 @@ class RenamePlan:
 
 @dataclass(frozen=True, slots=True)
 class RenameResult:
+    subject: RenameSubject
     old_name: str
     new_name: str
     renamed_context_count: int
+    renamed_placement_count: int
     changed_owner_count: int
     reference_count: int
     checkpoint_reference_count: int
@@ -82,6 +93,8 @@ def apply_rename(plan: RenamePlan, *, port: RenamePort) -> RenameResult:
         raise TypeError("Rename port returned an invalid result.")
     if (result.old_name, result.new_name) != (plan.old_name, plan.new_name):
         raise RuntimeError("Rename result does not match its reviewed plan.")
+    if result.subject != plan.subject:
+        raise RuntimeError("Rename result changed its reviewed subject.")
     return result
 
 
@@ -91,7 +104,7 @@ __all__ = [
     "RenamePort",
     "RenameRequest",
     "RenameResult",
+    "RenameSubject",
     "apply_rename",
     "plan_rename",
 ]
-

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import json
 import subprocess
 import sys
@@ -30,7 +32,6 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model import (
     ProfileError,
-    create_authority_grant,
     update_authority_grant,
 )
 from memcommit.application.operations.reference.application import (
@@ -86,12 +87,11 @@ def _fixture(isolated_store, tmp_path, monkeypatch):
         json.dumps(registry.to_dict(), indent=2) + "\n",
         encoding="utf-8",
     )
-    _registry, grant = create_authority_grant(
+    _registry, grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=grantee.name,
         resource_name=source.name,
-        attachment_name=workspace.name,
-        public_name="shared/source",
+        access_name="shared/source",
         permissions=_REQUIRED,
     )
     return (
@@ -240,7 +240,7 @@ def test_explicit_granted_context_reference_retains_direct_bytes_and_provenance(
     assert _context_contents(snapshot) == {memory.content}
     assert len(snapshot.granted_sources) == 1
     assert snapshot.granted_sources[0].grant_uid == grant.uid
-    assert snapshot.granted_sources[0].public_name == "shared/source"
+    assert snapshot.granted_sources[0].access_name == "shared/source"
     [checkpoint] = store.list_checkpoints(workspace.name)
     assert checkpoint["args"]["granted_sources"] == [
         snapshot.granted_sources[0].to_dict()
@@ -297,7 +297,7 @@ def test_recursive_granted_context_reference_retains_lexical_and_embed_scope(
         child_memory.content,
         embedded_memory.content,
     }
-    assert {source.public_name for source in snapshot.granted_sources} == {
+    assert {source.access_name for source in snapshot.granted_sources} == {
         "shared/source",
         "shared/source/child",
         "shared/source/embedded",
@@ -388,12 +388,11 @@ def test_recursive_granted_context_reference_conceals_query_only_override(
         embedded_memory,
         _grant,
     ) = _recursive_context_fixture(isolated_store, tmp_path, monkeypatch)
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name="reference-authority",
         grantee_name=AUTHORING_PROFILE_NAME,
         resource_name=child.name,
-        attachment_name=workspace.name,
-        public_name="shared/source/child",
+        access_name="shared/source/child",
         permissions=("QUERY",),
         recursive=True,
     )

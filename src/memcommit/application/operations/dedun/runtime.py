@@ -103,7 +103,7 @@ class MemoryStoreDedunPort:
         context = access.store.load_direct(access.context_name)
         if (
             context.uid != source.context_uid
-            or access.display_name != source.display_name
+            or access.access_name != source.display_name
         ):
             raise DedunConflictError(
                 "The confirmed duplicate Source identity changed. Run the finder again."
@@ -130,7 +130,7 @@ class MemoryStoreDedunPort:
             memories,
             context_uid=context.uid,
             context_name=context.name,
-            display_name=access.display_name,
+            display_name=access.access_name,
             context_digest=digest,
             direct_memory_digest=direct_context_digest(context),
             exact_item_groups=exact_item_groups,
@@ -161,8 +161,7 @@ class MemoryStoreDedunPort:
         return ContextAccess(
             store=self.active_store,
             context_name=plan.context_name,
-            display_name=plan.display_name,
-            attachment_name=None,
+            access_name=plan.display_name,
             permission="READ",
         )
 
@@ -373,7 +372,7 @@ def freeze_recursive_dedun_scope(
         registry=registry,
         include_query_routes=False,
     )
-    granted_descendants = readable.granted_names_below(access.display_name)
+    granted_descendants = readable.granted_names_below(access.access_name)
     if granted_descendants:
         raise DedunError(
             "Recursive Dedun cannot cross granted Context boundaries: "
@@ -389,12 +388,12 @@ def freeze_recursive_dedun_scope(
     source = QualityFindSourceFrame.create(
         tuple(access.store.load_direct(name) for name in names),
         context_names=names,
-        target_names=(access.display_name,),
+        target_names=(access.access_name,),
         selection_mode="SINGLE",
         include_descendants=True,
     )
     return FrozenRecursiveDedunScope(
-        root_name=access.display_name,
+        root_name=access.access_name,
         source=source,
         context_catalog=catalog,
     )
@@ -603,8 +602,7 @@ def apply_recursive_dedun_scope(
     root_access = ContextAccess(
         store=active_store,
         context_name=prepared.frozen.root_name,
-        display_name=prepared.frozen.root_name,
-        attachment_name=None,
+        access_name=prepared.frozen.root_name,
         permission="READ",
     )
     with authorized_context_mutation(

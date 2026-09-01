@@ -161,7 +161,7 @@ class MemoryStoreEmbedPort(EmbedPort):
                 source = access.store.load_direct(access.context_name)
         else:
             source = access.store.load_direct(access.context_name)
-        source.name = access.display_name
+        source.name = access.access_name
         return source
 
     def _canonical_local_name(self, locator: str) -> str:
@@ -177,8 +177,7 @@ class MemoryStoreEmbedPort(EmbedPort):
             return ContextAccess(
                 store=self._store,
                 context_name=local_name,
-                display_name=local_name,
-                attachment_name=None,
+                access_name=local_name,
                 permission="READ",
             )
         return resolve_context_access(
@@ -214,7 +213,7 @@ class MemoryStoreEmbedPort(EmbedPort):
                 raw = access.store.load_direct(access.context_name)
         else:
             raw = access.store.load_direct(access.context_name)
-        public = Context(uid=raw.uid, name=access.display_name)
+        public = Context(uid=raw.uid, name=access.access_name)
         return raw, public
 
     def _freeze_loaded(
@@ -352,7 +351,7 @@ class MemoryStoreEmbedPort(EmbedPort):
             )
         return FrozenMemoryEmbedPlan(
             request=request,
-            source_name=source_access.display_name,
+            source_name=source_access.access_name,
             source_uid=source.uid,
             source_digest=context_record_digest(source),
             memory_uid=memory.uid,

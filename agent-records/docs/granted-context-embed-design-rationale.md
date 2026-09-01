@@ -46,9 +46,8 @@ target namespace.
 A local Child continues to serialize as `context_ref`. A granted Child
 serializes as `granted_context_ref` containing only:
 
-- the public and authority Context names and exact Context UID;
+- the receiver access and authority Context names and exact Context UID;
 - authority and grantee Profile UIDs;
-- attachment Context name and UID;
 - Grant UID and its creation-time revision;
 - resource name and UID.
 
@@ -66,11 +65,13 @@ revocation, permission removal, identity replacement, target drift, or source
 record drift publishes no partial link.
 
 Recursive load reauthorizes every `granted_context_ref`. It requires the same
-active grantee, Grant UID, authority/resource/attachment identities, exact
-authority Context binding, and current effective EMBED permission. A later
-Grant revision may remain valid when all those identities and EMBED authority
-survive; the live relationship should not break merely because another
-permission was added.
+active grantee, Grant UID, authority/resource identities, exact authority
+Context binding, and current effective READ permission. The current
+receiver-owned placement supplies the live access name, so a receiver Rename
+moves the link without changing its Grant or authority identity. A later Grant
+revision may remain valid when those identities and READ authority survive;
+the live relationship should not break merely because another permission was
+added.
 
 If the embedded root binding is revoked or stale, recursive load fails closed.
 Within an otherwise valid granted root, every effective nested override must
@@ -91,7 +92,7 @@ explicit target-side operation.
 - Binding permanently to the creation revision was rejected. Revision is audit
   evidence, while current Grant identity, scope, and permission determine live
   authorization.
-- Multiple public Grant aliases to the same authority Context cannot coexist as
+- Multiple Grant access aliases to the same authority Context cannot coexist as
   distinct direct items in one target because Context UID remains the item key.
   A second Embed resolving to the same Context UID is rejected before Apply and
   must never replace the existing link or create a checkpoint. Supporting

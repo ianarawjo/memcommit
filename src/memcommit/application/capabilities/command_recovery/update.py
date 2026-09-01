@@ -12,7 +12,7 @@ from memcommit.application.capabilities.command_recovery.model import (
     CommandRestoreResult,
     RestoreDirection,
 )
-from memcommit.application.context_access import public_context_name
+from memcommit.application.context_access import access_context_name
 from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,
 )
@@ -36,7 +36,7 @@ def _public_restore_result(
     changes = tuple(
         replace(
             change,
-            context_name=public_context_name(binding, change.context_name),
+            context_name=access_context_name(binding, change.context_name),
         )
         for change in result.unit.changes
     )

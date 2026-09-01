@@ -16,16 +16,15 @@ GrantedQueryStage = Literal[
 
 @dataclass(frozen=True)
 class GrantedQueryTarget:
-    """Public control-plane identity for one QUERY-granted view."""
+    """Control-plane identity for one QUERY-granted access path."""
 
     grant_uid: str
-    public_name: str
-    attachment_name: str
+    access_name: str
 
     def __post_init__(self) -> None:
         if any(
             not isinstance(value, str) or not value
-            for value in (self.grant_uid, self.public_name, self.attachment_name)
+            for value in (self.grant_uid, self.access_name)
         ):
             raise ValueError("Granted Query target fields must be nonblank.")
 

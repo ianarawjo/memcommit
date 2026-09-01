@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import ast
 import json
 from pathlib import Path
@@ -31,7 +33,6 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant
 from memcommit.persistence.store import MemoryStore
 
 
@@ -93,12 +94,11 @@ def _authority_grant(isolated_store, tmp_path, monkeypatch):
     path = profile_registry_file()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(registry.to_dict()) + "\n", encoding="utf-8")
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=source_context.name,
-        attachment_name=task_context.name,
-        public_name="construction-details",
+        access_name="construction-details",
         permissions=("QUERY",),
     )
     return task_store

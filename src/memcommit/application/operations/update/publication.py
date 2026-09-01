@@ -58,15 +58,14 @@ def authorize_granted_target_operations(
     for public_name, uses in uses_by_owner.items():
         view = resolve_granted_context_view(
             public_name,
-            attachment_name=binding.attachment_context_name,
             required_permission="READ",
             registry=registry,
+            expected_grant_uid=binding.grant_uid,
         )
         owner_access = ContextAccess(
             store=access.store,
             context_name=view.authority_context_name,
-            display_name=public_name,
-            attachment_name=binding.attachment_context_name,
+            access_name=public_name,
             permission="READ",
             view=view,
         )

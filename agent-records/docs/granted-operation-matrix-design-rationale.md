@@ -5,12 +5,12 @@
 Grant resolution, frozen bindings, registry locking, and readable projections
 are owned by
 `memcommit.application.context_access.access`. The resolved
-value says which local or authority Store and exact Context a public name
+value says which local or authority Store and exact Context an access name
 denotes; it does not decide what an operation intends to do.
 
 `memcommit.application.authorization.context_use` owns that second decision.
 It authorizes `QUERY`, `CREATE`, `READ`, `UPDATE`, or `DELETE` against the
-resolved `ContextAccess`. This separation keeps public-name resolution out of
+resolved `ContextAccess`. This separation keeps access-name resolution out of
 operations while preventing resolution itself from silently granting a use.
 Registry persistence and its compatibility schema remain under the Profile
 operation until their persistence boundary is separated independently.
@@ -19,7 +19,7 @@ operation until their persistence boundary is separated independently.
 
 | Surface | Required Context use | Durable behavior |
 |---|---|---|
-| switch picker, ls, show, status, summarize | `READ` | Read-only public projection or output |
+| switch picker, ls, show, status, summarize | `READ` | Read-only access projection or output |
 | find and quality discovery | `READ` | Current readable projection; query-only overrides excluded |
 | query | `QUERY` (or stronger `READ`) | Mediated answer; query-only Source content is not exposed |
 | add | `CREATE` | Direct Memory and checkpoint in the exact Target |
@@ -34,8 +34,8 @@ operation until their persistence boundary is separated independently.
 | share endpoint | separate `SHARE` capability | Reviewed receiver-owned delivery unit |
 
 Every granted mutation revalidates the exact Grant revision, grantee and
-authority Profile identities, attachment, public/resource mapping, and
-required Context uses while the registry lock remains held through the write.
+authority Profile identities, placement/access/resource mapping, and required
+Context uses while the registry lock remains held through the write.
 
 ## Deliberate boundaries
 
@@ -45,8 +45,9 @@ required Context uses while the registry lock remains held through the write.
 - Search uses only the frozen readable projection. Generic checkpoint
   browsing, Log, and Revert do not gain authority history access from `READ`.
 - Context lifecycle and pointer operations do not treat an authority Context
-  as participant-owned topology. The five uses govern direct content in an
-  existing Context, not rename, branch, or Context deletion.
+  as participant-owned topology. Receiver Rename may move its own access path,
+  but it never renames the authority Context. The five uses govern direct
+  content in an existing Context, not authority rename, branch, or deletion.
 - Creating a result in a local Target needs no source-side export decision:
   the active Profile owns the Target. A granted Target must authorize every
   actual create, update, or delete effect.

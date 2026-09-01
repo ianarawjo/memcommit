@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import json
 import uuid
 
@@ -27,7 +29,6 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model import (
     ProfileError,
-    create_authority_grant,
     delete_authority_grant,
     update_authority_grant,
 )
@@ -72,12 +73,11 @@ def _fixture(isolated_store, tmp_path, monkeypatch):
     path = profile_registry_file()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(registry.to_dict(), indent=2) + "\n")
-    _registry, grant = create_authority_grant(
+    _registry, grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=grantee.name,
         resource_name=advisor.name,
-        attachment_name=workspace.name,
-        public_name=advisor.name,
+        access_name=advisor.name,
         permissions=("READ",),
         recursive=True,
     )
@@ -148,7 +148,7 @@ def test_cli_granted_memory_embed_persists_content_free_live_binding(
     checkpoint = store.list_checkpoints(workspace.name)[-1]
     authority_args = checkpoint["args"]["authority_grant"]
     assert authority_args["uid"] == grant.uid
-    assert authority_args["public_context"] == advisor.name
+    assert authority_args["access_context"] == advisor.name
 
 
 def test_granted_memory_embed_revocation_fails_closed_and_keeps_pointer(

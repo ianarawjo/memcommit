@@ -46,7 +46,7 @@ class ListSelection:
     readable_uids: tuple[str, ...]
 
     def __post_init__(self) -> None:
-        if self.access.display_name != self.context.name:
+        if self.access.access_name != self.context.name:
             raise ValueError("List selection does not match its authorized Context.")
         if self.context.name not in self.context_names:
             raise ValueError("List selection omitted its authorized Context name.")

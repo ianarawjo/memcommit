@@ -89,7 +89,7 @@ def load_rationale_scope(
     )
     return rationale_scope_from_catalog(
         read_store,
-        access.display_name,
+        access.access_name,
         include_descendants=include_descendants,
     )
 

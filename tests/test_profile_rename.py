@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import hashlib
 import os
 from pathlib import Path
@@ -23,7 +25,6 @@ from memcommit.application.operations.profile.config import (
     profile_store_dir,
 )
 from memcommit.application.operations.profile.model import (
-    create_authority_grant,
     rename_profile,
     rename_study,
     study_run_profile_pairs,
@@ -495,12 +496,11 @@ def test_rename_preserves_grant_records_and_updates_live_endpoint_labels(
         content="Authority Memory.",
     )
     grantee = _register_profile("grantee-old", context_name="task-root")
-    _registry, grant = create_authority_grant(
+    _registry, grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=grantee.name,
         resource_name="authority-root",
-        attachment_name="task-root",
-        public_name="authority-view",
+        access_name="authority-view",
         permissions=("READ",),
     )
     before = load_profile_registry()

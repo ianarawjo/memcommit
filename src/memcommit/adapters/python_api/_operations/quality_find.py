@@ -102,13 +102,13 @@ def _source(
     )
     contexts = tuple(
         (
-            GrantedReadStore(access, registry=registry).load_direct(access.display_name)
+            GrantedReadStore(access, registry=registry).load_direct(access.access_name)
             if access.is_granted
             else access.store.load_direct(access.context_name)
         )
         for access in accesses
     )
-    display_names = tuple(access.display_name for access in accesses)
+    display_names = tuple(access.access_name for access in accesses)
     return QualityFindSourceFrame.create(
         contexts,
         context_names=display_names,

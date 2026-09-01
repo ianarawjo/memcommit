@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import json
 import uuid
 
@@ -36,7 +38,6 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant
 from memcommit.source_projection.presentation import source_display_text
 from memcommit.application.capabilities.memory_transfer.application import (
     CopyMemoriesRequest,
@@ -93,20 +94,18 @@ def _granted_copy_fixture(isolated_store, tmp_path, monkeypatch):
     path = profile_registry_file()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(registry.to_dict(), indent=2) + "\n")
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=grantee.name,
         resource_name=source.name,
-        attachment_name=workspace.name,
-        public_name="shared/source",
+        access_name="shared/source",
         permissions=("READ",),
     )
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=grantee.name,
         resource_name=no_retention.name,
-        attachment_name=workspace.name,
-        public_name="shared/no-retention",
+        access_name="shared/no-retention",
         permissions=("READ",),
     )
     return store, source, memory, target, marker, local_source

@@ -67,7 +67,7 @@ def test_query_positional_target_accepts_context_uid(isolated_store):
     )
 
     assert isinstance(resolved, ContextAccess)
-    assert resolved.display_name == target.name
+    assert resolved.access_name == target.name
 
 
 def test_query_positional_uid_never_falls_through_to_question(isolated_store):
@@ -92,7 +92,7 @@ def test_query_positional_uid_compares_context_and_query_view_candidates(
     monkeypatch.setattr(
         "memcommit.adapters.console.commands.query.command.freeze_granted_query_targets",
         lambda _store: (
-            GrantedQueryTarget(shared_uid, "shared/view", "attachment"),
+            GrantedQueryTarget(shared_uid, "shared/view"),
         ),
     )
 
@@ -147,7 +147,7 @@ def test_query_plain_renderers_preserve_typed_answer_modes(capsys):
         QueryReferenceResponse(reference_request, "answer\x1btext")
     )
     granted_request = GrantedQueryRequest(
-        GrantedQueryTarget("grant", "shared/view", "anchor"),
+        GrantedQueryTarget("grant", "shared/view"),
         "What?",
     )
     render_granted_query_response(

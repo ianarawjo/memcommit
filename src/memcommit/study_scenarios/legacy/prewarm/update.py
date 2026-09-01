@@ -817,7 +817,7 @@ def find_installed_projectable_update_prewarm(
             exact_source = load_context_scope(
                 exact_source_store,
                 (
-                    source_access.display_name
+                    source_access.access_name
                     if source_access.is_granted
                     else source_access.context_name
                 ),
@@ -826,7 +826,7 @@ def find_installed_projectable_update_prewarm(
             exact_target = load_context_scope(
                 exact_target_store,
                 (
-                    target_access.display_name
+                    target_access.access_name
                     if target_access.is_granted
                     else target_access.context_name
                 ),
@@ -1018,7 +1018,7 @@ def install_declared_update_prewarms(
         source = load_context_scope(
             source_store,
             (
-                source_access.display_name
+                source_access.access_name
                 if source_access.is_granted
                 else source_access.context_name
             ),
@@ -1027,7 +1027,7 @@ def install_declared_update_prewarms(
         target = load_context_scope(
             target_store,
             (
-                target_access.display_name
+                target_access.access_name
                 if target_access.is_granted
                 else target_access.context_name
             ),

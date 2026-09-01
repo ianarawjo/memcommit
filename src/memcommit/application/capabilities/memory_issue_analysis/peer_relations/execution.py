@@ -98,7 +98,7 @@ def load_memory_relation_context(
     )
     context = load_context_scope(
         reader,
-        access.display_name if access.is_granted else access.context_name,
+        access.access_name if access.is_granted else access.context_name,
         include_descendants=include_descendants,
     )
     return project_memory_relation_context(context)

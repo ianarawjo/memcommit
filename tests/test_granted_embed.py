@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import json
 import uuid
 
@@ -32,7 +34,6 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model import (
     ProfileError,
-    create_authority_grant,
     delete_authority_grant,
     update_authority_grant,
 )
@@ -83,21 +84,19 @@ def _fixture(isolated_store, tmp_path, monkeypatch):
     path = profile_registry_file()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(registry.to_dict(), indent=2) + "\n")
-    _registry, grant = create_authority_grant(
+    _registry, grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=grantee.name,
         resource_name=advisor.name,
-        attachment_name=workspace.name,
-        public_name=advisor.name,
+        access_name=advisor.name,
         permissions=("READ",),
         recursive=True,
     )
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=grantee.name,
         resource_name=private.name,
-        attachment_name=workspace.name,
-        public_name=private.name,
+        access_name=private.name,
         permissions=("QUERY",),
         recursive=True,
     )
@@ -200,14 +199,14 @@ def test_context_reference_keeps_revoked_granted_context_edge_opaque(
     assert tuple(retained_edge.iter_items()) == ()
 
 
-def test_recursive_list_and_show_open_attached_read_projection(
+def test_recursive_local_views_do_not_mount_receiver_grant_placements(
     isolated_store,
     tmp_path,
     monkeypatch,
 ) -> None:
     copied_text: list[str] = []
     monkeypatch.setattr(list_command, "write_system_clipboard", copied_text.append)
-    store, _authority, workspace, _advisor, advice, _grant = _fixture(
+    store, _authority, workspace, advisor, advice, _grant = _fixture(
         isolated_store,
         tmp_path,
         monkeypatch,
@@ -226,22 +225,24 @@ def test_recursive_list_and_show_open_attached_read_projection(
         app,
         ["list", "--recursive", "--copy", workspace.name],
     )
+    granted_list = runner.invoke(app, ["list", "--direct", advisor.name])
 
     assert direct_list.exit_code == 0, direct_list.output + direct_list.stderr
     assert advice.content not in direct_list.output
     assert recursive_list.exit_code == 0, recursive_list.output + recursive_list.stderr
-    assert advice.content in recursive_list.output
+    assert advice.content not in recursive_list.output
     assert recursive_show.exit_code == 0, recursive_show.output + recursive_show.stderr
-    assert "Contexts 2" in recursive_show.output
-    assert "Context: advisor" in recursive_show.output
-    assert advice.content in recursive_show.output
-    assert "advisor/private" in recursive_show.output
+    assert "Contexts 1" in recursive_show.output
+    assert "Context: advisor" not in recursive_show.output
+    assert advice.content not in recursive_show.output
     assert "Concealed review note." not in recursive_list.output
     assert "Concealed review note." not in recursive_show.output
     assert mixed_copy.exit_code == 0, mixed_copy.output + mixed_copy.stderr
-    assert advice.content in copied_text[0]
+    assert advice.content not in copied_text[0]
     assert "Concealed review note." not in copied_text[0]
-    assert _advisor.uid not in store.load_direct(workspace.name).memories
+    assert granted_list.exit_code == 0, granted_list.output + granted_list.stderr
+    assert advice.content in granted_list.output
+    assert advisor.uid not in store.load_direct(workspace.name).memories
 
 
 def test_live_context_embed_crosses_nested_read_override(
@@ -254,10 +255,14 @@ def test_live_context_embed_crosses_nested_read_override(
         tmp_path,
         monkeypatch,
     )
+    registry = load_profile_registry()
+    nested_grant_uid = next(
+        placement.grant_uid
+        for placement in registry.grant_placements
+        if placement.access_name == "advisor/private"
+    )
     nested_grant = next(
-        grant
-        for grant in load_profile_registry().grants
-        if grant.public_name == "advisor/private"
+        grant for grant in registry.grants if grant.uid == nested_grant_uid
     )
     update_authority_grant(nested_grant.uid, permissions=("READ",))
 
@@ -294,7 +299,7 @@ def test_live_context_embed_crosses_nested_read_override(
     ] == [advice.content]
 
 
-def test_recursive_find_browses_attached_read_but_search_omits_provider_disclosure(
+def test_recursive_find_and_search_do_not_mount_grant_placements(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -313,12 +318,11 @@ def test_recursive_find_browses_attached_read_but_search_omits_provider_disclosu
     unrelated_advisor = ops.init("unrelated-advisor")
     ops.add(unrelated_advisor, "Unrelated authority-only review secret.")
     authority.save(unrelated_advisor)
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name="advisor-authority",
         grantee_name=AUTHORING_PROFILE_NAME,
         resource_name=unrelated_advisor.name,
-        attachment_name=unrelated_workspace.name,
-        public_name=unrelated_advisor.name,
+        access_name=unrelated_advisor.name,
         permissions=("READ",),
         recursive=True,
     )
@@ -382,7 +386,7 @@ def test_recursive_find_browses_attached_read_but_search_omits_provider_disclosu
     assert literal_direct.exit_code == 0, literal_direct.output
     assert "MATCHED 0" in literal_direct.output
     assert literal_recursive.exit_code == 0, literal_recursive.output
-    assert advice.content in literal_recursive.output
+    assert advice.content not in literal_recursive.output
     assert semantic_direct.exit_code == 0, (
         semantic_direct.output + semantic_direct.stderr
     )
@@ -482,7 +486,7 @@ def test_granted_embed_rejects_missing_permission_query_override_and_granted_tar
     assert concealed.exit_code == 1
     assert "does not allow read access" in concealed.stderr
     assert granted_target.exit_code == 1
-    assert "does not exist locally" in granted_target.stderr
+    assert "does not exist in this authorized view" in granted_target.stderr
     assert advisor.uid not in store.load_direct(workspace.name).memories
 
 

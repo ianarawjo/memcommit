@@ -58,7 +58,9 @@ the normal frozen-binding, lock, digest, and rollback checks.
 
 `EMBED` is now a relationship shape, not a permission. Creating a live Embed
 from a granted Source requires `READ`; recursively following the link
-reauthorizes the same exact Grant and Source binding. Revocation therefore
+reauthorizes the same exact Grant UID and Source binding. A receiver-side
+placement rename changes the current access path but not that durable authority
+identity. Revocation therefore
 closes the live projection while leaving the opaque relationship available for
 repair or removal.
 

@@ -488,7 +488,7 @@ def cmd(
                 required_permission="READ",
             )
             if access.is_granted:
-                context_name = access.display_name
+                context_name = access.access_name
                 selector = item_selector
                 if qualified_selector:
                     include_descendants = False

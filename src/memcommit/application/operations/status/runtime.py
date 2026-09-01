@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+from contextlib import nullcontext
 from typing import Any
 
 from memcommit.application.context_access.access import (
@@ -14,9 +15,12 @@ from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.application.context_access.readable_contexts import ReadableContextCatalog
-from memcommit.application.context_access.granted_view import grants_for_attachment
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.operations.profile.config import ProfileRegistry, profile_store_dir
+from memcommit.application.operations.profile.config import (
+    ProfileRegistry,
+    active_profile_registry_for_store,
+    profile_store_dir,
+)
 from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,
 )
@@ -78,7 +82,9 @@ class MemoryStoreStatusSource:
     def __init__(self, store: MemoryStore) -> None:
         self._store = store
 
-    def _profile_name(self, registry: ProfileRegistry) -> str:
+    def _profile_name(self, registry: ProfileRegistry | None) -> str:
+        if registry is None:
+            return "standalone"
         if (
             profile_store_dir(registry.active).resolve()
             == self._store.store_dir.resolve()
@@ -91,29 +97,17 @@ class MemoryStoreStatusSource:
         context_name: str,
         *,
         access: ContextAccess,
-        registry: ProfileRegistry,
+        registry: ProfileRegistry | None,
     ) -> tuple[StatusGrant, ...]:
-        if access.is_granted or self._profile_name(registry) == "standalone":
-            return ()
-        return tuple(
-            StatusGrant(
-                uid=grant.uid,
-                revision=grant.revision,
-                public_name=grant.public_name,
-                permissions=grant.permissions,
-            )
-            for grant in grants_for_attachment(
-                attachment_name=context_name,
-                registry=registry,
-            )
-        )
+        del context_name, access, registry
+        return ()
 
     def _snapshot_context(
         self,
         context: Context,
         *,
         access: ContextAccess,
-        registry: ProfileRegistry,
+        registry: ProfileRegistry | None,
     ) -> FrozenStatusContext:
         memories: list[StatusMemory] = []
         references: list[StatusMemoryReference] = []
@@ -174,7 +168,21 @@ class MemoryStoreStatusSource:
         )
 
     def freeze(self, request: StatusRequest) -> FrozenStatusFrame:
-        with authority_grant_snapshot_lock() as registry:
+        registry_snapshot = active_profile_registry_for_store(self._store.store_dir)
+        lock = (
+            authority_grant_snapshot_lock()
+            if registry_snapshot is not None
+            else nullcontext(None)
+        )
+        with lock as registry:
+            if (
+                registry_snapshot is not None
+                and registry is not None
+                and registry_snapshot.active.uid != registry.active.uid
+            ):
+                raise RuntimeError(
+                    "The active Profile changed before Status could freeze access."
+                )
             current_name = self._store.current_context_name()
             if not current_name:
                 raise NoCurrentStatusContextError(
@@ -193,7 +201,7 @@ class MemoryStoreStatusSource:
                 registry=registry,
             )
             scope = ContextScope.create(
-                (access.display_name,),
+                (access.access_name,),
                 include_descendants=request.include_descendants,
             )
             expanded = expand_lexical_context_names(
@@ -201,8 +209,8 @@ class MemoryStoreStatusSource:
                 sorted(catalog.list_context_names(), key=str.casefold),
             )
             names = (
-                access.display_name,
-                *(name for name in expanded if name != access.display_name),
+                access.access_name,
+                *(name for name in expanded if name != access.access_name),
             )
             contexts: list[FrozenStatusContext] = []
             seen_uids: set[str] = set()
@@ -238,7 +246,7 @@ class MemoryStoreStatusSource:
             for name in names:
                 visit(name)
             return FrozenStatusFrame(
-                current_context_name=access.display_name,
+                current_context_name=access.access_name,
                 profile_name=self._profile_name(registry),
                 contexts=tuple(contexts),
             )

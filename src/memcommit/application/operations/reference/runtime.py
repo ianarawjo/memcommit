@@ -24,6 +24,10 @@ from memcommit.application.context_access.model import (
     GrantedContextBinding,
     granted_context_binding_digest,
 )
+from memcommit.application.context_access.granted_view import (
+    active_grant_placements,
+    resolve_granted_context_view,
+)
 from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.application.capabilities.context_snapshot import (
     CONTEXT_SNAPSHOT_SCHEMA_VERSION,
@@ -66,7 +70,7 @@ class _FrozenContextSource:
     """Bind one public snapshot participant to its physical authority record."""
 
     access: ContextAccess
-    public_name: str
+    access_name: str
     authority_name: str
     context_uid: str
     context_digest: str
@@ -154,7 +158,7 @@ class MemoryStoreReferencePort(ReferencePort):
         # Provider-private names are not valid operands in the grantee's TUI.
         # The loaded object is a process-local snapshot, so relabelling it does
         # not mutate either Store and keeps later selection explicitly public.
-        context.name = access.display_name
+        context.name = access.access_name
         return context
 
     @classmethod
@@ -181,8 +185,7 @@ class MemoryStoreReferencePort(ReferencePort):
             return ContextAccess(
                 store=self._store,
                 context_name=local_name,
-                display_name=local_name,
-                attachment_name=None,
+                access_name=local_name,
                 permission="READ",
             )
         return resolve_context_access(
@@ -196,8 +199,7 @@ class MemoryStoreReferencePort(ReferencePort):
         return ContextAccess(
             store=self._store,
             context_name=name,
-            display_name=name,
-            attachment_name=None,
+            access_name=name,
             permission="CREATE",
         )
 
@@ -255,7 +257,7 @@ class MemoryStoreReferencePort(ReferencePort):
             request.source_locator,
             target_access=target_access,
         )
-        source_name = source_access.display_name
+        source_name = source_access.access_name
         target = self._store.load_for_update(into_name)
         item = ops.resolve(source, request.memory_selector)
         if not isinstance(item, Memory):
@@ -389,18 +391,15 @@ class MemoryStoreReferencePort(ReferencePort):
         """Bind every nested override that can shape one public snapshot."""
 
         view = root_access.view
-        if view is None or root_access.attachment_name is None:
+        if view is None:
             raise ValueError("Granted Context snapshot requires a Grant root.")
-        root_name = root_access.display_name
+        root_name = root_access.access_name
         relevant = (
             grant
-            for grant in registry.grants
-            if grant.grantee_profile_uid == view.grantee.uid
-            and grant.attachment_context_uid == view.grant.attachment_context_uid
-            and grant.attachment_context_name == root_access.attachment_name
-            and (
-                grant.public_name == root_name
-                or grant.public_name.startswith(root_name + "/")
+            for placement, grant in active_grant_placements(registry=registry)
+            if (
+                placement.access_name == root_name
+                or placement.access_name.startswith(root_name + "/")
             )
         )
         return tuple(
@@ -443,14 +442,11 @@ class MemoryStoreReferencePort(ReferencePort):
             )
             if not root_access.is_granted or root_access.view is None:
                 raise FileNotFoundError(f"Context '{source_name}' does not exist.")
-            if root_access.attachment_name is None:
-                raise ValueError("Granted Context snapshot has no attachment.")
-
             root_reader = GrantedReadStore(root_access, registry=registry)
             allowed_names = tuple(root_reader.list_context_names())
             lexical_names = expand_lexical_context_names(
                 ContextScope.create(
-                    (root_access.display_name,),
+                    (root_access.access_name,),
                     include_descendants=recursive,
                 ),
                 allowed_names,
@@ -475,8 +471,11 @@ class MemoryStoreReferencePort(ReferencePort):
                 access = resolve_granted_context_access(
                     self._store,
                     public_name,
-                    attachment_name=root_access.attachment_name,
-                    attachment_uid=root_access.view.grant.attachment_context_uid,
+                    grant_uid=resolve_granted_context_view(
+                        public_name,
+                        required_permission="READ",
+                        registry=registry,
+                    ).grant.uid,
                     required_permission="READ",
                     registry=registry,
                 )
@@ -487,7 +486,7 @@ class MemoryStoreReferencePort(ReferencePort):
                 ).project_direct(raw, public_name)
                 sources[public_name] = _FrozenContextSource(
                     access=access,
-                    public_name=public_name,
+                    access_name=public_name,
                     authority_name=access.context_name,
                     context_uid=raw.uid,
                     context_digest=context_record_digest(raw),
@@ -536,10 +535,10 @@ class MemoryStoreReferencePort(ReferencePort):
                     resolved,
                 )
 
-            root = public_frame(root_access.display_name)
+            root = public_frame(root_access.access_name)
             package: dict[str, object] = {
                 "schema_version": CONTEXT_SNAPSHOT_SCHEMA_VERSION,
-                "root": {"uid": root.uid, "name": root_access.display_name},
+                "root": {"uid": root.uid, "name": root_access.access_name},
                 "recursive": recursive,
                 "lexical_context_names": list(lexical_names),
                 "contexts": [records[name] for name in records],
@@ -547,14 +546,14 @@ class MemoryStoreReferencePort(ReferencePort):
             frozen_sources = tuple(sources.values())
             source_bindings = tuple(
                 (
-                    source.public_name,
+                    source.access_name,
                     source.context_uid,
                     source.context_digest,
                 )
                 for source in frozen_sources
             )
             return (
-                root_access.display_name,
+                root_access.access_name,
                 package,
                 source_bindings,
                 frozen_sources,
@@ -818,7 +817,7 @@ class MemoryStoreReferencePort(ReferencePort):
         if token.context_sources:
             expected_bindings = tuple(
                 (
-                    source.public_name,
+                    source.access_name,
                     source.context_uid,
                     source.context_digest,
                 )

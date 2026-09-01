@@ -237,7 +237,7 @@ def _open_search_workbench(
         include_query_routes=True,
     )
     names = tuple(catalog.list_context_names())
-    initial_target = access.display_name
+    initial_target = access.access_name
     if initial_target not in names:
         raise RuntimeError("The selected Context is outside the readable catalog.")
     displayed_current = current_name if current_name in names else initial_target
@@ -426,7 +426,7 @@ def cmd(
             ).value
             for operand in operands
         )
-        target_names = tuple(access.display_name for access in accesses)
+        target_names = tuple(access.access_name for access in accesses)
         if len(set(target_names)) != len(target_names):
             raise ValueError("Search Context roots must be distinct.")
         access = accesses[0]
@@ -519,7 +519,7 @@ def cmd(
                     include_query_routes=follow_embeds,
                 )
             for target_access in accesses:
-                catalog.access_for(target_access.display_name)
+                catalog.access_for(target_access.access_name)
             response = _run_search_request(store, catalog, request)
         else:
             catalog = freeze_readable_context_catalog(

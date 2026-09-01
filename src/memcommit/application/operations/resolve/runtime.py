@@ -147,7 +147,7 @@ class MemoryStoreResolvePort:
             projected = GrantedReadStore(
                 access,
                 registry=self.registry,
-            ).load_direct(access.display_name)
+            ).load_direct(access.access_name)
             if projected.uid != authority.uid:
                 raise ResolveConflictError(
                     "Granted Resolve Context identity changed during projection."
@@ -204,13 +204,13 @@ class MemoryStoreResolvePort:
             request=request,
             context_uid=authority.uid,
             context_name=authority.name,
-            display_name=access.display_name,
+            display_name=access.access_name,
             context_digest=digest,
             revision=_revision(
                 request,
                 context_uid=authority.uid,
                 context_name=authority.name,
-                display_name=access.display_name,
+                display_name=access.access_name,
                 context_digest=digest,
                 actionable_uids=actionable_uids,
             ),
@@ -239,8 +239,7 @@ class MemoryStoreResolvePort:
         return ContextAccess(
             store=self.active_store,
             context_name=frame.context_name,
-            display_name=frame.display_name,
-            attachment_name=None,
+            access_name=frame.display_name,
             permission="READ",
         )
 

@@ -36,7 +36,7 @@ class MemoryStoreSaveQueryAnswerPort(SaveQueryAnswerPort):
         if isinstance(response, GrantedQueryResponse):
             source: dict[str, object] = {
                 "kind": "QUERY_VIEW",
-                "public_name": response.request.target.public_name,
+                "access_name": response.request.target.access_name,
                 "federate_descendants": response.request.federate_descendants,
             }
             question = response.request.question

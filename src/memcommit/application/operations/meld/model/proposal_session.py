@@ -826,7 +826,7 @@ class MeldSession:
                 (self.granted_incoming, incoming, "INCOMING"),
                 (self.granted_target, baseline, "BASELINE"),
             ):
-                if binding is not None and binding.public_name != frame.context_name:
+                if binding is not None and binding.access_name != frame.context_name:
                     raise MeldError(
                         f"Directional {label} Grant binding does not match its frame."
                     )

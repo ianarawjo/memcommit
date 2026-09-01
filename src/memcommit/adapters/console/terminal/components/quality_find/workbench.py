@@ -701,7 +701,7 @@ def run_interactive_quality_find(
         include_query_routes=False,
     )
     names = tuple(catalog.list_context_names())
-    initial = access.display_name
+    initial = access.access_name
     if initial not in names:
         raise RuntimeError("The current Context is outside the readable catalog.")
     annotations = {

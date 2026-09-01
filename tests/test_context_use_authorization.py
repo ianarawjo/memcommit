@@ -23,8 +23,7 @@ def _access(store: MemoryStore, permissions: tuple[str, ...] | None) -> ContextA
     return ContextAccess(
         store=store,
         context_name="authority/source",
-        display_name="public/source",
-        attachment_name=None if view is None else "workspace",
+        access_name="public/source",
         permission="READ",
         view=view,
     )

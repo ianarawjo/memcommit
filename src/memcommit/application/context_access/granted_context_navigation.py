@@ -1,12 +1,17 @@
-"""Freeze authorized public Grant rows for Context namespace navigation."""
+"""Freeze authorized Grant placements for Context namespace navigation."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 from memcommit.application.operations.profile.config import (
+    ProfileConfigError,
+    default_store_dir,
     load_profile_registry,
     profile_store_dir,
+)
+from memcommit.application.context_access.granted_view import (
+    active_grant_placements,
 )
 from memcommit.source_projection.presentation import (
     SourceDisplayToken,
@@ -19,7 +24,7 @@ from memcommit.persistence.store import MemoryStore
 
 @dataclass(frozen=True)
 class GrantedContextNavigation:
-    """Public Grant rows and the subset authorized for ordinary READ browsing."""
+    """Grant access names and the subset authorized for ordinary READ browsing."""
 
     names: tuple[str, ...]
     annotations: dict[str, SourceDisplayValue]
@@ -82,7 +87,7 @@ def grant_navigation_annotation(
     """Render ownership and compact capability facts for Context navigation."""
 
     # Keep ownership separate so every Context-tree renderer can place GRANT
-    # before the public name instead of hiding it in trailing metadata.
+    # before the access name instead of hiding it in trailing metadata.
     return (
         SourceDisplayToken("GRANT", SourceTokenRole.OWNERSHIP),
         SourceDisplayToken(
@@ -103,7 +108,7 @@ def grant_navigation_display_annotation(
 def freeze_granted_context_navigation(
     store: MemoryStore | None = None,
 ) -> GrantedContextNavigation:
-    """Freeze every active public Grant row without opening authority content.
+    """Freeze every active Grant placement without opening authority content.
 
     READ grants expose their frozen public descendants as ordinary navigation
     rows. Other grants expose only their reviewed public root. In particular,
@@ -111,7 +116,15 @@ def freeze_granted_context_navigation(
     must not infer ordinary Context loading from namespace membership.
     """
 
-    registry = load_profile_registry()
+    try:
+        registry = load_profile_registry()
+    except ProfileConfigError:
+        if (
+            store is not None
+            and store.store_dir.resolve() != default_store_dir().resolve()
+        ):
+            return GrantedContextNavigation((), {}, frozenset())
+        raise
     active_store = profile_store_dir(registry.active)
     if store is None:
         store = MemoryStore(root=active_store, create=False)
@@ -122,28 +135,21 @@ def freeze_granted_context_navigation(
 
     names: dict[str, SourceDisplayValue] = {}
     readable_names: set[str] = set()
-    for grant in registry.grants:
-        if grant.grantee_profile_uid != registry.active.uid:
-            continue
-        if not store.context_exists(grant.attachment_context_name):
-            continue
-        attachment = store.load_direct(grant.attachment_context_name)
-        if attachment.uid != grant.attachment_context_uid:
-            continue
+    for placement, grant in active_grant_placements(registry=registry):
         annotation = grant_navigation_display_annotation(
             grant.permissions,
         )
         if "READ" not in grant.permissions:
-            # The public route is useful orientation, but its bindings would
+            # The access route is useful orientation, but its bindings would
             # reveal concealed authority descendants without READ permission.
-            names[grant.public_name] = annotation
-            readable_names.discard(grant.public_name)
+            names[placement.access_name] = annotation
+            readable_names.discard(placement.access_name)
             continue
         for binding in grant.contexts:
             suffix = binding.name[len(grant.resource_name) :]
-            public_name = grant.public_name + suffix
-            names[public_name] = annotation
-            readable_names.add(public_name)
+            access_name = placement.access_name + suffix
+            names[access_name] = annotation
+            readable_names.add(access_name)
 
     return GrantedContextNavigation(
         tuple(sorted(names)),

@@ -499,8 +499,7 @@ def _local_output_access(store: MemoryStore, name: str):
     return ContextAccess(
         store=store,
         context_name=name,
-        display_name=name,
-        attachment_name=None,
+        access_name=name,
         permission="CREATE",
     )
 

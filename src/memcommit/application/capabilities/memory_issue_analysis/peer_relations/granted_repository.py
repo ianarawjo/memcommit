@@ -116,7 +116,7 @@ class GrantedMemoryRelationArtifact:
         except MemoryRelationError as error:
             raise ValueError("Invalid granted comparison analysis.") from error
         for frame, binding in zip(analysis.frames, bindings, strict=True):
-            if binding is not None and binding.public_name != frame.context_name:
+            if binding is not None and binding.access_name != frame.context_name:
                 raise ValueError("Granted comparison binding does not match its frame.")
         return cls(
             retention=value["retention"],  # type: ignore[arg-type]
@@ -284,7 +284,7 @@ def memory_relation_artifact_contexts(
             context = _project_memory_relation_context(
                 load_context_scope(
                     GrantedReadStore(access),
-                    binding.public_name,
+                    binding.access_name,
                     include_descendants=include_descendants,
                 )
             )

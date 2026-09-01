@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import json
 import uuid
 
@@ -59,7 +61,6 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model import (
     ProfileError,
-    create_authority_grant,
     delete_authority_grant,
 )
 from memcommit.persistence.store import MemoryStore
@@ -308,21 +309,19 @@ def _setup_granted_target(
     path = profile_registry_file()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(registry.to_dict()) + "\n", encoding="utf-8")
-    _registry, parent_grant = create_authority_grant(
+    _registry, parent_grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=wiki.name,
-        attachment_name=source.name,
-        public_name=public_name,
+        access_name=public_name,
         permissions=parent_permissions,
         recursive=True,
     )
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=details.name,
-        attachment_name=source.name,
-        public_name=public_name + "/construction-details",
+        access_name=public_name + "/construction-details",
         permissions=("QUERY",),
         recursive=True,
     )
@@ -458,12 +457,11 @@ def test_directional_meld_rejects_narrower_grant_for_proposed_child_owner(
         tmp_path,
         monkeypatch,
     )
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name="run-granted-memory",
         grantee_name=AUTHORING_PROFILE_NAME,
         resource_name="campus-wiki/services",
-        attachment_name=incoming.name,
-        public_name="campus-wiki/services",
+        access_name="campus-wiki/services",
         permissions=(
             "READ",
             "CREATE",
@@ -1167,7 +1165,7 @@ def test_granted_context_binding_revalidates_exact_view_and_rejects_revocation(
 
     restored = revalidate_granted_context_binding(binding)
 
-    assert restored.display_name == wiki.name
+    assert restored.access_name == wiki.name
     assert restored.view is not None
     assert restored.view.grant.uid == grant.uid
     assert DETAIL_SECRET not in json.dumps(binding.to_dict())
@@ -1690,12 +1688,11 @@ def test_update_between_distinct_grants_writes_only_accepting_target(
         json.dumps(expanded.to_dict()) + "\n",
         encoding="utf-8",
     )
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name=target_authority.name,
         grantee_name=AUTHORING_PROFILE_NAME,
         resource_name=advisor.name,
-        attachment_name=source.name,
-        public_name="advisor2",
+        access_name="advisor2",
         permissions=("READ", "CREATE"),
         recursive=True,
     )

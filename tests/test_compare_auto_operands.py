@@ -19,7 +19,8 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import authority_grant_snapshot_lock, create_authority_grant
+from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
+from tests.grant_placement_support import create_authority_grant_with_placement
 from memcommit.persistence.store import MemoryStore
 from memcommit.adapters.console.commands.compare.targeting import (
     CompareTargetingError,
@@ -283,12 +284,11 @@ def test_compare_qualified_granted_memory_uses_public_owner(
     registry_path = profile_registry_file()
     registry_path.parent.mkdir(parents=True, exist_ok=True)
     registry_path.write_text(json.dumps(registry.to_dict()) + "\n", encoding="utf-8")
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=source.name,
-        attachment_name=attachment.name,
-        public_name="shared/source",
+        access_name="shared/source",
         permissions=("READ",),
     )
 
@@ -321,7 +321,7 @@ def test_compare_qualified_granted_memory_uses_public_owner(
         )
 
     assert targets.reference_access.is_granted
-    assert targets.reference_access.display_name == "shared/source"
+    assert targets.reference_access.access_name == "shared/source"
     assert targets.reference_memory_uid == granted_memory.uid
     assert not targets.compared_access.is_granted
 

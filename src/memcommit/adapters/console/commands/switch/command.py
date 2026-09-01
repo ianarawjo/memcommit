@@ -142,7 +142,7 @@ def cmd(
                     required_permission="READ",
                 )
                 return context_memory_rows(
-                    GrantedReadStore(access).load(access.display_name)
+                    GrantedReadStore(access).load(access.access_name)
                 )
             request = run_switch_tui(
                 SwitchTuiSetup(

@@ -108,7 +108,7 @@ def apply_exact_dedup(
         ExactDuplicateContextReport,
     ):
         raise TypeError("Exact Dedup requires Context access and frozen analysis.")
-    if analysis.context_name != access.display_name:
+    if analysis.context_name != access.access_name:
         raise ExactDedupError("The exact Dedup analysis targets another Context.")
     groups = analysis.report.groups
     if not groups:
@@ -120,7 +120,7 @@ def apply_exact_dedup(
             raise ExactDedupConflictError(
                 "The exact Dedup Context changed after analysis; nothing was written."
             )
-        return ExactDedupReceipt(access.display_name, (), None)
+        return ExactDedupReceipt(access.access_name, (), None)
 
     expected_digest = analysis.context_digest
     absorbed_uids = tuple(uid for group in groups for uid in group.absorbed_uids)
@@ -167,7 +167,7 @@ def apply_exact_dedup(
                     command="dedup",
                     args={
                         "contract": EXACT_DEDUP_CONTRACT_VERSION,
-                        "context": access.display_name,
+                        "context": access.access_name,
                         "groups": [
                             {
                                 "item_kind": group.item_kind,
@@ -180,7 +180,7 @@ def apply_exact_dedup(
                     },
                     description=(
                         f"Removed {len(absorbed_uids)} exact duplicate direct "
-                        f"item(s) from '{access.display_name}'"
+                        f"item(s) from '{access.access_name}'"
                     ),
                 ),
                 expected_context_digest=expected_digest,
@@ -189,7 +189,7 @@ def apply_exact_dedup(
                 raise ExactDedupError(
                     "Exact Dedup removed items without recording a checkpoint."
                 )
-    return ExactDedupReceipt(access.display_name, groups, checkpoint.uid)
+    return ExactDedupReceipt(access.access_name, groups, checkpoint.uid)
 
 
 def apply_exact_dedup_scope(
@@ -209,14 +209,14 @@ def apply_exact_dedup_scope(
         ExactDuplicateScopeReport,
     ):
         raise TypeError("Exact Dedup requires a Store, access, and frozen analysis.")
-    if analysis.root_name != access.display_name:
+    if analysis.root_name != access.access_name:
         raise ExactDedupError("The exact Dedup analysis targets another scope.")
     if not analysis.include_descendants:
         if len(analysis.contexts) != 1:
             raise ExactDedupError("Direct exact Dedup requires one analyzed Context.")
         receipt = apply_exact_dedup(access, analysis.contexts[0])
         return ExactDedupScopeReceipt(
-            root_name=access.display_name,
+            root_name=access.access_name,
             include_descendants=False,
             contexts=(receipt,),
         )
@@ -235,7 +235,7 @@ def apply_exact_dedup_scope(
         registry=registry,
         include_query_routes=False,
     )
-    granted_descendants = readable.granted_names_below(access.display_name)
+    granted_descendants = readable.granted_names_below(access.access_name)
     if granted_descendants:
         raise ExactDedupError(
             "Recursive exact Dedup cannot cross granted Context boundaries: "
@@ -279,7 +279,7 @@ def apply_exact_dedup_scope(
     changed = tuple(frame for frame in frames if frame[2])
     if not changed:
         return ExactDedupScopeReceipt(
-            root_name=access.display_name,
+            root_name=access.access_name,
             include_descendants=True,
             contexts=tuple(
                 ExactDedupReceipt(context.name, (), None)
@@ -330,7 +330,7 @@ def apply_exact_dedup_scope(
     tree_receipt = {
         "version": 1,
         "operation_uid": operation_uid,
-        "root": access.display_name,
+        "root": access.access_name,
         "include_descendants": True,
     }
     total_removed = sum(
@@ -340,7 +340,7 @@ def apply_exact_dedup_scope(
     )
     description = (
         f"Removed {total_removed} exact duplicate direct item(s) from "
-        f"{len(changed)} Context(s) under '{access.display_name}'"
+        f"{len(changed)} Context(s) under '{access.access_name}'"
     )
     entries = []
     changed_names: set[str] = set()
@@ -400,7 +400,7 @@ def apply_exact_dedup_scope(
         )
     }
     return ExactDedupScopeReceipt(
-        root_name=access.display_name,
+        root_name=access.access_name,
         include_descendants=True,
         contexts=tuple(
             ExactDedupReceipt(

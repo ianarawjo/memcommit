@@ -73,6 +73,7 @@ def isolate_default_semantic_prompt_policy(monkeypatch):
 @pytest.fixture()
 def isolated_store(tmp_path, monkeypatch):
     """Redirect MemoryStore to a fresh temporary directory for each test."""
+    monkeypatch.setenv("HOME", str(tmp_path))
     store_dir = tmp_path / ".mem"
     contexts_dir = store_dir / "contexts"
     query_sources_dir = store_dir / "query-sources"

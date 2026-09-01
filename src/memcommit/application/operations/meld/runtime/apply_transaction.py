@@ -384,9 +384,9 @@ def validate_owner_aware_grant_permissions(
         permission = "UPDATE" if proposal.operation == "EDIT" else "CREATE"
         view = resolve_granted_context_view(
             proposal.owner_context_name,
-            attachment_name=binding.attachment_context_name,
             required_permission=permission,
             registry=registry,
+            expected_grant_uid=binding.grant_uid,
         )
         if (
             view.grant.uid != binding.grant_uid
@@ -417,13 +417,13 @@ def apply_owner_proposals(direct: Context, proposals: Iterable) -> Context:
 
 def granted_owner_name(binding, public_name: str) -> str:
     if not (
-        public_name == binding.public_name
-        or public_name.startswith(binding.public_name + "/")
+        public_name == binding.access_name
+        or public_name.startswith(binding.access_name + "/")
     ):
         raise MeldApplicationError(
             "A directional Meld owner is outside the granted BASELINE namespace."
         )
-    return binding.authority_context_name + public_name[len(binding.public_name) :]
+    return binding.authority_context_name + public_name[len(binding.access_name) :]
 
 
 class MemoryStoreMeldApplyPort(MeldApplyPort):
@@ -777,8 +777,7 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
                 else ContextAccess(
                     store=store,
                     context_name=session.frames[0].context_name,
-                    display_name=session.frames[0].context_name,
-                    attachment_name=None,
+                    access_name=session.frames[0].context_name,
                     permission="READ",
                 )
             )
@@ -1012,8 +1011,7 @@ class MemoryStoreMeldApplyPort(MeldApplyPort):
                 else ContextAccess(
                     store=store,
                     context_name=session.frames[0].context_name,
-                    display_name=session.frames[0].context_name,
-                    attachment_name=None,
+                    access_name=session.frames[0].context_name,
                     permission="READ",
                 )
             )

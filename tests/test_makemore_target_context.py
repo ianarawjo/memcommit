@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import json
 import uuid
 
@@ -42,7 +44,6 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model import (
     ProfileError,
-    create_authority_grant,
     update_authority_grant,
 )
 from memcommit.persistence.store import MemoryStore, context_record_digest
@@ -549,12 +550,11 @@ def test_granted_ambient_uses_read_and_apply_requires_create(
     registry_path = profile_registry_file()
     registry_path.parent.mkdir(parents=True, exist_ok=True)
     registry_path.write_text(json.dumps(registry.to_dict()) + "\n", encoding="utf-8")
-    _registry, grant = create_authority_grant(
+    _registry, grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=grantee.name,
         resource_name=advisor.name,
-        attachment_name=target.name,
-        public_name="shared/advisor-examples",
+        access_name="shared/advisor-examples",
         permissions=("READ",),
     )
     access = resolve_context_access(

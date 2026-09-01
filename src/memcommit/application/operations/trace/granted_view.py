@@ -73,7 +73,7 @@ def build_granted_memory_trace(
     if not matches:
         raise MemoryHistoryReconstructionError(
             f"No current readable Memory with uid starting with {selector!r} "
-            f"exists in granted Context {(display_name or access.display_name)!r}."
+            f"exists in granted Context {(display_name or access.access_name)!r}."
         )
     if len(matches) != 1:
         raise MemoryHistoryReconstructionError(
@@ -93,7 +93,7 @@ def build_granted_memory_trace(
     grant = view.grant
     return GrantedMemoryTraceReport(
         context_uid=context.uid,
-        context_name=display_name or access.display_name,
+        context_name=display_name or access.access_name,
         selected_uid=memory.uid,
         current=MemoryState(
             uid=memory.uid,

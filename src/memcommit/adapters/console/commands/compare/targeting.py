@@ -84,7 +84,7 @@ def _direct_context(access: ContextAccess, registry: ProfileRegistry):
 
     if access.is_granted:
         return GrantedReadStore(access, registry=registry).load_direct(
-            access.display_name
+            access.access_name
         )
     return access.store.load_direct(access.context_name)
 
@@ -105,12 +105,12 @@ def _resolve_qualified_memory(
     if not matches:
         raise CompareTargetingError(
             f"No directly owned {role} Memory with uid starting with "
-            f"{selector!r} exists in Context {access.display_name!r}."
+            f"{selector!r} exists in Context {access.access_name!r}."
         )
     if len(matches) > 1:
         raise CompareTargetingError(
             f"{role} Memory prefix {selector!r} is ambiguous in Context "
-            f"{access.display_name!r}: "
+            f"{access.access_name!r}: "
             + ", ".join(memory.uid[:8] for memory in matches)
             + "."
         )

@@ -548,7 +548,7 @@ def run_query_workbench(
             answer_window.vertical_scroll = 0
             if not save_location_edit["edited"]:
                 source_name = (
-                    next_response.request.target.public_name
+                    next_response.request.target.access_name
                     if isinstance(next_response, GrantedQueryResponse)
                     else next_response.request.target_names[0]
                 )

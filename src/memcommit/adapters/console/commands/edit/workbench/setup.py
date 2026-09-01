@@ -39,12 +39,12 @@ def build_edit_tui_setup(
             access = port.access(name)
         except (FileNotFoundError, OSError, RuntimeError, ValueError):
             continue
-        selectable.add(access.display_name)
-        annotations[access.display_name] = context_access_display_facts(access)
+        selectable.add(access.access_name)
+        annotations[access.access_name] = context_access_display_facts(access)
 
     if requested_context is not None:
         access = port.access(requested_context)
-        selected = access.display_name
+        selected = access.access_name
         names.add(selected)
         selectable.add(selected)
         if access.is_granted:

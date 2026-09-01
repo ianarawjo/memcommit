@@ -85,14 +85,14 @@ def freeze_redundancy_scope(
         raise TypeError("Find Redundancies requires Context access and boolean reach.")
     if not include_descendants:
         context = (
-            GrantedReadStore(access, registry=registry).load_direct(access.display_name)
+            GrantedReadStore(access, registry=registry).load_direct(access.access_name)
             if access.is_granted
             else access.store.load_direct(access.context_name)
         )
         return QualityFindSourceFrame.create(
             (context,),
-            context_names=(access.display_name,),
-            target_names=(access.display_name,),
+            context_names=(access.access_name,),
+            target_names=(access.access_name,),
             selection_mode="SINGLE",
             include_descendants=False,
         )
@@ -104,13 +104,13 @@ def freeze_redundancy_scope(
         include_query_routes=False,
     )
     names = expand_lexical_context_names(
-        ContextScope.create((access.display_name,), include_descendants=True),
+        ContextScope.create((access.access_name,), include_descendants=True),
         catalog.list_context_names(),
     )
     return QualityFindSourceFrame.create(
         tuple(catalog.load_direct(name) for name in names),
         context_names=names,
-        target_names=(access.display_name,),
+        target_names=(access.access_name,),
         selection_mode="SINGLE",
         include_descendants=True,
     )

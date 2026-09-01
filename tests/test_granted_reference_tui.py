@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import json
 import uuid
 
@@ -24,7 +26,6 @@ from memcommit.application.operations.profile.config import (
     profile_store_dir,
 )
 from memcommit.application.operations.profile.model import (
-    create_authority_grant,
     update_authority_grant,
 )
 from memcommit.application.operations.reference.application import (
@@ -71,12 +72,11 @@ def _fixture(isolated_store, tmp_path, monkeypatch):
     path = profile_registry_file()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(registry.to_dict(), indent=2) + "\n")
-    _registry, grant = create_authority_grant(
+    _registry, grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=grantee.name,
         resource_name=source.name,
-        attachment_name=workspace.name,
-        public_name="shared/source",
+        access_name="shared/source",
         permissions=_REQUIRED,
     )
     return store, workspace, source, memory, grant

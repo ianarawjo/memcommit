@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import ast
 import json
 from pathlib import Path
@@ -31,7 +33,6 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model import (
     ProfileError,
-    create_authority_grant,
     delete_authority_grant,
 )
 from memcommit.persistence.store import MemoryStore
@@ -44,8 +45,7 @@ def _request() -> GrantedQueryRequest:
     return GrantedQueryRequest(
         GrantedQueryTarget(
             grant_uid="grant-1",
-            public_name="construction-details",
-            attachment_name="task-root",
+            access_name="construction-details",
         ),
         "When does it open?",
     )
@@ -81,19 +81,21 @@ def _authority_grant(isolated_store, tmp_path, monkeypatch):
     path = profile_registry_file()
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(registry.to_dict(), indent=2) + "\n", encoding="utf-8")
-    _registry, grant = create_authority_grant(
+    registry, grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=source_context.name,
-        attachment_name=task_context.name,
-        public_name="construction-details",
+        access_name="construction-details",
         permissions=("QUERY",),
     )
     request = GrantedQueryRequest(
         GrantedQueryTarget(
             grant_uid=grant.uid,
-            public_name=grant.public_name,
-            attachment_name=grant.attachment_context_name,
+            access_name=next(
+                placement.access_name
+                for placement in registry.grant_placements
+                if placement.grant_uid == grant.uid
+            ),
         ),
         "When does it open?",
     )

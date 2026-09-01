@@ -102,7 +102,7 @@ class MemoryStoreAddTargetPort(AddTargetPort):
         authorize_context_use(access, ContextUse.CREATE)
         context = access.store.load_direct(access.context_name)
         return FrozenAddTarget(
-            context_name=access.display_name,
+            context_name=access.access_name,
             context_uid=context.uid,
             token=_StoreAddTargetToken(access),
         )
@@ -142,7 +142,7 @@ class MemoryStoreAddTargetPort(AddTargetPort):
         if checkpoint is None:
             raise RuntimeError("Add saved no checkpoint.")
         return AddResult(
-            context_name=access.display_name,
+            context_name=access.access_name,
             context_uid=context.uid,
             memories=tuple(
                 AddedMemory(uid=memory.uid, content=memory.content)

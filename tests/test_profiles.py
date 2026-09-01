@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from tests.grant_placement_support import create_authority_grant_with_placement
+
 import hashlib
 from datetime import datetime
 import json
@@ -40,6 +42,7 @@ from memcommit.application.operations.profile.config import (
     GRANT_RESOURCE_CONTEXT_TREE,
     AuthorityGrant,
     GrantContextBinding,
+    GrantPlacement,
     ProfileEntry,
     ProfileRegistry,
     canonical_grant_permissions,
@@ -50,7 +53,6 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model import (
     ProfileError,
-    create_authority_grant,
     study_profile_groups,
 )
 from memcommit.application.context_access.granted_view import resolve_granted_context_view
@@ -153,6 +155,7 @@ def _install_legacy_split_study(
         contexts[(task, role)] = context
 
     grants: list[AuthorityGrant] = []
+    placements: list[GrantPlacement] = []
     grant_counts = {1: 2, 2: 3, 3: 2}
     for task, count in grant_counts.items():
         task_profile = next(
@@ -165,28 +168,30 @@ def _install_legacy_split_study(
             for candidate_task, role, profile in allocated
             if candidate_task == task and role == "AUTHORITY"
         )
-        task_context = contexts[(task, "TASK")]
         authority_context = contexts[(task, "AUTHORITY")]
         for index in range(1, count + 1):
-            grants.append(
-                AuthorityGrant(
-                    uid=str(uuid.uuid4()),
-                    revision=1,
-                    authority_profile_uid=authority_profile.uid,
-                    grantee_profile_uid=task_profile.uid,
-                    attachment_context_uid=task_context.uid,
-                    attachment_context_name=task_context.name,
-                    resource_kind=GRANT_RESOURCE_CONTEXT_TREE,
-                    resource_uid=authority_context.uid,
-                    resource_name=authority_context.name,
-                    public_name=f"view-{task}-{index}",
-                    permissions=("READ",),
-                    contexts=(
-                        GrantContextBinding(
-                            uid=authority_context.uid,
-                            name=authority_context.name,
-                        ),
+            grant = AuthorityGrant(
+                uid=str(uuid.uuid4()),
+                revision=1,
+                authority_profile_uid=authority_profile.uid,
+                grantee_profile_uid=task_profile.uid,
+                resource_kind=GRANT_RESOURCE_CONTEXT_TREE,
+                resource_uid=authority_context.uid,
+                resource_name=authority_context.name,
+                permissions=("READ",),
+                contexts=(
+                    GrantContextBinding(
+                        uid=authority_context.uid,
+                        name=authority_context.name,
                     ),
+                ),
+            )
+            grants.append(grant)
+            placements.append(
+                GrantPlacement(
+                    grant_uid=grant.uid,
+                    grantee_profile_uid=task_profile.uid,
+                    access_name=f"view-{task}-{index}",
                 )
             )
 
@@ -197,6 +202,7 @@ def _install_legacy_split_study(
             active_uid=registry.active_uid,
             profiles=(*registry.profiles, *profiles),
             grants=(*registry.grants, *grants),
+            grant_placements=(*registry.grant_placements, *placements),
         )
     )
     return study_uid, profiles, tuple(grants)
@@ -442,7 +448,6 @@ def test_init_study_selects_the_initialized_complete_profile(
 
     query_view = resolve_granted_context_view(
         "task-1/campus-wiki/construction-details",
-        attachment_name="task-1/participant/construction-updates",
         required_permission="QUERY",
     )
     query_source = load_authority_query_source(query_view, language="en")
@@ -451,7 +456,6 @@ def test_init_study_selects_the_initialized_complete_profile(
 
     wiki_query_view = resolve_granted_context_view(
         "task-1/campus-wiki",
-        attachment_name="task-1/participant/construction-updates",
         required_permission="QUERY",
     )
     wiki_query_source = load_authority_query_source(wiki_query_view, language="en")
@@ -460,7 +464,6 @@ def test_init_study_selects_the_initialized_complete_profile(
     with pytest.raises(ProfileError, match="does not allow share access"):
         resolve_granted_context_view(
             "task-1/campus-wiki",
-            attachment_name="task-1/participant/construction-updates",
             required_permission="SHARE",
         )
 
@@ -505,7 +508,6 @@ def test_init_study_selects_the_initialized_complete_profile(
 
     task_two_query = resolve_granted_context_view(
         "task-2/proposal-submission-guidelines",
-        attachment_name="task-2/participant/proposal-workspace",
         required_permission="QUERY",
     )
     task_two_source = load_authority_query_source(task_two_query, language="en")
@@ -576,22 +578,20 @@ def test_profile_inventory_counts_distinct_read_grants_without_alias_inflation(
     assert imported.exit_code == 0, imported.output
 
     for public_name in ("shared-campus", "campus-alias"):
-        create_authority_grant(
+        create_authority_grant_with_placement(
             authority_name="authority",
             grantee_name="authoring",
             resource_name="knowledge",
-            attachment_name="authoring-notes",
             permissions=["READ"],
-            public_name=public_name,
+            access_name=public_name,
             recursive=True,
         )
-    create_authority_grant(
+    create_authority_grant_with_placement(
         authority_name="authority",
         grantee_name="authoring",
         resource_name="query-resource",
-        attachment_name="authoring-notes",
         permissions=["QUERY"],
-        public_name="updates-query",
+        access_name="updates-query",
         recursive=True,
     )
 
@@ -1365,6 +1365,7 @@ def test_archive_legacy_study_rejects_an_active_member(
             active_uid=profiles[0].uid,
             profiles=registry.profiles,
             grants=registry.grants,
+            grant_placements=registry.grant_placements,
         )
     )
     before = profile_registry_file().read_bytes()
@@ -1574,6 +1575,7 @@ def test_archive_legacy_study_does_not_target_an_ordinary_profile(
             active_uid=registry.active_uid,
             profiles=registry.profiles,
             grants=registry.grants,
+            grant_placements=registry.grant_placements,
         )
     )
     before = profile_registry_file().read_bytes()
@@ -1607,22 +1609,20 @@ def test_archive_legacy_study_rejects_cross_boundary_grants(
         if profile.name == "legacy-run-task-1-campus-authority"
     )
     if direction == "outgoing":
-        create_authority_grant(
+        create_authority_grant_with_placement(
             authority_name=authority_profile.name,
             grantee_name="authoring",
             resource_name="authority-root",
-            attachment_name="authoring-notes",
             permissions=["READ"],
-            public_name="external-legacy-view",
+            access_name="external-legacy-view",
         )
     else:
-        create_authority_grant(
+        create_authority_grant_with_placement(
             authority_name="authoring",
             grantee_name=task_profile.name,
             resource_name="authoring-notes",
-            attachment_name="task-root",
             permissions=["READ"],
-            public_name="external-authoring-view",
+            access_name="external-authoring-view",
         )
     before = profile_registry_file().read_bytes()
 

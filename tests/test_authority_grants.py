@@ -30,9 +30,10 @@ from memcommit.application.operations.profile.config import (
     profile_store_dir,
 )
 from memcommit.application.operations.profile.model import (
-    create_authority_grant,
+    grant_placement,
     update_authority_grant,
 )
+from tests.grant_placement_support import create_authority_grant_with_placement
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.summarize.application import SummarizeRequest
 from memcommit.application.operations.summarize.runtime import execute_summarize
@@ -88,21 +89,19 @@ def _grant_fixture(isolated_store, tmp_path, monkeypatch):
         json.dumps(registry.to_dict(), indent=2) + "\n",
         encoding="utf-8",
     )
-    _registry, campus_grant = create_authority_grant(
+    _registry, campus_grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=campus.name,
-        attachment_name=task_root.name,
-        public_name=campus.name,
+        access_name=campus.name,
         permissions=("READ", "CREATE", "UPDATE"),
         recursive=True,
     )
-    _registry, details_grant = create_authority_grant(
+    _registry, details_grant = create_authority_grant_with_placement(
         authority_name=authority.name,
         grantee_name=authoring.name,
         resource_name=details.name,
-        attachment_name=task_root.name,
-        public_name=details.name,
+        access_name=details.name,
         permissions=("QUERY",),
         recursive=True,
     )
@@ -131,7 +130,7 @@ def test_unrelated_missing_context_is_not_reported_as_a_granted_view(
     checkout = runner.invoke(app, ["checkout", "practice/3"])
 
     assert checkout.exit_code == 1
-    assert "context 'practice/3' does not exist" in checkout.stderr
+    assert "Context 'practice/3' does not exist" in checkout.stderr
     assert "Granted view" not in checkout.stderr
 
 
@@ -171,12 +170,8 @@ def test_ls_projects_read_view_and_masks_narrower_query_view(
     contexts = runner.invoke(app, ["contexts"])
 
     assert root.exit_code == 0, root.output
-    assert "campus-wiki" in root.output
-    assert "Authority views:" in root.output
-    assert "task-1-campus-authority" in root.output
-    assert "Permissions: CREATE + READ + UPDATE" in root.output
-    assert "Source boundary:" not in root.output
-    assert "Target/artifact boundary:" not in root.output
+    assert "Context: task-root" in root.output
+    assert "campus-wiki" not in root.output
     assert view.exit_code == 0, view.output
     assert "Access: READ GRANT · PERMISSIONS CREATE + READ + UPDATE" in view.output
     assert "READ ONLY · FROM task-1-campus-authority" in view.output
@@ -221,12 +216,12 @@ def test_public_show_reuses_the_same_read_grant_and_concealment_boundary(
     assert SECRET not in repr(result)
 
 
-def test_status_keeps_read_only_projection_and_shows_granted_target_permissions(
+def test_status_keeps_read_only_projection_without_mounting_grants_locally(
     isolated_store,
     tmp_path,
     monkeypatch,
 ):
-    _authority, _editable, campus_grant, details_grant = _grant_fixture(
+    _authority, _editable, _campus_grant, _details_grant = _grant_fixture(
         isolated_store,
         tmp_path,
         monkeypatch,
@@ -249,15 +244,8 @@ def test_status_keeps_read_only_projection_and_shows_granted_target_permissions(
     attached = runner.invoke(app, ["status"])
 
     assert attached.exit_code == 0, attached.output
-    assert "Relationships:" in attached.output
-    assert (
-        f"GRANT [{campus_grant.uid[:8]} r1] campus-wiki · "
-        "PERMISSIONS CREATE + READ + UPDATE"
-    ) in attached.output
-    assert (
-        f"GRANT [{details_grant.uid[:8]} r1] "
-        "campus-wiki/construction-details · PERMISSIONS QUERY"
-    ) in attached.output
+    assert "Relationships:" not in attached.output
+    assert "GRANT" not in attached.output
     assert "Original campus note." not in attached.output
 
 
@@ -739,18 +727,14 @@ def test_grant_existing_context_roles_accept_context_uids(
     )
     source = ops.init("uid-grant-resource")
     authority_store.save(source)
-    attachment = MemoryStore().load_direct("task-root")
-
-    _registry, grant = create_authority_grant(
+    registry, grant = create_authority_grant_with_placement(
         authority_name="task-1-campus-authority",
         grantee_name=AUTHORING_PROFILE_NAME,
         resource_name=source.uid[:8],
-        attachment_name=attachment.uid[:8],
-        public_name="uid-granted-view",
+        access_name="uid-granted-view",
         permissions=("READ",),
     )
 
     assert grant.resource_name == source.name
     assert grant.resource_uid == source.uid
-    assert grant.attachment_context_name == attachment.name
-    assert grant.attachment_context_uid == attachment.uid
+    assert grant_placement(registry, grant).access_name == "uid-granted-view"

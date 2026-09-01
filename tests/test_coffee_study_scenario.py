@@ -183,10 +183,11 @@ def test_plain_init_study_builds_coffee_without_a_baseline_or_prewarm(
         for root in (participant_root, authority_root)
     )
 
+    grants_by_uid = {grant.uid: grant for grant in registry.grants}
     grants = {
-        grant.public_name: grant
-        for grant in registry.grants
-        if grant.grantee_profile_uid == participant.uid
+        placement.access_name: grants_by_uid[placement.grant_uid]
+        for placement in registry.grant_placements
+        if placement.grantee_profile_uid == participant.uid
     }
     assert set(grants) == {
         "task-1/customer-perspectives",

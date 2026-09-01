@@ -55,14 +55,15 @@ def build_add_workbench_setup(
             )
         except (FileNotFoundError, OSError, ProfileError, RuntimeError, ValueError):
             continue
-        selectable_context_names.add(context_access.display_name)
+        selectable_context_names.add(context_access.access_name)
 
     if not selectable_context_names:
         raise ValueError(
             "Interactive Add requires a local or CREATE-granted target Context."
         )
 
-    # Choose the Context initially selected when the workbench opens.
+    """Select Initial Context for Context Selector in workbench."""
+    # Select the Context specified by the command.
     if specified_context_locator is not None:
         specified_context_access = resolve_existing_context_access(
             store,
@@ -70,11 +71,13 @@ def build_add_workbench_setup(
             current_name=current_context_name,
             required_permission="CREATE",
         ).value
-        selected_context_name = specified_context_access.display_name
+        selected_context_name = specified_context_access.access_name
         visible_context_names.add(selected_context_name)
         selectable_context_names.add(selected_context_name)
+    # Otherwise select the current Context.
     elif current_context_name in selectable_context_names:
         selected_context_name = current_context_name
+    # Otherwise select the nearest available ancestor.
     elif (
         nearest_context_ancestor := find_nearest_context_ancestor(
             current_context_name,
@@ -82,6 +85,7 @@ def build_add_workbench_setup(
         )
     ) is not None:
         selected_context_name = nearest_context_ancestor
+    # Otherwise select the first available Context.
     else:
         selected_context_name = min(
             selectable_context_names,

@@ -5,32 +5,40 @@
 Cross-Profile authority is expressed as a registry capability grant. Ordinary
 source access remains a permissioned **view**, not a fork, merge, copy, or
 embedded Context: source data stays physically owned by one switchable
-authority Profile and a task Profile receives a public projection. A `SHARE`
-grant is the deliberate asymmetric exception: its public name is a write-only
+authority Profile and a task Profile receives a placed access path. A `SHARE`
+grant is the deliberate asymmetric exception: its access name is a write-only
 delivery endpoint and an approved consent unit becomes a receiver-owned copy.
 
 ```text
 task Profile                         task-specific authority Profile
 ┌──────────────────────────┐        ┌───────────────────────────────┐
-│ participant/task anchor  │        │ ordinary source Context tree  │
-│   └── granted view ──────┼───────>│ stable Context UIDs           │
+│ receiver-owned placement│        │ ordinary source Context tree  │
+│   └── Grant UID ─────────┼───────>│ stable Context UIDs           │
 └──────────────────────────┘        └───────────────────────────────┘
            permissions + frozen exact scope
 ```
 
 The source becomes fully editable through ordinary commands when the
 authority Profile is selected. In the task Profile, `mem contexts`, `mem ls`,
-and `mem show` expose only locally owned Contexts plus granted public views.
+and `mem show` expose only locally owned Contexts plus granted access paths.
 A view is deliberately not accepted by `mem switch`: switching changes the
 current ordinary Context inside one Profile, whereas a grant is a capability
 resolved for a command.
 
-The registry control plane stores each grant's stable UUID and revision,
-authority and grantee Profile UIDs, attachment Context UID and name, authority
-root Context UID and name, public path, permissions, and a frozen allowlist of
-exact authority Context UID/name pairs. Context data and checkpoints are not
+The registry control plane stores two separate records. `AuthorityGrant` owns
+the stable Grant UUID and revision, authority and grantee Profile UIDs,
+authority root Context UID/name, permissions, and the frozen allowlist of exact
+authority Context UID/name pairs. `GrantPlacement` belongs to the grantee and
+maps that Grant UUID to one `access_name`. Context data and checkpoints are not
 copied into the registry or grantee store. `SHARE` payloads are written only to
 the authority-owned receiver store; the registry remains capability metadata.
+
+Grant creation assigns the deterministic initial placement
+`granted/<authority-profile>/<resource-name>`. The authority chooses what is
+shared and which permissions apply, but does not choose where that resource is
+organized inside the receiver's namespace. The receiver may subsequently move
+the placement with ordinary `mem rename`; this changes neither Grant identity,
+authority Context names, permissions, nor data ownership.
 
 ## Permission contract
 
@@ -51,16 +59,17 @@ independent concrete effects. `SHARE` is a separate delivery endpoint
 capability, not an ordinary Context use.
 
 These permissions currently govern direct items inside existing Contexts.
-They do not delegate Context lifecycle operations such as `init`, `rename`,
-or Context deletion. The authority owner can perform those operations after
-switching to its Profile. This narrower interpretation avoids granting a
-namespace rewrite when the study only needs Memory authoring.
+They do not delegate authority Context lifecycle operations such as `init`,
+authority rename, or authority Context deletion. The authority owner can
+perform those operations after switching to its Profile. A receiver may rename
+only its `GrantPlacement`, which is namespace organization rather than an
+authority data mutation.
 
 Grant CRUD is separate from data CRUD:
 
 ```text
 mem profile grant create AUTHORITY GRANTEE RESOURCE \
-  --into ATTACHMENT --allow READ --recursive
+  --allow READ --recursive
 mem profile grant list
 mem profile grant update GRANT --allow READ --allow UPDATE
 mem profile grant delete GRANT
@@ -72,18 +81,19 @@ a grant removes the view immediately and never deletes either Profile's data.
 
 ## Nested views and fail-closed precedence
 
-A narrower public grant overrides a broader one by longest path. This is
+A narrower placed Grant overrides a broader one by longest access path. This is
 required for Task 1: `campus-wiki` is readable and editable, while
 `campus-wiki/construction-details` is query-only. Recursive listing filters
 the narrower tree from the broader `READ` projection and renders only its
-query link. `mem query VIEW` opens the Query workbench with that public View
+query link. `mem query VIEW` opens the Query workbench with that access path
 selected, while `mem query VIEW QUESTION` asks over its complete authorized
 frame without exposing ordinary Memory content. It never falls back to the
 parent's permission when the narrower grant denies the requested operation.
 
-Every operation validates the attachment Context and authority Context UIDs.
-A mutation re-resolves the grant immediately before saving and requires the
-same grant UID, revision, Profiles, and authority Context. It holds the
+Every operation resolves `access_name` to its exact placement, then follows the
+stable Grant UID to the authority Context. A mutation re-resolves the Grant
+immediately before saving and requires the same Grant UID, revision, Profiles,
+and authority Context. It holds the
 registry's grant lock until the authority-store save completes, so revocation
 cannot race into the interval between authorization and publication. The
 authority MemoryStore's normal digest CAS then protects the content snapshot.
@@ -157,8 +167,13 @@ security.
   fixtures, but rejected as the new authority model. The owner could not use
   normal Context CRUD, and read, edit, and query grants could not share one
   source identity.
-- **Persist grant pointers inside task Contexts:** rejected because Context
-  checkpoints, branches, and merges would copy capability-looking records.
+- **Attach Grant pointers to task Contexts:** rejected because the authority
+  sender would thereby choose receiver organization, while checkpoints,
+  branches, and merges could copy capability-looking records.
+- **Let Grant creation accept `--into` or `--as`:** rejected because those
+  options let the sender assign the receiver's namespace. A deterministic
+  initial placement followed by receiver-owned `mem rename` separates the two
+  responsibilities.
 - **Recursively include future descendants:** rejected because an authority
   author could accidentally disclose newly created material. Scope refresh is
   explicit.
@@ -169,10 +184,15 @@ security.
 
 This is a local research permission boundary, not operating-system isolation.
 The same OS user can read managed Profile files directly. Granted views do
-not delegate Context lifecycle commands. A granted Memory mutation records
+not delegate authority Context lifecycle commands. A granted Memory mutation records
 its checkpoint and grant audit metadata in the authority store; task-side
 `undo` does not span
 stores, so recovery currently requires selecting the authority Profile.
 Provider-backed `QUERY` remains the only supported way to open query-only
 content from a task Profile. Production use should move the authority store
 and enforcement to an authenticated MCP or internal service.
+
+Schema version 5 intentionally has no runtime adapter for attached schema-2 to
+schema-4 Grants. A registry containing those records fails with an instruction
+to recreate them, because guessing receiver placement would recreate the very
+sender-owned attachment semantics this change removes.

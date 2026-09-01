@@ -32,7 +32,7 @@ from ._storage import (
     _inspection_with_grants as _inspection_with_grants,
     _prepare_profile_deletion_batch as _prepare_profile_deletion_batch,
     _publish_permanent_removal as _publish_permanent_removal,
-    _read_granted_public_names as _read_granted_public_names,
+    _read_granted_access_names as _read_granted_access_names,
     _read_json as _read_json,
     _registry_lock as _registry_lock,
     _source_digest as _source_digest,
@@ -662,6 +662,7 @@ def migrate_visible_study_provider_policy(
             profiles=tuple(profiles),
             grants=registry.grants,
             removed_profile_uids=registry.removed_profile_uids,
+            grant_placements=registry.grant_placements,
         )
         _write_registry(updated)
         return StudyProviderPolicyMigrationResult(
@@ -836,6 +837,7 @@ def rename_study(
             profiles=updated_profiles,
             grants=registry.grants,
             removed_profile_uids=registry.removed_profile_uids,
+            grant_placements=registry.grant_placements,
         )
         try:
             _write_registry(updated)
@@ -908,7 +910,7 @@ def remove_study(
         for profile in stores_to_delete:
             inspect_store(
                 profile_store_dir(profile),
-                allowed_virtual_currents=_read_granted_public_names(
+                allowed_virtual_currents=_read_granted_access_names(
                     registry,
                     profile.uid,
                 ),
@@ -930,6 +932,11 @@ def remove_study(
             profiles=registry.profiles,
             grants=retained_grants,
             removed_profile_uids=ordered_removed,
+            grant_placements=tuple(
+                placement
+                for placement in registry.grant_placements
+                if placement.grant_uid in {grant.uid for grant in retained_grants}
+            ),
         )
         batch = _prepare_profile_deletion_batch(stores_to_delete)
         _publish_permanent_removal(
@@ -1037,6 +1044,11 @@ def archive_legacy_study(name: str) -> LegacyStudyArchiveResult:
             ),
             removed_profile_uids=tuple(
                 uid for uid in registry.removed_profile_uids if uid not in grouped_uids
+            ),
+            grant_placements=tuple(
+                placement
+                for placement in registry.grant_placements
+                if placement.grant_uid not in internal_grant_uids
             ),
         )
         try:

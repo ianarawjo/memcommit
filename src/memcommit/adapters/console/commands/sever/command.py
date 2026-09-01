@@ -150,8 +150,8 @@ def _start_analysis(
     # The application repeats authority checks before cache lookup or provider
     # construction, so this display preparation cannot authorize execution.
     request = SeverAnalysisRequest(
-        source_locator=source_access.display_name,
-        criteria_locator=criteria_access.display_name,
+        source_locator=source_access.access_name,
+        criteria_locator=criteria_access.access_name,
         output_name=output_name,
         source_include_descendants=source_descendants,
         criteria_include_descendants=criteria_descendants,
@@ -391,7 +391,7 @@ def _interactive_setup(store: MemoryStore) -> tuple[str, str, bool, bool] | None
             current_name=current_name,
             required_permission="READ",
         )
-        return context_memory_rows(GrantedReadStore(access).load(access.display_name))
+        return context_memory_rows(GrantedReadStore(access).load(access.access_name))
 
     receipt = choose_sever_setup(
         names,

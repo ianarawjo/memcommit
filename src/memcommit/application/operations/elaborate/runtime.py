@@ -99,7 +99,7 @@ def _frame_for(
         )
     return ElaborateFrame(
         context_uid=context.uid,
-        context_name=access.display_name,
+        context_name=access.access_name,
         context_digest=context_record_digest(context),
         target_alias=target_alias,
         sources=sources,

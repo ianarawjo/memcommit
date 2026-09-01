@@ -86,7 +86,7 @@ def authorize_context_use(
         raise ProfileError(
             f"Grant {access.view.grant.uid[:8]} does not allow "
             + " + ".join(ordered).lower()
-            + f" access to {access.display_name!r}."
+            + f" access to {access.access_name!r}."
         )
     return ContextUseAuthorization(access=access, allowed=allowed)
 

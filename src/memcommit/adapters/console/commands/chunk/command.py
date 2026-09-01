@@ -245,7 +245,7 @@ def cmd(
                 fg=typer.colors.YELLOW,
             )
         else:
-            display_name = display_escape_text(access.display_name)
+            display_name = display_escape_text(access.access_name)
             typer.secho(
                 f"Context '{display_name}' has no direct Memories that produce "
                 f"multiple chunks with {settings} — no changes made.",
@@ -258,14 +258,14 @@ def cmd(
     typer.echo()
     if memory_selector is not None:
         original, chunks = proposals[0]
-        display_name = display_escape_text(access.display_name)
+        display_name = display_escape_text(access.access_name)
         typer.secho(
             f"Proposed split of [{original.uid[:8]}] in Context "
             f"'{display_name}' → {len(chunks)} chunks ({settings})",
             bold=True,
         )
     else:
-        display_name = display_escape_text(access.display_name)
+        display_name = display_escape_text(access.access_name)
         typer.secho(
             f"Proposed split in Context '{display_name}' → {source_count} direct "
             f"Memories / {chunk_count} chunks ({settings})",
@@ -318,13 +318,13 @@ def cmd(
 
     if memory_selector is not None:
         # Retain the established single-Memory receipt for script compatibility.
-        display_name = display_escape_text(access.display_name)
+        display_name = display_escape_text(access.access_name)
         typer.secho(
             f"Done — {chunk_count} memories added in '{display_name}'.",
             fg=typer.colors.GREEN,
         )
     else:
-        display_name = display_escape_text(access.display_name)
+        display_name = display_escape_text(access.access_name)
         typer.secho(
             f"Done — {source_count} Memory(s) replaced with {chunk_count} chunks "
             f"in '{display_name}'.",

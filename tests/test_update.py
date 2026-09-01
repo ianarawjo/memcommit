@@ -529,11 +529,9 @@ def test_granted_update_uses_the_same_report_apply(monkeypatch):
     staged = replace(
         staged,
         granted_source=GrantedUpdateTarget(
-            public_name="shared/construction-updates",
+            access_name="shared/construction-updates",
             grantee_profile_uid="11111111-1111-4111-8111-111111111111",
             authority_profile_uid="22222222-2222-4222-8222-222222222222",
-            attachment_context_uid="attachment-context",
-            attachment_context_name="shared",
             grant_uid="33333333-3333-4333-8333-333333333333",
             grant_revision=1,
             grant_digest="a" * 64,
@@ -792,12 +790,10 @@ def test_update_rejects_granted_live_embed_before_provider_construction():
             target=memory,
             granted_source=GrantedMemorySource(
                 context_uid=authority.uid,
-                public_name=authority.name,
+                access_name=authority.name,
                 authority_context_name="authority/advisor",
                 authority_profile_uid="authority-profile",
                 grantee_profile_uid="grantee-profile",
-                attachment_context_uid=source.uid,
-                attachment_context_name=source.name,
                 grant_uid="grant",
                 grant_revision_at_creation=1,
                 resource_uid=authority.uid,

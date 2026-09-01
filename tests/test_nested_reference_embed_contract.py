@@ -66,12 +66,10 @@ def test_memory_pointer_rejects_malformed_grant_provenance(pointer_kind):
 def test_malformed_granted_memory_binding_fails_before_live_source_load():
     source = GrantedMemorySource(
         context_uid="authority-context",
-        public_name="shared/source",
+        access_name="shared/source",
         authority_context_name="private/source",
         authority_profile_uid="authority-profile",
         grantee_profile_uid="grantee-profile",
-        attachment_context_uid="attachment-context",
-        attachment_context_name="workspace",
         grant_uid="grant",
         grant_revision_at_creation=1,
         resource_uid="resource",
@@ -83,7 +81,7 @@ def test_malformed_granted_memory_binding_fails_before_live_source_load():
         "uid": "relationship",
         "target_context": {
             "uid": source.context_uid,
-            "name": source.public_name,
+            "name": source.access_name,
         },
         "target_memory_uid": "tampered-memory",
         "grant_source": source.to_dict(),

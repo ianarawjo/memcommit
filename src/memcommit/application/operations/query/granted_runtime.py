@@ -28,7 +28,10 @@ from memcommit.application.operations.profile.config import (
     load_profile_registry,
     profile_store_dir,
 )
-from memcommit.application.context_access.granted_view import resolve_granted_context_view
+from memcommit.application.context_access.granted_view import (
+    active_grant_placements,
+    resolve_granted_context_view,
+)
 from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,
 )
@@ -136,23 +139,22 @@ def _grant_for_request(
     registry,
 ) -> AuthorityGrant:
     matches = [
-        grant
-        for grant in registry.grants
+        (placement, grant)
+        for placement, grant in active_grant_placements(registry=registry)
         if grant.uid == request.target.grant_uid
         and grant.grantee_profile_uid == registry.active.uid
-        and grant.attachment_context_name == request.target.attachment_name
         and (
-            request.target.public_name == grant.public_name
-            or request.target.public_name.startswith(grant.public_name + "/")
+            request.target.access_name == placement.access_name
+            or request.target.access_name.startswith(placement.access_name + "/")
         )
     ]
     if len(matches) != 1:
         raise ValueError("The selected query-only View is no longer available.")
-    grant = matches[0]
+    placement, grant = matches[0]
     if "QUERY" not in grant.permissions:
         raise ValueError(
             f"Grant {grant.uid[:8]} does not allow query access to "
-            f"{grant.public_name!r}."
+            f"{placement.access_name!r}."
         )
     return grant
 
@@ -165,39 +167,31 @@ def freeze_granted_query_targets(store: MemoryStore) -> tuple[GrantedQueryTarget
     if store.store_dir.resolve() != profile_store_dir(registry.active).resolve():
         return ()
     targets: list[GrantedQueryTarget] = []
-    for grant in registry.grants:
-        if grant.grantee_profile_uid != registry.active.uid:
-            continue
+    for placement, grant in active_grant_placements(registry=registry):
         if "QUERY" not in grant.permissions:
-            continue
-        if not store.context_exists(grant.attachment_context_name):
-            continue
-        attachment = store.load_direct(grant.attachment_context_name)
-        if attachment.uid != grant.attachment_context_uid:
             continue
         targets.append(
             GrantedQueryTarget(
                 grant_uid=grant.uid,
-                public_name=grant.public_name,
-                attachment_name=grant.attachment_context_name,
+                access_name=placement.access_name,
             )
         )
     return tuple(
         sorted(
             targets,
-            key=lambda item: (item.public_name, item.attachment_name, item.grant_uid),
+            key=lambda item: (item.access_name, item.grant_uid),
         )
     )
 
 
 def resolve_granted_query_target(
     store: MemoryStore,
-    public_name: str,
+    access_name: str,
 ) -> GrantedQueryTarget | None:
     """Resolve one public QUERY route independently of the current Context.
 
-    Grant metadata and the local attachment identity are the public
-    control-plane boundary. Concealed authority Contexts remain unopened
+    Grant metadata and the receiver-owned Placement are the control-plane
+    boundary. Concealed authority Contexts remain unopened
     until the granted Query runtime has connected its provider.
     """
 
@@ -206,12 +200,12 @@ def resolve_granted_query_target(
     if store.store_dir.resolve() != profile_store_dir(registry.active).resolve():
         return None
     candidates = [
-        grant
-        for grant in registry.grants
+        (placement, grant)
+        for placement, grant in active_grant_placements(registry=registry)
         if grant.grantee_profile_uid == registry.active.uid
         and (
-            public_name == grant.public_name
-            or public_name.startswith(grant.public_name + "/")
+            access_name == placement.access_name
+            or access_name.startswith(placement.access_name + "/")
         )
     ]
     if not candidates:
@@ -219,36 +213,24 @@ def resolve_granted_query_target(
 
     # A narrower route is an authority override even when it removes QUERY.
     # Falling back to a broader QUERY Grant would bypass that boundary.
-    depth = max(len(grant.public_name.split("/")) for grant in candidates)
+    depth = max(len(placement.access_name.split("/")) for placement, _ in candidates)
     effective = [
-        grant for grant in candidates if len(grant.public_name.split("/")) == depth
+        (placement, grant)
+        for placement, grant in candidates
+        if len(placement.access_name.split("/")) == depth
     ]
-    valid = []
-    for grant in effective:
-        if not store.context_exists(grant.attachment_context_name):
-            continue
-        attachment = store.load_direct(grant.attachment_context_name)
-        if attachment.uid == grant.attachment_context_uid:
-            valid.append(grant)
-    if len(valid) != len(effective):
-        raise ValueError("The query-only View attachment Context changed.")
-    identities = {
-        (grant.uid, grant.attachment_context_uid, grant.attachment_context_name)
-        for grant in valid
-    }
-    if len(identities) != 1:
+    if len(effective) != 1:
         raise ValueError(
-            f"Query-only View {public_name!r} is ambiguous across attachment Contexts."
+            f"Query-only View {access_name!r} is ambiguous."
         )
-    grant = valid[0]
+    placement, grant = effective[0]
     if "QUERY" not in grant.permissions:
         raise ValueError(
-            f"Grant {grant.uid[:8]} does not allow query access to {public_name!r}."
+            f"Grant {grant.uid[:8]} does not allow query access to {access_name!r}."
         )
     return GrantedQueryTarget(
         grant_uid=grant.uid,
-        public_name=public_name,
-        attachment_name=grant.attachment_context_name,
+        access_name=access_name,
     )
 
 
@@ -280,9 +262,9 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
             raise ValueError("Granted Query preparation token is invalid.")
         request = prepared.request
         view = resolve_granted_context_view(
-            request.target.public_name,
-            attachment_name=request.target.attachment_name,
+            request.target.access_name,
             required_permission="QUERY",
+            expected_grant_uid=request.target.grant_uid,
         )
         if view.grant.uid != token.expected_grant.uid:
             raise ValueError("The selected query-only View binding changed.")
@@ -304,27 +286,26 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
             registry = token.registry
             descendant_candidates = tuple(
                 sorted(
-                    grant.public_name
-                    for grant in registry.grants  # type: ignore[attr-defined]
+                    placement.access_name
+                    for placement, grant in active_grant_placements(  # type: ignore[arg-type]
+                        registry=registry,
+                    )
                     if grant.grantee_profile_uid == registry.active.uid  # type: ignore[attr-defined]
-                    and grant.attachment_context_uid
-                    == token.expected_grant.attachment_context_uid
-                    and grant.attachment_context_name
-                    == token.expected_grant.attachment_context_name
                     and "QUERY" in grant.permissions
-                    and grant.public_name.startswith(request.target.public_name + "/")
+                    and placement.access_name.startswith(
+                        request.target.access_name + "/"
+                    )
                 )
             )
             selected_descendants = _select_relevant_descendant_views(
                 provider,
-                requested_name=request.target.public_name,
+                requested_name=request.target.access_name,
                 question=request.question,
                 candidates=descendant_candidates,
             )
             for descendant_name in selected_descendants:
                 descendant_view = resolve_granted_context_view(
                     descendant_name,
-                    attachment_name=request.target.attachment_name,
                     required_permission="QUERY",
                 )
                 descendant_source = load_authority_query_source(
@@ -347,11 +328,11 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
         provider_source_content = source.content
         if federated_sources:
             provider_source_name = (
-                request.target.public_name + " + relevant descendant views"
+                request.target.access_name + " + relevant descendant views"
             )
             provider_source_content = _federated_source_content(
                 (
-                    (request.target.public_name, source.content),
+                    (request.target.access_name, source.content),
                     *(
                         (name, descendant_source.content)
                         for name, descendant_source, _binding in federated_sources
@@ -391,10 +372,10 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
         registry,
     ) -> None:
         current_view = resolve_granted_context_view(
-            request.target.public_name,
-            attachment_name=request.target.attachment_name,
+            request.target.access_name,
             required_permission="QUERY",
             registry=registry,
+            expected_grant_uid=request.target.grant_uid,
         )
         current_source = load_authority_query_source(
             current_view,
@@ -414,7 +395,6 @@ class MemoryStoreGrantedQueryReadPort(GrantedQueryReadPort):
         for descendant_name, _source, descendant_binding in federated_sources:
             current_descendant_view = resolve_granted_context_view(
                 descendant_name,
-                attachment_name=request.target.attachment_name,
                 required_permission="QUERY",
                 registry=registry,
             )

@@ -169,7 +169,7 @@ def cmd(
             ).value
             for operand in operands
         )
-        target_names = tuple(access.display_name for access in accesses)
+        target_names = tuple(access.access_name for access in accesses)
         if len(set(target_names)) != len(target_names):
             raise ValueError("Find Context roots must be distinct.")
         # The TUI explicitly promises ALL READABLE CONTEXTS, so freeze the
@@ -185,7 +185,7 @@ def cmd(
             target_names = tuple(catalog.list_context_names())
             accesses = tuple(catalog.access_for(name) for name in target_names)
         for access in accesses:
-            catalog.access_for(access.display_name)
+            catalog.access_for(access.access_name)
 
         request = (
             None

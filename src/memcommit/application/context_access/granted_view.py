@@ -1,4 +1,4 @@
-"""Resolve one public Context through the active Profile's Grant metadata."""
+"""Resolve one placed Context through the active Profile's Grant metadata."""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ from pathlib import Path
 
 from memcommit.application.operations.profile.config import (
     AuthorityGrant,
+    GrantPlacement,
     ProfileEntry,
     ProfileRegistry,
     load_profile_registry,
@@ -24,35 +25,34 @@ class GrantedContextView:
     """One validated Context view resolved for a grantee Profile."""
 
     grant: AuthorityGrant
+    placement: GrantPlacement
     authority: ProfileEntry
     grantee: ProfileEntry
-    requested_name: str
+    access_name: str
     authority_context_name: str
     authority_root: Path
 
 
-def grants_for_attachment(
+def active_grant_placements(
     *,
-    attachment_name: str,
     registry: ProfileRegistry | None = None,
-) -> tuple[AuthorityGrant, ...]:
-    """Return validated grant metadata attached to one active-Profile Context."""
+) -> tuple[tuple[GrantPlacement, AuthorityGrant], ...]:
+    """Return the active Profile's placements joined to exact Grants."""
 
     registry = registry or load_profile_registry()
     grantee = registry.active
-    attachment = _context_record_at(profile_store_dir(grantee), attachment_name)
-    if attachment is None:
-        return ()
+    grants_by_uid = {grant.uid: grant for grant in registry.grants}
     return tuple(
         sorted(
             (
-                grant
-                for grant in registry.grants
-                if grant.grantee_profile_uid == grantee.uid
-                and grant.attachment_context_uid == attachment.uid
-                and grant.attachment_context_name == attachment.name
+                (placement, grants_by_uid[placement.grant_uid])
+                for placement in registry.grant_placements
+                if placement.grantee_profile_uid == grantee.uid
+                and placement.grant_uid in grants_by_uid
+                and grants_by_uid[placement.grant_uid].grantee_profile_uid
+                == grantee.uid
             ),
-            key=lambda grant: grant.public_name,
+            key=lambda item: item[0].access_name,
         )
     )
 
@@ -60,29 +60,31 @@ def grants_for_attachment(
 def resolve_granted_context_view(
     requested_name: str,
     *,
-    attachment_name: str,
     required_permission: str,
     registry: ProfileRegistry | None = None,
+    expected_grant_uid: str | None = None,
 ) -> GrantedContextView:
     """Resolve the most-specific grant and fail closed on narrower overrides."""
 
     registry = registry or load_profile_registry()
     permission = validate_grant_permission(required_permission)
     grantee = registry.active
-    attached = grants_for_attachment(
-        attachment_name=attachment_name,
-        registry=registry,
-    )
+    placed = active_grant_placements(registry=registry)
     candidates = [
-        grant
-        for grant in attached
-        if requested_name == grant.public_name
-        or requested_name.startswith(grant.public_name + "/")
+        (placement, grant)
+        for placement, grant in placed
+        if requested_name == placement.access_name
+        or requested_name.startswith(placement.access_name + "/")
     ]
     if not candidates:
         raise ProfileError(f"Granted view {requested_name!r} does not exist.")
-    grant = max(candidates, key=lambda item: len(item.public_name.split("/")))
-    suffix = requested_name[len(grant.public_name) :]
+    placement, grant = max(
+        candidates,
+        key=lambda item: len(item[0].access_name.split("/")),
+    )
+    if expected_grant_uid is not None and grant.uid != expected_grant_uid:
+        raise ProfileError("The Grant placement behind this persisted access changed.")
+    suffix = requested_name[len(placement.access_name) :]
     authority_name = grant.resource_name + suffix
     bindings = {binding.name: binding.uid for binding in grant.contexts}
     authority_uid = bindings.get(authority_name)
@@ -107,9 +109,10 @@ def resolve_granted_context_view(
         raise ProfileError("Granted authority Context identity changed.")
     return GrantedContextView(
         grant=grant,
+        placement=placement,
         authority=authority,
         grantee=grantee,
-        requested_name=requested_name,
+        access_name=requested_name,
         authority_context_name=authority_name,
         authority_root=authority_root,
     )
@@ -117,6 +120,6 @@ def resolve_granted_context_view(
 
 __all__ = [
     "GrantedContextView",
-    "grants_for_attachment",
+    "active_grant_placements",
     "resolve_granted_context_view",
 ]
