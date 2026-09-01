@@ -63,37 +63,40 @@ class MemoryStoreAddTargetPort(AddTargetPort):
         self,
         store: MemoryStore,
         *,
-        current_name: str | None,
+        current_context_name: str | None,
         local_only: bool = False,
     ):
         self._store = store
         # Relative target meaning must not drift if another process switches
         # the global current Context while this request is being composed.
-        self._current_name = current_name
+        self._current_context_name = current_context_name
         self._local_only = local_only
 
     @classmethod
     def capture(cls, store: MemoryStore) -> "MemoryStoreAddTargetPort":
-        return cls(store, current_name=store.current_context_name())
+        return cls(
+            store,
+            current_context_name=store.current_context_name(),
+        )
 
     def freeze(self, context_locator: str | None) -> FrozenAddTarget:
         if self._local_only:
             canonical = resolve_existing_local_context_operand(
                 self._store,
                 context_locator,
-                current=self._current_name,
+                current=self._current_context_name,
             ).name
             access = resolve_context_access(
                 self._store,
                 canonical,
-                current_name=self._current_name,
+                current_name=self._current_context_name,
                 required_permission="CREATE",
             )
         else:
             access = resolve_existing_context_access(
                 self._store,
                 context_locator,
-                current_name=self._current_name,
+                current_name=self._current_context_name,
                 required_permission="CREATE",
             ).value
         authorize_context_use(access, ContextUse.CREATE)

@@ -59,15 +59,15 @@ def add_memories(
 
     store = runtime.store
     try:
-        current_name = (
+        current_context_name = (
             store.current_context_name() if store.state_file.exists() else None
         )
-        operand = context_name or current_name
+        operand = context_name or current_context_name
         if operand is None:
             raise FileNotFoundError(
                 "No current Context; pass context_name or initialize one."
             )
-        canonical = resolve_context_locator(operand, current=current_name)
+        canonical = resolve_context_locator(operand, current=current_context_name)
         target_is_local = store.context_exists(canonical)
         if not target_is_local:
             if runtime.registry is None:
@@ -85,7 +85,7 @@ def add_memories(
                 )
         port = MemoryStoreAddTargetPort(
             store,
-            current_name=current_name,
+            current_context_name=current_context_name,
             local_only=target_is_local,
         )
         result = run_add(request, target_port=port)

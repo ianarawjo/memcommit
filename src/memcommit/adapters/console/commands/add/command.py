@@ -40,11 +40,14 @@ def _run_interactive_add(
         snapshot_hint="Pass positional MEMORY values or --paste outside a terminal.",
     )
     store = MemoryStore()
-    current_name = store.current_context_name()
-    port = MemoryStoreAddTargetPort(store, current_name=current_name)
+    current_context_name = store.current_context_name()
+    port = MemoryStoreAddTargetPort(
+        store,
+        current_context_name=current_context_name,
+    )
     setup = build_add_workbench_setup(
         store,
-        current_name=current_name,
+        current_context_name=current_context_name,
         specified_context_locator=specified_context_locator,
     )
     return run_add_workbench(
@@ -63,8 +66,11 @@ def _run_direct_add(
     # Capture global navigation before clipboard intake can yield control.
     # Relative target meaning stays stable for this command.
     store = MemoryStore()
-    current_name = store.current_context_name()
-    port = MemoryStoreAddTargetPort(store, current_name=current_name)
+    current_context_name = store.current_context_name()
+    port = MemoryStoreAddTargetPort(
+        store,
+        current_context_name=current_context_name,
+    )
     if paste:
         contents = parse_line_input_records(read_system_clipboard())
     request = AddRequest(

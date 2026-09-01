@@ -4,6 +4,7 @@ from __future__ import annotations
 import pytest
 
 from memcommit.application.capabilities.context_locator import (
+    find_nearest_context_ancestor,
     is_relative_context_locator,
     resolve_context_locator,
 )
@@ -41,6 +42,38 @@ def test_bare_name_remains_global_and_does_not_require_current():
     )
     assert resolve_context_locator("task2/advisor2", current=None) == (
         "task2/advisor2"
+    )
+
+
+@pytest.mark.parametrize(
+    ("current_context_name", "available_context_names", "expected"),
+    [
+        (
+            "organization/wiki/facilities",
+            {"organization", "organization/wiki"},
+            "organization/wiki",
+        ),
+        (
+            "organization/wiki/facilities",
+            {"organization", "unrelated"},
+            "organization",
+        ),
+        ("organization/wiki/facilities", {"unrelated"}, None),
+        ("organization", {"organization"}, None),
+        (None, {"organization"}, None),
+    ],
+)
+def test_finds_nearest_available_lexical_context_ancestor(
+    current_context_name,
+    available_context_names,
+    expected,
+):
+    assert (
+        find_nearest_context_ancestor(
+            current_context_name,
+            available_context_names,
+        )
+        == expected
     )
 
 

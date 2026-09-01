@@ -68,6 +68,12 @@ The public routes have these meanings:
 In an interactive terminal, bare `mem add` opens the TUI. The interactive route
 requires a TTY before constructing a Store or workbench setup, so bare Add in a
 pipeline, redirected process, or test host fails without filesystem effects.
+The workbench rejects an empty selectable target catalog before choosing its
+initial row. An explicit locator wins; otherwise it keeps the captured current
+Context when possible, then walks its lexical parents using the same `..`
+resolver, and uses catalog order only when no selectable ancestor exists. This
+keeps an implicit Add near the person's current namespace instead of jumping
+immediately to an unrelated alphabetic target.
 Positional Memories and `--paste` are mutually exclusive. Shell quoting
 determines positional Memory boundaries, so `mem add my name is` adds three
 Memories while `mem add "my name is"` adds one.

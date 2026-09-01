@@ -4,8 +4,12 @@ from __future__ import annotations
 
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
+import pytest
 
 import memcommit.application.capabilities.ops as ops
+from memcommit.application.context_access.granted_context_navigation import (
+    GrantedContextNavigation,
+)
 from memcommit.application.operations.add.application import (
     AddedMemory,
     AddRequest,
@@ -17,6 +21,7 @@ from memcommit.adapters.console.commands.add.workbench import (
     build_add_workbench_setup,
     run_add_workbench,
 )
+import memcommit.adapters.console.commands.add.workbench.setup as add_workbench_setup
 from memcommit.persistence.store import MemoryStore
 
 
@@ -51,7 +56,7 @@ def test_build_workbench_setup_freezes_local_targets_and_specified_selection(
 
     setup = build_add_workbench_setup(
         store,
-        current_name="beta",
+        current_context_name="beta",
         specified_context_locator="alpha",
     )
 
@@ -59,6 +64,72 @@ def test_build_workbench_setup_freezes_local_targets_and_specified_selection(
     assert setup.selectable_names == frozenset({"alpha", "beta"})
     assert setup.selected_context == "alpha"
     assert setup.current_context == "beta"
+
+
+def test_build_workbench_setup_prefers_nearest_selectable_parent(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    store.create_context(ops.init("alpha"))
+    store.create_context(ops.init("alpha/project"))
+    monkeypatch.setattr(
+        add_workbench_setup,
+        "freeze_granted_context_navigation",
+        lambda _store: GrantedContextNavigation((), {}, frozenset()),
+    )
+
+    setup = build_add_workbench_setup(
+        store,
+        current_context_name="alpha/project/task",
+        specified_context_locator=None,
+    )
+
+    assert setup.selected_context == "alpha/project"
+
+
+def test_build_workbench_setup_uses_catalog_fallback_without_selectable_parent(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    store.create_context(ops.init("zeta"))
+    store.create_context(ops.init("alpha"))
+    monkeypatch.setattr(
+        add_workbench_setup,
+        "freeze_granted_context_navigation",
+        lambda _store: GrantedContextNavigation((), {}, frozenset()),
+    )
+
+    setup = build_add_workbench_setup(
+        store,
+        current_context_name="unrelated/task",
+        specified_context_locator=None,
+    )
+
+    assert setup.selected_context == "alpha"
+
+
+def test_build_workbench_setup_rejects_an_empty_target_catalog(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    monkeypatch.setattr(
+        add_workbench_setup,
+        "freeze_granted_context_navigation",
+        lambda _store: GrantedContextNavigation((), {}, frozenset()),
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="Interactive Add requires a local or CREATE-granted target Context",
+    ):
+        build_add_workbench_setup(
+            store,
+            current_context_name=None,
+            specified_context_locator=None,
+        )
 
 
 def test_draft_state_preserves_multiline_text_and_cancelled_new_draft() -> None:

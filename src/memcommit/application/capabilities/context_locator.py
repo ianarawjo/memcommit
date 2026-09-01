@@ -1,7 +1,7 @@
 """Application-level lexical resolution for existing-Context operands."""
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Collection, Sequence
 
 from memcommit.application.capabilities.name_suggestions import (
     canonical_name_suggestions,
@@ -72,6 +72,34 @@ def resolve_context_locator(
     return "/".join(parts)
 
 
+def find_nearest_context_ancestor(
+    current_context_name: str | None,
+    available_context_names: Collection[str],
+) -> str | None:
+    """Find the closest lexical parent present in an available catalog."""
+
+    if current_context_name is None:
+        return None
+    if any(
+        not isinstance(context_name, str) or not context_name
+        for context_name in available_context_names
+    ):
+        raise ValueError("Available Context names must be non-empty strings.")
+
+    parent_context_name = resolve_context_locator(
+        ".",
+        current=current_context_name,
+    )
+    while "/" in parent_context_name:
+        parent_context_name = resolve_context_locator(
+            "..",
+            current=parent_context_name,
+        )
+        if parent_context_name in available_context_names:
+            return parent_context_name
+    return None
+
+
 def suggest_context_locators(
     locator: str,
     *,
@@ -96,6 +124,7 @@ def suggest_context_locators(
 
 
 __all__ = [
+    "find_nearest_context_ancestor",
     "is_relative_context_locator",
     "resolve_context_locator",
     "suggest_context_locators",

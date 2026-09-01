@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from memcommit.application.capabilities.context_locator import (
+    find_nearest_context_ancestor,
+)
 from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.context_access.granted_context_navigation import (
     freeze_granted_context_navigation,
@@ -19,7 +22,7 @@ from memcommit.persistence.store import MemoryStore
 def build_add_workbench_setup(
     store: MemoryStore,
     *,
-    current_name: str | None,
+    current_context_name: str | None,
     specified_context_locator: str | None,
 ) -> AddWorkbenchSetup:
     """Freeze visible Context rows and their CREATE availability."""
@@ -47,39 +50,48 @@ def build_add_workbench_setup(
             context_access = resolve_context_access(
                 store,
                 context_name,
-                current_name=current_name,
+                current_name=current_context_name,
                 required_permission="CREATE",
             )
         except (FileNotFoundError, OSError, ProfileError, RuntimeError, ValueError):
             continue
         selectable_context_names.add(context_access.display_name)
 
-    # Choose the Context initially selected when the workbench opens.
-    selected_context_name: str | None = None
-    if specified_context_locator is not None:
-        context_access = resolve_existing_context_access(
-            store,
-            specified_context_locator,
-            current_name=current_name,
-            required_permission="CREATE",
-        ).value
-        selected_context_name = context_access.display_name
-        visible_context_names.add(selected_context_name)
-        selectable_context_names.add(selected_context_name)
-    elif current_name in selectable_context_names:
-        selected_context_name = current_name
-    elif selectable_context_names:
-        selected_context_name = sorted(selectable_context_names, key=str.casefold)[0]
-
-    if selected_context_name is None:
+    if not selectable_context_names:
         raise ValueError(
             "Interactive Add requires a local or CREATE-granted target Context."
+        )
+
+    # Choose the Context initially selected when the workbench opens.
+    if specified_context_locator is not None:
+        specified_context_access = resolve_existing_context_access(
+            store,
+            specified_context_locator,
+            current_name=current_context_name,
+            required_permission="CREATE",
+        ).value
+        selected_context_name = specified_context_access.display_name
+        visible_context_names.add(selected_context_name)
+        selectable_context_names.add(selected_context_name)
+    elif current_context_name in selectable_context_names:
+        selected_context_name = current_context_name
+    elif (
+        nearest_context_ancestor := find_nearest_context_ancestor(
+            current_context_name,
+            selectable_context_names,
+        )
+    ) is not None:
+        selected_context_name = nearest_context_ancestor
+    else:
+        selected_context_name = min(
+            selectable_context_names,
+            key=str.casefold,
         )
     return AddWorkbenchSetup(
         names=tuple(sorted(visible_context_names, key=str.casefold)),
         selectable_names=frozenset(selectable_context_names),
         selected_context=selected_context_name,
-        current_context=current_name,
+        current_context=current_context_name,
         annotations=tuple(
             (context_name, grant_annotations_by_context_name[context_name])
             for context_name in sorted(
@@ -89,6 +101,3 @@ def build_add_workbench_setup(
             if context_name in visible_context_names
         ),
     )
-
-
-__all__ = ["build_add_workbench_setup"]
