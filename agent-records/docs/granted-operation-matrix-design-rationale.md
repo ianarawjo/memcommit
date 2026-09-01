@@ -4,7 +4,7 @@
 
 Grant resolution, frozen bindings, registry locking, and readable projections
 are owned by
-`memcommit.application.capabilities.authority.context_access`. The resolved
+`memcommit.application.context_access.access`. The resolved
 value says which local or authority Store and exact Context a public name
 denotes; it does not decide what an operation intends to do.
 

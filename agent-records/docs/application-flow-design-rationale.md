@@ -146,11 +146,11 @@ inside the existing operation dispatcher.
   including authority checks, CAS, rollback, checkpoints, and receipts.
 - Undo and Redo continue to consume Update checkpoint receipts; the shared
   flow neither implements nor weakens recovery.
-- Sever keeps its `SELF-SAVE` versus `OTHER-SAVE` location rule: self-save
-  updates one exact local Source identity, while other-save keeps Source
-  unchanged and publishes a require-new Result. Both routes retain their
-  checkpoint, saved-session CAS, exact compensation, and interrupted-Apply
-  recovery boundaries.
+- New Sever sessions update their ordinary local Source scope in place. Each
+  selected owner keeps its identity and receives a per-owner checkpoint under
+  one grouped command membership. Saved-session CAS, exact multi-owner
+  compensation, and interrupted-Apply recovery remain operation-owned; old
+  other-save sessions remain a read/resume compatibility route.
 - Meld keeps all four application transactions distinct, including its
   granted-source lock recursion and owner-aware rollback boundaries.
 - No visible TUI state or keyboard path changes in these extractions, so the

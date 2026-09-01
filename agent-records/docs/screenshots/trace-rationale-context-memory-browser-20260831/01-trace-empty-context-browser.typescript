@@ -1,0 +1,66 @@
+[32mInitialized context 'empty'.[0m
+[32mInitialized context 'notes'.[0m
+[32mAdded [260c19c2] Initial policy wording retained for provenance.[0m
+[32m[1mEdited [260c19c2] in 'notes':[0m
+[31m  - Initial policy wording retained for provenance.[0m
+[32m  + Final policy wording selected for exact Memory history.[0m
+[32mAdded [a50ff73a] A supporting Memory keeps the whole Context report visibly distinct.[0m
+[32mInitialized context 'notes/child'.[0m
+[32mAdded [2af3a1ba] A child Memory is browseable without broadening the selected parent.[0m
+[32mSwitched to context 'notes'.[0m
+[32mSwitched to context 'empty'.[0m
+LIVE COLOR PTY · 180x52
+PROFILE · ISOLATED CAPTURE · CURRENT · empty
+$ mem trace
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m TRACE · SELECT A CONTEXT OR MEMORY · empty[0m
+[0m Roots · empty[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0;1;7m› * ▾ empty[168C[0;1m^[0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: hide items  y copy Context  Y copy visible branch  Enter trace  q cancel · 1/1 · 1 selectable[174D[48A[0m

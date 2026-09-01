@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.context_locator import resolve_context_locator
+from memcommit.application.capabilities.operand_resolution import (
+    ResolvedExistingContextOperand,
+    resolve_existing_local_context_operand,
+)
 from memcommit.application.capabilities.write_protection.application import (
     ContextProtectionRequest,
     ProfileProtectionRequest,
@@ -11,21 +14,25 @@ from memcommit.application.capabilities.write_protection.application import (
     WriteProtectionResult,
 )
 from memcommit.core.context import Memory
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.core.context_targeting.model import ContextTarget
+from memcommit.persistence.store import (
+    ConcurrentContextUpdateError,
+    MemoryStore,
+    context_record_digest,
+)
 
 
-def _context_name(
+def _context_target(
+    store: MemoryStore,
     locator: str | None,
     *,
     current_context_name: str | None,
-) -> str:
-    if locator is None:
-        if current_context_name is None:
-            raise RuntimeError(
-                "No current context. Pass CONTEXT or run 'mem init <name>' first."
-            )
-        return current_context_name
-    return resolve_context_locator(locator, current=current_context_name)
+) -> ResolvedExistingContextOperand[ContextTarget]:
+    return resolve_existing_local_context_operand(
+        store,
+        locator,
+        current=current_context_name,
+    )
 
 
 class MemoryStoreWriteProtectionPort:
@@ -49,11 +56,17 @@ class MemoryStoreWriteProtectionPort:
                 total_count=1,
             )
 
-        name = _context_name(
+        resolved_context = _context_target(
+            self._store,
             request.context_locator,
             current_context_name=request.current_context_name,
         )
+        name = resolved_context.name
         context = self._store.load_direct(name)
+        if context.uid != resolved_context.uid:
+            raise ConcurrentContextUpdateError(
+                f"Context {name!r} changed identity during target resolution."
+            )
         if isinstance(request, ContextProtectionRequest):
             if request.recursive:
                 prefix = name + "/"

@@ -1,0 +1,12 @@
+$ mem sever                                                                                                                                                                         
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+SEVER APPLIED · capture/reference · IN PLACE                                                                                                                                        
+CONTEXTS · 2 UPDATED IN PLACE                                                                                                                                                       
+DECISIONS · KEEP 1 · FORGET 1                                                                                                                                                       
+SOURCE · UPDATED                                                                                                                                                                    
+RECEIPT · 51d2f9f5-82b2-462c-aa62-d8a82f522bb9                                                                                                                                      
+CHECKPOINT · 5ffb466c-778a-423c-b04e-68fa6f6afdca                                                                                                                                   
+REVIEW · mem review sever --session 51d2f9f5-82b2-462c-aa62-d8a82f522bb9                                                                                                            
+RECOVERY · mem undo                                                                                                                                                                 
+                                                                                                                                                                                    
+PRESS V · VERIFY SOURCE OWNERS

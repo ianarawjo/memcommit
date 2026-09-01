@@ -10,8 +10,8 @@ from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.application.capabilities.authority.context_access import (
-    resolve_context_access,
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
 )
 from memcommit.adapters.console.terminal.components.quality_find.rendering import (
     render_cleanup_member,
@@ -202,12 +202,12 @@ def _run(
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         if dedun_handoff and include_descendants:
-            access = resolve_context_access(
+            access = resolve_existing_context_access(
                 store,
                 context_name,
                 current_name=context_snapshot.current_name,
                 required_permission="READ",
-            )
+            ).value
             recursive_dedun = freeze_recursive_dedun_scope(store, access)
             source = recursive_dedun.source
         else:

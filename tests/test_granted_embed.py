@@ -9,7 +9,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     GrantedReadStore,
     resolve_context_access,
 )

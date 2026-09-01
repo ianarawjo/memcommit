@@ -1,5 +1,7 @@
 # `mem makemore` design rationale
 
+Last updated: 2026-08-31.
+
 > **Authorization contract updated 2026-08-30.** Permission claims below that use `EMBED`, `DERIVE`, `COMBINE`, `EXPORT`, `ACCEPT_DERIVED`, or `SAVE_*` describe the retired contract preserved for design history. The current contract uses `QUERY`, `CREATE`, `READ`, `UPDATE`, and `DELETE`; `READ` covers readable semantic use and Embed traversal, while `SHARE` remains a separate endpoint capability. See `granted-derived-ownership-design-rationale.md`.
 
 ## Purpose
@@ -10,6 +12,7 @@ evidence-bound Distill:
 ```text
 Goal  --Makemore--> suggested Rules
 Rules --Makemore--> suggested FIT / BOUNDARY / CONTRAST Case propositions
+Context --transient Distill--> Rules --Makemore--> suggested Case propositions
 ```
 
 All outputs are `[Suggested] [Unverified]`. A Goal is intent rather than
@@ -41,6 +44,60 @@ One complete request is
 requested proposal set. Input normalization occurs before prepared lookup; on
 an exact prepared miss, the one-turn budget is validated before provider
 construction.
+
+The direct request stays deliberately unaware of Distill. Context-backed
+automatic composition belongs to
+`memcommit.application.operations.makemore.distilled_runtime`, which first
+produces one ordinary typed `DistillResult`, then constructs the same
+Rules-to-Cases `MakemoreRequest` used by every direct adapter. This keeps both
+provider contracts independently testable and prevents the convenience route
+from creating a third, weaker generation prompt.
+
+## Context auto-composition
+
+When a Context Source is selected and `--as` is omitted, `auto` means one
+two-stage pipeline:
+
+```text
+exact Source Memories
+  -> evidence-linked transient Distilled Rules
+  -> exact-count suggested Makemore Cases
+  -> one atomic final Add
+```
+
+The Target is frozen before either provider stage. Distill reads the complete
+exact Source and accounts for every Source Memory as support, boundary, or
+outside evidence. Its Rules are passed directly to Makemore without first
+being stored, and the final publication revalidates the same Source, Goal, and
+Target pre-images. Failure, drift, an empty supported Rule set, Goal Fit
+`NOT_FIT`, a Makemore decoding failure, or strict validation failure publishes
+nothing.
+
+Only final Case propositions become ordinary Memories. Persisting intermediate
+Rules was rejected because it would mix abstraction levels in the Source,
+change the Target before the Makemore stage, create two Undo units, and let a
+partially completed pipeline escape. Checkpoint payload version 6 instead
+retains the complete transient Distill analysis—Rule text, rationale, exact
+support and boundary Memory UIDs, outside evidence, analysis identity, and Goal
+Fit—beside the normal Makemore proposal payload. Applied Review therefore
+reconstructs `Source -> transient Rules -> Cases` without claiming that those
+Rules were accepted as durable Memories.
+
+The omitted or explicit final count still defaults to exactly three and
+applies only to Makemore Cases. Distill retains its smallest-complete-set
+contract and receives no artificial Rule count derived from `--n`. Duplicate
+Source content is allowed because Distill evidence is UID-backed; content is
+not silently deduplicated. Distill itself still returns distinct Rule content
+before the direct Makemore request is constructed. The complete pipeline
+remains `SUGGESTED` and `UNVERIFIED`; evidence-linked intermediate Rules do not
+verify generated Cases. `--strict` retains its existing meaning and gates only
+the final Rules-to-Cases collection through independent Conformance and Fit.
+
+`--as rules` explicitly bypasses Distill and preserves direct Context
+Rules-to-Cases behavior, including the distinct-Rule requirement. `--as goal`
+preserves exact one-Memory Goal-to-Rules behavior. An inline `--rule` or
+standalone `--goal` also remains direct. Content is never classified as Rule or
+Case by guessing from prose or a Context name; invocation mode is the authority.
 
 Provider output uses a strict direction-specific schema. Both directions
 return exactly three proposals by default, while `--number` fixes both JSON
@@ -225,16 +282,19 @@ from one Current snapshot:
 | `mem makemore --from A` | `A` | Current |
 | `mem makemore --from A --to B` | `A` | `B` |
 
-With no inline input, directly owned ordinary Source Memories are interpreted
-as Rules by default and Makemore generates Cases. `--as goal` instead requires
+With no inline input, directly owned ordinary Source Memories enter the
+transient Distill→Makemore pipeline by default. `--as rules` interprets them as
+already-authored Rules and bypasses Distill; `--as goal` instead requires
 exactly one direct Memory and generates Rules. This role belongs to the
 invocation, not to the Context name: `goals`, `rules`, and other naming
 conventions carry no hidden semantics. `--goal` uses the shared Goal operand
 and may identify a direct-Memory Context, one direct Memory, or process-local
 text. When supplied alone, its exactly one item is also the Goal-to-Rules
 generative Source for compatibility. Beside `--rule` or a Context `--from`, it
-is auxiliary relevance focus and does not become Source evidence. Repeatable
-`--rule` remains available and uses Current or `--to` as its existing Target.
+is auxiliary relevance focus and does not become Source evidence. In the auto
+pipeline the same frozen Goal focuses Distill output selection and the later
+Makemore request, while remaining non-evidence. Repeatable `--rule` remains
+available and uses Current or `--to` as its existing Target.
 `--n`/`-n`/`--number` has the same exact meaning for inline input, Context input, and
 both Ground directions.
 
@@ -291,7 +351,8 @@ aliases report exactly which ambient items the provider says it materially
 used, may be empty, and are locally restricted to the frozen Target aliases.
 They do not replace `rule_checks` and do not turn Target Memories into Rule
 evidence. The typed analysis, plain and TUI details, public proposal, agent
-projection, digest, and version-5 Add receipt retain this trace. The receipt
+projection, digest, direct version-5 Add receipt, and composed version-6 Add
+receipt retain this trace. The receipt
 also records `quality_policy` and `case_validation`, using `NOT_RUN` rather
 than fabricating validation evidence for best-effort Cases. Any root,
 embedded, referenced, or granted ambient pre-image drift rejects the proposal

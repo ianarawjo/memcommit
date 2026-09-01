@@ -28,6 +28,30 @@ from memcommit.persistence.store import MemoryStore
 runner = CliRunner(mix_stderr=False)
 
 
+def test_cli_context_embed_accepts_source_and_target_context_uids(isolated_store):
+    store = MemoryStore()
+    source = ops.init("uid/embed-source")
+    ops.add(source, "source claim")
+    target = ops.init("uid/embed-target")
+    store.save(source)
+    store.save(target)
+
+    result = runner.invoke(
+        app,
+        [
+            "embed",
+            "--from",
+            source.uid[:8],
+            "--into",
+            target.uid[:8],
+        ],
+    )
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert source.name in result.output
+    assert target.name in result.output
+
+
 class _Port:
     def __init__(self) -> None:
         self.plan = FrozenMemoryEmbedPlan(

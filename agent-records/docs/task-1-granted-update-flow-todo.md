@@ -11,7 +11,7 @@ inspect participant/construction-updates
 → query campus-wiki, federating relevant query-only descendants
 → preview verified changes against the granted campus-wiki
 → apply the reviewed update through the editable grant
-→ inspect a stable diff and recovery receipts
+→ review immutable Update evidence and inspect its checkpoint diffs
 ```
 
 This file is the implementation checklist. Documentation refresh is included,
@@ -43,9 +43,9 @@ but it is not a substitute for the runtime work below.
 - A failed multi-Context application restores already written Contexts and
   does not publish a successful receipt. Crash durability remains an explicit
   prototype boundary until a journal exists.
-- `diff`, checkpoints, provenance, and undo/recovery refer to the authority
-  Context identities actually changed, while remaining inspectable from the
-  participant run.
+- Update Review, checkpoint Diff, provenance, and undo/recovery refer to the
+  authority Context identities actually changed, while remaining inspectable
+  from the participant run.
 
 ## Ordered implementation checklist
 
@@ -91,17 +91,16 @@ but it is not a substitute for the runtime work below.
     baseline or concealed query-only descendants.
   - Preserve rollback behavior across all affected authority Contexts.
 
-- [x] 5. Make receipts, `mem diff`, checkpoints, and recovery grant-aware.
+- [x] 5. Make receipts, Update Review, checkpoints, and recovery grant-aware.
   - Render the reviewed public target while validating the underlying
     authority identities.
   - Ensure repeated update is idempotent and does not reconnect to the provider
     or create duplicate checkpoints.
-  - Verify stale/revoked results remain inspectable but cannot be presented as
-    current or applied again.
-  - `mem diff` reopens the participant-side immutable operation record but
-    resolves the frozen grant to validate the current authority projection. A
-    revoked or changed grant therefore cannot erase the reviewed diff; it
-    changes the command to a non-current, failing inspection result.
+  - Verify stale/revoked Update evidence remains inspectable through
+    `mem review update` but cannot be applied again.
+  - `mem diff CHECKPOINT_UID` opens one exact authority-side revision only
+    while its granted CheckpointRead remains authorized; it does not reopen
+    the participant-side Update record or claim that the endpoint is current.
   - Automatic checkpoints live only beside the authority Contexts they cover.
     Their physical `command_contexts` membership uses authority names, while
     participant receipts and restoration output retain public granted names.

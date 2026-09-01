@@ -1,5 +1,10 @@
 # Meld shared TUI boundary
 
+> Current contract (2026-08-31): Endpoint Setup remains applicable, but new
+> candidate sessions render decisions through Resolve's compact workbench with
+> a `MELD` label. References below to the saved Meld Resolution workbench apply
+> only to retained historical session presentation.
+
 ## Motivating problem
 
 Meld still entered terminal presentation through two command-owned modules:

@@ -10,10 +10,10 @@ from prompt_toolkit.output import DummyOutput
 import typer
 
 import memcommit.adapters.console.commands.query.command as query_command
-from memcommit.application.operations.search.answer_references import (
-    SearchAnswerEvidence,
-    SearchAnswerSentence,
-    build_search_answer_reference_document,
+from memcommit.application.operations.query.reference_document import (
+    NumberedOrdinaryQueryReference,
+    OrdinaryQueryEvidence,
+    OrdinaryQueryReferenceDocument,
 )
 from memcommit.adapters.console.commands.query.workbench import (
     QueryAnswerFocus,
@@ -261,27 +261,27 @@ def test_query_workbench_can_start_on_one_typed_query_view():
 
 def test_query_answer_focus_and_clipboard_preserve_typed_references():
     request = OrdinaryQueryRequest("What changed?", ("task",))
-    document = build_search_answer_reference_document(
-        (
-            SearchAnswerEvidence(
+    evidence = (
+            OrdinaryQueryEvidence(
                 "m1",
                 "task/a",
                 "memory",
                 "11111111-memory",
                 "First supporting Memory.",
             ),
-            SearchAnswerEvidence(
+            OrdinaryQueryEvidence(
                 "m2",
                 "task/b",
                 "memory",
                 "22222222-memory",
                 "Second supporting Memory.",
             ),
-        ),
-        (
-            SearchAnswerSentence("First claim.", ("m1",)),
-            SearchAnswerSentence("Second claim.", ("m2",)),
-            SearchAnswerSentence("Third claim."),
+    )
+    document = OrdinaryQueryReferenceDocument(
+        body="First claim. [1] Second claim. [2] Third claim.",
+        references=tuple(
+            NumberedOrdinaryQueryReference(index, item)
+            for index, item in enumerate(evidence, start=1)
         ),
     )
     response = OrdinaryQueryResponse(request, document.text, True, document)

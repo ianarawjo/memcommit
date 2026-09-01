@@ -9,6 +9,7 @@ from memcommit.adapters.console.terminal.components.command_wait import (
     CommandWaitView,
 )
 from memcommit.application.operations.meld.model import (
+    MELD_CANDIDATE_SCHEMA_VERSION,
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MeldSession,
     meld_accounting,
@@ -105,6 +106,21 @@ def render_meld_session(
         _session_route(session),
         _session_scope(session),
     ]
+    if session.schema_version == MELD_CANDIDATE_SCHEMA_VERSION:
+        review = session.candidate_review
+        if review is None:
+            raise MeldCommandError("Meld candidate review is unavailable.")
+        lines.extend(
+            [
+                f"State: {session.state} · Resolve round: {review.round + 1}",
+                "",
+                "AUDIT-BACKED RESOLUTION",
+                f"SOURCE CLAIMS · {len(review.source_claims)}",
+                f"AUDIT ITEMS · {len(review.issues)}",
+                "UPDATE · one complete candidate post-image per finalized round",
+            ]
+        )
+        return "\n".join(lines)
     if session.relation_analysis_seed is not None:
         lines.append(f"Compare: {session.relation_analysis_seed.analysis.uid[:8]} · IMPORTED")
     lines.append(f"State: {session.state} · Round: {len(session.turns)}")
@@ -306,14 +322,41 @@ def render_meld_receipt(
     proposals = assessment.proposals if assessment is not None else ()
     additions = sum(item.operation == "ADD" for item in proposals)
     edits = sum(item.operation == "EDIT" for item in proposals)
+    removals = sum(item.operation == "REMOVE" for item in proposals)
+    if session.schema_version == MELD_CANDIDATE_SCHEMA_VERSION:
+        review = session.candidate_review
+        if review is None:
+            raise MeldCommandError("Applied Meld candidate review is unavailable.")
+        after = {
+            item.uid: item.content
+            for item in review.candidate.iter_items()
+            if hasattr(item, "content")
+        }
+        before = (
+            {}
+            if session.mode == "SYMMETRIC"
+            else {memory.uid: memory.content for memory in session.frames[1].memories}
+        )
+        additions = len(set(after) - set(before))
+        removals = len(set(before) - set(after))
+        edits = sum(
+            uid in after and after[uid] != content
+            for uid, content in before.items()
+        )
     lines = [
         f"MELD APPLIED · {session.mode} · {session.target.context_name}",
-        f"EFFECTS · ADD {additions} · EDIT {edits}",
+        f"EFFECTS · ADD {additions} · EDIT {edits} · REMOVE {removals}",
         f"RESULT MEMORIES · {len(session.application.result_memory_uids)}",
         f"RECEIPT · {session.uid}",
         f"CHECKPOINT · {session.application.checkpoint_uid}",
         f"REVIEW · mem review meld --session {session.uid}",
     ]
+    if session.schema_version == MELD_CANDIDATE_SCHEMA_VERSION:
+        assert session.candidate_review is not None
+        lines.insert(
+            3,
+            f"UNRESOLVED · {len(session.candidate_review.forced_audit_keys)}",
+        )
     if recovered:
         lines.append(
             "RECOVERY STATUS · prior application recovered; no duplicate write"
@@ -332,6 +375,12 @@ def render_meld_incomplete_receipt(session: MeldSession) -> str:
     issues = assessment.issues if assessment is not None else ()
     required = sum(issue.priority == "REQUIRED" for issue in issues)
     optional = len(issues) - required
+    if session.schema_version == MELD_CANDIDATE_SCHEMA_VERSION:
+        review = session.candidate_review
+        if review is None:
+            raise MeldCommandError("Meld candidate review is unavailable.")
+        required = len(review.issues)
+        optional = 0
     state_label = {
         "AWAITING_REPLY": "NEEDS INPUT",
         "READY_TO_APPLY": "READY",

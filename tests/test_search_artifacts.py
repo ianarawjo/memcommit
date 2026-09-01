@@ -6,9 +6,9 @@ from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.search.corpus import (
-    collect_readable_search_candidates,
-    load_readable_search_roots,
+from memcommit.application.capabilities.retrieval_corpus.loading import (
+    collect_readable_corpus_candidates,
+    load_readable_corpus_roots,
 )
 from memcommit.core.context import AutoCheckpoint
 from memcommit.application.operations.meld.model import MeldSession
@@ -16,7 +16,9 @@ from memcommit.application.operations.rationale.cache import (
     CachedRationaleInference,
     save_rationale_inference,
 )
-from memcommit.application.operations.search.model import SearchArtifact
+from memcommit.application.capabilities.retrieval_corpus.candidates import (
+    RetrievalArtifact,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -64,7 +66,7 @@ def _saved_meld_trace(store: MemoryStore):
 def test_search_frame_includes_checkpoint_trace_artifacts(isolated_store):
     store = MemoryStore()
     ctx = _saved_meld_trace(store)
-    roots = load_readable_search_roots(
+    roots = load_readable_corpus_roots(
         store,
         (ctx.name,),
         include_descendants=True,
@@ -72,7 +74,7 @@ def test_search_frame_includes_checkpoint_trace_artifacts(isolated_store):
         include_attached_reads=False,
     )
 
-    candidates = collect_readable_search_candidates(
+    candidates = collect_readable_corpus_candidates(
         store,
         roots,
         follow_embeds=True,
@@ -82,7 +84,7 @@ def test_search_frame_includes_checkpoint_trace_artifacts(isolated_store):
     artifacts = [
         candidate.item
         for candidate in candidates
-        if isinstance(candidate.item, SearchArtifact)
+        if isinstance(candidate.item, RetrievalArtifact)
     ]
     assert len(artifacts) == 1
     assert artifacts[0].artifact_kind == "trace"
@@ -145,14 +147,14 @@ def test_search_frame_includes_retained_meld_and_rationale_artifacts(
         ),
     )
 
-    roots = load_readable_search_roots(
+    roots = load_readable_corpus_roots(
         store,
         (target.name,),
         include_descendants=True,
         follow_embeds=True,
         include_attached_reads=False,
     )
-    candidates = collect_readable_search_candidates(
+    candidates = collect_readable_corpus_candidates(
         store,
         roots,
         follow_embeds=True,
@@ -161,7 +163,7 @@ def test_search_frame_includes_retained_meld_and_rationale_artifacts(
     kinds = {
         candidate.item.artifact_kind
         for candidate in candidates
-        if isinstance(candidate.item, SearchArtifact)
+        if isinstance(candidate.item, RetrievalArtifact)
     }
 
     assert {"meld_session", "rationale"} <= kinds
@@ -180,14 +182,14 @@ def test_unrelated_invalid_meld_session_does_not_block_search_artifacts(
     store._meld_session_path(unrelated.uid).parent.mkdir(parents=True, exist_ok=True)
     store._meld_session_path(unrelated.uid).write_text("{", encoding="utf-8")
 
-    roots = load_readable_search_roots(
+    roots = load_readable_corpus_roots(
         store,
         (selected.name,),
         include_descendants=True,
         follow_embeds=True,
         include_attached_reads=False,
     )
-    candidates = collect_readable_search_candidates(
+    candidates = collect_readable_corpus_candidates(
         store,
         roots,
         follow_embeds=True,

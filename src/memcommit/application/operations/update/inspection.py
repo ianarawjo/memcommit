@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 from memcommit.application.authorization import authorize_context_use
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     GrantedReadStore,
     revalidate_granted_context_binding,
 )

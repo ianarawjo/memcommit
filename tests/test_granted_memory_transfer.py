@@ -190,6 +190,30 @@ def test_granted_copy_uses_ordinary_read_authority(
     assert len(store.list_checkpoints(target.name)) == 1
 
 
+def test_granted_copy_source_and_local_target_accept_context_uids(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    store, _authority_store, source, (memory,), target, _grant = _grant_fixture(
+        tmp_path,
+        monkeypatch,
+    )
+
+    result = run_copy(
+        CopyMemoriesRequest(
+            (memory.uid,),
+            source_locator=source.uid[:8],
+            into_locator=target.uid[:8],
+        ),
+        port=_granted_port(store),
+    )
+
+    assert result.count == 1
+    assert result.items[0].source_context_name == "shared/source"
+    assert result.into_name == target.name
+
+
 def test_granted_copy_requires_an_explicit_public_owner(
     isolated_store,
     tmp_path,

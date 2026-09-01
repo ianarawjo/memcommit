@@ -178,6 +178,7 @@ def run_endpoint_setup(
                 ].selection.selected_name,
                 loader=memory_loader,
                 selected_memory_uid=role.selected_memory_uid,
+                required=role.memory_required,
             )
             for role in memory_roles
         }
@@ -334,6 +335,17 @@ def run_endpoint_setup(
                 )
             if role_uid not in selectors:
                 raise ValueError(f"{role.new_label} requires a new exact name.")
+            memory_uid = (
+                memory_focuses[role_uid].selected_memory_uid
+                if role_uid in memory_focuses
+                and role_allows_memory_focus(role_uid)
+                and not role.memory_preview_only
+                else None
+            )
+            if role.memory_required and memory_uid is None:
+                raise ValueError(
+                    f"{spec.role_label(selected_mode, role_uid)} requires one exact Memory."
+                )
             return EndpointSetupValue(
                 role_uid,
                 selectors[role_uid].selection.selected_name,
@@ -342,13 +354,7 @@ def run_endpoint_setup(
                     if role_uid in reach_states and role_allows_descendants(role_uid)
                     else False
                 ),
-                memory_uid=(
-                    memory_focuses[role_uid].selected_memory_uid
-                    if role_uid in memory_focuses
-                    and role_allows_memory_focus(role_uid)
-                    and not role.memory_preview_only
-                    else None
-                ),
+                memory_uid=memory_uid,
             )
 
         return EndpointSetupDraft(
@@ -468,7 +474,7 @@ def run_endpoint_setup(
                     if role.memory_preview_only
                     else f" · MEMORY {safe_terminal_text(memory_uid[:8])}"
                     if memory_uid is not None
-                    else " · WHOLE CONTEXT"
+                    else f" · {safe_terminal_text(role.memory_unselected_label)}"
                 )
                 if include_descendants:
                     memory_suffix = ""

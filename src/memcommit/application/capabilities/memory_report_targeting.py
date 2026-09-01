@@ -10,10 +10,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.application.capabilities.authority.context_access import ContextAccess, resolve_context_access
+from memcommit.application.context_access.access import ContextAccess, resolve_context_access
 from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )

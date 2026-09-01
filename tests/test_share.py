@@ -208,6 +208,19 @@ def test_direct_share_preserves_version_one_consent_and_uid_identity(
     assert preview.include_descendants is False
 
 
+def test_share_source_accepts_context_uid(tmp_path, monkeypatch):
+    _sender_store, _receiver_store, source, _receiver = _study_share_topology(
+        tmp_path,
+        monkeypatch,
+    )
+    endpoint = load_profile_registry().grants[0].public_name
+
+    preview = prepare_share(source.uid[:8], endpoint)
+
+    assert preview.source_context == source.name
+    assert preview.contexts[0].source_context_uid == source.uid
+
+
 def test_bare_share_opens_tty_flow_and_sends_selected_context(
     tmp_path,
     monkeypatch,

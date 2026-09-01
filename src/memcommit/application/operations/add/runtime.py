@@ -14,13 +14,20 @@ from memcommit.application.operations.add.application import (
     FrozenAddTarget,
     run_add,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.authorization.context_operation import (
     authorized_context_mutation,
+)
+from memcommit.application.context_access.access import (
     grant_checkpoint_args,
     resolve_context_access,
 )
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
+)
+from memcommit.application.capabilities.operand_resolution import (
+    resolve_existing_local_context_operand,
+)
 from memcommit.core.context import AutoCheckpoint
-from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.store import ConcurrentContextUpdateError
 
@@ -117,18 +124,24 @@ class MemoryStoreAddTargetPort(AddTargetPort):
 
     def freeze(self, context_locator: str | None) -> FrozenAddTarget:
         if self._local_only:
-            operand = context_locator or self._current_name
-            if operand is None:
-                raise RuntimeError("No current context. Run 'mem init <name>' first.")
-            canonical = resolve_context_locator(operand, current=self._current_name)
-            if not self._store.context_exists(canonical):
-                raise FileNotFoundError(f"Context {canonical!r} not found.")
-        access = resolve_context_access(
-            self._store,
-            context_locator,
-            current_name=self._current_name,
-            required_permission="CREATE",
-        )
+            canonical = resolve_existing_local_context_operand(
+                self._store,
+                context_locator,
+                current=self._current_name,
+            ).name
+            access = resolve_context_access(
+                self._store,
+                canonical,
+                current_name=self._current_name,
+                required_permission="CREATE",
+            )
+        else:
+            access = resolve_existing_context_access(
+                self._store,
+                context_locator,
+                current_name=self._current_name,
+                required_permission="CREATE",
+            ).value
         authorize_context_use(access, ContextUse.CREATE)
         context = access.store.load_direct(access.context_name)
         return FrozenAddTarget(

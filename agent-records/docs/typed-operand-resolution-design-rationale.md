@@ -35,6 +35,12 @@ not enumerate UIDs. The access-aware operand layer first selects a public name
 or UID from the operation's frozen readable catalog, then calls
 `resolve_context_access` again with the operation's exact permission. This
 prevents a READ candidate from silently satisfying `UPDATE` or `DELETE`.
+Local-only, READ-visible, and QUERY-only are therefore candidate-catalog
+policies, not separate locator algorithms. The local helper freezes strict
+ordinary Context records and feeds the same resolver without opening Grants;
+the readable helper freezes local plus READ-granted public identities. Query
+adds its QUERY-only View arm only in the positions whose grammar promises that
+interface.
 
 ## Resolution contract
 
@@ -69,10 +75,12 @@ The first implementation covers shared choke points rather than adding a UID
 parser to every command:
 
 - Existing Context: Switch, Checkpoint, Rename source, Clear, Context Delete,
-  Edit owner, Replace roots, Summarize, Search, Find, Audit, duplicate and
-  redundancy discovery, Dedup, Diff, Log, Rationale, Trace, and Revert.
+  Add target, List, Show's explicit owner, Edit owner including batch input,
+  Replace roots, Summarize, Search, Find, Audit, duplicate and redundancy
+  discovery, Dedup, Diff, Log, Rationale, Trace, Lock/Unlock, and Revert.
 - Directional Context endpoints: Meld, Update and directional Impact, and
-  Compare `--from`/`--to` plus positional peers.
+  Compare `--from`/`--to` plus positional peers, and Merge's readable Source
+  and CREATE-authorized Target.
 - Context or local Memory: Atomize, Chunk, Translate, Impact Atomize,
   Reference, Embed, Delete's combined target, Resolve's one-Context target
   grammar, and every caller of
@@ -85,11 +93,23 @@ parser to every command:
 - Query's first positional compares readable Context and QUERY-only View UIDs
   before permitting question fallback. Its question position already compares
   Memory and retained-artifact UIDs through the same durable UID primitive.
+  A single explicit `--context` uses the same two-arm classification so a
+  QUERY-only public View does not fail prematurely under READ; repeated
+  `--context` remains an ordinary readable-Context form.
 - Distill and Makemore use a storage-aware semantic-result endpoint sibling:
   the Source catalog may include READ-granted public Contexts, while the
   memorization Target is resolved only from ordinary-local existing Contexts.
   Elaborate resolves its existing READ+UPDATE owner through the access-aware
   operand layer before selecting the direct Memory.
+- Copy and Move resolve explicit Source owners and local Targets from frozen
+  Context identity frames, including when the Context locator is nested in
+  `CONTEXT:MEMORY`. Copy may add READ-granted Source frames; Move preserves its
+  existing rejection of granted ownership transfer after identity resolution.
+- Share and cross-Profile Context/Memory Import use the same resolver over an
+  explicit ordinary-local Store. They do not inherit the active Profile's
+  Grants. Profile Grant creation resolves its authority resource and grantee
+  attachment independently in those Profiles' local stores, while the public
+  view remains a new-name field.
 
 The storage-aware endpoint resolvers replace their earlier lexical-only
 counterparts. The old `resolve_semantic_result_endpoints`,
@@ -100,12 +120,16 @@ authority checks. Persisted session compatibility is preserved in operation
 adapters and schemas instead of by keeping an unsafe operand-resolution API.
 
 Show additionally compares a Context UID with its readable/local direct-item
-routes before choosing Context. This rollout covers the identified overloaded
-and existing-Context choke points; it is not permission to treat the operation
-catalog as permanently closed. A later operation or adapter audit must route
-new existing-Context operands through these layers and must not solve a gap by
-broadening a global UID index or by making the pure Context locator enumerate
-storage.
+routes before choosing Context. Diff compares its readable Context arm with
+ordinary-local checkpoint identities, then performs checkpoint-read
+authorization only after a Context or checkpoint coordinate is selected.
+Trace, Rationale, and Log likewise resolve a readable Context identity before
+their stronger retained-history policy is allowed to accept or reject it.
+This rollout covers the identified overloaded and existing-Context choke
+points; it is not permission to treat the operation catalog as permanently
+closed. A later operation or adapter audit must route new existing-Context
+operands through these layers and must not solve a gap by broadening a global
+UID index or by making the pure Context locator enumerate storage.
 
 ## Alternatives and boundaries
 
@@ -122,3 +146,7 @@ This layer does not choose recursive reach, follow embeds, mutation authority,
 provider disclosure, semantic relation meaning, cache equivalence, or Apply.
 It only converts one raw operand into an exact typed coordinate inside the
 candidate namespaces the calling operation was already allowed to expose.
+Grant selection still uses the most-specific public-name rule in
+`resolve_granted_context_view`, and execution-time permission/revocation checks
+remain in the authorization boundary. Checkpoint-read grants similarly remain
+an operation policy rather than a locator candidate source.

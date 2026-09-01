@@ -40,6 +40,10 @@ from memcommit.adapters.console.terminal.components.progress import CommandProgr
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
+from memcommit.application.capabilities.operand_resolution import (
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
+)
 from memcommit.adapters.console.commands.review.snapshot import (
     render_review_snapshot,
     visible_ordinal_index,
@@ -260,7 +264,13 @@ def cmd(
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         canonical_context_name = (
-            None if context_name is None else context_snapshot.resolve(context_name)
+            None
+            if context_name is None
+            else resolve_existing_context_operand(
+                freeze_local_context_operand_candidates(store),
+                context_name,
+                current=context_snapshot.current_name,
+            ).name
         )
         normalized_kind = kind.casefold() if kind is not None else None
         if session_uid is not None and receipt_uid is not None:

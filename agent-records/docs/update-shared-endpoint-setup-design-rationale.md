@@ -16,8 +16,9 @@ checkpoints, receipt, Undo, and Redo behavior.
 ## Motivation
 
 Update needs the same visible role grammar already exercised by Compare:
-independent Source and Target Context choice, exact-or-descendant reach, and
-optional direct-Memory focus. Retaining a second command-hosted implementation
+independent Source and Target choice, exact-or-descendant Context reach, exact
+stored-Memory focus, and process-local inline-Memory composition. Retaining a
+second command-hosted implementation
 would leave two focus traversals and two stale-Memory clearing rules for the
 same interaction contract. Update is also the first migrated consumer whose B
 role can mutate, so setup must stop before planning or application authority.
@@ -41,6 +42,7 @@ Update arguments:
 | Shared value | Existing Update input |
 | --- | --- |
 | A Context | `source_name` / `--from` |
+| A inline Memory | `memory` / `--memory` |
 | B Context | `target_name` / `--to` |
 | A descendants | `source_descendants` |
 | B descendants | `target_descendants` |
@@ -58,7 +60,11 @@ continues to store the resolved booleans rather than the spelling used.
 
 ## Invariants
 
-- A and B remain distinct readable public Contexts.
+- A Context Source and B remain distinct readable public Contexts.
+- A Source is exactly one of a Context range, one stored direct Memory with
+  its owner Context, or one nonempty process-local inline Memory.
+- Source type changes are explicit. A missing or mistyped Context never becomes
+  inline content merely because it is unavailable.
 - A and B retain independent exact-or-descendant reach.
 - Either role may select one direct Memory only while that role is exact.
 - Changing a Context or broadening that role to descendants clears only its
@@ -93,8 +99,11 @@ readers and existing Study receipts retain their prior representation while
 focused identity becomes durable. A CLI inline Source emits schema 8 with the
 exact process-local Memory and deterministic synthetic identity. It creates no
 stored Context; Apply reconstructs that Source and locks only durable target
-Contexts. The setup workbench remains Context-to-Context because introducing
-inline composition there would change its interaction and authority contract.
+Contexts. The setup workbench constructs that same inline form explicitly: its
+Source Type row hides the Context catalog for inline input and reviews the
+canonical `mem update --memory TEXT --to TARGET` command before returning a
+typed receipt. Stored Memory is a separate Source Type because its owner
+Context and exact UID remain durable identity rather than raw content.
 
 The command accepts `SOURCE [TARGET]`, `--from SOURCE --to TARGET`, and
 `--memory TEXT --to TARGET`. An unambiguously non-Context Source becomes the
@@ -111,8 +120,9 @@ reaches the existing transaction selected by its mutation owner.
 
 ## Verification and remaining boundary
 
-Adapter tests cover all four independent reach combinations, one focused
-Memory per role, Source Memory plus recursive Target, distinct defaults,
+Adapter tests cover all four independent Context-reach combinations, each of
+the three Source Types, one focused Memory per role, Source Memory plus
+recursive Target, inline canonical-command editing, distinct defaults,
 full-UID forwarding, and a frozen local-plus-READ-granted catalog. Focused
 semantic tests cover context-only neighbors, exact operation identity,
 focused-Target ADD exclusion, schema round-trip, graph freshness, and the

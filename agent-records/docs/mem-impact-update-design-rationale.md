@@ -157,74 +157,26 @@ separate exact-effect surface adjacent to application; its `APPLY?` route is a
 handoff to the owning operation rather than an application capability on the
 Impact projection itself.
 
-The default TTY grammar is `mem diff [CONTEXT]`. Bare `mem diff` first opens
-the same complete Context tree used by other Context-selecting flows; a Context
-operand resolves directly to that location and skips only this first selector.
-The second screen is the shared checkpoint browser owned by interactive
-history inspection flows.
-Tree annotations count command units rather than physical checkpoint files:
-`N direct · M inherited · K descendant commands`. Copied Branch lineage stays
-visible under its Source but is not attributed to the branch as a direct
-command. A multi-Context Update shares its
-session/digest identity across every owner and therefore counts once in every
-covering subtree; one Undo or Redo likewise shares its restoration receipt and
-counts once. `init` is the baseline for later transitions and is not presented
-as a Diff operation. Direct and descendant counts remain separate so a parent
-does not falsely appear to own its children's independently restorable history.
-Diff and Revert use this same location controller rather than maintaining separate
-catalog, count, or scrolling implementations. Their Context rows and inline
-operation rows therefore form the same navigation-unit sequence: `m` toggles
-the focused Context's operations, `M` toggles all visible operation rows, and
-Up/Down traverses both without turning a preview into a Context selection.
-Operation previews use neutral report styling, not the lavender reserved for
-actual Memory objects. Every compact identifier is role-labelled; focusing a
-command exposes its exact typed identifiers in a passive detail region. Revert
-retains checkpoint restoration review while Diff adds the directional
-before/after renderer. Static `mem log` does not enter this controller and
-retains its existing terminal-independent compatibility output.
-Local Contexts expose their recorded checkpoint history even when no saved
-Update exists. A currently saved Update additionally contributes its frozen
-target catalog and granted affected locations, so its authority-owned
-checkpoint receipts remain inspectable without opening the authority store.
-The selected checkpoint names its actual command (`ACTION update`, `add`,
-`edit`, and so on); one Update checkpoint may contain several EDIT, ADD, or
-REMOVE transitions. A catalog parent with changed Update owners below it offers
-`Enter open changed descendants`; because that catalog-only row has no exact
-history of its own, the unmodified key introduces no competing action. Arrow
-keys continue to own tree expansion. That explicit selection opens one
-read-only history whose rows remain location-owned and whose detail continues
-to name each exact Context and checkpoint. It includes only affected owners
-already frozen in the saved Update, not every readable or local descendant, so
-subtree convenience cannot widen authority or invent an aggregate checkpoint.
-A Context with no checkpoints remains in an explicit empty history TUI rather
-than returning immediately. In location-first Diff, Escape and Backspace
-return one level to the Context selector and preserve its selected location;
-`q` or `Ctrl-C` closes the command. An explicit Context operand has no selector
-to return to, so its close keys exit normally. Outside a TTY, operand-free Diff
-retains the deterministic saved-Update snapshot used by automation. The
-checkpoint detail preserves directional diff semantics:
-unchanged text and markers are white, text that disappears is red and
-underlined, and text that appears is green and underlined. The mechanical span
-classification—not whether text is on an upper, lower, or wrapped continuation
-line—determines the directional color.
-ADD and REMOVE show only their applicable side. `--raw` remains the exact
-unified-diff escape hatch, `--stat` the compact count-only form, and `--verbose`
-the diagnostic identity view. Opening the selector is inspection only: staged,
-applied, and undone receipts remain in their recorded lifecycle state, and no
-Apply or Undo capability is introduced by Diff.
+Diff is checkpoint-only. Bare `mem diff` freezes the current Context and opens
+its newest checkpoint; a Context name or UID opens that Context's newest
+checkpoint; a checkpoint UID opens that exact revision. There is no Context or
+checkpoint picker and no two-checkpoint positional form. Whole-Context
+chronology remains `mem trace CONTEXT`.
 
-The History detail and semantic Impact viewer use the same shared report and
-directional Memory-diff style roles. History does not own a second copy of the
-red, green, neutral, or label palette; changing the common roles therefore
-changes both projections together. Their navigation and data models remain
-separate because sharing presentation must not give History any Impact action.
-History follows the common read-only workbench topology with `VIEWER` above
-`ITEMS` while retaining Items as the initial hub. Enter from Items focuses the
-selected checkpoint detail in Viewer; Tab switches the two frames; Up/Down
-moves items or scrolls Viewer according to focus. Escape or Backspace from
-Viewer returns to Items first, and only the next back action leaves History for
-the owning Context selector. The shared focused-frame chrome communicates this
-layering without changing the checkpoint or operation projection.
+An interactive Diff opens one frozen document in the shared read-only Viewer.
+The default scan path shows ADD, EDIT, and REMOVE only, while the summary still
+reports the complete result size and the number of hidden unchanged Memories.
+The semantic palette colors only effect tokens and mechanical before/after
+text. `--verbose` restores unchanged rows and full UIDs. `--raw` and `--stat`
+remain static output, and non-TTY default output is the ANSI-free equivalent of
+the Viewer document. Escape, Backspace, and Q close the Viewer; it exposes no
+Apply, Undo, selection, or session mutation capability.
+
+The saved `UpdateSession` is deliberately not a Diff fallback. Its detailed
+OWNER, BEFORE/AFTER, REASON, and SOURCE REFERENCES blocks belong to
+`mem review update`. After application, every affected owner checkpoint UID in
+the Update receipt can be passed to `mem diff` for the provider-free physical
+revision recorded at that owner.
 
 Selecting the singleton receipt from the explicit `mem update --sessions`
 launcher uses this same state-aware workbench instead of printing the complete
@@ -466,9 +418,10 @@ session UID, ordered-operation digest, public owner, and grant identity. Only
 after all owners have been saved does the participant's active record become
 `applied` and receive projected result fingerprints and checkpoint receipts.
 
-`mem diff` renders the captured baseline-to-result operations deterministically
-after application. It does not recompute a model result or compare arbitrary
-Contexts. Publication still requires a later `push` or PR.
+`mem review update` renders the captured plan and provenance deterministically
+after application. Each application checkpoint can then be inspected with
+`mem diff CHECKPOINT_UID`; neither command recomputes a model result or
+compares arbitrary Contexts. Publication still requires a later `push` or PR.
 
 If the cached impact plan is stale because A or B changed, `update` plans again
 instead of promoting stale operations. Running `update` repeatedly with the
@@ -630,32 +583,31 @@ Memory count.
 
 ```bash
 mem diff
+mem diff CONTEXT_OR_UID
+mem diff CHECKPOINT_UID
 mem diff --raw
 mem diff --stat
 mem diff --verbose
 ```
 
 `diff` makes no model or network call. Its default semantic view uses yellow
-operation headings, red deleted text, green added text, dim unchanged lines,
-and cyan provenance. It shows collision-safe short UID prefixes and hides
-low-level Git headers and terminal-newline markers. `--verbose` shows complete
-UIDs and the source/target fingerprints.
+action tokens, red deleted text, green added text, and neutral report chrome.
+It shows collision-safe short UID prefixes, hides unchanged Memory rows, and
+hides low-level Git headers and terminal-newline markers. `--verbose` includes
+unchanged rows and complete UIDs.
 
 `--raw` renders the exact Git-style `---`, `+++`, and `@@` representation,
 including additions from `/dev/null`, removals to `/dev/null`, and
 terminal-newline markers. `--stat` shows only the edit/addition/removal counts.
 Raw and stat modes are mutually exclusive.
 
-Every detailed mode prints each operation's source provenance and reason. The
-command does not depend on the currently selected Context and it does not write
-Contexts, checkpoints, state, or session files.
-
-Before rendering, the command reloads the recorded A and B Context graphs. For
-a staged record it verifies the captured base; for an applied record it
-verifies the captured source and the receipt's result fingerprints. If those
-identities or planner-visible contents changed, the captured diff is still
-shown but marked stale and the command exits with a failure status. A future
-push must refuse a stale applied result.
+Bare Diff depends only on the current Context pointer; explicit Context and
+checkpoint operands do not switch it. The command does not read the active
+Update record and does not write Contexts, checkpoints, state, or session
+files. Update source provenance and reasons remain inspectable through
+`mem review update`, including after Grant revocation or later authority drift,
+because that Review opens immutable operation evidence rather than claiming a
+current endpoint projection.
 
 ## Local artifacts
 

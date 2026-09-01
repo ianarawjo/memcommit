@@ -15,7 +15,10 @@ from dataclasses import dataclass
 from typing import Any, Literal
 
 from memcommit.core.context import Context
-from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import HistoryError, flatten_checkpoint_entries
+from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import (
+    HistoryError,
+    flatten_checkpoint_entries,
+)
 from memcommit.application.capabilities.command_recovery.model import (
     BranchTreeContext,
     BranchTreeReceipt,
@@ -672,7 +675,7 @@ def _context_parts(
             # to APPLIED. Keep that checkpoint in the command stack so Undo
             # and Redo restore the complete operation rather than only visible
             # Context bytes.
-            or (before == snapshot and command not in {"meld", "merge"})
+            or (before == snapshot and command not in {"meld", "merge", "sever"})
         ):
             continue
         originals.append(

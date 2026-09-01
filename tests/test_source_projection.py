@@ -1,6 +1,6 @@
 import click
 
-from memcommit.application.capabilities.authority.granted_context_navigation import (
+from memcommit.application.context_access.granted_context_navigation import (
     grant_navigation_annotation,
     grant_navigation_capability_labels,
 )

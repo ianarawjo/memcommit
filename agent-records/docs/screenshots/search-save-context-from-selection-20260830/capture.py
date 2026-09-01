@@ -29,7 +29,7 @@ def _harness(mode: str, store_root: Path) -> None:
 
     import memcommit.application.capabilities.ops as ops
     import memcommit.adapters.console.commands.search.command as search_command
-    from memcommit.application.capabilities.authority.context_access import (
+    from memcommit.application.context_access.access import (
         resolve_context_access,
     )
     from memcommit.application.operations.search.application import (

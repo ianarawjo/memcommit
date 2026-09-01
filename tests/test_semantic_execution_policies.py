@@ -14,7 +14,7 @@ from memcommit.application.operations.meld.provider.contract import (
     MELD_EXECUTION_POLICY,
 )
 from memcommit.application.operations.rationale.model import RATIONALE_EXECUTION_POLICY
-from memcommit.application.operations.search.model import SEARCH_EXECUTION_POLICY
+from memcommit.application.operations.search.ranking import SEARCH_EXECUTION_POLICY
 from memcommit.application.capabilities.semantic.selective_curation import (
     CurationBatch,
     CurationItem,

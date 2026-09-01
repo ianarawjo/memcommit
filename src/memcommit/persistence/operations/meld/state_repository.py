@@ -492,6 +492,127 @@ class _MeldStateStoreMixin:
                             raise error
         ctx._store_digest = context_record_digest(ctx)
 
+    def save_meld_candidate_target_with_session(
+        self,
+        ctx: Context,
+        auto_checkpoint: AutoCheckpoint,
+        *,
+        expected_context_digest: str,
+        expected_session_digest: str,
+        source_bindings,
+        finalize_session,
+    ):
+        """Publish one candidate Target and its applied receipt as one command.
+
+        The Context record, automatic checkpoint, and Target-scoped Meld
+        session use separate files. Keep their locks together and roll every
+        file back when any later publication raises, so a process exception
+        cannot expose a Target whose reviewed session still says unresolved.
+        Durable crash journaling remains a separate boundary.
+        """
+        from memcommit.application.operations.meld.model import (
+            MeldSession,
+            meld_canonical_digest,
+        )
+
+        if not isinstance(ctx, Context) or not isinstance(
+            auto_checkpoint,
+            AutoCheckpoint,
+        ):
+            raise TypeError("Candidate Meld publication requires Context evidence.")
+        if not isinstance(expected_session_digest, str):
+            raise TypeError("Candidate Meld publication requires a session digest.")
+        if not callable(finalize_session):
+            raise TypeError("Candidate Meld publication requires a session finalizer.")
+        bindings = tuple(source_bindings)
+        source_names = tuple(name for name, _uid, _digest in bindings)
+        if len(source_names) != len(set(source_names)) or ctx.name in source_names:
+            raise ValueError("Invalid candidate Meld source lock set.")
+        path = self._meld_session_path(ctx.uid)
+
+        with self._command_write_lock():
+            with self._context_graph_lock(exclusive=False):
+                with self._context_write_locks((*source_names, ctx.name)):
+                    with self.profile_write_guard():
+                        if not path.exists() or not path.is_file() or path.is_symlink():
+                            raise ConcurrentContextUpdateError(
+                                "The candidate Meld session no longer exists."
+                            )
+                        with open(path, encoding="utf-8") as handle:
+                            prior_data = json.load(
+                                handle,
+                                object_pairs_hook=_reject_duplicate_json_keys,
+                            )
+                        prior = MeldSession.from_dict(prior_data)
+                        if (
+                            prior.target.context_uid != ctx.uid
+                            or meld_canonical_digest(prior_data)
+                            != expected_session_digest
+                        ):
+                            raise ConcurrentContextUpdateError(
+                                "The candidate Meld session changed before Apply."
+                            )
+                        self._assert_source_bindings_locked(
+                            bindings,
+                            result_label="candidate Meld target",
+                        )
+                        current_target = self.load_direct(ctx.name)
+                        original_target = current_target.to_dict()
+                        checkpoint = self._save_locked(
+                            ctx,
+                            auto_checkpoint,
+                            expected_context_digest=expected_context_digest,
+                        )
+                        if checkpoint is None:
+                            raise RuntimeError(
+                                "Candidate Meld Apply produced no checkpoint."
+                            )
+                        try:
+                            session = finalize_session(checkpoint)
+                            if not isinstance(session, MeldSession):
+                                raise TypeError(
+                                    "Candidate Meld finalizer returned no session."
+                                )
+                            data = session.to_dict()
+                            restored = MeldSession.from_dict(data)
+                            if (
+                                restored.uid != prior.uid
+                                or restored.target.context_uid != ctx.uid
+                                or restored.state != "APPLIED"
+                            ):
+                                raise ValueError(
+                                    "Candidate Meld finalizer returned an invalid receipt."
+                                )
+                            _write_json_atomic(path, data)
+                        except Exception as error:
+                            rollback_error: Exception | None = None
+                            try:
+                                _write_json_atomic(
+                                    self._context_file(ctx.name),
+                                    original_target,
+                                )
+                            except Exception as candidate:
+                                rollback_error = candidate
+                            try:
+                                self._remove_checkpoint_uid_locked(
+                                    ctx.name,
+                                    checkpoint.uid,
+                                )
+                            except Exception as candidate:
+                                rollback_error = rollback_error or candidate
+                            try:
+                                _write_json_atomic(path, prior_data)
+                            except Exception as candidate:
+                                rollback_error = rollback_error or candidate
+                            if rollback_error is not None:
+                                raise RuntimeError(
+                                    "Candidate Meld Apply failed and could not be "
+                                    "fully rolled back."
+                                ) from rollback_error
+                            raise error
+        ctx._store_digest = context_record_digest(ctx)
+        return checkpoint
+
     @_profile_write_guarded
     def delete_meld_session(self, target_context_uid: str) -> None:
         """Remove one exact target-bound meld artifact."""

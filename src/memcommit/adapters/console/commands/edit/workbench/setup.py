@@ -6,8 +6,8 @@ from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.context_access import context_access_display_facts
-from memcommit.application.capabilities.authority.granted_context_navigation import (
+from memcommit.application.context_access.access import context_access_display_facts
+from memcommit.application.context_access.granted_context_navigation import (
     freeze_granted_context_navigation,
 )
 from memcommit.core.context_targeting.model import DirectMemoryTarget

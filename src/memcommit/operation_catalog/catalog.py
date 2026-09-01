@@ -106,6 +106,7 @@ _OPERATIONS = (
         ExecutionKind.SEMANTIC,
         "Creates a conformance report without editing the selected data",
         "One saved Ground, or one exact local Target and Rules Context",
+        maturity="PARTIAL",
     ),
     _operation(
         "chunk",
@@ -168,11 +169,11 @@ _OPERATIONS = (
     ),
     _operation(
         "diff",
-        "Compare checkpoint states, one revision, or the active Update.",
-        "One Context checkpoint or active Update -> diff report",
+        "Inspect the pre-image-to-result change recorded by one Context checkpoint.",
+        "Current/latest or exact checkpoint -> read-only revision Viewer",
         ExecutionKind.DETERMINISTIC,
         "Read-only",
-        "One exact checkpoint or active Update",
+        "One exact checkpoint",
     ),
     _operation(
         "distill",
@@ -194,12 +195,12 @@ _OPERATIONS = (
     ),
     _operation(
         "makemore",
-        "Expand an abstract Goal, Rule, or condition into multiple more specific "
-        "candidate propositions.",
-        "Goal -> added Rules; Rules -> added Case propositions -> receipt",
+        "Generate more candidate propositions from a Context, Goal, or explicit "
+        "Rule set.",
+        "Context -> transient distilled Rules -> added Cases; explicit Goal/Rules -> proposals -> receipt",
         ExecutionKind.SEMANTIC,
         "Standalone atomically adds unverified results to one existing Target; Impact previews the result",
-        "One Goal or Rule set, inline or from one exact Ground revision",
+        "One exact Context, one Goal, one explicit Rule set, or one exact Ground revision",
     ),
     _operation(
         "edit",
@@ -266,12 +267,12 @@ _OPERATIONS = (
     ),
     _operation(
         "resolve",
-        "Automatically interpret incompatibility Issues in one complete direct-Memory "
-        "Context frame and verify one small Fit-YES plan.",
-        "Complete Context frame + optional guidance -> one grounded automatic Apply or one temporary assumed interpretation",
+        "Collect explicit conflict decisions, let Update plan once over the complete "
+        "Context, and reject an unforced conflict in the detached post-image.",
+        "Complete Context frame -> CONFIRM / INTENT / FORCE decisions -> one UpdatePlan -> complete post-image check",
         ExecutionKind.SEMANTIC,
-        "An assumed plan is temporary; a grounded plan applies as one checkpoint",
-        "One complete bounded direct Context frame; explicit Memory UID prefixes limit edits, not semantic reading",
+        "Decisions are process-local; an accepted UpdatePlan applies as one Resolve checkpoint",
+        "One complete bounded direct Context frame; explicit Memory UID prefixes limit actionable conflict members, not semantic reading or Update scope",
     ),
     _operation(
         "dedup",
@@ -535,12 +536,12 @@ _OPERATIONS = (
     ),
     _operation(
         "sever",
-        "Save a Result by selecting, transforming, or excluding Source Memories "
+        "Curate Source in place by selecting, transforming, or forgetting Memories "
         "according to a Criteria Context.",
-        "Source Context + Criteria Context -> self-save Source or other-save Result",
+        "Source Context scope + Criteria Context scope -> Source owners updated in place",
         ExecutionKind.SEMANTIC,
-        "Updates Source by default, or creates an explicit new Result; records a receipt",
-        "Source exact for self-save or exact/descendants for other-save; Criteria scoped frame",
+        "Updates every selected Source owner in place and records one grouped receipt",
+        "Independent exact/descendant Source and Criteria scopes; Source must be ordinary local",
     ),
     _operation(
         "share",
@@ -658,14 +659,11 @@ OPERATION_HELP_BY_NAME = OPERATION_BY_NAME
 if len(OPERATION_BY_NAME) != len(_OPERATIONS):  # pragma: no cover
     raise RuntimeError("Public operation names must be unique.")
 
-if set(OPERATION_FAMILY_BY_OPERATION) != set(  # pragma: no cover
-    OPERATION_BY_NAME
-):
+if set(OPERATION_FAMILY_BY_OPERATION) != set(OPERATION_BY_NAME):  # pragma: no cover
     missing = sorted(set(OPERATION_BY_NAME) - set(OPERATION_FAMILY_BY_OPERATION))
     stale = sorted(set(OPERATION_FAMILY_BY_OPERATION) - set(OPERATION_BY_NAME))
     raise RuntimeError(
-        "Operation family coverage mismatch: "
-        f"missing={missing!r}, stale={stale!r}."
+        "Operation family coverage mismatch: " f"missing={missing!r}, stale={stale!r}."
     )
 
 if set(BEST_FOR_BY_OPERATION) != set(OPERATION_BY_NAME):  # pragma: no cover

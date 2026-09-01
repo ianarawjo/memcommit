@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
     revalidate_granted_context_binding,
@@ -16,13 +16,15 @@ from memcommit.application.operations.meld.apply import (
     MeldApplicationError,
 )
 from memcommit.application.operations.meld.model import (
+    INLINE_MELD_CONTEXT_NAME,
+    MELD_CANDIDATE_SCHEMA_VERSION,
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MELD_OWNER_AWARE_SCHEMA_VERSION,
     MeldFrame,
     MeldSession,
     inline_meld_context,
 )
-from memcommit.core.context import Context
+from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.persistence.store import (
     MemoryStore,
@@ -81,8 +83,17 @@ def load_bound_meld_contexts(
 ) -> tuple[Context, Context, Context]:
     """Reload the exact frozen frames and application target for one session."""
 
-    if session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION:
-        left = inline_meld_context(session)
+    if session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION or (
+        session.schema_version == MELD_CANDIDATE_SCHEMA_VERSION
+        and session.frames[0].context_name == INLINE_MELD_CONTEXT_NAME
+    ):
+        if session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION:
+            left = inline_meld_context(session)
+        else:
+            frame = session.frames[0]
+            left = Context(uid=frame.context_uid, name=frame.context_name)
+            for source_memory in frame.memories:
+                left.add(Memory(source_memory.uid, source_memory.content))
         baseline = session.frames[1]
         right = load_context_scope(
             store,
@@ -270,7 +281,13 @@ def target_save_source_bindings(
             return ()
     bindings: list[tuple[str, str, str]] = []
     for index, frame in enumerate(session.frames):
-        if session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION and index == 0:
+        if (
+            session.schema_version == MELD_INLINE_MEMORY_SCHEMA_VERSION
+            or (
+                session.schema_version == MELD_CANDIDATE_SCHEMA_VERSION
+                and session.frames[0].context_name == INLINE_MELD_CONTEXT_NAME
+            )
+        ) and index == 0:
             # The frozen one-Memory source has no storage path or lock. Its
             # exact bytes are already part of the session CAS and checkpoint.
             continue

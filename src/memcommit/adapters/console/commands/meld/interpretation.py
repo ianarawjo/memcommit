@@ -6,10 +6,15 @@ import shlex
 from dataclasses import dataclass
 from typing import Literal
 
-from memcommit.application.capabilities.context_operand_classification import (
-    classify_context_or_inline_text_operand,
+from memcommit.application.capabilities.operand_resolution import (
+    ContextOperandCandidate,
 )
-from memcommit.application.capabilities.context_locator import resolve_context_locator
+from memcommit.application.context_access.access import ContextAccess
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_context_access_or_inline_text,
+    resolve_existing_context_access,
+)
 from memcommit.application.operations.meld.model import INLINE_MELD_CONTEXT_NAME
 from memcommit.core.context_targeting.model import InlineTextOperand
 from memcommit.adapters.console.coordination.context_scope_options import (
@@ -120,10 +125,10 @@ def _is_inline_memory_operand(
     """Classify only unambiguously non-Context one-operand text as Memory."""
 
     return isinstance(
-        classify_context_or_inline_text_operand(
+        resolve_context_access_or_inline_text(
+            store,
             value,
-            current=current_name,
-            context_exists=store.context_exists,
+            current_name=current_name,
         ),
         InlineTextOperand,
     )
@@ -273,6 +278,38 @@ def interpret_meld_command(
         return MeldSetupCommand()
 
     current_name = store.current_context_name()
+    frozen_context_candidates: (
+        tuple[ContextOperandCandidate[ContextAccess], ...] | None
+    ) = None
+
+    def context_candidates() -> tuple[ContextOperandCandidate[ContextAccess], ...]:
+        nonlocal frozen_context_candidates
+        if frozen_context_candidates is None:
+            frozen_context_candidates = freeze_profile_context_access_candidates(
+                store,
+                current_name=current_name,
+            )
+        return frozen_context_candidates
+
+    def existing_context_name(value: str) -> str:
+        return resolve_existing_context_access(
+            store,
+            value,
+            current_name=current_name,
+            candidates=context_candidates(),
+        ).name
+
+    def context_name_or_text(
+        value: str,
+    ) -> str | InlineTextOperand:
+        resolved = resolve_context_access_or_inline_text(
+            store,
+            value,
+            current_name=current_name,
+            candidates=context_candidates(),
+        )
+        return resolved if isinstance(resolved, InlineTextOperand) else resolved.name
+
     explicit_result = (
         request.result
         if request.result is not None
@@ -288,10 +325,7 @@ def interpret_meld_command(
             )
         left_name = INLINE_MELD_CONTEXT_NAME
         if directional_baseline is not None:
-            right_name = resolve_context_locator(
-                directional_baseline,
-                current=current_name,
-            )
+            right_name = existing_context_name(directional_baseline)
         else:
             if not current_name:
                 raise MeldCommandError(
@@ -308,24 +342,14 @@ def interpret_meld_command(
                 "before using --from, or supply --to BASELINE."
             )
         mode = "DIRECTIONAL"
-        parsed_from = classify_context_or_inline_text_operand(
-            request.from_,
-            current=current_name,
-            context_exists=store.context_exists,
-        )
+        parsed_from = context_name_or_text(request.from_)
         if isinstance(parsed_from, InlineTextOperand):
             incoming_text = parsed_from.text
             left_name = INLINE_MELD_CONTEXT_NAME
         else:
-            left_name = resolve_context_locator(
-                parsed_from.locator,
-                current=current_name,
-            )
+            left_name = parsed_from
         right_name = (
-            resolve_context_locator(
-                directional_baseline,
-                current=current_name,
-            )
+            existing_context_name(directional_baseline)
             if directional_baseline is not None
             else current_name
         )
@@ -346,23 +370,13 @@ def interpret_meld_command(
                 )
             left_name = current_name
         else:
-            parsed_left = classify_context_or_inline_text_operand(
-                request.left,
-                current=current_name,
-                context_exists=store.context_exists,
-            )
+            parsed_left = context_name_or_text(request.left)
             if isinstance(parsed_left, InlineTextOperand):
                 incoming_text = parsed_left.text
                 left_name = INLINE_MELD_CONTEXT_NAME
             else:
-                left_name = resolve_context_locator(
-                    parsed_left.locator,
-                    current=current_name,
-                )
-        right_name = resolve_context_locator(
-            directional_baseline,
-            current=current_name,
-        )
+                left_name = parsed_left
+        right_name = existing_context_name(directional_baseline)
         target_name = right_name
     elif explicit_result is not None:
         if request.left is None or request.right is None:
@@ -372,15 +386,15 @@ def interpret_meld_command(
                 "'mem meld PEER_A PEER_B RESULT_C'."
             )
         mode = "SYMMETRIC"
-        left_name = resolve_context_locator(request.left, current=current_name)
-        right_name = resolve_context_locator(request.right, current=current_name)
+        left_name = existing_context_name(request.left)
+        right_name = existing_context_name(request.right)
         # RESULT C may be new, so existing-Context relative locator semantics
         # deliberately do not apply to its exact requested name.
         target_name = explicit_result
     elif request.left is not None and request.right is not None:
         mode = "DIRECTIONAL"
-        left_name = resolve_context_locator(request.left, current=current_name)
-        right_name = resolve_context_locator(request.right, current=current_name)
+        left_name = existing_context_name(request.left)
+        right_name = existing_context_name(request.right)
         target_name = right_name
     elif request.left is not None:
         if not current_name:
@@ -390,19 +404,16 @@ def interpret_meld_command(
                 "'mem meld INCOMING BASELINE'."
             )
         mode = "DIRECTIONAL"
-        if _is_inline_memory_operand(
-            store,
-            request.left,
-            current_name=current_name,
-        ):
-            incoming_text = request.left
+        parsed_left = context_name_or_text(request.left)
+        if isinstance(parsed_left, InlineTextOperand):
+            incoming_text = parsed_left.text
             if left_descendants:
                 raise MeldCommandError(
                     "Inline Memory input cannot be combined with INCOMING descendants."
                 )
             left_name = INLINE_MELD_CONTEXT_NAME
         else:
-            left_name = resolve_context_locator(request.left, current=current_name)
+            left_name = parsed_left
         right_name = current_name
         target_name = right_name
     else:

@@ -407,10 +407,10 @@ app.command(
     "sever",
     help=operation_summary("sever"),
     epilog=(
-        "Positional form: 'mem sever SOURCE CRITERIA [RESULT]'. Omitting "
-        "RESULT self-saves into SOURCE; an explicit fresh RESULT saves "
-        "elsewhere. --source/--from, --criteria/--against, and "
-        "--save-as/--to are equivalent role aliases."
+        "Positional form: 'mem sever SOURCE CRITERIA'. Each selected Source "
+        "Context is updated at its existing location. --source/--from and "
+        "--criteria/--against are equivalent role aliases; Source and Criteria "
+        "descendants are controlled independently."
     ),
 )(sever.cmd)
 app.command(
@@ -456,7 +456,10 @@ app.add_typer(
     help=operation_summary("profile"),
 )
 app.add_typer(
-    dev.app, name="dev", help="Developer diagnostics and fixture utilities.", hidden=True
+    dev.app,
+    name="dev",
+    help="Developer diagnostics and fixture utilities.",
+    hidden=True,
 )
 
 

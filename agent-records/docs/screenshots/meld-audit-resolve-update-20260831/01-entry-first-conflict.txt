@@ -1,0 +1,14 @@
+ MELD · < 1/2 >
+ CONFLICT · [10000000] “Named greetings always end with a period.” ↔ [20000000] “Named greetings may omit punctuation.”
+ Which rule governs named greetings?
+  1 · ACCEPT THIS DIRECTION · Named greetings remain exceptions to the general rule.
+  2 · ADJUST WITH YOUR INTENT · Enter the direction this should follow.
+      YOUR INTENT  │ › Type here…                                     │
+  3 · LEAVE UNRESOLVED · Exclude this item from Update input and retain it as unresolved.
+
+
+  [← PREV]        1/2        [NEXT →]
+
+  FINALIZE DECISIONS · 0/2
+
+ ←/→ issue · ↑/↓ move · Enter select/finalize · Esc close

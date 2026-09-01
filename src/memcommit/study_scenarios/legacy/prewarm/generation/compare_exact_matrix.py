@@ -20,9 +20,9 @@ import sys
 import threading
 import time
 
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.adapters.console.commands.compare.execution import load_comparison_context
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )

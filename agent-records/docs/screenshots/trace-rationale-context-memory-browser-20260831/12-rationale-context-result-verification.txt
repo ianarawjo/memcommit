@@ -1,0 +1,8 @@
+Rationale · notes                                                                                                                                                                   
+                                                                                                                                                                                    
+CONTEXT                                                                                                                                                                             
+  2 direct Memories · 4 retained operations                                                                                                                                         
+                                                                                                                                                                                    
+RATIONALE                                                                                                                                                                           
+  Recorded Add and Edit operations explain how this exact Context reached its current direct state.                                                                                 
+READ-ONLY VERIFICATION · MODE RATIONALE-CONTEXT · TARGET [5550f590] · CURRENT notes · CONTEXTS + CHECKPOINTS + CURRENT POINTER UNCHANGED

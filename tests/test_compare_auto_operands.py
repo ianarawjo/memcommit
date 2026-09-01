@@ -149,6 +149,37 @@ def test_compare_mixes_context_and_memory_positionals(
     assert _contents(frames[1], "PRIMARY") == [compared_focus.content]
 
 
+def test_compare_from_and_to_accept_context_uid_prefixes(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    reference = ops.init("uid/reference")
+    ops.add(reference, "Reference claim.")
+    compared = ops.init("uid/compared")
+    ops.add(compared, "Compared claim.")
+    store.create_context(reference)
+    store.create_context(compared)
+    provider = _CapturingSummaryProvider()
+    _patch_summary_provider(monkeypatch, provider)
+
+    result = runner.invoke(
+        app,
+        [
+            "compare",
+            "--from",
+            reference.uid[:8],
+            "--to",
+            compared.uid[:8],
+            "--snapshot",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert f"Compare · {reference.name} ↔ {compared.name}" in result.output
+    assert len(provider.payloads) == 1
+
+
 def test_compare_bare_branch_memory_uid_is_unique_and_qualified_owner_is_exact(
     isolated_store,
     monkeypatch,
@@ -183,6 +214,18 @@ def test_compare_bare_branch_memory_uid_is_unique_and_qualified_owner_is_exact(
 def test_compare_rejects_duplicate_or_recursive_auto_memory_roles(
     isolated_store,
 ):
+    store = MemoryStore()
+    source = ops.init("auto/source")
+    source.add(
+        Memory(
+            uid="abcdef12-1111-4111-8111-111111111111",
+            content="Focused source.",
+        )
+    )
+    peer = ops.init("peer")
+    ops.add(peer, "Peer claim.")
+    store.create_context(source)
+    store.create_context(peer)
     duplicate = runner.invoke(
         app,
         [
@@ -198,9 +241,9 @@ def test_compare_rejects_duplicate_or_recursive_auto_memory_roles(
         ["compare", "abcdef12", "peer", "--reference-descendants"],
     )
 
-    assert duplicate.exit_code == 2
+    assert duplicate.exit_code == 1
     assert "both positionally and with --reference-memory" in duplicate.output
-    assert recursive.exit_code == 2
+    assert recursive.exit_code == 1
     assert "REFERENCE Memory selection cannot be combined" in recursive.output
 
 

@@ -1,0 +1,40 @@
+CAPTURE PTY · 180x52
+[?2004h[?1l[?25l[0m[?7l[0m[J[0m NEW REFERENCE · CHOOSE TARGET CONTEXT AND SOURCE MEMORY[0m
+[0;1m› TARGET CONTEXT[0m › workspace                               [ BROWSE ] [0;38;2;139;213;202;1mCURRENT[0m
+[0m  SOURCE MEMORY  › shared/source                                         [ BROWSE CONTEXT ] [0;38;2;139;213;202;1mGRANT · READ · REFERENCE[0m          [ CHOOSE MEMORY ][0m
+[0m┌──────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND · INVALID |──────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│› mem reference                                                                                                                                                                   [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m [0m
+[0m Type exact Context · ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel[122D[6A[28C[?7h[0m[?12l[?25h[?25l[?7l[28D[0m  TARGET CONTEXT[0m
+[0;1m› SOURCE MEMORY[17C[?7h[0m[?12l[?25h[?25l[?7l[94C[0;1m[ CHOOSE MEMORY ][0m
+
+
+
+
+[0m  SOURCE MEMORY · shared/source                                                                                                                                                    [179C[0;1m^[0m
+[0m  › · [memory 1fac5c7e] Retain this exact READ-granted version.[116C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[179C[0;48;2;68;68;68m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m ↑/↓ Memory (edge continues by row) · Enter choose · ←/Esc close details[72D[12A[126C[?7h[0m[?25l[?7l[94D[0m:1fac5c7e-97d6-4ad7-8e3c-ad8ee0deef8e [56C[0;38;2;16;36;47;48;2;139;213;255;1m[ CHOOSE MEMORY ][0m
+[0;38;2;139;213;255;1m┌─────────────────────────────────────────────────────────────────────| PROPOSED COMMAND · ENTER TO PROCEED |──────────────────────────────────────────────────────────────────────[179C┐[0m
+[0;38;2;139;213;255;1m│[0m› mem reference 1fac5c7e-97d6-4ad7-8e3c-ad8ee0deef8e --from shared/source --into workspace                                                                                        [179C[0;38;2;139;213;255;1m│[0m
+[0;38;2;139;213;255;1m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m [0m
+[0m SOURCE MEMORY uses Memory 1fac5c7e.[0m[K[0m
+[0m [0m[K[0m
+[C[0m[K[0m
+[C[0m[K[0m
+[C[0m[K[0m
+[C[0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[12A[125C[?7h[0m[?25l[?7l[?7h[0m[?25l[?7l[126D[0m  SOURCE MEMORY[111C[0;38;2;16;36;47;48;2;139;213;255m[ CHOOSE MEMORY ][0m
+[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃[37C┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[178C┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+
+[C[0mEnter to proceed ·[C↑ previous · Esc cancel[3A[48C[?7h[0m[?12l[?25h[91D[4A[J[0m[?7h[?2004l[32mReferenced snapshot [1fac5c7e] from 'shared/source' as [0401b7ae] in 'workspace'.[0m
+CAPTURE PAUSE · press Enter for read-only verification

@@ -22,11 +22,11 @@ from memcommit.persistence.command_ledger.attempts import annotate_read_report_a
 from memcommit.adapters.console.terminal.components.operation_launcher.location import (
     operation_launcher_orientation,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.adapters.console.terminal.components.focus import (

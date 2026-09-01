@@ -6,8 +6,8 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.capabilities.authority.context_access import (
-    resolve_context_access,
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
 )
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
@@ -73,12 +73,12 @@ def cmd(
     active_store = MemoryStore(create=False)
     try:
         snapshot = ContextOperandSnapshot.capture(active_store)
-        access = resolve_context_access(
+        access = resolve_existing_context_access(
             active_store,
             context_name,
             current_name=snapshot.current_name,
             required_permission="READ",
-        )
+        ).value
         analysis = analyze_exact_duplicate_scope(
             active_store,
             access,

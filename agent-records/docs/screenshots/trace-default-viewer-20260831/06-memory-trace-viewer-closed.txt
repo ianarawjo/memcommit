@@ -1,0 +1,7 @@
+LIVE COLOR PTY · 52 180                                                                                                                                                             
+PROFILE · ISOLATED CAPTURE · CURRENT · practice/rules                                                                                                                               
+                                                                                                                                                                                    
+$ /Users/KimMunyeong/.local/bin/mem trace 2f629230-6a7e-46f9-bafb-69400c60c70f --context practice/rules --all                                                                       
+WARNING: your terminal doesn't support cursor position requests (CPR).                                                                                                              
+                                                                                                                                                                                    
+MEMORY TRACE VIEWER CLOSED · EXIT 0 · READ-ONLY

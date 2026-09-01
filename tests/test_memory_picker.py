@@ -12,9 +12,11 @@ from memcommit.adapters.console.terminal.components.memory_report_picker import 
     MemoryReportTargetSelection,
     ScopedMemoryPickerItem,
     _render_memory_options,
+    choose_history_report_target,
     choose_memory,
     choose_memory_report_target,
 )
+from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTarget
 import memcommit.adapters.console.terminal.components.context_picker.dialog as context_picker
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
@@ -100,6 +102,99 @@ def test_report_picker_opens_a_frozen_context_catalog_with_no_memories():
         )
 
     assert selected is None
+
+
+def test_history_browser_selects_the_current_context_with_enter():
+    item = ScopedMemoryPickerItem(
+        context_name="notes",
+        uid=candidate(1).uid,
+        content="root Memory",
+        status="CURRENT",
+        catalog_context_names=("notes",),
+        change_count=2,
+    )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r")
+        selected = choose_history_report_target(
+            (item,),
+            context_name="notes",
+            operation="trace",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == ContextTarget("notes")
+
+
+def test_history_browser_selects_an_exact_memory_below_its_owner():
+    item = ScopedMemoryPickerItem(
+        context_name="notes",
+        uid=candidate(1).uid,
+        content="root Memory",
+        status="CURRENT",
+        catalog_context_names=("notes",),
+        change_count=2,
+    )
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[B\r")
+        selected = choose_history_report_target(
+            (item,),
+            context_name="notes",
+            operation="rationale",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == DirectMemoryTarget("notes", item.uid)
+
+
+def test_history_browser_keeps_an_empty_context_selectable():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r")
+        selected = choose_history_report_target(
+            (),
+            context_name="empty",
+            operation="trace",
+            catalog_context_names=("empty",),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == ContextTarget("empty")
+
+
+def test_history_browser_uses_the_switch_tree_without_range_or_context_rejection(
+    monkeypatch,
+):
+    observed = {}
+
+    def observe_tree(names, **kwargs):
+        observed.update(names=tuple(names), kwargs=kwargs)
+        return None
+
+    monkeypatch.setattr(
+        "memcommit.adapters.console.terminal.components.memory_report_picker.choose_context",
+        observe_tree,
+    )
+
+    assert (
+        choose_history_report_target(
+            (candidate(1, change_count=2),),
+            context_name="notes",
+            operation="trace",
+            require_tty=False,
+        )
+        is None
+    )
+    assert observed["names"] == ("notes",)
+    assert observed["kwargs"]["browse_only"] is False
+    assert observed["kwargs"]["selectable_memories"] is True
+    assert observed["kwargs"]["context_accept_handler"] is None
+    assert observed["kwargs"]["memory_scope_root"] is None
+    assert observed["kwargs"]["memory_reach_state"] is None
 
 
 def test_report_picker_can_broaden_an_empty_root_to_descendant_memories():

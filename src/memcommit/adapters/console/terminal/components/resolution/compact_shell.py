@@ -6,6 +6,7 @@ from collections.abc import Callable
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.application.current import get_app
+from prompt_toolkit.cursor_shapes import CursorShape, SimpleCursorShapeConfig
 from prompt_toolkit.filters import Condition, has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
@@ -25,14 +26,20 @@ from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import TextArea
 
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.adapters.console.terminal.components.exact_name import ExactNameInputControl
+from memcommit.adapters.console.terminal.components.exact_name import (
+    ExactNameInputControl,
+)
 from memcommit.adapters.console.terminal.components.frame import (
     TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
-from memcommit.adapters.console.terminal.components.save_location import SaveLocationView
-from memcommit.adapters.console.terminal.core.keybindings import bind_case_insensitive_key
+from memcommit.adapters.console.terminal.components.save_location import (
+    SaveLocationView,
+)
+from memcommit.adapters.console.terminal.core.keybindings import (
+    bind_case_insensitive_key,
+)
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
@@ -43,8 +50,13 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionWorkbenchAction,
     ResolutionWorkbenchView,
 )
-from memcommit.adapters.console.terminal.components.selection import FlatSelectionState, SelectionOption
-from memcommit.adapters.console.terminal.components.selection import render_vertical_choice_rows
+from memcommit.adapters.console.terminal.components.selection import (
+    FlatSelectionState,
+    SelectionOption,
+)
+from memcommit.adapters.console.terminal.components.selection import (
+    render_vertical_choice_rows,
+)
 
 
 def _recommended(option_uid: str, label: str) -> bool:
@@ -134,6 +146,7 @@ def run_compact_resolution_decisions(
     status = {"value": ""}
     destination_editing = {"value": False}
     syncing_response = {"value": False}
+    response_entry_text = {"value": ""}
     bindings = KeyBindings()
     destination_field = (
         ExactNameInputControl.create(destination, input_name="compact-save-location")
@@ -156,11 +169,10 @@ def run_compact_resolution_decisions(
             height=Dimension.exact(1),
             dont_extend_width=True,
             name="compact-resolution-response",
-            style=(
-                "class:memcommit.choice.active"
-                if response_option_uid is not None
-                else ""
-            ),
+            # Resolve uses the terminal caret as its editing signal. Keeping
+            # the field neutral avoids obscuring the text with a second,
+            # full-width focus treatment beside choice 2.
+            style="",
         )
         if stage_response is not None
         else None
@@ -172,8 +184,7 @@ def run_compact_resolution_decisions(
     )
     destination_keys_active = Condition(lambda: destination_editing["value"])
     decision_keys_active = (
-        Condition(lambda: not destination_editing["value"])
-        & ~response_keys_active
+        Condition(lambda: not destination_editing["value"]) & ~response_keys_active
     )
 
     def active_item() -> ResolutionItem | None:
@@ -287,20 +298,14 @@ def run_compact_resolution_decisions(
                 return bool(response_text(item.uid).strip())
             return selected_uid is not None or item.response_state == "ANSWERED"
 
-        answered_count = sum(
-            1
-            for item in required
-            if is_answered(item)
-        )
+        answered_count = sum(1 for item in required if is_answered(item))
         readiness = " READY" if answered_count == len(required) else ""
         return f"{base} · {answered_count}/{len(required)}{readiness}"
 
     def render_header() -> list[tuple[str, str]]:
         view = supplier()
         if header_label is not None:
-            position = (
-                f" · < {item_index['value'] + 1}/{len(items)} >" if items else ""
-            )
+            position = f" · < {item_index['value'] + 1}/{len(items)} >" if items else ""
             return [
                 (
                     "class:report-label",
@@ -384,9 +389,7 @@ def run_compact_resolution_decisions(
             state = FlatSelectionState(
                 (row,),
                 cursor_uid=row.uid,
-                selected_uid=(
-                    row.uid if selected_uid == option.uid else None
-                ),
+                selected_uid=(row.uid if selected_uid == option.uid else None),
                 allow_empty=True,
             )
             fragments.extend(
@@ -479,7 +482,10 @@ def run_compact_resolution_decisions(
         if destination_editing["value"]:
             return " Enter use exact name · Esc return · Ctrl-C cancel"
         if response_area is not None and get_app().layout.has_focus(response_area):
-            return " Type your intent · Enter save · ↑/↓ save and choose · Esc freeze"
+            return (
+                " Type your intent · ←/→ cursor · Enter save · "
+                "↑/↓ save and choose · Esc freeze"
+            )
         return (
             " ←/→ issue · ↑/↓ move · Enter "
             + safe_terminal_text(activation_hint)
@@ -503,6 +509,7 @@ def run_compact_resolution_decisions(
         show_cursor=False,
     )
     footer_control = FormattedTextControl(render_footer)
+
     def render_frozen_response() -> list[tuple[str, str]]:
         item = active_item()
         value = (
@@ -537,9 +544,7 @@ def run_compact_resolution_decisions(
                 ),
                 response_area,
                 Window(
-                    FormattedTextControl(
-                        lambda: [("class:report-label", " │")]
-                    ),
+                    FormattedTextControl(lambda: [("class:report-label", " │")]),
                     width=Dimension.exact(2),
                     dont_extend_width=True,
                 ),
@@ -638,8 +643,16 @@ def run_compact_resolution_decisions(
             )
         ),
     )
+    initial_response_index = response_choice_index(active_item())
+    initial_focus = (
+        response_area
+        if response_area is not None
+        and initial_response_index is not None
+        and row_index["value"] == initial_response_index
+        else body_control
+    )
     app: Application[ResolutionWorkbenchAction] = Application(
-        layout=Layout(root, focused_element=body_control),
+        layout=Layout(root, focused_element=initial_focus),
         key_bindings=bindings,
         full_screen=True,
         erase_when_done=True,
@@ -647,26 +660,28 @@ def run_compact_resolution_decisions(
         output=app_output,
         mouse_support=False,
         style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
+        cursor=(
+            SimpleCursorShapeConfig(CursorShape.BLINKING_BEAM)
+            if response_option_uid is not None
+            else None
+        ),
     )
 
-    def move_item(delta: int) -> None:
-        if not items:
-            return
-        item_index["value"] = (item_index["value"] + delta) % len(items)
-        focus_selected_choice()
-        sync_response_field()
-        status["value"] = ""
-        get_app().layout.focus(body_control)
-
-    def move_row(delta: int) -> None:
-        row_index["value"] = max(
-            0,
-            min(row_index["value"] + delta, max(row_count() - 1, 0)),
-        )
-        status["value"] = ""
+    def focus_current_row(*, enter_choice_editor: bool = True) -> None:
         item = active_item()
         option_count = len(item.options) if item is not None else 0
+        response_index = response_choice_index(item)
         if (
+            enter_choice_editor
+            and response_area is not None
+            and response_index is not None
+            and row_index["value"] == response_index
+        ):
+            # Merely landing on choice 2 must not select it. The draft becomes
+            # authoritative only after nonblank input is frozen by the caller.
+            sync_response_field()
+            get_app().layout.focus(response_area)
+        elif (
             response_option_uid is None
             and response_area is not None
             and response_available(item)
@@ -678,6 +693,22 @@ def run_compact_resolution_decisions(
             get_app().layout.focus(body_control)
         else:
             get_app().layout.focus(action_control)
+
+    def move_item(delta: int) -> None:
+        if not items:
+            return
+        item_index["value"] = (item_index["value"] + delta) % len(items)
+        focus_selected_choice()
+        status["value"] = ""
+        focus_current_row()
+
+    def move_row(delta: int) -> None:
+        row_index["value"] = max(
+            0,
+            min(row_index["value"] + delta, max(row_count() - 1, 0)),
+        )
+        status["value"] = ""
+        focus_current_row()
 
     def finish(action: ResolutionWorkbenchAction | None) -> None:
         if action is None:
@@ -694,9 +725,8 @@ def run_compact_resolution_decisions(
         stage_option(item.uid, option.uid)
         row_index["value"] = index
         status["value"] = f"Selected · {safe_terminal_text(option.label)}"
-        if (
-            response_option_uid is not None
-            and option.uid == response_option_uid(item.uid)
+        if response_option_uid is not None and option.uid == response_option_uid(
+            item.uid
         ):
             open_response()
 
@@ -708,9 +738,7 @@ def run_compact_resolution_decisions(
             return
         action_uid = action_rows()[row_index["value"] - option_count].uid
         if action_uid == "action:CONTINUE":
-            finish(
-                build_continue_action(item.uid if item is not None else None)
-            )
+            finish(build_continue_action(item.uid if item is not None else None))
         elif action_uid == "action:CHANGE_DESTINATION":
             open_destination()
         elif action_uid == "action:PREV":
@@ -736,6 +764,7 @@ def run_compact_resolution_decisions(
         try:
             response_area.text = current
             response_area.buffer.cursor_position = len(current)
+            response_entry_text["value"] = current
         finally:
             syncing_response["value"] = False
 
@@ -749,7 +778,7 @@ def run_compact_resolution_decisions(
             return False
         return True
 
-    def stage_inline_response() -> None:
+    def stage_inline_response(*, commit_unchanged: bool = False) -> None:
         item = active_item()
         if (
             syncing_response["value"]
@@ -760,7 +789,14 @@ def run_compact_resolution_decisions(
             or not response_is_valid()
         ):
             return
+        if (
+            response_option_uid is not None
+            and not commit_unchanged
+            and response_area.text == response_entry_text["value"]
+        ):
+            return
         stage_response(item.uid, response_area.text)
+        response_entry_text["value"] = response_area.text
         status["value"] = ""
 
     def open_response() -> None:
@@ -770,10 +806,10 @@ def run_compact_resolution_decisions(
         status["value"] = ""
         get_app().layout.focus(response_area)
 
-    def leave_response(delta: int) -> None:
+    def leave_response(delta: int, *, commit_unchanged: bool = False) -> None:
         if not response_is_valid():
             return
-        stage_inline_response()
+        stage_inline_response(commit_unchanged=commit_unchanged)
         row_index["value"] = max(
             0,
             min(row_index["value"] + delta, max(row_count() - 1, 0)),
@@ -876,7 +912,10 @@ def run_compact_resolution_decisions(
 
     @bindings.add("enter", filter=response_keys_active, eager=True)
     def _response_submit(event) -> None:
-        leave_response(0 if response_option_uid is not None else 1)
+        leave_response(
+            0 if response_option_uid is not None else 1,
+            commit_unchanged=response_option_uid is not None,
+        )
         event.app.invalidate()
 
     @bindings.add("up", filter=response_keys_active, eager=True)

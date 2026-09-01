@@ -10,6 +10,10 @@ from memcommit.adapters.console.terminal.components.progress import CommandProgr
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
+from memcommit.application.capabilities.operand_resolution import (
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
+)
 from memcommit.application.operations.check_conformance.model import (
     ConformanceError,
     ConformanceReport,
@@ -185,7 +189,15 @@ def cmd(
                 )
             snapshot = ContextOperandSnapshot.capture(store)
             subject_locator = option_subject_locator or target_context
-            target_name = snapshot.resolve_or_current(subject_locator)
+            target_name = (
+                resolve_existing_context_operand(
+                    freeze_local_context_operand_candidates(store),
+                    subject_locator,
+                    current=snapshot.current_name,
+                ).name
+                if subject_locator is not None
+                else snapshot.current_name
+            )
             if target_name is None:
                 raise ConformanceError(
                     "Context Conformance needs an Example, Case, Target, or "

@@ -9,12 +9,15 @@ import uuid
 # Transitional dependency: Grant access mechanics still live under commands.
 # Keeping them in this Store adapter prevents the terminal-independent
 # application boundary from depending on the CLI package during the rollout.
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
     freeze_granted_context_binding,
     revalidate_granted_context_binding,
-    resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
 )
 from memcommit.persistence.command_ledger.attempts import annotate_sever_attempt
 from memcommit.core.context import (
@@ -42,6 +45,7 @@ from memcommit.application.operations.profile.model import (
 )
 from memcommit.application.operations.sever.model import (
     SeverApplication,
+    SeverCheckpointReceipt,
     SeverContextBinding,
     SeverMemory,
     SeverSession,
@@ -93,6 +97,7 @@ from memcommit.persistence.store import (
 from memcommit.study_scenarios.legacy.prewarm.sever import (
     find_installed_projectable_sever_prewarm,
 )
+
 SeverProgressCallback = SeverProgressObserver
 
 
@@ -143,8 +148,7 @@ class MemoryStoreSeverDestinationPort:
         if output_name == self.source_name:
             if not self.self_save_allowed:
                 raise SeverApplicationError(
-                    "Self-save requires an ordinary local Source root with "
-                    "Source descendants excluded."
+                    "In-place Sever requires an ordinary local Source root."
                 )
             return
         if output_name != current_output_name and self.store.context_exists(
@@ -281,18 +285,24 @@ class MemoryStoreSeverInputPort:
         return cls(store, current_name=store.current_context_name())
 
     def freeze(self, request: SeverAnalysisRequest) -> FrozenSeverInputs:
-        source_access = resolve_context_access(
+        candidates = freeze_profile_context_access_candidates(
+            self._store,
+            current_name=self._current_name,
+        )
+        source_access = resolve_existing_context_access(
             self._store,
             request.source_locator,
             current_name=self._current_name,
             required_permission="READ",
-        )
-        criteria_access = resolve_context_access(
+            candidates=candidates,
+        ).value
+        criteria_access = resolve_existing_context_access(
             self._store,
             request.criteria_locator,
             current_name=self._current_name,
             required_permission="READ",
-        )
+            candidates=candidates,
+        ).value
         if (
             source_access.display_name == criteria_access.display_name
             and source_access.store.store_dir == criteria_access.store.store_dir
@@ -307,23 +317,13 @@ class MemoryStoreSeverInputPort:
             or source_access.store.store_dir != self._store.store_dir
         ):
             raise SeverApplicationError(
-                "Self-save requires an ordinary local Source. Save to a fresh "
-                "local Result when Source is granted."
+                "In-place Sever requires an ordinary local Source."
             )
         self_save = (
             same_source_name
             and not source_access.is_granted
             and source_access.store.store_dir == self._store.store_dir
         )
-        if self_save and request.source_include_descendants:
-            # A root-only self-save can preserve one Context's complete direct
-            # structure and Memory identities. Recursive self-save needs an
-            # owner-aware multi-Context receipt; rejecting it prevents a
-            # flattened Result from only partially mutating the Source tree.
-            raise SeverApplicationError(
-                "Self-save requires Source descendants to be excluded. "
-                "Use --source-root-only or save the recursive Result elsewhere."
-            )
         if self._store.context_exists(request.output_name) and not self_save:
             raise SeverApplicationError(
                 f"Output Context '{request.output_name}' already exists."
@@ -339,7 +339,7 @@ class MemoryStoreSeverInputPort:
             ),
         )
         self.last_frozen = frozen
-        annotate_sever_attempt(
+        attempt_details: dict[str, object] = dict(
             source_name=frozen.source.root_name,
             source_scope=(
                 "INCLUDE_DESCENDANTS"
@@ -354,12 +354,16 @@ class MemoryStoreSeverInputPort:
                 else "THIS_CONTEXT_ONLY"
             ),
             criteria_memory_count=len(frozen.criteria.memories),
-            output_name=request.output_name,
             excluded_query_context_count=len(
                 set(frozen.source.excluded_query_context_names)
                 | set(frozen.criteria.excluded_query_context_names)
             ),
         )
+        # New Sever invocations have no output endpoint to report. Keep the
+        # legacy field only for resumable OTHER_SAVE sessions and their logs.
+        if not self_save:
+            attempt_details["output_name"] = request.output_name
+        annotate_sever_attempt(**attempt_details)
         return frozen
 
 
@@ -561,64 +565,83 @@ class MemoryStoreSeverOutputPort:
         return output, tuple(result_uids), sources
 
     @staticmethod
-    def _self_save_source_receipt(session: SeverSession) -> tuple[str, str, str]:
-        """Return the one exact direct Source owner allowed for self-save."""
+    def _self_save_source_receipts(
+        session: SeverSession,
+    ) -> tuple[tuple[str, str, str], ...]:
+        """Return every exact local Source owner updated by in-place Sever."""
 
         if (
             session.save_mode != "SELF_SAVE"
             or session.source.granted is not None
-            or session.source.include_descendants
-            or len(session.source.contexts) != 1
+            or not session.source.contexts
         ):
             raise SeverApplicationError(
-                "Self-save requires one ordinary local Source root with "
-                "Source descendants excluded."
+                "In-place Sever requires one ordinary local Source scope."
             )
-        receipt = session.source.contexts[0]
-        if receipt[0] != session.source.root_name:
+        receipts = session.source.contexts
+        if (
+            receipts[0][0] != session.source.root_name
+            or receipts[0][1] != session.source.root_uid
+            or len({name for name, _uid, _digest in receipts}) != len(receipts)
+            or len({uid for _name, uid, _digest in receipts}) != len(receipts)
+        ):
             raise SeverApplicationError(
-                "The self-save Source receipt does not identify its root Context."
+                "The in-place Source receipts do not identify one rooted owner scope."
             )
-        return receipt
+        return receipts
 
     @classmethod
-    def _self_save_context(
+    def _self_save_contexts(
         cls,
         session: SeverSession,
-        original: Context,
-    ) -> tuple[Context, tuple[str, ...], list[dict[str, str]]]:
-        """Project reviewed treatments onto the same direct Context identity."""
+        originals: tuple[Context, ...],
+    ) -> tuple[tuple[Context, ...], tuple[str, ...], list[dict[str, str]]]:
+        """Project reviewed treatments back to each exact Source owner."""
 
-        source_name, source_uid, source_digest = cls._self_save_source_receipt(session)
-        if (
-            original.name != source_name
-            or original.uid != source_uid
-            or context_record_digest(original) != source_digest
-        ):
+        receipts = cls._self_save_source_receipts(session)
+        original_by_name = {context.name: context for context in originals}
+        if len(original_by_name) != len(originals) or set(original_by_name) != {
+            name for name, _uid, _digest in receipts
+        }:
             raise SeverApplicationError(
-                "The self-save Source changed after review. Re-run Sever."
+                "The in-place Source owner set changed after review. Re-run Sever."
             )
+        for source_name, source_uid, source_digest in receipts:
+            original = original_by_name[source_name]
+            if (
+                original.uid != source_uid
+                or context_record_digest(original) != source_digest
+            ):
+                raise SeverApplicationError(
+                    "The in-place Source changed after review. Re-run Sever."
+                )
+
         retained = {
             source.uid: (candidate, content)
             for candidate, source, content in session.results()
         }
+        operations_by_owner: dict[str, list[UpdateOperation]] = {
+            name: [] for name, _uid, _digest in receipts
+        }
         result_uids: list[str] = []
         sources: list[dict[str, str]] = []
-        operations: list[UpdateOperation] = []
         for candidate in session.candidates:
             source = session.source_memory(candidate.source_memory_uid)
-            current = original.memories.get(source.uid)
+            original = original_by_name.get(source.context_name)
+            current = (
+                original.memories.get(source.uid) if original is not None else None
+            )
             if (
-                source.context_name != source_name
+                original is None
                 or not isinstance(current, Memory)
                 or current.content != source.content
             ):
                 raise SeverApplicationError(
-                    "The self-save Source no longer contains its reviewed Memories."
+                    "An in-place Source owner no longer contains its reviewed Memories."
                 )
             retained_result = retained.get(source.uid)
             if retained_result is None:
-                operations.append(
+                operations_by_owner[source.context_name].append(
                     RemoveOperation(
                         owner_context_uid=original.uid,
                         owner_context_name=original.name,
@@ -631,7 +654,7 @@ class MemoryStoreSeverOutputPort:
             else:
                 _retained_candidate, content = retained_result
                 if content != source.content:
-                    operations.append(
+                    operations_by_owner[source.context_name].append(
                         EditOperation(
                             owner_context_uid=original.uid,
                             owner_context_name=original.name,
@@ -651,8 +674,34 @@ class MemoryStoreSeverOutputPort:
                     "selection": candidate.selection,
                 }
             )
-        output = cls._apply_projection(session, original, tuple(operations))
-        return output, tuple(result_uids), sources
+
+        outputs = tuple(
+            cls._apply_projection(
+                session,
+                original_by_name[name],
+                tuple(operations_by_owner[name]),
+            )
+            for name, _uid, _digest in receipts
+        )
+        return outputs, tuple(result_uids), sources
+
+    @classmethod
+    def _self_save_context(
+        cls,
+        session: SeverSession,
+        original: Context,
+    ) -> tuple[Context, tuple[str, ...], list[dict[str, str]]]:
+        """Compatibility projection for one exact direct Source Context."""
+
+        outputs, result_uids, sources = cls._self_save_contexts(
+            session,
+            (original,),
+        )
+        if len(outputs) != 1:
+            raise SeverApplicationError(
+                "Direct self-save cannot project a recursive Source scope."
+            )
+        return outputs[0], result_uids, sources
 
     @staticmethod
     def _checkpoint_args(
@@ -687,6 +736,14 @@ class MemoryStoreSeverOutputPort:
                 "context_uid": output.uid,
                 "context_name": output.name,
             }
+        else:
+            # Group every in-place owner checkpoint into one Undo/Redo unit.
+            # The root remains the primary receipt, while descendants retain
+            # their own Context and Memory identities.
+            args["command_contexts"] = [
+                {"uid": uid, "name": name}
+                for name, uid, _digest in session.source.contexts
+            ]
         return args
 
     def recover_materialization(self, session: SeverSession) -> SeverSession | None:
@@ -744,41 +801,80 @@ class MemoryStoreSeverOutputPort:
     def _recover_self_save(self, session: SeverSession) -> SeverSession | None:
         """Adopt an exact self-save committed before its session receipt."""
 
-        current = self.store.load_direct(session.output_name)
-        for checkpoint in self.store.list_checkpoints(session.output_name):
-            before = checkpoint.get("command_before")
-            snapshot = checkpoint.get("snapshot")
-            if (
-                checkpoint.get("command") != "sever"
-                or not isinstance(checkpoint.get("uid"), str)
-                or not isinstance(before, dict)
-                or not isinstance(snapshot, dict)
-            ):
-                continue
+        source_receipts = self._self_save_source_receipts(session)
+        checkpoints: list[dict[str, object]] = []
+        originals: list[Context] = []
+        snapshots: list[Context] = []
+        for name, _uid, _digest in source_receipts:
+            matches = []
+            for checkpoint in self.store.list_checkpoints(name):
+                args = checkpoint.get("args")
+                sever = args.get("sever") if isinstance(args, dict) else None
+                if (
+                    checkpoint.get("command") == "sever"
+                    and isinstance(checkpoint.get("uid"), str)
+                    and isinstance(checkpoint.get("command_before"), dict)
+                    and isinstance(checkpoint.get("snapshot"), dict)
+                    and isinstance(sever, dict)
+                    and sever.get("session_uid") == session.uid
+                ):
+                    matches.append(checkpoint)
+            if len(matches) != 1:
+                return None
+            checkpoint = matches[0]
             try:
-                original = Context.from_dict(before)
-                expected, result_uids, sources = self._self_save_context(
-                    session,
-                    original,
-                )
-            except (SeverApplicationError, TypeError, ValueError):
-                continue
-            if (
-                checkpoint.get("args")
-                != self._checkpoint_args(session, expected, sources)
-                or context_record_digest(snapshot) != context_record_digest(expected)
-                or current.uid != expected.uid
-                or context_record_digest(current) != context_record_digest(expected)
-            ):
-                continue
-            return session.with_application(
-                SeverApplication(
-                    output_context_uid=current.uid,
-                    checkpoint_uid=checkpoint["uid"],
-                    result_memory_uids=result_uids,
-                )
+                originals.append(Context.from_dict(checkpoint["command_before"]))
+                snapshots.append(Context.from_dict(checkpoint["snapshot"]))
+            except (KeyError, TypeError, ValueError):
+                return None
+            checkpoints.append(checkpoint)
+
+        try:
+            expected, result_uids, sources = self._self_save_contexts(
+                session,
+                tuple(originals),
             )
-        return None
+        except (SeverApplicationError, TypeError, ValueError):
+            return None
+        expected_args = self._checkpoint_args(session, expected[0], sources)
+        legacy_args = {
+            key: value
+            for key, value in expected_args.items()
+            if key != "command_contexts"
+        }
+        current = tuple(
+            self.store.load_direct(name) for name, _uid, _digest in source_receipts
+        )
+        if any(
+            checkpoint.get("args") not in (expected_args, legacy_args)
+            or snapshot.uid != output.uid
+            or context_record_digest(snapshot) != context_record_digest(output)
+            or live.uid != output.uid
+            or context_record_digest(live) != context_record_digest(output)
+            for checkpoint, snapshot, live, output in zip(
+                checkpoints,
+                snapshots,
+                current,
+                expected,
+            )
+        ):
+            return None
+        receipts = tuple(
+            SeverCheckpointReceipt(
+                context_uid=output.uid,
+                context_name=output.name,
+                checkpoint_uid=checkpoint["uid"],
+            )
+            for output, checkpoint in zip(expected, checkpoints)
+        )
+        return session.with_application(
+            SeverApplication(
+                output_context_uid=receipts[0].context_uid,
+                checkpoint_uid=receipts[0].checkpoint_uid,
+                result_memory_uids=result_uids,
+                checkpoints=receipts,
+            )
+        )
 
     def materialize(self, session: SeverSession) -> SeverSession:
         granted_bindings = tuple(
@@ -880,44 +976,90 @@ class MemoryStoreSeverOutputPort:
         )
 
     def _materialize_self_save(self, session: SeverSession) -> SeverSession:
-        """Replace one exact Source root with its reviewed Sever projection."""
+        """Apply the reviewed projection to every Source owner in place."""
 
-        original = self.store.load_direct(session.output_name)
-        output, result_uids, sources = self._self_save_context(session, original)
-        checkpoint_args = self._checkpoint_args(session, output, sources)
-        auto_checkpoint = AutoCheckpoint(
-            command="sever",
-            args=checkpoint_args,
-            description=(
-                f"Self-saved Sever result into '{session.output_name}' under "
-                f"'{session.criteria.root_name}': "
-                f"{len(result_uids)} kept, "
-                f"{len(session.candidates) - len(result_uids)} forgotten"
+        source_receipts = self._self_save_source_receipts(session)
+        source_names = {name for name, _uid, _digest in source_receipts}
+        catalog = tuple(self.store.list_context_names())
+        if session.source.include_descendants:
+            live_lexical_names = expand_lexical_context_names(
+                ContextScope.create(
+                    (session.source.root_name,),
+                    include_descendants=True,
+                ),
+                catalog,
+            )
+            if not set(live_lexical_names) <= source_names:
+                raise SeverApplicationError(
+                    "The Source Context subtree changed after review. Re-run Sever."
+                )
+        elif source_receipts != (
+            (
+                session.source.root_name,
+                session.source.root_uid,
+                session.source.contexts[0][2],
             ),
+        ):
+            raise SeverApplicationError(
+                "A direct in-place Sever must bind exactly its Source root."
+            )
+
+        originals = tuple(
+            self.store.load_direct(name) for name, _uid, _digest in source_receipts
+        )
+        outputs, result_uids, sources = self._self_save_contexts(
+            session,
+            originals,
+        )
+        checkpoint_args = self._checkpoint_args(session, outputs[0], sources)
+        description = (
+            f"Severed Source scope '{session.source.root_name}' in place under "
+            f"'{session.criteria.root_name}': {len(source_receipts)} Contexts, "
+            f"{len(result_uids)} kept, "
+            f"{len(session.candidates) - len(result_uids)} forgotten"
         )
         criteria_bindings = (
             session.criteria.contexts if session.criteria.granted is None else ()
         )
-        if criteria_bindings:
-            checkpoint = self.store.save_context_with_sources(
-                output,
-                auto_checkpoint,
-                expected_context_digest=context_record_digest(original),
-                source_bindings=criteria_bindings,
+        checkpoints = self.store.save_context_command_batch(
+            tuple(
+                (
+                    output,
+                    AutoCheckpoint(
+                        command="sever",
+                        args=checkpoint_args,
+                        description=description,
+                    ),
+                    expected_digest,
+                )
+                for output, (_name, _uid, expected_digest) in zip(
+                    outputs,
+                    source_receipts,
+                )
+            ),
+            source_bindings=criteria_bindings,
+            expected_context_catalog=(
+                catalog if session.source.include_descendants else None
+            ),
+        )
+        receipts = tuple(
+            SeverCheckpointReceipt(
+                context_uid=output.uid,
+                context_name=output.name,
+                checkpoint_uid=checkpoint.uid,
             )
-        else:
-            checkpoint = self.store.save(
-                output,
-                auto_checkpoint,
-                expected_context_digest=context_record_digest(original),
+            for output, checkpoint in zip(outputs, checkpoints)
+        )
+        if not receipts or receipts[0].context_uid != session.source.root_uid:
+            raise SeverApplicationError(
+                "In-place Sever produced no primary Source checkpoint."
             )
-        if checkpoint is None:
-            raise SeverApplicationError("Sever self-save produced no checkpoint.")
         return session.with_application(
             SeverApplication(
-                output_context_uid=output.uid,
-                checkpoint_uid=checkpoint.uid,
+                output_context_uid=receipts[0].context_uid,
+                checkpoint_uid=receipts[0].checkpoint_uid,
                 result_memory_uids=result_uids,
+                checkpoints=receipts,
             )
         )
 
@@ -947,7 +1089,9 @@ class MemoryStoreSeverOutputPort:
         # and intentionally avoid publishing a lifecycle event.
         with self.store._command_write_lock():  # noqa: SLF001
             with self.store._context_graph_lock(exclusive=False):  # noqa: SLF001
-                with self.store._context_write_lock(applied.output_name):  # noqa: SLF001
+                with self.store._context_write_lock(
+                    applied.output_name
+                ):  # noqa: SLF001
                     with self.store.profile_write_guard():
                         current = self.store.load_direct(applied.output_name)
                         if (
@@ -969,7 +1113,7 @@ class MemoryStoreSeverOutputPort:
                         self.store._delete_locked(applied.output_name)  # noqa: SLF001
 
     def _rollback_self_save(self, applied: SeverSession) -> None:
-        """Restore the exact Source pre-image after failed session persistence."""
+        """Restore every exact Source-owner pre-image after failed persistence."""
 
         application = applied.application
         if application is None:
@@ -980,67 +1124,145 @@ class MemoryStoreSeverOutputPort:
             state="REVIEWING",
             application=None,
         )
+        source_receipts = self._self_save_source_receipts(reviewed)
+        if application.checkpoints:
+            receipt_by_name = {
+                receipt.context_name: receipt for receipt in application.checkpoints
+            }
+            if tuple(receipt_by_name) != tuple(
+                name for name, _uid, _digest in source_receipts
+            ):
+                raise SeverApplicationError(
+                    "The in-place Sever receipt does not cover its Source owners."
+                )
+        elif len(source_receipts) == 1:
+            name, uid, _digest = source_receipts[0]
+            receipt_by_name = {
+                name: SeverCheckpointReceipt(
+                    context_uid=uid,
+                    context_name=name,
+                    checkpoint_uid=application.checkpoint_uid,
+                )
+            }
+        else:
+            raise SeverApplicationError(
+                "Recursive in-place Sever requires owner checkpoint receipts."
+            )
+
+        names = tuple(name for name, _uid, _digest in source_receipts)
         with self.store._command_write_lock():  # noqa: SLF001
-            with self.store._context_graph_lock(exclusive=False):  # noqa: SLF001
-                with self.store._context_write_lock(applied.output_name):  # noqa: SLF001
+            with self.store._context_graph_lock(  # noqa: SLF001
+                exclusive=reviewed.source.include_descendants
+            ):
+                if reviewed.source.include_descendants:
+                    live_lexical_names = expand_lexical_context_names(
+                        ContextScope.create(
+                            (reviewed.source.root_name,),
+                            include_descendants=True,
+                        ),
+                        self.store.list_context_names(),
+                    )
+                    if not set(live_lexical_names) <= set(names):
+                        raise SeverApplicationError(
+                            "The Source subtree changed before rollback."
+                        )
+                with self.store._context_write_locks(names):  # noqa: SLF001
                     with self.store.profile_write_guard():
-                        current = self.store.load_direct(applied.output_name)
-                        checkpoint = next(
-                            (
-                                item
-                                for item in self.store.list_checkpoints(
-                                    applied.output_name
+                        current: list[Context] = []
+                        checkpoints: list[dict[str, object]] = []
+                        originals: list[Context] = []
+                        snapshots: list[Context] = []
+                        for name in names:
+                            live = self.store.load_direct(name)
+                            receipt = receipt_by_name[name]
+                            checkpoint = next(
+                                (
+                                    item
+                                    for item in self.store.list_checkpoints(name)
+                                    if item.get("uid") == receipt.checkpoint_uid
+                                ),
+                                None,
+                            )
+                            before = (
+                                checkpoint.get("command_before")
+                                if isinstance(checkpoint, dict)
+                                else None
+                            )
+                            snapshot = (
+                                checkpoint.get("snapshot")
+                                if isinstance(checkpoint, dict)
+                                else None
+                            )
+                            if not isinstance(before, dict) or not isinstance(
+                                snapshot,
+                                dict,
+                            ):
+                                raise SeverApplicationError(
+                                    "An in-place checkpoint cannot restore its owner."
                                 )
-                                if item.get("uid") == application.checkpoint_uid
-                            ),
-                            None,
-                        )
-                        before = (
-                            checkpoint.get("command_before")
-                            if isinstance(checkpoint, dict)
-                            else None
-                        )
-                        snapshot = (
-                            checkpoint.get("snapshot")
-                            if isinstance(checkpoint, dict)
-                            else None
-                        )
-                        if not isinstance(before, dict) or not isinstance(
-                            snapshot, dict
-                        ):
-                            raise SeverApplicationError(
-                                "The self-save checkpoint cannot restore its Source."
-                            )
-                        original = Context.from_dict(before)
-                        expected, result_uids, sources = self._self_save_context(
+                            current.append(live)
+                            checkpoints.append(checkpoint)
+                            originals.append(Context.from_dict(before))
+                            snapshots.append(Context.from_dict(snapshot))
+
+                        expected, result_uids, sources = self._self_save_contexts(
                             reviewed,
-                            original,
+                            tuple(originals),
                         )
-                        if (
-                            application.result_memory_uids != result_uids
-                            or current.uid != application.output_context_uid
-                            or context_record_digest(current)
-                            != context_record_digest(expected)
+                        expected_args = self._checkpoint_args(
+                            reviewed,
+                            expected[0],
+                            sources,
+                        )
+                        legacy_args = {
+                            key: value
+                            for key, value in expected_args.items()
+                            if key != "command_contexts"
+                        }
+                        if application.result_memory_uids != result_uids or any(
+                            live.uid != output.uid
+                            or snapshot.uid != output.uid
+                            or context_record_digest(live)
+                            != context_record_digest(output)
                             or context_record_digest(snapshot)
-                            != context_record_digest(expected)
+                            != context_record_digest(output)
                             or checkpoint.get("args")
-                            != self._checkpoint_args(
-                                reviewed,
+                            not in (expected_args, legacy_args)
+                            for live, snapshot, output, checkpoint in zip(
+                                current,
+                                snapshots,
                                 expected,
-                                sources,
+                                checkpoints,
                             )
                         ):
                             raise SeverApplicationError(
-                                "The self-saved Sever Result changed before rollback."
+                                "The in-place Sever result changed before rollback."
                             )
-                        _write_json_atomic(
-                            self.store._context_file(applied.output_name),  # noqa: SLF001
-                            before,
-                        )
-                        self.store._remove_checkpoint_uid_locked(  # noqa: SLF001
-                            applied.output_name,
-                            application.checkpoint_uid,
-                        )
+
+                        written: list[Context] = []
+                        try:
+                            for original in originals:
+                                _write_json_atomic(
+                                    self.store._context_file(
+                                        original.name
+                                    ),  # noqa: SLF001
+                                    original.to_dict(),
+                                )
+                                written.append(original)
+                            for name in names:
+                                self.store._remove_checkpoint_uid_locked(  # noqa: SLF001
+                                    name,
+                                    receipt_by_name[name].checkpoint_uid,
+                                )
+                        except Exception:
+                            for output in expected[: len(written)]:
+                                _write_json_atomic(
+                                    self.store._context_file(
+                                        output.name
+                                    ),  # noqa: SLF001
+                                    output.to_dict(),
+                                )
+                            raise
 
 
 def execute_sever_apply(
@@ -1109,10 +1331,7 @@ def execute_sever_session_destination_change(
         destination_port=MemoryStoreSeverDestinationPort(
             store,
             source_name=session.source.root_name,
-            self_save_allowed=(
-                session.source.granted is None
-                and not session.source.include_descendants
-            ),
+            self_save_allowed=(session.source.granted is None),
         ),
     )
 

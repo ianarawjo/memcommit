@@ -21,10 +21,12 @@ from memcommit.application.operations.atomize.application import AtomizeInPlaceR
 from memcommit.application.operations.atomize.domain import AtomizeImpactError
 from memcommit.application.operations.atomize.runtime import execute_atomize_in_place
 from memcommit.application.capabilities.local_target_lookup import (
-    DirectMemoryAmbiguityError,
     resolve_local_context_memory_target,
 )
-from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
+from memcommit.application.capabilities.operand_resolution import (
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
+)
 from memcommit.core.context_targeting.model import (
     ContextTarget,
     DirectMemoryLocator,
@@ -55,32 +57,9 @@ def _parse_target(
         else None
     )
     if (
-        isinstance(parsed_operand, ExistingContextOperand)
-        and context_name is None
-        and is_memory_uid_prefix(context_operand)
+        isinstance(parsed_operand, DirectMemoryLocator)
+        and parsed_operand.context_locator is not None
     ):
-        early_store = MemoryStore(create=False)
-        early_snapshot = ContextOperandSnapshot.capture(early_store)
-        try:
-            early_target = resolve_local_context_memory_target(
-                early_store,
-                context_operand,
-                current=early_snapshot.current_name,
-            )
-        except FileNotFoundError:
-            early_target = None
-        except DirectMemoryAmbiguityError:
-            # Preserve the direct-Memory interpretation so the complete owner
-            # ambiguity is reported before a provider can be connected.
-            parsed_operand = DirectMemoryLocator(context_operand)
-            early_target = None
-        if isinstance(early_target, DirectMemoryTarget):
-            parsed_operand = DirectMemoryLocator(
-                early_target.memory_uid,
-                early_target.context_name,
-            )
-
-    if isinstance(parsed_operand, DirectMemoryLocator):
         if context_name is not None:
             raise ValueError(
                 "Auto-typed Memory cannot be combined with --context; use "
@@ -93,7 +72,7 @@ def _parse_target(
     positional_context = (
         parsed_operand.locator
         if isinstance(parsed_operand, ExistingContextOperand)
-        else None
+        else context_operand
     )
     return (
         choose_context_operand(positional_context, option=context_name),
@@ -165,13 +144,25 @@ def cmd(
                 current=context_snapshot.current_name,
             )
             if isinstance(target, DirectMemoryTarget):
+                if memory_selector is not None:
+                    raise ValueError(
+                        "Memory was supplied both positionally and with --memory."
+                    )
                 context_name = target.context_name
                 memory_selector = target.memory_uid
             else:
                 assert isinstance(target, ContextTarget)
                 context_name = target.context_name
 
-        canonical_name = context_snapshot.resolve_or_current(context_name)
+        canonical_name = (
+            resolve_existing_context_operand(
+                freeze_local_context_operand_candidates(store),
+                context_name,
+                current=context_snapshot.current_name,
+            ).name
+            if context_name is not None
+            else context_snapshot.current_name
+        )
         if not canonical_name:
             raise AtomizeImpactError(
                 "No current context. Pass --context or run 'mem init <name>' first."

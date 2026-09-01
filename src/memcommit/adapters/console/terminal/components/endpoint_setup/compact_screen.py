@@ -91,6 +91,7 @@ from memcommit.adapters.console.terminal.components.selection import (
     choice_marker,
     choice_visual_state,
 )
+from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.source_projection.presentation import source_display_text
 
 
@@ -104,7 +105,7 @@ def run_compact_endpoint_setup(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> EndpointSetupDraft | None:
-    """Collect the same typed draft through a five-row, input-first form."""
+    """Collect the same typed draft through a compact, input-first form."""
 
     if spec.screen_layout != "COMPACT_FORM":
         raise ValueError("Compact Endpoint Setup requires COMPACT_FORM layout.")
@@ -140,6 +141,50 @@ def run_compact_endpoint_setup(
     def role_allows_memory_focus(role_uid: str) -> bool:
         return spec.role_allows_memory_focus(selected_mode_uid(), role_uid)
 
+    def role_allows_inline_memory(role_uid: str) -> bool:
+        return spec.role_allows_inline_memory(selected_mode_uid(), role_uid)
+
+    typed_source_roles = tuple(role for role in spec.roles if role.allow_inline_memory)
+    source_type_states = {
+        role.uid: HorizontalChoiceState(
+            (
+                HorizontalChoiceOption(
+                    "CONTEXT",
+                    "CONTEXT",
+                    "Use the selected Context frame.",
+                ),
+                HorizontalChoiceOption(
+                    "STORED_MEMORY",
+                    "STORED MEMORY",
+                    "Use one exact Memory from its owning Context.",
+                ),
+                HorizontalChoiceOption(
+                    "INLINE_MEMORY",
+                    "INLINE MEMORY",
+                    "Use exact process-local text without a Source Context.",
+                ),
+            ),
+            selected_uid="CONTEXT",
+        )
+        for role in typed_source_roles
+    }
+
+    def effective_source_type(role_uid: str) -> str:
+        state = source_type_states.get(role_uid)
+        if state is None:
+            return "CONTEXT"
+        selected = state.selected_uid
+        if selected == "INLINE_MEMORY" and not role_allows_inline_memory(role_uid):
+            return "CONTEXT"
+        if selected == "STORED_MEMORY" and not role_allows_memory_focus(role_uid):
+            return "CONTEXT"
+        return selected
+
+    def source_type_visible(role_uid: str) -> bool:
+        return role_uid in source_type_states and (
+            role_allows_memory_focus(role_uid) or role_allows_inline_memory(role_uid)
+        )
+
     def completion_metadata(role: EndpointSetupRole) -> dict[str, str]:
         annotations = dict(role.annotations)
         result: dict[str, str] = {}
@@ -157,6 +202,7 @@ def run_compact_endpoint_setup(
 
     role_name_controls: dict[str, ExactNameInputControl] = {}
     role_inputs: dict[str, TextArea] = {}
+    inline_inputs: dict[str, TextArea] = {}
     catalog_selectors: dict[str, ContextSelectorControl] = {}
     for role in spec.roles:
         initial = (
@@ -183,19 +229,44 @@ def run_compact_endpoint_setup(
         input_control = ExactNameInputControl.create(
             ExactNameFieldView(
                 value=initial,
-                label="CONTEXT",
-                detail="Enter one exact existing or operation-valid new Context name.",
-                value_label="Context name",
+                label="MEMORY LOCATOR" if role.memory_required else "CONTEXT",
+                detail=(
+                    "Enter an owner Context, UID prefix for that owner, or CONTEXT:UID."
+                    if role.memory_required
+                    else "Enter one exact existing or operation-valid new Context name."
+                ),
+                value_label=(
+                    "Memory owner or locator"
+                    if role.memory_required
+                    else "Context name"
+                ),
             ),
             input_name=f"compact-endpoint-{role.uid.casefold()}",
             prompt="› ",
             completer=completer,
             complete_while_typing=True,
-            width=Dimension(min=18, preferred=42, max=52),
+            width=(
+                Dimension(min=18, preferred=56, max=64)
+                if role.memory_required
+                else Dimension(min=18, preferred=42, max=52)
+            ),
             dont_extend_width=True,
         )
         role_name_controls[role.uid] = input_control
         role_inputs[role.uid] = input_control.input
+        if role.allow_inline_memory:
+            inline_inputs[role.uid] = TextArea(
+                text="",
+                multiline=False,
+                prompt="› ",
+                focusable=True,
+                focus_on_click=True,
+                wrap_lines=False,
+                width=Dimension(min=18, preferred=74, max=92),
+                height=Dimension.exact(1),
+                dont_extend_width=True,
+                name=f"compact-endpoint-{role.uid.casefold()}-inline-memory",
+            )
         if catalog_candidates:
             selected = (
                 role.selected_name
@@ -228,15 +299,43 @@ def run_compact_endpoint_setup(
         for role in spec.roles
         if role.allow_descendants
     }
+    required_memory_owners = {
+        role.uid: role.selected_name for role in memory_roles if role.memory_required
+    }
+
+    def selected_memory_context(role_uid: str) -> str:
+        return required_memory_owners.get(
+            role_uid,
+            role_inputs[role_uid].text.strip(),
+        )
+
     memory_focuses = {
         role.uid: EndpointMemoryFocusController(
             role.uid,
-            selected_context=(lambda uid=role.uid: role_inputs[uid].text.strip()),
+            selected_context=(lambda uid=role.uid: selected_memory_context(uid)),
             loader=memory_loader,
             selected_memory_uid=role.selected_memory_uid,
+            required=role.memory_required,
         )
         for role in memory_roles
     }
+
+    def role_primary_input(role_uid: str) -> TextArea:
+        return (
+            inline_inputs[role_uid]
+            if effective_source_type(role_uid) == "INLINE_MEMORY"
+            else role_inputs[role_uid]
+        )
+
+    def role_uses_context_name(role_uid: str) -> bool:
+        return effective_source_type(role_uid) != "INLINE_MEMORY"
+
+    def role_uses_context_range(role_uid: str) -> bool:
+        return effective_source_type(role_uid) == "CONTEXT"
+
+    def role_uses_stored_memory(role_uid: str) -> bool:
+        return effective_source_type(role_uid) == "STORED_MEMORY"
+
     memory_detail = {"role_uid": None}
     catalog_detail = {"role_uid": None}
     updating_role_inputs: set[str] = set()
@@ -272,6 +371,66 @@ def run_compact_endpoint_setup(
             role_name_controls[role_uid].set_text(value)
         finally:
             updating_role_inputs.remove(role_uid)
+
+    def required_memory_locator_text(
+        role_uid: str,
+        memory_uid: str | None,
+    ) -> str:
+        owner = required_memory_owners[role_uid]
+        return owner if memory_uid is None else f"{owner}:{memory_uid}"
+
+    def required_memory_input_is_canonical(role_uid: str) -> bool:
+        memory_uid = memory_focuses[role_uid].selected_memory_uid
+        return (
+            role_inputs[role_uid].text.strip()
+            == required_memory_locator_text(role_uid, memory_uid)
+        )
+
+    def synchronize_required_memory_input(role_uid: str) -> tuple[str, str | None]:
+        """Resolve an owner, owner-qualified UID, or UID under the shown owner.
+
+        The retained owner is explicit process-local state. A bare UID is
+        resolved only inside that owner; it never broadens into a scan of
+        granted or unrelated Contexts. The canonical field then makes the
+        coordinate visible as ``CONTEXT:FULL_UID``.
+        """
+
+        role = role_by_uid[role_uid]
+        candidate = role_inputs[role_uid].text.strip()
+        if not candidate:
+            raise ValueError(
+                f"{spec.role_label(selected_mode_uid(), role_uid)} needs an owner "
+                "Context or Memory locator."
+            )
+        if candidate in role.selectable_names:
+            required_memory_owners[role_uid] = candidate
+            set_role_text(role_uid, candidate)
+            memory_focuses[role_uid].clear()
+            selector = catalog_selectors.get(role_uid)
+            if selector is not None:
+                selector.select_name(candidate)
+            return candidate, None
+
+        locator = parse_direct_memory_locator(candidate)
+        owner = locator.context_locator or required_memory_owners[role_uid]
+        if owner not in role.selectable_names:
+            raise ValueError(
+                f"{spec.role_label(selected_mode_uid(), role_uid)} owner Context "
+                f"'{owner}' is unavailable."
+            )
+        memory_uid = memory_focuses[role_uid].resolve_selector(
+            owner,
+            locator.memory_selector,
+        )
+        required_memory_owners[role_uid] = owner
+        # Updating the field clears stale Memory state through the ordinary
+        # text-change path; reselect only after the canonical locator is shown.
+        set_role_text(role_uid, f"{owner}:{memory_uid}")
+        memory_focuses[role_uid].select_exact(owner, memory_uid)
+        selector = catalog_selectors.get(role_uid)
+        if selector is not None:
+            selector.select_name(owner)
+        return owner, memory_uid
 
     def record_role_text_changed(role_uid: str) -> None:
         clear_stale_memory(role_uid)
@@ -316,6 +475,13 @@ def run_compact_endpoint_setup(
             raise ValueError(
                 f"{spec.role_label(selected_mode_uid(), role_uid)} needs a Context name."
             )
+        if role.memory_required:
+            if not required_memory_input_is_canonical(role_uid):
+                raise ValueError(
+                    f"{spec.role_label(selected_mode_uid(), role_uid)} locator "
+                    "changed; press Enter to resolve it."
+                )
+            return required_memory_owners[role_uid], False
         if role.new_parent_locator:
             if role.new_name_validator is not None:
                 role.new_name_validator(candidate)
@@ -334,12 +500,28 @@ def run_compact_endpoint_setup(
         values: list[EndpointSetupValue] = []
         for role_uid in spec.active_role_uids(selected_mode_uid()):
             role = role_by_uid[role_uid]
+            source_type = effective_source_type(role_uid)
+            if source_type == "INLINE_MEMORY":
+                content = inline_inputs[role_uid].text
+                if not content.strip():
+                    raise ValueError(
+                        f"{spec.role_label(selected_mode_uid(), role_uid)} needs inline Memory text."
+                    )
+                values.append(
+                    EndpointSetupValue(
+                        role_uid,
+                        "",
+                        inline_memory_content=content,
+                    )
+                )
+                continue
             context_name, create = resolve_role(role_uid)
             descendants = (
                 reach_states[role_uid].include_descendants
                 if not create
                 and role_uid in reach_states
                 and role_allows_descendants(role_uid)
+                and source_type == "CONTEXT"
                 else False
             )
             memory_uid = (
@@ -349,8 +531,19 @@ def run_compact_endpoint_setup(
                 and role_uid in memory_focuses
                 and role_allows_memory_focus(role_uid)
                 and not role.memory_preview_only
+                and (
+                    role_uid not in source_type_states or source_type == "STORED_MEMORY"
+                )
                 else None
             )
+            if source_type == "STORED_MEMORY" and memory_uid is None:
+                raise ValueError(
+                    f"{spec.role_label(selected_mode_uid(), role_uid)} requires one exact stored Memory."
+                )
+            if role.memory_required and memory_uid is None:
+                raise ValueError(
+                    f"{spec.role_label(selected_mode_uid(), role_uid)} requires one exact Memory."
+                )
             values.append(
                 EndpointSetupValue(
                     role_uid,
@@ -372,23 +565,45 @@ def run_compact_endpoint_setup(
     def apply_command_draft(draft: EndpointSetupDraft) -> None:
         """Apply one fully validated command to every persistent upper row."""
 
+        resolved_memory_uids: dict[str, str] = {}
         for value in draft.values:
             if value.memory_uid is None:
                 continue
-            memories = memory_focuses[value.role_uid].prepare_context(
-                value.context_name
+            resolved_memory_uids[value.role_uid] = memory_focuses[
+                value.role_uid
+            ].resolve_selector(
+                value.context_name,
+                value.memory_uid,
             )
-            if all(memory.uid != value.memory_uid for memory in memories):
-                raise ValueError(
-                    f"Memory '{value.memory_uid}' is unavailable in "
-                    f"Context '{value.context_name}'."
-                )
 
         mode_state.choose(draft.mode_uid)
         for value in draft.values:
             role_uid = value.role_uid
             role = role_by_uid[role_uid]
-            set_role_text(role_uid, value.context_name)
+            resolved_memory_uid = resolved_memory_uids.get(role_uid)
+            source_type_state = source_type_states.get(role_uid)
+            if value.inline_memory_content is not None:
+                if source_type_state is None:
+                    raise ValueError(f"{role.label} cannot accept inline Memory input.")
+                set_source_type(role_uid, "INLINE_MEMORY")
+                inline_inputs[role_uid].text = value.inline_memory_content
+                inline_inputs[role_uid].buffer.cursor_position = len(
+                    value.inline_memory_content
+                )
+                continue
+            if source_type_state is not None:
+                set_source_type(
+                    role_uid,
+                    "STORED_MEMORY" if value.memory_uid is not None else "CONTEXT",
+                )
+            if role.memory_required:
+                required_memory_owners[role_uid] = value.context_name
+                set_role_text(
+                    role_uid,
+                    required_memory_locator_text(role_uid, resolved_memory_uid),
+                )
+            else:
+                set_role_text(role_uid, value.context_name)
             name_draft = new_name_drafts.get(role_uid)
             if name_draft is not None:
                 name_draft.record_direct_edit(value.context_name)
@@ -412,7 +627,7 @@ def run_compact_endpoint_setup(
             if role_uid in memory_focuses:
                 memory_focuses[role_uid].select_exact(
                     value.context_name,
-                    value.memory_uid,
+                    resolved_memory_uid,
                 )
         memory_detail["role_uid"] = None
         catalog_detail["role_uid"] = None
@@ -466,6 +681,7 @@ def run_compact_endpoint_setup(
         wrap_lines=False,
     )
 
+    source_type_controls: dict[str, FormattedTextControl] = {}
     role_label_controls: dict[str, FormattedTextControl] = {}
     role_state_controls: dict[str, FormattedTextControl] = {}
     browse_controls: dict[str, FormattedTextControl] = {}
@@ -474,6 +690,8 @@ def run_compact_endpoint_setup(
 
     def role_row_focused(role_uid: str) -> bool:
         controls: list[object] = [role_inputs[role_uid]]
+        if role_uid in inline_inputs:
+            controls.append(inline_inputs[role_uid])
         if role_uid in browse_controls:
             controls.append(browse_controls[role_uid])
         if role_uid in reach_controls:
@@ -484,17 +702,34 @@ def run_compact_endpoint_setup(
 
     def render_role_label(role_uid: str) -> StyleAndTextTuples:
         focused = role_row_focused(role_uid)
+        label = spec.role_label(selected_mode_uid(), role_uid)
+        if source_type_visible(role_uid):
+            label = {
+                "CONTEXT": f"{role_uid} · SOURCE · CONTEXT",
+                "STORED_MEMORY": f"{role_uid} · SOURCE · MEMORY OWNER",
+                "INLINE_MEMORY": f"{role_uid} · SOURCE · INLINE MEMORY",
+            }[effective_source_type(role_uid)]
         return [
             (
                 focused_control_style(focused=focused),
-                f"{'›' if focused else ' '} "
-                f"{safe_terminal_text(spec.role_label(selected_mode_uid(), role_uid))}",
+                f"{'›' if focused else ' '} {safe_terminal_text(label)}",
             )
         ]
 
     def render_role_state(role_uid: str) -> StyleAndTextTuples:
         role = role_by_uid[role_uid]
+        if effective_source_type(role_uid) == "INLINE_MEMORY":
+            label = (
+                "PROCESS LOCAL · INLINE MEMORY"
+                if inline_inputs[role_uid].text.strip()
+                else "TYPE INLINE MEMORY"
+            )
+            return [("class:source-state", label)]
         candidate = role_inputs[role_uid].text.strip()
+        if role.memory_required:
+            if not required_memory_input_is_canonical(role_uid):
+                return [("class:source-state", "PRESS ENTER TO RESOLVE")]
+            candidate = required_memory_owners[role_uid]
         if not candidate:
             if role.allow_new:
                 label = (
@@ -531,6 +766,14 @@ def run_compact_endpoint_setup(
             style = "class:source-state"
         return [(style, safe_terminal_text(label))]
 
+    def render_source_type(role_uid: str) -> StyleAndTextTuples:
+        return render_horizontal_choice(
+            source_type_states[role_uid],
+            title=f"{role_uid} · SOURCE TYPE",
+            focused=get_app().layout.has_focus(source_type_controls[role_uid]),
+            inline_boxed=True,
+        )
+
     def render_reach(role_uid: str) -> StyleAndTextTuples:
         focused = get_app().layout.has_focus(reach_controls[role_uid])
         selected = reach_states[role_uid].include_descendants
@@ -550,8 +793,13 @@ def run_compact_endpoint_setup(
 
     def render_browse(role_uid: str) -> StyleAndTextTuples:
         focused = get_app().layout.has_focus(browse_controls[role_uid])
+        role = role_by_uid[role_uid]
         label = (
-            "BROWSE PARENT" if role_by_uid[role_uid].new_parent_locator else "BROWSE"
+            "BROWSE CONTEXT"
+            if role.memory_required
+            else "BROWSE PARENT"
+            if role.new_parent_locator
+            else "BROWSE"
         )
         return [
             (
@@ -563,7 +811,11 @@ def run_compact_endpoint_setup(
     def render_memory(role_uid: str) -> StyleAndTextTuples:
         focused = get_app().layout.has_focus(memory_controls[role_uid])
         role = role_by_uid[role_uid]
-        descendants = reach_states[role_uid].include_descendants
+        descendants = (
+            reach_states[role_uid].include_descendants
+            if role_uid in reach_states
+            else False
+        )
         selected_memory = memory_focuses[role_uid].selected_memory_uid
         value = (
             "READ ONLY"
@@ -572,7 +824,14 @@ def run_compact_endpoint_setup(
             if descendants
             else selected_memory[:8]
             if selected_memory is not None
-            else "WHOLE CONTEXT"
+            else "CHOOSE MEMORY"
+            if role_uid in source_type_states and role_uses_stored_memory(role_uid)
+            else role.memory_unselected_label
+        )
+        label = (
+            "CHOOSE MEMORY"
+            if role.memory_required
+            else f"MEMORY · {safe_terminal_text(value)}"
         )
         return [
             (
@@ -580,12 +839,23 @@ def run_compact_endpoint_setup(
                     focused=focused,
                     selected=selected_memory is not None and not descendants,
                 ),
-                f"[ MEMORY · {safe_terminal_text(value)} ]",
+                f"[ {label} ]",
             )
         ]
 
     label_width = max(
         7,
+        max(
+            (
+                max(
+                    len(f"{role.uid} · SOURCE · {suffix}")
+                    for suffix in ("CONTEXT", "MEMORY OWNER", "INLINE MEMORY")
+                )
+                + 3
+                for role in typed_source_roles
+            ),
+            default=0,
+        ),
         max(
             len(spec.role_label(mode.uid, role.uid)) + 3
             for mode in spec.modes
@@ -595,6 +865,26 @@ def run_compact_endpoint_setup(
     )
     role_rows = []
     for role in spec.roles:
+        if role.uid in source_type_states:
+            source_type_controls[role.uid] = FormattedTextControl(
+                lambda uid=role.uid: render_source_type(uid),
+                focusable=True,
+                show_cursor=False,
+            )
+            role_rows.append(
+                ConditionalContainer(
+                    Window(
+                        source_type_controls[role.uid],
+                        height=Dimension.exact(1),
+                        dont_extend_height=True,
+                        wrap_lines=False,
+                    ),
+                    filter=Condition(
+                        lambda uid=role.uid: role_is_active(uid)
+                        and source_type_visible(uid)
+                    ),
+                )
+            )
         role_label_controls[role.uid] = FormattedTextControl(
             lambda uid=role.uid: render_role_label(uid),
             show_cursor=False,
@@ -628,14 +918,41 @@ def run_compact_endpoint_setup(
                 width=Dimension.exact(label_width),
                 dont_extend_height=True,
             ),
-            role_inputs[role.uid],
         ]
+        if role.uid in inline_inputs:
+            columns.extend(
+                [
+                    ConditionalContainer(
+                        role_inputs[role.uid],
+                        filter=Condition(
+                            lambda uid=role.uid: role_uses_context_name(uid)
+                        ),
+                    ),
+                    ConditionalContainer(
+                        inline_inputs[role.uid],
+                        filter=Condition(
+                            lambda uid=role.uid: not role_uses_context_name(uid)
+                        ),
+                    ),
+                ]
+            )
+        else:
+            columns.append(role_inputs[role.uid])
         if role.uid in browse_controls:
             columns.append(
-                Window(
-                    browse_controls[role.uid],
-                    width=Dimension.exact(18 if role.new_parent_locator else 11),
-                    dont_extend_height=True,
+                ConditionalContainer(
+                    Window(
+                        browse_controls[role.uid],
+                        width=Dimension.exact(
+                            19
+                            if role.memory_required
+                            else 18
+                            if role.new_parent_locator
+                            else 11
+                        ),
+                        dont_extend_height=True,
+                    ),
+                    filter=Condition(lambda uid=role.uid: role_uses_context_name(uid)),
                 )
             )
         columns.extend(
@@ -655,7 +972,10 @@ def run_compact_endpoint_setup(
                         width=Dimension.exact(27),
                         dont_extend_height=True,
                     ),
-                    filter=Condition(lambda uid=role.uid: role_allows_descendants(uid)),
+                    filter=Condition(
+                        lambda uid=role.uid: role_allows_descendants(uid)
+                        and role_uses_context_range(uid)
+                    ),
                 )
             )
         if role.uid in memory_controls:
@@ -663,11 +983,15 @@ def run_compact_endpoint_setup(
                 ConditionalContainer(
                     Window(
                         memory_controls[role.uid],
-                        width=Dimension.exact(27),
+                        width=Dimension.exact(19 if role.memory_required else 27),
                         dont_extend_height=True,
                     ),
                     filter=Condition(
                         lambda uid=role.uid: role_allows_memory_focus(uid)
+                        and (
+                            uid not in source_type_states
+                            or role_uses_stored_memory(uid)
+                        )
                     ),
                 )
             )
@@ -704,7 +1028,14 @@ def run_compact_endpoint_setup(
         build_focused_frame(
             command_control.body,
             title=lambda: (
-                "PROPOSED COMMAND"
+                (
+                    "PROPOSED COMMAND"
+                    + (
+                        f" · {safe_terminal_text(spec.command_ready_hint)}"
+                        if spec.command_ready_hint is not None
+                        else ""
+                    )
+                )
                 if command_control.frame_title == "COMMAND · RUNNABLE"
                 else "PROPOSED COMMAND · INVALID"
             ),
@@ -765,12 +1096,13 @@ def run_compact_endpoint_setup(
         role_uid = memory_detail["role_uid"]
         if role_uid is None:
             return []
-        context_name = role_inputs[role_uid].text.strip()
+        context_name = selected_memory_context(role_uid)
         fragments: StyleAndTextTuples = [
             (
                 "class:report-neutral",
-                f"  MEMORY · {safe_terminal_text(spec.role_label(selected_mode_uid(), role_uid))}"
-                f" · {display_escape_text(context_name)}\n",
+                ("  " if role_by_uid[role_uid].memory_required else "  MEMORY · ")
+                + safe_terminal_text(spec.role_label(selected_mode_uid(), role_uid))
+                + f" · {display_escape_text(context_name)}\n",
             )
         ]
         fragments.extend(
@@ -851,6 +1183,42 @@ def run_compact_endpoint_setup(
         status["value"] = ""
         return "HANDLED"
 
+    def set_source_type(role_uid: str, source_type: str) -> bool:
+        changed = source_type_states[role_uid].choose(source_type)
+        memory_focus = memory_focuses[role_uid]
+        memory_focus.required = source_type == "STORED_MEMORY"
+        memory_detail["role_uid"] = None
+        catalog_detail["role_uid"] = None
+        status["value"] = ""
+        return changed
+
+    def move_source_type_choice(role_uid: str, delta: int) -> SurfaceMoveResult:
+        state = source_type_states[role_uid]
+        changed = state.move(delta)
+        if changed:
+            memory_focuses[role_uid].required = state.selected_uid == "STORED_MEMORY"
+            memory_detail["role_uid"] = None
+            catalog_detail["role_uid"] = None
+            status["value"] = ""
+        return "MOVED" if changed else "BOUNDARY"
+
+    def move_source_type_row(
+        event,
+        role_uid: str,
+        delta: int,
+    ) -> SurfaceMoveResult:
+        if delta > 0:
+            event.app.layout.focus(role_primary_input(role_uid))
+            return "CONSUMED"
+        if show_mode:
+            event.app.layout.focus(mode_control)
+            return "CONSUMED"
+        return "BOUNDARY"
+
+    def choose_source_type(_event, _role_uid: str) -> SurfaceActionResult:
+        status["value"] = ""
+        return "HANDLED"
+
     def adjacent_role_uid(role_uid: str, delta: int) -> str | None:
         """Return the primary field on the adjacent persistent form row."""
 
@@ -875,9 +1243,11 @@ def run_compact_endpoint_setup(
         status["value"] = ""
         adjacent = adjacent_role_uid(role_uid, delta)
         if adjacent is not None:
-            event.app.layout.focus(role_inputs[adjacent])
+            event.app.layout.focus(role_primary_input(adjacent))
             return "CONSUMED"
-        if delta < 0 and show_mode:
+        if delta < 0 and source_type_visible(role_uid):
+            event.app.layout.focus(source_type_controls[role_uid])
+        elif delta < 0 and show_mode:
             event.app.layout.focus(mode_control)
         elif delta > 0:
             if command_control is not None:
@@ -892,7 +1262,7 @@ def run_compact_endpoint_setup(
         return "CONSUMED"
 
     def move_role(event, role_uid: str, delta: int) -> SurfaceMoveResult:
-        buffer = role_inputs[role_uid].buffer
+        buffer = role_primary_input(role_uid).buffer
         if buffer.complete_state is None:
             return move_role_row(event, role_uid, delta)
         if delta > 0:
@@ -902,7 +1272,16 @@ def run_compact_endpoint_setup(
         return "CONSUMED"
 
     def choose_role(event, role_uid: str) -> SurfaceActionResult:
-        buffer = role_inputs[role_uid].buffer
+        buffer = role_primary_input(role_uid).buffer
+        if effective_source_type(role_uid) == "INLINE_MEMORY":
+            if not buffer.text.strip():
+                status["value"] = (
+                    f"{spec.role_label(selected_mode_uid(), role_uid)} needs inline Memory text."
+                )
+                return "HANDLED"
+            status["value"] = ""
+            surfaces.focus_relative(event.app, 1, wrap=False)
+            return "HANDLED"
         if (
             buffer.complete_state is not None
             and buffer.complete_state.current_completion is not None
@@ -911,7 +1290,10 @@ def run_compact_endpoint_setup(
             status["value"] = ""
             return "HANDLED"
         try:
-            resolve_role(role_uid)
+            if role_by_uid[role_uid].memory_required:
+                synchronize_required_memory_input(role_uid)
+            else:
+                resolve_role(role_uid)
         except (OSError, TypeError, ValueError) as error:
             status["value"] = str(error)
         else:
@@ -943,7 +1325,7 @@ def run_compact_endpoint_setup(
         candidate = (
             new_name_drafts[role_uid].parent_name
             if role.new_parent_locator
-            else role_inputs[role_uid].text.strip()
+            else selected_memory_context(role_uid)
         )
         selected = (
             candidate if candidate in selector.selectable else selector.view.names[0]
@@ -980,6 +1362,8 @@ def run_compact_endpoint_setup(
                     else ""
                 )
             else:
+                if role.memory_required:
+                    required_memory_owners[role_uid] = selected_name
                 set_role_text(role_uid, selected_name)
                 refresh_new_name_suggestions()
         catalog_detail["role_uid"] = None
@@ -1007,12 +1391,22 @@ def run_compact_endpoint_setup(
     def role_peer_controls(role_uid: str) -> tuple[object, ...]:
         """Return the visible left-to-right controls for one endpoint row."""
 
-        values: list[object] = [role_inputs[role_uid]]
-        if role_uid in browse_controls:
+        values: list[object] = [role_primary_input(role_uid)]
+        if role_uid in browse_controls and role_uses_context_name(role_uid):
             values.append(browse_controls[role_uid])
-        if role_uid in reach_controls and role_allows_descendants(role_uid):
+        if (
+            role_uid in reach_controls
+            and role_allows_descendants(role_uid)
+            and role_uses_context_range(role_uid)
+        ):
             values.append(reach_controls[role_uid])
-        if role_uid in memory_controls and role_allows_memory_focus(role_uid):
+        if (
+            role_uid in memory_controls
+            and role_allows_memory_focus(role_uid)
+            and (
+                role_uid not in source_type_states or role_uses_stored_memory(role_uid)
+            )
+        ):
             values.append(memory_controls[role_uid])
         return tuple(values)
 
@@ -1050,7 +1444,7 @@ def run_compact_endpoint_setup(
 
     def set_reach(role_uid: str, *, include_descendants: bool) -> None:
         reach_states[role_uid].move(1 if include_descendants else -1)
-        if reach_states[role_uid].include_descendants:
+        if role_uid in reach_states and reach_states[role_uid].include_descendants:
             cleared = memory_focuses.get(role_uid)
             if cleared is not None and cleared.clear():
                 status["value"] = (
@@ -1071,15 +1465,22 @@ def run_compact_endpoint_setup(
         return "HANDLED"
 
     def open_memory(role_uid: str) -> bool:
-        if reach_states[role_uid].include_descendants:
+        if role_uid in reach_states and reach_states[role_uid].include_descendants:
             memory_focuses[role_uid].clear()
             status["value"] = "Focused Memory requires THIS CONTEXT ONLY."
             return False
         try:
-            context_name, create = resolve_role(role_uid)
+            if role_by_uid[role_uid].memory_required:
+                context_name, _selected_memory = synchronize_required_memory_input(
+                    role_uid
+                )
+                create = False
+            else:
+                context_name, create = resolve_role(role_uid)
             if create:
                 raise ValueError("A new Context cannot select an existing Memory.")
             memory_focuses[role_uid].prepare_context(context_name)
+            memory_focuses[role_uid].state()
         except (OSError, TypeError, ValueError) as error:
             status["value"] = str(error)
             return False
@@ -1109,6 +1510,12 @@ def run_compact_endpoint_setup(
             )
             return "HANDLED"
         selected = memory_focuses[role_uid].choose()
+        if role_by_uid[role_uid].memory_required:
+            if selected is None:
+                raise RuntimeError("A required Memory chooser returned no Memory.")
+            owner = required_memory_owners[role_uid]
+            set_role_text(role_uid, f"{owner}:{selected}")
+            memory_focuses[role_uid].select_exact(owner, selected)
         memory_detail["role_uid"] = None
         status["value"] = (
             f"{spec.role_label(selected_mode_uid(), role_uid)} uses Memory {selected[:8]}."
@@ -1135,7 +1542,7 @@ def run_compact_endpoint_setup(
         if delta > 0:
             return "BOUNDARY"
         active_role_uids = spec.active_role_uids(selected_mode_uid())
-        event.app.layout.focus(role_inputs[active_role_uids[-1]])
+        event.app.layout.focus(role_primary_input(active_role_uids[-1]))
         status["value"] = ""
         return "CONSUMED"
 
@@ -1169,10 +1576,26 @@ def run_compact_endpoint_setup(
                 )
             )
         for role_uid in spec.active_role_uids(selected_mode_uid()):
+            if source_type_visible(role_uid):
+                values.append(
+                    FocusSurface(
+                        f"SOURCE_TYPE:{role_uid}",
+                        source_type_controls[role_uid],
+                        move_vertical=(
+                            lambda event, delta, uid=role_uid: move_source_type_row(
+                                event, uid, delta
+                            )
+                        ),
+                        activate=(
+                            lambda event, uid=role_uid: choose_source_type(event, uid)
+                        ),
+                        on_focus=close_memory_detail,
+                    )
+                )
             values.append(
                 FocusSurface(
                     f"ROLE:{role_uid}",
-                    role_inputs[role_uid],
+                    role_primary_input(role_uid),
                     move_vertical=(
                         lambda event, delta, uid=role_uid: move_role(event, uid, delta)
                     ),
@@ -1180,7 +1603,7 @@ def run_compact_endpoint_setup(
                     on_focus=close_memory_detail,
                 )
             )
-            if role_uid in browse_controls:
+            if role_uid in browse_controls and role_uses_context_name(role_uid):
                 values.append(
                     FocusSurface(
                         f"BROWSE:{role_uid}",
@@ -1196,7 +1619,11 @@ def run_compact_endpoint_setup(
                         on_focus=lambda uid=role_uid: prepare_browse(uid),
                     )
                 )
-            if role_uid in reach_controls and role_allows_descendants(role_uid):
+            if (
+                role_uid in reach_controls
+                and role_allows_descendants(role_uid)
+                and role_uses_context_range(role_uid)
+            ):
                 values.append(
                     FocusSurface(
                         f"RANGE:{role_uid}",
@@ -1210,7 +1637,14 @@ def run_compact_endpoint_setup(
                         on_focus=close_memory_detail,
                     )
                 )
-            if role_uid in memory_controls and role_allows_memory_focus(role_uid):
+            if (
+                role_uid in memory_controls
+                and role_allows_memory_focus(role_uid)
+                and (
+                    role_uid not in source_type_states
+                    or role_uses_stored_memory(role_uid)
+                )
+            ):
                 values.append(
                     FocusSurface(
                         f"MEMORY:{role_uid}",
@@ -1257,6 +1691,27 @@ def run_compact_endpoint_setup(
         move_mode(event, 1)
         event.app.invalidate()
 
+    source_type_focus = Condition(
+        lambda: any(
+            get_app().layout.has_focus(control)
+            for control in source_type_controls.values()
+        )
+    )
+
+    @bindings.add("left", filter=source_type_focus, eager=True)
+    def _source_type_left(event) -> None:
+        role_uid = focused_control_role(source_type_controls)
+        if role_uid is not None:
+            move_source_type_choice(role_uid, -1)
+        event.app.invalidate()
+
+    @bindings.add("right", filter=source_type_focus, eager=True)
+    def _source_type_right(event) -> None:
+        role_uid = focused_control_role(source_type_controls)
+        if role_uid is not None:
+            move_source_type_choice(role_uid, 1)
+        event.app.invalidate()
+
     reach_focus = Condition(
         lambda: any(
             get_app().layout.has_focus(control) for control in reach_controls.values()
@@ -1297,7 +1752,7 @@ def run_compact_endpoint_setup(
     input_focus = Condition(
         lambda: any(
             get_app().layout.has_focus(input_area)
-            for input_area in role_inputs.values()
+            for input_area in (*role_inputs.values(), *inline_inputs.values())
         )
     )
     writable_input_focus = Condition(
@@ -1338,9 +1793,11 @@ def run_compact_endpoint_setup(
         if buffer.cursor_position < len(buffer.text):
             buffer.cursor_position += 1
         else:
-            role_uid = focused_control_role(role_inputs)
+            role_uid = focused_control_role(role_inputs) or focused_control_role(
+                inline_inputs
+            )
             if role_uid is not None:
-                move_role_peer(event, role_uid, role_inputs[role_uid], 1)
+                move_role_peer(event, role_uid, role_primary_input(role_uid), 1)
         event.app.invalidate()
 
     @bindings.add("left", filter=browse_focus, eager=True)
@@ -1425,7 +1882,15 @@ def run_compact_endpoint_setup(
             )
         if get_app().layout.has_focus(mode_control):
             return " ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel"
+        if source_type_focus():
+            return " ←/→ Source type · ↓ Source input · Tab next control · Esc cancel"
         if input_focus():
+            inline_role_uid = focused_control_role(inline_inputs)
+            if inline_role_uid is not None:
+                return (
+                    " Type exact inline Memory · ←/→ caret · ↑/↓ endpoint row · "
+                    "Enter confirm · Tab next control · Esc cancel"
+                )
             has_matches = focused_input_has_completions()
             movement = "↑/↓ matches" if has_matches else "↑/↓ endpoint row"
             return (
@@ -1477,6 +1942,11 @@ def run_compact_endpoint_setup(
         if command_control is not None and command_control.is_focused():
             if not command_control.valid:
                 return " Fix the red command before running · Tab first control · Esc cancel"
+            if spec.command_ready_hint is not None:
+                return (
+                    f" {safe_terminal_text(spec.command_ready_hint.capitalize())} · "
+                    "↑ previous · Esc cancel"
+                )
             return (
                 " Enter run exact "
                 f"{safe_terminal_text(spec.command_verb)} command · ↑ previous · Esc cancel"
@@ -1492,7 +1962,15 @@ def run_compact_endpoint_setup(
             focused_element=(
                 mode_control
                 if show_mode
-                else role_inputs[spec.active_role_uids(selected_mode_uid())[0]]
+                else (
+                    source_type_controls[spec.active_role_uids(selected_mode_uid())[0]]
+                    if source_type_visible(
+                        spec.active_role_uids(selected_mode_uid())[0]
+                    )
+                    else role_primary_input(
+                        spec.active_role_uids(selected_mode_uid())[0]
+                    )
+                )
             ),
         ),
         key_bindings=bindings,

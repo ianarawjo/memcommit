@@ -522,6 +522,30 @@ def test_check_conformance_role_and_direction_aliases_share_context_route(
     assert len(provider.calls) == 1
 
 
+def test_check_conformance_target_accepts_context_uid(
+    isolated_store,
+    monkeypatch,
+):
+    _store, target, rules, provider = _install_context_conformance_cli_fixture(
+        monkeypatch
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "check-conformance",
+            "--rule",
+            rules.name,
+            "--example",
+            target.uid[:8],
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "[EXAMPLES ticker/examples]" in result.output
+    assert len(provider.calls) == 1
+
+
 def test_check_conformance_from_accepts_unique_local_rule_memory_uid(
     isolated_store,
     monkeypatch,

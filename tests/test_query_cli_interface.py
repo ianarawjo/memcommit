@@ -5,13 +5,27 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
+import pytest
 from typer.testing import CliRunner
 
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.operations.search.answer_references import (
-    SearchAnswerEvidence,
-    SearchAnswerSentence,
-    build_search_answer_reference_document,
+from memcommit.adapters.console.commands.query.command import (
+    _resolve_positional_query_target,
+)
+from memcommit.adapters.console.coordination.context_operand import (
+    ContextOperandSnapshot,
+)
+from memcommit.application.context_access.access import ContextAccess
+from memcommit.application.capabilities.operand_resolution import (
+    ContextOperandAmbiguityError,
+    ContextOperandNotFoundError,
+)
+from memcommit.core.context import Context
+from memcommit.persistence.store import MemoryStore
+from memcommit.application.operations.query.reference_document import (
+    NumberedOrdinaryQueryReference,
+    OrdinaryQueryEvidence,
+    OrdinaryQueryReferenceDocument,
 )
 from memcommit.adapters.console.commands.query.presentation import (
     render_granted_query_response,
@@ -36,6 +50,58 @@ from memcommit.application.operations.query.reference_application import (
 ROOT = Path(__file__).parents[1]
 PACKAGE = ROOT / "src" / "memcommit"
 runner = CliRunner(mix_stderr=False)
+
+
+def test_query_positional_target_accepts_context_uid(isolated_store):
+    store = MemoryStore()
+    target = Context(
+        uid="2a4dc8ab-1111-4111-8111-111111111111",
+        name="query/target",
+    )
+    store.save(target)
+
+    resolved = _resolve_positional_query_target(
+        store,
+        "2a4dc8ab",
+        snapshot=ContextOperandSnapshot.capture(store),
+    )
+
+    assert isinstance(resolved, ContextAccess)
+    assert resolved.display_name == target.name
+
+
+def test_query_positional_uid_never_falls_through_to_question(isolated_store):
+    store = MemoryStore()
+    store.save(Context(uid="aaaaaaaa-1111-4111-8111-111111111111", name="current"))
+
+    with pytest.raises(ContextOperandNotFoundError, match="readable Context"):
+        _resolve_positional_query_target(
+            store,
+            "deadbeef",
+            snapshot=ContextOperandSnapshot.capture(store),
+        )
+
+
+def test_query_positional_uid_compares_context_and_query_view_candidates(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    shared_uid = "2a4dc8ab-1111-4111-8111-111111111111"
+    store.save(Context(uid=shared_uid, name="query/target"))
+    monkeypatch.setattr(
+        "memcommit.adapters.console.commands.query.command.freeze_granted_query_targets",
+        lambda _store: (
+            GrantedQueryTarget(shared_uid, "shared/view", "attachment"),
+        ),
+    )
+
+    with pytest.raises(ContextOperandAmbiguityError, match="multiple Query targets"):
+        _resolve_positional_query_target(
+            store,
+            "2a4dc8ab",
+            snapshot=ContextOperandSnapshot.capture(store),
+        )
 
 
 def test_query_cli_has_no_transcript_session_surface():
@@ -95,19 +161,19 @@ def test_query_plain_renderers_preserve_typed_answer_modes(capsys):
 
 def test_grounded_query_plain_renderer_uses_self_contained_reference_rows(capsys):
     request = OrdinaryQueryRequest("What?", ("left", "right"))
-    document = build_search_answer_reference_document(
-        (
-            SearchAnswerEvidence(
+    evidence = (
+            OrdinaryQueryEvidence(
                 "m1", "left/source", "memory", "11111111-left", "Left fact."
             ),
-            SearchAnswerEvidence(
+            OrdinaryQueryEvidence(
                 "m2", "right/source", "artifact", "22222222-right", "Right fact."
             ),
-        ),
-        (
-            SearchAnswerSentence("Combined answer.", ("m1", "m2")),
-            SearchAnswerSentence("No second claim."),
-            SearchAnswerSentence("No third claim."),
+    )
+    document = OrdinaryQueryReferenceDocument(
+        body="Combined answer. [1] [2] No second claim. No third claim.",
+        references=tuple(
+            NumberedOrdinaryQueryReference(index, item)
+            for index, item in enumerate(evidence, start=1)
         ),
     )
 

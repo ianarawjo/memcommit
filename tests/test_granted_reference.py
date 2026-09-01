@@ -1,4 +1,4 @@
-"""Export-authorized immutable References from exact granted Memories."""
+"""Immutable References from explicit READ-granted Sources."""
 
 from __future__ import annotations
 
@@ -17,7 +17,8 @@ from memcommit.adapters.python_api import (
     ReferenceContextError,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.core.context import Memory, MemoryRef
+from memcommit.core.context import Context, Memory, MemoryRef
+from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 from memcommit.adapters.agent.reference import ReferenceAgentAdapter
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
@@ -32,9 +33,18 @@ from memcommit.application.operations.profile.model import (
     create_authority_grant,
     update_authority_grant,
 )
-from memcommit.application.operations.reference.application import ReferenceRequest
-from memcommit.application.operations.reference.runtime import MemoryStoreReferencePort
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.application.operations.reference.application import (
+    ContextReferenceRequest,
+    ReferenceRequest,
+)
+from memcommit.application.operations.reference.runtime import (
+    MemoryStoreReferencePort,
+)
+from memcommit.persistence.store import (
+    ConcurrentContextUpdateError,
+    MemoryStore,
+    context_record_digest,
+)
 
 
 runner = CliRunner(mix_stderr=False)
@@ -95,6 +105,62 @@ def _fixture(isolated_store, tmp_path, monkeypatch):
     )
 
 
+def _recursive_context_fixture(isolated_store, tmp_path, monkeypatch):
+    (
+        store,
+        authority_store,
+        workspace,
+        local_memory,
+        source,
+        memory,
+        grant,
+    ) = _fixture(isolated_store, tmp_path, monkeypatch)
+    child = ops.init("authority/source/child")
+    child_memory = ops.add(child, "Retain the readable lexical descendant.")
+    embedded = ops.init("authority/source/embedded")
+    embedded_memory = ops.add(embedded, "Retain the readable embedded Context.")
+    mutable_source = authority_store.load_for_update(source.name)
+    ops.embed(embedded, mutable_source)
+    for context in (child, embedded, mutable_source):
+        authority_store.save(context)
+    _registry, grant = update_authority_grant(
+        grant.uid,
+        permissions=_REQUIRED,
+        recursive=True,
+    )
+    return (
+        store,
+        authority_store,
+        workspace,
+        local_memory,
+        mutable_source,
+        memory,
+        child,
+        child_memory,
+        embedded,
+        embedded_memory,
+        grant,
+    )
+
+
+def _context_contents(context: Context) -> set[str]:
+    contents: set[str] = set()
+    visited: set[str] = set()
+
+    def visit(current: Context) -> None:
+        if current.uid in visited:
+            return
+        visited.add(current.uid)
+        for item in current.iter_items():
+            if isinstance(item, Memory):
+                contents.add(item.content)
+            elif isinstance(item, Context):
+                visit(item)
+
+    visit(context)
+    return contents
+
+
 def _qualified(memory: Memory) -> str:
     return f"shared/source:{memory.uid[:8]}"
 
@@ -140,6 +206,273 @@ def test_explicit_granted_memory_reference_retains_bytes_and_grant_provenance(
     assert record["content_sha256"] == reference.snapshot_content_sha256
     [checkpoint] = store.list_checkpoints(workspace.name)
     assert checkpoint["args"]["granted_source"] == record["grant_source"]
+
+
+def test_explicit_granted_context_reference_retains_direct_bytes_and_provenance(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    store, authority_store, workspace, _local, source, memory, grant = _fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    source_before = context_record_digest(authority_store.load_direct(source.name))
+
+    result = runner.invoke(
+        app,
+        ["reference", "shared/source", "--direct", "--into", workspace.name],
+    )
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert "direct Context snapshot 'shared/source'" in result.output
+    assert context_record_digest(authority_store.load_direct(source.name)) == (
+        source_before
+    )
+    snapshot = next(
+        item
+        for item in store.load_direct(workspace.name).iter_items()
+        if isinstance(item, ContextSnapshotRef)
+    )
+    assert snapshot.target_context_uid == source.uid
+    assert snapshot.target_context_name == "shared/source"
+    assert _context_contents(snapshot) == {memory.content}
+    assert len(snapshot.granted_sources) == 1
+    assert snapshot.granted_sources[0].grant_uid == grant.uid
+    assert snapshot.granted_sources[0].public_name == "shared/source"
+    [checkpoint] = store.list_checkpoints(workspace.name)
+    assert checkpoint["args"]["granted_sources"] == [
+        snapshot.granted_sources[0].to_dict()
+    ]
+
+
+def test_recursive_granted_context_reference_retains_lexical_and_embed_scope(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    (
+        store,
+        authority_store,
+        workspace,
+        _local,
+        source,
+        root_memory,
+        child,
+        child_memory,
+        embedded,
+        embedded_memory,
+        grant,
+    ) = _recursive_context_fixture(isolated_store, tmp_path, monkeypatch)
+
+    result = runner.invoke(
+        app,
+        [
+            "reference",
+            "shared/source",
+            "--recursive",
+            "--into",
+            workspace.name,
+        ],
+    )
+
+    assert result.exit_code == 0, result.stderr or result.output
+    snapshot = next(
+        item
+        for item in store.load_direct(workspace.name).iter_items()
+        if isinstance(item, ContextSnapshotRef)
+    )
+    assert snapshot.include_descendants is True
+    assert result.output.startswith("Referenced recursive Context snapshot")
+    assert {
+        record["name"] for record in snapshot.snapshot_package["contexts"]
+    } == {
+        "shared/source",
+        "shared/source/child",
+        "shared/source/embedded",
+    }
+    assert _context_contents(snapshot) == {
+        root_memory.content,
+        child_memory.content,
+        embedded_memory.content,
+    }
+    assert {source.public_name for source in snapshot.granted_sources} == {
+        "shared/source",
+        "shared/source/child",
+        "shared/source/embedded",
+    }
+    assert {source.grant_uid for source in snapshot.granted_sources} == {grant.uid}
+
+    changed = authority_store.load_for_update(source.name)
+    changed.replace(Memory(uid=root_memory.uid, content="Authority changed later."))
+    authority_store.save(changed)
+    update_authority_grant(grant.uid, permissions=("QUERY",))
+    retained = store.load(workspace.name).memories[snapshot.uid]
+    assert isinstance(retained, ContextSnapshotRef)
+    assert _context_contents(retained) == {
+        root_memory.content,
+        child_memory.content,
+        embedded_memory.content,
+    }
+    assert child.uid != embedded.uid
+
+
+def test_recursive_granted_context_reference_keeps_selected_grant_namespace(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    (
+        store,
+        _authority_store,
+        workspace,
+        _local,
+        _source,
+        root_memory,
+        child,
+        child_memory,
+        _embedded,
+        embedded_memory,
+        _grant,
+    ) = _recursive_context_fixture(isolated_store, tmp_path, monkeypatch)
+    collision = ops.init("shared/source/child")
+    collision_memory = ops.add(collision, "This local name must not win traversal.")
+    store.save(collision)
+    port = MemoryStoreReferencePort.capture(
+        store,
+        allow_granted_sources=True,
+    )
+
+    plan = port.freeze_context(
+        ContextReferenceRequest(
+            "shared/source",
+            workspace.name,
+            include_descendants=True,
+            follow_embeds=True,
+        )
+    )
+
+    child_record = next(
+        record
+        for record in plan.snapshot_package["contexts"]
+        if record["name"] == "shared/source/child"
+    )
+    assert child_record["uid"] == child.uid
+    result = port.apply_context(plan)
+    retained = store.load(workspace.name).memories[result.reference_uid]
+    assert isinstance(retained, ContextSnapshotRef)
+    assert _context_contents(retained) == {
+        root_memory.content,
+        child_memory.content,
+        embedded_memory.content,
+    }
+    assert collision_memory.content not in _context_contents(retained)
+
+
+def test_recursive_granted_context_reference_conceals_query_only_override(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    (
+        store,
+        _authority_store,
+        workspace,
+        _local,
+        _source,
+        root_memory,
+        child,
+        child_memory,
+        _embedded,
+        embedded_memory,
+        _grant,
+    ) = _recursive_context_fixture(isolated_store, tmp_path, monkeypatch)
+    create_authority_grant(
+        authority_name="reference-authority",
+        grantee_name=AUTHORING_PROFILE_NAME,
+        resource_name=child.name,
+        attachment_name=workspace.name,
+        public_name="shared/source/child",
+        permissions=("QUERY",),
+        recursive=True,
+    )
+    port = MemoryStoreReferencePort.capture(
+        store,
+        allow_granted_sources=True,
+    )
+
+    plan = port.freeze_context(
+        ContextReferenceRequest(
+            "shared/source",
+            workspace.name,
+            include_descendants=True,
+            follow_embeds=True,
+        )
+    )
+
+    assert {
+        record["name"] for record in plan.snapshot_package["contexts"]
+    } == {"shared/source", "shared/source/embedded"}
+    result = port.apply_context(plan)
+    retained = store.load(workspace.name).memories[result.reference_uid]
+    assert isinstance(retained, ContextSnapshotRef)
+    assert _context_contents(retained) == {
+        root_memory.content,
+        embedded_memory.content,
+    }
+    assert child_memory.content not in _context_contents(retained)
+
+
+def test_granted_context_reference_apply_revalidates_grant_and_all_source_records(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    (
+        store,
+        authority_store,
+        workspace,
+        _local,
+        _source,
+        _root_memory,
+        child,
+        _child_memory,
+        _embedded,
+        _embedded_memory,
+        grant,
+    ) = _recursive_context_fixture(isolated_store, tmp_path, monkeypatch)
+    request = ContextReferenceRequest(
+        "shared/source",
+        workspace.name,
+        include_descendants=True,
+        follow_embeds=True,
+    )
+
+    grant_port = MemoryStoreReferencePort.capture(
+        store,
+        allow_granted_sources=True,
+    )
+    grant_plan = grant_port.freeze_context(request)
+    update_authority_grant(grant.uid, permissions=_REQUIRED)
+    with pytest.raises(ProfileError, match="grant changed"):
+        grant_port.apply_context(grant_plan)
+    assert store.load_direct(workspace.name).ordered_uids()
+    assert len(store.load_direct(workspace.name).ordered_uids()) == 1
+    assert store.list_checkpoints(workspace.name) == []
+
+    source_port = MemoryStoreReferencePort.capture(
+        store,
+        allow_granted_sources=True,
+    )
+    source_plan = source_port.freeze_context(request)
+    changed_child = authority_store.load_for_update(child.name)
+    ops.add(changed_child, "Changed after Context Reference review.")
+    authority_store.save(changed_child)
+    with pytest.raises(ConcurrentContextUpdateError, match="changed"):
+        source_port.apply_context(source_plan)
+    assert len(store.load_direct(workspace.name).ordered_uids()) == 1
+    assert store.list_checkpoints(workspace.name) == []
 
 
 def test_granted_reference_rejects_query_only_source(
@@ -339,7 +672,7 @@ def test_retained_granted_reference_survives_source_edit_and_grant_revocation(
     assert "Authority changed later" not in shown.output
 
 
-def test_granted_reference_requires_explicit_owner_and_owned_local_target(
+def test_granted_reference_requires_explicit_memory_owner_and_owned_local_target(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -369,12 +702,11 @@ def test_granted_reference_requires_explicit_owner_and_owned_local_target(
     )
 
     assert bare.exit_code == 1
-    assert "local Context" in bare.stderr
-    assert whole_context.exit_code == 1
-    assert "does not exist" in whole_context.stderr
+    assert "readable Context" in bare.stderr
+    assert whole_context.exit_code == 0, whole_context.stderr
     assert granted_target.exit_code == 1
     assert "does not exist locally" in granted_target.stderr
-    assert store.list_checkpoints(workspace.name) == []
+    assert len(store.list_checkpoints(workspace.name)) == 1
 
     explicit_from = runner.invoke(
         app,
@@ -388,6 +720,7 @@ def test_granted_reference_requires_explicit_owner_and_owned_local_target(
         ],
     )
     assert explicit_from.exit_code == 0, explicit_from.stderr
+    assert len(store.list_checkpoints(workspace.name)) == 2
 
 
 def test_public_and_agent_routes_classify_grant_denial_as_authority(
@@ -442,6 +775,11 @@ def test_explicit_root_client_does_not_inherit_active_profile_grants(
             source_context="shared/source",
             into_context=workspace.name,
         )
+    with pytest.raises(ReferenceContextError, match="does not exist"):
+        client.reference_context(
+            "shared/source",
+            into_context=workspace.name,
+        )
 
     assert store.load_direct(workspace.name).to_dict() == before
     assert store.list_checkpoints(workspace.name) == []
@@ -452,3 +790,21 @@ def test_explicit_root_client_does_not_inherit_active_profile_grants(
         into_context=workspace.name,
     )
     assert active_result.source_name == "shared/source"
+    active_context = MemCommitClient().reference_context(
+        "shared/source",
+        into_context=workspace.name,
+    )
+    assert active_context.source_name == "shared/source"
+    agent_target = ops.init("agent-target")
+    store.save(agent_target)
+    agent_response = ReferenceAgentAdapter(MemCommitClient()).invoke(
+        {
+            "version": 2,
+            "kind": "context",
+            "source_context": "shared/source",
+            "into_context": agent_target.name,
+            "recursive": False,
+        }
+    )
+    assert agent_response["ok"] is True
+    assert agent_response["result"]["source_name"] == "shared/source"

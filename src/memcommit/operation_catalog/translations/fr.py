@@ -68,7 +68,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Supprimer un Context ou un élément précis devenu inutile.",
     ),
     "diff": _copy(
-        "Afficher les différences enregistrées par un checkpoint de Context ou l’Update actif.",
+        "Afficher la différence entre l’état précédent et le résultat enregistrée par un seul checkpoint de Context.",
         "Vérifier exactement ce qu’une opération enregistrée a modifié.",
     ),
     "distill": _copy(

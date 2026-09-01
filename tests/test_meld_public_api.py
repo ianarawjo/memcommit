@@ -10,11 +10,12 @@ import memcommit.adapters.python_api._operations.meld as meld_operation
 from memcommit.adapters.python_api import (
     MeldConflictError,
     MeldContextError,
+    MeldDecisionInput,
     MeldSessionResult,
     MeldStorageError,
     MemCommitClient,
 )
-from memcommit.application.operations.meld.proposal_iteration import MeldSessionSnapshot
+from memcommit.application.operations.meld.session import MeldSessionVersionError
 
 
 def _review_session():
@@ -120,76 +121,50 @@ def test_open_meld_maps_missing_target_to_public_context_error(tmp_path):
         client.open_meld("missing")
 
 
-def test_remaining_meld_lifecycle_methods_delegate_to_the_operation_owner(
+def test_resolve_meld_delegates_the_complete_decision_set(
     tmp_path,
     monkeypatch,
 ):
     client = MemCommitClient(root=tmp_path / "store", create=True)
     calls = []
 
-    def capture(name):
-        def invoke(*args, **kwargs):
-            calls.append((name, args, kwargs))
-            return name
-
-        return invoke
-
-    for name in ("comment_meld", "preserve_meld", "defer_meld", "apply_meld"):
-        monkeypatch.setattr(meld_operation, name, capture(name))
+    monkeypatch.setattr(
+        meld_operation,
+        "resolve_meld",
+        lambda *args, **kwargs: (calls.append((args, kwargs)) or "resolved"),
+    )
+    decisions = (
+        MeldDecisionInput("issue-1", "confirm"),
+        MeldDecisionInput("issue-2", "force"),
+    )
 
     assert (
-        client.comment_meld(
+        client.resolve_meld(
             "result",
-            "Keep both.",
-            issue_uid="issue-1",
-            option_uid="option-1",
+            decisions,
             expected_version="saved-version",
-            revision="replace",
-            revises_turn_uids=("turn-1",),
         )
-        == "comment_meld"
+        == "resolved"
     )
-    assert (
-        client.preserve_meld("result", expected_version="saved-version")
-        == "preserve_meld"
-    )
-    assert client.defer_meld("result", expected_version="saved-version") == "defer_meld"
-    assert client.apply_meld("result", expected_version="saved-version") == "apply_meld"
-
-    assert calls[0][1][0] is client._runtime
-    assert calls[0][1][1:] == ("result", "Keep both.")
-    assert calls[0][2] == {
-        "issue_uid": "issue-1",
-        "option_uid": "option-1",
-        "expected_version": "saved-version",
-        "revision": "replace",
-        "revises_turn_uids": ("turn-1",),
-    }
-    assert [call[0] for call in calls] == [
-        "comment_meld",
-        "preserve_meld",
-        "defer_meld",
-        "apply_meld",
-    ]
-    assert [call[2]["expected_version"] for call in calls] == [
-        "saved-version",
-        "saved-version",
-        "saved-version",
-        "saved-version",
+    assert calls == [
+        (
+            (client._runtime, "result", decisions),
+            {"expected_version": "saved-version"},
+        )
     ]
 
 
-def test_comment_meld_rejects_a_stale_review_before_provider_connection(
+def test_resolve_meld_rejects_a_stale_review_before_provider_connection(
     tmp_path,
     monkeypatch,
 ):
-    session = _review_session()
     monkeypatch.setattr(
         meld_operation,
-        "_meld_snapshot",
-        lambda runtime, target: MeldSessionSnapshot(
-            session=session,
-            version_token="current-version",
+        "_expected_meld_snapshot",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            MeldSessionVersionError(
+                "The saved Meld changed after this action was reviewed."
+            )
         ),
     )
     client = MemCommitClient(
@@ -201,46 +176,20 @@ def test_comment_meld_rejects_a_stale_review_before_provider_connection(
     )
 
     with pytest.raises(MeldConflictError, match="changed"):
-        client.comment_meld(
+        client.resolve_meld(
             "result",
-            issue_uid="issue-1",
-            option_uid="option-1",
+            (),
             expected_version="reviewed-version",
         )
 
 
-@pytest.mark.parametrize("method_name", ("preserve_meld", "defer_meld", "apply_meld"))
-def test_saved_meld_mutations_reject_stale_reviews_before_execution(
-    tmp_path,
-    monkeypatch,
-    method_name,
-):
-    session = _review_session()
-    monkeypatch.setattr(
-        meld_operation,
-        "_meld_snapshot",
-        lambda runtime, target: MeldSessionSnapshot(session, "current-version"),
-    )
-    for boundary in (
-        "execute_meld_preservation",
-        "execute_prepared_meld_turn",
-        "execute_meld_session_defer",
-        "execute_meld_apply",
-    ):
-        monkeypatch.setattr(
-            meld_operation,
-            boundary,
-            lambda *args, _boundary=boundary, **kwargs: (_ for _ in ()).throw(
-                AssertionError(f"stale action crossed {_boundary}")
-            ),
-        )
+def test_retired_meld_lifecycle_methods_are_not_public(tmp_path):
     client = MemCommitClient(root=tmp_path / "store", create=True)
 
-    with pytest.raises(MeldConflictError, match="changed"):
-        getattr(client, method_name)(
-            "result",
-            expected_version="reviewed-version",
-        )
+    assert not hasattr(client, "comment_meld")
+    assert not hasattr(client, "preserve_meld")
+    assert not hasattr(client, "defer_meld")
+    assert not hasattr(client, "apply_meld")
 
 
 def test_meld_current_context_failure_uses_the_meld_error_taxonomy():

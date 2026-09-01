@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     freeze_granted_context_binding,
     resolve_context_access,

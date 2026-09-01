@@ -1,5 +1,11 @@
 # Context and Memory Reference capture log
 
+> Historical evidence: this mode-based bare launcher was superseded by the
+> compact Target-plus-exact-Memory flow recorded in
+> `../reference-compact-exact-memory-20260831/`. Its Context snapshot results
+> remain evidence for the explicit CLI/callable route, not the current bare
+> `mem reference` screen.
+
 This ordered set records the shared immutable Reference flow for both Context
 and Memory units, including the direct/recursive Context scope boundary and a
 self-reference failure with no partial durable state.

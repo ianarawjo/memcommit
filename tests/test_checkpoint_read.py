@@ -8,14 +8,14 @@ import uuid
 import pytest
 
 from memcommit.application.capabilities import ops
-from memcommit.application.capabilities.authority.checkpoint_read import (
+from memcommit.application.authorization.checkpoint_read import (
     CheckpointReadAuthorizationError,
     read_checkpoint_history,
 )
-from memcommit.application.capabilities.authority.checkpoint_read_model import (
+from memcommit.application.authorization.checkpoint_read_model import (
     CheckpointRead,
 )
-from memcommit.application.capabilities.authority.context_access import ContextAccess
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     AUTHORING_PROFILE_UID,
@@ -27,8 +27,8 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
+from memcommit.application.context_access.granted_view import GrantedContextView
 from memcommit.application.operations.profile.model import (
-    GrantedContextView,
     ProfileError,
     create_authority_grant,
     update_authority_grant,

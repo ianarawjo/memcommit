@@ -76,18 +76,28 @@ does not display kind. Durable UIDs never enter the model prompt. This makes
 host-validated identity rather than trusting a number fabricated in generated
 text.
 
+`memcommit.application.operations.query.reference_document` owns the typed
+`OrdinaryQueryEvidence`, `NumberedOrdinaryQueryReference`, and
+`OrdinaryQueryReferenceDocument` values and the pure row renderer. Query's
+answer builder consumes the validated variable-length block sequence; it does
+not impose a sentence count. The retired Search-owned `SearchAnswerSentence`
+and `build_search_answer_reference_document` API required exactly three
+sentences, had no production caller, and is deleted rather than retained as a
+compatibility path.
+
 Answer intent and citation identity are separate concerns. The implemented
 case-derived answer contract and its calibration method are recorded in
 `query-case-derived-answer-design-rationale.md`. Provider contract version 2
 distinguishes direct, partial, absent, and observational results without
 weakening this document's host-owned alias and numbering boundary.
 
-Only the row facts and punctuation are shared with provider-free Find. Query retains
-first-use citation numbering, evidence alias validation, and used-reference
-selection; Find retains match ordering, exact spans, MemoryRef provenance, and
-its own preview policy. Sharing `SearchAnswerEvidence` itself was rejected
-because a provider-free exact match has no Query evidence alias or citation
-selection semantics.
+Only the row facts and punctuation are shared with provider-free Find. Query
+retains first-use citation numbering, evidence alias validation, and
+used-reference selection; Find retains match ordering, exact spans, MemoryRef
+provenance, and its own preview policy. `OrdinaryQueryEvidence` remains
+Query-owned because a provider-free exact match has no Query evidence alias or
+citation-selection semantics. The earlier Search-prefixed evidence name did
+not reflect its actual consumer and was removed.
 
 ## Boundaries and alternatives
 

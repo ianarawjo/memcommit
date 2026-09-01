@@ -59,13 +59,13 @@ command stack only when the granted authority reports that its corresponding
 stack is empty. Revocation, authority drift, and exact-unit ordering failures
 still fail closed rather than substituting an unrelated local command.
 
-Read-only `mem diff` treats the saved Update receipt as one endpoint unit too.
-An Update may bind a granted Source, a granted Target, or both, so freshness
-inspection revalidates every present frozen Grant binding before comparing the
-current frames. A granted Source must never be reopened from the active
-Profile's local store merely because its Target is local. Revocation or
-authority drift leaves the recorded diff inspectable but marks it revoked or
-stale under the same fail-closed presentation used for a granted Target.
+Read-only `mem review update` treats the saved Update receipt as immutable
+operation evidence. An Update may bind a granted Source, a granted Target, or
+both; later revocation or authority drift does not erase its recorded plan,
+reasons, or provenance. `mem diff` has the narrower physical role: it reads one
+authorized Context checkpoint and compares that revision with its recorded
+pre-image. The checkpoint UIDs printed by an applied Update receipt bridge
+those two views without making Diff reopen the active Update slot.
 
 ### Reversible Context creation
 

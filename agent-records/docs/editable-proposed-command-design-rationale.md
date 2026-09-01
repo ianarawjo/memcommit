@@ -67,7 +67,10 @@ Source/Child, Target, or Position rebuilds the canonical command in the field.
 Cursor or hover movement does not count as a retained semantic change. If an
 upper choice is temporarily incomplete—for example, Memory mode before a
 direct Memory is checked—the red box shows an editable command seed until the
-upper form becomes complete.
+upper form becomes complete. When that seed has no editable arguments, the
+box keeps its invalid title but suppresses the repeated missing-field sentence:
+the incomplete upper row already identifies the required choice. A partially
+typed or pasted invalid command still shows its precise repair diagnostic.
 
 ## Vertical uses: Embed and Edit
 
@@ -148,6 +151,12 @@ Setup draft. It does not rebuild a different request from stale upper fields,
 spawn a child shell, connect a provider, or publish durable state. Branch,
 Meld, Update, and Sever own codecs beside their command adapters; the shared
 terminal component no longer contains operation-named projection modules.
+
+Reference uses the same binding for its compact exact-Memory form. Changing
+the upper Target, Memory owner, or exact Memory rebuilds the command; editing
+the complete `--into`, `--from`, and Memory operands validates their frozen
+catalog identities and replaces those three upper values together before the
+request is frozen.
 
 ## Remaining rollout boundary
 

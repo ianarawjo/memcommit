@@ -46,12 +46,11 @@ there is intentionally no profile-wide “last Scope” preference.
   ordinary-local direct graph for Memory or item coordinates, completes a
   local auto-typed Context/Memory target, and offers the all-direct-item owner
   lookup needed by Show. Pure locator grammar remains in core `resolution.py`.
-- `application.operations.search.corpus` loads one or more searchable roots
-  and independently controls embedded-Context traversal and authorized
-  activity artifacts for Search, Find, and ordinary Query. It belongs to the
-  Search operation because those roots are immediately projected into
-  Search-owned candidates rather than remaining operation-neutral Context
-  targets.
+- `application.capabilities.retrieval_corpus.loading` loads one or more
+  readable roots and independently controls embedded-Context traversal and
+  authorized activity artifacts for Search, Find, and ordinary Query. Its
+  `RetrievalCandidate` and `RetrievalArtifact` types are operation-neutral;
+  ranking and answer semantics remain in their calling operations.
 - `application.capabilities.authority.readable_contexts` owns the Store-backed
   read facade that unifies ordinary local and effectively READ-granted public
   Contexts. It remains outside core because it reads Profile and persistence

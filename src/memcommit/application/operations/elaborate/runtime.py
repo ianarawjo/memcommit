@@ -5,13 +5,18 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.context_access import (
-    ContextAccess,
+from memcommit.application.authorization.context_operation import (
     authorized_context_mutation,
+)
+from memcommit.application.context_access.access import (
+    ContextAccess,
     freeze_granted_context_binding,
     grant_checkpoint_args,
-    resolve_context_access,
     revalidate_granted_context_binding,
+)
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
 )
 from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,
@@ -131,13 +136,19 @@ class MemoryStoreElaboratePort(ElaborateSourcePort):
             explicit_context=request.context_locator,
         )
         with authority_grant_snapshot_lock() as registry:
-            access = resolve_context_access(
+            candidates = freeze_profile_context_access_candidates(
+                self._store,
+                current_name=self._current_name,
+                registry=registry,
+            )
+            access = resolve_existing_context_access(
                 self._store,
                 locator.context_locator,
                 current_name=self._current_name,
                 required_permission="UPDATE",
                 registry=registry,
-            )
+                candidates=candidates,
+            ).value
             context = access.store.load_direct(access.context_name)
             target = ops.resolve_direct_memory(context, locator.memory_selector)
             binding = (

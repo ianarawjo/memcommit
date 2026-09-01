@@ -25,8 +25,8 @@ from memcommit.application.capabilities.semantic.generative_reduction_reference 
     distill_makemore_reference_payload,
     render_distill_makemore_reference_examples,
 )
-from memcommit.application.operations.search.answer_references import (
-    SearchAnswerEvidence,
+from memcommit.application.operations.query.reference_document import (
+    OrdinaryQueryEvidence,
 )
 from memcommit.application.operations.profile.config import (
     STUDY_RUN_AUTHORITY_SOURCE_KIND,
@@ -161,7 +161,7 @@ def test_find_and_query_study_turns_omit_authored_examples(monkeypatch) -> None:
     assert cases == []
 
     evidence = (
-        SearchAnswerEvidence(
+        OrdinaryQueryEvidence(
             "m1",
             "policy",
             "memory",

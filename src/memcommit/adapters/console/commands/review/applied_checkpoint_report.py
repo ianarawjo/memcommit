@@ -69,11 +69,41 @@ def _makemore_lines(payload: dict[str, object]) -> list[str]:
         quality_policy = "STRICT" if case_validation else "LEGACY"
     lines = [
         f"MODE · {_line(payload.get('mode', '(unknown)'))}",
+        f"SOURCE · {_line(payload.get('source_context') or '(inline)')}",
         f"TARGET · {_line(payload.get('target_context') or '(unknown)')}",
         f"VERIFICATION · {_line(payload.get('verification', 'UNVERIFIED'))}",
         f"QUALITY · {_line(quality_policy)}",
         f"CASE VALIDATION · {_line(case_validation or '(legacy)')}",
     ]
+    distillation = payload.get("distillation")
+    if payload.get("source_mode") == "DISTILL_THEN_MAKEMORE" and isinstance(
+        distillation,
+        dict,
+    ):
+        lines.extend(("", "PIPELINE · DISTILL → MAKEMORE"))
+        distill_overview = distillation.get("overview")
+        if distill_overview:
+            lines.extend(("DISTILL OVERVIEW", _line(distill_overview)))
+        rules = distillation.get("rules")
+        if isinstance(rules, list):
+            lines.extend(("", f"TRANSIENT DISTILLED RULES · {len(rules)}"))
+            for index, rule in enumerate(rules, 1):
+                if not isinstance(rule, dict):
+                    continue
+                lines.append(f"{index}. {_line(rule.get('content', ''))}")
+                lines.append(f"   WHY · {_line(rule.get('rationale', ''))}")
+                support = rule.get("support_memory_uids")
+                if isinstance(support, list):
+                    lines.append(
+                        "   SUPPORT · "
+                        + (", ".join(_line(uid) for uid in support) or "NONE")
+                    )
+                boundary = rule.get("boundary_memory_uids")
+                if isinstance(boundary, list) and boundary:
+                    lines.append(
+                        "   BOUNDARY · "
+                        + ", ".join(_line(uid) for uid in boundary)
+                    )
     overview = payload.get("overview")
     if overview:
         lines.extend(("", "PROPOSAL OVERVIEW", _line(overview)))

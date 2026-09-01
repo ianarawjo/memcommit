@@ -21,14 +21,21 @@ from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     GrantedReadStore,
     context_access_display_facts,
     resolve_context_access,
 )
 from memcommit.adapters.console.commands.help.inventory import CommandEntry
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
+)
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
+)
+from memcommit.application.capabilities.operand_resolution import (
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.commands.audit.receipt import (
@@ -227,11 +234,11 @@ def cmd(
                 "the Rules Context."
             )
         if rules_operands:
-            rules_name = context_snapshot.resolve(rules_operands[0])
-            if not store.context_exists(rules_name):
-                raise ConformanceError(
-                    "Audit Conformance currently requires a local Rules Context."
-                )
+            rules_name = resolve_existing_context_operand(
+                freeze_local_context_operand_candidates(store),
+                rules_operands[0],
+                current=context_snapshot.current_name,
+            ).name
             rules_ctx = store.load_direct(rules_name)
         if select_source:
             selected = _interactive_source(
@@ -247,15 +254,12 @@ def cmd(
                     "Audit Conformance currently requires a local Target Context."
                 )
         else:
-            canonical_name = (
-                None if context_name is None else context_snapshot.resolve(context_name)
-            )
-            access = resolve_context_access(
+            access = resolve_existing_context_access(
                 store,
-                canonical_name,
+                context_name,
                 current_name=context_snapshot.current_name,
                 required_permission="READ",
-            )
+            ).value
             ctx = (
                 GrantedReadStore(access).load_direct(access.display_name)
                 if access.is_granted

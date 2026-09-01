@@ -126,6 +126,32 @@ def test_cli_reference_operand_roles_are_actionable_outside_a_tty(isolated_store
     assert "outside a terminal" in bare.stderr
 
 
+def test_cli_context_reference_accepts_source_and_target_context_uids(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("uid/reference-source")
+    ops.add(source, "source claim")
+    target = ops.init("uid/reference-target")
+    store.save(source)
+    store.save(target)
+
+    result = runner.invoke(
+        app,
+        [
+            "reference",
+            "--from",
+            source.uid[:8],
+            "--into",
+            target.uid[:8],
+        ],
+    )
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert source.name in result.output
+    assert target.name in result.output
+
+
 def test_cli_reference_finds_unique_bare_uid_and_qualified_relative_owner(
     isolated_store,
 ):

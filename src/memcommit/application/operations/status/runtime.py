@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     context_access_display_facts,
     resolve_context_access,
@@ -13,12 +13,12 @@ from memcommit.application.capabilities.authority.context_access import (
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 from memcommit.core.context_targeting.model import ContextScope
-from memcommit.application.capabilities.authority.readable_contexts import ReadableContextCatalog
+from memcommit.application.context_access.readable_contexts import ReadableContextCatalog
+from memcommit.application.context_access.granted_view import grants_for_attachment
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.operations.profile.config import ProfileRegistry, profile_store_dir
 from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,
-    grants_for_attachment,
 )
 from memcommit.source_projection.model import SourceState
 from memcommit.application.operations.status.application import (

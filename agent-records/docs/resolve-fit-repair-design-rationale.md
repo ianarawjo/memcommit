@@ -90,11 +90,14 @@ The visible choice topology is always:
 ```
 
 The inline `YOUR INTENT` field is visually attached to choice 2 but is not a
-fourth Up/Down row. Enter on choice 2 opens its one-line editor. Enter or Escape
-freezes the draft and returns to choice 2; Up or Down freezes it and moves
-directly to choice 1 or 3. A blank draft does not satisfy choice 2 and does not
-make Finalize ready. If the person later selects choice 1, the draft remains
-process-local for reversible editing but is excluded from finalized input.
+fourth Up/Down row. Moving onto choice 2 immediately activates its neutral
+one-line editor and requests a blinking beam caret. Left/Right then moves the
+text caret rather than changing Audit items. Enter or Escape freezes the draft
+and returns to choice 2; Up or Down freezes it and moves directly to choice 1
+or 3. Merely traversing an unchanged retained draft does not select choice 2.
+A blank draft does not satisfy choice 2 and does not make Finalize ready. If
+the person later selects choice 1, the draft remains process-local for
+reversible editing but is excluded from finalized input.
 
 Previous and next item controls are explicit selectable actions immediately
 above `FINALIZE DECISIONS`. Left/Right also changes items. This placement makes

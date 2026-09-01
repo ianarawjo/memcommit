@@ -393,17 +393,25 @@ def cmd(
         reference_is_auto_memory = bool(
             auto_type_positionals
             and from_ is not None
-            and isinstance(
-                parse_auto_typed_context_memory_operand(from_),
-                DirectMemoryLocator,
+            and (
+                isinstance(
+                    reference_parsed := parse_auto_typed_context_memory_operand(
+                        from_
+                    ),
+                    DirectMemoryLocator,
+                )
+                and reference_parsed.context_locator is not None
             )
         )
         compared_is_auto_memory = bool(
             auto_type_positionals
             and to is not None
-            and isinstance(
-                parse_auto_typed_context_memory_operand(to),
-                DirectMemoryLocator,
+            and (
+                isinstance(
+                    compared_parsed := parse_auto_typed_context_memory_operand(to),
+                    DirectMemoryLocator,
+                )
+                and compared_parsed.context_locator is not None
             )
         )
         if reference_is_auto_memory and reference_memory is not None:

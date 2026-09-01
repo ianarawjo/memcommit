@@ -1,0 +1,52 @@
+┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────┐
+│ MEM MAKEMORE · ADD PROPOSAL                                                                                                                                                     ^│
+│ CONTEXT LOCATIONS                                                                                                                                                                │
+│   SOURCE · capture/makemore-auto                                                                                                                                                 │
+│   TARGET · capture/makemore-auto · EXISTING                                                                                                                                      │
+│ PROPOSAL · NEEDS REVIEW · 4 SOURCE MEMORIES · 2 DISTILLED RULES · 3 PROPOSALS · CONTEXT → RULES → CASES DIRECTION · 0 TARGET AMBIENT                                             │
+│                                                                                                                                                                                  │
+│ TRANSIENT DISTILLED RULES                                                                                                                                                        │
+│ 1. Record each review state as a concise standalone Memory. · SUPPORT f1ebe3ab, 43fbb7f5                                                                                         │
+│2. Keep current and concurrent states distinguishable. · SUPPORT a66d232d · BOUNDARY ef21ed72                                                                                     │
+│                                                                                                                                                                                  │
+│ PROPOSAL OVERVIEW                                                                                                                                                                │
+│ Three new state Memories instantiate both transient Rules without claiming verification.                                                                                         │
+│                                                                                                                                                                                  │
+│ PROPOSED CASES · 3                                                                                                                                                               │
+│ [1] queued for review — ALL 2 RULES · UNVERIFIED                                                                                                                                 │
+│                                                                                                                                                                                  │
+│ [2] review blocked by concurrent change — ALL 2 RULES · UNVERIFIED                                                                                                               │
+│                                                                                                                                                                                  │
+│ [3] current after review — ALL 2 RULES · UNVERIFIED                                                                                                                              │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ ITEMS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› REPORT         Complete Makemore report                                                                                                                                        ^┃
+┃  CASE · FIT     queued for review                                                                                                                                                ┃
+┃  CASE · BOUNDARY review blocked by concurrent change                                                                                                                             ┃
+┃  CASE · CONTRAST current after review                                                                                                                                            ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| TO DO |─────────────────────────────────────────────────────────────────────────────────────┐
+│[ READ ONLY ]  No action available · This saved session can only be inspected.                                                                                                    │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ READ ONLY · PROPOSAL · NEEDS REVIEW · ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter inspect  Esc/Backspace close H Help  Q close

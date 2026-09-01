@@ -1,4 +1,4 @@
-"""Shared location-first browser for Diff and Revert checkpoints."""
+"""Location-first checkpoint browser retained for Revert approval."""
 
 from __future__ import annotations
 
@@ -564,38 +564,3 @@ def browse_checkpoint_locations(
         if result is HISTORY_BACK:
             continue
         return result if isinstance(result, ReviewedCheckpointSelection) else None
-
-
-def browse_diff(
-    store: MemoryStore,
-    *,
-    session: UpdateSession | None,
-    context_locator: str | None,
-) -> None:
-    """Open one exact Context's directional Diff details.
-
-    A bare Diff snapshots the current Context instead of presenting the
-    Profile-wide Switch tree. An explicit locator keeps the same direct
-    inspection route without changing the global current pointer.
-    """
-
-    current_name = store.current_context_name()
-    if context_locator is None:
-        selected_locator = current_name
-        if selected_locator is None:
-            raise ValueError(
-                "No current Context is available for Diff; pass CONTEXT or "
-                "switch to one first."
-            )
-    else:
-        selected_locator = resolve_context_locator(
-            context_locator,
-            current=current_name,
-        )
-
-    browse_checkpoint_locations(
-        store,
-        session=session,
-        context_locator=selected_locator,
-        title="DIFF",
-    )

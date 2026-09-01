@@ -8,10 +8,13 @@ import typer
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     context_access_display_facts,
-    resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
 )
 from memcommit.adapters.console.commands.search.search_workbench import (
     run_search_workbench,
@@ -23,7 +26,7 @@ from memcommit.application.capabilities.save_context_from_selection.runtime impo
     execute_save_context_from_selection,
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
@@ -50,9 +53,13 @@ from memcommit.application.operations.search.save_context import (
 )
 from memcommit.providers.operation_connections import connect_search_provider
 from memcommit.providers.subscription import QueryProviderError
-from memcommit.application.operations.search.model import (
+from memcommit.application.capabilities.retrieval_corpus.candidates import (
+    RetrievalArtifact,
+)
+from memcommit.application.operations.search.errors import (
     SearchError,
-    SearchArtifact,
+)
+from memcommit.application.operations.search.ranking import (
     SearchMatch,
 )
 from memcommit.source_projection.model import (
@@ -134,7 +141,7 @@ def _render_match(match: SearchMatch) -> None:
             ]
         )
         typer.echo(f"{' ' * (len(label) + 1)}Ask with: {display_escape_text(command)}")
-    elif isinstance(item, SearchArtifact):
+    elif isinstance(item, RetrievalArtifact):
         label = (
             f"[related {item.artifact_kind} {item.uid[:8]}]"
             if match.relevance == "related"
@@ -405,13 +412,18 @@ def cmd(
             if context_name
             else (None,)
         )
+        context_candidates = freeze_profile_context_access_candidates(
+            store,
+            current_name=context_snapshot.current_name,
+        )
         accesses = tuple(
-            resolve_context_access(
+            resolve_existing_context_access(
                 store,
                 operand,
                 current_name=context_snapshot.current_name,
                 required_permission="READ",
-            )
+                candidates=context_candidates,
+            ).value
             for operand in operands
         )
         target_names = tuple(access.display_name for access in accesses)

@@ -16,7 +16,7 @@ from memcommit.application.operations.profile.config import (
     profile_stores_dir,
     virtual_authoring_registry,
 )
-from memcommit.application.capabilities.authority.storage_permissions import (
+from memcommit.persistence.store.infrastructure.storage_permissions import (
     PRIVATE_DIRECTORY_MODE,
     PRIVATE_FILE_MODE,
     StoragePermissionError,

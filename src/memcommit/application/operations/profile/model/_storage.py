@@ -26,7 +26,7 @@ from memcommit.application.operations.profile.config import (
     profile_stores_dir,
     validate_grant_resource_name,
 )
-from memcommit.application.capabilities.authority.storage_permissions import (
+from memcommit.persistence.store.infrastructure.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
 )

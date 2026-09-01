@@ -8,23 +8,18 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
-from memcommit.persistence.command_ledger.attempts import annotate_memory_report_attempt
+from memcommit.application.context_access.access import resolve_context_access
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
+    try_resolve_existing_context_access,
+)
 from memcommit.adapters.console.terminal.components.progress import progressing_provider_factory
 from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
 from memcommit.adapters.console.terminal.components.memory_report_picker import (
     ScopedMemoryPickerItem,
-    choose_memory_report_target,
-)
-from memcommit.adapters.console.coordination.memory_report_recents import (
-    MemoryReportRecentSelection,
-    MemoryReportSelectAction,
-    choose_memory_report_recent,
+    choose_history_report_target,
 )
 from memcommit.adapters.console.coordination.history_target import resolve_explicit_context_history_target
-from memcommit.adapters.console.terminal.components.read_only_viewer import (
-    interactive_report_terminal,
-)
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
@@ -39,7 +34,7 @@ from memcommit.application.operations.trace.application import (
     current_context_history_slice,
 )
 from memcommit.application.operations.rationale.context import synthesize_context_rationale
-from memcommit.core.context_targeting.model import ContextTarget
+from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTarget
 from memcommit.application.capabilities.memory_report_targeting import (
     ReadableMemoryTargetNotFoundError,
     freeze_memory_report_readable_catalog,
@@ -241,14 +236,74 @@ def render_context_rationale(
         typer.echo("  " + safe_terminal_text(projection.text))
 
 
+def _execute_context_rationale(
+    store: MemoryStore,
+    *,
+    context_name: str,
+    current_context_name: str | None,
+    as_json: bool,
+    verbose: bool,
+    limit: int,
+    unit: RationaleLimitUnit,
+) -> None:
+    """Run and present one exact Context rationale through its existing path."""
+
+    access = resolve_context_access(
+        store,
+        context_name,
+        current_name=current_context_name,
+        required_permission="READ",
+    )
+    context_report = (
+        current_context_history_slice(
+            access.store.load_direct(access.context_name),
+            warnings=(
+                "Authority history is outside this granted READ view.",
+            ),
+        )
+        if access.is_granted
+        else build_context_history_slice(access.store, access.context_name)
+    )
+    with progressing_provider_factory(
+        "RATIONALE",
+        "writing Context rationale",
+        connect_semantic_provider,
+    ) as provider_factory:
+        context_projection = synthesize_context_rationale(
+            context_report,
+            provider_factory=provider_factory,
+            history_available=not access.is_granted,
+            limit=limit,
+            unit=unit,
+        )
+    if as_json:
+        typer.echo(
+            json.dumps(
+                {
+                    "target": "CONTEXT",
+                    "trace": context_report.to_dict(),
+                    "rationale_projection": context_projection.to_dict(),
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+        return
+    render_context_rationale(
+        context_report,
+        context_projection,
+        verbose=verbose,
+    )
+
+
 def cmd(
     selector: Annotated[
         Optional[str],
         typer.Argument(
             help=(
-                "select from the current readable Context or descendants when "
-                "omitted; otherwise accepts CONTEXT, Memory/MemoryRef UID/prefix, "
-                "or CONTEXT:UID"
+                "browse the current readable subtree for one exact Context or "
+                "Memory when omitted; otherwise accepts CONTEXT, "
+                "Memory/MemoryRef UID/prefix, or CONTEXT:UID"
             )
         ),
     ] = None,
@@ -257,10 +312,7 @@ def cmd(
         typer.Option(
             "--context",
             "-c",
-            help=(
-                "Start Memory selection in this readable Context instead of "
-                "the current Context"
-            ),
+            help="Explain this exact Context; cannot be combined with SELECTOR",
         ),
     ] = None,
     verbose: Annotated[
@@ -306,113 +358,84 @@ def cmd(
         raise typer.Exit(1)
     store = MemoryStore(create=False)
     try:
-        include_descendants = True
+        include_descendants = False
         context_snapshot = ContextOperandSnapshot.capture(store)
-        if selector is None and as_json:
-            raise RationaleError("JSON output requires an explicit item UID.")
-        explicit_context = context_name is not None
-        if selector is not None and not explicit_context:
-            explicit_target = resolve_explicit_context_history_target(
+        if selector is not None and context_name is not None:
+            raise RationaleError(
+                "--context selects a Context and cannot be combined with SELECTOR; "
+                "use CONTEXT:UID for an exact Memory."
+            )
+        if selector is None and context_name is None and as_json:
+            raise RationaleError(
+                "JSON output requires an explicit Context or Memory target."
+            )
+        if context_name is not None:
+            context_name = resolve_existing_context_access(
+                store,
+                context_name,
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
+            ).name
+            _execute_context_rationale(
+                store,
+                context_name=context_name,
+                current_context_name=context_snapshot.current_name,
+                as_json=as_json,
+                verbose=verbose,
+                limit=limit,
+                unit=unit,
+            )
+            return
+        if selector is not None:
+            context_identity = try_resolve_existing_context_access(
+                store,
                 selector,
-                current_context=context_snapshot.current_name,
-                available_context_names=store.list_context_names(),
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
+            )
+            explicit_target = (
+                ContextTarget(context_identity.name)
+                if context_identity is not None
+                else resolve_explicit_context_history_target(
+                    selector,
+                    current_context=context_snapshot.current_name,
+                    available_context_names=store.list_context_names(),
+                )
             )
             if isinstance(explicit_target, ContextTarget):
-                access = resolve_context_access(
+                _execute_context_rationale(
                     store,
-                    explicit_target.context_name,
-                    current_name=context_snapshot.current_name,
-                    required_permission="READ",
+                    context_name=explicit_target.context_name,
+                    current_context_name=context_snapshot.current_name,
+                    as_json=as_json,
+                    verbose=verbose,
+                    limit=limit,
+                    unit=unit,
                 )
-                context_report = (
-                    current_context_history_slice(
-                        access.store.load_direct(access.context_name),
-                        warnings=(
-                            "Authority history is outside this granted READ view.",
-                        ),
-                    )
-                    if access.is_granted
-                    else build_context_history_slice(access.store, access.context_name)
-                )
-                with progressing_provider_factory(
-                    "RATIONALE",
-                    "writing Context rationale",
-                    connect_semantic_provider,
-                ) as provider_factory:
-                    context_projection = synthesize_context_rationale(
-                        context_report,
-                        provider_factory=provider_factory,
-                        history_available=not access.is_granted,
-                        limit=limit,
-                        unit=unit,
-                    )
-                if as_json:
-                    typer.echo(
-                        json.dumps(
-                            {
-                                "target": "CONTEXT",
-                                "trace": context_report.to_dict(),
-                                "rationale_projection": context_projection.to_dict(),
-                            },
-                            ensure_ascii=False,
-                            indent=2,
-                        )
-                    )
-                else:
-                    render_context_rationale(
-                        context_report,
-                        context_projection,
-                        verbose=verbose,
-                    )
                 return
-        if selector is None and not explicit_context and interactive_report_terminal():
-            launch = choose_memory_report_recent(store, operation="rationale")
-            if launch is None:
-                typer.echo("Rationale cancelled.")
-                return
-            if isinstance(launch, MemoryReportRecentSelection):
-                context_name = launch.context_name
-                selector = launch.memory_uid
-                include_descendants = launch.include_descendants
-            elif not isinstance(launch, MemoryReportSelectAction):
-                raise RationaleError("Rationale launcher returned an invalid action.")
         selected_from_profile = False
         if selector is None:
-            name = context_snapshot.resolve_or_current(context_name)
+            name = context_snapshot.current_name
             if not name:
                 raise RationaleError(
                     "No current context. Pass --context or run 'mem init <name>' first."
                 )
-            profile_catalog = (
-                None
-                if explicit_context
-                else freeze_rationale_profile_catalog(
-                    store,
-                    None,
-                    current_name=context_snapshot.current_name,
-                )
+            profile_catalog = freeze_rationale_profile_catalog(
+                store,
+                None,
+                current_name=context_snapshot.current_name,
             )
-            # A bare report starts where the person already is. The Profile
-            # catalog supplies authorized lexical descendants without turning
-            # unrelated readable Contexts into an extra location-picking step.
-            if profile_catalog is not None:
-                picker_scope = rationale_scope_from_catalog(
-                    profile_catalog,
-                    name,
-                    include_descendants=True,
-                )
-            else:
-                picker_scope = load_rationale_scope(
-                    store,
-                    name,
-                    current_name=context_snapshot.current_name,
-                    # Freeze every eligible row before the shared RANGE
-                    # control narrows or broadens selectable Memories.
-                    include_descendants=True,
-                )
+            # The Switch-style browser starts at the current public name and
+            # freezes its readable lexical subtree. Its final receipt remains
+            # one exact Context or exact owner/Memory coordinate.
+            picker_scope = rationale_scope_from_catalog(
+                profile_catalog,
+                name,
+                include_descendants=True,
+            )
             candidates, owners = rationale_candidates(picker_scope)
             scope_names = tuple(context.name for context in picker_scope.contexts)
-            selected = choose_memory_report_target(
+            selected = choose_history_report_target(
                 tuple(
                     ScopedMemoryPickerItem(
                         context_name=owners[candidate.uid][0].name,
@@ -427,15 +450,26 @@ def cmd(
                 context_name=picker_scope.root_name,
                 operation="rationale",
                 catalog_context_names=scope_names,
-                initial_include_descendants=False,
             )
             if selected is None:
                 typer.echo("Rationale cancelled.")
                 return
-            context_name = selected.root_context_name
+            if isinstance(selected, ContextTarget):
+                _execute_context_rationale(
+                    store,
+                    context_name=selected.context_name,
+                    current_context_name=context_snapshot.current_name,
+                    as_json=False,
+                    verbose=verbose,
+                    limit=limit,
+                    unit=unit,
+                )
+                return
+            if not isinstance(selected, DirectMemoryTarget):
+                raise RationaleError("Rationale browser returned an invalid target.")
+            context_name = selected.context_name
             selector = selected.memory_uid
-            include_descendants = selected.include_descendants
-            selected_from_profile = profile_catalog is not None
+            selected_from_profile = True
             # Re-read live state after the full-screen picker so the report is
             # tied to the exact Memory the person selected.
 
@@ -467,9 +501,6 @@ def cmd(
                         context_locator=access.context_name,
                     )
                 except ValueError as error:
-                    # ``--context ROOT`` historically searches readable
-                    # descendants. A qualified ``ROOT:UID`` is an exact owner
-                    # coordinate and must not silently broaden after a miss.
                     if qualified_selector or "No reportable" not in str(error):
                         raise
                     context_name = owner_locator
@@ -647,12 +678,6 @@ def cmd(
                 limit=limit,
                 unit=unit,
             )
-        annotate_memory_report_attempt(
-            operation="rationale",
-            context_name=scope.root_name,
-            memory_uid=report.trace.selected_uid,
-            include_descendants=include_descendants,
-        )
     except (
         FileNotFoundError,
         OSError,

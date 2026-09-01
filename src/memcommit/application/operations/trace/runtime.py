@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     resolve_context_access,
 )
-from memcommit.application.capabilities.authority.study_operation_policy import (
+from memcommit.application.authorization.study_operation_policy import (
     require_trace_access,
 )
 from memcommit.application.capabilities.memory_report_targeting import (

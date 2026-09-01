@@ -33,7 +33,7 @@ from memcommit.application.operations.replace.runtime import (
     execute_replace_plan,
 )
 from memcommit.persistence.store import ConcurrentContextUpdateError
-from memcommit.application.capabilities.authority.write_protection import WriteProtectionError
+from memcommit.persistence.store.infrastructure.write_protection import WriteProtectionError
 
 
 def _current_name(runtime: ClientRuntime) -> str | None:

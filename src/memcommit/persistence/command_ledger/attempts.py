@@ -470,54 +470,6 @@ def annotate_sever_attempt(**updates: object) -> None:
     active.record = updated
 
 
-def annotate_memory_report_attempt(
-    *,
-    operation: Literal["trace", "rationale"],
-    context_name: str,
-    memory_uid: str,
-    include_descendants: bool | None = None,
-) -> None:
-    """Persist only content-free navigation metadata for report Recents."""
-    active = _ACTIVE_ATTEMPT.get()
-    if active is None:
-        return
-    active_matches_view = active.record.operation == operation or (
-        operation == "trace" and active.record.operation == "log"
-    )
-    if not active_matches_view:
-        raise CommandAttemptError(
-            "Memory report metadata does not match the active operation."
-        )
-    details = dict(active.record.details)
-    details["memory_report"] = {
-        "operation": operation,
-        "context_name": context_name,
-        "memory_uid": memory_uid,
-        **(
-            {"include_descendants": include_descendants}
-            if include_descendants is not None
-            else {}
-        ),
-    }
-    details["read_report"] = ReadReportTarget(
-        operation=operation,
-        context_names=(context_name,),
-        target_names=(context_name,),
-        selection_mode="SINGLE",
-        ranges=("RECURSIVE",)
-        if (
-            include_descendants
-            if include_descendants is not None
-            else operation == "rationale"
-        )
-        else ("DIRECT",),
-        memory_uid=memory_uid,
-    ).to_metadata()
-    updated = replace(active.record, details=details)
-    active.ledger.replace(updated)
-    active.record = updated
-
-
 def annotate_read_report_attempt(target: ReadReportTarget) -> None:
     """Persist one content-free report identity on the active CLI attempt."""
 

@@ -8,14 +8,14 @@ import uuid
 from dataclasses import dataclass
 from typing import Literal, Sequence
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     GrantedReadStore,
     resolve_context_access,
 )
 from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.operations.review.model import direct_context_digest
 from memcommit.core.context import Context, Memory
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.persistence.store import MemoryStore

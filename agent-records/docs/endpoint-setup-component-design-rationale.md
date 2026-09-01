@@ -15,10 +15,18 @@ The common component owns only process-local interaction mechanics:
 
 - one checked operation shape with an independent keyboard cursor;
 - one or more named Context roles;
+- an optional, mode-gated Source Type row that explicitly selects `CONTEXT`,
+  `STORED MEMORY`, or `INLINE MEMORY` without classifying input by availability;
 - caller-supplied visible and selectable Context catalogs;
 - fixed roles that remain visible but are omitted from focus traversal;
 - optional caller-authorized direct-Memory projections loaded only for a
   role's explicitly selected exact Context;
+- an operation-neutral required-Memory variant that omits the whole-Context
+  choice while preserving the owner Context in the returned endpoint value;
+  its transient choices reuse the established direct-Memory picker row so the
+  UID label and preview stay on one line without importing a second Context
+  tree into the compact form;
+- caller-owned unselected-Memory copy and an optional ready-command hint;
 - shared Context-tree, selection, frame, focus, and key grammar; and
 - one typed setup draft returned without loading operation content or changing
   durable state.
@@ -78,7 +86,7 @@ plans enter their deterministic Resolution workbench instead.
 
 The Profile-readable Context catalog is shared authority-aware application
 logic, so its implementation lives in
-`application/capabilities/authority/readable_contexts.py`.
+`application/context_access/readable_contexts.py`.
 `commands/shared/readable_context_catalog.py` remains a compatibility import for
 unmigrated command adapters, while new internal code imports the owning module
 directly.
@@ -90,7 +98,24 @@ directly.
 - Meld now uses the rebuilt component for symmetric `A + B -> C` and
   directional `A -> B` modes. It can return one confirmed new Result name, but
   that value remains process-local and `NOT CREATED`; application validation
-  and materialization remain outside the component.
+  and materialization remain outside the component. Only directional A exposes
+  the three Source Types; symmetric A/B remain Context peers. Inline A returns
+  one process-local string, while stored A returns its owner Context plus exact
+  direct-Memory UID.
+- Bare Reference now uses `COMPACT_FORM` as a single Target-plus-exact-Memory
+  shape. `memory_required` removes the generic whole-Context choice, while the
+  operation validator and command codec still require the exact owner, Memory,
+  and existing local Target. `command_ready_hint` changes only the runnable
+  frame title/footer; the command editor remains the same final Enter surface.
+  Its expanded exact-Memory choices retain the compact form and selection
+  mechanics but render through the shared `[memory UID] preview` one-line row.
+  The persistent `SOURCE MEMORY` field is bidirectional: an owner Context can
+  lead into `CHOOSE MEMORY`, a list choice writes `CONTEXT:FULL_UID`, and a
+  direct UID/prefix or common `CONTEXT:UID` edit resolves back into the same
+  owner and Memory state. Bare selectors are confined to the already retained
+  owner; `BROWSE CONTEXT` is the explicit way to change that boundary.
+  Context-wide Reference stays on its explicit CLI and callable routes rather
+  than adding a second interactive mode.
 - Atomize remains on its characterized Study flow until its current behavior is
   frozen independently. Meld's requirements do not justify migrating it by
   visual similarity alone.

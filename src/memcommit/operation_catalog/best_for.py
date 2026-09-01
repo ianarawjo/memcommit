@@ -55,8 +55,8 @@ BEST_FOR_BY_OPERATION = {
         "unchanged original text."
     ),
     "makemore": (
-        "Generating several more concrete candidate Rules or Cases from an "
-        "abstract concept or condition."
+        "Generating several new candidate Memories from an existing Context, "
+        "or concrete candidate Rules or Cases from explicit input."
     ),
     "edit": (
         "Directly correcting or replacing the content of specific existing Memories."

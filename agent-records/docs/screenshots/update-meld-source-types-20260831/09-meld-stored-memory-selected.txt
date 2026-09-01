@@ -1,0 +1,12 @@
+$ mem meld                                                                                                                                                                          
+PTY 180 52                                                                                                                                                                          
+ NEW MELD · CHOOSE MODE AND ENDPOINTS                                                                                                                                               
+  MODE · [   SYMMETRIC · CREATE SEPARATE RESULT ]  [ ✓ DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT                                                                              
+  A · SOURCE TYPE · [   CONTEXT ]  [ ✓ STORED MEMORY ]  [   INLINE MEMORY ] · ←/→ TO SELECT                                                                                         
+› A · SOURCE · MEMORY OWNER  › practice/coffee/source                  [ BROWSE ]                                   [ MEMORY · c206b6cb ]                                           
+  TO                         › practice/coffee/target                  [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]           
+┌───────────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND |───────────────────────────────────────────────────────────────────────────────┐
+│› mem meld practice/coffee/source practice/coffee/target --incoming-memory c206b6cb-cf31-4c4d-b4da-9911d6ebecff                                                                   │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                                                                                    
+ FROM uses Memory c206b6cb.

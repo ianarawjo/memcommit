@@ -5,6 +5,13 @@ integration proposals, proposal sessions, and Apply effects to explicit owners.
 """
 
 from .apply_effects import MeldApplication, MeldChangeSet, MeldCheckpointReceipt
+from .candidate import (
+    MELD_CANDIDATE_CONTRACT_VERSION,
+    MeldCandidateReview,
+    MeldSourceClaim,
+    build_lossless_meld_candidate,
+    candidate_revision,
+)
 from .integration_proposal import (
     MeldAssessment,
     MeldIssue,
@@ -28,6 +35,7 @@ from .proposal_session import (
 )
 from .source_snapshot import (
     INLINE_MELD_CONTEXT_NAME,
+    MELD_CANDIDATE_SCHEMA_VERSION,
     MELD_COMPARISON_SCHEMA_VERSION,
     MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION,
     MELD_RELATION_ANALYSIS_SCHEMA_VERSION,
@@ -64,6 +72,8 @@ from .source_snapshot import (
 
 __all__ = (
     "INLINE_MELD_CONTEXT_NAME",
+    "MELD_CANDIDATE_CONTRACT_VERSION",
+    "MELD_CANDIDATE_SCHEMA_VERSION",
     "MELD_COMPARISON_SCHEMA_VERSION",
     "MELD_DIRECTIONAL_COMPARISON_SCHEMA_VERSION",
     "MELD_RELATION_ANALYSIS_SCHEMA_VERSION",
@@ -82,6 +92,7 @@ __all__ = (
     "MeldApplication",
     "MeldAssessment",
     "MeldChangeSet",
+    "MeldCandidateReview",
     "MeldCheckpointReceipt",
     "MeldRelationAnalysisSeed",
     "MeldComparisonSeed",
@@ -104,10 +115,13 @@ __all__ = (
     "MeldRole",
     "MeldSession",
     "MeldState",
+    "MeldSourceClaim",
     "MeldTarget",
     "MeldTurn",
     "MeldTurnScope",
     "default_meld_revision",
+    "build_lossless_meld_candidate",
+    "candidate_revision",
     "directional_comparison_basis_assessment",
     "directional_relation_basis_assessment",
     "inline_meld_context",

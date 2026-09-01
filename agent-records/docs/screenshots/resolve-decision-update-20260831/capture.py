@@ -75,7 +75,9 @@ class _ResolveCaptureProvider:
             if sys.stdin.readline().strip().lower() != "u":
                 raise RuntimeError("Update planning gate was not acknowledged.")
             payload = json.loads(prompt.split("UPDATE PAYLOAD:\n", 1)[1])
-            source_ids = [memory["source_id"] for memory in payload["source"]["memories"]]
+            source_ids = [
+                memory["source_id"] for memory in payload["source"]["memories"]
+            ]
             targets = payload["target"]["memories"]
             first = next(
                 target
@@ -85,7 +87,8 @@ class _ResolveCaptureProvider:
             third = next(
                 target
                 for target in targets
-                if target["content"] == "All greetings follow the house punctuation rule."
+                if target["content"]
+                == "All greetings follow the house punctuation rule."
             )
             return json.dumps(
                 {
@@ -220,7 +223,10 @@ def _run_child(kind: str) -> None:
     provider = _ResolveCaptureProvider(kind)
     resolve_command.connect_semantic_provider = lambda: provider
     print(f"$ mem resolve {context.name}", flush=True)
-    print(f"PTY · {size.columns}×{size.lines} · PROFILE isolated · CURRENT {context.name}", flush=True)
+    print(
+        f"PTY · {size.columns}×{size.lines} · PROFILE isolated · CURRENT {context.name}",
+        flush=True,
+    )
     resolve_command.cmd(
         auto_operands=[context.name],
         context_name=None,
@@ -231,12 +237,12 @@ def _run_child(kind: str) -> None:
         finding_handoff=None,
     )
 
-    print("CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION", flush=True)
+    print("CAPTURE GATE · PRESS V FOR POST-RESOLVE CONTEXT", flush=True)
     if sys.stdin.readline().strip().lower() != "v":
-        raise RuntimeError("Read-only verification gate was not acknowledged.")
+        raise RuntimeError("Post-Resolve Context gate was not acknowledged.")
     current = store.load_direct(context.name)
     checkpoint = store.list_checkpoints(context.name)[-1]
-    print("\nREAD-ONLY RESULT VERIFICATION")
+    print("\nCONTEXT AFTER RESOLVE")
     for item in current.iter_items():
         if isinstance(item, Memory):
             print(f"  [{item.uid}] {item.content}")
@@ -278,7 +284,27 @@ def _settle(child: pexpect.spawn, seconds: float = 0.5) -> None:
 
 
 def _snapshot(recorder: _StreamRecorder, stem: str) -> None:
-    base._render(recorder.getvalue(), stem)
+    raw = recorder.getvalue()
+    base._render(raw, stem)
+    screen = base.pyte.Screen(COLUMNS, ROWS)
+    base.pyte.Stream(screen).feed(raw)
+    blinking_beam_is_active = (
+        raw.rfind("\x1b[5 q") > raw.rfind("\x1b[0 q") and not screen.cursor.hidden
+    )
+    if blinking_beam_is_active:
+        # The raster projection is derived from the real PTY cursor position;
+        # pyte preserves that position but does not paint the cursor itself.
+        regular = base.ImageFont.truetype(base.FONT_PATH, 16, index=0)
+        cell_width = base.math.ceil(regular.getlength("M"))
+        cell_height = 21
+        margin = 16
+        image_path = OUT / f"{stem}.png"
+        image = base.Image.open(image_path)
+        draw = base.ImageDraw.Draw(image)
+        x = margin + screen.cursor.x * cell_width + 1
+        y = margin + screen.cursor.y * cell_height + 2
+        draw.line((x, y, x, y + cell_height - 5), fill="#cad3f5", width=2)
+        image.save(image_path)
     plain_path = OUT / f"{stem}.txt"
     plain = plain_path.read_text(encoding="utf-8")
     plain_path.write_text(
@@ -320,7 +346,7 @@ def _capture_success() -> None:
         _settle(child)
         _snapshot(recorder, "03-next-second-conflict")
 
-        child.send(DOWN + "\r")
+        child.send(DOWN)
         _settle(child)
         _snapshot(recorder, "04-intent-selected-inline-field")
 
@@ -387,11 +413,11 @@ def main() -> None:
     _capture_success()
     _capture_force()
 
-    raw = "".join(
-        path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript")
-    )
+    raw = "".join(path.read_text(encoding="utf-8") for path in OUT.glob("*.typescript"))
     if "38;2;" not in raw and "48;2;" not in raw:
         raise RuntimeError("PTY stream did not contain expected true-color ANSI.")
+    if "\x1b[5 q" not in raw:
+        raise RuntimeError("PTY stream did not request the blinking beam cursor.")
 
 
 if __name__ == "__main__":

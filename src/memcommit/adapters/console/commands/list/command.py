@@ -25,7 +25,7 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     resolve_scope_preset,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
     attached_grants,
@@ -51,7 +51,7 @@ from memcommit.application.operations.list.runtime import (
 )
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.model import GrantedUpdateTarget
-from memcommit.application.capabilities.authority.study_operation_policy import (
+from memcommit.application.authorization.study_operation_policy import (
     analysis_boundary_label,
 )
 from memcommit.source_projection.model import (

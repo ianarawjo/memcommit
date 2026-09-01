@@ -59,12 +59,14 @@ evaluate it.
 1. Read the public healthcare guidance and use the query-only Q&A view separately
    for any detailed question whose answer the participant needs.
 2. Find relevant candidates and their conditions in `local/personal-memory`.
-3. Use `mem sever --source SOURCE --criteria CRITERIA --save-as OUTPUT`, or the
-   equivalent interactive picker, to create sharing candidates and local
-   rationale. One Sever pass uses exactly one ordinary Criteria Context. Use
-   `mem meld` first for equal consideration of two criteria, or run Sever again
-   for an intentionally order-dependent refinement. The healthcare Q&A agent
-   does not run Sever or select candidates.
+3. Use `mem sever SOURCE CRITERIA`, or the equivalent interactive picker, to
+   curate the selected Source Contexts in place into sharing candidates and
+   local rationale. Source and Criteria descendants are chosen independently;
+   each selected Source owner remains at its existing Context location. One
+   Sever pass uses exactly one ordinary Criteria Context. Use `mem meld` first
+   for equal consideration of two criteria, or run Sever again for an
+   intentionally order-dependent refinement. The healthcare Q&A agent does not
+   run Sever or select candidates.
 4. Review the candidates and, when needed, use `mem rationale` and source traces
    to check the basis and omitted conditions for events, summaries, and policies.
 5. Send the finally reviewed items to the government healthcare institution's

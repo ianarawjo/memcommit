@@ -117,7 +117,8 @@ def _output_schema(frame: ElaborateFrame) -> dict[str, object]:
             "source_ids": {
                 "type": "array",
                 "minItems": 1,
-                "uniqueItems": True,
+                # Codex structured output rejects uniqueItems; the strict
+                # decoder below remains authoritative for alias uniqueness.
                 "items": {"type": "string", "enum": aliases},
             },
         },

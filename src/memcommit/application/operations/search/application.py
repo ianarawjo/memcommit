@@ -10,15 +10,19 @@ from memcommit.application.capabilities.durable_uid_resolution import (
     is_unresolved_uid_selector,
     try_resolve_durable_uid,
 )
-from memcommit.core.context import Memory, MemoryRef, QueryContextRef
-from memcommit.application.operations.search.model import (
+from memcommit.application.capabilities.retrieval_corpus.candidates import (
+    RetrievalArtifact,
+    RetrievalCandidate,
+    retrieval_candidate_uid_catalog,
+)
+from memcommit.application.operations.search.errors import (
     SearchError,
-    SearchArtifact,
-    SearchCandidate,
+)
+from memcommit.application.operations.search.ranking import (
     SearchMatch,
     rank_candidates,
-    search_candidate_uid_catalog,
 )
+from memcommit.core.context import Memory, MemoryRef, QueryContextRef
 
 
 SearchMode = Literal["CURRENT"]
@@ -141,7 +145,7 @@ class SearchResponse:
 class FrozenSearchCurrentSource:
     """One authorized current-state candidate frame."""
 
-    candidates: tuple[SearchCandidate, ...]
+    candidates: tuple[RetrievalCandidate, ...]
     coverage_root_name: str | None = None
 
 
@@ -186,7 +190,7 @@ def _namespace_branch(name: str, root_name: str) -> str | None:
 
 def supplement_namespace_branch_coverage(
     query: str,
-    candidates: tuple[SearchCandidate, ...] | list[SearchCandidate],
+    candidates: tuple[RetrievalCandidate, ...] | list[RetrievalCandidate],
     matches: list[SearchMatch],
     provider: SearchProvider,
     *,
@@ -287,11 +291,11 @@ def _current_result(match: SearchMatch) -> SearchResult:
         kind = "query"
         content = f"{item.name} · query view"
         source_identity = (None, None, None)
-    elif isinstance(item, SearchArtifact):
+    elif isinstance(item, RetrievalArtifact):
         kind = "artifact"
         content = f"{item.title}\n{item.content}"
         source_identity = (None, None, None)
-    else:  # pragma: no cover - SearchCandidate validates this union.
+    else:  # pragma: no cover - RetrievalCandidate validates this union.
         raise SearchError("Search returned an unsupported result type.")
     return SearchResult(
         context_name=candidate.context_name,
@@ -319,7 +323,7 @@ def run_search(
     _observe(observer, "INPUTS_FROZEN")
     try:
         identity = try_resolve_durable_uid(
-            search_candidate_uid_catalog(current_source.candidates),
+            retrieval_candidate_uid_catalog(current_source.candidates),
             request.query,
         )
     except DurableUidAmbiguityError as error:
@@ -335,6 +339,9 @@ def run_search(
             results=tuple(_current_result(match) for match in matches),
         )
     if is_unresolved_uid_selector(request.query.strip()):
+        # A clearly UID-shaped query is an identity lookup, not semantic text.
+        # Returning an empty authorized result prevents provider guesswork and
+        # does not disclose whether the identity exists outside this frame.
         return SearchResponse(request=request, mode="CURRENT", results=())
     _observe(observer, "CONNECTING_PROVIDER")
     provider = provider_factory()

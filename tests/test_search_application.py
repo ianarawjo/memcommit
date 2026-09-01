@@ -9,7 +9,7 @@ import uuid
 
 import pytest
 
-from memcommit.core.context import Context, Memory, QueryContextRef
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 import memcommit.application.operations.search.application as search_application
 from memcommit.application.operations.search.application import (
     SearchRequest,
@@ -17,7 +17,7 @@ from memcommit.application.operations.search.application import (
     run_search,
 )
 from memcommit.application.operations.search.runtime import execute_search
-from memcommit.application.operations.search.model import (
+from memcommit.application.operations.search.candidates import (
     SearchArtifact,
     SearchCandidate,
 )
@@ -134,6 +134,34 @@ def test_run_search_resolves_a_printed_non_uuid_artifact_prefix():
 
     assert [result.uid for result in response.results] == [artifact.uid]
     assert response.results[0].kind == "artifact"
+
+
+def test_run_search_resolves_the_source_uid_printed_by_a_reference_row():
+    source_uid = "22222222-2222-4222-8222-222222222222"
+    item = MemoryRef(
+        uid="11111111-1111-4111-8111-111111111111",
+        target_context_uid="context-2",
+        target_context_name="source",
+        target_memory_uid=source_uid,
+        target=Memory(uid=source_uid, content="Referenced Search content."),
+    )
+    candidate = SearchCandidate(
+        candidate_id="c000001",
+        kind="memory_ref",
+        context_uid="context-1",
+        context_names=("notes",),
+        item=item,
+        search_text=item.target.content,
+    )
+
+    response = run_search(
+        SearchRequest(source_uid[:8], ("notes",)),
+        source_port=_CurrentSource((candidate,)),
+        provider_factory=lambda: pytest.fail("Source UID must stay local"),
+    )
+
+    assert [result.uid for result in response.results] == [item.uid]
+    assert response.results[0].source_memory_uid == source_uid
 
 
 def test_run_search_freezes_empty_current_frame_before_provider_factory():

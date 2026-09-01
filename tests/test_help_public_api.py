@@ -78,6 +78,14 @@ def test_client_projects_provider_as_partial(tmp_path):
     assert operation.maturity == "PARTIAL"
 
 
+def test_client_projects_check_conformance_as_partial(tmp_path):
+    client = MemCommitClient(root=tmp_path / "missing-store")
+
+    operation = client.describe_operation("check-conformance")
+
+    assert operation.maturity == "PARTIAL"
+
+
 def test_client_projects_query_only_access_as_typed_detail(tmp_path):
     client = MemCommitClient(root=tmp_path / "missing-store")
 

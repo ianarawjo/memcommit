@@ -1,0 +1,8 @@
+Rationale [d525a9ad] · notes                                                                                                                                                        
+                                                                                                                                                                                    
+MEMORY                                                                                                                                                                              
+  Final policy wording selected for exact Memory history.                                                                                                                           
+                                                                                                                                                                                    
+PROVENANCE                                                                                                                                                                          
+  The retained Add introduced this Memory and the recorded Edit produced its current wording.                                                                                       
+READ-ONLY VERIFICATION · MODE RATIONALE-MEMORY · TARGET [d525a9ad] · CURRENT notes · CONTEXTS + CHECKPOINTS + CURRENT POINTER UNCHANGED

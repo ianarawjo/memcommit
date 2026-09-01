@@ -4,20 +4,27 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
-    resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
+    try_resolve_context_access_or_local_memory,
 )
 from memcommit.core.context import Memory
-from memcommit.application.capabilities.context_locator import resolve_context_locator
+from memcommit.application.capabilities.operand_resolution import (
+    ContextOperandCandidate,
+    ContextOperandResolutionError,
+    ResolvedExistingContextOperand,
+)
 from memcommit.application.capabilities.local_target_lookup import (
     resolve_local_direct_memory_locator,
 )
-from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
 from memcommit.core.context_targeting.model import (
     DirectMemoryLocator,
-    ExistingContextOperand,
+    DirectMemoryTarget,
 )
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
@@ -50,25 +57,25 @@ def _resolve_context_endpoint(
     current_name: str | None,
     registry: ProfileRegistry,
     role: str,
+    candidates: tuple[ContextOperandCandidate[ContextAccess], ...],
 ) -> ContextAccess:
     requested = operand if operand is not None else current_name
     if requested is None:
         raise CompareTargetingError(
             "No current reference Context. Run 'mem switch NAME' first."
         )
-    canonical = resolve_context_locator(requested, current=current_name)
     try:
-        return resolve_context_access(
+        return resolve_existing_context_access(
             store,
-            canonical,
+            requested,
             current_name=current_name,
             required_permission="READ",
             registry=registry,
-        )
-    except FileNotFoundError as error:
-        resolution = "" if canonical == requested else f" (resolved to {canonical!r})"
+            candidates=candidates,
+        ).value
+    except (FileNotFoundError, ContextOperandResolutionError) as error:
         raise CompareTargetingError(
-            f"{role} Context {requested!r}{resolution} does not exist."
+            f"{role} Context {requested!r} does not exist or is unavailable."
         ) from error
 
 
@@ -117,6 +124,7 @@ def _resolve_auto_memory_endpoint(
     current_name: str | None,
     registry: ProfileRegistry,
     role: str,
+    candidates: tuple[ContextOperandCandidate[ContextAccess], ...],
 ) -> tuple[ContextAccess, str]:
     locator = parse_direct_memory_locator(operand)
     if locator.context_locator is None:
@@ -142,6 +150,7 @@ def _resolve_auto_memory_endpoint(
             current_name=current_name,
             registry=registry,
             role=role,
+            candidates=candidates,
         )
         return access, target.memory_uid
 
@@ -151,6 +160,7 @@ def _resolve_auto_memory_endpoint(
         current_name=current_name,
         registry=registry,
         role=f"{role} Memory owner",
+        candidates=candidates,
     )
     memory_uid = _resolve_qualified_memory(
         access,
@@ -168,46 +178,50 @@ def _resolve_auto_typed_endpoint(
     current_name: str | None,
     registry: ProfileRegistry,
     role: str,
+    candidates: tuple[ContextOperandCandidate[ContextAccess], ...],
 ) -> tuple[ContextAccess, str | None]:
     """Preserve an exact readable Context, then try one short local Memory."""
 
     parsed = parse_auto_typed_context_memory_operand(operand)
-    if isinstance(parsed, DirectMemoryLocator):
+    if isinstance(parsed, DirectMemoryLocator) and parsed.context_locator is not None:
         return _resolve_auto_memory_endpoint(
             store,
             operand,
             current_name=current_name,
             registry=registry,
             role=role,
+            candidates=candidates,
         )
-    assert isinstance(parsed, ExistingContextOperand)
-    try:
-        return (
-            _resolve_context_endpoint(
-                store,
-                parsed.locator,
-                current_name=current_name,
-                registry=registry,
-                role=role,
-            ),
-            None,
+    resolved = try_resolve_context_access_or_local_memory(
+        store,
+        operand,
+        current_name=current_name,
+        registry=registry,
+        candidates=candidates,
+    )
+    if isinstance(resolved, ResolvedExistingContextOperand):
+        return resolved.value, None
+    if isinstance(resolved, DirectMemoryTarget):
+        access = _resolve_context_endpoint(
+            store,
+            resolved.context_name,
+            current_name=current_name,
+            registry=registry,
+            role=role,
+            candidates=candidates,
         )
-    except CompareTargetingError as context_error:
-        if not is_memory_uid_prefix(operand):
-            raise
-        try:
-            return _resolve_auto_memory_endpoint(
-                store,
-                operand,
-                current_name=current_name,
-                registry=registry,
-                role=role,
-            )
-        except CompareTargetingError:
-            # A short token with no local Memory retains the operation's
-            # established missing-Context error. Bare Grant content remains
-            # non-enumerable and requires a qualified public owner.
-            raise context_error
+        return access, resolved.memory_uid
+    return (
+        _resolve_context_endpoint(
+            store,
+            operand,
+            current_name=current_name,
+            registry=registry,
+            role=role,
+            candidates=candidates,
+        ),
+        None,
+    )
 
 
 def resolve_compare_cli_targets(
@@ -226,6 +240,11 @@ def resolve_compare_cli_targets(
 ) -> CompareCliTargets:
     """Freeze auto-typed operands into Compare's existing focused-frame inputs."""
 
+    candidates = freeze_profile_context_access_candidates(
+        store,
+        current_name=current_name,
+        registry=registry,
+    )
     reference_operand_is_memory = False
     compared_operand_is_memory = False
     if reference_is_auto_memory:
@@ -237,6 +256,7 @@ def resolve_compare_cli_targets(
             current_name=current_name,
             registry=registry,
             role="Reference",
+            candidates=candidates,
         )
         reference_operand_is_memory = True
     elif reference_is_auto_typed and reference_operand is not None:
@@ -246,6 +266,7 @@ def resolve_compare_cli_targets(
             current_name=current_name,
             registry=registry,
             role="Reference",
+            candidates=candidates,
         )
         reference_operand_is_memory = reference_memory_uid is not None
         if reference_operand_is_memory and reference_memory_selector is not None:
@@ -262,6 +283,7 @@ def resolve_compare_cli_targets(
             current_name=current_name,
             registry=registry,
             role="Reference",
+            candidates=candidates,
         )
         reference_memory_uid = reference_memory_selector
 
@@ -272,6 +294,7 @@ def resolve_compare_cli_targets(
             current_name=current_name,
             registry=registry,
             role="Compared",
+            candidates=candidates,
         )
         compared_operand_is_memory = True
     elif compared_is_auto_typed:
@@ -281,6 +304,7 @@ def resolve_compare_cli_targets(
             current_name=current_name,
             registry=registry,
             role="Compared",
+            candidates=candidates,
         )
         compared_operand_is_memory = compared_memory_uid is not None
         if compared_operand_is_memory and compared_memory_selector is not None:
@@ -296,6 +320,7 @@ def resolve_compare_cli_targets(
             current_name=current_name,
             registry=registry,
             role="Compared",
+            candidates=candidates,
         )
         compared_memory_uid = compared_memory_selector
 

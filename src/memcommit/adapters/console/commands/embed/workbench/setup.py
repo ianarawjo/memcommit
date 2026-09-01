@@ -10,8 +10,8 @@ from memcommit.application.operations.embed.application import (
     FrozenEmbedPlan,
     FrozenMemoryEmbedPlan,
 )
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
-from memcommit.application.capabilities.authority.granted_context_navigation import (
+from memcommit.application.context_access.access import resolve_context_access
+from memcommit.application.context_access.granted_context_navigation import (
     freeze_granted_context_navigation,
 )
 from memcommit.application.operations.embed.runtime import MemoryStoreEmbedPort

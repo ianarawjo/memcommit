@@ -5,9 +5,11 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.context_access import (
-    ContextAccess,
+from memcommit.application.authorization.context_operation import (
     authorized_context_mutation,
+)
+from memcommit.application.context_access.access import (
+    ContextAccess,
     grant_checkpoint_args,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory

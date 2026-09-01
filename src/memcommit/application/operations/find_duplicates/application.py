@@ -4,12 +4,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
-    resolve_context_access,
 )
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
+)
+from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
 )
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
@@ -172,13 +174,13 @@ def find_duplicates(
 ) -> ExactDuplicateScopeReport:
     """Resolve readable authority and analyze one exact or lexical scope."""
 
-    access = resolve_context_access(
+    access = resolve_existing_context_access(
         store,
         request.context_name,
         current_name=current_name,
         required_permission="READ",
         registry=registry,
-    )
+    ).value
     return analyze_exact_duplicate_scope(
         store,
         access,

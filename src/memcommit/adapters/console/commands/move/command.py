@@ -14,7 +14,7 @@ from memcommit.adapters.console.coordination.copy_and_move.arguments import (
     target_context_option,
 )
 from memcommit.adapters.console.terminal.core.capabilities import is_interactive_terminal
-from memcommit.application.capabilities.authority.write_protection import (
+from memcommit.persistence.store.infrastructure.write_protection import (
     WriteProtectionError,
 )
 from memcommit.application.capabilities.memory_transfer.application import (

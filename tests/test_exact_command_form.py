@@ -139,6 +139,35 @@ def test_editable_command_box_turns_red_while_live_input_is_invalid() -> None:
     assert "Complete VALUE and --into TARGET" in control.draft.error
 
 
+def test_empty_incomplete_command_seed_hides_redundant_error_body() -> None:
+    def incomplete_review() -> CommandReview:
+        raise ValueError("EXACT MEMORY requires one exact Memory.")
+
+    def require_complete(argv: tuple[str, ...]) -> None:
+        if len(argv) != 5 or argv[3] != "--into":
+            raise ValueError("Complete VALUE and --into TARGET are required.")
+
+    control = CommandEditorControl.create(
+        CommandDraft(
+            review=incomplete_review,
+            apply_argv=require_complete,
+            form=_form(),
+        ),
+        action_label="APPLY SAMPLE",
+        incomplete_action="FIX SAMPLE COMMAND",
+        input_name="empty-invalid-sample-proposed-command",
+    )
+
+    assert control.input.text == ""
+    assert control.frame_title == "COMMAND · INVALID"
+    assert not control._shows_error()
+
+    control.input.text = "partial"
+
+    assert control._shows_error()
+    assert "Complete VALUE and --into TARGET" in control.draft.error
+
+
 def test_editor_observes_upper_changes_without_erasing_unrepaired_invalid_text() -> None:
     state = {"value": "before", "target": "one"}
 

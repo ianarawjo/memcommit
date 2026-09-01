@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     COMPARISON_RULESET_VERSION,
     SUPPORTED_COMPARISON_RULESET_VERSIONS,
@@ -18,7 +18,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.pro
     SUPPORTED_COMPARISON_PROVIDER_CONTRACT_VERSIONS,
 )
 from memcommit.configuration.config import Config
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.study_scenarios.legacy.prewarm.generation.compare_exact_matrix import (

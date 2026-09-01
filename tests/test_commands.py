@@ -379,30 +379,17 @@ class TestHelp:
         assert selected.command_line == "mem alpha"
 
     def test_by_kind_preserves_workflow_order_while_a_z_sorts_names(self):
-        assert (
-            help_inventory.HELP_CATEGORY_BY_COMMAND["atomize"]
-            == "SEMANTIC UPDATES"
-        )
-        assert (
-            help_inventory.HELP_CATEGORY_BY_COMMAND["forget"]
-            == "SEMANTIC UPDATES"
-        )
+        assert help_inventory.HELP_CATEGORY_BY_COMMAND["atomize"] == "SEMANTIC UPDATES"
+        assert help_inventory.HELP_CATEGORY_BY_COMMAND["forget"] == "SEMANTIC UPDATES"
         assert (
             help_inventory.HELP_CATEGORY_BY_COMMAND["reference"]
             == "CREATE, COPY & CONNECT"
         )
+        assert help_inventory.HELP_CATEGORY_BY_COMMAND["merge"] == "DIRECT CHANGES"
         assert (
-            help_inventory.HELP_CATEGORY_BY_COMMAND["merge"]
-            == "DIRECT CHANGES"
+            help_inventory.HELP_CATEGORY_BY_COMMAND["dedup"] == "QUALITY & RESOLUTION"
         )
-        assert (
-            help_inventory.HELP_CATEGORY_BY_COMMAND["dedup"]
-            == "QUALITY & RESOLUTION"
-        )
-        assert (
-            help_inventory.HELP_CATEGORY_BY_COMMAND["replace"]
-            == "DIRECT CHANGES"
-        )
+        assert help_inventory.HELP_CATEGORY_BY_COMMAND["replace"] == "DIRECT CHANGES"
         names = (
             "clear",
             "branch",
@@ -611,7 +598,7 @@ class TestHelp:
             for form in merge_forms
         )
         assert any(
-            "--from [source] --against [criteria] --to [result]" in form
+            "--from [source] --against [criteria]" in form and "--to" not in form
             for form in sever_forms
         )
 
@@ -747,9 +734,10 @@ class TestHelp:
         for command_name, forms in help_inventory.COMMAND_FORMS.items():
             for form in forms:
                 command_line = help_inventory._selectable_form_line(form)
-                assert shlex.split(command_line)[:2] == ["mem", command_name], (
-                    f"{command_name} owns a form for another command: {command_line}"
-                )
+                assert shlex.split(command_line)[:2] == [
+                    "mem",
+                    command_name,
+                ], f"{command_name} owns a form for another command: {command_line}"
                 for placeholder, sample in samples.items():
                     command_line = command_line.replace(placeholder, sample)
                 argv = shlex.split(command_line)[1:]

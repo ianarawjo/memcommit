@@ -68,7 +68,6 @@ def test_start_command_builders_use_public_portable_grammar() -> None:
     assert sever_command_review.build_start_review(
         source_name="a",
         criteria_name="rules",
-        output_name="result",
         source_descendants=True,
         criteria_descendants=True,
     ).argv == (
@@ -76,14 +75,12 @@ def test_start_command_builders_use_public_portable_grammar() -> None:
         "sever",
         "a",
         "rules",
-        "result",
         "--source-descendants",
         "--criteria-descendants",
     )
     assert sever_command_review.build_start_review(
         source_name="a",
         criteria_name="rules",
-        output_name="a",
     ).argv == ("mem", "sever", "a", "rules")
 
 
@@ -142,7 +139,6 @@ def test_endpoint_command_codecs_round_trip_all_editable_setup_shapes() -> None:
         (
             EndpointSetupValue("SOURCE", "a", include_descendants=True),
             EndpointSetupValue("CRITERIA", "rules"),
-            EndpointSetupValue("OUTPUT", "result", create=True),
         ),
     )
     branch = EndpointSetupDraft(
@@ -188,16 +184,15 @@ def test_endpoint_command_codecs_round_trip_all_editable_setup_shapes() -> None:
         )
         == update
     )
-    assert sever_command_review.parse_endpoint_argv(
-        sever_command_review.build_start_review(
-            source_name="a",
-            criteria_name="rules",
-            output_name="result",
-            source_descendants=True,
-        ).argv
-    ) == EndpointSetupDraft(
-        sever.mode_uid,
-        (*sever.values[:2], EndpointSetupValue("OUTPUT", "result")),
+    assert (
+        sever_command_review.parse_endpoint_argv(
+            sever_command_review.build_start_review(
+                source_name="a",
+                criteria_name="rules",
+                source_descendants=True,
+            ).argv
+        )
+        == sever
     )
     assert (
         branch_command_review.parse_endpoint_argv(

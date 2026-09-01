@@ -10,9 +10,9 @@ class ReferenceError(RuntimeError):
     """Raised when a snapshot Reference cannot be published exactly."""
 
 
-# A retained snapshot survives Grant revocation, so reading alone is not
-# sufficient authority. Keep the complete export-and-retain boundary explicit
-# at the operation contract instead of letting adapters choose weaker subsets.
+# A retained snapshot survives Grant revocation. The current Context-use model
+# treats READ as the enforceable disclosure boundary for locally owned output.
+# Keep the operation-owned tuple explicit so every adapter uses the same check.
 GRANTED_MEMORY_REFERENCE_PERMISSIONS = (
     "READ",
 )
@@ -34,7 +34,7 @@ MemoryReferenceRequest = ReferenceRequest
 
 @dataclass(frozen=True)
 class ContextReferenceRequest:
-    """One local Context snapshot scope and exact local Target."""
+    """One local or READ-granted Context scope and exact local Target."""
 
     source_locator: str
     into_locator: str | None = None
@@ -118,7 +118,7 @@ class ContextReferenceResult:
 
 
 class ReferencePort(Protocol):
-    """Freeze and atomically publish one local snapshot Reference."""
+    """Freeze and atomically publish one snapshot into a local Target."""
 
     def freeze(self, request: ReferenceRequest) -> FrozenReferencePlan:
         """Resolve exact Source content and Target revision without mutation."""
@@ -130,7 +130,7 @@ class ReferencePort(Protocol):
         self,
         request: ContextReferenceRequest,
     ) -> FrozenContextReferencePlan:
-        """Freeze one exact local Context package without mutation."""
+        """Freeze one exact local or READ-granted package without mutation."""
 
     def apply_context(
         self,

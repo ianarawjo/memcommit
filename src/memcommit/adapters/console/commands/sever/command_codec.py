@@ -18,15 +18,10 @@ from memcommit.adapters.console.terminal.components.endpoint_setup.model import 
 SEVER_COMMAND_FORM = CommandForm(
     command=("mem", "sever"),
     usage=(
-        "mem sever SOURCE CRITERIA [OUTPUT] [--source-descendants] "
-        "[--criteria-descendants]"
+        "mem sever SOURCE CRITERIA [--source-descendants] " "[--criteria-descendants]"
     ),
     fields=(
         CommandFormField("SOURCE CRITERIA", "the two exact readable inputs"),
-        CommandFormField(
-            "OUTPUT",
-            "the Source itself or one exact new local Result Context",
-        ),
         CommandFormField(
             "--source-descendants / --criteria-descendants",
             "independent lexical input ranges",
@@ -53,10 +48,9 @@ def parse_endpoint_argv(argv: Sequence[str]) -> EndpointSetupDraft:
             raise ValueError(f"Editable Sever does not accept {token}.")
         else:
             positionals.append(token)
-    if len(positionals) not in {2, 3}:
-        raise ValueError("Editable Sever requires SOURCE CRITERIA and optional OUTPUT.")
-    source, criteria = positionals[:2]
-    output = positionals[2] if len(positionals) == 3 else source
+    if len(positionals) != 2:
+        raise ValueError("Editable Sever requires exactly SOURCE and CRITERIA.")
+    source, criteria = positionals
     return EndpointSetupDraft(
         "SEVER",
         (
@@ -70,7 +64,6 @@ def parse_endpoint_argv(argv: Sequence[str]) -> EndpointSetupDraft:
                 criteria,
                 include_descendants="--criteria-descendants" in switches,
             ),
-            EndpointSetupValue("OUTPUT", output),
         ),
     )
 
@@ -79,13 +72,10 @@ def build_start_review(
     *,
     source_name: str,
     criteria_name: str,
-    output_name: str,
     source_descendants: bool = False,
     criteria_descendants: bool = False,
 ) -> CommandReview:
     argv = ["mem", "sever", source_name, criteria_name]
-    if output_name != source_name:
-        argv.append(output_name)
     if source_descendants:
         argv.append("--source-descendants")
     if criteria_descendants:
@@ -94,7 +84,7 @@ def build_start_review(
         tuple(argv),
         (
             "Start or resume the exact Sever analysis and saved review session shown.",
-            "Do not save the Result; final self-save or other-save Apply remains separate.",
+            "Do not change Source owners yet; final in-place Apply remains separate.",
         ),
     )
 
@@ -124,7 +114,7 @@ def build_turn_review(
         tuple(argv),
         (
             "Save one Sever candidate decision against the exact displayed session revision.",
-            "Do not create the output Context; final Apply remains separate.",
+            "Do not update Source owners; final Apply remains separate.",
         ),
     )
 

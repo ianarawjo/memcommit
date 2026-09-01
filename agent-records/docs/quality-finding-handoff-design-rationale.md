@@ -76,8 +76,9 @@ direct-Memory digest.
 semantic preflight or provider connection. An added, removed, reordered, or
 edited direct Memory, a changed Context identity, or a changed public target
 name fails closed and requires the finder to run again. The whole direct frame
-is checked because Resolve independently evaluates Fit over that whole frame,
-not only over the reported pair.
+is checked because Resolve discovers decision inputs, runs Update, and verifies
+the resulting conflict relations over the complete Context rather than only
+the reported pair.
 
 The handoff carries no Grant or mutation authority. Resolve re-resolves the
 public target, freezes the current Grant binding and effect capabilities, and

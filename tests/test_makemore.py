@@ -899,6 +899,35 @@ def test_mem_makemore_plain_uses_the_typed_application(
     assert len(store.load_direct(target.name).order) == 3
 
 
+def test_mem_makemore_explicit_duplicate_rule_context_explains_distinctness(
+    isolated_store,
+    monkeypatch,
+) -> None:
+    store = MemoryStore()
+    source = ops.init("makemore/duplicate-rules")
+    ops.add(source, "Keep every result reviewable.")
+    ops.add(source, "keep every result reviewable.")
+    store.create_context(source)
+    store.set_current(source.name)
+    monkeypatch.setattr(
+        makemore_command,
+        "connect_semantic_provider",
+        lambda: (_ for _ in ()).throw(
+            AssertionError("duplicate Rules must fail before provider connection")
+        ),
+    )
+
+    result = runner.invoke(app, ["makemore", "--as", "rules"])
+
+    assert result.exit_code == 1
+    assert "Makemore error: Makemore Rules must be distinct." in result.output
+    assert (
+        "Direct Rules-to-Cases mode requires distinct Rules. Change the Rule "
+        "set, or omit --as rules to Distill the Context first."
+    ) in result.output
+    assert len(store.load_direct(source.name).order) == 2
+
+
 def test_mem_makemore_ground_adopt_is_an_explicit_physical_write(
     isolated_store,
     monkeypatch,

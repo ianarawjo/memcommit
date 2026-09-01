@@ -1,0 +1,12 @@
+ MELD · < 1/1 >
+ CONFLICT · [10000000] “General greetings end with a period; named greetings ma...” ↔ [20000000] “Named greetings may omit punctuation.”
+ Should named greetings remain exceptions?
+  1 · ACCEPT THIS DIRECTION · Named greetings remain exceptions to the general rule.
+  2 · ADJUST WITH YOUR INTENT · Enter the direction this should follow.
+      YOUR INTENT  │ › Type here…                                     │
+✓ 3 · LEAVE UNRESOLVED · Exclude this item from Update input and retain it as unresolved.
+
+
+  FINALIZE DECISIONS · 1/1 READY
+
+ Selected · 3 · LEAVE UNRESOLVED

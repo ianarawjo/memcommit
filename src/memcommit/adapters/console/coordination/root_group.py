@@ -13,7 +13,7 @@ except ImportError:  # pragma: no cover - compatibility with older Typer
 from memcommit.adapters.console.coordination.command_group import CanonicalCommandGroup
 
 from memcommit.adapters.console.terminal.components.errors import render_cli_error
-from memcommit.application.capabilities.authority.write_protection import (
+from memcommit.persistence.store.infrastructure.write_protection import (
     WriteProtectionError,
     WriteProtectionRegistryError,
 )

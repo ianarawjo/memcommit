@@ -10,9 +10,9 @@ from memcommit.application.capabilities.durable_uid_resolution import (
     is_unresolved_uid_selector,
     try_resolve_durable_uid,
 )
-from memcommit.application.operations.search.answer_references import (
-    NumberedSearchAnswerReference,
-    SearchAnswerReferenceDocument,
+from memcommit.application.operations.query.reference_document import (
+    NumberedOrdinaryQueryReference,
+    OrdinaryQueryReferenceDocument,
 )
 from memcommit.application.operations.query.evidence import (
     compact_artifact_references,
@@ -24,9 +24,9 @@ from memcommit.application.operations.query.answer import (
     complete_ordinary_query_answer,
     prepare_ordinary_query_answer,
 )
-from memcommit.application.operations.search.model import (
-    SearchCandidate,
-    search_candidate_uid_catalog,
+from memcommit.application.capabilities.retrieval_corpus.candidates import (
+    RetrievalCandidate,
+    retrieval_candidate_uid_catalog,
 )
 
 
@@ -68,7 +68,7 @@ class OrdinaryQueryResponse:
     request: OrdinaryQueryRequest
     answer: str
     grounded: bool
-    reference_document: SearchAnswerReferenceDocument | None = None
+    reference_document: OrdinaryQueryReferenceDocument | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.request, OrdinaryQueryRequest):
@@ -80,7 +80,7 @@ class OrdinaryQueryResponse:
         if self.reference_document is not None:
             if not isinstance(
                 self.reference_document,
-                SearchAnswerReferenceDocument,
+                OrdinaryQueryReferenceDocument,
             ):
                 raise ValueError("Ordinary Query reference document is invalid.")
             if not self.grounded:
@@ -98,13 +98,14 @@ class FrozenOrdinaryQuerySource:
     """One authorized, complete candidate frame frozen before provider use."""
 
     label: str
-    candidates: tuple[SearchCandidate, ...]
+    candidates: tuple[RetrievalCandidate, ...]
 
     def __post_init__(self) -> None:
         if not isinstance(self.label, str) or not self.label.strip():
             raise ValueError("Ordinary Query source requires a display label.")
         if not isinstance(self.candidates, tuple) or any(
-            not isinstance(candidate, SearchCandidate) for candidate in self.candidates
+            not isinstance(candidate, RetrievalCandidate)
+            for candidate in self.candidates
         ):
             raise ValueError("Ordinary Query source candidates must be frozen.")
 
@@ -164,7 +165,7 @@ def run_ordinary_query(
 
     try:
         identity = try_resolve_durable_uid(
-            search_candidate_uid_catalog(frozen.candidates),
+            retrieval_candidate_uid_catalog(frozen.candidates),
             request.question,
         )
     except DurableUidAmbiguityError as error:
@@ -178,7 +179,7 @@ def run_ordinary_query(
             )
         )
         references = tuple(
-            NumberedSearchAnswerReference(index, item)
+            NumberedOrdinaryQueryReference(index, item)
             for index, item in enumerate(evidence, start=1)
         )
         body = "\n".join(
@@ -186,7 +187,7 @@ def run_ordinary_query(
             f"{candidate.context_name}. [{index}]"
             for index, candidate in enumerate(selected_candidates, start=1)
         )
-        document = SearchAnswerReferenceDocument(body=body, references=references)
+        document = OrdinaryQueryReferenceDocument(body=body, references=references)
         return OrdinaryQueryResponse(
             request=request,
             answer=document.text,

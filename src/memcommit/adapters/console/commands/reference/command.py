@@ -6,11 +6,25 @@ from typing import Annotated, Optional
 
 import typer
 
+from memcommit.application.capabilities.operand_resolution import (
+    ContextOperandNotFoundError,
+    ResolvedExistingContextOperand,
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
+)
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
+    try_resolve_context_access_or_local_memory,
+)
+from memcommit.application.capabilities.durable_uid_resolution import (
+    is_unresolved_uid_selector,
+)
 from memcommit.application.capabilities.local_target_lookup import (
-    resolve_local_context_memory_target,
-    resolve_local_direct_memory_locator,
+    DirectMemoryNotFoundError,
 )
 from memcommit.core.context_targeting.model import (
+    ContextTarget,
     DirectMemoryLocator,
     DirectMemoryTarget,
 )
@@ -45,6 +59,7 @@ from memcommit.application.operations.reference.application import (
     run_reference,
 )
 from memcommit.application.operations.reference.runtime import MemoryStoreReferencePort
+from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
 
 
@@ -122,7 +137,7 @@ def cmd(
         typer.Option(
             "-r",
             "--recursive",
-            help="Snapshot descendants and local embedded Contexts",
+            help="Snapshot descendants and authorized embedded Contexts",
         ),
     ] = False,
 ) -> None:
@@ -201,6 +216,31 @@ def cmd(
     else:
         explicit_memory_request: ReferenceRequest | None = None
         try:
+            context_candidates = freeze_profile_context_access_candidates(
+                store,
+                current_name=port.current_context_name,
+            )
+            if target_option is not None:
+                try:
+                    target_option = resolve_existing_context_operand(
+                        freeze_local_context_operand_candidates(store),
+                        target_option,
+                        current=port.current_context_name,
+                    ).name
+                except ContextOperandNotFoundError as error:
+                    raise FileNotFoundError(
+                        f"Target Context {target_option!r} does not exist locally."
+                    ) from error
+            if source_from_option and (
+                target_option is not None or port.current_context_name is not None
+            ):
+                source_item = resolve_existing_context_access(
+                    store,
+                    source_item,
+                    current_name=port.current_context_name,
+                    required_permission="READ",
+                    candidates=context_candidates,
+                ).name
             parsed_source = (
                 parse_auto_typed_context_memory_operand(
                     source_item,
@@ -210,23 +250,29 @@ def cmd(
                 else None
             )
             auto_target = None
-            if parsed_source is not None and not isinstance(
-                parsed_source, DirectMemoryLocator
-            ):
-                try:
-                    auto_target = resolve_local_context_memory_target(
-                        store,
-                        source_item,
-                        current=port.current_context_name,
+            explicitly_qualified_memory = (
+                isinstance(parsed_source, DirectMemoryLocator)
+                and parsed_source.context_locator is not None
+            )
+            if parsed_source is not None and not explicitly_qualified_memory:
+                resolved = try_resolve_context_access_or_local_memory(
+                    store,
+                    source_item,
+                    current_name=port.current_context_name,
+                    candidates=context_candidates,
+                )
+                if isinstance(resolved, ResolvedExistingContextOperand):
+                    auto_target = ContextTarget(resolved.name)
+                elif isinstance(resolved, DirectMemoryTarget):
+                    auto_target = resolved
+                elif is_unresolved_uid_selector(source_item):
+                    raise DirectMemoryNotFoundError(
+                        f"No directly owned Memory or readable Context has a UID "
+                        f"starting with {source_item!r}."
                     )
-                except FileNotFoundError:
-                    # Preserve the established Context error route when a
-                    # short hexadecimal token matches neither local role.
-                    auto_target = None
-            memory_mode = isinstance(
-                parsed_source,
-                DirectMemoryLocator,
-            ) or isinstance(auto_target, DirectMemoryTarget)
+            memory_mode = explicitly_qualified_memory or isinstance(
+                auto_target, DirectMemoryTarget
+            )
             if memory_mode:
                 if direct or recursive:
                     typer.secho(
@@ -238,37 +284,37 @@ def cmd(
                     )
                     raise typer.Exit(2)
                 if (
-                    isinstance(parsed_source, DirectMemoryLocator)
-                    and parsed_source.context_locator is not None
+                    explicitly_qualified_memory
                 ):
                     # An explicit owner is the safe Grant boundary. Let the
                     # Reference runtime resolve that exact public Context and
                     # authorize retention. Bare UID lookup remains confined to
                     # the complete ordinary-local catalog below.
+                    memory_owner_access = resolve_existing_context_access(
+                        store,
+                        parsed_source.context_locator,
+                        current_name=port.current_context_name,
+                        required_permission="READ",
+                        candidates=context_candidates,
+                    )
                     explicit_memory_request = ReferenceRequest(
                         memory_selector=parsed_source.memory_selector,
-                        source_locator=parsed_source.context_locator,
+                        source_locator=memory_owner_access.name,
                         into_locator=target_option,
                     )
                     memory_target = None
                 else:
-                    memory_target = resolve_local_direct_memory_locator(
-                        store,
-                        (
-                            source_item
-                            if isinstance(parsed_source, DirectMemoryLocator)
-                            else auto_target.memory_uid
-                        ),
-                        current=port.current_context_name,
-                        explicit_context=(
-                            memory_owner
-                            if isinstance(parsed_source, DirectMemoryLocator)
-                            else auto_target.context_name
-                        ),
-                    )
+                    assert isinstance(auto_target, DirectMemoryTarget)
+                    memory_target = auto_target
             else:
                 memory_target = None
-        except (FileNotFoundError, OSError, TypeError, ValueError) as error:
+        except (
+            FileNotFoundError,
+            OSError,
+            ProfileError,
+            TypeError,
+            ValueError,
+        ) as error:
             typer.secho(
                 f"Error: {safe_terminal_text(str(error))}",
                 fg=typer.colors.RED,

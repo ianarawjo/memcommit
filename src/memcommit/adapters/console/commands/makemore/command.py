@@ -31,6 +31,11 @@ from memcommit.application.operations.makemore.add_runtime import (
     freeze_makemore_context_source,
     prepare_makemore_add,
 )
+from memcommit.application.operations.makemore.distilled_runtime import (
+    PreparedDistilledMakemoreAdd,
+    apply_prepared_distilled_makemore_add,
+    prepare_distilled_makemore_add,
+)
 from memcommit.application.operations.ground.makemore import (
     FrozenGroundMakemore,
     GroundMakemoreResult,
@@ -53,6 +58,24 @@ from memcommit.application.capabilities.semantic_result_memorization import (
     resolve_existing_semantic_result_endpoints,
 )
 from memcommit.persistence.store import MemoryStore
+
+
+_DISTINCT_RULES_ERROR = "Makemore Rules must be distinct."
+
+
+def _render_makemore_error(error: BaseException) -> None:
+    message = str(error)
+    typer.secho(
+        "Makemore error: " + display_escape_text(message),
+        fg=typer.colors.RED,
+        err=True,
+    )
+    if message == _DISTINCT_RULES_ERROR:
+        typer.echo(
+            "Direct Rules-to-Cases mode requires distinct Rules. Change the Rule "
+            "set, or omit --as rules to Distill the Context first.",
+            err=True,
+        )
 
 
 def cmd(
@@ -95,9 +118,12 @@ def cmd(
         str,
         typer.Option(
             "--as",
-            help="Interpret Context Source Memories as rules (default) or one goal",
+            help=(
+                "Interpret a Context Source as auto (Distill then Makemore), "
+                "existing rules, or one goal"
+            ),
         ),
-    ] = "rules",
+    ] = "auto",
     number: Annotated[
         Optional[int],
         typer.Option(
@@ -157,11 +183,15 @@ def cmd(
         ground_result: GroundMakemoreResult | None = None
         ground_store: MemoryStore | None = None
         prepared: PreparedMakemoreAdd | None = None
+        distilled_prepared: PreparedDistilledMakemoreAdd | None = None
         ordinary_store: MemoryStore | None = None
         ordinary_source: FrozenMakemoreSource | None = None
+        distilled_source_name: str | None = None
+        goal_focus = None
         ordinary_target: str | None = None
+        request: MakemoreRequest | None
         if ground is not None:
-            if source_name is not None or target_name is not None or as_role != "rules":
+            if source_name is not None or target_name is not None or as_role != "auto":
                 raise MakemoreError(
                     "--ground cannot be combined with --from, --to, or --as."
                 )
@@ -207,7 +237,7 @@ def cmd(
                 not inline_rules and goal_focus is None
             )
             if not context_source:
-                if as_role != "rules":
+                if as_role != "auto":
                     raise MakemoreError("--as applies only to a Context Source.")
                 if inline_rules:
                     request = MakemoreRequest(
@@ -241,34 +271,67 @@ def cmd(
                     target_locator=target_name,
                     current=snapshot.current_name,
                 )
-                if as_role not in {"goal", "rules"}:
-                    raise MakemoreError("Makemore --as must be 'goal' or 'rules'.")
-                ordinary_source = freeze_makemore_context_source(
-                    ordinary_store,
-                    context_name=endpoints.source_name,
-                    role=as_role,
-                    number=number,
-                    strict=strict,
-                    goal_focus=goal_focus,
-                )
-                request = ordinary_source.request
+                if as_role not in {"auto", "goal", "rules"}:
+                    raise MakemoreError(
+                        "Makemore --as must be 'auto', 'goal', or 'rules'."
+                    )
+                if as_role == "auto":
+                    distilled_source_name = endpoints.source_name
+                    request = None
+                else:
+                    ordinary_source = freeze_makemore_context_source(
+                        ordinary_store,
+                        context_name=endpoints.source_name,
+                        role=as_role,
+                        number=number,
+                        strict=strict,
+                        goal_focus=goal_focus,
+                    )
+                    request = ordinary_source.request
                 ordinary_target = endpoints.target_name
 
-        def execute(value: MakemoreRequest) -> MakemoreResult:
-            nonlocal prepared, ground_result
+        def execute(value: MakemoreRequest | None) -> MakemoreResult:
+            nonlocal prepared, distilled_prepared, ground_result
+            pipeline = distilled_source_name is not None
             with CommandProgress(
                 "MAKEMORE",
-                "generating review proposals",
-                total=1,
+                "distilling Source Rules" if pipeline else "generating review proposals",
+                total=2 if pipeline else 1,
             ) as progress:
                 if frozen_ground is not None and ground_store is not None:
+                    assert value is not None
                     ground_result = execute_ground_makemore(
                         frozen_ground,
                         store=ground_store,
                         provider_factory=connect_semantic_provider,
                     )
                     result = ground_result.makemore
+                elif pipeline:
+                    assert ordinary_store is not None
+                    assert ordinary_target is not None
+                    assert distilled_source_name is not None
+                    provider_call = 0
+
+                    def connect_pipeline_provider():
+                        nonlocal provider_call
+                        provider_call += 1
+                        if provider_call == 2:
+                            progress.update("generating Cases", step=2)
+                        return connect_semantic_provider()
+
+                    distilled_prepared = prepare_distilled_makemore_add(
+                        store=ordinary_store,
+                        source_name=distilled_source_name,
+                        target_name=ordinary_target,
+                        provider_factory=connect_pipeline_provider,
+                        goal_focus=goal_focus,
+                        number=number,
+                        strict=strict,
+                        will_apply=True,
+                    )
+                    result = distilled_prepared.result
                 else:
+                    assert value is not None
                     assert ordinary_store is not None
                     assert ordinary_target is not None
                     prepared = prepare_makemore_add(
@@ -280,7 +343,7 @@ def cmd(
                         will_apply=True,
                     )
                     result = prepared.result
-                progress.update("proposal ready", step=1)
+                progress.update("proposal ready", step=2 if pipeline else 1)
                 return result
 
         result = execute(request)
@@ -305,26 +368,46 @@ def cmd(
                 )
                 typer.echo(f"UNDO · mem ground {receipt.workspace_name} --undo")
             return
-        if result is None or prepared is None or ordinary_store is None:
+        if result is None or ordinary_store is None or (
+            prepared is None and distilled_prepared is None
+        ):
             raise MakemoreError("Makemore produced no addable proposal.")
-        receipt = apply_prepared_makemore_add(prepared, store=ordinary_store)
+        receipt = (
+            apply_prepared_distilled_makemore_add(
+                distilled_prepared,
+                store=ordinary_store,
+            )
+            if distilled_prepared is not None
+            else apply_prepared_makemore_add(prepared, store=ordinary_store)
+        )
         typer.secho(
             f"MAKEMORE APPLIED · {display_escape_text(receipt.target_name)}",
             fg=typer.colors.GREEN,
             bold=True,
         )
         source_label = receipt.source_name or "INLINE"
-        typer.echo(
-            f"MODE · {prepared.result.analysis.mode.value} · "
-            "VERIFICATION · UNVERIFIED · "
-            f"QUALITY · {prepared.result.analysis.quality_policy.value}"
+        active_prepared = (
+            distilled_prepared.makemore
+            if distilled_prepared is not None
+            else prepared
         )
+        assert active_prepared is not None
+        typer.echo(
+            f"MODE · {active_prepared.result.analysis.mode.value} · "
+            "VERIFICATION · UNVERIFIED · "
+            f"QUALITY · {active_prepared.result.analysis.quality_policy.value}"
+        )
+        if distilled_prepared is not None:
+            typer.echo(
+                "PIPELINE · DISTILL → MAKEMORE · "
+                f"{len(distilled_prepared.distill.analysis.rules)} TRANSIENT RULES"
+            )
         typer.echo(
             f"SOURCE · {display_escape_text(source_label)} · "
             f"TARGET · {display_escape_text(receipt.target_name)}"
         )
         typer.echo(f"EFFECTS · ADD {receipt.count} MEMORIES")
-        analysis = prepared.result.analysis
+        analysis = active_prepared.result.analysis
         added_contents = (
             tuple(item.content for item in analysis.rules)
             if analysis.mode is MakemoreMode.GOAL_TO_RULES
@@ -344,9 +427,5 @@ def cmd(
         TypeError,
         ValueError,
     ) as error:
-        typer.secho(
-            "Makemore error: " + display_escape_text(str(error)),
-            fg=typer.colors.RED,
-            err=True,
-        )
+        _render_makemore_error(error)
         raise typer.Exit(1)

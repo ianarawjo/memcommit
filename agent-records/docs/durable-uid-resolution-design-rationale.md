@@ -20,9 +20,9 @@ authorized to disclose, projects those values as typed `DurableUidCandidate`
 records, and only then asks the resolver to interpret an input. An exact UID
 wins. Automatic prefix interpretation starts at the eight-character display
 form printed by the console, applies to both UUID and non-UUID durable artifact
-identities, and succeeds only when one full UID is represented. Several
-occurrences of that same full UID are one durable identity and may all be
-returned; different full UIDs sharing a prefix are an ambiguity.
+identities, and succeeds only when one full UID is represented.
+Several occurrences of that same full UID are one durable identity and may all
+be returned; different full UIDs sharing a prefix are an ambiguity.
 
 This separation is intentional. Identity resolution answers which authorized
 object the text denotes; ContextUse, CheckpointRead, readable-catalog, and
@@ -41,21 +41,22 @@ evidence and no fabricated content span; text occurrence counts remain text
 occurrence counts. Search and ordinary Query use the shared Search candidate
 frame, including the same two identities for MemoryRef candidates as well as
 authorized query-route and local artifact projections. A standalone UID is
-resolved before provider construction. Search returns the exact row, while
-Query returns a grounded typed Reference document. An unmatched UUID-shaped
-standalone input returns no authorized result instead of inviting provider
-guesswork. Ordinary semantic text continues through the existing provider
-contracts.
+resolved before provider
+construction. Search returns the exact row, while Query returns a grounded
+typed Reference document. An unmatched UUID-shaped standalone input returns no
+authorized result instead of inviting provider guesswork. Ordinary semantic
+text continues through the existing provider contracts.
 
 Trace adds Context UID selection through the shared typed existing-Context
 operand layer, then falls through to its existing Memory/MemoryRef UID routes
-only when no Context identity matched. Diff retains its one-checkpoint-versus-
-previous form and additionally accepts `FROM_CHECKPOINT TO_CHECKPOINT`. Both
-checkpoint UIDs must resolve to the same Context. The adapter requests the
-exact `CheckpointRead.reference((from_uid, to_uid))` window, obtains a bounded
-`AuthorizedCheckpointHistory`, and renders only its `FROM` and `TO` result
-snapshots. Argument order is semantic and is not silently rearranged by
-timestamp.
+only when no Context identity matched. Diff accepts either a Context identity,
+which selects its newest checkpoint, or one checkpoint identity, which selects
+that exact revision. A checkpoint UID resolves across the frozen ordinary-local
+History catalog, while Context UID resolution also admits authorized readable
+Context candidates. The adapter requests one exact
+`CheckpointRead.reference((checkpoint_uid,))` window and renders that
+checkpoint against its retained pre-image. Two-checkpoint chronology is not a
+Diff operand contract; `mem trace CONTEXT` owns operation ordering.
 
 ## Alternatives and limitations
 

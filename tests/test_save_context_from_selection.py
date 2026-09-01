@@ -18,10 +18,10 @@ from memcommit.adapters.console.commands.search.search_workbench import (
     SearchWorkbenchResult,
 )
 from memcommit.application.authorization import ContextUse
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     resolve_context_access,
 )
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_readable_context_catalog,
 )
 from memcommit.application.capabilities.save_context_from_selection.application import (

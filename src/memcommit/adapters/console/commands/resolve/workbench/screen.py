@@ -33,6 +33,7 @@ from memcommit.application.operations.resolve.decisions import (
 def run_resolve_tui(
     analysis: ResolveAnalysis,
     *,
+    header_label: str = "RESOLVE",
     clipboard_writer: ClipboardWriter | None = None,
     app_input: Input | None = None,
     app_output: Output | None = None,
@@ -97,7 +98,7 @@ def run_resolve_tui(
         response_validator=validate_response,
         response_option_uid=lambda item_uid: f"{item_uid}:intent",
         response_title="YOUR INTENT",
-        header_label="RESOLVE",
+        header_label=header_label,
         activation_hint="select/finalize",
         show_item_navigation=True,
         build_continue_action=continue_action,

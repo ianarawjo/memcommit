@@ -18,10 +18,9 @@ from memcommit.application.operations.profile.config import (
     load_profile_registry,
     profile_store_dir,
     canonical_grant_permissions,
-    validate_grant_permission,
     validate_grant_resource_name,
 )
-from memcommit.application.capabilities.authority.checkpoint_read_model import (
+from memcommit.application.authorization.checkpoint_read_model import (
     CheckpointEmbed,
     CheckpointRead,
     CheckpointReference,
@@ -34,6 +33,16 @@ from memcommit.application.capabilities.history.query.checkpoint_history_slicing
 from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import (
     HistoryError,
 )
+from memcommit.application.capabilities.operand_resolution import (
+    ContextOperandNotFoundError,
+    resolve_existing_local_context_operand,
+)
+from memcommit.application.capabilities.context_locator import (
+    is_relative_context_locator,
+)
+from memcommit.application.capabilities.durable_uid_resolution import (
+    is_unresolved_uid_selector,
+)
 from memcommit.persistence.store import MemoryStore
 
 from ._storage import (
@@ -43,18 +52,6 @@ from ._storage import (
     _registry_lock as _registry_lock,
     _write_registry as _write_registry,
 )
-
-
-@dataclass(frozen=True)
-class GrantedContextView:
-    """One validated Context view resolved for a grantee Profile."""
-
-    grant: AuthorityGrant
-    authority: ProfileEntry
-    grantee: ProfileEntry
-    requested_name: str
-    authority_context_name: str
-    authority_root: Path
 
 
 @dataclass(frozen=True)
@@ -219,10 +216,14 @@ def create_authority_grant(
     """Create one exact cross-Profile Context view under the registry lock."""
 
     canonical_permissions = canonical_grant_permissions(permissions)
-    # Existing legacy Grants remain readable, but a new Grant must not publish
-    # or attach another shell-dependent Context locator.
-    validate_portable_context_name(resource_name)
-    validate_portable_context_name(attachment_name)
+    # Fail invalid names before opening either Profile store. Relative
+    # locators and UID selectors are the only existing-Context spellings that
+    # are not themselves canonical portable names.
+    for operand in (resource_name, attachment_name):
+        if not is_relative_context_locator(
+            operand
+        ) and not is_unresolved_uid_selector(operand):
+            validate_portable_context_name(operand)
     with _registry_lock():
         registry = load_profile_registry()
         authority = registry.by_name(authority_name)
@@ -237,7 +238,47 @@ def create_authority_grant(
             )
         if authority.uid == grantee.uid:
             raise ProfileError("A Profile cannot grant a view to itself.")
+        authority_store = MemoryStore(
+            root=profile_store_dir(authority),
+            create=False,
+        )
+        try:
+            resolved_resource = resolve_existing_local_context_operand(
+                authority_store,
+                resource_name,
+                current=authority_store.current_context_name(),
+            )
+        except ContextOperandNotFoundError as error:
+            raise ProfileError(
+                f"Authority Context {resource_name!r} does not exist."
+            ) from error
+        resource_name = resolved_resource.name
+        grantee_store = MemoryStore(
+            root=profile_store_dir(grantee),
+            create=False,
+        )
+        try:
+            resolved_attachment = resolve_existing_local_context_operand(
+                grantee_store,
+                attachment_name,
+                current=grantee_store.current_context_name(),
+            )
+        except ContextOperandNotFoundError as error:
+            raise ProfileError(
+                f"Grantee Context {attachment_name!r} does not exist in "
+                f"Profile {grantee.name!r}."
+            ) from error
+        attachment_name = resolved_attachment.name
+        # A new Grant persists canonical ordinary names even when its CLI
+        # operands used relative spelling or a durable Context UID.
+        validate_portable_context_name(resource_name)
+        validate_portable_context_name(attachment_name)
         authority_contexts, _ = _context_records(profile_store_dir(authority))
+        authority_root = authority_contexts.get(resource_name)
+        if authority_root is None or authority_root.uid != resolved_resource.uid:
+            raise ProfileError(
+                "Authority Context changed identity during Grant resolution."
+            )
         scope = _grant_scope(
             authority_contexts,
             resource_name,
@@ -252,6 +293,10 @@ def create_authority_grant(
         )
         _assert_checkpoint_reads_retained(authority, scope, canonical_reads)
         attachment = _assert_grantee_attachment(grantee, attachment_name)
+        if attachment.uid != resolved_attachment.uid:
+            raise ProfileError(
+                "Grantee attachment changed identity during Grant resolution."
+            )
         public = public_name or resource_name
         public = validate_portable_context_name(public)
         _assert_public_view_available(
@@ -403,90 +448,6 @@ def delete_authority_grant(
 def list_authority_grants() -> tuple[ProfileRegistry, tuple[AuthorityGrant, ...]]:
     registry = load_profile_registry()
     return registry, registry.grants
-
-
-def grants_for_attachment(
-    *,
-    attachment_name: str,
-    registry: ProfileRegistry | None = None,
-) -> tuple[AuthorityGrant, ...]:
-    """Return validated grant metadata attached to one active-Profile Context."""
-
-    registry = registry or load_profile_registry()
-    grantee = registry.active
-    attachment = _context_record_at(profile_store_dir(grantee), attachment_name)
-    if attachment is None:
-        return ()
-    return tuple(
-        sorted(
-            (
-                grant
-                for grant in registry.grants
-                if grant.grantee_profile_uid == grantee.uid
-                and grant.attachment_context_uid == attachment.uid
-                and grant.attachment_context_name == attachment.name
-            ),
-            key=lambda grant: grant.public_name,
-        )
-    )
-
-
-def resolve_granted_context_view(
-    requested_name: str,
-    *,
-    attachment_name: str,
-    required_permission: str,
-    registry: ProfileRegistry | None = None,
-) -> GrantedContextView:
-    """Resolve the most-specific grant and fail closed on narrower overrides."""
-
-    registry = registry or load_profile_registry()
-    permission = validate_grant_permission(required_permission)
-    grantee = registry.active
-    attached = grants_for_attachment(
-        attachment_name=attachment_name,
-        registry=registry,
-    )
-    candidates = [
-        grant
-        for grant in attached
-        if requested_name == grant.public_name
-        or requested_name.startswith(grant.public_name + "/")
-    ]
-    if not candidates:
-        raise ProfileError(f"Granted view {requested_name!r} does not exist.")
-    grant = max(candidates, key=lambda item: len(item.public_name.split("/")))
-    suffix = requested_name[len(grant.public_name) :]
-    authority_name = grant.resource_name + suffix
-    bindings = {binding.name: binding.uid for binding in grant.contexts}
-    authority_uid = bindings.get(authority_name)
-    if authority_uid is None:
-        raise ProfileError(f"Context {requested_name!r} is not included in this Grant.")
-    if permission not in grant.permissions:
-        raise ProfileError(
-            f"Grant {grant.uid[:8]} does not allow {permission.lower()} access "
-            f"to {requested_name!r}."
-        )
-    authority = next(
-        profile
-        for profile in registry.profiles
-        if profile.uid == grant.authority_profile_uid
-    )
-    authority_root = profile_store_dir(authority)
-    # Runtime view resolution must not inspect sibling or narrower authority
-    # Contexts merely to validate one frozen binding.  This is especially
-    # important when a readable parent has a query-only nested override.
-    context = _context_record_at(authority_root, authority_name)
-    if context is None or context.uid != authority_uid:
-        raise ProfileError("Granted authority Context identity changed.")
-    return GrantedContextView(
-        grant=grant,
-        authority=authority,
-        grantee=grantee,
-        requested_name=requested_name,
-        authority_context_name=authority_name,
-        authority_root=authority_root,
-    )
 
 
 def resolve_share_endpoint(

@@ -80,7 +80,10 @@ def operation_record_identity(
     if command == "update":
         session_uid = args.get("update_session_uid")
         operation_digest = args.get("operation_digest")
-        if all(isinstance(value, str) and value for value in (session_uid, operation_digest)):
+        if all(
+            isinstance(value, str) and value
+            for value in (session_uid, operation_digest)
+        ):
             return f"update:{session_uid}:{operation_digest}"
     if command == "meld":
         record = args.get("meld")
@@ -92,6 +95,19 @@ def operation_record_identity(
                 for value in (session_uid, change_set_digest)
             ):
                 return f"meld:{session_uid}:{change_set_digest}"
+    if command == "sever":
+        record = args.get("sever")
+        if isinstance(record, dict) and isinstance(args.get("command_contexts"), list):
+            session_uid = record.get("session_uid")
+            session_digest = record.get("session_digest")
+            if all(
+                isinstance(value, str) and value
+                for value in (session_uid, session_digest)
+            ):
+                # Every selected Source owner has its own physical checkpoint,
+                # but this retained session identity proves that they belong to
+                # one reviewed, atomic in-place Sever command.
+                return f"sever:{session_uid}:{session_digest}"
     if command == "merge":
         record = args.get("merge_tree")
         if isinstance(record, dict):

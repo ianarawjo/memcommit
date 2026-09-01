@@ -22,7 +22,7 @@ from memcommit.adapters.python_api.errors import (
     CompareProviderFailure,
     CompareStorageError,
 )
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonError,
     comparison_canonical_digest,

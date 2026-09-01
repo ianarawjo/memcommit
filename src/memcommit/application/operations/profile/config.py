@@ -15,7 +15,7 @@ from pathlib import Path
 import re
 import uuid
 
-from memcommit.application.capabilities.authority.checkpoint_read_model import (
+from memcommit.application.authorization.checkpoint_read_model import (
     CheckpointRead,
     CheckpointReadValueError,
     canonical_checkpoint_reads,

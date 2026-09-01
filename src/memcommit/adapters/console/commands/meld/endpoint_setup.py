@@ -8,13 +8,17 @@ from dataclasses import dataclass
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     context_access_display_facts,
 )
-from memcommit.adapters.console.commands.meld import command_codec as meld_command_review
-from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.adapters.console.commands.meld import (
+    command_codec as meld_command_review,
+)
+from memcommit.adapters.console.terminal.components.context_picker import (
+    context_memory_rows,
+)
+from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
 )
@@ -43,6 +47,7 @@ class MeldTuiSetup:
     eligible_target_names: frozenset[str]
     current_context: str | None = None
     annotations: tuple[tuple[str, SourceDisplayValue], ...] = ()
+    inline_baseline_names: frozenset[str] | None = None
 
     def __post_init__(self) -> None:
         if (
@@ -65,6 +70,17 @@ class MeldTuiSetup:
         labels = dict(self.annotations)
         if len(labels) != len(self.annotations) or set(labels) - set(self.names):
             raise ValueError("Meld setup annotations are outside its catalog.")
+        if self.inline_baseline_names is not None and not (
+            self.inline_baseline_names <= set(self.names)
+        ):
+            raise ValueError("Meld inline baselines are outside its catalog.")
+
+    def allows_inline_baseline(self, name: str) -> bool:
+        return (
+            name in self.names
+            if self.inline_baseline_names is None
+            else name in self.inline_baseline_names
+        )
 
 
 @dataclass(frozen=True)
@@ -72,7 +88,7 @@ class MeldEndpointSelection:
     """One reviewed Meld shape returned without planning or durable mutation."""
 
     mode: str
-    left_name: str
+    left_name: str | None
     right_name: str
     target_name: str | None = None
     create_target: bool = False
@@ -80,11 +96,14 @@ class MeldEndpointSelection:
     right_descendants: bool = False
     left_memory_uid: str | None = None
     right_memory_uid: str | None = None
+    inline_source_content: str | None = None
 
     def __post_init__(self) -> None:
         if self.mode not in {"symmetric", "directional"}:
             raise ValueError("Meld endpoint selection has an unknown mode.")
-        if self.left_name == self.right_name:
+        if self.mode == "symmetric" and self.left_name is None:
+            raise ValueError("Symmetric Meld requires a Context Source A.")
+        if self.left_name is not None and self.left_name == self.right_name:
             raise ValueError("Meld endpoint selection requires distinct A and B.")
         if self.mode == "symmetric" and self.target_name is None:
             raise ValueError("Symmetric Meld endpoint selection requires C.")
@@ -92,6 +111,17 @@ class MeldEndpointSelection:
             self.target_name is not None or self.create_target
         ):
             raise ValueError("Directional Meld uses B as its result target.")
+        if (self.left_name is None) == (self.inline_source_content is None):
+            raise ValueError(
+                "Meld setup requires exactly one Context or inline Source."
+            )
+        if self.inline_source_content is not None and (
+            self.mode != "directional"
+            or not self.inline_source_content.strip()
+            or self.left_descendants
+            or self.left_memory_uid is not None
+        ):
+            raise ValueError("Inline Meld setup cannot retain INCOMING Context scope.")
 
 
 @dataclass(frozen=True)
@@ -99,7 +129,7 @@ class MeldSetupReceipt:
     """Reviewed process-local arguments for one new Meld command."""
 
     mode: str
-    left_name: str
+    left_name: str | None
     right_name: str
     target_name: str | None = None
     create_target: bool = False
@@ -107,6 +137,7 @@ class MeldSetupReceipt:
     right_descendants: bool = False
     left_memory_uid: str | None = None
     right_memory_uid: str | None = None
+    inline_source_content: str | None = None
 
 
 def meld_endpoint_setup_spec(
@@ -145,6 +176,7 @@ def meld_endpoint_setup_spec(
                 ),
                 descendant_role_uids=frozenset({"A", "B"}),
                 memory_focus_role_uids=frozenset(),
+                inline_memory_role_uids=frozenset(),
             ),
             EndpointSetupMode(
                 "DIRECTIONAL",
@@ -157,6 +189,7 @@ def meld_endpoint_setup_spec(
                 ),
                 descendant_role_uids=frozenset({"A", "B"}),
                 memory_focus_role_uids=frozenset({"A", "B"}),
+                inline_memory_role_uids=frozenset({"A"}),
             ),
         ),
         initial_mode_uid="SYMMETRIC",
@@ -173,6 +206,7 @@ def meld_endpoint_setup_spec(
                 height=height,
                 allow_descendants=True,
                 allow_memory_focus=True,
+                allow_inline_memory=True,
                 memory_height=7,
             ),
             EndpointSetupRole(
@@ -225,7 +259,7 @@ def choose_meld_endpoint_setup(
             new_name_validator=new_name_validator,
         ),
         memory_loader=memory_loader,
-        validate_draft=lambda value: _validate_meld_draft(value),
+        validate_draft=lambda value: _validate_meld_draft(setup, value),
         command_editor=EndpointCommandBinding(
             form=meld_command_review.MELD_COMMAND_FORM,
             review=_meld_start_review,
@@ -242,7 +276,7 @@ def choose_meld_endpoint_setup(
     target = draft.value("C") if draft.mode_uid == "SYMMETRIC" else None
     return MeldEndpointSelection(
         mode=draft.mode_uid.casefold(),
-        left_name=left.context_name,
+        left_name=(left.context_name if left.inline_memory_content is None else None),
         right_name=right.context_name,
         target_name=target.context_name if target is not None else None,
         create_target=target.create if target is not None else False,
@@ -250,6 +284,7 @@ def choose_meld_endpoint_setup(
         right_descendants=right.include_descendants,
         left_memory_uid=left.memory_uid,
         right_memory_uid=right.memory_uid,
+        inline_source_content=left.inline_memory_content,
     )
 
 
@@ -259,18 +294,27 @@ def _meld_start_review(draft):
     target = draft.value("C") if draft.mode_uid == "SYMMETRIC" else None
     return meld_command_review.build_start_review(
         mode=draft.mode_uid,
-        left_name=left.context_name,
+        left_name=(left.context_name if left.inline_memory_content is None else None),
         right_name=right.context_name,
         target_name=target.context_name if target is not None else None,
         left_descendants=left.include_descendants,
         right_descendants=right.include_descendants,
         left_memory_uid=left.memory_uid,
         right_memory_uid=right.memory_uid,
+        incoming_text=left.inline_memory_content,
     )
 
 
-def _validate_meld_draft(draft) -> str | None:
-    if draft.value("A").context_name == draft.value("B").context_name:
+def _validate_meld_draft(setup: MeldTuiSetup, draft) -> str | None:
+    left = draft.value("A")
+    right = draft.value("B")
+    if left.inline_memory_content is not None:
+        if draft.mode_uid != "DIRECTIONAL":
+            return "Inline Memory input requires Directional Meld."
+        if not setup.allows_inline_baseline(right.context_name):
+            return "Inline Memory Meld requires an ordinary local Baseline Context."
+        return None
+    if left.context_name == right.context_name:
         return "A and B must be distinct Contexts."
     if draft.mode_uid == "SYMMETRIC":
         target = draft.value("C")
@@ -322,6 +366,7 @@ def choose_meld_setup(
         right_descendants=selected.right_descendants,
         left_memory_uid=selected.left_memory_uid,
         right_memory_uid=selected.right_memory_uid,
+        inline_source_content=selected.inline_source_content,
     )
 
 
@@ -393,6 +438,7 @@ def _freeze_meld_tui_setup(
             eligible_target_names=eligible_targets,
             current_context=current_name,
             annotations=annotations,
+            inline_baseline_names=frozenset(local_names),
         ),
         catalog,
     )

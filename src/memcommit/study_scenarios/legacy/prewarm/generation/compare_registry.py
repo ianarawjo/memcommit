@@ -18,7 +18,7 @@ from typing import Sequence
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution import (
     load_comparison_context,
 )
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
     load_comparison_analysis,
 )

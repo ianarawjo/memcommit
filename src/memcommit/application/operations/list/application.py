@@ -5,8 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol
 
-from memcommit.application.capabilities.authority.context_access import ContextAccess
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.access import ContextAccess
+from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
 )
 from memcommit.core.context import Context

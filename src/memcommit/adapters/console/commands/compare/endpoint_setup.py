@@ -7,12 +7,12 @@ from dataclasses import dataclass
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     context_access_display_facts,
 )
 from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup import (

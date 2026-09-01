@@ -2,7 +2,14 @@
 
 from __future__ import annotations
 
+from memcommit.application.capabilities.operand_resolution import (
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
+)
 from memcommit.application.capabilities.context_locator import resolve_context_locator
+from memcommit.application.capabilities.durable_uid_resolution import (
+    is_unresolved_uid_selector,
+)
 from memcommit.application.operations.rename.application import (
     RenameBinding,
     RenamePlan,
@@ -21,18 +28,25 @@ class MemoryStoreRenamePort:
         self._store = store
 
     def freeze(self, request: RenameRequest) -> RenamePlan:
-        old_name = resolve_context_locator(
+        if not is_unresolved_uid_selector(request.old_locator):
+            lexical_old_name = resolve_context_locator(
+                request.old_locator,
+                current=request.current_context_name,
+            )
+            try:
+                validate_portable_context_name(lexical_old_name)
+            except ValueError as error:
+                raise ValueError(
+                    "General Context rename requires a portable existing Context "
+                    "name; use 'mem profile migrate-context' for a nonportable "
+                    "legacy source."
+                ) from error
+        old_name = resolve_existing_context_operand(
+            freeze_local_context_operand_candidates(self._store),
             request.old_locator,
             current=request.current_context_name,
-        )
-        try:
-            validate_portable_context_name(old_name)
-        except ValueError as error:
-            raise ValueError(
-                "General Context rename requires a portable existing Context "
-                "name; use 'mem profile migrate-context' for a nonportable "
-                "legacy source."
-            ) from error
+        ).name
+        validate_portable_context_name(old_name)
         token = self._store.plan_context_rename(old_name, request.new_name)
         return RenamePlan(
             old_name=token.old_name,
@@ -83,4 +97,3 @@ def execute_rename(store: MemoryStore, plan: RenamePlan) -> RenameResult:
 
 
 __all__ = ["MemoryStoreRenamePort", "execute_rename", "prepare_rename"]
-

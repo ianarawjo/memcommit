@@ -100,7 +100,7 @@ __all__ = [
     "HelpInputError",
     "MemCommitClient",
     "MemCommitError",
-    "MeldApplyResult",
+    "MeldDecisionInput",
     "MeldAuthorityError",
     "MeldConflictError",
     "MeldContextError",
@@ -167,8 +167,7 @@ __all__ = [
     "ReplaceStorageError",
     "ResolveAnalysisResult",
     "ResolveApplyResult",
-    "ResolveCandidateResult",
-    "ResolveEffectResult",
+    "ResolveDecisionInput",
     "ResolveIssueResult",
     "SearchItemResult",
     "SearchResult",
@@ -333,7 +332,7 @@ _LAZY_EXPORTS = {
             "Result",
         )
     },
-    "MeldApplyResult": ("memcommit.adapters.python_api.meld", "MeldApplyResult"),
+    "MeldDecisionInput": ("memcommit.adapters.python_api.meld", "MeldDecisionInput"),
     "MeldIssueResult": ("memcommit.adapters.python_api.meld", "MeldIssueResult"),
     "MeldOptionResult": ("memcommit.adapters.python_api.meld", "MeldOptionResult"),
     "MeldProposalResult": ("memcommit.adapters.python_api.meld", "MeldProposalResult"),
@@ -427,13 +426,9 @@ _LAZY_EXPORTS = {
         "memcommit.adapters.python_api.resolve",
         "ResolveApplyResult",
     ),
-    "ResolveCandidateResult": (
+    "ResolveDecisionInput": (
         "memcommit.adapters.python_api.resolve",
-        "ResolveCandidateResult",
-    ),
-    "ResolveEffectResult": (
-        "memcommit.adapters.python_api.resolve",
-        "ResolveEffectResult",
+        "ResolveDecisionInput",
     ),
     "ResolveIssueResult": (
         "memcommit.adapters.python_api.resolve",

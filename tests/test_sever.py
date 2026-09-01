@@ -62,8 +62,8 @@ class SeverProvider:
         assert "maxItems" not in summary_schema["properties"]["source_memory_ids"]
         assert "maxItems" not in summary_schema["properties"]["criterion_memory_ids"]
         assert "query-only sources" in prompt
-        assert "selectively forgetting information" in prompt
-        assert "decide only what the local Result remembers" in prompt
+        assert "selectively curate a Source in place" in prompt
+        assert "decide only what each Source owner remembers" in prompt
         assert "KEEP_AS_WRITTEN" in prompt
         assert "WHAT CHANGED summary rather than a count report" in prompt
         instructions = prompt.split(SEVER_PAYLOAD_MARKER, 1)[0]
@@ -121,6 +121,30 @@ def _context(store: MemoryStore, name: str, *contents: str):
         ops.add(context, content)
     store.create_context(context)
     return context
+
+
+def _start_legacy_other_save(
+    store: MemoryStore,
+    *,
+    source_name: str,
+    criteria_name: str,
+    output_name: str,
+) -> SeverSession:
+    """Persist an old Result-bearing session to verify resume compatibility."""
+
+    analysis = sever_command._start_analysis(
+        store=store,
+        current_name=store.current_context_name(),
+        source_name=source_name,
+        criteria_name=criteria_name,
+        output_name=output_name,
+        source_descendants=False,
+        criteria_descendants=False,
+        provider_factory=SeverProvider,
+    )
+    return sever_command.execute_sever_session_start(
+        analysis, store=store
+    ).snapshot.session
 
 
 def test_sever_start_reports_real_blocking_stages(isolated_store, monkeypatch):
@@ -182,7 +206,7 @@ def test_sever_provider_failure_reports_the_unsaved_frozen_frame(isolated_store)
         )
 
 
-def test_explicit_sever_creates_review_session_without_output_or_query_access(
+def test_explicit_sever_creates_in_place_review_without_query_access(
     isolated_store,
     monkeypatch,
 ):
@@ -214,25 +238,26 @@ def test_explicit_sever_creates_review_session_without_output_or_query_access(
             "local/personal-memory",
             "--against",
             "local/guardrails",
-            "--to",
-            "healthcare-draft",
         ],
     )
 
     assert result.exit_code == 0, result.output
-    assert "SEVER READY · local/personal-memory → healthcare-draft" in result.output
+    assert (
+        "SEVER READY · local/personal-memory × local/guardrails · IN PLACE"
+        in result.output
+    )
     assert "IMPACT · mem impact sever --session" in result.output
     assert "query-only Contexts do not grant" not in result.output
-    assert "OUTPUT · healthcare-draft · READY TO CREATE" in result.output
+    assert "SOURCE · UNCHANGED · 1 CONTEXT UPDATE ON APPLY" in result.output
     assert not store.context_exists("healthcare-draft")
     sessions = SeverSessionStore(store).list()
     assert len(sessions) == 1
     assert sessions[0].criteria.root_name == "local/guardrails"
     assert len(provider.payloads) == 1
-    assert set(provider.payloads[0]) == {"source", "criteria", "output_name"}
+    assert set(provider.payloads[0]) == {"source", "criteria"}
 
 
-def test_sever_accepts_positional_roles_and_defaults_to_self_save(
+def test_sever_accepts_two_positional_roles_and_rejects_a_result_operand(
     isolated_store,
     monkeypatch,
 ):
@@ -251,22 +276,22 @@ def test_sever_accepts_positional_roles_and_defaults_to_self_save(
         app,
         ["sever", "practice/source", "practice/criteria"],
     )
-    applied = runner.invoke(
+    session = SeverSessionStore(store).list()[0]
+    applied = runner.invoke(app, ["sever", "--resume", session.uid, "--accept"])
+    named_result = runner.invoke(
         app,
         [
             "sever",
             "practice/source",
             "practice/criteria",
             "practice/result",
-            "--accept",
         ],
     )
-    mixed_alias = runner.invoke(
+    result_option = runner.invoke(
         app,
         [
             "sever",
             "practice/source",
-            "--against",
             "practice/criteria",
             "--save-as",
             "practice/alias-result",
@@ -274,15 +299,19 @@ def test_sever_accepts_positional_roles_and_defaults_to_self_save(
     )
 
     assert defaulted.exit_code == 0, defaulted.output + defaulted.stderr
-    assert "SEVER READY · practice/source → practice/source" in defaulted.output
-    assert "OUTPUT · practice/source · WILL UPDATE SOURCE" in defaulted.output
+    assert "practice/source × practice/criteria · IN PLACE" in defaulted.output
+    assert "SOURCE · UNCHANGED · 1 CONTEXT UPDATE ON APPLY" in defaulted.output
     assert store.load_direct("practice/source").memories
     assert applied.exit_code == 0, applied.output + applied.stderr
-    assert "SEVER APPLIED · practice/source → practice/result" in applied.output
-    assert store.context_exists("practice/result")
-    assert mixed_alias.exit_code == 0, mixed_alias.output + mixed_alias.stderr
-    assert "OUTPUT · practice/alias-result · READY TO CREATE" in mixed_alias.output
-    assert len(provider.payloads) == 3
+    assert "SEVER APPLIED · practice/source · IN PLACE" in applied.output
+    assert not store.context_exists("practice/result")
+    assert named_result.exit_code == 2
+    assert "expected exactly two positional Contexts" in (
+        named_result.output + named_result.stderr
+    )
+    assert result_option.exit_code == 2
+    assert "No such option: --save-as" in (result_option.output + result_option.stderr)
+    assert len(provider.payloads) == 1
 
 
 def test_sever_rejects_duplicate_or_overfull_positional_roles_before_provider(
@@ -326,7 +355,7 @@ def test_sever_rejects_duplicate_or_overfull_positional_roles_before_provider(
         duplicate_aliases.output + duplicate_aliases.stderr
     )
     assert overfull.exit_code == 2
-    assert "expected at most three positional Contexts" in (
+    assert "expected exactly two positional Contexts" in (
         overfull.output + overfull.stderr
     )
     assert provider.payloads == []
@@ -367,13 +396,13 @@ def test_sever_self_save_preserves_context_and_memory_identity(
             "sever",
             "practice/source",
             "practice/criteria",
-            "practice/source",
             "--accept",
         ],
     )
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert "SAVE MODE · SELF-SAVE" in result.output
+    assert "SEVER APPLIED · practice/source · IN PLACE" in result.output
+    assert "CONTEXTS · 1 UPDATED IN PLACE" in result.output
     assert "SOURCE · UPDATED" in result.output
     updated = store.load_direct("practice/source")
     assert updated.uid == before_uid
@@ -391,13 +420,13 @@ def test_sever_self_save_preserves_context_and_memory_identity(
     assert len(provider.payloads) == 1
 
 
-def test_sever_rejects_recursive_self_save_before_provider(
+def test_sever_updates_each_selected_source_descendant_in_place(
     isolated_store,
     monkeypatch,
 ):
     store = MemoryStore()
-    _context(store, "practice/source", "Source")
-    _context(store, "practice/source/child", "Child Source")
+    root = _context(store, "practice/source", "Source")
+    child = _context(store, "practice/source/child", "Child Source")
     _context(store, "practice/criteria", "Criterion")
     provider = SeverProvider()
     monkeypatch.setattr(
@@ -417,11 +446,41 @@ def test_sever_rejects_recursive_self_save_before_provider(
         ],
     )
 
-    assert result.exit_code == 1
-    assert "Self-save requires Source descendants to be excluded" in (
-        result.output + result.stderr
-    )
-    assert provider.payloads == []
+    assert result.exit_code == 0, result.output + result.stderr
+    assert "SEVER APPLIED · practice/source · IN PLACE" in result.output
+    assert "CONTEXTS · 2 UPDATED IN PLACE" in result.output
+    updated_root = store.load_direct(root.name)
+    updated_child = store.load_direct(child.name)
+    assert updated_root.uid == root.uid
+    assert updated_child.uid == child.uid
+    assert [item.content for item in updated_root.iter_items()] == [
+        "Needs step-free access at appointments."
+    ]
+    assert not updated_child.memories
+    assert len(provider.payloads) == 1
+    assert {item["owner"] for item in provider.payloads[0]["source"]["memories"]} == {
+        root.name,
+        child.name,
+    }
+    session = SeverSessionStore(store).list()[0]
+    assert session.application is not None
+    assert [receipt.context_name for receipt in session.application.checkpoints] == [
+        root.name,
+        child.name,
+    ]
+
+    undone = runner.invoke(app, ["undo"])
+    assert undone.exit_code == 0, undone.output + undone.stderr
+    assert [item.content for item in store.load_direct(root.name).iter_items()] == [
+        "Source"
+    ]
+    assert [item.content for item in store.load_direct(child.name).iter_items()] == [
+        "Child Source"
+    ]
+
+    redone = runner.invoke(app, ["redo"])
+    assert redone.exit_code == 0, redone.output
+    assert not store.load_direct(child.name).memories
 
 
 def test_scripted_sever_decision_rejects_a_stale_reviewed_session(
@@ -444,8 +503,6 @@ def test_scripted_sever_decision_rejects_a_stale_reviewed_session(
             "source",
             "--criteria",
             "criteria",
-            "--save-as",
-            "result",
         ],
     )
     assert started.exit_code == 0, started.output
@@ -471,7 +528,9 @@ def test_scripted_sever_decision_rejects_a_stale_reviewed_session(
     assert SeverSessionStore(store).load(before.uid) == before
 
 
-def test_accept_materializes_only_reviewed_result_content(isolated_store, monkeypatch):
+def test_accept_materializes_only_reviewed_changes_in_source(
+    isolated_store, monkeypatch
+):
     store = MemoryStore()
     source = _context(
         store,
@@ -502,28 +561,22 @@ def test_accept_materializes_only_reviewed_result_content(isolated_store, monkey
             "local/personal-memory",
             "--criteria",
             "local/guardrails",
-            "--save-as",
-            "healthcare-draft",
             "--accept",
         ],
     )
 
     assert result.exit_code == 0, result.output
-    assert "SEVER APPLIED · local/personal-memory → healthcare-draft" in result.output
-    assert "RESULT · CREATED SEPARATELY" in result.output
-    output = store.load_direct("healthcare-draft")
+    assert "SEVER APPLIED · local/personal-memory · IN PLACE" in result.output
+    assert "SOURCE · UPDATED" in result.output
+    output = store.load_direct(source.name)
     assert [item.content for item in output.iter_items()] == [
         "Needs step-free access at appointments."
     ]
     assert len(applied_update_plans) == 1
     assert tuple(
         operation.operation for operation in applied_update_plans[0].operations
-    ) == ("add",)
-    assert [item.content for item in store.load_direct(source.name).iter_items()] == [
-        "I need a step-free entrance.",
-        "My sibling prefers chocolate snacks.",
-    ]
-    checkpoint = store.list_checkpoints("healthcare-draft")[0]
+    ) == ("edit", "remove")
+    checkpoint = store.list_checkpoints(source.name)[0]
     assert checkpoint["command"] == "sever"
     assert checkpoint["args"]["sever"]["criteria"] == "local/guardrails"
 
@@ -535,21 +588,18 @@ def test_sever_undo_and_redo_restore_output_session_and_checkpoint_log(
     store = MemoryStore()
     _context(store, "source", "Source")
     _context(store, "criteria", "Criterion")
-    monkeypatch.setattr(
-        sever_command,
-        "connect_codex_chatgpt_provider",
-        lambda: SeverProvider(),
+    session = _start_legacy_other_save(
+        store,
+        source_name="source",
+        criteria_name="criteria",
+        output_name="result",
     )
     applied = runner.invoke(
         app,
         [
             "sever",
-            "--source",
-            "source",
-            "--criteria",
-            "criteria",
-            "--save-as",
-            "result",
+            "--resume",
+            session.uid,
             "--accept",
         ],
     )
@@ -665,21 +715,18 @@ def test_sever_undo_rolls_back_context_archive_when_session_save_fails(
     store = MemoryStore()
     _context(store, "source", "Source")
     _context(store, "criteria", "Criterion")
-    monkeypatch.setattr(
-        sever_command,
-        "connect_codex_chatgpt_provider",
-        lambda: SeverProvider(),
+    session = _start_legacy_other_save(
+        store,
+        source_name="source",
+        criteria_name="criteria",
+        output_name="result",
     )
     applied = runner.invoke(
         app,
         [
             "sever",
-            "--source",
-            "source",
-            "--criteria",
-            "criteria",
-            "--save-as",
-            "result",
+            "--resume",
+            session.uid,
             "--accept",
         ],
     )
@@ -737,8 +784,6 @@ def test_query_only_reference_is_never_a_source_memory(isolated_store, monkeypat
             "local/personal-memory",
             "--criteria",
             "public-guidance",
-            "--save-as",
-            "draft",
         ],
     )
 
@@ -790,8 +835,6 @@ def test_provider_schema_avoids_unsupported_unique_items_and_rejects_duplicates(
             "source",
             "--criteria",
             "criteria",
-            "--save-as",
-            "draft",
         ],
     )
 
@@ -826,8 +869,6 @@ def test_source_and_criteria_descendant_scopes_are_independent(
             "--source-root-only",
             "--criteria",
             "criteria",
-            "--save-as",
-            "draft",
         ],
     )
 
@@ -865,13 +906,25 @@ def test_new_sever_setup_resolves_both_operands_against_one_current_snapshot(
         *,
         current_name,
         required_permission,
+        candidates,
     ):
         assert required_permission == "READ"
+        assert candidates is not None
         resolved.append((operand, current_name))
-        return SimpleNamespace(display_name=operand)
+        name = "alpha/criteria" if operand == "../criteria" else operand
+        return SimpleNamespace(name=name)
 
     monkeypatch.setattr(MemoryStore, "current_context_name", changing_current)
-    monkeypatch.setattr(sever_command, "resolve_context_access", resolve_access)
+    monkeypatch.setattr(
+        sever_command,
+        "freeze_profile_context_access_candidates",
+        lambda *_args, **_kwargs: object(),
+    )
+    monkeypatch.setattr(
+        sever_command,
+        "resolve_existing_context_access",
+        resolve_access,
+    )
     monkeypatch.setattr(
         sever_command,
         "run_command_wait",
@@ -886,46 +939,27 @@ def test_new_sever_setup_resolves_both_operands_against_one_current_snapshot(
             "sever",
             "--criteria",
             "../criteria",
-            "--save-as",
-            "result",
         ],
     )
 
     assert result.exit_code == 1
     assert current_reads == ["alpha/current"]
     assert resolved == [
-        ("alpha/current", "alpha/current"),
-        ("alpha/criteria", "alpha/current"),
+        (None, "alpha/current"),
+        ("../criteria", "alpha/current"),
     ]
 
 
-def test_sever_requires_exactly_one_criteria_and_new_output(isolated_store):
+def test_sever_requires_exactly_one_criteria(isolated_store):
     store = MemoryStore()
     _context(store, "local/personal-memory", "Memory")
 
     missing = runner.invoke(
         app,
-        ["sever", "--source", "local/personal-memory", "--save-as", "draft"],
+        ["sever", "--source", "local/personal-memory"],
     )
     assert missing.exit_code == 1
     assert "requires CRITERIA" in missing.stderr
-
-    _context(store, "local/guardrails", "Criterion")
-    _context(store, "draft", "Existing")
-    collision = runner.invoke(
-        app,
-        [
-            "sever",
-            "--source",
-            "local/personal-memory",
-            "--criteria",
-            "local/guardrails",
-            "--save-as",
-            "draft",
-        ],
-    )
-    assert collision.exit_code == 1
-    assert "already exists" in collision.stderr
 
 
 def test_resolution_adapter_exposes_source_criteria_output_skeleton(isolated_store):

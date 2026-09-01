@@ -63,11 +63,12 @@ closes the live projection while leaving the opaque relationship available for
 repair or removal.
 
 Copy may materialize a fresh local Memory from a readable granted Source.
-Reference remains a frozen local snapshot where that operation supports the
-Source; it does not pretend to be a live authority pointer. Granted Move is
-still unsupported because it would delete authority-owned state and write a
-different store as one transaction. The supported sequence is Copy followed by
-an ordinary local Move.
+Reference may retain either an explicitly owner-qualified Memory or an
+explicitly rooted direct/recursive Context scope as a frozen local snapshot;
+it records exact Grant provenance and never pretends to be a live authority
+pointer. Granted Move is still unsupported because it would delete
+authority-owned state and write a different store as one transaction. The
+supported sequence is Copy followed by an ordinary local Move.
 
 These ownership and transaction boundaries are independent from the retired
 derived-use flags. A multi-authority write still requires a durable cross-store

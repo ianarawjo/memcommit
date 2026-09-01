@@ -5,11 +5,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.context_access import (
-    ContextAccess,
+from memcommit.application.authorization.context_operation import (
     authorized_context_mutation,
+)
+from memcommit.application.context_access.access import (
+    ContextAccess,
     grant_checkpoint_args,
-    resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.application.capabilities.local_target_lookup import (
@@ -46,12 +50,12 @@ class MemoryStoreEditPort(EditPort):
         return cls(store, current_name=store.current_context_name())
 
     def access(self, context_locator: str | None) -> ContextAccess:
-        return resolve_context_access(
+        return resolve_existing_context_access(
             self.store,
             context_locator,
             current_name=self.current_context_name,
             required_permission="UPDATE",
-        )
+        ).value
 
     def inspect_context(self, context_locator: str | None) -> Context:
         access = self.access(context_locator)

@@ -13,10 +13,13 @@ from memcommit.adapters.console.terminal.components.endpoint_setup import (
     EndpointSetupSpec,
     run_endpoint_setup,
 )
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.context_access.access import resolve_context_access
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
+)
 from memcommit.application.operations.merge.application import MergeReach, MergeRequest
 from memcommit.application.operations.merge.runtime import MemoryStoreMergePort
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_profile_context_navigation,
 )
 from memcommit.source_projection.presentation import SourceDisplayValue
@@ -80,12 +83,12 @@ def build_merge_setup(
 ) -> MergeSetup:
     """Freeze readable Sources and CREATE-authorized Targets for one launch."""
 
-    target = resolve_context_access(
+    target = resolve_existing_context_access(
         port.store,
         requested_target,
         current_name=port.current_context_name,
         required_permission="CREATE",
-    )
+    ).value
     # ALL READABLE CONTEXTS is Profile-wide. A granted current Target is only
     # orientation, so anchor discovery at its local attachment and retain each
     # Source name's exact frozen READ binding through the common catalog.

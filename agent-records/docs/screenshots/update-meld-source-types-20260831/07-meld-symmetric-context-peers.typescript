@@ -1,0 +1,12 @@
+$ mem meld
+PTY 180 52
+[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0m NEW MELD · CHOOSE MODE AND ENDPOINTS[0m
+[0m› MODE · [0;38;2;139;213;255;1m[[0;38;2;16;36;47;48;2;139;213;255;1m ✓ SYMMETRIC · CREATE SEPARATE RESULT [0;38;2;139;213;255;1m][0m  [   DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT[0m
+[0m  FROM                       › practice/coffee/source                  [ BROWSE ]                                   [   INCLUDE DESCENDANTS ][0m
+[0m  WITH                       › practice/coffee/target                  [ BROWSE ] [0;38;2;139;213;202;1mCURRENT[0m                           [   INCLUDE DESCENDANTS ][0m
+[0m  TO                         ›                                         [ BROWSE ] [0;38;2;245;169;127;1mCHOOSE EMPTY OR ENTER NEW NAME[0m
+[0m┌──────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND · INVALID |──────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│› mem meld                                                                                                                                                                        [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m [0m
+[0m ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel[64D[8A[?7h[0m

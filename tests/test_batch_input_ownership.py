@@ -8,8 +8,8 @@ from pathlib import Path
 import pytest
 
 import memcommit.adapters.console.coordination.batch_input_source as batch_input_source
-from memcommit.adapters.console.commands.add.input_records import (
-    parse_input_records as parse_add_input_records,
+from memcommit.adapters.console.commands.add.line_input_records import (
+    parse_line_input_records,
 )
 from memcommit.adapters.console.commands.edit.input_records import (
     parse_input_records as parse_edit_input_records,
@@ -36,7 +36,7 @@ def test_batch_input_has_one_source_owner_and_command_local_grammars() -> None:
         / "console"
         / "commands"
         / "add"
-        / "input_records.py"
+        / "line_input_records.py"
     ).is_file()
     assert (
         source
@@ -63,12 +63,12 @@ def test_batch_input_source_reads_utf8_file_without_newline_translation(tmp_path
 
 
 def test_add_input_records_strip_lines_and_ignore_empty_lines() -> None:
-    assert parse_add_input_records("  one  \r\n\r\n\ttwo\t\n") == ["one", "two"]
+    assert parse_line_input_records("  one  \r\n\r\n\ttwo\t\n") == ["one", "two"]
 
 
 def test_add_input_records_reject_an_empty_batch() -> None:
     with pytest.raises(ValueError, match="no non-empty lines"):
-        parse_add_input_records(" \r\n\t\n")
+        parse_line_input_records(" \r\n\t\n")
 
 
 def test_edit_input_records_split_only_the_first_tab() -> None:
@@ -110,8 +110,11 @@ def test_add_and_edit_commands_import_their_exact_owners() -> None:
     )
 
     assert (
-        "from memcommit.adapters.console.commands.add.input_records import "
-        "parse_input_records" in add_source
+        "from memcommit.adapters.console.commands.add.line_input_records import ("
+        in add_source
+    )
+    assert (
+        "parse_line_input_records" in add_source
     )
     assert (
         "from memcommit.adapters.console.commands.edit.input_records import "

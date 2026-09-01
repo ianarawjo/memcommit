@@ -5,12 +5,18 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.authorization.context_operation import (
+    authorized_context_operation,
+)
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
-    authorized_context_operation,
     grant_checkpoint_args,
     resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
 )
 from memcommit.core.context import (
     AutoCheckpoint,
@@ -19,7 +25,7 @@ from memcommit.core.context import (
 )
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
-from memcommit.application.capabilities.authority.granted_context_navigation import (
+from memcommit.application.context_access.granted_context_navigation import (
     freeze_granted_context_navigation,
 )
 from memcommit.application.operations.merge.application import (
@@ -56,7 +62,7 @@ from memcommit.application.capabilities.history.reconstruction.memory_lineage_re
     resolve_lineage_target_uids,
 )
 from memcommit.persistence.store import MemoryStore, context_record_digest
-from memcommit.application.capabilities.authority.write_protection import WriteProtectionError
+from memcommit.persistence.store.infrastructure.write_protection import WriteProtectionError
 
 
 def _memory_only_source(source: Context) -> Context:
@@ -363,18 +369,24 @@ class MemoryStoreMergePort(MergePort):
         return self._freeze_direct(request)
 
     def _freeze_direct(self, request: MergeRequest) -> FrozenMergePlan:
-        source_access = resolve_context_access(
+        candidates = freeze_profile_context_access_candidates(
+            self._store,
+            current_name=self._current_name,
+        )
+        source_access = resolve_existing_context_access(
             self._store,
             request.source_locator,
             current_name=self._current_name,
             required_permission="READ",
-        )
-        target_access = resolve_context_access(
+            candidates=candidates,
+        ).value
+        target_access = resolve_existing_context_access(
             self._store,
             request.target_locator,
             current_name=self._current_name,
             required_permission="CREATE",
-        )
+            candidates=candidates,
+        ).value
         source = self._load_source(source_access)
         target = target_access.store.load_for_update(target_access.context_name)
         if (
@@ -448,18 +460,24 @@ class MemoryStoreMergePort(MergePort):
         )
 
     def _freeze_recursive(self, request: MergeRequest) -> FrozenMergePlan:
-        source_root_access = resolve_context_access(
+        candidates = freeze_profile_context_access_candidates(
+            self._store,
+            current_name=self._current_name,
+        )
+        source_root_access = resolve_existing_context_access(
             self._store,
             request.source_locator,
             current_name=self._current_name,
             required_permission="READ",
-        )
-        target_root_access = resolve_context_access(
+            candidates=candidates,
+        ).value
+        target_root_access = resolve_existing_context_access(
             self._store,
             request.target_locator,
             current_name=self._current_name,
             required_permission="CREATE",
-        )
+            candidates=candidates,
+        ).value
         if source_root_access.store.store_dir == target_root_access.store.store_dir:
             source_root = source_root_access.context_name
             target_root = target_root_access.context_name

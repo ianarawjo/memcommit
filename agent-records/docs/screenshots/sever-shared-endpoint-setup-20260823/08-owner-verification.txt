@@ -1,0 +1,21 @@
+SEVER · IN-PLACE OWNER VERIFICATION                                                                                                                                                 
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+PROFILE · ISOLATED EXPLICIT STORE · HOST GRANTS EXCLUDED                                                                                                                            
+CURRENT CONTEXT · capture/reference                                                                                                                                                 
+                                                                                                                                                                                    
+SOURCE ROOT · capture/reference                                                                                                                                                     
+  SAME CONTEXT UID · True                                                                                                                                                           
+  MEMORY · Step-free access is needed for appointments.                                                                                                                             
+  SEVER CHECKPOINTS · 1                                                                                                                                                             
+SOURCE DESCENDANT · capture/reference/old-access                                                                                                                                    
+  SAME CONTEXT UID · True                                                                                                                                                           
+  MEMORY COUNT · 0                                                                                                                                                                  
+  SEVER CHECKPOINTS · 1                                                                                                                                                             
+                                                                                                                                                                                    
+PROVIDER CALLS · 1                                                                                                                                                                  
+SOURCE MEMORIES IN ONE TURN · 2                                                                                                                                                     
+CRITERIA MEMORIES IN ONE TURN · 2                                                                                                                                                   
+OWNER CHECKPOINT RECEIPTS · 2                                                                                                                                                       
+RESULT CONTEXT · NOT SELECTED OR CREATED                                                                                                                                            
+VERIFICATION COMPLETE · BOTH OWNERS STAY IN PLACE                                                                                                                                   
+PRESS C · CAPTURE CANCEL BRANCH

@@ -1,0 +1,2 @@
+Trace cancelled.                                                                                                                                                                    
+READ-ONLY VERIFICATION · MODE EMPTY · TARGET [260c19c2] · CURRENT empty · CONTEXTS + CHECKPOINTS + CURRENT POINTER UNCHANGED

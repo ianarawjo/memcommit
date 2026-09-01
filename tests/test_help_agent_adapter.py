@@ -144,6 +144,20 @@ def test_provider_maturity_is_partial_in_agent_discovery(tmp_path):
     assert provider["maturity"] == "PARTIAL"
 
 
+def test_check_conformance_maturity_is_partial_in_agent_discovery(tmp_path):
+    adapter = HelpAgentAdapter(MemCommitClient(root=tmp_path / "missing-store"))
+
+    conformance = adapter.invoke(
+        {
+            "version": 1,
+            "kind": "describe",
+            "operation": "check-conformance",
+        }
+    )["result"]["operation"]
+
+    assert conformance["maturity"] == "PARTIAL"
+
+
 def test_agent_can_list_compact_detail_ids_before_requesting_one(tmp_path):
     adapter = HelpAgentAdapter(MemCommitClient(root=tmp_path / "missing-store"))
 

@@ -1,0 +1,86 @@
+[32mInitialized context 'empty'.[0m
+[32mInitialized context 'notes'.[0m
+[32mAdded [fa1aa2cc] Initial policy wording retained for provenance.[0m
+[32m[1mEdited [fa1aa2cc] in 'notes':[0m
+[31m  - Initial policy wording retained for provenance.[0m
+[32m  + Final policy wording selected for exact Memory history.[0m
+[32mAdded [ee692302] A supporting Memory keeps the whole Context report visibly distinct.[0m
+[32mInitialized context 'notes/child'.[0m
+[32mAdded [db30150f] A child Memory is browseable without broadening the selected parent.[0m
+[32mSwitched to context 'notes'.[0m
+LIVE COLOR PTY · 180x52
+PROFILE · ISOLATED CAPTURE · CURRENT · notes
+$ mem trace
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m TRACE · SELECT A CONTEXT OR MEMORY · notes[0m
+[0m Roots · notes[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0;1;7m› * ▾ notes[168C[0;1m^[0m
+[0;38;5;189m  · [fa1aa2cc] [r2] Final policy wording selected for exact Memory history.[104C[0;48;5;238m [0m
+[0;38;5;189m  · [ee692302] [r1] A supporting Memory keeps the whole Context report visibly distinct.[91C[0;48;5;238m [0m
+[0m      ▾ notes/child[160C[0;48;5;238m [0m
+[0;38;5;189m    · [db30150f] [r1] A child Memory is browseable without broadening the selected parent.[89C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: hide items  y copy Context  Y copy visible branch  Enter trace  q cancel · 1/5 · 2 selectable[174D[48A[0m[3A[J[0m[?7h[?1049l[?2004l[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTEXT LINEAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[0;38;5;231;1mTRACE[0;38;5;231m · notes[0m                                                                                                                                                                    [0;1m^[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231;1m[CONTEXT][0;38;5;231m · 4 OPERATIONS · 3 MEMORY CHANGES · LATEST FIRST[0m                                                                                                                       [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;111;1madd[0;38;5;231m [0;38;5;180;1m[CHECKPOINT 0c898c38][0;38;5;231m  2026-08-31 11:25 · 1 MEMORY CHANGE[0m                                                                                                                    [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m  Added: "A supporting Memory keeps the whole Context report visibly distinct."[0m                                                                                                  [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;150;1m  + [0;38;5;231m[[0;38;5;111;1mADD[0;38;5;231m] [0;38;5;189m[MEMORY ee692302] [0;38;5;150;4mA supporting Memory keeps the whole Context report visibly distinct.[0m                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;150;1medit[0;38;5;231m [0;38;5;180;1m[CHECKPOINT d8420bdc][0;38;5;231m  2026-08-31 11:25 · 1 MEMORY CHANGE[0m                                                                                                                   [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m  Edited memory [fa1aa2cc][0m                                                                                                                                                       [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;210;1m  - [0;38;5;231m[[0;38;5;150;1mEDIT[0;38;5;231m] [0;38;5;189m[MEMORY fa1aa2cc] [0;38;5;210;4mInitial[0;38;5;231m policy wording [0;38;5;210;4mretained[0;38;5;231m for [0;38;5;210;4mprovenance.[0m                                                                                                     [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;150;1m  + [0;38;5;231m[[0;38;5;150;1mEDIT[0;38;5;231m] [0;38;5;189m[MEMORY fa1aa2cc] [0;38;5;150;4mFinal[0;38;5;231m policy wording [0;38;5;150;4mselected[0;38;5;231m for [0;38;5;150;4mexact Memory history.[0m                                                                                             [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;111;1madd[0;38;5;231m [0;38;5;180;1m[CHECKPOINT 32eda116][0;38;5;231m  2026-08-31 11:25 · 1 MEMORY CHANGE[0m                                                                                                                    [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m  Added: "Initial policy wording retained for provenance."[0m                                                                                                                       [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;150;1m  + [0;38;5;231m[[0;38;5;111;1mADD[0;38;5;231m] [0;38;5;189m[MEMORY fa1aa2cc] [0;38;5;150;4mInitial policy wording retained for provenance.[0m                                                                                                      [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0m                                                                                                                                                                                 [0;48;5;238m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;111;1minit[0;38;5;231m [0;38;5;180;1m[CHECKPOINT f7188416][0;38;5;231m  2026-08-31 11:25 · 0 MEMORY CHANGES[0m                                                                                                                  [0;48;5;248m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m  Initialized context 'notes'[0m                                                                                                                                                    [0;48;5;248m [179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┃[0;38;5;231m  (no direct Memory change)[0m                                                                                                                                                      [0;1mv[179C[0;38;5;117;1m┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m TRACE REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only[90D[20A[C[?7h[0m[?12l[?25h

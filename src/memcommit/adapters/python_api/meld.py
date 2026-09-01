@@ -7,6 +7,27 @@ from typing import Literal
 
 
 @dataclass(frozen=True)
+class MeldDecisionInput:
+    """One explicit Resolve decision for a Meld Audit item."""
+
+    issue_uid: str
+    kind: Literal["confirm", "intent", "force"]
+    intent: str = ""
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.issue_uid, str) or not self.issue_uid.strip():
+            raise ValueError("Meld decision issue_uid must be nonblank.")
+        if self.kind not in {"confirm", "intent", "force"}:
+            raise ValueError("Meld decision kind must be confirm, intent, or force.")
+        if not isinstance(self.intent, str):
+            raise TypeError("Meld decision intent must be text.")
+        if self.kind == "intent" and not self.intent.strip():
+            raise ValueError("An intent decision requires nonblank intent.")
+        if self.kind != "intent" and self.intent:
+            raise ValueError("Only an intent decision may carry intent text.")
+
+
+@dataclass(frozen=True)
 class MeldOptionResult:
     uid: str
     label: str
@@ -48,18 +69,11 @@ class MeldSessionResult:
     proposals: tuple[MeldProposalResult, ...]
     origin: str | None = None
     checkpoint_uid: str | None = None
-
-
-@dataclass(frozen=True)
-class MeldApplyResult:
-    session: MeldSessionResult
-    recovered: bool
-    checkpoint_uid: str
-    result_count: int
+    unresolved_count: int = 0
 
 
 __all__ = [
-    "MeldApplyResult",
+    "MeldDecisionInput",
     "MeldIssueResult",
     "MeldOptionResult",
     "MeldProposalResult",

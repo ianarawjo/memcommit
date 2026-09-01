@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import copy
 
-from memcommit.application.capabilities.context_locator import resolve_context_locator
+from memcommit.application.capabilities.operand_resolution import (
+    resolve_existing_local_context_operand,
+)
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
@@ -203,12 +205,19 @@ def plan_context_import(
             root=profile_store_dir(source),
             create=False,
         )
-        source_name = resolve_context_locator(
+        source_current = source_store.current_context_name()
+        resolved_source = resolve_existing_local_context_operand(
+            source_store,
             source_context_locator,
-            current=source_store.current_context_name(),
+            current=source_current,
         )
+        source_name = resolved_source.name
         target_root = target_name or source_name
         with source_store._context_graph_lock(exclusive=True):
+            if source_store.load_direct(source_name).uid != resolved_source.uid:
+                raise ProfileError(
+                    "Context import Source changed identity during resolution."
+                )
             source_names = _source_context_names(
                 source_store,
                 source_name,
@@ -249,15 +258,22 @@ def import_context_from_profile(
             root=profile_store_dir(source),
             create=False,
         )
-        source_name = resolve_context_locator(
+        source_current = source_store.current_context_name()
+        resolved_source = resolve_existing_local_context_operand(
+            source_store,
             source_context_locator,
-            current=source_store.current_context_name(),
+            current=source_current,
         )
+        source_name = resolved_source.name
         target_root = target_name or source_name
 
         # The exclusive source graph lock freezes recursive membership and
         # every record identity until the destination transaction commits.
         with source_store._context_graph_lock(exclusive=True):
+            if source_store.load_direct(source_name).uid != resolved_source.uid:
+                raise ProfileError(
+                    "Context import Source changed identity during resolution."
+                )
             source_names = _source_context_names(
                 source_store,
                 source_name,

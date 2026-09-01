@@ -219,6 +219,30 @@ def test_batch_edit_file_is_atomic_preserves_order_and_checkpoints_once(
     }
 
 
+def test_batch_edit_context_option_accepts_context_uid(
+    isolated_store,
+    tmp_path,
+):
+    invoke("init", "notes")
+    invoke("add", "before")
+    store = MemoryStore()
+    context = store.load_direct("notes")
+    memory = direct_memories("notes")[0]
+    source = tmp_path / "uid-edit.tsv"
+    source.write_text(f"{memory.uid}\tafter\n", encoding="utf-8")
+
+    result = invoke(
+        "edit",
+        "--input",
+        str(source),
+        "--context",
+        context.uid[:8],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert direct_memories("notes")[0].content == "after"
+
+
 def test_batch_edit_stdin_applies_all_changes_in_one_checkpoint(isolated_store):
     invoke("init", "notes")
     invoke("add", "one")

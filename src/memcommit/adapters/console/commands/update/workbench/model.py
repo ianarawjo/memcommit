@@ -16,6 +16,7 @@ class UpdateEndpointSetup:
     target_name: str
     current_context: str | None = None
     annotations: tuple[tuple[str, SourceDisplayValue], ...] = ()
+    inline_target_names: frozenset[str] | None = None
 
     def __post_init__(self) -> None:
         if (
@@ -33,15 +34,39 @@ class UpdateEndpointSetup:
         labels = dict(self.annotations)
         if len(labels) != len(self.annotations) or set(labels) - set(self.names):
             raise ValueError("Update setup annotations are outside its catalog.")
+        if self.inline_target_names is not None and not (
+            self.inline_target_names <= set(self.names)
+        ):
+            raise ValueError("Update inline targets are outside its catalog.")
+
+    def allows_inline_target(self, name: str) -> bool:
+        return (
+            name in self.names
+            if self.inline_target_names is None
+            else name in self.inline_target_names
+        )
 
 
 @dataclass(frozen=True)
 class UpdateEndpointSelection:
     """One reviewed Update scope returned without planning or application."""
 
-    source_name: str
+    source_name: str | None
     target_name: str
     source_descendants: bool = False
     target_descendants: bool = False
     source_memory_uid: str | None = None
     target_memory_uid: str | None = None
+    inline_source_content: str | None = None
+
+    def __post_init__(self) -> None:
+        if (self.source_name is None) == (self.inline_source_content is None):
+            raise ValueError(
+                "Update setup requires exactly one Context or inline Source."
+            )
+        if self.inline_source_content is not None and (
+            not self.inline_source_content.strip()
+            or self.source_descendants
+            or self.source_memory_uid is not None
+        ):
+            raise ValueError("Inline Update setup cannot retain Source Context scope.")

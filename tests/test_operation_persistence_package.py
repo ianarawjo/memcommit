@@ -21,6 +21,8 @@ OPERATIONS_ROOT = REPOSITORY_ROOT / "src/memcommit/persistence/operations"
 INFRASTRUCTURE_ROOT = STORE_ROOT / "infrastructure"
 
 EXPECTED_METHODS = {
+    "store/infrastructure/storage_permissions.py": set(),
+    "store/infrastructure/write_protection.py": set(),
     "store/infrastructure/paths.py": {
         "__init__",
         "store_dir",

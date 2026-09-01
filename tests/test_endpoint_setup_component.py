@@ -15,6 +15,9 @@ from memcommit.adapters.console.terminal.components.endpoint_setup import (
     EndpointSetupValue,
     run_endpoint_setup,
 )
+from memcommit.adapters.console.terminal.components.endpoint_setup.memory_focus import (
+    EndpointMemoryFocusController,
+)
 
 
 def _spec() -> EndpointSetupSpec:
@@ -180,6 +183,93 @@ def test_endpoint_setup_read_only_memory_preview_requires_a_memory_control() -> 
             "source",
             memory_preview_only=True,
         )
+
+
+def test_endpoint_setup_rejects_a_multiline_unselected_memory_label() -> None:
+    with pytest.raises(ValueError, match="unselected Memory label"):
+        EndpointSetupRole(
+            "A",
+            "A",
+            ("source",),
+            frozenset({"source"}),
+            "source",
+            allow_memory_focus=True,
+            memory_unselected_label="CHOOSE\nMEMORY",
+        )
+
+
+def test_endpoint_setup_required_memory_needs_an_editable_memory_control() -> None:
+    with pytest.raises(ValueError, match="required Memory selection"):
+        EndpointSetupRole(
+            "A",
+            "A",
+            ("source",),
+            frozenset({"source"}),
+            "source",
+            memory_required=True,
+        )
+
+
+def test_required_endpoint_memory_uses_the_one_line_direct_memory_renderer() -> None:
+    controller = EndpointMemoryFocusController(
+        "SOURCE",
+        selected_context=lambda: "shared/source",
+        loader=lambda _role_uid, context_name: (
+            EndpointSetupMemory(
+                context_name,
+                "abcd1234-0000-0000-0000-000000000000",
+                "Retain this exact version.",
+            ),
+        ),
+        required=True,
+    )
+
+    unselected = "".join(
+        text
+        for _style, text in controller.render(
+            focused=True,
+            include_descendants=False,
+        )
+    )
+    assert unselected == (
+        "  › · [memory abcd1234] Retain this exact version."
+    )
+
+    controller.choose()
+    selected = "".join(
+        text
+        for _style, text in controller.render(
+            focused=True,
+            include_descendants=False,
+        )
+    )
+    assert selected == (
+        "  › ✓ [memory abcd1234] Retain this exact version."
+    )
+
+
+def test_required_endpoint_memory_resolves_one_uid_prefix_inside_its_owner() -> None:
+    controller = EndpointMemoryFocusController(
+        "SOURCE",
+        selected_context=lambda: "shared/source",
+        loader=lambda _role_uid, context_name: (
+            EndpointSetupMemory(
+                context_name,
+                "abcd1234-0000-0000-0000-000000000000",
+                "First",
+            ),
+            EndpointSetupMemory(
+                context_name,
+                "ef567890-0000-0000-0000-000000000000",
+                "Second",
+            ),
+        ),
+        required=True,
+    )
+
+    assert controller.resolve_selector("shared/source", "ef567890") == (
+        "ef567890-0000-0000-0000-000000000000"
+    )
 
 
 def test_endpoint_setup_preserves_an_explicit_initial_role_range() -> None:

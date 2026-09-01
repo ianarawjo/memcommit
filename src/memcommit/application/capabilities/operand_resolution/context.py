@@ -245,6 +245,36 @@ def freeze_local_context_operand_candidates(
     )
 
 
+def resolve_existing_local_context_operand(
+    store: LocalContextOperandStore,
+    operand: str | None,
+    *,
+    current: str | None,
+    candidates: tuple[ContextOperandCandidate[ContextTarget], ...] | None = None,
+) -> ResolvedExistingContextOperand[ContextTarget]:
+    """Require one ordinary-local Context from one frozen identity frame.
+
+    The helper keeps local-only operations on the same name/relative/UID
+    interpretation order as Grant-aware operations without letting them open
+    the active Profile's Grant catalog.  Supplying ``candidates`` lets a
+    multi-operand command freeze its local namespace once at command start.
+    """
+
+    if operand is None:
+        if current is None:
+            raise RuntimeError("No current context. Run 'mem init <name>' first.")
+        operand = current
+    return resolve_existing_context_operand(
+        (
+            candidates
+            if candidates is not None
+            else freeze_local_context_operand_candidates(store)
+        ),
+        operand,
+        current=current,
+    )
+
+
 __all__ = [
     "ContextOperandAmbiguityError",
     "ContextOperandCandidate",
@@ -254,5 +284,6 @@ __all__ = [
     "freeze_local_context_operand_candidates",
     "resolve_context_or_inline_text_operand",
     "resolve_existing_context_operand",
+    "resolve_existing_local_context_operand",
     "try_resolve_existing_context_operand",
 ]

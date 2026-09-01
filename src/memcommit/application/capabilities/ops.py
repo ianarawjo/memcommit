@@ -48,7 +48,7 @@ if TYPE_CHECKING:
     from memcommit.application.operations.find_duplicates.application import (
         ExactDuplicateReport,
     )
-    from memcommit.application.operations.search.model import (
+    from memcommit.application.operations.search.ranking import (
         PromptProvider,
         SearchMatch,
     )
@@ -1142,9 +1142,13 @@ def search(
     ``additional_roots`` lets a store-aware caller freeze lexical namespace
     descendants without teaching this in-memory operation about persistence.
     """
-    from memcommit.application.operations.search.model import (
-        SearchError,
+    from memcommit.application.capabilities.retrieval_corpus.candidates import (
         collect_candidates_from_roots,
+    )
+    from memcommit.application.operations.search.errors import (
+        SearchError,
+    )
+    from memcommit.application.operations.search.ranking import (
         rank_candidates,
     )
 
@@ -1156,6 +1160,7 @@ def search(
     candidates = collect_candidates_from_roots(
         (ctx, *additional_roots),
         recursive=recursive,
+        operation="Search",
     )
     if not candidates:
         return []

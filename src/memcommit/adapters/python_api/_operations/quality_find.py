@@ -23,7 +23,7 @@ from memcommit.adapters.python_api.quality_find import (
     QualityFindContextResult,
     QualityFindResult,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     GrantedReadStore,
     resolve_context_access,
 )

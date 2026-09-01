@@ -2,14 +2,13 @@
 
 ## Motivation
 
-Summarize, Trace, Rationale, the three quality Find operations, and Dedun's
-shared discovery phase all produce read-only reports before any later action,
-but their interactive entry paths had diverged. Trace and
-Rationale reused the saved-session picker for content-free navigation history,
-Summarize opened its Context workbench directly, and the finders always opened
-fresh target setup. That made visually similar operations imply different
-lifecycle concepts and made the session-shaped recent adapter carry executable
-argv even though a recent report is not a durable session.
+Summarize, the three quality Find operations, and Dedun's shared discovery
+phase all produce read-only reports before any later action, but their
+interactive entry paths had diverged. Earlier Trace and Rationale revisions
+also reused this lifecycle for content-free navigation history. They now use a
+direct Switch-style Context-or-Memory browser instead: the dual exact target
+choice is clearer without a session-shaped Recent step, while the remaining
+operations retain the lifecycle described here.
 
 ## Shared lifecycle
 
@@ -33,10 +32,11 @@ future target-selection route would need its own explicit operation contract.
 This matches the broader rule that executable argv does not open full-screen
 setup implicitly.
 
-`ReadReportTarget` is the interface-independent identity joining those steps.
+`ReadReportTarget` is the interface-independent identity joining those steps
+for operations that still expose this lifecycle.
 It records only the canonical operation name, effective readable Context names,
 explicit target roots, one-versus-many selection mode, direct/recursive range,
-Profile selection, and an optional Memory UID for Trace/Rationale. It cannot
+Profile selection, and the legacy optional Memory UID field. It cannot
 contain report prose, Memory content, provider output, cache artifacts, argv,
 callbacks, or mutation receipts.
 
@@ -55,9 +55,10 @@ authority and frozen-evidence checks. The recent record neither contains a
 cache key nor grants cache eligibility. Quality Find reports do not own
 response drafts at all, so Recents reconstruct only their target identity.
 
-Legacy Trace/Rationale `memory_report` metadata remains readable. New Memory
-report attempts also publish the generic shape so both operations use the same
-launcher as Summarize and Find without breaking existing attempt ledgers.
+Legacy Trace/Rationale `memory_report` and generic `read_report` metadata remain
+readable for old ledgers. New Trace, Rationale, and `mem log --memory` attempts
+do not publish either shape and do not enter Recents; compatibility parsing is
+retained only so historical stores remain inspectable.
 
 ## Presentation ownership
 
@@ -67,11 +68,12 @@ Select-Target action. It does not own target trees or result documents:
 
 - Summarize executes one direct/recursive request and prints one result; its
   former Context Summary workbench remains component-level code.
-- Trace prints its bounded temporal lineage directly; its former receipt/detail
-  indirection and Viewer switch are retired.
-- Rationale retains its whole-Trace, example-calibrated natural-provenance
-  synthesis and compact terminal receipt; its legacy current-purpose inference
-  fields remain JSON compatibility data only.
+- Trace uses a direct Context-or-Memory browser, then opens its already-built
+  bounded document in the read-only Viewer for an interactive terminal.
+- Rationale uses the same target grammar and retains its whole-Trace,
+  example-calibrated natural-provenance synthesis and compact terminal receipt;
+  its legacy current-purpose inference fields remain JSON compatibility data
+  only.
 - Ambiguity and Conflict retain explicit `--select` multi-target/Profile setup
   and compact process-local read-only finding browsers. Their questions and
   possible readings remain evidence rather than answer controls. Exact
@@ -97,12 +99,10 @@ This is composition rather than one universal report model. The operations
 share launch and lifecycle identity while preserving different evidence,
 viewer, clipboard, authority, cache, and handoff semantics.
 
-Trace and Rationale interpret their launcher's `Select Target` action as the
-command-start current Context, not as a request for a second Profile-wide
-location picker. Their operation-owned target tree immediately shows that
-Context's Memories with exact reach and keeps `INCLUDE DESCENDANTS` available.
-Another root remains available through explicit `--context`; Recents continue
-to reopen their exact recorded target.
+Trace and Rationale no longer consume the shared Recent launcher. Their bare
+commands open the current-root Switch-style tree directly, where Enter chooses
+one exact Context or one exact Memory. `--context` is an exact Context report
+target rather than a browser root or Memory-owner option.
 
 The Profile/Store orientation above the launcher is also operation-neutral.
 Its command adapter matches the frozen Store root against the Profile registry

@@ -282,9 +282,10 @@ classification, and stale generated output.
   records why public Fit repair, Dedup, and clarification retain distinct
   operation semantics and Apply boundaries.
 - [`resolve-fit-repair-design-rationale.md`](resolve-fit-repair-design-rationale.md)
-  defines public Resolve's whole-frame Fit repair, grounded effect generation,
-  independent verification, Pareto minimum-change choices, Grant capability
-  intersection, exact replay, and one-checkpoint Apply boundary.
+  defines public Resolve's revision-bound conflict decisions, process-local
+  Update Source, one-shot complete-Target UpdatePlan, detached whole-post-image
+  conflict check, Grant capability intersection, and one-checkpoint Apply
+  boundary.
 - [`dedup-design-rationale.md`](dedup-design-rationale.md) defines the typed
   confirmed-finding batch, provider-free connected components, unchanged
   existing-survivor choices, Grant-aware deletion, reference blocking, shared

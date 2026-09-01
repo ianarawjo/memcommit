@@ -3,7 +3,9 @@
 ## Status
 
 Update and Meld accept an unambiguously non-Context string as one exact,
-process-local Source Memory. The shared application classifier lives in
+process-local Source Memory. Their new-session TUIs additionally expose the
+Source shape as an explicit three-way choice: `CONTEXT`, `STORED MEMORY`, or
+`INLINE MEMORY`. The shared application classifier lives in
 `memcommit.application.capabilities.context_operand_classification`; each
 operation retains its own frame, session, authority, provider, review, and
 Apply semantics. Console-only arbitration between positional and named
@@ -102,8 +104,13 @@ target Contexts. The reviewed target mutation, checkpoint, Undo, and Redo
 boundaries are otherwise unchanged.
 
 For this rollout, inline Update and Meld targets must be ordinary local
-Contexts. The setup TUI remains a Context-to-Context chooser; inline content
-enters through the explicit command boundary. Impact Update also retains its
-existing saved/Context endpoint grammar. Supporting granted targets, inline
-setup composition, or wider operation rollout requires a separate authority
-and interaction review.
+Contexts. In each setup TUI, selecting `INLINE MEMORY` replaces the Source
+Context controls with one process-local text field and constructs the same
+canonical `--memory TEXT` command used at the CLI boundary. Selecting `STORED
+MEMORY` retains an owner Context and requires one exact direct Memory UID;
+selecting `CONTEXT` retains exact-or-descendant Context reach. Switching types
+never interprets a missing Context name as inline text. Directional Meld
+exposes the choice only for its incoming Source; symmetric Meld remains two
+Context peers. Impact Update retains its existing saved/Context endpoint
+grammar. Supporting granted inline targets or wider operation rollout requires
+a separate authority and interaction review.

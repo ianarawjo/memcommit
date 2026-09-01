@@ -198,6 +198,31 @@ def test_recursive_context_import_rewrites_internal_names_and_keeps_uids(
     assert checkpoint["args"]["source_profile_name"] == "source-profile"
 
 
+def test_context_import_source_accepts_context_uid(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, identities = _prepare_profiles(isolated_store, tmp_path, monkeypatch)
+
+    result = runner.invoke(
+        app,
+        [
+            "import",
+            "context",
+            identities["root_context_uid"],
+            "--from-profile",
+            "source-profile",
+            "--recursive",
+            "--as",
+            "uid-import/root",
+        ],
+    )
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert active.load_direct("uid-import/root").uid == identities["root_context_uid"]
+
+
 def test_context_import_rejects_an_open_reference_without_partial_creation(
     isolated_store,
     tmp_path,
@@ -256,6 +281,33 @@ def test_memory_import_preserves_uid_and_rejects_target_collision(
     assert checkpoint["command"] == "import"
     assert checkpoint["args"]["resource_kind"] == "memory"
     assert checkpoint["args"]["source_memory_uid"] == identities["child_memory_uid"]
+
+
+def test_memory_import_context_roles_accept_context_uids(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    active, identities = _prepare_profiles(isolated_store, tmp_path, monkeypatch)
+    target = active.load_direct("destination")
+
+    result = runner.invoke(
+        app,
+        [
+            "import",
+            "memory",
+            identities["child_memory_uid"][:8],
+            "--from-profile",
+            "source-profile",
+            "--context",
+            identities["child_context_uid"],
+            "--into",
+            target.uid[:8],
+        ],
+    )
+
+    assert result.exit_code == 0, result.stderr or result.output
+    assert identities["child_memory_uid"] in active.load_direct(target.name).memories
 
 
 def test_recursive_context_collision_fails_before_creating_any_sibling(

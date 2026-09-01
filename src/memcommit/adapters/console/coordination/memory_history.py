@@ -4,14 +4,16 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
+)
 from memcommit.core.context import Context
 from memcommit.application.operations.trace.application import (
     MemoryHistory,
     reconstruct_memory_history,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.capabilities.authority.study_operation_policy import require_trace_access
+from memcommit.application.authorization.study_operation_policy import require_trace_access
 
 
 @dataclass(frozen=True)
@@ -31,12 +33,12 @@ def load_retained_history_context(
 ) -> RetainedHistoryContext:
     """Resolve READ, then enforce the stronger owner-history boundary."""
 
-    access = resolve_context_access(
+    access = resolve_existing_context_access(
         store,
         context_locator,
         current_name=current_name,
         required_permission="READ",
-    )
+    ).value
     # A Grant attachment authorizes current content projection, not the
     # authority Profile's checkpoints, command receipts, or saved analyses.
     require_trace_access(

@@ -7,8 +7,13 @@ import shlex
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
-from memcommit.application.operations.edit.application import EditRequest, FrozenEditPlan
+from memcommit.adapters.console.terminal.components.context_picker import (
+    ContextMemoryRow,
+)
+from memcommit.application.operations.edit.application import (
+    EditRequest,
+    FrozenEditPlan,
+)
 from memcommit.adapters.console.terminal.components.command_editor import (
     format_exact_command,
 )
@@ -25,8 +30,6 @@ from memcommit.adapters.console.commands.reference.workbench import (
     run_reference_tui,
 )
 from memcommit.application.operations.reference.application import (
-    ContextReferenceRequest,
-    FrozenContextReferencePlan,
     FrozenReferencePlan,
     ReferenceRequest,
 )
@@ -70,9 +73,10 @@ def test_reference_tui_selects_exact_memory_and_target_before_freeze() -> None:
         )
 
     with create_pipe_input() as pipe_input:
-        # Right selects Memory mode, then the direct-Memory row and Target lead
-        # to one reviewed exact command.
-        pipe_input.send_text("\x1b[C\t\x1b[B\r\t\t\r")
+        # Target is already local/current. Move to Exact Memory, confirm its
+        # Source Context, open the transient list, choose the first Memory,
+        # then Enter on the proposed command.
+        pipe_input.send_text("\x1b[B\r\r\r\x1b[B\r")
         result = run_reference_tui(
             ReferenceTuiSetup(
                 names=("source", "target"),
@@ -81,9 +85,6 @@ def test_reference_tui_selects_exact_memory_and_target_before_freeze() -> None:
             ),
             memory_loader=_memory_rows,
             prepare=prepare,
-            prepare_context=lambda _request: (_ for _ in ()).throw(
-                AssertionError("Memory mode called Context preparation")
-            ),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -93,68 +94,158 @@ def test_reference_tui_selects_exact_memory_and_target_before_freeze() -> None:
     assert requests == [ReferenceRequest(MEMORY_UID, "source", "target")]
 
 
-def test_reference_tui_selects_context_scope_and_target_before_freeze() -> None:
-    requests: list[ContextReferenceRequest] = []
+def test_reference_command_reprojects_memory_owner_and_target_before_freeze() -> None:
+    requests: list[ReferenceRequest] = []
 
-    def prepare_context(
-        request: ContextReferenceRequest,
-    ) -> FrozenContextReferencePlan:
+    def prepare(request: ReferenceRequest) -> FrozenReferencePlan:
         requests.append(request)
-        return FrozenContextReferencePlan(
+        return FrozenReferencePlan(
             request=request,
             source_name=request.source_locator,
-            source_uid="source-uid",
-            source_bindings=(("source", "source-uid", "source-digest"),),
-            snapshot_package={
-                "schema_version": 1,
-                "root": {"uid": "source-uid", "name": "source"},
-                "recursive": True,
-                "lexical_context_names": ["source"],
-                "contexts": [
-                    {
-                        "uid": "source-uid",
-                        "name": "source",
-                        "memories": {},
-                        "order": [],
-                    }
-                ],
-            },
-            snapshot_content_sha256="snapshot-digest",
-            into_name=request.into_locator or "target",
-            into_uid="target-uid",
-            into_digest="target-digest",
+            source_uid="other-context-uid",
+            source_digest="other-context-digest",
+            memory_uid=request.memory_selector,
+            memory_content="other old content",
+            memory_content_sha256="other-memory-digest",
+            into_name=request.into_locator or "source",
+            into_uid="source-context-uid",
+            into_digest="source-context-digest",
             token=object(),
         )
 
     with create_pipe_input() as pipe_input:
-        # Context is the default unit. Tab reaches Source, then scope; Right
-        # chooses recursive before Target and exact review.
-        pipe_input.send_text("\t\t\x1b[C\t\t\r")
+        # Down reaches Exact Memory and then Proposed Command. A complete edit
+        # atomically changes Target, owning Context, and exact Memory in the
+        # upper form; the same Enter freezes that synchronized request.
+        pipe_input.send_text(
+            "\x1b[B\x1b[B"
+            + f"{OTHER_MEMORY_UID[:8]} --from other --into source"
+            + "\r"
+        )
         result = run_reference_tui(
             ReferenceTuiSetup(
-                names=("source", "target"),
+                names=("source", "other"),
                 selected_source="source",
-                selected_target="target",
+                selected_target="other",
             ),
             memory_loader=_memory_rows,
-            prepare=lambda _request: (_ for _ in ()).throw(
-                AssertionError("Context mode called Memory preparation")
-            ),
-            prepare_context=prepare_context,
+            prepare=prepare,
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
         )
 
     assert result is not None
-    assert requests == [
-        ContextReferenceRequest(
-            "source",
-            "target",
-            include_descendants=True,
-            follow_embeds=True,
+    assert requests == [ReferenceRequest(OTHER_MEMORY_UID, "other", "source")]
+
+
+def test_reference_owner_qualified_memory_input_reprojects_the_command() -> None:
+    requests: list[ReferenceRequest] = []
+
+    def prepare(request: ReferenceRequest) -> FrozenReferencePlan:
+        requests.append(request)
+        return FrozenReferencePlan(
+            request=request,
+            source_name=request.source_locator,
+            source_uid="other-context-uid",
+            source_digest="other-context-digest",
+            memory_uid=request.memory_selector,
+            memory_content="other old content",
+            memory_content_sha256="other-memory-digest",
+            into_name=request.into_locator or "source",
+            into_uid="source-context-uid",
+            into_digest="source-context-digest",
+            token=object(),
         )
-    ]
+
+    with create_pipe_input() as pipe_input:
+        # Enter resolves CONTEXT:UID into the owner and full Memory identity.
+        # Down then reaches the reprojected command for exact approval.
+        pipe_input.send_text(
+            "\x1b[B\x15" + f"other:{OTHER_MEMORY_UID[:8]}" + "\r\x1b[B\r"
+        )
+        result = run_reference_tui(
+            ReferenceTuiSetup(
+                names=("source", "other"),
+                selected_source="source",
+                selected_target="source",
+            ),
+            memory_loader=_memory_rows,
+            prepare=prepare,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is not None
+    assert requests == [ReferenceRequest(OTHER_MEMORY_UID, "other", "source")]
+
+
+def test_reference_bare_uid_input_resolves_only_inside_the_retained_owner() -> None:
+    requests: list[ReferenceRequest] = []
+
+    def prepare(request: ReferenceRequest) -> FrozenReferencePlan:
+        requests.append(request)
+        return FrozenReferencePlan(
+            request=request,
+            source_name=request.source_locator,
+            source_uid="other-context-uid",
+            source_digest="other-context-digest",
+            memory_uid=request.memory_selector,
+            memory_content="other old content",
+            memory_content_sha256="other-memory-digest",
+            into_name=request.into_locator or "source",
+            into_uid="source-context-uid",
+            into_digest="source-context-digest",
+            token=object(),
+        )
+
+    with create_pipe_input() as pipe_input:
+        # The row already retains "other" as its explicit owner. A bare UID
+        # prefix is resolved only inside that owner, then shown canonically as
+        # other:FULL_UID before the exact command can run.
+        pipe_input.send_text(
+            "\x1b[B\x15" + OTHER_MEMORY_UID[:8] + "\r\x1b[B\r"
+        )
+        result = run_reference_tui(
+            ReferenceTuiSetup(
+                names=("source", "other"),
+                selected_source="other",
+                selected_target="source",
+            ),
+            memory_loader=_memory_rows,
+            prepare=prepare,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is not None
+    assert requests == [ReferenceRequest(OTHER_MEMORY_UID, "other", "source")]
+
+
+def test_reference_double_colon_locator_never_freezes() -> None:
+    requests: list[ReferenceRequest] = []
+
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(
+            "\x1b[B\x15" + f"other::{OTHER_MEMORY_UID[:8]}" + "\r\x1b"
+        )
+        result = run_reference_tui(
+            ReferenceTuiSetup(
+                names=("source", "other"),
+                selected_source="source",
+                selected_target="source",
+            ),
+            memory_loader=_memory_rows,
+            prepare=lambda request: requests.append(request),  # type: ignore[arg-type,return-value]
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert result is None
+    assert requests == []
 
 
 def test_edit_tui_prefills_selected_memory_and_freezes_replacement() -> None:
@@ -278,9 +369,6 @@ def test_direct_memory_action_tuis_cancel_without_freezing() -> None:
             ReferenceTuiSetup(("source",), "source", "source"),
             memory_loader=_memory_rows,
             prepare=lambda request: reference_requests.append(request),  # type: ignore[arg-type,return-value]
-            prepare_context=lambda _request: (_ for _ in ()).throw(
-                AssertionError("cancel reached Context preparation")
-            ),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -313,9 +401,6 @@ def test_direct_memory_action_tuis_ctrl_c_without_freezing() -> None:
             ReferenceTuiSetup(("source",), "source", "source"),
             memory_loader=_memory_rows,
             prepare=lambda request: reference_requests.append(request),  # type: ignore[arg-type,return-value]
-            prepare_context=lambda _request: (_ for _ in ()).throw(
-                AssertionError("cancel reached Context preparation")
-            ),
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,

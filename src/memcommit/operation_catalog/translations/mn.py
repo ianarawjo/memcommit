@@ -68,7 +68,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Хэрэггүй болсон тодорхой Context эсвэл зүйлийг арилгах үед.",
     ),
     "diff": _copy(
-        "Context checkpoint эсвэл идэвхтэй Update-д бүртгэгдсэн ялгааг харуулна.",
+        "Нэг Context checkpoint-д бүртгэгдсэн өмнөх төлөв ба үр дүнгийн ялгааг харуулна.",
         "Бүртгэгдсэн operation яг юуг өөрчилснийг шалгах үед.",
     ),
     "distill": _copy(

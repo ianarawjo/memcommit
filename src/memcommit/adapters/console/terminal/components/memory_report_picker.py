@@ -1,11 +1,11 @@
-"""Shared read-only terminal picker for trace/rationale Memory selection."""
+"""Shared read-only terminal targeting for Trace/Rationale history reports."""
 
 from __future__ import annotations
 
 import sys
 from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Literal, Protocol, runtime_checkable
+from typing import Literal, Protocol, TypeAlias, runtime_checkable
 
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
@@ -19,6 +19,10 @@ from memcommit.adapters.console.terminal.components.context_picker import (
     ContextMemorySelection,
     ContextPickerActionReceipt,
     choose_context,
+)
+from memcommit.core.context_targeting.model import (
+    ContextTarget,
+    DirectMemoryTarget,
 )
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
@@ -61,6 +65,9 @@ class MemoryReportTargetSelection:
     owner_context_name: str
     memory_uid: str
     include_descendants: bool
+
+
+HistoryReportTargetSelection: TypeAlias = ContextTarget | DirectMemoryTarget
 
 
 def _reject_context_target(_context_name: str) -> ContextPickerActionReceipt:
@@ -135,8 +142,9 @@ def _choose_memory_selection(
     app_output: Output | None = None,
     require_tty: bool = True,
     initial_include_descendants: bool | None = None,
-) -> tuple[ContextMemorySelection, bool] | None:
-    """Select one Memory through the shared Context/Memory tree picker."""
+    allow_context_targets: bool = False,
+) -> tuple[str | ContextMemorySelection, bool] | None:
+    """Select one report target through the shared Context/Memory tree picker."""
     options = tuple(items)
     if operation not in {"trace", "rationale"}:
         raise ValueError("Memory picker operation must be trace or rationale.")
@@ -167,8 +175,13 @@ def _choose_memory_selection(
         raise ValueError("Memory selection received duplicate UIDs.")
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError(
-            "Interactive Memory selection requires a terminal. "
-            "Pass a Memory UID explicitly."
+            (
+                "Interactive Context or Memory selection requires a terminal. "
+                "Pass a Context name or Memory UID explicitly."
+                if allow_context_targets
+                else "Interactive Memory selection requires a terminal. "
+                "Pass a Memory UID explicitly."
+            )
         )
 
     item_catalog_names = tuple(
@@ -183,8 +196,7 @@ def _choose_memory_selection(
     )
     # A current-root report flow may deliberately open an empty Context. Keep
     # its frozen structural rows even when no Memory exists anywhere in that
-    # range; candidate absence is presentation state, not permission to bypass
-    # the exact/subtree control.
+    # range; the Context itself remains an exact selectable target.
     names = tuple(dict.fromkeys((*explicit_catalog, *item_catalog_names, *owner_names)))
     if (
         any(not isinstance(name, str) or not name for name in names)
@@ -228,16 +240,27 @@ def _choose_memory_selection(
         names,
         current=context_name if context_name in names else names[0],
         title=(
-            f"{operation.upper()} · SELECT A MEMORY · "
-            f"{display_escape_text(context_name)}"
+            f"{operation.upper()} · "
+            + (
+                "SELECT A CONTEXT OR MEMORY · "
+                if allow_context_targets
+                else "SELECT A MEMORY · "
+            )
+            + f"{display_escape_text(context_name)}"
         ),
-        accept_label=("open lineage" if operation == "trace" else "open rationale"),
+        accept_label=("trace" if operation == "trace" else "explain"),
+        nested_accept_label=(
+            "trace Memory" if operation == "trace" else "explain Memory"
+        ),
         memory_loader=memory_rows,
-        initially_expand_all=True,
+        initially_expand_selected=allow_context_targets,
+        initially_expand_all=not allow_context_targets,
         initially_show_memories=True,
-        browse_only=True,
+        browse_only=not allow_context_targets,
         selectable_memories=True,
-        context_accept_handler=_reject_context_target,
+        context_accept_handler=(
+            None if allow_context_targets else _reject_context_target
+        ),
         app_input=app_input,
         app_output=app_output,
         require_tty=require_tty,
@@ -246,11 +269,45 @@ def _choose_memory_selection(
     )
     if selected is None:
         return None
+    if allow_context_targets and isinstance(selected, str):
+        return selected, False
     if not isinstance(selected, ContextMemorySelection):
-        raise ValueError("Memory selection did not return an exact Memory.")
+        raise ValueError("History selection did not return a Context or exact Memory.")
     return selected, (
         reach_state.include_descendants if reach_state is not None else False
     )
+
+
+def choose_history_report_target(
+    items: Sequence[MemoryPickerItem],
+    *,
+    context_name: str,
+    operation: MemoryPickerOperation,
+    catalog_context_names: Sequence[str] | None = None,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> HistoryReportTargetSelection | None:
+    """Choose one exact Context or Memory through the shared Switch-style tree."""
+
+    selected = _choose_memory_selection(
+        items,
+        context_name=context_name,
+        operation=operation,
+        catalog_context_names=catalog_context_names,
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+        allow_context_targets=True,
+    )
+    if selected is None:
+        return None
+    target, _include_descendants = selected
+    if isinstance(target, str):
+        return ContextTarget(target)
+    if isinstance(target, DirectMemoryTarget):
+        return target
+    raise ValueError("History selection returned an unsupported target.")
 
 
 def choose_memory_report_target(

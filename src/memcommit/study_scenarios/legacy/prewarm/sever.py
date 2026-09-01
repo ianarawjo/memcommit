@@ -8,7 +8,10 @@ import json
 from pathlib import Path
 import uuid
 
-from memcommit.application.capabilities.authority.context_access import ContextAccess, resolve_context_access
+from memcommit.application.context_access.access import (
+    ContextAccess,
+    resolve_context_access,
+)
 from memcommit.configuration.config import Config
 from memcommit.providers.policy import (
     resolve_operation_provider_policy,
@@ -342,6 +345,7 @@ def _fresh_review(
     *,
     source: SeverContextBinding,
     criteria: SeverContextBinding,
+    output_name: str | None = None,
 ) -> SeverSession:
     if not _semantic_binding_matches(
         prepared.source, source
@@ -366,6 +370,7 @@ def _fresh_review(
         state="REVIEWING",
         source=source,
         criteria=criteria,
+        output_name=output_name or prepared.output_name,
         candidates=candidates,
         application=None,
     )
@@ -484,7 +489,7 @@ def install_declared_sever_prewarms(
 def _local_output_access(store: MemoryStore, name: str):
     # Kept local to avoid broadening the public Context locator contract for a
     # require-new output name.
-    from memcommit.application.capabilities.authority.context_access import ContextAccess
+    from memcommit.application.context_access.access import ContextAccess
 
     validate_portable_context_name(name)
     if store.context_exists(name):
@@ -570,7 +575,7 @@ def find_installed_projectable_sever_prewarm(
     criteria: SeverContextBinding,
     output_name: str,
 ) -> SeverPrewarmMatch | None:
-    """Compatibility facade; projection is intentionally unavailable."""
+    """Return an exact review or safely rebind legacy output to Source."""
 
     exact = find_installed_exact_sever_prewarm(
         store=store,
@@ -579,7 +584,70 @@ def find_installed_projectable_sever_prewarm(
         output_name=output_name,
     )
     if exact is None:
-        return None
+        # New console Sever has no Result endpoint: every owner stays in place.
+        # Old Study artifacts used a separate output name even though their
+        # keep/transform/drop ledger depended only on the frozen Source and
+        # Criteria frames. Rebinding is therefore limited to the exact Source
+        # root; this cannot authorize an arbitrary destination.
+        if output_name != source.root_name:
+            return None
+        registry = load_registry(store.store_dir)
+        if registry is None:
+            return None
+        provider_identity = _configured_semantic_identity()
+        matches: list[tuple[SemanticIdentity, SeverSession]] = []
+        for entry in registry.entries:
+            if not entry.enabled or entry.operation != "SEVER":
+                continue
+            artifact = load_artifact(store.store_dir, entry)
+            prepared, description = _validate_artifact(artifact, entry_key=entry.key)
+            cached_identity = (
+                artifact.get("provider"),
+                artifact.get("model"),
+                artifact.get("reasoning"),
+            )
+            if not prewarm_quality_satisfies(
+                cached_identity,  # type: ignore[arg-type]
+                provider_identity,
+            ):
+                continue
+            try:
+                _validate_description(store, description)
+            except StudyPrewarmRegistryError:
+                continue
+            if not _receipt_matches(
+                store,
+                entry_key=entry.key,
+                source=source,
+                criteria=criteria,
+            ):
+                continue
+            if not _semantic_binding_matches(
+                prepared.source,
+                source,
+            ) or not _semantic_binding_matches(prepared.criteria, criteria):
+                continue
+            matches.append(
+                (
+                    cached_identity,  # type: ignore[arg-type]
+                    _fresh_review(
+                        prepared,
+                        source=source,
+                        criteria=criteria,
+                        output_name=source.root_name,
+                    ),
+                )
+            )
+        selected = highest_quality_candidates(matches)
+        if len(selected) > 1:
+            raise StudyPrewarmRegistryError(
+                "Multiple declared Sever prewarms match the same frozen request."
+            )
+        return (
+            SeverPrewarmMatch(session=selected[0], origin="PROJECTED_PREWARM")
+            if selected
+            else None
+        )
     return SeverPrewarmMatch(session=exact, origin="EXACT_PREWARM")
 
 

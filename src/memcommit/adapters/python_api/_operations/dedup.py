@@ -20,7 +20,7 @@ from memcommit.adapters.python_api.errors import (
     SemanticInputError,
     SemanticStorageError,
 )
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.dedup.application import (
     ExactDedupConflictError,

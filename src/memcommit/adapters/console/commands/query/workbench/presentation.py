@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.operations.search.answer_references import (
-    SearchAnswerReferenceDocument,
-    render_numbered_search_answer_reference,
+from memcommit.application.operations.query.reference_document import (
+    OrdinaryQueryReferenceDocument,
+    render_numbered_ordinary_query_reference,
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import focused_control_style
@@ -34,7 +34,7 @@ def render_query_answer(response: QueryWorkbenchResponse | None) -> str:
 
 def query_answer_reference_document(
     response: QueryWorkbenchResponse | None,
-) -> SearchAnswerReferenceDocument | None:
+) -> OrdinaryQueryReferenceDocument | None:
     if not isinstance(response, OrdinaryQueryResponse):
         return None
     return response.reference_document
@@ -112,7 +112,7 @@ def project_query_answer_clipboard(
         )
     reference = document.references[active_stop - 1]
     return QueryAnswerClipboardProjection(
-        text=safe_terminal_text(render_numbered_search_answer_reference(reference)),
+        text=safe_terminal_text(render_numbered_ordinary_query_reference(reference)),
         scope="FOCUSED",
         label=f"Reference {reference.number}",
         reference_count=reference_count,
@@ -156,7 +156,7 @@ def render_query_answer_fragments(
                     if active
                     else ""
                 ),
-                safe_terminal_text(render_numbered_search_answer_reference(reference)),
+                safe_terminal_text(render_numbered_ordinary_query_reference(reference)),
             )
         )
     return fragments

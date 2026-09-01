@@ -82,7 +82,7 @@ def reference_context(
     into_context: str | None = None,
     recursive: bool = False,
 ) -> ContextReferenceResult:
-    """Retain one immutable direct or recursive Context snapshot."""
+    """Retain one immutable local or READ-granted Context snapshot."""
 
     try:
         result = execute_context_reference(
@@ -93,6 +93,7 @@ def reference_context(
                 follow_embeds=recursive,
             ),
             store=runtime.store,
+            allow_granted_sources=active_client_registry(runtime) is not None,
         )
     except FileNotFoundError as error:
         raise_public(ReferenceContextError, error)

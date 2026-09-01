@@ -14,6 +14,9 @@ from memcommit.application.capabilities.durable_uid_resolution import (
     DurableUidCandidate,
     try_resolve_durable_uid,
 )
+from memcommit.application.capabilities.operand_resolution import (
+    ContextOperandCandidate,
+)
 from memcommit.application.capabilities.name_suggestions import did_you_mean_suffix
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.model import CheckpointTarget, ContextTarget
@@ -78,16 +81,31 @@ def resolve_local_context_checkpoint_target(
     operand: str,
     *,
     current: str | None,
+    context_candidates: Sequence[ContextOperandCandidate[object]] | None = None,
 ) -> ContextTarget | CheckpointTarget:
-    """Resolve one overloaded Context-or-checkpoint operand without guessing.
+    """Resolve one Context-or-local-checkpoint operand without guessing.
 
     Relative syntax is always a Context locator. Bare UUID-shaped values may
     select a checkpoint only when no exact Context with the same spelling is
     present and the checkpoint prefix is unique across the frozen local
-    catalog.
+    History catalog.  Callers may supply a broader authorized Context frame;
+    this never broadens the checkpoint side.
     """
 
-    names = tuple(store.list_context_names())
+    local_names = tuple(store.list_context_names())
+    frozen_contexts = (
+        tuple(context_candidates)
+        if context_candidates is not None
+        else tuple(
+            ContextOperandCandidate(
+                uid=store.load_direct(name).uid,
+                name=name,
+                value=ContextTarget(name),
+            )
+            for name in local_names
+        )
+    )
+    names = tuple(candidate.name for candidate in frozen_contexts)
     context_name = resolve_context_locator(operand, current=current)
     context_exists = context_name in names
     relative = operand in {".", ".."} or operand.startswith(("./", "../"))
@@ -96,7 +114,10 @@ def resolve_local_context_checkpoint_target(
             return ContextTarget(context_name)
         raise ValueError(f"Context '{context_name}' is unavailable.")
 
-    targets = freeze_local_checkpoint_targets(store, context_names=names)
+    # Retained checkpoint History remains ordinary-local even when the Context
+    # arm admits readable Grant identities.  Grant checkpoint policy is
+    # evaluated only after the operand has selected the Context arm.
+    targets = freeze_local_checkpoint_targets(store, context_names=local_names)
     uid_shaped = is_memory_uid_selector(operand)
     checkpoint_matches = tuple(
         target
@@ -111,15 +132,13 @@ def resolve_local_context_checkpoint_target(
     if context_exists:
         return ContextTarget(context_name)
     if uid_shaped:
-        candidates: tuple[
-            DurableUidCandidate[ContextTarget | CheckpointTarget], ...
-        ] = tuple(
+        candidates: tuple[DurableUidCandidate[ContextTarget | CheckpointTarget], ...] = tuple(
             DurableUidCandidate(
-                uid=store.load_direct(name).uid,
+                uid=candidate.uid,
                 kind="context",
-                value=ContextTarget(name),
+                value=ContextTarget(candidate.name),
             )
-            for name in names
+            for candidate in frozen_contexts
         ) + tuple(
             DurableUidCandidate(
                 uid=target.checkpoint_uid,

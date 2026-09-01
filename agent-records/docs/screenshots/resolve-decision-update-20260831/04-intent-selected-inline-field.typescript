@@ -51,7 +51,7 @@ PTY · 180×52 · PROFILE isolated · CURRENT capture/resolve
 
 
 
-[0m [47A[0m[?25l[A[0;38;2;16;36;47;48;2;139;213;255;1m✓[0m
+[0m [47A[0m[5 q[?25l[A[0;38;2;16;36;47;48;2;139;213;255;1m✓[0m
 
 
 
@@ -81,8 +81,8 @@ PTY · 180×52 · PROFILE isolated · CURRENT capture/resolve
 
 
 [18C[0;38;2;244;245;247m2[10C[0m[NEXT →][5A[37D[0m[?25l[A[0m  1 · ACCEPT THIS DIRECTION · The exception applies only to named greetings.[0m
-[0;38;2;16;36;47;48;2;139;213;255m✓ 2 · ADJUST WITH YOUR INTENT · Enter the direction this should follow.[0m
-[21C[0;38;2;16;36;47;48;2;139;213;255m›                                               [0;38;2;244;245;247;1m │[0m
+
+[21C[0m›                                               [0;38;2;244;245;247;1m │[0m
 
 
 
@@ -90,4 +90,4 @@ PTY · 180×52 · PROFILE isolated · CURRENT capture/resolve
 
 
 
-[C[0mType yo[Cr[Cintent · Enter save · ↑/↓ save and[Cchoose · Esc freeze[8A[42D[0m[?12l[?25h
+[C[0mType yo[Cr[Cintent · ←/→[Ccursor · En[Cer s[Cve ·[C↑/↓ save and choose · Esc freeze[8A[55D[0m[?12l[?25h

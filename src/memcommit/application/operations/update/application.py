@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import copy
+
 from memcommit.application.operations.update.model import (
     AddOperation,
     AppliedOwner,
@@ -173,6 +175,52 @@ def apply_update(plan: UpdatePlan, target: Context) -> UpdateResult:
     )
 
 
+def materialize_update_post_image(
+    result: UpdateResult,
+    target: Context,
+) -> Context:
+    """Recompose the complete detached Target graph after exact application.
+
+    ``UpdateResult`` keeps owner post-images separate so publication can retain
+    each Context's CAS boundary. Semantic callers such as Resolve instead need
+    one complete graph for whole-frame verification. This helper joins those
+    views without mutating either the frozen Target or the result records.
+    """
+
+    if not isinstance(result, UpdateResult):
+        raise TypeError("Expected an UpdateResult.")
+    if not isinstance(target, Context):
+        raise TypeError("Expected a target Context.")
+    if result.target_uid != target.uid or result.target_name != target.name:
+        raise UpdateApplicationError(
+            "The Update result Target does not match the supplied Context."
+        )
+
+    root = copy.deepcopy(target)
+    owner_by_uid = {context.uid: context for context in _walk_target_contexts(root)}
+    for affected in result.affected_owners:
+        owner = owner_by_uid.get(affected.owner_context_uid)
+        if owner is None or owner.name != affected.owner_context_name:
+            raise UpdateApplicationError(
+                "The Update result names an owner outside the supplied Target graph."
+            )
+        expected_memories = {
+            item.uid: item
+            for item in affected.post_image.iter_items()
+            if isinstance(item, Memory)
+        }
+        for uid, item in tuple(owner.memories.items()):
+            if isinstance(item, Memory) and uid not in expected_memories:
+                owner.remove(uid)
+        for uid, memory in expected_memories.items():
+            replacement = Memory(uid=uid, content=memory.content)
+            if uid in owner.memories:
+                owner.replace(replacement)
+            else:
+                owner.add(replacement)
+    return root
+
+
 def apply_staged_update_plan(
     session: UpdateSession,
     target: Context,
@@ -186,12 +234,7 @@ def apply_staged_update_plan(
             "Update application requires a staged update session."
         )
     return apply_update(
-        UpdatePlan(
-            uid=session.uid,
-            target_uid=session.target_uid,
-            target_name=session.target_name,
-            operations=session.operations,
-        ),
+        session.plan,
         target,
     )
 
@@ -200,4 +243,5 @@ __all__ = [
     "UpdateApplicationError",
     "apply_staged_update_plan",
     "apply_update",
+    "materialize_update_post_image",
 ]

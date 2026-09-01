@@ -5,7 +5,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 import uuid
 
-from memcommit.application.capabilities.context_locator import resolve_context_locator
+from memcommit.application.capabilities.operand_resolution import (
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
+)
 from memcommit.application.operations.checkpoint.application import (
     CheckpointMemberPlan,
     CheckpointPlan,
@@ -39,10 +42,11 @@ class MemoryStoreCheckpointPort:
             if context_name is None:
                 raise RuntimeError("No current context. Run 'mem init <name>' first.")
         else:
-            context_name = resolve_context_locator(
+            context_name = resolve_existing_context_operand(
+                freeze_local_context_operand_candidates(self._store),
                 request.context_locator,
                 current=request.current_context_name,
-            )
+            ).name
         root = self._store.load_direct(context_name)
         if not request.recursive:
             contexts = (root,)

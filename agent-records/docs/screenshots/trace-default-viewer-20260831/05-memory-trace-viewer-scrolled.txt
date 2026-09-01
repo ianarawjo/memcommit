@@ -1,0 +1,32 @@
+LIVE COLOR PTY · 52 180                                                                                                                                                             
+PROFILE · ISOLATED CAPTURE · CURRENT · practice/rules                                                                                                                               
+                                                                                                                                                                                    
+$ /Users/KimMunyeong/.local/bin/mem trace 2f629230-6a7e-46f9-bafb-69400c60c70f --context practice/rules --all                                                                       
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ LINEAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃  − [2f629230]@1 Trace subject version 08 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                      ^┃
+┃  + [2f629230]@1 Trace subject version 09 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃[edit] [CHECKPOINT 13b5c03c] [MEMORY 2f629230]  2026-08-31 06:11                                                                                                                  ┃
+┃  − [2f629230]@1 Trace subject version 07 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                       ┃
+┃  + [2f629230]@1 Trace subject version 08 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃[edit] [CHECKPOINT 704ede77] [MEMORY 2f629230]  2026-08-31 06:11                                                                                                                  ┃
+┃  − [2f629230]@1 Trace subject version 06 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                       ┃
+┃  + [2f629230]@1 Trace subject version 07 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃[edit] [CHECKPOINT 837142c0] [MEMORY 2f629230]  2026-08-31 06:11                                                                                                                  ┃
+┃  − [2f629230]@1 Trace subject version 05 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                       ┃
+┃  + [2f629230]@1 Trace subject version 06 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃[edit] [CHECKPOINT d3f3b2c5] [MEMORY 2f629230]  2026-08-31 06:11                                                                                                                  ┃
+┃  − [2f629230]@1 Trace subject version 04 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                       ┃
+┃  + [2f629230]@1 Trace subject version 05 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃[edit] [CHECKPOINT 81270384] [MEMORY 2f629230]  2026-08-31 06:11                                                                                                                  ┃
+┃  − [2f629230]@1 Trace subject version 03 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                       ┃
+┃  + [2f629230]@1 Trace subject version 04 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃[edit] [CHECKPOINT a2a21968] [MEMORY 2f629230]  2026-08-31 06:11                                                                                                                  ┃
+┃  − [2f629230]@1 Trace subject version 02 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                      v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ TRACE REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

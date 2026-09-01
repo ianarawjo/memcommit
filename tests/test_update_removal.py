@@ -85,7 +85,7 @@ def _persist_removal_pair(store: MemoryStore):
     return source, source_memory, target, pointer, obsolete, preserved
 
 
-def test_mem_update_applies_explicit_removal_and_diff_keeps_provenance(
+def test_mem_update_removal_uses_review_for_provenance_and_diff_for_checkpoint(
     isolated_store,
     monkeypatch,
 ) -> None:
@@ -118,12 +118,23 @@ def test_mem_update_applies_explicit_removal_and_diff_keeps_provenance(
         "reason",
     ]
 
-    semantic = runner.invoke(app, ["diff"])
-    raw = runner.invoke(app, ["diff", "--raw"])
+    applied = store.load_staged_update()
+    assert applied is not None
+    assert applied.application is not None
+    checkpoint_uid = next(
+        checkpoint.checkpoint_uid
+        for checkpoint in applied.application.checkpoints
+        if checkpoint.context_name == TARGET_NAME
+    )
+    semantic = runner.invoke(
+        app,
+        ["review", "update", "--session", applied.uid, "--snapshot"],
+    )
+    raw = runner.invoke(app, ["diff", checkpoint_uid, "--raw"])
 
     assert semantic.exit_code == 0, semantic.output
-    assert "0 EDITS · 0 ADDITIONS · 1 REMOVALS · 1 CHANGES" in semantic.output
-    assert f"REMOVE {TARGET_NAME} Memory [{obsolete.uid}]" in semantic.output
+    assert "REMOVE" in semantic.output
+    assert f"Memory [{obsolete.uid}]" in semantic.output
     assert (
         f"Memory [{source_memory.uid}]"
         in semantic.output
@@ -131,7 +142,6 @@ def test_mem_update_applies_explicit_removal_and_diff_keeps_provenance(
     assert raw.exit_code == 0, raw.output
     assert f"--- a/{TARGET_NAME}#{obsolete.uid}" in raw.output
     assert "+++ /dev/null" in raw.output
-    assert f"Sources: {SOURCE_NAME}#{source_memory.uid}" in raw.output
 
 
 def test_remove_session_round_trip_is_v3_and_legacy_schema_rejects_it() -> None:

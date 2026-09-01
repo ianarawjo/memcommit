@@ -1,0 +1,7 @@
+$ mem meld                                                                                                                                                                          
+PTY 180 52                                                                                                                                                                          
+WARNING: your terminal doesn't support cursor position requests (CPR).                                                                                                              
+                                                                                                                                                                                    
+TYPED MELD SETUP RECEIPT · MeldEndpointSelection(mode='directional', left_name=None, right_name='practice/coffee/target', target_name=None, create_target=False, left_descendants=Fa
+lse, right_descendants=False, left_memory_uid=None, right_memory_uid=None, inline_source_content='keep this exact distinction')                                                     
+CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION

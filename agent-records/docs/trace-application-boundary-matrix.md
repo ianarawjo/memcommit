@@ -11,14 +11,14 @@ current CLI route set.
 
 | Route | Entry | Application path | Result | Effect | Evidence |
 | --- | --- | --- | --- | --- | --- |
-| Explicit Context | `mem trace CONTEXT` | CLI syntax classification → `TraceContextTarget` → `execute_trace` | `ContextHistorySlice` | None | Context Trace and application runtime tests |
-| Explicit current or historical Memory | `mem trace UID`, `mem trace CONTEXT:UID`, `mem trace UID --context CONTEXT` | `TraceMemoryTarget` → readable/current resolution with retained-local fallback → `execute_trace` | `MemoryHistory` | None | Trace/Rationale, compact output, and application tests |
+| Explicit Context | `mem trace CONTEXT`, `mem trace --context CONTEXT` | CLI syntax classification → exact `TraceContextTarget` → `execute_trace` | `ContextHistorySlice` | None | Context Trace and application runtime tests |
+| Explicit current or historical Memory | `mem trace UID`, `mem trace CONTEXT:UID` | `TraceMemoryTarget` → readable/current resolution with retained-local fallback → `execute_trace` | `MemoryHistory` | None | Trace/Rationale, compact output, and application tests |
 | Explicit MemoryRef | same direct-item forms | exact local relationship occurrence resolution → `execute_trace` | `MemoryReferenceTraceReport` with independent target status/Trace | None | typed Trace/Rationale and Reference tests |
 | READ-granted current Memory | qualified or unique Profile-readable UID | exact active Grant resolution → current-only freeze → `execute_trace` | `GrantedMemoryTraceReport` with visible access route and hidden owner history | None | authority-Grant and application dispatch tests |
-| Interactive target selection | `mem trace` in a TTY | `TraceTargetCatalogRequest` → `load_trace_target_catalog` → shared terminal picker → exact `TraceMemoryTarget` → `execute_trace` | Same Memory result | Completed-attempt metadata only | picker ownership and application catalog tests |
-| Recent target | `mem trace` → completed recent | content-free recent selection → exact `TraceMemoryTarget` → fresh resolution/authorization → `execute_trace` | Newly reconstructed result; never a saved report | Completed-attempt metadata only | read-report lifecycle and picker tests |
+| Interactive target selection | `mem trace` in a TTY | `TraceTargetCatalogRequest` → `load_trace_target_catalog` → Switch-style Context/Memory tree → exact `TraceContextTarget` or `TraceMemoryTarget` → `execute_trace` | Same Context or Memory result | None | picker ownership and application catalog tests |
 | JSON | explicit target plus `--json` | same execution boundary | `TraceResult.to_dict()`/typed report JSON | stdout only | chronological JSON regression |
-| Bounded or complete text | `--limit N`, `--all`, `--verbose` | same complete application result | adapter-only bounded/plain projection | stdout only | compact projection tests |
+| Interactive Context or direct-Memory report | complete `mem trace` request in a TTY | same complete application result | existing single read-only Viewer over the bounded fragment document | terminal presentation only | Viewer routing and compact projection tests |
+| Bounded or complete text | `--limit N`, `--all`, `--verbose` through a pipe/non-TTY; `mem log --memory` for local Memory lineage | same complete application result | adapter-only bounded/plain projection | stdout only | Viewer routing and compact projection tests |
 
 ## Callable matrix
 
@@ -37,7 +37,7 @@ current CLI route set.
 | `build_reference_trace` | `memcommit.application.operations.trace.reference_lineage` | Project one relationship occurrence and independently authorize its target lineage | Store + owner Context + selector → `MemoryReferenceTraceReport` | Live Embed and snapshot Reference remain typed graph edges; occurrence and target identity stay separate |
 | `build_granted_memory_trace` | `memcommit.application.operations.trace.granted_view` | Freeze the current readable Memory and exact Grant route while keeping owner history hidden | granted access + selector → `GrantedMemoryTraceReport` | READ is not checkpoint authority |
 | `execute_trace` | same | Store-backed composition of `run_trace` | request + explicit Store → result | No terminal output |
-| `commands.trace.cmd` | console adapter | Parse CLI syntax/options, launch Recents/picker, render result, translate errors, annotate successful attempts | argv/TUI → request + presentation | No direct authority resolution or report-builder call |
+| `commands.trace.cmd` | console adapter | Parse CLI syntax/options, launch the direct Context/Memory browser, render result, and translate errors | argv/TUI → request + presentation | No direct authority resolution or report-builder call |
 
 ## Invariants
 
@@ -50,9 +50,9 @@ current CLI route set.
    Memory namespace without preferring current or local ownership. Local
    retained Memories and MemoryRefs are fallback candidates only when no
    current readable ordinary Memory matches.
-4. Interactive catalog rows are local, direct Memory candidates. Historical
-   UIDs use retained evidence; Context descendants are frozen before the
-   terminal range control narrows the visible selection.
+4. Interactive catalog rows are local Contexts and direct Memory candidates.
+   Historical UIDs use retained evidence. The frozen descendant tree is browse
+   breadth only: Enter always returns one exact Context or Memory target.
 5. `FrozenTraceSubject` preserves the exact subject kind, Context UID/public
    name, and selected UID. A mismatched report is rejected before presentation.
 6. MemoryRef occurrence history and target Memory lineage remain separate.

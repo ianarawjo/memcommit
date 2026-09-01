@@ -4,13 +4,19 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
     context_access_display_facts,
     project_grants_into_context,
     resolve_context_access,
     top_level_grants,
+)
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
+)
+from memcommit.application.capabilities.operand_resolution import (
+    ContextOperandNotFoundError,
 )
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.capabilities.context_snapshot import (
@@ -34,9 +40,10 @@ from memcommit.core.context_targeting.model import (
     DirectMemoryLocator,
     ExistingContextOperand,
 )
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
 )
+from memcommit.application.context_access.granted_view import grants_for_attachment
 from memcommit.core.context_targeting.resolution import (
     expand_lexical_context_names,
     parse_auto_typed_context_memory_operand,
@@ -45,7 +52,6 @@ from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.operations.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
-    grants_for_attachment,
 )
 from memcommit.application.operations.show.application import (
     ShowContextSnapshot,
@@ -675,11 +681,25 @@ def execute_show_cli_operand(
             )
         )
 
-    if operand is None or context_name is not None:
+    if context_name is not None:
+        resolved_context = resolve_existing_context_access(
+            store,
+            context_name,
+            current_name=current_context_name,
+            required_permission="READ",
+            registry=registry,
+        )
         return execute(
             ShowRequest(
-                context_name=context_name,
+                context_name=resolved_context.name,
                 selector=operand,
+                include_descendants=include_descendants,
+                follow_embeds=follow_embeds,
+            )
+        )
+    if operand is None:
+        return execute(
+            ShowRequest(
                 include_descendants=include_descendants,
                 follow_embeds=follow_embeds,
             )
@@ -696,6 +716,60 @@ def execute_show_cli_operand(
                 ShowRequest(
                     context_name=parsed.context_locator,
                     selector=parsed.memory_selector,
+                )
+            )
+        try:
+            context_target = resolve_existing_context_access(
+                store,
+                operand,
+                current_name=current_context_name,
+                required_permission="READ",
+                registry=registry,
+            )
+        except ContextOperandNotFoundError:
+            pass
+        else:
+            # A bare UID must be compared with the other kinds admitted by
+            # Show before the Context route can win. Qualified CONTEXT:UID is
+            # the explicit disambiguator when a direct row shares the prefix.
+            direct_item_match = False
+            try:
+                resolve_local_direct_item_locator(
+                    store,
+                    operand,
+                    current=current_context_name,
+                )
+            except DirectItemNotFoundError:
+                pass
+            else:
+                direct_item_match = True
+            if allow_grants:
+                readable_catalog = freeze_memory_report_readable_catalog(
+                    store,
+                    current=current_context_name,
+                    registry=registry,
+                )
+                if readable_catalog is not None:
+                    try:
+                        resolve_readable_memory_target(readable_catalog, operand)
+                    except ReadableMemoryTargetNotFoundError:
+                        pass
+                    except ReadableMemoryTargetAmbiguityError as error:
+                        raise ShowInputError(
+                            f"Ambiguous selector {operand!r}: {error}"
+                        ) from error
+                    else:
+                        direct_item_match = True
+            if direct_item_match:
+                raise ShowInputError(
+                    f"UID {operand!r} matches both a readable Context and a "
+                    "direct item; pass the exact Context name or CONTEXT:UID."
+                )
+            return execute(
+                ShowRequest(
+                    context_name=context_target.name,
+                    include_descendants=include_descendants,
+                    follow_embeds=follow_embeds,
                 )
             )
         return execute_bare_direct_item(parsed.memory_selector)

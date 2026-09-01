@@ -20,17 +20,18 @@ mem impact [--from LOCATOR] [--to LOCATOR]
 mem impact update LOCATOR LOCATOR
 mem update LOCATOR LOCATOR
 mem update [--from LOCATOR] [--to LOCATOR]
-mem sever LOCATOR LOCATOR [RESULT_NAME]
+mem sever LOCATOR LOCATOR
 mem sever [--source LOCATOR | --from LOCATOR]
            [--criteria LOCATOR | --against LOCATOR]
-           [--save-as RESULT_NAME | --to RESULT_NAME]
 mem list [LOCATOR]
 mem ls [LOCATOR]
 mem show [LOCATOR | ITEM | LOCATOR:ITEM] [--context LOCATOR]
 mem log [--memory SELECTOR] --context LOCATOR
 mem revert [CHECKPOINT] --context LOCATOR
-mem trace [SELECTOR] --context LOCATOR
-mem rationale [SELECTOR] --context LOCATOR
+mem trace --context LOCATOR
+mem trace [LOCATOR:]SELECTOR
+mem rationale --context LOCATOR
+mem rationale [LOCATOR:]SELECTOR
 mem find [QUERY] --context LOCATOR
 mem audit [LOCATOR]
 mem dedun [LOCATOR]
@@ -148,9 +149,9 @@ mem compare --from ../from --to ../to
 identify the same ordered comparison slot and the second spelling can reuse
 the first analysis. A single positional endpoint is the peer and uses current
 as the reference; two positional endpoints explicitly supply reference and
-peer. Positional Compare endpoints use the shared Context/direct-Memory shape
-classifier, while `--from` and `--to` remain explicitly typed Context routes
-for compatibility and legacy UUID-shaped Context names.
+peer. Positional Compare endpoints use the shared typed Context/direct-Memory
+resolver. `--from` and `--to` use the same existing-Context name, relative,
+and UID finder rather than a separate name-only path.
 
 ## CLI operand grammar
 
@@ -180,7 +181,7 @@ table as the authored cross-operation rule:
 | root `impact` | Error without a named route or endpoint | none, because the first token is a subcommand | retained `--from`/`--to` directional alias |
 | `forget`, `impact forget` | Context defaults to current; instruction is still required outside the setup TTY | the position is reserved for `INSTRUCTION` | `--context CONTEXT` |
 | `checkpoint` | Use current Context; one positional operand remains its compatibility `MESSAGE` | `CONTEXT MESSAGE`, or `CONTEXT --message MESSAGE`; the explicit message makes the Context role unambiguous | `--context CONTEXT` makes an optional positional operand the message; `--message MESSAGE` makes an optional positional operand the Context |
-| `sever` | Open Source/Criteria/Result setup | `SOURCE CRITERIA [RESULT]`; omitted Result self-saves | `--source`/`--from`, `--criteria`/`--against`, `--save-as`/`--to` |
+| `sever` | Open Source/Criteria in-place setup | exactly `SOURCE CRITERIA`; Source owners stay in place | `--source`/`--from`, `--criteria`/`--against` |
 | `embed`, `reference` | Open Source/Target setup | `ITEM`; omitted Target is current | A Context Source may use `--from SOURCE`; `--into`/`--to` select Target. With an explicit Memory ITEM, `--from` retains its owner-Context qualifier meaning |
 | `impact meld`, `impact sever` | Inspect saved operation work | none | `--session UID` only |
 
@@ -223,13 +224,9 @@ Sever follows the same command-entry rule for its positional Source/Criteria
 inputs and their `--source`/`--from` and `--criteria`/`--against` aliases. When
 Source is omitted, the captured current Context supplies it; a relative Criteria locator is still
 resolved against that exact same snapshot, not against a later reread of
-global current state. When Result is omitted, Sever self-saves by reusing the
-canonical Source name from that snapshot. An explicit positional Result or
-`--save-as` value is not passed through the existing-Context resolver: it must
-either equal that canonical Source name for self-save or be a fresh ordinary
-Context identifier for other-save. `--save-as` and `--to` are equivalent Result
-spellings. A raw relative Result is never reinterpreted against later global
-current state.
+global current state. The canonical Source name from that snapshot is also the
+internal in-place post-image identity; no Result operand is accepted or later
+reinterpreted against global current state.
 
 Merge similarly resolves positional SOURCE and TARGET, or `--from` SOURCE plus
 the `--into`/`--to` Target aliases, against one captured current snapshot.
@@ -249,20 +246,18 @@ the selected Context UID/digest. Compare still binds the exact source
 snapshots and ordered analysis slot. A later mutating command must retain its
 own locks, UID/digest checks, and canonical-target confirmation.
 
-Compare classifies positional endpoints before storage lookup. Bare Memory
-selectors scan only the strict ordinary-local direct-owner catalog and must be
-unique across branch copies; an owner-qualified `CONTEXT:MEMORY` may instead
-resolve an authorized public Grant Context. Both sides share one command-start
-current-name and Grant-registry snapshot. The resulting exact owner and Memory
-UID feed the existing focused-Compare contract, so automatic typing neither
-widens descendants nor promotes neighboring Memories from context-only
-evidence. Eight-or-more-character UUID shapes are storage-independently typed
-as Memory. A shorter hexadecimal positional preserves an exact readable
-Context first, then uses the same unique ordinary-local Memory fallback;
-`--from`/`--to`, explicit Memory options, and qualified locators remain the
-unambiguous compatibility forms.
+Compare freezes readable Contexts and ordinary-local direct Memories before it
+interprets a bare UID. Exact/relative Context names win; a UID then resolves
+across both kinds and fails on a cross-kind or multi-owner ambiguity. An
+owner-qualified `CONTEXT:MEMORY` may resolve an authorized public Grant
+Context, but bare Memory enumeration remains local. Both sides share one
+command-start current name, candidate catalog, and Grant-registry snapshot.
+The resulting exact owner and Memory UID feed the existing focused-Compare
+contract, so automatic typing neither widens descendants nor promotes
+neighboring Memories from context-only evidence.
 
-Atomize, Impact Atomize, Chunk, and Translate use that same shape classifier.
+Atomize, Impact Atomize, Chunk, and Translate use the same typed local target
+resolver.
 Their bare Memory operands require one unique ordinary-local direct owner, so
 the active local Context receives no hidden priority. Chunk alone preserves an
 already selected nonlocal public Grant current pointer as the explicit owner,

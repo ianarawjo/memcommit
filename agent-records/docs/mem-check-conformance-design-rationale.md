@@ -202,6 +202,16 @@ duplicate/ambiguity/conflict/Fit judgments.
 - A Ground workspace is revalidated after Rule/Context Conformance before its
   report is returned.
 
+## Help maturity
+
+The public operation catalog marks `check-conformance` as `PARTIAL`, so
+interactive and plain `mem help` plus API and agent discovery surfaces expose
+the same maturity boundary. This label describes the operation's current
+surface area, not an allowance to return incomplete judgments: execution still
+requires complete frozen Rule and Target coverage. Descendant, embedded, and
+granted frames, enforcement, repair, and Rule promotion remain outside the
+implemented surface.
+
 ## Intentional non-goals
 
 This operation does not execute a Rule as a transformation, compare an output

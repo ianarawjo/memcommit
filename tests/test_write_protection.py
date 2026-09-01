@@ -11,7 +11,7 @@ import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.persistence.store import MemoryStore, context_record_digest
-from memcommit.application.capabilities.authority.write_protection import (
+from memcommit.persistence.store.infrastructure.write_protection import (
     WriteProtectionError,
     WriteProtectionState,
 )

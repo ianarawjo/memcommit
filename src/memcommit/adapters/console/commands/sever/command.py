@@ -10,9 +10,13 @@ import typer
 from memcommit.application.capabilities.review_policy import (
     ownership_aware_application_review,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     GrantedReadStore,
     resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
 )
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionNewReceipt,
@@ -27,7 +31,7 @@ from memcommit.adapters.console.commands.sever.sessions import (
     list_sever_session_catalog,
     reload_selected_sever_session,
 )
-from memcommit.application.capabilities.authority.granted_context_navigation import (
+from memcommit.application.context_access.granted_context_navigation import (
     freeze_granted_context_navigation,
 )
 from memcommit.adapters.console.coordination.endpoint_operand import (
@@ -183,11 +187,27 @@ def _start(
     """Compatibility facade for historical command-level test callers."""
 
     snapshot = ContextOperandSnapshot.capture(store)
+    candidates = freeze_profile_context_access_candidates(
+        store,
+        current_name=snapshot.current_name,
+    )
     return _start_analysis(
         store=store,
         current_name=snapshot.current_name,
-        source_name=snapshot.resolve(source_name),
-        criteria_name=snapshot.resolve(criteria_name),
+        source_name=resolve_existing_context_access(
+            store,
+            source_name,
+            current_name=snapshot.current_name,
+            required_permission="READ",
+            candidates=candidates,
+        ).name,
+        criteria_name=resolve_existing_context_access(
+            store,
+            criteria_name,
+            current_name=snapshot.current_name,
+            required_permission="READ",
+            candidates=candidates,
+        ).name,
         output_name=output_name,
         source_descendants=source_descendants,
         criteria_descendants=criteria_descendants,
@@ -197,22 +217,21 @@ def _start(
 
 def render_sever(session: SeverSession) -> str:
     self_save = session.save_mode == "SELF_SAVE"
+    source_context_count = len(session.source.contexts)
     lines = [
-        f"SEVER · {session.state} · " + ("SELF-SAVE" if self_save else "OTHER-SAVE"),
+        f"SEVER · {session.state} · " + ("IN PLACE" if self_save else "OTHER-SAVE"),
         f"SOURCE · {safe_terminal_text(session.source.root_name)} · "
         f"{'INCLUDE DESCENDANTS' if session.source.include_descendants else 'THIS CONTEXT ONLY'} · "
         f"{len(session.source.memories)} Memories",
         f"CRITERIA · {safe_terminal_text(session.criteria.root_name)} · "
         f"{'INCLUDE DESCENDANTS' if session.criteria.include_descendants else 'THIS CONTEXT ONLY'}",
-        f"OUTPUT · {safe_terminal_text(session.output_name)} · "
-        + (
-            "SOURCE UPDATED"
-            if self_save and session.state == "APPLIED"
-            else "WILL UPDATE SOURCE"
+        (
+            f"APPLY · {source_context_count} SOURCE CONTEXT"
+            f"{'S' if source_context_count != 1 else ''} · "
+            + ("UPDATED IN PLACE" if session.state == "APPLIED" else "UPDATE IN PLACE")
             if self_save
-            else "CREATED LOCALLY"
-            if session.state == "APPLIED"
-            else "READY TO CREATE"
+            else f"OUTPUT · {safe_terminal_text(session.output_name)} · "
+            + ("CREATED LOCALLY" if session.state == "APPLIED" else "READY TO CREATE")
         ),
         "",
         safe_terminal_text(session.overview),
@@ -233,17 +252,21 @@ def render_sever(session: SeverSession) -> str:
                 candidate.selection == "RECOMMENDED"
                 and candidate.recommendation == "FORGET"
             )
-            else candidate.custom_content
-            if candidate.selection == "CUSTOM"
-            else source.content
-            if candidate.selection == "AS_WRITTEN"
-            else candidate.proposed_content
+            else (
+                candidate.custom_content
+                if candidate.selection == "CUSTOM"
+                else (
+                    source.content
+                    if candidate.selection == "AS_WRITTEN"
+                    else candidate.proposed_content
+                )
+            )
         )
         lines.extend(
             [
                 f"  {index}. [{candidate.uid[:8]}] {label}",
                 f"     SOURCE · {safe_terminal_text(source.content)}",
-                f"     RESULT · {safe_terminal_text(result)}",
+                f"     {'AFTER' if self_save else 'RESULT'} · {safe_terminal_text(result)}",
                 f"     WHY · {safe_terminal_text(candidate.rationale)}",
             ]
         )
@@ -268,7 +291,7 @@ def render_sever(session: SeverSession) -> str:
         [
             "",
             (
-                "The reviewed Result replaces the Source Context on Apply."
+                "Apply updates each selected Source Context at its existing location."
                 if self_save
                 else "Apply creates a separate Result Context."
             ),
@@ -293,16 +316,27 @@ def render_sever_receipt(session: SeverSession) -> str:
         for candidate in session.candidates
     )
     self_save = session.save_mode == "SELF_SAVE"
-    lines = [
-        f"SEVER APPLIED · {session.source.root_name} → {session.output_name}",
-        f"SAVE MODE · {'SELF-SAVE' if self_save else 'OTHER-SAVE'}",
-        f"DECISIONS · KEEP {len(session.application.result_memory_uids)} · FORGET {forgotten}",
-        "SOURCE · UPDATED" if self_save else "RESULT · CREATED SEPARATELY",
-        f"RECEIPT · {session.uid}",
-        f"CHECKPOINT · {session.application.checkpoint_uid}",
-        f"REVIEW · mem review sever --session {session.uid}",
-        "RECOVERY · mem undo",
-    ]
+    if self_save:
+        checkpoint_count = len(session.application.checkpoints) or 1
+        lines = [
+            f"SEVER APPLIED · {session.source.root_name} · IN PLACE",
+            f"CONTEXTS · {checkpoint_count} UPDATED IN PLACE",
+        ]
+    else:
+        lines = [
+            f"SEVER APPLIED · {session.source.root_name} → {session.output_name}",
+            "SAVE MODE · OTHER-SAVE",
+        ]
+    lines.extend(
+        [
+            f"DECISIONS · KEEP {len(session.application.result_memory_uids)} · FORGET {forgotten}",
+            "SOURCE · UPDATED" if self_save else "RESULT · CREATED SEPARATELY",
+            f"RECEIPT · {session.uid}",
+            f"CHECKPOINT · {session.application.checkpoint_uid}",
+            f"REVIEW · mem review sever --session {session.uid}",
+            "RECOVERY · mem undo",
+        ]
+    )
     return "\n".join(lines)
 
 
@@ -314,15 +348,20 @@ def render_sever_incomplete_receipt(session: SeverSession) -> str:
         item.effective_obligation == "REQUIRED" and item.response_state != "ANSWERED"
         for item in view.items
     )
-    output_state = (
-        "WILL UPDATE SOURCE" if session.save_mode == "SELF_SAVE" else "READY TO CREATE"
-    )
+    if session.save_mode == "SELF_SAVE":
+        route = f"{session.source.root_name} × {session.criteria.root_name} · IN PLACE"
+        destination = (
+            f"SOURCE · UNCHANGED · {len(session.source.contexts)} CONTEXT"
+            f"{'S' if len(session.source.contexts) != 1 else ''} UPDATE ON APPLY"
+        )
+    else:
+        route = f"{session.source.root_name} → {session.output_name}"
+        destination = f"OUTPUT · {session.output_name} · READY TO CREATE"
     return "\n".join(
         [
-            f"SEVER {'NEEDS INPUT' if required else 'READY'} · "
-            f"{session.source.root_name} → {session.output_name}",
+            f"SEVER {'NEEDS INPUT' if required else 'READY'} · {route}",
             f"JUDGMENTS · REQUIRED {required}",
-            f"OUTPUT · {session.output_name} · {output_state}",
+            destination,
             f"SESSION · {session.uid}",
             "SOURCE · UNCHANGED",
             f"IMPACT · mem impact sever --session {session.uid}",
@@ -338,7 +377,7 @@ def _apply(store: MemoryStore, session: SeverSession) -> SeverSession:
     ).session
 
 
-def _interactive_setup(store: MemoryStore) -> tuple[str, str, str, bool, bool] | None:
+def _interactive_setup(store: MemoryStore) -> tuple[str, str, bool, bool] | None:
     names = tuple(store.list_context_names())
     granted = freeze_granted_context_navigation(store)
     current_name = store.current_context_name()
@@ -367,7 +406,6 @@ def _interactive_setup(store: MemoryStore) -> tuple[str, str, str, bool, bool] |
     return (
         receipt.source_name,
         receipt.criteria_name,
-        receipt.output_name,
         receipt.source_descendants,
         receipt.criteria_descendants,
     )
@@ -381,10 +419,12 @@ def _render_saved_session_list(sessions: SeverSessionStore) -> None:
         typer.echo("No saved Sever sessions.")
         return
     for item in saved:
-        typer.echo(
-            f"{item.uid} · {item.state} · {item.source.root_name} × "
-            f"{item.criteria.root_name} → {item.output_name}"
+        route = (
+            f"{item.source.root_name} × {item.criteria.root_name} · IN PLACE"
+            if item.save_mode == "SELF_SAVE"
+            else f"{item.source.root_name} × {item.criteria.root_name} → {item.output_name}"
         )
+        typer.echo(f"{item.uid} · {item.state} · {route}")
 
 
 def _choose_saved_sever_session(
@@ -440,13 +480,9 @@ def _run_workbench(
         def validate_destination(name: str) -> None:
             validate_portable_context_name(name)
             if name == session.source.root_name:
-                if (
-                    session.source.granted is not None
-                    or session.source.include_descendants
-                ):
+                if session.source.granted is not None:
                     raise ValueError(
-                        "Self-save requires an ordinary local Source root with "
-                        "Source descendants excluded."
+                        "In-place Sever requires an ordinary local Source root."
                     )
                 return
             if name != session.output_name and store.context_exists(name):
@@ -464,14 +500,14 @@ def _run_workbench(
             artifact_uid=active_view.artifact_uid,
             revision=active_view.revision,
             title=(
-                "IMPACT · SEVER SELF-SAVE · SOURCE WILL BE REPLACED"
+                "IMPACT · SEVER IN PLACE · SOURCE OWNERS WILL BE UPDATED"
                 if session.save_mode == "SELF_SAVE"
                 else "IMPACT · SEVER OTHER-SAVE"
             ),
             summary=(
-                "This is the exact local result that Apply would save. "
+                "This is the exact reviewed after-state that Apply would save. "
                 + (
-                    "It replaces the Source Context."
+                    "Each selected Source Context stays at its existing location."
                     if session.save_mode == "SELF_SAVE"
                     else "It creates a separate Result Context."
                 )
@@ -502,7 +538,10 @@ def _run_workbench(
                     context_names=tuple(store.list_context_names()),
                     current_context=store.current_context_name(),
                 )
-                if allow_apply
+                # New console sessions are always in place and expose no Save
+                # Location. Retain the destination surface only when reopening
+                # an older other-save session with a frozen output contract.
+                if allow_apply and session.save_mode == "OTHER_SAVE"
                 else None
             ),
             turn_command_review=lambda proposed: (
@@ -556,7 +595,9 @@ def _run_workbench(
                 "recommended": "RECOMMENDED",
                 "as-written": "AS_WRITTEN",
                 "forget": "FORGET",
-            }.get(suffix)  # type: ignore[assignment]
+            }.get(
+                suffix
+            )  # type: ignore[assignment]
             if selection is None:
                 raise SeverCommandError("Unsupported Sever decision.")
             custom_content = ""
@@ -582,22 +623,21 @@ def _resolve_endpoint_syntax(
     *,
     source_name: str | None,
     criteria_name: str | None,
-    save_as: str | None,
-) -> tuple[str | None, str | None, str | None]:
+) -> tuple[str | None, str | None]:
     """Normalize positional roles and their compatibility options."""
 
     positional = tuple(endpoints or ())
-    if len(positional) > 3:
+    if len(positional) > 2:
         raise SeverCommandError(
-            "expected at most three positional Contexts: SOURCE CRITERIA [RESULT]."
+            "expected exactly two positional Contexts: SOURCE CRITERIA. "
+            "Sever updates the selected Source scope in place."
         )
-    resolved = [source_name, criteria_name, save_as]
+    resolved = [source_name, criteria_name]
     role_options = (
         "--source/--from",
         "--criteria/--against",
-        "--save-as/--to",
     )
-    role_names = ("SOURCE", "CRITERIA", "RESULT")
+    role_names = ("SOURCE", "CRITERIA")
     for index, value in enumerate(positional):
         if resolved[index] is not None:
             raise SeverCommandError(
@@ -605,17 +645,14 @@ def _resolve_endpoint_syntax(
                 f"{role_options[index]}."
             )
         resolved[index] = value
-    return resolved[0], resolved[1], resolved[2]
+    return resolved[0], resolved[1]
 
 
 def cmd(
     contexts: Annotated[
         list[str] | None,
         typer.Argument(
-            help=(
-                "SOURCE and CRITERIA Contexts, plus an optional RESULT; "
-                "omit RESULT to self-save or name a new Context to save elsewhere"
-            ),
+            help="SOURCE and CRITERIA Contexts; Source owners are updated in place",
         ),
     ] = None,
     source_name: Annotated[
@@ -644,23 +681,6 @@ def cmd(
         typer.Option(
             "--against",
             help="Compatibility alias for --criteria",
-        ),
-    ] = None,
-    save_as: Annotated[
-        Optional[str],
-        typer.Option(
-            "--save-as",
-            help=(
-                "Save to SOURCE for self-save or to a fresh Context for other-save; "
-                "omission self-saves"
-            ),
-        ),
-    ] = None,
-    to: Annotated[
-        Optional[str],
-        typer.Option(
-            "--to",
-            help="Directional compatibility alias for --save-as Result",
         ),
     ] = None,
     direct: Annotated[
@@ -711,9 +731,7 @@ def cmd(
     ] = None,
     comment: Annotated[
         Optional[str],
-        typer.Option(
-            "--comment", help="Exact custom result content when --choice custom"
-        ),
+        typer.Option("--comment", help="Exact retained content when --choice custom"),
     ] = None,
     expect_session: Annotated[
         Optional[str],
@@ -727,7 +745,7 @@ def cmd(
         bool,
         typer.Option(
             "--accept",
-            help="Apply the reviewed self-save or other-save Result",
+            help="Apply the reviewed Sever session",
         ),
     ] = False,
     sessions_flag: Annotated[
@@ -746,16 +764,10 @@ def cmd(
             role="CRITERIA",
             options=(("--criteria", criteria_name), ("--against", against)),
         )
-        result_option = choose_endpoint_operand(
-            None,
-            role="RESULT",
-            options=(("--save-as", save_as), ("--to", to)),
-        )
-        source_name, criteria_name, save_as = _resolve_endpoint_syntax(
+        source_name, criteria_name = _resolve_endpoint_syntax(
             contexts,
             source_name=source_option,
             criteria_name=criteria_option,
-            save_as=result_option,
         )
     except (SeverCommandError, ValueError) as error:
         typer.secho(
@@ -798,7 +810,6 @@ def cmd(
                     for value in (
                         source_name,
                         criteria_name,
-                        save_as,
                         resume,
                         candidate,
                         choice,
@@ -818,7 +829,6 @@ def cmd(
             scope_flags_supplied
             and source_name is None
             and criteria_name is None
-            and save_as is None
             and resume is None
         ):
             raise SeverCommandError(
@@ -863,24 +873,17 @@ def cmd(
         if session is not None:
             pass
         elif resume is not None:
-            if any(
-                value is not None for value in (source_name, criteria_name, save_as)
-            ):
+            if any(value is not None for value in (source_name, criteria_name)):
                 raise SeverCommandError(
-                    "--resume cannot be combined with Source, Criteria, or output operands."
+                    "--resume cannot be combined with Source or Criteria operands."
                 )
             snapshot = execute_sever_session_open(resume, store=store)
             session = snapshot.session
         else:
-            if (
-                start_new_from_sessions
-                or source_name is None
-                and criteria_name is None
-                and save_as is None
-            ):
+            if start_new_from_sessions or source_name is None and criteria_name is None:
                 if not interactive:
                     typer.echo(
-                        "No Sever setup supplied. Use SOURCE CRITERIA [RESULT], or run in a TTY."
+                        "No Sever setup supplied. Use SOURCE CRITERIA, or run in a TTY."
                     )
                     return
                 setup = _interactive_setup(store)
@@ -890,23 +893,33 @@ def cmd(
                 (
                     source_name,
                     criteria_name,
-                    save_as,
                     source_descendants,
                     criteria_descendants,
                 ) = setup
             if criteria_name is None:
                 raise SeverCommandError("Starting Sever requires CRITERIA.")
-            source_name = context_snapshot.resolve_or_current(source_name)
-            if source_name is None:
+            if source_name is None and context_snapshot.current_name is None:
                 raise SeverCommandError(
                     "Starting Sever requires SOURCE or a current Context."
                 )
-            criteria_name = context_snapshot.resolve(criteria_name)
-            if save_as is None:
-                # SOURCE and CRITERIA were resolved against one command-start
-                # snapshot. Reuse that frozen canonical Source name so omitted
-                # RESULT cannot change meaning with later global-current state.
-                save_as = source_name
+            context_candidates = freeze_profile_context_access_candidates(
+                store,
+                current_name=context_snapshot.current_name,
+            )
+            source_name = resolve_existing_context_access(
+                store,
+                source_name,
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
+                candidates=context_candidates,
+            ).name
+            criteria_name = resolve_existing_context_access(
+                store,
+                criteria_name,
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
+                candidates=context_candidates,
+            ).name
             if source_descendants is None or criteria_descendants is None:
                 raise SeverCommandError("Sever scope resolution produced no range.")
             analysis = _start_analysis(
@@ -914,7 +927,10 @@ def cmd(
                 current_name=context_snapshot.current_name,
                 source_name=source_name,
                 criteria_name=criteria_name,
-                output_name=save_as,
+                # Console Sever is always in place. Reuse the canonical Source
+                # captured from this command-start snapshot as the internal
+                # post-image identity; it is not a user-selectable endpoint.
+                output_name=source_name,
                 source_descendants=source_descendants,
                 criteria_descendants=criteria_descendants,
             )
@@ -922,7 +938,7 @@ def cmd(
             snapshot = stored.snapshot
             session = snapshot.session
             sever_prewarm_origin = (
-                stored.origin if stored.origin == "EXACT_PREWARM" else None
+                stored.origin if stored.origin != "PROVIDER" else None
             )
 
         if session is None or snapshot is None:
@@ -987,7 +1003,10 @@ def cmd(
             session = _run_workbench(store, session)
 
         if sever_prewarm_origin:
-            typer.echo("ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED")
+            typer.echo(
+                "ANALYSIS · "
+                f"{sever_prewarm_origin.replace('_', ' ')} · PROVIDER NOT CALLED"
+            )
         if session.state == "APPLIED":
             typer.echo(render_sever_receipt(session))
         else:

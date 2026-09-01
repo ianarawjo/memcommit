@@ -1,0 +1,11 @@
+$ mem update                                                                                                                                                                        
+PTY 180 52                                                                                                                                                                          
+ NEW UPDATE · A → B · CHOOSE SOURCE AND TARGET                                                                                                                                      
+  A · SOURCE TYPE · [   CONTEXT ]  [   STORED MEMORY ]  [ ✓ INLINE MEMORY ] · ←/→ TO SELECT                                                                                         
+  A · SOURCE · INLINE MEMORY         › 나는 자연인이다                                                         PROCESS LOCAL · INLINE MEMORY                                        
+  B · TARGET · CHANGES APPLY HERE    › practice/coffee/target                  [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]   
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ PROPOSED COMMAND ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› mem update --memory '나는 자연인이다' --to practice/coffee/target                                                                                                               ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+                                                                                                                                                                                    
+ Enter run exact START command · ↑ previous · Esc cancel

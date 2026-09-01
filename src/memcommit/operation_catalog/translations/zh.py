@@ -67,7 +67,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "移除不再需要的特定 Context 或项目时。",
     ),
     "diff": _copy(
-        "显示 Context checkpoint 或当前 Update 所记录的差异。",
+        "显示单个 Context checkpoint 所记录的前一状态与结果之间的差异。",
         "精确验证已记录操作修改了什么时。",
     ),
     "distill": _copy(

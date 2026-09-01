@@ -9,9 +9,12 @@ from typing import AbstractSet
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.adapters.console.terminal.components.context_picker import ContextMemoryRow
-from memcommit.adapters.console.commands.sever import command_codec as sever_command_review
+from memcommit.adapters.console.terminal.components.context_picker import (
+    ContextMemoryRow,
+)
+from memcommit.adapters.console.commands.sever import (
+    command_codec as sever_command_review,
+)
 from memcommit.adapters.console.terminal.components.endpoint_setup import (
     EndpointCommandBinding,
     EndpointSetupDraft,
@@ -29,7 +32,7 @@ from memcommit.source_projection.presentation import (
 
 @dataclass(frozen=True)
 class SeverTuiSetup:
-    """Frozen readable inputs and local output namespace supplied by Sever."""
+    """Frozen readable inputs and local Source namespace supplied by Sever."""
 
     names: tuple[str, ...]
     local_names: tuple[str, ...]
@@ -51,7 +54,7 @@ class SeverTuiSetup:
             or len(set(self.local_names)) != len(self.local_names)
             or not set(self.local_names) <= set(self.names)
         ):
-            raise ValueError("Sever setup requires a valid local output namespace.")
+            raise ValueError("Sever setup requires a valid local Source namespace.")
         if (
             len(self.selectable_names) < 2
             or not self.selectable_names <= set(self.names)
@@ -64,6 +67,8 @@ class SeverTuiSetup:
             or self.source_name == self.criteria_name
         ):
             raise ValueError("Sever setup requires distinct available defaults.")
+        if self.source_name not in self.local_names:
+            raise ValueError("Sever setup requires an ordinary local Source default.")
         labels = dict(self.annotations)
         if len(labels) != len(self.annotations) or set(labels) - set(self.names):
             raise ValueError("Sever setup annotations are outside its catalog.")
@@ -79,11 +84,10 @@ class SeverTuiSetup:
 
 @dataclass(frozen=True)
 class SeverSetupReceipt:
-    """One reviewed Sever scope returned without provider or durable work."""
+    """One reviewed in-place Sever scope returned without durable work."""
 
     source_name: str
     criteria_name: str
-    output_name: str
     source_descendants: bool = True
     criteria_descendants: bool = True
 
@@ -91,79 +95,31 @@ class SeverSetupReceipt:
         if (
             not self.source_name
             or not self.criteria_name
-            or not self.output_name
             or self.source_name == self.criteria_name
         ):
             raise ValueError("Sever endpoint selection is incomplete or ambiguous.")
-        if self.output_name == self.source_name and self.source_descendants:
-            raise ValueError("Sever self-save requires an exact Source Context.")
 
 
 # Endpoint selection and the command receipt are the same frozen setup result.
 SeverEndpointSelection = SeverSetupReceipt
 
 
-def _shared_local_output_name(
-    source_name: str,
-    criteria_name: str,
-    *,
-    local_names: Sequence[str],
-    occupied_names: AbstractSet[str],
-) -> str:
-    """Choose a fresh result under the deepest shared ordinary ancestor."""
-
-    source_parts = source_name.split("/")
-    criteria_parts = criteria_name.split("/")
-    shared_parts: list[str] = []
-    for source_part, criteria_part in zip(source_parts, criteria_parts):
-        if source_part != criteria_part:
-            break
-        shared_parts.append(source_part)
-    local = frozenset(local_names)
-    output_base = next(
-        (
-            "/".join(shared_parts[:depth])
-            for depth in range(len(shared_parts), 0, -1)
-            if "/".join(shared_parts[:depth]) in local
-        ),
-        None,
-    )
-    output_stem = f"{output_base}/severed" if output_base else "severed"
-    default_output = output_stem
-    suffix = 2
-    while default_output in occupied_names:
-        default_output = f"{output_stem}-{suffix}"
-        suffix += 1
-    return default_output
-
-
 def sever_endpoint_setup_spec(setup: SeverTuiSetup) -> EndpointSetupSpec:
-    """Build Sever's Source, Criteria, and save-location role pane."""
+    """Build Sever's Source and Criteria role pane."""
 
     if not isinstance(setup, SeverTuiSetup):
         raise TypeError("Sever endpoint setup requires a SeverTuiSetup.")
     annotations = tuple(setup.annotations)
     height = min(9, max(4, len(setup.names)))
 
-    def suggest_output(values: Mapping[str, str]) -> str:
-        return _shared_local_output_name(
-            values.get("SOURCE", setup.source_name),
-            values.get("CRITERIA", setup.criteria_name),
-            local_names=setup.local_names,
-            occupied_names=frozenset(setup.names),
-        )
-
-    initial_output = suggest_output(
-        {"SOURCE": setup.source_name, "CRITERIA": setup.criteria_name}
-    )
     return EndpointSetupSpec(
-        title="NEW SEVER · SOURCE × CRITERIA → RESULT",
-        subtitle="CHOOSE TWO READABLE INPUTS AND ONE LOCAL SAVE LOCATION",
+        title="NEW SEVER · SOURCE × CRITERIA · IN PLACE",
+        subtitle="CHOOSE SOURCE AND CRITERIA; EACH SOURCE CONTEXT STAYS IN PLACE",
         modes=(
             EndpointSetupMode(
                 "SEVER",
-                "SEVER · SOURCE × CRITERIA → RESULT",
-                "Source and Criteria are read together; Result is reviewed later.",
+                "SEVER · SOURCE × CRITERIA · IN PLACE",
+                "Source and Criteria are read together; Source owners are updated in place.",
             ),
         ),
         initial_mode_uid="SEVER",
@@ -171,9 +127,9 @@ def sever_endpoint_setup_spec(setup: SeverTuiSetup) -> EndpointSetupSpec:
         roles=(
             EndpointSetupRole(
                 "SOURCE",
-                "SOURCE · ALL READABLE CONTEXTS",
+                "SOURCE · LOCAL CONTEXTS · UPDATED IN PLACE",
                 setup.names,
-                setup.selectable_names,
+                frozenset(setup.local_names),
                 setup.source_name,
                 current_context=setup.current_context,
                 annotations=annotations,
@@ -198,25 +154,6 @@ def sever_endpoint_setup_spec(setup: SeverTuiSetup) -> EndpointSetupSpec:
                 allow_memory_focus=True,
                 memory_preview_only=True,
                 memory_height=7,
-            ),
-            EndpointSetupRole(
-                "OUTPUT",
-                "RESULT · SOURCE OR NEW LOCAL CONTEXT",
-                setup.local_names,
-                frozenset(setup.local_names),
-                (
-                    setup.source_name
-                    if setup.source_name in setup.local_names
-                    else setup.local_names[0]
-                ),
-                current_context=setup.current_context,
-                height=min(9, max(3, len(setup.local_names))),
-                allow_new=True,
-                new_label="CREATE NEW RESULT CONTEXT",
-                initial_new_name=initial_output,
-                prefer_new=True,
-                new_name_validator=validate_portable_context_name,
-                new_name_suggester=suggest_output,
             ),
         ),
         action_label="START SEVER",
@@ -251,11 +188,9 @@ def choose_sever_endpoint_setup(
     def command_review(draft: EndpointSetupDraft):
         source = draft.value("SOURCE")
         criteria = draft.value("CRITERIA")
-        output = draft.value("OUTPUT")
         return sever_command_review.build_start_review(
             source_name=source.context_name,
             criteria_name=criteria.context_name,
-            output_name=output.context_name,
             source_descendants=source.include_descendants,
             criteria_descendants=criteria.include_descendants,
         )
@@ -279,11 +214,9 @@ def choose_sever_endpoint_setup(
         raise ValueError("Sever setup returned an unsupported operation shape.")
     source = draft.value("SOURCE")
     criteria = draft.value("CRITERIA")
-    output = draft.value("OUTPUT")
     return SeverEndpointSelection(
         source_name=source.context_name,
         criteria_name=criteria.context_name,
-        output_name=output.context_name,
         source_descendants=source.include_descendants,
         criteria_descendants=criteria.include_descendants,
     )
@@ -293,25 +226,14 @@ def _validate_sever_draft(
     setup: SeverTuiSetup,
     draft: EndpointSetupDraft,
 ) -> str | None:
-    """Keep save-mode and readable-role policy outside shared mechanics."""
+    """Keep in-place authority policy outside shared mechanics."""
 
     source = draft.value("SOURCE")
     criteria = draft.value("CRITERIA")
-    output = draft.value("OUTPUT")
     if source.context_name == criteria.context_name:
         return "Source and Criteria must be distinct Contexts."
-    try:
-        validate_portable_context_name(output.context_name)
-    except (TypeError, ValueError) as error:
-        return str(error)
-    if output.context_name == source.context_name:
-        if source.context_name not in setup.local_names:
-            return "Self-save requires an ordinary local Source Context."
-        if source.include_descendants:
-            return "Self-save requires THIS CONTEXT ONLY for Source."
-        return None
-    if output.context_name in setup.names:
-        return "Other-save requires a new Context name; only Source may already exist."
+    if source.context_name not in setup.local_names:
+        return "In-place Sever requires an ordinary local Source Context."
     return None
 
 

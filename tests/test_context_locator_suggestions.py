@@ -2,17 +2,23 @@
 
 from __future__ import annotations
 
+import uuid
+
 import pytest
 
 from memcommit.application.capabilities.context_locator import suggest_context_locators
 from memcommit.application.operations.diff.context_checkpoint_lookup import (
     resolve_local_context_checkpoint_target,
 )
+from memcommit.core.context import Context
 
 
 class _CheckpointCatalog:
     def list_context_names(self) -> list[str]:
         return ["practice/rules", "practice/examples", "archive"]
+
+    def load_direct(self, name: str) -> Context:
+        return Context(uid=str(uuid.uuid5(uuid.NAMESPACE_URL, name)), name=name)
 
     def list_checkpoints(self, name: str) -> list[dict]:
         return []

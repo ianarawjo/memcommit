@@ -5,8 +5,8 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.context_access import (
-    resolve_context_access,
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
 )
 from memcommit.application.capabilities.memory_issue_analysis.relation_analysis import (
     analyze_memory_redundancies,
@@ -81,13 +81,13 @@ def prepare_find_redundancies(
 ) -> QualityFindSourceFrame:
     """Resolve authority and freeze the exact independent Context frames."""
 
-    access = resolve_context_access(
+    access = resolve_existing_context_access(
         store,
         request.context_name,
         current_name=current_name,
         required_permission="READ",
         registry=registry,
-    )
+    ).value
     return freeze_redundancy_scope(
         store,
         access,

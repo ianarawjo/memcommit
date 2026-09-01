@@ -1,4 +1,4 @@
-"""Physical layout contracts for application operations and capabilities."""
+"""Physical layout contracts for application responsibilities."""
 
 from __future__ import annotations
 
@@ -14,7 +14,6 @@ CAPABILITIES = APPLICATION / "capabilities"
 
 CAPABILITY_ENTRIES = {
     "__init__.py",
-    "authority",
     "checkpoint_catalog.py",
     "command_recovery",
     "context_locator.py",
@@ -29,9 +28,10 @@ CAPABILITY_ENTRIES = {
     "memory_transfer",
     "name_suggestions.py",
     "local_target_lookup.py",
-    "ops.py",
     "operand_resolution",
+    "ops.py",
     "resolution",
+    "retrieval_corpus",
     "review_policy.py",
     "reviewing",
     "save_context_from_selection",
@@ -43,6 +43,7 @@ CAPABILITY_ENTRIES = {
 
 LEGACY_APPLICATION_MODULES = (
     "memcommit.application.authority",
+    "memcommit.application.capabilities.authority",
     "memcommit.application.context_locator",
     "memcommit.application.evaluation",
     "memcommit.application.exact_command_review",
@@ -64,7 +65,7 @@ LEGACY_APPLICATION_MEMBERS = {
 }
 
 
-def test_application_root_has_only_operations_and_capabilities() -> None:
+def test_application_root_has_only_declared_responsibility_packages() -> None:
     visible = {
         path.name for path in APPLICATION.iterdir() if path.name != "__pycache__"
     }

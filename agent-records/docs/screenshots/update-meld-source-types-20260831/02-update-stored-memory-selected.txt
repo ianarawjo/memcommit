@@ -1,0 +1,11 @@
+$ mem update                                                                                                                                                                        
+PTY 180 52                                                                                                                                                                          
+ NEW UPDATE · A → B · CHOOSE SOURCE AND TARGET                                                                                                                                      
+  A · SOURCE TYPE · [   CONTEXT ]  [ ✓ STORED MEMORY ]  [   INLINE MEMORY ] · ←/→ TO SELECT                                                                                         
+› A · SOURCE · MEMORY OWNER          › practice/coffee/source                  [ BROWSE ]                                   [ MEMORY · 2b8298ba ]                                   
+  B · TARGET · CHANGES APPLY HERE    › practice/coffee/target                  [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]   
+┌───────────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND |───────────────────────────────────────────────────────────────────────────────┐
+│› mem update --from practice/coffee/source --to practice/coffee/target --source-memory 2b8298ba-e49d-46d0-8aea-6f3e0e334177                                                       │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                                                                                    
+ A · SOURCE · ALL READABLE CONTEXTS uses Memory 2b8298ba.

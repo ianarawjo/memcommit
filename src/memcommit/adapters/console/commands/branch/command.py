@@ -5,7 +5,10 @@ import typer
 from memcommit.adapters.console.commands.branch.endpoint_setup import (
     choose_branch_creation,
 )
-from memcommit.application.capabilities.context_locator import resolve_context_locator
+from memcommit.application.capabilities.operand_resolution import (
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
+)
 from memcommit.adapters.console.coordination.context_scope_options import (
     ContextScopePreset,
     legacy_root_only_option_alias,
@@ -133,7 +136,11 @@ def cmd(
     else:
         try:
             source_name = (
-                resolve_context_locator(from_, current=expected_current)
+                resolve_existing_context_operand(
+                    freeze_local_context_operand_candidates(store),
+                    from_,
+                    current=expected_current,
+                ).name
                 if from_ is not None
                 else expected_current
             )

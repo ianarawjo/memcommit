@@ -28,9 +28,9 @@ from memcommit.application.operations.profile.config import (
     load_profile_registry,
     profile_store_dir,
 )
+from memcommit.application.context_access.granted_view import resolve_granted_context_view
 from memcommit.application.operations.profile.model import (
     authority_grant_snapshot_lock,
-    resolve_granted_context_view,
 )
 from memcommit.persistence.store import MemoryStore
 

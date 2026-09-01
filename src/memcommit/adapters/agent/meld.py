@@ -6,7 +6,6 @@ from collections.abc import Mapping
 from typing import Literal
 
 from memcommit.adapters.python_api import (
-    MeldApplyResult,
     MeldAuthorityError,
     MeldConflictError,
     MeldContextError,
@@ -14,6 +13,7 @@ from memcommit.adapters.python_api import (
     MeldExecutionError,
     MeldInputError,
     MeldProviderFailure,
+    MeldDecisionInput,
     MeldSessionResult,
     MeldStorageError,
     MemCommitClient,
@@ -34,10 +34,7 @@ MeldAgentKind = Literal[
     "start",
     "restart",
     "open",
-    "comment",
-    "preserve",
-    "defer",
-    "apply",
+    "resolve",
 ]
 
 
@@ -62,13 +59,10 @@ def _base(value: Mapping[str, object]) -> MeldAgentKind:
         "start",
         "restart",
         "open",
-        "comment",
-        "preserve",
-        "defer",
-        "apply",
+        "resolve",
     }:
         raise AgentRequestError(
-            "kind must be one of: start, restart, open, comment, preserve, defer, apply."
+            "kind must be one of: start, restart, open, resolve."
         )
     return kind  # type: ignore[return-value]
 
@@ -116,61 +110,60 @@ def _parse_request(payload: object) -> tuple[MeldAgentKind, dict[str, object]]:
                 field="right_descendants",
             ),
         }
-    if kind == "comment":
+    if kind == "resolve":
         exact_fields(
             value,
-            required={"version", "kind", "target_context", "expected_version"},
-            optional=frozenset(
-                {
-                    "comment",
-                    "issue_uid",
-                    "option_uid",
-                    "revision",
-                    "revises_turn_uids",
-                }
-            ),
-            label="Meld comment request",
+            required={
+                "version",
+                "kind",
+                "target_context",
+                "expected_version",
+                "decisions",
+            },
+            label="Meld resolve request",
         )
-        raw_revises = value.get("revises_turn_uids", [])
-        if not isinstance(raw_revises, list):
-            raise AgentRequestError("revises_turn_uids must be a list.")
-        comment = (
-            text_value(value["comment"], field="comment") if "comment" in value else ""
-        )
-        issue_uid = text_value(
-            value.get("issue_uid"),
-            field="issue_uid",
-            optional=True,
-        )
-        option_uid = text_value(
-            value.get("option_uid"),
-            field="option_uid",
-            optional=True,
-        )
-        expected_version = text_value(
-            value["expected_version"],
-            field="expected_version",
-        )
-        if not comment and option_uid is None:
-            raise AgentRequestError("Meld comment requires comment or option_uid.")
-        if option_uid is not None and issue_uid is None:
-            raise AgentRequestError("option_uid requires issue_uid.")
+        raw_decisions = value["decisions"]
+        if not isinstance(raw_decisions, list):
+            raise AgentRequestError("decisions must be a list.")
+        decisions: list[MeldDecisionInput] = []
+        for index, raw in enumerate(raw_decisions):
+            decision = object_value(raw, label=f"Meld decision {index + 1}")
+            exact_fields(
+                decision,
+                required={"issue_uid", "kind"},
+                optional={"intent"},
+                label=f"Meld decision {index + 1}",
+            )
+            decision_kind = text_value(decision["kind"], field="decision kind")
+            if decision_kind not in {"confirm", "intent", "force"}:
+                raise AgentRequestError(
+                    "Meld decision kind must be confirm, intent, or force."
+                )
+            try:
+                decisions.append(
+                    MeldDecisionInput(
+                        issue_uid=text_value(
+                            decision["issue_uid"], field="decision issue_uid"
+                        ),
+                        kind=decision_kind,  # type: ignore[arg-type]
+                        intent=(
+                            text_value(decision["intent"], field="decision intent")
+                            if "intent" in decision
+                            else ""
+                        ),
+                    )
+                )
+            except (TypeError, ValueError) as error:
+                raise AgentRequestError(str(error)) from error
         return kind, {
             "target_context": text_value(
                 value["target_context"],
                 field="target_context",
             ),
-            "comment": comment,
-            "issue_uid": issue_uid,
-            "option_uid": option_uid,
-            "expected_version": expected_version,
-            "revision": text_value(
-                value.get("revision", "EXTEND"),
-                field="revision",
+            "expected_version": text_value(
+                value["expected_version"], field="expected_version"
             ),
-            "revises_turn_uids": tuple(
-                text_value(item, field="revises_turn_uids item") for item in raw_revises
-            ),
+            "decisions": tuple(decisions),
         }
     if kind == "restart":
         exact_fields(
@@ -222,21 +215,7 @@ def _parse_request(payload: object) -> tuple[MeldAgentKind, dict[str, object]]:
                 field="target_context",
             )
         }
-    exact_fields(
-        value,
-        required={"version", "kind", "target_context", "expected_version"},
-        label=f"Meld {kind} request",
-    )
-    return kind, {
-        "target_context": text_value(
-            value["target_context"],
-            field="target_context",
-        ),
-        "expected_version": text_value(
-            value["expected_version"],
-            field="expected_version",
-        ),
-    }
+    raise AssertionError("Unhandled Meld agent action.")
 
 
 def _session_result(result: MeldSessionResult) -> JsonObject:
@@ -253,6 +232,7 @@ def _session_result(result: MeldSessionResult) -> JsonObject:
         "ready_to_apply": result.ready_to_apply,
         "origin": result.origin,
         "checkpoint_uid": result.checkpoint_uid,
+        "unresolved_count": result.unresolved_count,
         "issues": [
             {
                 "uid": issue.uid,
@@ -305,10 +285,7 @@ class MeldAgentAdapter:
             "start",
             "restart",
             "open",
-            "comment",
-            "preserve",
-            "defer",
-            "apply",
+            "resolve",
         }:
             kind = payload["kind"]  # type: ignore[assignment]
         try:
@@ -356,23 +333,12 @@ class MeldAgentAdapter:
                 message="The Meld tool failed internally.",
                 retryable=False,
             )
-        apply_result = result if isinstance(result, MeldApplyResult) else None
-        session = apply_result.session if apply_result is not None else result
         return {
             "version": MELD_AGENT_CONTRACT_VERSION,
             "ok": True,
             "kind": kind,
             "result": {
-                "session": _session_result(session),
-                **(
-                    {
-                        "recovered": apply_result.recovered,
-                        "checkpoint_uid": apply_result.checkpoint_uid,
-                        "result_count": apply_result.result_count,
-                    }
-                    if apply_result is not None
-                    else {}
-                ),
+                "session": _session_result(result),
             },
         }
 
@@ -381,13 +347,13 @@ def meld_agent_tool_schema() -> JsonObject:
     """Return one strict union schema for versioned Meld actions."""
 
     text = {"type": "string", "minLength": 1, "pattern": r".*\S.*"}
-    kinds = ["start", "restart", "open", "comment", "preserve", "defer", "apply"]
+    kinds = ["start", "restart", "open", "resolve"]
     return {
         "name": MELD_AGENT_TOOL_NAME,
         "description": (
-            "Start or continue a reviewed MemCommit Meld through stable "
-            "application operations. Every saved-session mutation requires "
-            "the expected_version returned by open; Apply never calls the provider."
+            "Start, inspect, or resolve a candidate-based MemCommit Meld. Resolve "
+            "submits one decision per Audit item, runs one whole-candidate Update, "
+            "re-audits it, and applies only a verified post-image."
         ),
         "parameters": {
             "type": "object",
@@ -402,29 +368,43 @@ def meld_agent_tool_schema() -> JsonObject:
                 "expected_version": {
                     **text,
                     "description": (
-                        "Opaque version returned by open; required by restart, "
-                        "comment, preserve, defer, and apply."
+                        "Opaque version returned by open; required by restart "
+                        "and resolve."
                     ),
                 },
                 "mode": {"type": "string", "enum": ["directional", "symmetric"]},
                 "create_target": {"type": "boolean"},
                 "left_descendants": {"type": "boolean"},
                 "right_descendants": {"type": "boolean"},
-                "comment": text,
-                "issue_uid": {"type": ["string", "null"], "minLength": 1},
-                "option_uid": {
-                    "type": ["string", "null"],
-                    "minLength": 1,
-                    "description": (
-                        "Exact option UID returned by open; requires issue_uid."
-                    ),
+                "decisions": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": False,
+                        "required": ["issue_uid", "kind"],
+                        "properties": {
+                            "issue_uid": text,
+                            "kind": {
+                                "type": "string",
+                                "enum": ["confirm", "intent", "force"],
+                            },
+                            "intent": {"type": "string"},
+                        },
+                    },
                 },
-                "revision": {
-                    "type": "string",
-                    "enum": ["CONFIRM", "EXTEND", "CORRECT", "RETRACT"],
-                },
-                "revises_turn_uids": {"type": "array", "items": text},
             },
+            "allOf": [
+                {
+                    "if": {"properties": {"kind": {"const": "resolve"}}},
+                    "then": {
+                        "required": [
+                            "target_context",
+                            "expected_version",
+                            "decisions",
+                        ]
+                    },
+                }
+            ],
         },
     }
 

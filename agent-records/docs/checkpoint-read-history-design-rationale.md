@@ -72,9 +72,9 @@ external Grant.
 This contract does not invent command-line syntax for authoring
 `CheckpointRead` scopes. Existing granted Trace remains blocked because its
 current report expects a complete History graph; neither a Reference nor a
-later Embed necessarily authorizes that complete graph. Diff's two-checkpoint
-form now requests an exact Reference pair and renders its comparison through
-`AuthorizedCheckpointHistory`. Other granted History adapters must likewise
+later Embed necessarily authorizes that complete graph. Diff requests one exact
+checkpoint Reference and renders only that revision against its retained
+pre-image after authorization. Other granted History adapters must likewise
 request and render a bounded window before exposing retained evidence.
 
 The command-attempt ledger and Study action ledger remain independent durable

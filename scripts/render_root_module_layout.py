@@ -107,6 +107,10 @@ RETIRED_ROOT_MODULES = {
         "retired after generic application-to-console report projection was "
         "federated into each operation's console adapter"
     ),
+    "resolve_rules": (
+        "retired when Resolve's fixed exact-case rules were replaced by "
+        "reviewed decisions composed through the ordinary Update operation"
+    ),
     "translation_view": (
         "retired when the mixed translation view was split into a core catalog "
         "and explicit application and persistence owners"
@@ -238,7 +242,6 @@ OPERATION_TARGETS = {
     "rationale_scope": "memcommit.application.operations.rationale.scope",
     "rationale_semantic": "memcommit.application.operations.rationale.semantic",
     "reference_provenance": "memcommit.application.operations.reference.provenance",
-    "resolve_rules": "memcommit.application.operations.resolve.rules",
     "resolve_semantic": "memcommit.application.operations.resolve.semantic",
     "resolve_targeting": "memcommit.application.operations.resolve.targeting",
     "resource_import": "memcommit.application.operations.resource_import",
@@ -323,14 +326,14 @@ CONCEPT_TARGETS = {
     "semantic_provider": "memcommit.providers.semantic",
     "semantic_redundancy_evidence": "memcommit.application.capabilities.semantic.redundancy_evidence",
     "session_workbench_navigation": "memcommit.application.capabilities.reviewing.session_navigation",
-    "storage_permissions": "memcommit.application.capabilities.authority.storage_permissions",
+    "storage_permissions": "memcommit.persistence.store.infrastructure.storage_permissions",
     "study_action_log": "memcommit.persistence.command_ledger.study_actions",
-    "study_operation_policy": "memcommit.application.capabilities.authority.study_operation_policy",
+    "study_operation_policy": "memcommit.application.authorization.study_operation_policy",
     "store": "memcommit.persistence.store",
     "temporal_history": "memcommit.application.capabilities.history.reconstruction.memory_state_delta",
     "uid_locator": "memcommit.core.context_targeting.uid_locator",
     "understanding": "memcommit.application.capabilities.semantic.understanding",
-    "write_protection": "memcommit.application.capabilities.authority.write_protection",
+    "write_protection": "memcommit.persistence.store.infrastructure.write_protection",
 }
 
 

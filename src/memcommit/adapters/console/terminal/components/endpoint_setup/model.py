@@ -20,6 +20,7 @@ class EndpointSetupMode:
     role_labels: tuple[tuple[str, str], ...] = ()
     descendant_role_uids: frozenset[str] | None = None
     memory_focus_role_uids: frozenset[str] | None = None
+    inline_memory_role_uids: frozenset[str] | None = None
 
     def __post_init__(self) -> None:
         if (
@@ -51,6 +52,7 @@ class EndpointSetupMode:
         for role_uids, label in (
             (self.descendant_role_uids, "descendant"),
             (self.memory_focus_role_uids, "Memory-focus"),
+            (self.inline_memory_role_uids, "inline-Memory"),
         ):
             if role_uids is not None and (
                 not isinstance(role_uids, frozenset)
@@ -103,7 +105,10 @@ class EndpointSetupRole:
     allow_descendants: bool = False
     include_descendants: bool = False
     allow_memory_focus: bool = False
+    allow_inline_memory: bool = False
     memory_preview_only: bool = False
+    memory_required: bool = False
+    memory_unselected_label: str = "WHOLE CONTEXT"
     selected_memory_uid: str | None = None
     memory_height: int = 7
     allow_new: bool = False
@@ -154,12 +159,38 @@ class EndpointSetupRole:
             )
         if (
             type(self.allow_memory_focus) is not bool
+            or type(self.allow_inline_memory) is not bool
             or type(self.memory_preview_only) is not bool
+            or type(self.memory_required) is not bool
         ):
             raise TypeError("Endpoint role Memory-focus state must be boolean.")
         if self.memory_preview_only and not self.allow_memory_focus:
             raise ValueError(
                 "Endpoint role read-only Memory preview requires a Memory control."
+            )
+        if self.memory_required and (
+            not self.allow_memory_focus or self.memory_preview_only
+        ):
+            raise ValueError(
+                "Endpoint role required Memory selection needs an editable Memory control."
+            )
+        if self.allow_inline_memory and (
+            not self.allow_memory_focus
+            or self.allow_new
+            or self.fixed
+            or self.memory_preview_only
+        ):
+            raise ValueError(
+                "Inline Memory input requires one editable existing-Context role "
+                "with stored-Memory focus."
+            )
+        if (
+            not isinstance(self.memory_unselected_label, str)
+            or not self.memory_unselected_label.strip()
+            or any(character in self.memory_unselected_label for character in "\r\n")
+        ):
+            raise ValueError(
+                "Endpoint role unselected Memory label must be single-line text."
             )
         if (
             type(self.allow_new) is not bool
@@ -250,6 +281,7 @@ class EndpointSetupSpec:
     roles: tuple[EndpointSetupRole, ...]
     action_label: str = "CONTINUE TO PLAN REVIEW"
     command_verb: str = "START"
+    command_ready_hint: str | None = None
     screen_layout: Literal["WORKBENCH", "COMPACT_FORM"] = "WORKBENCH"
 
     def __post_init__(self) -> None:
@@ -262,10 +294,21 @@ class EndpointSetupSpec:
             or not self.action_label
             or not isinstance(self.command_verb, str)
             or not self.command_verb
+            or (
+                self.command_ready_hint is not None
+                and (
+                    not isinstance(self.command_ready_hint, str)
+                    or not self.command_ready_hint.strip()
+                )
+            )
             or self.screen_layout not in {"WORKBENCH", "COMPACT_FORM"}
             or any(
                 character
-                in self.title + self.subtitle + self.action_label + self.command_verb
+                in self.title
+                + self.subtitle
+                + self.action_label
+                + self.command_verb
+                + (self.command_ready_hint or "")
                 for character in "\r\n"
             )
         ):
@@ -306,6 +349,13 @@ class EndpointSetupSpec:
                     uid for uid in active if role_by_uid[uid].allow_memory_focus
                 )
             )
+            inline_memory = (
+                mode.inline_memory_role_uids
+                if mode.inline_memory_role_uids is not None
+                else frozenset(
+                    uid for uid in active if role_by_uid[uid].allow_inline_memory
+                )
+            )
             if not descendants <= active or any(
                 not role_by_uid[uid].allow_descendants for uid in descendants
             ):
@@ -318,6 +368,29 @@ class EndpointSetupSpec:
                 raise ValueError(
                     "Endpoint setup mode enables unavailable Memory focus."
                 )
+            if (
+                not inline_memory <= active
+                or any(
+                    not role_by_uid[uid].allow_inline_memory for uid in inline_memory
+                )
+                or not inline_memory <= memory_focus
+            ):
+                raise ValueError(
+                    "Endpoint setup mode enables unavailable inline Memory input."
+                )
+            if any(
+                role_by_uid[uid].memory_required and uid not in memory_focus
+                for uid in active
+            ):
+                raise ValueError(
+                    "Endpoint setup mode hides a required Memory selection."
+                )
+        if any(role.allow_inline_memory for role in self.roles) and (
+            self.screen_layout != "COMPACT_FORM"
+        ):
+            raise ValueError(
+                "Inline Memory source selection currently requires compact setup."
+            )
 
     def mode(self, uid: str) -> EndpointSetupMode:
         try:
@@ -352,6 +425,14 @@ class EndpointSetupSpec:
             role.allow_memory_focus for role in self.roles if role.uid == role_uid
         )
 
+    def role_allows_inline_memory(self, mode_uid: str, role_uid: str) -> bool:
+        mode = self.mode(mode_uid)
+        if mode.inline_memory_role_uids is not None:
+            return role_uid in mode.inline_memory_role_uids
+        return role_uid in self.active_role_uids(mode_uid) and next(
+            role.allow_inline_memory for role in self.roles if role.uid == role_uid
+        )
+
 
 @dataclass(frozen=True)
 class EndpointSetupValue:
@@ -362,13 +443,13 @@ class EndpointSetupValue:
     include_descendants: bool = False
     memory_uid: str | None = None
     create: bool = False
+    inline_memory_content: str | None = None
 
     def __post_init__(self) -> None:
         if (
             not isinstance(self.role_uid, str)
             or not self.role_uid
             or not isinstance(self.context_name, str)
-            or not self.context_name
             or type(self.include_descendants) is not bool
             or type(self.create) is not bool
             or (
@@ -379,8 +460,29 @@ class EndpointSetupValue:
                     or any(character in self.memory_uid for character in "\r\n")
                 )
             )
+            or (
+                self.inline_memory_content is not None
+                and (
+                    not isinstance(self.inline_memory_content, str)
+                    or not self.inline_memory_content.strip()
+                    or any(
+                        character in self.inline_memory_content for character in "\r\n"
+                    )
+                )
+            )
         ):
             raise ValueError("Endpoint setup values require one exact typed range.")
+        if self.inline_memory_content is None and not self.context_name:
+            raise ValueError("A Context endpoint requires one exact Context name.")
+        if self.inline_memory_content is not None and (
+            self.context_name
+            or self.include_descendants
+            or self.memory_uid is not None
+            or self.create
+        ):
+            raise ValueError(
+                "Inline Memory input cannot retain Context range or creation state."
+            )
         if self.memory_uid is not None and self.include_descendants:
             raise ValueError(
                 "Endpoint setup values cannot focus one Memory across descendants."
@@ -389,6 +491,14 @@ class EndpointSetupValue:
             raise ValueError(
                 "A new endpoint cannot retain descendant or Memory focus state."
             )
+
+    @property
+    def source_type(self) -> Literal["CONTEXT", "STORED_MEMORY", "INLINE_MEMORY"]:
+        if self.inline_memory_content is not None:
+            return "INLINE_MEMORY"
+        if self.memory_uid is not None:
+            return "STORED_MEMORY"
+        return "CONTEXT"
 
 
 @dataclass(frozen=True)

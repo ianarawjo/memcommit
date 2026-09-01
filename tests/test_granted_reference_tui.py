@@ -1,4 +1,4 @@
-"""Interactive retained References from exact granted Memory Sources."""
+"""Interactive retained References from exact READ-granted Sources."""
 
 from __future__ import annotations
 
@@ -23,8 +23,14 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     profile_store_dir,
 )
-from memcommit.application.operations.profile.model import create_authority_grant, update_authority_grant
-from memcommit.application.operations.reference.application import FrozenReferencePlan, ReferenceRequest
+from memcommit.application.operations.profile.model import (
+    create_authority_grant,
+    update_authority_grant,
+)
+from memcommit.application.operations.reference.application import (
+    FrozenReferencePlan,
+    ReferenceRequest,
+)
 from memcommit.application.operations.reference.runtime import MemoryStoreReferencePort
 from memcommit.source_projection.presentation import source_display_text
 from memcommit.persistence.store import MemoryStore
@@ -101,7 +107,7 @@ def test_granted_memory_reference_tui_separates_source_and_local_roles(
     )
     inspected = port.inspect_memory_source("shared/source")
 
-    assert setup.context_source_names == (workspace.name,)
+    assert setup.selected_source == "shared/source"
     assert setup.target_names == (workspace.name,)
     assert setup.memory_source_names == ("shared/source", workspace.name)
     assert setup.memory_source_selectable_names == frozenset(
@@ -168,9 +174,9 @@ def test_granted_memory_reference_tui_freezes_qualified_source_and_local_target(
     )
 
     with create_pipe_input() as pipe_input:
-        # Memory mode → exact direct Memory under the already-qualified public
-        # Source → ordinary local Target → exact reviewed command.
-        pipe_input.send_text("\x1b[C\t\x1b[B\r\t\t\r")
+        # Local Target → qualified public Source → exact direct Memory →
+        # proposed command.
+        pipe_input.send_text("\x1b[B\r\r\r\x1b[B\r")
         result = choose_reference_setup(
             _granted_port(store),
             app_input=pipe_input,
@@ -191,14 +197,12 @@ def test_granted_memory_reference_tui_freezes_qualified_source_and_local_target(
 
 
 def test_reference_tui_model_rejects_a_granted_target_role() -> None:
-    with pytest.raises(ValueError, match="initial Context is unavailable"):
+    with pytest.raises(ValueError, match="initial Target Context is unavailable"):
         ReferenceTuiSetup(
             names=("workspace",),
             selected_source="workspace",
             selected_target="shared/source",
             memory_source_names=("shared/source", "workspace"),
-            memory_source_selectable_names=frozenset(
-                {"shared/source", "workspace"}
-            ),
+            memory_source_selectable_names=frozenset({"shared/source", "workspace"}),
             selected_memory_source="shared/source",
         )

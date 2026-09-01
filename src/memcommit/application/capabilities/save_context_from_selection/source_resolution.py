@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Protocol
 
-from memcommit.application.capabilities.authority.context_access import ContextAccess
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.capabilities.save_context_from_selection.application import (
     SaveContextFromSelectionError,
 )

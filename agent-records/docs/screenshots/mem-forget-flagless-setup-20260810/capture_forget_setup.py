@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import sys
 import tempfile
 import time
@@ -14,13 +15,15 @@ import time
 ROWS = 52
 COLUMNS = 180
 CAPTURE_DIR = Path(__file__).resolve().parent
-REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
+REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
 INSTRUCTION = (
     "Forget the previous west-entrance desk location and obsolete access code; "
     "keep general accessibility guidance."
 )
-if str(REPOSITORY_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPOSITORY_ROOT))
+INITIAL_INSTRUCTION = "Forget the obsolete access code."
+SOURCE_ROOT = REPOSITORY_ROOT / "src"
+if str(SOURCE_ROOT) not in sys.path:
+    sys.path.insert(0, str(SOURCE_ROOT))
 
 
 def _configure_store(root: Path) -> None:
@@ -70,7 +73,7 @@ def _child(store_root: Path, *, cancel: bool) -> None:
 
     _configure_store(store_root)
     os.environ["MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG"] = "1"
-    rows, columns = os.get_terminal_size()
+    columns, rows = os.get_terminal_size()
     print(f"CAPTURE PTY · {columns}x{rows}", flush=True)
     store, current, source = _create_store()
     original = source.to_dict()
@@ -93,13 +96,13 @@ def _child(store_root: Path, *, cancel: bool) -> None:
                 if index == 0:
                     decision = "EDIT"
                     content = "The route remains step-free."
-                    rationale = (
-                        "Remove the old desk location while retaining accessibility guidance."
-                    )
+                    rationale = "Remove the old desk location while retaining accessibility guidance."
                 elif index == 1:
                     decision = "DELETE"
                     content = ""
-                    rationale = "The instruction explicitly covers the obsolete access code."
+                    rationale = (
+                        "The instruction explicitly covers the obsolete access code."
+                    )
                 else:
                     decision = "KEEP"
                     content = memory["content"]
@@ -137,8 +140,7 @@ def _child(store_root: Path, *, cancel: bool) -> None:
         print("CANCEL VERIFICATION · READ-ONLY")
         print(f"PROVIDER CONNECTIONS · {provider_connections['value']}")
         print(
-            "SOURCE UNCHANGED · "
-            + ("YES" if reloaded.to_dict() == original else "NO")
+            "SOURCE UNCHANGED · " + ("YES" if reloaded.to_dict() == original else "NO")
         )
         print(f"CURRENT CONTEXT · {store.current_context_name()}")
         return
@@ -175,7 +177,8 @@ def _wait_for(child, raw: bytearray, marker: bytes, *, timeout: float) -> None:
     deadline = time.monotonic() + timeout
     while marker not in raw:
         if time.monotonic() >= deadline:
-            raise RuntimeError(f"Timed out waiting for {marker!r}.")
+            tail = bytes(raw[-4000:]).decode("utf-8", errors="replace")
+            raise RuntimeError(f"Timed out waiting for {marker!r}. Tail:\n{tail}")
         _drain(child, raw)
     _settle(child, raw, delay=0.2)
 
@@ -280,56 +283,40 @@ def _capture_apply(environment: dict[str, str]) -> bytearray:
     raw = bytearray()
     with tempfile.TemporaryDirectory(prefix="memcommit-forget-setup-") as directory:
         child = _spawn(environment, directory, cancel=False)
-        _wait_for(child, raw, b"MEM FORGET", timeout=5)
+        _wait_for(child, raw, b"NEW FORGET", timeout=5)
         _render_snapshot("01-setup-entry", bytes(raw))
 
-        child.send(INSTRUCTION.encode("utf-8"))
+        child.send(INITIAL_INSTRUCTION.encode("utf-8"))
         _wait_for(child, raw, b"obsolete access code", timeout=3)
         _render_snapshot("02-instruction-entered", bytes(raw))
 
-        child.send(b"\t\x1b[B\r")
+        child.send(b"\x1b[A\x1b[C\r")
         _settle(child, raw)
-        _render_snapshot("03-source-selected", bytes(raw))
+        _render_snapshot("03-source-browser", bytes(raw))
 
-        child.send(b"\t")
+        child.send(b"\x1b[B\r")
         _settle(child, raw)
-        _render_snapshot("04-todo-ready", bytes(raw))
+        _render_snapshot("04-source-selected-command-synced", bytes(raw))
+
+        child.send(b"\x1b[B\r")
+        _settle(child, raw)
+        _render_snapshot("05-command-focused", bytes(raw))
+
+        exact_arguments = shlex.join((INSTRUCTION, "--from", "beta"))
+        child.send(b"\x15" + exact_arguments.encode("utf-8"))
+        _wait_for(child, raw, b"general accessibility guidance", timeout=3)
+        _render_snapshot("06-command-edit-updates-fields", bytes(raw))
 
         child.send(b"\r")
-        _wait_for(child, raw, b"CONTENT PENDING", timeout=5)
-        _render_snapshot("05-analysis-pending", bytes(raw))
+        _wait_for(child, raw, b"ANALYZING 3 SOURCE MEMORIES", timeout=5)
+        _render_snapshot("07-analysis-pending", bytes(raw))
 
-        child.send(b"c")
-        _settle(child, raw, delay=0.5)
-        _render_snapshot("06-context-browser", bytes(raw))
-
-        child.send(b"i")
-        _wait_for(child, raw, b"FROZEN MEMORIES", timeout=3)
-        _render_snapshot("07-confirmed-inputs", bytes(raw))
-        child.send(b"r")
-
-        _wait_for(child, raw, b"Remove the obsolete location", timeout=15)
-        _render_snapshot("08-review-report", bytes(raw))
-
-        child.send(b"\t\x1b[B\r")
-        _wait_for(child, raw, b"WHY THIS ACTION", timeout=5)
-        _render_snapshot("09-decision-detail", bytes(raw))
-
-        child.send(b"a")
-        _settle(child, raw, delay=0.5)
-        _render_snapshot("10-approval-summary", bytes(raw))
-
-        child.send(b"\x1b[F")
-        _settle(child, raw)
-        _render_snapshot("11-exact-apply-action", bytes(raw))
-
-        child.send(b"\r")
-        _wait_for(child, raw, b"CAPTURE PAUSE", timeout=8)
-        _render_snapshot("12-success-receipt", bytes(raw))
+        _wait_for(child, raw, b"CAPTURE PAUSE", timeout=15)
+        _render_snapshot("08-success-receipt", bytes(raw))
 
         child.send(b"\r")
         _wait_for(child, raw, b"PROVIDER CONNECTIONS", timeout=5)
-        _render_snapshot("13-read-only-verification", bytes(raw))
+        _render_snapshot("09-read-only-verification", bytes(raw))
         child.close()
         if child.exitstatus not in {0, None}:
             raise RuntimeError(f"Apply capture child exited with {child.exitstatus}.")
@@ -340,10 +327,10 @@ def _capture_cancel(environment: dict[str, str]) -> bytearray:
     raw = bytearray()
     with tempfile.TemporaryDirectory(prefix="memcommit-forget-cancel-") as directory:
         child = _spawn(environment, directory, cancel=True)
-        _wait_for(child, raw, b"MEM FORGET", timeout=5)
+        _wait_for(child, raw, b"NEW FORGET", timeout=5)
         child.send(b"\x1b")
         _wait_for(child, raw, b"CANCEL VERIFICATION", timeout=5)
-        _render_snapshot("14-cancelled-before-provider", bytes(raw))
+        _render_snapshot("10-cancelled-before-provider", bytes(raw))
         child.close()
         if child.exitstatus not in {0, None}:
             raise RuntimeError(f"Cancel capture child exited with {child.exitstatus}.")
@@ -351,12 +338,20 @@ def _capture_cancel(environment: dict[str, str]) -> bytearray:
 
 
 def _parent() -> None:
+    for pattern in (
+        "[0-9][0-9]-*.png",
+        "[0-9][0-9]-*.txt",
+        "[0-9][0-9]-*.typescript",
+    ):
+        for path in CAPTURE_DIR.glob(pattern):
+            path.unlink()
     environment = dict(os.environ)
     environment.pop("NO_COLOR", None)
     environment.update(
         {
             "TERM": "xterm-256color",
             "COLORTERM": "truecolor",
+            "PROMPT_TOOLKIT_NO_CPR": "1",
             "MEMCOMMIT_TEST_DISABLE_ATTEMPT_LOG": "1",
         }
     )

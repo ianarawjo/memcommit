@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-import pytest
-
 import memcommit.adapters.console.terminal.components.history.browser as diff_browser
 from memcommit.adapters.console.terminal.components.context_picker import ContextSubtreeSelection
 from memcommit.adapters.console.terminal.components.history.picker import HISTORY_BACK
@@ -105,68 +103,6 @@ def test_shared_location_browser_backspace_reopens_context_selector(monkeypatch)
             },
         )
     ]
-
-
-def test_diff_bypasses_profile_location_selection_and_opens_current_fullscreen(
-    monkeypatch,
-):
-    observed = {}
-
-    def browse(*_args, **kwargs):
-        observed.update(kwargs)
-
-    monkeypatch.setattr(diff_browser, "browse_checkpoint_locations", browse)
-
-    diff_browser.browse_diff(Store(), session=None, context_locator=None)
-
-    assert observed == {
-        "session": None,
-        "context_locator": "task-1",
-        "title": "DIFF",
-    }
-
-
-def test_diff_explicit_context_bypasses_current_without_switching(monkeypatch):
-    observed = {}
-
-    def browse(*_args, **kwargs):
-        observed.update(kwargs)
-
-    monkeypatch.setattr(diff_browser, "browse_checkpoint_locations", browse)
-
-    diff_browser.browse_diff(Store(), session=None, context_locator="archive")
-
-    assert observed["context_locator"] == "archive"
-
-
-def test_diff_resolves_relative_context_from_one_current_snapshot(monkeypatch):
-    observed = {}
-    store = Store()
-    store.current_context_name = lambda: "task-1/current"
-
-    def browse(*_args, **kwargs):
-        observed.update(kwargs)
-
-    monkeypatch.setattr(diff_browser, "browse_checkpoint_locations", browse)
-
-    diff_browser.browse_diff(store, session=None, context_locator="../archive")
-
-    assert observed["context_locator"] == "task-1/archive"
-
-
-def test_diff_without_current_or_explicit_context_fails_before_browser(monkeypatch):
-    store = Store()
-    store.current_context_name = lambda: None
-    monkeypatch.setattr(
-        diff_browser,
-        "browse_checkpoint_locations",
-        lambda *_args, **_kwargs: (_ for _ in ()).throw(
-            AssertionError("profile location browser must not open")
-        ),
-    )
-
-    with pytest.raises(ValueError, match="No current Context"):
-        diff_browser.browse_diff(store, session=None, context_locator=None)
 
 
 def test_exact_history_scope_does_not_scan_unrelated_context_history(monkeypatch):

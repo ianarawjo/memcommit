@@ -9,10 +9,25 @@ from memcommit.adapters.console.terminal.components.progress import CommandProgr
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     context_access_display_facts,
     resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
+)
+from memcommit.application.capabilities.durable_uid_resolution import (
+    DurableUidAmbiguityError,
+    DurableUidCandidate,
+    is_unresolved_uid_selector,
+    try_resolve_durable_uid,
+)
+from memcommit.application.capabilities.operand_resolution import (
+    ContextOperandAmbiguityError,
+    ContextOperandCandidate,
+    ContextOperandNotFoundError,
 )
 from memcommit.application.operations.query.granted_application import (
     GrantedQueryRequest,
@@ -33,7 +48,7 @@ from memcommit.adapters.console.commands.query.workbench import (
 from memcommit.adapters.console.terminal.components.session_help import (
     bind_session_help,
 )
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_readable_context_catalog,
     freeze_profile_readable_context_catalog,
 )
@@ -88,7 +103,9 @@ from memcommit.application.operations.query.granted_source import (
     GrantedQuerySourceError,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.search.model import SearchError
+from memcommit.application.capabilities.retrieval_corpus.errors import (
+    RetrievalCorpusError,
+)
 
 
 def _query_ordinary_context(
@@ -168,17 +185,22 @@ def _open_query_workbench(
     """Open one blank Query over frozen readable and public QUERY catalogs."""
 
     context_snapshot = ContextOperandSnapshot.capture(store)
-    selected_name = (
-        query_target.attachment_name
-        if query_target is not None
-        else context_snapshot.resolve_or_current(context_name)
-    )
-    access = resolve_context_access(
-        store,
-        selected_name,
-        current_name=context_snapshot.current_name,
-        required_permission="READ",
-    )
+    if query_target is not None:
+        selected_name = query_target.attachment_name
+        access = resolve_context_access(
+            store,
+            selected_name,
+            current_name=context_snapshot.current_name,
+            required_permission="READ",
+        )
+    else:
+        resolved = resolve_existing_context_access(
+            store,
+            context_name,
+            current_name=context_snapshot.current_name,
+            required_permission="READ",
+        )
+        access = resolved.value
     catalog = freeze_profile_readable_context_catalog(store, access)
     names = tuple(catalog.list_context_names())
     displayed_current = (
@@ -316,6 +338,8 @@ def _resolve_positional_query_target(
     selector: str,
     *,
     snapshot: ContextOperandSnapshot,
+    explicit_context_option: bool = False,
+    context_candidates: tuple[ContextOperandCandidate[ContextAccess], ...] | None = None,
 ) -> ContextAccess | GrantedQueryTarget | None:
     """Resolve one accessible target before allowing question fallback.
 
@@ -324,13 +348,60 @@ def _resolve_positional_query_target(
     must remain visible errors instead of silently changing operation meaning.
     """
 
-    canonical = snapshot.resolve(selector)
+    if explicit_context_option:
+        frozen_contexts = (
+            context_candidates
+            if context_candidates is not None
+            else freeze_profile_context_access_candidates(
+                store,
+                current_name=snapshot.current_name,
+            )
+        )
+        try:
+            return resolve_existing_context_access(
+                store,
+                selector,
+                current_name=snapshot.current_name,
+                required_permission="READ",
+                candidates=frozen_contexts,
+            ).value
+        except (
+            FileNotFoundError,
+            ProfileError,
+            ContextOperandNotFoundError,
+        ) as read_error:
+            query_target = resolve_granted_query_target(store, selector)
+            if query_target is not None:
+                return query_target
+            if is_unresolved_uid_selector(selector):
+                query_candidates = tuple(
+                    DurableUidCandidate(
+                        uid=target.grant_uid,
+                        kind="query-view",
+                        value=target,
+                    )
+                    for target in freeze_granted_query_targets(store)
+                )
+                try:
+                    identity = try_resolve_durable_uid(query_candidates, selector)
+                except DurableUidAmbiguityError as error:
+                    raise ContextOperandAmbiguityError(str(error)) from error
+                if identity is not None:
+                    coordinates = tuple(dict.fromkeys(identity.values))
+                    if len(coordinates) != 1:
+                        raise ContextOperandAmbiguityError(
+                            f"UID {selector!r} identifies multiple query-only "
+                            "Views; pass one exact public View name."
+                        )
+                    return coordinates[0]
+            raise read_error
+
     ordinary: ContextAccess | None = None
     ordinary_error: FileNotFoundError | ProfileError | None = None
     try:
         ordinary = resolve_context_access(
             store,
-            canonical,
+            selector,
             current_name=snapshot.current_name,
             required_permission="READ",
         )
@@ -352,6 +423,77 @@ def _resolve_positional_query_target(
     ):
         assert ordinary_error is not None
         raise ordinary_error
+    if is_unresolved_uid_selector(selector):
+        context_candidates = freeze_profile_context_access_candidates(
+            store,
+            current_name=snapshot.current_name,
+        )
+        query_targets = freeze_granted_query_targets(store)
+        candidates: tuple[
+            DurableUidCandidate[
+                ContextOperandCandidate[ContextAccess] | GrantedQueryTarget
+            ],
+            ...,
+        ] = tuple(
+            DurableUidCandidate(
+                uid=candidate.uid,
+                kind="context",
+                value=candidate,
+            )
+            for candidate in context_candidates
+        ) + tuple(
+            DurableUidCandidate(
+                uid=target.grant_uid,
+                kind="query-view",
+                value=target,
+            )
+            for target in query_targets
+        )
+        try:
+            identity = try_resolve_durable_uid(candidates, selector)
+        except DurableUidAmbiguityError as error:
+            raise ContextOperandAmbiguityError(str(error)) from error
+        if identity is None:
+            raise ContextOperandNotFoundError(
+                f"UID {selector!r} is unavailable as a readable Context or "
+                "query-only View."
+            )
+        coordinates: list[
+            ContextOperandCandidate[ContextAccess] | GrantedQueryTarget
+        ] = []
+        keys: set[tuple[str, ...]] = set()
+        for value in identity.values:
+            key = (
+                ("query-view", value.grant_uid, value.public_name)
+                if isinstance(value, GrantedQueryTarget)
+                else ("context", value.uid, value.name)
+            )
+            if key not in keys:
+                keys.add(key)
+                coordinates.append(value)
+        if len(coordinates) != 1:
+            rendered = "; ".join(
+                (
+                    f"Query View {value.public_name} [{value.grant_uid}]"
+                    if isinstance(value, GrantedQueryTarget)
+                    else f"Context {value.name} [{value.uid}]"
+                )
+                for value in coordinates
+            )
+            raise ContextOperandAmbiguityError(
+                f"UID {selector!r} identifies multiple Query targets: "
+                f"{rendered}. Use --context/-c or an exact public View name."
+            )
+        selected = coordinates[0]
+        if isinstance(selected, GrantedQueryTarget):
+            return selected
+        return resolve_existing_context_access(
+            store,
+            selected.name,
+            current_name=snapshot.current_name,
+            required_permission="READ",
+            candidates=context_candidates,
+        ).value
     return None
 
 
@@ -514,7 +656,7 @@ def cmd(
         except (
             FileNotFoundError,
             OrdinaryQueryCorpusTooLarge,
-            SearchError,
+            RetrievalCorpusError,
             OSError,
             ProfileConfigError,
             ProfileError,
@@ -560,7 +702,7 @@ def cmd(
         except (
             FileNotFoundError,
             OrdinaryQueryCorpusTooLarge,
-            SearchError,
+            RetrievalCorpusError,
             OSError,
             ProfileConfigError,
             ProfileError,
@@ -578,35 +720,47 @@ def cmd(
         return
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
-        resolved_context_names = tuple(
-            context_snapshot.resolve(operand) for operand in context_operands
+        context_candidates = freeze_profile_context_access_candidates(
+            store,
+            current_name=context_snapshot.current_name,
         )
+        query_context_option: GrantedQueryTarget | None = None
+        if len(context_operands) == 1 and question is None:
+            option_target = _resolve_positional_query_target(
+                store,
+                context_operands[0],
+                snapshot=context_snapshot,
+                explicit_context_option=True,
+                context_candidates=context_candidates,
+            )
+            if isinstance(option_target, GrantedQueryTarget):
+                query_context_option = option_target
+                resolved_context_names = ()
+            else:
+                resolved_context_names = (option_target.display_name,)
+        else:
+            resolved_context_names = tuple(
+                resolve_existing_context_access(
+                    store,
+                    operand,
+                    current_name=context_snapshot.current_name,
+                    required_permission="READ",
+                    candidates=context_candidates,
+                ).name
+                for operand in context_operands
+            )
         if question is not None and not question.strip():
             raise ValueError("Question must be non-empty.")
+        if query_context_option is not None:
+            _query_granted_target(
+                store,
+                target=query_context_option,
+                question=selector,
+                language=language,
+                federate_descendants=traversal.include_descendants,
+            )
+            return
         if resolved_context_names and question is None:
-            if len(resolved_context_names) == 1:
-                try:
-                    resolve_context_access(
-                        store,
-                        resolved_context_names[0],
-                        current_name=context_snapshot.current_name,
-                        required_permission="READ",
-                    )
-                except (FileNotFoundError, ProfileError) as read_error:
-                    granted_target = resolve_granted_query_target(
-                        store,
-                        resolved_context_names[0],
-                    )
-                    if granted_target is None:
-                        raise read_error
-                    _query_granted_target(
-                        store,
-                        target=granted_target,
-                        question=selector,
-                        language=language,
-                        federate_descendants=traversal.include_descendants,
-                    )
-                    return
             if language != "en":
                 raise ValueError("--language applies only to a query-only view.")
             _query_ordinary_context(
@@ -689,7 +843,7 @@ def cmd(
     except (
         FileNotFoundError,
         OrdinaryQueryCorpusTooLarge,
-        SearchError,
+        RetrievalCorpusError,
         OSError,
         ProfileConfigError,
         ProfileError,

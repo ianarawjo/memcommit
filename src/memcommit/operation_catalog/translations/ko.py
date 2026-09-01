@@ -68,7 +68,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "더 이상 필요하지 않은 특정 Context나 항목을 제거할 때.",
     ),
     "diff": _copy(
-        "Context checkpoint 또는 활성 Update가 기록한 차이를 보여줍니다.",
+        "Context checkpoint 하나가 기록한 직전 상태와 결과의 차이를 보여줍니다.",
         "기록된 operation이 정확히 무엇을 변경했는지 확인할 때.",
     ),
     "distill": _copy(
@@ -84,8 +84,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "원문을 고치지 않고 하나의 기존 Memory를 더 명시적으로 풀어쓸 때.",
     ),
     "makemore": _copy(
-        "추상적인 Goal, Rule 또는 조건을 더 구체적인 여러 후보 명제로 확장합니다.",
-        "추상적인 개념이나 조건에서 더 구체적인 여러 후보 Rule 또는 Case를 만들 때.",
+        "Context에서 잠정 Rule을 Distill한 뒤 새 Case를 만들거나, 명시적인 Goal 또는 Rule을 여러 후보 명제로 확장합니다.",
+        "기존 Context를 바탕으로 새 후보 Memory를 만들거나 명시적인 입력에서 후보 Rule 또는 Case를 만들 때.",
     ),
     "embed": _copy(
         "Source 소유권을 유지하면서 하나의 Memory 또는 Context를 가리키는 live link를 로컬 Target 안에 둡니다.",

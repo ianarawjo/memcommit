@@ -54,6 +54,10 @@ from memcommit.application.capabilities.local_target_lookup import (
     DirectMemoryAmbiguityError,
     resolve_local_context_memory_target,
 )
+from memcommit.application.capabilities.operand_resolution import (
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
+)
 from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
 from memcommit.core.context_targeting.model import (
     ContextTarget,
@@ -380,8 +384,14 @@ def _dispatch_impact(
                 else:
                     assert isinstance(auto_target, ContextTarget)
             else:
-                canonical_context_name = context_snapshot.resolve_or_current(
-                    context_name
+                canonical_context_name = (
+                    resolve_existing_context_operand(
+                        freeze_local_context_operand_candidates(store),
+                        context_name,
+                        current=context_snapshot.current_name,
+                    ).name
+                    if context_name is not None
+                    else context_snapshot.current_name
                 )
             if not canonical_context_name:
                 raise AtomizeImpactError(

@@ -17,16 +17,16 @@ from memcommit.application.operations.query.ordinary_application import (
     run_ordinary_query,
 )
 from memcommit.application.operations.query.ordinary_runtime import execute_ordinary_query
-from memcommit.application.operations.search.model import (
-    SearchArtifact,
-    SearchCandidate,
+from memcommit.application.capabilities.retrieval_corpus.candidates import (
+    RetrievalArtifact,
+    RetrievalCandidate,
 )
 from memcommit.persistence.store import MemoryStore
 
 
-def _candidate(content: str = "One authorized answer fact.") -> SearchCandidate:
+def _candidate(content: str = "One authorized answer fact.") -> RetrievalCandidate:
     memory = Memory(uid="memory-1", content=content)
-    return SearchCandidate(
+    return RetrievalCandidate(
         candidate_id="c000001",
         kind="memory",
         context_uid="context-1",
@@ -121,13 +121,13 @@ def test_run_ordinary_query_resolves_uid_with_a_typed_reference_and_no_provider(
 
 
 def test_run_ordinary_query_resolves_a_printed_non_uuid_artifact_prefix():
-    artifact = SearchArtifact(
+    artifact = RetrievalArtifact(
         uid="rationale:11111111-1111-4111-8111-111111111111",
         artifact_kind="rationale",
         title="Why this Memory exists",
         content="Retained rationale evidence.",
     )
-    candidate = SearchCandidate(
+    candidate = RetrievalCandidate(
         candidate_id="c000001",
         kind="artifact",
         context_uid="context-1",

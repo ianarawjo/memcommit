@@ -2,14 +2,16 @@
 
 from __future__ import annotations
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
-    resolve_context_access,
 )
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
     freeze_profile_readable_context_catalog,
     freeze_readable_context_catalog,
+)
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
 )
 from memcommit.application.operations.list.application import (
     ListRequest,
@@ -105,12 +107,12 @@ class MemoryStoreListSource:
         self._store = store
 
     def freeze(self, request: ListRequest) -> ListSelection:
-        access = resolve_context_access(
+        access = resolve_existing_context_access(
             self._store,
             request.context_locator,
             current_name=request.current_context_name,
             required_permission="READ",
-        )
+        ).value
         readable_uids = profile_readable_display_uids(self._store, access)
         catalog = freeze_readable_context_catalog(self._store, access)
         context_names = tuple(catalog.list_context_names())
@@ -157,4 +159,3 @@ __all__ = [
     "profile_readable_display_uids",
     "readable_catalog_display_uids",
 ]
-

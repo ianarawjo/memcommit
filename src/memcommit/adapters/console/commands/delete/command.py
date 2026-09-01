@@ -19,6 +19,7 @@ from memcommit.application.capabilities.local_target_lookup import (
 )
 from memcommit.core.context_targeting.model import DirectItemTarget
 from memcommit.application.operations.delete.application import (
+    ContextDeleteRequest,
     DeleteError,
     DeleteStalePlanError,
     DirectItemDeleteRequest,
@@ -111,17 +112,18 @@ def _next_context_target(
 
 
 def _context_plan(
-    store: MemoryStore,
-    snapshot: ContextOperandSnapshot,
     port: MemoryStoreDeletePort,
     selector: str,
 ) -> FrozenContextDeletePlan | None:
     """Resolve one local Context against the command-start current snapshot."""
 
-    name = snapshot.resolve(selector)
-    if not store.context_exists(name):
+    # The port owns the frozen local candidate frame and captured current
+    # Context. Going through it keeps name/relative/UID interpretation aligned
+    # with the direct-item candidate that this command compares below.
+    try:
+        return port.freeze_context(ContextDeleteRequest(selector))
+    except FileNotFoundError:
         return None
-    return port.freeze_exact_context(name)
 
 
 def _exact_context_plan(
@@ -209,8 +211,6 @@ def _delete_item(
 
 
 def _prepare_explicit_target(
-    store: MemoryStore,
-    snapshot: ContextOperandSnapshot,
     port: MemoryStoreDeletePort,
     selector: str,
     context_name: str | None,
@@ -224,7 +224,7 @@ def _prepare_explicit_target(
 
     if context_name is None:
         try:
-            context_plan = _context_plan(store, snapshot, port, selector)
+            context_plan = _context_plan(port, selector)
         except (FileNotFoundError, OSError, ValueError) as error:
             context_error = error
 
@@ -525,8 +525,6 @@ def cmd(
     try:
         prepared_targets = tuple(
             _prepare_explicit_target(
-                store,
-                snapshot,
                 port,
                 selector,
                 context_name,

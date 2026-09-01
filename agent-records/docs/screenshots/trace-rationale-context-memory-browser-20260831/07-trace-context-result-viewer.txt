@@ -1,0 +1,22 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTEXT LINEAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃TRACE · notes                                                                                                                                                                    ^┃
+┃[CONTEXT] · 4 OPERATIONS · 3 MEMORY CHANGES · LATEST FIRST                                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT 0c898c38]  2026-08-31 11:25 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "A supporting Memory keeps the whole Context report visibly distinct."                                                                                                   ┃
+┃  + [ADD] [MEMORY ee692302] A supporting Memory keeps the whole Context report visibly distinct.                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃edit [CHECKPOINT d8420bdc]  2026-08-31 11:25 · 1 MEMORY CHANGE                                                                                                                    ┃
+┃  Edited memory [fa1aa2cc]                                                                                                                                                        ┃
+┃  - [EDIT] [MEMORY fa1aa2cc] Initial policy wording retained for provenance.                                                                                                      ┃
+┃  + [EDIT] [MEMORY fa1aa2cc] Final policy wording selected for exact Memory history.                                                                                              ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT 32eda116]  2026-08-31 11:25 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "Initial policy wording retained for provenance."                                                                                                                        ┃
+┃  + [ADD] [MEMORY fa1aa2cc] Initial policy wording retained for provenance.                                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃init [CHECKPOINT f7188416]  2026-08-31 11:25 · 0 MEMORY CHANGES                                                                                                                   ┃
+┃  Initialized context 'notes'                                                                                                                                                     ┃
+┃  (no direct Memory change)                                                                                                                                                      v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ TRACE REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

@@ -156,27 +156,28 @@ terminal flow.
 ## Public Resolve naming and implementation
 
 The internal noun **Resolution** names the general lifecycle. Public
-`mem resolve` is the narrower Fit-repair operation:
+`mem resolve` is the narrower conflict-decision operation:
 
 ```text
-fit_K(P) in {MAY, NO}
-  -> grounded candidates
-  -> independent complete-frame Fit verification
-  -> operation-owned minimum-change comparison
-  -> zero candidates: NEEDS_INPUT
-  -> one minimum: automatic proposal
-  -> several incomparable minima: explicit choice
+complete direct Context
+  -> conservative conflict understandings
+  -> one CONFIRM, INTENT, or FORCE decision per Issue
+  -> process-local Source Context
+  -> ordinary Update generates one complete-Target UpdatePlan
+  -> detached complete post-image conflict check
+  -> Resolve-owned atomic publication
 ```
 
-An automatic proposal is not automatic Apply.  Fit establishes compatibility,
-not truth, support, authority, or permission to mutate.
+The conservative understanding is not proof and never becomes authoritative
+without explicit confirmation. A conflict-free post-image is an Apply gate,
+not proof of truth.
 
 The former working name `reconcile` bundled ambiguity clarification and
 conflict repair too broadly.  Quality surfaces instead route by finding type:
 
 ```text
 exact or semantic DUN redundancy -> dedun
-ambiguity -> clarify, and Resolve only if joint Fit remains MAY/NO
+ambiguity -> clarify
 conflict  -> Resolve
 ```
 
@@ -185,17 +186,14 @@ separately authorized, frozen operation request; they do not mutate from the
 discovery stage. Conflict-to-Resolve and confirmed-redundancy-to-Dedun are implemented;
 clarification remains separate future work.
 
-Resolve V1 projects its verified candidate UIDs as the legal choices of one
-required `resolve-plan` item. Candidate generation, independent grounding and
-information-preservation verification, complete post-image Fit, and Pareto
-minimum-change comparison remain operation-owned. The shared validator checks
-only the exact selected UID before the Resolve runtime repeats authority,
-freshness, pre-image, reference, and checkpoint checks. The full contract is
-recorded in
+Resolve projects three operation-authored choices for every Issue. The shared
+terminal mechanics retain exact Issue and option UIDs, while Resolve owns
+decision completeness and revision binding. Update alone generates exact
+mutations from the finalized decision Source. Resolve then repeats authority,
+freshness, pre-image, reference, complete-post-image conflict, and checkpoint
+checks. The full contract is recorded in
 [`resolve-fit-repair-design-rationale.md`](resolve-fit-repair-design-rationale.md).
-The TUI now carries that same Resolve case rather than constructing an
-unbound candidate menu; this does not make candidate generation deterministic,
-only the already-verified candidate selection and exact Apply handoff.
+The TUI does not construct or select a mutation candidate.
 
 ## Complete-DUN vertical slice with exact Apply
 
@@ -254,10 +252,11 @@ the same CLI/TUI gate but deliberately has no public or agent adapter yet.
   but Resolve and Dedun deliberately retain different solvers and mutation
   semantics.
 
-## 2026-08-20 lifecycle clarification
+## 2026-08-31 lifecycle clarification
 
 Resolution provides exact judgments inside an execution operation; it is not
 the post-application Review phase. Merge and Dedun may omit Viewer while
-retaining all decision context beside their choices. Resolve automatically
-applies its unique independently verified candidate. Terminal evidence is
-opened later through the operation receipt's `mem review` route.
+retaining all decision context beside their choices. Resolve requires explicit
+Issue decisions, delegates its mutation plan to Update, and applies only after
+the detached complete post-image contains no unforced conflict. Terminal
+evidence is opened later through the operation receipt's `mem review` route.

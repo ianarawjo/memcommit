@@ -1,0 +1,27 @@
+$ mem meld
+PTY 180 52
+[6n[?2004h[?1l[?25l[0m[?7l[0m[J[0m NEW MELD · CHOOSE MODE AND ENDPOINTS[0m
+[0m› MODE · [0;38;2;139;213;255;1m[[0;38;2;16;36;47;48;2;139;213;255;1m ✓ SYMMETRIC · CREATE SEPARATE RESULT [0;38;2;139;213;255;1m][0m  [   DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT[0m
+[0m  FROM                       › practice/coffee/source                  [ BROWSE ]                                   [   INCLUDE DESCENDANTS ][0m
+[0m  WITH                       › practice/coffee/target                  [ BROWSE ] [0;38;2;139;213;202;1mCURRENT[0m                           [   INCLUDE DESCENDANTS ][0m
+[0m  TO                         ›                                         [ BROWSE ] [0;38;2;245;169;127;1mCHOOSE EMPTY OR ENTER NEW NAME[0m
+[0m┌──────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND · INVALID |──────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│› mem meld                                                                                                                                                                        [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m [0m
+[0m ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel[64D[8A[?7h[0m[?25l[?7l[9C[0m[   SYMMETRIC · CREATE SEPARATE RESULT ][2C[0;38;2;139;213;255;1m[[0;38;2;16;36;47;48;2;139;213;255;1m ✓ DIRECTIONAL · UPDATE EXISTING [0;38;2;139;213;255;1m][0m
+[2C[0mA · SOURCE TYPE · [[0;38;2;16;36;47;48;2;139;213;255m ✓ CONTEXT [0m]  [   STORED MEMORY ]  [   INLINE MEMORY ] · ←/→ TO SELECT[0m[K[0m
+[2C[0mA · SOURCE · CONTEXT[25Csource[29C       [0m
+[31C[0mpractice/coffee/target [28C[0;38;2;139;213;202;1mCURRENT[0m                       [4C[   INCLUDE DESCENDANTS ][2C[ MEMORY · WHOLE CONTEXT ][0m
+[0;38;2;139;213;255;1m┌───────────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND |───────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0;38;2;139;213;255;1m│[0m› mem meld practice/coffee/source practice/coffee/target                                                                                                                          [179C[0;38;2;139;213;255;1m│[0m
+[0;38;2;139;213;255;1m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m [7A[?7h[0m[?25l[?7l[?7h[0m[?25l[?7l[0m [50C[[0;38;2;16;36;47;48;2;139;213;255m ✓ DIRECTIONAL · UPDATE EXISTING [0m][0m
+[21C[0m   CONTEXT [4C[0;38;2;16;36;47;48;2;139;213;255m ✓ STORED MEMORY [0m
+[0;1m› A · SOURCE · MEMORY OWNER[89C[0;38;2;16;36;47;48;2;139;213;255;1m[ MEMORY · c206b6cb ][0m[K[0m
+
+
+[58C[0m--incoming-memory c206b6cb-cf31-4c4d-b4da-9911d6ebecff [0m
+
+
+[C[0mFROM us[Cs Memory c206b6cb.[0m[K[6A[89C[?7h[0m[?25l[?7l[?7h[0m

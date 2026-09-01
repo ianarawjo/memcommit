@@ -1,0 +1,10 @@
+$ mem sever                                                                                                                                                                         
+PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
+ NEW SEVER · SOURCE × CRITERIA · IN PLACE · CHOOSE SOURCE AND CRITERIA; EACH SOURCE CONTEXT STAYS IN PLACE                                                                          
+› SOURCE · LOCAL CONTEXTS · UPDATED IN PLACE › capture/reference                       [ BROWSE ] CURRENT                     [ ✓ INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
+  CRITERIA · ALL READABLE CONTEXTS           › capture/criteria                        [ BROWSE ]                             [ ✓ INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
+┌───────────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND |───────────────────────────────────────────────────────────────────────────────┐
+│› mem sever capture/reference capture/criteria --source-descendants --criteria-descendants                                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                                                                                    
+ ↑/↓ endpoint row · ←/→ row control · Space or Enter toggle descendants · Tab next control · Esc cancel

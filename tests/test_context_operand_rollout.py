@@ -113,13 +113,8 @@ def test_read_and_analysis_commands_share_relative_context_operand_boundary(
 
     invocations = (
         ["show", memory.uid, "--context", "../to"],
-        ["trace", memory.uid, "--context", "../to"],
-        [
-            "rationale",
-            memory.uid,
-            "--context",
-            "../to",
-        ],
+        ["trace", f"../to:{memory.uid}"],
+        ["rationale", f"../to:{memory.uid}"],
         ["find", "evidence", "--context", "../to"],
         ["find-ambiguities", "--context", "../to"],
         ["dedun", "--context", "../to"],
@@ -172,6 +167,54 @@ def test_query_resolves_only_ordinary_parent_context_operand(
     assert result.output == "Grounded answer.\n"
     assert calls == [("opaque-source", "Concealed evidence.", "What is known?")]
     assert current_reads == ["scope/from"]
+
+
+def test_context_uid_round_trips_across_existing_context_carriers(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = ops.init("uid/source")
+    source_memory = ops.add(source, "source selected through its Context UID")
+    moved_memory = ops.add(source, "moved through source and target Context UIDs")
+    target = ops.init("uid/target")
+    store.save(source)
+    store.save(target)
+    store.set_current(target.name)
+
+    invocations = (
+        ["list", source.uid[:8]],
+        ["show", "--context", source.uid[:8]],
+        ["add", "added through target UID", "--context", target.uid[:8]],
+        ["lock", "context", source.uid[:8]],
+        ["unlock", "--context", source.uid[:8]],
+        [
+            "copy",
+            source_memory.uid,
+            "--from",
+            source.uid[:8],
+            "--into",
+            target.uid[:8],
+        ],
+        [
+            "move",
+            moved_memory.uid,
+            "--from",
+            source.uid[:8],
+            "--into",
+            target.uid[:8],
+        ],
+        ["merge", source.uid[:8], target.uid[:8]],
+    )
+
+    results = [runner.invoke(app, argv) for argv in invocations]
+
+    assert all(result.exit_code == 0 for result in results), [
+        result.output + result.stderr for result in results
+    ]
+    assert source.name in results[0].output
+    assert source.name in results[1].output
+    assert moved_memory.uid not in store.load_direct(source.name).memories
+    assert moved_memory.uid in store.load_direct(target.name).memories
 
 
 def test_review_and_unary_impact_canonicalize_before_stateful_helpers(

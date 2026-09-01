@@ -79,12 +79,15 @@ For each Audit item the vertical decision sequence is exactly:
 1 ACCEPT THIS DIRECTION <-> 2 ADJUST WITH YOUR INTENT <-> 3 LEAVE UNRESOLVED
 ```
 
-The visible `YOUR INTENT` field is not a fourth row. Enter on choice 2 opens
-its editor. Enter or Escape freezes the draft back onto choice 2; Up and Down
-freeze it and move directly to choice 1 or choice 3. Selecting choice 1 later
-retains the process-local draft but excludes it from finalized Update input.
-A blank choice-2 draft never counts as ready. Previous/next item controls stay
-immediately above `FINALIZE DECISIONS` and are ordinary selectable actions.
+The visible `YOUR INTENT` field is not a fourth row. Moving onto choice 2
+immediately activates its neutral editor and blinking beam caret; Left/Right
+then moves within the text. Enter or Escape freezes the draft back onto choice
+2, while Up and Down freeze it and move directly to choice 1 or choice 3.
+Traversing an unchanged retained draft does not replace the selected decision.
+Selecting choice 1 later retains the process-local draft but excludes it from
+finalized Update input. A blank choice-2 draft never counts as ready.
+Previous/next item controls stay immediately above `FINALIZE DECISIONS` and
+are ordinary selectable actions.
 
 The choice-bound behavior is an explicit Resolve option on the shared compact
 mechanics. Existing Meld and other callers retain their independent optional
@@ -114,8 +117,9 @@ note field until their own application contracts adopt Resolve semantics.
   post-image materialization.
 - Verification tests cover an exact remaining forced key and a blocking new
   Audit key.
-- TUI tests cover ACCEPT, inline INTENT, LEAVE UNRESOLVED, a non-focusable
-  input row, blank-intent readiness, previous/next actions, and finalization.
+- TUI tests cover ACCEPT, immediate inline INTENT editing, caret-local
+  Left/Right, LEAVE UNRESOLVED, a non-independent input row, blank-intent
+  readiness, previous/next actions, and finalization.
 - Color-capable 180x52 PTY captures record entry, every decision/input
   transition, Update, post-image Audit, receipts, and read-only verification.
   The focused Fit branch is recorded under

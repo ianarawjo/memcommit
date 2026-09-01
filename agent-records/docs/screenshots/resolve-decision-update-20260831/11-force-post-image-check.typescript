@@ -51,7 +51,7 @@ PTY · 180×52 · PROFILE isolated · CURRENT capture/resolve
 
 
 
-[0m [47A[0m[?25l[A[0m  1 · ACCEPT THIS DIRECTION · Named greetings remain exceptions to the general rule.[0m
+[0m [47A[0m[5 q[?25l[A[0m  1 · ACCEPT THIS DIRECTION · Named greetings remain exceptions to the general rule.[0m
 
 
 [0;38;2;16;36;47;48;2;139;213;255;1m✓ 3 · LEAVE UNRESOLVED · Exclude this item from Update input and retain it as unresolved.[0m
@@ -59,6 +59,6 @@ PTY · 180×52 · PROFILE isolated · CURRENT capture/resolve
 
 [23C[0m1[2C READY[0m
 
-[C[0mSelected · 3 · LEAVE[CUNRESOLVED[0m[K[10A[32D[0m[A[J[0m[?7h[?1049l[?2004lMEM RESOLVE · 1/2 · BUILDING WHOLE-CONTEXT UPDATE PLAN . · 0sMEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE . · 0s      MEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE . · 0sMEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE . · 0s
+[C[0mSelected · 3 · LEAVE[CUNRESOLVED[0m[K[10A[32D[0m[A[J[0m[?7h[?1049l[?2004l[0 qMEM RESOLVE · 1/2 · BUILDING WHOLE-CONTEXT UPDATE PLAN . · 0sMEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE . · 0s      MEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE . · 0sMEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE . · 0s
 POST-IMAGE AUDIT GATE · PRESS C
 MEM RESOLVE · 2/2 · CHECKING COMPLETE POST-IMAGE .. · 0s

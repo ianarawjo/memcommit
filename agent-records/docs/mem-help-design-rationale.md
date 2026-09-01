@@ -569,7 +569,8 @@ separate Enter after review.
 A deliberately bounded command needs no status annotation when its
 advertised contract is available. For example, `merge` intentionally performs
 structural UID union without semantic reconciliation, and `diff` intentionally
-renders the active update rather than comparing arbitrary Contexts. The
+renders one checkpoint revision rather than comparing arbitrary Contexts or
+reopening the active Update. The
 inventory describes the contract people can actually invoke, not a broader
 operation suggested by the command's name or a production-readiness claim.
 Individual commands may still have documented permission, provider,

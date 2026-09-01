@@ -6,7 +6,7 @@ from collections.abc import Iterable
 from dataclasses import dataclass
 from enum import Enum
 
-from memcommit.application.capabilities.authority.context_access import ContextAccess
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.operations.profile.model import ProfileError
 
 

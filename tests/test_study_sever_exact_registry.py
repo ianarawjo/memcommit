@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 import memcommit.configuration.config as config_module
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.adapters.console.commands.sever.command import _capture_binding, _start
 from memcommit.adapters.console.entrypoint import app
 from memcommit.configuration.config import Config
@@ -235,14 +235,12 @@ def test_exact_sever_cli_discloses_prewarm_origin(
             SOURCE_NAME,
             "--criteria",
             CRITERIA_NAME,
-            "--save-as",
-            OUTPUT_NAME,
             "--recursive",
         ],
     )
 
     assert result.exit_code == 0
-    assert "ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED" in result.stdout
+    assert "ANALYSIS · PROJECTED PREWARM · PROVIDER NOT CALLED" in result.stdout
     assert len(SeverSessionStore(store).list()) == 1
 
 

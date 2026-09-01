@@ -18,7 +18,7 @@ from memcommit.adapters.console.commands.compare.command import render_compariso
 from memcommit.adapters.console.commands.compare.execution import (
     ensure_comparison_analysis,
 )
-from memcommit.application.capabilities.authority.context_access import ContextAccess
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonAnalysis,
     ComparisonInput,

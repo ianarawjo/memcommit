@@ -25,12 +25,12 @@ from memcommit.application.capabilities.local_target_lookup import (
     DirectMemoryNotFoundError,
     resolve_local_direct_memory_locator,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.application.operations.profile.config import ProfileRegistry

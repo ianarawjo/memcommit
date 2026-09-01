@@ -18,18 +18,17 @@ from memcommit.application.operations.check_conformance.model import (
 from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.context_locator import (
     is_relative_context_locator,
-    resolve_context_locator,
+)
+from memcommit.application.capabilities.durable_uid_resolution import (
+    is_unresolved_uid_selector,
 )
 from memcommit.application.capabilities.local_target_lookup import (
-    resolve_local_direct_memory_locator,
-    try_resolve_short_local_direct_memory_locator,
+    DirectMemoryNotFoundError,
+    resolve_local_context_memory_target,
 )
 from memcommit.core.context_targeting.model import (
-    DirectMemoryLocator,
-    ExistingContextOperand,
-)
-from memcommit.core.context_targeting.resolution import (
-    parse_auto_typed_context_memory_operand,
+    ContextTarget,
+    DirectMemoryTarget,
 )
 from memcommit.application.operations.ground.workspace_model import GroundWorkspace
 from memcommit.application.operations.ground.workspace_projection import (
@@ -162,18 +161,27 @@ def freeze_conformance_rules_operand(
             rules=(rule,),
         )
 
-    parsed = parse_auto_typed_context_memory_operand(text)
-    if isinstance(parsed, DirectMemoryLocator):
-        memory_operand = (
-            f"{parsed.context_locator}:{parsed.memory_selector.casefold()}"
-            if parsed.context_locator is not None
-            else parsed.memory_selector.casefold()
-        )
-        target = resolve_local_direct_memory_locator(
+    try:
+        target = resolve_local_context_memory_target(
             store,
-            memory_operand,
+            text,
             current=current_name,
         )
+    except (FileNotFoundError, DirectMemoryNotFoundError) as error:
+        if is_relative_context_locator(text):
+            raise ConformanceError(
+                f"Conformance Rules Context locator {text!r} does not exist locally."
+            ) from error
+        if is_unresolved_uid_selector(text):
+            raise ConformanceError(str(error)) from error
+        rule = _literal_rule(text)
+        return FrozenConformanceRulesOperand(
+            kind="TEXT",
+            label=f"TEXT {rule.content}",
+            rules=(rule,),
+        )
+
+    if isinstance(target, DirectMemoryTarget):
         context = store.load_direct(target.context_name)
         memory = context.memories.get(target.memory_uid)
         if not isinstance(memory, Memory):
@@ -190,55 +198,18 @@ def freeze_conformance_rules_operand(
             memory_uid=memory.uid,
             memory_digest=_memory_digest(memory),
         )
-
-    assert isinstance(parsed, ExistingContextOperand)
-    canonical_name = resolve_context_locator(parsed.locator, current=current_name)
-    if store.context_exists(canonical_name):
-        context = store.load_direct(canonical_name)
-        memories = _direct_memories(context)
-        if not memories:
-            raise ConformanceError("The Rules Context contains no direct Memories.")
-        return FrozenConformanceRulesOperand(
-            kind="CONTEXT",
-            label=context.name,
-            rules=_rules_from_memories(memories),
-            context_name=context.name,
-            context_uid=context.uid,
-            context_digest=context_record_digest(context),
-        )
-    short_target = try_resolve_short_local_direct_memory_locator(
-        store,
-        parsed.locator,
-        current=current_name,
-    )
-    if short_target is not None:
-        context = store.load_direct(short_target.context_name)
-        memory = context.memories.get(short_target.memory_uid)
-        if not isinstance(memory, Memory):  # pragma: no cover - resolver invariant
-            raise ConformanceError(
-                "The selected Conformance Rule is not a direct ordinary Memory."
-            )
-        rule = ConformanceRule(memory.uid, "r1", memory.content)
-        return FrozenConformanceRulesOperand(
-            kind="MEMORY",
-            label=f"MEMORY {context.name}:{memory.uid[:8]}",
-            rules=(rule,),
-            context_name=context.name,
-            context_uid=context.uid,
-            memory_uid=memory.uid,
-            memory_digest=_memory_digest(memory),
-        )
-    if is_relative_context_locator(parsed.locator):
-        raise ConformanceError(
-            f"Conformance Rules Context locator {parsed.locator!r} does not "
-            "exist locally."
-        )
-
-    rule = _literal_rule(parsed.locator)
+    assert isinstance(target, ContextTarget)
+    context = store.load_direct(target.context_name)
+    memories = _direct_memories(context)
+    if not memories:
+        raise ConformanceError("The Rules Context contains no direct Memories.")
     return FrozenConformanceRulesOperand(
-        kind="TEXT",
-        label=f"TEXT {rule.content}",
-        rules=(rule,),
+        kind="CONTEXT",
+        label=context.name,
+        rules=_rules_from_memories(memories),
+        context_name=context.name,
+        context_uid=context.uid,
+        context_digest=context_record_digest(context),
     )
 
 

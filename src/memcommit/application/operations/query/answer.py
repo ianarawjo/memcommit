@@ -8,11 +8,11 @@ import unicodedata
 from dataclasses import dataclass
 from typing import Literal, Protocol, Sequence, cast
 
-from memcommit.application.operations.search.answer_references import (
-    SEARCH_ANSWER_SENTENCE_LIMIT,
-    SearchAnswerEvidence,
-    SearchAnswerReferenceDocument,
-    NumberedSearchAnswerReference,
+from memcommit.application.operations.query.reference_document import (
+    ORDINARY_QUERY_BLOCK_TEXT_LIMIT,
+    NumberedOrdinaryQueryReference,
+    OrdinaryQueryEvidence,
+    OrdinaryQueryReferenceDocument,
 )
 from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
@@ -359,7 +359,7 @@ class OrdinaryQueryOneShotPlan:
 
     prompt: str
     output_schema: dict[str, object]
-    evidence: tuple[SearchAnswerEvidence, ...]
+    evidence: tuple[OrdinaryQueryEvidence, ...]
 
 
 def _strict_json_object(
@@ -374,7 +374,7 @@ def _strict_json_object(
 
 
 def _evidence_payload(
-    evidence: Sequence[SearchAnswerEvidence],
+    evidence: Sequence[OrdinaryQueryEvidence],
 ) -> list[dict[str, str]]:
     # Durable UIDs stay host-local. Temporary aliases are sufficient for the
     # model to attach evidence and for the host to create real citation numbers.
@@ -390,7 +390,7 @@ def _evidence_payload(
 
 
 def ordinary_query_output_schema(
-    evidence: Sequence[SearchAnswerEvidence],
+    evidence: Sequence[OrdinaryQueryEvidence],
 ) -> dict[str, object]:
     """Return the strict typed-block schema for one frozen corpus."""
 
@@ -415,7 +415,7 @@ def ordinary_query_output_schema(
                         "text": {
                             "type": "string",
                             "minLength": 1,
-                            "maxLength": SEARCH_ANSWER_SENTENCE_LIMIT,
+                            "maxLength": ORDINARY_QUERY_BLOCK_TEXT_LIMIT,
                         },
                         "source_aliases": {
                             "type": "array",
@@ -437,7 +437,7 @@ def ordinary_query_output_schema(
 
 def _build_prompt(
     question: str,
-    evidence: Sequence[SearchAnswerEvidence],
+    evidence: Sequence[OrdinaryQueryEvidence],
 ) -> tuple[str, dict[str, object]]:
     schema = ordinary_query_output_schema(evidence)
     prompt_policy = resolve_semantic_prompt_policy()
@@ -544,7 +544,7 @@ def _build_prompt(
 
 def prepare_ordinary_query_answer(
     question: str,
-    evidence: Sequence[SearchAnswerEvidence],
+    evidence: Sequence[OrdinaryQueryEvidence],
 ) -> OrdinaryQueryOneShotPlan:
     """Freeze and preflight one whole-corpus turn before provider connection."""
 
@@ -564,7 +564,7 @@ def prepare_ordinary_query_answer(
         raise OrdinaryQueryAnswerError(
             "Ordinary Query evidence must be a sequence."
         ) from error
-    if not frozen or any(not isinstance(item, SearchAnswerEvidence) for item in frozen):
+    if not frozen or any(not isinstance(item, OrdinaryQueryEvidence) for item in frozen):
         raise OrdinaryQueryAnswerError(
             "Ordinary Query requires at least one typed evidence item."
         )
@@ -595,7 +595,7 @@ def prepare_ordinary_query_answer(
 
 
 def _bounded_output_text(value: object, *, label: str, allow_empty: bool) -> str:
-    if not isinstance(value, str) or len(value) > SEARCH_ANSWER_SENTENCE_LIMIT:
+    if not isinstance(value, str) or len(value) > ORDINARY_QUERY_BLOCK_TEXT_LIMIT:
         raise OrdinaryQueryAnswerError(f"Ordinary Query returned invalid {label}.")
     text = value.strip()
     if (not allow_empty and not text) or "\n" in value or "\r" in value:
@@ -610,7 +610,7 @@ def _bounded_output_text(value: object, *, label: str, allow_empty: bool) -> str
 
 def _parse_answer(
     raw: object,
-    evidence: Sequence[SearchAnswerEvidence],
+    evidence: Sequence[OrdinaryQueryEvidence],
 ) -> OrdinaryQueryAnswer:
     if not isinstance(raw, str) or len(raw) > ORDINARY_QUERY_RESPONSE_LIMIT:
         raise OrdinaryQueryAnswerError(
@@ -712,9 +712,9 @@ def complete_ordinary_query_answer(
 
 
 def build_ordinary_query_reference_document(
-    evidence: Sequence[SearchAnswerEvidence],
+    evidence: Sequence[OrdinaryQueryEvidence],
     answer: OrdinaryQueryAnswer,
-) -> SearchAnswerReferenceDocument:
+) -> OrdinaryQueryReferenceDocument:
     """Assign first-use citation numbers after validating provider aliases."""
 
     if not isinstance(answer, OrdinaryQueryAnswer) or not answer.grounded:
@@ -731,7 +731,7 @@ def build_ordinary_query_reference_document(
         raise OrdinaryQueryAnswerError(
             "Ordinary Query reference evidence must be a sequence."
         ) from error
-    if any(not isinstance(item, SearchAnswerEvidence) for item in evidence_items):
+    if any(not isinstance(item, OrdinaryQueryEvidence) for item in evidence_items):
         raise OrdinaryQueryAnswerError(
             "Ordinary Query reference evidence must be typed."
         )
@@ -756,10 +756,10 @@ def build_ordinary_query_reference_document(
             rendered_text += " " + " ".join(markers)
         rendered_blocks.append((block.role, rendered_text))
     references = tuple(
-        NumberedSearchAnswerReference(number, by_alias[alias])
+        NumberedOrdinaryQueryReference(number, by_alias[alias])
         for alias, number in citation_numbers.items()
     )
-    return SearchAnswerReferenceDocument(
+    return OrdinaryQueryReferenceDocument(
         body=_join_rendered_blocks(tuple(rendered_blocks)),
         references=references,
     )

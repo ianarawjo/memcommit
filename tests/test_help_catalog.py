@@ -278,15 +278,15 @@ def test_distill_help_separates_case_propositions_from_goal_focus():
 
 def test_makemore_help_separates_candidate_rules_from_concrete_cases():
     assert operation_help("makemore").summary == (
-        "Expand an abstract Goal, Rule, or condition into multiple more specific "
-        "candidate propositions."
+        "Generate more candidate propositions from a Context, Goal, or explicit "
+        "Rule set."
     )
     assert BEST_FOR_BY_OPERATION["makemore"] == (
-        "Generating several more concrete candidate Rules or Cases from an "
-        "abstract concept or condition."
+        "Generating several new candidate Memories from an existing Context, "
+        "or concrete candidate Rules or Cases from explicit input."
     )
     assert operation_help("makemore").flow == (
-        "Goal -> added Rules; Rules -> added Case propositions -> receipt"
+        "Context -> transient distilled Rules -> added Cases; explicit Goal/Rules -> proposals -> receipt"
     )
 
 
@@ -786,7 +786,7 @@ def test_long_and_annotated_command_labels_use_both_record_rows():
 
     expected_labels = {
         "delete": "(remove)",
-        "check-": "conformance",
+        "check-conformance": "[PARTIAL]",
         "config": "(legacy)",
         "ground": "[PARTIAL]",
         "import": "[PARTIAL]",
@@ -1073,7 +1073,8 @@ def test_semantic_transform_and_review_details_preserve_reviewed_boundaries():
     [translation_routes] = operation_help("translate").details
     [impact_invocation] = operation_help("impact").details
     [fit_verdicts] = operation_help("fit").details
-    [conformance_comparison] = operation_help("check-conformance").details
+    conformance = operation_help("check-conformance")
+    [conformance_comparison] = conformance.details
 
     assert atomize.details == ()
     assert translation_routes.title == "MATERIALIZATION ROUTES"
@@ -1087,6 +1088,7 @@ def test_semantic_transform_and_review_details_preserve_reviewed_boundaries():
     assert fit_verdicts.title == "YES, MAY, OR NO"
     assert "multiple entrances" in fit_verdicts.options[1].guidance
     assert "only one entrance" in fit_verdicts.options[2].guidance
+    assert conformance.maturity == "PARTIAL"
     assert conformance_comparison.title == "FIT OR CONFORMANCE"
     assert conformance_comparison.discovery.value == "TOOL_SELECTION"
 
@@ -1108,7 +1110,7 @@ def test_final_help_categories_match_their_reviewed_runtime_boundaries():
     assert log.summary == (
         "Print or search recorded Context, Memory, and Profile history."
     )
-    assert diff.flow == "One Context checkpoint or active Update -> diff report"
+    assert diff.flow == "Current/latest or exact checkpoint -> read-only revision Viewer"
     assert undo.summary == "Undo the most recent recorded command as one unit."
     assert "every Context and Memory change" in undo.effect
     assert revert.summary.startswith("Restore the current or an explicit local Context")

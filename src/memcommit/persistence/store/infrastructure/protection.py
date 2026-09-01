@@ -5,7 +5,7 @@ from contextlib import contextmanager
 from functools import wraps
 from typing import Callable, Iterable, Iterator
 from memcommit.core.context import Context, Memory
-from memcommit.application.capabilities.authority.write_protection import (
+from memcommit.persistence.store.infrastructure.write_protection import (
     WriteProtectionError,
     WriteProtectionRegistry,
     WriteProtectionRegistryError,

@@ -1,0 +1,54 @@
+CAPTURE PTY · 180x52
+[?2004h[?1l[?25l[0m[?7l[0m[J[0m NEW FORGET · CHOOSE SOURCE AND INSTRUCTION[0m
+[0m  FROM         › alpha                                               [ BROWSE ] [0;38;5;116;1mCURRENT · THIS CONTEXT ONLY[0m
+[0;1m› INSTRUCTION[0m  ›[0m
+[0;38;5;210;1m┌───────────────────────────────────────────────────────────────────────────────────| COMMAND |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0;38;5;210;1m│[0;38;5;231;1m› mem forget                                                                                                                                                                      [179C[0;38;5;210;1m│[0m
+[0;38;5;210;1m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m Type instruction · Enter command · ↑ Source · ↓ Command · Esc cancel[69D[4A[17C[?7h[0m[?12l[?25h[?25l[?7l[0mForget the obsolete access code.[0m
+[0;38;5;117;1m┌───────────────────────────────────────────────────────────────────────────────────| COMMAND |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0;38;5;117;1m│[0;38;5;231m› mem forget 'Forget the obsolete access code.' --from alpha                                                                                                                      [179C[0;38;5;117;1m│[0m
+[0;38;5;117;1m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[3A[49C[?7h[0m[?12l[?25h[?25l[?7l[?7h[0m[?12l[?25h[?25l[?7l[A[20C[0;38;5;234;48;5;117m[ BROWSE ][0m
+[0m  INSTRUCTION[0m
+
+
+
+[C[0m FROM · ALL READABL[C CONTEXTS · ENTER USES ONE DIRECT SOURCE[0m[K[0m
+[0;1;7m› ✓ * · [0;38;5;234;48;5;117;1malpha[166C[0;1m^[0m
+[0m  ·   · beta                                                                                                                                                                       [179C[0;1mv[0m
+[0m ↑/↓ Context · Enter use · ←/→ collapse/expand · Esc close[58D[2A[?7h[0m[?25l[?7l[6A[0;1m› FROM[11C[0mbeta  [46C[0;1m[ BROWSE ][C[0;38;5;116;1mTHIS CONTEXT ONLY[0m[K[0m
+
+
+[56C[0;38;5;231mbeta  [0m
+
+[0m [0m[K[0m
+[0m Enter browse · ← Source · ↓ Instruction · Esc cancel[0m[K[0m
+[0m [0m[K[0m
+[0m [0m[K[8A[68C[?7h[0m[?25l[?7l[?7h[0m[?25l[?7l[69D[0m  FROM[63C[ BROWSE ][0m
+
+[0;38;5;117;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃[9C┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;5;117;1m┃[178C┃[0m
+[0;38;5;117;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+
+[7C[0mrun exact Forget command · ↑ Instruction · Esc cancel[3A[?7h[0m[?12l[?25h[?25l[?7l[2A[32D[0mprevious[Cwest-entrance desk location and obsolete access code; keep general accessibility guidance.[0m
+
+[26C[0;38;5;231mprevious[Cwest-entrance[Cdesk loca[Cion and obsolete access code; keep general accessibility guidance.' --from beta [?7h[0m[?12l[?25h[138D[4A[J[0m[?7h[?2004lMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION . · 0sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION .. · 0sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION … · 0s MEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION . · 1sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION .. · 1sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION … · 1s MEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION . · 2sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION .. · 2sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION … · 2s MEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION . · 3sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION .. · 3sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION … · 3s MEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION . · 4sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION .. · 4sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION … · 4s MEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION . · 5sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION .. · 5sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION … · 6s MEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION . · 6sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION .. · 6sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION … · 7s MEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION . · 7sMEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION .. · 7s                                                                      [1mFORGET APPLIED · SOURCE beta[0m
+FORGET · Forget the previous west-entrance desk location and obsolete access code; keep general accessibility guidance.
+DIFF · 2 CHANGES
+[38;2;166;218;149m[1m~[0m [fcc678bb] [38;2;237;135;150m[4mThe desk was previously beside the west entrance. [0mThe route remains step-free.
+[38;2;237;135;150m[1m-[0m [e09c0838] [38;2;237;135;150m[4mThe obsolete access code was 4815.[0m
+RECEIPT · 3dd2ba89-8e8b-4620-9a8a-cf289f50a427
+CHECKPOINT · 3dd2ba89-8e8b-4620-9a8a-cf289f50a427
+REVIEW · mem review forget --receipt 3dd2ba89-8e8b-4620-9a8a-cf289f50a427
+RECOVERY · mem undo
+CAPTURE PAUSE · press Enter for read-only verification
+
+CAPTURE VERIFICATION COMMAND · mem show --context beta
+[1mContext: beta[0m
+  Memories 2  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+[1m
+Items (in context order):[0m
+  [memory fcc678bb] [38;2;202;211;245mThe route remains step-free.[0m
+  [memory 9045b040] [38;2;202;211;245mVisitors should verify the step-free route before arrival.[0m
+CURRENT CONTEXT · alpha
+PROVIDER CONNECTIONS · 1

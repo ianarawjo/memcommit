@@ -7,14 +7,14 @@ from dataclasses import dataclass
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     context_access_display_facts,
 )
 from memcommit.adapters.console.terminal.components.context_picker import (
     context_memory_rows,
 )
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup import (
@@ -32,17 +32,24 @@ from memcommit.source_projection.model import SourceDisplayFacts
 class UpdateSetupReceipt:
     """Reviewed process-local arguments for one new Update command."""
 
-    source_name: str
+    source_name: str | None
     target_name: str
     source_descendants: bool = False
     target_descendants: bool = False
     source_memory_uid: str | None = None
     target_memory_uid: str | None = None
+    inline_source_content: str | None = None
 
 
 def _readable_endpoint_catalog(
     store: MemoryStore,
-) -> tuple[tuple[str, ...], str, str, dict[str, SourceDisplayFacts]]:
+) -> tuple[
+    tuple[str, ...],
+    str,
+    str,
+    dict[str, SourceDisplayFacts],
+    frozenset[str],
+]:
     """Freeze the readable names and defaults used by Update setup."""
 
     local_names = tuple(store.list_context_names())
@@ -71,7 +78,7 @@ def _readable_endpoint_catalog(
         for name in names
         if catalog.access_for(name).is_granted
     }
-    return names, source_name, target_name, annotations
+    return names, source_name, target_name, annotations, frozenset(local_names)
 
 
 def choose_update_setup(
@@ -84,7 +91,13 @@ def choose_update_setup(
     """Freeze readable authority, then collect one shared Update setup."""
 
     current_name = store.current_context_name()
-    names, source_name, target_name, annotation_map = _readable_endpoint_catalog(store)
+    (
+        names,
+        source_name,
+        target_name,
+        annotation_map,
+        inline_target_names,
+    ) = _readable_endpoint_catalog(store)
     annotations = tuple(annotation_map.items())
 
     root_name = current_name if current_name in names else names[0]
@@ -116,6 +129,7 @@ def choose_update_setup(
             target_name=target_name,
             current_context=current_name,
             annotations=annotations,
+            inline_target_names=inline_target_names,
         ),
         memory_loader=load_memories,
         app_input=app_input,
@@ -131,4 +145,5 @@ def choose_update_setup(
         target_descendants=selected.target_descendants,
         source_memory_uid=selected.source_memory_uid,
         target_memory_uid=selected.target_memory_uid,
+        inline_source_content=selected.inline_source_content,
     )

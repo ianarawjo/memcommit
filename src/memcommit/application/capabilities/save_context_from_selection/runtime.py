@@ -9,9 +9,11 @@ from typing import Protocol
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.authorization import ContextUse, authorize_context_use
-from memcommit.application.capabilities.authority.context_access import (
-    ContextAccess,
+from memcommit.application.authorization.context_operation import (
     authorized_context_operation,
+)
+from memcommit.application.context_access.access import (
+    ContextAccess,
     granted_memory_source,
 )
 from memcommit.application.capabilities.save_context_from_selection.application import (

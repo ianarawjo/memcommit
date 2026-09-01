@@ -48,6 +48,22 @@ def test_positional_context_accepts_recursive_scope(isolated_store):
     assert "child content" in result.output
 
 
+def test_bare_context_uid_resolves_before_direct_item_fallback(isolated_store):
+    store = MemoryStore()
+    target = ops.init("uid/context")
+    ops.add(target, "context selected by uid")
+    current = ops.init("uid/current")
+    store.save(target)
+    store.save(current)
+    store.set_current(current.name)
+
+    result = runner.invoke(app, ["show", target.uid[:8]])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert "Context: uid/context" in result.output
+    assert "context selected by uid" in result.output
+
+
 def test_bare_uid_finds_one_direct_item_outside_current(isolated_store):
     store = MemoryStore()
     owner = ops.init("owner")

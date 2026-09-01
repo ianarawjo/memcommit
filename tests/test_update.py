@@ -1579,9 +1579,20 @@ def test_update_undo_and_redo_follow_the_affected_target_not_current_context(
     undone_session = store.load_staged_update()
     assert undone_session.status == "undone"
     assert undone_session.application is not None
-    undone_diff = runner.invoke(app, ["diff"])
-    assert undone_diff.exit_code == 0, undone_diff.output
-    assert "Undone update" in undone_diff.output
+    undone_review = runner.invoke(
+        app,
+        [
+            "review",
+            "update",
+            "--session",
+            undone_session.uid,
+            "--snapshot",
+        ],
+    )
+    assert undone_review.exit_code == 0, undone_review.output
+    assert "MEM REVIEW · UPDATE" in undone_review.output
+    assert f"SOURCE · {TASK1_SOURCE}" in undone_review.output
+    assert f"TARGET · {TASK1_TARGET}" in undone_review.output
 
     redo = runner.invoke(app, ["redo"])
 
@@ -1963,6 +1974,35 @@ def test_empty_update_launcher_passes_exact_setup_memories(
     ]
 
 
+def test_empty_update_launcher_routes_inline_source_to_memory_option(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    monkeypatch.setattr(
+        update_command,
+        "choose_update_setup",
+        lambda _store: UpdateSetupReceipt(
+            None,
+            "target",
+            inline_source_content="one exact inline update",
+        ),
+    )
+    invoked = []
+    monkeypatch.setattr(update_command, "cmd", lambda **kwargs: invoked.append(kwargs))
+
+    update_command._start_new_update_from_setup(store)
+
+    assert invoked == [
+        {
+            "memory": "one exact inline update",
+            "target_name": "target",
+            "source_descendants": False,
+            "target_descendants": False,
+        }
+    ]
+
+
 def test_saved_update_launcher_reenters_compact_execution_without_impact_workbench(
     isolated_store,
     monkeypatch,
@@ -2315,9 +2355,7 @@ def test_multi_context_update_is_one_atomic_undo_and_redo_unit(
         app,
         [
             "trace",
-            target_memory.uid[:8],
-            "--context",
-            TASK1_TARGET_CHILD,
+            f"{TASK1_TARGET_CHILD}:{target_memory.uid[:8]}",
             "--verbose",
         ],
     )

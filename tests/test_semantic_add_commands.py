@@ -43,11 +43,35 @@ def _create(
 
 class _MakemoreProvider:
     calls: list[dict[str, object]] = []
+    distill_calls: list[dict[str, object]] = []
 
     def complete(self, prompt, *, operation, output_schema=None):
+        distill_validation = passing_distill_goal_fit_response(prompt, operation)
+        if distill_validation is not None:
+            return distill_validation
         validation = passing_makemore_validation_response(prompt, operation)
         if validation is not None:
             return validation
+        if operation == DISTILL_OPERATION:
+            payload = json.loads(prompt.split(DISTILL_PAYLOAD_MARKER, 1)[1])
+            type(self).distill_calls.append(payload)
+            aliases = [
+                item["memory_id"] for item in payload["source"]["memories"]
+            ]
+            return json.dumps(
+                {
+                    "overview": "The Source supports one bounded ticker Rule.",
+                    "rules": [
+                        {
+                            "content": "Use the exchange-confirmed ticker symbol.",
+                            "rationale": "The complete Source supports it.",
+                            "support_memory_ids": aliases[:1],
+                            "boundary_memory_ids": aliases[1:2],
+                        }
+                    ],
+                    "outside_memory_ids": aliases[2:],
+                }
+            )
         assert operation == MAKEMORE_OPERATION
         payload = json.loads(prompt.split(MAKEMORE_PAYLOAD_MARKER, 1)[1])
         type(self).calls.append(payload)
@@ -210,6 +234,7 @@ def test_makemore_endpoint_matrix_adds_atomically(
         for name in ("matrix/source", "matrix/target", "matrix/current")
     }
     _MakemoreProvider.calls = []
+    _MakemoreProvider.distill_calls = []
     monkeypatch.setattr(
         makemore_command,
         "connect_semantic_provider",
@@ -232,6 +257,9 @@ def test_makemore_endpoint_matrix_adds_atomically(
     checkpoint = store.list_checkpoints(expected_target)[0]
     assert checkpoint["command"] == "makemore"
     assert checkpoint["args"]["makemore"]["effect"] == "ADD"
+    assert checkpoint["args"]["makemore"]["source_mode"] == (
+        "DISTILL_THEN_MAKEMORE"
+    )
     assert checkpoint["args"]["makemore"]["quality_policy"] == "BEST_EFFORT"
     assert checkpoint["args"]["makemore"]["case_validation"] == "NOT_RUN"
     assert len(checkpoint["args"]["makemore"]["result_memory_uids"]) == 3
@@ -255,6 +283,7 @@ def test_mem_makemore_number_is_an_exact_cli_and_checkpoint_contract(
     source = _create(store, "number/source", "Confirm a ticker before acting.")
     store.set_current(target.name)
     _MakemoreProvider.calls = []
+    _MakemoreProvider.distill_calls = []
     monkeypatch.setattr(
         makemore_command,
         "connect_semantic_provider",
@@ -316,7 +345,7 @@ def test_makemore_context_role_is_explicit_and_not_name_based(
     )
 
 
-def test_makemore_combines_rule_source_with_context_goal_focus(
+def test_makemore_combines_distilled_context_source_with_context_goal_focus(
     isolated_store,
     monkeypatch,
 ) -> None:
@@ -334,6 +363,7 @@ def test_makemore_combines_rule_source_with_context_goal_focus(
         "Give practical advice to a friend who owns a cafe.",
     )
     _MakemoreProvider.calls = []
+    _MakemoreProvider.distill_calls = []
     monkeypatch.setattr(
         makemore_command,
         "connect_semantic_provider",
@@ -362,6 +392,9 @@ def test_makemore_combines_rule_source_with_context_goal_focus(
     )
     checkpoint = store.list_checkpoints(source.name)[0]
     assert checkpoint["args"]["makemore"]["goal_focus"]["kind"] == "CONTEXT"
+    assert checkpoint["args"]["makemore"]["distillation"]["goal_fit"][
+        "verdict"
+    ] == "FIT"
 
 
 @pytest.mark.parametrize(
@@ -598,6 +631,8 @@ def test_impact_endpoint_preview_never_adds(
         assert "IMPACT · DISTILL ADD" not in result.output
     else:
         assert "PROPOSED CASES" in result.output
+        assert "TRANSIENT DISTILLED RULES" in result.output
+        assert "CONTEXT → RULES → CASES" in result.output
         assert "ENDPOINTS UNCHANGED" not in result.output
         assert "[ADD]" not in result.output
         assert _MakemoreProvider.calls[-1]["number"] == 2
@@ -628,7 +663,8 @@ def test_missing_target_fails_before_provider_construction(
     )
 
     assert result.exit_code == 1
-    assert "not found" in result.output
+    assert "missing/target" in result.output
+    assert "not found" in result.output or "does not exist" in result.output
     assert store.list_checkpoints(source.name) == []
 
 
@@ -770,6 +806,7 @@ def test_repeated_same_context_makemore_sees_prior_output_only_later(
     current = _create(store, "repeat/current", "Confirm a ticker before acting.")
     store.set_current(current.name)
     _MakemoreProvider.calls = []
+    _MakemoreProvider.distill_calls = []
     monkeypatch.setattr(
         makemore_command,
         "connect_semantic_provider",
@@ -780,5 +817,9 @@ def test_repeated_same_context_makemore_sees_prior_output_only_later(
     second = runner.invoke(app, ["makemore"])
 
     assert first.exit_code == second.exit_code == 0
-    assert [len(call["inputs"]) for call in _MakemoreProvider.calls] == [1, 4]
+    assert [
+        len(call["source"]["memories"])
+        for call in _MakemoreProvider.distill_calls
+    ] == [1, 4]
+    assert [len(call["inputs"]) for call in _MakemoreProvider.calls] == [1, 1]
     assert len(store.load_direct(current.name).order) == 7

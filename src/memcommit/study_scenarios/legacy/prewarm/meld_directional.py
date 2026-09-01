@@ -13,7 +13,7 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     GrantedReadStore,
     freeze_granted_context_binding,
     resolve_context_access,

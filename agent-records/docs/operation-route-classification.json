@@ -11,7 +11,8 @@
     "CLOSED": {
       "add": {
         "evidence": [
-          "agent-records/docs/add-callable-boundary-matrix.md"
+          "agent-records/docs/add-callable-boundary-matrix.md",
+          "agent-records/docs/typed-operand-resolution-design-rationale.md"
         ],
         "reason": "The typed batch, authority, mutation, CLI, TUI, public, and agent routes are verified against one application/runtime boundary."
       },
@@ -46,7 +47,8 @@
         "evidence": [
           "agent-records/docs/copy-callable-boundary-matrix.md",
           "agent-records/docs/granted-derived-ownership-design-rationale.md",
-          "agent-records/docs/copy-and-move-design-rationale.md"
+          "agent-records/docs/copy-and-move-design-rationale.md",
+          "agent-records/docs/typed-operand-resolution-design-rationale.md"
         ],
         "reason": "CLI, Embed-shaped multi-Memory TUI, Python, and agent routes share one provider-free ordered direct-Memory plan, including exact READ Grant bindings, local-only Target placement, mandatory fresh output UIDs, atomic checkpoint, and Undo/Redo boundary."
       },
@@ -156,7 +158,8 @@
         "evidence": [
           "agent-records/docs/merge-application-boundary-matrix.md",
           "agent-records/docs/context-locator-design-rationale.md",
-          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md"
+          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "agent-records/docs/typed-operand-resolution-design-rationale.md"
         ],
         "reason": "Direct and recursive Merge planning, review, application, and presentation use the same frozen typed plan and runtime."
       },
@@ -164,26 +167,10 @@
         "evidence": [
           "agent-records/docs/granted-derived-ownership-design-rationale.md",
           "agent-records/docs/move-callable-boundary-matrix.md",
-          "agent-records/docs/copy-and-move-design-rationale.md"
+          "agent-records/docs/copy-and-move-design-rationale.md",
+          "agent-records/docs/typed-operand-resolution-design-rationale.md"
         ],
         "reason": "CLI, Embed-shaped multi-Memory TUI, Python, and agent routes share one provider-free local ownership-transfer plan, complete inbound-link freeze, default atomic live-Embed retargeting with explicit Break, and one-unit Undo/Redo boundary; explicit granted Sources fail with the Copy-then-local-Move boundary."
-      },
-      "meld": {
-        "evidence": [
-          "agent-records/docs/meld-application-boundary-matrix.md",
-          "agent-records/docs/meld-application-boundary-design-rationale.md",
-          "agent-records/docs/meld-session-lifecycle-design-rationale.md",
-          "agent-records/docs/context-or-inline-memory-operand-design-rationale.md",
-          "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
-          "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
-          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
-          "agent-records/docs/peer-relation-analysis-design-rationale.md",
-          "agent-records/docs/session-endpoint-setup-design-rationale.md",
-          "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md",
-          "agent-records/docs/meld-command-interpretation-design-rationale.md",
-          "agent-records/docs/mem-meld-design-rationale.md"
-        ],
-        "reason": "CLI, TUI, Python, and agent routes share typed Start, Restart, saved-turn, cache/provider, CAS, and Apply lifecycles with exact/equivalent/projected reuse and one reviewed-session version contract."
       },
       "pwd": {
         "evidence": [
@@ -200,7 +187,8 @@
           "agent-records/docs/query-reference-application-boundary-matrix.md",
           "agent-records/docs/query-case-derived-answer-design-rationale.md",
           "agent-records/docs/retrieve-answer-save-panel-design-rationale.md",
-          "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
+          "agent-records/docs/study-semantic-prompt-policy-design-rationale.md",
+          "agent-records/docs/typed-operand-resolution-design-rationale.md"
         ],
         "reason": "Ordinary, granted, and query-only families plus CLI, TUI, public, and agent projections have a verified operation package. The interactive answer save crosses a separate typed require-new application edge without reopening QUERY-only Sources."
       },
@@ -210,7 +198,7 @@
           "agent-records/docs/memory-reference-embed-semantics-design-rationale.md",
           "agent-records/docs/reference-callable-boundary-matrix.md"
         ],
-        "reason": "CLI, TUI, Python, and agent routes share one provider-free frozen local or explicit READ-granted Memory Source, local Target snapshot, content-digest revalidation, atomic checkpoint, and immutable stored-value contract."
+        "reason": "CLI, TUI, Python, and agent routes share one provider-free frozen local or explicitly rooted READ-granted Memory/Context Source, local Target snapshot, exact Grant/scope/content revalidation, atomic checkpoint, and immutable stored-value contract."
       },
       "replace": {
         "evidence": [
@@ -227,7 +215,7 @@
           "agent-records/docs/resolution-lifecycle-design-rationale.md",
           "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
         ],
-        "reason": "Direct-Memory Fit repair exposes CLI, TUI, public, and agent projections over one typed analysis, exact replay, authority, and checkpointed Apply boundary."
+        "reason": "Direct-Context Resolve exposes CLI, TUI, public, and agent projections over one conflict analysis, exact finalized decisions, ordinary Update planning, complete detached post-image conflict verification, authority, and checkpointed Apply boundary."
       },
       "dedun": {
         "evidence": [
@@ -299,7 +287,8 @@
       "show": {
         "evidence": [
           "agent-records/docs/show-application-boundary-matrix.md",
-          "agent-records/docs/show-application-design-rationale.md"
+          "agent-records/docs/show-application-design-rationale.md",
+          "agent-records/docs/typed-operand-resolution-design-rationale.md"
         ],
         "reason": "CLI direct/recursive scope, Python, agent, and Find follow-up routes share one live typed inspection application boundary with one-snapshot targeting, readable-catalog traversal, READ-Grant projection, and structural query-only concealment."
       },
@@ -335,9 +324,10 @@
           "agent-records/docs/trace-lineage-normal-form-design-rationale.md",
           "agent-records/docs/retained-history-application-ownership-design-rationale.md",
           "agent-records/docs/read-report-lifecycle-design-rationale.md",
-          "agent-records/docs/mem-trace-rationale-design-rationale.md"
+          "agent-records/docs/mem-trace-rationale-design-rationale.md",
+          "agent-records/docs/typed-operand-resolution-design-rationale.md"
         ],
-        "reason": "Explicit Context, current or historical Memory, MemoryRef, granted-current, interactive catalog, recent, JSON, and bounded text routes share one typed target catalog and terminal-independent Trace request/result boundary."
+        "reason": "Explicit Context, current or historical Memory, MemoryRef, granted-current, direct Context-or-Memory browser, JSON, and bounded text routes share one typed target catalog and terminal-independent Trace request/result boundary."
       },
       "branch": {
         "evidence": [
@@ -391,6 +381,24 @@
       }
     },
     "MIXED": {
+      "meld": {
+        "evidence": [
+          "agent-records/docs/meld-application-boundary-matrix.md",
+          "agent-records/docs/meld-application-boundary-design-rationale.md",
+          "agent-records/docs/meld-session-lifecycle-design-rationale.md",
+          "agent-records/docs/context-or-inline-memory-operand-design-rationale.md",
+          "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
+          "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
+          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "agent-records/docs/peer-relation-analysis-design-rationale.md",
+          "agent-records/docs/session-endpoint-setup-design-rationale.md",
+          "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md",
+          "agent-records/docs/meld-command-interpretation-design-rationale.md",
+          "agent-records/docs/mem-meld-design-rationale.md",
+          "agent-records/docs/typed-operand-resolution-design-rationale.md"
+        ],
+        "reason": "The direct-local console, Python, and agent routes share one candidate Audit–Resolve–Update boundary and no longer execute Compare-backed planning, while descendant/Grant placement and the candidate receipt crash interval remain explicitly incomplete."
+      },
       "search": {
         "evidence": [
           "agent-records/docs/durable-uid-resolution-design-rationale.md",

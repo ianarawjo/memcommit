@@ -43,7 +43,9 @@ def test_unique_public_prefix_resolves_but_ambiguous_prefix_fails_closed():
 
 
 def test_unknown_or_short_nonexact_text_is_not_reclassified_as_a_uid():
-    candidates = (_candidate("aaaaaaaa-1111-4111-8111-111111111111", "one"),)
+    candidates = (
+        _candidate("aaaaaaaa-1111-4111-8111-111111111111", "one"),
+    )
 
     assert try_resolve_durable_uid(candidates, "ordinary search") is None
     assert try_resolve_durable_uid(candidates, "aaaa") is None

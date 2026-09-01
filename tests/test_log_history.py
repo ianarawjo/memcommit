@@ -82,6 +82,19 @@ def test_log_is_terminal_independent_and_prints_only_the_current_context(
     assert "history_display_row_segments" in source
 
 
+def test_log_context_option_accepts_context_uid(isolated_store):
+    invoke("init", "other")
+    invoke("checkpoint", "other checkpoint")
+    context = MemoryStore().load_direct("other")
+    invoke("init", "current")
+
+    result = invoke("log", "--context", context.uid[:8])
+
+    assert result.exit_code == 0, result.output
+    assert "Log for 'other'" in result.output
+    assert "other checkpoint" in result.output
+
+
 def test_plain_remains_a_compatible_alias_for_the_static_report(isolated_store):
     invoke("init", "notes")
     invoke("add", "one")

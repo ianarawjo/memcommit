@@ -25,7 +25,7 @@ def test_goal_operand_freezes_context_memory_and_inline_with_one_contract(
 
     context_focus = freeze_goal_focus_operand(
         store,
-        goals.name,
+        goals.uid[:8],
         current_name=None,
     )
     memory_focus = freeze_goal_focus_operand(
@@ -59,7 +59,7 @@ def test_goal_operand_fails_closed_for_locator_typos_and_missing_memory(
             "coffee/goasl",
             current_name=None,
         )
-    with pytest.raises(Exception, match="No directly owned Memory"):
+    with pytest.raises(GoalFocusError, match="Memory or local Context"):
         freeze_goal_focus_operand(
             store,
             "deadbeef",

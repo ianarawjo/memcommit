@@ -6,11 +6,13 @@ import typer
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
 from memcommit.adapters.console.terminal.components.command_wait import run_command_wait
 from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     context_access_display_facts,
-    resolve_context_access,
 )
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
+)
+from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.adapters.console.commands.forget.receipt import render_forget_change_lines
@@ -229,6 +231,7 @@ def cmd(
     context_name: Annotated[
         Optional[str],
         typer.Option(
+            "--from",
             "--context",
             "-c",
             help="Direct Source Context (defaults to current)",
@@ -249,12 +252,12 @@ def cmd(
     try:
         context_snapshot = ContextOperandSnapshot.capture(active_store)
         if info is None:
-            access = resolve_context_access(
+            access = resolve_existing_context_access(
                 active_store,
                 context_name,
                 current_name=context_snapshot.current_name,
                 required_permission="READ",
-            )
+            ).value
             catalog = freeze_profile_readable_context_catalog(
                 active_store,
                 access,

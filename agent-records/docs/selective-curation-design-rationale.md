@@ -8,7 +8,8 @@
 though both perform the same middle operation: compare a complete Source frame
 with one criterion frame, then keep, transform, or drop each Source Memory.
 Forget supplies one natural-language instruction and mutates the Source;
-Sever supplies a Criteria Context and creates a separate result. Keeping their
+Sever supplies a Criteria Context and updates each selected Source owner in
+place. Keeping their
 batch semantics separate made completeness, alias safety, exact-keep, and
 empty-drop validation drift, while Forget retained a legacy sparse proposal
 screen instead of the shared Resolution report.
@@ -65,12 +66,9 @@ Both reports identify their operation frame above their operation-owned
 overview using the shared typed `CONTEXT LOCATIONS` projection. Forget labels
 its batch prose `ASSESSMENT`; Sever labels its bounded Source account `SOURCE
 OVERVIEW`. Neither is placed inside a generic model-comprehension group.
-Forget shows its Source. Sever shows Source, Criteria, and Result, including
-whether the Result is `NOT CREATED` or `CREATED`. An unapplied Sever Result also uses the shared
-compact `SAVE LOCATION` frame between `ITEMS` and final Review and Apply;
-changing it updates the durable session but does not create the Context. Its
-expanded editor shares the local parent-Context tree and keeps exact direct
-input as the initial focus.
+Forget shows its Source. New Sever sessions show Source and Criteria only; the
+after-state is review evidence, not a third Context endpoint. Source ownership
+fixes every Sever write location, so no `SAVE LOCATION` frame is rendered.
 
 The complete Forget result uses the same located `MemoryChange` projection as
 Sever and Diff instead of flattening every outcome into one Results paragraph.
@@ -88,22 +86,34 @@ authoritative `before` side until Apply.
 ## Flagless Forget setup
 
 In a TTY, `mem forget` without an instruction opens a process-local setup
-workbench before connecting a provider. The screen composes three vertical
-Surfaces through the common terminal component family:
+workbench before connecting a provider. Its compact form contains only a
+direct `FROM` field with a transient Browse control, a one-line `INSTRUCTION`,
+and one always-visible editable `COMMAND`. The command box is the sole
+execution action. The setup therefore does not add a parallel `READY`, metrics,
+`TO DO`, or action-button surface merely to restate whether the command is
+runnable. Initial focus remains in Instruction so the common current-Context
+case starts with immediate semantic input.
 
-1. `INSTRUCTION`, a query-like writable single-line field initially focused;
-2. `SOURCE`, the common `ContextSelectorControl` in `SINGLE` mode over one
-   frozen `ALL READABLE CONTEXTS` catalog; and
-3. `TO DO`, the exact `ANALYZE AND REVIEW` action.
+The form is deliberately bidirectional. A valid upper-field edit projects to
+the canonical command `mem forget 'INSTRUCTION' --from SOURCE`. A valid command
+edit parses and validates the complete Source/instruction pair before moving
+either upper field, so an invalid or incomplete command cannot partially
+change the visible request. If further typing makes a previously valid command
+invalid, the upper form retains that last complete accepted pair. The shared
+`CommandEditorControl` preserves a person's focused spelling and argument order
+while they edit; the next genuine upper-form change reprojects the canonical
+command. `--context` and `-c`
+remain accepted compatibility aliases, but `--from` is the canonical editable
+and public option because the field's role is Source selection.
 
-The current Context is initially checked and marked only for orientation.
-Selecting another row does not switch the global current Context. Enter from
-the Instruction field analyzes the checked current Source directly, matching
-Query and Find's quick input path; a person who changes Source may instead run
-from To Do. Both paths produce the same process-local `ForgetSetupResult`
-containing one canonical public Context name and one nonblank instruction.
-The command retrieves the selected Context's exact store and Grant binding
-from the same frozen catalog rather than resolving current state again.
+The current Context is the initial `FROM` value and is marked only for
+orientation. Browsing opens the common `ContextSelectorControl` in `SINGLE`
+mode over one frozen `ALL READABLE CONTEXTS` catalog. Selecting another row
+updates `FROM` and the command but does not switch the global current Context.
+Running the command produces the same process-local `ForgetSetupResult`
+containing one canonical public Context name and one nonblank instruction. The
+command retrieves the selected Context's exact store and Grant binding from
+the same frozen catalog rather than resolving current state again.
 
 Forget deliberately exposes no `PROFILE`, `MULTIPLE`, descendant-range, or
 embedded-Context controls. Its mutation unit remains one direct Context and
@@ -117,12 +127,15 @@ the accepted reviewed edits and deletes continue to determine the exact
 
 Cancellation publishes no analysis and connects no provider. Outside a TTY,
 an omitted instruction fails with a stable usage error. Supplying
-`mem forget "INSTRUCTION"` preserves the existing current-Context fast path,
-non-TTY prompt compatibility, whole-frame provider turn, Resolution review,
-and checkpoint behavior. After a successful TTY Apply, the command prints the
-canonical public Source, submitted instruction, exact applied change lines, and
-checkpoint identity as its durable success receipt; this appears only after the
-authorized save succeeds.
+`mem forget "INSTRUCTION"` preserves the existing current-Context fast path;
+`--from SOURCE` selects another exact Source without opening setup. Both retain
+non-TTY prompt compatibility, the whole-frame provider turn, authority and
+review boundaries, and checkpoint behavior. The compact setup remains only a
+request editor: its instruction is a process-local `INSTRUCTION` criterion,
+never an inline Memory or fabricated durable provenance. After a successful
+TTY Apply, the command prints the canonical public Source, submitted
+instruction, exact applied change lines, and checkpoint identity as its durable
+success receipt; this appears only after the authorized save succeeds.
 
 The compact applied receipt deliberately projects changes as a diff instead of
 repeating an `EFFECTS · REMOVE n · EDIT n` summary. Each removed or edited
@@ -145,8 +158,8 @@ A granted Source is the actual authority mutation target, so it retains exact
 final review when the reviewed batch contains an edit or removal. An all-KEEP
 batch is different: it publishes no Context mutation, bypasses authority review,
 prints an explicit unchanged/no-checkpoint receipt, and creates no artificial
-Undo unit. This differs from Sever, where even granted Source and Criteria
-frames remain unchanged and only the new local Result is published.
+Undo unit. This differs from Sever, where an all-KEEP review still records its
+grouped Source-owner application even though Context bytes remain unchanged.
 
 The Resolution workbench never mutates the loaded Context. It returns either
 cancellation or the exact sparse reviewed change set. The command then computes
@@ -166,13 +179,14 @@ authorize provider disclosure, persist sessions, or mutate storage.
 
 - Forget owns its direct active-Context scope, `UPDATE`/`DELETE` permission
   calculation, in-place Memory identity, and Source checkpoint.
-- Sever owns independent Source/Criteria scope, retained granted bindings,
-  `DERIVE + COMBINE + EXPORT + SAVE_ANALYSIS`, require-new result creation,
-  and application receipt.
+- Sever owns independent Source/Criteria scope, retained Criteria grant
+  bindings, local Source `UPDATE`/`DELETE` authority, grouped owner checkpoints,
+  and its application receipt.
 
 This separation prevents visual and semantic reuse from turning a read grant
-into mutation or export authority. It also preserves the intentionally opposite
-materialization semantics: Forget changes the Source, while Sever never does.
+into mutation authority. Forget uses one process-local instruction against one
+Source; Sever uses a complete durable Criteria Memory frame and may update
+multiple selected Source owners as one command.
 
 ## Compatibility and limitations
 

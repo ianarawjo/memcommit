@@ -26,7 +26,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.exe
     ensure_comparison_analysis,
     load_comparison_context,
 )
-from memcommit.application.capabilities.authority.context_access import ContextAccess, resolve_context_access
+from memcommit.application.context_access.access import ContextAccess, resolve_context_access
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonAnalysis, ComparisonInput
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import analyze_comparison
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import load_comparison_analysis

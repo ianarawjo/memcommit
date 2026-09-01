@@ -3,8 +3,9 @@
 Context Embed stores a live pointer.  A Context Reference instead stores a
 versioned package of direct Context records.  Direct scope freezes only the
 selected record; recursive scope additionally freezes lexical descendants and
-ordinary local Contexts reached through Embed edges.  Query-only and granted
-edges remain opaque because read visibility is not retention authority.
+authorized Contexts reached through Embed edges.  Granted edges encountered
+incidentally remain opaque; an explicitly selected READ-granted root may carry
+frozen Grant provenance for the records the operation retained.
 """
 
 from __future__ import annotations
@@ -21,6 +22,7 @@ from memcommit.core.context import (
     MemoryRef,
     QueryContextRef,
 )
+from memcommit.application.context_access.model import GrantedContextBinding
 
 
 CONTEXT_SNAPSHOT_SCHEMA_VERSION = 1
@@ -219,6 +221,7 @@ class ContextSnapshotRef(Context):
         target_context_name: str,
         snapshot_package: Mapping[str, object],
         snapshot_content_sha256: str,
+        granted_sources: tuple[GrantedContextBinding, ...] = (),
     ) -> None:
         package = validate_context_snapshot_package(snapshot_package)
         expected = context_snapshot_digest(package)
@@ -231,6 +234,17 @@ class ContextSnapshotRef(Context):
             or root.get("name") != target_context_name
         ):
             raise ValueError("Context snapshot provenance does not match its root.")
+        if (
+            not isinstance(granted_sources, tuple)
+            or any(
+                not isinstance(source, GrantedContextBinding)
+                for source in granted_sources
+            )
+            or len({source.public_name for source in granted_sources})
+            != len(granted_sources)
+            or any("READ" not in source.permissions for source in granted_sources)
+        ):
+            raise ValueError("Context snapshot granted Source provenance is invalid.")
         super().__init__(uid=uid, name=target_context_name)
         retained = _hydrate_package(package)
         self.memories = retained.memories
@@ -241,6 +255,7 @@ class ContextSnapshotRef(Context):
         self.snapshot_content_sha256 = snapshot_content_sha256
         self.include_descendants = bool(package["recursive"])
         self.follow_embeds = bool(package["recursive"])
+        self.granted_sources = granted_sources
 
     @property
     def is_snapshot(self) -> bool:
@@ -251,7 +266,7 @@ class ContextSnapshotRef(Context):
         digest = context_snapshot_digest(package)
         if digest != self.snapshot_content_sha256:
             raise ValueError("Context snapshot content digest does not match.")
-        return {
+        record: dict[str, object] = {
             "type": "context_snapshot_ref",
             "uid": self.uid,
             "target_context": {
@@ -261,6 +276,11 @@ class ContextSnapshotRef(Context):
             "snapshot": package,
             "content_sha256": self.snapshot_content_sha256,
         }
+        if self.granted_sources:
+            record["grant_sources"] = [
+                source.to_dict() for source in self.granted_sources
+            ]
+        return record
 
     @classmethod
     def from_dict(cls, data: Mapping[str, object]) -> "ContextSnapshotRef":
@@ -271,12 +291,19 @@ class ContextSnapshotRef(Context):
         if not isinstance(snapshot, Mapping):
             raise ValueError("Context snapshot reference has no retained package.")
         digest = data.get("content_sha256")
+        raw_granted_sources = data.get("grant_sources", [])
+        if not isinstance(raw_granted_sources, list):
+            raise ValueError("Context snapshot granted Sources must be a list.")
         return cls(
             uid=_text(data.get("uid"), label="reference UID"),
             target_context_uid=_text(target.get("uid"), label="Source UID"),
             target_context_name=_text(target.get("name"), label="Source name"),
             snapshot_package=snapshot,
             snapshot_content_sha256=_text(digest, label="content digest"),
+            granted_sources=tuple(
+                GrantedContextBinding.from_dict(source)
+                for source in raw_granted_sources
+            ),
         )
 
     def copy(self) -> "ContextSnapshotRef":

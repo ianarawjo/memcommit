@@ -15,6 +15,10 @@ from memcommit.adapters.console.terminal.components.history.checkpoint_diff impo
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.coordination.context_operand import ContextOperandSnapshot
+from memcommit.application.capabilities.operand_resolution import (
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
+)
 from memcommit.adapters.console.terminal.components.history.browser import browse_checkpoint_locations
 from memcommit.adapters.console.terminal.components.history.picker import (
     HistorySelectionReceipt,
@@ -343,7 +347,13 @@ def cmd(
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         explicit_name = (
-            context_snapshot.resolve(context_name) if context_name is not None else None
+            resolve_existing_context_operand(
+                freeze_local_context_operand_candidates(store),
+                context_name,
+                current=context_snapshot.current_name,
+            ).name
+            if context_name is not None
+            else None
         )
         name = explicit_name or context_snapshot.current_name
     except ValueError as error:

@@ -8,7 +8,9 @@ import json
 import uuid
 
 from memcommit.core.context import AutoCheckpoint, Context, Memory
-from memcommit.application.capabilities.context_locator import resolve_context_locator
+from memcommit.application.capabilities.operand_resolution import (
+    resolve_existing_local_context_operand,
+)
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
 from memcommit.application.operations.profile.config import ProfileRegistry, profile_store_dir
@@ -463,6 +465,7 @@ def _deliver_locked(
     endpoint_name: str,
     include_descendants: bool,
     expected: SharePreview | None = None,
+    expected_source_uid: str | None = None,
 ) -> ShareDelivery:
     endpoint = resolve_share_endpoint(endpoint_name, registry=registry)
     if expected is not None and (
@@ -485,6 +488,13 @@ def _deliver_locked(
         source_name,
         include_descendants=include_descendants,
     )
+    selected_source_uid = (
+        expected.source_context_uid if expected is not None else expected_source_uid
+    )
+    if selected_source_uid is not None and bindings[0][1] != selected_source_uid:
+        raise ShareError(
+            "The selected Share Source changed identity; reopen Share before sending."
+        )
     receiver_store = MemoryStore(root=endpoint.receiver_root, create=False)
     with source_store.locked_context_snapshots(
         bindings,
@@ -539,12 +549,17 @@ def deliver_context(
         raw_source = source_locator if source_locator is not None else current
         if raw_source is None:
             raise ShareError("No current Context is available to share.")
-        source_name = resolve_context_locator(raw_source, current=current)
+        resolved_source = resolve_existing_local_context_operand(
+            source_store,
+            raw_source,
+            current=current,
+        )
         return _deliver_locked(
             registry=registry,
-            source_name=source_name,
+            source_name=resolved_source.name,
             endpoint_name=endpoint_name,
             include_descendants=include_descendants,
+            expected_source_uid=resolved_source.uid,
         )
 
 
@@ -568,12 +583,21 @@ def prepare_share(
         raw_source = source_locator if source_locator is not None else current
         if raw_source is None:
             raise ShareError("No current Context is available to share.")
-        source_name = resolve_context_locator(raw_source, current=current)
+        resolved_source = resolve_existing_local_context_operand(
+            source_store,
+            raw_source,
+            current=current,
+        )
+        source_name = resolved_source.name
         bindings = _source_bindings(
             source_store,
             source_name,
             include_descendants=include_descendants,
         )
+        if bindings[0][1] != resolved_source.uid:
+            raise ShareError(
+                "The selected Share Source changed identity; reopen Share."
+            )
         with source_store.locked_context_snapshots(
             bindings,
             source_root=source_name,

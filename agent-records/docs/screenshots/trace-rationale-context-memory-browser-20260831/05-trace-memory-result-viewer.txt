@@ -1,0 +1,14 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ LINEAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃TRACE · notes                                                                                                                                                                    ^┃
+┃[MEMORY 8ae41b4e] · 2 OPERATIONS · LATEST FIRST                                                                                                                                   ┃
+┃                                                                                                                                                                                  ┃
+┃[edit] [CHECKPOINT 1e00d092] [MEMORY 8ae41b4e]  2026-08-31 11:25                                                                                                                  ┃
+┃  − [8ae41b4e]@1 Initial policy wording retained for provenance.                                                                                                                  ┃
+┃  + [8ae41b4e]@1 Final policy wording selected for exact Memory history.                                                                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃[add] [CHECKPOINT 34847be7] [MEMORY 8ae41b4e]  2026-08-31 11:25 · created "Initial policy wording retained for provena…"                                                          ┃
+┃                                                                                                                                                                                  ┃
+┃ATTACHMENTS                                                                                                                                                                       ┃
+┃  none                                                                                                                                                                           v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ TRACE REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

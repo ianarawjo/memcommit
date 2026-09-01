@@ -4,10 +4,14 @@ import typer
 
 import memcommit.application.capabilities.ops as ops
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.authorization.context_operation import (
     authorized_context_mutation,
+)
+from memcommit.application.context_access.access import (
     grant_checkpoint_args,
-    resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
 )
 from memcommit.core.context import AutoCheckpoint
 from memcommit.application.operations.edit.application import (
@@ -198,12 +202,12 @@ def cmd(
         return
 
     try:
-        access = resolve_context_access(
+        access = resolve_existing_context_access(
             active_store,
             context_name,
             current_name=current_name,
             required_permission="UPDATE",
-        )
+        ).value
         store = access.store
         ctx = store.load_direct(access.context_name)
     except (

@@ -11,7 +11,7 @@ from typing import Literal
 from memcommit.application.operations.update.model import GrantedUpdateTarget
 
 
-SEVER_SCHEMA_VERSION = 3
+SEVER_SCHEMA_VERSION = 4
 SeverDecision = Literal[
     "KEEP_AS_WRITTEN",
     "KEEP_REDACTED",
@@ -65,7 +65,9 @@ def _uuid(value: object, label: str) -> str:
 
 def _digest(value: object, label: str) -> str:
     text = _text(value, label)
-    if len(text) != 64 or any(character not in "0123456789abcdef" for character in text):
+    if len(text) != 64 or any(
+        character not in "0123456789abcdef" for character in text
+    ):
         raise SeverError(f"Invalid Sever {label}.")
     return text
 
@@ -88,7 +90,11 @@ class SeverMemory:
         _text(self.content, "Memory content")
 
     def to_dict(self) -> dict[str, str]:
-        return {"uid": self.uid, "context_name": self.context_name, "content": self.content}
+        return {
+            "uid": self.uid,
+            "context_name": self.context_name,
+            "content": self.content,
+        }
 
     @classmethod
     def from_dict(cls, value: object) -> "SeverMemory":
@@ -130,13 +136,11 @@ class SeverContextBinding:
             raise SeverError("Duplicate Sever Memory uid.")
         if type(self.include_descendants) is not bool:
             raise SeverError("Invalid Sever descendant scope.")
-        if (
-            any(
-                not isinstance(name, str) or not name.strip()
-                for name in self.excluded_query_context_names
-            )
-            or len(set(self.excluded_query_context_names))
-            != len(self.excluded_query_context_names)
+        if any(
+            not isinstance(name, str) or not name.strip()
+            for name in self.excluded_query_context_names
+        ) or len(set(self.excluded_query_context_names)) != len(
+            self.excluded_query_context_names
         ):
             raise SeverError("Invalid excluded query-only Context names.")
         if self.granted is not None:
@@ -161,9 +165,7 @@ class SeverContextBinding:
             "memories": [memory.to_dict() for memory in self.memories],
             "granted": self.granted,
             "include_descendants": self.include_descendants,
-            "excluded_query_context_names": list(
-                self.excluded_query_context_names
-            ),
+            "excluded_query_context_names": list(self.excluded_query_context_names),
         }
 
     @classmethod
@@ -171,14 +173,18 @@ class SeverContextBinding:
         if not isinstance(value, dict):
             raise SeverError("Invalid Sever Context binding.")
         legacy_keys = {
-            "root_uid", "root_name", "frame_digest", "contexts", "memories", "granted"
+            "root_uid",
+            "root_name",
+            "frame_digest",
+            "contexts",
+            "memories",
+            "granted",
         }
         if frozenset(value) not in {
             frozenset(legacy_keys),
             frozenset(legacy_keys | {"include_descendants"}),
             frozenset(
-                legacy_keys
-                | {"include_descendants", "excluded_query_context_names"}
+                legacy_keys | {"include_descendants", "excluded_query_context_names"}
             ),
         }:
             raise SeverError("Invalid Sever Context binding.")
@@ -229,7 +235,9 @@ class SeverCandidate:
         _text(self.rationale, "candidate rationale")
         if self.recommendation == "FORGET":
             if self.proposed_content:
-                raise SeverError("Forgotten Sever candidates cannot have result content.")
+                raise SeverError(
+                    "Forgotten Sever candidates cannot have result content."
+                )
         elif not self.proposed_content.strip():
             raise SeverError("Retained Sever candidates require result content.")
         if self.selection not in _SELECTIONS:
@@ -258,13 +266,21 @@ class SeverCandidate:
         data = _exact(
             value,
             {
-                "uid", "source_memory_uid", "recommendation", "proposed_content",
-                "rationale", "criterion_memory_uids", "selection", "custom_content",
+                "uid",
+                "source_memory_uid",
+                "recommendation",
+                "proposed_content",
+                "rationale",
+                "criterion_memory_uids",
+                "selection",
+                "custom_content",
             },
             "candidate",
         )
         refs = data["criterion_memory_uids"]
-        if not isinstance(refs, list) or any(not isinstance(item, str) for item in refs):
+        if not isinstance(refs, list) or any(
+            not isinstance(item, str) for item in refs
+        ):
             raise SeverError("Invalid Sever criterion references.")
         return cls(
             uid=data["uid"],  # type: ignore[arg-type]
@@ -297,9 +313,7 @@ class SeverAppliedSummary:
             _uuid(uid, "applied summary Memory uid")
         if len(set(self.source_memory_uids)) != len(self.source_memory_uids):
             raise SeverError("Duplicate applied-summary Source Memory uid.")
-        if len(set(self.criterion_memory_uids)) != len(
-            self.criterion_memory_uids
-        ):
+        if len(set(self.criterion_memory_uids)) != len(self.criterion_memory_uids):
             raise SeverError("Duplicate applied-summary Criteria Memory uid.")
 
     def to_dict(self) -> dict[str, object]:
@@ -331,32 +345,99 @@ class SeverAppliedSummary:
 
 
 @dataclass(frozen=True)
+class SeverCheckpointReceipt:
+    """One exact Source owner checkpoint in an in-place Sever command."""
+
+    context_uid: str
+    context_name: str
+    checkpoint_uid: str
+
+    def __post_init__(self) -> None:
+        _uuid(self.context_uid, "checkpoint owner Context uid")
+        _text(self.context_name, "checkpoint owner Context name")
+        _uuid(self.checkpoint_uid, "checkpoint uid")
+
+    def to_dict(self) -> dict[str, str]:
+        return {
+            "context_uid": self.context_uid,
+            "context_name": self.context_name,
+            "checkpoint_uid": self.checkpoint_uid,
+        }
+
+    @classmethod
+    def from_dict(cls, value: object) -> "SeverCheckpointReceipt":
+        data = _exact(
+            value,
+            {"context_uid", "context_name", "checkpoint_uid"},
+            "checkpoint receipt",
+        )
+        return cls(**data)  # type: ignore[arg-type]
+
+
+@dataclass(frozen=True)
 class SeverApplication:
     output_context_uid: str
     checkpoint_uid: str
     result_memory_uids: tuple[str, ...]
+    checkpoints: tuple[SeverCheckpointReceipt, ...] = ()
+
+    def __post_init__(self) -> None:
+        _uuid(self.output_context_uid, "output Context uid")
+        _uuid(self.checkpoint_uid, "checkpoint uid")
+        for uid in self.result_memory_uids:
+            _uuid(uid, "result Memory uid")
+        if len(set(self.result_memory_uids)) != len(self.result_memory_uids):
+            raise SeverError("Duplicate Sever result Memory uid.")
+        identities = [
+            (receipt.context_uid, receipt.context_name) for receipt in self.checkpoints
+        ]
+        if (
+            len(identities) != len(set(identities))
+            or len({receipt.context_uid for receipt in self.checkpoints})
+            != len(self.checkpoints)
+            or len({receipt.context_name for receipt in self.checkpoints})
+            != len(self.checkpoints)
+            or len({receipt.checkpoint_uid for receipt in self.checkpoints})
+            != len(self.checkpoints)
+            or (
+                self.checkpoints
+                and (
+                    self.checkpoints[0].context_uid != self.output_context_uid
+                    or self.checkpoints[0].checkpoint_uid != self.checkpoint_uid
+                )
+            )
+        ):
+            raise SeverError("Invalid Sever application checkpoints.")
 
     def to_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "output_context_uid": self.output_context_uid,
             "checkpoint_uid": self.checkpoint_uid,
             "result_memory_uids": list(self.result_memory_uids),
         }
+        if self.checkpoints:
+            result["checkpoints"] = [item.to_dict() for item in self.checkpoints]
+        return result
 
     @classmethod
     def from_dict(cls, value: object) -> "SeverApplication":
-        data = _exact(
-            value,
-            {"output_context_uid", "checkpoint_uid", "result_memory_uids"},
-            "application",
-        )
+        keys = {"output_context_uid", "checkpoint_uid", "result_memory_uids"}
+        if isinstance(value, dict) and "checkpoints" in value:
+            keys.add("checkpoints")
+        data = _exact(value, keys, "application")
         uids = data["result_memory_uids"]
         if not isinstance(uids, list):
             raise SeverError("Invalid Sever result Memory uids.")
+        raw_checkpoints = data.get("checkpoints", [])
+        if not isinstance(raw_checkpoints, list):
+            raise SeverError("Invalid Sever application checkpoints.")
         return cls(
             output_context_uid=_uuid(data["output_context_uid"], "output Context uid"),
             checkpoint_uid=_uuid(data["checkpoint_uid"], "checkpoint uid"),
             result_memory_uids=tuple(_uuid(item, "result Memory uid") for item in uids),
+            checkpoints=tuple(
+                SeverCheckpointReceipt.from_dict(item) for item in raw_checkpoints
+            ),
         )
 
 
@@ -378,14 +459,16 @@ class SeverSession:
         """Classify the reviewed location without inventing relation terminology."""
 
         return (
-            "SELF_SAVE"
-            if self.output_name == self.source.root_name
-            else "OTHER_SAVE"
+            "SELF_SAVE" if self.output_name == self.source.root_name else "OTHER_SAVE"
         )
 
     def __post_init__(self) -> None:
         _uuid(self.uid, "session uid")
-        if not isinstance(self.revision, int) or isinstance(self.revision, bool) or self.revision < 1:
+        if (
+            not isinstance(self.revision, int)
+            or isinstance(self.revision, bool)
+            or self.revision < 1
+        ):
             raise SeverError("Invalid Sever revision.")
         if self.state not in {"REVIEWING", "APPLIED"}:
             raise SeverError("Invalid Sever state.")
@@ -395,17 +478,28 @@ class SeverSession:
             raise SeverError("A Sever session requires candidates.")
         source_uids = {memory.uid for memory in self.source.memories}
         criterion_uids = {memory.uid for memory in self.criteria.memories}
-        if len({candidate.source_memory_uid for candidate in self.candidates}) != len(self.candidates):
+        if len({candidate.source_memory_uid for candidate in self.candidates}) != len(
+            self.candidates
+        ):
             raise SeverError("Duplicate Sever source candidate.")
-        if {candidate.source_memory_uid for candidate in self.candidates} != source_uids:
-            raise SeverError("Sever candidates must cover every source Memory exactly once.")
-        if any(not set(candidate.criterion_memory_uids) <= criterion_uids for candidate in self.candidates):
+        if {
+            candidate.source_memory_uid for candidate in self.candidates
+        } != source_uids:
+            raise SeverError(
+                "Sever candidates must cover every source Memory exactly once."
+            )
+        if any(
+            not set(candidate.criterion_memory_uids) <= criterion_uids
+            for candidate in self.candidates
+        ):
             raise SeverError("Sever candidate cites an unavailable criterion Memory.")
         if self.applied_summary is not None:
             if not set(self.applied_summary.source_memory_uids) <= source_uids:
                 raise SeverError("Applied summary cites an unavailable Source Memory.")
             if not set(self.applied_summary.criterion_memory_uids) <= criterion_uids:
-                raise SeverError("Applied summary cites an unavailable Criteria Memory.")
+                raise SeverError(
+                    "Applied summary cites an unavailable Criteria Memory."
+                )
         if (self.state == "APPLIED") != (self.application is not None):
             raise SeverError("Invalid Sever application state.")
 
@@ -415,7 +509,9 @@ class SeverSession:
             raise SeverError("Unknown Sever source Memory.")
         return matches[0]
 
-    def select(self, candidate_uid: str, selection: SeverSelection, custom: str = "") -> "SeverSession":
+    def select(
+        self, candidate_uid: str, selection: SeverSelection, custom: str = ""
+    ) -> "SeverSession":
         if self.state != "REVIEWING":
             raise SeverError("An applied Sever session cannot be edited.")
         updated: list[SeverCandidate] = []
@@ -519,8 +615,16 @@ class SeverSession:
     @classmethod
     def from_dict(cls, value: object) -> "SeverSession":
         legacy_keys = {
-            "schema_version", "uid", "revision", "state", "source", "criteria",
-            "output_name", "overview", "candidates", "application",
+            "schema_version",
+            "uid",
+            "revision",
+            "state",
+            "source",
+            "criteria",
+            "output_name",
+            "overview",
+            "candidates",
+            "application",
         }
         current_keys = legacy_keys | {"applied_summary"}
         if not isinstance(value, dict) or frozenset(value) not in {
@@ -529,7 +633,7 @@ class SeverSession:
         }:
             raise SeverError("Invalid Sever session.")
         data = value
-        if data["schema_version"] not in {1, 2, SEVER_SCHEMA_VERSION}:
+        if data["schema_version"] not in {1, 2, 3, SEVER_SCHEMA_VERSION}:
             raise SeverError("Unsupported Sever schema version.")
         candidates = data["candidates"]
         if not isinstance(candidates, list):
@@ -557,8 +661,14 @@ class SeverSession:
 
 
 def sever_record_digest(value: SeverSession | dict[str, object]) -> str:
-    record = value.to_dict() if isinstance(value, SeverSession) else SeverSession.from_dict(value).to_dict()
-    encoded = json.dumps(record, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
+    record = (
+        value.to_dict()
+        if isinstance(value, SeverSession)
+        else SeverSession.from_dict(value).to_dict()
+    )
+    encoded = json.dumps(
+        record, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    ).encode()
     return hashlib.sha256(encoded).hexdigest()
 
 
@@ -578,5 +688,7 @@ def sever_frame_digest(
         "include_descendants": include_descendants,
     }
     return hashlib.sha256(
-        json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()
+        json.dumps(
+            payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        ).encode()
     ).hexdigest()

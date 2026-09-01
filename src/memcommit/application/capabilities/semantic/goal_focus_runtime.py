@@ -5,20 +5,13 @@ from __future__ import annotations
 import hashlib
 
 from memcommit.core.context import Context, Memory
-from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.capabilities.local_target_lookup import (
-    resolve_local_direct_memory_locator,
-    try_resolve_short_local_direct_memory_locator,
+    resolve_local_context_memory_or_inline_text_target,
 )
 from memcommit.core.context_targeting.model import (
-    DirectMemoryLocator,
+    ContextTarget,
+    DirectMemoryTarget,
     InlineTextOperand,
-)
-from memcommit.application.capabilities.context_operand_classification import (
-    classify_context_or_inline_text_operand,
-)
-from memcommit.core.context_targeting.resolution import (
-    parse_auto_typed_context_memory_operand,
 )
 from memcommit.application.capabilities.semantic.goal_focus import (
     FrozenGoalFocus,
@@ -48,18 +41,14 @@ def _items(context: Context, memories: tuple[Memory, ...]) -> tuple[GoalFocusIte
     )
 
 
-def _memory_focus(
+def _resolved_memory_focus(
     store: MemoryStore,
+    target: DirectMemoryTarget,
     *,
-    locator: str,
-    current_name: str | None,
     kind: GoalFocusKind = "MEMORY",
 ) -> FrozenGoalFocus:
-    target = resolve_local_direct_memory_locator(
-        store,
-        locator,
-        current=current_name,
-    )
+    """Freeze one already resolved owner coordinate without reinterpreting it."""
+
     context = store.load_direct(target.context_name)
     memory = context.memories.get(target.memory_uid)
     if not isinstance(memory, Memory):  # pragma: no cover - resolver invariant
@@ -123,41 +112,26 @@ def freeze_goal_focus_operand(
     if value.startswith("text:"):
         return inline_goal_focus(value.removeprefix("text:"))
 
-    parsed = parse_auto_typed_context_memory_operand(value)
-    if isinstance(parsed, DirectMemoryLocator):
-        return _memory_focus(
+    try:
+        target = resolve_local_context_memory_or_inline_text_target(
             store,
-            locator=value,
-            current_name=current_name,
+            value,
+            current=current_name,
         )
-
-    canonical_name = resolve_context_locator(parsed.locator, current=current_name)
-    if store.context_exists(canonical_name):
+    except (FileNotFoundError, ValueError) as error:
+        raise GoalFocusError(str(error)) from error
+    if isinstance(target, ContextTarget):
         return freeze_goal_focus_context(
-            store.load_direct(canonical_name),
+            store.load_direct(target.context_name),
             require_single=require_single,
         )
-
-    short_memory = try_resolve_short_local_direct_memory_locator(
-        store,
-        parsed.locator,
-        current=current_name,
-    )
-    if short_memory is not None:
-        return _memory_focus(
+    if isinstance(target, DirectMemoryTarget):
+        return _resolved_memory_focus(
             store,
-            locator=short_memory.memory_uid,
-            current_name=current_name,
+            target,
         )
-
-    classified = classify_context_or_inline_text_operand(
-        value,
-        current=current_name,
-        context_exists=store.context_exists,
-    )
-    if isinstance(classified, InlineTextOperand):
-        return inline_goal_focus(classified.text)
-    raise GoalFocusError(f"Goal Context {canonical_name!r} does not exist locally.")
+    assert isinstance(target, InlineTextOperand)
+    return inline_goal_focus(target.text)
 
 
 def revalidate_goal_focus(store: MemoryStore, focus: FrozenGoalFocus) -> None:

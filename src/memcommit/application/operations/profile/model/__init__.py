@@ -29,7 +29,6 @@ from ._storage import (
 )
 
 from .grants import (
-    GrantedContextView as GrantedContextView,
     ShareEndpoint as ShareEndpoint,
     _assert_grantee_attachment as _assert_grantee_attachment,
     _assert_public_view_available as _assert_public_view_available,
@@ -37,9 +36,7 @@ from .grants import (
     _grant_selector as _grant_selector,
     create_authority_grant as create_authority_grant,
     delete_authority_grant as delete_authority_grant,
-    grants_for_attachment as grants_for_attachment,
     list_authority_grants as list_authority_grants,
-    resolve_granted_context_view as resolve_granted_context_view,
     resolve_share_endpoint as resolve_share_endpoint,
     update_authority_grant as update_authority_grant,
 )
@@ -94,7 +91,6 @@ from .lifecycle import (
 
 __all__ = [
     "ContextInventory",
-    "GrantedContextView",
     "LegacyStudyArchiveResult",
     "ProfileCreationResult",
     "ProfileError",
@@ -114,7 +110,6 @@ __all__ = [
     "create_authority_grant",
     "create_profile",
     "delete_authority_grant",
-    "grants_for_attachment",
     "import_baseline_profile",
     "import_profile",
     "inspect_store",
@@ -125,7 +120,6 @@ __all__ = [
     "remove_study",
     "rename_profile",
     "rename_study",
-    "resolve_granted_context_view",
     "resolve_share_endpoint",
     "study_profile_groups",
     "study_run_profile_pairs",

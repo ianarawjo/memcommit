@@ -73,7 +73,7 @@ Task 2 workflow.
 ## Implementation ownership
 
 The shared Grant-navigation snapshot is owned by
-`memcommit.application.capabilities.authority.granted_context_navigation`.
+`memcommit.application.context_access.granted_context_navigation`.
 It is not a core Context-targeting primitive: freezing the snapshot loads the
 active Profile registry, verifies that the supplied Store belongs to that
 Profile, revalidates each local attachment Context identity, and applies the

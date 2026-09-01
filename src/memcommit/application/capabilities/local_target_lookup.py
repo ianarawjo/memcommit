@@ -7,13 +7,24 @@ from typing import Protocol
 
 from memcommit.core.context import Context, Information, Memory
 from memcommit.application.capabilities.context_locator import resolve_context_locator
+from memcommit.application.capabilities.context_locator import (
+    is_relative_context_locator,
+)
+from memcommit.application.capabilities.durable_uid_resolution import (
+    DurableUidAmbiguityError,
+    DurableUidCandidate,
+    is_unresolved_uid_selector,
+    try_resolve_durable_uid,
+)
 from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
 from memcommit.core.context_targeting.model import (
     ContextTarget,
     DirectItemTarget,
     DirectMemoryTarget,
     ExistingContextOperand,
+    InlineTextOperand,
 )
+from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
     parse_direct_memory_locator,
@@ -52,6 +63,14 @@ class DirectMemoryNotFoundError(DirectMemoryLocatorError):
 
 class DirectMemoryAmbiguityError(DirectMemoryLocatorError):
     """More than one ordinary local direct-Memory coordinate matched."""
+
+
+class LocalContextMemoryTargetNotFoundError(DirectMemoryNotFoundError):
+    """No local Context or direct Memory matched an auto-typed operand."""
+
+
+class LocalContextMemoryTargetAmbiguityError(DirectMemoryAmbiguityError):
+    """An auto-typed UID matched incompatible local target coordinates."""
 
 
 def _direct_memory_matches(
@@ -258,23 +277,118 @@ def resolve_local_context_memory_target(
     """
 
     parsed = parse_auto_typed_context_memory_operand(operand)
-    if isinstance(parsed, ExistingContextOperand):
-        context_name = resolve_context_locator(parsed.locator, current=current)
-        if store.context_exists(context_name):
-            return ContextTarget(context_name)
-        short_memory = try_resolve_short_local_direct_memory_locator(
+    # CONTEXT:UID is an explicit Memory spelling. Bare UUID-shaped operands
+    # remain auto-typed until the same frozen frame has considered both
+    # Context and Memory identities; otherwise a Context UID is irreversibly
+    # misclassified as Memory before storage is consulted.
+    if not isinstance(parsed, ExistingContextOperand) and parsed.context_locator:
+        return resolve_local_direct_memory_locator(
             store,
-            parsed.locator,
+            operand,
             current=current,
         )
-        if short_memory is not None:
-            return short_memory
+
+    assert isinstance(operand, str)
+    graph = store.load_direct_context_graph_strict()
+    context_name = resolve_context_locator(operand, current=current)
+    named = tuple(context for context in graph if context.name == context_name)
+    if len(named) == 1:
+        return ContextTarget(named[0].name)
+    if len(named) > 1:
+        raise LocalContextMemoryTargetAmbiguityError(
+            f"Context name {context_name!r} has multiple local identities."
+        )
+
+    if not is_unresolved_uid_selector(operand):
+        short_matches = tuple(
+            (context, item)
+            for context in graph
+            for item in context.iter_items()
+            if isinstance(item, Memory) and item.uid.startswith(operand)
+        )
+        if short_matches:
+            return _resolved_direct_memory_target(
+                operand,
+                short_matches,
+                context_name=None,
+            )
         raise FileNotFoundError(f"Context {context_name!r} does not exist locally.")
-    return resolve_local_direct_memory_locator(
-        store,
-        operand,
-        current=current,
+
+    candidates: tuple[
+        DurableUidCandidate[ContextTarget | DirectMemoryTarget], ...
+    ] = tuple(
+        DurableUidCandidate(
+            uid=context.uid,
+            kind="context",
+            value=ContextTarget(context.name),
+        )
+        for context in graph
+    ) + tuple(
+        DurableUidCandidate(
+            uid=item.uid,
+            kind="memory",
+            value=DirectMemoryTarget(context.name, item.uid),
+        )
+        for context in graph
+        for item in context.iter_items()
+        if isinstance(item, Memory)
     )
+    try:
+        identity = try_resolve_durable_uid(candidates, operand)
+    except DurableUidAmbiguityError as error:
+        raise LocalContextMemoryTargetAmbiguityError(str(error)) from error
+    if identity is None:
+        raise LocalContextMemoryTargetNotFoundError(
+            f"No directly owned Memory or local Context has a UID starting "
+            f"with {operand!r}."
+        )
+    targets = tuple(dict.fromkeys(identity.values))
+    if len(targets) != 1:
+        choices = "; ".join(
+            target.context_name
+            if isinstance(target, ContextTarget)
+            else f"{target.context_name}:{target.memory_uid}"
+            for target in targets
+        )
+        raise LocalContextMemoryTargetAmbiguityError(
+            f"UID {operand!r} identifies multiple local target coordinates: "
+            f"{choices}. Pass an exact Context name or CONTEXT:UID."
+        )
+    return targets[0]
+
+
+def resolve_local_context_memory_or_inline_text_target(
+    store: LocalDirectMemoryLocatorStore,
+    operand: object,
+    *,
+    current: str | None,
+) -> ContextTarget | DirectMemoryTarget | InlineTextOperand:
+    """Resolve a local Context/Memory first, then allow unambiguous prose.
+
+    This is the three-kind grammar used by semantic Goal-like inputs. Missing
+    relative names, portable Context-shaped names, and UID-shaped selectors
+    fail closed; only text that cannot be any of those locator forms becomes
+    process-local inline input.
+    """
+
+    try:
+        return resolve_local_context_memory_target(
+            store,
+            operand,
+            current=current,
+        )
+    except (FileNotFoundError, DirectMemoryNotFoundError):
+        if not isinstance(operand, str):
+            raise
+        if is_unresolved_uid_selector(operand) or is_relative_context_locator(
+            operand
+        ):
+            raise
+        try:
+            validate_portable_context_name(operand)
+        except ValueError:
+            return InlineTextOperand(operand)
+        raise
 
 
 def try_resolve_short_local_direct_memory_locator(

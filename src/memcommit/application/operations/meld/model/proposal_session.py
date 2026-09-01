@@ -16,6 +16,7 @@ from memcommit.core.context import Context, Memory
 from memcommit.persistence.store import context_record_digest
 
 from .apply_effects import MeldApplication, MeldChangeSet, MeldCheckpointReceipt
+from .candidate import MeldCandidateReview
 from .integration_proposal import (
     MeldAssessment,
     MeldProposal,
@@ -28,6 +29,7 @@ from .integration_proposal import (
 )
 from .source_snapshot import (
     INLINE_MELD_CONTEXT_NAME,
+    MELD_CANDIDATE_SCHEMA_VERSION,
     MELD_RELATION_ANALYSIS_SCHEMA_VERSION,
     MELD_DIRECTIONAL_RELATION_SCHEMA_VERSION,
     MELD_DIRECTIONAL_PRESERVATION_SCHEMA_VERSION,
@@ -70,6 +72,7 @@ class MeldSession:
     state: MeldState = "PENDING_ANALYSIS"
     turns: tuple[MeldTurn, ...] = ()
     application: MeldApplication | None = None
+    candidate_review: MeldCandidateReview | None = None
 
     @classmethod
     def create_symmetric(
@@ -322,7 +325,11 @@ class MeldSession:
                 self.application.to_dict() if self.application is not None else None
             ),
         }
-        if self.schema_version >= MELD_RELATION_ANALYSIS_SCHEMA_VERSION:
+        if (
+            MELD_RELATION_ANALYSIS_SCHEMA_VERSION
+            <= self.schema_version
+            < MELD_CANDIDATE_SCHEMA_VERSION
+        ):
             result["comparison_seed"] = (
                 self.relation_analysis_seed.to_dict()
                 if self.relation_analysis_seed is not None
@@ -336,6 +343,12 @@ class MeldSession:
             )
             result["granted_target"] = (
                 None if self.granted_target is None else self.granted_target.to_dict()
+            )
+        if self.schema_version == MELD_CANDIDATE_SCHEMA_VERSION:
+            result["candidate_review"] = (
+                None
+                if self.candidate_review is None
+                else self.candidate_review.to_dict()
             )
         return result
 
@@ -354,6 +367,7 @@ class MeldSession:
             MELD_DIRECTIONAL_RELATION_SCHEMA_VERSION,
             MELD_MEMORY_FOCUS_SCHEMA_VERSION,
             MELD_INLINE_MEMORY_SCHEMA_VERSION,
+            MELD_CANDIDATE_SCHEMA_VERSION,
         }:
             raise MeldError("Unsupported meld session schema version.")
         keys = {
@@ -366,10 +380,16 @@ class MeldSession:
             "turns",
             "application",
         }
-        if schema_version >= MELD_RELATION_ANALYSIS_SCHEMA_VERSION:
+        if (
+            MELD_RELATION_ANALYSIS_SCHEMA_VERSION
+            <= schema_version
+            < MELD_CANDIDATE_SCHEMA_VERSION
+        ):
             keys.add("comparison_seed")
         if schema_version >= MELD_GRANTED_SCHEMA_VERSION:
             keys.update({"granted_incoming", "granted_target"})
+        if schema_version == MELD_CANDIDATE_SCHEMA_VERSION:
+            keys.add("candidate_review")
         data = _exact_dict(
             value,
             keys,
@@ -386,7 +406,11 @@ class MeldSession:
         raw_application = data["application"]
         raw_relation_analysis_seed = (
             data["comparison_seed"]
-            if schema_version >= MELD_RELATION_ANALYSIS_SCHEMA_VERSION
+            if (
+                MELD_RELATION_ANALYSIS_SCHEMA_VERSION
+                <= schema_version
+                < MELD_CANDIDATE_SCHEMA_VERSION
+            )
             else None
         )
         session = cls(
@@ -426,6 +450,12 @@ class MeldSession:
                 None
                 if raw_application is None
                 else MeldApplication.from_dict(raw_application)
+            ),
+            candidate_review=(
+                None
+                if schema_version != MELD_CANDIDATE_SCHEMA_VERSION
+                or data["candidate_review"] is None
+                else MeldCandidateReview.from_dict(data["candidate_review"])
             ),
         )
         session._validate()
@@ -651,8 +681,14 @@ class MeldSession:
             MELD_DIRECTIONAL_RELATION_SCHEMA_VERSION,
             MELD_MEMORY_FOCUS_SCHEMA_VERSION,
             MELD_INLINE_MEMORY_SCHEMA_VERSION,
+            MELD_CANDIDATE_SCHEMA_VERSION,
         }:
             raise MeldError("Unsupported meld session schema version.")
+        if self.schema_version == MELD_CANDIDATE_SCHEMA_VERSION:
+            self._validate_candidate_session()
+            return
+        if self.candidate_review is not None:
+            raise MeldError("A legacy Meld session cannot contain a candidate review.")
         if self.schema_version == MELD_LEGACY_SCHEMA_VERSION:
             if self.relation_analysis_seed is not None:
                 raise MeldError(
@@ -950,6 +986,87 @@ class MeldSession:
                     )
         elif self.application is not None:
             raise MeldError("Only an applied meld may retain an application.")
+
+    def _validate_candidate_session(self) -> None:
+        """Validate the Audit→Resolve→Update session independently of legacy turns."""
+
+        if self.relation_analysis_seed is not None or self.turns:
+            raise MeldError(
+                "A candidate Meld session cannot contain relation analysis or turns."
+            )
+        if len(self.frames) != 2 or self.candidate_review is None:
+            raise MeldError("A candidate Meld session requires two Sources and a review.")
+        if (
+            len({frame.uid for frame in self.frames}) != 2
+            or len({frame.context_uid for frame in self.frames}) != 2
+            or len({frame.context_name for frame in self.frames}) != 2
+        ):
+            raise MeldError("Candidate Meld Source frames must be distinct.")
+        if self.mode == "SYMMETRIC":
+            if any(frame.role != "PEER" for frame in self.frames):
+                raise MeldError("Symmetric candidate Meld requires two PEER frames.")
+            if self.target.context_uid in {
+                frame.context_uid for frame in self.frames
+            } or self.target.context_name in {
+                frame.context_name for frame in self.frames
+            }:
+                raise MeldError("Symmetric candidate target overlaps a Source.")
+        else:
+            incoming, baseline = self.frames
+            if incoming.role != "INCOMING" or baseline.role != "BASELINE":
+                raise MeldError(
+                    "Directional candidate Meld requires INCOMING and BASELINE."
+                )
+            if (
+                self.target.context_uid != baseline.context_uid
+                or self.target.context_name != baseline.context_name
+                or self.target.context_digest != baseline.context_digest
+            ):
+                raise MeldError(
+                    "Directional candidate target must match its BASELINE."
+                )
+        source_keys = {
+            (frame.uid, memory.uid)
+            for frame in self.frames
+            for memory in frame.memories
+        }
+        claim_keys = {
+            (claim.frame_uid, claim.memory_uid)
+            for claim in self.candidate_review.source_claims
+        }
+        if claim_keys != source_keys or len(claim_keys) != len(
+            self.candidate_review.source_claims
+        ):
+            raise MeldError(
+                "Candidate Meld must bind every Source Memory exactly once."
+            )
+        source_by_key = {
+            (frame.uid, memory.uid): (frame, memory)
+            for frame in self.frames
+            for memory in frame.memories
+        }
+        for claim in self.candidate_review.source_claims:
+            frame, memory = source_by_key[(claim.frame_uid, claim.memory_uid)]
+            if (
+                claim.context_uid != frame.context_uid
+                or claim.context_name != frame.context_name
+                or claim.content != memory.content
+            ):
+                raise MeldError(
+                    "Candidate Meld Source claim changed its frozen evidence."
+                )
+        if self.state not in {
+            "AWAITING_REPLY",
+            "READY_TO_APPLY",
+            "KEPT_REVIEW_ONLY",
+            "APPLIED",
+        }:
+            raise MeldError("Candidate Meld has an invalid lifecycle state.")
+        if self.state == "APPLIED":
+            if self.application is None:
+                raise MeldError("Applied candidate Meld requires an application receipt.")
+        elif self.application is not None:
+            raise MeldError("Only an applied candidate Meld may retain a receipt.")
 
     def _validate_assessment(self, turn: MeldTurn) -> None:
         assessment = turn.assessment

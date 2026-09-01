@@ -6,15 +6,18 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     context_access_display_facts,
-    resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
 )
 from memcommit.adapters.console.clipboard import ClipboardError, write_system_clipboard
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.adapters.console.coordination.context_scope_options import (
@@ -152,13 +155,18 @@ def cmd(
         operands: tuple[str | None, ...] = (
             tuple(context_name) if context_name else (None,)
         )
+        context_candidates = freeze_profile_context_access_candidates(
+            store,
+            current_name=snapshot.current_name,
+        )
         accesses = tuple(
-            resolve_context_access(
+            resolve_existing_context_access(
                 store,
                 operand,
                 current_name=snapshot.current_name,
                 required_permission="READ",
-            )
+                candidates=context_candidates,
+            ).value
             for operand in operands
         )
         target_names = tuple(access.display_name for access in accesses)

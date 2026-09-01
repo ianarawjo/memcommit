@@ -5,6 +5,7 @@ from __future__ import annotations
 import pytest
 
 from memcommit.adapters.python_api import (
+    MeldDecisionInput,
     MeldProviderFailure,
     MeldSessionResult,
     MemCommitClient,
@@ -104,14 +105,14 @@ def test_provider_failure_is_bounded_and_retryable(client, monkeypatch):
     def fail(**kwargs):
         raise MeldProviderFailure("private endpoint detail")
 
-    monkeypatch.setattr(client, "comment_meld", fail)
+    monkeypatch.setattr(client, "resolve_meld", fail)
     result = MeldAgentAdapter(client).invoke(
         {
             "version": 1,
-            "kind": "comment",
+            "kind": "resolve",
             "target_context": "baseline",
-            "comment": "Use the first reading.",
             "expected_version": "saved-version",
+            "decisions": [],
         }
     )
 
@@ -123,22 +124,29 @@ def test_provider_failure_is_bounded_and_retryable(client, monkeypatch):
     }
 
 
-def test_exact_issue_option_forwards_the_reviewed_version(client, monkeypatch):
+def test_complete_decision_set_forwards_the_reviewed_version(client, monkeypatch):
     calls = []
     monkeypatch.setattr(
         client,
-        "comment_meld",
+        "resolve_meld",
         lambda *args, **kwargs: (calls.append((args, kwargs)) or _session()),
     )
 
     result = MeldAgentAdapter(client).invoke(
         {
             "version": 1,
-            "kind": "comment",
+            "kind": "resolve",
             "target_context": "baseline",
-            "issue_uid": "issue-1",
-            "option_uid": "option-1",
             "expected_version": "saved-version",
+            "decisions": [
+                {"issue_uid": "issue-1", "kind": "confirm"},
+                {
+                    "issue_uid": "issue-2",
+                    "kind": "intent",
+                    "intent": "Keep named greetings as exceptions.",
+                },
+                {"issue_uid": "issue-3", "kind": "force"},
+            ],
         }
     )
 
@@ -148,79 +156,59 @@ def test_exact_issue_option_forwards_the_reviewed_version(client, monkeypatch):
             (),
             {
                 "target_context": "baseline",
-                "comment": "",
-                "issue_uid": "issue-1",
-                "option_uid": "option-1",
                 "expected_version": "saved-version",
-                "revision": "EXTEND",
-                "revises_turn_uids": (),
+                "decisions": (
+                    MeldDecisionInput("issue-1", "confirm"),
+                    MeldDecisionInput(
+                        "issue-2",
+                        "intent",
+                        "Keep named greetings as exceptions.",
+                    ),
+                    MeldDecisionInput("issue-3", "force"),
+                ),
             },
         )
     ]
 
 
-def test_exact_issue_option_requires_the_reviewed_version(client):
+def test_resolve_requires_the_reviewed_version(client):
     result = MeldAgentAdapter(client).invoke(
         {
             "version": 1,
-            "kind": "comment",
+            "kind": "resolve",
             "target_context": "baseline",
-            "issue_uid": "issue-1",
-            "option_uid": "option-1",
+            "decisions": [],
         }
     )
 
     assert result["ok"] is False
     assert result["error"]["code"] == "invalid_request"
     assert "expected_version" in result["error"]["message"]
+
+
+def test_intent_decision_requires_nonblank_intent(client):
+    result = MeldAgentAdapter(client).invoke(
+        {
+            "version": 1,
+            "kind": "resolve",
+            "target_context": "baseline",
+            "expected_version": "saved-version",
+            "decisions": [{"issue_uid": "issue-1", "kind": "intent"}],
+        }
+    )
+
+    assert result["ok"] is False
+    assert result["error"]["code"] == "invalid_request"
+    assert "nonblank intent" in result["error"]["message"]
 
 
 @pytest.mark.parametrize("kind", ("comment", "preserve", "defer", "apply"))
-def test_every_saved_session_mutation_requires_the_reviewed_version(client, kind):
-    payload = {
-        "version": 1,
-        "kind": kind,
-        "target_context": "baseline",
-    }
-    if kind == "comment":
-        payload["comment"] = "Keep the reviewed interpretation."
-
-    result = MeldAgentAdapter(client).invoke(payload)
+def test_retired_meld_agent_actions_are_not_executable(client, kind):
+    result = MeldAgentAdapter(client).invoke({"version": 1, "kind": kind})
 
     assert result["ok"] is False
     assert result["error"]["code"] == "invalid_request"
-    assert "expected_version" in result["error"]["message"]
-
-
-@pytest.mark.parametrize("kind", ("preserve", "defer", "apply"))
-def test_saved_session_actions_forward_the_exact_reviewed_version(
-    client,
-    monkeypatch,
-    kind,
-):
-    calls = []
-    monkeypatch.setattr(
-        client,
-        f"{kind}_meld",
-        lambda **kwargs: (calls.append(kwargs) or _session()),
-    )
-
-    result = MeldAgentAdapter(client).invoke(
-        {
-            "version": 1,
-            "kind": kind,
-            "target_context": "baseline",
-            "expected_version": "saved-version",
-        }
-    )
-
-    assert result["ok"] is True
-    assert calls == [
-        {
-            "target_context": "baseline",
-            "expected_version": "saved-version",
-        }
-    ]
+    assert "resolve" in result["error"]["message"]
 
 
 def test_schema_is_fresh_and_uses_stable_tool_name():
@@ -229,5 +217,6 @@ def test_schema_is_fresh_and_uses_stable_tool_name():
 
     assert meld_agent_tool_schema()["name"] == MELD_AGENT_TOOL_NAME
     properties = meld_agent_tool_schema()["parameters"]["properties"]
-    assert "option_uid" in properties
+    assert "decisions" in properties
+    assert properties["kind"]["enum"] == ["start", "restart", "open", "resolve"]
     assert "required by restart" in properties["expected_version"]["description"]

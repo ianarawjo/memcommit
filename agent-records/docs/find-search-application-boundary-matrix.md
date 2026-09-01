@@ -57,6 +57,18 @@ revalidation, require-new publication, checkpoint, rollback, and receipt.
 Search analysis therefore cannot publish, while Find or another result-bearing
 operation can later reuse the same save boundary without importing Search.
 
+The operation-neutral
+`memcommit.application.capabilities.retrieval_corpus` capability owns
+`RetrievalCandidate`, `RetrievalArtifact`, Context-graph collection, readable
+root loading, and bounded Store-backed activity projections. Search's
+`ranking.py` alone owns the provider schema, prompt, strict decoder, semantic
+execution budget, staged TOP_K_RERANK calls, and final reconciliation. The old
+Search `candidates.py`, `corpus.py`, and `artifacts.py` paths and the broad
+`model.py` path are thin compatibility facades only; production Search, Query,
+and Find code imports the shared corpus owner directly. Store-backed artifact
+projection may read terminal-independent operation or Store records but may
+not import console session catalogs or terminal components.
+
 The historical Find-named Search and materialization facades are removed.
 Importing `memcommit.application.operations.search` alone remains lazy and does
 not assemble either Search execution or the selection-save capability.
@@ -159,6 +171,11 @@ persistence facade.
 - granted current content follows the same current-only query contract;
 - no stdout or stderr from the Store runtime; and
 - no command, Typer, or prompt-toolkit imports in the application module.
+- importing the complete Search runtime loads no console adapter modules;
+- production code imports shared retrieval-corpus candidates plus Search's
+  ranking and error owners rather than the `model.py` compatibility facade;
+- Query owns its typed evidence/reference document and Search exposes no answer
+  builder or exact-three-sentence contract.
 
 `tests/test_save_context_from_selection.py` proves:
 

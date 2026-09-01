@@ -1,5 +1,10 @@
 # Meld Usage
 
+> Current contract (2026-08-31): new Meld runs use Audit → Resolve decisions →
+> one whole-candidate Update → post-image Audit and Source coverage → Apply.
+> Compare-backed turns, preserve/defer, and separate acceptance described in
+> older examples below are historical and require revision before reuse.
+
 > **Authorization contract updated 2026-08-30.** Permission claims below that use `EMBED`, `DERIVE`, `COMBINE`, `EXPORT`, `ACCEPT_DERIVED`, or `SAVE_*` describe the retired contract preserved for design history. The current contract uses `QUERY`, `CREATE`, `READ`, `UPDATE`, and `DELETE`; `READ` covers readable semantic use and Embed traversal, while `SHARE` remains a separate endpoint capability. See `granted-derived-ownership-design-rationale.md`.
 
 This is the canonical user-facing command guide for the meld behavior that is
@@ -71,6 +76,22 @@ Explicit forms such as `mem meld --memory TEXT`, `mem meld INCOMING BASELINE`,
 aliases retain target-bound create-or-resume behavior.
 `--sessions` cannot be combined with Context operands or semantic, terminal,
 restart, or expansion actions.
+
+## Start a new Meld in the TUI
+
+The new-Meld setup begins in symmetric mode, where A and B are Context peers
+and C is their separate Result. Switching to directional mode exposes an
+explicit incoming Source Type row:
+
+- `CONTEXT` selects a readable incoming Context and optional descendant reach;
+- `STORED MEMORY` selects its readable owner Context and requires one exact
+  direct Memory; and
+- `INLINE MEMORY` accepts one process-local text value and reviews
+  `mem meld --memory TEXT --into BASELINE`.
+
+The baseline remains a Context and may independently select an exact stored
+Memory. An unavailable Context is never treated as inline text automatically,
+and symmetric mode never exposes stored- or inline-Memory peers.
 
 ## Inline-Memory meld: incorporate one exact idea
 

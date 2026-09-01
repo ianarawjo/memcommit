@@ -6,7 +6,6 @@ import typer
 
 from memcommit.persistence.command_ledger.attempts import (
     current_command_attempt_uid,
-    annotate_memory_report_attempt,
 )
 from memcommit.application.operations.log.application import (
     LogEntry,
@@ -17,6 +16,9 @@ from memcommit.application.operations.log.runtime import execute_log
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
+)
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
 )
 from memcommit.adapters.console.terminal.components.history.presentation import (
     history_result_recovery_label,
@@ -223,13 +225,18 @@ def _render_operation_attempts(attempts: Sequence[LogEntry]) -> None:
             output = sever.get("output_name")
             if all(
                 value is not None
-                for value in (source, criteria, source_count, criteria_count, output)
+                for value in (source, criteria, source_count, criteria_count)
             ):
+                route = (
+                    " · IN PLACE"
+                    if output is None
+                    else f" → {safe_terminal_text(str(output))}"
+                )
                 typer.echo(
                     "      SEVER · "
                     f"{safe_terminal_text(str(source))} ({source_count}) × "
-                    f"{safe_terminal_text(str(criteria))} ({criteria_count}) → "
-                    f"{safe_terminal_text(str(output))}"
+                    f"{safe_terminal_text(str(criteria))} ({criteria_count})"
+                    f"{route}"
                 )
             provider = sever.get("provider")
             timeout = sever.get("provider_timeout_seconds")
@@ -455,8 +462,17 @@ def cmd(
     store = MemoryStore()
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
-        name = context_snapshot.resolve_or_current(context_name)
-    except ValueError as error:
+        name = (
+            resolve_existing_context_access(
+                store,
+                context_name,
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
+            ).name
+            if context_name is not None
+            else context_snapshot.current_name
+        )
+    except (ProfileError, ValueError) as error:
         typer.secho(
             f"History Context error: {display_escape_text(str(error))}",
             fg=typer.colors.RED,
@@ -492,11 +508,6 @@ def cmd(
                 current_name=context_snapshot.current_name,
             )
             report = build_memory_history(store, history_context, memory)
-            annotate_memory_report_attempt(
-                operation="trace",
-                context_name=history_context.display_name,
-                memory_uid=report.selected_uid,
-            )
         except (
             FileNotFoundError,
             OSError,

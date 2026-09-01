@@ -63,11 +63,13 @@ class _Provider:
         self.continuation = continuation
         self.calls = 0
         self.payload = None
+        self.output_schema = None
 
     def complete(self, prompt, *, operation, output_schema=None):
         self.calls += 1
         assert operation == "elaborate_memory"
         assert output_schema is not None
+        self.output_schema = output_schema
         self.payload = json.loads(prompt.split("ELABORATE PAYLOAD:\n", 1)[1])
         return json.dumps(
             {
@@ -81,7 +83,8 @@ class _Provider:
 
 def test_elaborate_builds_result_by_appending_after_unchanged_original():
     frame = _frame()
-    revision = elaborate_frame(frame, _Provider())
+    provider = _Provider()
+    revision = elaborate_frame(frame, provider)
 
     assert revision.original_content == "Original statement."
     assert revision.continuation == "This makes the existing condition explicit."
@@ -93,6 +96,28 @@ def test_elaborate_builds_result_by_appending_after_unchanged_original():
     assert revision.content.startswith(revision.original_content)
     assert revision.memory_uid == "memory-1"
     assert revision.changed is True
+    assert "uniqueItems" not in json.dumps(provider.output_schema)
+
+
+def test_elaborate_rejects_duplicate_source_ids_after_provider_return():
+    class DuplicateSourceProvider(_Provider):
+        def complete(self, prompt, *, operation, output_schema=None):
+            super().complete(
+                prompt,
+                operation=operation,
+                output_schema=output_schema,
+            )
+            return json.dumps(
+                {
+                    "disposition": "EXPAND",
+                    "continuation": "Unsupported continuation.",
+                    "reason": "Invalid test result.",
+                    "source_ids": ["m000001", "m000001"],
+                }
+            )
+
+    with pytest.raises(ElaborateError, match="distinct source aliases"):
+        elaborate_frame(_frame(), DuplicateSourceProvider())
 
 
 def test_elaborate_keep_never_changes_or_appends_content():

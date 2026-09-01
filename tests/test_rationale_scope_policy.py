@@ -11,7 +11,7 @@ from memcommit.adapters.console.commands.switch.command import _local_picker_ann
 from memcommit.core.context import Memory
 from memcommit.application.operations.profile.config import ProfileEntry, ProfileRegistry
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.capabilities.authority.study_operation_policy import operation_policy
+from memcommit.application.authorization.study_operation_policy import operation_policy
 
 
 runner = CliRunner()
@@ -23,7 +23,7 @@ def _memory(store: MemoryStore, context_name: str, content: str) -> Memory:
     )
 
 
-def test_rationale_from_parent_selects_descendant_but_does_not_analyze_neighbors(
+def test_qualified_rationale_target_does_not_analyze_neighbors(
     isolated_store,
 ):
     assert runner.invoke(app, ["init", "advisor"]).exit_code == 0
@@ -35,11 +35,11 @@ def test_rationale_from_parent_selects_descendant_but_does_not_analyze_neighbors
     target = _memory(store, "advisor/style", "Use a diagram when branches matter.")
     result = runner.invoke(
         app,
-        ["rationale", target.uid[:8], "--context", "advisor"],
+        ["rationale", f"advisor/style:{target.uid[:8]}"],
     )
     structured = runner.invoke(
         app,
-        ["rationale", target.uid[:8], "--context", "advisor", "--json"],
+        ["rationale", f"advisor/style:{target.uid[:8]}", "--json"],
     )
 
     assert result.exit_code == 0, result.output
@@ -63,11 +63,11 @@ def test_locally_owned_trace_is_available_independent_of_study_task(
     task3 = _memory(store, "task-3/personal-memory", "Task 3 note.")
     task1_result = runner.invoke(
         app,
-        ["trace", task1.uid[:8], "--context", "task-1/participant"],
+        ["trace", f"task-1/participant:{task1.uid[:8]}"],
     )
     allowed = runner.invoke(
         app,
-        ["trace", task3.uid[:8], "--context", "task-3/personal-memory"],
+        ["trace", f"task-3/personal-memory:{task3.uid[:8]}"],
     )
     task1_ls = runner.invoke(app, ["ls", "task-1/participant"])
     task3_ls = runner.invoke(app, ["ls", "task-3/personal-memory"])

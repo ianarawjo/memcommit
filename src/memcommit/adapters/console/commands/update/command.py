@@ -14,7 +14,7 @@ from memcommit.adapters.console.terminal.components.command_wait import (
 from memcommit.adapters.console.commands.update.endpoint_setup import (
     choose_update_setup,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     GrantedReadStore,
     freeze_granted_context_binding,
 )
@@ -109,11 +109,14 @@ def _start_new_update_from_setup(store: MemoryStore) -> None:
         typer.echo("Update setup cancelled; no session was created.")
         return
     start_kwargs = {
-        "source_name": setup.source_name,
         "target_name": setup.target_name,
         "source_descendants": setup.source_descendants,
         "target_descendants": setup.target_descendants,
     }
+    if setup.inline_source_content is not None:
+        start_kwargs["memory"] = setup.inline_source_content
+    else:
+        start_kwargs["source_name"] = setup.source_name
     if setup.source_memory_uid is not None:
         start_kwargs["source_memory"] = setup.source_memory_uid
     if setup.target_memory_uid is not None:

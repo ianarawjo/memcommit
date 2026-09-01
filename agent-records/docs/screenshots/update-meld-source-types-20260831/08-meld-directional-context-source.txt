@@ -1,0 +1,12 @@
+$ mem meld                                                                                                                                                                          
+PTY 180 52                                                                                                                                                                          
+ NEW MELD · CHOOSE MODE AND ENDPOINTS                                                                                                                                               
+› MODE · [   SYMMETRIC · CREATE SEPARATE RESULT ]  [ ✓ DIRECTIONAL · UPDATE EXISTING ] · ←/→ TO SELECT                                                                              
+  A · SOURCE TYPE · [ ✓ CONTEXT ]  [   STORED MEMORY ]  [   INLINE MEMORY ] · ←/→ TO SELECT                                                                                         
+  A · SOURCE · CONTEXT       › practice/coffee/source                  [ BROWSE ]                                   [   INCLUDE DESCENDANTS ]                                       
+  TO                         › practice/coffee/target                  [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]           
+┌───────────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND |───────────────────────────────────────────────────────────────────────────────┐
+│› mem meld practice/coffee/source practice/coffee/target                                                                                                                          │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                                                                                    
+ ←/→ mode · ↓ first endpoint row · Tab next control · Esc cancel

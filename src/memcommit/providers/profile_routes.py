@@ -30,7 +30,7 @@ from memcommit.application.operations.profile.config import (
     profile_control_dir,
     study_run_identity,
 )
-from memcommit.application.capabilities.authority.storage_permissions import ensure_private_directory
+from memcommit.persistence.store.infrastructure.storage_permissions import ensure_private_directory
 
 
 PROFILE_PROVIDER_ROUTES_SCHEMA_VERSION = 1

@@ -1,5 +1,11 @@
 # Meld modes and shared contract
 
+> Current contract (2026-08-31): new Meld sessions use the candidate
+> Audit–Resolve–Update lifecycle documented in
+> `meld-application-boundary-design-rationale.md`. Compare/relation preparation,
+> proposal comments, preserve/defer, and separate Apply described later in this
+> file are retained historical rationale, not executable current routes.
+
 ## Status
 
 This note distills the shared semantic-meld contract and its two authority
@@ -7,9 +13,9 @@ modes. The canonical user-facing commands and terminology are maintained in
 [`mem-meld-usage.md`](mem-meld-usage.md). This rationale explains why those
 entry points differ; it is not a second command manual.
 
-Two public Context-to-Context paths now exist as bounded research prototypes.
-Directional Meld is the positional primitive; symmetric Meld makes its third
-Result frame explicit:
+Two Context-to-Context paths and one inline intake path exist as bounded
+research prototypes. Directional Meld is the positional primitive; symmetric
+Meld makes its third Result frame explicit:
 
 ```text
 # Directional: incoming enters an existing authoritative baseline
@@ -439,6 +445,15 @@ symmetric mode may retain a process-local C draft for reversible navigation,
 but C is absent from the directional receipt and cannot affect its provider or
 target identity. See `session-endpoint-setup-design-rationale.md` for the
 presentation, receipt, and validation boundaries.
+
+Directional mode also gives incoming A one explicit Source Type choice:
+`CONTEXT`, `STORED MEMORY`, or `INLINE MEMORY`. Context keeps its independent
+exact-or-descendant reach. Stored Memory keeps the readable owner Context and
+requires one exact direct Memory UID. Inline Memory replaces those controls
+with one process-local text field and reviews the canonical
+`mem meld --memory TEXT --into BASELINE` command. No unavailable Context is
+silently reclassified as text. Symmetric mode deliberately omits this control
+because both A and B are equal-authority Context frames.
 
 Symmetric `A + B → C` is the initial and leftmost mode. Directional `A → B`
 remains the explicit option to its right in the same horizontal selector.

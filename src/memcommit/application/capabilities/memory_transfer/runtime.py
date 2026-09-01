@@ -9,14 +9,23 @@ from contextlib import ExitStack
 from dataclasses import dataclass
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.context_access import (
-    ContextAccess,
+from memcommit.application.authorization.context_operation import (
     authorized_context_operation,
+)
+from memcommit.application.context_access.access import (
+    ContextAccess,
     freeze_granted_context_binding,
-    resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
+)
+from memcommit.application.capabilities.operand_resolution import (
+    ContextOperandCandidate,
+    ContextOperandNotFoundError,
+    resolve_existing_context_operand,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
-from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.core.context_targeting.resolution import parse_direct_memory_locator
 from memcommit.application.capabilities.memory_transfer.application import (
     CopyMemoriesRequest,
@@ -186,11 +195,25 @@ def _resolve_one_memory(
         )
     except ValueError as error:
         raise MemoryTransferError(str(error)) from error
-    owner_name = (
-        None
-        if locator.context_locator is None
-        else resolve_context_locator(locator.context_locator, current=current_name)
-    )
+    owner_name = None
+    if locator.context_locator is not None:
+        try:
+            owner_name = resolve_existing_context_operand(
+                tuple(
+                    ContextOperandCandidate(
+                        uid=frame.context.uid,
+                        name=frame.display_name,
+                        value=frame,
+                    )
+                    for frame in frames
+                ),
+                locator.context_locator,
+                current=current_name,
+            ).name
+        except ContextOperandNotFoundError as error:
+            raise FileNotFoundError(
+                f"Context {locator.context_locator!r} does not exist locally."
+            ) from error
     matches = _memory_matches(
         frames,
         locator.memory_selector,
@@ -227,24 +250,30 @@ def _target_frame(
     *,
     current_name: str | None,
 ) -> _StoreTransferFrame:
-    if locator is None:
-        if current_name is None:
-            raise MemoryTransferError(
-                "No current Context. Pass --into TARGET_CONTEXT explicitly."
-            )
-        name = current_name
-    else:
-        name = resolve_context_locator(locator, current=current_name)
-    try:
-        return next(
-            frame
-            for frame in frames
-            if not frame.access.is_granted and frame.display_name == name
+    if locator is None and current_name is None:
+        raise MemoryTransferError(
+            "No current Context. Pass --into TARGET_CONTEXT explicitly."
         )
-    except StopIteration as error:
+    target_locator = locator or current_name or ""
+    try:
+        resolved = resolve_existing_context_operand(
+            tuple(
+                ContextOperandCandidate(
+                    uid=frame.context.uid,
+                    name=frame.display_name,
+                    value=frame,
+                )
+                for frame in frames
+                if not frame.access.is_granted
+            ),
+            target_locator,
+            current=current_name,
+        )
+    except ContextOperandNotFoundError as error:
         raise FileNotFoundError(
-            f"Copy/Move Target Context '{name}' does not exist locally."
+            f"Copy/Move Target Context {target_locator!r} does not exist locally."
         ) from error
+    return resolved.value
 
 
 def _unique_source_frames(
@@ -450,11 +479,11 @@ class MemoryStoreCopyAndMovePort:
             for context in contexts
         )
 
-    def _source_owner_names(
+    def _source_owner_locators(
         self,
         request: CopyMemoriesRequest | MoveMemoriesRequest,
     ) -> tuple[str, ...]:
-        names: list[str] = []
+        locators: list[str] = []
         for operand in request.memory_locators:
             try:
                 locator = parse_direct_memory_locator(
@@ -465,13 +494,9 @@ class MemoryStoreCopyAndMovePort:
                 raise MemoryTransferError(str(error)) from error
             if locator.context_locator is None:
                 continue
-            name = resolve_context_locator(
-                locator.context_locator,
-                current=self._current_name,
-            )
-            if name not in names:
-                names.append(name)
-        return tuple(names)
+            if locator.context_locator not in locators:
+                locators.append(locator.context_locator)
+        return tuple(locators)
 
     def _with_granted_source_frames(
         self,
@@ -480,13 +505,8 @@ class MemoryStoreCopyAndMovePort:
         *,
         kind: str,
     ) -> tuple[_StoreTransferFrame, ...]:
-        local_names = {frame.display_name for frame in frames}
-        external_names = tuple(
-            name
-            for name in self._source_owner_names(request)
-            if name not in local_names
-        )
-        if not external_names or not self._allow_granted_sources:
+        owner_locators = self._source_owner_locators(request)
+        if not owner_locators or not self._allow_granted_sources:
             return frames
 
         with authority_grant_snapshot_lock() as registry:
@@ -497,18 +517,24 @@ class MemoryStoreCopyAndMovePort:
                 # Grants merely because a public-looking locator was supplied.
                 return frames
             additions: list[_StoreTransferFrame] = []
-            for public_name in external_names:
-                access = resolve_context_access(
+            candidates = freeze_profile_context_access_candidates(
+                self._store,
+                current_name=self._current_name,
+                registry=registry,
+            )
+            seen: set[tuple[str, str]] = set()
+            for owner_locator in owner_locators:
+                access = resolve_existing_context_access(
                     self._store,
-                    public_name,
+                    owner_locator,
                     current_name=self._current_name,
                     required_permission="READ",
                     registry=registry,
-                )
+                    candidates=candidates,
+                ).value
                 if not access.is_granted:
-                    raise MemoryTransferStalePlanError(
-                        "Copy/Move Source ownership changed during selection."
-                    )
+                    continue
+                public_name = access.display_name
                 if kind == "MOVE":
                     raise MemoryTransferAuthorityError(
                         f"Move cannot use granted Source {public_name!r}: READ "
@@ -517,6 +543,10 @@ class MemoryStoreCopyAndMovePort:
                         "the local copy."
                     )
                 context = access.store.load_direct(access.context_name)
+                identity = (public_name, context.uid)
+                if identity in seen:
+                    continue
+                seen.add(identity)
                 additions.append(
                     _StoreTransferFrame(
                         context=context,

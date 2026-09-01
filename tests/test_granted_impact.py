@@ -21,7 +21,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.pro
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.repository import (
     comparison_analysis_path,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     freeze_granted_context_binding,
     resolve_context_access,
     revalidate_granted_context_binding,
@@ -38,7 +38,7 @@ from memcommit.adapters.console.commands.update.endpoint_setup import (
 )
 from memcommit.adapters.console.commands.meld.endpoint_setup import MeldSetupReceipt
 from memcommit.core.context import AutoCheckpoint, Context, Memory
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
 )
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
@@ -847,15 +847,13 @@ def test_rationale_local_root_does_not_analyze_granted_neighbor_subtree(
     target = next(item for item in attachment.iter_items() if isinstance(item, Memory))
     result = runner.invoke(
         app,
-        ["rationale", target.uid[:8], "--context", "task-root"],
+        ["rationale", f"{attachment.name}:{target.uid[:8]}"],
     )
     structured = runner.invoke(
         app,
         [
             "rationale",
-            target.uid[:8],
-            "--context",
-            "task-root",
+            f"{attachment.name}:{target.uid[:8]}",
             "--json",
         ],
     )
@@ -888,7 +886,7 @@ def test_rationale_mixed_subtree_needs_no_combination_permission_for_provenance(
     target = next(item for item in attachment.iter_items() if isinstance(item, Memory))
     result = runner.invoke(
         app,
-        ["rationale", target.uid[:8], "--context", "task-root"],
+        ["rationale", f"{attachment.name}:{target.uid[:8]}"],
     )
 
     assert result.exit_code == 0, result.output + result.stderr
@@ -1478,13 +1476,16 @@ def test_granted_source_impact_and_update_apply_to_local_target(
         app,
         ["update", "--from", wiki.name, "--to", local_target.name],
     )
-    diff = runner.invoke(app, ["diff", "--stat"])
+    applied = active.load_staged_update()
+    assert applied is not None
+    review = runner.invoke(
+        app,
+        ["review", "update", "--session", applied.uid, "--snapshot"],
+    )
 
     assert update.exit_code == 0, update.output + update.stderr
-    assert diff.exit_code == 0, diff.output + diff.stderr
-    assert "Applied granted update" in diff.stdout
-    assert "STALE" not in diff.stderr
-    assert "REVOKED" not in diff.stderr
+    assert review.exit_code == 0, review.output + review.stderr
+    assert "MEM REVIEW · UPDATE" in review.stdout
     assert calls == 1
     assert any(
         isinstance(item, Memory) and item.content == "Advisor-derived campus note."
@@ -1492,10 +1493,12 @@ def test_granted_source_impact_and_update_apply_to_local_target(
     )
     assert authority.load_direct(wiki.name).to_dict() == wiki.to_dict()
     delete_authority_grant(grant.uid)
-    revoked_diff = runner.invoke(app, ["diff", "--stat"])
-    assert revoked_diff.exit_code == 1
-    assert "REVOKED" in revoked_diff.stderr
-    assert "remains inspectable" in revoked_diff.stderr
+    revoked_review = runner.invoke(
+        app,
+        ["review", "update", "--session", applied.uid, "--snapshot"],
+    )
+    assert revoked_review.exit_code == 0, revoked_review.output
+    assert "MEM REVIEW · UPDATE" in revoked_review.stdout
 
 
 def test_new_compare_and_update_setup_include_a_granted_target(
@@ -2053,12 +2056,12 @@ def test_granted_target_empty_update_records_only_an_idempotent_receipt(
         assert tuple(authority_store.list_checkpoints(name)) == checkpoints_before[name]
 
 
-def test_granted_diff_revalidates_authority_and_keeps_public_names(
+def test_granted_update_review_keeps_public_names(
     isolated_store,
     tmp_path,
     monkeypatch,
 ):
-    _active, _authority, source, wiki, _grant = _setup_granted_target(
+    active, _authority, source, wiki, _grant = _setup_granted_target(
         isolated_store,
         tmp_path,
         monkeypatch,
@@ -2087,22 +2090,25 @@ def test_granted_diff_revalidates_authority_and_keeps_public_names(
         == 0
     )
 
-    result = runner.invoke(app, ["diff", "--stat"])
+    applied = active.load_staged_update()
+    assert applied is not None
+    result = runner.invoke(
+        app,
+        ["review", "update", "--session", applied.uid, "--snapshot"],
+    )
 
     assert result.exit_code == 0, result.output
-    assert "Applied granted update" in result.stdout
-    assert "task-root → campus-wiki" in result.stdout
-    assert "2 changes · 1 edited · 1 added" in result.stdout
-    assert "STALE" not in result.stderr
-    assert "REVOKED" not in result.stderr
+    assert "MEM REVIEW · UPDATE" in result.stdout
+    assert "SOURCE · task-root" in result.stdout
+    assert "TARGET · campus-wiki" in result.stdout
 
 
-def test_granted_diff_remains_inspectable_after_revocation(
+def test_granted_update_review_remains_inspectable_after_revocation(
     isolated_store,
     tmp_path,
     monkeypatch,
 ):
-    _active, _authority, source, wiki, grant = _setup_granted_target(
+    active, _authority, source, wiki, grant = _setup_granted_target(
         isolated_store,
         tmp_path,
         monkeypatch,
@@ -2130,18 +2136,22 @@ def test_granted_diff_remains_inspectable_after_revocation(
         ).exit_code
         == 0
     )
+    applied = active.load_staged_update()
+    assert applied is not None
     delete_authority_grant(grant.uid)
 
-    result = runner.invoke(app, ["diff", "--stat"])
+    result = runner.invoke(
+        app,
+        ["review", "update", "--session", applied.uid, "--snapshot"],
+    )
 
-    assert result.exit_code == 1
-    assert "Applied granted update" in result.stdout
-    assert "2 changes · 1 edited · 1 added" in result.stdout
-    assert "REVOKED" in result.stderr
-    assert "remains inspectable" in result.stderr
+    assert result.exit_code == 0, result.output
+    assert "MEM REVIEW · UPDATE" in result.stdout
+    assert "SOURCE · task-root" in result.stdout
+    assert "TARGET · campus-wiki" in result.stdout
 
 
-def test_granted_diff_marks_authority_drift_stale_but_keeps_receipts(
+def test_granted_update_review_keeps_receipt_after_authority_drift(
     isolated_store,
     tmp_path,
     monkeypatch,
@@ -2174,17 +2184,24 @@ def test_granted_diff_marks_authority_drift_stale_but_keeps_receipts(
         ).exit_code
         == 0
     )
+    applied = active.load_staged_update()
+    assert applied is not None
+    assert applied.application is not None
     changed = authority.load_direct(wiki.name)
     ops.add(changed, "A later authority correction.")
     authority.save(changed)
 
-    result = runner.invoke(app, ["diff", "--verbose", "--stat"])
+    result = runner.invoke(
+        app,
+        ["review", "update", "--session", applied.uid, "--snapshot"],
+    )
 
-    assert result.exit_code == 1
-    assert "STALE" in result.stderr
-    assert "2 changes · 1 edited · 1 added" in result.stdout
-    assert "Checkpoint  campus-wiki" in result.stdout
-    assert "Checkpoint  campus-wiki/services" in result.stdout
+    assert result.exit_code == 0, result.output
+    assert "MEM REVIEW · UPDATE" in result.stdout
+    assert {checkpoint.context_name for checkpoint in applied.application.checkpoints} == {
+        "campus-wiki",
+        "campus-wiki/services",
+    }
 
 
 def test_revoked_granted_update_cannot_be_undone_by_participant(

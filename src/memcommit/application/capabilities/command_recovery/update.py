@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import replace
 
 from memcommit.application.authorization import authorize_context_use
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     revalidate_granted_context_binding,
 )
 from memcommit.application.capabilities.command_recovery.model import (

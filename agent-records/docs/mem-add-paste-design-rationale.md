@@ -90,7 +90,7 @@ no-payload-echo boundary are unchanged.
 The source contract and record grammars have different owners. The shared
 UTF-8 file/stdin reader lives in
 `memcommit.adapters.console.coordination.batch_input_source`; Add's stripped,
-non-empty line grammar lives in `commands.add.input_records`, and Edit's
+non-empty line grammar lives in `commands.add.line_input_records`, and Edit's
 first-tab grammar lives in `commands.edit.input_records`. The former
 `interfaces.cli.batch_input` owner and intermediate `console.shared.batch_input`
 facade are removed rather than retained as internal compatibility paths. This

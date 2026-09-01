@@ -1,5 +1,11 @@
 # Granted Memory Reference TUI — 2026-08-23
 
+> Historical evidence: this mode-based launcher was superseded by the compact
+> Target-plus-exact-Memory flow recorded in
+> `../reference-compact-exact-memory-20260831/`. The persisted Reference and
+> Grant behavior shown below remains historical evidence; these images are not
+> the current bare `mem reference` setup screen.
+
 This ordered capture records one retained Memory Reference from the explicit
 public Grant locator `shared/source` into the ordinary local Context
 `workspace`. The Grant has exactly `READ + DERIVE + EXPORT + SAVE_ANALYSIS`;

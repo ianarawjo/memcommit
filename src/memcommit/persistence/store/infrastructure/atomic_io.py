@@ -6,7 +6,7 @@ import json
 import os
 import uuid
 from pathlib import Path
-from memcommit.application.capabilities.authority.storage_permissions import (
+from memcommit.persistence.store.infrastructure.storage_permissions import (
     ensure_private_directory,
     open_private_exclusive,
 )

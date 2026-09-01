@@ -5,9 +5,9 @@ from __future__ import annotations
 from typing import Protocol
 
 from memcommit.core.context import Context
-from memcommit.application.operations.search.corpus import (
-    collect_readable_search_candidates,
-    load_readable_search_roots,
+from memcommit.application.capabilities.retrieval_corpus.loading import (
+    collect_readable_corpus_candidates,
+    load_readable_corpus_roots,
 )
 from memcommit.application.operations.search.application import (
     SearchObserver,
@@ -50,7 +50,7 @@ class MemoryStoreSearchSourcePort(SearchSourcePort):
         self._catalog = catalog
 
     def _roots(self, request: SearchRequest) -> tuple[Context, ...]:
-        return load_readable_search_roots(
+        return load_readable_corpus_roots(
             self._catalog,
             request.target_names,
             include_descendants=request.include_descendants,
@@ -72,11 +72,12 @@ class MemoryStoreSearchSourcePort(SearchSourcePort):
                 continue
             if not access.is_granted:
                 local_roots.append(root)
-        candidates = collect_readable_search_candidates(
+        candidates = collect_readable_corpus_candidates(
             self._store,
             roots,
             follow_embeds=request.follow_embeds,
             artifact_roots=tuple(local_roots),
+            operation="Search",
         )
         coverage_root_name = (
             request.target_names[0]

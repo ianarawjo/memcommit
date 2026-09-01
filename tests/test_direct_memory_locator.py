@@ -3,8 +3,9 @@
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.core.context import Memory, MemoryRef, QueryContextRef
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.application.capabilities.local_target_lookup import (
+    LocalContextMemoryTargetAmbiguityError,
     resolve_local_direct_item_locator,
     resolve_local_context_memory_target,
     resolve_local_direct_memory_locator,
@@ -104,6 +105,59 @@ def test_local_auto_target_resolves_context_or_exact_memory(isolated_store):
 
     assert context_target == ContextTarget(source.name)
     assert memory_target == DirectMemoryTarget(source.name, memory.uid)
+
+
+def test_local_auto_target_resolves_context_uid_before_memory_fallback(
+    isolated_store,
+):
+    store = MemoryStore()
+    source = Context(
+        uid="2a4dc8ab-1111-4111-8111-111111111111",
+        name="practice/coffee/source",
+    )
+    owner = Context(
+        uid="bbbbbbbb-1111-4111-8111-111111111111",
+        name="practice/coffee/owner",
+    )
+    owner.add(
+        Memory(
+            uid="52b75243-1111-4111-8111-111111111111",
+            content="owned value",
+        )
+    )
+    store.save(source)
+    store.save(owner)
+
+    target = resolve_local_context_memory_target(
+        store,
+        "2a4dc8ab",
+        current=owner.name,
+    )
+
+    assert target == ContextTarget(source.name)
+
+
+def test_local_auto_target_rejects_cross_kind_uid_ambiguity(isolated_store):
+    store = MemoryStore()
+    context = Context(
+        uid="2a4dc8ab-1111-4111-8111-111111111111",
+        name="context-target",
+    )
+    owner = Context(
+        uid="bbbbbbbb-1111-4111-8111-111111111111",
+        name="memory-owner",
+    )
+    owner.add(
+        Memory(
+            uid="2a4dc8ab-2222-4222-8222-222222222222",
+            content="memory target",
+        )
+    )
+    store.save(context)
+    store.save(owner)
+
+    with pytest.raises(LocalContextMemoryTargetAmbiguityError, match="matches 2"):
+        resolve_local_context_memory_target(store, "2a4dc8ab", current=None)
 
 
 def test_local_auto_target_resolves_short_uid_after_exact_context_miss(

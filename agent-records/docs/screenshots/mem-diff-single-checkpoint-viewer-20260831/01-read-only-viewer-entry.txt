@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CHECKPOINT REVISION ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃DIFF · coffee                                                                                                                                                                    ^┃
+┃[CHECKPOINT 64a69449] · update · 4 CHANGES · 7 RESULT MEMORIES                                                                                                                    ┃
+┃4 edited · 0 added · 0 removed · 3 unchanged hidden                                                                                                                               ┃
+┃Merged four complementary coffee preferences.                                                                                                                                     ┃
+┃                                                                                                                                                                                  ┃
+┃ - [EDIT]   [d70adf55] I avoid cafés where several conversations overlap loudly.                                                                                                  ┃
+┃ + [EDIT]   [d70adf55] I avoid cafés where several conversations overlap loudly, but a café where nobody talks also feels uncomfortable for a gathering.                          ┃
+┃ - [EDIT]   [d52b3406] I avoid cafés where tables are too low to use plates or a laptop comfortably.                                                                              ┃
+┃ + [EDIT]   [d52b3406] I avoid cafés where tables are too low to use plates or a laptop comfortably, as well as cafés with unusually high uniform tables.                         ┃
+┃ - [EDIT]   [d9f491de] Sparse flavor notes make it difficult for me to choose a coffee.                                                                                           ┃
+┃ + [EDIT]   [d9f491de] Flavor descriptions that are too sparse, abstract, or exaggerated make it difficult for me to choose a coffee.                                             ┃
+┃ - [EDIT]   [5fff0304] I prefer menus with enough options for ordering with a companion.                                                                                          ┃
+┃ + [EDIT]   [5fff0304] I prefer menus with enough options for ordering with a companion, but too many options make it difficult to choose.                                        ┃
+┃                                                                                                                                                                                  ┃
+┃Use --verbose to include unchanged Memories and full UIDs.                                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ DIFF REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

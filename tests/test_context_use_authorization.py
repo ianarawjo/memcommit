@@ -3,7 +3,7 @@ from types import SimpleNamespace
 import pytest
 
 from memcommit.application.authorization import ContextUse, authorize_context_use
-from memcommit.application.capabilities.authority.context_access import ContextAccess
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     canonical_grant_permissions,

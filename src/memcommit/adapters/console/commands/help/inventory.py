@@ -179,8 +179,7 @@ HELP_SECTION_BY_COMMAND = {
     for operation in section_group.operations
 }
 HELP_CATEGORY_ORDER = {
-    group.family.title: index
-    for index, group in enumerate(_HELP_APPLICATION_GROUPS)
+    group.family.title: index for index, group in enumerate(_HELP_APPLICATION_GROUPS)
 }
 HELP_COMMAND_ORDER = {
     operation.name: operation_index
@@ -235,14 +234,13 @@ COMMAND_FORMS = {
         "mem fit --ground [ground] --receipt [uid] (reopen one current or stale Ground receipt)",
     ),
     "resolve": (
-        "mem resolve (automatically apply one grounded full-frame plan, or show a non-applicable outcome)",
-        "mem resolve [context] (apply a grounded plan or print ASSUMED / ALREADY_FIT)",
-        "mem resolve [context] [memory_uid] (auto-classify one Context and optional edit restrictions)",
+        "mem resolve (decide current-Context conflicts, then apply one whole-Context UpdatePlan)",
+        "mem resolve [context] (decide conflicts and update one exact Context)",
+        "mem resolve [context] [memory_uid] (select one actionable Memory without narrowing the complete Context frame)",
         "mem resolve [context] --memory [memory_uid] (explicitly accept a short Memory prefix)",
         "mem resolve [context]:[memory_uid] (bind one Memory restriction to its exact Context)",
-        "mem resolve --context [context] --no-create (limit the automatic plan to existing-Memory edits)",
+        "mem resolve --context [context] --no-create (limit the finalized UpdatePlan to existing-Memory edits)",
         'mem resolve --context [context] --allow-delete --guidance "[grounds]" (exceptionally permit grounded retirement)',
-        "mem resolve --context [context] --candidate [full_id] --expected-revision [revision] --apply (replay an externally reviewed exact plan)",
     ),
     "dedup": (
         "mem dedup (remove exact duplicates from the current Context)",
@@ -324,11 +322,12 @@ COMMAND_FORMS = {
         "mem delete [item1] [item2] --context [context] (scope every item to one owner)",
     ),
     "diff": (
-        "mem diff (select a Context, then inspect its checkpoints)",
-        "mem diff [context] (inspect that Context's checkpoints directly)",
-        "mem diff --raw (exact unified diff)",
-        "mem diff --stat (summary only)",
-        "mem diff --verbose (complete UIDs and source/target fingerprints)",
+        "mem diff (open the current Context's latest checkpoint in a read-only Viewer)",
+        "mem diff [context_or_uid] (open that Context's latest checkpoint)",
+        "mem diff [checkpoint_uid] (open that exact checkpoint revision)",
+        "mem diff --raw (print the exact unified diff)",
+        "mem diff --stat (print the checkpoint summary only)",
+        "mem diff --verbose (include unchanged Memories and complete UIDs)",
     ),
     "distill": (
         "mem distill (distill current and add Rules back to current)",
@@ -344,8 +343,11 @@ COMMAND_FORMS = {
         "(atomically add the complete proposal to the physical /rules lane)",
     ),
     "makemore": (
-        "mem makemore (treat current direct Memories as Rules and add Cases to current)",
-        "mem makemore --from [source] --to [target] (explicit existing endpoints)",
+        "mem makemore (Distill current into transient Rules, then add Cases to current)",
+        "mem makemore --from [source] --to [target] "
+        "(Distill Source transiently, then add Cases to Target)",
+        "mem makemore --from [source] --as rules "
+        "(treat its direct Memories as existing Rules without Distill)",
         "mem makemore --from [source] --as goal (treat its one direct Memory as a Goal)",
         "mem makemore --goal [context|memory|text] "
         "(use it as Goal Source and add candidate Rules to current)",
@@ -393,9 +395,7 @@ COMMAND_FORMS = {
         "mem embed [memory_selector] --from [source_context] --into [target_context] --before [item]",
         "mem embed [memory_selector] --from [source_context] --into [target_context] --after [item]",
     ),
-    "eval": (
-        "mem eval (show the reserved PARTIAL shell; no evaluation subcommands)",
-    ),
+    "eval": ("mem eval (show the reserved PARTIAL shell; no evaluation subcommands)",),
     "find": (
         "mem find (interactive provider-free pattern, Context scope, and complete results)",
         'mem find "[text]" (literal text in the direct current Context)',
@@ -468,9 +468,9 @@ COMMAND_FORMS = {
         'mem impact forget "[instruction]" --context [context] (preview one exact direct Source)',
         "mem impact distill --from [source] --to [target] (preview the Rules Distill would add)",
         "mem impact elaborate [UID_or_CONTEXT:UID] (preview one append-only same-UID revision)",
-        "mem impact makemore --from [source] --to [target] (preview the Memories Makemore would add)",
-        "mem impact resolve --context [context] (preview one automatic full-frame interpretation plan)",
-        "mem impact resolve --context [context] --candidate [full_id] (preview its exact effect set)",
+        "mem impact makemore --from [source] --to [target] "
+        "(preview transient Distill Rules and the Cases Makemore would add)",
+        "mem impact resolve --context [context] (inspect conflict decisions before any UpdatePlan exists)",
         "mem impact meld (inspect a saved Meld Impact; APPLY? opens its Apply flow)",
         "mem impact meld --session [uid] (inspect an exact saved Meld Impact; APPLY? opens its Apply flow)",
         "mem impact sever (inspect a saved Sever Impact; APPLY? opens its Apply flow)",
@@ -627,10 +627,11 @@ COMMAND_FORMS = {
         'mem query [query_view] "[question]" --language [language] (explicit source language)',
     ),
     "rationale": (
-        "mem rationale (open Recents or select a Memory from the current readable Context)",
+        "mem rationale (select one exact Context or Memory from the current readable subtree)",
+        "mem rationale [context] (explain one exact readable Context)",
         "mem rationale [memory_selector] (explain one current or historical Memory)",
-        "mem rationale --context [context] (start Memory selection in one readable Context)",
-        "mem rationale [memory_selector] --context [context] (explicit Context and Memory)",
+        "mem rationale --context [context] (explain one exact readable Context)",
+        "mem rationale [context]:[memory_selector] (explicit Context and Memory)",
     ),
     "reference": (
         "mem reference (choose a Context or Memory snapshot and Target interactively)",
@@ -671,15 +672,15 @@ COMMAND_FORMS = {
         "mem review ambiguities --context [context] (Context-bound Ambiguity review)",
     ),
     "sever": (
-        "mem sever (choose Source, Criteria, and Result for a new Sever)",
+        "mem sever (choose Source and Criteria for an in-place Sever)",
         "mem sever --sessions (enter the interactive Sever session launcher)",
-        "mem sever [source_context] [criteria_context] (self-save into Source)",
-        "mem sever [source_context] [criteria_context] [fresh_result_context] (save as a separate Result)",
-        "mem sever [source_context] [criteria_context] [result_context] -r",
-        "mem sever [source_context] [criteria_context] [result_context] -r --source-root-only",
-        "mem sever --source [source] --criteria [criteria] --save-as [result] (compatibility aliases)",
-        "mem sever --from [source] --against [criteria] --to [result] (directional aliases)",
-        "mem sever --criteria [criteria_context] (current Context is Source and self-save target)",
+        "mem sever [source_context] [criteria_context] (update Source in place)",
+        "mem sever [source_context] [criteria_context] -r (include both descendant scopes)",
+        "mem sever [source_context] [criteria_context] --source-descendants (include Source descendants)",
+        "mem sever [source_context] [criteria_context] --criteria-descendants (include Criteria descendants)",
+        "mem sever --source [source] --criteria [criteria] (compatibility role aliases)",
+        "mem sever --from [source] --against [criteria] (directional role aliases)",
+        "mem sever --criteria [criteria_context] (current Context is Source)",
         "mem sever --resume [uid] (open an exact saved Sever session)",
     ),
     "share": (
@@ -729,10 +730,11 @@ COMMAND_FORMS = {
         "mem translate [memory_selector] --to [language] --in-place (add one translated sibling Memory)",
     ),
     "trace": (
-        "mem trace (open Recents or select a Memory from the current Context)",
+        "mem trace (select one exact Context or Memory from the current local subtree)",
+        "mem trace [context] (show one exact Context lineage)",
         "mem trace [memory_selector] (print the bounded retained lineage document)",
-        "mem trace --context [context] (start Memory selection in one local Context)",
-        "mem trace [memory_selector] --context [context] (explicit Context and Memory)",
+        "mem trace --context [context] (show one exact Context lineage)",
+        "mem trace [context]:[memory_selector] (explicit Context and Memory)",
     ),
     "undo": ("mem undo (undo the latest recorded Context command)",),
     "unlock": (

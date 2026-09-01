@@ -16,47 +16,41 @@ from memcommit.adapters.python_api.errors import (
     MeldStorageError,
 )
 from memcommit.adapters.python_api.meld import (
-    MeldApplyResult as PublicMeldApplyResult,
+    MeldDecisionInput,
     MeldIssueResult,
     MeldOptionResult,
     MeldProposalResult,
     MeldSessionResult,
 )
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.meld.model import (
-    MELD_SCHEMA_VERSION,
+    MELD_CANDIDATE_SCHEMA_VERSION,
     MeldError as CoreMeldError,
     meld_canonical_digest,
 )
-from memcommit.application.operations.meld.apply import MeldApplyRequest
+from memcommit.application.operations.meld.resolution import (
+    MeldResolutionError,
+    plan_meld_candidate_update,
+)
+from memcommit.application.operations.resolve.decisions import ResolveDecision
 from memcommit.application.operations.meld.provider.contract import (
     MeldProviderError,
-)
-from memcommit.application.operations.meld.proposal_iteration import (
-    MeldResolutionError,
-    MeldResolutionTurnRequest,
-    prepare_meld_resolution_turn,
 )
 from memcommit.application.operations.meld.preparation import (
     MeldRestartError,
     MeldRestartRequest,
 )
 from memcommit.application.operations.meld.runtime import (
-    execute_meld_apply,
-    execute_meld_preservation,
-    execute_prepared_meld_turn,
+    execute_meld_candidate_proposal,
     execute_meld_restart,
-    execute_meld_session_defer,
-    execute_meld_session_open,
     execute_meld_start,
     load_meld_source,
-    prepare_pending_meld_turn,
+    open_meld_candidate_session,
 )
-from memcommit.application.operations.meld.proposal_iteration import (
+from memcommit.application.operations.meld.session import (
     MeldSessionVersionError,
     MeldSessionVersionInputError,
-    prepare_meld_preservation_turn,
     require_meld_session_version,
 )
 from memcommit.application.operations.meld.preparation import MeldStartError, MeldStartRequest
@@ -89,6 +83,11 @@ def _safe_semantic_provider(runtime: ClientRuntime) -> object:
 def _project_meld(session, *, origin: str | None = None) -> MeldSessionResult:
     assessment = session.current_assessment
     application = session.application
+    candidate_review = (
+        getattr(session, "candidate_review", None)
+        if getattr(session, "schema_version", None) == MELD_CANDIDATE_SCHEMA_VERSION
+        else None
+    )
     return MeldSessionResult(
         session_uid=session.uid,
         version=meld_canonical_digest(session.to_dict()),
@@ -97,11 +96,58 @@ def _project_meld(session, *, origin: str | None = None) -> MeldSessionResult:
         left_context=session.frames[0].context_name,
         right_context=session.frames[1].context_name,
         target_context=session.target.context_name,
-        turn_count=len(session.turns),
-        overview=assessment.overview if assessment is not None else None,
-        ready_to_apply=(assessment.ready_to_apply if assessment is not None else False),
+        turn_count=(
+            candidate_review.round + 1
+            if candidate_review is not None
+            else len(session.turns)
+        ),
+        overview=(
+            (
+                f"Audit-backed candidate with {len(candidate_review.source_claims)} "
+                "frozen Source claims."
+            )
+            if candidate_review is not None
+            else assessment.overview
+            if assessment is not None
+            else None
+        ),
+        ready_to_apply=(
+            session.state == "APPLIED"
+            if candidate_review is not None
+            else assessment.ready_to_apply
+            if assessment is not None
+            else False
+        ),
         issues=(
             tuple(
+                MeldIssueResult(
+                    uid=issue.uid,
+                    priority="REQUIRED",
+                    title=f"{issue.kind} · {issue.classification}",
+                    question=issue.question,
+                    why_it_matters=issue.reason,
+                    options=(
+                        MeldOptionResult(
+                            uid=f"{issue.uid}:confirm",
+                            label="CONFIRM THIS UNDERSTANDING",
+                            text=issue.proposed_direction,
+                        ),
+                        MeldOptionResult(
+                            uid=f"{issue.uid}:intent",
+                            label="PROVIDE YOUR INTENT",
+                            text="Supply a different resolution direction.",
+                        ),
+                        MeldOptionResult(
+                            uid=f"{issue.uid}:force",
+                            label="FORCE CONTINUE",
+                            text="Keep this Audit item explicitly unresolved.",
+                        ),
+                    ),
+                )
+                for issue in candidate_review.issues
+            )
+            if candidate_review is not None
+            else tuple(
                 MeldIssueResult(
                     uid=issue.uid,
                     priority=issue.priority,
@@ -140,6 +186,11 @@ def _project_meld(session, *, origin: str | None = None) -> MeldSessionResult:
         checkpoint_uid=(
             application.checkpoint_uid if application is not None else None
         ),
+        unresolved_count=(
+            len(candidate_review.forced_audit_keys)
+            if candidate_review is not None
+            else 0
+        ),
     )
 
 
@@ -153,15 +204,13 @@ def _meld_snapshot(runtime: ClientRuntime, target_name: str):
         required_permission="READ",
     )
     target = load_meld_source(access, project=False)
-    return execute_meld_session_open(target.uid, store=runtime.store)
+    return open_meld_candidate_session(target.uid, store=runtime.store)
 
 
 def _expected_meld_snapshot(
     runtime: ClientRuntime,
     target_name: str,
     expected_version: str,
-    *,
-    allow_applied_predecessor: bool = False,
 ):
     """Load once and bind a public mutation to the caller's reviewed version."""
 
@@ -169,7 +218,6 @@ def _expected_meld_snapshot(
     return require_meld_session_version(
         snapshot,
         expected_version,
-        allow_applied_predecessor=allow_applied_predecessor,
     )
 
 
@@ -356,51 +404,64 @@ def open_meld(runtime: ClientRuntime, target_context: str) -> MeldSessionResult:
     return _project_meld(snapshot.session)
 
 
-def comment_meld(
+def resolve_meld(
     runtime: ClientRuntime,
     target_context: str,
-    comment: str = "",
+    decisions: Sequence[MeldDecisionInput] = (),
     *,
     expected_version: str,
-    issue_uid: str | None = None,
-    option_uid: str | None = None,
-    revision: str = "EXTEND",
-    revises_turn_uids: Sequence[str] = (),
 ) -> MeldSessionResult:
-    """Submit one complete semantic follow-up against a saved version."""
+    """Finalize one complete decision set, Update once, verify, and Apply."""
 
     try:
-        if not isinstance(comment, str):
-            raise MeldResolutionError("comment must be text.")
-        if not isinstance(revision, str):
-            raise MeldResolutionError("revision must be text.")
         snapshot = _expected_meld_snapshot(
             runtime,
             target_context,
             expected_version,
         )
-        pending = prepare_meld_resolution_turn(
-            MeldResolutionTurnRequest(
-                snapshot=snapshot,
-                comment=comment,
-                issue_uid=issue_uid,
-                option_uid=option_uid,
-                revision=revision.upper(),  # type: ignore[arg-type]
-                revises_turn_uids=tuple(revises_turn_uids),
+        session = snapshot.session
+        if session.schema_version != MELD_CANDIDATE_SCHEMA_VERSION:
+            raise MeldResolutionError(
+                "Legacy Compare-backed Meld sessions are read-only; restart Meld."
             )
+        if any(not isinstance(item, MeldDecisionInput) for item in decisions):
+            raise TypeError("Meld decisions must use MeldDecisionInput.")
+        typed = tuple(
+            ResolveDecision(
+                issue_uid=item.issue_uid,
+                kind=item.kind.upper(),  # type: ignore[arg-type]
+                intent=item.intent,
+            )
+            for item in decisions
         )
-        result = execute_prepared_meld_turn(
-            prepare_pending_meld_turn(pending, store=runtime.store),
-            provider_factory=lambda: _safe_semantic_provider(runtime),
+        target = runtime.store.load_direct(session.target.context_name)
+        proposal = plan_meld_candidate_update(
+            session,
+            typed,
+            target=target,
+            update_provider_factory=lambda: _safe_semantic_provider(runtime),
+            audit_provider_factory=lambda: _safe_semantic_provider(runtime),
+            direction_provider_factory=lambda: _safe_semantic_provider(runtime),
+            coverage_provider_factory=lambda: _safe_semantic_provider(runtime),
         )
+        saved, receipt = execute_meld_candidate_proposal(
+            session,
+            proposal,
+            store=runtime.store,
+            expected_session_digest=snapshot.version_token,
+        )
+        if receipt.missing_claim_aliases:
+            raise MeldResolutionError(
+                "The proposed post-image dropped Source claim(s): "
+                + ", ".join(receipt.missing_claim_aliases)
+                + ". Nothing was applied."
+            )
     except MeldProviderFailure:
         raise
     except MeldSessionVersionInputError as error:
         _raise(MeldInputError, error)
     except MeldSessionVersionError as error:
         _raise(MeldConflictError, error)
-    except MeldProviderError as error:
-        _raise(MeldProviderFailure, error)
     except FileNotFoundError as error:
         _raise(MeldContextError, error)
     except ProfileError as error:
@@ -413,146 +474,12 @@ def comment_meld(
         _raise(MeldInputError, error)
     except (CoreMeldError, RuntimeError, TypeError, ValueError) as error:
         _raise(MeldExecutionError, error)
-    return _project_meld(result.session, origin=result.origin)
-
-
-def preserve_meld(
-    runtime: ClientRuntime,
-    target_context: str,
-    *,
-    expected_version: str,
-) -> MeldSessionResult:
-    """Preserve every remaining distinction under the saved-session CAS."""
-
-    try:
-        snapshot = _expected_meld_snapshot(
-            runtime,
-            target_context,
-            expected_version,
-        )
-        pending = prepare_meld_preservation_turn(
-            snapshot,
-            guidance=(
-                "Preserve every remaining supported source distinction "
-                "without inventing unsupported content."
-            ),
-        )
-        session = pending.session
-        if (
-            session.mode == "SYMMETRIC"
-            and session.schema_version >= MELD_SCHEMA_VERSION
-        ):
-            saved = execute_meld_preservation(pending, store=runtime.store)
-            return _project_meld(saved.session, origin="LOCAL")
-        prepared = prepare_pending_meld_turn(
-            pending,
-            store=runtime.store,
-        )
-        result = execute_prepared_meld_turn(
-            prepared,
-            provider_factory=lambda: _safe_semantic_provider(runtime),
-        )
-    except MeldProviderFailure:
-        raise
-    except MeldSessionVersionInputError as error:
-        _raise(MeldInputError, error)
-    except MeldSessionVersionError as error:
-        _raise(MeldConflictError, error)
-    except MeldProviderError as error:
-        _raise(MeldProviderFailure, error)
-    except FileNotFoundError as error:
-        _raise(MeldContextError, error)
-    except ProfileError as error:
-        _raise(MeldAuthorityError, error)
-    except ConcurrentContextUpdateError as error:
-        _raise(MeldConflictError, error)
-    except OSError as error:
-        _raise(MeldStorageError, error)
-    except (CoreMeldError, RuntimeError, TypeError, ValueError) as error:
-        _raise(MeldExecutionError, error)
-    return _project_meld(result.session, origin=result.origin)
-
-
-def defer_meld(
-    runtime: ClientRuntime,
-    target_context: str,
-    *,
-    expected_version: str,
-) -> MeldSessionResult:
-    """Close one saved review without changing its target."""
-
-    try:
-        snapshot = _expected_meld_snapshot(
-            runtime,
-            target_context,
-            expected_version,
-        )
-        saved = execute_meld_session_defer(snapshot, store=runtime.store)
-    except MeldSessionVersionInputError as error:
-        _raise(MeldInputError, error)
-    except MeldSessionVersionError as error:
-        _raise(MeldConflictError, error)
-    except FileNotFoundError as error:
-        _raise(MeldContextError, error)
-    except ConcurrentContextUpdateError as error:
-        _raise(MeldConflictError, error)
-    except OSError as error:
-        _raise(MeldStorageError, error)
-    except (CoreMeldError, RuntimeError, TypeError, ValueError) as error:
-        _raise(MeldExecutionError, error)
-    return _project_meld(saved.session, origin="LOCAL")
-
-
-def apply_meld(
-    runtime: ClientRuntime,
-    target_context: str,
-    *,
-    expected_version: str,
-) -> PublicMeldApplyResult:
-    """Apply exactly one ready saved proposal without another provider turn."""
-
-    try:
-        snapshot = _expected_meld_snapshot(
-            runtime,
-            target_context,
-            expected_version,
-            allow_applied_predecessor=True,
-        )
-        applied = execute_meld_apply(
-            MeldApplyRequest(
-                session=snapshot.session,
-                expected_session_digest=snapshot.version_token,
-            ),
-            store=runtime.store,
-        )
-    except MeldSessionVersionInputError as error:
-        _raise(MeldInputError, error)
-    except MeldSessionVersionError as error:
-        _raise(MeldConflictError, error)
-    except FileNotFoundError as error:
-        _raise(MeldContextError, error)
-    except ProfileError as error:
-        _raise(MeldAuthorityError, error)
-    except ConcurrentContextUpdateError as error:
-        _raise(MeldConflictError, error)
-    except OSError as error:
-        _raise(MeldStorageError, error)
-    except (CoreMeldError, RuntimeError, TypeError, ValueError) as error:
-        _raise(MeldExecutionError, error)
-    return PublicMeldApplyResult(
-        session=_project_meld(applied.session, origin="LOCAL"),
-        recovered=applied.receipt.recovered,
-        checkpoint_uid=applied.receipt.checkpoint_uid,
-        result_count=applied.receipt.result_count,
-    )
+    return _project_meld(saved, origin="AUDIT_RESOLVE_UPDATE")
 
 
 __all__ = [
-    "apply_meld",
-    "comment_meld",
-    "defer_meld",
     "open_meld",
-    "preserve_meld",
+    "resolve_meld",
     "restart_meld",
     "start_meld",
 ]

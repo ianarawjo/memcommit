@@ -5,11 +5,14 @@ import typer
 from memcommit.adapters.console.terminal.components.context_picker import choose_context, context_memory_rows
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     GrantedReadStore,
     resolve_context_access,
 )
-from memcommit.application.capabilities.authority.granted_context_navigation import (
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
+)
+from memcommit.application.context_access.granted_context_navigation import (
     GrantedContextNavigation,
     freeze_granted_context_navigation,
     grant_navigation_annotation,
@@ -173,10 +176,20 @@ def cmd(
             typer.echo("Switch cancelled.")
             return
     else:
-        request = SwitchContextRequest(
-            selector=name,
-            expected_current=expected_current,
-        )
+        try:
+            selected = resolve_existing_context_access(
+                store,
+                name,
+                current_name=expected_current,
+                required_permission="READ",
+            )
+            request = SwitchContextRequest(
+                selector=selected.name,
+                expected_current=expected_current,
+            )
+        except (OSError, ProfileConfigError, ProfileError, RuntimeError, ValueError) as error:
+            typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
+            raise typer.Exit(1)
 
     try:
         target_name = (

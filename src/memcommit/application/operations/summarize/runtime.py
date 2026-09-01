@@ -10,12 +10,15 @@ from typing import Iterator, Protocol
 # application boundary and still live under commands. Keep the dependency in
 # this infrastructure adapter so the application and domain remain terminal-
 # independent; move it only after another vertical slice proves the same owner.
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     freeze_granted_context_binding,
     resolve_context_access,
     revalidate_granted_context_binding,
 )
-from memcommit.application.capabilities.authority.readable_contexts import ReadableContextCatalog
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
+)
+from memcommit.application.context_access.readable_contexts import ReadableContextCatalog
 from memcommit.core.context import Context
 from memcommit.core.context_targeting.model import ContextScope
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
@@ -147,13 +150,13 @@ class MemoryStoreSummarySourcePort(SummarySourcePort):
 
     def freeze(self, request: SummarizeRequest) -> FrozenSummarySource:
         with authority_grant_snapshot_lock() as registry:
-            access = resolve_context_access(
+            access = resolve_existing_context_access(
                 self._store,
                 request.context_locator,
                 current_name=self._current_name,
                 required_permission="READ",
                 registry=registry,
-            )
+            ).value
             loaded = _load_frame(
                 self._store,
                 access,

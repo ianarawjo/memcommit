@@ -6,34 +6,37 @@ from dataclasses import dataclass, field, replace
 import hashlib
 from typing import Protocol
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
     freeze_granted_context_binding,
     revalidate_granted_context_binding,
-    resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
+    try_resolve_context_access_or_local_memory,
 )
 from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.context_locator import (
     is_relative_context_locator,
-    resolve_context_locator,
+)
+from memcommit.application.capabilities.durable_uid_resolution import (
+    is_unresolved_uid_selector,
+)
+from memcommit.application.capabilities.operand_resolution import (
+    ResolvedExistingContextOperand,
 )
 from memcommit.application.capabilities.semantic.memory_scope import (
     MemoryScopeError,
     resolve_memory_scope,
 )
-from memcommit.application.capabilities.local_target_lookup import (
-    try_resolve_short_local_direct_memory_locator,
-)
 from memcommit.core.context_targeting.model import (
+    DirectMemoryTarget,
     DirectMemoryLocator,
-    ExistingContextOperand,
 )
 from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
-)
-from memcommit.application.capabilities.authority.readable_contexts import (
-    freeze_profile_readable_context_catalog,
 )
 from memcommit.application.operations.fit.ground_report import (
     FitError,
@@ -234,41 +237,19 @@ def run_stored_source_fit(
     current_name = store.current_context_name()
     accumulators: dict[tuple[str, ...], _FitSourceAccumulator] = {}
     access_order: list[tuple[str, ...]] = []
-    readable_names: frozenset[str] | None = None
-
-    def all_readable_names() -> frozenset[str]:
-        """Freeze the Profile-wide READ catalog without opening Context bodies."""
-
-        nonlocal readable_names
-        if readable_names is not None:
-            return readable_names
-        local_names = tuple(store.list_context_names())
-        if not local_names:
-            readable_names = frozenset()
-            return readable_names
-        anchor_name = local_names[0]
-        anchor = ContextAccess(
-            store=store,
-            context_name=anchor_name,
-            display_name=anchor_name,
-            attachment_name=None,
-            permission="READ",
-        )
-        catalog = freeze_profile_readable_context_catalog(
-            store,
-            anchor,
-            include_query_routes=False,
-        )
-        readable_names = frozenset(catalog.list_context_names())
-        return readable_names
+    context_candidates = freeze_profile_context_access_candidates(
+        store,
+        current_name=current_name,
+    )
 
     def source(locator: str | None) -> _FitSourceAccumulator:
-        access = resolve_context_access(
+        access = resolve_existing_context_access(
             store,
             locator,
             current_name=current_name,
             required_permission="READ",
-        )
+            candidates=context_candidates,
+        ).value
         key = _fit_access_key(access)
         existing = accumulators.get(key)
         if existing is not None:
@@ -350,7 +331,7 @@ def run_stored_source_fit(
             continue
 
         parsed = parse_auto_typed_context_memory_operand(operand)
-        if isinstance(parsed, DirectMemoryLocator):
+        if isinstance(parsed, DirectMemoryLocator) and parsed.context_locator is not None:
             select_memory(
                 FitMemorySourceRequest(
                     selector=parsed.memory_selector.casefold(),
@@ -358,33 +339,34 @@ def run_stored_source_fit(
                 )
             )
             continue
-        assert isinstance(parsed, ExistingContextOperand)
-        canonical_name = resolve_context_locator(
-            parsed.locator,
-            current=current_name,
-        )
-        if canonical_name in all_readable_names():
-            select_context(parsed.locator)
-            continue
-        short_target = try_resolve_short_local_direct_memory_locator(
+        resolved = try_resolve_context_access_or_local_memory(
             store,
-            parsed.locator,
-            current=current_name,
+            operand,
+            current_name=current_name,
+            candidates=context_candidates,
         )
-        if short_target is not None:
+        if isinstance(resolved, ResolvedExistingContextOperand):
+            select_context(resolved.name)
+            continue
+        if isinstance(resolved, DirectMemoryTarget):
             select_memory(
                 FitMemorySourceRequest(
-                    selector=short_target.memory_uid,
-                    context_locator=short_target.context_name,
+                    selector=resolved.memory_uid,
+                    context_locator=resolved.context_name,
                 )
             )
             continue
-        if is_relative_context_locator(parsed.locator):
+        if is_relative_context_locator(operand):
             raise FitSourceError(
-                f"Fit Context locator {parsed.locator!r} is outside the readable "
+                f"Fit Context locator {operand!r} is outside the readable "
                 "namespace."
             )
-        add_literal(parsed.locator)
+        if is_unresolved_uid_selector(operand):
+            raise FitSourceError(
+                f"No direct Fit Memory or readable Context has UID prefix "
+                f"{operand!r}."
+            )
+        add_literal(operand)
 
     for memory_source in request.memory_sources:
         select_memory(memory_source)

@@ -9,9 +9,12 @@ from memcommit.adapters.console.commands.update.workbench.model import (
     UpdateEndpointSelection,
     UpdateEndpointSetup,
 )
-from memcommit.adapters.console.commands.update import command_codec as update_command_review
+from memcommit.adapters.console.commands.update import (
+    command_codec as update_command_review,
+)
 from memcommit.adapters.console.terminal.components.endpoint_setup import (
     EndpointCommandBinding,
+    EndpointSetupDraft,
     EndpointSetupMode,
     EndpointSetupRole,
     EndpointSetupSpec,
@@ -54,6 +57,7 @@ def update_endpoint_setup_spec(setup: UpdateEndpointSetup) -> EndpointSetupSpec:
                 height=height,
                 allow_descendants=True,
                 allow_memory_focus=True,
+                allow_inline_memory=True,
                 memory_height=8,
             ),
             EndpointSetupRole(
@@ -87,20 +91,21 @@ def choose_update_endpoint_setup(
     draft = run_endpoint_setup(
         update_endpoint_setup_spec(setup),
         memory_loader=memory_loader,
-        validate_draft=lambda value: (
-            "A and B must be distinct Contexts."
-            if value.value("A").context_name == value.value("B").context_name
-            else None
-        ),
+        validate_draft=lambda value: _validate_update_draft(setup, value),
         command_editor=EndpointCommandBinding(
             form=update_command_review.UPDATE_COMMAND_FORM,
             review=lambda value: update_command_review.build_start_review(
-                source_name=value.value("A").context_name,
+                source_name=(
+                    value.value("A").context_name
+                    if value.value("A").inline_memory_content is None
+                    else None
+                ),
                 target_name=value.value("B").context_name,
                 source_descendants=value.value("A").include_descendants,
                 target_descendants=value.value("B").include_descendants,
                 source_memory_uid=value.value("A").memory_uid,
                 target_memory_uid=value.value("B").memory_uid,
+                inline_source_content=value.value("A").inline_memory_content,
             ),
             parse=update_command_review.parse_endpoint_argv,
         ),
@@ -115,10 +120,28 @@ def choose_update_endpoint_setup(
     source = draft.value("A")
     target = draft.value("B")
     return UpdateEndpointSelection(
-        source_name=source.context_name,
+        source_name=(
+            source.context_name if source.inline_memory_content is None else None
+        ),
         target_name=target.context_name,
         source_descendants=source.include_descendants,
         target_descendants=target.include_descendants,
         source_memory_uid=source.memory_uid,
         target_memory_uid=target.memory_uid,
+        inline_source_content=source.inline_memory_content,
     )
+
+
+def _validate_update_draft(
+    setup: UpdateEndpointSetup,
+    draft: EndpointSetupDraft,
+) -> str | None:
+    source = draft.value("A")
+    target = draft.value("B")
+    if source.inline_memory_content is not None:
+        if not setup.allows_inline_target(target.context_name):
+            return "Inline Memory Update requires an ordinary local Target Context."
+        return None
+    if source.context_name == target.context_name:
+        return "A and B must be distinct Contexts."
+    return None

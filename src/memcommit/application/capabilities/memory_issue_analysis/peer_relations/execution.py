@@ -20,7 +20,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.rep
     load_memory_relation_analysis,
     save_memory_relation_analysis,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
     freeze_granted_context_binding,

@@ -97,7 +97,6 @@ def _start_new_meld_from_setup(store: MemoryStore) -> None:
     if receipt is None:
         typer.echo("New Meld cancelled; no session was created.")
         return
-    left = receipt.left_name
     right = receipt.right_name
 
     def replaces_existing_target(target_name: str) -> bool:
@@ -110,11 +109,14 @@ def _start_new_meld_from_setup(store: MemoryStore) -> None:
     if receipt.mode == "directional":
         restart_existing = replaces_existing_target(right)
         start_kwargs = {
-            "left": left,
             "into": right,
             "left_descendants": receipt.left_descendants,
             "right_descendants": receipt.right_descendants,
         }
+        if receipt.inline_source_content is not None:
+            start_kwargs["memory"] = receipt.inline_source_content
+        else:
+            start_kwargs["left"] = receipt.left_name
         if restart_existing:
             # Choosing New is the explicit replacement signal when setup
             # resolves to a target that already owns even an indistinguishable
@@ -129,8 +131,10 @@ def _start_new_meld_from_setup(store: MemoryStore) -> None:
 
     if receipt.target_name is None:
         raise MeldCommandError("Symmetric Meld setup omitted result C.")
+    if receipt.left_name is None:
+        raise MeldCommandError("Symmetric Meld setup omitted Source A.")
     start_kwargs = {
-        "left": left,
+        "left": receipt.left_name,
         "right": right,
         "to": receipt.target_name,
         "left_descendants": receipt.left_descendants,

@@ -6,9 +6,11 @@ from dataclasses import dataclass
 import hashlib
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.context_access import (
-    ContextAccess,
+from memcommit.application.authorization.context_operation import (
     authorized_context_operation,
+)
+from memcommit.application.context_access.access import (
+    ContextAccess,
     grant_checkpoint_args,
     granted_context_link,
     granted_memory_source,
@@ -194,7 +196,8 @@ class MemoryStoreEmbedPort(EmbedPort):
             item = ops.resolve(source, selector)
         except KeyError as error:
             raise FileNotFoundError(
-                f"Memory {selector!r} does not exist in Context {source.name!r}."
+                f"No directly owned Memory with uid starting with {selector!r} "
+                f"exists in Context {source.name!r}."
             ) from error
         if not isinstance(item, Memory):
             raise TypeError(

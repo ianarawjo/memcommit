@@ -227,14 +227,13 @@ evidence; Conformance does not claim such a reconciler.
 
 ## Whole-frame Resolve
 
-Resolve declares `WHOLE_FRAME_ONLY`. The initial Fit judgment, candidate
-generation, independent grounding/information-preservation verification, and
-final Fit judgments each operate on a complete frozen direct-Memory frame or
-complete candidate post-image. A complete block matrix would not establish
-that a repair preserves facts across shards, and independent local repairs
-could introduce new cross-batch incompatibilities. Resolve therefore rejects
-an oversized frame before provider construction or before publishing an
-incomplete analysis; it does not enable hidden batching.
+Resolve conflict discovery declares `WHOLE_FRAME_ONLY` and operates on the
+complete frozen direct-Memory frame. After human decisions, ordinary Update
+plans once over the complete Target; Resolve applies that plan detached and
+sends the complete post-image to the whole-frame conflict analyzer. A complete
+block matrix would not prove cross-block compatibility, so discovery and final
+conflict verification reject unsupported staging instead of publishing a
+partial analysis or partial post-image.
 
 ## Migration scope
 

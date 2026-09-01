@@ -8,6 +8,10 @@ import memcommit.application.capabilities.ops as ops
 import memcommit.application.operations.forget.runtime as forget_runtime
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.forget import command as forget_command
+from memcommit.adapters.console.commands.forget.command_codec import (
+    build_forget_review,
+    parse_forget_command_argv,
+)
 from memcommit.adapters.console.commands.forget.setup import (
     ForgetSetupResult,
     choose_forget_setup,
@@ -34,7 +38,9 @@ def test_forget_provider_follows_the_active_profile_route(monkeypatch):
 
 def test_forget_setup_enter_runs_the_current_direct_source():
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("Forget the old desk location.\r")
+        # Enter moves from the required instruction into the exact command;
+        # the command itself is the only execution action.
+        pipe_input.send_text("Forget the old desk location.\r\r")
         receipt = choose_forget_setup(
             ("alpha", "beta"),
             current="alpha",
@@ -49,10 +55,13 @@ def test_forget_setup_enter_runs_the_current_direct_source():
     )
 
 
-def test_forget_setup_selects_one_peer_source_before_todo():
+def test_forget_setup_selects_one_peer_source_before_command():
     with create_pipe_input() as pipe_input:
-        # Enter an instruction, move to Source, check beta, then run from To Do.
-        pipe_input.send_text("Forget the old desk location.\t\x1b[B\r\t\r")
+        # Enter an instruction, move up to Source, browse to beta, then run the
+        # bidirectionally synchronized command box.
+        pipe_input.send_text(
+            "Forget the old desk location.\x1b[A\x1b[C\r\x1b[B\r\x1b[B\r\r"
+        )
         receipt = choose_forget_setup(
             ("alpha", "beta"),
             current="alpha",
@@ -69,7 +78,7 @@ def test_forget_setup_selects_one_peer_source_before_todo():
 
 def test_forget_setup_keeps_backspace_as_instruction_deletion():
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("Forget the old desk locationx\x7f.\r")
+        pipe_input.send_text("Forget the old desk locationx\x7f.\r\r")
         receipt = choose_forget_setup(
             ("alpha",),
             current="alpha",
@@ -82,6 +91,47 @@ def test_forget_setup_keeps_backspace_as_instruction_deletion():
         context_name="alpha",
         instruction="Forget the old desk location.",
     )
+
+
+def test_forget_setup_command_edit_updates_both_upper_fields_atomically():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(
+            "Initial instruction.\r" "\x15'Command-edited instruction.' --from beta\r"
+        )
+        receipt = choose_forget_setup(
+            ("alpha", "beta"),
+            current="alpha",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert receipt == ForgetSetupResult(
+        context_name="beta",
+        instruction="Command-edited instruction.",
+    )
+
+
+def test_forget_command_codec_uses_from_and_accepts_legacy_context_aliases():
+    review = build_forget_review(
+        source_name="alpha",
+        instruction="Forget the old desk location.",
+    )
+
+    assert review.argv == (
+        "mem",
+        "forget",
+        "Forget the old desk location.",
+        "--from",
+        "alpha",
+    )
+    assert parse_forget_command_argv(review.argv) == (
+        "alpha",
+        "Forget the old desk location.",
+    )
+    assert parse_forget_command_argv(
+        ("mem", "forget", "Forget it.", "--context", "beta")
+    ) == ("beta", "Forget it.")
 
 
 def test_forget_setup_rejects_blank_submission_then_escape_cancels():
@@ -143,9 +193,7 @@ def test_flagless_forget_uses_the_frozen_selected_context(
 
     assert result.exit_code == 0, result.output + result.stderr
     assert current_name != selected_name
-    assert observed == [
-        (selected_name, "Forget the old desk location.", False)
-    ]
+    assert observed == [(selected_name, "Forget the old desk location.", False)]
 
 
 def test_flagless_forget_cancel_does_not_connect_provider(
@@ -192,9 +240,7 @@ def test_explicit_forget_instruction_keeps_the_existing_fast_path(
     monkeypatch.setattr(
         forget_command,
         "choose_forget_setup",
-        lambda *_args, **_kwargs: (_ for _ in ()).throw(
-            AssertionError("setup opened")
-        ),
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("setup opened")),
     )
     monkeypatch.setattr(
         forget_command,
@@ -211,6 +257,32 @@ def test_explicit_forget_instruction_keeps_the_existing_fast_path(
 
     assert result.exit_code == 0, result.output + result.stderr
     assert observed == [(current_name, "Forget the old desk location.")]
+
+
+def test_explicit_forget_accepts_from_as_the_canonical_source_option(
+    isolated_store,
+    monkeypatch,
+):
+    _store, _current_name, selected_name = _store_with_two_contexts()
+    observed: list[tuple[str, str]] = []
+    monkeypatch.setattr(
+        forget_command,
+        "connect_codex_chatgpt_provider",
+        lambda: object(),
+    )
+    monkeypatch.setattr(
+        forget_command,
+        "_run_interactive_forget",
+        lambda ctx, info, _provider, **_kwargs: observed.append((ctx.name, info)) or [],
+    )
+
+    result = runner.invoke(
+        app,
+        ["forget", "Forget the old desk location.", "--from", selected_name],
+    )
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert observed == [(selected_name, "Forget the old desk location.")]
 
 
 def test_tty_forget_prints_a_receipt_only_after_the_checkpoint_succeeds(

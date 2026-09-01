@@ -1,0 +1,11 @@
+$ mem update                                                                                                                                                                        
+PTY 180 52                                                                                                                                                                          
+ NEW UPDATE · A → B · CHOOSE SOURCE AND TARGET                                                                                                                                      
+› A · SOURCE TYPE · [   CONTEXT ]  [   STORED MEMORY ]  [ ✓ INLINE MEMORY ] · ←/→ TO SELECT                                                                                         
+  A · SOURCE · INLINE MEMORY         ›                                                                         TYPE INLINE MEMORY                                                   
+  B · TARGET · CHANGES APPLY HERE    › practice/coffee/target                  [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · WHOLE CONTEXT ]   
+┌──────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND · INVALID |──────────────────────────────────────────────────────────────────────────┐
+│› mem update                                                                                                                                                                      │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                                                                                    
+ ←/→ Source type · ↓ Source input · Tab next control · Esc cancel

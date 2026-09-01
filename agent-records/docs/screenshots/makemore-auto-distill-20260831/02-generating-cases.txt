@@ -1,0 +1,3 @@
+PTY · 180 columns × 52 rows                                                                                                                                                         
+$ mem impact makemore --number 3                                                                                                                                                    
+MEM IMPACT · MAKEMORE · 3/3 · GENERATING CASES .. · 1s

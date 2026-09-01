@@ -12,8 +12,8 @@ from memcommit.adapters.console.commands.search.command import (
     _run_search_request,
 )
 from memcommit.application.operations.search.corpus import load_readable_search_roots
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.access import resolve_context_access
+from memcommit.application.context_access.readable_contexts import (
     freeze_readable_context_catalog,
 )
 from memcommit.adapters.console.commands.search.search_workbench import (
@@ -31,12 +31,16 @@ from memcommit.core.context import (
 from memcommit.application.operations.search.application import (
     supplement_namespace_branch_coverage,
 )
-from memcommit.application.operations.search.model import (
-    SearchError,
+from memcommit.application.operations.search.candidates import (
     SearchCandidate,
-    SearchMatch,
     collect_candidates,
     collect_candidates_from_roots,
+)
+from memcommit.application.operations.search.errors import (
+    SearchError,
+)
+from memcommit.application.operations.search.ranking import (
+    SearchMatch,
     rank_candidates,
 )
 from memcommit.persistence.store import MemoryStore
@@ -336,27 +340,6 @@ def test_search_all_rejects_explicit_context(isolated_store, monkeypatch):
 
     assert result.exit_code == 1
     assert "--all/-a cannot be combined with --context/-c" in result.stderr
-
-
-def test_search_cli_accepts_a_memory_uid_without_connecting_provider(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    context = ops.init("search/uid")
-    memory = ops.add(context, "Identity-selected Search evidence.")
-    store.save(context)
-    store.set_current(context.name)
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.search.command.connect_search_provider",
-        lambda: pytest.fail("UID Search must not connect a provider"),
-    )
-
-    result = runner.invoke(app, ["search", memory.uid[:8]])
-
-    assert result.exit_code == 0, result.output + result.stderr
-    assert f"[memory {memory.uid[:8]}]" in result.output
-    assert "Identity-selected Search evidence." in result.output
 
 
 def test_search_cli_multi_roots_keep_descendants_and_embeds_independent(
@@ -872,6 +855,27 @@ def test_search_cli_recurses_renders_local_content_and_does_not_checkpoint(
     assert direct.exit_code == 0
     assert direct.output == "facilities-reference\n  (no matching items)\n"
     assert "Temporary parking" not in direct.output
+
+
+def test_search_cli_accepts_a_memory_uid_without_connecting_provider(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    context = ops.init("search-uid")
+    memory = ops.add(context, "Identity-selected Search result.")
+    store.save(context)
+    store.set_current(context.name)
+    monkeypatch.setattr(
+        "memcommit.adapters.console.commands.search.command.connect_search_provider",
+        lambda: pytest.fail("UID Search must not connect a provider"),
+    )
+
+    result = runner.invoke(app, ["search", memory.uid[:8]])
+
+    assert result.exit_code == 0, result.output + result.stderr
+    assert f"[memory {memory.uid[:8]}]" in result.output
+    assert memory.content in result.output
 
 
 def test_search_cli_recursive_searches_materialized_namespace_descendants(

@@ -29,7 +29,7 @@ active `MemoryStore`; granted names load through a grant-bounded
 collapsing storage ownership, grant identity, or authorization.
 
 The implementation is owned by
-`memcommit.application.capabilities.authority.readable_contexts`. Constructing
+`memcommit.application.context_access.readable_contexts`. Constructing
 the namespace reads the active Profile and Store, resolves exact
 `ContextAccess`, revalidates Grant attachments, and routes Context loads across
 local and authority stores. Those are application access decisions rather than

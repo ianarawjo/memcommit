@@ -390,6 +390,27 @@ def test_exact_revert_resolves_an_explicit_relative_context_once(
     assert not store.load_direct("task/target").memories
 
 
+def test_exact_revert_accepts_an_explicit_context_uid(isolated_store):
+    invoke("init", "task/source")
+    invoke("init", "task/target")
+    invoke("add", "remove me")
+    store = MemoryStore()
+    target = store.load_direct("task/target")
+    checkpoint_uid = store.list_checkpoints(target.name)[-1]["uid"]
+    store.set_current("task/source")
+
+    result = invoke(
+        "revert",
+        checkpoint_uid[:8],
+        "--context",
+        target.uid[:8],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert store.current_context_name() == "task/source"
+    assert not store.load_direct(target.name).memories
+
+
 def test_missing_hex_uid_never_falls_back_to_semantic_search(
     isolated_store,
     monkeypatch,

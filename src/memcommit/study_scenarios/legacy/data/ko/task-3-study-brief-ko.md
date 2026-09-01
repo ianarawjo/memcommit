@@ -47,11 +47,13 @@ Memory나 기관 기록에 접근하지 않고 어떤 Memory도 선택·포함·
 
 1. 공개 의료 가이던스를 읽고, 필요한 상세 질문은 질의 전용 Q&A view에서 별도로 확인한다.
 2. `local/personal-memory`에서 관련 후보와 그 조건을 찾는다.
-3. `mem sever --source SOURCE --criteria CRITERIA --save-as OUTPUT` 또는 동일한
-   인터랙티브 picker로 공유 후보와 로컬 rationale을 만든다. 한 Sever pass에는
-   ordinary Criteria Context 하나만 사용한다. 두 기준을 동등하게 고려하려면 먼저
-   `mem meld`를 사용하고, 순서가 있는 두 번째 정제를 원하면 Sever를 다시 실행한다.
-   의료 Q&A 에이전트는 Sever를 수행하거나 후보를 선택하지 않는다.
+3. `mem sever SOURCE CRITERIA` 또는 동일한 인터랙티브 picker로 선택한 Source
+   Context를 제자리에서 공유 후보와 로컬 rationale로 정제한다. Source와 Criteria의
+   descendants는 서로 독립적으로 선택하며, 선택된 각 Source owner는 기존 Context
+   위치를 유지한다. 한 Sever pass에는 ordinary Criteria Context 하나만 사용한다.
+   두 기준을 동등하게 고려하려면 먼저 `mem meld`를 사용하고, 순서가 있는 두 번째
+   정제를 원하면 Sever를 다시 실행한다. 의료 Q&A 에이전트는 Sever를 수행하거나
+   후보를 선택하지 않는다.
 4. 후보를 검토하고, 필요하면 `mem rationale`과 source trace로 사건·요약·정책의
    근거와 누락된 조건을 확인한다.
 5. 최종 검토한 항목을 `mem share --to government/healthcare-agent`로 정부 의료기관

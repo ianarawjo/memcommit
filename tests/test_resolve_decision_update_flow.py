@@ -141,8 +141,10 @@ def _checks(
             ),
         )
     )
+
     def provenance(operation):
         return QualityAuditProvenance(operation, False)
+
     return (
         QualityAuditCheck(
             "duplicates",
@@ -423,8 +425,8 @@ def test_update_plans_once_and_audits_detached_post_image(monkeypatch):
     assert proposal.ready_to_apply
     assert len(proposal.plan.operations) == 1
     assert port.target.memories[LEFT_UID].content == "Always use a period."
-    assert captured["context"].memories[LEFT_UID].content.startswith(
-        "Use a period except"
+    assert (
+        captured["context"].memories[LEFT_UID].content.startswith("Use a period except")
     )
     assert proposal.blocking_audit_keys == ()
     assert port.revalidations == 2
@@ -540,12 +542,10 @@ def test_resolve_tui_collects_accept_then_finalizes():
     assert decisions == (ResolveDecision("audit-item-one", "CONFIRM"),)
 
 
-def test_resolve_tui_enter_on_two_edits_without_adding_a_focus_row():
+def test_resolve_tui_two_edits_immediately_without_adding_a_focus_row():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\x1b[B\r"
-            "Named greetings never require punctuation.\r"
-            "\x1b[B\r\x1b[B\r"
+            "\x1b[BNamed greetings never require punctuation.\r\x1b[B\r\x1b[B\r"
         )
         decisions = run_resolve_tui(
             _analysis(),
@@ -558,10 +558,23 @@ def test_resolve_tui_enter_on_two_edits_without_adding_a_focus_row():
     assert decisions == (ResolveDecision("audit-item-one", "FORCE"),)
 
 
+def test_resolve_tui_left_and_right_move_the_intent_caret():
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[Babc\x1b[D\x1b[DX\r\x1b[B\x1b[B\r")
+        decisions = run_resolve_tui(
+            _analysis(),
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert decisions == (ResolveDecision("audit-item-one", "INTENT", "aXbc"),)
+
+
 def test_resolve_tui_freezes_intent_draft_when_accept_is_selected():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\x1b[B\r"
+            "\x1b[B"
             "Named greetings never require punctuation.\r"
             "\x1b[A\r"
             "\x1b[B\x1b[B\x1b[B\r"
@@ -579,10 +592,10 @@ def test_resolve_tui_freezes_intent_draft_when_accept_is_selected():
 def test_resolve_tui_does_not_count_blank_intent_as_ready():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\x1b[B\r"
+            "\x1b[B"
             "\r"
             "\x1b[B\x1b[B\r"
-            "\x1b[A\x1b[A\r"
+            "\x1b[A\x1b[A"
             "Named greetings never require punctuation.\r"
             "\x1b[B\x1b[B\r"
         )
@@ -617,10 +630,7 @@ def test_resolve_tui_prev_next_rows_navigate_multiple_audit_items():
     )
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
-            "\r"
-            "\x1b[B\x1b[B\x1b[B\x1b[B\r"
-            "\x1b[B\x1b[B\r"
-            "\x1b[B\x1b[B\x1b[B\r"
+            "\r\x1b[B\x1b[B\x1b[B\x1b[B\r\x1b[B\x1b[B\r\x1b[B\x1b[B\x1b[B\r"
         )
         decisions = run_resolve_tui(
             _analysis(first_analysis.review_issues[0], second),

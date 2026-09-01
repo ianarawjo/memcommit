@@ -18,11 +18,15 @@ from memcommit.adapters.console.terminal.components.endpoint_setup.model import 
 MELD_COMMAND_FORM = CommandForm(
     command=("mem", "meld"),
     usage=(
-        "mem meld LEFT RIGHT [--to TARGET] [--left-descendants] "
-        "[--right-descendants] [--incoming-memory UID] [--baseline-memory UID]"
+        "mem meld (LEFT RIGHT | --memory TEXT --into BASELINE) [--to TARGET] "
+        "[--left-descendants] [--right-descendants] "
+        "[--incoming-memory UID] [--baseline-memory UID]"
     ),
     fields=(
-        CommandFormField("LEFT RIGHT", "the exact incoming and baseline Contexts"),
+        CommandFormField(
+            "LEFT RIGHT / --memory TEXT --into BASELINE",
+            "Context or inline-Memory directional input",
+        ),
         CommandFormField("--to TARGET", "a separate symmetric Result Context"),
         CommandFormField(
             "--left-descendants / --right-descendants",
@@ -45,7 +49,13 @@ def parse_endpoint_argv(argv: Sequence[str]) -> EndpointSetupDraft:
     positionals: list[str] = []
     options: dict[str, str] = {}
     switches: set[str] = set()
-    value_options = {"--to", "--incoming-memory", "--baseline-memory"}
+    value_options = {
+        "--to",
+        "--into",
+        "--memory",
+        "--incoming-memory",
+        "--baseline-memory",
+    }
     switch_options = {"--left-descendants", "--right-descendants"}
     index = 2
     while index < len(values):
@@ -66,6 +76,29 @@ def parse_endpoint_argv(argv: Sequence[str]) -> EndpointSetupDraft:
             raise ValueError(f"Editable Meld does not accept {token}.")
         positionals.append(token)
         index += 1
+    if "--memory" in options:
+        if positionals or "--into" not in options or "--to" in options:
+            raise ValueError(
+                "Editable inline Meld requires --memory TEXT --into BASELINE."
+            )
+        if "--left-descendants" in switches or "--incoming-memory" in options:
+            raise ValueError(
+                "Editable inline Meld cannot use INCOMING descendants or focus."
+            )
+        return EndpointSetupDraft(
+            "DIRECTIONAL",
+            (
+                EndpointSetupValue("A", "", inline_memory_content=options["--memory"]),
+                EndpointSetupValue(
+                    "B",
+                    options["--into"],
+                    include_descendants="--right-descendants" in switches,
+                    memory_uid=options.get("--baseline-memory"),
+                ),
+            ),
+        )
+    if "--into" in options:
+        raise ValueError("Editable Context Meld does not use --into.")
     if len(positionals) != 2:
         raise ValueError("Editable Meld requires exactly LEFT and RIGHT Contexts.")
     left, right = positionals
@@ -93,7 +126,7 @@ def parse_endpoint_argv(argv: Sequence[str]) -> EndpointSetupDraft:
 def build_start_review(
     *,
     mode: str,
-    left_name: str,
+    left_name: str | None,
     right_name: str,
     target_name: str | None = None,
     left_descendants: bool = False,
@@ -111,6 +144,8 @@ def build_start_review(
             )
         argv = ["mem", "meld", "--memory", incoming_text, "--into", right_name]
     else:
+        if left_name is None:
+            raise ValueError("Context Meld input requires one Source Context.")
         argv = ["mem", "meld", left_name, right_name]
     if mode.upper() == "SYMMETRIC":
         if target_name is None:

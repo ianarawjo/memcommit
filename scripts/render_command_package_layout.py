@@ -173,6 +173,9 @@ RETIRED_BASELINE_MODULES = {
     "meld_target_picker": (
         "retired after Meld adopted the shared endpoint setup for Result selection"
     ),
+    "memory_report_recents": (
+        "retired when Trace and Rationale adopted direct Context-or-Memory browsing"
+    ),
     "shell_init": (
         "retired after Help and init-study took ownership of their distinct "
         "shell responsibilities"
@@ -275,7 +278,6 @@ SHARED_MODULES = {
     "horizontal_choice",
     "memory_history",
     "memory_picker",
-    "memory_report_recents",
     "operation_launcher_location",
     "paste_input",
     "quality_find_workbench",
@@ -322,7 +324,7 @@ RELOCATED_SHARED_TARGETS = {
     "operation_launcher_location": "memcommit.adapters.console.terminal.components.operation_launcher.location",
     "paste_input": "memcommit.adapters.console.terminal.components.paste_input",
     "quality_find_workbench": "memcommit.adapters.console.terminal.components.quality_find.workbench",
-    "readable_context_catalog": "memcommit.application.capabilities.authority.readable_contexts",
+    "readable_context_catalog": "memcommit.application.context_access.readable_contexts",
     "resolution_workbench_shell": "memcommit.adapters.console.terminal.components.resolution.session_shell",
     "restoration_present": "memcommit.adapters.console.terminal.components.restoration_receipt",
     "save_location_control": "memcommit.adapters.console.terminal.components.save_location",
@@ -426,7 +428,7 @@ def build_plan() -> dict[str, object]:
                 "legacy_module": f"{LEGACY_NAMESPACE}.{stem}",
                 "canonical_module": relocated or f"{COORDINATION_NAMESPACE}.{target}",
                 "owner": (
-                    "authority"
+                    "context-access"
                     if stem == "readable_context_catalog"
                     else "terminal"
                     if relocated

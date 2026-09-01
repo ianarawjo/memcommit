@@ -31,6 +31,10 @@ from memcommit.application.operations.replace.application import (
     ReplaceRequest,
 )
 from memcommit.application.operations.replace.runtime import execute_replace_with_store
+from memcommit.application.capabilities.operand_resolution import (
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
+)
 from memcommit.persistence.store import MemoryStore
 
 
@@ -139,17 +143,24 @@ def cmd(
         operands: tuple[str | None, ...] = (
             tuple(context_name) if context_name else (None,)
         )
-        target_names = tuple(snapshot.resolve_or_current(value) for value in operands)
-        if any(name is None for name in target_names):
+        if any(value is None for value in operands) and snapshot.current_name is None:
             raise FileNotFoundError("No current Context is available.")
-        canonical_targets = tuple(name for name in target_names if name is not None)
+        selectors = tuple(
+            value if value is not None else snapshot.current_name for value in operands
+        )
+        assert all(selector is not None for selector in selectors)
+        context_candidates = freeze_local_context_operand_candidates(store)
+        canonical_targets = tuple(
+            resolve_existing_context_operand(
+                context_candidates,
+                selector,
+                current=snapshot.current_name,
+            ).name
+            for selector in selectors
+            if selector is not None
+        )
         if len(set(canonical_targets)) != len(canonical_targets):
             raise ValueError("Replace Context roots must be distinct.")
-        if any(not store.context_exists(name) for name in canonical_targets):
-            raise FileNotFoundError(
-                "Replace targets must be ordinary local Contexts in this Store."
-            )
-
         request = (
             None
             if pattern is None

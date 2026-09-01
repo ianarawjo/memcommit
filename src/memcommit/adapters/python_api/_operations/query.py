@@ -20,10 +20,10 @@ from memcommit.adapters.python_api.query import (
     QueryCitation,
     ReferenceQueryResult,
 )
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.core.context import QueryContextRef
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.application.operations.query.granted_application import (
@@ -57,7 +57,9 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.providers.subscription import QueryProviderError
-from memcommit.application.operations.search.model import SearchError
+from memcommit.application.capabilities.retrieval_corpus.errors import (
+    RetrievalCorpusError,
+)
 
 
 StageObserver = Callable[[str], None]
@@ -179,7 +181,7 @@ def query_ordinary(
         raise_public(QueryStorageError, error)
     except (
         OrdinaryQueryCorpusTooLarge,
-        SearchError,
+        RetrievalCorpusError,
         RuntimeError,
         TypeError,
         ValueError,

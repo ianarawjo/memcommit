@@ -9,7 +9,7 @@ import pytest
 import memcommit.application.capabilities.ops as ops
 import memcommit.application.operations.find_duplicates.application as find_duplicates_application
 from memcommit.adapters.python_api import MemCommitClient
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.capabilities.command_recovery import build_command_stacks
 from memcommit.core.context import MemoryRef
 from memcommit.application.operations.dedup.application import (

@@ -75,6 +75,24 @@ def test_both_spellings_resolve_relative_context_locators(
     assert not store.context_exists("project/victim")
 
 
+@pytest.mark.parametrize("command", ("delete", "remove"))
+def test_both_spellings_resolve_context_uid_before_direct_item_fallback(
+    isolated_store,
+    command,
+):
+    store = MemoryStore()
+    victim = ops.init("victim")
+    store.create_context(victim)
+    store.create_context(ops.init("keeper"))
+    store.set_current("keeper")
+
+    result = runner.invoke(app, [command, victim.uid[:8], "--force"])
+
+    assert result.exit_code == 0, result.output
+    assert "Deleted context 'victim'" in result.output
+    assert not store.context_exists("victim")
+
+
 def test_context_delete_keeps_human_confirmation_and_cancel_is_read_only(
     isolated_store,
 ):

@@ -1,0 +1,7 @@
+$ mem update                                                                                                                                                                        
+PTY 180 52                                                                                                                                                                          
+WARNING: your terminal doesn't support cursor position requests (CPR).                                                                                                              
+                                                                                                                                                                                    
+TYPED UPDATE SETUP RECEIPT · UpdateEndpointSelection(source_name=None, target_name='practice/coffee/target', source_descendants=False, target_descendants=False, source_memory_uid=N
+one, target_memory_uid=None, inline_source_content='나는 자연인이다')                                                                                                               
+CAPTURE GATE · PRESS V FOR READ-ONLY VERIFICATION

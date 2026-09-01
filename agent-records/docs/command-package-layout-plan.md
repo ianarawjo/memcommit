@@ -8,10 +8,10 @@ This is the exact path-only classification of the formerly flat
 route closure remains solely in the operation evidence ledger.
 
 - Baseline modules: 153
-- Active canonical mappings: 139
-- Retired baseline modules: 14
+- Active canonical mappings: 138
+- Retired baseline modules: 15
 - Command entry packages: 61
-- Shared command mechanisms: 40
+- Shared command mechanisms: 39
 
 | Legacy module | Canonical module | Role | Owner |
 | --- | --- | --- | --- |
@@ -96,7 +96,6 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.meld_shell` | `memcommit.adapters.console.commands.meld.command` | command-owned-support | `meld` |
 | `memcommit.commands.memory_history` | `memcommit.adapters.console.coordination.memory_history` | shared-command-mechanism | `coordination` |
 | `memcommit.commands.memory_picker` | `memcommit.adapters.console.terminal.components.memory_report_picker` | shared-terminal-component | `terminal` |
-| `memcommit.commands.memory_report_recents` | `memcommit.adapters.console.coordination.memory_report_recents` | shared-command-mechanism | `coordination` |
 | `memcommit.commands.merge` | `memcommit.adapters.console.commands.merge.command` | command-entry | `commands.merge` |
 | `memcommit.commands.operation_launcher_location` | `memcommit.adapters.console.terminal.components.operation_launcher.location` | shared-terminal-component | `terminal` |
 | `memcommit.commands.ordinary_query_provider_policy` | `memcommit.adapters.console.commands.query.provider_policy` | command-owned-support | `query` |
@@ -110,7 +109,7 @@ route closure remains solely in the operation evidence ledger.
 | `memcommit.commands.query` | `memcommit.adapters.console.commands.query.command` | command-entry | `commands.query` |
 | `memcommit.commands.query_workbench` | `memcommit.adapters.console.commands.query.workbench` | command-owned-support | `query` |
 | `memcommit.commands.rationale` | `memcommit.adapters.console.commands.rationale.command` | command-entry | `commands.rationale` |
-| `memcommit.commands.readable_context_catalog` | `memcommit.application.capabilities.authority.readable_contexts` | shared-application-capability | `authority` |
+| `memcommit.commands.readable_context_catalog` | `memcommit.application.context_access.readable_contexts` | shared-application-capability | `context-access` |
 | `memcommit.commands.redo` | `memcommit.adapters.console.commands.redo.command` | command-entry | `commands.redo` |
 | `memcommit.commands.reference` | `memcommit.adapters.console.commands.reference.command` | command-entry | `commands.reference` |
 | `memcommit.commands.remove` | `memcommit.adapters.console.commands.remove.command` | command-entry | `commands.remove` |

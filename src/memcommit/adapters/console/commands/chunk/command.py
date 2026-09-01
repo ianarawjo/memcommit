@@ -5,8 +5,10 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.persistence.command_ledger.attempts import annotate_command_outcome
-from memcommit.application.capabilities.authority.context_access import (
-    resolve_context_access,
+from memcommit.application.context_access.operand_resolution import (
+    freeze_profile_context_access_candidates,
+    resolve_existing_context_access,
+    try_resolve_context_access_or_local_memory,
 )
 from memcommit.application.operations.chunk.application import chunk
 from memcommit.application.operations.chunk.domain import ChunkMethod, chunk_content
@@ -15,13 +17,11 @@ from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
 from memcommit.core.context import Memory
-from memcommit.application.capabilities.local_target_lookup import (
-    resolve_local_context_memory_target,
-    resolve_local_direct_memory_locator,
+from memcommit.application.capabilities.operand_resolution import (
+    ResolvedExistingContextOperand,
 )
 from memcommit.core.context_targeting.uid_locator import is_memory_uid_prefix
 from memcommit.core.context_targeting.model import (
-    ContextTarget,
     DirectMemoryLocator,
     DirectMemoryTarget,
 )
@@ -134,59 +134,29 @@ def cmd(
             if memory_selector is not None
             else None
         )
-        if isinstance(parsed_operand, DirectMemoryLocator):
-            if parsed_operand.context_locator is None:
-                if (
-                    snapshot.current_name is not None
-                    and not active_store.context_exists(snapshot.current_name)
-                ):
-                    # A virtual current pointer is already an explicit public
-                    # Grant selection. Preserve that authority-bearing owner;
-                    # the ordinary-local global catalog cannot enumerate it.
-                    context_name = snapshot.current_name
-                    memory_selector = parsed_operand.memory_selector
-                else:
-                    target = resolve_local_direct_memory_locator(
-                        active_store,
-                        parsed_operand.memory_selector,
-                        current=snapshot.current_name,
-                    )
-                    context_name = target.context_name
-                    memory_selector = target.memory_uid
-            else:
-                context_name = parsed_operand.context_locator
-                memory_selector = parsed_operand.memory_selector
+        context_candidates = freeze_profile_context_access_candidates(
+            active_store,
+            current_name=snapshot.current_name,
+        )
+        if (
+            isinstance(parsed_operand, DirectMemoryLocator)
+            and parsed_operand.context_locator is not None
+        ):
+            context_name = parsed_operand.context_locator
+            memory_selector = parsed_operand.memory_selector
         elif parsed_operand is not None:
-            exact_access = None
-            if is_memory_uid_prefix(memory_selector):
-                try:
-                    exact_access = resolve_context_access(
-                        active_store,
-                        parsed_operand.locator,
-                        current_name=snapshot.current_name,
-                        required_permission="DELETE",
-                    )
-                except FileNotFoundError:
-                    pass
-            if exact_access is not None:
-                auto_target = ContextTarget(exact_access.display_name)
-            else:
-                try:
-                    auto_target = resolve_local_context_memory_target(
-                        active_store,
-                        memory_selector,
-                        current=snapshot.current_name,
-                    )
-                except FileNotFoundError:
-                    auto_target = None
-            if auto_target is not None:
-                if isinstance(auto_target, DirectMemoryTarget):
-                    context_name = auto_target.context_name
-                    memory_selector = auto_target.memory_uid
-                else:
-                    assert isinstance(auto_target, ContextTarget)
-                    context_name = auto_target.context_name
-                    memory_selector = None
+            resolved = try_resolve_context_access_or_local_memory(
+                active_store,
+                memory_selector,
+                current_name=snapshot.current_name,
+                candidates=context_candidates,
+            )
+            if isinstance(resolved, ResolvedExistingContextOperand):
+                context_name = resolved.name
+                memory_selector = None
+            elif isinstance(resolved, DirectMemoryTarget):
+                context_name = resolved.context_name
+                memory_selector = resolved.memory_uid
             elif (
                 snapshot.current_name is not None
                 and not active_store.context_exists(snapshot.current_name)
@@ -196,14 +166,15 @@ def cmd(
                 # bare prefixes never enumerate arbitrary Grants.
                 context_name = snapshot.current_name
             else:
-                context_name = parsed_operand.locator
+                context_name = memory_selector
                 memory_selector = None
-        access = resolve_context_access(
+        access = resolve_existing_context_access(
             active_store,
             context_name,
             current_name=snapshot.current_name,
             required_permission="DELETE",
-        )
+            candidates=context_candidates,
+        ).value
         store = access.store
         ctx = store.load_direct(access.context_name)
     except (

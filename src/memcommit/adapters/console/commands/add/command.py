@@ -15,17 +15,12 @@ from memcommit.application.operations.add.application import (
     run_add,
 )
 from memcommit.application.operations.add.runtime import MemoryStoreAddTargetPort
-from memcommit.application.capabilities.authority.context_access import (
-    context_access_display_facts,
-    resolve_context_access,
-)
-from memcommit.application.capabilities.authority.granted_context_navigation import (
-    freeze_granted_context_navigation,
-)
 from memcommit.adapters.console.coordination.endpoint_operand import (
     choose_endpoint_operand,
 )
-from memcommit.adapters.console.commands.add.input_records import parse_input_records
+from memcommit.adapters.console.commands.add.line_input_records import (
+    parse_line_input_records,
+)
 from memcommit.adapters.console.commands.add.receipt import render_add_receipt
 from memcommit.adapters.console.coordination.batch_input_source import (
     read_batch_input_text,
@@ -37,79 +32,12 @@ from memcommit.adapters.console.terminal.components.paste_input import (
     capture_paste,
 )
 from memcommit.adapters.console.commands.add.workbench import (
-    AddWorkbenchSetup,
+    build_add_workbench_setup,
     run_add_workbench,
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
-
-
-def _prepare_add_workbench_setup(
-    store: MemoryStore,
-    *,
-    current_name: str | None,
-    requested_context: str | None,
-) -> AddWorkbenchSetup:
-    """Freeze visible Context rows and their CREATE availability."""
-
-    local_names = tuple(store.list_context_names())
-    granted = freeze_granted_context_navigation(store)
-    names = set(local_names) | set(granted.names)
-    selectable = set(local_names)
-    annotations = {
-        name: value
-        for name, value in granted.annotations.items()
-        if name not in local_names
-    }
-
-    for name in granted.names:
-        if name in local_names:
-            continue
-        try:
-            access = resolve_context_access(
-                store,
-                name,
-                current_name=current_name,
-                required_permission="CREATE",
-            )
-        except (FileNotFoundError, OSError, ProfileError, RuntimeError, ValueError):
-            continue
-        selectable.add(access.display_name)
-
-    selected: str | None = None
-    if requested_context is not None:
-        access = resolve_context_access(
-            store,
-            requested_context,
-            current_name=current_name,
-            required_permission="CREATE",
-        )
-        selected = access.display_name
-        names.add(selected)
-        selectable.add(selected)
-        if access.is_granted:
-            annotations[selected] = context_access_display_facts(access)
-    elif current_name in selectable:
-        selected = current_name
-    elif selectable:
-        selected = sorted(selectable, key=str.casefold)[0]
-
-    if selected is None:
-        raise ValueError(
-            "Interactive Add requires a local or CREATE-granted target Context."
-        )
-    return AddWorkbenchSetup(
-        names=tuple(sorted(names, key=str.casefold)),
-        selectable_names=frozenset(selectable),
-        selected_context=selected,
-        current_context=current_name,
-        annotations=tuple(
-            (name, annotations[name])
-            for name in sorted(annotations, key=str.casefold)
-            if name in names
-        ),
-    )
 
 
 def cmd(
@@ -198,7 +126,7 @@ def cmd(
 
     try:
         if source_count == 0:
-            setup = _prepare_add_workbench_setup(
+            setup = build_add_workbench_setup(
                 store,
                 current_name=current_name,
                 requested_context=requested_context,
@@ -248,7 +176,7 @@ def cmd(
             except PasteCancelled:
                 typer.echo("Aborted — no changes made.")
                 return
-            contents = tuple(parse_input_records(raw_text))
+            contents = tuple(parse_line_input_records(raw_text))
             count = len(contents)
             noun = "line" if count == 1 else "lines"
             typer.secho(f"[{count} {noun} pasted]", dim=True)
@@ -269,7 +197,7 @@ def cmd(
             raw_text = read_batch_input_text(input_source)
             request = AddRequest(
                 context_locator=requested_context,
-                contents=tuple(parse_input_records(raw_text)),
+                contents=tuple(parse_line_input_records(raw_text)),
                 source=AddSource(
                     mode="LINES",
                     kind="stdin" if input_source == "-" else "utf-8-file",

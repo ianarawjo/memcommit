@@ -6,10 +6,12 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Iterator
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.authorization.context_operation import (
+    authorized_context_operation,
+)
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
-    authorized_context_operation,
     freeze_granted_context_binding,
     revalidate_granted_context_binding,
     resolve_context_access,

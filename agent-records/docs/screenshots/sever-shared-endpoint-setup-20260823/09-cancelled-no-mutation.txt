@@ -1,0 +1,4 @@
+$ mem sever  # cancel branch                                                                                                                                                        
+Sever setup cancelled. No session created.                                                                                                                                          
+CANCEL STORE UNCHANGED · True                                                                                                                                                       
+CANCEL VERIFICATION · NO NEW SESSION OR CHECKPOINT

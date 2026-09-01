@@ -1,0 +1,32 @@
+LIVE COLOR PTY · 52 180                                                                                                                                                             
+PROFILE · ISOLATED CAPTURE · CURRENT · practice/rules                                                                                                                               
+                                                                                                                                                                                    
+$ /Users/KimMunyeong/.local/bin/mem trace practice/rules --all                                                                                                                      
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTEXT LINEAGE ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃TRACE · practice/rules                                                                                                                                                           ^┃
+┃[CONTEXT] · 19 OPERATIONS · 18 MEMORY CHANGES · LATEST FIRST                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT b4f11b06]  2026-08-31 06:11 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "A final note keeps the newest Context operation distinct."                                                                                                              ┃
+┃  + [ADD] [MEMORY 9d220cec] A final note keeps the newest Context operation distinct.                                                                                             ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT 8a9932ac]  2026-08-31 06:11 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "A second supporting Memory makes Context lineage visibly mixed."                                                                                                        ┃
+┃  + [ADD] [MEMORY 5fff77a3] A second supporting Memory makes Context lineage visibly mixed.                                                                                       ┃
+┃                                                                                                                                                                                  ┃
+┃add [CHECKPOINT 988951f4]  2026-08-31 06:11 · 1 MEMORY CHANGE                                                                                                                     ┃
+┃  Added: "A separate policy Memory remains independent."                                                                                                                          ┃
+┃  + [ADD] [MEMORY 0f745f96] A separate policy Memory remains independent.                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃edit [CHECKPOINT b180d04b]  2026-08-31 06:11 · 1 MEMORY CHANGE                                                                                                                    ┃
+┃  Edited memory [2f629230]                                                                                                                                                        ┃
+┃  - [EDIT] [MEMORY 2f629230] Trace subject version 13 keeps one deliberately long sentence for wrapped Viewer evidence.                                                           ┃
+┃  + [EDIT] [MEMORY 2f629230] Trace subject version 14 keeps one deliberately long sentence for wrapped Viewer evidence.                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃edit [CHECKPOINT 53c9ed9e]  2026-08-31 06:11 · 1 MEMORY CHANGE                                                                                                                    ┃
+┃  Edited memory [2f629230]                                                                                                                                                        ┃
+┃  - [EDIT] [MEMORY 2f629230] Trace subject version 12 keeps one deliberately long sentence for wrapped Viewer evidence.                                                           ┃
+┃  + [EDIT] [MEMORY 2f629230] Trace subject version 13 keeps one deliberately long sentence for wrapped Viewer evidence.                                                           ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ TRACE REPORT · ↑/↓ scroll · PgUp/PgDn page · Home/End · Esc/Backspace/Q close · read-only

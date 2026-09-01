@@ -8,8 +8,8 @@ were directly under memcommit at baseline commit 885e62c0.
 | Role | Modules |
 | --- | ---: |
 | historical-compatibility-facade | 87 |
-| operation-implementation | 75 |
-| retired-prototype | 21 |
+| operation-implementation | 74 |
+| retired-prototype | 22 |
 | root-boundary | 1 |
 | shared-concept-implementation | 65 |
 
@@ -108,7 +108,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.exact_dedup | historical-compatibility-facade | remove | memcommit.application.operations.dedup.application | 0 |
 | memcommit.exact_dedup_application | historical-compatibility-facade | remove | memcommit.application.operations.dedup.application | 0 |
 | memcommit.find_answer_dialogue | retired-prototype | retire | none (retired) | 3 |
-| memcommit.find_answer_references | operation-implementation | relocate-without-alias | memcommit.application.operations.search.answer_references | 6 |
+| memcommit.find_answer_references | retired-prototype | retire | none (retired; Query owns its new typed reference document) | 6 |
 | memcommit.find_application | historical-compatibility-facade | remove | memcommit.application.operations.search.application | 0 |
 | memcommit.find_materialization_application | retired-prototype | retire | none (retired) | 0 |
 | memcommit.find_materialization_runtime | retired-prototype | retire | none (retired) | 0 |
@@ -215,7 +215,7 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.replace_runtime | historical-compatibility-facade | remove | memcommit.application.operations.replace.runtime | 0 |
 | memcommit.resolution_workbench | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.resolution.workbench | 25 |
 | memcommit.resolve_application | historical-compatibility-facade | remove | memcommit.application.operations.resolve.application | 0 |
-| memcommit.resolve_rules | operation-implementation | relocate-without-alias | memcommit.application.operations.resolve.rules | 2 |
+| memcommit.resolve_rules | retired-prototype | retire | none (retired) | 2 |
 | memcommit.resolve_runtime | historical-compatibility-facade | remove | memcommit.application.operations.resolve.runtime | 0 |
 | memcommit.resolve_semantic | operation-implementation | relocate-without-alias | memcommit.application.operations.resolve.semantic | 4 |
 | memcommit.resolve_targeting | operation-implementation | relocate-without-alias | memcommit.application.operations.resolve.targeting | 1 |
@@ -244,10 +244,10 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.show_runtime | operation-implementation | relocate-without-alias | memcommit.application.operations.show.runtime | 0 |
 | memcommit.status_application | operation-implementation | relocate-without-alias | memcommit.application.operations.status.application | 0 |
 | memcommit.status_runtime | operation-implementation | relocate-without-alias | memcommit.application.operations.status.runtime | 0 |
-| memcommit.storage_permissions | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.authority.storage_permissions | 4 |
+| memcommit.storage_permissions | shared-concept-implementation | relocate-without-alias | memcommit.persistence.store.infrastructure.storage_permissions | 4 |
 | memcommit.store | shared-concept-implementation | relocate-without-alias | memcommit.persistence.store | 217 |
 | memcommit.study_action_log | shared-concept-implementation | relocate-without-alias | memcommit.persistence.command_ledger.study_actions | 11 |
-| memcommit.study_operation_policy | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.authority.study_operation_policy | 2 |
+| memcommit.study_operation_policy | shared-concept-implementation | relocate-without-alias | memcommit.application.authorization.study_operation_policy | 2 |
 | memcommit.summarize | operation-implementation | relocate-without-alias | memcommit.application.operations.summarize.model | 9 |
 | memcommit.summarize_application | historical-compatibility-facade | remove | memcommit.application.operations.summarize.application | 0 |
 | memcommit.summarize_runtime | historical-compatibility-facade | remove | memcommit.application.operations.summarize.runtime | 0 |
@@ -265,4 +265,4 @@ were directly under memcommit at baseline commit 885e62c0.
 | memcommit.update_endpoints | operation-implementation | relocate-without-alias | memcommit.adapters.console.commands.update.endpoint_operands | 2 |
 | memcommit.update_receipt_store | operation-implementation | relocate-without-alias | memcommit.persistence.operations.update.receipt_repository | 5 |
 | memcommit.update_resolution_adapter | operation-implementation | relocate-without-alias | memcommit.adapters.console.commands.update.workbench.presentation | 3 |
-| memcommit.write_protection | shared-concept-implementation | relocate-without-alias | memcommit.application.capabilities.authority.write_protection | 7 |
+| memcommit.write_protection | shared-concept-implementation | relocate-without-alias | memcommit.persistence.store.infrastructure.write_protection | 7 |

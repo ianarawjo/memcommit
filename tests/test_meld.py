@@ -220,6 +220,36 @@ def test_new_meld_setup_routes_exact_memories_into_directional_command(
     ]
 
 
+def test_new_meld_setup_routes_inline_source_into_directional_baseline(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    monkeypatch.setattr(
+        meld_command,
+        "choose_meld_setup",
+        lambda _store: MeldSetupReceipt(
+            "directional",
+            None,
+            "baseline",
+            inline_source_content="one exact inline distinction",
+        ),
+    )
+    calls = []
+    monkeypatch.setattr(meld_command, "cmd", lambda **kwargs: calls.append(kwargs))
+
+    meld_command._start_new_meld_from_setup(store)
+
+    assert calls == [
+        {
+            "memory": "one exact inline distinction",
+            "into": "baseline",
+            "left_descendants": False,
+            "right_descendants": False,
+        }
+    ]
+
+
 class Task2Provider:
     """Deterministic Task 2 relation ledger with one grounding turn."""
 
@@ -2766,6 +2796,33 @@ def test_directional_meld_from_uses_current_baseline_and_canonical_session(
     assert resumed_session is not None
     assert resumed_session.uid == first_session.uid
     assert len(provider.payloads) == 1
+
+
+def test_directional_meld_from_and_to_accept_context_uids(
+    isolated_store,
+    monkeypatch,
+):
+    store = MemoryStore()
+    incoming, baseline, _, _ = _directional_contexts(store)
+    provider = DirectionalProvider()
+    _patch_provider(monkeypatch, provider)
+
+    result = runner.invoke(
+        app,
+        ["meld", "--from", incoming.uid[:8], "--to", baseline.uid[:8]],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert (
+        f"INCOMING {incoming.name} → BASELINE / TARGET {baseline.name}"
+        in result.output
+    )
+    session = store.load_meld_session(baseline.uid)
+    assert session is not None
+    assert [frame.context_uid for frame in session.frames] == [
+        incoming.uid,
+        baseline.uid,
+    ]
 
 
 def test_directional_meld_edits_adds_and_preserves_baseline_then_recovers(

@@ -5,9 +5,9 @@ from __future__ import annotations
 from typing import Protocol
 
 from memcommit.core.context import Context
-from memcommit.application.operations.search.corpus import (
-    collect_readable_search_candidates,
-    load_readable_search_roots,
+from memcommit.application.capabilities.retrieval_corpus.loading import (
+    collect_readable_corpus_candidates,
+    load_readable_corpus_roots,
 )
 from memcommit.application.operations.query.ordinary_application import (
     FrozenOrdinaryQuerySource,
@@ -54,7 +54,7 @@ class MemoryStoreOrdinaryQuerySourcePort(OrdinaryQuerySourcePort):
         self._catalog = catalog
 
     def freeze(self, request: OrdinaryQueryRequest) -> FrozenOrdinaryQuerySource:
-        roots = load_readable_search_roots(
+        roots = load_readable_corpus_roots(
             self._catalog,
             request.target_names,
             include_descendants=request.include_descendants,
@@ -69,11 +69,12 @@ class MemoryStoreOrdinaryQuerySourcePort(OrdinaryQuerySourcePort):
             if self._catalog.context_exists(root.name)
             and not self._catalog.access_for(root.name).is_granted
         )
-        candidates = collect_readable_search_candidates(
+        candidates = collect_readable_corpus_candidates(
             self._store,
             roots,
             follow_embeds=request.follow_embeds,
             artifact_roots=local_roots,
+            operation="Query",
         )
         label = (
             request.target_names[0]

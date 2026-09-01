@@ -49,7 +49,7 @@ from memcommit.adapters.python_api.errors import (
     QueryConfigurationError,
 )
 from memcommit.adapters.python_api.meld import (
-    MeldApplyResult as PublicMeldApplyResult,
+    MeldDecisionInput,
     MeldSessionResult,
 )
 from memcommit.adapters.python_api.copy_and_move import (
@@ -71,6 +71,7 @@ from memcommit.adapters.python_api.quality_find import QualityFindResult
 from memcommit.adapters.python_api.resolve import (
     ResolveAnalysisResult,
     ResolveApplyResult,
+    ResolveDecisionInput,
 )
 from memcommit.adapters.python_api.search import SearchResult
 from memcommit.adapters.python_api.show import ShowResult
@@ -497,10 +498,9 @@ class MemCommitClient:
         allow_create: bool = True,
         allow_delete: bool = False,
         guidance: str = "",
-        target_fit: str = "MAY",
         expected_revision: str | None = None,
     ) -> ResolveAnalysisResult:
-        """Return one automatic grounded or assumed full-frame interpretation plan."""
+        """Return conflicts and conservative understandings for human decisions."""
 
         from memcommit.adapters.python_api._operations.resolve import resolve_context
 
@@ -511,7 +511,6 @@ class MemCommitClient:
             allow_create=allow_create,
             allow_delete=allow_delete,
             guidance=guidance,
-            target_fit=target_fit,
             expected_revision=expected_revision,
         )
 
@@ -577,7 +576,6 @@ class MemCommitClient:
         allow_create: bool = True,
         allow_delete: bool = False,
         guidance: str = "",
-        target_fit: str = "MAY",
         expected_revision: str | None = None,
     ) -> ResolveAnalysisResult:
         """Resolve one exact finder receipt after fresh source and authority checks."""
@@ -592,7 +590,6 @@ class MemCommitClient:
             allow_create=allow_create,
             allow_delete=allow_delete,
             guidance=guidance,
-            target_fit=target_fit,
             expected_revision=expected_revision,
         )
 
@@ -600,16 +597,16 @@ class MemCommitClient:
         self,
         analysis: ResolveAnalysisResult,
         *,
-        candidate_uid: str,
+        decisions: Sequence[ResolveDecisionInput],
     ) -> ResolveApplyResult:
-        """Apply one exact candidate from a reviewed Resolve analysis."""
+        """Apply one UpdatePlan generated from finalized Resolve decisions."""
 
         from memcommit.adapters.python_api._operations.resolve import apply_resolve
 
         return apply_resolve(
             self._runtime,
             analysis,
-            candidate_uid=candidate_uid,
+            decisions=decisions,
         )
 
     def dedup(
@@ -821,77 +818,21 @@ class MemCommitClient:
 
         return open_meld(self._runtime, target_context)
 
-    def comment_meld(
+    def resolve_meld(
         self,
         target_context: str,
-        comment: str = "",
-        *,
-        expected_version: str,
-        issue_uid: str | None = None,
-        option_uid: str | None = None,
-        revision: str = "EXTEND",
-        revises_turn_uids: Sequence[str] = (),
-    ) -> MeldSessionResult:
-        """Submit one complete semantic follow-up against a saved version."""
-
-        from memcommit.adapters.python_api._operations.meld import comment_meld
-
-        return comment_meld(
-            self._runtime,
-            target_context,
-            comment,
-            expected_version=expected_version,
-            issue_uid=issue_uid,
-            option_uid=option_uid,
-            revision=revision,
-            revises_turn_uids=revises_turn_uids,
-        )
-
-    def preserve_meld(
-        self,
-        target_context: str,
+        decisions: Sequence[MeldDecisionInput] = (),
         *,
         expected_version: str,
     ) -> MeldSessionResult:
-        """Preserve every remaining distinction under the saved-session CAS."""
+        """Resolve one candidate round through Update and post-image verification."""
 
-        from memcommit.adapters.python_api._operations.meld import preserve_meld
+        from memcommit.adapters.python_api._operations.meld import resolve_meld
 
-        return preserve_meld(
+        return resolve_meld(
             self._runtime,
             target_context,
-            expected_version=expected_version,
-        )
-
-    def defer_meld(
-        self,
-        target_context: str,
-        *,
-        expected_version: str,
-    ) -> MeldSessionResult:
-        """Close one saved review without changing its target."""
-
-        from memcommit.adapters.python_api._operations.meld import defer_meld
-
-        return defer_meld(
-            self._runtime,
-            target_context,
-            expected_version=expected_version,
-        )
-
-    def apply_meld(
-        self,
-        target_context: str,
-        *,
-        expected_version: str,
-    ) -> PublicMeldApplyResult:
-        """Apply exactly one ready saved proposal without another provider turn."""
-
-        from memcommit.adapters.python_api._operations.meld import apply_meld
-
-        return apply_meld(
-            self._runtime,
-            target_context,
+            decisions,
             expected_version=expected_version,
         )
 

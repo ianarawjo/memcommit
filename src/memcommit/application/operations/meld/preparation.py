@@ -5,11 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal, Protocol
 
-from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
-    MemoryRelationAnalysis,
-)
 from memcommit.application.operations.meld.model import (
     INLINE_MELD_CONTEXT_NAME,
+    MELD_CANDIDATE_SCHEMA_VERSION,
     MELD_INLINE_MEMORY_SCHEMA_VERSION,
     MELD_TEXT_LIMIT,
     MeldSession,
@@ -18,11 +16,7 @@ from memcommit.application.operations.meld.model import (
 
 MeldStartMode = Literal["SYMMETRIC", "DIRECTIONAL"]
 MeldStartOrigin = Literal[
-    "PROVIDER",
-    "SAVED_RELATION_ANALYSIS",
-    "EXACT_PREWARM",
-    "EQUIVALENT_SCOPE_PREWARM",
-    "PROJECTED_PREWARM",
+    "AUDIT_RESOLVE_UPDATE",
 ]
 
 
@@ -38,7 +32,6 @@ def validate_meld_start_scope(
     incoming_memory: str | None,
     baseline_memory: str | None,
     incoming_text: str | None,
-    relation_analysis: MemoryRelationAnalysis | None,
     error_type: type[RuntimeError],
 ) -> None:
     """Validate directional Memory focus before any Store or provider work."""
@@ -55,12 +48,6 @@ def validate_meld_start_scope(
         raise error_type("INCOMING Memory focus cannot be combined with descendants.")
     if baseline_memory is not None and right_descendants:
         raise error_type("BASELINE Memory focus cannot be combined with descendants.")
-    if relation_analysis is not None and any(
-        selector is not None for selector in selectors
-    ):
-        raise error_type(
-            "Meld Memory focus cannot reuse a whole-frame relation analysis."
-        )
     if incoming_text is not None:
         if not isinstance(incoming_text, str) or not incoming_text.strip():
             raise error_type("Inline Meld Memory content must be nonempty text.")
@@ -71,11 +58,10 @@ def validate_meld_start_scope(
         if (
             left_descendants
             or incoming_memory is not None
-            or relation_analysis is not None
         ):
             raise error_type(
                 "Inline Meld Memory input cannot be combined with INCOMING "
-                "descendants, an INCOMING Memory selector, or relation evidence."
+                "descendants or an INCOMING Memory selector."
             )
 
 
@@ -93,7 +79,6 @@ class MeldStartRequest:
     incoming_memory: str | None = None
     baseline_memory: str | None = None
     incoming_text: str | None = None
-    relation_analysis: MemoryRelationAnalysis | None = None
 
     def __post_init__(self) -> None:
         names = (self.left_name, self.right_name, self.target_name)
@@ -115,7 +100,6 @@ class MeldStartRequest:
             incoming_memory=self.incoming_memory,
             baseline_memory=self.baseline_memory,
             incoming_text=self.incoming_text,
-            relation_analysis=self.relation_analysis,
             error_type=MeldStartError,
         )
         if self.left_name == self.right_name:
@@ -187,7 +171,8 @@ def run_meld_start(
         )
     )
     inline_scope_matches = request.incoming_text is None or (
-        getattr(session, "schema_version", None) == MELD_INLINE_MEMORY_SCHEMA_VERSION
+        getattr(session, "schema_version", None)
+        in {MELD_INLINE_MEMORY_SCHEMA_VERSION, MELD_CANDIDATE_SCHEMA_VERSION}
         and len(session.frames[0].memories) == 1
         and session.frames[0].memories[0].content == request.incoming_text
     )
@@ -222,7 +207,6 @@ class MeldRestartRequest:
     incoming_memory: str | None = None
     baseline_memory: str | None = None
     incoming_text: str | None = None
-    relation_analysis: MemoryRelationAnalysis | None = None
 
     def __post_init__(self) -> None:
         if self.mode not in {"SYMMETRIC", "DIRECTIONAL"}:
@@ -244,7 +228,6 @@ class MeldRestartRequest:
             incoming_memory=self.incoming_memory,
             baseline_memory=self.baseline_memory,
             incoming_text=self.incoming_text,
-            relation_analysis=self.relation_analysis,
             error_type=MeldRestartError,
         )
         if self.left_name == self.right_name:
@@ -317,7 +300,8 @@ def run_meld_restart(
         )
     )
     inline_scope_matches = request.incoming_text is None or (
-        getattr(session, "schema_version", None) == MELD_INLINE_MEMORY_SCHEMA_VERSION
+        getattr(session, "schema_version", None)
+        in {MELD_INLINE_MEMORY_SCHEMA_VERSION, MELD_CANDIDATE_SCHEMA_VERSION}
         and len(session.frames[0].memories) == 1
         and session.frames[0].memories[0].content == request.incoming_text
     )

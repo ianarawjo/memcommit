@@ -1,5 +1,5 @@
 {
-  "active_module_count": 139,
+  "active_module_count": 138,
   "baseline_commit": "f8c54a56",
   "baseline_module_count": 153,
   "entry_package_count": 61,
@@ -645,13 +645,6 @@
       "role": "shared-terminal-component"
     },
     {
-      "canonical_module": "memcommit.adapters.console.coordination.memory_report_recents",
-      "legacy_module": "memcommit.commands.memory_report_recents",
-      "owner": "coordination",
-      "public_exports": [],
-      "role": "shared-command-mechanism"
-    },
-    {
       "canonical_module": "memcommit.adapters.console.commands.merge.command",
       "legacy_module": "memcommit.commands.merge",
       "owner": "commands.merge",
@@ -755,9 +748,9 @@
       "role": "command-entry"
     },
     {
-      "canonical_module": "memcommit.application.capabilities.authority.readable_contexts",
+      "canonical_module": "memcommit.application.context_access.readable_contexts",
       "legacy_module": "memcommit.commands.readable_context_catalog",
-      "owner": "authority",
+      "owner": "context-access",
       "public_exports": [],
       "role": "shared-application-capability"
     },
@@ -1114,10 +1107,11 @@
     "memcommit.commands.ground_named_shell",
     "memcommit.commands.ground_session_picker",
     "memcommit.commands.meld_target_picker",
+    "memcommit.commands.memory_report_recents",
     "memcommit.commands.session_endpoint_setup",
     "memcommit.commands.shell_init",
     "memcommit.commands.write_protection"
   ],
   "schema_version": 1,
-  "shared_module_count": 40
+  "shared_module_count": 39
 }

@@ -104,7 +104,7 @@ raw intake
 → find-ambiguities
 → find-conflicts
 → clarify where needed
-→ resolve Fit MAY/NO
+→ resolve from finalized conflict decisions
 → audience
 → normalize
 → duplicate verification
@@ -171,7 +171,7 @@ source intake
 → find-ambiguities
 → find-conflicts
 → clarify where needed
-→ resolve Fit MAY/NO
+→ resolve from finalized conflict decisions
 → audience
 → normalize
 → duplicate verification
@@ -530,7 +530,7 @@ important than final CLI spelling.
 | 3 | `mem find-ambiguities` | unary interpretation and clarification findings | read-only; no checkpoint |
 | 4 | `mem find-conflicts` | pairwise `YES`/`MAY` conflict findings and questions | read-only; no checkpoint |
 | 5a | future clarification | grounded reading or missing-evidence record for ambiguity findings | read-only response first; any edit requires a separate confirmed plan |
-| 5b | `mem resolve` | minimum-change candidate that independently changes joint Fit `MAY`/`NO` to `YES`, or `NEEDS_INPUT` | proposal first; explicit Apply consumes one exact authorized plan |
+| 5b | `mem resolve` | explicit CONFIRM, INTENT, or FORCE decisions followed by one whole-Context UpdatePlan and complete post-image conflict check | decisions first; Resolve atomically publishes only an Update-generated plan with no unforced post-image conflict |
 | 6 | `mem audience` | applicability, recipient, purpose, and disclosure assignments | preview first; storage representation must be explicit |
 | 7 | `mem normalize` | named rule violations and full replacement proposals | confirmed batch applies as one checkpoint |
 | 8 | `mem find-duplicates` verification | post-normalization mechanical and semantic reclassification | read-only; any removal requires a new `dedup` plan |
@@ -619,11 +619,11 @@ The focused rationale is
   either detector.
 - Clarification treats missing scope as the default hypothesis, not proof that
   one statement is false, and records the evidence still required.
-- Resolve accepts only a complete joint frame whose Fit result is `MAY` or
-  `NO`, and any proposed replacement must be independently verified as `YES`.
-- Resolve can conclude that the complete statements are already Fit `YES` and
-  need no edit; a standalone ambiguity can remain a clarification task without
-  becoming a Fit repair.
+- Resolve discovers conflicts over one complete direct Context and requires one
+  explicit decision per Issue before any mutation plan exists.
+- CONFIRM and exact person-authored INTENT become a process-local Update
+  Source; FORCE remains audit state. Update plans once over the complete Target,
+  and any unforced remaining or new post-image conflict blocks publication.
 
 ### `audience`
 
@@ -710,7 +710,7 @@ atomize
 → find-ambiguities
 → find-conflicts
 → clarify where needed
-→ resolve Fit MAY/NO
+→ resolve from finalized conflict decisions
 → audience
 → normalize
 → duplicate verification

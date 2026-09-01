@@ -98,8 +98,7 @@ Operation labels such as EDIT, KEEP, or SUMMARIZE do not influence hunk
 calculation and the renderer never infers semantic equivalence. Consequently,
 Update continues to reject an exact no-op EDIT before presentation, while
 Sever may intentionally show `= KEEP` because retaining that Memory in the
-reviewed self-saved Source or other-saved Result is an operation-owned
-decision.
+reviewed in-place Source after-state is an operation-owned decision.
 
 Interactive Resolution rendering derives its content width from the current
 terminal on every projection. Viewer report rows, nested option boxes, seeded
@@ -234,11 +233,13 @@ honor.
 Resolve explicitly opts into a narrower variant because its text is not an
 independent note: it is the semantic value of choice 2. The shared shell places
 the one-line `YOUR INTENT` affordance immediately after that choice, but does
-not add it to the Up/Down row sequence. Enter on choice 2 opens editor mode;
-Enter or Escape freezes the draft on choice 2, while Up and Down freeze it and
-move directly to choices 1 and 3. A blank draft never satisfies readiness.
-This mode is presentation mechanics only and is not inherited by other compact
-callers without an explicit operation-owned contract.
+not add it to the Up/Down row sequence. Moving onto choice 2 activates the
+neutral field and requests a blinking beam caret immediately. Left/Right then
+belongs to text editing; Enter or Escape freezes the draft on choice 2, while
+Up and Down freeze it and move directly to choices 1 and 3. Traversing an
+unchanged retained draft does not select it, and a blank draft never satisfies
+readiness. This mode is presentation mechanics only and is not inherited by
+other compact callers without an explicit operation-owned contract.
 
 ## Common contract
 
@@ -502,25 +503,21 @@ state.
 
 ### Sever
 
-Sever projects each outbound candidate and its operation-owned choices through
-the common Resolution Workbench after its separate Source–Criteria–Output
-setup. The Sever controller continues to own the scoped source snapshots,
-candidate selection semantics, exact output, durable session digest, and final
-local application. Sharing the workbench does not make the setup screen or the
-saved-session listing common, and it does not relax Sever's rule that reviewed
-output is never transmitted by the Sever operation.
-The embedded Sever Impact is the exact proposed local Result and identifies
-`SELF-SAVE` or `OTHER-SAVE`. Self-save removes or edits reviewed Memories in
-the exact Source root; other-save creates a new Context without editing Source.
-It compares every Source Memory with its reviewed Result representation. KEEP
-renders one equality line; redaction, summary, reframe, and custom wording
-render a two-sided transition; FORGET renders only the Source-side `-` line.
-In self-save, FORGET removes the Source Memory. In other-save, FORGET omits it
-from Result while Source remains unchanged.
+Sever projects each Source candidate and its operation-owned choices through
+the common Resolution Workbench after its separate Source–Criteria setup. The
+Sever controller continues to own the scoped snapshots, candidate-selection
+semantics, durable session digest, and final local application. Sharing the
+workbench does not make the setup screen or saved-session listing common.
+The embedded Sever Impact is the exact proposed in-place after-state. It
+compares every Source Memory with that reviewed representation. KEEP renders
+one equality line; redaction, summary, reframe, and custom wording render a
+two-sided transition; FORGET renders only the Source-side `-` line and removes
+that Memory from its direct owner. With Source descendants included, the
+location on each change identifies which owner stays in place.
 
 ### Save location before Apply
 
-Operations that select a self- or other-save Result may supply one
+Operations that select a save destination may supply one
 operation-owned `SAVE LOCATION` value to the common workbench. The shell
 renders it as a compact conditional frame between `ITEMS` and `TO DO`, outside
 the report Viewer, and returns one exact `CHANGE_DESTINATION` action from the
@@ -528,6 +525,10 @@ frame's one-line direct editor. The resting row shows the current exact name,
 its operation-owned state, and `Enter to change`. The shell does not persist,
 rename, create, or apply anything itself; the owning operation validates and
 commits the new name, then supplies a replacement revision.
+
+New Sever sessions do not supply this value: Source ownership fixes every
+in-place destination. The Sever destination surface remains only when an older
+Result-bearing session is reopened for compatibility.
 
 When the operation supplies a frozen local Context catalog, Enter expands the
 same frame into a shared parent tree above the prefilled direct-name field. The
@@ -567,7 +568,9 @@ Audit item. An answerable item opens a Resolve-owned compact decision surface
 with ACCEPT THIS DIRECTION, ADJUST WITH YOUR INTENT, and LEAVE UNRESOLVED.
 Multiple items retain `< n/total >` plus selectable PREV and NEXT controls
 immediately above FINALIZE DECISIONS; the intent choice alone opens its
-attached inline editor without making that editor another navigation row.
+attached inline editor as soon as it is targeted, without making that editor
+another navigation row. Its blinking beam caret owns Left/Right until the
+person freezes the draft or moves Up/Down to another decision.
 
 The compact adapter neither plans mutations nor writes storage. It returns one
 typed decision per Audit item. Resolve binds those decisions to the Audit

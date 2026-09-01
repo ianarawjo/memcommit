@@ -1003,15 +1003,15 @@
       "role": "retired-prototype"
     },
     {
-      "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.operations.search.answer_references",
-      "canonical_target_path": "memcommit/application/operations/search/answer_references.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 6,
       "lines": 310,
       "module": "memcommit.find_answer_references",
       "path": "memcommit/find_answer_references.py",
-      "reason": "implementation is named for and consumed by one operation",
-      "role": "operation-implementation"
+      "reason": "the exact-three-sentence Search answer API is retired; ordinary Query owns a new variable-block typed reference document",
+      "role": "retired-prototype"
     },
     {
       "action": "remove",
@@ -2180,15 +2180,15 @@
       "role": "historical-compatibility-facade"
     },
     {
-      "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.operations.resolve.rules",
-      "canonical_target_path": "memcommit/application/operations/resolve/rules.py",
+      "action": "retire",
+      "canonical_target": null,
+      "canonical_target_path": null,
       "inbound_package_importers": 2,
       "lines": 352,
       "module": "memcommit.resolve_rules",
       "path": "memcommit/resolve_rules.py",
-      "reason": "implementation is named for and consumed by one operation",
-      "role": "operation-implementation"
+      "reason": "retired when Resolve's fixed exact-case rules were replaced by reviewed decisions composed through the ordinary Update operation",
+      "role": "retired-prototype"
     },
     {
       "action": "remove",
@@ -2500,8 +2500,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.capabilities.authority.storage_permissions",
-      "canonical_target_path": "memcommit/application/capabilities/authority/storage_permissions.py",
+      "canonical_target": "memcommit.persistence.store.infrastructure.storage_permissions",
+      "canonical_target_path": "memcommit/persistence/store/infrastructure/storage_permissions.py",
       "inbound_package_importers": 4,
       "lines": 145,
       "module": "memcommit.storage_permissions",
@@ -2533,8 +2533,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.capabilities.authority.study_operation_policy",
-      "canonical_target_path": "memcommit/application/capabilities/authority/study_operation_policy.py",
+      "canonical_target": "memcommit.application.authorization.study_operation_policy",
+      "canonical_target_path": "memcommit/application/authorization/study_operation_policy.py",
       "inbound_package_importers": 2,
       "lines": 98,
       "module": "memcommit.study_operation_policy",
@@ -2731,8 +2731,8 @@
     },
     {
       "action": "relocate-without-alias",
-      "canonical_target": "memcommit.application.capabilities.authority.write_protection",
-      "canonical_target_path": "memcommit/application/capabilities/authority/write_protection.py",
+      "canonical_target": "memcommit.persistence.store.infrastructure.write_protection",
+      "canonical_target_path": "memcommit/persistence/store/infrastructure/write_protection.py",
       "inbound_package_importers": 7,
       "lines": 366,
       "module": "memcommit.write_protection",
@@ -2746,8 +2746,8 @@
   "schema_version": 1,
   "summary": {
     "historical-compatibility-facade": 87,
-    "operation-implementation": 75,
-    "retired-prototype": 21,
+    "operation-implementation": 74,
+    "retired-prototype": 22,
     "root-boundary": 1,
     "shared-concept-implementation": 65
   }

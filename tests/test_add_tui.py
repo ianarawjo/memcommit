@@ -5,6 +5,7 @@ from __future__ import annotations
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
+import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.add.application import (
     AddedMemory,
     AddRequest,
@@ -13,8 +14,10 @@ from memcommit.application.operations.add.application import (
 from memcommit.adapters.console.commands.add.workbench import (
     AddDraftState,
     AddWorkbenchSetup,
+    build_add_workbench_setup,
     run_add_workbench,
 )
+from memcommit.persistence.store import MemoryStore
 
 
 def _setup(*names: str, selected: str = "target") -> AddWorkbenchSetup:
@@ -36,6 +39,26 @@ def _result(request: AddRequest) -> AddResult:
         ),
         checkpoint_uid="checkpoint-uid",
     )
+
+
+def test_build_workbench_setup_freezes_local_targets_and_requested_selection(
+    isolated_store,
+) -> None:
+    store = MemoryStore()
+    store.create_context(ops.init("beta"))
+    store.create_context(ops.init("alpha"))
+    store.set_current("beta")
+
+    setup = build_add_workbench_setup(
+        store,
+        current_name="beta",
+        requested_context="alpha",
+    )
+
+    assert setup.names == ("alpha", "beta")
+    assert setup.selectable_names == frozenset({"alpha", "beta"})
+    assert setup.selected_context == "alpha"
+    assert setup.current_context == "beta"
 
 
 def test_draft_state_preserves_multiline_text_and_cancelled_new_draft() -> None:

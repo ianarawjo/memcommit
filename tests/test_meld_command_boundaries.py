@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 from memcommit.adapters.console.commands.meld import command
@@ -7,6 +9,8 @@ from memcommit.adapters.console.commands.meld import entrypoint
 import memcommit.adapters.console.commands.meld.interpretation as interpretation
 from memcommit.adapters.console.commands.meld import presentation
 from memcommit.adapters.console.commands.meld.workflow import workflow
+from memcommit.core.context import Context
+from memcommit.persistence.store import MemoryStore
 
 
 class _InterpretationStore:
@@ -14,6 +18,7 @@ class _InterpretationStore:
         self.current = current
         self.existing = set(existing)
         self.current_reads = 0
+        self.store_dir = Path("/tmp/memcommit-interpretation-store")
 
     def current_context_name(self) -> str | None:
         self.current_reads += 1
@@ -21,6 +26,20 @@ class _InterpretationStore:
 
     def context_exists(self, name: str) -> bool:
         return name in self.existing
+
+    def list_context_names(self) -> list[str]:
+        return sorted(self.existing)
+
+    def load_direct(self, name: str) -> Context:
+        if name not in self.existing:
+            raise FileNotFoundError(name)
+        return Context(
+            uid=(name.encode("utf-8").hex() + "0" * 36)[:36],
+            name=name,
+        )
+
+    def load_direct_context_graph_strict(self) -> tuple[Context, ...]:
+        return tuple(self.load_direct(name) for name in sorted(self.existing))
 
 
 def _request(**overrides) -> interpretation.MeldCommandRequest:
@@ -62,7 +81,7 @@ def test_meld_command_facade_preserves_existing_imports() -> None:
 
 
 def test_meld_entrypoint_delegates_one_validated_request(monkeypatch) -> None:
-    store = _InterpretationStore()
+    store = _InterpretationStore(existing=("incoming", "baseline"))
     calls = []
 
     monkeypatch.setattr(entrypoint, "MemoryStore", lambda *, create: store)
@@ -90,7 +109,10 @@ def test_meld_entrypoint_delegates_one_validated_request(monkeypatch) -> None:
 
 
 def test_meld_interpretation_owns_symmetric_to_and_relative_source_meaning() -> None:
-    store = _InterpretationStore(current="work/current")
+    store = _InterpretationStore(
+        current="work/current",
+        existing=("work/current", "work/a", "work/b"),
+    )
 
     interpreted = interpretation.interpret_meld_command(
         _request(left="../a", right="../b", to="results/c"),
@@ -104,6 +126,31 @@ def test_meld_interpretation_owns_symmetric_to_and_relative_source_meaning() -> 
     assert interpreted.target_name == "results/c"
     assert interpreted.start_command == "mem meld work/a work/b --to results/c"
     assert store.current_reads == 1
+
+
+def test_meld_existing_endpoints_round_trip_context_uid_prefixes(tmp_path) -> None:
+    store = MemoryStore(root=tmp_path / "store")
+    incoming = Context(
+        uid="2a4dc8ab-cc03-5721-923f-03e3b4669cf5",
+        name="practice/coffee/compare-merge-meld-update/a",
+    )
+    baseline = Context(
+        uid="bbbbbbbb-1111-4111-8111-111111111111",
+        name="coffee",
+    )
+    store.save(incoming)
+    store.save(baseline)
+
+    interpreted = interpretation.interpret_meld_command(
+        _request(from_="2a4dc8ab", to="bbbbbbbb"),
+        store=store,
+    )
+
+    assert isinstance(interpreted, interpretation.InterpretedMeldCommand)
+    assert interpreted.left_name == incoming.name
+    assert interpreted.right_name == baseline.name
+    assert interpreted.incoming_text is None
+    assert "INLINE MEMORY" not in interpreted.start_command
 
 
 def test_meld_interpretation_returns_typed_launcher_routes() -> None:

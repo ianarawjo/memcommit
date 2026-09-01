@@ -2,16 +2,27 @@
 
 from __future__ import annotations
 
+from contextlib import ExitStack
 from dataclasses import dataclass
 import hashlib
 import uuid
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.context_access import (
-    ContextAccess,
+from memcommit.application.authorization.context_operation import (
     authorized_context_operation,
+)
+from memcommit.application.context_access.access import (
+    ContextAccess,
+    GrantedReadStore,
+    freeze_granted_context_binding,
     granted_memory_source,
+    revalidate_granted_context_binding,
     resolve_context_access,
+    resolve_granted_context_access,
+)
+from memcommit.application.context_access.model import (
+    GrantedContextBinding,
+    granted_context_binding_digest,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.application.capabilities.context_snapshot import (
@@ -38,17 +49,38 @@ from memcommit.application.operations.reference.application import (
     validate_context_reference_request,
     validate_reference_request,
 )
-from memcommit.application.operations.profile.config import profile_store_dir
+from memcommit.application.operations.profile.config import (
+    ProfileRegistry,
+    profile_store_dir,
+)
 from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
-from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.persistence.store import (
+    ConcurrentContextUpdateError,
+    MemoryStore,
+    context_record_digest,
+)
+
+
+@dataclass(frozen=True)
+class _FrozenContextSource:
+    """Bind one public snapshot participant to its physical authority record."""
+
+    access: ContextAccess
+    public_name: str
+    authority_name: str
+    context_uid: str
+    context_digest: str
 
 
 @dataclass(frozen=True)
 class _LocalReferenceToken:
-    """Bind one frozen Memory snapshot to its exact Source authority."""
+    """Bind one frozen snapshot to its exact Source authority."""
 
     owner: object
     source_access: ContextAccess | None = None
+    context_sources: tuple[_FrozenContextSource, ...] = ()
+    granted_sources: tuple[GrantedContextBinding, ...] = ()
+    grant_scope_fingerprint: tuple[tuple[str, int, str], ...] = ()
 
 
 class MemoryStoreReferencePort(ReferencePort):
@@ -325,6 +357,7 @@ class MemoryStoreReferencePort(ReferencePort):
                 elif (
                     recursive
                     and isinstance(item, Context)
+                    and not isinstance(item, ContextSnapshotRef)
                     and item._granted_link is None
                     and self._store.context_exists(item.name)
                 ):
@@ -348,6 +381,187 @@ class MemoryStoreReferencePort(ReferencePort):
         }
         return package, tuple(bindings.values())
 
+    @staticmethod
+    def _grant_scope_fingerprint(
+        registry: ProfileRegistry,
+        root_access: ContextAccess,
+    ) -> tuple[tuple[str, int, str], ...]:
+        """Bind every nested override that can shape one public snapshot."""
+
+        view = root_access.view
+        if view is None or root_access.attachment_name is None:
+            raise ValueError("Granted Context snapshot requires a Grant root.")
+        root_name = root_access.display_name
+        relevant = (
+            grant
+            for grant in registry.grants
+            if grant.grantee_profile_uid == view.grantee.uid
+            and grant.attachment_context_uid == view.grant.attachment_context_uid
+            and grant.attachment_context_name == root_access.attachment_name
+            and (
+                grant.public_name == root_name
+                or grant.public_name.startswith(root_name + "/")
+            )
+        )
+        return tuple(
+            sorted(
+                (
+                    grant.uid,
+                    grant.revision,
+                    granted_context_binding_digest(grant.to_dict()),
+                )
+                for grant in relevant
+            )
+        )
+
+    def _granted_context_snapshot_package(
+        self,
+        source_name: str,
+        *,
+        recursive: bool,
+    ) -> tuple[
+        str,
+        dict[str, object],
+        tuple[tuple[str, str, str], ...],
+        tuple[_FrozenContextSource, ...],
+        tuple[GrantedContextBinding, ...],
+        tuple[tuple[str, int, str], ...],
+    ]:
+        """Freeze one explicit READ-granted public Context scope by value."""
+
+        with authority_grant_snapshot_lock() as registry:
+            if self._store.store_dir.resolve() != profile_store_dir(
+                registry.active
+            ).resolve():
+                raise FileNotFoundError(f"Context '{source_name}' does not exist.")
+            root_access = resolve_context_access(
+                self._store,
+                source_name,
+                current_name=self._current_name,
+                required_permission="READ",
+                registry=registry,
+            )
+            if not root_access.is_granted or root_access.view is None:
+                raise FileNotFoundError(f"Context '{source_name}' does not exist.")
+            if root_access.attachment_name is None:
+                raise ValueError("Granted Context snapshot has no attachment.")
+
+            root_reader = GrantedReadStore(root_access, registry=registry)
+            allowed_names = tuple(root_reader.list_context_names())
+            lexical_names = expand_lexical_context_names(
+                ContextScope.create(
+                    (root_access.display_name,),
+                    include_descendants=recursive,
+                ),
+                allowed_names,
+            )
+            allowed = frozenset(allowed_names)
+            queue = list(lexical_names)
+            records: dict[str, dict[str, object]] = {}
+            projected_frames: dict[str, Context] = {}
+            sources: dict[str, _FrozenContextSource] = {}
+            granted_sources: dict[str, GrantedContextBinding] = {}
+
+            def public_frame(public_name: str) -> Context:
+                """Read and project one exact authorized record only once."""
+
+                cached = projected_frames.get(public_name)
+                if cached is not None:
+                    return cached
+                if public_name not in allowed:
+                    raise FileNotFoundError(
+                        f"Context '{public_name}' is outside the granted view."
+                    )
+                access = resolve_granted_context_access(
+                    self._store,
+                    public_name,
+                    attachment_name=root_access.attachment_name,
+                    attachment_uid=root_access.view.grant.attachment_context_uid,
+                    required_permission="READ",
+                    registry=registry,
+                )
+                raw = access.store.load_direct(access.context_name)
+                projected = GrantedReadStore(
+                    access,
+                    registry=registry,
+                ).project_direct(raw, public_name)
+                sources[public_name] = _FrozenContextSource(
+                    access=access,
+                    public_name=public_name,
+                    authority_name=access.context_name,
+                    context_uid=raw.uid,
+                    context_digest=context_record_digest(raw),
+                )
+                granted_sources[public_name] = freeze_granted_context_binding(access)
+                projected_frames[public_name] = projected
+                return projected
+
+            index = 0
+            while index < len(queue):
+                name = queue[index]
+                index += 1
+                if name in records:
+                    continue
+                direct = public_frame(name)
+                resolved = Context.from_dict(direct.to_dict())
+                for uid, item in direct.iter_entries():
+                    if (
+                        isinstance(item, MemoryRef)
+                        and item.is_live
+                        and not item.is_granted
+                        and item.target_context_name in allowed
+                    ):
+                        owner = public_frame(item.target_context_name)
+                        if owner.uid == item.target_context_uid:
+                            target_memory = owner.memories.get(
+                                item.target_memory_uid
+                            )
+                            if isinstance(target_memory, Memory):
+                                resolved.memories[uid] = MemoryRef.from_dict(
+                                    item.to_dict(),
+                                    target=target_memory,
+                                )
+                    elif (
+                        recursive
+                        and isinstance(item, Context)
+                        and not isinstance(item, ContextSnapshotRef)
+                        and item._granted_link is None
+                        and item.name in allowed
+                    ):
+                        embedded = public_frame(item.name)
+                        if embedded.uid == item.uid and item.name not in records:
+                            queue.append(item.name)
+                records[name] = snapshot_record_with_frozen_memory_embeds(
+                    direct,
+                    resolved,
+                )
+
+            root = public_frame(root_access.display_name)
+            package: dict[str, object] = {
+                "schema_version": CONTEXT_SNAPSHOT_SCHEMA_VERSION,
+                "root": {"uid": root.uid, "name": root_access.display_name},
+                "recursive": recursive,
+                "lexical_context_names": list(lexical_names),
+                "contexts": [records[name] for name in records],
+            }
+            frozen_sources = tuple(sources.values())
+            source_bindings = tuple(
+                (
+                    source.public_name,
+                    source.context_uid,
+                    source.context_digest,
+                )
+                for source in frozen_sources
+            )
+            return (
+                root_access.display_name,
+                package,
+                source_bindings,
+                frozen_sources,
+                tuple(granted_sources.values()),
+                self._grant_scope_fingerprint(registry, root_access),
+            )
+
     def freeze_context(
         self,
         request: ContextReferenceRequest,
@@ -364,13 +578,32 @@ class MemoryStoreReferencePort(ReferencePort):
             raise ReferenceError(
                 "Context Reference Source and Target must be distinct Contexts."
             )
-        for name in (source_name, into_name):
-            if not self._store.context_exists(name):
-                raise FileNotFoundError(f"Context '{name}' does not exist.")
-        package, source_bindings = self._context_snapshot_package(
-            source_name,
-            recursive=request.include_descendants,
-        )
+        if not self._store.context_exists(into_name):
+            raise FileNotFoundError(
+                f"Target Context '{into_name}' does not exist locally."
+            )
+        context_sources: tuple[_FrozenContextSource, ...] = ()
+        granted_sources: tuple[GrantedContextBinding, ...] = ()
+        grant_scope_fingerprint: tuple[tuple[str, int, str], ...] = ()
+        if self._store.context_exists(source_name):
+            package, source_bindings = self._context_snapshot_package(
+                source_name,
+                recursive=request.include_descendants,
+            )
+        elif self._allow_granted_sources:
+            (
+                source_name,
+                package,
+                source_bindings,
+                context_sources,
+                granted_sources,
+                grant_scope_fingerprint,
+            ) = self._granted_context_snapshot_package(
+                source_name,
+                recursive=request.include_descendants,
+            )
+        else:
+            raise FileNotFoundError(f"Context '{source_name}' does not exist.")
         if any(name == into_name for name, _uid, _digest in source_bindings):
             raise ReferenceError(
                 "Context Reference Target cannot be inside its frozen Source scope."
@@ -399,7 +632,12 @@ class MemoryStoreReferencePort(ReferencePort):
             into_name=into_name,
             into_uid=target.uid,
             into_digest=context_record_digest(target),
-            token=_LocalReferenceToken(self._owner),
+            token=_LocalReferenceToken(
+                self._owner,
+                context_sources=context_sources,
+                granted_sources=granted_sources,
+                grant_scope_fingerprint=grant_scope_fingerprint,
+            ),
         )
 
     def apply(self, plan: FrozenReferencePlan) -> ReferenceResult:
@@ -548,34 +786,114 @@ class MemoryStoreReferencePort(ReferencePort):
             target_context_name=plan.source_name,
             snapshot_package=plan.snapshot_package,
             snapshot_content_sha256=plan.snapshot_content_sha256,
+            granted_sources=token.granted_sources,
         )
         ops.reference_context(reference, target)
         context_count = len(plan.snapshot_package["contexts"])
-        checkpoint = self._store.save_context_with_sources(
-            target,
-            AutoCheckpoint(
-                command="reference",
-                args={
-                    "kind": "context",
-                    "reference_uid": reference.uid,
-                    "source": plan.source_name,
-                    "source_uid": plan.source_uid,
-                    "snapshot_content_sha256": plan.snapshot_content_sha256,
-                    "into": plan.into_name,
-                    "snapshot": True,
-                    "include_descendants": plan.request.include_descendants,
-                    "follow_embeds": plan.request.follow_embeds,
-                    "context_count": context_count,
-                },
-                description=(
-                    f"Referenced {'recursive' if plan.request.include_descendants else 'direct'} "
-                    f"Context snapshot '{plan.source_name}' as "
-                    f"[{reference.uid[:8]}] in '{plan.into_name}'"
-                ),
+        checkpoint_args: dict[str, object] = {
+            "kind": "context",
+            "reference_uid": reference.uid,
+            "source": plan.source_name,
+            "source_uid": plan.source_uid,
+            "snapshot_content_sha256": plan.snapshot_content_sha256,
+            "into": plan.into_name,
+            "snapshot": True,
+            "include_descendants": plan.request.include_descendants,
+            "follow_embeds": plan.request.follow_embeds,
+            "context_count": context_count,
+        }
+        if token.granted_sources:
+            checkpoint_args["granted_sources"] = [
+                source.to_dict() for source in token.granted_sources
+            ]
+        checkpoint_record = AutoCheckpoint(
+            command="reference",
+            args=checkpoint_args,
+            description=(
+                f"Referenced {'recursive' if plan.request.include_descendants else 'direct'} "
+                f"Context snapshot '{plan.source_name}' as "
+                f"[{reference.uid[:8]}] in '{plan.into_name}'"
             ),
-            expected_context_digest=plan.into_digest,
-            source_bindings=plan.source_bindings,
         )
+        if token.context_sources:
+            expected_bindings = tuple(
+                (
+                    source.public_name,
+                    source.context_uid,
+                    source.context_digest,
+                )
+                for source in token.context_sources
+            )
+            if expected_bindings != plan.source_bindings:
+                raise ValueError("The frozen granted Context plan was modified.")
+            checks = tuple(
+                (source.access, ("READ",)) for source in token.context_sources
+            )
+            with authorized_context_operation(checks) as registry:
+                if registry is None:
+                    raise RuntimeError(
+                        "The granted Context authority is unavailable."
+                    )
+                for binding in token.granted_sources:
+                    revalidate_granted_context_binding(
+                        binding,
+                        registry=registry,
+                        active_store=self._store,
+                    )
+                if token.grant_scope_fingerprint != (
+                    self._grant_scope_fingerprint(
+                        registry,
+                        token.context_sources[0].access,
+                    )
+                ):
+                    raise RuntimeError(
+                        "The granted Context scope changed after Reference review."
+                    )
+                grouped: dict[str, list[_FrozenContextSource]] = {}
+                for source in token.context_sources:
+                    grouped.setdefault(
+                        str(source.access.store.store_dir.resolve()),
+                        [],
+                    ).append(source)
+                with ExitStack() as stack:
+                    for store_root in sorted(grouped):
+                        group = sorted(
+                            grouped[store_root],
+                            key=lambda source: source.authority_name,
+                        )
+                        first, *remaining = group
+                        stack.enter_context(
+                            first.access.store.locked_context_snapshot(
+                                first.authority_name,
+                                expected_uid=first.context_uid,
+                                expected_digest=first.context_digest,
+                            )
+                        )
+                        for source in remaining:
+                            current = first.access.store.load_direct(
+                                source.authority_name
+                            )
+                            if (
+                                current.uid != source.context_uid
+                                or context_record_digest(current)
+                                != source.context_digest
+                            ):
+                                raise ConcurrentContextUpdateError(
+                                    f"Context '{source.authority_name}' changed "
+                                    "before it could be published."
+                                )
+                    checkpoint = self._store.save(
+                        target,
+                        checkpoint_record,
+                        expected_context_digest=plan.into_digest,
+                    )
+        else:
+            checkpoint = self._store.save_context_with_sources(
+                target,
+                checkpoint_record,
+                expected_context_digest=plan.into_digest,
+                source_bindings=plan.source_bindings,
+            )
         if checkpoint is None:
             raise RuntimeError("Context Reference saved no checkpoint.")
         return ContextReferenceResult(
@@ -611,10 +929,14 @@ def execute_context_reference(
     request: ContextReferenceRequest,
     *,
     store: MemoryStore,
+    allow_granted_sources: bool = False,
 ) -> ContextReferenceResult:
-    """Execute one local Context snapshot with no terminal dependency."""
+    """Execute one local or explicitly granted Context snapshot."""
 
-    port = MemoryStoreReferencePort.capture(store)
+    port = MemoryStoreReferencePort.capture(
+        store,
+        allow_granted_sources=allow_granted_sources,
+    )
     return run_context_reference(request, port=port)
 
 

@@ -68,12 +68,12 @@ approval prompt would turn an already-submitted read request into a redundant
 second confirmation, while treating it as a mutation approval would overstate
 its effects.  The allowlist and actual-output receipt are its safety boundary.
 
-Verified-plan Resolve and the shared semantic compact execution shell do not
-consume this component. Their selected, revision-bound plan remains adjacent
-to a separated Apply row; Enter on that row is the sole approval, followed by
-the operation's normal freshness validation. The compatibility
-`resolve_candidate_exact_review` value remains available to non-compact
-callers, but the terminal compact route does not insert it as a second screen.
+Resolve and the shared semantic compact execution shell do not consume this
+component. Resolve finalizes revision-bound conflict decisions, then lets
+Update generate an exact plan; it has no candidate replay command or
+compatibility exact-review value. FINALIZE DECISIONS is the semantic-input
+boundary, followed by whole-post-image verification and normal freshness
+validation.
 
 Semantic-session commands are a deliberately narrower use of this value. The
 global START/TURN/NONE classification, revision binding, rebuilding rule, and

@@ -1,9 +1,10 @@
 $ mem sever                                                                                                                                                                         
 PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
- NEW SEVER · SOURCE × CRITERIA → RESULT · CHOOSE TWO READABLE INPUTS AND ONE LOCAL SAVE LOCATION                                                                                    
-› SOURCE · ALL READABLE CONTEXTS       › capture/reference                       [ BROWSE ] CURRENT                           [ ✓ INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
-  CRITERIA · ALL READABLE CONTEXTS     › capture/criteria                        [ BROWSE ]                                   [ ✓ INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
-  RESULT · SOURCE OR NEW LOCAL CONTEXT › severed                                 [ BROWSE ] NEW · CREATE ON START                                                                   
- COMMAND · RUNNABLE · ENTER TO START                                                                                                                                                
- mem sever capture/reference capture/criteria severed --source-descendants --criteria-descendants                                                                                   
+ NEW SEVER · SOURCE × CRITERIA · IN PLACE · CHOOSE SOURCE AND CRITERIA; EACH SOURCE CONTEXT STAYS IN PLACE                                                                          
+› SOURCE · LOCAL CONTEXTS · UPDATED IN PLACE › capture/reference                       [ BROWSE ] CURRENT                     [ ✓ INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
+  CRITERIA · ALL READABLE CONTEXTS           › capture/criteria                        [ BROWSE ]                             [ ✓ INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
+┌───────────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND |───────────────────────────────────────────────────────────────────────────────┐
+│› mem sever capture/reference capture/criteria --source-descendants --criteria-descendants                                                                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                                                                                    
  Type exact Context · ←/→ caret · → at end next control · ↑/↓ endpoint row · Enter confirm · Tab next control · Esc cancel

@@ -43,7 +43,7 @@ def _build_store(store_root: Path):
 
 def _search_harness(store_root: Path) -> None:
     import memcommit.adapters.console.commands.search.command as search_command
-    from memcommit.application.capabilities.authority.context_access import resolve_context_access
+    from memcommit.application.context_access.access import resolve_context_access
     from memcommit.application.operations.search.application import SearchResponse, SearchResult
     from memcommit.persistence.store import MemoryStore
 
@@ -97,8 +97,8 @@ def _search_harness(store_root: Path) -> None:
 
 def _find_harness(store_root: Path) -> None:
     from memcommit.adapters.console.commands.find.workbench import FindTuiSetup, run_find_workbench
-    from memcommit.application.capabilities.authority.context_access import resolve_context_access
-    from memcommit.application.capabilities.authority.readable_contexts import freeze_readable_context_catalog
+    from memcommit.application.context_access.access import resolve_context_access
+    from memcommit.application.context_access.readable_contexts import freeze_readable_context_catalog
     from memcommit.application.capabilities.save_context_from_selection.runtime import execute_save_context_from_selection
     from memcommit.application.operations.find.application import FindRequest
     from memcommit.application.operations.find.runtime import execute_find

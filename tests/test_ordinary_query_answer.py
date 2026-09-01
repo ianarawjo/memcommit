@@ -7,18 +7,18 @@ import json
 import pytest
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.context_access import resolve_context_access
+from memcommit.application.context_access.access import resolve_context_access
 from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
 )
 from memcommit.application.operations.query.ordinary_runtime import (
     execute_ordinary_query,
 )
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_readable_context_catalog,
 )
-from memcommit.application.operations.search.answer_references import (
-    SearchAnswerEvidence,
+from memcommit.application.operations.query.reference_document import (
+    OrdinaryQueryEvidence,
 )
 from memcommit.application.operations.query.answer import (
     OrdinaryQueryAnswerError,
@@ -30,23 +30,23 @@ from memcommit.application.operations.query.answer import (
 from memcommit.persistence.store import MemoryStore
 
 
-def _evidence() -> tuple[SearchAnswerEvidence, ...]:
+def _evidence() -> tuple[OrdinaryQueryEvidence, ...]:
     return (
-        SearchAnswerEvidence(
+        OrdinaryQueryEvidence(
             "m1",
             "task/left",
             "memory",
             "11111111-left",
             "Left-side example.",
         ),
-        SearchAnswerEvidence(
+        OrdinaryQueryEvidence(
             "m2",
             "task/right",
             "memory",
             "22222222-right",
             "Right-side example.",
         ),
-        SearchAnswerEvidence(
+        OrdinaryQueryEvidence(
             "m3",
             "task",
             "artifact",
@@ -414,7 +414,7 @@ def test_prompt_and_schema_publish_the_case_derived_contract():
 
 def test_complete_corpus_over_one_shot_bound_fails_before_provider_use():
     oversized = tuple(
-        SearchAnswerEvidence(
+        OrdinaryQueryEvidence(
             f"m{index}",
             "task",
             "memory",

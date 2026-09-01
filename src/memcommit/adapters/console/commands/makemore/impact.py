@@ -36,6 +36,10 @@ from memcommit.application.operations.makemore.add_runtime import (
     freeze_makemore_context_source,
     prepare_makemore_add,
 )
+from memcommit.application.operations.makemore.distilled_runtime import (
+    prepare_distilled_makemore_add,
+)
+from memcommit.application.operations.distill.application import DistillResult
 from memcommit.application.operations.makemore.application import (
     MakemoreRequest,
     MakemoreResult,
@@ -58,6 +62,7 @@ def makemore_impact_presentation(
     *,
     source_name: str | None,
     target_name: str,
+    distill_result: DistillResult | None = None,
 ) -> ImpactSessionPresentation:
     """Project the exact unverified Memories Makemore would add."""
 
@@ -152,9 +157,40 @@ def makemore_impact_presentation(
     )
     display_source = source_name or "INLINE INPUT"
     direction = (
-        "GOAL → RULES"
-        if analysis.mode is MakemoreMode.GOAL_TO_RULES
-        else "RULES → CASES"
+        "CONTEXT → RULES → CASES"
+        if distill_result is not None
+        else (
+            "GOAL → RULES"
+            if analysis.mode is MakemoreMode.GOAL_TO_RULES
+            else "RULES → CASES"
+        )
+    )
+    overview_sections = []
+    if distill_result is not None:
+        distilled = distill_result.analysis
+        overview_sections.append(
+            ResolutionOverviewSection(
+                "distilled-rules",
+                "TRANSIENT DISTILLED RULES",
+                "\n".join(
+                    f"{index}. {rule.content} · SUPPORT "
+                    + (", ".join(uid[:8] for uid in rule.support_memory_uids) or "NONE")
+                    + (
+                        " · BOUNDARY "
+                        + ", ".join(uid[:8] for uid in rule.boundary_memory_uids)
+                        if rule.boundary_memory_uids
+                        else ""
+                    )
+                    for index, rule in enumerate(distilled.rules, 1)
+                ),
+            )
+        )
+    overview_sections.append(
+        ResolutionOverviewSection(
+            "proposal-overview",
+            "PROPOSAL OVERVIEW",
+            analysis.overview,
+        )
     )
     view = ResolutionWorkbenchView(
         operation="makemore",
@@ -164,7 +200,24 @@ def makemore_impact_presentation(
         route=f"SOURCE {display_source} → TARGET {target_name}",
         status="PROPOSAL · NEEDS REVIEW",
         metrics=(
-            ResolutionMetric("INPUTS", str(len(analysis.inputs))),
+            ResolutionMetric(
+                "SOURCE MEMORIES" if distill_result is not None else "INPUTS",
+                str(
+                    len(distill_result.analysis.source.sources)
+                    if distill_result is not None
+                    else len(analysis.inputs)
+                ),
+            ),
+            *(
+                (
+                    ResolutionMetric(
+                        "DISTILLED RULES",
+                        str(len(distill_result.analysis.rules)),
+                    ),
+                )
+                if distill_result is not None
+                else ()
+            ),
             ResolutionMetric("PROPOSALS", str(len(proposals))),
             ResolutionMetric("DIRECTION", direction),
             ResolutionMetric(
@@ -177,13 +230,7 @@ def makemore_impact_presentation(
             ResolutionContextLocation("TARGET", target_name, "EXISTING"),
         ),
         overview=analysis.overview,
-        overview_sections=(
-            ResolutionOverviewSection(
-                "proposal-overview",
-                "PROPOSAL OVERVIEW",
-                analysis.overview,
-            ),
-        ),
+        overview_sections=tuple(overview_sections),
         list_label="PROPOSED RULES" if rules_direction else "PROPOSED CASES",
         items=items,
         empty_message="No Makemore proposals were returned.",
@@ -224,8 +271,14 @@ def makemore_cmd(
     ] = None,
     as_role: Annotated[
         str,
-        typer.Option("--as", help="Interpret Context Source as rules or one goal"),
-    ] = "rules",
+        typer.Option(
+            "--as",
+            help=(
+                "Interpret Context Source as auto (Distill then Makemore), "
+                "existing rules, or one goal"
+            ),
+        ),
+    ] = "auto",
     number: Annotated[
         Optional[int],
         typer.Option(
@@ -256,13 +309,15 @@ def makemore_cmd(
         )
         inline_rules = bool(rule)
         frozen_source = None
+        distilled_source_name = None
+        distill_result = None
         if source_name is not None and inline_rules:
             raise MakemoreError("Inline --rule input cannot be combined with --from.")
         context_source = source_name is not None or (
             not inline_rules and goal_focus is None
         )
         if not context_source:
-            if as_role != "rules":
+            if as_role != "auto":
                 raise MakemoreError("--as applies only to a Context Source.")
             if inline_rules:
                 request = MakemoreRequest(
@@ -297,39 +352,75 @@ def makemore_cmd(
                 target_locator=target_name,
                 current=snapshot.current_name,
             )
-            if as_role not in {"goal", "rules"}:
-                raise MakemoreError("Makemore --as must be 'goal' or 'rules'.")
-            frozen_source = freeze_makemore_context_source(
-                store,
-                context_name=endpoints.source_name,
-                role=as_role,
-                number=number,
-                strict=strict,
-                goal_focus=goal_focus,
-            )
-            request = frozen_source.request
+            if as_role not in {"auto", "goal", "rules"}:
+                raise MakemoreError(
+                    "Makemore --as must be 'auto', 'goal', or 'rules'."
+                )
+            if as_role == "auto":
+                distilled_source_name = endpoints.source_name
+                request = None
+            else:
+                frozen_source = freeze_makemore_context_source(
+                    store,
+                    context_name=endpoints.source_name,
+                    role=as_role,
+                    number=number,
+                    strict=strict,
+                    goal_focus=goal_focus,
+                )
+                request = frozen_source.request
             resolved_source = endpoints.source_name
             resolved_target = endpoints.target_name
+        pipeline = distilled_source_name is not None
         with CommandProgress(
             "IMPACT · MAKEMORE",
             "preparing source and target",
-            total=2,
+            total=3 if pipeline else 2,
         ) as progress:
-            prepared = prepare_makemore_add(
-                store=store,
-                request=request,
-                target_name=resolved_target,
-                source=frozen_source,
-                provider_factory=lambda: (
-                    progress.update("generating proposals", step=2)
-                    or connect_semantic_provider()
-                ),
-            )
+            if pipeline:
+                assert distilled_source_name is not None
+                provider_call = 0
+
+                def connect_pipeline_provider():
+                    nonlocal provider_call
+                    provider_call += 1
+                    progress.update(
+                        "distilling Source Rules"
+                        if provider_call == 1
+                        else "generating Cases",
+                        step=2 if provider_call == 1 else 3,
+                    )
+                    return connect_semantic_provider()
+
+                distilled = prepare_distilled_makemore_add(
+                    store=store,
+                    source_name=distilled_source_name,
+                    target_name=resolved_target,
+                    provider_factory=connect_pipeline_provider,
+                    goal_focus=goal_focus,
+                    number=number,
+                    strict=strict,
+                )
+                prepared = distilled.makemore
+                distill_result = distilled.distill
+            else:
+                assert request is not None
+                prepared = prepare_makemore_add(
+                    store=store,
+                    request=request,
+                    target_name=resolved_target,
+                    source=frozen_source,
+                    provider_factory=lambda: (
+                        progress.update("generating proposals", step=2)
+                        or connect_semantic_provider()
+                    ),
+                )
         show_process_local_impact(
             makemore_impact_presentation(
                 prepared.result,
                 source_name=resolved_source,
                 target_name=resolved_target,
+                distill_result=distill_result,
             ),
             operation="makemore",
         )

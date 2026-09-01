@@ -51,9 +51,9 @@ from memcommit.application.operations.profile.config import (
 from memcommit.application.operations.profile.model import (
     ProfileError,
     create_authority_grant,
-    resolve_granted_context_view,
     study_profile_groups,
 )
+from memcommit.application.context_access.granted_view import resolve_granted_context_view
 from memcommit.application.operations.query.granted_source import (
     load_authority_query_source,
 )

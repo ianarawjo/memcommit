@@ -62,6 +62,8 @@ def test_meld_setup_projects_mode_dependent_shared_roles() -> None:
     assert spec.role_label("DIRECTIONAL", "B") == "TO"
     assert spec.role_allows_memory_focus("SYMMETRIC", "A") is False
     assert spec.role_allows_memory_focus("DIRECTIONAL", "A") is True
+    assert spec.role_allows_inline_memory("SYMMETRIC", "A") is False
+    assert spec.role_allows_inline_memory("DIRECTIONAL", "A") is True
     assert spec.roles[2].allow_new is True
     assert spec.roles[2].prefer_new is True
     assert spec.roles[2].existing_label == "EMPTY · EXISTING"
@@ -156,7 +158,7 @@ def test_compact_directional_from_and_to_support_in_place_caret_edits() -> None:
         # endpoint in place. Left belongs to the writable field's caret, not
         # row navigation; Delete and insertion must change the exact operands.
         pipe_input.send_text(
-            "\x1b[C\x1b[B"
+            "\x1b[C\x1b[B\x1b[B"
             "\x1b[D\x1b[D\x1b[C\x1b[3~b\r\x1b[B"
             "\x1b[D\x1b[D\x1b[C\x1b[3~a\r\x1b[B\r"
         )
@@ -180,7 +182,7 @@ def test_compact_directional_browse_replaces_both_exact_endpoint_fields() -> Non
         # Browse A from meld/a to meld/b, then move vertically from A's Browse
         # control and Browse B from meld/b to meld/a. Each catalog choice must
         # replace the writable field that builds the final command operands.
-        pipe_input.send_text("\x1b[C\x1b[B\t\r\x1b[B\r\x1b[B\t\r\x1b[A\r\x1b[B\r")
+        pipe_input.send_text("\x1b[C\x1b[B\x1b[B\t\r\x1b[B\r\x1b[B\t\r\x1b[A\r\x1b[B\r")
         selected = choose_meld_endpoint_setup(
             _setup(),
             memory_loader=_load,
@@ -202,7 +204,7 @@ def test_compact_input_right_edge_enters_browse_then_left_returns_to_edit() -> N
         # crosses into Browse; choosing there writes the same field, and Left
         # returns to that exact input so the catalog value can be edited again.
         pipe_input.send_text(
-            "\x1b[C\x1b[B\x1b[C\r\x1b[B\r\x1b[D\x1b[D\x1b[3~a\r\x1b[B\x1b[B\r"
+            "\x1b[C\x1b[B\x1b[B\x1b[C\r\x1b[B\r\x1b[D\x1b[D\x1b[3~a\r\x1b[B\x1b[B\r"
         )
         selected = choose_meld_endpoint_setup(
             _setup(),
@@ -392,7 +394,13 @@ def test_compact_directional_mode_keeps_each_cli_descendant_combination(
     with create_pipe_input() as pipe_input:
         # Select Directional, visit each independent range, then Continue.
         pipe_input.send_text(
-            "\x1b[C" + "\t" * 3 + left_toggle + "\t" * 4 + right_toggle + "\t\t\r"
+            "\x1b[C"
+            + "\t" * 4
+            + left_toggle
+            + "\t" * 3
+            + right_toggle
+            + "\t" * 2
+            + "\r"
         )
         selected = choose_meld_endpoint_setup(
             _setup(),
@@ -414,7 +422,7 @@ def test_compact_directional_mode_keeps_each_cli_descendant_combination(
 def test_compact_descendant_space_toggles_the_checked_value() -> None:
     with create_pipe_input() as pipe_input:
         # Left/Right now own row navigation; Space owns the checkbox value.
-        pipe_input.send_text("\x1b[C" + "\t" * 3 + " " + "\t" * 6 + "\r")
+        pipe_input.send_text("\x1b[C" + "\t" * 4 + " " + "\t" * 5 + "\r")
         selected = choose_meld_endpoint_setup(
             _setup(),
             memory_loader=_load,
@@ -431,11 +439,32 @@ def test_compact_descendant_space_toggles_the_checked_value() -> None:
     )
 
 
-def test_compact_left_right_traverse_browse_reach_and_memory() -> None:
+def test_compact_context_source_traverses_browse_and_reach() -> None:
     with create_pipe_input() as pipe_input:
-        # Enter A's row, Tab once out of the caret-owning input, then use
-        # Right to cross Browse -> reach -> Memory before opening its list.
-        pipe_input.send_text("\x1b[C\x1b[B\t\x1b[C\x1b[C\r\x1b[B\r\x1b[B\x1b[B\r\x03")
+        # Directional Context Source exposes Browse and descendants, then
+        # moves vertically through B to the exact command.
+        pipe_input.send_text("\x1b[C\x1b[B\x1b[B\t\x1b[C \x1b[B\x1b[B\r")
+        selected = choose_meld_endpoint_setup(
+            _setup(),
+            memory_loader=_load,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == MeldEndpointSelection(
+        "directional",
+        "meld/a",
+        "meld/b",
+        left_descendants=True,
+    )
+
+
+def test_compact_stored_memory_source_uses_owner_context_and_exact_uid() -> None:
+    with create_pipe_input() as pipe_input:
+        # Directional -> Source Type -> Stored Memory -> owner input/Browse ->
+        # required Memory picker -> B -> exact command.
+        pipe_input.send_text("\x1b[C\t\x1b[C\t\t\t\r\r\x1b[B\x1b[B\r")
         selected = choose_meld_endpoint_setup(
             _setup(),
             memory_loader=_load,
@@ -449,27 +478,6 @@ def test_compact_left_right_traverse_browse_reach_and_memory() -> None:
         "meld/a",
         "meld/b",
         left_memory_uid=LEFT_UID,
-    )
-
-
-def test_compact_left_from_memory_returns_to_reach_without_changing_it() -> None:
-    with create_pipe_input() as pipe_input:
-        # Reach Memory by row arrows, return Left to the reach checkbox, then
-        # toggle it explicitly with Space before moving vertically to START.
-        pipe_input.send_text("\x1b[C\x1b[B\t\x1b[C\x1b[C\x1b[D \x1b[B\x1b[B\r\x03")
-        selected = choose_meld_endpoint_setup(
-            _setup(),
-            memory_loader=_load,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert selected == MeldEndpointSelection(
-        "directional",
-        "meld/a",
-        "meld/b",
-        left_descendants=True,
     )
 
 
@@ -477,7 +485,7 @@ def test_directional_meld_omits_c_and_can_focus_one_incoming_memory() -> None:
     with create_pipe_input() as pipe_input:
         # Switch mode, open A's Memory list explicitly, select its first
         # Memory, then cross B to the action.
-        pipe_input.send_text("\x1b[C" + "\t" * 4 + "\r\x1b[B\r" + "\t" * 5 + "\r")
+        pipe_input.send_text("\x1b[C\t\x1b[C\t\t\t\r\r\x1b[B\x1b[B\r")
         selected = choose_meld_endpoint_setup(
             _setup(),
             memory_loader=_load,
@@ -494,11 +502,11 @@ def test_directional_meld_omits_c_and_can_focus_one_incoming_memory() -> None:
     )
 
 
-def test_compact_directional_memory_button_does_not_trap_row_arrows() -> None:
+def test_compact_directional_inline_memory_reaches_baseline_and_command() -> None:
     with create_pipe_input() as pipe_input:
-        # Directional MODE, then Tab to A Memory. Down moves to B's primary
-        # field and a second Down reaches START without opening the list.
-        pipe_input.send_text("\x1b[C" + "\t" * 4 + "\x1b[B\x1b[B\r\x03")
+        pipe_input.send_text(
+            "\x1b[C\t\x1b[C\x1b[C\tkeep this exact distinction\x1b[B\x1b[B\r"
+        )
         selected = choose_meld_endpoint_setup(
             _setup(),
             memory_loader=_load,
@@ -509,16 +517,18 @@ def test_compact_directional_memory_button_does_not_trap_row_arrows() -> None:
 
     assert selected == MeldEndpointSelection(
         "directional",
-        "meld/a",
+        None,
         "meld/b",
+        inline_source_content="keep this exact distinction",
     )
 
 
-def test_compact_directional_memory_list_continues_at_its_edge() -> None:
+def test_compact_directional_command_editor_accepts_inline_memory_form() -> None:
     with create_pipe_input() as pipe_input:
-        # Enter opens A's two-row Whole Context/Memory list. Down reaches the
-        # Memory, another Down leaves the list for B, and Down reaches START.
-        pipe_input.send_text("\x1b[C" + "\t" * 4 + "\r\x1b[B\x1b[B\x1b[B\r\x03")
+        pipe_input.send_text(
+            "\x1b[C\x1b[B\x1b[B\x1b[B\x1b[B"
+            "\x15--memory 'new inline fact' --into meld/b\r"
+        )
         selected = choose_meld_endpoint_setup(
             _setup(),
             memory_loader=_load,
@@ -529,8 +539,9 @@ def test_compact_directional_memory_list_continues_at_its_edge() -> None:
 
     assert selected == MeldEndpointSelection(
         "directional",
-        "meld/a",
+        None,
         "meld/b",
+        inline_source_content="new inline fact",
     )
 
 

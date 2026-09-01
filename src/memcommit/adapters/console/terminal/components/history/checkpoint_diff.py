@@ -9,15 +9,25 @@ from dataclasses import dataclass
 from typing import Any
 
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
+from prompt_toolkit.input import Input
+from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.terminal.components.history.picker import HistoryDetailView, HistoryPickerItem
+from memcommit.adapters.console.terminal.components.history.picker import (
+    HistoryDetailView,
+    HistoryPickerItem,
+)
+from memcommit.adapters.console.terminal.components.plain_text_clipboard import (
+    plain_text_from_fragments,
+)
+from memcommit.adapters.console.terminal.components.read_only_viewer import (
+    run_read_only_viewer,
+)
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_action_style
 from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange, memory_diff_lines
 from memcommit.application.capabilities.history.query.checkpoint_history_slicing import (
-    CheckpointHistoryComparison,
     CheckpointHistorySlice,
 )
 
@@ -224,6 +234,192 @@ def _render_revision_item(
     return fragments
 
 
+def _revision_projection(
+    checkpoints: Sequence[Mapping[str, Any]] | CheckpointHistorySlice,
+    entry: HistoryPickerItem,
+) -> tuple[
+    Mapping[str, Any],
+    tuple[_CheckpointItemChange, ...],
+    int,
+    bool,
+]:
+    checkpoint_records = (
+        checkpoints.physical_entries
+        if isinstance(checkpoints, CheckpointHistorySlice)
+        else checkpoints
+    )
+    records = {
+        checkpoint["uid"]: checkpoint
+        for checkpoint in checkpoint_records
+        if isinstance(checkpoint.get("uid"), str)
+    }
+    checkpoint = records[entry.uid]
+    if isinstance(checkpoints, CheckpointHistorySlice):
+        revision = checkpoints.revision(entry.uid)
+        before_snapshot = revision.before_snapshot
+        after_snapshot = revision.after_snapshot
+    else:
+        before_snapshot = _before_snapshots(checkpoints)[entry.uid]
+        after_snapshot = checkpoint.get("snapshot")
+    changes, result_count, reordered = _checkpoint_revision_items(
+        before_snapshot,
+        after_snapshot,
+    )
+    return checkpoint, changes, result_count, reordered
+
+
+def checkpoint_revision_document_fragments(
+    checkpoints: Sequence[Mapping[str, Any]] | CheckpointHistorySlice,
+    entry: HistoryPickerItem,
+    *,
+    context_name: str,
+    verbose: bool = False,
+) -> StyleAndTextTuples:
+    """Project one checkpoint as a compact, semantically colored document.
+
+    Diff answers one question: what changed at this checkpoint?  Retained
+    Memories remain part of the exact result count, but their rows stay out of
+    the default scan path.  ``--verbose`` restores those rows and full UIDs.
+    """
+
+    checkpoint, changes, result_count, reordered = _revision_projection(
+        checkpoints,
+        entry,
+    )
+    counts = {
+        treatment: sum(change.treatment == treatment for change in changes)
+        for treatment in ("KEEP", "ADD", "EDIT", "REMOVE")
+    }
+    action_value = checkpoint.get("command")
+    action = (
+        action_value
+        if isinstance(action_value, str) and action_value
+        else "checkpoint"
+    )
+    checkpoint_uid = entry.uid if verbose else entry.uid[:8]
+    changed_count = counts["ADD"] + counts["EDIT"] + counts["REMOVE"]
+    fragments: StyleAndTextTuples = [
+        ("class:report-label", "DIFF"),
+        ("class:report-neutral", f" · {display_escape_text(context_name)}\n"),
+        ("class:history-receipt", f"[CHECKPOINT {display_escape_text(checkpoint_uid)}]"),
+        ("class:report-neutral", " · "),
+        (
+            semantic_action_style(action, fallback="class:report-neutral"),
+            display_escape_text(action),
+        ),
+        (
+            "class:report-neutral",
+            f" · {changed_count} CHANGE{'S' if changed_count != 1 else ''}"
+            f" · {result_count} RESULT "
+            f"MEMOR{'IES' if result_count != 1 else 'Y'}\n",
+        ),
+        (
+            "class:report-neutral",
+            f"{counts['EDIT']} edited · {counts['ADD']} added · "
+            f"{counts['REMOVE']} removed",
+        ),
+    ]
+    if not verbose and counts["KEEP"]:
+        fragments.append(
+            (
+                "class:report-neutral",
+                f" · {counts['KEEP']} unchanged hidden",
+            )
+        )
+    fragments.append(("class:report-neutral", "\n"))
+    description = entry.description.strip()
+    if description:
+        fragments.extend(
+            (
+                ("class:report-neutral", display_escape_text(description)),
+                ("class:report-neutral", "\n"),
+            )
+        )
+    fragments.append(("", "\n"))
+
+    visible_changes = (
+        changes
+        if verbose
+        else tuple(change for change in changes if change.treatment != "KEEP")
+    )
+    if visible_changes:
+        for change in visible_changes:
+            fragments.extend(
+                _render_revision_item(
+                    change,
+                    location=entry.uid,
+                    verbose_uid=verbose,
+                )
+            )
+    else:
+        fragments.append(
+            ("class:report-neutral", "No direct Memory content changed.\n")
+        )
+    if reordered:
+        fragments.append(
+            (
+                "class:report-neutral",
+                "\nORDER · retained direct items changed position; result "
+                "order is authoritative.\n",
+            )
+        )
+    if not verbose and counts["KEEP"]:
+        fragments.append(
+            (
+                "class:report-neutral",
+                "\nUse --verbose to include unchanged Memories and full UIDs.\n",
+            )
+        )
+    return fragments
+
+
+def format_checkpoint_revision_report(
+    checkpoints: Sequence[Mapping[str, Any]] | CheckpointHistorySlice,
+    entry: HistoryPickerItem,
+    *,
+    context_name: str,
+    verbose: bool = False,
+) -> str:
+    """Return the ANSI-free equivalent of the read-only Diff document."""
+
+    return plain_text_from_fragments(
+        checkpoint_revision_document_fragments(
+            checkpoints,
+            entry,
+            context_name=context_name,
+            verbose=verbose,
+        ),
+        whole_document=True,
+    )
+
+
+def open_checkpoint_revision_viewer(
+    checkpoints: Sequence[Mapping[str, Any]] | CheckpointHistorySlice,
+    entry: HistoryPickerItem,
+    *,
+    context_name: str,
+    verbose: bool = False,
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> None:
+    """Open one frozen checkpoint document in the shared read-only Viewer."""
+
+    run_read_only_viewer(
+        checkpoint_revision_document_fragments(
+            checkpoints,
+            entry,
+            context_name=context_name,
+            verbose=verbose,
+        ),
+        title="DIFF REPORT",
+        frame_title="CHECKPOINT REVISION",
+        app_input=app_input,
+        app_output=app_output,
+        require_tty=require_tty,
+    )
+
+
 def checkpoint_revision_detail_renderer(
     checkpoints: Sequence[Mapping[str, Any]] | CheckpointHistorySlice,
     *,
@@ -400,27 +596,9 @@ def render_checkpoint_revision_cli(
 ) -> str:
     """Render one exact checkpoint revision without opening a terminal picker."""
 
-    checkpoint_records = (
-        checkpoints.physical_entries
-        if isinstance(checkpoints, CheckpointHistorySlice)
-        else checkpoints
-    )
-    records = {
-        checkpoint["uid"]: checkpoint
-        for checkpoint in checkpoint_records
-        if isinstance(checkpoint.get("uid"), str)
-    }
-    checkpoint = records[entry.uid]
-    if isinstance(checkpoints, CheckpointHistorySlice):
-        revision = checkpoints.revision(entry.uid)
-        before_snapshot = revision.before_snapshot
-        after_snapshot = revision.after_snapshot
-    else:
-        before_snapshot = _before_snapshots(checkpoints)[entry.uid]
-        after_snapshot = checkpoint.get("snapshot")
-    changes, result_count, _reordered = _checkpoint_revision_items(
-        before_snapshot,
-        after_snapshot,
+    checkpoint, changes, result_count, _reordered = _revision_projection(
+        checkpoints,
+        entry,
     )
     counts = {
         treatment: sum(change.treatment == treatment for change in changes)
@@ -446,87 +624,12 @@ def render_checkpoint_revision_cli(
     if raw:
         body = _raw_revision_lines(changes, context_name=context_name)
         return "\n".join((*header, "", *body))
-    detail = checkpoint_revision_detail_renderer(
+    return format_checkpoint_revision_report(
         checkpoints,
-        verbose_uids=verbose,
-    )(entry)
-    fragments = detail.content if isinstance(detail, HistoryDetailView) else detail
-    return (
-        "UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS\n"
-        f"CONTEXT     {context_name}\n"
-        + "".join(text for _style, text in fragments).rstrip()
+        entry,
+        context_name=context_name,
+        verbose=verbose,
     )
-
-
-def render_checkpoint_comparison_cli(
-    comparison: CheckpointHistoryComparison,
-    *,
-    context_name: str,
-    stat: bool = False,
-    raw: bool = False,
-    verbose: bool = False,
-) -> str:
-    """Render two exact retained result states in explicit FROM → TO order."""
-
-    if not isinstance(comparison, CheckpointHistoryComparison):
-        raise TypeError("Checkpoint comparison rendering requires a frozen pair.")
-    from_checkpoint_uid = comparison.from_checkpoint.uid
-    to_checkpoint_uid = comparison.to_checkpoint.uid
-    changes, result_count, reordered = _checkpoint_revision_items(
-        comparison.from_snapshot,
-        comparison.to_snapshot,
-    )
-    counts = {
-        treatment: sum(change.treatment == treatment for change in changes)
-        for treatment in ("KEEP", "ADD", "EDIT", "REMOVE")
-    }
-
-    def action(record: Mapping[str, Any]) -> str:
-        value = record.get("command")
-        return value if isinstance(value, str) and value else "checkpoint"
-
-    header = [
-        "UNIT        CHECKPOINT · CHECKPOINT VS CHECKPOINT",
-        f"FROM        {from_checkpoint_uid}",
-        f"TO          {to_checkpoint_uid}",
-        f"CONTEXT     {context_name}",
-        f"FROM ACTION {action(comparison.from_record)}",
-        f"TO ACTION   {action(comparison.to_record)}",
-        f"RESULT      {_direct_item_count(result_count)}",
-        (
-            "SUMMARY     "
-            f"{counts['KEEP']} kept · {counts['ADD']} added · "
-            f"{counts['EDIT']} edited · {counts['REMOVE']} removed"
-        ),
-    ]
-    if stat:
-        return "\n".join(header)
-    if raw:
-        body = _raw_revision_lines(changes, context_name=context_name)
-        return "\n".join((*header, "", *body))
-
-    fragments: StyleAndTextTuples = []
-    for change in changes:
-        fragments.extend(
-            _render_revision_item(
-                change,
-                location=f"{from_checkpoint_uid}..{to_checkpoint_uid}",
-                verbose_uid=verbose,
-            )
-        )
-    if not changes:
-        fragments.append(("class:report-neutral", " (empty direct Context)\n"))
-    if reordered:
-        fragments.append(
-            (
-                "class:report-neutral",
-                "\n ORDER · retained direct items changed position; result "
-                "rows remain authoritative.\n",
-            )
-        )
-    return "\n".join((*header, "")) + "".join(
-        text for _style, text in fragments
-    ).rstrip()
 
 
 def checkpoint_diff_detail_renderer(

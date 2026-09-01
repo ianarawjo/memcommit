@@ -7,28 +7,23 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.application.capabilities.durable_uid_resolution import (
-    DurableUidCandidate,
-    try_resolve_durable_uid,
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
+    try_resolve_existing_context_access,
 )
-from memcommit.persistence.command_ledger.attempts import annotate_memory_report_attempt
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
 from memcommit.adapters.console.terminal.components.memory_report_picker import (
     ScopedMemoryPickerItem,
-    choose_memory_report_target,
-)
-from memcommit.adapters.console.coordination.memory_report_recents import (
-    MemoryReportRecentSelection,
-    MemoryReportSelectAction,
-    choose_memory_report_recent,
+    choose_history_report_target,
 )
 from memcommit.adapters.console.coordination.history_target import (
     resolve_explicit_context_history_target,
 )
 from memcommit.adapters.console.commands.trace.context_projection import (
     format_context_trace_report,
+    open_context_trace_viewer,
 )
 from memcommit.adapters.console.terminal.components.read_only_viewer import (
     interactive_report_terminal,
@@ -37,12 +32,13 @@ from memcommit.adapters.console.commands.trace.projection import (
     DEFAULT_TRACE_OPERATION_LIMIT,
     MAX_TRACE_OPERATION_LIMIT,
     format_compact_trace_report,
+    open_trace_viewer,
 )
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.core.context_targeting.model import ContextTarget
+from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTarget
 from memcommit.application.capabilities.history.verification import (
     MemoryHistoryReconstructionError,
 )
@@ -95,12 +91,47 @@ def _present_context_trace(
     if as_json:
         typer.echo(json.dumps(report.to_dict(), ensure_ascii=False, indent=2))
         return
+    if interactive_report_terminal():
+        # Context Trace already owns one complete, frozen report.  The Viewer
+        # only bounds that document inside the terminal; it does not introduce
+        # checkpoint selection or another semantic execution path.
+        open_context_trace_viewer(report, verbose=verbose, limit=limit)
+        return
     typer.echo(
         format_context_trace_report(
             report,
             verbose=verbose,
             limit=limit,
         )
+    )
+
+
+def _execute_context_trace(
+    store: MemoryStore,
+    *,
+    context_name: str,
+    current_context_name: str | None,
+    as_json: bool,
+    verbose: bool,
+    limit: int | None,
+) -> None:
+    """Run and present one exact Context target through the shared boundary."""
+
+    trace_result = execute_trace(
+        TraceRequest(
+            target=TraceContextTarget(context_name),
+            current_context_name=current_context_name,
+        ),
+        store=store,
+    )
+    context_report = trace_result.report
+    if not isinstance(context_report, ContextHistorySlice):
+        raise RuntimeError("Context Trace returned an invalid report.")
+    _present_context_trace(
+        context_report,
+        as_json=as_json,
+        verbose=verbose,
+        limit=limit,
     )
 
 
@@ -207,9 +238,9 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "select from the current Context or descendants when omitted; "
-                "otherwise accepts CONTEXT, Memory/MemoryRef UID/prefix, or "
-                "CONTEXT:UID"
+                "browse the current local subtree for one exact Context or "
+                "Memory when omitted; otherwise accepts CONTEXT, "
+                "Memory/MemoryRef UID/prefix, or CONTEXT:UID"
             )
         ),
     ] = None,
@@ -218,9 +249,7 @@ def cmd(
         typer.Option(
             "--context",
             "-c",
-            help=(
-                "Start Memory selection in this Context instead of the current Context"
-            ),
+            help="Trace this exact Context; cannot be combined with SELECTOR",
         ),
     ] = None,
     verbose: Annotated[
@@ -266,25 +295,40 @@ def cmd(
     store = MemoryStore(create=False)
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
-        if selector is None and as_json:
+        if selector is not None and context_name is not None:
             raise MemoryHistoryReconstructionError(
-                "JSON output requires an explicit item UID."
+                "--context selects a Context and cannot be combined with SELECTOR; "
+                "use CONTEXT:UID for an exact Memory."
             )
-        explicit_context = context_name is not None
-        if selector is not None and not explicit_context:
-            context_identity = try_resolve_durable_uid(
-                tuple(
-                    DurableUidCandidate(
-                        uid=context.uid,
-                        kind="context",
-                        value=ContextTarget(context.name),
-                    )
-                    for context in store.load_direct_context_graph_strict()
-                ),
+        if selector is None and context_name is None and as_json:
+            raise MemoryHistoryReconstructionError(
+                "JSON output requires an explicit Context or Memory target."
+            )
+        if context_name is not None:
+            context_name = resolve_existing_context_access(
+                store,
+                context_name,
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
+            ).name
+            _execute_context_trace(
+                store,
+                context_name=context_name,
+                current_context_name=context_snapshot.current_name,
+                as_json=as_json,
+                verbose=verbose,
+                limit=operation_limit,
+            )
+            return
+        if selector is not None:
+            context_identity = try_resolve_existing_context_access(
+                store,
                 selector,
+                current_name=context_snapshot.current_name,
+                required_permission="READ",
             )
             explicit_target = (
-                context_identity.values[0]
+                ContextTarget(context_identity.name)
                 if context_identity is not None
                 else resolve_explicit_context_history_target(
                     selector,
@@ -293,51 +337,28 @@ def cmd(
                 )
             )
             if isinstance(explicit_target, ContextTarget):
-                trace_result = execute_trace(
-                    TraceRequest(
-                        target=TraceContextTarget(explicit_target.context_name),
-                        current_context_name=context_snapshot.current_name,
-                    ),
-                    store=store,
-                )
-                context_report = trace_result.report
-                if not isinstance(context_report, ContextHistorySlice):
-                    raise RuntimeError("Context Trace returned an invalid report.")
-                _present_context_trace(
-                    context_report,
+                _execute_context_trace(
+                    store,
+                    context_name=explicit_target.context_name,
+                    current_context_name=context_snapshot.current_name,
                     as_json=as_json,
                     verbose=verbose,
                     limit=operation_limit,
                 )
                 return
-        if selector is None and not explicit_context and interactive_report_terminal():
-            launch = choose_memory_report_recent(store, operation="trace")
-            if launch is None:
-                typer.echo("Trace cancelled.")
-                return
-            if isinstance(launch, MemoryReportRecentSelection):
-                context_name = launch.context_name
-                selector = launch.memory_uid
-            elif not isinstance(launch, MemoryReportSelectAction):
-                raise MemoryHistoryReconstructionError(
-                    "Trace launcher returned an invalid action."
-                )
 
         if selector is None:
-            name = context_snapshot.resolve_or_current(context_name)
+            name = context_snapshot.current_name
             if not name:
                 raise MemoryHistoryReconstructionError(
                     "No current context. Pass --context or run 'mem init <name>' first."
                 )
-            # The current or explicit Context is already the useful default.
-            # Freeze its descendants for the range control, but do not force a
-            # second location decision before the person can see its Memories.
+            # The Switch-style browser freezes the current lexical subtree, but
+            # every returned Context or Memory remains one exact target.
             target_catalog = load_trace_target_catalog(
                 TraceTargetCatalogRequest(
                     context_locator=name,
                     current_context_name=context_snapshot.current_name,
-                    # Freeze every descendant before the shared RANGE control
-                    # narrows or broadens what can actually be selected.
                     include_descendants=True,
                 ),
                 store=store,
@@ -354,18 +375,31 @@ def cmd(
                 )
                 for candidate in target_catalog.candidates
             )
-            selected = choose_memory_report_target(
+            selected = choose_history_report_target(
                 candidate_items,
                 context_name=name,
                 operation="trace",
                 catalog_context_names=catalog_names,
-                initial_include_descendants=False,
             )
             if selected is None:
                 typer.echo("Trace cancelled.")
                 return
+            if isinstance(selected, ContextTarget):
+                _execute_context_trace(
+                    store=store,
+                    context_name=selected.context_name,
+                    current_context_name=context_snapshot.current_name,
+                    as_json=False,
+                    verbose=verbose,
+                    limit=operation_limit,
+                )
+                return
+            if not isinstance(selected, DirectMemoryTarget):
+                raise MemoryHistoryReconstructionError(
+                    "Trace browser returned an invalid target."
+                )
             selector = selected.memory_uid
-            context_name = selected.owner_context_name
+            context_name = selected.context_name
             # The pickers are read-only, but another process may have changed
             # the Context while they were open. Re-read before resolving the
             # exact UID so the report never mixes old live state with new history.
@@ -381,20 +415,6 @@ def cmd(
             store=store,
         )
         report: TraceReport = trace_result.report
-        if isinstance(report, GrantedMemoryTraceReport):
-            annotate_memory_report_attempt(
-                operation="trace",
-                context_name=report.context_name,
-                memory_uid=report.selected_uid,
-                include_descendants=False,
-            )
-        elif isinstance(report, MemoryHistory):
-            annotate_memory_report_attempt(
-                operation="trace",
-                context_name=report.context_name,
-                memory_uid=report.selected_uid,
-                include_descendants=False,
-            )
     except (
         FileNotFoundError,
         OSError,
@@ -430,4 +450,10 @@ def cmd(
     elif isinstance(report, GrantedMemoryTraceReport):
         render_granted_trace(report, verbose=verbose)
     else:
-        render_trace(report, verbose=verbose, limit=operation_limit)
+        if interactive_report_terminal():
+            # Keep stdout available to pipes and `mem log --memory`, while the
+            # direct human Trace route contains the same document in one
+            # scrollable read-only viewport.
+            open_trace_viewer(report, verbose=verbose, limit=operation_limit)
+        else:
+            render_trace(report, verbose=verbose, limit=operation_limit)

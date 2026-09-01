@@ -1,9 +1,0 @@
-$ mem sever                                                                                                                                                                         
-PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
- NEW SEVER · SOURCE × CRITERIA → RESULT · CHOOSE TWO READABLE INPUTS AND ONE LOCAL SAVE LOCATION                                                                                    
-  SOURCE · ALL READABLE CONTEXTS       › capture/reference                       [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
-  CRITERIA · ALL READABLE CONTEXTS     › capture/criteria                        [ BROWSE ]                                   [ ✓ INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
-  RESULT · SOURCE OR NEW LOCAL CONTEXT › capture/reference                       [ BROWSE ] EXISTING · CURRENT                                                                      
- COMMAND · RUNNABLE · ENTER TO START                                                                                                                                                
- mem sever capture/reference capture/criteria --criteria-descendants                                                                                                                
- Enter run exact START command · ↑ previous · Esc cancel

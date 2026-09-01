@@ -29,7 +29,7 @@ from memcommit.application.capabilities.history.reconstruction.checkpoint_state_
 from memcommit.application.capabilities.history.query.semantic_history_query import HistorySearchError
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.operations.search.model import SearchError
+from memcommit.application.operations.search.errors import SearchError
 
 
 def _current_name(runtime: ClientRuntime) -> str | None:

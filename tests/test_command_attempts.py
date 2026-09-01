@@ -1,4 +1,5 @@
 """Profile-scoped command-attempt audit contracts."""
+
 from __future__ import annotations
 
 import json
@@ -172,8 +173,6 @@ def test_failed_sever_attempt_retains_bounded_frame_diagnostics(
             "local/source",
             "--criteria",
             "local/criteria",
-            "--save-as",
-            "local/result",
             "-r",
         ],
     )
@@ -190,13 +189,15 @@ def test_failed_sever_attempt_retains_bounded_frame_diagnostics(
             "criteria_name": "local/criteria",
             "criteria_scope": "INCLUDE_DESCENDANTS",
             "criteria_memory_count": 1,
-            "output_name": "local/result",
             "excluded_query_context_count": 0,
             "provider": "codex_chatgpt",
             "provider_timeout_seconds": 600,
             "failure_kind": "TIMEOUT",
         }
     }
+    shown = runner.invoke(app, ["log", "--operations"])
+    assert shown.exit_code == 0
+    assert "SEVER · local/source (2) × local/criteria (1) · IN PLACE" in shown.output
 
 
 def test_operation_log_lists_prior_attempt_without_listing_itself(

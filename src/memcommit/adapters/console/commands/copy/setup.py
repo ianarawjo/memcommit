@@ -11,7 +11,7 @@ from memcommit.adapters.console.coordination.copy_and_move.model import (
 from memcommit.adapters.console.terminal.components.copy_and_move import (
     run_copy_and_move_workbench,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
     resolve_context_access,
@@ -23,7 +23,7 @@ from memcommit.application.operations.copy.application import prepare_copy
 from memcommit.application.operations.copy.runtime import MemoryStoreCopyPort
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.core.context import Context
-from memcommit.application.capabilities.authority.granted_context_navigation import (
+from memcommit.application.context_access.granted_context_navigation import (
     freeze_granted_context_navigation,
 )
 from memcommit.adapters.console.terminal.components.context_picker import context_memory_rows

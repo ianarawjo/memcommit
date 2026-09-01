@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Iterable
 import uuid
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
     freeze_granted_context_binding,

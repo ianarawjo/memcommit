@@ -122,6 +122,84 @@ def test_new_endpoint_value_cannot_retain_existing_scope_state():
         EndpointSetupValue("C", "new/result", include_descendants=True, create=True)
 
 
+def test_endpoint_value_reports_each_explicit_source_type():
+    assert EndpointSetupValue("A", "source").source_type == "CONTEXT"
+    assert (
+        EndpointSetupValue("A", "source", memory_uid="memory-uid").source_type
+        == "STORED_MEMORY"
+    )
+    assert (
+        EndpointSetupValue(
+            "A", "", inline_memory_content="one exact sentence"
+        ).source_type
+        == "INLINE_MEMORY"
+    )
+
+
+def test_inline_endpoint_value_cannot_retain_context_scope():
+    with pytest.raises(ValueError, match="cannot retain Context range"):
+        EndpointSetupValue(
+            "A",
+            "source",
+            inline_memory_content="one exact sentence",
+        )
+
+
+def test_three_way_source_type_requires_stored_memory_focus():
+    with pytest.raises(ValueError, match="with stored-Memory focus"):
+        EndpointSetupRole(
+            "A",
+            "A · SOURCE",
+            ("source",),
+            frozenset({"source"}),
+            "source",
+            allow_inline_memory=True,
+        )
+
+
+def test_inline_source_type_can_be_gated_by_operation_mode():
+    names = ("source", "target")
+    spec = EndpointSetupSpec(
+        title="DIRECTIONAL SOURCE TYPES",
+        subtitle="SETUP ONLY",
+        modes=(
+            EndpointSetupMode(
+                "SYMMETRIC",
+                "SYMMETRIC",
+                inline_memory_role_uids=frozenset(),
+            ),
+            EndpointSetupMode(
+                "DIRECTIONAL",
+                "DIRECTIONAL",
+                inline_memory_role_uids=frozenset({"A"}),
+            ),
+        ),
+        initial_mode_uid="SYMMETRIC",
+        roles=(
+            EndpointSetupRole(
+                "A",
+                "A · SOURCE",
+                names,
+                frozenset(names),
+                "source",
+                allow_memory_focus=True,
+                allow_inline_memory=True,
+            ),
+            EndpointSetupRole(
+                "B",
+                "B · TARGET",
+                names,
+                frozenset(names),
+                "target",
+            ),
+        ),
+        screen_layout="COMPACT_FORM",
+    )
+
+    assert spec.role_allows_inline_memory("SYMMETRIC", "A") is False
+    assert spec.role_allows_inline_memory("DIRECTIONAL", "A") is True
+
+
 def test_shared_setup_omits_inactive_result_role_from_directional_draft():
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\x1b[C" + "\t" * 7 + "\r")

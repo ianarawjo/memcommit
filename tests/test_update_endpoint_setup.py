@@ -14,7 +14,9 @@ import memcommit.adapters.console.commands.update.endpoint_setup as update_setup
 import memcommit.adapters.console.commands.update.command as update_command
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.terminal.components.endpoint_setup import EndpointSetupMemory
+from memcommit.adapters.console.terminal.components.endpoint_setup import (
+    EndpointSetupMemory,
+)
 from memcommit.adapters.console.commands.update.workbench import (
     UpdateEndpointSelection,
     UpdateEndpointSetup,
@@ -66,6 +68,8 @@ def test_update_setup_projects_two_independent_shared_endpoint_roles() -> None:
     assert tuple(role.uid for role in spec.roles) == ("A", "B")
     assert all(role.allow_descendants for role in spec.roles)
     assert all(role.allow_memory_focus for role in spec.roles)
+    assert spec.roles[0].allow_inline_memory is True
+    assert spec.roles[1].allow_inline_memory is False
     assert spec.roles[0].selected_name == "source"
     assert spec.roles[1].selected_name == "target"
 
@@ -95,10 +99,10 @@ def test_update_cli_exposes_common_and_role_specific_scope_controls() -> None:
 @pytest.mark.parametrize(
     ("keys", "source_descendants", "target_descendants"),
     (
-        ("\x1b[B\x1b[B\r", False, False),
-        ("\t\t \x1b[B\x1b[B\r", True, False),
-        ("\x1b[B\t\t \x1b[B\r", False, True),
-        ("\t\t \x1b[B\t\t \x1b[B\r", True, True),
+        ("\x1b[B" * 3 + "\r", False, False),
+        ("\t\t\t \x1b[B\x1b[B\r", True, False),
+        ("\x1b[B\x1b[B\t\t \x1b[B\r", False, True),
+        ("\t\t\t \x1b[B\t\t \x1b[B\r", True, True),
     ),
 )
 def test_update_setup_returns_all_independent_range_combinations(
@@ -124,14 +128,15 @@ def test_update_setup_returns_all_independent_range_combinations(
     )
 
 
-def test_update_setup_runs_the_visible_command_and_reprojects_every_upper_field() -> None:
+def test_update_setup_runs_the_visible_command_and_reprojects_every_upper_field() -> (
+    None
+):
     with create_pipe_input() as pipe_input:
         # A -> B -> editable command through the compact vertical row topology.
         # The fixed ``mem update`` prefix remains chrome; replace every
         # argument and approve the exact visible buffer.
         pipe_input.send_text(
-            "\x1b[B" * 2
-            + "\x15--from target --to source --source-descendants\r"
+            "\x1b[B" * 3 + "\x15--from target --to source --source-descendants\r"
         )
         selected = choose_update_endpoint_setup(
             _setup(),
@@ -150,10 +155,7 @@ def test_update_setup_runs_the_visible_command_and_reprojects_every_upper_field(
 
 def test_update_setup_can_focus_one_exact_memory_per_side() -> None:
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text(
-            "\t\t\t\r\x1b[B\r\x1b[B"
-            "\t\t\t\r\x1b[B\r\x1b[B\r"
-        )
+        pipe_input.send_text("\x1b[C\t\t\t\r\r\x1b[B\t\t\t\r\x1b[B\r\x1b[B\r")
         selected = choose_update_endpoint_setup(
             _setup(),
             memory_loader=_load,
@@ -172,7 +174,7 @@ def test_update_setup_can_focus_one_exact_memory_per_side() -> None:
 
 def test_update_setup_keeps_source_memory_and_target_descendants_independent() -> None:
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\t\t\t\r\x1b[B\r\x1b[B\t\t \x1b[B\r")
+        pipe_input.send_text("\x1b[C\t\t\t\r\r\x1b[B\t\t \x1b[B\r")
         selected = choose_update_endpoint_setup(
             _setup(),
             memory_loader=_load,
@@ -186,6 +188,67 @@ def test_update_setup_keeps_source_memory_and_target_descendants_independent() -
         "target",
         target_descendants=True,
         source_memory_uid=SOURCE_UID,
+    )
+
+
+def test_update_setup_accepts_one_explicit_inline_memory_source() -> None:
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\x1b[C\x1b[C\t나는 자연인이다\x1b[B\x1b[B\r")
+        selected = choose_update_endpoint_setup(
+            _setup(),
+            memory_loader=_load,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == UpdateEndpointSelection(
+        None,
+        "target",
+        inline_source_content="나는 자연인이다",
+    )
+
+
+def test_update_setup_reprojects_an_edited_inline_memory_command() -> None:
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(
+            "\x1b[B" * 3 + "\x15--memory 'one exact sentence' --to target\r"
+        )
+        selected = choose_update_endpoint_setup(
+            _setup(),
+            memory_loader=_load,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == UpdateEndpointSelection(
+        None,
+        "target",
+        inline_source_content="one exact sentence",
+    )
+
+
+def test_update_setup_reprojects_edited_stored_memories_to_both_upper_rows() -> None:
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text(
+            "\x1b[B" * 3
+            + "\x15--from target --to source "
+            + f"--source-memory {TARGET_UID} --target-memory {SOURCE_UID}\r"
+        )
+        selected = choose_update_endpoint_setup(
+            _setup(),
+            memory_loader=_load,
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+
+    assert selected == UpdateEndpointSelection(
+        "target",
+        "source",
+        source_memory_uid=TARGET_UID,
+        target_memory_uid=SOURCE_UID,
     )
 
 
@@ -248,10 +311,7 @@ def test_update_command_composition_preserves_a_frozen_readable_catalog(
     )
 
     with create_pipe_input() as pipe_input:
-        pipe_input.send_text(
-            "\t\t\t\r\x1b[B\r\x1b[B"
-            "\t\t\t\r\x1b[B\r\x1b[B\r"
-        )
+        pipe_input.send_text("\x1b[C\t\t\t\r\r\x1b[B\t\t\t\r\x1b[B\r\x1b[B\r")
         receipt = update_setup_command.choose_update_setup(
             Store(),  # type: ignore[arg-type]
             app_input=pipe_input,

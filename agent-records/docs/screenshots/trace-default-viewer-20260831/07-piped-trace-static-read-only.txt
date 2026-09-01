@@ -1,0 +1,25 @@
+LIVE COLOR PTY · 52 180                                                                                                                                                             
+PROFILE · ISOLATED CAPTURE · CURRENT · practice/rules                                                                                                                               
+                                                                                                                                                                                    
+$ /Users/KimMunyeong/.local/bin/mem trace 2f629230-6a7e-46f9-bafb-69400c60c70f --context practice/rules --limit 3 | sed -n 1,24p                                                    
+TRACE · practice/rules                                                                                                                                                              
+[MEMORY 2f629230] · 15 OPERATIONS · LATEST FIRST · SHOWING 3 OF 15                                                                                                                  
+                                                                                                                                                                                    
+[edit] [CHECKPOINT b180d04b] [MEMORY 2f629230]  2026-08-31 06:11                                                                                                                    
+  − [2f629230]@1 Trace subject version 13 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                         
+  + [2f629230]@1 Trace subject version 14 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                         
+                                                                                                                                                                                    
+[edit] [CHECKPOINT 53c9ed9e] [MEMORY 2f629230]  2026-08-31 06:11                                                                                                                    
+  − [2f629230]@1 Trace subject version 12 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                         
+  + [2f629230]@1 Trace subject version 13 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                         
+                                                                                                                                                                                    
+[edit] [CHECKPOINT 80414860] [MEMORY 2f629230]  2026-08-31 06:11                                                                                                                    
+  − [2f629230]@1 Trace subject version 11 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                         
+  + [2f629230]@1 Trace subject version 12 keeps one deliberately long sentence for wrapped Viewer evidence.                                                                         
+                                                                                                                                                                                    
+… 12 OLDER OPERATIONS HIDDEN · use --all or --limit N                                                                                                                               
+                                                                                                                                                                                    
+ATTACHMENTS                                                                                                                                                                         
+  none                                                                                                                                                                              
+                                                                                                                                                                                    
+PIPED TRACE VERIFIED · EXIT 0 · STORE DIGEST UNCHANGED

@@ -156,6 +156,24 @@ def test_explicit_subtree_branch_clones_hierarchy_and_internal_pointers(
     assert restored_reference.target_memory_uid == branch_child_memory.uid
 
 
+def test_branch_from_accepts_existing_context_uid(isolated_store):
+    store = MemoryStore()
+    source = ops.init("source")
+    ops.add(source, "source fact")
+    store.create_context(source, _checkpoint("source"))
+    store.create_context(ops.init("current"), _checkpoint("current"))
+    store.set_current("current")
+
+    result = runner.invoke(
+        app,
+        ["branch", "experiment", "--from", source.uid[:8]],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert "Branched 'source' → 'experiment'" in result.output
+    assert store.load_direct("experiment").uid != source.uid
+
+
 def test_recursive_branch_undo_cancels_the_complete_created_tree_and_redo_restores_it(
     isolated_store,
 ):

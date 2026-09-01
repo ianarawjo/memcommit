@@ -5,15 +5,17 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.context_access import (
-    ContextAccess,
+from memcommit.application.authorization.context_operation import (
     authorized_context_mutation,
+)
+from memcommit.application.context_access.access import (
+    ContextAccess,
     freeze_granted_context_binding,
     grant_checkpoint_args,
     revalidate_granted_context_binding,
     resolve_context_access,
 )
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     ReadableContextCatalog,
 )
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (

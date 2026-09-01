@@ -5,11 +5,15 @@ from __future__ import annotations
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.authority.context_access import (
-    ContextAccess,
+from memcommit.application.authorization.context_operation import (
     authorized_context_mutation,
+)
+from memcommit.application.context_access.access import (
+    ContextAccess,
     grant_checkpoint_args,
-    resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
 )
 from memcommit.core.context import AutoCheckpoint, Context
 from memcommit.application.operations.forget.application import (
@@ -140,12 +144,12 @@ class MemoryStoreForgetSourcePort(ForgetSourcePort):
                     "One Forget runtime cannot freeze two different Sources."
                 )
             return self._frozen_source
-        access = resolve_context_access(
+        access = resolve_existing_context_access(
             self.store,
             request.source_locator,
             current_name=self.current_name,
             required_permission="READ",
-        )
+        ).value
         context = access.store.load_direct(access.context_name)
         source = FrozenForgetSource(
             context=context,

@@ -38,9 +38,7 @@ from memcommit.application.operations.sever.session_store import SeverSessionSto
 from memcommit.persistence.store import MemoryStore
 
 
-GRANT_PERMISSIONS = (
-    "READ",
-)
+GRANT_PERMISSIONS = ("READ",)
 
 
 def _granted_review(
@@ -170,7 +168,7 @@ def test_granted_source_self_save_fails_at_input_boundary(
 
     with pytest.raises(
         SeverApplicationError,
-        match="Self-save requires an ordinary local Source",
+        match="In-place Sever requires an ordinary local Source",
     ):
         MemoryStoreSeverInputPort.capture(active).freeze(
             SeverAnalysisRequest(

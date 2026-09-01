@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import hashlib
 
-from memcommit.application.capabilities.context_locator import resolve_context_locator
+from memcommit.application.capabilities.operand_resolution import (
+    resolve_existing_local_context_operand,
+)
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
@@ -71,19 +73,21 @@ def _memory_import_plan(
     )
 
 
-def _memory_target_name(
+def _memory_target_identity(
     destination: MemoryStore,
     target_context_locator: str | None,
-) -> str:
+) -> tuple[str, str]:
     destination_current = destination.current_context_name()
     if target_context_locator is None:
         if not destination_current:
             raise RuntimeError("No current Context; pass --into TARGET.")
-        return destination_current
-    return resolve_context_locator(
+        target_context_locator = destination_current
+    resolved = resolve_existing_local_context_operand(
+        destination,
         target_context_locator,
         current=destination_current,
     )
+    return resolved.name, resolved.uid
 
 
 def plan_memory_import(
@@ -96,7 +100,10 @@ def plan_memory_import(
     """Validate and freeze one read-only direct Memory import preview."""
 
     destination = MemoryStore()
-    target_name = _memory_target_name(destination, target_context_locator)
+    target_name, target_uid = _memory_target_identity(
+        destination,
+        target_context_locator,
+    )
     with authority_grant_snapshot_lock() as registry:
         require_active_profile_snapshot(registry, destination)
         source = source_profile(registry, source_profile_name)
@@ -105,15 +112,26 @@ def plan_memory_import(
             root=profile_store_dir(source),
             create=False,
         )
-        source_name = resolve_context_locator(
+        source_current = source_store.current_context_name()
+        resolved_source = resolve_existing_local_context_operand(
+            source_store,
             source_context_locator,
-            current=source_store.current_context_name(),
+            current=source_current,
         )
+        source_name = resolved_source.name
         with source_store._context_graph_lock(exclusive=False):
             with source_store._context_write_lock(source_name):
                 source_context = source_store.load_direct(source_name)
+                if source_context.uid != resolved_source.uid:
+                    raise ProfileError(
+                        "Memory import Source changed identity during resolution."
+                    )
                 source_memory = _direct_memory(source_context, memory_selector)
                 target = destination.load_for_update(target_name)
+                if target.uid != target_uid:
+                    raise ProfileError(
+                        "Memory import Target changed identity during resolution."
+                    )
                 if source_memory.uid in target.memories:
                     raise ProfileError(
                         f"Memory identity [{source_memory.uid[:8]}] already exists "
@@ -139,7 +157,10 @@ def import_memory_from_profile(
     """Import one directly owned Memory into an existing active Context."""
 
     destination = MemoryStore()
-    target_name = _memory_target_name(destination, target_context_locator)
+    target_name, target_uid = _memory_target_identity(
+        destination,
+        target_context_locator,
+    )
 
     with authority_grant_snapshot_lock() as registry:
         require_active_profile_snapshot(registry, destination)
@@ -149,15 +170,26 @@ def import_memory_from_profile(
             root=profile_store_dir(source),
             create=False,
         )
-        source_name = resolve_context_locator(
+        source_current = source_store.current_context_name()
+        resolved_source = resolve_existing_local_context_operand(
+            source_store,
             source_context_locator,
-            current=source_store.current_context_name(),
+            current=source_current,
         )
+        source_name = resolved_source.name
         with source_store._context_graph_lock(exclusive=False):
             with source_store._context_write_lock(source_name):
                 source_context = source_store.load_direct(source_name)
+                if source_context.uid != resolved_source.uid:
+                    raise ProfileError(
+                        "Memory import Source changed identity during resolution."
+                    )
                 source_memory = _direct_memory(source_context, memory_selector)
                 target = destination.load_for_update(target_name)
+                if target.uid != target_uid:
+                    raise ProfileError(
+                        "Memory import Target changed identity during resolution."
+                    )
                 if source_memory.uid in target.memories:
                     raise ProfileError(
                         f"Memory identity [{source_memory.uid[:8]}] already exists "

@@ -32,7 +32,7 @@ from memcommit.application.operations.delete.runtime import MemoryStoreDeletePor
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import ConcurrentContextUpdateError
-from memcommit.application.capabilities.authority.write_protection import WriteProtectionError
+from memcommit.persistence.store.infrastructure.write_protection import WriteProtectionError
 
 
 def _item(item) -> DeletedDirectItemResult:

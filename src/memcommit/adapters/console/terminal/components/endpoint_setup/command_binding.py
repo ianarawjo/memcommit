@@ -34,7 +34,9 @@ class EndpointCommandBinding:
         if not isinstance(self.form, CommandForm):
             raise TypeError("Endpoint command binding requires a CommandForm.")
         if not callable(self.review) or not callable(self.parse):
-            raise TypeError("Endpoint command binding requires review and parse callbacks.")
+            raise TypeError(
+                "Endpoint command binding requires review and parse callbacks."
+            )
 
     def decode(
         self,
@@ -101,15 +103,34 @@ def normalize_endpoint_command_draft(
         if not isinstance(value, EndpointSetupValue):
             raise TypeError("Endpoint command returned an invalid endpoint value.")
         role = role_by_uid[value.role_uid]
+        if value.inline_memory_content is not None:
+            if not spec.role_allows_inline_memory(draft.mode_uid, value.role_uid):
+                raise ValueError(
+                    f"{role.label} does not allow inline Memory input in this mode."
+                )
+            normalized.append(
+                EndpointSetupValue(
+                    value.role_uid,
+                    "",
+                    inline_memory_content=value.inline_memory_content,
+                )
+            )
+            continue
         context_name, create = _resolve_role_name(role, value.context_name)
         if value.include_descendants and not spec.role_allows_descendants(
             draft.mode_uid, value.role_uid
         ):
-            raise ValueError(f"{role.label} does not allow descendant reach in this mode.")
+            raise ValueError(
+                f"{role.label} does not allow descendant reach in this mode."
+            )
         if value.memory_uid is not None and not spec.role_allows_memory_focus(
             draft.mode_uid, value.role_uid
         ):
-            raise ValueError(f"{role.label} does not allow direct Memory focus in this mode.")
+            raise ValueError(
+                f"{role.label} does not allow direct Memory focus in this mode."
+            )
+        if role.memory_required and value.memory_uid is None:
+            raise ValueError(f"{role.label} requires one exact Memory.")
         normalized.append(
             EndpointSetupValue(
                 value.role_uid,
@@ -117,6 +138,7 @@ def normalize_endpoint_command_draft(
                 include_descendants=value.include_descendants,
                 memory_uid=value.memory_uid,
                 create=create,
+                inline_memory_content=None,
             )
         )
     result = EndpointSetupDraft(draft.mode_uid, tuple(normalized))

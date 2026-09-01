@@ -19,7 +19,7 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.rep
     comparison_analyses_dir,
     load_comparison_analysis,
 )
-from memcommit.application.capabilities.authority.context_access import ContextAccess
+from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.granted_repository import (
     granted_artifact_contexts,
     iter_granted_comparison_artifacts,

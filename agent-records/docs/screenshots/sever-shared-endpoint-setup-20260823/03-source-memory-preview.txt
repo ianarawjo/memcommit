@@ -1,16 +1,17 @@
 $ mem sever                                                                                                                                                                         
 PTY · 180 COLUMNS × 52 ROWS                                                                                                                                                         
- NEW SEVER · SOURCE × CRITERIA → RESULT · CHOOSE TWO READABLE INPUTS AND ONE LOCAL SAVE LOCATION                                                                                    
-› SOURCE · ALL READABLE CONTEXTS       › capture/reference                       [ BROWSE ] CURRENT                           [   INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
-  CRITERIA · ALL READABLE CONTEXTS     › capture/criteria                        [ BROWSE ]                                   [ ✓ INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
-  RESULT · SOURCE OR NEW LOCAL CONTEXT › severed                                 [ BROWSE ] NEW · CREATE ON START                                                                   
- COMMAND · RUNNABLE · ENTER TO START                                                                                                                                                
- mem sever capture/reference capture/criteria severed --criteria-descendants                                                                                                        
-  MEMORY · SOURCE · ALL READABLE CONTEXTS · capture/reference                                                                                                                      ^
+ NEW SEVER · SOURCE × CRITERIA · IN PLACE · CHOOSE SOURCE AND CRITERIA; EACH SOURCE CONTEXT STAYS IN PLACE                                                                          
+› SOURCE · LOCAL CONTEXTS · UPDATED IN PLACE › capture/reference                       [ BROWSE ] CURRENT                     [   INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
+  CRITERIA · ALL READABLE CONTEXTS           › capture/criteria                        [ BROWSE ]                             [ ✓ INCLUDE DESCENDANTS ]  [ MEMORY · READ ONLY ]     
+┌───────────────────────────────────────────────────────────────────────────────| PROPOSED COMMAND |───────────────────────────────────────────────────────────────────────────────┐
+│› mem sever capture/reference capture/criteria --criteria-descendants                                                                                                             │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                                                                                                                                                    
+  MEMORY · SOURCE · LOCAL CONTEXTS · UPDATED IN PLACE · capture/reference                                                                                                          ^
 ✓ WHOLE CONTEXT                                                                                                                                                                     
   Use every direct Memory in this exact Context.                                                                                                                                    
                                                                                                                                                                                     
-  MEMORY · 4e006972                                                                                                                                                                 
-  Reference policy is reviewed.                                                                                                                                                     
+  MEMORY · 6a08ff78                                                                                                                                                                 
+  I need a step-free entrance for appointments.                                                                                                                                     
                                                                                                                                                                                    v
  ↑/↓ Memory evidence (edge continues by row) · Enter keeps whole Context · ←/Esc close details

@@ -6,12 +6,12 @@ from dataclasses import replace
 from typing import Sequence
 
 from memcommit.core.context import Memory, MemoryRef, QueryContextRef
-from memcommit.application.operations.search.answer_references import (
-    SearchAnswerEvidence,
+from memcommit.application.operations.query.reference_document import (
+    OrdinaryQueryEvidence,
 )
-from memcommit.application.operations.search.model import (
-    SearchArtifact,
-    SearchCandidate,
+from memcommit.application.capabilities.retrieval_corpus.candidates import (
+    RetrievalArtifact,
+    RetrievalCandidate,
 )
 
 
@@ -20,9 +20,9 @@ class OrdinaryQueryEvidenceError(RuntimeError):
 
 
 def _candidate_to_evidence(
-    candidate: SearchCandidate,
+    candidate: RetrievalCandidate,
     alias: str,
-) -> SearchAnswerEvidence:
+) -> OrdinaryQueryEvidence:
     """Project one candidate without opening concealed query-only content."""
 
     item = candidate.item
@@ -39,14 +39,14 @@ def _candidate_to_evidence(
     elif isinstance(item, QueryContextRef):
         kind = "query"
         content = f"{item.name} (query-only)"
-    elif isinstance(item, SearchArtifact):
+    elif isinstance(item, RetrievalArtifact):
         kind = "artifact"
         content = f"{item.title}\n{item.content}"
-    else:  # pragma: no cover - SearchCandidate validates this union.
+    else:  # pragma: no cover - RetrievalCandidate validates this union.
         raise OrdinaryQueryEvidenceError(
             "Unsupported ordinary-Query evidence candidate."
         )
-    return SearchAnswerEvidence(
+    return OrdinaryQueryEvidence(
         alias=alias,
         context_name=candidate.context_name,
         kind=kind,
@@ -56,8 +56,8 @@ def _candidate_to_evidence(
 
 
 def visible_result_evidence(
-    candidates: Sequence[SearchCandidate],
-) -> tuple[SearchAnswerEvidence, ...]:
+    candidates: Sequence[RetrievalCandidate],
+) -> tuple[OrdinaryQueryEvidence, ...]:
     """Project the complete frozen Query corpus as stable ``mN`` evidence."""
 
     return tuple(
@@ -67,9 +67,9 @@ def visible_result_evidence(
 
 
 def compact_artifact_references(
-    evidence: Sequence[SearchAnswerEvidence],
-    candidates: Sequence[SearchCandidate],
-) -> tuple[SearchAnswerEvidence, ...]:
+    evidence: Sequence[OrdinaryQueryEvidence],
+    candidates: Sequence[RetrievalCandidate],
+) -> tuple[OrdinaryQueryEvidence, ...]:
     """Use artifact summaries in citations while retaining full answer input."""
 
     summaries = {
@@ -78,7 +78,7 @@ def compact_artifact_references(
             f"{candidate.item.summary.strip() or candidate.item.title}"
         )
         for candidate in candidates
-        if isinstance(candidate.item, SearchArtifact)
+        if isinstance(candidate.item, RetrievalArtifact)
     }
     return tuple(
         replace(
@@ -93,10 +93,10 @@ def compact_artifact_references(
 
 
 def compact_reference_content(
-    evidence: Sequence[SearchAnswerEvidence],
+    evidence: Sequence[OrdinaryQueryEvidence],
     *,
     limit: int = 600,
-) -> tuple[SearchAnswerEvidence, ...]:
+) -> tuple[OrdinaryQueryEvidence, ...]:
     """Bound Query citations without changing provider synthesis evidence."""
 
     if limit < 80:

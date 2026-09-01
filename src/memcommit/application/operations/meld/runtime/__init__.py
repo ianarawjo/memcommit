@@ -18,11 +18,15 @@ from .apply_transaction import (
     required_directional_target_permissions as required_directional_target_permissions,
     validate_owner_aware_grant_permissions as validate_owner_aware_grant_permissions,
 )
+from .candidate_resolution import (
+    MeldCandidateApplyReceipt,
+    execute_meld_candidate_proposal,
+)
+from .candidate_session import open_meld_candidate_session
 from .preparation import (
     MemoryStoreMeldRestartPort as MemoryStoreMeldRestartPort,
     MemoryStoreMeldStartPort,
     PreparedMeldExecution,
-    _start_relation_analysis as _start_relation_analysis,
     execute_meld_restart,
     execute_meld_start,
     prepare_meld_restart,
@@ -65,6 +69,7 @@ from .source_access import (
 __all__ = (
     "MELD_AGGREGATE_TIMEOUT_SECONDS",
     "MemoryStoreMeldApplyPort",
+    "MeldCandidateApplyReceipt",
     "MemoryStoreMeldAssessmentPort",
     "MemoryStoreMeldDestinationPort",
     "MemoryStoreMeldPreservationPort",
@@ -76,6 +81,7 @@ __all__ = (
     "assert_meld_source_bindings",
     "assert_unapplied_meld_target",
     "execute_meld_apply",
+    "execute_meld_candidate_proposal",
     "execute_meld_assessment",
     "execute_meld_destination_change",
     "execute_meld_initial_preservation",
@@ -89,6 +95,7 @@ __all__ = (
     "load_bound_meld_contexts",
     "load_local_meld_source",
     "load_meld_source",
+    "open_meld_candidate_session",
     "meld_bound_frame_digest",
     "prepare_meld_assessment",
     "prepare_meld_restart",

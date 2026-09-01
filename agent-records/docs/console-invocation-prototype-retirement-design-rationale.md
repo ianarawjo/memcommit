@@ -6,9 +6,10 @@ The console has no user-selectable `AUTO`, `PLAIN`, or `TUI` presentation
 mode. Remove `--plain` and `--tui` from operation commands, delete
 `memcommit.adapters.console.router`, and delete the composition-root runners
 whose only job was to select between line output and an operation screen.
-Terminal capability may still control color, wrapping, clipboard support, and
-whether an input editor can open; it must not select a different semantic flow
-for the same complete argv.
+Terminal capability may still control color, wrapping, clipboard support,
+whether an input editor can open, and whether one already-frozen read-only
+document is hosted in a bounded viewport. It must not select a different
+application result, target, or action flow for the same complete argv.
 
 This supersedes this record's earlier, narrower retirement of
 `adapters.interfaces.cli.invocation`. That prototype was unused, but the later
@@ -24,13 +25,17 @@ A command now derives its route from input completeness and operation meaning:
   editor only in an interactive terminal. A supplied Find pattern or complete
   Replace pair executes immediately and prints the same bounded result or
   receipt in every terminal.
-- Resolve, Summarize, Distill, Makemore, Fit, Log, Trace, and the internal
+- Resolve, Summarize, Distill, Makemore, Fit, Log, and the internal
   exact Dedun replay have one result route. Complete execution commands apply
   or return their operation receipt; read-only commands print their typed
   document. Impact and Review remain the explicit homes for non-applying
   analysis and retained post-application evidence.
-- Trace prints its bounded lineage document directly. The former compact
-  receipt-to-`--plain` indirection and `--tui` Viewer selection are removed.
+- Trace has one frozen typed result but two environment-owned hosts: an
+  interactive terminal contains Context and direct-local-Memory lineage in the
+  existing single read-only Viewer, while a pipe receives the same bounded
+  document directly. Reference and Grant-limited Trace variants remain static.
+  The former compact receipt-to-`--plain` indirection and user-selectable
+  `--tui` Viewer switch remain removed.
 - ANSI-free behavior comes from pipes, `NO_COLOR`, or terminal capability. A
   command flag no longer duplicates that environmental presentation concern.
 
@@ -42,11 +47,19 @@ future command forms appear to support a mode switch that no longer exists.
 ## Why this boundary
 
 The complete argv is the durable, scriptable expression of intent. Letting TTY
-state replace its result with a setup screen, pager, or Viewer made the same
-invocation require different keys and produce different output depending on
-where it ran. Conversely, missing required text genuinely needs an input
-surface and cannot execute outside a TTY. Input completeness is therefore the
-useful boundary; “plain versus TUI” is not.
+state replace its target, application result, or available actions with a setup
+screen made the same invocation mean different things depending on where it
+ran. Conversely, missing required text genuinely needs an input surface and
+cannot execute outside a TTY. Input completeness therefore remains the useful
+execution boundary; “plain versus TUI” is not a user-selectable mode.
+
+Trace exposes a narrower presentation exception. Its direct-local-Memory and
+Context Viewers add no target selection, Items surface, or action; they only
+bound the exact fragment document that otherwise floods terminal scrollback.
+The application request, operation bound, ordering, labels, and read-only
+effect are identical to the piped projection. This distinction corrects the
+earlier retirement's over-broad treatment of a read-only viewport as though it
+were an alternate semantic flow.
 
 Keeping operation-owned editors and reusable Viewer/workbench components is
 intentional. Those components remain available to bare input flows, Impact,

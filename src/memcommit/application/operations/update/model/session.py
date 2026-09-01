@@ -31,6 +31,7 @@ from .inputs import (
     collect_update_inputs,
     inline_update_context,
 )
+from .plan import UpdatePlan
 from .receipts import ContextFingerprint, UpdateApplicationReceipt
 
 
@@ -64,6 +65,22 @@ class UpdateSession:
     granted_target: GrantedContextBinding | None = None
     goal_focus: FrozenGoalFocus | None = None
     application: UpdateApplicationReceipt | None = None
+
+    @property
+    def plan(self) -> UpdatePlan:
+        """Project the session's exact operations into the reusable Apply value.
+
+        Session metadata belongs to the direct ``mem update`` review lifecycle.
+        Other operations consume only this target-bound plan, so they cannot
+        accidentally inherit Update's saved-session or publication semantics.
+        """
+
+        return UpdatePlan(
+            uid=self.uid,
+            target_uid=self.target_uid,
+            target_name=self.target_name,
+            operations=self.operations,
+        )
 
     def with_status(self, status: UpdateStatus) -> UpdateSession:
         if status not in {"impact", "staged"}:

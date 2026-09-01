@@ -5,11 +5,19 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import memcommit.application.capabilities.ops as ops
-from memcommit.application.capabilities.authority.context_access import (
-    ContextAccess,
+from memcommit.application.authorization.context_operation import (
     authorized_context_mutation,
+)
+from memcommit.application.context_access.access import (
+    ContextAccess,
     grant_checkpoint_args,
-    resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
+)
+from memcommit.application.capabilities.operand_resolution import (
+    freeze_local_context_operand_candidates,
+    resolve_existing_context_operand,
 )
 from memcommit.core.context import (
     AutoCheckpoint,
@@ -162,12 +170,12 @@ class MemoryStoreDeletePort(DeletePort):
                 else:
                     return self.freeze_local_item_target(target)
 
-        access = resolve_context_access(
+        access = resolve_existing_context_access(
             self._store,
             request.context_locator,
             current_name=self._current_name,
             required_permission="DELETE",
-        )
+        ).value
         context = access.store.load_direct(access.context_name)
         item = ops.resolve(context, request.selector)
         return FrozenDirectItemDeleteTarget(
@@ -243,12 +251,11 @@ class MemoryStoreDeletePort(DeletePort):
         self,
         request: ContextDeleteRequest,
     ) -> FrozenContextDeletePlan:
-        canonical = resolve_context_locator(
+        canonical = resolve_existing_context_operand(
+            freeze_local_context_operand_candidates(self._store),
             request.context_locator,
             current=self._current_name,
-        )
-        if not self._store.context_exists(canonical):
-            raise FileNotFoundError(f"Context '{canonical}' not found.")
+        ).name
         context = self._store.load_direct(canonical)
         digest = context_record_digest(context)
         return FrozenContextDeletePlan(

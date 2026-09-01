@@ -1,0 +1,10 @@
+                                                                                                                                                                                    
+$ mem diff coffee --stat                                                                                                                                                            
+UNIT        CHECKPOINT · THIS CHECKPOINT VS PREVIOUS                                                                                                                                
+CHECKPOINT  64a69449-ec4a-4f2d-81ad-90cc160d83fd                                                                                                                                    
+CONTEXT     coffee                                                                                                                                                                  
+ACTION      update                                                                                                                                                                  
+DESCRIPTION Merged four complementary coffee preferences.                                                                                                                           
+RESULT      7 DIRECT ITEMS                                                                                                                                                          
+SUMMARY     3 kept · 0 added · 4 edited · 0 removed                                                                                                                                 
+READ-ONLY VERIFIED · STORE BYTES UNCHANGED · CURRENT coffee

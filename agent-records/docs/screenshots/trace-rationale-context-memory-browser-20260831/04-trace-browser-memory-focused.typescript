@@ -1,0 +1,113 @@
+[32mInitialized context 'empty'.[0m
+[32mInitialized context 'notes'.[0m
+[32mAdded [8ae41b4e] Initial policy wording retained for provenance.[0m
+[32m[1mEdited [8ae41b4e] in 'notes':[0m
+[31m  - Initial policy wording retained for provenance.[0m
+[32m  + Final policy wording selected for exact Memory history.[0m
+[32mAdded [d3cba7b2] A supporting Memory keeps the whole Context report visibly distinct.[0m
+[32mInitialized context 'notes/child'.[0m
+[32mAdded [a551a673] A child Memory is browseable without broadening the selected parent.[0m
+[32mSwitched to context 'notes'.[0m
+LIVE COLOR PTY · 180x52
+PROFILE · ISOLATED CAPTURE · CURRENT · notes
+$ mem trace
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m TRACE · SELECT A CONTEXT OR MEMORY · notes[0m
+[0m Roots · notes[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0;1;7m› * ▾ notes[168C[0;1m^[0m
+[0;38;5;189m  · [8ae41b4e] [r2] Final policy wording selected for exact Memory history.[104C[0;48;5;238m [0m
+[0;38;5;189m  · [d3cba7b2] [r1] A supporting Memory keeps the whole Context report visibly distinct.[91C[0;48;5;238m [0m
+[0m      ▾ notes/child[160C[0;48;5;238m [0m
+[0;38;5;189m    · [a551a673] [r1] A child Memory is browseable without broadening the selected parent.[89C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: hide items  y copy Context  Y copy visible branch  Enter trace  q cancel · 1/5 · 2 selectable[174D[48A[0m[?25l[0m› * ▾ notes[0m
+[0;1;7m  › [8ae41b4e] [r2] Final policy wording selected for exact Memory history.[0m
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[94C[0m/Y copy i[2Cm [CEnter trace Memory  q cancel · 2/5 ·[C2[Cselectable[0m[K[47A[157D[0m

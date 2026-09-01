@@ -11,16 +11,12 @@ from typer.testing import CliRunner
 import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.search.command as find_command
 import memcommit.adapters.console.commands.query.command as query_command
-import memcommit.adapters.console.commands.rationale.command as rationale_command
 from memcommit.adapters.python_api import MemCommitClient, ShowContextResult
 from memcommit.adapters.console.entrypoint import app
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     resolve_context_access,
 )
-from memcommit.adapters.console.terminal.components.memory_report_picker import (
-    MemoryReportTargetSelection,
-)
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.core.context import Memory
@@ -422,39 +418,21 @@ def test_profile_target_workbenches_keep_all_readable_names_from_a_grant(
     }
 
 
-def test_explicit_granted_rationale_picker_keeps_readable_descendants(
+def test_explicit_granted_rationale_context_is_an_exact_hidden_history_report(
     isolated_store,
     tmp_path,
     monkeypatch,
 ):
-    _authority, editable, _campus_grant, _details_grant = _grant_fixture(
+    _authority, _editable, _campus_grant, _details_grant = _grant_fixture(
         isolated_store,
         tmp_path,
         monkeypatch,
     )
-    observed: dict[str, object] = {}
-
-    def select_memory(items, *, context_name, catalog_context_names, **kwargs):
-        observed["scope"] = tuple(catalog_context_names)
-        assert any(item.uid == editable.uid for item in items)
-        return MemoryReportTargetSelection(
-            root_context_name=context_name,
-            owner_context_name="campus-wiki",
-            memory_uid=editable.uid,
-            include_descendants=False,
-        )
-
-    monkeypatch.setattr(rationale_command, "interactive_report_terminal", lambda: True)
-    monkeypatch.setattr(
-        rationale_command,
-        "choose_memory_report_target",
-        select_memory,
-    )
     result = runner.invoke(app, ["rationale", "--context", "campus-wiki"])
 
     assert result.exit_code == 0, result.output + result.stderr
-    assert observed["scope"] == ("campus-wiki", "campus-wiki/public")
-    assert "PROVENANCE — hidden by Grant" in result.output
+    assert "Rationale · campus-wiki" in result.output
+    assert "RATIONALE — hidden by Grant" in result.output
     assert "APPARENT PURPOSE" not in result.output
     assert MemoryStore().current_context_name() == "task-root"
 
@@ -518,6 +496,44 @@ def test_granted_read_shows_current_trace_route_but_never_opens_history(
     assert updated_content in trace.output
     assert log_memory.exit_code == 1
     assert "READ does not expose authority checkpoint" in log_memory.stderr
+
+
+def test_granted_context_uid_round_trips_before_existing_grant_checks(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    authority_store, _editable, _campus_grant, _details_grant = _grant_fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    granted = authority_store.load_direct("campus-wiki")
+    selector = granted.uid[:8]
+
+    listed = runner.invoke(app, ["list", selector])
+    shown = runner.invoke(app, ["show", "--context", selector])
+    added = runner.invoke(
+        app,
+        ["add", "Created through a granted Context UID.", "--context", selector],
+    )
+    traced = runner.invoke(app, ["trace", selector])
+    rationale = runner.invoke(app, ["rationale", selector])
+    merged = runner.invoke(app, ["merge", selector])
+    diffed = runner.invoke(app, ["diff", selector])
+
+    assert listed.exit_code == 0, listed.output + listed.stderr
+    assert shown.exit_code == 0, shown.output + shown.stderr
+    assert added.exit_code == 0, added.output + added.stderr
+    assert traced.exit_code == 1
+    assert "granted READ view" in traced.stderr
+    assert "does not expose authority checkpoint" in traced.stderr
+    assert rationale.exit_code == 0, rationale.output + rationale.stderr
+    assert merged.exit_code == 0, merged.output + merged.stderr
+    assert "RATIONALE — hidden by Grant" in rationale.output
+    assert diffed.exit_code == 1
+    assert "neither an existing Context nor" not in diffed.stderr
+    assert "checkpoint" in diffed.stderr.lower()
 
 
 @pytest.mark.parametrize("operation", ("show", "trace", "rationale"))
@@ -709,3 +725,32 @@ def test_profile_grant_cli_creates_and_updates_frozen_permission_record(
     assert listed.exit_code == 0, listed.output
     assert "read,delete" in listed.output
     assert "task-1-campus-authority:campus-wiki" in listed.output
+
+
+def test_grant_existing_context_roles_accept_context_uids(
+    isolated_store,
+    tmp_path,
+    monkeypatch,
+):
+    authority_store, _editable, _campus_grant, _details_grant = _grant_fixture(
+        isolated_store,
+        tmp_path,
+        monkeypatch,
+    )
+    source = ops.init("uid-grant-resource")
+    authority_store.save(source)
+    attachment = MemoryStore().load_direct("task-root")
+
+    _registry, grant = create_authority_grant(
+        authority_name="task-1-campus-authority",
+        grantee_name=AUTHORING_PROFILE_NAME,
+        resource_name=source.uid[:8],
+        attachment_name=attachment.uid[:8],
+        public_name="uid-granted-view",
+        permissions=("READ",),
+    )
+
+    assert grant.resource_name == source.name
+    assert grant.resource_uid == source.uid
+    assert grant.attachment_context_name == attachment.name
+    assert grant.attachment_context_uid == attachment.uid

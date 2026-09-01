@@ -1,0 +1,72 @@
+[32mInitialized context 'empty'.[0m
+[32mInitialized context 'notes'.[0m
+[32mAdded [5550f590] Initial policy wording retained for provenance.[0m
+[32m[1mEdited [5550f590] in 'notes':[0m
+[31m  - Initial policy wording retained for provenance.[0m
+[32m  + Final policy wording selected for exact Memory history.[0m
+[32mAdded [11e5fd64] A supporting Memory keeps the whole Context report visibly distinct.[0m
+[32mInitialized context 'notes/child'.[0m
+[32mAdded [22aabe19] A child Memory is browseable without broadening the selected parent.[0m
+[32mSwitched to context 'notes'.[0m
+LIVE COLOR PTY · 180x52
+PROFILE · ISOLATED CAPTURE · CURRENT · notes
+$ mem rationale
+[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0m RATIONALE · SELECT A CONTEXT OR MEMORY · notes[0m
+[0m Roots · notes[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0;1;7m› * ▾ notes[168C[0;1m^[0m
+[0;38;5;189m  · [5550f590] [r2] Final policy wording selected for exact Memory history.[104C[0;48;5;238m [0m
+[0;38;5;189m  · [11e5fd64] [r1] A supporting Memory keeps the whole Context report visibly distinct.[91C[0;48;5;238m [0m
+[0m      ▾ notes/child[160C[0;48;5;238m [0m
+[0;38;5;189m    · [22aabe19] [r1] A child Memory is browseable without broadening the selected parent.[89C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[179C[0;48;5;238m [0m
+[0m                                                                                                                                                                                   [179C[0;1mv[0m
+[0m───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C─[0m
+[0m ↑↓ move  ←→ expand  A expand all  m THIS Context: hide items · M EVERY Context: hide items  y copy Context  Y copy visible branch  Enter explain  q cancel · 1/5 · 2 selectable[176D[48A[0m[3A[J[0m[?7h[?1049l[?2004lMEM RATIONALE · 1/2 · CONNECTING PROVIDER . · 0sMEM RATIONALE · 2/2 · WRITING CONTEXT RATIONALE . · 0s                                                      [1mRationale · notes[0m
+[1m
+CONTEXT[0m
+  2 direct Memories · 4 retained operations
+[1m
+RATIONALE[0m
+  Recorded Add and Edit operations explain how this exact Context reached its current direct state.
+READ-ONLY VERIFICATION · MODE RATIONALE-CONTEXT · TARGET [5550f590] · CURRENT notes · CONTEXTS + CHECKPOINTS + CURRENT POINTER UNCHANGED

@@ -6,7 +6,9 @@ from collections.abc import Sequence
 from typing import Protocol
 
 from memcommit.core.context import Context, Memory, MemoryRef
-from memcommit.application.operations.search.corpus import load_readable_search_roots
+from memcommit.application.capabilities.retrieval_corpus.loading import (
+    load_readable_corpus_roots,
+)
 from memcommit.application.operations.find.application import (
     FrozenFindSource,
     FindRequest,
@@ -102,7 +104,7 @@ class ReadableFindSourcePort(FindSourcePort):
         self._catalog = catalog
 
     def freeze(self, request: FindRequest) -> FrozenFindSource:
-        roots = load_readable_search_roots(
+        roots = load_readable_corpus_roots(
             self._catalog,
             request.target_names,
             include_descendants=request.include_descendants,

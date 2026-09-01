@@ -5,7 +5,7 @@ from __future__ import annotations
 from contextlib import ExitStack
 from datetime import datetime
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     GrantedReadStore,
 )

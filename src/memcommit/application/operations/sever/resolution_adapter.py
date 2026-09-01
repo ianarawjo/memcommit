@@ -19,7 +19,10 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionWorkbenchView,
 )
 from memcommit.application.capabilities.reviewing.result_workbench import ResultRef
-from memcommit.application.operations.sever.model import SeverSession, sever_record_digest
+from memcommit.application.operations.sever.model import (
+    SeverSession,
+    sever_record_digest,
+)
 
 
 _TREATMENT_DISPLAY_LABELS = {
@@ -94,7 +97,7 @@ def _excerpt(text: str, *, limit: int = 90) -> str:
 
 
 def _named_examples(memories, *, total: int) -> str:
-    shown = [f'“{_excerpt(memory.content)}”' for memory in memories]
+    shown = [f"“{_excerpt(memory.content)}”" for memory in memories]
     if not shown:
         return "none"
     remainder = total - len(shown)
@@ -108,8 +111,7 @@ def _report_items_summary(session: SeverSession) -> str:
         if _effective_treatment(candidate) != "KEEP_AS_WRITTEN"
     ]
     affected = [
-        session.source_memory(candidate.source_memory_uid)
-        for candidate in changed
+        session.source_memory(candidate.source_memory_uid) for candidate in changed
     ]
     criterion_counts = Counter(
         criterion_uid
@@ -118,13 +120,14 @@ def _report_items_summary(session: SeverSession) -> str:
     )
     criteria_by_uid = {memory.uid: memory for memory in session.criteria.memories}
     influential = [
-        criteria_by_uid[uid]
-        for uid, _count in criterion_counts.most_common(3)
+        criteria_by_uid[uid] for uid, _count in criterion_counts.most_common(3)
     ]
     semantic_summary = (
         session.applied_summary.text
         if session.applied_summary is not None
-        and all(candidate.selection == "RECOMMENDED" for candidate in session.candidates)
+        and all(
+            candidate.selection == "RECOMMENDED" for candidate in session.candidates
+        )
         else (
             "The current reviewed choices change or forget the Source Memories "
             "identified below."
@@ -153,7 +156,7 @@ def _report_items_summary(session: SeverSession) -> str:
         "Items; the complete per-Memory outcome appears once in the full result "
         f"view. "
         + (
-            "Self-save replaces the Source with that reviewed Result. "
+            "Each Source Context stays in place and receives its reviewed after-state. "
             if self_save
             else "Other-save creates a separate Result. "
         )
@@ -247,11 +250,15 @@ class SeverResolutionWorkbenchAdapter:
             selected_result = (
                 "(forgotten)"
                 if candidate.selection == "FORGET"
-                else candidate.custom_content
-                if candidate.selection == "CUSTOM"
-                else source.content
-                if candidate.selection == "AS_WRITTEN"
-                else candidate.proposed_content or "(forgotten)"
+                else (
+                    candidate.custom_content
+                    if candidate.selection == "CUSTOM"
+                    else (
+                        source.content
+                        if candidate.selection == "AS_WRITTEN"
+                        else candidate.proposed_content or "(forgotten)"
+                    )
+                )
             )
             title = " ".join(source.content.split())
             items.append(
@@ -345,9 +352,7 @@ class SeverResolutionWorkbenchAdapter:
         results = tuple(
             ResolutionResult(
                 uid=candidate.uid,
-                marker=(
-                    "−" if _effective_treatment(candidate) == "FORGET" else "+"
-                ),
+                marker=("−" if _effective_treatment(candidate) == "FORGET" else "+"),
                 label=_TREATMENT_DISPLAY_LABELS[_effective_treatment(candidate)],
                 text=(
                     (
@@ -356,15 +361,19 @@ class SeverResolutionWorkbenchAdapter:
                         else "Omitted from the new Result."
                     )
                     if candidate.selection == "FORGET"
-                    else candidate.custom_content
-                    if candidate.selection == "CUSTOM"
-                    else session.source_memory(candidate.source_memory_uid).content
-                    if candidate.selection == "AS_WRITTEN"
-                    else candidate.proposed_content
-                    or (
-                        "Removed from Source."
-                        if session.save_mode == "SELF_SAVE"
-                        else "Omitted from the new Result."
+                    else (
+                        candidate.custom_content
+                        if candidate.selection == "CUSTOM"
+                        else (
+                            session.source_memory(candidate.source_memory_uid).content
+                            if candidate.selection == "AS_WRITTEN"
+                            else candidate.proposed_content
+                            or (
+                                "Removed from Source."
+                                if session.save_mode == "SELF_SAVE"
+                                else "Omitted from the new Result."
+                            )
+                        )
                     )
                 ),
                 reason=candidate.rationale,
@@ -387,33 +396,37 @@ class SeverResolutionWorkbenchAdapter:
             title="MEM SEVER · LOCAL CONTENT REVIEW",
             route=(
                 f"SOURCE {session.source.root_name} × CRITERIA "
-                f"{session.criteria.root_name} → "
-                f"{'SELF-SAVE' if session.save_mode == 'SELF_SAVE' else 'OTHER-SAVE'} "
-                f"{session.output_name}"
+                f"{session.criteria.root_name} · IN PLACE"
+                if session.save_mode == "SELF_SAVE"
+                else f"SOURCE {session.source.root_name} × CRITERIA "
+                f"{session.criteria.root_name} → OTHER-SAVE {session.output_name}"
             ),
             status=session.state,
             metrics=(
-                ResolutionMetric(label="SOURCE", value=str(len(session.source.memories))),
+                ResolutionMetric(
+                    label="SOURCE", value=str(len(session.source.memories))
+                ),
                 ResolutionMetric(label="CRITERIA", value="1 Context"),
-                ResolutionMetric(label="RESULT", value=str(len(session.results()))),
+                ResolutionMetric(
+                    label="AFTER" if session.save_mode == "SELF_SAVE" else "RESULT",
+                    value=str(len(session.results())),
+                ),
             ),
             context_locations=(
-                ResolutionContextLocation("SOURCE", session.source.root_name),
-                ResolutionContextLocation("CRITERIA", session.criteria.root_name),
-                ResolutionContextLocation(
-                    "RESULT",
-                    session.output_name,
-                    (
-                        "SELF-SAVED"
-                        if session.save_mode == "SELF_SAVE"
-                        and session.state == "APPLIED"
-                        else "WILL UPDATE SOURCE"
-                        if session.save_mode == "SELF_SAVE"
-                        else "CREATED"
-                        if session.state == "APPLIED"
-                        else "CREATE ON APPLY"
+                (
+                    ResolutionContextLocation("SOURCE", session.source.root_name),
+                    ResolutionContextLocation("CRITERIA", session.criteria.root_name),
+                )
+                if session.save_mode == "SELF_SAVE"
+                else (
+                    ResolutionContextLocation("SOURCE", session.source.root_name),
+                    ResolutionContextLocation("CRITERIA", session.criteria.root_name),
+                    ResolutionContextLocation(
+                        "RESULT",
+                        session.output_name,
+                        "CREATED" if session.state == "APPLIED" else "CREATE ON APPLY",
                     ),
-                ),
+                )
             ),
             overview=overview,
             overview_sections=overview_sections,
@@ -421,7 +434,7 @@ class SeverResolutionWorkbenchAdapter:
             items=tuple(items),
             empty_message="No source Memories.",
             results_label=(
-                "SELF-SAVE DRAFT · SOURCE WILL BE REPLACED"
+                "IN-PLACE DRAFT · SOURCE OWNERS STAY IN PLACE"
                 if session.save_mode == "SELF_SAVE"
                 else "OTHER-SAVE DRAFT"
             ),

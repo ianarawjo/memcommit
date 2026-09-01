@@ -6,7 +6,7 @@ import hashlib
 from collections.abc import Callable, Iterable
 from contextlib import ExitStack
 
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     ContextAccess,
     revalidate_granted_context_binding,
 )
@@ -24,10 +24,10 @@ from memcommit.application.operations.meld.model import (
     MeldCheckpointReceipt,
     MeldSession,
 )
+from memcommit.application.context_access.granted_view import resolve_granted_context_view
 from memcommit.application.operations.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
-    resolve_granted_context_view,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.persistence.store import (

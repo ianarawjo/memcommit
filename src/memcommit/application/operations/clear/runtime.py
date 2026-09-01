@@ -4,15 +4,19 @@ from __future__ import annotations
 
 import uuid
 
-from memcommit.application.capabilities.authority.context_access import (
-    ContextAccess,
+from memcommit.application.authorization.context_operation import (
     authorized_context_mutation,
+)
+from memcommit.application.context_access.access import (
+    ContextAccess,
     grant_checkpoint_args,
-    resolve_context_access,
+)
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
 )
 from memcommit.core.context import AutoCheckpoint
 from memcommit.core.context_targeting.model import ContextScope
-from memcommit.application.capabilities.authority.readable_contexts import (
+from memcommit.application.context_access.readable_contexts import (
     freeze_readable_context_catalog,
 )
 from memcommit.core.context_targeting.resolution import expand_lexical_context_names
@@ -140,12 +144,12 @@ def execute_clear(
 ) -> ClearResult:
     """Resolve, revalidate, and publish one Clear request or no change."""
 
-    access = resolve_context_access(
+    access = resolve_existing_context_access(
         active_store,
         request.context_locator,
         current_name=current_name,
         required_permission="DELETE",
-    )
+    ).value
     if request.recursive:
         return _clear_recursive(active_store, access)
 

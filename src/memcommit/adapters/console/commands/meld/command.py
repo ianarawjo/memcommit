@@ -32,20 +32,16 @@ from memcommit.adapters.console.commands.meld.presentation import (
     render_meld_session,
 )
 from memcommit.adapters.console.commands.meld.workflow.workflow import (
-    _accept,
     _assert_non_target_source_bindings,
     _assert_source_bindings,
     _assert_unapplied_target,
-    _assess_and_save,
     _bound_frame_digest,
     _complete_default_terminal_execution,
     _interactive_terminal,
-    _issue_selector,
     _load_bound_contexts,
     _load_local_meld_source,
     _load_meld_source,
     _meld_request_matches_saved_session,
-    _preserve_all_guidance,
     _resolve_meld_source,
     _resume_picked_meld,
     _run_interactive,
@@ -65,7 +61,6 @@ from memcommit.adapters.console.commands.meld.entrypoint import (
 from memcommit.adapters.console.commands.meld.workflow.workflow import (
     connect_codex_chatgpt_provider,
     run_command_wait,
-    run_meld_shell,
     sys,
 )
 
@@ -83,8 +78,6 @@ __all__ = [
     "_meld_wait_fragments",
     "_meld_picker_entry",
     "_interactive_terminal",
-    "_preserve_all_guidance",
-    "_issue_selector",
     "_load_bound_contexts",
     "_resolve_meld_source",
     "_is_inline_memory_operand",
@@ -95,8 +88,6 @@ __all__ = [
     "_assert_source_bindings",
     "_assert_non_target_source_bindings",
     "_assert_unapplied_target",
-    "_assess_and_save",
-    "_accept",
     "_complete_default_terminal_execution",
     "_run_interactive",
     "run_meld_review",
@@ -116,7 +107,6 @@ __all__ = [
     "choose_session",
     "connect_codex_chatgpt_provider",
     "run_command_wait",
-    "run_meld_shell",
     "sys",
 ]
 

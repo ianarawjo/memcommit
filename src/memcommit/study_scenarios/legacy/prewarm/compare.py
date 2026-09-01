@@ -12,7 +12,7 @@ import uuid
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.execution import (
     load_comparison_context,
 )
-from memcommit.application.capabilities.authority.context_access import (
+from memcommit.application.context_access.access import (
     GrantedReadStore,
     resolve_context_access,
 )
@@ -69,7 +69,7 @@ from memcommit.study_scenarios.legacy.prewarm.scope_equivalence import (
 )
 
 if TYPE_CHECKING:
-    from memcommit.application.capabilities.authority.context_access import (
+    from memcommit.application.context_access.access import (
         ContextAccess,
     )
 

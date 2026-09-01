@@ -75,7 +75,7 @@ class CommandEditorControl:
                         height=Dimension.exact(1),
                         dont_extend_height=True,
                     ),
-                    filter=Condition(lambda: not draft.valid),
+                    filter=Condition(lambda: holder["value"]._shows_error()),
                 ),
             ]
         )
@@ -144,6 +144,18 @@ class CommandEditorControl:
                 " " + display_escape_text(self.draft.error),
             )
         ]
+
+    def _shows_error(self) -> bool:
+        """Show diagnostics only after the person has begun a command edit.
+
+        An empty argument buffer is the normal projection of an incomplete
+        upper form.  Its row already exposes the missing choice, so repeating
+        that validation sentence below the fixed command prompt adds noise.
+        Once arguments exist, retaining the precise diagnostic is essential
+        for repairing a partially typed or pasted command.
+        """
+
+        return not self.draft.valid and bool(self.input.text.strip())
 
     def _replace_text(self, text: str) -> None:
         self._changing_buffer = True

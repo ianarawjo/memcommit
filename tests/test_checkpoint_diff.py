@@ -4,8 +4,12 @@ from __future__ import annotations
 
 from memcommit.adapters.console.terminal.components.history.checkpoint_diff import (
     checkpoint_diff_detail_renderer,
+    checkpoint_revision_document_fragments,
     checkpoint_restore_detail_renderer,
+    format_checkpoint_revision_report,
+    open_checkpoint_revision_viewer,
 )
+import memcommit.adapters.console.terminal.components.history.checkpoint_diff as checkpoint_diff
 from memcommit.adapters.console.terminal.components.history.picker import HistoryDetailView
 from memcommit.adapters.console.terminal.components.history.presentation import checkpoint_picker_entries
 
@@ -218,3 +222,103 @@ def test_revert_uses_revision_result_instead_of_current_to_target_impact():
     assert "REVISION DIFF" in rendered
     assert "RESTORE IMPACT" not in rendered
     assert "A much later Memory." not in rendered
+
+
+def test_diff_document_hides_kept_rows_but_preserves_summary_and_color():
+    before = _checkpoint(
+        "11111111-1111-4111-8111-111111111111",
+        "2026-08-06T10:00:00-04:00",
+        "add",
+        "unused",
+    )
+    before["snapshot"] = {
+        "uid": "context",
+        "name": "wiki/access",
+        "memories": {
+            "kept-memory": {
+                "type": "memory",
+                "uid": "kept-memory",
+                "content": "Keep me",
+            },
+            "edited-memory": {
+                "type": "memory",
+                "uid": "edited-memory",
+                "content": "Old wording",
+            },
+        },
+        "order": ["kept-memory", "edited-memory"],
+    }
+    after = _checkpoint(
+        "22222222-2222-4222-8222-222222222222",
+        "2026-08-06T11:00:00-04:00",
+        "update",
+        "unused",
+    )
+    after["snapshot"] = {
+        **before["snapshot"],
+        "memories": {
+            **before["snapshot"]["memories"],
+            "edited-memory": {
+                "type": "memory",
+                "uid": "edited-memory",
+                "content": "New wording",
+            },
+        },
+    }
+    checkpoints = [after, before]
+    entry = checkpoint_picker_entries(checkpoints)[0]
+
+    fragments = checkpoint_revision_document_fragments(
+        checkpoints,
+        entry,
+        context_name="wiki/access",
+    )
+    rendered = "".join(text for _style, text in fragments)
+    plain = format_checkpoint_revision_report(
+        checkpoints,
+        entry,
+        context_name="wiki/access",
+    )
+
+    assert "DIFF · wiki/access" in rendered
+    assert "1 edited · 0 added · 0 removed · 1 unchanged hidden" in rendered
+    assert "Keep me" not in rendered
+    assert "Old wording" in rendered
+    assert "New wording" in rendered
+    assert ("class:semantic.edit", "EDIT") in fragments
+    assert ("class:memory-diff.before-marker", " - ") in fragments
+    assert ("class:memory-diff.after-marker", " + ") in fragments
+    assert plain == rendered.rstrip()
+
+
+def test_checkpoint_revision_viewer_is_one_read_only_document(monkeypatch):
+    checkpoint = _checkpoint(
+        "11111111-1111-4111-8111-111111111111",
+        "2026-08-06T10:00:00-04:00",
+        "add",
+        "First Memory.",
+    )
+    entry = checkpoint_picker_entries([checkpoint])[0]
+    viewed = {}
+    monkeypatch.setattr(
+        checkpoint_diff,
+        "run_read_only_viewer",
+        lambda text, **kwargs: viewed.update(text=text, kwargs=kwargs),
+    )
+
+    open_checkpoint_revision_viewer(
+        [checkpoint],
+        entry,
+        context_name="wiki/access",
+    )
+
+    assert "DIFF · wiki/access" in "".join(
+        text for _style, text in viewed["text"]
+    )
+    assert viewed["kwargs"] == {
+        "title": "DIFF REPORT",
+        "frame_title": "CHECKPOINT REVISION",
+        "app_input": None,
+        "app_output": None,
+        "require_tty": True,
+    }

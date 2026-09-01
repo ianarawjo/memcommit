@@ -64,7 +64,7 @@ The other initial configurations are:
 | Update | `SOURCE A → TARGET B` | A and B are existing Context trees; each has an independent, default-off reach control |
 | Meld, directional | `INCOMING A → BASELINE B` | A and B have independent, default-off reach controls; B remains the authoritative result target |
 | Meld, symmetric | `PEER A + PEER B → RESULT C` | A and B have independent, default-off reach controls; C is an eligible empty Context or a validated new exact name |
-| Sever | `SOURCE A × CRITERIA B → OUTPUT C` | A and B are readable Context roles with independent, default-on scope controls and read-only direct-Memory previews; C is either exact A for self-save or a validated new local name for other-save |
+| Sever | `SOURCE A × CRITERIA B · IN PLACE` | A is an ordinary local Source, B is readable Criteria, and both have independent, default-on scope controls plus read-only direct-Memory previews; every selected A owner stays in place |
 
 Compare and Update freeze A and B from the same unified readable public
 namespace used by other read/source-selection commands. Ordinary local names
@@ -305,8 +305,8 @@ An operation adapter converts the draft into an operation-owned typed receipt:
 - Branch: one existing local Source with exact-versus-lexical-subtree reach,
   plus one exact require-new target whose parent tree is only a placement aid;
   and
-- Sever: source/criteria names, both descendant-scope flags, and one output
-  name that is either exact Source for self-save or require-new for other-save.
+- Sever: source/criteria names and both descendant-scope flags; Source ownership
+  determines the in-place write locations.
 
 The adapter owns cross-role validation and user-facing role terminology. The
 operation then reloads and freezes authoritative state before provider work or
@@ -334,9 +334,9 @@ continues to own all consequential checks:
   the frozen receipt itself, then rechecks both peers and verifies that C is
   distinct, eligible, empty/session-free when existing, or atomically
   creatable when new.
-- Sever freezes its independently scoped Source and Criteria projections and
-  revalidates either exact-Source self-save or require-new Output other-save at
-  its established application boundary.
+- Sever freezes its independently scoped Source and Criteria projections,
+  requires an ordinary local Source, and revalidates every selected Source
+  owner before one grouped in-place application.
 
 Catalog selection is not authority. A setup receipt is not an Apply receipt.
 Every operation reloads the selected identities and performs its existing
@@ -389,9 +389,9 @@ setup directly; it never discovers or focuses a saved session first. Saved
 work is a separate, explicit route under `--sessions`.
 
 Compare, Meld, Sever, and Update use the role-based endpoint shell described
-above. Sever projects Source, Criteria, and Result through the compact form;
-its adapter validates distinct readable inputs, exact self-save scope, and
-fresh other-save naming before it returns the unchanged typed receipt.
+above. Sever projects Source and Criteria through the compact form; its adapter
+validates distinct inputs and ordinary local Source ownership before it returns
+the typed two-role receipt.
 Choosing **New** from any of the four `--sessions` launchers delegates to the
 same operation-owned setup used by bare entry. The launcher cannot own a
 parallel creation flow.
@@ -421,11 +421,10 @@ their ordinary bare work routes separate from explicit `--sessions` browsing.
 3. **Completed:** migrate Update and Compare new-session endpoint collection
    to fixed-mode role specs. Compare also accepts explicit `--from A --to B`
    so its selected A does not require changing the global current Context.
-4. **Completed:** re-express Sever's Source, Criteria, and Result through the
-   shared compact role-pane shell. Preserve the typed receipt, independent
-   default-on scopes, lazy read-only Memory evidence, exact-command review,
-   exact-Source self-save rule, and fresh-name other-save rule while retiring
-   the 684-line command-local screen.
+4. **Completed:** re-express Sever's Source and Criteria through the shared
+   compact role-pane shell. Preserve independent default-on scopes, lazy
+   read-only Memory evidence, exact-command review, and local Source ownership
+   while retiring the 684-line command-local screen and the Result endpoint.
 
 Each step must keep non-TTY explicit forms stable and add pipe-input tests for
 focus, mode switching, hidden-C exclusion, tree-state independence, cancel,
