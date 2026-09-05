@@ -302,8 +302,12 @@ def test_context_init_tui_returns_a_request_without_executing_storage():
         create_parents=True,
         expected_current="project",
     )
-    assert observed["view"].state == "NEW CONTEXT"
+    assert observed["view"].label == "CONTEXT"
+    assert observed["view"].state == "CREATE MISSING PARENTS"
+    assert observed["view"].context_names == ()
     assert observed["view"].current_context == "project"
+    assert observed["view"].heading == "MEM INIT"
+    assert observed["view"].submit_hint == "Enter create and switch"
 
 
 def test_context_init_tui_cancel_returns_no_request():
@@ -322,9 +326,7 @@ def test_context_init_tui_cancel_returns_no_request():
 
 def test_context_init_console_owns_setup_and_receipt_without_facades():
     repository_root = Path(__file__).resolve().parents[1]
-    command_root = (
-        repository_root / "src/memcommit/adapters/console/commands/init"
-    )
+    command_root = repository_root / "src/memcommit/adapters/console/commands/init"
     retired_tui_root = (
         repository_root
         / "src/memcommit/adapters/interfaces/tui/operations/context_init"

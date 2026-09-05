@@ -1203,8 +1203,10 @@ class TestInit:
 
         assert result.exit_code == 0
         assert observed["view"].value == "new-context-2"
-        assert observed["view"].label == "NEW CONTEXT NAME"
-        assert observed["view"].state == "NEW CONTEXT"
+        assert observed["view"].label == "CONTEXT"
+        assert observed["view"].state == ""
+        assert observed["view"].context_names == ()
+        assert observed["view"].heading == "MEM INIT"
         assert MemoryStore().current_context_name() == "new-context-2"
 
     def test_bare_init_cancel_preserves_current(

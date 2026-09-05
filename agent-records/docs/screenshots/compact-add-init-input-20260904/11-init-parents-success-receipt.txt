@@ -1,0 +1,9 @@
+LIVE PTY · 52 180                                                                                                                                                                   
+ MEM INIT                                                                                                                                                                           
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ CONTEXT · CREATE MISSING PARENTS ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃› archive/2026/notes                                                                                                                                                              ┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+ Edit directly · Ctrl-U clear · Enter create and switch · Esc cancel                                                                                                                
+Ensured context hierarchy 'archive/2026/notes'.                                                                                                                                     
+  Created: archive, archive/2026, archive/2026/notes                                                                                                                                
+  Current: archive/2026/notes

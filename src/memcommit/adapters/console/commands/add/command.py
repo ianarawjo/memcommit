@@ -7,6 +7,7 @@ from typing import Annotated, Optional
 import typer
 
 from memcommit.application.operations.add.application import (
+    AddedMemory,
     AddError,
     AddRequest,
     AddResult,
@@ -28,13 +29,35 @@ from memcommit.adapters.console.commands.add.workbench import (
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
+from memcommit.application.operations.show.application import ShowMemory, ShowRequest
+from memcommit.application.operations.show.runtime import execute_show
 from memcommit.persistence.store import ConcurrentContextUpdateError, MemoryStore
+
+
+def load_add_memories(
+    name: str,
+    *,
+    store: MemoryStore,
+    current_context_name: str | None,
+) -> tuple[AddedMemory, ...]:
+    """Use the existing READ boundary instead of reading through the mutation port."""
+
+    result = execute_show(
+        ShowRequest(context_name=name, current_context_name=current_context_name),
+        store=store,
+        allow_grants=True,
+    )
+    return tuple(
+        AddedMemory(uid=item.uid, content=item.content)
+        for item in result.contexts[0].items
+        if isinstance(item, ShowMemory)
+    )
 
 
 def _run_interactive_add(
     *,
     specified_context_locator: str | None,
-) -> AddResult | None:
+) -> tuple[AddResult, ...]:
     require_interactive_terminal(
         "Interactive Add",
         snapshot_hint="Pass positional MEMORY values or --paste outside a terminal.",
@@ -53,6 +76,9 @@ def _run_interactive_add(
     return run_add_workbench(
         setup=setup,
         execute=lambda request: run_add(request, target_port=port),
+        load_memories=lambda name: load_add_memories(
+            name, store=store, current_context_name=current_context_name
+        ),
         require_tty=False,
     )
 
@@ -122,12 +148,14 @@ def cmd(
 
     try:
         if not contents and not paste:
-            result = _run_interactive_add(
+            results = _run_interactive_add(
                 specified_context_locator=specified_context_locator,
             )
-            if result is None:
+            if not results:
                 typer.echo("Add cancelled — no changes made.")
-                return
+            for result in results:
+                render_add_receipt(result)
+            return
         else:
             result = _run_direct_add(
                 contents=contents,

@@ -4,6 +4,7 @@
   "operations": {
     "add": [
       "agent-records/docs/add-callable-boundary-matrix.md",
+      "agent-records/docs/interactive-add-input-design-rationale.md",
       "agent-records/docs/typed-operand-resolution-design-rationale.md"
     ],
     "atomize": [
@@ -209,7 +210,8 @@
     ],
     "init": [
       "agent-records/docs/context-init-application-boundary-matrix.md",
-      "agent-records/docs/context-name-portability-design-rationale.md"
+      "agent-records/docs/context-name-portability-design-rationale.md",
+      "agent-records/docs/interactive-context-creation-design-rationale.md"
     ],
     "init-study": [
       "agent-records/docs/init-study-application-boundary-design-rationale.md",

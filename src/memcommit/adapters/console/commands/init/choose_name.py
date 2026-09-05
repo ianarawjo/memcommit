@@ -46,12 +46,16 @@ def run_context_init_tui(
     name = chooser(
         ContextNameView(
             value=suggestion,
-            label="NEW CONTEXT NAME",
-            state="NEW CONTEXT",
+            label="CONTEXT",
+            state="CREATE MISSING PARENTS" if create_parents else "",
             detail="Enter creates this exact Context and switches to it.",
             validate=setup.validate_name,
-            context_names=setup.context_names,
+            # Bare Init accepts one exact new identifier. Existing names are
+            # used for collision-free suggestion, not as a parent browser.
+            context_names=(),
             current_context=setup.expected_current,
+            heading="MEM INIT",
+            submit_hint="Enter create and switch",
         )
     )
     if name is None:

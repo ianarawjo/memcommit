@@ -191,7 +191,7 @@ COMMAND_FORMS = {
     "add": (
         'mem add "[memory_content]" (add one Memory to the current Context)',
         'mem add "[memory_a]" "[memory_b]" (add one Memory per positional value)',
-        "mem add (open the interactive multi-Memory editor)",
+        "mem add (view a Context and add one Memory per Enter)",
         "mem add --paste (add clipboard text as one Memory per non-empty line)",
         'mem add "[memory_content]" --to [target_context] (add to an explicit Target)',
         'mem add "[memory_a]" "[memory_b]" --to [target_context] (add a positional batch to an explicit Target)',

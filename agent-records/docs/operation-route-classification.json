@@ -12,6 +12,7 @@
       "add": {
         "evidence": [
           "agent-records/docs/add-callable-boundary-matrix.md",
+          "agent-records/docs/interactive-add-input-design-rationale.md",
           "agent-records/docs/typed-operand-resolution-design-rationale.md"
         ],
         "reason": "The typed batch, authority, mutation, CLI, TUI, public, and agent routes are verified against one application/runtime boundary."
@@ -150,7 +151,8 @@
       "init": {
         "evidence": [
           "agent-records/docs/context-init-application-boundary-matrix.md",
-          "agent-records/docs/context-name-portability-design-rationale.md"
+          "agent-records/docs/context-name-portability-design-rationale.md",
+          "agent-records/docs/interactive-context-creation-design-rationale.md"
         ],
         "reason": "Ordinary Context initialization has one typed terminal-free transaction and independent exact-name CLI/TUI presenters; Study initialization remains a separate operation."
       },

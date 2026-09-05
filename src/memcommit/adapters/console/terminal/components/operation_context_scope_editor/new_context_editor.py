@@ -96,6 +96,8 @@ class ContextNameView(ExactNameFieldView):
     value_label: str = "Context name"
     context_names: tuple[str, ...] = ()
     current_context: str | None = None
+    heading: str | None = None
+    submit_hint: str = "Enter continue"
 
     def __post_init__(self) -> None:
         super().__post_init__()
@@ -116,6 +118,18 @@ class ContextNameView(ExactNameFieldView):
             or any(character in self.current_context for character in "\r\n")
         ):
             raise ValueError("Current Context must be one nonempty line.")
+        if self.heading is not None and (
+            not isinstance(self.heading, str)
+            or not self.heading.strip()
+            or any(character in self.heading for character in "\r\n")
+        ):
+            raise ValueError("Context-name heading must be one nonempty line.")
+        if (
+            not isinstance(self.submit_hint, str)
+            or not self.submit_hint.strip()
+            or any(character in self.submit_hint for character in "\r\n")
+        ):
+            raise ValueError("Context-name submit hint must be one nonempty line.")
 
 
 @dataclass
@@ -540,7 +554,8 @@ def choose_context_name(
             [
                 (
                     "",
-                    f" Edit directly · Ctrl-U clear{parent_hint} · Enter continue · Esc cancel",
+                    f" Edit directly · Ctrl-U clear{parent_hint} · "
+                    f"{view.submit_hint} · Esc cancel",
                 )
             ]
         )
@@ -550,7 +565,7 @@ def choose_context_name(
         [
             Window(
                 FormattedTextControl(
-                    FormattedText([("class:heading", f" {view.label}")])
+                    FormattedText([("class:heading", f" {view.heading or view.label}")])
                 ),
                 height=Dimension.exact(1),
                 dont_extend_height=True,

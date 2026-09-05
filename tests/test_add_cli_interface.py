@@ -208,3 +208,35 @@ def test_interactive_help_uses_to_for_explicit_add_targets() -> None:
     assert explicit_target_forms
     assert all("--to [target_context]" in form for form in explicit_target_forms)
     assert not any("--context" in form for form in explicit_target_forms)
+
+
+def test_interactive_close_reports_each_saved_context_without_cancellation(
+    isolated_store, monkeypatch
+):
+    import memcommit.adapters.console.commands.add.command as command
+    from memcommit.application.operations.add.application import AddRequest
+
+    store = MemoryStore()
+    for name in ("first", "second"):
+        store.save(ops.init(name))
+    store.set_current("first")
+    monkeypatch.setattr(
+        command, "require_interactive_terminal", lambda *args, **kwargs: None
+    )
+
+    def workbench(*, setup, execute, load_memories, **kwargs):
+        results = []
+        for name in ("first", "second"):
+            results.append(
+                execute(AddRequest(context_locator=name, contents=(f"For {name}",)))
+            )
+            assert load_memories(name)[-1].content == f"For {name}"
+        return tuple(results)
+
+    monkeypatch.setattr(command, "run_add_workbench", workbench)
+    result = runner.invoke(app, ["add"])
+    assert result.exit_code == 0, result.output
+    assert "Added 1 Memory to 'first'." in result.output
+    assert "Added 1 Memory to 'second'." in result.output
+    assert "cancelled" not in result.output
+    assert store.current_context_name() == "first"

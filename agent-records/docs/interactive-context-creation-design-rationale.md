@@ -38,21 +38,22 @@ receipt to the normal command implementation.
 
 ## Interactive UI
 
-Bare Init needs only the existing compact name-dialog shape:
+Bare Init uses one compact exact-name field. The command heading already states
+that this is initialization, so the field uses the shorter `CONTEXT` label:
 
 ```text
  MEM INIT
- NEW CONTEXT NAME · NOT CREATED
-╭──────────────────────────────────────────────╮
-│ new-context                                  │
+╭─ CONTEXT ────────────────────────────────────╮
+│ › new-context                                │
 ╰──────────────────────────────────────────────╯
- Edit directly · Ctrl-U clear · Enter create · Esc cancel
+ Edit directly · Ctrl-U clear · Enter create and switch · Esc cancel
 ```
 
-When a frozen catalog exists, Init shows the common `PARENT CONTEXT` locator
-above that field. Choosing a parent reparents the untouched suggestion. After
-the first direct edit, the complete exact input becomes authoritative: parent
-browsing may change the locator selection but cannot rewrite the edited name.
+Init does not show a parent browser. Its frozen local catalog supplies only the
+collision-free suggestion and validation context; the person authors the
+complete exact new identifier directly. `--parents` keeps the same screen and
+marks the field `CREATE MISSING PARENTS` while retaining its existing
+application behavior.
 
 Bare Branch uses the compact shared Endpoint Setup also used by Meld. Its B
 row treats the catalog only as a transient parent locator and keeps the exact
@@ -121,17 +122,20 @@ as `ContextNameView`, `ContextParentLocatorState`,
 `ContextParentLocatorControl`, `ContextNameControl`, and `context_name_*`
 renderers. Core `ContextNameDraftState` in `tui/name_draft.py` owns the shared
 untouched-to-edited transition, nearest-parent inference, suggestion
-inheritance, and conditional reparenting used by both Init and Branch.
+inheritance, and conditional reparenting used by compound callers such as
+Branch.
 `ContextNameEditorState` remains a compatibility alias. The smaller exact-name
 input and focused-frame mechanics live with the operation-neutral terminal
 primitives. Generic defaults and validation failures say `CONTEXT NAME` rather
 than `SAVE LOCATION`. The Resolution adapter supplies `SAVE LOCATION`; Init
-supplies `NEW CONTEXT NAME`; Branch supplies the same new-Context label; each remains free
-to provide `NOT CREATED`, `CURRENT TARGET`, or another operation-owned state.
+supplies the `MEM INIT` heading and `CONTEXT` field; Branch supplies its exact
+new-Context label. Each remains free to provide `NOT CREATED`, `CURRENT TARGET`,
+or another operation-owned state.
 
 The current `commands/shared/save_location_control.py` remains a thin compatibility
 facade for existing callers. It supplies Save Location defaults but owns no
-interaction mechanics. Init imports the generic Context-name composition;
+interaction mechanics. Init imports only the compact generic Context-name
+composition and deliberately omits its optional parent catalog;
 Branch configures the common endpoint shell used by Atomize. Neither names its
 field after Save Location.
 
@@ -151,17 +155,17 @@ uses the same data contract with a Typer prompt. The Profile-specific
 `study_name_dialog` shares the operation-neutral exact-name field but not the
 Context parent locator or Context validation contract.
 
-The controls do not infer edit ownership from string equality. A person may
+The compound controls do not infer edit ownership from string equality. A person may
 edit a value back to its original spelling and it still remains directly
 owned; programmatic suggestion and parent updates are explicitly guarded so
-they do not mark the draft edited. This prevents both Init and Branch from
-silently resuming automatic inheritance after a deliberate edit.
+they do not mark the draft edited. This prevents parent-assisted callers such
+as Branch from silently resuming automatic inheritance after a deliberate edit.
 
 The new presentation should compose existing operation-neutral controls:
 
 - the generic exact-name validation and input presentation;
-- `ContextNameEditorState` and its direct-input-first parent browser where a
-  destination parent catalog is useful;
+- `ContextNameEditorState` and its parent browser only where a compound caller
+  needs destination assistance;
 - `ContextTreeState` for cursor, expansion, and scrolling;
 - SINGLE `ContextSelectionState` for the exact Branch Source;
 - the common Context-tree row renderer and selection marker/style projection.

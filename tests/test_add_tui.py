@@ -1,4 +1,4 @@
-"""Interactive Add draft and terminal-flow contracts."""
+"""Interactive compact Add and read-only Viewer contracts."""
 
 from __future__ import annotations
 
@@ -16,10 +16,8 @@ from memcommit.application.operations.add.application import (
     AddResult,
 )
 from memcommit.adapters.console.commands.add.workbench import (
-    AddDraftState,
     AddWorkbenchSetup,
     build_add_workbench_setup,
-    run_add_workbench,
 )
 import memcommit.adapters.console.commands.add.workbench.setup as add_workbench_setup
 from memcommit.persistence.store import MemoryStore
@@ -132,108 +130,130 @@ def test_build_workbench_setup_rejects_an_empty_target_catalog(
         )
 
 
-def test_draft_state_preserves_multiline_text_and_cancelled_new_draft() -> None:
-    state = AddDraftState()
-    state.begin_edit()
-    state.save_edit("First line.\nSecond line.")
-    state.new()
-    state.cancel_edit()
+def _run(keys: str, *, names=("target",), selected="target", execute=None, load=None):
+    from memcommit.adapters.console.commands.add.workbench.screen import _AddWorkbench
 
-    assert state.drafts == ["First line.\nSecond line."]
-    assert state.ready_contents == ("First line.\nSecond line.",)
+    requests = []
+    rows = {name: [] for name in names}
 
-
-def test_draft_state_supports_ordered_create_edit_and_delete() -> None:
-    state = AddDraftState()
-    state.begin_edit()
-    state.save_edit("First")
-    state.new()
-    state.save_edit("Second")
-    state.move(-1)
-    state.begin_edit()
-    state.save_edit("First revised")
-    state.move(1)
-    state.delete_selected()
-
-    assert state.ready_contents == ("First revised",)
-    assert state.cursor == 0
-
-
-def test_workbench_e_to_edit_adds_multiple_explicit_multiline_drafts() -> None:
-    requests: list[AddRequest] = []
-
-    def execute(request: AddRequest) -> AddResult:
+    def save(request):
         requests.append(request)
-        return _result(request)
+        result = _result(request)
+        rows[result.context_name].extend(result.memories)
+        return result
 
     with create_pipe_input() as pipe_input:
-        # Initial focus is the draft surface. Enter is an editor newline,
-        # Ctrl-S saves locally, N starts another draft, and the To Do Enter is
-        # the only durable action. A final Enter closes the success receipt.
-        pipe_input.send_text("eFirst line.\rSecond line.\x13nAnother.\x13\t\r\r")
-        returned = run_add_workbench(
-            setup=_setup(),
-            execute=execute,
+        workbench = _AddWorkbench(
+            setup=_setup(*names, selected=selected),
+            execute=execute or save,
+            load_memories=load or (lambda name: tuple(rows[name])),
             app_input=pipe_input,
             app_output=DummyOutput(),
-            require_tty=False,
         )
+        pipe_input.send_text(keys)
+        result = workbench.run()
+    return result, requests, workbench
 
-    assert returned == _result(requests[0])
-    assert len(requests) == 1
-    assert requests[0].contents == (
-        "First line.\nSecond line.",
-        "Another.",
+
+def test_enter_adds_repeated_memories_and_close_returns_each_receipt():
+    results, requests, screen = _run("First Memory.\rSecond Memory.\r\x1b")
+    assert [request.contents for request in requests] == [
+        ("First Memory.",),
+        ("Second Memory.",),
+    ]
+    assert results == tuple(_result(request) for request in requests)
+    assert screen.memory_input.text == ""
+    assert "First Memory." in screen.viewer.text_area.text
+    assert "Second Memory." in screen.viewer.text_area.text
+
+
+def test_context_selection_refreshes_viewer_and_changes_only_selected_target():
+    # ADD -> CONTEXT -> open tree -> alpha -> commit -> VIEWER -> ADD.
+    results, requests, screen = _run(
+        "\t\r\x1b[A\r\t\tOnly alpha.\r\x1b",
+        names=("alpha", "target"),
+        load=lambda name: (AddedMemory(uid=name, content=f"Contents of {name}"),),
+    )
+    assert results[0].context_name == "alpha"
+    assert requests[0].context_locator == "alpha"
+    assert "Contents of alpha" in screen.viewer.text_area.text
+    assert "Contents of target" not in screen.viewer.text_area.text
+
+
+def test_context_browser_back_discards_hover_and_keeps_input():
+    results, requests, screen = _run(
+        "Kept draft\t\r\x1b[A\x7f\t\t\r\x1b",
+        names=("alpha", "target"),
     )
     assert requests[0].context_locator == "target"
+    assert requests[0].contents == ("Kept draft",)
+    assert not screen.context.is_open
+    assert len(results) == 1
 
 
-def test_workbench_context_selector_changes_exact_add_target() -> None:
-    requests: list[AddRequest] = []
-    with create_pipe_input() as pipe_input:
-        # Shift-Tab reaches the shared Context selector, Up selects alpha,
-        # Enter stages it, Tab returns to drafts, and the normal draft flow
-        # executes against that exact selected Context.
-        pipe_input.send_text("\x1b[Z\x1b[A\r\teOnly alpha receives this.\x13\t\r\r")
-        returned = run_add_workbench(
-            setup=_setup("alpha", "target", selected="target"),
-            execute=lambda request: requests.append(request) or _result(request),
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
+@pytest.mark.parametrize("keys", ["\x1b", "Uncommitted\x03", "\r\x1b"])
+def test_close_interrupt_and_blank_enter_do_not_call_application(keys):
+    results, requests, _screen = _run(keys)
+    assert results == ()
+    assert requests == []
 
-    assert returned is not None
+
+@pytest.mark.parametrize("line_ending", ["\n", "\r", "\r\n"])
+def test_backspace_edits_input_and_multiline_paste_is_rejected(line_ending):
+    results, requests, screen = _run(
+        f"Keepx\x7f\x1b[200~first{line_ending}second\x1b[201~\r\x1b"
+    )
+    assert requests[0].contents == ("Keep",)
+    assert len(results) == len(requests) == 1
+    assert "first" not in screen.viewer.text_area.text
+    assert "second" not in screen.viewer.text_area.text
+    assert screen.memory_input.text == ""
+
+
+def test_failed_add_retains_input_for_retry_without_a_success_receipt():
+    attempts = []
+
+    def execute(request):
+        attempts.append(request)
+        if len(attempts) == 1:
+            raise RuntimeError("write failed")
+        return _result(request)
+
+    results, _, screen = _run("Retry me\r\r\x1b", execute=execute)
+    assert len(results) == 1
+    assert attempts[0] == attempts[1]
+    assert attempts[1].contents == ("Retry me",)
+    assert screen.memory_input.text == ""
+
+
+def test_viewer_failure_after_save_clears_input_without_retrying_saved_memory():
+    loads = []
+
+    def load(name):
+        loads.append(name)
+        if len(loads) == 1:
+            return (AddedMemory(uid="old", content="Old Viewer contents"),)
+        raise RuntimeError("read revoked")
+
+    results, requests, screen = _run("Saved once\r\r\x1b", load=load)
+    assert len(results) == len(requests) == 1
+    assert screen.memory_input.text == ""
+    assert "Old Viewer contents" not in screen.viewer.text_area.text
+    assert "Memories unavailable" in screen.viewer.text_area.text
+
+
+def test_viewer_load_error_clears_previous_context_without_disabling_add():
+    def load(name):
+        if name == "alpha":
+            raise OSError("Memory list temporarily unavailable")
+        return (AddedMemory(uid="old", content="Previous Context contents"),)
+
+    results, requests, screen = _run(
+        "\t\r\x1b[A\r\t\tNew Memory\r\x1b",
+        names=("alpha", "target"),
+        load=load,
+    )
+    assert len(results) == len(requests) == 1
     assert requests[0].context_locator == "alpha"
-
-
-def test_workbench_escape_cancels_without_calling_application() -> None:
-    requests: list[AddRequest] = []
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("q")
-        returned = run_add_workbench(
-            setup=_setup(),
-            execute=lambda request: requests.append(request) or _result(request),
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert returned is None
-    assert requests == []
-
-
-def test_workbench_ctrl_c_cancels_without_calling_application() -> None:
-    requests: list[AddRequest] = []
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("eUncommitted draft.\x03")
-        returned = run_add_workbench(
-            setup=_setup(),
-            execute=lambda request: requests.append(request) or _result(request),
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert returned is None
-    assert requests == []
+    assert "Previous Context contents" not in screen.viewer.text_area.text
+    assert "Memories unavailable" in screen.viewer.text_area.text

@@ -1,30 +1,26 @@
-"""Context-targeted E-to-edit terminal workbench for Add."""
+"""Context, scrollable Memory viewer, and repeatable compact Add input."""
 
 from __future__ import annotations
 
 from collections.abc import Callable
+from functools import partial
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.application.current import get_app
-from prompt_toolkit.filters import Condition, has_focus
+from prompt_toolkit.filters import has_focus
 from prompt_toolkit.input import Input
 from prompt_toolkit.key_binding import KeyBindings
+from prompt_toolkit.keys import Keys
 from prompt_toolkit.layout import Dimension, FormattedTextControl, Layout, Window
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
 
 from memcommit.application.operations.add.application import (
+    AddedMemory,
     AddRequest,
     AddResult,
 )
-from memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector import (
-    ContextSelectorControl,
-    ContextSelectorView,
-)
-from memcommit.adapters.console.terminal.core.capabilities import (
-    require_interactive_terminal,
-)
-from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.adapters.console.commands.add.workbench.model import AddWorkbenchSetup
 from memcommit.adapters.console.terminal.components.focus import (
     FocusSurface,
     SurfaceActionResult,
@@ -34,417 +30,314 @@ from memcommit.adapters.console.terminal.components.focus import (
 )
 from memcommit.adapters.console.terminal.components.frame import (
     TuiRegion,
-    build_focused_frame,
+    bind_focused_frame_style,
     build_tui_frame,
 )
-from memcommit.adapters.console.terminal.components.in_frame_input import (
-    InFrameInputManager,
-    InFrameInputSection,
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.compact_context_selector import (
+    CompactContextSelectorControl,
 )
-from memcommit.adapters.console.terminal.components.multiline_input import (
-    build_framed_multiline_input,
+from memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector import (
+    ContextSelectorControl,
+    ContextSelectorView,
+)
+from memcommit.adapters.console.terminal.components.primitives import (
+    ExactNameFieldControl,
+    ExactNameFieldView,
 )
 from memcommit.adapters.console.terminal.components.scrollable_pane import (
     build_scrollable_formatted_text_pane,
+    move_wrapped_read_cursor,
+    scroll_wrapped_page,
+)
+from memcommit.adapters.console.terminal.core.capabilities import (
+    require_interactive_terminal,
 )
 from memcommit.adapters.console.terminal.core.keybindings import (
     bind_case_insensitive_key,
     bind_tui_interrupt,
     dispatch_tui_back,
 )
-from memcommit.adapters.console.terminal.core.text_layout import (
-    elide_terminal_text,
-    single_line_terminal_text,
-)
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.adapters.console.commands.add.workbench.model import (
-    AddDraftState,
-    AddWorkbenchSetup,
-)
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 
 
-def _draft_fragments(
-    state: AddDraftState,
-    *,
-    saved: AddResult | None,
-) -> tuple[list[tuple[str, str]], int]:
-    fragments: list[tuple[str, str]] = []
-    cursor_position = 0
-    plain_length = 0
-    for index, content in enumerate(state.drafts):
-        if index:
-            fragments.append(("", "\n"))
-            plain_length += 1
-        selected = index == state.cursor
-        if selected:
-            cursor_position = plain_length
-        pointer = "›" if selected else " "
-        if saved is not None and index < saved.count:
-            status = f"SAVED {saved.memories[index].uid[:8]}"
-        elif state.editing == index:
-            status = "EDITING"
-        elif content is None:
-            status = "EMPTY · E EDIT"
-        else:
-            status = "DRAFT"
-        heading = f"{pointer} {index + 1} · [{status}]\n"
-        heading_style = "class:detail-card.focused" if selected else "class:detail-card"
-        fragments.append((heading_style, heading))
-        plain_length += len(heading)
-        preview = (
-            "  (empty draft)"
-            if content is None
-            else "  "
-            + elide_terminal_text(
-                single_line_terminal_text(safe_terminal_text(content)),
-                140,
-            )
-        )
-        fragments.append(("class:memory-object", preview))
-        plain_length += len(preview)
-    return fragments, cursor_position
-
-
-def run_add_workbench(
-    *,
-    setup: AddWorkbenchSetup,
-    execute: Callable[[AddRequest], AddResult],
-    app_input: Input | None = None,
-    app_output: Output | None = None,
-    require_tty: bool = True,
-) -> AddResult | None:
-    """Review exact multiline drafts, then persist one atomic Add batch."""
-
-    if require_tty:
-        require_interactive_terminal(
-            "Interactive Add",
-            snapshot_hint=(
-                "Pass positional MEMORY values or --paste outside a terminal."
-            ),
-        )
-    if not isinstance(setup, AddWorkbenchSetup):
-        raise TypeError("Add workbench requires an AddWorkbenchSetup.")
-
-    selector = ContextSelectorControl(
+def _build_context_selector(setup: AddWorkbenchSetup) -> ContextSelectorControl:
+    return ContextSelectorControl(
         ContextSelectorView(
             names=setup.names,
             selected=(setup.selected_context,),
             mode="SINGLE",
-            label="TARGET · CAN ADD MEMORIES · * CURRENT",
+            label="CONTEXT",
             current_context=setup.current_context,
             selectable_names=setup.selectable_names,
             annotations=setup.annotations,
         ),
         height=min(8, max(3, len(setup.names))),
     )
-    drafts = AddDraftState()
-    draft_pane = build_scrollable_formatted_text_pane(
-        "DRAFT MEMORIES · E EDIT · N NEW · D DELETE",
-        height=Dimension(weight=1, min=10),
-        style="class:viewer-body",
-        frame_style="",
-    )
-    editor = build_framed_multiline_input(
-        "EDITOR",
-        buffer_name="add-draft-editor",
-        height=Dimension(min=6, preferred=8, max=12),
-    )
-    input_manager = InFrameInputManager(draft_pane.pane)
-    bindings = KeyBindings()
-    result: AddResult | None = None
-    status = {"value": ""}
 
-    def refresh_drafts() -> None:
-        fragments, cursor_position = _draft_fragments(drafts, saved=result)
-        draft_pane.set_formatted_text(fragments, anchor="preserve")
-        draft_pane.text_area.buffer.cursor_position = min(
-            cursor_position,
-            len(draft_pane.text_area.text),
+
+def memory_fragments(memories: tuple[AddedMemory, ...]) -> list[tuple[str, str]]:
+    if not memories:
+        return [("", " (no direct Memories)")]
+    fragments: list[tuple[str, str]] = []
+    for index, memory in enumerate(memories):
+        if index:
+            fragments.append(("", "\n"))
+        fragments.append(("", f" [{safe_terminal_text(memory.uid[:8])}] "))
+        fragments.append(("class:memory-object", safe_terminal_text(memory.content)))
+    return fragments
+
+
+class _AddWorkbench:
+    """Keep each successful Enter receipt while composing the next Memory."""
+
+    def __init__(
+        self,
+        *,
+        setup: AddWorkbenchSetup,
+        execute: Callable[[AddRequest], AddResult],
+        load_memories: Callable[[str], tuple[AddedMemory, ...]],
+        app_input: Input | None,
+        app_output: Output | None,
+    ) -> None:
+        self.execute = execute
+        self.load_memories = load_memories
+        self.results: list[AddResult] = []
+        self.status = ""
+        self.selector = _build_context_selector(setup)
+        self.context = CompactContextSelectorControl(self.selector)
+        self.viewer = build_scrollable_formatted_text_pane(
+            "VIEWER", height=Dimension.exact(12), buffer_name="add-viewer"
         )
-
-    refresh_drafts()
-
-    def render_todo() -> list[tuple[str, str]]:
-        focused = get_app().layout.has_focus(todo_control)
-        style = "class:memcommit.choice.active.focused" if focused else ""
-        pointer = "›" if focused else " "
-        target = safe_terminal_text(selector.selection.selected_name)
-        if result is not None:
-            return [
-                ("class:report-label", "STATUS · SUCCESS\n"),
-                (
-                    "class:report-neutral",
-                    f"SAVED · {result.count} "
-                    f"{'MEMORY' if result.count == 1 else 'MEMORIES'} · "
-                    "ONE CHECKPOINT\n"
-                    f"TARGET · {safe_terminal_text(result.context_name)}\n"
-                    f"CHECKPOINT · {result.checkpoint_uid[:8]}\n",
-                ),
-                (style, f"{pointer} CLOSE · ENTER"),
-            ]
-        if drafts.editing is not None:
-            action = "FINISH OR CANCEL THE ACTIVE EDIT"
-        elif drafts.ready_contents:
-            count = len(drafts.ready_contents)
-            action = f"ADD {count} {'MEMORY' if count == 1 else 'MEMORIES'} · ENTER"
-        else:
-            action = "MEMORY REQUIRED · E EDIT"
-        return [
-            (style, f"{pointer} {action}\n"),
-            ("class:report-neutral", f"TARGET · {target}\n"),
-            (
-                "class:report-neutral",
-                "DURABLE EFFECT · ONE ATOMIC CHECKPOINT · NO PROVIDER",
+        bind_focused_frame_style(
+            self.viewer.frame,
+            is_focused=lambda: get_app().layout.has_focus(self.viewer.text_area),
+        )
+        memory_field = ExactNameFieldControl.create(
+            ExactNameFieldView(
+                value="",
+                label="ADD",
+                value_label="Memory",
+                strip_candidate=False,
             ),
-        ]
+            input_name="add-memory-input",
+        )
+        self.memory_input = memory_field.input
+        self.bindings = KeyBindings()
+        self.surfaces = SurfaceFocusController(self._surfaces)
+        bind_surface_navigation(self.bindings, self.surfaces)
+        self._bind_keys()
+        root = build_tui_frame(
+            TuiRegion(Window(FormattedTextControl(" MEM ADD"), height=1)),
+            TuiRegion(self.context.container),
+            TuiRegion(self.viewer.container),
+            TuiRegion(memory_field.frame),
+            TuiRegion(Window(FormattedTextControl(self._render_footer), height=1)),
+        )
+        self.app: Application[tuple[AddResult, ...]] = Application(
+            layout=Layout(root, focused_element=self.memory_input),
+            key_bindings=self.bindings,
+            full_screen=False,
+            erase_when_done=True,
+            input=app_input,
+            output=app_output,
+            mouse_support=False,
+            style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
+        )
+        self._refresh_viewer()
 
-    todo_control = FormattedTextControl(
-        render_todo,
-        focusable=True,
-        show_cursor=False,
-    )
-    todo_frame = build_focused_frame(
-        Window(todo_control, wrap_lines=True),
-        title="TO DO",
-        is_focused=lambda: get_app().layout.has_focus(todo_control),
-        height=Dimension.exact(6),
-    )
-
-    header = Window(
-        FormattedTextControl(
-            " MEM ADD\n"
-            " CREATE ONE OR MORE EXACT MULTILINE MEMORIES · REVIEW BEFORE SAVE"
-        ),
-        height=Dimension.exact(2),
-        dont_extend_height=True,
-    )
-
-    def render_footer() -> str:
-        if status["value"]:
-            return " " + safe_terminal_text(status["value"])
-        if get_app().layout.has_focus(editor.text_area):
-            return " Enter newline · Ctrl-S save draft · Esc cancel edit"
-        if result is not None:
-            return " Enter/Esc/Q close · saved"
-        if get_app().layout.has_focus(selector.control):
-            return (
-                " ↑/↓ move/cross · ←/→ tree · Enter/Space select · "
-                "Tab drafts · Esc cancel"
-            )
-        if get_app().layout.has_focus(draft_pane.text_area):
-            return (
-                " ↑/↓ draft/cross · E edit · N new · D delete · Tab next · Esc cancel"
-            )
-        return " Enter add batch · ↑ drafts · Tab target · Esc cancel"
-
-    footer = Window(
-        FormattedTextControl(render_footer),
-        height=Dimension.exact(1),
-        dont_extend_height=True,
-    )
-    root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(selector.frame),
-        TuiRegion(draft_pane.container),
-        TuiRegion(todo_frame),
-        TuiRegion(footer),
-    )
-    app: Application[AddResult | None] = Application(
-        layout=Layout(root, focused_element=draft_pane.text_area),
-        key_bindings=bindings,
-        full_screen=True,
-        erase_when_done=True,
-        input=app_input,
-        output=app_output,
-        mouse_support=False,
-        style=merge_styles([MEMCOMMIT_TUI_STYLE, SEMANTIC_VIEWER_STYLE]),
-    )
-
-    def move_context(_event, delta: int) -> SurfaceMoveResult:
-        before = selector.tree.selected_name
-        selector.move(delta)
-        return "MOVED" if selector.tree.selected_name != before else "BOUNDARY"
-
-    def enter_context(delta: int) -> None:
-        rows = selector.tree.visible_rows()
-        selector.tree.selected_name = rows[0 if delta > 0 else -1].name
-
-    def choose_context(_event) -> SurfaceActionResult:
-        if result is not None:
-            return "IGNORED"
-        try:
-            selector.choose_cursor()
-        except ValueError as error:
-            status["value"] = str(error)
-        else:
-            status["value"] = ""
-        return "HANDLED"
-
-    def move_draft(_event, delta: int) -> SurfaceMoveResult:
-        if drafts.move(delta):
-            refresh_drafts()
-            return "MOVED"
-        return "BOUNDARY"
-
-    def begin_edit(event, *, new: bool = False) -> None:
-        nonlocal result
-        if result is not None:
-            return
-        try:
-            text = drafts.new() if new else drafts.begin_edit()
-        except ValueError as error:
-            status["value"] = str(error)
-            return
-        editor.text_area.text = text
-        editor.text_area.buffer.cursor_position = len(text)
-        input_manager.show(
-            draft_pane.pane,
-            InFrameInputSection(
-                "EDITOR · CTRL-S SAVE DRAFT · ESC CANCEL",
-                editor.text_area,
-                height=Dimension(min=5, preferred=7, max=10),
+    def _surfaces(self) -> tuple[FocusSurface, ...]:
+        return (
+            FocusSurface(
+                "CONTEXT",
+                self.context.control,
+                move_vertical=self._move_context,
+                activate=self._choose_context,
+            ),
+            FocusSurface(
+                "VIEWER",
+                self.viewer.text_area,
+                move_vertical=self._move_viewer,
+                on_focus=self.context.close,
+            ),
+            FocusSurface(
+                "ADD",
+                self.memory_input,
+                activate=self._submit,
+                on_focus=self.context.close,
             ),
         )
-        status["value"] = ""
-        refresh_drafts()
-        event.app.layout.focus(editor.text_area)
-        event.app.invalidate()
 
-    def activate_draft(event) -> SurfaceActionResult:
-        begin_edit(event)
+    def run(self) -> tuple[AddResult, ...]:
+        return self.app.run()
+
+    def _render_footer(self) -> str:
+        if get_app().layout.has_focus(self.memory_input):
+            hint = "Enter add · Tab Context · Esc close"
+        elif get_app().layout.has_focus(self.viewer.text_area):
+            hint = "↑/↓ scroll · Tab Add · Esc close"
+        elif self.context.is_open:
+            hint = "↑/↓ move · ←/→ tree · Enter select · Tab Viewer · Esc back"
+        else:
+            hint = "Enter change Context · Tab Viewer · Esc close"
+        return (
+            " "
+            + (safe_terminal_text(self.status) + " · " if self.status else "")
+            + hint
+        )
+
+    def _refresh_viewer(self, *, added: bool = False) -> None:
+        try:
+            memories = self.load_memories(self.selector.selection.selected_name)
+        except (OSError, RuntimeError, TypeError, ValueError):
+            # Never keep the previous Context's content after a failed read or
+            # treat a failed Viewer refresh as a failed, retryable Add.
+            self.viewer.set_formatted_text(
+                [
+                    (
+                        "",
+                        " Memories unavailable · Context could not be read.",
+                    )
+                ],
+                anchor="start",
+            )
+        else:
+            self.viewer.set_formatted_text(
+                memory_fragments(memories), anchor="end" if added else "start"
+            )
+
+    def _move_context(self, _event, delta: int) -> SurfaceMoveResult:
+        if not self.context.is_open:
+            return "BOUNDARY"
+        before = self.selector.tree.selected_name
+        self.selector.move(delta)
+        return "MOVED" if self.selector.tree.selected_name != before else "BOUNDARY"
+
+    def _move_viewer(self, event, delta: int) -> SurfaceMoveResult:
+        return (
+            "MOVED" if move_wrapped_read_cursor(event, direction=delta) else "BOUNDARY"
+        )
+
+    def _choose_context(self, event) -> SurfaceActionResult:
+        if not self.context.is_open:
+            self.context.open()
+        else:
+            try:
+                self.selector.choose_cursor()
+            except ValueError as error:
+                self.status = str(error)
+                return "HANDLED"
+            self.context.close()
+            self.status = ""
+            self._refresh_viewer()
+        event.app.layout.focus(self.context.control)
         return "HANDLED"
 
-    def submit(event) -> SurfaceActionResult:
-        nonlocal result
-        if result is not None:
-            event.app.exit(result=result)
-            return "HANDLED"
-        if drafts.editing is not None:
-            status["value"] = "Save or cancel the active draft edit first."
-            return "HANDLED"
-        contents = drafts.ready_contents
-        if not contents:
-            status["value"] = "Press E to enter at least one Memory."
-            event.app.layout.focus(draft_pane.text_area)
+    def _submit(self, event) -> SurfaceActionResult:
+        content = self.memory_input.text
+        if not content.strip():
+            self.status = "A Memory must contain nonblank text."
             return "HANDLED"
         request = AddRequest(
-            context_locator=selector.selection.selected_name,
-            contents=contents,
+            context_locator=self.selector.selection.selected_name, contents=(content,)
         )
         try:
-            completed = execute(request)
+            completed = self.execute(request)
             if not isinstance(completed, AddResult):
                 raise TypeError("Add application returned an invalid result.")
         except (OSError, RuntimeError, TypeError, ValueError) as error:
-            status["value"] = f"Add failed · {error}"
-            return "HANDLED"
-        result = completed
-        status["value"] = ""
-        refresh_drafts()
-        event.app.layout.focus(todo_control)
+            self.status = f"Add failed · {error}"
+            self._refresh_viewer()
+        else:
+            self.results.append(completed)
+            self.memory_input.text = ""
+            self.status = (
+                f"Added [{completed.memories[0].uid[:8]}] to {completed.context_name}"
+            )
+            self._refresh_viewer(added=True)
         return "HANDLED"
 
-    surfaces = SurfaceFocusController(
-        (
-            FocusSurface(
-                "TARGET",
-                selector.control,
-                move_vertical=move_context,
-                activate=choose_context,
-                on_vertical_enter=enter_context,
-            ),
-            FocusSurface(
-                "DRAFTS",
-                draft_pane.text_area,
-                move_vertical=move_draft,
-                activate=activate_draft,
-            ),
-            FocusSurface(
-                "TO_DO",
-                todo_control,
-                move_vertical=lambda _event, _delta: "BOUNDARY",
-                activate=submit,
-            ),
+    def _paste(self, event) -> None:
+        if "\n" in event.data or "\r" in event.data:
+            self.status = "Paste one Memory on a single line."
+        else:
+            self.memory_input.buffer.insert_text(event.data)
+        event.app.invalidate()
+
+    def _close(self, event) -> None:
+        event.app.exit(result=tuple(self.results))
+
+    def _close_context(self, event) -> bool:
+        if not self.context.is_open:
+            return False
+        was_focused = event.app.layout.has_focus(self.context.control)
+        self.context.close()
+        if was_focused:
+            event.app.layout.focus(self.context.control)
+        return True
+
+    def _back(self, event) -> None:
+        dispatch_tui_back(event, self._close_context, close=self._close)
+
+    def _collapse(self, event) -> None:
+        self.selector.collapse()
+        event.app.invalidate()
+
+    def _expand(self, event) -> None:
+        self.selector.expand()
+        event.app.invalidate()
+
+    def _expand_all(self, event) -> None:
+        self.selector.toggle_expand_all()
+        event.app.invalidate()
+
+    def _bind_keys(self) -> None:
+        selector_focus = has_focus(self.selector.control)
+        viewer_focus = has_focus(self.viewer.text_area)
+        memory_focus = has_focus(self.memory_input)
+        self.bindings.add("left", filter=selector_focus, eager=True)(self._collapse)
+        self.bindings.add("right", filter=selector_focus, eager=True)(self._expand)
+        bind_case_insensitive_key(self.bindings, "a", filter=selector_focus)(
+            self._expand_all
         )
-    )
-    bind_surface_navigation(bindings, surfaces)
+        self.bindings.add("pageup", filter=viewer_focus)(
+            partial(scroll_wrapped_page, direction=-1)
+        )
+        self.bindings.add("pagedown", filter=viewer_focus)(
+            partial(scroll_wrapped_page, direction=1)
+        )
+        self.bindings.add(Keys.BracketedPaste, filter=memory_focus)(self._paste)
+        self.bindings.add("escape", eager=True)(self._back)
+        self.bindings.add("backspace", filter=~memory_focus, eager=True)(self._back)
+        bind_case_insensitive_key(self.bindings, "q", filter=~memory_focus)(self._back)
+        bind_tui_interrupt(self.bindings, self._close)
 
-    selector_focus = has_focus(selector.control)
 
-    @bindings.add("left", filter=selector_focus, eager=True)
-    def _collapse(event) -> None:
-        selector.collapse()
-        event.app.invalidate()
+def run_add_workbench(
+    *,
+    setup: AddWorkbenchSetup,
+    execute: Callable[[AddRequest], AddResult],
+    load_memories: Callable[[str], tuple[AddedMemory, ...]],
+    app_input: Input | None = None,
+    app_output: Output | None = None,
+    require_tty: bool = True,
+) -> tuple[AddResult, ...]:
+    """Browse one Context and immediately append each submitted Memory."""
 
-    @bindings.add("right", filter=selector_focus, eager=True)
-    def _expand(event) -> None:
-        selector.expand()
-        event.app.invalidate()
-
-    @bindings.add(" ", filter=selector_focus, eager=True)
-    def _choose(event) -> None:
-        choose_context(event)
-        event.app.invalidate()
-
-    @bind_case_insensitive_key(bindings, "a", filter=selector_focus)
-    def _expand_all(event) -> None:
-        selector.toggle_expand_all()
-        event.app.invalidate()
-
-    drafts_focus = has_focus(draft_pane.text_area) & Condition(lambda: result is None)
-
-    @bind_case_insensitive_key(bindings, "e", filter=drafts_focus)
-    def _edit(event) -> None:
-        begin_edit(event)
-
-    @bind_case_insensitive_key(bindings, "n", filter=drafts_focus)
-    def _new(event) -> None:
-        begin_edit(event, new=True)
-
-    @bind_case_insensitive_key(bindings, "d", filter=drafts_focus)
-    def _delete(event) -> None:
-        drafts.delete_selected()
-        status["value"] = ""
-        refresh_drafts()
-        event.app.invalidate()
-
-    @bindings.add("c-s", filter=has_focus(editor.text_area), eager=True)
-    def _save_edit(event) -> None:
-        try:
-            drafts.save_edit(editor.text_area.text)
-        except ValueError as error:
-            status["value"] = str(error)
-            event.app.invalidate()
-            return
-        input_manager.clear()
-        status["value"] = "Draft saved locally · Context not changed."
-        refresh_drafts()
-        event.app.layout.focus(draft_pane.text_area)
-        event.app.invalidate()
-
-    @bindings.add("escape", filter=has_focus(editor.text_area), eager=True)
-    def _cancel_edit(event) -> None:
-        drafts.cancel_edit()
-        input_manager.clear()
-        status["value"] = "Edit cancelled · Context not changed."
-        refresh_drafts()
-        event.app.layout.focus(draft_pane.text_area)
-        event.app.invalidate()
-
-    read_only_focus = Condition(lambda: surfaces.active(get_app()) is not None)
-
-    def close(event) -> None:
-        event.app.exit(result=result)
-
-    bind_tui_interrupt(bindings, close)
-
-    @bindings.add("escape", filter=read_only_focus, eager=True)
-    @bindings.add("backspace", filter=read_only_focus, eager=True)
-    @bind_case_insensitive_key(bindings, "q", filter=read_only_focus)
-    def _close(event) -> None:
-        dispatch_tui_back(event, close=close)
-
-    return app.run()
+    if require_tty:
+        require_interactive_terminal(
+            "Interactive Add",
+            snapshot_hint="Pass positional MEMORY values or --paste outside a terminal.",
+        )
+    if not isinstance(setup, AddWorkbenchSetup):
+        raise TypeError("Add workbench requires an AddWorkbenchSetup.")
+    return _AddWorkbench(
+        setup=setup,
+        execute=execute,
+        load_memories=load_memories,
+        app_input=app_input,
+        app_output=app_output,
+    ).run()

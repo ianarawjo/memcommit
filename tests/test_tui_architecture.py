@@ -213,10 +213,10 @@ def test_add_tui_delegates_common_interaction_mechanics() -> None:
 
     assert {
         "memcommit.adapters.console.terminal.components.operation_context_scope_editor.existing_context_selector",
+        "memcommit.adapters.console.terminal.components.operation_context_scope_editor.compact_context_selector",
         "memcommit.adapters.console.terminal.components.focus",
         "memcommit.adapters.console.terminal.components.frame",
-        "memcommit.adapters.console.terminal.components.in_frame_input",
-        "memcommit.adapters.console.terminal.components.multiline_input",
+        "memcommit.adapters.console.terminal.components.primitives",
         "memcommit.adapters.console.terminal.components.scrollable_pane",
     } <= imports
     assert ".vertical_scroll" not in source

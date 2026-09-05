@@ -1,0 +1,8 @@
+LIVE PTY · 52 180                                                                                                                                                                   
+Context: project                                                                                                                                                                    
+  Memories 2  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory b6952cc2] Existing project Memory.                                                                                                                                        
+  [memory e63a872c] A compact Memory.                                                                                                                                               
+Second line stays together.

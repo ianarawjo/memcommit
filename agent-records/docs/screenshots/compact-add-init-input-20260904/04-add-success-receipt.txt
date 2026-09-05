@@ -1,0 +1,3 @@
+Added 1 Memory to 'project'.                                                                                                                                                        
+  [e63a872c] A compact Memory.\nSecond line stays together.                                                                                                                         
+Operation Checkpoint [aa23d5bd].
