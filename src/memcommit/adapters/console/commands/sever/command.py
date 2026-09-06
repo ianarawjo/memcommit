@@ -83,8 +83,8 @@ from memcommit.application.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
     sever_memory_changes,
 )
+from memcommit.application.operations.sever.inputs import capture_sever_binding
 from memcommit.application.operations.sever.runtime import (
-    capture_sever_binding,
     execute_sever_analysis,
     execute_sever_apply,
     execute_sever_session_apply,

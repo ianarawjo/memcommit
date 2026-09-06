@@ -324,3 +324,51 @@ removed. It cannot mutate a Source.
   cross-filesystem journal for damaged or only partially durable files.
 - Sever Undo/Redo has exception rollback across Context and session writes, but
   a process or machine crash between its file moves is not journal-recovered.
+
+
+## 2026-09-05 Apply responsibility split
+
+The production runtime had accumulated detached result calculation, input
+capture, authority validation, checkpoint metadata, two save modes, interrupted
+recovery, and compensation in one module. Its output port alone contained most
+of that code. These responsibilities now live under the operation-owned `apply/`
+package; this is an ownership refactor, not a new Apply lifecycle.
+
+- `apply/projection.py` maps reviewed decisions to exact Update operations and
+  detached Context post-images. It performs no Store writes or locking. Normal
+  publication, interrupted recovery, and compensation reuse the same calculation
+  so they cannot independently reinterpret the accepted decision ledger.
+- `apply/checkpoints.py` constructs checkpoint metadata and owns its exact
+  save-mode-specific legacy compatibility comparison. Owner membership, Context
+  and Memory identity, review digests, and persisted field names are unchanged.
+- `apply/execution.py` implements `MemoryStoreSeverOutputPort`. It keeps the Grant
+  registry lock, before/after authority checks, and compensation on failed
+  revalidation around the complete selected save-mode transaction.
+- `apply/self_save.py` owns in-place publication, interrupted recovery, and
+  compensation as one family. `apply/other_save.py` owns the equivalent legacy
+  require-new Result route. Their Store lock order, CAS sets, checkpoint order,
+  and exact pre/post-image checks are preserved.
+- `inputs.py` owns frame capture and request input freezing. Both analysis and
+  Apply revalidation depend on this module; Apply must not import `runtime.py`
+  to recapture its reviewed input.
+- `runtime.py` retains the `execute_sever_*` entry points, session/destination
+  adapters, and provider-attempt wiring. The established input/output port and
+  capture names remain direct aliases to their canonical owners. Tests that
+  observe Update projection patch `apply.projection.apply_update` directly.
+
+The name `apply` follows the operation's existing execution phase; `projection`
+means the conversion from reviewed decisions to a detached Context state. The
+internal `SELF_SAVE` and `OTHER_SAVE` values remain unchanged. Splitting recovery
+and compensation into unrelated generic modules was rejected because each must
+share its save mode's exact mutation and checkpoint contract. A new generic
+transaction engine, schema migration, and UI redesign are outside this change.
+
+This extraction does not remove the existing private Store API coupling in
+compensation or introduce a cross-filesystem journal. Those implementation
+limitations now have a focused owner in the save-mode modules. No interactive
+state, key sequence, rendered text, or user approval boundary changes, so the
+existing terminal captures remain applicable.
+
+Verification covers real-Store self/other-save, owner identity, Grant changes,
+CAS failure compensation, interrupted recovery, Undo/Redo, terminal-independent
+imports, compatibility alias identity, and exact legacy checkpoint matching.

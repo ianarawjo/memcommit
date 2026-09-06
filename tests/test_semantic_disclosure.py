@@ -18,7 +18,7 @@ from memcommit.application.capabilities.semantic.disclosure import (
     require_semantic_disclosure_authority,
 )
 from memcommit.application.operations.sever.application import SeverApplicationError
-from memcommit.application.operations.sever.runtime import capture_sever_binding
+from memcommit.application.operations.sever.inputs import capture_sever_binding
 from memcommit.application.operations.summarize.model import (
     SummarizeError,
     collect_summary_scope,

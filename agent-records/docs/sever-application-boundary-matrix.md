@@ -91,10 +91,10 @@ for Sever's decision meaning.
 
 `memcommit.application.operations.sever.session_store` owns only the private session file
 layout, locking, and digest CAS. Sever-to-Update translation and Source
-publication remain in `memcommit.application.operations.sever.runtime`, because a private
+publication belong to `memcommit.application.operations.sever.apply`, because a private
 review receipt and an ordinary Context mutation have different recovery and
 authority boundaries. The deterministic in-memory ADD/EDIT/REMOVE projection
-now delegates to `memcommit.application.operations.update.application.apply_update`.
+in `apply.projection` delegates to `memcommit.application.operations.update.application.apply_update`.
 That shared boundary returns only detached post-images: it does not open an
 Update workbench, persist an Update session, create a checkpoint, or render an
 Update receipt. Sever therefore retains its save-mode, authority, recovery,
@@ -248,3 +248,20 @@ success now prints a compact KEEP/FORGET receipt instead of the candidate
 report. `mem review sever --session UID` accepts only an APPLIED session and
 cannot decide candidates or mutate a Source; REVIEWING sessions resume
 through `mem sever`.
+
+
+## 2026-09-05 Apply module ownership
+
+The internal Apply port is now implemented in `apply/execution.py`, with
+`apply/projection.py` for detached results, `apply/checkpoints.py` for checkpoint
+metadata and legacy matching, and `apply/self_save.py` / `apply/other_save.py`
+for each mode's publication, recovery, and compensation. Shared input capture
+lives in `inputs.py` so analysis and Apply revalidation do not depend on runtime
+composition. `runtime.py` keeps callable entry points and behavior-free aliases
+for its former input/output port and capture names.
+
+The lifecycle and safety invariants above are unchanged. See the Apply
+responsibility split in [the Sever rationale](mem-sever-design-rationale.md)
+for the motivating scenario, dependency direction, naming decisions, and
+remaining Store coupling. No new operation route state or UI behavior is
+introduced by this module split.

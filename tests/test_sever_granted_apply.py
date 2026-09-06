@@ -29,9 +29,9 @@ from memcommit.application.operations.sever.application import (
     SeverApplicationError,
     SeverPersistedApplyRequest,
 )
+from memcommit.application.operations.sever.apply.execution import MemoryStoreSeverOutputPort
 from memcommit.application.operations.sever.runtime import (
     MemoryStoreSeverInputPort,
-    MemoryStoreSeverOutputPort,
     execute_sever_session_apply,
     execute_sever_session_start,
 )

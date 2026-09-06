@@ -10,7 +10,7 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.application.operations.sever.runtime as sever_runtime
+import memcommit.application.operations.sever.apply.projection as sever_projection
 from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.sever import command as sever_command
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
@@ -380,13 +380,13 @@ def test_sever_self_save_preserves_context_and_memory_identity(
         lambda: provider,
     )
     applied_update_plans = []
-    apply_update = sever_runtime.apply_update
+    apply_update = sever_projection.apply_update
 
     def observe_update_plan(plan, target):
         applied_update_plans.append(plan)
         return apply_update(plan, target)
 
-    monkeypatch.setattr(sever_runtime, "apply_update", observe_update_plan)
+    monkeypatch.setattr(sever_projection, "apply_update", observe_update_plan)
     before_uid = source.uid
     before_memory_uids = tuple(source.memories)
 
@@ -545,13 +545,13 @@ def test_accept_materializes_only_reviewed_changes_in_source(
         lambda: SeverProvider(),
     )
     applied_update_plans = []
-    apply_update = sever_runtime.apply_update
+    apply_update = sever_projection.apply_update
 
     def observe_update_plan(plan, target):
         applied_update_plans.append(plan)
         return apply_update(plan, target)
 
-    monkeypatch.setattr(sever_runtime, "apply_update", observe_update_plan)
+    monkeypatch.setattr(sever_projection, "apply_update", observe_update_plan)
 
     result = runner.invoke(
         app,
