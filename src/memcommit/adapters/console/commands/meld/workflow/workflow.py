@@ -462,7 +462,6 @@ def _run_interactive(
     session: MeldSession,
     provider_factory,
     allow_apply: bool = True,
-    analysis_origin: str | None = None,
 ) -> MeldSession:
     """Run candidate decisions; legacy Compare-backed sessions are read-only."""
     if session.schema_version == MELD_CANDIDATE_SCHEMA_VERSION:
@@ -703,7 +702,6 @@ def execute_meld_command(
         )
         present_started_meld(
             session,
-            directional_prewarm_origin=None,
         )
         return
 

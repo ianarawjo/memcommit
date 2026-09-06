@@ -64,7 +64,6 @@ from memcommit.providers.subscription import (
     connect_codex_chatgpt_provider,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
 from memcommit.application.operations.update.model import (
     UpdateError,
     UpdateSession,
@@ -310,8 +309,6 @@ def _plan_update_with_wait(
 
 def _decide_direct_update(
     prepared: UpdateSession,
-    *,
-    analysis_origin: str | None,
 ) -> UpdateSession | None:
     """Return the exact staged proposal only after explicit Apply."""
 
@@ -319,7 +316,6 @@ def _decide_direct_update(
         return prepared
     decision = decide_update_application(
         prepared,
-        analysis_origin=analysis_origin,
     )
     return prepared if decision == "APPLY" else None
 
@@ -815,21 +811,6 @@ def cmd(
         cached = None
 
     try:
-        update_prewarm_match = None
-        update_analysis_origin: str | None = None
-        if session is not None:
-            from memcommit.study_scenarios.legacy.prewarm.update import (
-                installed_update_prewarm_origin,
-            )
-
-            update_analysis_origin = (
-                None
-                if inline_source_content is not None
-                else installed_update_prewarm_origin(
-                    store,
-                    session,
-                )
-            )
         if session is None:
             if (
                 cached is not None
@@ -851,92 +832,20 @@ def cmd(
                 )
             ):
                 session = cached.with_status("staged")
-                from memcommit.study_scenarios.legacy.prewarm.update import (
-                    installed_update_prewarm_origin,
-                )
-
-                origin = (
-                    None
-                    if inline_source_content is not None
-                    else installed_update_prewarm_origin(store, cached)
-                )
-                if origin is not None:
-                    update_analysis_origin = origin
-                    label = (
-                        "EXACT PREWARM"
-                        if origin == "EXACT_PREWARM"
-                        else (
-                            "PROJECTED PREWARM"
-                            if origin == "PROJECTED_PREWARM"
-                            else "EQUIVALENT SCOPE PREWARM"
-                        )
-                    )
-                    typer.echo(
-                        f"{label} · UPDATE PLAN REUSED · provider was not called."
-                    )
             else:
-                from memcommit.study_scenarios.legacy.prewarm.update import (
-                    find_installed_projectable_update_prewarm,
+                session = _plan_update_with_wait(
+                    source,
+                    target,
+                    source_descendants=source_descendants,
+                    target_descendants=target_descendants,
+                    granted_source=granted_source,
+                    granted_target=granted_target,
+                    source_memory_selector=source_memory,
+                    target_memory_selector=target_memory,
+                    inline_source_content=inline_source_content,
+                    goal_focus=goal_focus,
+                    allowed_target_uses=target_authorization.allowed,
                 )
-
-                update_prewarm_match = (
-                    None
-                    if (
-                        inline_source_content is not None
-                        or goal_focus is not None
-                        or source_memory is not None
-                        or target_memory is not None
-                    )
-                    else find_installed_projectable_update_prewarm(
-                        store=store,
-                        source=source,
-                        target=target,
-                        source_include_descendants=source_descendants,
-                        target_include_descendants=target_descendants,
-                        granted_source=granted_source,
-                        granted_target=granted_target,
-                    )
-                )
-                if (
-                    update_prewarm_match is not None
-                    and not update_operations_are_authorized(
-                        update_prewarm_match.session.operations,
-                        target_authorization.allowed,
-                    )
-                ):
-                    # A prewarm is reusable only when it fits the Target's
-                    # current mutation vocabulary. Replan with the constrained
-                    # schema instead of surfacing a late permission failure.
-                    update_prewarm_match = None
-                if update_prewarm_match is not None:
-                    session = update_prewarm_match.session.with_status("staged")
-                    update_analysis_origin = update_prewarm_match.origin
-                    label = (
-                        "EXACT PREWARM"
-                        if update_prewarm_match.origin == "EXACT_PREWARM"
-                        else (
-                            "EQUIVALENT SCOPE PREWARM"
-                            if update_prewarm_match.origin == "EQUIVALENT_SCOPE_PREWARM"
-                            else "PROJECTED PREWARM"
-                        )
-                    )
-                    typer.echo(
-                        f"{label} · UPDATE PLAN REUSED · provider was not called."
-                    )
-                else:
-                    session = _plan_update_with_wait(
-                        source,
-                        target,
-                        source_descendants=source_descendants,
-                        target_descendants=target_descendants,
-                        granted_source=granted_source,
-                        granted_target=granted_target,
-                        source_memory_selector=source_memory,
-                        target_memory_selector=target_memory,
-                        inline_source_content=inline_source_content,
-                        goal_focus=goal_focus,
-                        allowed_target_uses=target_authorization.allowed,
-                    )
             authorize_context_use(
                 target_access,
                 required_update_context_uses(session.operations),
@@ -957,35 +866,11 @@ def cmd(
                     "REVIEW PREVIOUS · mem review update --session "
                     f"{completed_previous.uid}"
                 )
-            if update_prewarm_match is not None:
-                from memcommit.study_scenarios.legacy.prewarm.update import (
-                    record_equivalent_update_prewarm,
-                    record_exact_update_prewarm,
-                    record_projected_update_prewarm,
-                )
-
-                recorder = (
-                    record_exact_update_prewarm
-                    if update_prewarm_match.origin == "EXACT_PREWARM"
-                    else (
-                        record_equivalent_update_prewarm
-                        if update_prewarm_match.origin == "EQUIVALENT_SCOPE_PREWARM"
-                        else record_projected_update_prewarm
-                    )
-                )
-                recorder(
-                    store,
-                    entry_key=update_prewarm_match.entry_key,
-                    session=session,
-                    prepared_source_name=(update_prewarm_match.prepared_source_name),
-                )
-
         if session.goal_focus is not None:
             revalidate_goal_focus(store, session.goal_focus)
 
         reviewed = _decide_direct_update(
             session,
-            analysis_origin=update_analysis_origin,
         )
         if reviewed is None:
             current = store.load_staged_update() or session
@@ -1004,7 +889,6 @@ def cmd(
         ProfileError,
         QueryProviderError,
         RuntimeError,
-        StudyPrewarmRegistryError,
         UpdateError,
         ValueError,
     ) as error:

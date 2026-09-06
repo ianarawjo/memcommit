@@ -44,7 +44,6 @@ def test_production_sever_consumers_use_the_operation_owner() -> None:
         "src/memcommit/application/operations/sever/application.py",
         "src/memcommit/application/operations/sever/provider.py",
         "src/memcommit/application/operations/sever/resolution_adapter.py",
-        "src/memcommit/study_scenarios/legacy/prewarm/sever.py",
         "src/memcommit/application/operations/sever/session_store.py",
         "src/memcommit/application/operations/sever/runtime.py",
         "src/memcommit/persistence/operations",

@@ -92,7 +92,6 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
         "src/memcommit/persistence/store/record_restore_checkpoint.py",
         "src/memcommit/persistence/store/checkpoint",
         "src/memcommit/persistence/store/command_restoration",
-        "src/memcommit/study_scenarios/legacy/prewarm/atomize.py",
     )
     legacy_names = tuple(legacy_name for legacy_name, _canonical in MODULE_PAIRS)
 

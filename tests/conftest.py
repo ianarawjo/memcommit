@@ -117,3 +117,19 @@ def isolated_store(tmp_path, monkeypatch):
     )
 
     return store_dir
+
+
+@pytest.fixture
+def retired_study_artifacts(isolated_store):
+    """Old bundle files neither affect commands nor get deleted as a side effect."""
+    paths = (
+        "study-semantic-prewarm/registry.json",
+        "study-semantic-prewarm-reference.json",
+        "study-prewarm-installations/declared-atomize-old.json",
+    )
+    artifacts = {isolated_store / name: b"retired, deliberately invalid JSON" for name in paths}
+    for path, content in artifacts.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(content)
+    yield artifacts
+    assert {path: path.read_bytes() for path in artifacts} == artifacts

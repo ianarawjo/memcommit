@@ -209,5 +209,4 @@ def cmd(
         created=False,
         audit=applied.audit,
         recovered_application=applied.recovered,
-        exact_prewarm=executed.analysis_origin == "EXACT_PREWARM",
     )

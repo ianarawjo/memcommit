@@ -7,7 +7,6 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.exe
     ComparisonExecutionResult,
     connect_comparison_provider,
     ensure_comparison_analysis,
-    install_prepared_comparison_analysis,
     load_comparison_context,
     recursive_comparison_projection,
 )
@@ -18,7 +17,6 @@ __all__ = [
     "ComparisonExecutionResult",
     "connect_comparison_provider",
     "ensure_comparison_analysis",
-    "install_prepared_comparison_analysis",
     "load_comparison_context",
     "recursive_comparison_projection",
 ]

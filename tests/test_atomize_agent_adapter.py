@@ -220,7 +220,6 @@ def test_open_calls_one_public_method_and_projects_cache_and_effect(
             "kind": "open",
             "context_name": "task/source",
             "refresh": True,
-            "use_prepared": False,
         }
     )
 
@@ -230,8 +229,7 @@ def test_open_calls_one_public_method_and_projects_cache_and_effect(
             {
                 "context_name": "task/source",
                 "refresh": True,
-                "use_prepared": False,
-                "memory_selector": None,
+                    "memory_selector": None,
             },
         )
     ]
@@ -662,7 +660,7 @@ def test_companion_skill_preserves_read_only_issue_and_exact_apply_boundaries():
     assert "Use when the user asks" in normalized
     assert "Invoke `memcommit_atomize` directly." in normalized
     assert "Send `version: 1` and `kind: open`" in normalized
-    assert "`EXACT_PREWARM` is cached" in normalized
+    assert "EXACT_PREWARM" not in normalized
     assert "Use the newest proposal version" in normalized
     assert "does not collect or incorporate responses" in normalized
     assert "it must not already exist" in normalized

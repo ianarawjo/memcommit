@@ -10,7 +10,6 @@ Last reviewed: 2026-08-30.
 proposal = client.open_atomize_analysis(
     context_name=None,
     refresh=False,
-    use_prepared=True,
     memory_selector=None,
 )
 plan = client.plan_atomize_output(
@@ -35,9 +34,9 @@ readiness. `AtomizePlanUpdateResult` is the sole provider-free edit result.
 
 ## Open, planning, and Apply
 
-Open returns one exact origin: `SAVED`, `EXACT_PREWARM`, or `PROVIDER`.
+Open returns one exact origin: `SAVED` or `PROVIDER`.
 Opening never edits the Source Context. `refresh=True` explicitly requests a
-new provider analysis; `use_prepared=False` disables hidden prepared lookup.
+new provider analysis. The retired `use_prepared` option is no longer accepted.
 
 Output planning is provider-free and exact-version bound. A distinct Output
 name is require-new and remains only a plan. Apply rechecks the exact Source,
@@ -71,8 +70,11 @@ does not load commands, Typer, or prompt-toolkit.
 
 ## Verification and limits
 
-Focused tests cover exports, lazy imports, whole/focused open, saved/prepared
+Focused tests cover exports, lazy imports, whole/focused open, saved
 reuse, refresh, read-only issue projection, Output planning, both Apply
 directions, lineage, unresolved audit, recovery, stale conflicts, and the
 absence of response/Grounding methods. Resolution of those findings is an
 intentional non-goal of this API.
+
+Prewarm retirement and existing-data boundaries are recorded in
+[the retirement rationale](study-prewarm-retirement-design-rationale.md).

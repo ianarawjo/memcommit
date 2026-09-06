@@ -9,7 +9,7 @@ one stable `MemCommitClient` method:
 
 | Action | Provider | Durable Context effect | Purpose |
 | --- | --- | --- | --- |
-| `open` | saved/prepared hit: no; miss/refresh: yes | none | inspect whole-Context or focused exact-Memory analysis |
+| `open` | saved hit: no; miss/refresh: yes | none | inspect whole-Context or focused exact-Memory analysis |
 | `plan_output` | no | none | select in-place Source or require-new Save As destination |
 | `apply_as_is` | final normal-form verification only | one Source checkpoint | apply the exact current in-place proposal |
 | `save_as` | final normal-form verification only | one new-Context checkpoint | publish the exact require-new plan |
@@ -47,3 +47,6 @@ origin, exact planning, both checkpoint directions, retry recovery, stale
 rejection, registry composition, and absence of the retired Grounding adapter.
 The tool currently covers local ordinary Contexts. It does not define the
 future consumer of an unresolved Atomize receipt.
+
+Prewarm retirement and existing-data boundaries are recorded in
+[the retirement rationale](study-prewarm-retirement-design-rationale.md).

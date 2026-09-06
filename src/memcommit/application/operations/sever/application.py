@@ -38,20 +38,9 @@ class FrozenSeverInputs:
     criteria: SeverContextBinding
 
 
-SeverPreparedOrigin = Literal[
-    "EXACT_PREWARM",
-    "EQUIVALENT_SCOPE_PREWARM",
-    "PROJECTED_PREWARM",
-]
-SeverAnalysisOrigin = Literal[
-    "PROVIDER",
-    "EXACT_PREWARM",
-    "EQUIVALENT_SCOPE_PREWARM",
-    "PROJECTED_PREWARM",
-]
+SeverAnalysisOrigin = Literal["PROVIDER"]
 SeverAnalysisStage = Literal[
     "INPUTS_FROZEN",
-    "PREPARED_REUSED",
     "CONNECTING_PROVIDER",
     "ANALYZING",
 ]
@@ -72,14 +61,6 @@ class SeverAnalysisResult:
 
     session: SeverSession
     origin: SeverAnalysisOrigin
-
-
-@dataclass(frozen=True)
-class SeverPreparedAnalysis:
-    """One adapter-authorized prepared review and its projection relation."""
-
-    session: SeverSession
-    origin: SeverPreparedOrigin
 
 
 @dataclass(frozen=True)
@@ -157,19 +138,8 @@ class SeverInputPort(Protocol):
         """Return complete inputs only after all pre-disclosure checks pass."""
 
 
-class SeverPreparedLookup(Protocol):
-    """Look up one exact prepared review for already-authorized inputs."""
-
-    def __call__(
-        self,
-        inputs: FrozenSeverInputs,
-        output_name: str,
-    ) -> SeverPreparedAnalysis | None:
-        """Return a fresh review or ``None`` without broadening either frame."""
-
-
 class SeverProviderFactory(Protocol):
-    """Construct the configured semantic provider lazily after cache lookup."""
+    """Construct the configured semantic provider lazily after input authorization."""
 
     def __call__(self) -> object:
         """Return one provider for the complete Source × Criteria turn."""
@@ -237,9 +207,7 @@ def _validated_review(
     inputs: FrozenSeverInputs,
     output_name: str,
 ) -> SeverSession:
-    # Exact prepared artifacts and live provider results cross the same
-    # boundary. Validate both so a cache adapter cannot publish a wider or
-    # differently targeted review than the authorized request.
+    # Provider output must remain inside the exact authorized request.
     if (
         session.state != "REVIEWING"
         or session.application is not None
@@ -258,30 +226,12 @@ def run_sever_analysis(
     *,
     input_port: SeverInputPort,
     provider_factory: SeverProviderFactory,
-    prepared_lookup: SeverPreparedLookup | None = None,
     progress_observer: SeverProgressObserver | None = None,
 ) -> SeverAnalysisResult:
     """Create one complete review without CLI, TUI, or durable output effects."""
 
     inputs = input_port.freeze(request)
     _observe(progress_observer, "INPUTS_FROZEN", inputs)
-
-    prepared = (
-        prepared_lookup(inputs, request.output_name)
-        if prepared_lookup is not None
-        else None
-    )
-    if prepared is not None:
-        validated = _validated_review(
-            prepared.session,
-            inputs=inputs,
-            output_name=request.output_name,
-        )
-        _observe(progress_observer, "PREPARED_REUSED", inputs)
-        return SeverAnalysisResult(
-            session=validated,
-            origin=prepared.origin,
-        )
 
     _observe(progress_observer, "CONNECTING_PROVIDER", inputs)
     provider = provider_factory()

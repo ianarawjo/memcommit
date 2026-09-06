@@ -78,6 +78,7 @@ def _contexts(root):
     return store, reference, compared
 
 
+@pytest.mark.usefixtures("retired_study_artifacts")
 def test_public_compare_run_open_reuse_and_exact_refresh(isolated_store):
     store, reference, compared = _contexts(isolated_store)
     provider = _CompareProvider()

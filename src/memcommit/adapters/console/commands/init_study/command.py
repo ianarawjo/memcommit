@@ -181,8 +181,8 @@ def cmd(
         "Profiles and connected with real authority grants."
     )
     typer.echo(
-        "Operational history starts empty; no shared semantic prewarm was "
-        "attached. Checkpoints, sessions, ad-hoc caches, locks, and run logs "
+        "Operational history starts empty. "
+        "Checkpoints, sessions, ad-hoc caches, locks, and run logs "
         "were not imported."
     )
     typer.echo("Active Profile: " + display_escape_text(result.active_profile_name))

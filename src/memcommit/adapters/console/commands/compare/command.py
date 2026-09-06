@@ -102,15 +102,6 @@ from memcommit.application.operations.rationale.scope import (
 )
 from memcommit.persistence.store import MemoryStore
 from memcommit.providers.semantic import connect_operation_provider
-from memcommit.study_scenarios.legacy.prewarm.compare import (
-    EquivalentComparePrewarmMatch,
-    find_declared_equivalent_compare_analysis,
-    installed_compare_prewarm_origin,
-    project_declared_compare_analysis,
-    record_equivalent_compare_prewarm,
-    record_exact_compare_prewarm,
-)
-from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
 
 
 # A full Task 1 subtree Compare is one intentionally indivisible relation
@@ -142,7 +133,7 @@ def _resume_selected_comparison(
         store=store,
         analysis=analysis,
         reused=True,
-        origin=installed_compare_prewarm_origin(store, analysis) or "SAVED_REUSE",
+        origin="SAVED_REUSE",
         ledger=ledger,
         snapshot=snapshot,
     )
@@ -640,18 +631,6 @@ def cmd(
                 work=compare_frames,
             )
 
-        equivalent_match: EquivalentComparePrewarmMatch | None = None
-
-        def equivalent(comparison_input):
-            nonlocal equivalent_match
-            equivalent_match = find_declared_equivalent_compare_analysis(
-                store=store,
-                comparison_input=comparison_input,
-                current_name=current_name,
-                registry_snapshot=profile_registry,
-            )
-            return equivalent_match.analysis if equivalent_match is not None else None
-
         execution = ensure_comparison_analysis(
             store=store,
             reference_access=reference_access,
@@ -666,49 +645,12 @@ def cmd(
             memory_selectors=(reference_memory, compared_memory),
             refresh=refresh,
             analyze=analyze_input,
-            equivalent=(
-                equivalent
-                if reference_memory is None and compared_memory is None
-                else None
-            ),
-            project=(
-                (
-                    lambda comparison_input: project_declared_compare_analysis(
-                        store=store,
-                        comparison_input=comparison_input,
-                        current_name=current_name,
-                        registry_snapshot=profile_registry,
-                    )
-                )
-                if reference_memory is None and compared_memory is None
-                else None
-            ),
         )
-        if (
-            execution.origin == "EQUIVALENT_SCOPE_PREWARM"
-            and equivalent_match is not None
-        ):
-            if equivalent_match.origin == "EXACT_PREWARM":
-                record_exact_compare_prewarm(
-                    store,
-                    entry_key=equivalent_match.entry_key,
-                    analysis=execution.analysis,
-                )
-            else:
-                record_equivalent_compare_prewarm(
-                    store,
-                    entry_key=equivalent_match.entry_key,
-                    analysis=execution.analysis,
-                    prepared_context_names=(equivalent_match.prepared_context_names),
-                )
         _present_comparison(
             store=store,
             analysis=execution.analysis,
             reused=execution.reused,
-            origin=(
-                installed_compare_prewarm_origin(store, execution.analysis)
-                or execution.origin
-            ),
+            origin=execution.origin,
             ledger=ledger,
             snapshot=snapshot,
             durable=execution.durable,
@@ -728,7 +670,6 @@ def cmd(
         ProfileError,
         QueryProviderError,
         RationaleError,
-        StudyPrewarmRegistryError,
         ValueError,
     ) as error:
         typer.secho(

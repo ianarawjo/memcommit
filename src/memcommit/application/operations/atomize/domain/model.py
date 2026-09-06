@@ -27,9 +27,8 @@ ATOMIZE_READING_LABEL_WORD_LIMIT = 20
 
 
 ATOMIZE_RULESET_VERSION = "atomize-v2-reviewed-frame-draft"
-# Study prewarm keys bind the complete provider prompt/decoder contract in
-# addition to the semantic ruleset.  Keep this separate so a presentation-only
-# ruleset change cannot accidentally make an older structured response current.
+# Keep the provider prompt/decoder version separate from the semantic ruleset
+# so presentation changes do not redefine the structured response contract.
 ATOMIZE_PROVIDER_CONTRACT_VERSION = "atomize-one-shot-quality-v1"
 ATOMIZE_LEGACY_RULESET_VERSION = "atomize-v1-draft"
 ATOMIZE_SIZE_REVIEW_CHARS = 80

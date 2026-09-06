@@ -329,16 +329,15 @@ def open_atomize_analysis(
     context_name: str | None = None,
     *,
     refresh: bool = False,
-    use_prepared: bool = True,
     memory_selector: str | None = None,
 ) -> AtomizeAnalysisResult:
-    """Open one exact saved, prepared, or provider-backed analysis pair."""
+    """Open one exact saved or provider-backed analysis pair."""
 
     if context_name is not None and (
         not isinstance(context_name, str) or not context_name.strip()
     ):
         raise AtomizeInputError("context_name must be nonblank text when supplied.")
-    if not isinstance(refresh, bool) or not isinstance(use_prepared, bool):
+    if not isinstance(refresh, bool):
         raise AtomizeInputError("Atomize analysis controls must be booleans.")
     if memory_selector is not None and (
         not isinstance(memory_selector, str) or not memory_selector.strip()
@@ -351,12 +350,6 @@ def open_atomize_analysis(
                 context=context,
                 refresh=refresh,
                 memory_selector=memory_selector,
-                # Refresh is an explicit provider request. It dominates the
-                # general cache preference instead of exposing an invalid
-                # refresh+prepared combination to callers.
-                allow_prepared=(
-                    use_prepared and not refresh and memory_selector is None
-                ),
             ),
             store=runtime.store,
             provider_factory=lambda: _provider(runtime),
@@ -400,7 +393,6 @@ def apply_atomize_as_is(
     snapshot = analysis._snapshot
     if not isinstance(snapshot, AtomizeExecutionSnapshot) or analysis.origin not in {
         "SAVED",
-        "EXACT_PREWARM",
         "PROVIDER",
     }:
         raise AtomizeInputError(

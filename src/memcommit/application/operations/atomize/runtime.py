@@ -1149,11 +1149,9 @@ def execute_atomize_in_place(
         AtomizeAnalysisOpenRequest(
             context=request.context,
             refresh=request.refresh,
-            # Console Atomize is always in place, even when a compatible
-            # historical prewarm carried a now-retired Save As destination.
+            # Console Atomize always binds its Output plan to the Source.
             output_context_name=request.context.name,
             memory_selector=request.memory_selector,
-            allow_prepared=not request.refresh,
         ),
         store=store,
         provider_factory=provider_factory,

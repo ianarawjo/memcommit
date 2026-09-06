@@ -188,7 +188,6 @@ def render_atomize_apply_result(
     created: bool,
     audit: AtomizeApplicationAudit,
     recovered_application: bool = False,
-    exact_prewarm: bool = False,
 ) -> None:
     """Render one typed application receipt without owning its execution."""
 
@@ -208,8 +207,6 @@ def render_atomize_apply_result(
     typer.echo(effects)
     if normal_form is not None:
         typer.echo("NORMAL FORM · SEMANTIC CHUNK + DEDUN · VERIFIED")
-    if exact_prewarm:
-        typer.echo("ANALYSIS · EXACT PREWARM · INITIAL ANALYSIS REUSED")
     _render_unresolved_issues(session, audit)
     _render_applied_splits(session=session, result=result)
     if result.split_count:

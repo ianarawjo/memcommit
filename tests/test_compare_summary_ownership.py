@@ -159,4 +159,4 @@ def test_meld_has_no_compare_operation_presentation_or_prewarm_dependency() -> N
     assert "memcommit.application.operations.compare" not in source
     assert "memcommit.adapters.console.commands.compare" not in source
     assert "study_scenarios.legacy.prewarm.compare" not in source
-    assert "study_scenarios.legacy.prewarm.peer_relations" in source
+    assert "study_scenarios.legacy.prewarm" not in source

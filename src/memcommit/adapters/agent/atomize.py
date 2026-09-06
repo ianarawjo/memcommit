@@ -102,17 +102,13 @@ def _parse_request(payload: object) -> tuple[AtomizeAgentKind, dict[str, object]
             value,
             required={"version", "kind"},
             optional=frozenset(
-                {"context_name", "refresh", "use_prepared", "memory_selector"}
+                {"context_name", "refresh", "memory_selector"}
             ),
             label="Atomize open request",
         )
         return kind, {
             "context_name": _context_name(value),
             "refresh": _boolean(value.get("refresh", False), field="refresh"),
-            "use_prepared": _boolean(
-                value.get("use_prepared", True),
-                field="use_prepared",
-            ),
             "memory_selector": text_value(
                 value.get("memory_selector"),
                 field="memory_selector",
@@ -148,7 +144,7 @@ def _analysis_result(
     effect: str | None = None,
 ) -> JsonObject:
     provider_used = result.origin == "PROVIDER"
-    cache_used = result.origin in {"SAVED", "EXACT_PREWARM"}
+    cache_used = result.origin == "SAVED"
     projected: JsonObject = {
         "analysis_uid": result.analysis_uid,
         "version": result.version,
@@ -451,7 +447,6 @@ def atomize_agent_tool_schema() -> JsonObject:
             "context_name": nullable_text,
             "memory_selector": nullable_text,
             "refresh": {"type": "boolean", "default": False},
-            "use_prepared": {"type": "boolean", "default": True},
         },
     }
     plan_output = base("plan_output")

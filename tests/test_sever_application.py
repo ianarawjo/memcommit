@@ -29,8 +29,6 @@ from memcommit.application.operations.sever.application import (
     SeverDecisionRequest,
     SeverDestinationRequest,
     SeverPersistedApplyRequest,
-    SeverPreparedAnalysis,
-    SeverPreparedOrigin,
     SeverSessionSnapshot,
     run_sever_analysis,
     run_sever_apply,
@@ -273,63 +271,6 @@ def test_run_sever_analysis_converges_on_one_typed_request_without_terminal():
     assert result.session.source == inputs.source
     assert result.session.criteria == inputs.criteria
     assert result.session.output_name == "result"
-
-
-@pytest.mark.parametrize(
-    "origin",
-    (
-        "EXACT_PREWARM",
-        "EQUIVALENT_SCOPE_PREWARM",
-        "PROJECTED_PREWARM",
-    ),
-)
-def test_prepared_review_retains_origin_and_never_constructs_provider(
-    origin: SeverPreparedOrigin,
-):
-    inputs = _inputs()
-    stages: list[SeverAnalysisProgress] = []
-
-    result = run_sever_analysis(
-        SeverAnalysisRequest("source", "criteria", "result", False, False),
-        input_port=_StaticInputPort(inputs),
-        provider_factory=lambda: (_ for _ in ()).throw(
-            AssertionError("an exact prepared review must not construct a provider")
-        ),
-        prepared_lookup=lambda frozen, output: SeverPreparedAnalysis(
-            session=_review(frozen, output_name=output),
-            origin=origin,
-        ),
-        progress_observer=stages.append,
-    )
-
-    assert result.origin == origin
-    assert [event.stage for event in stages] == [
-        "INPUTS_FROZEN",
-        "PREPARED_REUSED",
-    ]
-
-
-def test_prepared_review_cannot_change_frozen_source_or_output():
-    inputs = _inputs()
-    other_source = replace(inputs.source, root_name="other-source")
-    invalid = replace(
-        _review(inputs),
-        source=other_source,
-        output_name="other-result",
-    )
-
-    with pytest.raises(SeverApplicationError, match="outside the frozen request"):
-        run_sever_analysis(
-            SeverAnalysisRequest("source", "criteria", "result", False, False),
-            input_port=_StaticInputPort(inputs),
-            provider_factory=lambda: (_ for _ in ()).throw(
-                AssertionError("invalid prepared review must not reach provider")
-            ),
-            prepared_lookup=lambda _inputs, _output: SeverPreparedAnalysis(
-                session=invalid,
-                origin="PROJECTED_PREWARM",
-            ),
-        )
 
 
 def test_run_sever_apply_validates_receipt_and_is_idempotent():
@@ -623,6 +564,7 @@ def test_sever_command_does_not_own_session_mutation_or_persistence():
     assert "sever_record_digest" not in source
 
 
+@pytest.mark.usefixtures("retired_study_artifacts")
 def test_real_store_analysis_and_apply_are_terminal_free_and_preserve_source(
     isolated_store,
     capsys,
@@ -1068,57 +1010,6 @@ def test_real_store_apply_name_race_leaves_review_and_existing_owner_unchanged(
     assert SeverSessionStore(store).load(analysis.session.uid) == analysis.session
 
 
-def test_runtime_retains_projected_cache_origin_and_skips_provider(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    source = ops.init("projection/source")
-    ops.add(source, "Keep only the access requirement.")
-    criteria = ops.init("projection/criteria")
-    ops.add(criteria, "Minimize unrelated personal detail.")
-    store.create_context(source)
-    store.create_context(criteria)
-    lookups = []
-
-    def projected_lookup(*, store, source, criteria, output_name):
-        lookups.append((store, source, criteria, output_name))
-
-        class Match:
-            session = _review(
-                FrozenSeverInputs(source=source, criteria=criteria),
-                output_name=output_name,
-            )
-            origin = "PROJECTED_PREWARM"
-
-        return Match()
-
-    monkeypatch.setattr(
-        sever_runtime,
-        "find_installed_projectable_sever_prewarm",
-        projected_lookup,
-    )
-
-    result = execute_sever_analysis(
-        SeverAnalysisRequest(
-            source_locator=source.name,
-            criteria_locator=criteria.name,
-            output_name="projection/result",
-            source_include_descendants=False,
-            criteria_include_descendants=False,
-        ),
-        store=store,
-        provider_factory=lambda: (_ for _ in ()).throw(
-            AssertionError("projected prepared analysis must not construct provider")
-        ),
-    )
-
-    assert result.origin == "PROJECTED_PREWARM"
-    assert len(lookups) == 1
-    assert lookups[0][3] == "projection/result"
-    assert not store.context_exists("projection/result")
-
-
 def test_real_store_rejects_missing_source_before_provider_construction(
     isolated_store,
 ):
@@ -1145,3 +1036,23 @@ def test_real_store_rejects_missing_source_before_provider_construction(
         )
 
     assert provider_calls == 0
+
+
+@pytest.mark.parametrize("change", ("source", "output"))
+def test_provider_review_cannot_change_frozen_source_or_output(monkeypatch, change):
+    inputs = _inputs()
+    invalid = _review(inputs)
+    if change == "source":
+        invalid = replace(invalid, source=replace(inputs.source, root_name="other"))
+    else:
+        invalid = replace(invalid, output_name="other-result")
+    monkeypatch.setattr(
+        "memcommit.application.operations.sever.application.analyze_sever",
+        lambda *_args: invalid,
+    )
+    with pytest.raises(SeverApplicationError, match="outside the frozen request"):
+        run_sever_analysis(
+            SeverAnalysisRequest("source", "criteria", "result", False, False),
+            input_port=_StaticInputPort(inputs),
+            provider_factory=object,
+        )

@@ -18,7 +18,7 @@ from memcommit.application.operations.atomize.records import (
 from memcommit.core.context import Context
 
 
-AtomizeAnalysisOrigin = Literal["SAVED", "EXACT_PREWARM", "PROVIDER"]
+AtomizeAnalysisOrigin = Literal["SAVED", "PROVIDER"]
 AtomizeProviderFactory = Callable[[], AtomizeProvider]
 
 
@@ -38,15 +38,11 @@ class AtomizeAnalysisOpenRequest:
     source_review_digest: str | None = None
     output_context_name: str | None = None
     memory_selector: str | None = None
-    allow_prepared: bool = False
 
     def __post_init__(self) -> None:
         if not isinstance(self.context, Context):
             raise TypeError("Atomize analysis open requires a Context.")
-        if not isinstance(self.refresh, bool) or not isinstance(
-            self.allow_prepared,
-            bool,
-        ):
+        if not isinstance(self.refresh, bool):
             raise TypeError("Atomize analysis open controls must be booleans.")
         if self.output_context_name is not None and (
             not isinstance(self.output_context_name, str)
@@ -62,20 +58,6 @@ class AtomizeAnalysisOpenRequest:
             raise AtomizeAnalysisApplicationError(
                 "Atomize Memory selector must be nonempty text."
             )
-        reviewed = (
-            bool(self.declared_frames)
-            or bool(self.declared_frame_origins)
-            or self.source_review_uid is not None
-            or self.source_review_digest is not None
-        )
-        if reviewed and self.allow_prepared:
-            raise AtomizeAnalysisApplicationError(
-                "Reviewed Atomize reanalysis cannot use a prepared analysis."
-            )
-        if self.refresh and self.allow_prepared:
-            raise AtomizeAnalysisApplicationError(
-                "Refreshed Atomize analysis cannot use a prepared analysis."
-            )
 
 
 @dataclass(frozen=True)
@@ -89,10 +71,6 @@ class AtomizeAnalysisOpenResult:
     @property
     def created_analysis(self) -> bool:
         return self.origin == "PROVIDER"
-
-    @property
-    def materialized_prepared(self) -> bool:
-        return self.origin == "EXACT_PREWARM"
 
 
 class AtomizeAnalysisOpenPort(Protocol):
@@ -113,7 +91,7 @@ def _validate_result(
 ) -> AtomizeAnalysisOpenResult:
     analysis = result.analysis
     review_record = result.review_record
-    if result.origin not in {"SAVED", "EXACT_PREWARM", "PROVIDER"}:
+    if result.origin not in {"SAVED", "PROVIDER"}:
         raise AtomizeAnalysisApplicationError(
             "Atomize analysis returned an unknown origin."
         )
@@ -145,10 +123,6 @@ def _validate_result(
     if request.refresh and result.origin != "PROVIDER":
         raise AtomizeAnalysisApplicationError(
             "Atomize refresh did not produce a new provider analysis."
-        )
-    if result.origin == "EXACT_PREWARM" and not request.allow_prepared:
-        raise AtomizeAnalysisApplicationError(
-            "Atomize analysis reused a prepared result outside its request."
         )
     if request.source_review_uid is not None and (
         analysis.source_review_uid != request.source_review_uid

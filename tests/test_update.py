@@ -1321,6 +1321,7 @@ def test_resolved_source_ref_content_change_invalidates_session():
     assert not session_matches(session, source, target)
 
 
+@pytest.mark.usefixtures("retired_study_artifacts")
 def test_impact_then_update_reuses_plan_and_materializes_local_fork(
     isolated_store,
     monkeypatch,
@@ -1436,7 +1437,7 @@ def test_tty_update_reviews_once_before_applying(
     assert applied.status == "applied"
     assert applied.application is not None
     assert len(reviews) == 1
-    assert reviews[0][1] == {"analysis_origin": None}
+    assert reviews[0][1] == {}
     target_after = store.load_direct(TASK1_TARGET_CHILD)
     assert target_after.memories[target_memory.uid].content != (
         target_before.memories[target_memory.uid].content
@@ -2554,6 +2555,7 @@ def test_multi_owner_write_failure_rolls_back_contexts_and_checkpoints(
     assert staged.application is None
 
 
+@pytest.mark.usefixtures("retired_study_artifacts")
 def test_invalid_provider_output_leaves_contexts_and_sessions_unchanged(
     isolated_store,
     monkeypatch,

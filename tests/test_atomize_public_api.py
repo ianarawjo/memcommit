@@ -24,17 +24,12 @@ from memcommit import (
     AtomizeStructuralApplyResult,
     MemCommitClient,
 )
-from memcommit.application.operations.atomize.domain import (
-    create_atomize_analysis,
-    impact_atomize,
-)
 from memcommit.application.operations.atomize.runtime import (
     capture_atomize_execution_snapshot,
 )
 from memcommit.adapters.python_api.errors import AtomizeExecutionError
 from memcommit.core.context import Memory
 from memcommit.persistence.store import MemoryStore
-from memcommit.study_scenarios.legacy.prewarm.atomize import AtomizePrewarmMatch
 
 
 _PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"
@@ -200,57 +195,6 @@ def test_open_projects_provider_analysis_then_resumes_without_provider(
     assert provider.calls == 1
 
 
-def test_exact_hidden_prewarm_is_materialized_without_provider(
-    isolated_store,
-    monkeypatch,
-):
-    client, store, context, _memory, _provider = _client_and_context()
-    prepared = create_atomize_analysis(
-        context,
-        impact_atomize(context, lambda: _Provider()),
-    )
-    match = AtomizePrewarmMatch(
-        entry_key="capture/atomize",
-        analysis=prepared,
-        output_context_name=context.name,
-    )
-    monkeypatch.setattr(
-        "memcommit.application.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
-        lambda *, store, context: match,
-    )
-    client = MemCommitClient(
-        root=store.store_dir,
-        semantic_provider_factory=lambda: (_ for _ in ()).throw(
-            AssertionError("exact prewarm opened a provider")
-        ),
-    )
-
-    result = client.open_atomize_analysis(use_prepared=True)
-
-    assert result.origin == "EXACT_PREWARM"
-    assert result.analysis_uid == prepared.uid
-
-
-def test_refresh_dominates_prepared_preference_and_calls_provider(
-    isolated_store,
-    monkeypatch,
-):
-    client, _store, context, _memory, provider = _client_and_context()
-    monkeypatch.setattr(
-        "memcommit.application.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
-        lambda **_kwargs: pytest.fail("refresh looked up a prepared analysis"),
-    )
-
-    refreshed = client.open_atomize_analysis(
-        context.name,
-        refresh=True,
-        use_prepared=True,
-    )
-
-    assert refreshed.origin == "PROVIDER"
-    assert provider.calls == 1
-
-
 def test_apply_as_is_records_one_checkpoint_and_exact_retry_recovers(
     isolated_store,
 ):
@@ -325,7 +269,7 @@ def test_saved_version_apply_rejects_unknown_or_changed_revision(isolated_store)
         )
 
 
-def test_open_can_focus_one_memory_without_reusing_whole_prepared_state(
+def test_open_can_focus_one_memory(
     isolated_store,
 ):
     store = MemoryStore()

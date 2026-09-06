@@ -841,7 +841,6 @@ class MemCommitClient:
         context_name: str | None = None,
         *,
         refresh: bool = False,
-        use_prepared: bool = True,
         memory_selector: str | None = None,
     ) -> AtomizeAnalysisResult:
         """Open one exact durable structural Atomize proposal."""
@@ -854,7 +853,6 @@ class MemCommitClient:
             self._runtime,
             context_name,
             refresh=refresh,
-            use_prepared=use_prepared,
             memory_selector=memory_selector,
         )
 

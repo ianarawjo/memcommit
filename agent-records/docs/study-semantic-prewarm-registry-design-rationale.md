@@ -1,5 +1,8 @@
 # Study semantic prewarm registry design rationale
 
+> Historical design: the prewarm implementation was removed on 2026-09-06.
+> Scenario data and ordinary sessions remain; see [retirement rationale](study-prewarm-retirement-design-rationale.md).
+
 > **Authorization contract updated 2026-08-30.** Permission claims below that use `EMBED`, `DERIVE`, `COMBINE`, `EXPORT`, `ACCEPT_DERIVED`, or `SAVE_*` describe the retired contract preserved for design history. The current contract uses `QUERY`, `CREATE`, `READ`, `UPDATE`, and `DELETE`; `READ` covers readable semantic use and Embed traversal, while `SHARE` remains a separate endpoint capability. See `granted-derived-ownership-design-rationale.md`.
 
 ## Status

@@ -55,15 +55,6 @@ from memcommit.application.operations.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
 )
-from memcommit.study_scenarios.legacy.prewarm.compare import (
-    EquivalentComparePrewarmMatch,
-    find_declared_equivalent_compare_analysis,
-    installed_compare_prewarm_origin,
-    project_declared_compare_analysis,
-    record_equivalent_compare_prewarm,
-    record_exact_compare_prewarm,
-)
-from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
 
 
 def _raise(error_type: type[Exception], error: BaseException) -> None:
@@ -204,19 +195,6 @@ def _execute(
             include_descendants=compared_descendants,
             registry=registry,
         )
-        registry_snapshot = registry
-
-    equivalent_match: EquivalentComparePrewarmMatch | None = None
-
-    def equivalent(comparison_input):
-        nonlocal equivalent_match
-        equivalent_match = find_declared_equivalent_compare_analysis(
-            store=runtime.store,
-            comparison_input=comparison_input,
-            current_name=current_name,
-            registry_snapshot=registry_snapshot,
-        )
-        return equivalent_match.analysis if equivalent_match is not None else None
 
     execution = ensure_comparison_analysis(
         store=runtime.store,
@@ -230,42 +208,10 @@ def _execute(
         refresh=refresh,
         expected_version=expected_version,
         analyze=lambda comparison_input: _analyze(runtime, comparison_input),
-        equivalent=(
-            equivalent if reference_memory is None and compared_memory is None else None
-        ),
-        project=(
-            (
-                lambda comparison_input: project_declared_compare_analysis(
-                    store=runtime.store,
-                    comparison_input=comparison_input,
-                    current_name=current_name,
-                    registry_snapshot=registry_snapshot,
-                )
-            )
-            if reference_memory is None and compared_memory is None
-            else None
-        ),
     )
-    if execution.origin == "EQUIVALENT_SCOPE_PREWARM" and equivalent_match is not None:
-        if equivalent_match.origin == "EXACT_PREWARM":
-            record_exact_compare_prewarm(
-                runtime.store,
-                entry_key=equivalent_match.entry_key,
-                analysis=execution.analysis,
-            )
-        else:
-            record_equivalent_compare_prewarm(
-                runtime.store,
-                entry_key=equivalent_match.entry_key,
-                analysis=execution.analysis,
-                prepared_context_names=equivalent_match.prepared_context_names,
-            )
     return _project_comparison(
         execution,
-        origin=(
-            installed_compare_prewarm_origin(runtime.store, execution.analysis)
-            or execution.origin
-        ),
+        origin=execution.origin,
     )
 
 
@@ -350,8 +296,6 @@ def compare_contexts(
         _raise(CompareStorageError, error)
     except (ComparisonError, TypeError, ValueError) as error:
         _raise(CompareExecutionError, error)
-    except StudyPrewarmRegistryError as error:
-        _raise(CompareExecutionError, error)
 
 
 def open_comparison(
@@ -433,8 +377,6 @@ def refresh_comparison(
     except OSError as error:
         _raise(CompareStorageError, error)
     except (ComparisonError, TypeError, ValueError) as error:
-        _raise(CompareExecutionError, error)
-    except StudyPrewarmRegistryError as error:
         _raise(CompareExecutionError, error)
 
 

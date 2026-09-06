@@ -494,7 +494,7 @@ def _provider_view(session: MeldSession) -> _ProviderView:
             _basis_proposals,
         ) = _assessment_provider_payload(session, basis, view)
         # Keep the provider field stable for cached completions and Study
-        # prewarms; its Python owner is now the peer-relation capability.
+        # saved results; its Python owner is now the peer-relation capability.
         payload["comparison_basis"] = basis_payload
         view = replace(
             view,

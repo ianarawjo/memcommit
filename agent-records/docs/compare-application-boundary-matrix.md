@@ -1,5 +1,9 @@
 # Compare application boundary matrix
 
+> 2026-09-06: Study prewarm routes and APIs are retired. Any older prewarm
+> discussion below is historical; the [retirement rationale](study-prewarm-retirement-design-rationale.md)
+> defines current behavior. Scenario data and ordinary saved sessions remain.
+
 > **Authorization contract updated 2026-08-30.** Permission claims below that use `EMBED`, `DERIVE`, `COMBINE`, `EXPORT`, `ACCEPT_DERIVED`, or `SAVE_*` describe the retired contract preserved for design history. The current contract uses `QUERY`, `CREATE`, `READ`, `UPDATE`, and `DELETE`; `READ` covers readable semantic use and Embed traversal, while `SHARE` remains a separate endpoint capability. See `granted-derived-ownership-design-rationale.md`.
 
 ## Lightweight Summary implementation ownership
@@ -46,7 +50,6 @@ by either application boundary.
 | Candidate | Durable | Provider | Result origin | Boundary |
 | --- | --- | --- | --- | --- |
 | exact current saved analysis | yes | no | `SAVED_REUSE` | exact frame, scope, source digest, and ruleset |
-| installed exact hidden analysis | materialized on use | no | `EXACT_PREWARM` | authority and complete current frames precede lookup |
 | ancestor-equivalent hidden analysis | materialized on use | no | recorded equivalent origin | operation-owned equivalence proof |
 | safe descendant-subset projection | no | no | `PROJECTED` | complete projected relation coverage; cannot Open |
 | live miss | according to local/Grant retention | one complete turn | `LIVE` | strict decoder and post-provider source revalidation |

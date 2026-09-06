@@ -133,7 +133,6 @@ def run_meld_shell(
     read_only: bool = False,
     review_only: bool = False,
     destination=None,
-    analysis_origin: str | None = None,
     draft_loader: Callable[[str], tuple[str | None, str]] | None = None,
     draft_saver: Callable[[str, str | None, str], None] | None = None,
 ) -> MeldShellAction | None:
@@ -161,15 +160,7 @@ def run_meld_shell(
     adapter = MeldResolutionWorkbenchAdapter(session)
 
     def current_view():
-        view = adapter.view()
-        if analysis_origin is None:
-            return view
-        label = (
-            "EXACT PREWARM"
-            if analysis_origin == "EXACT_PREWARM"
-            else "EQUIVALENT SCOPE PREWARM"
-        )
-        return replace(view, status=f"{view.status} · {label} · PROVIDER NOT CALLED")
+        return adapter.view()
 
     review_view = None
     if review_only:
@@ -186,26 +177,13 @@ def run_meld_shell(
             render_peer_relation_analysis(
                 session.relation_analysis_seed.analysis,
                 reused=True,
-                origin=analysis_origin or "SAVED_REUSE",
+                origin="SAVED_REUSE",
                 durable=True,
                 heading="MEM COMPARE · SYMMETRIC PEERS",
             )
             .partition("\nThe complete source-linked relation ledger")[0]
             .rstrip()
         )
-        if analysis_origin is not None:
-            label = (
-                "EXACT PREWARM"
-                if analysis_origin == "EXACT_PREWARM"
-                else "EQUIVALENT SCOPE PREWARM"
-            )
-            first_line, separator, remainder = relation_report.partition("\n")
-            relation_report = (
-                first_line
-                + separator
-                + f"ANALYSIS ORIGIN · {label} · PROVIDER NOT CALLED\n"
-                + remainder
-            )
     report_badges = _relation_issue_resolution_badges(session)
     report_conflicts_remaining = sum(not badge for badge in report_badges)
     global_strategies = (

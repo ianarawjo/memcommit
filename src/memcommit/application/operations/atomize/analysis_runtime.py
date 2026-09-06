@@ -1,4 +1,4 @@
-"""Production Store, prepared-cache, and provider adapters for Atomize open."""
+"""Production Store, and provider adapters for Atomize open."""
 
 from __future__ import annotations
 
@@ -32,9 +32,6 @@ from memcommit.application.capabilities.semantic.prompt_policy import (
     resolve_semantic_prompt_policy,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.study_scenarios.legacy.prewarm.atomize import (
-    find_declared_atomize_prewarm,
-)
 
 
 ATOMIZE_AGGREGATE_TIMEOUT_SECONDS = 300
@@ -105,94 +102,12 @@ def requested_atomize_memory_uids(
     )
 
 
-def _install_prepared_atomize_analysis(
-    *,
-    store: MemoryStore,
-    context: Context,
-    analysis: AtomizeAnalysisSession,
-    output_context_name: str | None,
-) -> AtomizeAnalysisOpenResult:
-    """Publish one exact hidden analysis as a fresh visible session pair."""
-
-    if (
-        analysis.context_uid != context.uid
-        or analysis.context_name != context.name
-        or not atomize_analysis_matches_context(analysis, context)
-    ):
-        raise AtomizeImpactError(
-            "Prepared atomize analysis does not match the current Context."
-        )
-    latest = store.load_direct(context.name)
-    if not atomize_analysis_matches_context(analysis, latest):
-        raise AtomizeImpactError(
-            "Context changed while the prepared atomize analysis was being "
-            "installed; no preview was saved."
-        )
-
-    existing = store.load_atomize_analysis(context.uid)
-    previous_workbench = (
-        store.load_atomize_workbench(existing) if existing is not None else None
-    )
-    workbench = create_atomize_review_record(
-        analysis,
-        output_context_name=output_context_name or context.name,
-    )
-    analysis_saved = False
-    history_created = False
-    try:
-        history_created = _archive_displaced_atomize_pair(
-            store,
-            existing=existing,
-            review_record=previous_workbench,
-            replacement_uid=analysis.uid,
-        )
-        store.save_atomize_analysis(analysis)
-        analysis_saved = True
-        store.save_atomize_workbench(workbench)
-    except Exception:
-        if not analysis_saved:
-            _remove_failed_atomize_archive(
-                store,
-                existing=existing,
-                created=history_created,
-            )
-            raise
-        try:
-            if existing is None:
-                store.delete_atomize_workbench(analysis.context_uid)
-                store.delete_atomize_analysis(analysis.context_uid)
-            else:
-                store.save_atomize_analysis(existing)
-                if previous_workbench is None:
-                    store.delete_atomize_workbench(existing.context_uid)
-                else:
-                    store.save_atomize_workbench(previous_workbench)
-            _remove_failed_atomize_archive(
-                store,
-                existing=existing,
-                created=history_created,
-            )
-        except Exception as cleanup_error:
-            raise RuntimeError(
-                "Prepared atomize installation failed and its previous derived "
-                "state could not be restored."
-            ) from cleanup_error
-        raise
-    return AtomizeAnalysisOpenResult(
-        analysis=analysis,
-        review_record=workbench,
-        origin="EXACT_PREWARM",
-    )
-
-
 @dataclass
 class MemoryStoreAtomizeAnalysisOpenPort:
-    """Open one exact saved, prepared, or provider-backed Atomize session."""
+    """Open one exact saved or provider-backed Atomize session."""
 
     store: MemoryStore
     validate_before_save: Callable[[], None] | None = None
-    prepared_analysis_override: AtomizeAnalysisSession | None = None
-    prepared_output_name: str | None = None
     expected_session: AtomizeExecutionSnapshot | None = None
 
     def _replace_expected_session(
@@ -256,32 +171,6 @@ class MemoryStoreAtomizeAnalysisOpenPort:
                 )
                 raise
 
-    def _prepared(
-        self,
-        request: AtomizeAnalysisOpenRequest,
-        *,
-        prompt_policy_id: str,
-    ) -> tuple[AtomizeAnalysisSession | None, str | None]:
-        if not request.allow_prepared:
-            return None, request.output_context_name
-        if self.prepared_analysis_override is not None:
-            if self.prepared_analysis_override.prompt_policy_id != prompt_policy_id:
-                return None, request.output_context_name
-            return self.prepared_analysis_override, (
-                request.output_context_name or self.prepared_output_name
-            )
-        match = find_declared_atomize_prewarm(
-            store=self.store,
-            context=request.context,
-        )
-        if match is None:
-            return None, request.output_context_name
-        if match.analysis.prompt_policy_id != prompt_policy_id:
-            return None, request.output_context_name
-        return match.analysis, (
-            request.output_context_name or match.output_context_name
-        )
-
     def open(
         self,
         request: AtomizeAnalysisOpenRequest,
@@ -334,37 +223,6 @@ class MemoryStoreAtomizeAnalysisOpenPort:
                 analysis=existing,
                 review_record=workbench,
                 origin="SAVED",
-            )
-
-        prepared_analysis, effective_prepared_output = self._prepared(
-            request,
-            prompt_policy_id=prompt_policy_id,
-        )
-        if prepared_analysis is not None and not request.refresh:
-            prepared_uids = tuple(item.memory_uid for item in prepared_analysis.items)
-            if request.memory_selector is not None and requested_uids != prepared_uids:
-                # A whole-Context prewarm is equivalent only when the focused
-                # request covers that same one-Memory actionable set. A wider
-                # prewarm is ignored so the exact focus receives fresh analysis.
-                prepared_analysis = None
-        if prepared_analysis is not None and not request.refresh:
-            if (
-                request.declared_frames
-                or request.declared_frame_origins
-                or request.source_review_uid is not None
-                or request.source_review_digest is not None
-            ):
-                raise AtomizeImpactError(
-                    "A prepared atomize analysis cannot replace a reviewed "
-                    "reanalysis request."
-                )
-            if self.validate_before_save is not None:
-                self.validate_before_save()
-            return _install_prepared_atomize_analysis(
-                store=self.store,
-                context=context,
-                analysis=prepared_analysis,
-                output_context_name=effective_prepared_output,
             )
 
         previous_workbench = (
@@ -472,8 +330,6 @@ def execute_atomize_analysis_open(
     store: MemoryStore,
     provider_factory: AtomizeProviderFactory,
     validate_before_save: Callable[[], None] | None = None,
-    prepared_analysis_override: AtomizeAnalysisSession | None = None,
-    prepared_output_name: str | None = None,
     expected_session: AtomizeExecutionSnapshot | None = None,
 ) -> AtomizeAnalysisOpenResult:
     """Execute one Atomize open through production non-terminal adapters."""
@@ -483,8 +339,6 @@ def execute_atomize_analysis_open(
         port=MemoryStoreAtomizeAnalysisOpenPort(
             store=store,
             validate_before_save=validate_before_save,
-            prepared_analysis_override=prepared_analysis_override,
-            prepared_output_name=prepared_output_name,
             expected_session=expected_session,
         ),
         provider_factory=provider_factory,

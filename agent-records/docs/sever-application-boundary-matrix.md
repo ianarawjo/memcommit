@@ -1,5 +1,9 @@
 # Sever application-boundary matrix
 
+> 2026-09-06: Study prewarm routes and APIs are retired. Any older prewarm
+> discussion below is historical; the [retirement rationale](study-prewarm-retirement-design-rationale.md)
+> defines current behavior. Scenario data and ordinary saved sessions remain.
+
 > **Authorization contract updated 2026-08-30.** Permission claims below that use `EMBED`, `DERIVE`, `COMBINE`, `EXPORT`, `ACCEPT_DERIVED`, or `SAVE_*` describe the retired contract preserved for design history. The current contract uses `QUERY`, `CREATE`, `READ`, `UPDATE`, and `DELETE`; `READ` covers readable semantic use and Embed traversal, while `SHARE` remains a separate endpoint capability. See `granted-derived-ownership-design-rationale.md`.
 
 ## Status
@@ -35,7 +39,6 @@ SeverAnalysisRequest
         v
 run_sever_analysis
   | authority-frozen Source × Criteria
-  | hidden prepared-analysis lookup
   | otherwise one whole-frame provider turn
         |
         v
@@ -67,9 +70,8 @@ SeverPersistedApplyResult
 | --- | --- | --- | --- | --- |
 | Analysis input | `SeverAnalysisRequest` | `MemoryStoreSeverInputPort` | Exactly two positional roles or `--source`/`--from` plus `--criteria`/`--against`; two-pane setup maps Source, Criteria, and independent ranges | Duplicate role spellings and any Result operand fail before Store access; relative CLI locators are frozen to canonical public names before confirmation; runtime repeats authority checks before disclosure |
 | Frozen evidence | `FrozenSeverInputs` | `capture_sever_binding` | No interface may append hidden Memories | Source and Criteria each retain exact Context identities, digests, ordinary Memories, Grant binding, range, and excluded query-only names |
-| Cache | `SeverPreparedLookup` | installed Sever prewarm adapter | Interface receives the typed exact/equivalent/projected origin | Lookup runs only after authority and complete frame capture; a prepared decision ledger must exactly match the requested frozen bindings and internal in-place Source identity after any adapter-owned safe projection |
 | Provider | lazy `SeverProviderFactory` | configured provider supplied by the composition boundary | Progress is projected from typed stages | Cache hits never construct a provider; live work remains one whole-frame selective-curation turn |
-| Decision result | `SeverAnalysisResult` | strict provider decoder or fresh prepared ledger | Resolution Workbench renders outstanding choices | The ledger covers every Source Memory exactly once and creates no Result Context |
+| Decision result | `SeverAnalysisResult` | strict provider decoder | Resolution Workbench renders outstanding choices | The ledger covers every Source Memory exactly once and creates no Result Context |
 | Session lifecycle | `SeverSessionRepository`, `SeverSessionSnapshot` | `MemoryStoreSeverSessionRepository` | launchers and `--resume` open a snapshot; interfaces never calculate a record digest | Create, load, and replace share one opaque optimistic-CAS contract |
 | Decision revision | `SeverDecisionRequest` | repository replace under the snapshot token | scripted choices and TUI responses submit the same exact candidate UID and selection | stale revisions fail before they can overwrite a newer decision; custom content is valid only for `CUSTOM` |
 | Destination revision | legacy `SeverDestinationRequest`, `SeverDestinationPort` | retained live Store name validation plus repository CAS | no Save Location is shown for new in-place sessions | destination revision remains only for reopening an older Result-bearing session; new console setup cannot create that shape |
@@ -135,7 +137,7 @@ imports the runtime owner directly rather than reaching through the command.
   and complete-frame checks before cache lookup or provider construction.
 - Query-only routes never disclose hidden content. Live `MemoryRef` values fail
   rather than being copied into a retained frame.
-- Prepared and provider-produced decision ledgers cross the same validation gate;
+- Provider-produced decision ledgers cross the frozen-request validation gate;
   neither may change Source, Criteria, ranges, owner identity, or review state.
 - Every durable decision mutation consumes the exact version token returned by
   create or open. The repository is the only layer that interprets that token
@@ -166,8 +168,8 @@ imports the runtime owner directly rather than reaching through the command.
 The focused boundary and compatibility run currently covers:
 
 - pure typed provider analysis and typed progress stages;
-- prepared reuse with provider construction prohibited and its projection origin retained;
-- rejection of a prepared review that changes the frozen Source or output;
+- provider execution even when retired artifacts remain on disk;
+- rejection of a provider review that changes the frozen Source or output;
 - typed Apply receipt validation and idempotence;
 - typed session create/open, decision, persisted Apply, and stale-
   snapshot rejection;
@@ -181,7 +183,7 @@ The focused boundary and compatibility run currently covers:
 - missing Source failure before provider construction;
 - real-Store session CAS, persisted Apply, and repeat-
   Apply idempotence without terminal output;
-- existing CLI, TUI setup, authority, exact Study prewarm, review, Apply,
+- existing CLI, TUI setup, authority, review, Apply,
   Undo/Redo, and application-report behavior.
 - local Source/Criteria freshness, Source-subtree membership races, all-KEEP
   materialization, multi-owner synchronous compensation, and late-success
@@ -206,9 +208,8 @@ compatibility compensation and interrupted recovery.
 1. The complete known Source-batch/session-REVIEWING gap is recoverable, but
    the prototype still has no cross-filesystem journal for storage damage below
    either atomic file primitive.
-2. This boundary preserves `EXACT`, `EQUIVALENT_SCOPE`, and `PROJECTED` cache
-   origins but does not decide when projection is safe. The Study prewarm
-   adapter remains authoritative for that separate cache contract.
+2. New analysis uses the provider. Ordinary saved reviews remain reusable;
+   retired hidden artifacts do not participate in lookup or projection.
 3. The setup workbench remains command-owned under
    `adapters.console.commands.sever`, while the operation-neutral Resolution
    Workbench remains shared. No Sever-specific `interfaces.tui.operations`

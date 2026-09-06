@@ -112,9 +112,7 @@ _capture_binding = capture_sever_binding
 def _start_progress(progress, event: SeverAnalysisProgress) -> None:
     """Project typed application stages into the existing command wait view."""
 
-    if event.stage == "PREPARED_REUSED":
-        progress.update("reusing prepared analysis", step=3)
-    elif event.stage == "CONNECTING_PROVIDER":
+    if event.stage == "CONNECTING_PROVIDER":
         progress.update("connecting provider", step=2)
     elif event.stage == "ANALYZING":
         progress.update(
@@ -837,7 +835,6 @@ def cmd(
             )
         session: SeverSession | None = None
         snapshot: SeverSessionSnapshot | None = None
-        sever_prewarm_origin: str | None = None
         start_new_from_sessions = False
         if sessions_flag:
             if not interactive:
@@ -937,10 +934,6 @@ def cmd(
             stored = execute_sever_session_start(analysis, store=store)
             snapshot = stored.snapshot
             session = snapshot.session
-            sever_prewarm_origin = (
-                stored.origin if stored.origin != "PROVIDER" else None
-            )
-
         if session is None or snapshot is None:
             raise SeverCommandError("Sever session lifecycle produced no snapshot.")
 
@@ -1002,11 +995,6 @@ def cmd(
         elif sys.stdin.isatty() and sys.stdout.isatty():
             session = _run_workbench(store, session)
 
-        if sever_prewarm_origin:
-            typer.echo(
-                "ANALYSIS · "
-                f"{sever_prewarm_origin.replace('_', ' ')} · PROVIDER NOT CALLED"
-            )
         if session.state == "APPLIED":
             typer.echo(render_sever_receipt(session))
         else:

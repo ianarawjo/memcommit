@@ -35,9 +35,6 @@ from ._shared import source_profile as _resolve_source_profile
 
 _BASELINE_TOP_LEVEL_DIRECTORIES = (
     "query-sources",
-    # Unlike ordinary runtime caches, this directory is an explicitly
-    # declared fixture whose exact artifacts are rebound when a caller uses it.
-    "study-semantic-prewarm",
     "translation-views",
 )
 

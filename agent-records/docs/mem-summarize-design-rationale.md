@@ -113,10 +113,10 @@ transient success or failure receipt, and likewise create no structured stage.
 After the semantic call, the command rebuilds the same frame and compares its
 digest before publishing output. A granted READ frame additionally freezes and
 revalidates the exact grant binding. Ordinary results are process-local, so
-authority-derived prose is not copied into the participant Store. A participant
-Study Profile may resolve an exact prepared understanding from its pinned
-immutable baseline bundle after the same READ freeze. The result is still
-materialized only in the invoking process and is revalidated before return.
+authority-derived prose is not copied into the participant Store. Nonempty
+Study frames use the same provider route; hidden prewarm lookup is retired.
+The result is materialized only in the invoking process and revalidated
+before return. See [retirement rationale](study-prewarm-retirement-design-rationale.md).
 
 ## Reuse boundary
 

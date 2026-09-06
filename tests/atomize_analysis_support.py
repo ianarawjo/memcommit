@@ -14,7 +14,6 @@ from memcommit.application.operations.atomize.analysis_runtime import (
     execute_atomize_analysis_open,
 )
 from memcommit.application.operations.atomize.domain import (
-    AtomizeAnalysisSession,
     AtomizeFrameOrigin,
     AtomizeProvider,
 )
@@ -34,7 +33,6 @@ def open_or_create_atomize_review_record(
     source_review_digest: str | None = None,
     output_context_name: str | None = None,
     validate_before_save: Callable[[], None] | None = None,
-    prepared_analysis: AtomizeAnalysisSession | None = None,
     memory_selector: str | None = None,
 ) -> AtomizeAnalysisOpenResult:
     """Keep test setup concise while exercising the production typed boundary."""
@@ -49,13 +47,10 @@ def open_or_create_atomize_review_record(
             source_review_digest=source_review_digest,
             output_context_name=output_context_name,
             memory_selector=memory_selector,
-            allow_prepared=prepared_analysis is not None and not refresh,
         ),
         store=store,
         provider_factory=provider_factory,
         validate_before_save=validate_before_save,
-        prepared_analysis_override=prepared_analysis,
-        prepared_output_name=output_context_name,
     )
 
 

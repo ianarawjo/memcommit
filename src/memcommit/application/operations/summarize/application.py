@@ -61,13 +61,6 @@ class SummaryProviderSessionFactory(Protocol):
         """Yield the provider used for exactly one nonempty summary frame."""
 
 
-class SummaryPreparedLookup(Protocol):
-    """Resolve one exact prepared result without broadening its source frame."""
-
-    def __call__(self, frame: SummaryFrame) -> UnderstandingSummary | None:
-        """Return a prepared understanding only for this exact frozen frame."""
-
-
 class _UnavailableProvider:
     """Fail if an empty frame accidentally reaches semantic infrastructure."""
 
@@ -80,7 +73,6 @@ def run_summarize(
     *,
     source_port: SummarySourcePort,
     provider_session_factory: SummaryProviderSessionFactory,
-    prepared_lookup: SummaryPreparedLookup | None = None,
 ) -> SummarizeResult:
     """Run the read-only Summarize use case without CLI or TUI dependencies."""
 
@@ -95,17 +87,8 @@ def run_summarize(
         )
 
     if frame.sources:
-        understanding = prepared_lookup(frame) if prepared_lookup is not None else None
-        if understanding is None:
-            with provider_session_factory() as provider:
-                understanding = summarize_frame(frame, provider)
-        elif any(
-            uid not in {source.memory_uid for source in frame.sources}
-            for uid in understanding.source_uids
-        ):
-            raise SummarizeError(
-                "The prepared summary cites evidence outside the frozen frame."
-            )
+        with provider_session_factory() as provider:
+            understanding = summarize_frame(frame, provider)
     else:
         understanding = summarize_frame(frame, _UnavailableProvider())
 

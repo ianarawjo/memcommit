@@ -38,9 +38,6 @@ from memcommit.application.operations.summarize.application import (
     SummarySourcePort,
     run_summarize,
 )
-from memcommit.study_scenarios.legacy.prewarm.summarize import (
-    find_declared_summarize_prewarm,
-)
 from memcommit.application.operations.update.model import GrantedUpdateTarget
 
 
@@ -224,10 +221,6 @@ def run_summarize_with_store(
             current_name=current_context_name,
         ),
         provider_session_factory=provider_session_factory,
-        prepared_lookup=lambda frame: find_declared_summarize_prewarm(
-            store=store,
-            frame=frame,
-        ),
     )
 
 

@@ -79,14 +79,6 @@ def test_plain_init_study_builds_coffee_without_a_baseline_or_prewarm(
     monkeypatch.setenv("HOME", str(tmp_path))
     _prepare_authoring()
 
-    def reject_legacy_prewarm(*_args, **_kwargs):
-        raise AssertionError("coffee must not inspect or prepare legacy prewarms")
-
-    monkeypatch.setattr(
-        "memcommit.study_scenarios.legacy.prewarm.prepare.prepare_study_prewarms",
-        reject_legacy_prewarm,
-    )
-
     result = runner.invoke(app, ["init-study", "coffee-default"])
 
     assert result.exit_code == 0, result.stderr or result.output
@@ -94,7 +86,7 @@ def test_plain_init_study_builds_coffee_without_a_baseline_or_prewarm(
     assert "Baseline Profile:" not in result.output
     assert "Contexts 10 · Memories 14 · current=practice" in result.output
     assert "Granted Contexts 9 · Granted Memories 56" in result.output
-    assert "no shared semantic prewarm was attached" in result.output
+    assert "Operational history starts empty." in result.output
     assert "Checking shared Study cache compatibility" not in result.output
 
     registry = load_profile_registry()

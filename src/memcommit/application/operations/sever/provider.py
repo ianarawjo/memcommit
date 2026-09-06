@@ -26,8 +26,7 @@ from memcommit.application.capabilities.semantic_execution import ExecutionMode
 
 
 SEVER_PAYLOAD_MARKER = "SEVER PAYLOAD:\n"
-# A prepared Study artifact must stop matching when the semantic prompt or
-# decoder contract changes, even if the frozen Source and Criteria do not.
+# Version the semantic prompt and decoder independently of the input frame.
 SEVER_PROVIDER_CONTRACT_VERSION = "selective-curation-sever-v1"
 
 

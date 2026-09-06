@@ -14,6 +14,7 @@
       "agent-records/docs/atomize-read-only-findings-design-rationale.md",
       "agent-records/docs/context-locator-design-rationale.md",
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+      "agent-records/docs/study-prewarm-retirement-design-rationale.md",
       "agent-records/docs/study-semantic-prompt-policy-design-rationale.md",
       "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md"
     ],
@@ -52,13 +53,14 @@
     ],
     "compare": [
       "agent-records/docs/compare-application-boundary-matrix.md",
-      "agent-records/docs/compare-summary-design-rationale.md",
       "agent-records/docs/compare-session-lifecycle-design-rationale.md",
+      "agent-records/docs/compare-summary-design-rationale.md",
       "agent-records/docs/context-locator-design-rationale.md",
       "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
       "agent-records/docs/mem-compare-design-rationale.md",
       "agent-records/docs/peer-relation-analysis-design-rationale.md",
       "agent-records/docs/session-endpoint-setup-design-rationale.md",
+      "agent-records/docs/study-prewarm-retirement-design-rationale.md",
       "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
     ],
     "copy": [
@@ -96,9 +98,9 @@
       "agent-records/docs/mem-history-search-design-rationale.md",
       "agent-records/docs/typed-operand-resolution-design-rationale.md"
     ],
-        "distill": [
-            "agent-records/docs/distill-makemore-generative-reduction-design-rationale.md",
-            "agent-records/docs/distill-makemore-application-boundary-matrix.md",
+    "distill": [
+      "agent-records/docs/distill-makemore-generative-reduction-design-rationale.md",
+      "agent-records/docs/distill-makemore-application-boundary-matrix.md",
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
       "agent-records/docs/goal-focus-operand-design-rationale.md",
       "agent-records/docs/semantic-result-memorization-design-rationale.md",
@@ -111,18 +113,18 @@
     "elaborate": [
       "agent-records/docs/elaborate-append-only-design-rationale.md"
     ],
-        "makemore": [
-            "agent-records/docs/distill-makemore-generative-reduction-design-rationale.md",
-            "agent-records/docs/distill-makemore-application-boundary-matrix.md",
-            "agent-records/docs/makemore-model-responsibility-design-rationale.md",
-            "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
-            "agent-records/docs/fit-general-judgment-design-rationale.md",
-            "agent-records/docs/goal-focus-operand-design-rationale.md",
-            "agent-records/docs/makemore-rename-design-rationale.md",
-            "agent-records/docs/mem-makemore-design-rationale.md",
-            "agent-records/docs/semantic-result-memorization-design-rationale.md",
-            "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
-        ],
+    "makemore": [
+      "agent-records/docs/distill-makemore-generative-reduction-design-rationale.md",
+      "agent-records/docs/distill-makemore-application-boundary-matrix.md",
+      "agent-records/docs/makemore-model-responsibility-design-rationale.md",
+      "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+      "agent-records/docs/fit-general-judgment-design-rationale.md",
+      "agent-records/docs/goal-focus-operand-design-rationale.md",
+      "agent-records/docs/makemore-rename-design-rationale.md",
+      "agent-records/docs/mem-makemore-design-rationale.md",
+      "agent-records/docs/semantic-result-memorization-design-rationale.md",
+      "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
+    ],
     "embed": [
       "agent-records/docs/embed-application-boundary-matrix.md",
       "agent-records/docs/granted-context-embed-design-rationale.md",
@@ -159,14 +161,14 @@
       "agent-records/docs/read-report-lifecycle-design-rationale.md",
       "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
     ],
-  "find-duplicates": [
-    "agent-records/docs/context-locator-design-rationale.md",
+    "find-duplicates": [
+      "agent-records/docs/context-locator-design-rationale.md",
       "agent-records/docs/find-duplicates-callable-boundary-matrix.md",
       "agent-records/docs/memory-issue-analysis-application-boundary-matrix.md",
       "agent-records/docs/memory-issue-analysis-design-rationale.md",
       "agent-records/docs/dedup-design-rationale.md",
-    "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
-  ],
+      "agent-records/docs/study-semantic-prompt-policy-design-rationale.md"
+    ],
     "find-redundancies": [
       "agent-records/docs/context-locator-design-rationale.md",
       "agent-records/docs/find-redundancies-callable-boundary-matrix.md",
@@ -202,10 +204,12 @@
     ],
     "impact": [
       "agent-records/docs/context-locator-design-rationale.md",
-      "agent-records/docs/impact-review-console-adapter-ownership-design-rationale.md"
+      "agent-records/docs/impact-review-console-adapter-ownership-design-rationale.md",
+      "agent-records/docs/study-prewarm-retirement-design-rationale.md"
     ],
     "import": [
       "agent-records/docs/mem-import-design-rationale.md",
+      "agent-records/docs/study-prewarm-retirement-design-rationale.md",
       "agent-records/docs/typed-operand-resolution-design-rationale.md"
     ],
     "init": [
@@ -216,7 +220,8 @@
     "init-study": [
       "agent-records/docs/init-study-application-boundary-design-rationale.md",
       "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
-      "agent-records/docs/init-study-scenario-versioning-design-rationale.md"
+      "agent-records/docs/init-study-scenario-versioning-design-rationale.md",
+      "agent-records/docs/study-prewarm-retirement-design-rationale.md"
     ],
     "list": [
       "agent-records/docs/context-listing-design-rationale.md",
@@ -235,18 +240,19 @@
       "agent-records/docs/retained-history-application-ownership-design-rationale.md"
     ],
     "meld": [
-      "agent-records/docs/meld-application-boundary-matrix.md",
-      "agent-records/docs/meld-application-boundary-design-rationale.md",
-      "agent-records/docs/meld-session-lifecycle-design-rationale.md",
       "agent-records/docs/context-or-inline-memory-operand-design-rationale.md",
-      "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
-      "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+      "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
+      "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
+      "agent-records/docs/meld-application-boundary-design-rationale.md",
+      "agent-records/docs/meld-application-boundary-matrix.md",
+      "agent-records/docs/meld-command-interpretation-design-rationale.md",
+      "agent-records/docs/meld-session-lifecycle-design-rationale.md",
+      "agent-records/docs/mem-meld-design-rationale.md",
       "agent-records/docs/peer-relation-analysis-design-rationale.md",
       "agent-records/docs/session-endpoint-setup-design-rationale.md",
+      "agent-records/docs/study-prewarm-retirement-design-rationale.md",
       "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md",
-      "agent-records/docs/meld-command-interpretation-design-rationale.md",
-      "agent-records/docs/mem-meld-design-rationale.md",
       "agent-records/docs/typed-operand-resolution-design-rationale.md"
     ],
     "merge": [
@@ -337,16 +343,17 @@
       "agent-records/docs/search-find-replace-design-rationale.md"
     ],
     "sever": [
-      "agent-records/docs/sever-application-boundary-matrix.md",
       "agent-records/docs/application-flow-design-rationale.md",
       "agent-records/docs/context-locator-design-rationale.md",
       "agent-records/docs/context-name-portability-design-rationale.md",
-      "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+      "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
       "agent-records/docs/mem-sever-design-rationale.md",
       "agent-records/docs/ownership-aware-application-review-design-rationale.md",
       "agent-records/docs/semantic-resolution-workbench-design-rationale.md",
       "agent-records/docs/session-endpoint-setup-design-rationale.md",
+      "agent-records/docs/sever-application-boundary-matrix.md",
+      "agent-records/docs/study-prewarm-retirement-design-rationale.md",
       "agent-records/docs/study-semantic-prewarm-registry-design-rationale.md",
       "agent-records/docs/terminal-ui-integration-design-rationale.md"
     ],
@@ -364,8 +371,9 @@
       "agent-records/docs/mem-status-short-design-rationale.md"
     ],
     "summarize": [
-      "agent-records/docs/summarize-application-boundary-matrix.md",
-      "agent-records/docs/read-report-lifecycle-design-rationale.md"
+      "agent-records/docs/read-report-lifecycle-design-rationale.md",
+      "agent-records/docs/study-prewarm-retirement-design-rationale.md",
+      "agent-records/docs/summarize-application-boundary-matrix.md"
     ],
     "switch": [
       "agent-records/docs/switch-application-boundary-matrix.md",
@@ -398,15 +406,16 @@
     ],
     "update": [
       "agent-records/docs/context-locator-design-rationale.md",
-      "agent-records/docs/update-application-boundary-matrix.md",
-      "agent-records/docs/update-terminal-session-rotation-design-rationale.md",
       "agent-records/docs/context-or-inline-memory-operand-design-rationale.md",
-      "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
-      "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
       "agent-records/docs/goal-focus-operand-design-rationale.md",
+      "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
+      "agent-records/docs/interactive-semantic-command-boundary-design-rationale.md",
       "agent-records/docs/peer-relation-analysis-design-rationale.md",
-      "agent-records/docs/session-endpoint-setup-design-rationale.md"
+      "agent-records/docs/session-endpoint-setup-design-rationale.md",
+      "agent-records/docs/study-prewarm-retirement-design-rationale.md",
+      "agent-records/docs/update-application-boundary-matrix.md",
+      "agent-records/docs/update-terminal-session-rotation-design-rationale.md"
     ]
   }
 }

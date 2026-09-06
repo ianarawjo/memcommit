@@ -126,13 +126,7 @@ def _header_lines(
         SourceDisplayFacts(access=SourceAccess.READ_GRANT)
     )
     analysis_state = (
-        "EXACT PREWARM"
-        if origin == "EXACT_PREWARM"
-        else "EQUIVALENT SCOPE PREWARM"
-        if origin == "EQUIVALENT_SCOPE_PREWARM"
-        else "PROJECTED"
-        if origin == "PROJECTED"
-        else "REUSED"
+        "REUSED"
         if reused
         else "NEW"
     )

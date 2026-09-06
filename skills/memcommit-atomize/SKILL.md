@@ -14,11 +14,10 @@ shell commands, Python snippets, provider calls, or filesystem access.
   `context_name`, or omit it only when the frozen current Context is intended.
 - Add `memory_selector` to focus one exact Memory. Use a UID/prefix or exact
   selector returned by MemCommit; do not invent one.
-- Normally keep `refresh: false` and `use_prepared: true`. Set `refresh: true`
-  only for an explicitly requested fresh provider analysis. Set
-  `use_prepared: false` only to bypass hidden prepared analysis.
+- Normally keep `refresh: false`. Set `refresh: true` only for an explicitly
+  requested fresh provider analysis.
 - Interpret `origin`, `provider_used`, `cache_used`, and `effect` literally.
-  `SAVED` is provider-free and has no new effect; `EXACT_PREWARM` is cached;
+  `SAVED` is provider-free and has no new effect;
   `PROVIDER` performs inference. Opening never edits the Source Context.
 
 Review the overview, every item and proposed child, evidence spans, read-only

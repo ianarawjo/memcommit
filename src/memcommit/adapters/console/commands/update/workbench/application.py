@@ -59,28 +59,12 @@ def run_update_workbench(session: UpdateSession) -> None:
 
 def decide_update_application(
     session: UpdateSession,
-    *,
-    analysis_origin: str | None = None,
 ) -> Literal["APPLY"] | None:
     """Return Apply against the exact report, or close without changing it."""
 
     view = replace(
         _view(session, staged=True, applied=False),
-        status=(
-            "STAGED · "
-            + (
-                "EXACT PREWARM"
-                if analysis_origin == "EXACT_PREWARM"
-                else (
-                    "PROJECTED PREWARM"
-                    if analysis_origin == "PROJECTED_PREWARM"
-                    else "EQUIVALENT SCOPE PREWARM"
-                )
-            )
-            + " · PROVIDER NOT CALLED"
-            if analysis_origin is not None
-            else "STAGED"
-        ),
+        status="STAGED",
         capabilities=frozenset({"ACCEPT"}),
         accept_enabled=True,
     )

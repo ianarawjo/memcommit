@@ -93,7 +93,7 @@ def test_restart_meld_forwards_the_reviewed_version(monkeypatch, tmp_path):
 
     def execute(request, **kwargs):
         calls.append((request, kwargs))
-        return SimpleNamespace(session=session, origin="EXACT_PREWARM")
+        return SimpleNamespace(session=session, origin="PROVIDER")
 
     monkeypatch.setattr(meld_operation, "execute_meld_restart", execute)
     client = MemCommitClient(
@@ -109,7 +109,7 @@ def test_restart_meld_forwards_the_reviewed_version(monkeypatch, tmp_path):
         expected_version="saved-version",
     )
 
-    assert result.origin == "EXACT_PREWARM"
+    assert result.origin == "PROVIDER"
     assert calls[0][0].expected_version == "saved-version"
     assert calls[0][0].mode == "DIRECTIONAL"
 

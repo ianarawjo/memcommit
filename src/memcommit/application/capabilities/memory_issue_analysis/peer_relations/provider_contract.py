@@ -1062,7 +1062,7 @@ def analyze_memory_relations(
             ) from repair_error
 
 
-# Provider operation names remain stable so existing prewarms and cache
+# Provider operation names remain stable so existing saved analysis and cache
 # evidence keep matching, while Python ownership is capability-neutral.
 ComparisonProvider = MemoryRelationProvider
 ComparisonProviderError = MemoryRelationProviderError

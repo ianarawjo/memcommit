@@ -595,22 +595,8 @@ def present_resumed_meld(
 
 def present_started_meld(
     session: MeldSession,
-    *,
-    directional_prewarm_origin: str | None,
 ) -> None:
-    """Present a newly created Meld and any provider-free analysis origin."""
-    if directional_prewarm_origin:
-        label = (
-            "EXACT PREWARM"
-            if directional_prewarm_origin == "EXACT_PREWARM"
-            else (
-                "EQUIVALENT SCOPE PREWARM"
-                if directional_prewarm_origin == "EQUIVALENT_SCOPE_PREWARM"
-                else "PROJECTED PREWARM"
-            )
-        )
-        phase = "INITIAL ANALYSIS" if len(session.turns) > 1 else "ANALYSIS"
-        typer.echo(f"{phase} · {label} · PROVIDER NOT CALLED")
+    """Present a newly created Meld."""
     _present_terminal_outcome(session)
 
 

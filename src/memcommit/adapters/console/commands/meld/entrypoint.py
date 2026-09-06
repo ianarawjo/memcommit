@@ -41,7 +41,6 @@ from memcommit.persistence.store import (
     ConcurrentContextUpdateError,
     MemoryStore,
 )
-from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
 
 from memcommit.adapters.console.commands.meld.errors import MeldCommandError
 from memcommit.adapters.console.commands.meld.interpretation import (
@@ -424,7 +423,6 @@ def cmd(
         ProfileConfigError,
         ProfileError,
         QueryProviderError,
-        StudyPrewarmRegistryError,
     ) as error:
         typer.secho(f"Meld error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)

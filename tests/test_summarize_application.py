@@ -21,7 +21,6 @@ from memcommit.application.operations.summarize.application import (
 from memcommit.application.operations.summarize.runtime import execute_summarize
 import memcommit.application.operations.summarize.runtime as summarize_runtime
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.capabilities.semantic.understanding import UnderstandingSummary
 
 
 def _context(*contents: str) -> Context:
@@ -118,24 +117,6 @@ def test_run_summarize_empty_frame_never_opens_provider_session():
     assert "contains no ordinary Memories" in result.understanding.text
 
 
-def test_run_summarize_rejects_prepared_evidence_outside_frozen_frame():
-    frame = collect_summary_frame(_context("Bounded evidence."))
-    source = _StaticSummarySource(frame)
-
-    with pytest.raises(SummarizeError, match="outside the frozen frame"):
-        run_summarize(
-            SummarizeRequest(context_locator="summary"),
-            source_port=source,
-            provider_session_factory=lambda: (_ for _ in ()).throw(
-                AssertionError("invalid prepared result must not open provider")
-            ),
-            prepared_lookup=lambda _frame: UnderstandingSummary(
-                text="An invalid prepared claim.",
-                source_uids=("outside-memory",),
-            ),
-        )
-
-
 def test_run_summarize_rejects_source_change_before_returning_result():
     frame = collect_summary_frame(_context("Initial evidence."))
     current_frame = collect_summary_frame(
@@ -179,6 +160,7 @@ def test_summarize_application_has_no_command_typer_or_tui_imports():
     assert forbidden == ()
 
 
+@pytest.mark.usefixtures("retired_study_artifacts")
 def test_execute_summarize_runs_against_real_store_without_terminal(
     isolated_store,
     capsys,

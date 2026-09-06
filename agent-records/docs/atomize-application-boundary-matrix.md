@@ -1,5 +1,9 @@
 # Atomize application-boundary matrix
 
+> 2026-09-06: Study prewarm routes and APIs are retired. Any older prewarm
+> discussion below is historical; the [retirement rationale](study-prewarm-retirement-design-rationale.md)
+> defines current behavior. Scenario data and ordinary saved sessions remain.
+
 ## 2026-08-30 one-shot console revision
 
 `mem atomize [TARGET]` now freezes a Context or one direct Memory, performs
@@ -86,7 +90,6 @@ load exact local Context
 AtomizeAnalysisOpenRequest
         |
         +-- exact current saved pair --> SAVED
-        +-- allowed hidden Study hit --> EXACT_PREWARM
         `-- otherwise --> lazy provider construction --> PROVIDER
         |
         v
@@ -127,7 +130,7 @@ transformation.
 request/result, origin contract, and result validation without importing
 Store, commands, Typer, or prompt-toolkit.
 `memcommit.application.operations.atomize.analysis_runtime` owns saved-pair lookup,
-hidden-prewarm lookup, lazy provider connection, Context freshness recheck,
+lazy provider connection, Context freshness recheck,
 pair publication, and the synchronous restoration path. The legacy
 `atomize_workflow` module remains a compatibility facade over structural
 analysis only.
@@ -176,9 +179,9 @@ analysis only.
 
 | Case | Current effect | Evidence state | Extraction requirement |
 | --- | --- | --- | --- |
-| Preview or workbench open | Analysis/workbench artifacts only; no Context checkpoint | existing preview, workbench, and Study-prewarm tests | typed analysis result must remain non-applying |
+| Preview or workbench open | Analysis/workbench artifacts only; no Context checkpoint | existing preview and workbench tests | typed analysis result must remain non-applying |
 | Ordinary exact-Context command | compatible complete analysis is created/reused and immediately applied in place; no launcher or workbench is opened | bare and explicit-Context execution tests | freeze exact name, complete scope, and in-place Output before ordinary Apply |
-| Compact direct receipt | split/child/keep counts and every unresolved issue on one logical line accompany up to three exact source-to-child effect groups; additional splits hand off explicitly to exact post-application Review; a first-use prepared hit also states `ANALYSIS · EXACT PREWARM · PROVIDER NOT CALLED` | compact receipt, prepared auto-Apply, and applied Review tests | changed Memory content is bounded proof rather than a second report; unresolved evidence is complete, while omitted split proofs are named explicitly |
+| Compact direct receipt | split/child/keep counts and every unresolved issue on one logical line accompany up to three exact source-to-child effect groups; additional splits hand off explicitly to exact post-application Review | compact receipt, direct Apply, and applied Review tests | changed Memory content is bounded proof rather than a second report; unresolved evidence is complete, while omitted split proofs are named explicitly |
 | Applied Review reopen | complete analysis remains read-only and provider-free despite the post-split Context digest; each item title pairs source UID with its content preview, while applied children render as `APPLIED CHILD MEMORIES` with explicit `MEMORY n` rows | direct receipt/review and adapter tests | accept only exact terminal receipt/checkpoint evidence; reject response edits; retain source-span evidence without repeating it in the default snapshot |
 | Close/cancel before final action | Saved review may remain; no Context effect | shared Resolution CLOSE and workbench persistence tests | application port must never be called |
 | Local current analysis, one or more splits | one in-place Context checkpoint, complete SPLIT/KEEP/PRESERVE trace | `test_saved_atomize_analysis_applies_once_with_recorded_lineage` | consume exact analysis and workbench revision |
@@ -210,25 +213,13 @@ analysis only.
 | Structural Apply receipt failure | synchronous pre-commit failure exposes no Context effect; a prior exact checkpoint is recoverable without replay | checkpoint/receipt pair remains one application outcome | verified for local in-place Apply |
 | Legacy Grounding checkpoint | no new route writes one; generic before/after snapshots remain readable | Context snapshot restoration only; no companion session synchronization | keep artifact bytes inert without reviving Grounding ownership |
 
-## Hidden prewarm and visible-session boundary
+## Saved analysis and provider boundary
 
-The Study Atomize prewarm is a hidden declared artifact, not a pre-created user
-session. Initialization validates and installs only its hidden entry receipt.
-The first explicit matching Atomize invocation materializes the prepared
-analysis through the ordinary production slot and creates a blank run-local
-workbench. A mismatch, stale Source, lower/incomparable cached provider
-quality, or failed
-workbench publication must not expose a partial visible session or connect a
-provider under the guise of a hit.
-
-This cache boundary is adjacent to Apply but independent from it. The
-application API returns the typed origin `SAVED`, `EXACT_PREWARM`, or
-`PROVIDER`. `allow_prepared` is an operation-owned request policy: Impact
-refresh/review prohibit hidden reuse, while ordinary first use may allow it.
-The runtime, not the command, looks up the artifact only
-after the exact Context has been loaded and before constructing a provider.
-Hidden installation files remain outside the public session repository, and a
-cache hit does not bypass later Apply freshness or authority checks.
+Opening returns `SAVED` or `PROVIDER`. Exact ordinary saved-session reuse,
+explicit refresh, scope and freshness validation, reviewed-revision binding,
+and rollback of a failed analysis/workbench publication remain in the runtime.
+Hidden Study lookup, installation, prepared overrides, and `allow_prepared`
+were removed. Old hidden files are inert and never bypass Apply validation.
 
 ## Implemented and remaining extraction boundary
 
@@ -257,7 +248,7 @@ Suggested ownership:
   analysis-open request/result, exact origin validation, and
   terminal-independent port.
 - `memcommit.application.operations.atomize.analysis_runtime`: saved-pair and
-  hidden-prewarm lookup, lazy provider analysis, freshness recheck, and pair
+  lazy provider analysis, freshness recheck, and pair
   publication/restoration.
 - `memcommit.adapters.console.commands.atomize.command`: CLI/TUI composition, progress and receipts,
   mapping final workbench actions to the typed in-place or Save As use case;

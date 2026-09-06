@@ -1,5 +1,8 @@
 # Legacy Study prewarm regeneration design rationale
 
+> Historical design: the prewarm implementation was removed on 2026-09-06.
+> Scenario data and ordinary sessions remain; see [retirement rationale](study-prewarm-retirement-design-rationale.md).
+
 ## Current boundary
 
 The prewarm registry and regeneration modules belong to the packaged `legacy`

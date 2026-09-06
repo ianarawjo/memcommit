@@ -535,7 +535,6 @@ def run_atomize_impact(
                     context=ctx,
                     refresh=refresh,
                     memory_selector=memory_selector,
-                    allow_prepared=not refresh and memory_selector is None,
                 ),
                 store=store,
                 provider_factory=provider_factory,
@@ -573,13 +572,7 @@ def run_atomize_impact(
             )
         except ReviewCancelled:
             typer.echo("Atomize Impact closed. No Memory changes applied.")
-    if opened.materialized_prepared:
-        typer.secho(
-            f"Exact prewarm materialized [{analysis.uid[:8]}] on first use; "
-            "the provider was not called.",
-            fg=typer.colors.CYAN,
-        )
-    elif opened.created_analysis:
+    if opened.created_analysis:
         typer.secho(
             f"Analysis saved [{analysis.uid[:8]}] for mem trace/rationale.",
             fg=typer.colors.CYAN,

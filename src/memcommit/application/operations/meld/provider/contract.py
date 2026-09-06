@@ -23,7 +23,7 @@ MELD_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 MELD_RESPONSE_CHAR_LIMIT = 1_000_000
 MELD_KEY_LIMIT = 100
 MELD_OPTION_LIMIT = 5
-# Exact Study prewarms bind to the provider-facing decision contract, not only
+# Saved semantic results bind to the provider-facing decision contract, not only
 # Meld's durable schema. Changing the compact fields or their meaning must make
 # an older prepared assessment miss instead of silently reusing it.
 MELD_DIRECTIONAL_PROVIDER_CONTRACT_VERSION = "directional-compare-decisions-v2"

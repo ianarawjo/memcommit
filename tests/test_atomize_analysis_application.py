@@ -1,4 +1,4 @@
-"""Contracts for Atomize's typed saved/prepared/provider open boundary."""
+"""Contracts for Atomize's typed saved/provider open boundary."""
 
 from __future__ import annotations
 
@@ -11,8 +11,6 @@ import pytest
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.operations.atomize.domain import (
     AtomizeImpactError,
-    create_atomize_analysis,
-    impact_atomize,
 )
 from memcommit.application.operations.atomize.analysis_application import (
     AtomizeAnalysisOpenRequest,
@@ -22,7 +20,6 @@ from memcommit.application.operations.atomize.analysis_runtime import (
 )
 from memcommit.core.context import Memory
 from memcommit.persistence.store import MemoryStore
-from memcommit.study_scenarios.legacy.prewarm.atomize import AtomizePrewarmMatch
 
 
 _PAYLOAD_MARKER = "ATOMIZE IMPACT PAYLOAD:\n"
@@ -73,6 +70,7 @@ def _context(store: MemoryStore):
     return context
 
 
+@pytest.mark.usefixtures("retired_study_artifacts")
 def test_provider_create_then_saved_resume_does_not_reconnect(isolated_store):
     store = MemoryStore()
     context = _context(store)
@@ -101,74 +99,7 @@ def test_provider_create_then_saved_resume_does_not_reconnect(isolated_store):
     assert provider.calls == 1
 
 
-def test_runtime_looks_up_hidden_prepared_analysis_before_provider(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    context = _context(store)
-    prepared = create_atomize_analysis(
-        context,
-        impact_atomize(context, lambda: _Provider()),
-    )
-    match = AtomizePrewarmMatch(
-        entry_key="capture/atomize",
-        analysis=prepared,
-        output_context_name="atomize/prepared-output",
-    )
-    monkeypatch.setattr(
-        "memcommit.application.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
-        lambda *, store, context: match,
-    )
-
-    opened = execute_atomize_analysis_open(
-        AtomizeAnalysisOpenRequest(
-            context=context,
-            allow_prepared=True,
-        ),
-        store=store,
-        provider_factory=lambda: (_ for _ in ()).throw(
-            AssertionError("exact prewarm opened a provider")
-        ),
-    )
-
-    assert opened.origin == "EXACT_PREWARM"
-    assert opened.materialized_prepared is True
-    assert opened.analysis == prepared
-    assert opened.review_record.output_context_name == "atomize/prepared-output"
-
-
-def test_disallowed_prepared_lookup_falls_through_to_provider(
-    isolated_store,
-    monkeypatch,
-):
-    store = MemoryStore()
-    context = _context(store)
-    monkeypatch.setattr(
-        "memcommit.application.operations.atomize.analysis_runtime.find_declared_atomize_prewarm",
-        lambda **_kwargs: pytest.fail("disallowed prepared lookup was attempted"),
-    )
-    prepared = create_atomize_analysis(
-        context,
-        impact_atomize(context, lambda: _Provider()),
-    )
-    provider = _Provider()
-
-    opened = execute_atomize_analysis_open(
-        AtomizeAnalysisOpenRequest(
-            context=context,
-            allow_prepared=False,
-        ),
-        store=store,
-        provider_factory=lambda: provider,
-        prepared_analysis_override=prepared,
-    )
-
-    assert opened.origin == "PROVIDER"
-    assert opened.analysis.uid != prepared.uid
-    assert provider.calls == 1
-
-
+@pytest.mark.usefixtures("retired_study_artifacts")
 def test_stale_saved_analysis_fails_before_provider_without_refresh(
     isolated_store,
 ):

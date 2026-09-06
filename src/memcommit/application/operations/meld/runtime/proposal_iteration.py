@@ -43,9 +43,6 @@ from memcommit.persistence.store import (
 )
 from memcommit.providers.subscription import CodexChatGPTProvider
 from memcommit.providers.types import ProviderIdentity
-from memcommit.study_scenarios.legacy.prewarm.meld_resolution import (
-    find_installed_meld_resolution_branch,
-)
 
 from .apply_transaction import validate_owner_aware_grant_permissions
 from .source_access import (
@@ -73,7 +70,6 @@ class _MeldAssessmentToken:
     request_digest: str | None
     configured_provider: dict[str, object] | None
     cached_branch: MeldResolutionBranch | None
-    branch_from_study_prewarm: bool
 
 
 class MemoryStoreMeldAssessmentPort(MeldAssessmentPort):
@@ -98,7 +94,6 @@ class MemoryStoreMeldAssessmentPort(MeldAssessmentPort):
         request_digest: str | None = None
         configured_provider: dict[str, object] | None = None
         cached_branch = None
-        from_study_prewarm = False
         if cacheable:
             request_digest = meld_turn_request_digest(session)
             configured_provider = configured_meld_cache_identity()
@@ -107,13 +102,6 @@ class MemoryStoreMeldAssessmentPort(MeldAssessmentPort):
                 configured_provider,
             )
             cached_branch = self._store.load_meld_resolution_branch(cache_key)
-            if cached_branch is None:
-                cached_branch = find_installed_meld_resolution_branch(
-                    store=self._store,
-                    branch_key=cache_key,
-                    request_digest=request_digest,
-                )
-                from_study_prewarm = cached_branch is not None
         return FrozenMeldAssessment(
             session=session,
             expected_session_digest=expected_session_digest,
@@ -126,7 +114,6 @@ class MemoryStoreMeldAssessmentPort(MeldAssessmentPort):
                 request_digest=request_digest,
                 configured_provider=configured_provider,
                 cached_branch=cached_branch,
-                branch_from_study_prewarm=from_study_prewarm,
             ),
         )
 
@@ -174,31 +161,26 @@ class MemoryStoreMeldAssessmentPort(MeldAssessmentPort):
                         + " + ".join(missing)
                         + " required by the proposed Meld changes."
                     )
-        if token.cacheable and (
-            token.cached_branch is None or token.branch_from_study_prewarm
-        ):
-            if token.cached_branch is None:
-                if (
-                    token.request_digest is None
-                    or token.configured_provider is None
-                    or completion is None
-                ):
-                    raise MeldApplicationError(
-                        "Meld cache publication lacks complete provider evidence."
-                    )
-                branch = MeldResolutionBranch.create(
-                    session=session,
-                    request_digest=token.request_digest,
-                    configured_provider=token.configured_provider,
-                    origin_provider=(
-                        origin_provider
-                        if isinstance(origin_provider, ProviderIdentity)
-                        else None
-                    ),
-                    completion=completion,
+        if token.cacheable and token.cached_branch is None:
+            if (
+                token.request_digest is None
+                or token.configured_provider is None
+                or completion is None
+            ):
+                raise MeldApplicationError(
+                    "Meld cache publication lacks complete provider evidence."
                 )
-            else:
-                branch = token.cached_branch
+            branch = MeldResolutionBranch.create(
+                session=session,
+                request_digest=token.request_digest,
+                configured_provider=token.configured_provider,
+                origin_provider=(
+                    origin_provider
+                    if isinstance(origin_provider, ProviderIdentity)
+                    else None
+                ),
+                completion=completion,
+            )
             self._store.save_meld_resolution_branch(branch)
         self._store.save_meld_session(
             session,

@@ -1,5 +1,8 @@
 # Study shared prewarm bundle design rationale
 
+> Historical design: the prewarm implementation was removed on 2026-09-06.
+> Scenario data and ordinary sessions remain; see [retirement rationale](study-prewarm-retirement-design-rationale.md).
+
 ## Decision
 
 Ordinary semantic caches remain owned by the Profile whose data, authority,

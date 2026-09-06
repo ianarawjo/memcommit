@@ -38,7 +38,6 @@ from memcommit.application.operations.update.model import (
     plan_update,
     required_update_context_uses,
     session_matches,
-    update_operations_are_authorized,
 )
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique_uid
@@ -47,7 +46,6 @@ from memcommit.providers.subscription import (
     QueryProviderError,
     connect_codex_chatgpt_provider,
 )
-from memcommit.study_scenarios.legacy.prewarm.registry import StudyPrewarmRegistryError
 
 
 def open_saved_update_impact(
@@ -174,62 +172,28 @@ def run_directional_update_impact(
             if target_access.is_granted
             else None
         )
-        from memcommit.study_scenarios.legacy.prewarm.update import (
-            find_installed_projectable_update_prewarm,
-        )
-
-        update_prewarm_match = (
-            None
-            if source_memory is not None or target_memory is not None
-            else find_installed_projectable_update_prewarm(
-                store=store,
-                source=source,
-                target=target,
+        with CommandProgress(
+            "IMPACT UPDATE",
+            "connecting provider",
+            total=2,
+        ) as progress:
+            progress.update("planning memory changes", step=2)
+            session = plan_update(
+                source,
+                target,
+                # Keep connection lazy so Update's complete authority and
+                # semantic-disclosure preflight runs first. A nested live
+                # Grant must fail without contacting a provider at all.
+                connect_codex_chatgpt_provider,
+                status="impact",
                 source_include_descendants=source_descendants,
                 target_include_descendants=target_descendants,
                 granted_source=granted_source,
                 granted_target=granted_target,
+                source_memory_selector=source_memory,
+                target_memory_selector=target_memory,
+                allowed_target_uses=target_authorization.allowed,
             )
-        )
-        if (
-            update_prewarm_match is not None
-            and not update_operations_are_authorized(
-                update_prewarm_match.session.operations,
-                target_authorization.allowed,
-            )
-        ):
-            # Installed analysis is only valid when its exact effects still
-            # fit the Target Grant. Let constrained planning replace it.
-            update_prewarm_match = None
-        if update_prewarm_match is not None:
-            session = update_prewarm_match.session.with_status("impact")
-            label = update_prewarm_match.origin.replace("_", " ")
-            typer.echo(
-                f"{label} · UPDATE IMPACT MATERIALIZED · provider was not called."
-            )
-        else:
-            with CommandProgress(
-                "IMPACT UPDATE",
-                "connecting provider",
-                total=2,
-            ) as progress:
-                progress.update("planning memory changes", step=2)
-                session = plan_update(
-                    source,
-                    target,
-                    # Keep connection lazy so Update's complete authority and
-                    # semantic-disclosure preflight runs first. A nested live
-                    # Grant must fail without contacting a provider at all.
-                    connect_codex_chatgpt_provider,
-                    status="impact",
-                    source_include_descendants=source_descendants,
-                    target_include_descendants=target_descendants,
-                    granted_source=granted_source,
-                    granted_target=granted_target,
-                    source_memory_selector=source_memory,
-                    target_memory_selector=target_memory,
-                    allowed_target_uses=target_authorization.allowed,
-                )
 
         authorize_context_use(
             target_access,
@@ -314,33 +278,12 @@ def run_directional_update_impact(
                     "no preview was saved."
                 )
             store.save_impact_plan(session)
-            if update_prewarm_match is not None:
-                from memcommit.study_scenarios.legacy.prewarm.update import (
-                    record_equivalent_update_prewarm,
-                    record_exact_update_prewarm,
-                    record_projected_update_prewarm,
-                )
-
-                recorder = (
-                    record_exact_update_prewarm
-                    if update_prewarm_match.origin == "EXACT_PREWARM"
-                    else record_equivalent_update_prewarm
-                    if update_prewarm_match.origin == "EQUIVALENT_SCOPE_PREWARM"
-                    else record_projected_update_prewarm
-                )
-                recorder(
-                    store,
-                    entry_key=update_prewarm_match.entry_key,
-                    session=session,
-                    prepared_source_name=(update_prewarm_match.prepared_source_name),
-                )
     except (
         OSError,
         ProfileConfigError,
         ProfileError,
         QueryProviderError,
         RuntimeError,
-        StudyPrewarmRegistryError,
         UpdateError,
         ValueError,
     ) as error:

@@ -111,7 +111,7 @@ class AtomizeInPlaceResult:
 
     analysis: AtomizeAnalysisSession
     application: AtomizeRecordApplyResult
-    analysis_origin: Literal["SAVED", "EXACT_PREWARM", "PROVIDER"]
+    analysis_origin: Literal["SAVED", "PROVIDER"]
 
 
 @dataclass(frozen=True)

@@ -5,8 +5,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from memcommit.application.operations.sever.application import (
-    FrozenSeverInputs,
-    SeverPreparedAnalysis,
     SeverAnalysisRequest,
     SeverAnalysisResult,
     SeverApplicationError,
@@ -51,10 +49,6 @@ from memcommit.persistence.store import (
 from memcommit.providers.subscription import (
     QueryProviderError,
     QueryProviderTimeoutError,
-)
-
-from memcommit.study_scenarios.legacy.prewarm.sever import (
-    find_installed_projectable_sever_prewarm,
 )
 
 SeverProgressCallback = SeverProgressObserver
@@ -152,11 +146,6 @@ def execute_sever_analysis(
             request,
             input_port=input_port,
             provider_factory=lambda: _provider_with_attempt_evidence(provider_factory),
-            prepared_lookup=lambda inputs, output_name: _prepared_analysis(
-                store,
-                inputs,
-                output_name,
-            ),
             progress_observer=progress_callback,
         )
     except QueryProviderError as error:
@@ -178,39 +167,6 @@ def execute_sever_analysis(
     except SeverProviderError:
         annotate_sever_attempt(failure_kind="VALIDATION")
         raise
-
-
-def _prepared_analysis(
-    store: MemoryStore,
-    inputs: FrozenSeverInputs,
-    output_name: str,
-) -> SeverPreparedAnalysis | None:
-    match = find_installed_projectable_sever_prewarm(
-        store=store,
-        source=inputs.source,
-        criteria=inputs.criteria,
-        output_name=output_name,
-    )
-    if match is None:
-        return None
-    if match.origin == "EXACT_PREWARM":
-        return SeverPreparedAnalysis(
-            session=match.session,
-            origin="EXACT_PREWARM",
-        )
-    if match.origin == "EQUIVALENT_SCOPE_PREWARM":
-        return SeverPreparedAnalysis(
-            session=match.session,
-            origin="EQUIVALENT_SCOPE_PREWARM",
-        )
-    if match.origin == "PROJECTED_PREWARM":
-        return SeverPreparedAnalysis(
-            session=match.session,
-            origin="PROJECTED_PREWARM",
-        )
-    raise SeverApplicationError(
-        "The prepared Sever analysis has an unsupported origin."
-    )
 
 
 def execute_sever_apply(
