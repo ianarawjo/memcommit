@@ -11,7 +11,7 @@ from types import SimpleNamespace
 import pytest
 from typer.testing import CliRunner
 
-import memcommit.adapters.console.commands.profile.command as profile_command
+import memcommit.adapters.console.commands.profile.migration as profile_migration
 import memcommit.application.capabilities.ops as ops
 from memcommit.adapters.console.entrypoint import app
 from memcommit.core.context import AutoCheckpoint, Context
@@ -50,7 +50,7 @@ def _previewed_apply_args(output: str) -> list[str]:
 
 def test_migration_shell_receipt_escapes_display_controls_but_round_trips():
     raw_name = "scope/current\u202e"
-    command = profile_command._migration_shell_join(
+    command = profile_migration._migration_shell_join(
         ("printf", "%s", raw_name)
     )
 
@@ -246,12 +246,12 @@ def test_compatibility_migration_fails_closed_on_frozen_grant_names(
     )
     blocker = SimpleNamespace(uid="12345678-blocking-grant")
     monkeypatch.setattr(
-        profile_command,
+        profile_migration,
         "_context_migration_grant_blockers",
         lambda _old_name: (registry, (blocker,)),
     )
     monkeypatch.setattr(
-        profile_command,
+        profile_migration,
         "profile_store_dir",
         lambda _profile: isolated_store,
     )
@@ -341,12 +341,12 @@ def test_apply_receipt_rejects_an_active_profile_switch(
         )
     }
     monkeypatch.setattr(
-        profile_command,
+        profile_migration,
         "_context_migration_grant_blockers",
         lambda _old_name: (registry["value"], ()),
     )
     monkeypatch.setattr(
-        profile_command,
+        profile_migration,
         "profile_store_dir",
         lambda _profile: isolated_store,
     )
@@ -465,12 +465,12 @@ def test_migration_blocks_only_authority_context_grant_incidents(
         grants=(authority_blocker, attachment_blocker, unrelated),
     )
     monkeypatch.setattr(
-        profile_command,
+        profile_migration,
         "load_profile_registry",
         lambda: registry,
     )
 
-    frozen, blockers = profile_command._context_migration_grant_blockers(
+    frozen, blockers = profile_migration._context_migration_grant_blockers(
         "legacy root"
     )
 

@@ -33,7 +33,7 @@ def test_profile_name_shorthand_uses_the_existing_selection_boundary(
         raise AssertionError("profile NAME must not open the picker")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profile.command.choose_profile",
+        "memcommit.adapters.console.commands.profile.selector.choose_profile",
         unexpected_picker,
     )
 
@@ -134,7 +134,7 @@ def test_profile_use_without_a_name_keeps_the_interactive_picker(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profile.command.choose_profile",
+        "memcommit.adapters.console.commands.profile.selector.choose_profile",
         lambda entries, *, current, registry_generation, apply_removal: "authoring",
     )
 

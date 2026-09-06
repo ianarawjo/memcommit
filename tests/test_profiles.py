@@ -290,7 +290,7 @@ def test_bare_profile_uses_interactive_picker_result(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profile.command.choose_profile",
+        "memcommit.adapters.console.commands.profile.selector.choose_profile",
         select,
     )
 
@@ -318,7 +318,7 @@ def test_bare_profile_cancel_preserves_active_profile(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profile.command.choose_profile",
+        "memcommit.adapters.console.commands.profile.selector.choose_profile",
         lambda entries, *, current, registry_generation, apply_removal: None,
     )
 
@@ -342,7 +342,7 @@ def test_bare_profile_revalidates_picker_result_before_selection(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profile.command.choose_profile",
+        "memcommit.adapters.console.commands.profile.selector.choose_profile",
         lambda entries, *, current, registry_generation, apply_removal: "missing",
     )
 
@@ -366,7 +366,7 @@ def test_explicit_profile_use_does_not_open_picker(
         raise AssertionError("explicit profile use must not open the picker")
 
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profile.command.choose_profile",
+        "memcommit.adapters.console.commands.profile.selector.choose_profile",
         unexpected_picker,
     )
 
@@ -1102,7 +1102,7 @@ def test_initialized_study_picker_shows_participant_and_authority_profiles(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profile.command.choose_profile",
+        "memcommit.adapters.console.commands.profile.selector.choose_profile",
         select,
     )
 

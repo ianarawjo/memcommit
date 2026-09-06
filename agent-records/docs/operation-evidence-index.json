@@ -264,6 +264,7 @@
       "agent-records/docs/checkpoint-read-history-design-rationale.md",
       "agent-records/docs/context-name-portability-design-rationale.md",
       "agent-records/docs/mem-profile-design-rationale.md",
+      "agent-records/docs/profile-console-package-design-rationale.md",
       "agent-records/docs/study-action-ledger-design-rationale.md",
       "agent-records/docs/typed-operand-resolution-design-rationale.md"
     ],

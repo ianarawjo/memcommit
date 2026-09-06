@@ -12,9 +12,13 @@ import pytest
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
-import memcommit.adapters.console.commands.profile.command as profile_command
+import memcommit.adapters.console.commands.profile.lifecycle as profile_lifecycle
+import memcommit.adapters.console.commands.profile.study_profile as study_profile
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.profile.picker import ProfilePickerAction
+from memcommit.adapters.console.commands.profile.picker import (
+    ProfilePickerAction,
+    ProfilePickerRefresh,
+)
 from memcommit.core.context import Memory
 from memcommit.application.operations.profile.config import (
     PROFILE_REGISTRY_SCHEMA_VERSION,
@@ -297,7 +301,7 @@ def test_cli_child_remove_keeps_study_header_and_reports_permanent_deletion(
         monkeypatch,
     )
     _RecordingProgress.calls = []
-    monkeypatch.setattr(profile_command, "CommandProgress", _RecordingProgress)
+    monkeypatch.setattr(profile_lifecycle, "CommandProgress", _RecordingProgress)
 
     removed = runner.invoke(
         app,
@@ -365,7 +369,7 @@ def test_interactive_removal_reloads_and_stays_in_profile_selector(
                 registry_generation=registry_generation,
             )
             status = apply_removal(action)
-            return profile_command.ProfilePickerRefresh(
+            return ProfilePickerRefresh(
                 status=status,
                 preferred_row_index=3,
             )
@@ -376,7 +380,7 @@ def test_interactive_removal_reloads_and_stays_in_profile_selector(
         lambda: True,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.profile.command.choose_profile", select
+        "memcommit.adapters.console.commands.profile.selector.choose_profile", select
     )
 
     result = runner.invoke(app, ["profile"])
@@ -425,7 +429,7 @@ def test_cli_study_remove_force_deletes_both_stores_and_prints_receipt(
         monkeypatch,
     )
     _RecordingProgress.calls = []
-    monkeypatch.setattr(profile_command, "CommandProgress", _RecordingProgress)
+    monkeypatch.setattr(study_profile, "CommandProgress", _RecordingProgress)
 
     result = runner.invoke(
         app,
