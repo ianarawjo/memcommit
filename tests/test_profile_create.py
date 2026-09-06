@@ -13,10 +13,14 @@ from prompt_toolkit.output import DummyOutput
 import pytest
 
 import memcommit.application.operations.profile.model as profiles_module
-from memcommit.adapters.console.commands.profile.picker import (
+from memcommit.adapters.console.commands.profile.picker.model import (
     ProfilePickerAction,
     ProfilePickerEntry,
-    _creation_review,
+)
+from memcommit.adapters.console.commands.profile.picker.review import (
+    creation_review,
+)
+from memcommit.adapters.console.commands.profile.picker.app import (
     choose_profile,
 )
 from memcommit.application.operations.profile.config import (
@@ -166,7 +170,7 @@ def test_profile_picker_n_reviews_one_exact_empty_profile_creation():
         registry_generation=8,
         row_index=1,
     )
-    review = _creation_review(selected)
+    review = creation_review(selected)
     assert review.argv == ("mem", "profile", "create", "new-profile")
     assert "Keep the current Profile selected." in review.effects
 

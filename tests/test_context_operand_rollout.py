@@ -21,10 +21,17 @@ from memcommit.adapters.console.terminal.components.context_picker import (
     _visible_context_rows,
     choose_context,
 )
-from memcommit.adapters.console.commands.profile.picker import (
+from memcommit.adapters.console.commands.profile.picker.model import (
     ProfilePickerEntry,
-    _render_profile_options,
+)
+from memcommit.adapters.console.commands.profile.picker.presentation import (
+    render_profile_options,
+)
+from memcommit.adapters.console.commands.profile.picker.app import (
     choose_profile,
+)
+from memcommit.adapters.console.commands.profile.picker.rows import (
+    build_picker_rows,
 )
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
@@ -321,7 +328,7 @@ def test_profile_picker_escapes_metadata_but_returns_raw_identity():
         query_source_names=("query\tname",),
     )
     rendered = _visible_text(
-        _render_profile_options((entry,), selected=0, current=raw_name)
+        render_profile_options(build_picker_rows((entry,), current=raw_name), selected=0, current=raw_name)
     )
 
     assert raw_name not in rendered

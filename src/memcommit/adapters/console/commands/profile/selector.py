@@ -12,10 +12,12 @@ from memcommit.adapters.console.commands.profile.inventory import (
     _study_memberships,
 )
 from memcommit.adapters.console.commands.profile.lifecycle import _use_profile
-from memcommit.adapters.console.commands.profile.picker import (
+from memcommit.adapters.console.commands.profile.picker.model import (
     ProfilePickerAction,
     ProfilePickerEntry,
     ProfilePickerRefresh,
+)
+from memcommit.adapters.console.commands.profile.picker.app import (
     choose_profile,
 )
 from memcommit.adapters.console.commands.profile.presentation import (

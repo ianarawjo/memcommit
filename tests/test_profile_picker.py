@@ -7,16 +7,25 @@ import threading
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 
-import memcommit.adapters.console.commands.profile.picker as profile_picker_module
-from memcommit.adapters.console.commands.profile.picker import (
+import memcommit.adapters.console.commands.profile.picker.app as profile_picker_module
+import memcommit.adapters.console.commands.profile.picker.presentation as profile_picker_presentation
+from memcommit.adapters.console.commands.profile.picker.model import (
     ProfilePickerAction,
     ProfilePickerEntry,
     ProfilePickerRefresh,
-    _picker_rows,
-    _rename_review,
-    _removal_action,
-    _removal_review,
-    _render_profile_options,
+)
+from memcommit.adapters.console.commands.profile.picker.rows import (
+    build_picker_rows,
+)
+from memcommit.adapters.console.commands.profile.picker.review import (
+    rename_review,
+    removal_action,
+    removal_review,
+)
+from memcommit.adapters.console.commands.profile.picker.presentation import (
+    render_profile_options,
+)
+from memcommit.adapters.console.commands.profile.picker.app import (
     choose_profile,
 )
 
@@ -55,7 +64,7 @@ def _visible_text(fragments: list[tuple[str, str]]) -> str:
 
 def test_profile_picker_marks_current_and_selected_use_action():
     rendered = _visible_text(
-        _render_profile_options(ENTRIES, selected=1, current="authoring")
+        render_profile_options(build_picker_rows(ENTRIES, current="authoring"), selected=1, current="authoring")
     )
     lines = rendered.splitlines()
 
@@ -132,7 +141,7 @@ def test_profile_picker_r_edits_and_reviews_one_exact_rename():
 
 
 def test_profile_picker_rename_review_uses_explicit_profile_command():
-    review = _rename_review(
+    review = rename_review(
         ProfilePickerAction(
             kind="RENAME_PROFILE",
             name="old-name",
@@ -191,7 +200,7 @@ def test_profile_picker_r_on_study_header_reviews_exact_study_rename():
         new_name="renamed-pilot",
         row_index=1,
     )
-    review = _rename_review(selected)
+    review = rename_review(selected)
     assert review.argv == (
         "mem",
         "profile",
@@ -249,7 +258,7 @@ def test_profile_picker_renders_every_profile_for_window_owned_scrolling():
         for index in range(30)
     )
     rendered = _visible_text(
-        _render_profile_options(entries, selected=24, current="study-00")
+        render_profile_options(build_picker_rows(entries, current="study-00"), selected=24, current="study-00")
     )
 
     assert len(rendered.splitlines()) == 30
@@ -258,8 +267,8 @@ def test_profile_picker_renders_every_profile_for_window_owned_scrolling():
 
 
 def test_profile_picker_anchors_viewport_at_exact_selected_profile():
-    fragments = _render_profile_options(
-        ENTRIES,
+    fragments = render_profile_options(
+        build_picker_rows(ENTRIES, current="authoring"),
         selected=2,
         current="authoring",
     )
@@ -315,7 +324,7 @@ def test_profile_picker_nests_study_task_profiles_under_timestamped_heading():
     )
 
     rendered = _visible_text(
-        _render_profile_options(entries, selected=3, current="authoring")
+        render_profile_options(build_picker_rows(entries, current="authoring"), selected=3, current="authoring")
     )
 
     lines = rendered.splitlines()
@@ -372,7 +381,7 @@ def test_profile_picker_keeps_study_authorities_with_their_tasks():
     )
 
     rendered = _visible_text(
-        _render_profile_options(entries, selected=3, current="authoring")
+        render_profile_options(build_picker_rows(entries, current="authoring"), selected=3, current="authoring")
     )
 
     assert rendered.count("STUDY pilot-001") == 1
@@ -409,7 +418,7 @@ def test_profile_picker_labels_current_init_study_pair():
     )
 
     rendered = _visible_text(
-        _render_profile_options(entries, selected=2, current="pilot-current")
+        render_profile_options(build_picker_rows(entries, current="pilot-current"), selected=2, current="pilot-current")
     )
 
     assert rendered.count("STUDY pilot-current") == 1
@@ -445,7 +454,7 @@ def test_profile_picker_focuses_study_header_as_its_own_row():
     )
 
     rendered = _visible_text(
-        _render_profile_options(entries, selected=1, current="authoring")
+        render_profile_options(build_picker_rows(entries, current="authoring"), selected=1, current="authoring")
     )
 
     assert rendered.splitlines()[1].startswith("› STUDY pilot")
@@ -523,7 +532,7 @@ def test_profile_picker_deletion_cycles_every_shared_busy_frame(monkeypatch):
             study_profile_count=2,
         ),
     )
-    original_suffix = profile_picker_module.busy_suffix
+    original_suffix = profile_picker_presentation.busy_suffix
     rendered_frames: set[str] = set()
     all_frames_rendered = threading.Event()
     deletion_started = threading.Event()
@@ -537,7 +546,7 @@ def test_profile_picker_deletion_cycles_every_shared_busy_frame(monkeypatch):
             all_frames_rendered.set()
         return suffix
 
-    monkeypatch.setattr(profile_picker_module, "busy_suffix", capture_suffix)
+    monkeypatch.setattr(profile_picker_presentation, "busy_suffix", capture_suffix)
     monkeypatch.setattr(
         profile_picker_module,
         "_PROFILE_DELETION_BUSY_INTERVAL_SECONDS",
@@ -647,10 +656,10 @@ def test_profile_picker_review_warns_that_store_and_checkpoints_are_unrecoverabl
             study_profile_count=2,
         ),
     )
-    row = _picker_rows(entries, current="authoring")[1]
-    action = _removal_action(row, registry_generation=9)
+    row = build_picker_rows(entries, current="authoring")[1]
+    action = removal_action(row, registry_generation=9)
 
-    review = _removal_review(action, row)
+    review = removal_review(action, row)
 
     assert any("Memory, session, and checkpoint" in line for line in review.effects)
     assert "This cannot be undone or recovered by mem." in review.effects

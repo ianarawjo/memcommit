@@ -15,7 +15,7 @@ import memcommit.application.capabilities.ops as ops
 import memcommit.adapters.console.commands.profile.lifecycle as profile_lifecycle
 import memcommit.adapters.console.commands.profile.study_profile as study_profile
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.commands.profile.picker import (
+from memcommit.adapters.console.commands.profile.picker.model import (
     ProfilePickerAction,
     ProfilePickerRefresh,
 )
