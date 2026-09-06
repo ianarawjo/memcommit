@@ -31,7 +31,7 @@ from memcommit.adapters.console.terminal.core.capabilities import (
     require_interactive_terminal,
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.adapters.console.terminal.components.endpoint_setup.compact_screen import (
+from memcommit.adapters.console.terminal.components.endpoint_setup.compact.screen import (
     run_compact_endpoint_setup,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.command_binding import (

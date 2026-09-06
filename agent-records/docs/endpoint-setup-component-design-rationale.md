@@ -91,6 +91,46 @@ logic, so its implementation lives in
 unmigrated command adapters, while new internal code imports the owning module
 directly.
 
+## Compact form implementation ownership
+
+The compact form had grown to 1,989 lines, mostly inside one function. Reviewing
+an endpoint edit required tracing closures and several parallel dictionaries
+for the same role. The implementation now lives in the `endpoint_setup/compact/`
+package, with names that describe the task a reader can inspect:
+
+- `endpoint_editor.py`: `EndpointEditor` owns one role's writable fields,
+  Context selector, reach, Memory focus, new-name draft, and row rendering.
+  It collects or applies one `EndpointSetupValue`.
+- `command_sync.py`: `EndpointCommandSync` collects active role values, runs
+  the caller's validator, and synchronizes the existing command editor with
+  the endpoint editors through `EndpointCommandBinding`.
+- `screen.py`: the screen composes those objects and owns mode selection,
+  focus traversal, transient detail panes, keyboard actions, status, and the
+  application lifetime. The public setup dispatcher imports this entry point.
+
+This separates ownership rather than passing the old dictionaries to several
+files or splitting by generic names such as `state` and `render`. The small
+classes add some construction code; the purpose is independently reviewable
+responsibilities, not a claim that the total source is shorter. Screen-wide
+navigation still coordinates endpoint changes and remains a substantial part
+of the screen module.
+
+Existing Context selectors, exact-name controls, Memory-focus controllers,
+command codecs, and `SurfaceFocusController` remain the owning components for
+their shared mechanics. Before applying a command's decoded draft, every
+requested Memory selector must still resolve successfully; a later endpoint
+failure must not partially rewrite earlier fields. Editing a Context still
+clears stale Memory selection, while programmatic name synchronization does
+not claim a direct person edit. Operation authority, validation, persistence,
+provider work, visible text, and keyboard behavior are unchanged.
+
+Verification covered the existing 107 component and caller tests for Endpoint
+Setup, Update, Meld, Sever, Branch, and Reference. A before/after comparison at
+180×52 also matched all character and style cells across 44 rendered states
+for stored Memory, inline Memory, Context browsing, command editing, and new
+Context parent selection. This was a comparison of the actual prompt-toolkit
+rendered cells, not a new screenshot record or a changed interactive flow.
+
 ## Intentional limitations
 
 - Compare and Update now use the rebuilt component. Their provider, cache,
