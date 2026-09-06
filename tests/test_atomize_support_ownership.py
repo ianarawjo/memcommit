@@ -84,7 +84,7 @@ def test_atomize_production_consumers_use_canonical_support_modules() -> None:
         "src/memcommit/application/operations/atomize/runtime.py",
         "src/memcommit/application/capabilities/ops.py",
         "src/memcommit/application/capabilities/history/verification",
-        "src/memcommit/application/capabilities/history/reconstruction/memory_effect_derivation.py",
+        "src/memcommit/application/capabilities/history/reconstruction/memory_effects",
         "src/memcommit/application/capabilities/history/query/memory_history_slicing.py",
         "src/memcommit/application/operations/review/model.py",
         "src/memcommit/persistence/operations/atomize",

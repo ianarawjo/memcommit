@@ -31,8 +31,10 @@ from memcommit.application.capabilities.history.model.topology import (
     HistoryStep,
     HistoryRelation,
 )
-from memcommit.application.capabilities.history.reconstruction.memory_effect_derivation import (
+from memcommit.application.capabilities.history.model.memory_event import (
     MemoryHistoryEvent,
+)
+from memcommit.application.capabilities.history.reconstruction.memory_history_reconstruction import (
     derive_memory_history_events,
 )
 from memcommit.core.context import Context

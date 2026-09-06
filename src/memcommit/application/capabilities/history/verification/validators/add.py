@@ -88,3 +88,35 @@ def _source_occurrences(
             "RECORDED" if explicit else "RECONSTRUCTED",
         )
     return result
+
+
+def verify_add_occurrences(
+    *, args: dict[str, Any], after: _Frame, added: set[str], checkpoint_uid: str
+) -> tuple[dict[str, tuple[SourceOccurrence, MemoryHistoryEvidence]], list[str]]:
+    """Retain reconstructed occurrences and explain invalid recorded provenance."""
+    warnings: list[str] = []
+    source = args.get("source")
+    if isinstance(source, dict):
+        raw_text = source.get("raw_text")
+        declared_hash = source.get("sha256")
+        if not (
+            isinstance(raw_text, str)
+            and isinstance(declared_hash, str)
+            and hashlib.sha256(raw_text.encode("utf-8")).hexdigest() == declared_hash
+        ):
+            warnings.append(
+                f"Checkpoint [{checkpoint_uid[:8]}] has an invalid add "
+                "source hash; source occurrence evidence was reconstructed."
+            )
+    declared_uids = args.get("memory_uids")
+    added_in_context_order = [uid for uid in after.order if uid in added]
+    if (
+        isinstance(declared_uids, list)
+        and set(uid for uid in declared_uids if isinstance(uid, str)) == added
+        and declared_uids != added_in_context_order
+    ):
+        warnings.append(
+            f"Checkpoint [{checkpoint_uid[:8]}] records add Memory UIDs "
+            "out of Context order; occurrence order was reconstructed."
+        )
+    return _source_occurrences(args=args, after=after, added_uids=added), warnings

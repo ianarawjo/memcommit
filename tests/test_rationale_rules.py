@@ -16,7 +16,7 @@ from memcommit.application.capabilities.history.verification import (
     MemoryHistoryContextTransition,
     MemoryState,
 )
-from memcommit.application.capabilities.history.reconstruction.memory_effect_derivation import (
+from memcommit.application.capabilities.history.model.memory_event import (
     MemoryHistoryEvent,
 )
 from memcommit.application.capabilities.history.query.memory_history_slicing import (

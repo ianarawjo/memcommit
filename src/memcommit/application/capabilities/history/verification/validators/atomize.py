@@ -4,15 +4,18 @@ from __future__ import annotations
 
 import hashlib
 import json
-from typing import Any
 import uuid
+from dataclasses import dataclass
+from typing import Any
 
+from ..checkpoint import _checkpoint_fields
 from ..frame import _Frame, _frame_from_snapshot
 from ..model import (
-    MemoryHistoryChildEvidence,
+    TRACE_METADATA_LEGACY_SCHEMA_VERSION,
     TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION,
     TRACE_METADATA_REVIEWED_LEGACY_SCHEMA_VERSION,
     TRACE_METADATA_SCHEMA_VERSION,
+    MemoryHistoryChildEvidence,
 )
 
 
@@ -324,3 +327,201 @@ def _atomize_evidence(
             "digest": digest,
         },
     )
+
+
+@dataclass(frozen=True)
+class AtomizeChangeEvidence:
+    kind: str
+    source_uids: tuple[str, ...]
+    result_uids: tuple[str, ...]
+    effective_result_uids: tuple[str, ...]
+    reason: str | None
+    reason_codes: tuple[str, ...]
+    operation_id: str | None
+    child_evidence: tuple[MemoryHistoryChildEvidence, ...]
+    review_evidence: dict[str, str] | None
+
+
+def verify_atomize_changes(
+    *,
+    before: _Frame,
+    after: _Frame,
+    entry: dict,
+) -> tuple[list[AtomizeChangeEvidence], list[str]]:
+    checkpoint_uid, timestamp, command, description, args = _checkpoint_fields(entry)
+    metadata = args.get("trace")
+    if metadata is None:
+        return [], []
+    schema_version = (
+        metadata.get("schema_version")
+        if isinstance(
+            metadata,
+            dict,
+        )
+        else None
+    )
+    if (
+        not isinstance(metadata, dict)
+        or isinstance(schema_version, bool)
+        or schema_version
+        not in {
+            TRACE_METADATA_LEGACY_SCHEMA_VERSION,
+            TRACE_METADATA_REVIEWED_LEGACY_SCHEMA_VERSION,
+            TRACE_METADATA_SCHEMA_VERSION,
+            TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION,
+        }
+        or not isinstance(metadata.get("changes"), list)
+    ):
+        return (
+            [],
+            [
+                f"Checkpoint [{checkpoint_uid[:8]}] has invalid trace metadata; "
+                "snapshot differences were used instead."
+            ],
+        )
+    operation_id = metadata.get("operation_id")
+    if operation_id is not None and not isinstance(operation_id, str):
+        operation_id = None
+
+    changes: list[AtomizeChangeEvidence] = []
+    consumed_before: set[str] = set()
+    consumed_after: set[str] = set()
+    warnings: list[str] = []
+    normal_form_absorptions: dict[str, str] = {}
+    if schema_version == TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION:
+        try:
+            from memcommit.application.operations.atomize.domain import (
+                AtomizeNormalFormAudit,
+            )
+
+            normal_form = AtomizeNormalFormAudit.from_dict(metadata.get("normal_form"))
+        except (RuntimeError, TypeError, ValueError):
+            return (
+                [],
+                [
+                    f"Checkpoint [{checkpoint_uid[:8]}] has invalid Atomize "
+                    "normal-form metadata; snapshot differences were used instead."
+                ],
+            )
+        normal_form_absorptions = dict(normal_form.absorbed_to_survivor)
+    for record in metadata["changes"]:
+        if not isinstance(record, dict):
+            warnings.append(
+                f"Checkpoint [{checkpoint_uid[:8]}] contains an invalid trace change."
+            )
+            continue
+        kind = record.get("kind")
+        source_uids = record.get("source_uids")
+        result_uids = record.get("result_uids")
+        reason = record.get("reason")
+        reason_codes = record.get("reason_codes", [])
+        if (
+            kind not in {"KEEP", "PRESERVE", "SPLIT", "ABSORB"}
+            or not isinstance(source_uids, list)
+            or not source_uids
+            or any(not isinstance(uid, str) or not uid for uid in source_uids)
+            or not isinstance(result_uids, list)
+            or not result_uids
+            or any(not isinstance(uid, str) or not uid for uid in result_uids)
+            or (reason is not None and not isinstance(reason, str))
+            or not isinstance(reason_codes, list)
+            or any(not isinstance(code, str) for code in reason_codes)
+        ):
+            warnings.append(
+                f"Checkpoint [{checkpoint_uid[:8]}] contains an invalid trace change."
+            )
+            continue
+
+        effective_result_uids = list(
+            dict.fromkeys(normal_form_absorptions.get(uid, uid) for uid in result_uids)
+        )
+        involved_before = set(source_uids)
+        involved_after = set(effective_result_uids)
+        normal_form_match = (
+            schema_version == TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION
+            and len(source_uids) == 1
+            and source_uids[0] in before.memories
+            and (
+                (
+                    kind == "SPLIT"
+                    and source_uids[0] not in after.memories
+                    and bool(effective_result_uids)
+                    and set(effective_result_uids) <= set(after.memories)
+                )
+                or (
+                    kind in {"KEEP", "PRESERVE"}
+                    and len(effective_result_uids) == 1
+                    and effective_result_uids[0] in after.memories
+                    and (
+                        source_uids[0] == effective_result_uids[0]
+                        or source_uids[0] not in after.memories
+                    )
+                )
+            )
+        )
+        if (
+            involved_before & consumed_before
+            or (
+                schema_version != TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION
+                and involved_after & consumed_after
+            )
+            or not (
+                normal_form_match
+                or _history_change_matches_snapshot(
+                    kind=kind,
+                    source_uids=source_uids,
+                    result_uids=result_uids,
+                    before=before,
+                    after=after,
+                )
+            )
+        ):
+            warnings.append(
+                f"Checkpoint [{checkpoint_uid[:8]}] trace metadata does not "
+                "match its snapshot; snapshot differences were used instead."
+            )
+            continue
+
+        child_evidence: tuple[MemoryHistoryChildEvidence, ...] = ()
+        review_evidence: dict[str, str] | None = None
+        if schema_version in {
+            TRACE_METADATA_REVIEWED_LEGACY_SCHEMA_VERSION,
+            TRACE_METADATA_SCHEMA_VERSION,
+            TRACE_METADATA_NORMAL_FORM_SCHEMA_VERSION,
+        }:
+            parsed_evidence = _atomize_evidence(
+                record,
+                schema_version=schema_version,
+                kind=kind,
+                source_uids=source_uids,
+                result_uids=result_uids,
+                before=before,
+                args=args,
+            )
+            if parsed_evidence is None:
+                warnings.append(
+                    f"Checkpoint [{checkpoint_uid[:8]}] has invalid reviewed "
+                    "atomize evidence; lineage was retained without that "
+                    "evidence."
+                )
+            else:
+                child_evidence, review_evidence = parsed_evidence
+        # Atomize records degrade independently: an invalid later record must
+        # not erase a relation already proven by the retained snapshots.
+        changes.append(
+            AtomizeChangeEvidence(
+                kind=kind,
+                source_uids=tuple(source_uids),
+                result_uids=tuple(result_uids),
+                effective_result_uids=tuple(effective_result_uids),
+                reason=reason,
+                reason_codes=tuple(reason_codes),
+                operation_id=operation_id,
+                child_evidence=child_evidence,
+                review_evidence=review_evidence,
+            )
+        )
+        consumed_before.update(source_uids)
+        consumed_after.update(effective_result_uids)
+
+    return changes, warnings

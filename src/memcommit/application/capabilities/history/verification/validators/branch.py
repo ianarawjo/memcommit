@@ -10,12 +10,17 @@ from memcommit.application.capabilities.command_recovery import (
 )
 from memcommit.application.capabilities.history.reconstruction.memory_lineage_relations import (
     MemoryLineageEdge,
+    memory_content_sha256,
     parse_memory_lineage_receipt,
 )
 
 from ..checkpoint import _checkpoint_fields
 from ..frame import _Frame
-from ..model import MemoryHistoryCommandContext, MemoryHistoryCommandOperation
+from ..model import (
+    MemoryHistoryCommandContext,
+    MemoryHistoryCommandOperation,
+    MemoryState,
+)
 
 
 @dataclass(frozen=True)
@@ -115,3 +120,47 @@ def _recorded_branch_transition(
         ),
         None,
     )
+
+
+def branch_source_states(
+    *, transition: _RecordedBranchTransition, before: _Frame, after: _Frame
+) -> dict[str, tuple[MemoryState, ...]]:
+    """Recover only Source values proven by the preceding frame or locked receipt."""
+    source_is_preceding_frame = (
+        before.context_uid == transition.source.uid
+        and before.context_name == transition.source.name
+    )
+    edge_by_target_uid = {
+        edge.target_memory_uid: edge for edge in transition.memory_edges
+    }
+    sources: dict[str, tuple[MemoryState, ...]] = {}
+    for uid in after.order:
+        target_state = after.memories[uid]
+        edge = edge_by_target_uid.get(uid)
+        source_uid = edge.source_memory_uid if edge is not None else uid
+        source_state = (
+            before.memories.get(source_uid) if source_is_preceding_frame else None
+        )
+        # Branch preserves content across distinct occurrence identities. If
+        # the copied Source had uncheckpointed changes, the target snapshot
+        # proves the copied result but the older inherited frame must not be
+        # presented as its exact input.
+        if source_state is not None and source_state.content == target_state.content:
+            retained_source = (source_state,)
+        elif edge is not None and edge.source_content_sha256 == memory_content_sha256(
+            target_state.content
+        ):
+            # The Branch receipt is written while the Source record is locked.
+            # It therefore proves the copied Source value even when that value
+            # had not received its own earlier checkpoint.
+            retained_source = (
+                MemoryState(
+                    uid=edge.source_memory_uid,
+                    content=target_state.content,
+                    position=target_state.position,
+                ),
+            )
+        else:
+            retained_source = ()
+        sources[uid] = retained_source
+    return sources

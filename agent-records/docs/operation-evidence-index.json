@@ -231,7 +231,8 @@
       "agent-records/docs/checkpoint-read-history-design-rationale.md",
       "agent-records/docs/command-attempt-ledger-design-rationale.md",
       "agent-records/docs/mem-history-search-design-rationale.md",
-      "agent-records/docs/typed-operand-resolution-design-rationale.md"
+      "agent-records/docs/typed-operand-resolution-design-rationale.md",
+      "agent-records/docs/retained-history-application-ownership-design-rationale.md"
     ],
     "meld": [
       "agent-records/docs/meld-application-boundary-matrix.md",
@@ -290,7 +291,8 @@
       "agent-records/docs/read-report-lifecycle-design-rationale.md",
       "agent-records/docs/mem-trace-rationale-design-rationale.md",
       "agent-records/docs/study-semantic-prompt-policy-design-rationale.md",
-      "agent-records/docs/typed-operand-resolution-design-rationale.md"
+      "agent-records/docs/typed-operand-resolution-design-rationale.md",
+      "agent-records/docs/retained-history-application-ownership-design-rationale.md"
     ],
     "redo": [
       "agent-records/docs/semantic-apply-undo-design-rationale.md",

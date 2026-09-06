@@ -265,7 +265,7 @@ blocked = (
     'memcommit.application.operations.trace.reference_lineage',
     'memcommit.application.capabilities.history.reconstruction.history_graph_reconstruction',
     'memcommit.application.capabilities.history.model.topology',
-    'memcommit.application.capabilities.history.reconstruction.memory_effect_derivation',
+    'memcommit.application.capabilities.history.reconstruction.memory_history_reconstruction',
     'memcommit.application.capabilities.history.query.memory_history_slicing',
     'memcommit.application.capabilities.reviewing.report',
     'memcommit.reference_application',

@@ -20,7 +20,7 @@ from memcommit.application.capabilities.history.query.memory_history_slicing imp
     collect_memory_history_candidates,
     reconstruct_memory_history,
 )
-from memcommit.application.capabilities.history.reconstruction.memory_effect_derivation import (
+from memcommit.application.capabilities.history.model.memory_event import (
     MemoryHistoryEvent,
     MemoryHistoryEventKind,
 )

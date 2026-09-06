@@ -16,7 +16,7 @@ from memcommit.application.capabilities.history.reconstruction.history_graph_rec
     reconstruct_history_graph,
     reconstruct_history_graph_from_evidence,
 )
-from memcommit.application.capabilities.history.reconstruction.memory_effect_derivation import (
+from memcommit.application.capabilities.history.reconstruction.memory_history_reconstruction import (
     derive_memory_history_events,
 )
 from memcommit.application.capabilities.history.query.memory_history_slicing import (

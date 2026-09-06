@@ -21,7 +21,7 @@ from memcommit.application.capabilities.history.verification import (
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistory,
 )
-from memcommit.application.capabilities.history.reconstruction.memory_effect_derivation import (
+from memcommit.application.capabilities.history.model.memory_event import (
     MemoryHistoryEvent,
 )
 from memcommit.providers.subscription import QueryProviderError
