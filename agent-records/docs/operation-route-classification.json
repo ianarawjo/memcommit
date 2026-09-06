@@ -429,7 +429,8 @@
           "agent-records/docs/session-endpoint-setup-design-rationale.md",
           "agent-records/docs/study-prewarm-retirement-design-rationale.md",
           "agent-records/docs/update-application-boundary-matrix.md",
-          "agent-records/docs/update-terminal-session-rotation-design-rationale.md"
+          "agent-records/docs/update-terminal-session-rotation-design-rationale.md",
+          "agent-records/docs/history-picker-ownership-design-rationale.md"
         ],
         "reason": "Apply policy and recovery are verified, but the remaining Update routes have not been traced into one complete reviewed application boundary."
       }

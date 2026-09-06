@@ -286,6 +286,13 @@ creation-time Init and Atomize remain separate when they persisted separate
 snapshots. The full checkpoint UID is the process-local selection receipt even
 though Items shows only its compact prefix.
 
+The terminal ownership split is documented in
+[History picker and Revert review ownership](history-picker-ownership-design-rationale.md).
+The shared History picker now assembles only a read-only Items/Viewer screen;
+the Revert command adapter owns its separate review workbench and frozen
+selection preparation. This changes internal imports and composition while
+preserving the interaction and execution boundaries described below.
+
 Viewer uses the shared complete revision renderer described in
 `agent-records/docs/checkpoint-revision-diff-design-rationale.md`. It shows what the selected
 checkpoint's command changed relative to its own predecessor and the complete

@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import memcommit.adapters.console.terminal.components.history.browser as diff_browser
 from memcommit.adapters.console.terminal.components.context_picker import ContextSubtreeSelection
-from memcommit.adapters.console.terminal.components.history.picker import HISTORY_BACK
+from memcommit.adapters.console.terminal.components.history.model import HISTORY_BACK
 
 
 class Store:
@@ -134,9 +134,6 @@ def test_exact_history_scope_does_not_scan_unrelated_context_history(monkeypatch
                 "back_navigation": False,
                 "manual": False,
                 "show_diffs": True,
-                "mode": "log",
-                "keep_history": False,
-                "staged_checkpoint_uid": None,
                 "title": "DIFF",
             },
         )
@@ -272,49 +269,6 @@ def test_checkpoint_rows_do_not_infer_creation_origin_from_oldest_entry():
 
     assert rows[0].label == "created"
     assert [badge.text for badge in rows[0].badges] == ["CHECKPOINT plain-cr"]
-
-
-def test_revert_version_rows_keep_every_exact_checkpoint_selectable():
-    shared_update = {
-        "update_session_uid": "session-1",
-        "operation_digest": "digest-1",
-    }
-    checkpoints = (
-        {
-            "uid": "checkpoint-a",
-            "timestamp": "2026-08-13T12:00:00",
-            "command": "update",
-            "description": "First retained state",
-            "args": shared_update,
-        },
-        {
-            "uid": "checkpoint-b",
-            "timestamp": "2026-08-13T11:00:00",
-            "command": "update",
-            "description": "Second retained state",
-            "args": shared_update,
-        },
-        {
-            "uid": "checkpoint-init",
-            "timestamp": "2026-08-13T10:00:00",
-            "command": "init",
-            "description": "Creation state",
-            "args": {},
-        },
-    )
-
-    rows = diff_browser._checkpoint_version_rows(
-        checkpoints,
-        context_name="journal",
-        context_uid="journal-uid",
-    )
-
-    assert [row.selector for row in rows] == [
-        "checkpoint-a",
-        "checkpoint-b",
-        "checkpoint-init",
-    ]
-    assert [row.label for row in rows] == ["update", "update", "created"]
 
 
 def test_checkpoint_rows_separate_direct_commands_from_inherited_lineage():

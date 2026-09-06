@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Any
 
-from memcommit.adapters.console.terminal.components.history.picker import HistoryPickerEntry
+from memcommit.adapters.console.terminal.components.history.model import HistoryPickerEntry
 from memcommit.application.capabilities.history.query.semantic_history_query import (
     HistorySearchResult,
 )

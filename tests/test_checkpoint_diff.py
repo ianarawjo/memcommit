@@ -10,7 +10,7 @@ from memcommit.adapters.console.terminal.components.history.checkpoint_diff impo
     open_checkpoint_revision_viewer,
 )
 import memcommit.adapters.console.terminal.components.history.checkpoint_diff as checkpoint_diff
-from memcommit.adapters.console.terminal.components.history.picker import HistoryDetailView
+from memcommit.adapters.console.terminal.components.history.model import HistoryDetailView
 from memcommit.adapters.console.terminal.components.history.presentation import checkpoint_picker_entries
 
 

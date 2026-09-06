@@ -96,7 +96,8 @@
       "agent-records/docs/checkpoint-revision-diff-design-rationale.md",
       "agent-records/docs/durable-uid-resolution-design-rationale.md",
       "agent-records/docs/mem-history-search-design-rationale.md",
-      "agent-records/docs/typed-operand-resolution-design-rationale.md"
+      "agent-records/docs/typed-operand-resolution-design-rationale.md",
+      "agent-records/docs/history-picker-ownership-design-rationale.md"
     ],
     "distill": [
       "agent-records/docs/distill-makemore-generative-reduction-design-rationale.md",
@@ -327,7 +328,8 @@
       "agent-records/docs/checkpoint-targeting-design-rationale.md",
       "agent-records/docs/checkpoint-revision-diff-design-rationale.md",
       "agent-records/docs/mem-history-search-design-rationale.md",
-      "agent-records/docs/undo-redo-application-boundary-matrix.md"
+      "agent-records/docs/undo-redo-application-boundary-matrix.md",
+      "agent-records/docs/history-picker-ownership-design-rationale.md"
     ],
     "review": [
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
@@ -415,7 +417,8 @@
       "agent-records/docs/session-endpoint-setup-design-rationale.md",
       "agent-records/docs/study-prewarm-retirement-design-rationale.md",
       "agent-records/docs/update-application-boundary-matrix.md",
-      "agent-records/docs/update-terminal-session-rotation-design-rationale.md"
+      "agent-records/docs/update-terminal-session-rotation-design-rationale.md",
+      "agent-records/docs/history-picker-ownership-design-rationale.md"
     ]
   }
 }

@@ -19,10 +19,10 @@ from memcommit.application.capabilities.operand_resolution import (
     freeze_local_context_operand_candidates,
     resolve_existing_context_operand,
 )
-from memcommit.adapters.console.terminal.components.history.browser import browse_checkpoint_locations
-from memcommit.adapters.console.terminal.components.history.picker import (
-    HistorySelectionReceipt,
-    choose_history,
+from memcommit.adapters.console.commands.revert.selection import review_context_checkpoints
+from memcommit.adapters.console.commands.revert.workbench import choose_revert_history
+from memcommit.adapters.console.commands.revert.review import (
+    RevertSelectionReceipt,
     revert_exact_command_review,
 )
 from memcommit.adapters.console.terminal.components.history.presentation import checkpoint_picker_entries
@@ -98,7 +98,7 @@ def _semantic_selection(
     query: str,
     *,
     keep: bool,
-) -> HistorySelectionReceipt | None:
+) -> RevertSelectionReceipt | None:
     if not _interactive_terminal():
         raise ValueError(
             "Natural-language revert selection requires an interactive "
@@ -146,10 +146,9 @@ def _semantic_selection(
             ),
         )
 
-    return choose_history(
+    return choose_revert_history(
         options,
         context_name=name,
-        mode="revert",
         detail_renderer=checkpoint_revision_detail_renderer(entries),
         keep_history=keep,
         revert_review_factory=revert_review_factory,
@@ -161,16 +160,15 @@ def _picker_selection(
     entries: list[dict[str, Any]],
     *,
     keep: bool,
-) -> HistorySelectionReceipt | None:
+) -> RevertSelectionReceipt | None:
     if not _interactive_terminal():
         raise ValueError(
             "Interactive checkpoint selection requires a terminal. "
             "Pass a checkpoint UID explicitly."
         )
-    return choose_history(
+    return choose_revert_history(
         checkpoint_picker_entries(entries),
         context_name=name,
-        mode="revert",
         detail_renderer=checkpoint_revision_detail_renderer(entries),
         keep_history=keep,
     )
@@ -183,7 +181,7 @@ def _validate_reviewed_frame(
     context_uid: str,
     context_digest: str,
     history_digest: str,
-    receipt: HistorySelectionReceipt,
+    receipt: RevertSelectionReceipt,
 ) -> str:
     """Recheck the reviewed frame before entering the store's revert lock."""
     if receipt.context_name != context_name:
@@ -401,12 +399,10 @@ def cmd(
 
     if selector is None and _interactive_terminal():
         try:
-            reviewed = browse_checkpoint_locations(
+            reviewed = review_context_checkpoints(
                 store,
-                session=None,
-                context_locator=name,
+                context_name=name,
                 title="REVERT",
-                mode="revert",
                 keep_history=keep,
             )
         except (FileNotFoundError, OSError, RuntimeError, ValueError) as error:

@@ -1,53 +1,31 @@
-"""Interaction and presentation contract for the shared history picker."""
+"""Reading, model, and presentation contracts for the shared history picker."""
 
 from __future__ import annotations
 
 import io
-
 import pytest
 from prompt_toolkit.input.defaults import create_pipe_input
 from prompt_toolkit.output import DummyOutput
 from prompt_toolkit.utils import get_cwidth
 
+from tests.history_picker_support import entry
 import memcommit.adapters.console.terminal.components.history.picker as history_picker
-from memcommit.adapters.console.terminal.components.history.picker import (
+from memcommit.adapters.console.terminal.components.history.picker import choose_history
+from memcommit.adapters.console.terminal.components.history.model import (
     HISTORY_BACK,
-    REVERT_COMMAND_FORM,
     HistoryDetailView,
     HistoryPickerEntry,
-    HistorySelectionReceipt,
-    _detail_unit_position,
-    _render_detail,
-    _render_entry_fragments,
+)
+from memcommit.adapters.console.terminal.components.history.rendering import (
+    detail_unit_position,
+    render_history_detail,
+    render_history_entry_fragments,
     _render_entry_line,
-    _visible_bounds,
-    choose_history,
-    parse_revert_command_argv,
-    revert_exact_command_review,
+    visible_history_bounds,
 )
-from memcommit.adapters.console.terminal.components.command_editor import (
-    format_exact_command,
+from memcommit.application.capabilities.reviewing.session_navigation import (
+    SessionWorkbenchNavigation,
 )
-from memcommit.application.capabilities.reviewing.session_navigation import SessionWorkbenchNavigation
-
-
-def entry(
-    suffix: int,
-    *,
-    description: str = "Added one note",
-    uid: str | None = None,
-) -> HistoryPickerEntry:
-    return HistoryPickerEntry(
-        uid=uid or f"00000000-0000-4000-8000-{suffix:012d}",
-        timestamp=f"2026-07-30T11:{suffix:02d}:00-04:00",
-        command="add",
-        description=description,
-        detail=(
-            f"Snapshot: {suffix + 3} direct items · {suffix} Memories · "
-            "1 MemoryRef · 1 query-only Context · 1 embedded Context\n"
-            "Transition: +1 added · ~2 edited · -3 removed · 4 reordered"
-        ),
-    )
 
 
 def test_history_row_gives_wide_viewport_to_description():
@@ -81,13 +59,13 @@ def test_history_row_gives_wide_viewport_to_description():
 def test_history_row_colors_only_the_unfocused_action_token():
     candidate = entry(1)
 
-    unfocused = _render_entry_fragments(
+    unfocused = render_history_entry_fragments(
         candidate,
         entries=(candidate,),
         selected=False,
         available_width=100,
     )
-    focused = _render_entry_fragments(
+    focused = render_history_entry_fragments(
         candidate,
         entries=(candidate,),
         selected=True,
@@ -101,224 +79,6 @@ def test_history_row_colors_only_the_unfocused_action_token():
     assert all(style == "class:memcommit.table.selected" for style, _text in focused)
 
 
-def test_revert_stages_exact_checkpoint_then_jumps_directly_to_proposed_command():
-    candidate = entry(1)
-    with create_pipe_input() as pipe_input:
-        # Items Enter stages the exact UID and focuses the final editable
-        # command; the next Enter applies it without a redundant policy stop.
-        pipe_input.send_text("\r\r")
-        selected = choose_history(
-            (candidate,),
-            context_name="test/update/to",
-            mode="revert",
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert selected == HistorySelectionReceipt(
-        context_name="test/update/to",
-        checkpoint_uid=candidate.uid,
-        keep_history=True,
-    )
-
-
-def test_revert_arrows_move_and_clamp_before_accepting():
-    candidates = (entry(1), entry(2), entry(3))
-    with create_pipe_input() as pipe_input:
-        # Move to the last row, once up, then choose the second row.
-        pipe_input.send_text("\x1b[B\x1b[B\x1b[A\r\r")
-        selected = choose_history(
-            candidates,
-            context_name="journal",
-            mode="revert",
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert selected is not None
-    assert selected.checkpoint_uid == candidates[1].uid
-    assert selected.keep_history is True
-
-
-def test_revert_arrow_boundary_enters_viewer_then_returns_to_items():
-    candidates = (entry(1), entry(2))
-    with create_pipe_input() as pipe_input:
-        # Up from the first Item crosses into the Viewer. Enter returns to
-        # Items, where Down must still select the second exact checkpoint.
-        pipe_input.send_text("\x1b[A\r\x1b[B\r\r")
-        selected = choose_history(
-            candidates,
-            context_name="journal",
-            mode="revert",
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert selected == HistorySelectionReceipt(
-        context_name="journal",
-        checkpoint_uid=candidates[1].uid,
-        keep_history=True,
-    )
-
-
-def test_revert_tui_can_explicitly_discard_newer_checkpoints():
-    candidate = entry(1)
-    with create_pipe_input() as pipe_input:
-        # Items Enter jumps to the command. Shift-Tab returns to History,
-        # Left changes the keep-all default to DISCARD NEWER, and Enter returns
-        # to the synchronized command before final approval.
-        pipe_input.send_text("\r\x1b[Z\x1b[D\r\r")
-        selected = choose_history(
-            (candidate,),
-            context_name="journal",
-            mode="revert",
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert selected == HistorySelectionReceipt(
-        context_name="journal",
-        checkpoint_uid=candidate.uid,
-        keep_history=False,
-    )
-
-
-def test_revert_accepts_a_checkpoint_staged_in_the_context_tree():
-    candidates = (entry(1), entry(2))
-    with create_pipe_input() as pipe_input:
-        # The Context tree's exact-version Enter already performed checkpoint
-        # selection. The proposed command therefore starts focused, without a
-        # redundant second selection of the same UID in Items.
-        pipe_input.send_text("\r")
-        selected = choose_history(
-            candidates,
-            context_name="journal",
-            mode="revert",
-            staged_checkpoint_uid=candidates[1].uid,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert selected == HistorySelectionReceipt(
-        context_name="journal",
-        checkpoint_uid=candidates[1].uid,
-        keep_history=True,
-    )
-
-
-def test_revert_discard_flag_initializes_the_tui_policy():
-    candidate = entry(1)
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\r\r")
-        selected = choose_history(
-            (candidate,),
-            context_name="journal",
-            mode="revert",
-            keep_history=False,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert selected is not None
-    assert selected.keep_history is False
-
-
-def test_revert_proposed_command_unique_prefix_updates_controls_and_applies():
-    candidates = (
-        entry(1, uid="11111111-1111-4111-8111-111111111111"),
-        entry(2, uid="22222222-2222-4222-8222-222222222222"),
-    )
-    selector = candidates[1].uid[:8]
-    replacement = f"{selector} --context journal --discard-newer"
-    with create_pipe_input() as pipe_input:
-        # Stage the first row, then use only a unique prefix for another frozen
-        # UID. Validation must move Items/Viewer and History before Apply.
-        pipe_input.send_text("\r\x15" + replacement + "\r")
-        selected = choose_history(
-            candidates,
-            context_name="journal",
-            mode="revert",
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert selected == HistorySelectionReceipt(
-        context_name="journal",
-        checkpoint_uid=candidates[1].uid,
-        keep_history=False,
-    )
-
-
-def test_revert_proposed_command_is_explicit_and_round_trips_unique_prefix():
-    candidates = (
-        entry(1, uid="11111111-1111-4111-8111-111111111111"),
-        entry(2, uid="22222222-2222-4222-8222-222222222222"),
-    )
-    selector = candidates[1].uid[:8]
-    review = revert_exact_command_review(
-        context_name="practice/greetings",
-        checkpoint_uid=candidates[1].uid,
-        keep_history=True,
-    )
-
-    assert format_exact_command(review) == (
-        f"mem revert {candidates[1].uid} --context practice/greetings --keep"
-    )
-    assert parse_revert_command_argv(
-        (
-            *REVERT_COMMAND_FORM.command,
-            selector,
-            "--context",
-            "practice/greetings",
-            "--discard-newer",
-        ),
-        context_name="practice/greetings",
-        entries=candidates,
-    ) == (candidates[1].uid, False)
-
-
-def test_revert_proposed_command_rejects_ambiguous_uid_prefix():
-    candidates = (entry(1), entry(2))
-
-    with pytest.raises(ValueError, match="matches 2 visible checkpoints"):
-        parse_revert_command_argv(
-            (
-                *REVERT_COMMAND_FORM.command,
-                "00000000",
-                "--context",
-                "practice/greetings",
-                "--keep",
-            ),
-            context_name="practice/greetings",
-            entries=candidates,
-        )
-
-
-def test_empty_revert_stays_read_only_until_back_navigation():
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text("\r\x1b[B\x7f")
-        selected = choose_history(
-            (),
-            context_name="empty/context",
-            mode="revert",
-            initial_details_open=True,
-            empty_message="No checkpoints for this Context yet.",
-            back_navigation=True,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert selected is HISTORY_BACK
-
-
 def test_log_enter_opens_viewer_and_q_closes_without_selection():
     candidate = entry(1)
     with create_pipe_input() as pipe_input:
@@ -327,7 +87,6 @@ def test_log_enter_opens_viewer_and_q_closes_without_selection():
         selected = choose_history(
             (candidate,),
             context_name="journal",
-            mode="log",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -350,7 +109,6 @@ def test_log_item_arrow_previews_viewer_without_moving_focus():
         selected = choose_history(
             candidates,
             context_name="journal",
-            mode="log",
             detail_renderer=detail_renderer,
             workbench_navigation=navigation,
             app_input=pipe_input,
@@ -371,25 +129,8 @@ def test_empty_log_stays_open_until_an_explicit_close_key():
         selected = choose_history(
             (),
             context_name="empty/context",
-            mode="log",
             initial_details_open=True,
             empty_message="No checkpoints for this Context yet.",
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            require_tty=False,
-        )
-
-    assert selected is None
-
-
-@pytest.mark.parametrize("key", ["q", "\x1b", "\x7f", "\x03"])
-def test_cancel_keys_return_no_receipt(key: str):
-    with create_pipe_input() as pipe_input:
-        pipe_input.send_text(key)
-        selected = choose_history(
-            (entry(1),),
-            context_name="journal",
-            mode="revert",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -405,7 +146,6 @@ def test_diff_style_back_keys_return_explicit_navigation_receipt(key: str):
         selected = choose_history(
             (entry(1),),
             context_name="journal",
-            mode="log",
             back_navigation=True,
             app_input=pipe_input,
             app_output=DummyOutput(),
@@ -423,7 +163,6 @@ def test_viewer_back_returns_to_items_before_leaving_history():
         selected = choose_history(
             (entry(1),),
             context_name="journal",
-            mode="log",
             initial_details_open=True,
             back_navigation=True,
             app_input=pipe_input,
@@ -449,7 +188,6 @@ def test_log_viewer_bottom_arrow_returns_to_items_navigation():
         selected = choose_history(
             candidates,
             context_name="journal",
-            mode="log",
             detail_renderer=detail_renderer,
             app_input=pipe_input,
             app_output=DummyOutput(),
@@ -461,9 +199,9 @@ def test_log_viewer_bottom_arrow_returns_to_items_navigation():
 
 
 def test_visible_window_tracks_selection_and_never_exceeds_twelve_rows():
-    assert _visible_bounds(0, 20) == (0, 12)
-    assert _visible_bounds(10, 20) == (4, 16)
-    assert _visible_bounds(19, 20) == (8, 20)
+    assert visible_history_bounds(0, 20) == (0, 12)
+    assert visible_history_bounds(10, 20) == (4, 16)
+    assert visible_history_bounds(19, 20) == (8, 20)
 
 
 def test_history_uses_the_shared_full_screen_session(monkeypatch):
@@ -481,7 +219,6 @@ def test_history_uses_the_shared_full_screen_session(monkeypatch):
     selected = choose_history(
         (entry(1),),
         context_name="journal",
-        mode="log",
         require_tty=False,
     )
 
@@ -492,11 +229,11 @@ def test_history_uses_the_shared_full_screen_session(monkeypatch):
 def test_detail_position_tracks_semantic_change_anchors():
     anchors = (6, 10, 15)
 
-    assert _detail_unit_position(anchors, 0) == 1
-    assert _detail_unit_position(anchors, 6) == 1
-    assert _detail_unit_position(anchors, 14) == 2
-    assert _detail_unit_position(anchors, 15) == 3
-    assert _detail_unit_position(anchors, 99) == 3
+    assert detail_unit_position(anchors, 0) == 1
+    assert detail_unit_position(anchors, 6) == 1
+    assert detail_unit_position(anchors, 14) == 2
+    assert detail_unit_position(anchors, 15) == 3
+    assert detail_unit_position(anchors, 99) == 3
 
 
 def test_history_detail_requires_strictly_increasing_unit_anchors():
@@ -507,7 +244,7 @@ def test_history_detail_requires_strictly_increasing_unit_anchors():
 def test_detail_contains_full_checkpoint_and_direct_change_summaries():
     candidate = entry(5)
 
-    rendered = _render_detail(candidate)
+    rendered = render_history_detail(candidate)
 
     assert candidate.uid in rendered
     assert candidate.timestamp in rendered
@@ -534,7 +271,7 @@ def test_generic_detail_can_render_a_temporal_memory_version():
         ),
     )
 
-    rendered = _render_detail(candidate)
+    rendered = render_history_detail(candidate)
 
     assert "Command      memory-version" in rendered
     assert "Memory: The East Gate shuttle" in rendered
@@ -554,7 +291,6 @@ def test_log_mode_accepts_a_non_checkpoint_protocol_projection():
         selected = choose_history(
             (TemporalMemoryVersion(),),
             context_name="transportation",
-            mode="log",
             app_input=pipe_input,
             app_output=DummyOutput(),
             require_tty=False,
@@ -572,7 +308,7 @@ def test_untrusted_fields_are_display_escaped_in_detail():
         detail="Memory text\u202e\nFAKE TRUSTED HEADING",
     )
 
-    rendered = _render_detail(candidate)
+    rendered = render_history_detail(candidate)
 
     assert "uid\\nsecond-heading" in rendered
     assert "time\\u202eexe" in rendered
@@ -586,11 +322,11 @@ def test_untrusted_fields_are_display_escaped_in_detail():
 
 def test_picker_requires_tty_when_requested(monkeypatch):
     monkeypatch.setattr(
-        "memcommit.adapters.console.terminal.components.history.picker.sys.stdin",
+        "memcommit.adapters.console.terminal.components.history.controls.sys.stdin",
         io.StringIO(),
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.terminal.components.history.picker.sys.stdout",
+        "memcommit.adapters.console.terminal.components.history.controls.sys.stdout",
         io.StringIO(),
     )
 
@@ -598,7 +334,6 @@ def test_picker_requires_tty_when_requested(monkeypatch):
         choose_history(
             (entry(1),),
             context_name="journal",
-            mode="log",
         )
 
 
@@ -609,28 +344,18 @@ def test_picker_rejects_empty_duplicate_or_invalid_inputs():
         choose_history(
             (),
             context_name="journal",
-            mode="log",
             require_tty=False,
         )
     with pytest.raises(ValueError, match="duplicate"):
         choose_history(
             (candidate, candidate),
             context_name="journal",
-            mode="log",
             require_tty=False,
         )
     with pytest.raises(ValueError, match="Context name"):
         choose_history(
             (candidate,),
             context_name="",
-            mode="log",
-            require_tty=False,
-        )
-    with pytest.raises(ValueError, match="mode"):
-        choose_history(
-            (candidate,),
-            context_name="journal",
-            mode="inspect",  # type: ignore[arg-type]
             require_tty=False,
         )
 
@@ -644,3 +369,26 @@ def test_entry_rejects_non_text_detail():
             description="Added",
             detail=3,  # type: ignore[arg-type]
         )
+
+
+@pytest.mark.parametrize("entries", [(), (entry(1),)])
+def test_read_only_history_never_constructs_a_command_editor(monkeypatch, entries):
+    from memcommit.adapters.console.terminal.components.command_editor import (
+        CommandEditorControl,
+    )
+
+    def forbidden(*_args, **_kwargs):
+        raise AssertionError("Reading history must not assemble a command editor")
+
+    monkeypatch.setattr(CommandEditorControl, "create", forbidden)
+    with create_pipe_input() as pipe_input:
+        pipe_input.send_text("\r\rq")
+        result = choose_history(
+            entries,
+            context_name="journal",
+            empty_message="No checkpoints for this Context yet.",
+            app_input=pipe_input,
+            app_output=DummyOutput(),
+            require_tty=False,
+        )
+    assert result is None

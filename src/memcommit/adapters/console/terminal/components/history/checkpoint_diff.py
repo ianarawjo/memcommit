@@ -12,7 +12,7 @@ from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 from prompt_toolkit.input import Input
 from prompt_toolkit.output import Output
 
-from memcommit.adapters.console.terminal.components.history.picker import (
+from memcommit.adapters.console.terminal.components.history.model import (
     HistoryDetailView,
     HistoryPickerItem,
 )

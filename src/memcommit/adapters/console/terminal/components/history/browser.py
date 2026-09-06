@@ -1,10 +1,10 @@
-"""Location-first checkpoint browser retained for Revert approval."""
+"""Read-only location and subtree browsing for retained checkpoint history."""
 
 from __future__ import annotations
 
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass, replace as dataclass_replace
+from dataclasses import replace as dataclass_replace
 
 from memcommit.adapters.console.terminal.components.history.checkpoint_diff import (
     checkpoint_revision_detail_renderer,
@@ -19,24 +19,17 @@ from memcommit.adapters.console.terminal.components.checkpoint_location import (
     CheckpointLocationSelection,
     choose_history_location,
 )
-from memcommit.adapters.console.terminal.components.history.picker import (
+from memcommit.adapters.console.terminal.components.history.model import (
     HISTORY_BACK,
     HistoryBackNavigation,
-    HistoryPickerMode,
-    HistorySelectionReceipt,
-    choose_history,
-    revert_exact_command_review,
 )
+from memcommit.adapters.console.terminal.components.history.picker import choose_history
 from memcommit.adapters.console.terminal.components.history.presentation import checkpoint_picker_entries
 from memcommit.adapters.console.terminal.components.history.update_checkpoint import (
     choose_update_checkpoint_at_location,
     choose_update_checkpoint_subtree,
 )
 from memcommit.application.capabilities.context_locator import resolve_context_locator
-from memcommit.application.capabilities.checkpoint_catalog import (
-    ResolvedCheckpointUnit,
-    freeze_checkpoint_catalog,
-)
 from memcommit.adapters.console.terminal.components.history.display import (
     HistoryDisplayRow,
     checkpoint_command_identity,
@@ -44,25 +37,8 @@ from memcommit.adapters.console.terminal.components.history.display import (
     project_history_display_rows,
 )
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_action_style
-from memcommit.persistence.store import (
-    MemoryStore,
-    checkpoint_history_digest,
-    context_record_digest,
-)
+from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.model import UpdateSession
-
-
-@dataclass(frozen=True)
-class ReviewedCheckpointSelection:
-    """One exact mutation target frozen before its History approval screen."""
-
-    context_name: str
-    context_uid: str
-    context_digest: str
-    history_digest: str
-    checkpoint_uid: str
-    keep_history: bool
-    checkpoint_unit: ResolvedCheckpointUnit
 
 
 def _update_locations(session: UpdateSession | None) -> tuple[str, ...]:
@@ -244,31 +220,6 @@ def _context_rows_from_history(
     return tuple(projected)
 
 
-def _checkpoint_version_rows(
-    checkpoints: Sequence[Mapping[str, object]],
-    *,
-    context_name: str,
-    context_uid: str,
-) -> tuple[ContextMemoryRow, ...]:
-    """Project every exact restorable version without operation deduplication.
-
-    The Context stage is allowed to choose a checkpoint, but it does not decide
-    whether that checkpoint is a useful or legal Revert result. In particular,
-    correlated Init/Atomize records and repeated command identities remain
-    independently focusable because they represent different persisted states.
-    """
-
-    return _context_rows_from_history(
-        project_history_display_rows(
-            checkpoints,
-            context_name=context_name,
-            context_uid=context_uid,
-            deduplicate_commands=False,
-        ),
-        context_name=context_name,
-    )
-
-
 def _update_operation_rows(
     session: UpdateSession | None,
     name: str,
@@ -334,12 +285,9 @@ def _browse_local_checkpoints(
     back_navigation: bool = False,
     manual: bool = False,
     show_diffs: bool = True,
-    mode: HistoryPickerMode = "log",
-    keep_history: bool = False,
-    staged_checkpoint_uid: str | None = None,
     title: str | None = None,
-) -> ReviewedCheckpointSelection | HistoryBackNavigation | None:
-    context = store.load_direct(context_name)
+) -> HistoryBackNavigation | None:
+    store.load_direct(context_name)
     all_checkpoints = store.list_checkpoints(context_name)
     checkpoints = [
         checkpoint
@@ -352,26 +300,9 @@ def _browse_local_checkpoints(
     detail_renderer = None
     if checkpoints and show_diffs:
         detail_renderer = checkpoint_revision_detail_renderer(all_checkpoints)
-    catalog = freeze_checkpoint_catalog(store) if mode == "revert" else None
-    reviewed_units: dict[str, ResolvedCheckpointUnit] = {}
-
-    def revert_review_factory(uid: str, keep: bool):
-        assert catalog is not None
-        unit = catalog.resolve(uid, context_name=context_name)
-        reviewed_units[uid] = unit
-        return revert_exact_command_review(
-            context_name=context_name,
-            checkpoint_uid=uid,
-            keep_history=keep,
-            affected_checkpoints=tuple(
-                (member.context_name, member.checkpoint_uid) for member in unit.members
-            ),
-        )
-
     result = choose_history(
         [projected[checkpoint["uid"]] for checkpoint in checkpoints],
         context_name=context_name,
-        mode=mode,
         initial_details_open=True,
         detail_renderer=detail_renderer,
         empty_message=(
@@ -380,28 +311,8 @@ def _browse_local_checkpoints(
             else "No checkpoints for this Context yet."
         ),
         back_navigation=back_navigation,
-        keep_history=keep_history,
-        staged_checkpoint_uid=staged_checkpoint_uid,
         title=title,
-        revert_review_factory=(revert_review_factory if mode == "revert" else None),
     )
-    if isinstance(result, HistorySelectionReceipt):
-        assert catalog is not None
-        checkpoint_unit = reviewed_units.get(result.checkpoint_uid)
-        if checkpoint_unit is None:
-            checkpoint_unit = catalog.resolve(
-                result.checkpoint_uid,
-                context_name=context_name,
-            )
-        return ReviewedCheckpointSelection(
-            context_name=context_name,
-            context_uid=context.uid,
-            context_digest=context_record_digest(context),
-            history_digest=checkpoint_history_digest(all_checkpoints),
-            checkpoint_uid=result.checkpoint_uid,
-            keep_history=result.keep_history,
-            checkpoint_unit=checkpoint_unit,
-        )
     return result if isinstance(result, HistoryBackNavigation) else None
 
 
@@ -413,9 +324,7 @@ def browse_checkpoint_locations(
     title: str,
     manual: bool = False,
     show_diffs: bool = True,
-    mode: HistoryPickerMode = "log",
-    keep_history: bool = False,
-) -> ReviewedCheckpointSelection | None:
+) -> None:
     """Select or resolve a Context, then browse its checkpoint transitions."""
     if manual:
         session = None
@@ -435,13 +344,8 @@ def browse_checkpoint_locations(
         context_name: str,
         *,
         back_navigation: bool,
-        staged_checkpoint_uid: str | None = None,
-    ) -> ReviewedCheckpointSelection | HistoryBackNavigation | None:
+    ) -> HistoryBackNavigation | None:
         if context_name in update_locations and session is not None:
-            if mode != "log":
-                raise ValueError(
-                    "Only ordinary local Context checkpoints can be reverted."
-                )
             return choose_update_checkpoint_at_location(
                 session,
                 context_name,
@@ -454,9 +358,6 @@ def browse_checkpoint_locations(
             back_navigation=back_navigation,
             manual=manual,
             show_diffs=show_diffs,
-            mode=mode,
-            keep_history=keep_history,
-            staged_checkpoint_uid=staged_checkpoint_uid,
             title=title,
         )
 
@@ -467,8 +368,8 @@ def browse_checkpoint_locations(
         )
         if context_name not in selectable:
             raise ValueError(f"Context '{context_name}' is not available for {title}.")
-        result = open_context_history(context_name, back_navigation=False)
-        return result if isinstance(result, ReviewedCheckpointSelection) else None
+        open_context_history(context_name, back_navigation=False)
+        return None
 
     operations_by_name: dict[str, set[str]] = defaultdict(set)
     inherited_by_name: dict[str, set[str]] = defaultdict(set)
@@ -503,11 +404,7 @@ def browse_checkpoint_locations(
     def load_operations(name: str) -> tuple[ContextMemoryRow, ...]:
         if name in local_names:
             context = store.load_direct(name)
-            local_rows = (
-                _checkpoint_version_rows
-                if mode == "revert"
-                else _checkpoint_operation_rows
-            )(
+            local_rows = _checkpoint_operation_rows(
                 tuple(
                     checkpoint
                     for checkpoint in store.list_checkpoints(name)
@@ -524,7 +421,6 @@ def browse_checkpoint_locations(
         return (*local_rows, *projected_rows)
 
     while True:
-        staged_checkpoint_uid: str | None = None
         location_selection = choose_history_location(
             selectable,
             current=selector_current,
@@ -533,7 +429,7 @@ def browse_checkpoint_locations(
             catalog_names=catalog,
             descendant_scope_names=changed_descendant_roots,
             operation_loader=load_operations,
-            select_nested_checkpoints=mode == "revert",
+            select_nested_checkpoints=False,
         )
         if location_selection is None:
             return
@@ -551,7 +447,6 @@ def browse_checkpoint_locations(
             return
         if isinstance(location_selection, CheckpointLocationSelection):
             context_name = location_selection.context_name
-            staged_checkpoint_uid = location_selection.checkpoint_uid
         else:
             context_name = location_selection
         selector_current = context_name
@@ -559,8 +454,7 @@ def browse_checkpoint_locations(
         result = open_context_history(
             context_name,
             back_navigation=True,
-            staged_checkpoint_uid=staged_checkpoint_uid,
         )
         if result is HISTORY_BACK:
             continue
-        return result if isinstance(result, ReviewedCheckpointSelection) else None
+        return None

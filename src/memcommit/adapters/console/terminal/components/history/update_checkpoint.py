@@ -7,12 +7,12 @@ from dataclasses import dataclass
 
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
 
-from memcommit.adapters.console.terminal.components.history.picker import (
+from memcommit.adapters.console.terminal.components.history.picker import choose_history
+from memcommit.adapters.console.terminal.components.history.model import (
     HistoryBackNavigation,
     HistoryDetailView,
     HistoryPickerEntry,
     HistoryPickerItem,
-    choose_history,
 )
 from memcommit.adapters.console.terminal.components.checkpoint_location import (
     choose_history_location,
@@ -285,7 +285,6 @@ def choose_update_checkpoint_at_location(
     result = choose_history(
         (entry,),
         context_name=location,
-        mode="log",
         initial_details_open=True,
         detail_renderer=update_checkpoint_detail_renderer(session, location),
         back_navigation=back_navigation,
@@ -317,7 +316,6 @@ def choose_update_checkpoint_subtree(
     result = choose_history(
         entries,
         context_name=f"{root} · CHANGED SUBTREE",
-        mode="log",
         initial_details_open=True,
         detail_renderer=render,
         back_navigation=back_navigation,
