@@ -1,5 +1,33 @@
 # Atomize domain package design rationale
 
+## 2026-09-05 provider contract reading split
+
+The 1,228-line `domain/provider_contract.py` is now a package at the same
+import path. The purpose is to make the existing contract readable in smaller
+pieces before considering changes to its design:
+
+- `examples.py` loads authored examples, checks fixture/profile integrity, and
+  filters cases by the active evidence mode. The name describes the actual
+  data rather than suggesting an adaptive calibration process.
+- `prompt.py` constructs the payload and prompt, including the existing
+  one-shot budget check.
+- `response_schema.py` describes the provider's structured response format.
+- `response.py` parses, validates, and projects the response into domain
+  records. It also owns the duplicate-JSON-key rejection helper reused when
+  loading examples.
+- `__init__.py` only re-exports the existing function entry points. Analysis
+  imports the narrow implementation modules directly.
+
+Function names and bodies, prompt text, example selection, schema, error
+messages, source grounding, output ordering, and the single provider call are
+unchanged. The existing domain facade's prompt-policy and input-limit override
+seams remain available. No saved schema or ruleset version changes.
+
+This deliberately postpones moving execution policy out of prompt construction,
+extracting shared semantic validators, renaming functions, and splitting the
+response parser further. Those are separate design choices to evaluate while
+reading the smaller files; a file-size change alone does not justify them.
+
 ## 2026-08-29 responsibility revision
 
 The structural `domain` package described below remains current. The later
@@ -22,11 +50,11 @@ focused edit require understanding the entire operation kernel.
 ## Selected boundary
 
 `memcommit.application.operations.atomize.domain` is now a package with five
-implementation modules:
+implementation owners (the provider contract is now the package above):
 
 - `model.py` owns operation-neutral values, rules, report records, and the
   provider protocol.
-- `provider_contract.py` owns calibration, prompt and schema construction,
+- `provider_contract/` owns authored examples, prompt and schema construction,
   semantic-execution preflight, and fail-closed provider decoding.
 - `analysis.py` owns candidate selection, linting, and non-mutating analysis
   orchestration.

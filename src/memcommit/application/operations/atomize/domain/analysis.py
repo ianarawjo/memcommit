@@ -26,7 +26,9 @@ from .model import (
     AtomizeOverviewSection,
     AtomizeProvider,
 )
-from .provider_contract import _output_schema, _parse_items, _payload, _prompt
+from .provider_contract.prompt import _payload, _prompt
+from .provider_contract.response import _parse_items
+from .provider_contract.response_schema import _output_schema
 
 
 _SEGMENT_BOUNDARY = re.compile(r"[.!?。？！]+(?=\s|$)")
