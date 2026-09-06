@@ -103,6 +103,7 @@ def cmd(
         Optional[str],
         typer.Option(
             "--memory",
+            "-m",
             metavar="UID_OR_PREFIX",
             help=(
                 "Atomize one direct Memory; its Context neighbors are "

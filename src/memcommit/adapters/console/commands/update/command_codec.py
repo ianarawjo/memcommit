@@ -59,6 +59,9 @@ def parse_endpoint_argv(argv: Sequence[str]) -> EndpointSetupDraft:
     index = 2
     while index < len(values):
         token = values[index]
+        # Normalize option tokens only: inline Memory text must stay verbatim.
+        if token == "-m":
+            token = "--memory"
         if token in value_options:
             if token in options or index + 1 >= len(values):
                 raise ValueError(f"Update {token} requires exactly one value.")

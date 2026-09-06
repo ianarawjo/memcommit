@@ -75,3 +75,25 @@ of either spelling remains non-isolating.
   a close spelling is not authority to run a possibly mutating operation.
 - `mem find redundancy` cannot be introduced as an alias because `mem find`
   already owns literal-search operands.
+
+## Context and Memory option aliases
+
+Every declared `--context` option also accepts `-c`, and every declared
+`--memory` option also accepts `-m`. These are explicit parameter aliases,
+separate from command-name resolution; they do not rewrite operands or add
+options to commands without the corresponding long option. Memory input
+retains its operation-owned meaning: inline text for Update/Meld, or a
+Memory selector where that is the existing contract.
+
+Log previously used `-m` for `--manual`. Consistency assigns it to `--memory`
+and moves the manual-checkpoint shorthand to `-M`; `--manual` is unchanged.
+This deliberately breaks the old short spelling. Inferring its meaning from
+whether a value follows would make the same flag ambiguous, so bare `log -m`
+now fails for a missing Memory value.
+
+Update and Meld's editable setup parsers normalize `-m` only in option-token
+positions, before duplicate detection. Literal Memory text, including text
+equal to an option spelling, remains verbatim. Mixed `-m`/`--memory` duplicates
+remain invalid. Generated approval commands retain their existing long
+spellings and exact approval boundaries; this changes accepted spelling,
+not the interactive flow or materialization contract.

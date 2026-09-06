@@ -315,7 +315,7 @@ def cmd(
     ] = None,
     manual: Annotated[
         bool,
-        typer.Option("--manual", "-m", help="Show only manually-created checkpoints"),
+        typer.Option("--manual", "-M", help="Show only manually-created checkpoints"),
     ] = False,
     limit: Annotated[
         int,
@@ -349,6 +349,7 @@ def cmd(
         Optional[str],
         typer.Option(
             "--memory",
+            "-m",
             help=(
                 "Inspect one current or historical Memory lineage; "
                 "mem trace provides interactive inspection of the same lineage"

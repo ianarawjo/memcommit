@@ -327,6 +327,7 @@ def cmd(
         Optional[str],
         typer.Option(
             "--memory",
+            "-m",
             help=(
                 "Use exact text as one process-local INCOMING Memory; the "
                 "current Context, --into, or directional --to supplies BASELINE"

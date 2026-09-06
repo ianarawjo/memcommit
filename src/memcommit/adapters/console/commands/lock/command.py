@@ -43,6 +43,7 @@ def default(
         Optional[str],
         typer.Option(
             "--memory",
+            "-m",
             metavar="[CONTEXT:]UID_OR_PREFIX",
             help="Explicit direct Memory target; accepts a short prefix",
         ),

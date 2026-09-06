@@ -274,6 +274,7 @@ def _dispatch_impact(
         Optional[str],
         typer.Option(
             "--memory",
+            "-m",
             metavar="UID_OR_PREFIX",
             help=(
                 "With atomize, analyze one direct Memory while its neighbors "
@@ -614,6 +615,7 @@ def atomize_impact_cmd(
         Optional[str],
         typer.Option(
             "--memory",
+            "-m",
             metavar="UID_OR_PREFIX",
             help="Analyze one direct Memory with its neighbors as context",
         ),

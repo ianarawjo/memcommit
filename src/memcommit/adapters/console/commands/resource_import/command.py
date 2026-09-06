@@ -196,7 +196,7 @@ def cmd(
     ] = None,
     source_context: Annotated[
         Optional[str],
-        typer.Option("--context", help="Source Context containing a Memory"),
+        typer.Option("--context", "-c", help="Source Context containing a Memory"),
     ] = None,
     target_name: Annotated[
         Optional[str],

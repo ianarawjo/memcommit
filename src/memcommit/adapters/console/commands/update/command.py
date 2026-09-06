@@ -356,6 +356,7 @@ def cmd(
         Optional[str],
         typer.Option(
             "--memory",
+            "-m",
             help=(
                 "Use exact text as one process-local Source Memory; current or "
                 "--to supplies the Target"

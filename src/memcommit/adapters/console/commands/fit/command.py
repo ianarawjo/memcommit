@@ -85,6 +85,7 @@ def cmd(
         Optional[list[str]],
         typer.Option(
             "--memory",
+            "-m",
             metavar="[CONTEXT:]UID_OR_PREFIX",
             help=(
                 "Repeatable direct Memory source; an unqualified selector uses "
