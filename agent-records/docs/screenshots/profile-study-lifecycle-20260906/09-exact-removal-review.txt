@@ -1,0 +1,52 @@
+ Review irreversible deletion                                                                                                                                                       
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+PROPOSED COMMAND · NOT RUN                                                                                                                                                         ^
+  mem profile remove-study capture-renamed --force                                                                                                                                  
+                                                                                                                                                                                    
+EFFECTS · ONE COMMAND                                                                                                                                                               
+  Permanently delete all 2 Profile stores in Study 'capture-renamed'.                                                                                                               
+  Delete every Memory, session, and checkpoint in those stores.                                                                                                                     
+  Remove every Grant connected to those Profiles.                                                                                                                                   
+  This cannot be undone or recovered by mem.                                                                                                                                        
+                                                                                                                                                                                    
+Approval applies only to the exact command shown above.                                                                                                                             
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ Enter/A apply exact command  Esc back · IRREVERSIBLE · store and checkpoints will be deleted

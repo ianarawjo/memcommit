@@ -22,9 +22,9 @@ from memcommit.application.operations.profile.config import (
     profile_registry_file,
     study_run_identity,
 )
+from memcommit.application.operations.profile.study.provider_policy_migration import migrate_visible_study_provider_policy
 from memcommit.application.operations.profile.model import (
     ProfileError,
-    migrate_visible_study_provider_policy,
 )
 
 

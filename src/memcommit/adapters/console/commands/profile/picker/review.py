@@ -64,17 +64,12 @@ def rename_review(action: ProfilePickerAction) -> CommandReview:
     if action.kind not in {"RENAME_PROFILE", "RENAME_STUDY"} or action.new_name is None:
         raise ValueError("Rename review requires an exact new name.")
     if action.kind == "RENAME_STUDY":
-        profile_effect = (
-            "Update every legacy member Profile display name as one registry change."
-            if action.renames_member_profiles
-            else "Keep both member Profile display names unchanged."
-        )
         return CommandReview(
             argv=("mem", "profile", "rename-study", action.name, action.new_name),
             effects=(
                 f"Change the Study display name from {action.name!r} to "
                 f"{action.new_name!r}.",
-                profile_effect,
+                "Keep both member Profile display names unchanged.",
                 "Keep the same Study UID, Profile UIDs, stores, Contexts, Memories, and Grants.",
                 "Keep the same active Profile selected.",
             ),

@@ -59,3 +59,13 @@ def _study_run_authority_profile_name(study_name: str) -> str:
         raise ProfileError(
             "Study name is too long to create its granted-memory Profile."
         ) from error
+
+
+_STUDY_TASKS = (1, 2, 3)
+
+
+_STUDY_AUTHORITY_PROFILE_NAMES = {
+    1: "task-1-campus-authority",
+    2: "task-2-proposal-authority",
+    3: "task-3-healthcare-authority",
+}

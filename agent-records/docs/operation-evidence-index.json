@@ -222,7 +222,8 @@
       "agent-records/docs/init-study-application-boundary-design-rationale.md",
       "agent-records/docs/init-study-prewarm-regeneration-design-rationale.md",
       "agent-records/docs/init-study-scenario-versioning-design-rationale.md",
-      "agent-records/docs/study-prewarm-retirement-design-rationale.md"
+      "agent-records/docs/study-prewarm-retirement-design-rationale.md",
+      "agent-records/docs/profile-study-lifecycle-design-rationale.md"
     ],
     "list": [
       "agent-records/docs/context-listing-design-rationale.md",
@@ -274,7 +275,10 @@
       "agent-records/docs/mem-profile-design-rationale.md",
       "agent-records/docs/profile-console-package-design-rationale.md",
       "agent-records/docs/study-action-ledger-design-rationale.md",
-      "agent-records/docs/typed-operand-resolution-design-rationale.md"
+      "agent-records/docs/typed-operand-resolution-design-rationale.md",
+      "agent-records/docs/profile-study-lifecycle-design-rationale.md",
+      "agent-records/docs/profile-model-package-design-rationale.md",
+      "agent-records/docs/profile-removal-design-rationale.md"
     ],
     "provider": [
       "agent-records/docs/semantic-provider-policy-design-rationale.md"

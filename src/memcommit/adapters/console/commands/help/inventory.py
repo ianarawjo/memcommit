@@ -594,7 +594,6 @@ COMMAND_FORMS = {
         "mem profile remove [profile_name] (permanently delete one Profile store)",
         "mem profile remove-study [study_name] (permanently delete Study stores)",
         "mem profile import [profile_name] --from [store] (copy a complete store)",
-        "mem profile archive-study [study_name] (detach a legacy split Study)",
         "mem profile grant list (list cross-Profile views)",
         "mem profile grant create [authority_profile] [grantee_profile] [source_context] --allow [permission]",
         "mem profile grant create [authority_profile] [grantee_profile] [source_context] --allow [permission] --recursive (include current descendants)",

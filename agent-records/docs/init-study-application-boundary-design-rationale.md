@@ -15,10 +15,12 @@ and its command attempt are finalized before the child zsh begins.
 
 `operations/profile` remains reusable control-plane infrastructure: Profile
 validation, registry locking and replacement, store inspection, Grant
-resolution, and legacy split-Study administration. Its `model/study.py` keeps
-grouping, migration, rename, archive, and removal, but no longer implements
-init-study package parsing, scenario remapping, store composition, or batch
-publication. Production callers import the `init_study` operation directly.
+resolution, and current Study pair administration under `profile/study/`.
+Split-Study grouping and archive administration were retired on 2026-09-06.
+Init-study owns package parsing, scenario remapping, store composition, and
+batch publication. Its package UUID/digest validators and scenario Task/Authority
+constants also live under `init_study/profile/`. Production callers import the
+`init_study` operation directly.
 
 The former root `init_study/composition.py` and `publication.py` modules and
 former private imports through `profile.model` remain thin compatibility
@@ -44,11 +46,11 @@ same behavior.
 
 ## Boundary retained
 
-Init-study still reuses Profile control-plane storage, registry, Grant-scope,
-and legacy Study identity primitives. Those are shared safety and compatibility
-contracts rather than scenario construction. This change deliberately moves
-definitions without changing function bodies, persistence formats, names, or
-transaction order.
+Init-study still reuses Profile control-plane storage, registry, and Grant-scope
+primitives. The later [Study lifecycle retirement](profile-study-lifecycle-design-rationale.md)
+moves scenario identity helpers into init-study and removes split-group name
+reservation. Scenario package contracts and initialization transaction order
+remain unchanged.
 
 The Study shell currently requires zsh and deliberately skips personal startup
 files so a user configuration cannot reconnect ordinary history. Supporting

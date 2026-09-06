@@ -1,0 +1,7 @@
+52 180
+* authoring              [38;2;166;218;149m[1mCURRENT[0m authoring Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=authoring-notes
+  capture-renamed        [38;2;139;213;202m[1mSTUDY[0m   created=2026-09-06T00:00:00+00:00
+    ├─   Participant     [38;2;139;213;202m[1mUSE[0m     profile=participant-one · managed · Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=practice
+    └─   Granted memory  [38;2;139;213;202m[1mUSE[0m     profile=participant-one-granted-memory · managed · Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=granted-memory/source
+Granted views are permission projections, not copied Profiles.
+Authority Profiles are ordinary switchable owners of source data.

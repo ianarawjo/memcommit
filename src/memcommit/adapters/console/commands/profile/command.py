@@ -23,7 +23,6 @@ from memcommit.adapters.console.commands.profile.lifecycle import (
 from memcommit.adapters.console.commands.profile.migration import migrate_context_cmd
 from memcommit.adapters.console.commands.profile.selector import _run_profile_selector
 from memcommit.adapters.console.commands.profile.study_profile import (
-    archive_study_cmd,
     remove_study_cmd,
     rename_study_cmd,
 )
@@ -87,4 +86,3 @@ app.command("rename")(rename_cmd)
 app.command("rename-study")(rename_study_cmd)
 app.command("migrate-context")(migrate_context_cmd)
 app.command("import")(import_cmd)
-app.command("archive-study")(archive_study_cmd)

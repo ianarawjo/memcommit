@@ -12,8 +12,7 @@ from memcommit.adapters.console.commands.profile.presentation import (
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model._storage import ProfileError
 from memcommit.application.operations.profile.model.lifecycle import list_profiles
-from memcommit.application.operations.profile.model.study import (
-    study_profile_groups,
+from memcommit.application.operations.profile.study.topology import (
     study_run_profile_pairs,
 )
 
@@ -31,7 +30,6 @@ class _ProfileStudyMembership:
     name: str
     created_at: str
     role: str
-    task: int | None
     first: bool
     last: bool
     profile_count: int
@@ -40,11 +38,10 @@ class _ProfileStudyMembership:
 
 def _study_memberships(registry) -> dict[str, _ProfileStudyMembership]:
     try:
-        groups = study_profile_groups(registry.profiles)
         pairs = study_run_profile_pairs(registry.profiles)
     except (ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
-    study_names = [group.name.casefold() for group in groups] + [
+    study_names = [
         pair.name.casefold() for pair in pairs
     ]
     if len(study_names) != len(set(study_names)):
@@ -53,25 +50,6 @@ def _study_memberships(registry) -> dict[str, _ProfileStudyMembership]:
         profile.uid: index for index, profile in enumerate(registry.profiles)
     }
     memberships: dict[str, _ProfileStudyMembership] = {}
-    for group in groups:
-        members = (*group.profiles, *group.support_profiles)
-        visible_members = tuple(
-            profile for profile in members if not registry.is_removed(profile)
-        )
-        for index, profile in enumerate(members):
-            is_task = index < len(group.profiles)
-            task = index + 1 if is_task else index - len(group.profiles) + 1
-            memberships[profile.uid] = _ProfileStudyMembership(
-                uid=group.uid,
-                name=group.name,
-                created_at=group.created_at,
-                role="TASK" if is_task else "AUTHORITY",
-                task=task,
-                first=bool(visible_members and profile.uid == visible_members[0].uid),
-                last=bool(visible_members and profile.uid == visible_members[-1].uid),
-                profile_count=len(members),
-                removed_count=len(members) - len(visible_members),
-            )
     for pair in pairs:
         if (
             profile_positions[pair.authority.uid]
@@ -95,7 +73,6 @@ def _study_memberships(registry) -> dict[str, _ProfileStudyMembership]:
                 name=pair.name,
                 created_at=pair.created_at,
                 role=role,
-                task=None,
                 first=bool(visible_members and profile.uid == visible_members[0].uid),
                 last=bool(visible_members and profile.uid == visible_members[-1].uid),
                 profile_count=len(pair_members),

@@ -36,8 +36,7 @@ from memcommit.persistence.store.translation_catalog import (
 )
 
 
-class ProfileError(RuntimeError):
-    """A profile operation cannot complete without risking local state."""
+from memcommit.application.operations.profile.errors import ProfileError as ProfileError
 
 
 @dataclass(frozen=True)

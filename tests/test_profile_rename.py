@@ -26,10 +26,9 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model import (
     rename_profile,
-    rename_study,
-    study_run_profile_pairs,
-    study_profile_groups,
 )
+from memcommit.application.operations.profile.study.lifecycle import rename_study
+from memcommit.application.operations.profile.study.topology import study_run_profile_pairs
 from memcommit.persistence.command_ledger.study_actions import (
     StudyActionLedger,
     record_study_action_for_profile,
@@ -106,59 +105,6 @@ def _register_profile(
         )
     )
     return profile
-
-
-def _install_legacy_split_study(
-    name: str = "legacy-run",
-) -> tuple[str, tuple[ProfileEntry, ...]]:
-    registry = load_profile_registry()
-    study_uid = str(uuid.uuid4())
-    authority_suffixes = {
-        1: "task-1-campus-authority",
-        2: "task-2-proposal-authority",
-        3: "task-3-healthcare-authority",
-    }
-    allocated: list[ProfileEntry] = []
-    for task in (1, 2, 3):
-        for role in ("TASK", "AUTHORITY"):
-            profile = ProfileEntry(
-                uid=str(uuid.uuid4()),
-                name=(
-                    f"{name}-task-{task}"
-                    if role == "TASK"
-                    else f"{name}-{authority_suffixes[task]}"
-                ),
-                kind="MANAGED",
-                source={
-                    "kind": (
-                        "STUDY_RUN_TASK" if role == "TASK" else "STUDY_RUN_AUTHORITY"
-                    ),
-                    "study_uid": study_uid,
-                    "study_name": name,
-                    "created_at": "2026-08-03T18:50:46.360105+00:00",
-                    "task": task,
-                    "manifest_sha256": str(task) * 64,
-                    "canonical_language": "en",
-                },
-            )
-            context_name = "task-root" if role == "TASK" else "authority-root"
-            store = MemoryStore(root=profile_store_dir(profile))
-            context = ops.init(context_name)
-            ops.add(context, f"Legacy {role.lower()} Memory for Task {task}.")
-            store.save(context)
-            store.set_current(context.name)
-            allocated.append(profile)
-    profiles = tuple(allocated)
-    profiles_module._write_registry(
-        ProfileRegistry(
-            generation=max(1, registry.generation + 1),
-            active_uid=registry.active_uid,
-            profiles=(*registry.profiles, *profiles),
-            grants=registry.grants,
-        )
-    )
-    assert study_profile_groups(load_profile_registry().profiles)[-1].uid == study_uid
-    return study_uid, profiles
 
 
 def _install_current_study(
@@ -288,40 +234,6 @@ def test_current_study_rename_changes_only_the_shared_label_and_keeps_old_action
     assert historical[0].study_name == "current-run"
 
 
-def test_legacy_study_rename_updates_all_derived_profile_names_atomically(
-    profile_home,
-):
-    study_uid, members = _install_legacy_split_study()
-    before = load_profile_registry()
-    digests = {
-        profile.uid: _tree_digest(profile_store_dir(profile)) for profile in members
-    }
-
-    result = rename_study("legacy-run", "renamed-legacy")
-
-    assert result.uid == study_uid
-    assert result.renamed_profile_count == 6
-    after = load_profile_registry()
-    group = study_profile_groups(after.profiles)[0]
-    assert group.name == "renamed-legacy"
-    assert [profile.name for profile in group.profiles] == [
-        "renamed-legacy-task-1",
-        "renamed-legacy-task-2",
-        "renamed-legacy-task-3",
-    ]
-    assert all(
-        profile.source is not None and profile.source["study_name"] == "renamed-legacy"
-        for profile in (*group.profiles, *group.support_profiles)
-    )
-    assert after.generation == before.generation + 1
-    assert after.active_uid == before.active_uid
-    assert after.grants == before.grants
-    assert {
-        profile.uid: _tree_digest(profile_store_dir(profile))
-        for profile in (*group.profiles, *group.support_profiles)
-    } == digests
-
-
 def test_study_rename_rejects_a_stale_picker_receipt(profile_home):
     study_uid, _participant, _authority = _install_current_study()
     frozen = load_profile_registry()
@@ -352,7 +264,6 @@ def test_study_rename_exact_noop_does_not_publish_a_registry_generation(
     result = rename_study("current-run", "current-run", expected_uid=study_uid)
 
     assert not result.changed
-    assert result.renamed_profile_count == 0
     assert load_profile_registry().generation == generation
     assert profile_registry_file().read_bytes() == before
 
@@ -368,21 +279,6 @@ def test_study_rename_rejects_an_existing_study_label_case_insensitively(
         rename_study("first-run", "SECOND-RUN")
 
     assert profile_registry_file().read_bytes() == before
-
-
-def test_legacy_study_rename_rejects_a_generated_profile_name_collision(
-    profile_home,
-):
-    _install_legacy_split_study()
-    collision = _register_profile("renamed-legacy-task-1")
-    before = profile_registry_file().read_bytes()
-    digest = _tree_digest(profile_store_dir(collision))
-
-    with pytest.raises(profiles_module.ProfileError, match="already exists"):
-        rename_study("legacy-run", "renamed-legacy")
-
-    assert profile_registry_file().read_bytes() == before
-    assert _tree_digest(profile_store_dir(collision)) == digest
 
 
 def test_rename_inactive_ordinary_study_changes_only_its_registry_name(
@@ -566,75 +462,6 @@ def test_study_baseline_name_has_no_special_rename_status(profile_home):
     renamed = load_profile_registry().by_name("new-baseline")
     assert renamed is not None and renamed.uid == baseline.uid
     assert _tree_digest(profile_store_dir(renamed)) == digest
-
-
-def test_legacy_split_member_cannot_be_renamed_individually(profile_home):
-    _study_uid, profiles = _install_legacy_split_study()
-    member = profiles[0]
-    before = profile_registry_file().read_bytes()
-    digests = {
-        profile.uid: _tree_digest(profile_store_dir(profile)) for profile in profiles
-    }
-
-    result = runner.invoke(
-        app,
-        ["profile", "rename", member.name, "detached-task"],
-    )
-
-    assert result.exit_code == 1
-    assert "member of legacy Study 'legacy-run'" in result.stderr
-    assert profile_registry_file().read_bytes() == before
-    assert (
-        study_profile_groups(load_profile_registry().profiles)[0].name == "legacy-run"
-    )
-    assert {
-        profile.uid: _tree_digest(profile_store_dir(profile)) for profile in profiles
-    } == digests
-
-
-def test_ordinary_profile_cannot_take_a_live_legacy_group_name(profile_home):
-    ordinary = _register_profile("ordinary")
-    _study_uid, profiles = _install_legacy_split_study()
-    before = profile_registry_file().read_bytes()
-
-    result = runner.invoke(
-        app,
-        ["profile", "rename", ordinary.name, "LEGACY-RUN"],
-    )
-
-    assert result.exit_code == 1
-    assert "conflicts with existing legacy Study 'legacy-run'" in result.stderr
-    assert profile_registry_file().read_bytes() == before
-    assert all(profile_store_dir(profile).is_dir() for profile in profiles)
-
-
-def test_archived_legacy_group_name_can_be_reused_by_an_ordinary_profile(
-    profile_home,
-):
-    ordinary = _register_profile("ordinary")
-    study_uid, legacy_profiles = _install_legacy_split_study()
-    archived = runner.invoke(app, ["profile", "archive-study", "legacy-run"])
-    assert archived.exit_code == 0, archived.stderr or archived.output
-    manifest = (
-        profile_home
-        / ".mem-profiles"
-        / "archives"
-        / "studies"
-        / study_uid
-        / "manifest.json"
-    )
-    archive_bytes = manifest.read_bytes()
-
-    result = runner.invoke(
-        app,
-        ["profile", "rename", ordinary.name, "legacy-run"],
-    )
-
-    assert result.exit_code == 0, result.stderr or result.output
-    renamed = load_profile_registry().by_name("legacy-run")
-    assert renamed is not None and renamed.uid == ordinary.uid
-    assert manifest.read_bytes() == archive_bytes
-    assert all(profile_store_dir(profile).is_dir() for profile in legacy_profiles)
 
 
 def test_casefold_collision_fails_without_mutating_either_profile(profile_home):
@@ -836,3 +663,32 @@ def test_registry_failure_after_visible_replace_keeps_the_renamed_identity(
     assert after.active_uid == before.active_uid
     assert profile_store_dir(renamed) == root
     assert _tree_digest(root) == digest
+
+
+@pytest.mark.parametrize("visible_replace", [False, True])
+def test_study_rename_preserves_registry_failure_boundary(profile_home, monkeypatch, visible_replace):
+    import memcommit.application.operations.profile.study.lifecycle as study_lifecycle
+
+    study_uid, participant, authority = _install_current_study()
+    before = load_profile_registry()
+    roots = (profile_store_dir(participant), profile_store_dir(authority))
+    before_digests = tuple(_tree_digest(root) for root in roots)
+    real_write_registry = study_lifecycle._write_registry
+
+    def fail_registry(updated):
+        if visible_replace:
+            real_write_registry(updated)
+        raise OSError("simulated durability failure")
+
+    monkeypatch.setattr(study_lifecycle, "_write_registry", fail_registry)
+    with pytest.raises((OSError, profiles_module.ProfileError)) as failure:
+        rename_study("current-run", "renamed", expected_uid=study_uid)
+    after = load_profile_registry()
+    if visible_replace:
+        assert "it remains renamed" in str(failure.value)
+        assert after.generation == before.generation + 1
+        assert study_run_profile_pairs(after.profiles)[0].name == "renamed"
+        assert tuple(p.name for p in after.profiles) == tuple(p.name for p in before.profiles)
+    else:
+        assert after == before
+    assert tuple(_tree_digest(root) for root in roots) == before_digests

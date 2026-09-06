@@ -41,40 +41,6 @@ from .grants import (
     update_authority_grant as update_authority_grant,
 )
 
-from .study import (
-    _LEGACY_STUDY_ARCHIVE_SCHEMA_VERSION as _LEGACY_STUDY_ARCHIVE_SCHEMA_VERSION,
-    _STUDY_AUTHORITY_PROFILE_NAMES as _STUDY_AUTHORITY_PROFILE_NAMES,
-    _STUDY_AUTHORITY_SOURCE_KIND as _STUDY_AUTHORITY_SOURCE_KIND,
-    _STUDY_PROFILE_OPTIONAL_SOURCE_FIELDS as _STUDY_PROFILE_OPTIONAL_SOURCE_FIELDS,
-    _STUDY_PROFILE_SOURCE_FIELDS as _STUDY_PROFILE_SOURCE_FIELDS,
-    _STUDY_PROFILE_SOURCE_KIND as _STUDY_PROFILE_SOURCE_KIND,
-    _STUDY_TASKS as _STUDY_TASKS,
-    LegacyStudyArchiveResult as LegacyStudyArchiveResult,
-    StudyProfileGroup as StudyProfileGroup,
-    StudyProviderPolicyMigrationResult as StudyProviderPolicyMigrationResult,
-    StudyRemovalResult as StudyRemovalResult,
-    StudyRenameResult as StudyRenameResult,
-    StudyRunProfilePair as StudyRunProfilePair,
-    _ensure_legacy_study_archives_dir as _ensure_legacy_study_archives_dir,
-    _legacy_study_archive_record as _legacy_study_archive_record,
-    _legacy_study_archives_dir as _legacy_study_archives_dir,
-    _manifest_digest as _manifest_digest,
-    _prepare_legacy_study_archive as _prepare_legacy_study_archive,
-    _publish_legacy_study_archive as _publish_legacy_study_archive,
-    _reuse_legacy_study_archive as _reuse_legacy_study_archive,
-    _study_authority_profile_name as _study_authority_profile_name,
-    _study_target as _study_target,
-    _study_task_profile_name as _study_task_profile_name,
-    _study_uuid as _study_uuid,
-    _timezone_timestamp as _timezone_timestamp,
-    archive_legacy_study as archive_legacy_study,
-    migrate_visible_study_provider_policy as migrate_visible_study_provider_policy,
-    remove_study as remove_study,
-    rename_study as rename_study,
-    study_profile_groups as study_profile_groups,
-    study_run_profile_pairs as study_run_profile_pairs,
-)
-
 from .lifecycle import (
     ProfileCreationResult as ProfileCreationResult,
     ProfileRemovalResult as ProfileRemovalResult,
@@ -91,7 +57,6 @@ from .lifecycle import (
 
 __all__ = [
     "ContextInventory",
-    "LegacyStudyArchiveResult",
     "ProfileCreationResult",
     "ProfileError",
     "ProfileRemovalResult",
@@ -99,12 +64,10 @@ __all__ = [
     "ShareEndpoint",
     "StoreInspection",
     "StudyImportResult",
-    "StudyProfileGroup",
     "StudyProviderPolicyMigrationResult",
     "StudyRemovalResult",
     "StudyRenameResult",
     "StudyRunProfilePair",
-    "archive_legacy_study",
     "authority_grant_snapshot_lock",
     "baseline_store_digest",
     "create_authority_grant",
@@ -122,7 +85,6 @@ __all__ = [
     "rename_profile",
     "rename_study",
     "resolve_share_endpoint",
-    "study_profile_groups",
     "study_run_profile_pairs",
     "update_authority_grant",
     "use_profile",
@@ -188,10 +150,31 @@ _INIT_STUDY_PROFILE_COMPAT_EXPORTS = {
 }
 
 
+# Study transactions import this package's storage primitives. Keep their
+# aggregate exports lazy so direct transaction imports cannot create a cycle.
+_CURRENT_STUDY_EXPORTS = {
+    "StudyRunProfilePair": "model",
+    "StudyRenameResult": "model",
+    "StudyRemovalResult": "model",
+    "study_run_profile_pairs": "topology",
+    "rename_study": "lifecycle",
+    "remove_study": "lifecycle",
+    "StudyProviderPolicyMigrationResult": "provider_policy_migration",
+    "migrate_visible_study_provider_policy": "provider_policy_migration",
+}
+
+
 def __getattr__(name: str):
     """Lazily preserve names relocated from the aggregate Profile model."""
 
-    if name in _MEM_IMPORT_COMPAT_EXPORTS:
+    if name in _CURRENT_STUDY_EXPORTS:
+        from importlib import import_module
+
+        module = import_module(
+            f"memcommit.application.operations.profile.study.{_CURRENT_STUDY_EXPORTS[name]}"
+        )
+        value = getattr(module, name)
+    elif name in _MEM_IMPORT_COMPAT_EXPORTS:
         from memcommit.application.operations.resource_import import profile
 
         value = getattr(profile, name)

@@ -1,0 +1,52 @@
+ Review exact Study rename                                                                                                                                                          
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+PROPOSED COMMAND · NOT RUN                                                                                                                                                         ^
+  mem profile rename-study capture-study capture-renamed                                                                                                                            
+                                                                                                                                                                                    
+EFFECTS · ONE COMMAND                                                                                                                                                               
+  Change the Study display name from 'capture-study' to 'capture-renamed'.                                                                                                          
+  Keep both member Profile display names unchanged.                                                                                                                                 
+  Keep the same Study UID, Profile UIDs, stores, Contexts, Memories, and Grants.                                                                                                    
+  Keep the same active Profile selected.                                                                                                                                            
+                                                                                                                                                                                    
+Approval applies only to the exact command shown above.                                                                                                                             
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                    
+                                                                                                                                                                                   v
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ Enter/A rename Study  Esc back

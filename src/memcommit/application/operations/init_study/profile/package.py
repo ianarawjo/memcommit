@@ -19,12 +19,6 @@ from memcommit.application.operations.profile.model._storage import (
     _source_digest,
     inspect_store,
 )
-from memcommit.application.operations.profile.model.study import (
-    _STUDY_AUTHORITY_PROFILE_NAMES,
-    _STUDY_TASKS,
-    _manifest_digest,
-    _study_uuid,
-)
 from memcommit.core.context import Context, Memory
 from memcommit.core.memory_translation import (
     MemoryTranslationCatalog,
@@ -33,12 +27,35 @@ from memcommit.core.memory_translation import (
 from memcommit.persistence.store.translation_catalog import (
     decode_translation_catalog_record,
 )
+from memcommit.persistence.store.infrastructure.atomic_io import _canonical_json_digest
 
 from .model import (
+    _STUDY_TASKS,
+    _STUDY_AUTHORITY_PROFILE_NAMES,
     _STUDY_BUNDLE_NAMESPACE,
     _StudyProfileSource,
     _StudyTaskPackage,
 )
+
+
+def _study_uuid(value: object, *, label: str) -> str:
+    try:
+        canonical = str(uuid.UUID(value))
+    except (AttributeError, TypeError, ValueError) as error:
+        raise ProfileError(f"Study manifest {label} is invalid.") from error
+    if value != canonical:
+        raise ProfileError(f"Study manifest {label} is invalid.")
+    return canonical
+
+
+def _manifest_digest(value: object, *, field: str) -> str:
+    if (
+        not isinstance(value, str)
+        or len(value) != 64
+        or any(character not in "0123456789abcdef" for character in value)
+    ):
+        raise ProfileError(f"Study manifest {field} is invalid.")
+    return value
 
 
 def _study_integer(value: object, *, label: str) -> int:
@@ -167,6 +184,13 @@ def _study_package(
             raise ProfileError(f"Task {task} manifest profile path is invalid.")
         store = package / expected_store_path
         inspection = inspect_store(store)
+        if "context_records_sha256" in raw:
+            contexts, _query_refs = _context_records(store)
+            actual_digest = _canonical_json_digest({
+                name: context.to_dict() for name, context in contexts.items()
+            })
+            if raw["context_records_sha256"] != actual_digest:
+                raise ProfileError(f"Task {task} native Context records changed after packaging.")
         if inspection.current_context != raw.get("current_context"):
             raise ProfileError(
                 f"Task {task} Profile {canonical_name!r} current Context is inconsistent."

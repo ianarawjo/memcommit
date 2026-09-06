@@ -17,7 +17,7 @@ from memcommit.providers.policy import (  # noqa: E402
     STUDY_PROVIDER_POLICY_VERSION,
     study_provider_config,
 )
-from memcommit.application.operations.profile.model import migrate_visible_study_provider_policy  # noqa: E402
+from memcommit.application.operations.profile.study.provider_policy_migration import migrate_visible_study_provider_policy  # noqa: E402
 
 
 def main() -> int:

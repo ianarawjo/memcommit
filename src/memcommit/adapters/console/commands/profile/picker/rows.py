@@ -40,7 +40,6 @@ def _validate_entries(
                     entry.study_uid,
                     entry.study_name,
                     entry.study_created_at,
-                    entry.study_task,
                     entry.study_role,
                 )
             )
@@ -51,19 +50,9 @@ def _validate_entries(
                 and bool(entry.study_name)
                 and isinstance(entry.study_created_at, str)
                 and bool(entry.study_created_at)
-                and entry.study_profile_count > 0
+                and entry.study_profile_count == 2
                 and 0 <= entry.study_removed_count < entry.study_profile_count
-                and (
-                    (
-                        type(entry.study_task) is int
-                        and entry.study_task in {1, 2, 3}
-                        and entry.study_role in {None, "TASK", "AUTHORITY"}
-                    )
-                    or (
-                        entry.study_task is None
-                        and entry.study_role in {"PARTICIPANT", "GRANTED_MEMORY"}
-                    )
-                )
+                and entry.study_role in {"PARTICIPANT", "GRANTED_MEMORY"}
             )
         )
         or (
@@ -75,7 +64,7 @@ def _validate_entries(
         raise ValueError("Profile selection received invalid entries.")
     study_metadata: dict[
         str,
-        tuple[str, str, int, int, set[tuple[str, int | None]]],
+        tuple[str, str, int, int, set[str]],
     ] = {}
     finished_studies: set[str] = set()
     previous_study: str | None = None
@@ -92,10 +81,10 @@ def _validate_entries(
             raise ValueError("Study Profile entries must remain contiguous.")
         created_at = entry.study_created_at
         study_uid = entry.study_uid
-        task = entry.study_task
         assert isinstance(created_at, str)
         assert isinstance(study_uid, str)
-        member = (entry.study_role or "TASK", task)
+        assert entry.study_role is not None
+        member = entry.study_role
         existing = study_metadata.get(study_name)
         metadata = (
             study_uid,
@@ -133,7 +122,6 @@ def build_picker_rows(
                     created_at=entry.study_created_at,
                     profile_count=entry.study_profile_count,
                     removed_count=entry.study_removed_count,
-                    renames_member_profiles=entry.study_role in {"TASK", "AUTHORITY"},
                 )
             )
         rows.append(

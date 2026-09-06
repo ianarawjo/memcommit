@@ -19,7 +19,7 @@ from memcommit.application.operations.profile.model._storage import (
     _context_records,
     inspect_store,
 )
-from memcommit.application.operations.profile.model.study import _STUDY_TASKS
+from .model import _STUDY_TASKS
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 from memcommit.core.memory_translation import MemoryTranslationCatalog
 from memcommit.persistence.store.translation_catalog import (

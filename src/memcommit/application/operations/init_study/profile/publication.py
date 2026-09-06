@@ -33,7 +33,7 @@ from memcommit.application.operations.profile.model._storage import (
     inspect_store,
 )
 from memcommit.application.operations.profile.model.grants import _grant_scope
-from memcommit.application.operations.profile.model.study import _STUDY_TASKS
+from .model import _STUDY_TASKS
 from memcommit.core.context import Context, Memory
 
 from .composition import _compose_study_run_pair

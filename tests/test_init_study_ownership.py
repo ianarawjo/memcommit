@@ -49,7 +49,7 @@ def test_init_study_command_imports_the_operation_owned_application() -> None:
 
 def test_init_study_profile_construction_has_one_canonical_owner() -> None:
     study_lifecycle_functions = _top_level_function_names(
-        "src/memcommit/application/operations/profile/model/study.py"
+        "src/memcommit/application/operations/profile/study"
     )
     composition_functions = _top_level_function_names(
         "src/memcommit/application/operations/init_study/profile/composition.py"
@@ -91,13 +91,10 @@ def test_old_init_study_construction_imports_are_compatibility_aliases() -> None
         "import _publish_study_run_pair as old_publication\n"
         "from memcommit.application.operations.init_study.profile.package "
         "import _study_packages as canonical_packages\n"
-        "from memcommit.application.operations.profile.model.study "
-        "import _study_packages as old_direct_packages\n"
         "from memcommit.application.operations.profile.model "
         "import _study_packages as old_aggregate_packages\n"
         "assert old_composition is canonical_composition\n"
         "assert old_publication is canonical_publication\n"
-        "assert old_direct_packages is canonical_packages\n"
         "assert old_aggregate_packages is canonical_packages\n"
     )
 

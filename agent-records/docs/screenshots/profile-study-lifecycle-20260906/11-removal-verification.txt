@@ -1,0 +1,5 @@
+52 180                                                                                                                                                                              
+* authoring  CURRENT authoring Contexts 1 owned + 0 granted · Memories 1 owned + 0 granted · current=authoring-notes                                                                
+Granted views are permission projections, not copied Profiles.                                                                                                                      
+Authority Profiles are ordinary switchable owners of source data.                                                                                                                   
+Deleted Profile tombstones hidden from this list: 2

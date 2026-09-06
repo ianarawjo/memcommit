@@ -55,8 +55,7 @@ def _study_role_label(membership: _ProfileStudyMembership) -> str:
         return "Participant"
     if membership.role == "GRANTED_MEMORY":
         return "Granted memory"
-    role_name = "Task" if membership.role == "TASK" else "Authority"
-    return f"{role_name} {membership.task}"
+    raise ValueError(f"Unknown Study role: {membership.role!r}")
 
 
 def _profile_inventory_identity_width(
@@ -199,18 +198,13 @@ def _profile_rename_status(result) -> str:
 def _study_rename_status(result) -> str:
     if not result.changed:
         return "Study '" + display_escape_text(result.name) + "' unchanged"
-    profile_note = (
-        f" · {result.renamed_profile_count} legacy Profile names updated"
-        if result.renamed_profile_count
-        else " · member Profile names unchanged"
-    )
     return (
         "Renamed Study '"
         + display_escape_text(result.previous_name)
         + "' to '"
         + display_escape_text(result.name)
         + "' · UID unchanged"
-        + profile_note
+        + " · member Profile names unchanged"
     )
 
 
@@ -263,13 +257,7 @@ def _print_study_rename(result) -> None:
         fg=typer.colors.GREEN,
     )
     typer.echo("Study UID unchanged: " + display_escape_text(result.uid))
-    if result.renamed_profile_count:
-        typer.echo(
-            "Legacy member Profile display names updated atomically: "
-            + str(result.renamed_profile_count)
-        )
-    else:
-        typer.echo("Member Profile display names unchanged.")
+    typer.echo("Member Profile display names unchanged.")
     typer.echo("Profile UIDs, stores, Contexts, Memories, and Grants unchanged.")
     typer.echo(
         "Active Profile unchanged: " + display_escape_text(result.active_profile_name)

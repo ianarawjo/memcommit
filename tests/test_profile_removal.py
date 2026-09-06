@@ -35,10 +35,10 @@ from memcommit.application.operations.profile.model import (
     _write_registry,
     list_profiles,
     remove_profile,
-    remove_study,
-    study_run_profile_pairs,
     use_profile,
 )
+from memcommit.application.operations.profile.study.lifecycle import remove_study
+from memcommit.application.operations.profile.study.topology import study_run_profile_pairs
 from memcommit.persistence.store import MemoryStore
 
 

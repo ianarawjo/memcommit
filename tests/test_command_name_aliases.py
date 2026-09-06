@@ -42,14 +42,14 @@ def test_root_aliases_open_canonical_help(entered, canonical):
 
 
 def test_hyphen_omission_applies_to_nested_command_groups():
-    profile_result = runner.invoke(app, ["profile", "archivestudy", "--help"])
+    profile_result = runner.invoke(app, ["profile", "renamestudy", "--help"])
     dev_result = runner.invoke(
         app,
         ["dev", "querysource", "install", "--help"],
     )
 
     assert profile_result.exit_code == 0, profile_result.output
-    assert " profile archive-study " in profile_result.output.splitlines()[1]
+    assert " profile rename-study " in profile_result.output.splitlines()[1]
     assert dev_result.exit_code == 0, dev_result.output
     assert " dev query-source install " in dev_result.output.splitlines()[1]
 

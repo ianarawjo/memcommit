@@ -52,7 +52,7 @@ def _entry_name_label(entry: ProfilePickerEntry) -> str:
     elif entry.study_role == "GRANTED_MEMORY":
         role = "Granted memory"
     else:
-        role = f"{(entry.study_role or 'TASK').title()} {entry.study_task}"
+        raise ValueError(f"Unknown Study role: {entry.study_role!r}")
     return f"{role} · {display_escape_text(entry.name)}"
 
 

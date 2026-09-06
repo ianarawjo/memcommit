@@ -104,9 +104,10 @@ left behind by the earlier selector-only implementation can be permanently
 purged by naming that Profile directly or deleting its complete Study; a
 tombstone whose store is already absent is treated as completed deletion.
 
-`archive-study` retains its existing legacy detach behavior. It writes an
-archive manifest and preserves stores, so it remains semantically distinct
-from permanent `remove-study`.
+The legacy split-Study `archive-study` route was retired on 2026-09-06.
+Existing archives are untouched. Current Study deletion still uses the
+permanent-removal boundary described here; see the
+[Study lifecycle rationale](profile-study-lifecycle-design-rationale.md).
 
 ## Alternatives considered
 

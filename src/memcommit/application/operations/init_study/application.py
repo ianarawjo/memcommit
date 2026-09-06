@@ -25,7 +25,6 @@ from memcommit.application.operations.profile.config import (
 from memcommit.application.operations.profile.model import (
     ProfileError,
     _registry_lock,
-    study_profile_groups,
 )
 
 
@@ -59,14 +58,6 @@ def init_legacy_study_profile(
 
     with _registry_lock():
         registry = load_profile_registry()
-        if any(
-            group.name.casefold() == profile_name.casefold()
-            for group in study_profile_groups(registry.profiles)
-        ):
-            raise ProfileError(
-                f"Profile name {profile_name!r} conflicts with an existing legacy "
-                "Study group."
-            )
         staging = profile_stores_dir() / (
             f".{profile_name}.legacy-source-{uuid.uuid4().hex}"
         )
@@ -126,14 +117,6 @@ def init_coffee_study_profile(
 
     with _registry_lock():
         registry = load_profile_registry()
-        if any(
-            group.name.casefold() == profile_name.casefold()
-            for group in study_profile_groups(registry.profiles)
-        ):
-            raise ProfileError(
-                f"Profile name {profile_name!r} conflicts with an existing legacy "
-                "Study group."
-            )
         staging = profile_stores_dir() / (
             f".{profile_name}.coffee-source-{uuid.uuid4().hex}"
         )

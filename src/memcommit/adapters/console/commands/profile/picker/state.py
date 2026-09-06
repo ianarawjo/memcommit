@@ -166,7 +166,6 @@ class ProfilePickerState:
                 registry_generation=self.registry_generation,
                 new_name=name,
                 row_index=edit.row_index,
-                renames_member_profiles=row.renames_member_profiles,
             )
         self.stage = action
         self.notify()

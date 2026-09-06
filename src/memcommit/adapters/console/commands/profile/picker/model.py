@@ -22,7 +22,6 @@ class ProfilePickerEntry:
     study_uid: str | None = None
     study_name: str | None = None
     study_created_at: str | None = None
-    study_task: int | None = None
     study_role: str | None = None
     study_profile_count: int = 0
     study_removed_count: int = 0
@@ -47,7 +46,6 @@ class ProfilePickerAction:
     registry_generation: int | None
     new_name: str | None = None
     row_index: int | None = None
-    renames_member_profiles: bool = False
 
 
 @dataclass(frozen=True)
@@ -69,4 +67,3 @@ class ProfilePickerRow:
     created_at: str | None = None
     profile_count: int = 1
     removed_count: int = 0
-    renames_member_profiles: bool = False

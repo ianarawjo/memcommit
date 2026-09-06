@@ -105,9 +105,9 @@ def test_profile_subcommands_keep_precedence_over_the_name_shorthand(
     )
 
     result = runner.invoke(app, ["profile", "list"])
-    archive = runner.invoke(
+    study_rename = runner.invoke(
         app,
-        ["profile", "archive-study", "missing-study"],
+        ["profile", "rename-study", "missing-study", "new-study"],
     )
     rename = runner.invoke(
         app,
@@ -116,8 +116,8 @@ def test_profile_subcommands_keep_precedence_over_the_name_shorthand(
 
     assert result.exit_code == 0, result.output
     assert "* authoring" in result.output
-    assert archive.exit_code == 1
-    assert "Legacy Study 'missing-study' does not exist" in archive.stderr
+    assert study_rename.exit_code == 1
+    assert "Study 'missing-study' does not exist" in study_rename.stderr
     assert rename.exit_code == 1
     assert "Profile 'missing-profile' does not exist" in rename.stderr
 

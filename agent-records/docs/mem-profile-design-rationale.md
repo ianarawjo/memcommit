@@ -22,7 +22,7 @@ the concise interactive spelling requested to parallel `mem switch NAME`.
 Both forms reach the same validation, locking, and atomic selector update;
 the shorthand is parser routing rather than a second mutation path. Known
 subcommands (`list`, its hidden `ls` alias, `current`, `create`, `use`, `import`,
-`archive-study`, `rename`, and `grant`) take precedence, so a
+`rename-study`, `rename`, and `grant`) take precedence, so a
 Profile whose name equals one of those reserved command tokens must be selected
 with the explicit `use` form. `mem profile list` remains an explicit inventory
 command.
@@ -152,9 +152,10 @@ would fragment a single run and duplicate its control-plane identity. One
 physical Profile was rejected because ordinary local Context resolution would
 bypass the grant engine.
 
-Registries containing older
-`STUDY_RUN_TASK`/`STUDY_RUN_AUTHORITY` Profiles remain readable and selectable;
-the legacy six-Profile grouping UI is retained only for those persisted records.
+Older `STUDY_RUN_TASK`/`STUDY_RUN_AUTHORITY` provenance remains ordinary Profile
+metadata. Its split-Study grouping, name reservations, and archive administration
+were retired on 2026-09-06. Existing stores and archive files are untouched;
+see the [Study lifecycle rationale](profile-study-lifecycle-design-rationale.md).
 
 Current `STUDY_RUN`/`STUDY_RUN_GRANTED_MEMORY` provenance is also projected as
 one group in both the terminal picker and stable list:
@@ -179,7 +180,10 @@ atomic registry generation that publishes the complete pair and grants. Its
 detailed ledger is seeded explicitly because the `init-study` root attempt
 began in the previous Profile.
 
-## Recoverable legacy Study archive
+## Historical split-Study archive (retired 2026-09-06)
+
+The following records the former archive design for research provenance. The
+command and implementation have been removed; it is not a current operation.
 
 `mem profile archive-study NAME` applies only to a complete persisted split
 Study group created by the older initialization model. It does not archive an
@@ -269,8 +273,8 @@ inventory row and press Enter to switch explicitly.
 
 Names retain the portable one-segment contract. Creation rejects
 case-insensitive collisions with live or removed Profile identities, the fixed
-`authoring` anchor, and live legacy Study headings. The
-retained-name boundary keeps tombstones and Study grouping unambiguous.
+`authoring` anchor. The retained-name boundary keeps Profile tombstones
+unambiguous.
 
 ## Stable-identity Profile rename
 
@@ -289,7 +293,7 @@ the current display name. Enter produces an exact
 `mem profile rename OLD NEW` review; a second Enter or `A` applies it. Escape
 returns from review to the name field, then from the field to the picker.
 Study headers route to the separate whole-Study rename described below. Fixed
-anchors and individually protected legacy Study members fail in the picker
+anchors fail in the picker
 before the Profile-name field opens.
 
 The picker receipt freezes the target Profile UID and registry generation.
@@ -329,12 +333,11 @@ display-name indexes. A Profile rename therefore does not rewrite an earlier
 `source_profile_name`, legacy Study provenance, or an archived Profile record.
 Those records retain the name observed when they were created, while their
 stable UIDs preserve identity. Archived names do not reserve a live display
-name; only the current registry and live legacy Study groups participate in
+name; only the current registry participates in
 rename collision checks.
 
 Profile names retain the portable one-segment contract. Existing Profile-name
-collisions and live legacy Study-group-name collisions are checked
-case-insensitively. An exact same-name request, where the resolved target name
+collisions are checked case-insensitively. An exact same-name request, where the resolved target name
 already equals `NEW`, is a successful no-op: it does not inspect the store,
 publish a new registry generation, or turn a fixed anchor into an error. A
 case-only change such as `Pilot` to `pilot` is a real rename and is allowed
@@ -342,16 +345,13 @@ when the same Profile owns both spellings.
 
 The fixed `authoring` name is protected as both rename source and destination
 because it is the backward-compatible store anchor. `study-baseline` has no
-special status after removal of the registered baseline lifecycle. Members of
-a live legacy split Study remain protected from individual rename because their
-task/authority names are validated against immutable grouping provenance. A
-whole legacy-group rename would need to revise all member identities and is not
-an ordinary Profile rename.
+special status after removal of the registered baseline lifecycle. Former split-Study source metadata imposes no additional Profile-name contract
+after retirement of split-Study administration.
 
 CLI subcommand tokens remain legal Profile names for compatibility with import
 and the existing shorthand contract. Registered subcommands and their supported
 hyphen-omitted input aliases take precedence over shorthand selection. A
-Profile named `archive-study` or `archivestudy`, for example, must be selected
+Profile named `rename-study` or `renamestudy`, for example, must be selected
 with `mem profile use NAME`; rename success output always prints that explicit
 form. An existing Profile named `rename` can itself be renamed with
 `mem profile rename rename NEW`.
@@ -386,13 +386,8 @@ implicitly was rejected because it would collapse the separate Study and
 Profile controls that the picker exposes and surprise anyone who had already
 renamed one child independently.
 
-Legacy six-Profile Studies are the compatibility exception. Their validator
-derives every task and authority Profile name from `source.study_name`, so
-changing only the heading would make the persisted group unreadable. A legacy
-Study rename therefore rewrites the shared provenance label and all six derived
-Profile display names atomically, after validating every generated name and
-collision. It still does not move or rewrite a store, and the exact review says
-that member names will change before approval.
+Legacy split-Study rename and its derived member-name rewriting were retired
+on 2026-09-06. Current Study rename has only the shared-label behavior above.
 
 Current Study action events retain the Study label observed when each event was
 written. Readers bind historical events by Study UID, Profile UID, and role, so
@@ -453,8 +448,8 @@ The local account can still read its files.
 
 ## Alternatives considered
 
-- **Split each initialization into Task and Authority Profiles:** retained only
-  for legacy registry compatibility, not new creation. It changed the baseline
+- **Split each initialization into Task and Authority Profiles:** previously
+  retained for legacy registry compatibility; support was retired on 2026-09-06. It changed the baseline
   topology during copy and required six identities plus grants before the
   underlying Memory sets and boundaries were stable.
 - **Merge all task stores into `~/.mem`:** rejected because it collapses study
@@ -467,12 +462,12 @@ The local account can still read its files.
 - **Make `mem switch` scan package output directories:** rejected because it
   would list targets that are not members of the active store and cannot be
   switched to by the existing command contract.
-- **Delete legacy Study stores after hiding their rows:** rejected because it
+- **Delete legacy Study stores after hiding their rows (historical archive):** rejected because it
   destroys recoverability and can invalidate an already running process's
   frozen root.
-- **Silently switch away from an active legacy Study:** rejected because an
+- **Silently switch away from an active legacy Study (historical archive):** rejected because an
   archive request must not redirect another terminal's next command.
-- **Archive and initialize the replacement in one command:** rejected because
+- **Archive and initialize the replacement in one command (historical):** rejected because
   preserving old state and allocating a new run are independently reviewable
   mutations with different failure boundaries.
 - **Move or rename a managed Store directory with its display name:** rejected
@@ -481,9 +476,9 @@ The local account can still read its files.
 - **Rewrite prior provenance, grants, and archive manifests after rename:**
   rejected because grants already bind stable UIDs, while provenance and
   archives must retain the historical name observed when they were recorded.
-- **Rename one member of a legacy split Study:** rejected because its derived
-  task or authority name is part of the grouping provenance contract. A future
-  whole-group workflow would be a separate multi-record mutation.
+- **Rename one member of a legacy split Study (historical):** formerly rejected
+  because derived member names encoded grouping provenance. The grouping
+  contract was retired together with whole-group administration.
 
 ## Current limitations
 
@@ -491,16 +486,15 @@ The local account can still read its files.
   already running in another terminal.
 - Editing a managed Profile does not rewrite a packaged scenario. Scenario
   changes require an explicit source, digest, rationale, and regression update.
-- Generic Profile removal, replacement, backup, and reset remain deferred. The
-  narrow legacy split-Study archive has an explicit recoverable manifest, but a
-  matching restore command remains future work.
+- Profile and current Study removal permanently delete their stores through the
+  reviewed removal contract. Replacement, backup, reset, and restore of
+  historical split-Study archives are not introduced here.
 - Profile rename is limited to live ordinary managed Profiles. It does not
-  rename the fixed authoring anchor, individual legacy Study members,
+  rename the fixed authoring anchor,
   archived records, historical provenance, or any Context inside the Store.
-- `archive-study` does not promise repeated-success acknowledgement. After the
-  registry detach commits, repeating the old Study name reports that the live
-  legacy Study does not exist; the durable manifest remains the completion
-  record until a dedicated archive-status surface exists.
+- Split-Study grouping and `archive-study` are no longer supported. Existing
+  archive artifacts remain historical records; no automatic restoration or
+  data cleanup occurs.
 - Study Profile creation records source Profile identity, a baseline digest,
   and an import timestamp. Whole-session command/event logging and ordinary
   single-Profile Study completion/archive state remain a separate lifecycle

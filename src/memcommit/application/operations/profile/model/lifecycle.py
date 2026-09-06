@@ -39,10 +39,7 @@ from ._storage import (
     inspect_store as inspect_store,
 )
 
-from .study import (
-    study_profile_groups as study_profile_groups,
-    study_run_profile_pairs as study_run_profile_pairs,
-)
+from memcommit.application.operations.profile.study.topology import study_run_profile_pairs
 
 
 @dataclass(frozen=True)
@@ -205,20 +202,6 @@ def create_profile(
         )
         if collision is not None:
             raise ProfileError(f"Profile {collision.name!r} already exists.")
-        legacy_study = next(
-            (
-                group
-                for group in study_profile_groups(registry.profiles)
-                if group.name.casefold() == canonical.casefold()
-            ),
-            None,
-        )
-        if legacy_study is not None:
-            raise ProfileError(
-                f"Profile name {canonical!r} conflicts with existing legacy "
-                f"Study {legacy_study.name!r}."
-            )
-
         profile = ProfileEntry(
             uid=str(uuid.uuid4()),
             name=canonical,
@@ -339,25 +322,8 @@ def rename_profile(
                 changed=False,
             )
 
-        groups = study_profile_groups(registry.profiles)
-        membership = next(
-            (
-                group
-                for group in groups
-                if any(
-                    profile.uid == target.uid
-                    for profile in (*group.profiles, *group.support_profiles)
-                )
-            ),
-            None,
-        )
         if target.kind == "AUTHORING":
             raise ProfileError("The fixed authoring Profile cannot be renamed.")
-        if membership is not None:
-            raise ProfileError(
-                f"Profile {target.name!r} is a member of legacy Study "
-                f"{membership.name!r} and cannot be renamed individually."
-            )
         if canonical_new.casefold() == AUTHORING_PROFILE_NAME.casefold():
             raise ProfileError("The fixed authoring Profile name is reserved.")
         collision = next(
@@ -371,20 +337,6 @@ def rename_profile(
         )
         if collision is not None:
             raise ProfileError(f"Profile {collision.name!r} already exists.")
-        group_collision = next(
-            (
-                group
-                for group in groups
-                if group.name.casefold() == canonical_new.casefold()
-            ),
-            None,
-        )
-        if group_collision is not None:
-            raise ProfileError(
-                f"Profile name {canonical_new!r} conflicts with existing legacy "
-                f"Study {group_collision.name!r}."
-            )
-
         # Rename is a control-plane metadata mutation, but validate the live
         # target before publishing a new locator for an unsafe or missing root.
         inspect_store(profile_store_dir(target))
@@ -438,10 +390,6 @@ def _profile_study_target(
 ) -> tuple[str, str, tuple[ProfileEntry, ...]] | None:
     """Return the complete Study containing a Profile, when one exists."""
 
-    for group in study_profile_groups(registry.profiles):
-        members = (*group.profiles, *group.support_profiles)
-        if any(member.uid == profile.uid for member in members):
-            return group.uid, group.name, members
     for pair in study_run_profile_pairs(registry.profiles):
         members = (pair.participant, pair.authority)
         if any(member.uid == profile.uid for member in members):

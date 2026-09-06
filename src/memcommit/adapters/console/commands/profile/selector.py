@@ -39,7 +39,7 @@ from memcommit.application.operations.profile.model.lifecycle import (
     remove_profile,
     rename_profile,
 )
-from memcommit.application.operations.profile.model.study import (
+from memcommit.application.operations.profile.study.lifecycle import (
     remove_study,
     rename_study,
 )
@@ -75,9 +75,6 @@ def _pick_profile(
                 if profile.uid in memberships
                 else None
             ),
-            study_task=(
-                memberships[profile.uid].task if profile.uid in memberships else None
-            ),
             study_role=(
                 memberships[profile.uid].role if profile.uid in memberships else None
             ),
@@ -99,12 +96,7 @@ def _pick_profile(
             rename_block=(
                 "The fixed authoring Profile cannot be renamed"
                 if profile.kind == "AUTHORING"
-                else (
-                    "Legacy Study members cannot be renamed individually"
-                    if profile.uid in memberships
-                    and memberships[profile.uid].task is not None
-                    else None
-                )
+                else None
             ),
         )
         for profile, inspection in zip(

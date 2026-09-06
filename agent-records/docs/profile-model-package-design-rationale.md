@@ -20,10 +20,13 @@ function objects from the narrower owning modules.
 The implementation is grouped as follows:
 
 - `_storage.py` owns validated store inspection, registry locking and durable
-  publication, deletion staging, and shared failure/result types.
+  publication, deletion staging, and shared inventory/result types.
 - `grants.py` owns Authority Grant lifecycle and grant-backed read/share
   resolution.
-- `study.py` owns Study grouping, migration, archive, rename, and removal.
+- `../study/` owns current Study pair values, pure topology, rename/removal,
+  and the separate explicit provider-policy migration. Split-Study grouping and
+  archive support were retired on 2026-09-06.
+- `../errors.py` owns the shared Profile operation error independently of storage.
 - `lifecycle.py` owns ordinary Profile listing, selection, creation, import,
   rename, and removal.
 
@@ -33,11 +36,11 @@ composition, and publication modules own the initialization-only data flow.
 The former Profile-model names resolve lazily to those canonical objects for
 compatibility, but Profile lifecycle no longer contains their implementation.
 
-The dependency direction is `_storage` toward no sibling, `grants` toward
-`_storage`, `study` toward `_storage` and the shared Grant scope constructor,
-and `lifecycle` toward `_storage` plus Study classification. Ordinary Profile
-lifecycle consults Study classification so it can preserve reserved names and
-whole-Study boundaries; it does not perform Study publication.
+Ordinary Profile lifecycle imports the pure current Study topology. Study
+lifecycle uses the existing shared storage primitives. The topology imports
+configuration, value types, and `profile.errors`, so it does not load the
+aggregate model or storage. Current Study exports from the aggregate model are
+lazy to preserve object identity without introducing initialization cycles.
 
 ## Preserved invariants
 
@@ -51,10 +54,10 @@ whole-Study boundaries; it does not perform Study publication.
 - Selecting a Profile continues to affect the next process rather than
   redirecting a store already opened by the current process.
 
-The move intentionally changes no function or class body. Structural
-verification compares all 132 original top-level definitions with their new
-ASTs, and compatibility verification covers every name imported from the old
-module path by production code and tests.
+The initial package extraction preserved all 132 original definition bodies.
+The subsequent Study retirement intentionally removes split-only behavior; its
+current boundaries and verification are recorded in the
+[Study lifecycle rationale](profile-study-lifecycle-design-rationale.md).
 
 ## Alternatives and limitation
 
@@ -64,9 +67,8 @@ store primitives; assigning those helpers to one public domain would either
 create a cycle or obscure their shared safety role. `_storage.py` is therefore
 an internal fourth module rather than duplicated code.
 
-The remaining `study.py` retains the validators and stable task/authority
-identity constants used when reading legacy Study provenance. Init-study
-package parsing imports those narrow compatibility contracts; moving them into
-a third shared schema module would add indirection without separating another
-independent behavior. The transaction bodies themselves now live with the
-init-study operation.
+The former `study.py` is now removed. Task/authority identity constants and
+package validators used by the maintained legacy debugging scenario now belong
+to `init_study/profile/model.py` and `package.py`. They no longer require an
+import from Study administration. Existing init-study aliases remain only in
+the aggregate Profile model; the duplicate direct-study alias map is retired.

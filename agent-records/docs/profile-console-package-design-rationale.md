@@ -18,7 +18,9 @@ arguments, output, interactive steps, application transactions, or authority.
   choose between non-interactive output, the selector, and direct selection.
 - `lifecycle.py` handles ordinary create, rename, remove, import, and actual
   selection, including the existing Study leave/enter accounting.
-- `study_profile.py` handles remove-study, rename-study, and archive-study.
+- `study_profile.py` handles remove-study and rename-study. The split-only
+  archive-study command was retired on 2026-09-06; see the
+  [Study lifecycle rationale](profile-study-lifecycle-design-rationale.md).
   Its name describes operations on Study-member Profiles, rather than claiming
   ownership of all Study behavior.
 - `grants.py` owns its Typer sub-app, Grant command handlers, and Grant output.
@@ -159,10 +161,10 @@ adds no interactive flow and changes no application authority boundary.
 A generic helpers module and a file-per-key-handler split were rejected because
 both leave state ownership scattered. Moving all mutations into the picker or
 forcing deletion to return before completion would disturb the existing
-selector and close-after-deletion contracts. This refactor-only commit retains
-existing legacy Study input fields, validation, labels, and member-rename
-behavior. Independent Study lifecycle changes in the primary working tree
-remain separate, unstaged work.
+selector and close-after-deletion contracts. The subsequent Study lifecycle
+cleanup removes legacy fields and member-rename behavior from these narrow
+modules; the picker now accepts only current participant/authority pairs.
+See the [Study lifecycle rationale](profile-study-lifecycle-design-rationale.md).
 
 ### Picker split verification
 
