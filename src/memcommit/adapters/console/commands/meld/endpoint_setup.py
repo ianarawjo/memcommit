@@ -193,7 +193,7 @@ def meld_endpoint_setup_spec(
             ),
         ),
         initial_mode_uid="SYMMETRIC",
-        screen_layout="COMPACT_FORM",
+        screen_layout="FORM",
         roles=(
             EndpointSetupRole(
                 "A",

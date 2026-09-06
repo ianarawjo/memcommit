@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 
 from prompt_toolkit.application import get_app
 from prompt_toolkit.completion import WordCompleter
@@ -156,7 +156,7 @@ class EndpointEditor:
                     else "Context name"
                 ),
             ),
-            input_name=f"compact-endpoint-{role.uid.casefold()}",
+            input_name=f"endpoint-form-{role.uid.casefold()}",
             prompt="› ",
             completer=completer,
             complete_while_typing=True,
@@ -180,7 +180,7 @@ class EndpointEditor:
                 width=Dimension(min=18, preferred=74, max=92),
                 height=Dimension.exact(1),
                 dont_extend_width=True,
-                name=f"compact-endpoint-{role.uid.casefold()}-inline-memory",
+                name=f"endpoint-form-{role.uid.casefold()}-inline-memory",
             )
         if catalog_candidates:
             selected = (
@@ -266,6 +266,104 @@ class EndpointEditor:
         changed = self.source_type.choose(source_type)
         self.memory_focus.required = source_type == "STORED_MEMORY"
         return changed
+
+    def move_source_type(self, delta: int) -> bool:
+        changed = self.source_type.move(delta)
+        # Keyboard and decoded-command edits must update the same requirement.
+        self.set_source_type(self.source_type.selected_uid)
+        return changed
+
+    def label(self) -> str:
+        return self.spec.role_label(self.selected_mode_uid(), self.uid)
+
+    def reconcile_mode(self) -> None:
+        if self.memory_focus is not None and not self.role_allows_memory_focus():
+            self.memory_focus.clear()
+
+    def confirm_input(self) -> None:
+        if self.effective_source_type() == "INLINE_MEMORY":
+            self.checked_inline_content()
+        elif self.role.memory_required:
+            self.synchronize_required_memory_input()
+        else:
+            self.resolve_role()
+
+    def checked_inline_content(self) -> str:
+        content = self.inline_input.text
+        if not content.strip():
+            raise ValueError(f"{self.label()} needs inline Memory text.")
+        return content
+
+    def set_descendants(self, include_descendants: bool) -> bool:
+        """Return whether broadening this role invalidated its exact Memory."""
+        self.reach.move(1 if include_descendants else -1)
+        if self.reach.include_descendants and self.memory_focus is not None:
+            return self.memory_focus.clear()
+        return False
+
+    def catalog_initial_name(self) -> str:
+        return (
+            self.new_name_draft.parent_name
+            if self.role.new_parent_locator
+            else self.selected_memory_context()
+        )
+
+    def select_catalog_name(self, name: str) -> str:
+        """Apply a browser choice through the same stale-selection clearing path."""
+        if self.role.new_parent_locator:
+            draft = self.new_name_draft
+            self.set_role_text(draft.choose_parent(name))
+            return (
+                "Parent selected; edited exact name preserved." if draft.edited else ""
+            )
+        if self.role.memory_required:
+            self.required_memory_owner = name
+        self.set_role_text(name)
+        return ""
+
+    def refresh_name_suggestion(self, values: Mapping[str, str]) -> None:
+        """Inherit an operation suggestion only while the name remains untouched."""
+        role = self.role
+        if role.new_name_suggester is None:
+            return
+        candidate = role.new_name_suggester(values)
+        parent = (
+            infer_context_parent(candidate, role.names, fallback=role.selected_name)
+            if role.new_parent_locator
+            else None
+        )
+        inherited = self.new_name_draft.inherit_suggestion(
+            candidate, parent_name=parent
+        )
+        if self.input.text != inherited:
+            self.set_role_text(inherited)
+
+    def prepare_memory_selection(self) -> None:
+        if self.reach is not None and self.reach.include_descendants:
+            self.memory_focus.clear()
+            raise ValueError("Focused Memory requires THIS CONTEXT ONLY.")
+        if self.role.memory_required:
+            context_name, _memory_uid = self.synchronize_required_memory_input()
+        else:
+            context_name, create = self.resolve_role()
+            if create:
+                raise ValueError("A new Context cannot select an existing Memory.")
+        self.memory_focus.prepare_context(context_name)
+        self.memory_focus.state()
+
+    def select_memory(self) -> str | None:
+        if self.role.memory_preview_only:
+            raise ValueError("Read-only Memory evidence cannot change an endpoint.")
+        selected = self.memory_focus.choose()
+        if self.role.memory_required:
+            if selected is None:
+                raise RuntimeError("A required Memory chooser returned no Memory.")
+            owner = self.required_memory_owner
+            # Field synchronization clears old Memory state. Restore the exact
+            # selection only after its canonical owner-qualified locator is shown.
+            self.set_role_text(self.required_memory_locator_text(selected))
+            self.memory_focus.select_exact(owner, selected)
+        return selected
 
     def role_is_active(self) -> bool:
         return self.uid in self.spec.active_role_uids(self.selected_mode_uid())
@@ -564,12 +662,9 @@ class EndpointEditor:
         role = self.role
         source_type = self.effective_source_type()
         if source_type == "INLINE_MEMORY":
-            content = self.inline_input.text
-            if not content.strip():
-                raise ValueError(
-                    f"{self.spec.role_label(self.selected_mode_uid(), self.uid)} needs inline Memory text."
-                )
-            return EndpointSetupValue(self.uid, "", inline_memory_content=content)
+            return EndpointSetupValue(
+                self.uid, "", inline_memory_content=self.checked_inline_content()
+            )
         context_name, create = self.resolve_role()
         descendants = (
             self.reach.include_descendants

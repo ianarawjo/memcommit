@@ -1,4 +1,4 @@
-"""Compact exact-Memory setup for interactive Reference."""
+"""Exact-Memory input form for interactive Reference."""
 
 from __future__ import annotations
 
@@ -132,7 +132,7 @@ def reference_endpoint_setup_spec(setup: ReferenceTuiSetup) -> EndpointSetupSpec
         action_label="RETAIN SOURCE MEMORY",
         command_verb="REFERENCE",
         command_ready_hint="ENTER TO PROCEED",
-        screen_layout="COMPACT_FORM",
+        screen_layout="FORM",
     )
 
 
@@ -227,7 +227,7 @@ def run_reference_tui(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> FrozenReferencePlan | None:
-    """Freeze one exact Memory after the shared compact setup returns."""
+    """Freeze one exact Memory after the shared Endpoint Setup form returns."""
 
     del prepare_context  # Compatibility only; bare interactive setup is exact-Memory.
     spec = reference_endpoint_setup_spec(setup)

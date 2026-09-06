@@ -1,4 +1,4 @@
-"""Contracts for Reference's compact exact-Memory endpoint setup."""
+"""Contracts for Reference's form exact-Memory endpoint setup."""
 
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ def _draft() -> EndpointSetupDraft:
     )
 
 
-def test_reference_setup_is_one_compact_target_then_exact_memory_form() -> None:
+def test_reference_setup_is_one_form_target_then_exact_memory_form() -> None:
     setup = ReferenceTuiSetup(
         names=("workspace",),
         selected_source="shared/source",
@@ -52,7 +52,7 @@ def test_reference_setup_is_one_compact_target_then_exact_memory_form() -> None:
 
     spec = reference_endpoint_setup_spec(setup)
 
-    assert spec.screen_layout == "COMPACT_FORM"
+    assert spec.screen_layout == "FORM"
     assert tuple(mode.uid for mode in spec.modes) == ("REFERENCE",)
     assert spec.active_role_uids("REFERENCE") == ("TARGET", "SOURCE")
     assert spec.role_label("REFERENCE", "TARGET") == "TARGET CONTEXT"

@@ -1,0 +1,380 @@
+{
+  "baseline_revision": "0d7ff831860c4e0d59faa83378ed216aa0757e7d",
+  "baseline_package": "src/memcommit/adapters/console/terminal/components/endpoint_setup/compact",
+  "viewport": {
+    "columns": 180,
+    "rows": 52
+  },
+  "total_states": 85,
+  "paths": [
+    {
+      "path": "meld-stored",
+      "states": 16,
+      "keys": [
+        "\u001b[C",
+        "\u001b[B",
+        "\u001b[C",
+        "\u001b[B",
+        "\u001b[C",
+        "\r",
+        "\u001b[B",
+        "\r",
+        "\u001b[C",
+        "\r",
+        "\u001b[B",
+        "\r",
+        "\u001b[B",
+        "\u0015meld/a",
+        "\u001b[B",
+        "\r"
+      ],
+      "result": {
+        "mode_uid": "DIRECTIONAL",
+        "values": [
+          {
+            "role_uid": "A",
+            "context_name": "meld/b",
+            "include_descendants": false,
+            "memory_uid": "bcde2345-0000-4000-8000-000000000000",
+            "create": false,
+            "inline_memory_content": null
+          },
+          {
+            "role_uid": "B",
+            "context_name": "meld/a",
+            "include_descendants": false,
+            "memory_uid": null,
+            "create": false,
+            "inline_memory_content": null
+          }
+        ]
+      },
+      "cell_sha256": [
+        "6b832d1f5bdad025a1d0cbf2bcee3b38dd527753e6cbf2b332fdad384eda8181",
+        "0baee7eb4e87c988afba97397a6b9a77a29f922007b801abbad51de7887712f1",
+        "abb8ab468fd8f3023ba86851f129ddb41729421aed802bf8492c31ed0c55ba2b",
+        "3049a40898a6cbba7f610d66e7c162d5214ffbcd63175f9e07ef0099cd842bfc",
+        "638af9b52a5ad2a7414274d57d73680297c29de2cbeb47dec3b0afc104637419",
+        "70065872ffd079749654cb7c626ec3d366020e60d1f8e9e61ae9955600b0f625",
+        "0cae57072644b3dddfc1feb10d5062d7274c104e72db115c9afe1b6a51f1ad9d",
+        "4ff31461a97dd4a29f1c8f2007ec8365a8f23bbfadfe32fd40d5389a6a12b32b",
+        "bbeeac8358157ec68d0a2a7fcac7a4ee72824202dd34dad449e2167c9ac3db69",
+        "ceffd2d751edd53195f53664c0478000f85a5a5d5a8a3aee825874c9d3227404",
+        "0182cab872c3d948521eb117b6f711f3e1a9c1a45d1093db989fde21bd908488",
+        "53e57e52301f1c679189d2e619a216907a3e7c6bc98a75b1e3f525ffe4890a17",
+        "df6245f3360f4cdfd8ea3b653bc4af26336fea55bee87f8f2b112dc2de16f3a7",
+        "76831dd38909a999bfe31e36ab0b48348d6247cfbc9245c54f4d2fc4d342858c",
+        "8ef722c619aaff22a674d46a4f626d5bb9ce7ad86e7b719ff8560120cf50e102",
+        "9f0443865a0d5fae8db03398dc9eddfc850b4a240379ab363da4dbeea03ab2fc"
+      ]
+    },
+    {
+      "path": "meld-symmetric",
+      "states": 12,
+      "keys": [
+        "\u001b[B",
+        "\u001b[C",
+        "\u001b[C",
+        " ",
+        "\u001b[B",
+        "\u001b[C",
+        "\u001b[C",
+        " ",
+        "\u001b[B",
+        "meld/new-result",
+        "\r",
+        "\r"
+      ],
+      "result": {
+        "mode_uid": "SYMMETRIC",
+        "values": [
+          {
+            "role_uid": "A",
+            "context_name": "meld/a",
+            "include_descendants": true,
+            "memory_uid": null,
+            "create": false,
+            "inline_memory_content": null
+          },
+          {
+            "role_uid": "B",
+            "context_name": "meld/b",
+            "include_descendants": true,
+            "memory_uid": null,
+            "create": false,
+            "inline_memory_content": null
+          },
+          {
+            "role_uid": "C",
+            "context_name": "meld/new-result",
+            "include_descendants": false,
+            "memory_uid": null,
+            "create": true,
+            "inline_memory_content": null
+          }
+        ]
+      },
+      "cell_sha256": [
+        "6b832d1f5bdad025a1d0cbf2bcee3b38dd527753e6cbf2b332fdad384eda8181",
+        "95b4249f5ae8e7ac4d5b3b2afa5a14ca0a7a35e984cf1421c528c3d4cbc9e8cb",
+        "2b2c0d83b21d27faffdd3a6fba9510ac877ec09966c5f217212b3d4faf29e43a",
+        "8100302c688013690910d1cba08cf4d1f20fe4a757749a0b95d907f648946185",
+        "7625212ee3786a33837b9eaee08e2025c754c3bccfe7a5b6770faa7f66d34e84",
+        "6dbbabe55b05d1ee994da2ea5ef886c3d7873bd9639577a484262446abab8a2c",
+        "5d82790d51b6b11f9b4cc3502183e8d4a85c20bfd78d8a74519cefae4ab1a8ee",
+        "1696c290c947790e48b76394e35f7255e61fd228379aea7ea54fa264f015ba47",
+        "b81ddd4269107b29a29f18777e643ebc5d75cf9d5394394ca6b448ece32bfd36",
+        "1d3a94463006d50db0ce752d79d2d26ffe9787ea60ed85db8d48752fb5c2a307",
+        "72913ec1e019a759cd17d15b99457317026a82d34e46d82c0b481420e1144557",
+        "2f85cf6b7199672d47349cd2b3c96e73a82d5a1b4877079e0249ce3a42b60503"
+      ]
+    },
+    {
+      "path": "update-inline-command",
+      "states": 11,
+      "keys": [
+        "\u001b[C",
+        "\u001b[C",
+        "\u001b[B",
+        "\r",
+        "Exact inline evidence.",
+        "\r",
+        "\u001b[B",
+        "\u0015invalid-context --into beta",
+        "\r",
+        "\u0015--memory Inline --to beta",
+        "\r",
+        "\u001b"
+      ],
+      "result": {
+        "mode_uid": "UPDATE",
+        "values": [
+          {
+            "role_uid": "A",
+            "context_name": "",
+            "include_descendants": false,
+            "memory_uid": null,
+            "create": false,
+            "inline_memory_content": "Inline"
+          },
+          {
+            "role_uid": "B",
+            "context_name": "beta",
+            "include_descendants": false,
+            "memory_uid": null,
+            "create": false,
+            "inline_memory_content": null
+          }
+        ]
+      },
+      "cell_sha256": [
+        "317b26e0063649088a56f3c222927eb86e3ef4710b717819828eb4a9f18a3d90",
+        "156d1df634289033354ff2de140ffaa06409703da8bd7304ab52554346facf69",
+        "e55358e23cbaa6df5b49212c3c6cc568009a7946e4304c298dde3a15db5c961b",
+        "09b958df44d736d77ccdbb671e388e08af61e5eb94a21e14f7081c71aa42b271",
+        "830822f8d429033c88666f79e82bc288c5859fb97ea46c76852fe746df034c02",
+        "d008159a149b5474a9cb00d2ee2c5b297e950c7ba076e2d106a82538ce2fae3f",
+        "b356f81dc4f116fb12acb0123b8571991f265c42fd874c7e76a3d23ba83865c5",
+        "3018ca082dbd9fade81ed253afd4ffd1edc2aee90006b012f8e8f2d2c3197c5b",
+        "4b51f600056e4eafc3df13db52b88ccf7fcae92d87116b6a579b3ad90aefd1b9",
+        "1d3da3662bf0921a654176002e22910b5fc6e57120777b0a0642e9d9ea3c575e",
+        "c55b5d3ea4e02f8cb7856d59d00a1bf19b5f320ec99f03052176b370507d0022"
+      ]
+    },
+    {
+      "path": "branch-parent-command",
+      "states": 12,
+      "keys": [
+        "\u001b[B",
+        "\u0015alpha/custom",
+        "\u001b[C",
+        "\r",
+        "\u001b[B",
+        "\r",
+        "\u001b[D",
+        "\u001b[B",
+        "\u0015beta --from alpha --source-root-only",
+        "\r",
+        "\u0015beta/final --from alpha --source-root-only",
+        "\r"
+      ],
+      "result": {
+        "mode_uid": "BRANCH",
+        "values": [
+          {
+            "role_uid": "A",
+            "context_name": "alpha",
+            "include_descendants": false,
+            "memory_uid": null,
+            "create": false,
+            "inline_memory_content": null
+          },
+          {
+            "role_uid": "B",
+            "context_name": "beta/final",
+            "include_descendants": false,
+            "memory_uid": null,
+            "create": true,
+            "inline_memory_content": null
+          }
+        ]
+      },
+      "cell_sha256": [
+        "86c931839d63db403de1902716be7bdc233b536c54b4bf6ccfed500dc0ea7a94",
+        "19c4b648b238e94cd5c599a15b6186dd865d9bed6e46168cd1fc75b15240b200",
+        "69899fd1ac1a22c3318d90b64d654ecabe022e97776d3b0992560a69463d3541",
+        "78098a0e4c39da657c5bbb6818e86bbe9f3cc57922131267007a2c1a41817153",
+        "376d271e346394ab5e8190f74c7fc62cd5b27b0ce9ba12f62e32bfaa8c79527f",
+        "d44af428ce292809b61a1e9a5fa8eca2339463226d06c84d76f69a57e9c192a3",
+        "146ed8e78988245e3db85ea73e3da6eaa89b9a9d843cf79744335c86567b4eda",
+        "69899fd1ac1a22c3318d90b64d654ecabe022e97776d3b0992560a69463d3541",
+        "883480ab5c7eebb37e6d9680e9446bd62caa2b7b45e0382935df977966ef7b92",
+        "7cadb20b0a6f22707af2bde7f95deca4429ae7247215a7146535eff871568917",
+        "e5d72fdb03e5158562f9401c0d9c3485c71c544fd5d62648c39d7652d3989517",
+        "02e76dd5db0f8e7bf137452c1b005e193082cd944b770e1be68848e4ab2ae0c8"
+      ]
+    },
+    {
+      "path": "reference-required",
+      "states": 8,
+      "keys": [
+        "\u001b[B",
+        "\u0015shared/source:abcd",
+        "\r",
+        "\r",
+        "\u001b[B",
+        "\r",
+        "\u001b[B",
+        "\r"
+      ],
+      "result": {
+        "mode_uid": "REFERENCE",
+        "values": [
+          {
+            "role_uid": "TARGET",
+            "context_name": "workspace",
+            "include_descendants": false,
+            "memory_uid": null,
+            "create": false,
+            "inline_memory_content": null
+          },
+          {
+            "role_uid": "SOURCE",
+            "context_name": "shared/source",
+            "include_descendants": false,
+            "memory_uid": "bcde2345-0000-4000-8000-000000000000",
+            "create": false,
+            "inline_memory_content": null
+          }
+        ]
+      },
+      "cell_sha256": [
+        "3d82987f97b6858c4979139f1ee20a3e2b0d25afa166bbecacb087abf622c15b",
+        "a1d8f020a5e88890d10cdbfc9ed071cff5e89d801fe23764def57a5a24f68e88",
+        "e31d984d14dff813fc5a63762afe77c027120336d69988f317c13192357c0b3a",
+        "eb8a35bf32784832e02106d0ab615b9ac1d470d54b521b12e35de835e0d8eac9",
+        "03e83f21d46fd6e9e766170b5bbf4602794c97ca550f869f8724e78eee9ac219",
+        "b61c42602e224998c66a6d142ac93a12280121f4fdfe7ad6f129ab548f2094d3",
+        "6f69e7bee685a0d2a991165659a73bb4c71bfd2aa0b0d3897b2040a026c25f7a",
+        "7b36f351446482ed20ccf5341a504d7c94e3cc78e2b5bf746e8708718d468219"
+      ]
+    },
+    {
+      "path": "update-load-failure",
+      "states": 7,
+      "keys": [
+        "\u001b[C",
+        "\u001b[B",
+        "\u001b[C",
+        "\u001b[C",
+        "\r",
+        "\u001b"
+      ],
+      "result": null,
+      "cell_sha256": [
+        "317b26e0063649088a56f3c222927eb86e3ef4710b717819828eb4a9f18a3d90",
+        "156d1df634289033354ff2de140ffaa06409703da8bd7304ab52554346facf69",
+        "4be53cd66e3edd3b4490e354c5c8e8ca10560e0f16de2adc84e1e3fc67d3e43a",
+        "bfdab72cc58763ae2170aea1c30cc5393419e289de25f2779a8a8634119654d7",
+        "1ace6b191fd5c0ecf78ef8e33b08b96bc5ef158316630f52d605a0f153b42bca",
+        "a269b81ad857a12692159398401cee760ab1ab28e0a1c55fa1f22d4470b5cb61",
+        "a269b81ad857a12692159398401cee760ab1ab28e0a1c55fa1f22d4470b5cb61"
+      ]
+    },
+    {
+      "path": "preview-read-only",
+      "states": 10,
+      "keys": [
+        "\u001b[C",
+        "\u001b[C",
+        "\u001b[C",
+        "\r",
+        "\u001b[B",
+        "\r",
+        "\u001b[D",
+        "\u001b[B",
+        "\u001b[B",
+        "\r"
+      ],
+      "result": {
+        "mode_uid": "UPDATE",
+        "values": [
+          {
+            "role_uid": "A",
+            "context_name": "alpha",
+            "include_descendants": false,
+            "memory_uid": null,
+            "create": false,
+            "inline_memory_content": null
+          },
+          {
+            "role_uid": "B",
+            "context_name": "beta",
+            "include_descendants": false,
+            "memory_uid": null,
+            "create": false,
+            "inline_memory_content": null
+          }
+        ]
+      },
+      "cell_sha256": [
+        "2c67d31bccd48efcfac384a3f76357c5479e2a88edde3877ed7beb6ae8bcb669",
+        "d2419ba8b15c1227ad2fc52ccb36635d693a8c9d45839c90fd50bddc6acc1cf6",
+        "d480d3dc6939135f8cead6fe9b669a2e948a1e35ce076cb6656d93a6913b7c7e",
+        "b5451f56fa2d985d0a297a82d86f4a57e7208b0ad39caa1cc564f79e9a7c5d30",
+        "0623af4237397d49d80a8e20fd4920cb85bc043e3231e3bfe00e8e440a6d5083",
+        "fa62a78fe87ac2cb7e8706638277e31e0412a305ce369f9c42c0cf3819191403",
+        "e0cecac86cbd7c6cc66002dc15379b4c6ae0879e8b7c9cdfd798391e7304fa0b",
+        "b5451f56fa2d985d0a297a82d86f4a57e7208b0ad39caa1cc564f79e9a7c5d30",
+        "c72b83791ec5f7aaba066d1b15b84326df14de381152990dbd161c25a83e1cf9",
+        "4774476483bdd6934903c25e803567880bae3f367c63c5861966a2c26f95b0ed"
+      ]
+    },
+    {
+      "path": "browser-cancel-completion",
+      "states": 9,
+      "keys": [
+        "\u001b[C",
+        "\r",
+        "\u001b[B",
+        "\u001b",
+        "\u001b[D",
+        "\u0015b",
+        "\u001b",
+        "\u001b"
+      ],
+      "result": null,
+      "cell_sha256": [
+        "86c931839d63db403de1902716be7bdc233b536c54b4bf6ccfed500dc0ea7a94",
+        "6f009dd7dde44d26bdd9976646423a35d2ab3db18253b978f6cde448e70f2229",
+        "e6ef98e3ddc32d8ef214038c6811789e2b52c5a966dc734ef0e38e57082b094e",
+        "c7ac7ed8a444785faea9222e7eed100a73c4473b72221377f0c277ade652e70d",
+        "c7ac7ed8a444785faea9222e7eed100a73c4473b72221377f0c277ade652e70d",
+        "86c931839d63db403de1902716be7bdc233b536c54b4bf6ccfed500dc0ea7a94",
+        "2f9574c54be13e724b0bc940a36b88f97a9e3897a2d16e5c814c34ef66f5d1df",
+        "2f9574c54be13e724b0bc940a36b88f97a9e3897a2d16e5c814c34ef66f5d1df",
+        "96c6b38d70d8ee613bc3adf8106da7f7da18435d00bdf75beaf412bac1f2543d"
+      ]
+    }
+  ]
+}

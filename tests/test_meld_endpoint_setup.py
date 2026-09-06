@@ -48,7 +48,7 @@ def _load(role_uid: str, context_name: str):
 def test_meld_setup_projects_mode_dependent_shared_roles() -> None:
     spec = meld_endpoint_setup_spec(_setup())
 
-    assert spec.screen_layout == "COMPACT_FORM"
+    assert spec.screen_layout == "FORM"
     assert tuple(mode.label for mode in spec.modes) == (
         "SYMMETRIC · CREATE SEPARATE RESULT",
         "DIRECTIONAL · UPDATE EXISTING",
@@ -129,7 +129,7 @@ def test_meld_setup_confirms_a_new_symmetric_result() -> None:
     )
 
 
-def test_compact_setup_keeps_each_operand_directly_editable() -> None:
+def test_form_setup_keeps_each_operand_directly_editable() -> None:
     with create_pipe_input() as pipe_input:
         # Replace A, B, and C independently through their exact-name fields.
         pipe_input.send_text(
@@ -152,7 +152,7 @@ def test_compact_setup_keeps_each_operand_directly_editable() -> None:
     )
 
 
-def test_compact_directional_from_and_to_support_in_place_caret_edits() -> None:
+def test_form_directional_from_and_to_support_in_place_caret_edits() -> None:
     with create_pipe_input() as pipe_input:
         # Switch to Directional and edit the final segment of each prefilled
         # endpoint in place. Left belongs to the writable field's caret, not
@@ -177,7 +177,7 @@ def test_compact_directional_from_and_to_support_in_place_caret_edits() -> None:
     )
 
 
-def test_compact_directional_browse_replaces_both_exact_endpoint_fields() -> None:
+def test_form_directional_browse_replaces_both_exact_endpoint_fields() -> None:
     with create_pipe_input() as pipe_input:
         # Browse A from meld/a to meld/b, then move vertically from A's Browse
         # control and Browse B from meld/b to meld/a. Each catalog choice must
@@ -198,7 +198,7 @@ def test_compact_directional_browse_replaces_both_exact_endpoint_fields() -> Non
     )
 
 
-def test_compact_input_right_edge_enters_browse_then_left_returns_to_edit() -> None:
+def test_form_input_right_edge_enters_browse_then_left_returns_to_edit() -> None:
     with create_pipe_input() as pipe_input:
         # Right inside a field remains caret motion. At the final character it
         # crosses into Browse; choosing there writes the same field, and Left
@@ -221,7 +221,7 @@ def test_compact_input_right_edge_enters_browse_then_left_returns_to_edit() -> N
     )
 
 
-def test_compact_result_catalog_shows_only_eligible_existing_targets() -> None:
+def test_form_result_catalog_shows_only_eligible_existing_targets() -> None:
     with create_pipe_input() as pipe_input:
         # C's explicit Browse opens only eligible empty targets, not A/B sources.
         pipe_input.send_text("\t" * 8 + "\r\r\t\r")
@@ -241,7 +241,7 @@ def test_compact_result_catalog_shows_only_eligible_existing_targets() -> None:
     )
 
 
-def test_compact_mode_down_enters_endpoint_without_changing_mode() -> None:
+def test_form_mode_down_enters_endpoint_without_changing_mode() -> None:
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\x1b[B" + "\t" * 6 + "meld/down-result\r\r")
         selected = choose_meld_endpoint_setup(
@@ -261,7 +261,7 @@ def test_compact_mode_down_enters_endpoint_without_changing_mode() -> None:
     )
 
 
-def test_compact_arrows_follow_visible_endpoint_rows() -> None:
+def test_form_arrows_follow_visible_endpoint_rows() -> None:
     with create_pipe_input() as pipe_input:
         # MODE ↓ A ↓ B ↓ C. Horizontal Browse/range controls remain in the
         # Tab order instead of intercepting vertical row navigation.
@@ -284,7 +284,7 @@ def test_compact_arrows_follow_visible_endpoint_rows() -> None:
 
 
 @pytest.mark.parametrize("horizontal_tabs", (2, 3))
-def test_compact_arrows_leave_browse_and_reach_by_endpoint_row(
+def test_form_arrows_leave_browse_and_reach_by_endpoint_row(
     horizontal_tabs: int,
 ) -> None:
     with create_pipe_input() as pipe_input:
@@ -310,7 +310,7 @@ def test_compact_arrows_leave_browse_and_reach_by_endpoint_row(
     )
 
 
-def test_compact_action_up_returns_to_the_last_endpoint_row() -> None:
+def test_form_action_up_returns_to_the_last_endpoint_row() -> None:
     with create_pipe_input() as pipe_input:
         # MODE ↓ A ↓ B ↓ C ↓ START, then Up reverses to C's primary field.
         pipe_input.send_text("\x1b[B" * 4 + "\x1b[A" + "meld/revisited-result\r\r\x03")
@@ -331,7 +331,7 @@ def test_compact_action_up_returns_to_the_last_endpoint_row() -> None:
     )
 
 
-def test_compact_exact_input_keeps_left_arrow_for_caret_editing() -> None:
+def test_form_exact_input_keeps_left_arrow_for_caret_editing() -> None:
     with create_pipe_input() as pipe_input:
         # Reach the writable C field, type one missing character, move the
         # caret Left inside that exact name, and repair it in place.
@@ -353,7 +353,7 @@ def test_compact_exact_input_keeps_left_arrow_for_caret_editing() -> None:
     )
 
 
-def test_compact_symmetric_mode_keeps_both_independent_descendant_flags() -> None:
+def test_form_symmetric_mode_keeps_both_independent_descendant_flags() -> None:
     with create_pipe_input() as pipe_input:
         # MODE -> A/range, broaden A -> B/range, broaden B -> C/new -> Continue.
         pipe_input.send_text("\t\t\t \t\t\t \tmeld/recursive-result\r\r")
@@ -385,7 +385,7 @@ def test_compact_symmetric_mode_keeps_both_independent_descendant_flags() -> Non
         (" ", " ", True, True),
     ),
 )
-def test_compact_directional_mode_keeps_each_cli_descendant_combination(
+def test_form_directional_mode_keeps_each_cli_descendant_combination(
     left_toggle: str,
     right_toggle: str,
     left_descendants: bool,
@@ -419,7 +419,7 @@ def test_compact_directional_mode_keeps_each_cli_descendant_combination(
     )
 
 
-def test_compact_descendant_space_toggles_the_checked_value() -> None:
+def test_form_descendant_space_toggles_the_checked_value() -> None:
     with create_pipe_input() as pipe_input:
         # Left/Right now own row navigation; Space owns the checkbox value.
         pipe_input.send_text("\x1b[C" + "\t" * 4 + " " + "\t" * 5 + "\r")
@@ -439,7 +439,7 @@ def test_compact_descendant_space_toggles_the_checked_value() -> None:
     )
 
 
-def test_compact_context_source_traverses_browse_and_reach() -> None:
+def test_form_context_source_traverses_browse_and_reach() -> None:
     with create_pipe_input() as pipe_input:
         # Directional Context Source exposes Browse and descendants, then
         # moves vertically through B to the exact command.
@@ -460,7 +460,7 @@ def test_compact_context_source_traverses_browse_and_reach() -> None:
     )
 
 
-def test_compact_stored_memory_source_uses_owner_context_and_exact_uid() -> None:
+def test_form_stored_memory_source_uses_owner_context_and_exact_uid() -> None:
     with create_pipe_input() as pipe_input:
         # Directional -> Source Type -> Stored Memory -> owner input/Browse ->
         # required Memory picker -> B -> exact command.
@@ -502,7 +502,7 @@ def test_directional_meld_omits_c_and_can_focus_one_incoming_memory() -> None:
     )
 
 
-def test_compact_directional_inline_memory_reaches_baseline_and_command() -> None:
+def test_form_directional_inline_memory_reaches_baseline_and_command() -> None:
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
             "\x1b[C\t\x1b[C\x1b[C\tkeep this exact distinction\x1b[B\x1b[B\r"
@@ -523,7 +523,7 @@ def test_compact_directional_inline_memory_reaches_baseline_and_command() -> Non
     )
 
 
-def test_compact_directional_command_editor_accepts_inline_memory_form() -> None:
+def test_form_directional_command_editor_accepts_inline_memory_form() -> None:
     with create_pipe_input() as pipe_input:
         pipe_input.send_text(
             "\x1b[C\x1b[B\x1b[B\x1b[B\x1b[B"

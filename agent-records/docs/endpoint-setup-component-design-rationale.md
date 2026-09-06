@@ -91,45 +91,79 @@ logic, so its implementation lives in
 unmigrated command adapters, while new internal code imports the owning module
 directly.
 
-## Compact form implementation ownership
+## Endpoint form implementation ownership
 
-The compact form had grown to 1,989 lines, mostly inside one function. Reviewing
-an endpoint edit required tracing closures and several parallel dictionaries
-for the same role. The implementation now lives in the `endpoint_setup/compact/`
-package, with names that describe the task a reader can inspect:
+The first extraction (`66f326835`) separated a 1,989-line function into a role
+editor, command synchronization, and a 1,200-line screen. That established
+per-role state but left the screen updating editor internals while also owning
+Context browsing, Memory choices, spatial navigation, and screen composition.
 
-- `endpoint_editor.py`: `EndpointEditor` owns one role's writable fields,
-  Context selector, reach, Memory focus, new-name draft, and row rendering.
-  It collects or applies one `EndpointSetupValue`.
+The current implementation lives in `endpoint_setup/form/`. `FORM` describes
+the input-first interaction: exact endpoint fields stay visible, while Context
+and Memory lists open on demand. The earlier `compact` / `COMPACT_FORM` names
+originated in the 2026-08-20 Meld change to use fewer terminal rows than the
+framed workbench. Relative size does not identify a lasting responsibility, so
+the package, entry point (`run_endpoint_setup_form`), layout discriminator, and
+all maintained callers now use the form terminology. `WORKBENCH` remains the
+other layout. These are process-local internal UI settings; no durable session
+schema, CLI spelling, or operation request changes, and no old-name import or
+layout alias is retained.
+
+The six implementation modules have the following owners:
+
+- `endpoint_editor.py`: `EndpointEditor` owns one role's fields, Context
+  selector, reach, Memory focus, new-name draft, and row rendering. Its methods
+  apply Context/parent choices, source-type changes, descendant reach, and
+  exact Memory choices, and collect or apply one `EndpointSetupValue`.
 - `command_sync.py`: `EndpointCommandSync` collects active role values, runs
-  the caller's validator, and synchronizes the existing command editor with
-  the endpoint editors through `EndpointCommandBinding`.
-- `screen.py`: the screen composes those objects and owns mode selection,
-  focus traversal, transient detail panes, keyboard actions, status, and the
-  application lifetime. The public setup dispatcher imports this entry point.
+  the caller's validator, and synchronizes the existing command editor through
+  `EndpointCommandBinding`.
+- `context_browser.py`: `ContextBrowser` owns the temporary catalog, its
+  selection/cancellation lifecycle, displayed tree, and return focus. It uses
+  the editor's existing frozen selector and applies chosen names through the
+  editor instead of updating name and Memory state itself.
+- `memory_picker.py`: `MemoryPicker` owns temporary list visibility, list
+  movement, and choice/evidence presentation. Existing
+  `EndpointMemoryFocusController` still owns projection loading and list
+  selection; the editor owns the resulting endpoint value.
+- `form_navigation.py`: `FormNavigation` declares form rows and key actions
+  through the existing `SurfaceFocusController`. Tab and spatial row traversal
+  use the editor's same visible peer set. Input caret/completion boundaries,
+  temporary-list edges, and the matching key hints stay together. Layered
+  Escape uses `dispatch_tui_back`.
+- `screen.py`: the screen constructs these components, coordinates operation
+  mode changes and suggestions across roles, returns the validated draft, and
+  owns the application lifetime. Panels and navigation receive explicit
+  dependencies and callbacks; none imports or receives the whole screen.
 
-This separates ownership rather than passing the old dictionaries to several
-files or splitting by generic names such as `state` and `render`. The small
-classes add some construction code; the purpose is independently reviewable
-responsibilities, not a claim that the total source is shorter. Screen-wide
-navigation still coordinates endpoint changes and remains a substantial part
-of the screen module.
+This separates state ownership and complete interactions. Moving rendering and
+key handlers into arbitrary helper files while sharing the entire screen would
+leave the same coupling. Likewise, rebuilding trees, Memory loaders, or the
+common focus controller would create competing implementations. Neither is
+needed for this extraction; the complete form package can remain larger than
+the old function while each responsibility becomes independently reviewable.
 
-Existing Context selectors, exact-name controls, Memory-focus controllers,
-command codecs, and `SurfaceFocusController` remain the owning components for
-their shared mechanics. Before applying a command's decoded draft, every
-requested Memory selector must still resolve successfully; a later endpoint
-failure must not partially rewrite earlier fields. Editing a Context still
-clears stale Memory selection, while programmatic name synchronization does
-not claim a direct person edit. Operation authority, validation, persistence,
-provider work, visible text, and keyboard behavior are unchanged.
+Before applying a command's decoded draft, every requested Memory selector must
+still resolve successfully; a later endpoint failure must not partially rewrite
+earlier fields. Context edits clear stale Memory choices. Required-Memory
+selection writes the canonical owner-qualified locator before restoring its
+selection, because writing the field itself clears old Memory state. Source
+type changes from keys and decoded commands use the same requirement update.
+New-name synchronization must not claim a direct person edit. Browser visibility
+and Memory-list visibility remain separate from the retained endpoint values.
+Operation authority, validation callbacks, persistence, and provider work remain
+outside these components.
 
-Verification covered the existing 107 component and caller tests for Endpoint
-Setup, Update, Meld, Sever, Branch, and Reference. A before/after comparison at
-180×52 also matched all character and style cells across 44 rendered states
-for stored Memory, inline Memory, Context browsing, command editing, and new
-Context parent selection. This was a comparison of the actual prompt-toolkit
-rendered cells, not a new screenshot record or a changed interactive flow.
+Verification on 2026-09-06 passed 118 existing component and caller tests for
+Endpoint Setup, Update, Meld, Sever, Branch, Reference, Compare, and Audit.
+A before/after comparison at 180×52 matched 85 rendered states, including all
+character/style cells, cursor coordinates, and returned drafts across eight
+input paths. These cover stored/inline Memory, Context browsing and cancellation,
+required Memory, read-only evidence, parent editing, command validation, and
+projection failure. This compares actual prompt-toolkit rendered cells; it is
+not a new screenshot record or a changed interactive flow. The comparison
+harness and results are retained under
+`agent-records/outputs/endpoint-form-refactor-20260906/`.
 
 ## Intentional limitations
 
@@ -142,7 +176,7 @@ rendered cells, not a new screenshot record or a changed interactive flow.
   the three Source Types; symmetric A/B remain Context peers. Inline A returns
   one process-local string, while stored A returns its owner Context plus exact
   direct-Memory UID.
-- Bare Reference now uses `COMPACT_FORM` as a single Target-plus-exact-Memory
+- Bare Reference now uses `FORM` as a single Target-plus-exact-Memory
   shape. `memory_required` removes the generic whole-Context choice, while the
   operation validator and command codec still require the exact owner, Memory,
   and existing local Target. `command_ready_hint` changes only the runnable

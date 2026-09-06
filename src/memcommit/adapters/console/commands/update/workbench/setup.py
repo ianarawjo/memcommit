@@ -44,7 +44,7 @@ def update_endpoint_setup_spec(setup: UpdateEndpointSetup) -> EndpointSetupSpec:
             ),
         ),
         initial_mode_uid="UPDATE",
-        screen_layout="COMPACT_FORM",
+        screen_layout="FORM",
         roles=(
             EndpointSetupRole(
                 "A",

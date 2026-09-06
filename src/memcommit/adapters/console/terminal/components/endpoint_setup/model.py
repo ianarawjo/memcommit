@@ -282,7 +282,7 @@ class EndpointSetupSpec:
     action_label: str = "CONTINUE TO PLAN REVIEW"
     command_verb: str = "START"
     command_ready_hint: str | None = None
-    screen_layout: Literal["WORKBENCH", "COMPACT_FORM"] = "WORKBENCH"
+    screen_layout: Literal["WORKBENCH", "FORM"] = "WORKBENCH"
 
     def __post_init__(self) -> None:
         if (
@@ -301,7 +301,7 @@ class EndpointSetupSpec:
                     or not self.command_ready_hint.strip()
                 )
             )
-            or self.screen_layout not in {"WORKBENCH", "COMPACT_FORM"}
+            or self.screen_layout not in {"WORKBENCH", "FORM"}
             or any(
                 character
                 in self.title
@@ -386,10 +386,10 @@ class EndpointSetupSpec:
                     "Endpoint setup mode hides a required Memory selection."
                 )
         if any(role.allow_inline_memory for role in self.roles) and (
-            self.screen_layout != "COMPACT_FORM"
+            self.screen_layout != "FORM"
         ):
             raise ValueError(
-                "Inline Memory source selection currently requires compact setup."
+                "Inline Memory source selection currently requires FORM layout."
             )
 
     def mode(self, uid: str) -> EndpointSetupMode:

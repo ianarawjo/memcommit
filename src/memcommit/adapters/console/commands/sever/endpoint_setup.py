@@ -123,7 +123,7 @@ def sever_endpoint_setup_spec(setup: SeverTuiSetup) -> EndpointSetupSpec:
             ),
         ),
         initial_mode_uid="SEVER",
-        screen_layout="COMPACT_FORM",
+        screen_layout="FORM",
         roles=(
             EndpointSetupRole(
                 "SOURCE",

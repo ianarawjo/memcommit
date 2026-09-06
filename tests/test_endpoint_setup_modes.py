@@ -193,7 +193,7 @@ def test_inline_source_type_can_be_gated_by_operation_mode():
                 "target",
             ),
         ),
-        screen_layout="COMPACT_FORM",
+        screen_layout="FORM",
     )
 
     assert spec.role_allows_inline_memory("SYMMETRIC", "A") is False

@@ -125,7 +125,7 @@ Branch, Meld, Update, and Sever now use the same compact, input-first Endpoint
 Setup presentation and the same editor at the bottom of that form. Update had
 previously retained the larger `WORKBENCH` projection even though its two
 existing-Context roles, independent reach, and exact-Memory focus were already
-fully described by the shared `EndpointSetupSpec`. Selecting `COMPACT_FORM`
+fully described by the shared `EndpointSetupSpec`. Selecting `FORM`
 removes that visual exception without changing Update's typed draft, readable
 catalog, codec, planning boundary, or materialization semantics. The larger
 projection remains available to operations whose setup genuinely needs its

@@ -1,4 +1,4 @@
-"""Project local Branch placement into shared compact Endpoint Setup."""
+"""Project local Branch placement into the shared Endpoint Setup form."""
 
 from __future__ import annotations
 
@@ -67,7 +67,7 @@ def branch_endpoint_setup_spec(
             ),
         ),
         initial_mode_uid="BRANCH",
-        screen_layout="COMPACT_FORM",
+        screen_layout="FORM",
         roles=(
             EndpointSetupRole(
                 "A",
@@ -112,7 +112,7 @@ def choose_branch_creation(
     app_output: Output | None = None,
     require_tty: bool = True,
 ) -> BranchCreationReceipt | None:
-    """Return one compact Branch draft without creating or switching Contexts."""
+    """Return one Branch setup draft without creating or switching Contexts."""
 
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError("Interactive Branch setup requires a terminal.")

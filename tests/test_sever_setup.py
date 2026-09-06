@@ -44,7 +44,7 @@ def _setup() -> SeverTuiSetup:
 def test_sever_setup_projects_two_in_place_roles_with_descendant_controls() -> None:
     spec = sever_endpoint_setup_spec(_setup())
 
-    assert spec.screen_layout == "COMPACT_FORM"
+    assert spec.screen_layout == "FORM"
     assert spec.initial_mode_uid == "SEVER"
     assert tuple(role.uid for role in spec.roles) == ("SOURCE", "CRITERIA")
     assert all(role.include_descendants for role in spec.roles)

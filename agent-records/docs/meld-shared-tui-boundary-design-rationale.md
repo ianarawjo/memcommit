@@ -49,7 +49,7 @@ five-row decision into a full terminal canvas and gave supporting navigation
 more visual weight than the request being constructed. Shorter labels inside
 the same boxes did not solve that hierarchy problem.
 
-Meld therefore opts into the shared Endpoint Setup's `COMPACT_FORM` layout.
+Meld therefore opts into the shared Endpoint Setup's `FORM` layout.
 Its stable draft contract is projected through five persistent rows:
 
 1. `MODE` chooses `SYMMETRIC · CREATE SEPARATE RESULT` or
@@ -143,7 +143,7 @@ The compact form renders in the terminal's main buffer and requests only its
 visible rows. It does not enter an alternate full-screen buffer or keep a
 flexible blank spacer merely to fill the viewport; terminal history above the
 launcher remains intact. On completion it erases only its own live form before
-the caller begins Meld. This boundary is specific to `COMPACT_FORM`; saved
+the caller begins Meld. This boundary is specific to `FORM`; saved
 Meld analysis and Resolution workbenches still own full-screen presentation.
 
 `START MELD` is intentionally concrete. There is no intermediate “Meld
@@ -152,7 +152,7 @@ planning” screen: the setup component returns a process-local receipt, then
 or resumes the session/Result under its existing boundaries, and opens review.
 The component itself still performs none of that work.
 
-`COMPACT_FORM` is an explicit shared-component opt-in rather than a Meld-owned
+`FORM` is an explicit shared-component opt-in rather than a Meld-owned
 parallel request model. Other endpoint consumers retain `WORKBENCH`, including
 their established framed trees and keyboard paths, until their own interaction
 evidence is reviewed.

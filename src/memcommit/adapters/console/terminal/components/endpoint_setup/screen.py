@@ -31,8 +31,8 @@ from memcommit.adapters.console.terminal.core.capabilities import (
     require_interactive_terminal,
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
-from memcommit.adapters.console.terminal.components.endpoint_setup.compact.screen import (
-    run_compact_endpoint_setup,
+from memcommit.adapters.console.terminal.components.endpoint_setup.form.screen import (
+    run_endpoint_setup_form,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.command_binding import (
     DraftValidator,
@@ -99,8 +99,8 @@ def run_endpoint_setup(
 
     if not isinstance(spec, EndpointSetupSpec):
         raise TypeError("Endpoint setup requires an EndpointSetupSpec.")
-    if spec.screen_layout == "COMPACT_FORM":
-        return run_compact_endpoint_setup(
+    if spec.screen_layout == "FORM":
+        return run_endpoint_setup_form(
             spec,
             memory_loader=memory_loader,
             validate_draft=validate_draft,

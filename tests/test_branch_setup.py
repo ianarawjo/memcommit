@@ -40,7 +40,7 @@ def _choose(keys: str, *, validated: list[str] | None = None):
         )
 
 
-def test_branch_setup_uses_compact_shared_from_and_new_to_rows() -> None:
+def test_branch_setup_uses_form_shared_from_and_new_to_rows() -> None:
     spec = branch_endpoint_setup_spec(
         ("alpha", "beta"),
         current="alpha",
@@ -48,7 +48,7 @@ def test_branch_setup_uses_compact_shared_from_and_new_to_rows() -> None:
         validate_name=lambda _name: None,
     )
 
-    assert spec.screen_layout == "COMPACT_FORM"
+    assert spec.screen_layout == "FORM"
     assert len(spec.modes) == 1
     assert spec.active_role_uids("BRANCH") == ("A", "B")
     assert spec.role_label("BRANCH", "A") == "FROM"
@@ -59,7 +59,7 @@ def test_branch_setup_uses_compact_shared_from_and_new_to_rows() -> None:
     assert spec.command_verb == "APPLY"
 
 
-def test_branch_setup_returns_the_initial_compact_plan() -> None:
+def test_branch_setup_returns_the_initial_form_plan() -> None:
     # Tab traverses A Browse/range, B input/parent Browse, then exact Apply.
     result = _choose("\t" * 5 + "\r")
 

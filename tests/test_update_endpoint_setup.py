@@ -64,7 +64,7 @@ def test_update_setup_projects_two_independent_shared_endpoint_roles() -> None:
     spec = update_endpoint_setup_spec(_setup())
 
     assert spec.initial_mode_uid == "UPDATE"
-    assert spec.screen_layout == "COMPACT_FORM"
+    assert spec.screen_layout == "FORM"
     assert tuple(role.uid for role in spec.roles) == ("A", "B")
     assert all(role.allow_descendants for role in spec.roles)
     assert all(role.allow_memory_focus for role in spec.roles)

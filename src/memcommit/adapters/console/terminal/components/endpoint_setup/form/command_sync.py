@@ -50,7 +50,7 @@ class EndpointCommandSync:
                 ),
                 action_label=f"RUN EXACT {spec.command_verb} COMMAND",
                 incomplete_action="FIX THE RED COMMAND BEFORE RUNNING",
-                input_name="compact-endpoint-proposed-command",
+                input_name="endpoint-form-proposed-command",
             )
             if binding is not None
             else None
