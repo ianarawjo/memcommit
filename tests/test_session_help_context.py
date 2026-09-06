@@ -1,4 +1,4 @@
-"""Click-context compatibility for the shared command wait inventory."""
+"""Click-context compatibility for the shared session Help inventory."""
 
 from memcommit.adapters.console.commands.help.command import CommandEntry
 from memcommit.adapters.console.terminal.components import session_help

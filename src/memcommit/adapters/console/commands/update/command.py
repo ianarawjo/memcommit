@@ -8,7 +8,6 @@ import typer
 
 from memcommit.application.authorization import ContextUse, authorize_context_use
 from memcommit.adapters.console.terminal.components.command_wait import (
-    CommandWaitView,
     run_command_wait,
 )
 from memcommit.adapters.console.commands.update.endpoint_setup import (
@@ -227,40 +226,6 @@ def _browse_saved_update(store: MemoryStore) -> None:
     cmd(**resume_kwargs)
 
 
-def _update_confirmed_inputs_view(
-    source: Context,
-    target: Context,
-    *,
-    source_descendants: bool,
-    target_descendants: bool,
-) -> CommandWaitView:
-    """Freeze the exact Update route shown while its semantic turn runs."""
-
-    lines = [
-        "MEM UPDATE · INPUTS CONFIRMED · BUILDING PLAN",
-        "",
-        f"SOURCE A · {display_escape_text(source.name)}",
-        "  SCOPE · "
-        + ("INCLUDE DESCENDANTS" if source_descendants else "SELECTED GRAPH ONLY"),
-        "  ROLE · INPUT TO THIS PLAN",
-        "",
-        f"TARGET B · {display_escape_text(target.name)}",
-        "  SCOPE · "
-        + ("INCLUDE DESCENDANTS" if target_descendants else "SELECTED GRAPH ONLY"),
-        "  ROLE · CHANGES APPLY HERE AFTER REVIEW",
-    ]
-    lines.extend(
-        [
-            "",
-            "Building the plan. Apply remains a separate review action.",
-        ]
-    )
-    return CommandWaitView(
-        title="UPDATE INPUTS",
-        text="\n".join(lines),
-    )
-
-
 def _plan_update_with_wait(
     source: Context,
     target: Context,
@@ -275,7 +240,7 @@ def _plan_update_with_wait(
     goal_focus: FrozenGoalFocus | None = None,
     allowed_target_uses: frozenset[ContextUse],
 ) -> UpdateSession:
-    """Plan one complete Update while sharing the interactive command wait."""
+    """Plan one complete Update behind the shared transient progress line."""
 
     def plan(progress):
         def connect():

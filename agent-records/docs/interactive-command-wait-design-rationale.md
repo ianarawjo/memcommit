@@ -1,5 +1,79 @@
 # Interactive command wait design rationale
 
+## Retirement: 2026-09-05
+
+The full-screen waiting UI is retired. The user explicitly chose to remove it
+because it will no longer be used. At removal, every production
+`run_command_wait` caller omitted `return_view`, so commands already used the
+synchronous transient progress line. Only dedicated UI tests still entered the
+full-screen branch. Keeping its Profile browser, lazy Memory previews, Help
+handoff, executor lifecycle, and destination navigation would retain a second
+interaction system with no current command consumer.
+
+`command_wait.py` now owns only `CommandWaitProgress` and `run_command_wait`.
+The wrapper enters `CommandProgress`, calls `work(progress)` exactly once on
+the calling thread, closes progress on success or failure, and returns the
+same result or propagates the same exception. The command owns semantic work,
+provider use, persistence, and approval. Removing presentation code does not
+partition provider work or change those operation boundaries.
+
+The existing stream decision is preserved: interactive stdin/stdout (or
+`interactive=True`) forces progress on; otherwise `CommandProgress` uses its
+captured stderr TTY status. Thus `interactive=False` does not silence a stderr
+TTY. This change deliberately avoids altering that compatibility behavior.
+Progress reports real host stages and elapsed time, not completion percentages.
+There is no wait-specific keyboard navigation or deferred-close protocol.
+
+The view/browser types and full-screen-only parameters were removed rather
+than accepted as ignored compatibility arguments. Audit no longer forwards
+those arguments, and unused Update/Meld wait-view builders and their exports
+are gone. Meld's already-uncommitted cleanup contained the same removals; only
+the wait-specific helpers and two dedicated tests are included here so this
+commit can import independently of the wider Meld refactor.
+The remaining function name and import path stay stable for existing command
+callers. Splitting the retired UI into a new package was rejected because it
+would keep maintenance obligations for a feature the user has discontinued.
+
+Shared `BackgroundExecutorTurn`, Session Help, Context picker, and scrolling
+components remain available to their other consumers. The Click-context Help
+test now lives in `tests/test_session_help_context.py`, matching its actual
+owner. Command-wait tests cover caller-thread/context preservation, exactly-once
+execution, result/exception identity, progress cleanup, stream compatibility,
+and validation before work. Audit and Update tests cover their stage handoff.
+
+No active interactive flow or rendering changed, so no new TUI capture set is
+needed for this removal. Existing dated screenshots and reproduction scripts
+are historical evidence; they were not regenerated against the reduced API.
+Reproducing the retired UI requires its historical checkout. The former design
+below is retained to explain those artifacts, not as a current feature contract.
+The current progress contract is in
+[`blocking-command-progress-design-rationale.md`](blocking-command-progress-design-rationale.md).
+
+### Retirement verification
+
+The focused command-wait, progress, Session Help, Help context, and Audit suites
+passed all 50 tests. Update, Compare, Forget, Sever, and Meld command-boundary,
+TUI-boundary, and runtime suites passed 198 tests with one existing failure:
+`tests/test_compare.py::test_relative_peer_locator_errors_before_provider`
+expects a resolved-name error while the current Compare adapter emits
+`does not exist or is unavailable`. Loading the pre-removal `command_wait.py`
+in a fresh pytest process reproduced the same failure. This removal does not
+change that operand-validation path. `python scripts/verify_operation_evidence.py
+--check` also passed; no operation evidence registry was changed.
+
+A separate checkout exported from the staged index (without unrelated dirty
+changes) passed 311 tests and retained 45 existing failures: the same Compare
+case plus 44 legacy Meld tests still present in commit
+`ca1822a79ad15dc4577366972932074c2256de50`. Running the Compare/legacy-Meld
+suites against that commit's original source and the staged source produced
+identical outcomes for all 154 cases (109 passed, 45 failed). The commit therefore
+does not depend on the concurrent Meld refactor to import, and this broader
+check introduced no new failing case. The primary checkout already has that
+legacy test file removed by unrelated work; its remaining deletion is not part
+of this retirement commit.
+
+## Historical design (retired)
+
 ## Problem and scope
 
 Meld and Update can own an intentionally indivisible replacement turn for

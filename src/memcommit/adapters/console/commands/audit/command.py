@@ -3,11 +3,9 @@
 from __future__ import annotations
 
 import sys
-from collections.abc import Callable, Sequence
+from collections.abc import Callable
 from typing import Annotated, Optional
 
-from prompt_toolkit.input import Input
-from prompt_toolkit.output import Output
 import typer
 
 from memcommit.adapters.console.terminal.components.progress import (
@@ -26,7 +24,6 @@ from memcommit.application.context_access.access import (
     context_access_display_facts,
     resolve_context_access,
 )
-from memcommit.adapters.console.commands.help.inventory import CommandEntry
 from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
@@ -78,12 +75,8 @@ def _run_quality_audit_checks(
     provider_factory: Callable[[], FindingsProvider],
     *,
     conformance_rules: Context | None = None,
-    app_input: Input | None = None,
-    app_output: Output | None = None,
     interactive: bool | None = None,
     interval: float = BUSY_INTERVAL_SECONDS,
-    help_entries: Sequence[CommandEntry] | None = None,
-    on_help_action: Callable[[str, str | None], None] | None = None,
 ) -> QualityAuditSession:
     """Run the frozen checks behind one shared transient progress line."""
 
@@ -118,12 +111,8 @@ def _run_quality_audit_checks(
         "finding redundancies",
         total=total_checks,
         work=work,
-        app_input=app_input,
-        app_output=app_output,
         interactive=interactive,
         interval=interval,
-        help_entries=help_entries,
-        on_help_action=on_help_action,
     )
 
 

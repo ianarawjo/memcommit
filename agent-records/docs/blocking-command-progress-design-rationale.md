@@ -21,35 +21,34 @@ MEM COMPARE · 2/2 · ANALYZING RELATIONS … · 18s
   boundaries. Elapsed time continues within a provider call.
 - No percentage or provider-internal stage is shown because the one-shot
   provider API exposes neither.
-- The line is emitted only to an interactive stderr TTY and is erased before
-  normal output or an error is printed. Redirected output, snapshot contracts,
-  and stdout parsing therefore remain stable.
+- `CommandProgress` defaults to its captured stderr TTY status. The command
+  wait wrapper preserves its existing override: interactive stdin/stdout or
+  explicit `interactive=True` forces the line on, otherwise stderr decides.
+  Progress is erased when the work exits; stdout remains owned by the command.
+  Fully redirected execution receives no progress text by default.
 - Untrusted operation or stage text is terminal-escaped and folded to one line.
 - A provider factory may be wrapped lazily. The progress line starts only when
   the reusable workflow actually requests a provider, so a valid saved result
   or cache hit does not flash a false `CONNECTING PROVIDER` state.
 
-Initial Compare, Meld, Forget, Sever, Update, and Audit work uses this same
-transient line in a TTY. Only a Meld or Update replacement turn submitted from
-an existing completed review enters the full-screen interactive command-wait
-TUI, where retaining that prior report provides real context. Non-TTY
-execution also retains the transient-line contract above. See
+Compare, Meld, Forget, Sever, Update, and Audit use `run_command_wait` to
+execute one blocking callback behind this line. As of 2026-09-05 the unused
+full-screen command-wait branch is removed; it no longer accepts prior-report,
+confirmed-input, Context-browser, or Help parameters. Work still runs exactly
+once on the calling thread, with the same result and exception propagation.
+The retirement rationale and historical UI evidence are preserved in
 [`interactive-command-wait-design-rationale.md`](interactive-command-wait-design-rationale.md).
 
 ## Coverage audit
 
-The ordinary user-facing provider boundaries now use either the shared line or
-its interactive command-wait projection:
+The following command boundaries use the shared progress line. This inventory
+is presentation coverage, not an operation route classification.
 
-- Update planning uses the transient line; comment-driven replanning retains
-  the previous reviewed report in the interactive wait. Directional Impact
-  Update planning also retains the transient line.
+- Update planning and Directional Impact Update planning.
 - Atomize analysis from Atomize or Impact, Atomize grounding turns, and final
   normal-form Apply. Apply progress starts only when Dedun or verification
   requests a provider, so exact checkpoint recovery remains silent.
-- Meld initial analysis uses the transient line. Later issue or whole-set turns,
-  including Review handoffs that re-enter the same Meld controller, retain the
-  previous reviewed report in the interactive wait.
+- Meld candidate start/restart and candidate Update planning/verification.
 - Search, Compare, Compare rationale, the three quality finders,
   and ambiguity Review creation; initial Compare analysis uses the transient
   line in a TTY.

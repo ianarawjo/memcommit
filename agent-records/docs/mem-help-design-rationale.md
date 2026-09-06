@@ -407,29 +407,21 @@ require operands or provider work. No Enter in the browser invokes the selected
 command callback; selection only returns editable shell text. Execution remains
 a later, separate Enter after the person has reviewed and edited that text.
 
-The same inventory also has a stricter `EXPLORE` presentation used by the
-shared interactive command-wait screen, where a previously completed review
-report is the default foreground while submitted guidance is incorporated.
-In that mode Enter and Right keep descriptions and audited Forms inside Help;
-they never return a shell template. `H` or `h` opens Help from the report,
-confirmed-input copy, or read-only Context browser and hides it back to the
-same surface; `Q`, `q`, or Escape also returns. A completed background turn
-appears as `RESULT READY · H / Q RETURN` without closing Help. Initial semantic
-analysis has no completed review and stays on the one-line progress contract,
-so it does not open this Help-capable full-screen surface. The
-inventory data and renderer remain shared; only the caller-owned visibility
-and exit policy differs. Ordinary `mem help` retains `H` for full command help.
-The sibling wait destinations are `C/c` for a browse-only switch-shaped
-Context tree, `I/i` for supplied confirmed inputs, and `R/r` for a supplied
-report. Repeating the active destination key returns to its immediate origin,
-matching `H/h` open/hide without reviving the former unnamed C-only toggle.
-`m/M` may reveal Memory previews inside the Context tree, but that surface has
-no switch receipt or current-Context mutation path.
-See
+The same inventory also has a stricter `EXPLORE` presentation. Enter and
+Right keep descriptions and audited Forms inside Help; they never return a
+shell template. The inventory data and renderer remain shared, while the
+caller owns visibility and exit policy. Ordinary `mem help` retains `H` for
+full command help.
+
+The full-screen command-wait consumer, including its C/I/R destinations and
+`RESULT READY` handoff, was retired on 2026-09-05 after production callers had
+stopped supplying a prior report. Blocking waits now use the transient
+progress line. Its former behavior and captures remain documented in
 [`command-wait-destination-browser-design-rationale.md`](command-wait-destination-browser-design-rationale.md)
-for the destination and browse-only boundary, and
+and
 [`interactive-command-wait-design-rationale.md`](interactive-command-wait-design-rationale.md)
-for background execution consistency.
+as historical evidence. This retirement does not remove `EXPLORE` from Help
+or the Session Help controller used by other surfaces.
 
 Long-lived terminal sessions now reuse that same `EXPLORE` renderer through
 the operation-neutral Session Help controller. On a read-only navigation

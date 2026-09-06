@@ -88,9 +88,8 @@ def _run_resolution_forget_snapshot(
     *,
     mutates_granted_authority: bool = False,
 ) -> ForgetSessionSnapshot | None:
-    # Forget remains one whole-frame provider turn. Only its host execution is
-    # moved off the foreground so Help can be explored without partitioning or
-    # changing the semantic request.
+    # Progress reports liveness around the whole-frame turn; it does not
+    # partition the Source or criterion frame into independent provider calls.
     source = source_port.freeze(request)
     ctx = source.context
     result = run_command_wait(

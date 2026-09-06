@@ -339,7 +339,7 @@ def test_get_or_run_audit_rechecks_all_sections_after_source_change(isolated_sto
     assert len(sessions.list()) == 2
 
 
-def test_audit_initial_checks_never_supply_a_full_screen_return_view(monkeypatch):
+def test_audit_checks_share_one_progress_line_with_real_stages(monkeypatch):
     ctx, _first, _second = _context()
     EmptyAuditProvider.calls = []
     stages: list[tuple[object, ...]] = []
@@ -348,26 +348,20 @@ def test_audit_initial_checks_never_supply_a_full_screen_return_view(monkeypatch
         def update(self, stage, *, step):
             stages.append(("UPDATE", stage, step))
 
-    def wait(operation, stage, *, total, work, **kwargs):
-        assert "return_view" not in kwargs
+    def wait(operation, stage, *, total, work, interactive, interval):
+        assert interactive is True
+        assert interval == 0.01
         stages.append(("WAIT", operation, stage, total))
         return work(Progress())
 
     monkeypatch.setattr(audit_command, "run_command_wait", wait)
 
-    with create_pipe_input() as pipe_input:
-        session = _run_quality_audit_checks(
-            ctx,
-            EmptyAuditProvider,
-            app_input=pipe_input,
-            app_output=DummyOutput(),
-            interactive=True,
-            interval=0.01,
-            help_entries=(),
-            on_help_action=lambda *_args: pytest.fail(
-                "initial Audit must not enter full-screen Help"
-            ),
-        )
+    session = _run_quality_audit_checks(
+        ctx,
+        EmptyAuditProvider,
+        interactive=True,
+        interval=0.01,
+    )
 
     assert [check.kind for check in session.checks] == [
         "duplicates",

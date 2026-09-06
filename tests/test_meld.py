@@ -4953,35 +4953,6 @@ def test_each_meld_option_has_a_distinct_exact_request_digest():
     assert keys[0] != keys[1]
 
 
-def test_initial_meld_has_no_review_report_to_restore():
-    incoming = ops.init("wait/incoming")
-    baseline = ops.init("wait/baseline")
-    ops.add(incoming, "Incoming fact.")
-    ops.add(baseline, "Baseline fact.")
-    session = MeldSession.create_directional(incoming, baseline)
-    session.start_initial_analysis()
-
-    with pytest.raises(ValueError, match="requires a submitted turn"):
-        meld_command._meld_wait_view(session)
-
-
-def test_meld_wait_view_styles_memory_objects_without_tinting_report_prose():
-    fragments = meld_command._meld_wait_fragments(
-        "WHAT MEM UNDERSTOOD\nNeutral report prose.\n"
-        "PROPOSED TARGET MEMORIES\n"
-        "  +  1. [PRESERVE] One proposed Memory.\n"
-        "       WHY · Supporting explanation."
-    )
-
-    assert ("class:section", "WHAT MEM UNDERSTOOD\n") in fragments
-    assert (
-        "class:memory-object",
-        "  +  1. [PRESERVE] One proposed Memory.\n",
-    ) in fragments
-    assert ("", "Neutral report prose.\n") in fragments
-    assert ("", "       WHY · Supporting explanation.") in fragments
-
-
 def test_directional_validation_repair_is_bounded_and_publishes_nothing(
     isolated_store,
 ):

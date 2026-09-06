@@ -20,9 +20,6 @@ from memcommit.adapters.console.commands.meld.interpretation import (
 )
 from memcommit.adapters.console.commands.meld.presentation import (
     _meld_picker_entry,
-    _meld_wait_context_view,
-    _meld_wait_fragments,
-    _meld_wait_view,
     _session_command,
     _session_route,
     _session_scope,
@@ -73,9 +70,6 @@ __all__ = [
     "render_meld_session",
     "render_meld_receipt",
     "render_meld_incomplete_receipt",
-    "_meld_wait_view",
-    "_meld_wait_context_view",
-    "_meld_wait_fragments",
     "_meld_picker_entry",
     "_interactive_terminal",
     "_load_bound_contexts",

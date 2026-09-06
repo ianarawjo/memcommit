@@ -13,9 +13,11 @@ Session Help is therefore one operation-neutral handoff implemented by
 `memcommit.adapters.console.terminal.components.session_help`. It is adopted by Query, Find search and
 chat, Compare, Result, the shared Resolution workbench, and the physical blank
 Ground shell. Resolution covers Meld, Sever, Update, Atomize, Forget,
-Impact, and adaptive Review without operation-specific bindings. The common
-command-wait screen now uses the same controller while retaining its special
-result-ready behavior.
+Impact, and adaptive Review without operation-specific bindings. The former
+command-wait screen also used this controller. That unused consumer and its
+result-ready behavior were retired on 2026-09-05; Session Help remains shared
+by the long-lived sessions. See the
+[retirement decision](interactive-command-wait-design-rationale.md#retirement-2026-09-05).
 
 That terminal component is the physical implementation, not a facade over an
 operation-shaped `interfaces.tui` module. The Help command registers its
@@ -96,5 +98,5 @@ opening Help; reserving `H` globally would make normal questions impossible to
 type. The Help inventory is frozen for one parent session, so commands added by
 dynamic external mutation do not appear until a new session starts. Help is a
 full-screen terminal handoff rather than a floating overlay because nested
-prompt-toolkit input ownership is explicit and already proven by the
-command-wait workflow.
+prompt-toolkit input ownership is explicit and was originally established by
+the now-retired command-wait workflow.

@@ -1,5 +1,17 @@
 # Command-wait destination browser design rationale
 
+## Status: retired 2026-09-05
+
+The full-screen command-wait UI and its C/I/R destination browser have been
+removed. No production caller still supplied the previous-report view needed
+to enter this path. The following account and its dated captures describe the
+historical implementation, not current keyboard behavior. The shared Context
+picker and Session Help remain in use by other terminal surfaces. See the
+[retirement decision](interactive-command-wait-design-rationale.md#retirement-2026-09-05)
+for the current boundary and preserved progress contract.
+
+## Historical design
+
 ## Problem
 
 The review-replacement wait footer previously used `C` as a toggle between the

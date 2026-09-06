@@ -1502,23 +1502,15 @@ def test_tty_update_uses_only_the_initial_planning_wait_before_applying(
         "decide_update_application",
         lambda session, **_kwargs: "APPLY",
     )
-    wait_views = []
+    wait_calls = []
     progress_updates = []
 
     class Progress:
         def update(self, stage, *, step):
             progress_updates.append((stage, step))
 
-    def wait(
-        operation,
-        stage,
-        *,
-        total,
-        work,
-        return_view=None,
-        context_view=None,
-    ):
-        wait_views.append((operation, stage, total, return_view, context_view))
+    def wait(operation, stage, *, total, work):
+        wait_calls.append((operation, stage, total))
         return work(Progress())
 
     monkeypatch.setattr(update_command, "run_command_wait", wait)
@@ -1530,10 +1522,9 @@ def test_tty_update_uses_only_the_initial_planning_wait_before_applying(
     applied = store.load_staged_update()
     assert applied is not None
     assert applied.status == "applied"
-    assert [view[0:3] for view in wait_views] == [
+    assert wait_calls == [
         ("UPDATE", "connecting provider", 2),
     ]
-    assert wait_views[0][3:] == (None, None)
     assert progress_updates == [
         ("planning memory changes", 2),
     ]
