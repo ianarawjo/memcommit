@@ -30,7 +30,9 @@ Within that package, `contracts.py` owns the immutable preview and result
 types, while `profile.py`, `context.py`, and `memory.py` own the three resource
 flows. `_shared.py` contains only their common source/destination identity
 checks. Dependencies point from each resource flow toward contracts and shared
-checks; one resource module does not reach through another for implementation.
+checks. `context_data.py` owns shared Context mapping and reference closure;
+`documents/` owns native JSON decoding, explicit file input and the publication
+boundary also used by Study. See [native JSON import](native-json-import-design-rationale.md).
 
 The earlier parallel `application.operations.resource_import.model` façade was
 removed when the complete operation topology was adopted. Current callers use
@@ -52,6 +54,10 @@ mem import context SOURCE_CONTEXT --from-profile SOURCE_PROFILE
     [--as TARGET_CONTEXT] [--recursive]
 mem import memory MEMORY --from-profile SOURCE_PROFILE
     --context SOURCE_CONTEXT [--into TARGET_CONTEXT]
+mem import context --from FILE.json [--as NEW_NAME]
+mem import context SOURCE_CONTEXT --from DIRECTORY [-r] [--as NEW_ROOT]
+mem import context --from DIRECTORY -r
+mem import memory --from FILE.json [--into TARGET_CONTEXT]
 ```
 
 `mem import NAME --from PATH` remains a compatibility spelling of `mem import
@@ -80,8 +86,8 @@ be loaded. This keeps source discovery from mixing the active destination into
 the same visible Profile namespace. Removed Profiles are omitted as well.
 
 The TUI intentionally supports registered `--from-profile` sources only.
-External filesystem intake remains the explicit `mem import profile ... --from
-PATH` form: adding path completion or a terminal filesystem browser would be a
+External filesystem intake remains explicit `--from PATH` forms for Profile
+stores/packages and native Context/Memory JSON: adding path completion or a terminal filesystem browser would be a
 separate host-disclosure and portability decision. Cross-Profile export is also
 not implied by this setup. Grants remain the live readable-access mechanism,
 and `mem share` remains the bounded sender-to-receiver transfer mechanism.

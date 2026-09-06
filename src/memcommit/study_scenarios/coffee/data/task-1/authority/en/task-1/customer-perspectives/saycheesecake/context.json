@@ -1,0 +1,56 @@
+{
+  "uid": "53f5d5a5-7306-58bb-8c7d-31e81bf9e53b",
+  "name": "task-1/customer-perspectives/saycheesecake",
+  "memories": {
+    "99e753f9-79b8-51da-a9bb-87ad59c63e37": {
+      "type": "memory",
+      "uid": "99e753f9-79b8-51da-a9bb-87ad59c63e37",
+      "content": "The user's saved café photos repeatedly show window-seat selfies and desserts ordered with a companion."
+    },
+    "dfbcf441-fc9e-5e42-ade0-9f10730fdfbd": {
+      "type": "memory",
+      "uid": "dfbcf441-fc9e-5e42-ade0-9f10730fdfbd",
+      "content": "When the user will visit with a companion, first reflect both people's essential conditions and present the remaining preferences as differences among the options."
+    },
+    "9582b41b-ebb7-5f26-849b-ad00ff8cb06f": {
+      "type": "memory",
+      "uid": "9582b41b-ebb7-5f26-849b-ad00ff8cb06f",
+      "content": "This agent can account for both the user's preferences and a companion's shared preferences about food, seating, and noise."
+    },
+    "4c10282f-7d8b-5a21-b361-2a94e0061f83": {
+      "type": "memory",
+      "uid": "4c10282f-7d8b-5a21-b361-2a94e0061f83",
+      "content": "This agent respects a companion's explicit dealbreakers first, but prioritizes its own user's preferences if the other agent also assumes that its user should not compromise."
+    },
+    "dc464514-bd87-5902-b1fd-0c653897a4f9": {
+      "type": "memory",
+      "uid": "dc464514-bd87-5902-b1fd-0c653897a4f9",
+      "content": "The user prefers sofas or wide bench seats that make it easy to turn toward a companion over desk-style seating."
+    },
+    "0dafb843-f480-54be-ac9e-af09f9479e81": {
+      "type": "memory",
+      "uid": "0dafb843-f480-54be-ac9e-af09f9479e81",
+      "content": "Design-forward tables and sofas may be uncomfortable to use, but they can strengthen a café's visual distinctiveness."
+    },
+    "0f38a193-54af-536a-ad5d-25979b53d69e": {
+      "type": "memory",
+      "uid": "0f38a193-54af-536a-ad5d-25979b53d69e",
+      "content": "The user expects that a companion may feel burdened when no decaffeinated or non-coffee drink is available."
+    },
+    "7c142254-0b3d-5d58-a857-62fde692f9ee": {
+      "type": "memory",
+      "uid": "7c142254-0b3d-5d58-a857-62fde692f9ee",
+      "content": "The user expects that an owner may view a long stay more positively when companions order both drinks and dessert."
+    }
+  },
+  "order": [
+    "99e753f9-79b8-51da-a9bb-87ad59c63e37",
+    "dfbcf441-fc9e-5e42-ade0-9f10730fdfbd",
+    "9582b41b-ebb7-5f26-849b-ad00ff8cb06f",
+    "4c10282f-7d8b-5a21-b361-2a94e0061f83",
+    "dc464514-bd87-5902-b1fd-0c653897a4f9",
+    "0dafb843-f480-54be-ac9e-af09f9479e81",
+    "0f38a193-54af-536a-ad5d-25979b53d69e",
+    "7c142254-0b3d-5d58-a857-62fde692f9ee"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "uid": "6e9f8ad5-a43d-5dfd-99a3-604f2757da0d",
+  "name": "advisor2/evaluation",
+  "memories": {
+    "f27576c7-6f53-5412-901c-19df7e1d5e2e": {
+      "type": "memory",
+      "uid": "f27576c7-6f53-5412-901c-19df7e1d5e2e",
+      "content": "배포한 설계를 유지·수정·중단할 운영 결정을 좌우할 대표 측정값 하나를 지정하라."
+    },
+    "8608bdf3-49d7-54d0-a2fb-c883c24e40ef": {
+      "type": "memory",
+      "uid": "8608bdf3-49d7-54d0-a2fb-c883c24e40ef",
+      "content": "HCI 심사 패널은 선언된 대표 측정값으로 운영 결정을 내릴 수 있는지 확인한다."
+    },
+    "b06bb706-f911-5767-8e27-b64c74d0e592": {
+      "type": "memory",
+      "uid": "b06bb706-f911-5767-8e27-b64c74d0e592",
+      "content": "대표 측정값이 어느 수준에 도달하면 설계를 유지, 수정, 중단할지 판단 기준을 정하라."
+    },
+    "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3": {
+      "type": "memory",
+      "uid": "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3",
+      "content": "설계가 한 역할의 부담을 줄이는 대신 다른 역할에 새 업무를 만드는지 평가하라."
+    },
+    "935cf79f-3e67-567d-ab55-35e8fad7eb37": {
+      "type": "memory",
+      "uid": "935cf79f-3e67-567d-ab55-35e8fad7eb37",
+      "content": "사용 가능성과 조직이 실제로 도입할 의향을 서로 다른 평가 결과로 구분하라."
+    },
+    "bea0e97f-1217-507b-87a7-09ce85bae9fe": {
+      "type": "memory",
+      "uid": "bea0e97f-1217-507b-87a7-09ce85bae9fe",
+      "content": "구현 충실도는 계획한 기능과 운영 절차가 현장에서 의도한 방식으로 제공되었는지를 나타낸다."
+    },
+    "dbe435ff-fe32-54fe-a2e6-7b46694ce151": {
+      "type": "memory",
+      "uid": "dbe435ff-fe32-54fe-a2e6-7b46694ce151",
+      "content": "초기 평가와 장기 운영은 시스템 노출 기간과 반복 사용 횟수가 달라 같은 측정 조건이 아니다."
+    }
+  },
+  "order": [
+    "f27576c7-6f53-5412-901c-19df7e1d5e2e",
+    "8608bdf3-49d7-54d0-a2fb-c883c24e40ef",
+    "b06bb706-f911-5767-8e27-b64c74d0e592",
+    "473ec6e8-29f0-5c83-b36d-b7d32eeb25a3",
+    "935cf79f-3e67-567d-ab55-35e8fad7eb37",
+    "bea0e97f-1217-507b-87a7-09ce85bae9fe",
+    "dbe435ff-fe32-54fe-a2e6-7b46694ce151"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "uid": "86f20c97-0838-5d35-868a-4a93892df9a5",
+  "name": "practice/coffee/compare-merge-meld-update/b",
+  "memories": {
+    "530c16dd-0482-5745-a9fe-b8b7f3cf6e5e": {
+      "type": "memory",
+      "uid": "530c16dd-0482-5745-a9fe-b8b7f3cf6e5e",
+      "content": "아무도 대화하지 않는 지나치게 조용한 카페는 모임을 가지기에 불편하다."
+    },
+    "7b5d7d97-86f1-57ed-ba2a-0ba0846e4429": {
+      "type": "memory",
+      "uid": "7b5d7d97-86f1-57ed-ba2a-0ba0846e4429",
+      "content": "테이블이 지나치게 높고 획일적이면 카페보다 집이나 사무실처럼 느껴져 선호하지 않는다."
+    },
+    "6510d8ba-1a6f-5040-9808-173404e53a5b": {
+      "type": "memory",
+      "uid": "6510d8ba-1a6f-5040-9808-173404e53a5b",
+      "content": "지나치게 추상적이거나 과장된 향미 표현은 주문을 오히려 어렵게 만든다."
+    },
+    "e06bd754-b5e3-5240-9112-e7f9fa011011": {
+      "type": "memory",
+      "uid": "e06bd754-b5e3-5240-9112-e7f9fa011011",
+      "content": "선택지가 너무 많으면 고르기 어렵다."
+    }
+  },
+  "order": [
+    "530c16dd-0482-5745-a9fe-b8b7f3cf6e5e",
+    "7b5d7d97-86f1-57ed-ba2a-0ba0846e4429",
+    "6510d8ba-1a6f-5040-9808-173404e53a5b",
+    "e06bd754-b5e3-5240-9112-e7f9fa011011"
+  ]
+}

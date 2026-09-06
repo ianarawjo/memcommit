@@ -1,0 +1,32 @@
+{
+  "uid": "a8cb8b9b-bab0-57be-817b-255b1c10d918",
+  "name": "proposal-submission-guidelines/review",
+  "memories": {
+    "60c1fb1f-98d4-541e-82bf-4caff1665169": {
+      "type": "memory",
+      "uid": "60c1fb1f-98d4-541e-82bf-4caff1665169",
+      "content": "내부 조언이 공식 공고나 제출 양식과 충돌하면 공식 요구를 우선 적용하라."
+    },
+    "fce9d4b7-7899-5694-ab49-3d43a9ae7c37": {
+      "type": "memory",
+      "uid": "fce9d4b7-7899-5694-ab49-3d43a9ae7c37",
+      "content": "로컬 에이전트는 포털의 실제 접수 성공을 보증할 수 없다."
+    },
+    "0e1d9d6a-4e52-5f27-a1be-5a544bba8e2c": {
+      "type": "memory",
+      "uid": "0e1d9d6a-4e52-5f27-a1be-5a544bba8e2c",
+      "content": "로컬 에이전트는 공식 공고에 없는 제출 요건을 확정할 수 없다."
+    },
+    "2437d6d7-a8d6-5f4a-bc1f-12ae5a660941": {
+      "type": "memory",
+      "uid": "2437d6d7-a8d6-5f4a-bc1f-12ae5a660941",
+      "content": "행정 검토자는 필수 섹션이 빠졌는지 먼저 확인한다."
+    }
+  },
+  "order": [
+    "60c1fb1f-98d4-541e-82bf-4caff1665169",
+    "fce9d4b7-7899-5694-ab49-3d43a9ae7c37",
+    "0e1d9d6a-4e52-5f27-a1be-5a544bba8e2c",
+    "2437d6d7-a8d6-5f4a-bc1f-12ae5a660941"
+  ]
+}

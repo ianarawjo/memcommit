@@ -24,153 +24,21 @@
 > 정확히 150개의 독립 검토 가능한
 > 후보가 있다.
 
-- T2-R-001 — `structure/problem` — PP — 구체적인 사람, 장소, 사용 상황이 있어야 문제를 이해할 수 있다면 문제 설명을 셋째 문장까지 이어가도 된다.
-- T2-R-070 — `structure/three-sentence-context` — PP — 구체적인 상황과 결과를 추상적인 두 문장에 압축하지 말고 셋째 문장에 제시하라.
-- T2-R-002 — `structure/research-question-position` — PP — 주된 HCI 연구 질문에 사용자, 운영 이해관계자, 실제 사용 환경을 명시하라.
-- T2-R-011 — `structure/interaction-step-visual` — PP — 낯선 상호작용 절차를 제안할 때는 한 장의 간결한 시각 자료로 요약하라.
-- T2-R-071 — `structure/interaction-transition-visual` — PP — 낯선 상호작용 절차가 한 단계에서 다음 단계로 넘어가는 조건을 시각 자료에 표시하라.
-- T2-R-015 — `structure/masters-timeline-phases` — PP — 석사 연구 일정을 현장 이해, 시스템 구현, 사용자 연구, 분석의 단계별 이정표로 제시하라.
-- T2-R-072 — `structure/masters-timeline-deliverables` — PP — 석사 연구의 각 이정표에 다음 단계 진입을 판단할 산출물을 연결하라.
-- T2-R-017 — `structure/gap-contribution-link` — PP — 실제 사용 맥락의 공백과 제안한 설계·운영 기여를 한 흐름 안에서 직접 연결하라.
-- T2-R-018 — `structure/continuous-two-page-flow` — PP — 두 쪽 제안서에는 추가 소제목을 피하고 문단 전환으로 문제에서 제안할 대응과 다음 단계까지 하나의 논리를 유지하라.
-- T2-R-083 — `structure/paragraph-transition-chain` — PP — 짧은 제안서가 이름 붙은 조각의 묶음이 아니라 논증으로 읽히도록 각 문단 첫머리를 앞 문단의 주장과 연결하라.
-- T2-R-024 — `structure/preliminary-result-placement` — PP — 현장 관찰이나 기술 검증 결과는 실행 가능성 주장을 뒷받침하는 문장 가까이에 배치하라.
-- T2-R-054 — `structure/reviewer-three-sentence-context` — OM — 독자는 사람, 장소, 결과가 암시만 된 압축된 도입부를 잘못 이해할 수 있다.
-- T2-R-080 — `structure/compressed-opening-generic-cost` — OM — 두 문장짜리 도입부는 너무 일반적이어서 독자가 주제는 이해해도 제안서가 바꾸려는 상황을 떠올리지 못할 수 있다.
-- T2-R-003 — `emphasis/contribution-count` — PP — 독자가 기억해야 할 주된 HCI 기여는 두 가지를 넘기지 마라.
-- T2-R-051 — `emphasis/contribution-naming` — PP — 각 설계 또는 운영 기여를 이름 붙인 한 문장으로 제시하라.
-- T2-R-013 — `emphasis/recruitment-primary-constraint` — PP — 조직 구성원을 모집하는 연구에서는 업무 흐름 제약을 강조하라.
-- T2-R-073 — `emphasis/recruitment-secondary-constraint` — PP — 조직 구성원을 모집하는 연구에서는 관리자 승인 제약을 강조하라.
-- T2-R-026 — `style/em-dash-conditional-use` — PP — 의도적인 끊김이나 강한 대조를 나타낼 때만 em dash를 사용하고, 그렇지 않으면 문장을 나누거나 일반적인 문장부호를 사용하라.
-- T2-R-055 — `emphasis/reviewer-contribution-capacity` — OM — HCI 심사자는 이름 붙은 설계·운영 기여가 두 개를 넘으면 주된 기여를 파악하기 어려워한다.
-- T2-R-004 — `claim-evidence/evidence-adjacency` — PP — 사용자 요구나 현장 효과에 관한 주장 바로 옆에 관찰 근거나 출처를 두어라.
-- T2-R-005 — `claim-evidence/observation-prediction-status` — PP — 현장에서 이미 확인한 사실과 사용자 연구가 검토할 예상을 문장 수준에서 구별하라.
-- T2-R-009 — `expression/sequence-table-choice` — PP — 초안 작성 중 절차가 자주 바뀔 가능성이 크면 흐름 그림보다 순서표를 사용하라.
-- T2-R-010 — `claim-evidence/causal-language` — PP — 설계가 인과 추론을 뒷받침하지 않으면 인과를 입증한다는 동사를 사용하지 마라.
-- T2-R-012 — `claim-evidence/source-priority` — PP — 빠르게 바뀌는 HCI 주제에서는 최신 시스템과 현장 연구를 우선 인용하라.
-- T2-R-027 — `claim-evidence/design-rationale` — PP — 각 설계 선택이 해결하려는 사용자나 운영 이해관계자의 필요를 설명하라.
-- T2-R-041 — `claim-evidence/direct-evidence` — PP — 중요한 결론에는 그 결론을 직접 검토한 가장 가까운 근거를 우선 인용하라.
-- T2-R-056 — `claim-evidence/reviewer-evidence-order` — OM — 심사자는 중요한 결론과 가장 가까운 곳에 놓인 직접 근거를 먼저 확인한다.
-- T2-R-019 — `style/action-first-procedure` — PP — 절차 문장에서는 “우리”를 반복하지 말고 행동, 조건, 산출물부터 써서 단계를 쉽게 따라가고 재사용할 수 있게 하라.
-- T2-R-020 — `style/confirmed-procedure-status` — PP — 실제 사용 환경에서 확인한 시스템 동작은 관찰된 상태로 써라.
-- T2-R-052 — `style/unconfirmed-procedure-status` — PP — 아직 현장에서 확인하지 않은 시스템 동작은 조건부 계획으로 써라.
-- T2-R-057 — `style/reviewer-action-first-sequence` — OM — 독자는 각 문장이 저자보다 행동이나 조건으로 시작할 때 순서를 더 정확히 재구성할 수 있다.
-- T2-R-006 — `terminology/term-consistency` — PP — 같은 사용자 역할, 시스템 기능, 운영 단계를 가리키는 명칭은 중간에 바꾸지 마라.
-- T2-R-021 — `terminology/abbreviation-eligibility` — PP — 두 쪽짜리 제안서에서는 반복되는 긴 명칭에만 약어를 사용하라.
-- T2-R-082 — `terminology/abbreviation-definition` — PP — 약어를 처음 사용할 때 전체 명칭과 약어를 함께 제시하라.
-- T2-R-042 — `terminology/participant-role-language` — PP — 참가자는 상태가 아니라 연구에서 수행하는 역할을 중심으로 지칭하라.
-- T2-R-058 — `terminology/reviewer-undefined-abbreviation` — OM — 세부 분야가 다른 심사자는 처음에 정의되지 않은 약어를 문맥만으로 복원하기 어려워한다.
-- T2-R-033 — `expression/prototype-fidelity-separation` — KB — 시제품의 시각적 충실도와 실제 데이터·서비스 연결 수준은 서로 다를 수 있다.
-- T2-R-081 — `expression/interaction-state-change` — KB — 서비스 흐름 그림은 개별 화면만으로 드러나지 않는 사람·시스템 간 전환을 나타낸다.
-- T2-R-059 — `expression/reviewer-caption-scan` — OM — HCI 심사자는 시스템 구조와 서비스 흐름 그림을 본문보다 먼저 훑는 경우가 많다.
-- T2-R-007 — `methods/question-evidence-analysis` — PP — 모든 HCI 연구 질문에 대응하는 현장·사용자 자료원과 분석 절차를 지정하라.
-- T2-R-014 — `style/sentence-rhythm-rule` — PP — 서로 연결된 생각을 나누어서 의도한 읽기 호흡이 사라진다면 짧은 문장으로 기계적으로 쪼개지 마라.
-- T2-R-074 — `style/connected-thoughts` — PP — 여러 절이 하나의 연속된 흐름을 이루어 함께 읽는 편이 자연스러우면 긴 문장을 유지하라.
-- T2-R-016 — `methods/preregistration-change-condition` — PP — 사전등록 연구에서는 계획 변경의 판단 기준을 밝혀라.
-- T2-R-075 — `methods/preregistration-change-record` — PP — 사전등록 연구에서는 계획 변경의 기록 위치를 밝혀라.
-- T2-R-022 — `methods/bounded-target-range` — PP — 확정 인원이 달라질 수 있으면 근거 있는 최소·최대 범위를 사용하고 두 경계를 서로 다른 작업량과 예산 경우에 연결하라.
-- T2-R-028 — `methods/data-collection-tool` — PP — 각 현장·사용자 자료를 수집할 관찰 기록, 시스템 로그 또는 인터뷰 도구를 구체적으로 적어라.
-- T2-R-076 — `methods/data-collection-timing` — PP — 각 현장·사용자 자료를 배포 전·중·후 어느 시점에 수집할지 적어라.
-- T2-R-034 — `methods/range-boundary-review` — OM — 독자는 범위의 두 경계가 일정, 작업량, 비용에 주는 결과가 없으면 목표 범위를 평가할 수 없다.
-- T2-R-036 — `methods/deployment-failure-observation` — WM — 현장 배포에서는 설계 선택 외에도 네트워크와 서비스 불안정성이 독립적인 과업 실패 원인으로 존재한다.
-- T2-R-084 — `methods/deployment-safety-signal` — WM — 현장 시스템에서 안전 신호가 발생하면 해당 기관의 기존 안전 절차가 연구 일정과 자료 수집 계획보다 우선한다.
-- T2-R-060 — `methods/reviewer-answerability-trace` — OM — 심사자는 각 연구 질문에서 자료원과 분석 절차까지 이어지는 경로를 따라 답변 가능성을 판단한다.
-- T2-R-069 — `methods/author-feature-contribution-assumption` — UM — 사용자는 구현한 기능 목록을 설계 기여로 바로 제시하는 경향이 있다.
-- T2-R-043 — `evaluation/primary-measure` — PP — 배포한 설계를 유지·수정·중단할 운영 결정을 좌우할 대표 측정값 하나를 지정하라.
-- T2-R-061 — `evaluation/panel-primary-measure` — OM — HCI 심사 패널은 선언된 대표 측정값으로 운영 결정을 내릴 수 있는지 확인한다.
-- T2-R-008 — `ethics/burden-mitigation` — PP — 각 현장 사용자 연구 과업에서 예상되는 참가자 부담과 그 완화책을 연결하라.
-- T2-R-029 — `ethics/accessibility-accommodation` — PP — 참가자가 현장 시스템과 연구 과업에 접근하는 데 필요한 편의를 명시하라.
-- T2-R-077 — `ethics/accommodation-delivery` — PP — 접근성 편의를 현장 사용자 연구에서 제공하는 방식을 명시하라.
-- T2-R-030 — `ethics/identifier-separation` — PP — 수집 직후 개인 식별자를 연구자료에서 분리하는 방법을 적어라.
-- T2-R-037 — `ethics/equipment-loan` — PP — 참가자에게 필요한 장비가 없을 때 대여할 장비를 적어라.
-- T2-R-078 — `ethics/equipment-return` — PP — 참가자에게 대여한 장비의 반환 절차를 적어라.
-- T2-R-062 — `ethics/ethics-reviewer-mitigation` — OM — HCI 윤리 검토자는 현장 사용자 연구 과업마다 예상 부담과 완화책이 대응하는지 확인한다.
-- T2-R-025 — `scope/generalization-boundary` — PP — 설계 지식을 적용하려는 사용자 집단과 실제 사용 환경을 한 문장으로 특정하라.
-- T2-R-063 — `scope/reviewer-generalization-boundary` — OM — 심사자는 명시된 대상 집단과 환경을 통해 결과의 일반화 경계를 판단한다.
-- T2-R-038 — `safety/escalation-order` — PP — 연구 중 심각한 불편이 보고되면 누구에게 어떤 순서로 알릴지 적어라.
-- T2-R-064 — `safety/staff-escalation-reliance` — OM — 현장 담당자는 심각한 불편이 보고되면 사전에 정한 연락 순서에 의존한다.
-- T2-R-039 — `feasibility/unverified-schedule-assumption` — PP — 아직 검증되지 않은 일정 가정은 가정이라고 표시하라.
-- T2-R-085 — `feasibility/unverified-recruitment-assumption` — PP — 아직 검증되지 않은 모집 가정은 가정이라고 표시하라.
-- T2-R-086 — `feasibility/unverified-technical-assumption` — PP — 아직 검증되지 않은 기술 가정은 가정이라고 표시하라.
-- T2-R-044 — `feasibility/resource-traceability` — PP — 각 핵심 시제품 기능과 현장 연구 절차에 필요한 자원을 역으로 확인하라.
-- T2-R-065 — `feasibility/operations-staff-check` — OM — 운영 검토자는 각 절차에 필요한 사람을 보고 실행 가능성을 판단한다.
-- T2-R-087 — `feasibility/operations-equipment-check` — OM — 운영 검토자는 각 절차에 필요한 장비를 보고 실행 가능성을 판단한다.
-- T2-R-088 — `feasibility/operations-time-check` — OM — 운영 검토자는 각 절차에 필요한 시간을 보고 실행 가능성을 판단한다.
-- T2-R-035 — `reproducibility/software-version-assessability` — OM — HCI 심사자는 현장 배포에 사용한 시스템 버전이 드러나지 않으면 결과의 재현 가능성을 평가하기 어렵다.
-- T2-R-023 — `budget/separate-table-detail` — PP — 본문에는 총액과 주요 범주만 남기고 수량, 단가, 가정은 하나의 간결한 예산표나 부록에 배치하라.
-- T2-R-031 — `budget/table-stable-rows` — PP — 별도 예산표에서 각 비용 범주, 수량, 단가, 소계에 고정된 행을 부여하라.
-- T2-R-079 — `budget/table-assumption-column` — PP — 서술을 다시 쓰지 않고 하나의 가정을 확인하거나 고칠 수 있도록 산정 근거를 전용 표 열에 넣어라.
-- T2-R-066 — `budget/reviewer-table-arithmetic` — OM — 독자는 산문에 흩어진 금액보다 일정한 표에서 계산을 확인하고 범주를 더 빨리 비교할 수 있다.
-- T2-R-046 — `compensation/base-hourly-rate` — PP — 사용자 연구 보상 예산은 세션 시간과 필수 기술·이동 준비를 합친 예상 참여 부담을 기준으로 산정하라.
-- T2-R-047 — `compensation/modality-burden` — PP — 연구를 중도 종료한 참가자에게도 실제 참여 시간을 보상하라.
-- T2-R-053 — `compensation/participation-time` — PP — 연구 방식과 관계없이 세션에 실제로 참여한 시간을 보상하라.
-- T2-R-048 — `compensation/payment-method` — PP — 원격 연구에서 전자송금을 사용할 수 없는 참가자에게 같은 가치의 상품권 지급을 허용하라.
-- T2-R-049 — `compensation/payment-method-finality` — PP — 지급 방식이 미정이라고 확인되었다면 이를 제안서 단계의 결함으로 취급하지 마라.
-- T2-R-050 — `compensation/modality-rate` — PP — 이동이나 기술 준비로 참여 부담이 달라지면 대면 연구와 원격 연구의 보상액을 다르게 산정하는 것을 허용하라.
-- T2-R-067 — `compensation/participant-fairness` — OM — 참가자는 세션 시간과 필수 기술·이동 준비를 합친 부담으로 보상의 공정성을 판단한다.
-- T2-R-032 — `review/substantive-pass` — PP — 제출 전 한 차례는 사용자 문제, 시스템 개입, 현장 평가 논리의 타당성만 따로 검토하라.
-- T2-R-040 — `review/question-prototype-consistency` — PP — 연구 질문과 시스템의 핵심 기능이 서로 일치하는지 대조하라.
-- T2-R-089 — `review/task-measure-consistency` — PP — 현장 과업과 대표 측정값이 서로 일치하는지 대조하라.
-- T2-R-090 — `review/evidence-decision-consistency` — PP — 수집할 근거와 바꾸려는 설계·운영 결정이 서로 일치하는지 대조하라.
-- T2-R-045 — `review/logic-consistency` — PP — 사용자 문제, 시스템 개입, 현장 평가, 기대 기여가 같은 논리적 흐름을 이루는지 최종 확인하라.
-- T2-R-068 — `review/reviewer-question-prototype-confidence` — OM — HCI 심사자는 연구 질문과 시스템 기능이 연결되지 않으면 설계 개입의 타당성을 낮게 본다.
-- T2-R-091 — `review/reviewer-task-measure-confidence` — OM — HCI 심사자는 현장 과업이 대표 측정값을 만들지 못하면 평가 계획의 타당성을 낮게 본다.
-- T2-R-092 — `review/reviewer-evidence-decision-confidence` — OM — HCI 심사자는 수집할 근거가 설계·운영 결정을 바꾸지 못하면 기여의 실용성을 낮게 본다.
-- T2-R-093 — `structure/continuous-flow-space-benefit` — PP — 반복되는 소제목이 논증에 필요한 공간을 차지한다면 추가 제목 대신 문단 전환을 사용하라.
-- T2-R-094 — `structure/continuous-flow-bridge` — PP — 각 문단을 다음 문단이 답할 질문이나 결과로 끝내라.
-- T2-R-095 — `structure/continuous-flow-causal-thread` — KB — 문제, 결과, 대응, 다음 단계가 이어지면 소제목을 반복하지 않아도 주장 사이의 관계가 들린다.
-- T2-R-096 — `structure/reader-fragmentation-observation` — OM — 독자는 아주 짧은 부분마다 제목이 붙으면 새 제목이 앞 문단과의 연결을 끊어 글을 개요처럼 느낄 수 있다.
-- T2-R-097 — `emphasis/primary-deployment-decision` — PP — 평가 결과로 바꾸려는 가장 중요한 현장 운영 결정 하나를 중심 주장으로 강조하라.
-- T2-R-098 — `emphasis/optional-feature-boundary` — PP — 주된 현장 문제를 검토하는 데 필요하지 않은 시제품 기능은 부차적 범위로 명시하라.
-- T2-R-099 — `style/author-sentence-rhythm-preference` — UM — 사용자는 짧은 문장이 훑어보기 쉽다는 점을 이해하지만 모든 문장을 잘게 나누면 읽는 호흡이 사라진다고 느낀다.
-- T2-R-100 — `claim-evidence/workaround-evidence` — PP — 기존 도구를 우회해 과업을 끝낸 현장 사례를 설계 필요성의 근거로 연결하라.
-- T2-R-101 — `claim-evidence/stakeholder-report-observation` — PP — 운영 이해관계자가 보고한 문제와 연구자가 직접 관찰한 문제를 서로 다른 근거로 표시하라.
-- T2-R-102 — `claim-evidence/breakdown-log-value` — KB — 현장 장애 기록은 시스템 실패와 사용자의 적응 행동이 발생한 시점과 조건을 함께 보여줄 수 있다.
-- T2-R-103 — `claim-evidence/routine-adaptation` — WM — 새 시스템을 도입하는 현장에서는 공식 절차와 기존 수동 절차가 한동안 병행되어 단일 설계 효과를 분리하기 어렵다.
-- T2-R-104 — `style/action-first-checklist` — PP — 절차 문장의 첫 구절을 의미 변화 없이 점검표 항목으로 다시 쓸 수 있도록 행동부터 서술하라.
-- T2-R-105 — `style/first-person-pronoun-consistency` — PP — 사용자는 개인 작성자라면 “저(I)”를, 명시된 팀이라면 “우리(we)”를 선택하고 같은 책임 주체를 설명하면서 둘을 섞지 않아야 한다.
-- T2-R-106 — `style/action-first-reuse` — WM — 행동 우선 절차 문장은 주어가 저자가 아니라 단계이므로 순서를 바꾸거나 점검표로 옮기기가 더 쉽다.
-- T2-R-107 — `terminology/operational-role-authority` — PP — 운영 역할을 처음 제시할 때 그 역할이 내릴 수 있는 결정과 수행할 수 있는 조치를 함께 정의하라.
-- T2-R-108 — `terminology/title-authority-variance` — KB — 같은 직함을 쓰는 사람이라도 배포 현장에 따라 시스템 변경 권한과 자료 접근 권한이 다를 수 있다.
-- T2-R-109 — `terminology/author-user-bucket` — UM — 사용자는 서로 다른 현장 역할을 모두 사용자라는 한 명칭으로 묶는 경향이 있다.
-- T2-R-110 — `expression/sequence-table-stable-rows` — PP — 순서표에서 각 단계, 행위자, 조건, 결과에 고정된 행을 부여하라.
-- T2-R-111 — `expression/sequence-table-update-cost` — KB — 절차가 바뀔 때 순서표의 한 행을 고치는 일은 갈림 구조의 그림을 다시 그리는 일보다 대체로 빠르다.
-- T2-R-112 — `expression/reader-table-overview-limit` — OM — 독자는 순서표를 단계별로 확인할 수 있지만 전체 갈림 구조는 한눈에 보기 어렵다고 느낄 수 있다.
-- T2-R-113 — `methods/range-minimum-case` — PP — 범위 안의 모든 수를 같게 취급하지 말고 최소 목표로도 완료할 수 있는 일을 정의하라.
-- T2-R-114 — `methods/range-change-absorption` — PP — 초기 추정치 하나가 보장된 것처럼 가장하지 말고 예상되는 확정 인원 변화를 흡수하도록 제한된 범위를 사용하라.
-- T2-R-115 — `methods/range-schedule-cases` — PP — 최소와 최대 경계에서 세션 수와 진행자 시간이 어떻게 달라지는지 보여라.
-- T2-R-116 — `methods/range-maximum-case` — PP — 최대 목표에서 가능해지는 추가 작업량이나 산출물을 정의해 상한이 임의의 여유분이 되지 않게 하라.
-- T2-R-117 — `methods/range-budget-tradeoff` — KB — 제한된 범위는 불확실성을 정직하게 보존하지만 하나의 고정 목표보다 최종 작업량과 예산의 확정성을 낮춘다.
-- T2-R-118 — `style/author-em-dash-confidence` — UM — 사용자는 em dash가 장식이 아니라 의도적인 끊김이나 대조를 나타내는지 설명할 수 있다.
-- T2-R-119 — `style/em-dash-rhetorical-function` — WM — em dash는 쉼표보다 강한 끊김을 만들며 문장의 의도적인 대조를 더 분명하게 들리게 할 수 있다.
-- T2-R-120 — `evaluation/decision-threshold` — PP — 대표 측정값이 어느 수준에 도달하면 설계를 유지, 수정, 중단할지 판단 기준을 정하라.
-- T2-R-121 — `evaluation/work-redistribution` — PP — 설계가 한 역할의 부담을 줄이는 대신 다른 역할에 새 업무를 만드는지 평가하라.
-- T2-R-122 — `evaluation/acceptability-usability-separation` — PP — 사용 가능성과 조직이 실제로 도입할 의향을 서로 다른 평가 결과로 구분하라.
-- T2-R-123 — `evaluation/implementation-fidelity` — KB — 구현 충실도는 계획한 기능과 운영 절차가 현장에서 의도한 방식으로 제공되었는지를 나타낸다.
-- T2-R-124 — `evaluation/novelty-decay` — WM — 초기 평가와 장기 운영은 시스템 노출 기간과 반복 사용 횟수가 달라 같은 측정 조건이 아니다.
-- T2-R-125 — `ethics/safe-fallback` — PP — 연구 참여를 중단해도 참가자가 기존 업무 절차로 안전하게 돌아갈 수 있는 방법을 마련하라.
-- T2-R-126 — `ethics/refusal-nonpenalty` — PP — 조직 구성원이 연구 참여를 거절해도 업무 배정이나 평가에서 불이익을 받지 않는다고 명시하라.
-- T2-R-127 — `ethics/advisor-fallback-risk` — SM — 사용자의 참여 중단 위험은 현장 과업에 안전한 대체 절차가 있을 때만 충분히 검토될 수 있다.
-- T2-R-128 — `ethics/author-short-session-burden` — UM — 사용자는 세션이 짧으면 업무 중단과 관리자 노출에서 생기는 부담도 작다고 가정하는 경향이 있다.
-- T2-R-129 — `scope/transfer-conditions` — PP — 설계 지침을 다른 현장에 적용하려면 같아야 하는 업무 흐름, 기술 기반, 운영 권한 조건을 명시하라.
-- T2-R-130 — `scope/transfer-boundary-components` — KB — 현장 설계 지식의 전이 가능성은 사용자 특성뿐 아니라 업무 흐름과 기술·조직 기반에도 좌우된다.
-- T2-R-131 — `scope/author-overgeneralization` — UM — 사용자는 한 배포 현장에서 확인한 결과를 유사한 모든 조직에 적용하려는 경향이 있다.
-- T2-R-132 — `safety/stop-rule` — PP — 참가자 피해, 운영 장애, 데이터 이상이 어느 수준이면 배포와 자료 수집을 중단할지 정하라.
-- T2-R-133 — `safety/restoration-plan` — PP — 현장 배포를 중단한 뒤 기존 시스템과 업무 상태를 복구할 절차를 마련하라.
-- T2-R-134 — `safety/advisor-recovery-authority` — SM — 사용자의 중단 계획은 복구 명령을 내릴 권한과 실행 책임자를 명시해야 실행 가능성을 판단받을 수 있다.
-- T2-R-135 — `safety/blame-reporting` — WM — 오류 보고가 개인 성과평가와 연결된 조직에서는 안전 신호 기록이 연구용 결정 기록과 분리되어 같은 사건의 추적 경로가 끊길 수 있다.
-- T2-R-136 — `feasibility/partner-commitment` — PP — 모집, 설치, 운영 지원에 필요한 현장 파트너의 약속과 확인 상태를 각각 적어라.
-- T2-R-137 — `feasibility/maintenance-owner` — PP — 배포 기간 중 소프트웨어 업데이트, 장비 점검, 사용자 지원을 맡을 책임자를 지정하라.
-- T2-R-138 — `feasibility/advisor-hidden-dependencies` — SM — 사용자의 배포 준비도는 외부 서비스와 현장 인력 의존성이 드러날 때만 검토될 수 있다.
-- T2-R-139 — `feasibility/site-schedule-change` — WM — 현장 일정과 담당 인력은 연구자가 통제할 수 없는 운영 사정으로 바뀔 수 있다.
-- T2-R-140 — `reproducibility/config-change-log` — PP — 배포 중 바뀐 시스템 설정, 현장 절차, 자료 수집 도구를 시점과 이유와 함께 기록하라.
-- T2-R-141 — `reproducibility/deployment-provenance` — KB — 배포 버전과 설정 변경의 이력은 서로 다른 현장에서 나온 결과를 해석하는 데 필요한 근거다.
-- T2-R-142 — `budget/table-update-cost` — PP — 추정치가 바뀌면 여러 산문 문단에 새 금액을 반복하지 말고 표의 한 행과 소계를 수정하라.
-- T2-R-143 — `budget/table-reading-boundary` — PP — 독자가 명확한 참조로 전체 표에 도달할 수 있다면 자세한 계산은 중심 논증 밖에 두어라.
-- T2-R-144 — `budget/author-prose-enumeration-tendency` — UM — 사용자는 별도 예산표가 없으면 긴 비용 나열로 논증의 흐름을 끊는 경향이 있다.
-- T2-R-145 — `compensation/longitudinal-reporting-burden` — PP — 일지 작성과 반복 보고가 필요한 종단 연구에서는 세션 밖 기록 시간도 보상에 포함하라.
-- T2-R-146 — `compensation/staff-labor-separation` — PP — 연구 참가 보상과 현장 직원이 업무로 수행하는 설치·운영 지원의 인건비를 구분하라.
-- T2-R-147 — `compensation/author-unpaid-preparation` — UM — 사용자는 세션 시간은 계산하지만 참가자의 사전 설정과 후속 보고 시간을 빠뜨리는 경향이 있다.
-- T2-R-148 — `review/failure-mode-walkthrough` — PP — 제출 전에 현장 담당자와 함께 설치 실패, 운영 중단, 복구 상황을 순서대로 점검하라.
-- T2-R-149 — `review/contribution-decision-test` — PP — 각 제안 기여가 실제로 어떤 설계 또는 운영 결정을 바꿀 수 있는지 한 문장으로 검증하라.
-- T2-R-150 — `review/advisor-placeholder-visibility` — SM — 사용자는 남은 실행 위험을 검토할 수 있도록 미확정 현장 파트너와 장비를 확정된 항목과 구별해야 한다.
+Memory 본문은 아래 Context JSON 파일에서 관리한다. 이 문서는 데이터 계약과 탐색용 인덱스다.
+
+- [`advisor2/structure`](../native/task-2/task-2-proposal-authority/ko/advisor2/structure/context.json)
+- [`advisor2/emphasis`](../native/task-2/task-2-proposal-authority/ko/advisor2/emphasis/context.json)
+- [`advisor2/style`](../native/task-2/task-2-proposal-authority/ko/advisor2/style/context.json)
+- [`advisor2/claim-evidence`](../native/task-2/task-2-proposal-authority/ko/advisor2/claim-evidence/context.json)
+- [`advisor2/expression`](../native/task-2/task-2-proposal-authority/ko/advisor2/expression/context.json)
+- [`advisor2/terminology`](../native/task-2/task-2-proposal-authority/ko/advisor2/terminology/context.json)
+- [`advisor2/methods`](../native/task-2/task-2-proposal-authority/ko/advisor2/methods/context.json)
+- [`advisor2/evaluation`](../native/task-2/task-2-proposal-authority/ko/advisor2/evaluation/context.json)
+- [`advisor2/ethics`](../native/task-2/task-2-proposal-authority/ko/advisor2/ethics/context.json)
+- [`advisor2/scope`](../native/task-2/task-2-proposal-authority/ko/advisor2/scope/context.json)
+- [`advisor2/safety`](../native/task-2/task-2-proposal-authority/ko/advisor2/safety/context.json)
+- [`advisor2/feasibility`](../native/task-2/task-2-proposal-authority/ko/advisor2/feasibility/context.json)
+- [`advisor2/reproducibility`](../native/task-2/task-2-proposal-authority/ko/advisor2/reproducibility/context.json)
+- [`advisor2/budget`](../native/task-2/task-2-proposal-authority/ko/advisor2/budget/context.json)
+- [`advisor2/compensation`](../native/task-2/task-2-proposal-authority/ko/advisor2/compensation/context.json)
+- [`advisor2/review`](../native/task-2/task-2-proposal-authority/ko/advisor2/review/context.json)

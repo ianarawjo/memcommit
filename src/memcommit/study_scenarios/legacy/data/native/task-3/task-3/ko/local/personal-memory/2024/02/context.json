@@ -1,0 +1,68 @@
+{
+  "uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+  "name": "local/personal-memory/2024/02",
+  "memories": {
+    "1c627e4c-c393-5bd3-a5ae-b3318821be73": {
+      "type": "memory",
+      "uid": "1c627e4c-c393-5bd3-a5ae-b3318821be73",
+      "content": "이모가 사용자의 집 여분 열쇠 한 개를 보관한다."
+    },
+    "e80936de-87af-5dbb-ab94-d456bbfaab0a": {
+      "type": "memory",
+      "uid": "e80936de-87af-5dbb-ab94-d456bbfaab0a",
+      "content": "사용자는 문이 잠기면 관리실보다 여분 열쇠를 가진 이모에게 먼저 연락하는 경로에 익숙하다."
+    },
+    "7c26cf33-0630-5138-910a-6d37d6ed2b63": {
+      "type": "memory",
+      "uid": "7c26cf33-0630-5138-910a-6d37d6ed2b63",
+      "content": "사용자는 이모에게 열쇠를 받으러 갈 때 도착 시각을 먼저 알려 서로 기다리는 일을 피하고 싶어 한다."
+    },
+    "c3f0f26c-8d89-55e3-8bf3-398271e417e7": {
+      "type": "memory",
+      "uid": "c3f0f26c-8d89-55e3-8bf3-398271e417e7",
+      "content": "사용자는 빌린 여분 열쇠를 같은 날 직접 돌려주어야 마음이 놓인다."
+    },
+    "7d7d00a3-c5af-5441-bb50-9631fbfd7979": {
+      "type": "memory",
+      "uid": "7d7d00a3-c5af-5441-bb50-9631fbfd7979",
+      "content": "사용자는 새 현관 비밀번호를 종이에 남기는 일을 불안하게 느낀다."
+    },
+    "2e0df581-bd54-54f5-94ef-b719427fc88c": {
+      "type": "memory",
+      "uid": "2e0df581-bd54-54f5-94ef-b719427fc88c",
+      "content": "사용자는 회의 중 예고 없이 방문한 가족에게 바로 응답하지 못하는 상황을 곤란하게 느꼈다."
+    },
+    "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d": {
+      "type": "memory",
+      "uid": "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d",
+      "content": "사용자는 남동생이 택배를 대신 받아 준 날 배송 사진을 확인한 뒤 안심했다."
+    },
+    "76fb9115-a3f2-5ce3-a445-c3d1e38e4253": {
+      "type": "memory",
+      "uid": "76fb9115-a3f2-5ce3-a445-c3d1e38e4253",
+      "content": "이모는 여분 열쇠를 건네기 전에 사용자가 직접 오는지 확인받기를 원한다."
+    },
+    "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd": {
+      "type": "memory",
+      "uid": "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd",
+      "content": "여분 열쇠의 보관 위치나 이모의 연락처를 공유하기 전에 사용자에게 확인하라."
+    },
+    "b18ff5b4-4f0d-5b93-8c41-439e5b15c710": {
+      "type": "memory",
+      "uid": "b18ff5b4-4f0d-5b93-8c41-439e5b15c710",
+      "content": "공동주택의 관리실은 신원 확인 없이 세대 열쇠를 대신 보관하지 않는다."
+    }
+  },
+  "order": [
+    "1c627e4c-c393-5bd3-a5ae-b3318821be73",
+    "e80936de-87af-5dbb-ab94-d456bbfaab0a",
+    "7c26cf33-0630-5138-910a-6d37d6ed2b63",
+    "c3f0f26c-8d89-55e3-8bf3-398271e417e7",
+    "7d7d00a3-c5af-5441-bb50-9631fbfd7979",
+    "2e0df581-bd54-54f5-94ef-b719427fc88c",
+    "9278b64e-7550-5eb6-bbfd-544a2ae4ec3d",
+    "76fb9115-a3f2-5ce3-a445-c3d1e38e4253",
+    "6fa50e1d-8bd1-557a-9b03-1e4a4dc664bd",
+    "b18ff5b4-4f0d-5b93-8c41-439e5b15c710"
+  ]
+}

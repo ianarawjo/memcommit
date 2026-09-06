@@ -1,4 +1,5 @@
 # 과제 3 설명
 
-- description/task-3 [PP] 상황 · 정부가 의료 서비스 과정의 대부분 단계를 지원할 수 있는 새로운 AI 의료 에이전트를 제공한다고 가정해 보십시오. 더 유용한 지원을 제공하기 위해 이 에이전트는 당신의 로컬 에이전트가 이전부터 사용해 온 개인 Memory에 대한 접근을 요청합니다. 이 Memory에는 다른 에이전트들과 나눈 과거 대화뿐 아니라 당신의 삶 거의 모든 영역에 관한 정보가 포함되어 있습니다.
-- description/task-3-task [PP] 과업 · 어떤 정보를 제공하고 어떤 정보를 제외할지 결정한 뒤, 선택한 정보만 전송하십시오.
+Memory 본문은 아래 Context JSON 파일에서 관리한다. 이 문서는 데이터 계약과 탐색용 인덱스다.
+
+- [`description`](../native/task-3/task-3/ko/description/context.json)

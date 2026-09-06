@@ -1,0 +1,68 @@
+{
+  "uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+  "name": "local/personal-memory/2025/01",
+  "memories": {
+    "50911f7e-75a1-5099-99f1-e471bb8e6cb6": {
+      "type": "memory",
+      "uid": "50911f7e-75a1-5099-99f1-e471bb8e6cb6",
+      "content": "One of the user's identity documents needs renewal in the second half of 2025."
+    },
+    "d5bd9f79-7295-5014-9668-83b7cffc78e2": {
+      "type": "memory",
+      "uid": "d5bd9f79-7295-5014-9668-83b7cffc78e2",
+      "content": "The user postponed an application until the next day after spending time looking for document photos in scattered folders."
+    },
+    "5f92f6a3-1739-580c-bd63-1a936098ccd0": {
+      "type": "memory",
+      "uid": "5f92f6a3-1739-580c-bd63-1a936098ccd0",
+      "content": "After gathering the necessary copies in one folder, the user completed the renewal form in one sitting."
+    },
+    "929107ac-c62d-5920-9f71-12d4c9a102e9": {
+      "type": "memory",
+      "uid": "929107ac-c62d-5920-9f71-12d4c9a102e9",
+      "content": "The user entered an abbreviated name on an official form and then discovered that it differed from the supporting document."
+    },
+    "df8b90c2-4310-5e89-b979-508309bf6b04": {
+      "type": "memory",
+      "uid": "df8b90c2-4310-5e89-b979-508309bf6b04",
+      "content": "On the next application, after comparing the name with the source document, the user did not receive a correction request."
+    },
+    "306b9df1-d713-5413-b448-e2b42376d827": {
+      "type": "memory",
+      "uid": "306b9df1-d713-5413-b448-e2b42376d827",
+      "content": "The user put only the submission deadline in the calendar and missed the application deadline by one day because they did not check the issuance period."
+    },
+    "870b57b5-4cdb-54fc-b17f-8ffb86dad802": {
+      "type": "memory",
+      "uid": "870b57b5-4cdb-54fc-b17f-8ffb86dad802",
+      "content": "On the next application, the user recorded the expected issuance date separately in the calendar."
+    },
+    "a0fe456c-0794-5bce-8ef9-9558e9833471": {
+      "type": "memory",
+      "uid": "a0fe456c-0794-5bce-8ef9-9558e9833471",
+      "content": "Staff at a public-service counter expect a person requesting identity verification to bring an original as well as a copy."
+    },
+    "111972b9-e05f-5e1b-b121-ef9e51572d1d": {
+      "type": "memory",
+      "uid": "111972b9-e05f-5e1b-b121-ef9e51572d1d",
+      "content": "When planning an official application, put both the submission deadline and expected issuance date in the calendar and verify them."
+    },
+    "c9872898-ec4f-576e-b154-ff6fda581a1a": {
+      "type": "memory",
+      "uid": "c9872898-ec4f-576e-b154-ff6fda581a1a",
+      "content": "The local agent cannot determine the current validity of an identity document without its expiration date."
+    }
+  },
+  "order": [
+    "50911f7e-75a1-5099-99f1-e471bb8e6cb6",
+    "d5bd9f79-7295-5014-9668-83b7cffc78e2",
+    "5f92f6a3-1739-580c-bd63-1a936098ccd0",
+    "929107ac-c62d-5920-9f71-12d4c9a102e9",
+    "df8b90c2-4310-5e89-b979-508309bf6b04",
+    "306b9df1-d713-5413-b448-e2b42376d827",
+    "870b57b5-4cdb-54fc-b17f-8ffb86dad802",
+    "a0fe456c-0794-5bce-8ef9-9558e9833471",
+    "111972b9-e05f-5e1b-b121-ef9e51572d1d",
+    "c9872898-ec4f-576e-b154-ff6fda581a1a"
+  ]
+}

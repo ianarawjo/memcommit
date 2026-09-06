@@ -1,0 +1,56 @@
+{
+  "uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+  "name": "local/guardrails/minimization-and-redaction",
+  "memories": {
+    "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24": {
+      "type": "memory",
+      "uid": "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24",
+      "content": "Select only the smallest Memory unit needed for the current purpose."
+    },
+    "9d626b1a-d3f8-57ee-919e-4a103f974c01": {
+      "type": "memory",
+      "uid": "9d626b1a-d3f8-57ee-919e-4a103f974c01",
+      "content": "Redact identifiers from the content when they are not needed for sharing."
+    },
+    "c679d589-afa1-59bd-9973-a20076c1fc8d": {
+      "type": "memory",
+      "uid": "c679d589-afa1-59bd-9973-a20076c1fc8d",
+      "content": "Check that generalized wording does not change the source's essential meaning."
+    },
+    "ee35327b-43ee-5dc2-9e6f-4632ce25636c": {
+      "type": "memory",
+      "uid": "ee35327b-43ee-5dc2-9e6f-4632ce25636c",
+      "content": "Do not replace a removed value with a plausible value."
+    },
+    "8a1824a2-c4a3-5648-9f9a-c449f82a71a5": {
+      "type": "memory",
+      "uid": "8a1824a2-c4a3-5648-9f9a-c449f82a71a5",
+      "content": "Show the user the types of fields that were redacted."
+    },
+    "2dfad7bd-3d8a-5dc0-babd-8fa4eeb1555a": {
+      "type": "memory",
+      "uid": "2dfad7bd-3d8a-5dc0-babd-8fa4eeb1555a",
+      "content": "Omitting information is not a statement of the opposite fact."
+    },
+    "0b514128-2b69-534e-bac9-e685aefc5683": {
+      "type": "memory",
+      "uid": "0b514128-2b69-534e-bac9-e685aefc5683",
+      "content": "A recipient organization may interpret content omitted from a summary as “not applicable” rather than “not verified.”"
+    },
+    "9e254845-ed87-5fe5-97e8-b4454bb4382b": {
+      "type": "memory",
+      "uid": "9e254845-ed87-5fe5-97e8-b4454bb4382b",
+      "content": "Combining multiple de-identified fragments can re-identify a person."
+    }
+  },
+  "order": [
+    "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24",
+    "9d626b1a-d3f8-57ee-919e-4a103f974c01",
+    "c679d589-afa1-59bd-9973-a20076c1fc8d",
+    "ee35327b-43ee-5dc2-9e6f-4632ce25636c",
+    "8a1824a2-c4a3-5648-9f9a-c449f82a71a5",
+    "2dfad7bd-3d8a-5dc0-babd-8fa4eeb1555a",
+    "0b514128-2b69-534e-bac9-e685aefc5683",
+    "9e254845-ed87-5fe5-97e8-b4454bb4382b"
+  ]
+}

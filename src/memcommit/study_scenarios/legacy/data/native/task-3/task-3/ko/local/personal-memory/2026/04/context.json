@@ -1,0 +1,68 @@
+{
+  "uid": "16e860a8-7a90-5b7a-adc3-1c487ef97e03",
+  "name": "local/personal-memory/2026/04",
+  "memories": {
+    "384f4e47-1d90-5c4e-984a-6403fb26df74": {
+      "type": "memory",
+      "uid": "384f4e47-1d90-5c4e-984a-6403fb26df74",
+      "content": "사용자는 기부할 옷을 현관 옆 큰 가방에 모아 둔다."
+    },
+    "16be89a1-66f7-5241-993a-d495a7bc1feb": {
+      "type": "memory",
+      "uid": "16be89a1-66f7-5241-993a-d495a7bc1feb",
+      "content": "사용자는 서랍 하나를 한꺼번에 비웠다가 필요한 충전기를 찾지 못했다."
+    },
+    "3b402d53-6d16-5f10-9964-a3f504f2ee27": {
+      "type": "memory",
+      "uid": "3b402d53-6d16-5f10-9964-a3f504f2ee27",
+      "content": "사용자는 다음 정리에서는 물건을 종류별로 나눈 뒤 버릴 것만 가방에 넣었다."
+    },
+    "657f55d0-cbe6-5098-a34a-669acbb59ad7": {
+      "type": "memory",
+      "uid": "657f55d0-cbe6-5098-a34a-669acbb59ad7",
+      "content": "사용자는 입지 않은 옷을 사진으로 남겨 두고도 한 달 동안 다시 꺼내지 않았다."
+    },
+    "b152e8f8-1d98-53dc-8c50-965b1dadd4d7": {
+      "type": "memory",
+      "uid": "b152e8f8-1d98-53dc-8c50-965b1dadd4d7",
+      "content": "사용자는 그 옷들을 기부 가방에 옮긴 뒤 옷장 한 칸을 비웠다."
+    },
+    "049f4e89-aadf-5851-8c0c-456c5bb9fb7a": {
+      "type": "memory",
+      "uid": "049f4e89-aadf-5851-8c0c-456c5bb9fb7a",
+      "content": "사용자는 중요한 종이와 광고지를 함께 버릴 뻔해 재활용 상자를 다시 확인했다."
+    },
+    "828790fa-0e60-5710-a4b1-6a93827088f2": {
+      "type": "memory",
+      "uid": "828790fa-0e60-5710-a4b1-6a93827088f2",
+      "content": "사용자는 다음 정리 때 문서용 상자를 따로 두어 종이를 섞지 않았다."
+    },
+    "6e4c3217-e8aa-55a8-b08a-157c280282e1": {
+      "type": "memory",
+      "uid": "6e4c3217-e8aa-55a8-b08a-157c280282e1",
+      "content": "엄마는 상태가 좋은 주방용품을 버리기 전에 필요한지 한 번 물어봐 달라고 한다."
+    },
+    "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff": {
+      "type": "memory",
+      "uid": "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff",
+      "content": "개인 문서나 타인의 물건을 폐기 후보로 표시하기 전에 사용자에게 확인하라."
+    },
+    "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f": {
+      "type": "memory",
+      "uid": "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f",
+      "content": "로컬 에이전트는 사용 빈도만으로 물건의 정서적 의미를 판단할 수 없다."
+    }
+  },
+  "order": [
+    "384f4e47-1d90-5c4e-984a-6403fb26df74",
+    "16be89a1-66f7-5241-993a-d495a7bc1feb",
+    "3b402d53-6d16-5f10-9964-a3f504f2ee27",
+    "657f55d0-cbe6-5098-a34a-669acbb59ad7",
+    "b152e8f8-1d98-53dc-8c50-965b1dadd4d7",
+    "049f4e89-aadf-5851-8c0c-456c5bb9fb7a",
+    "828790fa-0e60-5710-a4b1-6a93827088f2",
+    "6e4c3217-e8aa-55a8-b08a-157c280282e1",
+    "3a1bbc9d-c509-5bf6-bd2b-34be32c57eff",
+    "5bd5a2c0-8361-5c63-8fef-f1e3a2cbf22f"
+  ]
+}

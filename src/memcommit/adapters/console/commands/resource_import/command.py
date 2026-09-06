@@ -27,6 +27,10 @@ from memcommit.application.operations.resource_import.profile import (
     import_baseline_profile,
     import_profile_from_profile,
 )
+from memcommit.application.operations.resource_import.documents.application import (
+    import_context_from_documents,
+    import_memory_from_document,
+)
 
 
 _RESOURCE_KINDS = {"profile", "context", "memory"}
@@ -188,7 +192,9 @@ def cmd(
     ] = None,
     source: Annotated[
         Optional[Path],
-        typer.Option("--from", help="External source .mem store or package"),
+        typer.Option(
+            "--from", help="External .mem store/package, or native Context/Memory JSON"
+        ),
     ] = None,
     source_profile: Annotated[
         Optional[str],
@@ -276,11 +282,50 @@ def cmd(
             _fail("Legacy Profile import requires --from PATH.")
         kind = "profile"
         resource_name = kind_or_name
-    elif resource_name is None:
+    elif resource_name is None and not (
+        source is not None and kind in {"context", "memory"}
+    ):
         _fail(f"{kind.title()} import requires a resource name or selector.")
 
-    assert resource_name is not None
     try:
+        if kind in {"context", "memory"} and source is not None:
+            allowed = (
+                {"--from", "--as", "--direct", "--recursive"}
+                if kind == "context"
+                else {"--from", "--into"}
+            )
+            _reject_options(options, allowed=allowed)
+            if kind == "context":
+                result = import_context_from_documents(
+                    source,
+                    source_name=resource_name,
+                    target_name=target_name,
+                    recursive=recursive,
+                )
+            else:
+                result = import_memory_from_document(
+                    source,
+                    memory_selector=resource_name,
+                    target_context_locator=target_context,
+                )
+            if kind == "context":
+                typer.echo(
+                    f"Imported {len(result.target_contexts)} Context(s) · "
+                    f"{len(result.memory_uids)} Memory(s) from native JSON."
+                )
+            else:
+                typer.echo(
+                    f"Imported native JSON Memory [{display_escape_text(result.memory_uids[0][:8])}]."
+                )
+            typer.echo(
+                "Contexts: "
+                + ", ".join(
+                    display_escape_text(name) for name in result.target_contexts
+                )
+            )
+            return
+
+        assert resource_name is not None
         if kind == "profile":
             _reject_options(options, allowed={"--from", "--from-profile"})
             _profile_import(

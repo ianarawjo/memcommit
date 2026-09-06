@@ -31,6 +31,7 @@ from memcommit.study_scenarios.legacy.fixtures import (
 )
 from memcommit.application.operations.profile.config import GRANT_PERMISSIONS
 from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store.infrastructure.atomic_io import _canonical_json_digest
 from memcommit.core.memory_translation import (
     MemoryTranslationCatalog,
     TRANSLATION_ORIGIN_IMPORTED,
@@ -656,14 +657,8 @@ def _manifest_entry(
         verified=pair.canonical.verified,
         english_sha256=_digest(pair.canonical.content),
         korean_sha256=_digest(pair.translation.content),
-        source_english=(
-            f"{pair.canonical.source_path.parent.name}/"
-            f"{pair.canonical.source_path.name}"
-        ),
-        source_korean=(
-            f"{pair.translation.source_path.parent.name}/"
-            f"{pair.translation.source_path.name}"
-        ),
+        source_english=pair.canonical.source_location,
+        source_korean=pair.translation.source_location,
         translation_origin=TRANSLATION_ORIGIN_IMPORTED,
         translation_review_status=TRANSLATION_REVIEW_UNREVIEWED,
     )
@@ -705,7 +700,12 @@ def _save_contexts(
             key=lambda item: (-item.name.count("/"), item.name),
         )
     )
-    store.create_missing_contexts(
+    from memcommit.application.operations.resource_import.documents.publication import (
+        import_context_records,
+    )
+
+    import_context_records(
+        store,
         entries,
         make_current=profile_spec.current_context,
     )
@@ -802,13 +802,38 @@ def _build_profile_contents(
         list[tuple[Memory, FixtureTranslationPair]],
     ] = {}
     manifest: list[BundleManifestEntry] = []
-    for context_name in profile_spec.initial_contexts:
-        _ensure_context(contexts, context_name, task=task_spec.task)
+    native_root = fixture_root / "native" / f"task-{task_spec.task}" / profile_spec.name / "en"
+    use_native = (fixture_root / "native" / "metadata").is_dir()
+    if use_native:
+        from memcommit.application.operations.resource_import.documents.codec import read_context_documents
+
+        contexts = {document.value.name: document.value for document in read_context_documents(native_root)}
+    else:
+        for context_name in profile_spec.initial_contexts:
+            _ensure_context(contexts, context_name, task=task_spec.task)
 
     with _isolated_store_root(store_root):
         store = MemoryStore()
         for dataset_spec in profile_spec.datasets:
             dataset, pairs = _load_pairs(dataset_spec.dataset, fixture_root)
+            if use_native:
+                for pair in pairs:
+                    runtime_locator = _runtime_locator(
+                        pair.canonical, authoring_root=dataset.spec.context_name,
+                        runtime_root=dataset_spec.runtime_root,
+                        year_month_hierarchy=dataset_spec.year_month_hierarchy,
+                    )
+                    owner_name = runtime_locator.rsplit("/", 1)[0]
+                    owner = contexts.get(owner_name)
+                    memory = owner.memories.get(pair.canonical.memory_uid) if owner else None
+                    if not isinstance(memory, Memory) or memory.content != pair.canonical.content:
+                        raise StudyBundleError("Native fixture placement differs from its Study contract.")
+                    korean_by_owner.setdefault(owner_name, []).append((memory, pair))
+                    manifest.append(_manifest_entry(
+                        task_spec.task, profile_spec.name, dataset_spec.dataset, pair,
+                        runtime_context=owner_name, memory_uid=memory.uid, query_only=False,
+                    ))
+                continue
             # A fixture's historical query_only flag describes the task-facing
             # interaction.  The authority profile owns the same records as
             # ordinary Contexts so its operator can inspect and maintain them.
@@ -824,6 +849,11 @@ def _build_profile_contents(
                 )
             )
         # Only real zero-Memory Contexts provide structural namespace rows.
+        if use_native:
+            declared = {entry.memory_uid for entry in manifest}
+            present = {item.uid for context in contexts.values() for item in context.iter_items() if isinstance(item, Memory)}
+            if declared != present:
+                raise StudyBundleError("Native profile Memory set differs from its declared datasets.")
         # Link any explicitly materialized direct parent after all datasets
         # are loaded; the picker itself never invents a missing prefix.
         for child_name in sorted(contexts, key=lambda name: (name.count("/"), name)):
@@ -853,6 +883,11 @@ def _build_profile_contents(
             "store_path": (Path("profiles") / profile_spec.name / ".mem").as_posix(),
             "current_context": profile_spec.current_context,
             "context_count": len(contexts),
+            # JSON makes order, Context identity and reference placement
+            # authored input too; Memory body hashes alone no longer cover it.
+            "context_records_sha256": _canonical_json_digest({
+                name: context.to_dict() for name, context in contexts.items()
+            }),
             "ordinary_count": len(entries),
             "datasets": [dataset.dataset for dataset in profile_spec.datasets],
             "entries": [asdict(entry) for entry in entries],

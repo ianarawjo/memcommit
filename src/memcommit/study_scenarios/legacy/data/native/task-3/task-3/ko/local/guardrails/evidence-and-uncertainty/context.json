@@ -1,0 +1,44 @@
+{
+  "uid": "136dface-67b3-5116-86e2-b70449b30366",
+  "name": "local/guardrails/evidence-and-uncertainty",
+  "memories": {
+    "aff10a17-19e9-5e2e-b082-4971c8ac5b2f": {
+      "type": "memory",
+      "uid": "aff10a17-19e9-5e2e-b082-4971c8ac5b2f",
+      "content": "시점에 따라 달라지는 내용에는 마지막 확인 시점을 표시하라."
+    },
+    "3f8f3387-8c2a-5059-8b4f-4b1478f5076a": {
+      "type": "memory",
+      "uid": "3f8f3387-8c2a-5059-8b4f-4b1478f5076a",
+      "content": "확실하지 않은 내용은 불확실하다고 표시하라."
+    },
+    "aa806a1b-9eaa-5964-98a6-ed787d57887b": {
+      "type": "memory",
+      "uid": "aa806a1b-9eaa-5964-98a6-ed787d57887b",
+      "content": "충돌이 해소되지 않은 메모리는 어느 한쪽을 현재 사실로 확정하지 마라."
+    },
+    "b59b39e5-f099-5111-9ce9-8eaef8472cc8": {
+      "type": "memory",
+      "uid": "b59b39e5-f099-5111-9ce9-8eaef8472cc8",
+      "content": "각 공유 후보가 근거로 삼은 로컬 메모리를 추적 가능하게 유지하라."
+    },
+    "77a7fd0e-d11c-596f-ac36-ffe2a183b6ea": {
+      "type": "memory",
+      "uid": "77a7fd0e-d11c-596f-ac36-ffe2a183b6ea",
+      "content": "Memory가 기록된 뒤 사실이 바뀌어도 원본 Memory가 갱신되지 않으면 공유 후보에는 이전 상태가 남는다."
+    },
+    "587c2393-0105-5905-813e-c188b5a976f4": {
+      "type": "memory",
+      "uid": "587c2393-0105-5905-813e-c188b5a976f4",
+      "content": "수신 에이전트는 표시되지 않은 불확실성을 확인된 사실로 해석할 수 있다."
+    }
+  },
+  "order": [
+    "aff10a17-19e9-5e2e-b082-4971c8ac5b2f",
+    "3f8f3387-8c2a-5059-8b4f-4b1478f5076a",
+    "aa806a1b-9eaa-5964-98a6-ed787d57887b",
+    "b59b39e5-f099-5111-9ce9-8eaef8472cc8",
+    "77a7fd0e-d11c-596f-ac36-ffe2a183b6ea",
+    "587c2393-0105-5905-813e-c188b5a976f4"
+  ]
+}

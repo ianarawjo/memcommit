@@ -1,0 +1,308 @@
+{
+  "uid": "d1995b25-eefe-5353-8c23-0e0965e7a6ae",
+  "name": "campus-wiki/shop-updates",
+  "memories": {
+    "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83": {
+      "type": "memory",
+      "uid": "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83",
+      "content": "본관 1층 캠퍼스스토어는 방학 중에도 오전 7시부터 오후 11시까지 운영한다."
+    },
+    "3ecf1523-62fe-5bb1-be29-2b4a9b3384df": {
+      "type": "memory",
+      "uid": "3ecf1523-62fe-5bb1-be29-2b4a9b3384df",
+      "content": "공학관 캠퍼스스토어의 방학 중 통상 운영시간은 오전 9시부터 오후 6시까지다."
+    },
+    "2e45bd48-390e-5b77-9082-fec388b4bd9f": {
+      "type": "memory",
+      "uid": "2e45bd48-390e-5b77-9082-fec388b4bd9f",
+      "content": "본관 1층 카페는 여름방학에도 운영한다."
+    },
+    "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1": {
+      "type": "memory",
+      "uid": "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1",
+      "content": "본관 1층 식사 공간은 여름방학에도 운영한다."
+    },
+    "df0dbcfb-86c8-52a0-b303-71a6e2dfa4c6": {
+      "type": "memory",
+      "uid": "df0dbcfb-86c8-52a0-b303-71a6e2dfa4c6",
+      "content": "본관 1층 이노베이션 허브 안에는 커피머신이 있다."
+    },
+    "65a4b93f-f1da-52c0-b013-34c876391794": {
+      "type": "memory",
+      "uid": "65a4b93f-f1da-52c0-b013-34c876391794",
+      "content": "본관 1층 이노베이션 허브 안의 커피머신은 교직원만 사용할 수 있다."
+    },
+    "ed7db155-c6c8-5a91-a574-fc44b081a92a": {
+      "type": "memory",
+      "uid": "ed7db155-c6c8-5a91-a574-fc44b081a92a",
+      "content": "서편 복합관의 ATM은 본관 안의 ATM과 별개다."
+    },
+    "ce4dd3c2-790f-5ef7-b851-e693f750c1ef": {
+      "type": "memory",
+      "uid": "ce4dd3c2-790f-5ef7-b851-e693f750c1ef",
+      "content": "서편 복합관의 ATM은 A 야외주차장 옆 건물에 있다."
+    },
+    "46192dec-18a4-5404-b3fe-5c0c42be97da": {
+      "type": "memory",
+      "uid": "46192dec-18a4-5404-b3fe-5c0c42be97da",
+      "content": "저녁에 현금이 필요한 학생은 본관 ATM을 언제든 이용할 수 있으리라 기대하는 경우가 많다."
+    },
+    "644d9c0b-c300-51e4-b680-4318328aa4b9": {
+      "type": "memory",
+      "uid": "644d9c0b-c300-51e4-b680-4318328aa4b9",
+      "content": "늦은 시간에 간단한 물품이 필요한 학생은 본관 24시간 매장이 열려 있으리라 기대한다."
+    },
+    "b03652e7-6a61-5dd6-8484-f19f93536d59": {
+      "type": "memory",
+      "uid": "b03652e7-6a61-5dd6-8484-f19f93536d59",
+      "content": "폐쇄 시설과 같은 종류의 대체 장소를 확인해 안내하라."
+    },
+    "5f43f896-6a76-51f2-b034-221955b4165f": {
+      "type": "memory",
+      "uid": "5f43f896-6a76-51f2-b034-221955b4165f",
+      "content": "서편 복합관 시설과 본관 시설을 같은 곳으로 취급하지 마라."
+    },
+    "b0fa660c-d579-5c27-bf74-c9b3839fd36d": {
+      "type": "memory",
+      "uid": "b0fa660c-d579-5c27-bf74-c9b3839fd36d",
+      "content": "편의시설 안내 에이전트는 게시된 위치를 답할 수 있다."
+    },
+    "16efed59-7583-5467-828e-b856ccf7c5e1": {
+      "type": "memory",
+      "uid": "16efed59-7583-5467-828e-b856ccf7c5e1",
+      "content": "편의시설 안내 에이전트는 게시된 운영시간을 답할 수 있다."
+    },
+    "150a226f-2cfb-523a-ae59-a37becaa4310": {
+      "type": "memory",
+      "uid": "150a226f-2cfb-523a-ae59-a37becaa4310",
+      "content": "편의시설 안내 에이전트는 상품 재고를 확인할 수 없다."
+    },
+    "0147df04-89c5-56a0-b119-5b6baf57bb29": {
+      "type": "memory",
+      "uid": "0147df04-89c5-56a0-b119-5b6baf57bb29",
+      "content": "편의시설 안내 에이전트는 결제 가능 여부를 확인할 수 없다."
+    },
+    "91791ba2-e7cc-5437-9855-e10726378d20": {
+      "type": "memory",
+      "uid": "91791ba2-e7cc-5437-9855-e10726378d20",
+      "content": "편의시설 안내 에이전트는 당일의 돌발 휴점을 확인할 수 없다."
+    },
+    "39b4d014-8b9d-55ac-a5c2-ccc3e948a721": {
+      "type": "memory",
+      "uid": "39b4d014-8b9d-55ac-a5c2-ccc3e948a721",
+      "content": "캠퍼스스토어 위탁 운영업체는 저녁 시간 학생들이 본관 ATM과 24시간 매장을 함께 이용하는 경향을 수요 계획에 반영한다."
+    },
+    "6248ac88-de59-5039-b01e-328669694909": {
+      "type": "memory",
+      "uid": "6248ac88-de59-5039-b01e-328669694909",
+      "content": "공학관 캠퍼스스토어는 학용품과 기본 생활용품을 판매한다."
+    },
+    "a64be11d-06da-56b0-9dcb-9c26b75a1cbb": {
+      "type": "memory",
+      "uid": "a64be11d-06da-56b0-9dcb-9c26b75a1cbb",
+      "content": "본관 캠퍼스스토어의 반품 조건은 매장 영수증 안내에 게시된다."
+    },
+    "cf273ead-e557-5449-bc44-28b3fa5c1dc3": {
+      "type": "memory",
+      "uid": "cf273ead-e557-5449-bc44-28b3fa5c1dc3",
+      "content": "캠퍼스스토어에서 판매하는 상품의 가격은 각 매장이 정한다."
+    },
+    "124a8981-a1c3-518a-a2cf-8c128b2e0c73": {
+      "type": "memory",
+      "uid": "124a8981-a1c3-518a-a2cf-8c128b2e0c73",
+      "content": "본관 식사 공간의 당일 메뉴는 입구의 메뉴판에 게시된다."
+    },
+    "451e08d8-5b71-5655-af71-94e99eb46cb2": {
+      "type": "memory",
+      "uid": "451e08d8-5b71-5655-af71-94e99eb46cb2",
+      "content": "식사 메뉴의 주요 알레르기 유발 성분 표시는 메뉴판에서 확인할 수 있다."
+    },
+    "ad2ae9ae-4630-5d1d-8930-ff5e61469bed": {
+      "type": "memory",
+      "uid": "ad2ae9ae-4630-5d1d-8930-ff5e61469bed",
+      "content": "식음 안내 에이전트는 조리 공간의 교차접촉이 없다고 보장할 수 없다."
+    },
+    "5b24402f-f130-5110-aa9b-3d7d781d43f9": {
+      "type": "memory",
+      "uid": "5b24402f-f130-5110-aa9b-3d7d781d43f9",
+      "content": "채식 선택지는 당일 메뉴판의 식단 기호로 표시된다."
+    },
+    "4b9bdbce-dc56-5ed3-b79c-a5dfc5bf586e": {
+      "type": "memory",
+      "uid": "4b9bdbce-dc56-5ed3-b79c-a5dfc5bf586e",
+      "content": "본관 1층에는 개인 물병을 채울 수 있는 음수대가 있다."
+    },
+    "d0fb793a-0864-5db7-a568-3fc424ae126a": {
+      "type": "memory",
+      "uid": "d0fb793a-0864-5db7-a568-3fc424ae126a",
+      "content": "본관 카페의 일반 좌석은 개별 예약을 받지 않는다."
+    },
+    "3b64fba2-0530-5ec2-87f0-858e0b15445a": {
+      "type": "memory",
+      "uid": "3b64fba2-0530-5ec2-87f0-858e0b15445a",
+      "content": "학생센터 공용 라운지에는 이용자가 쓸 수 있는 전자레인지가 있다."
+    },
+    "7930a9bc-37f3-5344-8aef-9111f1007813": {
+      "type": "memory",
+      "uid": "7930a9bc-37f3-5344-8aef-9111f1007813",
+      "content": "본관 2층에는 음료 자동판매기가 있다."
+    },
+    "3e06443d-ca8e-5f52-8500-e4c961bd45b7": {
+      "type": "memory",
+      "uid": "3e06443d-ca8e-5f52-8500-e4c961bd45b7",
+      "content": "본관 5층에는 간식 자동판매기가 있다."
+    },
+    "815ce86f-370a-51d0-8cb9-82aed0352946": {
+      "type": "memory",
+      "uid": "815ce86f-370a-51d0-8cb9-82aed0352946",
+      "content": "본관과 서편 복합관의 ATM은 서로 다른 운영기관이 관리한다."
+    },
+    "07312b3b-fe85-51cf-8f96-b11cb830a5dd": {
+      "type": "memory",
+      "uid": "07312b3b-fe85-51cf-8f96-b11cb830a5dd",
+      "content": "편의시설 안내 에이전트는 ATM 거래 내역을 열람하거나 거래 오류의 원인을 확인할 수 없다."
+    },
+    "56b07b71-d6b0-5cde-b3ca-e165ea0275f5": {
+      "type": "memory",
+      "uid": "56b07b71-d6b0-5cde-b3ca-e165ea0275f5",
+      "content": "ATM 카드 회수나 거래 오류는 해당 ATM 운영기관에 문의하라."
+    },
+    "dc4bb95b-4196-552e-91c0-1f788dc081f7": {
+      "type": "memory",
+      "uid": "dc4bb95b-4196-552e-91c0-1f788dc081f7",
+      "content": "방문자 서비스 창구의 운영시간은 본관 안내 페이지에 게시된다."
+    },
+    "eb08465c-7591-57d2-a932-ae4db8b73ef2": {
+      "type": "memory",
+      "uid": "eb08465c-7591-57d2-a932-ae4db8b73ef2",
+      "content": "방문자 서비스 창구는 캠퍼스 지도와 공개 시설 안내를 제공한다."
+    },
+    "8a8f4943-ef7d-54d2-b797-25037a7b9ad7": {
+      "type": "memory",
+      "uid": "8a8f4943-ef7d-54d2-b797-25037a7b9ad7",
+      "content": "일반 시설 문의는 공개 온라인 문의 양식으로 제출할 수 있다."
+    },
+    "53aa3f6e-1be2-5ccc-80c7-003286636621": {
+      "type": "memory",
+      "uid": "53aa3f6e-1be2-5ccc-80c7-003286636621",
+      "content": "학생지원 업무 중 개인 기록을 다루는 서비스는 본인 확인이 필요하다."
+    },
+    "3b187e27-31b2-543f-8c62-6b43135e7b40": {
+      "type": "memory",
+      "uid": "3b187e27-31b2-543f-8c62-6b43135e7b40",
+      "content": "방문자는 캠퍼스의 공개 게스트 네트워크를 이용할 수 있다."
+    },
+    "fdbea8e9-d79b-5b0e-9742-406883f5aef6": {
+      "type": "memory",
+      "uid": "fdbea8e9-d79b-5b0e-9742-406883f5aef6",
+      "content": "게스트 네트워크의 접속 방법은 방문자 서비스 안내에 게시된다."
+    },
+    "209ddf18-2029-5fd1-82bf-e382dda2cf01": {
+      "type": "memory",
+      "uid": "209ddf18-2029-5fd1-82bf-e382dda2cf01",
+      "content": "공학관 캠퍼스스토어는 본관과 별도 건물에 있고 본관을 통과하지 않는 공개 보행로로 갈 수 있다."
+    },
+    "8d71aef9-b9e7-5ee5-914a-95a943c18090": {
+      "type": "memory",
+      "uid": "8d71aef9-b9e7-5ee5-914a-95a943c18090",
+      "content": "편의시설 안내 에이전트는 이용자의 구매 내역을 열람할 수 없다."
+    },
+    "fa47663f-27a3-5962-ac4d-b2f7a905ec6d": {
+      "type": "memory",
+      "uid": "fa47663f-27a3-5962-ac4d-b2f7a905ec6d",
+      "content": "식음 안내 에이전트는 메뉴에 없는 재료 구성을 추정하지 마라."
+    },
+    "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0": {
+      "type": "memory",
+      "uid": "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0",
+      "content": "공휴일에는 캠퍼스 상점과 식음시설의 운영시간이 각각 달라질 수 있다."
+    },
+    "1ff36f44-d288-52db-9f58-aa17a80a6259": {
+      "type": "memory",
+      "uid": "1ff36f44-d288-52db-9f58-aa17a80a6259",
+      "content": "시험기간의 연장 운영은 해당 매장의 공식 공지에서 확인하라."
+    },
+    "3534e0d3-d005-50cc-bafa-887b1e0918fc": {
+      "type": "memory",
+      "uid": "3534e0d3-d005-50cc-bafa-887b1e0918fc",
+      "content": "매장 운영자는 상품 재고와 판매 가능 여부를 결정한다."
+    },
+    "027bc3db-3b45-5d27-829d-678ecb2fed9e": {
+      "type": "memory",
+      "uid": "027bc3db-3b45-5d27-829d-678ecb2fed9e",
+      "content": "수업 사이 시간이 긴 학생은 본관 1층 식사 공간을 편하게 기다릴 수 있는 장소로 선호한다."
+    },
+    "45b26dcc-e2bc-554a-aeae-91aac780b121": {
+      "type": "memory",
+      "uid": "45b26dcc-e2bc-554a-aeae-91aac780b121",
+      "content": "외부 방문객은 공개 행사와 같은 건물 안에서 카페를 이용할 수 있으리라 기대하는 경우가 많다."
+    },
+    "c66e27a1-f73d-5da2-abfb-c14b76e2bd2d": {
+      "type": "memory",
+      "uid": "c66e27a1-f73d-5da2-abfb-c14b76e2bd2d",
+      "content": "다회용 용기 반납함은 본관 1층 식사 공간 출구 옆에 있다."
+    },
+    "0dfe62b6-7d78-5dc4-8ef0-e1fa8227dee5": {
+      "type": "memory",
+      "uid": "0dfe62b6-7d78-5dc4-8ef0-e1fa8227dee5",
+      "content": "본관 식사 공간에는 휠체어가 접근할 수 있는 좌석이 있다."
+    },
+    "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da": {
+      "type": "memory",
+      "uid": "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da",
+      "content": "서비스 이용 문제는 해당 시설의 게시된 문의 창구에 전달하도록 안내하라."
+    }
+  },
+  "order": [
+    "9e6dcc99-d2d7-54bd-adbf-ca20ebf22f83",
+    "3ecf1523-62fe-5bb1-be29-2b4a9b3384df",
+    "2e45bd48-390e-5b77-9082-fec388b4bd9f",
+    "5f686fb7-fc7a-5698-8cc5-d5ccff25dfe1",
+    "df0dbcfb-86c8-52a0-b303-71a6e2dfa4c6",
+    "65a4b93f-f1da-52c0-b013-34c876391794",
+    "ed7db155-c6c8-5a91-a574-fc44b081a92a",
+    "ce4dd3c2-790f-5ef7-b851-e693f750c1ef",
+    "46192dec-18a4-5404-b3fe-5c0c42be97da",
+    "644d9c0b-c300-51e4-b680-4318328aa4b9",
+    "b03652e7-6a61-5dd6-8484-f19f93536d59",
+    "5f43f896-6a76-51f2-b034-221955b4165f",
+    "b0fa660c-d579-5c27-bf74-c9b3839fd36d",
+    "16efed59-7583-5467-828e-b856ccf7c5e1",
+    "150a226f-2cfb-523a-ae59-a37becaa4310",
+    "0147df04-89c5-56a0-b119-5b6baf57bb29",
+    "91791ba2-e7cc-5437-9855-e10726378d20",
+    "39b4d014-8b9d-55ac-a5c2-ccc3e948a721",
+    "6248ac88-de59-5039-b01e-328669694909",
+    "a64be11d-06da-56b0-9dcb-9c26b75a1cbb",
+    "cf273ead-e557-5449-bc44-28b3fa5c1dc3",
+    "124a8981-a1c3-518a-a2cf-8c128b2e0c73",
+    "451e08d8-5b71-5655-af71-94e99eb46cb2",
+    "ad2ae9ae-4630-5d1d-8930-ff5e61469bed",
+    "5b24402f-f130-5110-aa9b-3d7d781d43f9",
+    "4b9bdbce-dc56-5ed3-b79c-a5dfc5bf586e",
+    "d0fb793a-0864-5db7-a568-3fc424ae126a",
+    "3b64fba2-0530-5ec2-87f0-858e0b15445a",
+    "7930a9bc-37f3-5344-8aef-9111f1007813",
+    "3e06443d-ca8e-5f52-8500-e4c961bd45b7",
+    "815ce86f-370a-51d0-8cb9-82aed0352946",
+    "07312b3b-fe85-51cf-8f96-b11cb830a5dd",
+    "56b07b71-d6b0-5cde-b3ca-e165ea0275f5",
+    "dc4bb95b-4196-552e-91c0-1f788dc081f7",
+    "eb08465c-7591-57d2-a932-ae4db8b73ef2",
+    "8a8f4943-ef7d-54d2-b797-25037a7b9ad7",
+    "53aa3f6e-1be2-5ccc-80c7-003286636621",
+    "3b187e27-31b2-543f-8c62-6b43135e7b40",
+    "fdbea8e9-d79b-5b0e-9742-406883f5aef6",
+    "209ddf18-2029-5fd1-82bf-e382dda2cf01",
+    "8d71aef9-b9e7-5ee5-914a-95a943c18090",
+    "fa47663f-27a3-5962-ac4d-b2f7a905ec6d",
+    "cf4cd9ec-c404-5fd8-bf58-2a68bd406fd0",
+    "1ff36f44-d288-52db-9f58-aa17a80a6259",
+    "3534e0d3-d005-50cc-bafa-887b1e0918fc",
+    "027bc3db-3b45-5d27-829d-678ecb2fed9e",
+    "45b26dcc-e2bc-554a-aeae-91aac780b121",
+    "c66e27a1-f73d-5da2-abfb-c14b76e2bd2d",
+    "0dfe62b6-7d78-5dc4-8ef0-e1fa8227dee5",
+    "5ea2bbd5-fc53-5bae-aaac-30aaa3e785da"
+  ]
+}

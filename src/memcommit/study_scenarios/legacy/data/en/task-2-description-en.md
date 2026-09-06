@@ -1,4 +1,5 @@
 # Task 2 Description
 
-- T2-D-001 — `description/task-2` — PP — SITUATION · Imagine that you are a graduate student preparing a two-page research proposal with two co-advisors who have equal authority. Each advisor has provided an agent memory store containing their writing policies on structure, emphasis, claims and evidence, tone, and terminology. Both sets of guidance are useful, but they are not identical: some policies apply in different contexts, some conflict with one another, and others express the same underlying idea in different ways.
-- T2-D-002 — `description/task-2-task` — PP — TASK · Combine the stores without favoring either advisor by consolidating duplicates, clarifying contexts, and either reconciling conflicts or preserving them with explanations.
+Memory content is maintained in the Context JSON files below. This document retains the data contract and a navigation index.
+
+- [`description`](../native/task-2/task-2/en/description/context.json)

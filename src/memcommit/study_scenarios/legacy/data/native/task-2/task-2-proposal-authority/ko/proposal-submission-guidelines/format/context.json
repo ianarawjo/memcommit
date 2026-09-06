@@ -1,0 +1,56 @@
+{
+  "uid": "7fe9fd43-0d6d-54b3-aa7d-06b6ad8dd0d1",
+  "name": "proposal-submission-guidelines/format",
+  "memories": {
+    "ec0f5d7b-369d-55cc-a238-b776c6b0271f": {
+      "type": "memory",
+      "uid": "ec0f5d7b-369d-55cc-a238-b776c6b0271f",
+      "content": "제안서 본문을 최대 두 쪽으로 제한하라."
+    },
+    "78acd8e3-6cc0-5fa0-a60d-d1f80e21e00a": {
+      "type": "memory",
+      "uid": "78acd8e3-6cc0-5fa0-a60d-d1f80e21e00a",
+      "content": "참고문헌은 본문 두 쪽 제한에 포함되지 않는다."
+    },
+    "21dd4a7f-f397-5d2a-b675-a4800c262a27": {
+      "type": "memory",
+      "uid": "21dd4a7f-f397-5d2a-b675-a4800c262a27",
+      "content": "본문에 배치한 그림과 표는 본문 두 쪽 제한에 포함된다."
+    },
+    "bff84712-882c-5a0d-a3e4-0e77912d9d3b": {
+      "type": "memory",
+      "uid": "bff84712-882c-5a0d-a3e4-0e77912d9d3b",
+      "content": "본문 글자 크기를 11포인트 이상으로 유지하라."
+    },
+    "0dfe0e3c-999d-58da-93d3-796e3954ca2b": {
+      "type": "memory",
+      "uid": "0dfe0e3c-999d-58da-93d3-796e3954ca2b",
+      "content": "모든 페이지를 US Letter 크기로 작성하라."
+    },
+    "f7e050f7-a5ed-5bea-b5b1-5decfc51edd7": {
+      "type": "memory",
+      "uid": "f7e050f7-a5ed-5bea-b5b1-5decfc51edd7",
+      "content": "본문 글꼴은 Arial을 사용하라."
+    },
+    "b641d18e-e6d4-5967-a01c-11182fafa8a8": {
+      "type": "memory",
+      "uid": "b641d18e-e6d4-5967-a01c-11182fafa8a8",
+      "content": "모든 페이지의 네 방향 여백을 1인치 이상으로 유지하라."
+    },
+    "801a95cb-fe6a-53f7-9e1a-e12ced336f34": {
+      "type": "memory",
+      "uid": "801a95cb-fe6a-53f7-9e1a-e12ced336f34",
+      "content": "심사자는 그림과 표를 본문과 별도로 먼저 훑는 경우가 많다."
+    }
+  },
+  "order": [
+    "ec0f5d7b-369d-55cc-a238-b776c6b0271f",
+    "78acd8e3-6cc0-5fa0-a60d-d1f80e21e00a",
+    "21dd4a7f-f397-5d2a-b675-a4800c262a27",
+    "bff84712-882c-5a0d-a3e4-0e77912d9d3b",
+    "0dfe0e3c-999d-58da-93d3-796e3954ca2b",
+    "f7e050f7-a5ed-5bea-b5b1-5decfc51edd7",
+    "b641d18e-e6d4-5967-a01c-11182fafa8a8",
+    "801a95cb-fe6a-53f7-9e1a-e12ced336f34"
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "uid": "2a4a102a-14f5-53bb-88ef-681448ebecff",
+  "name": "advisor2/feasibility",
+  "memories": {
+    "5c9755f8-78bd-5654-a3c7-8be0864e4f12": {
+      "type": "memory",
+      "uid": "5c9755f8-78bd-5654-a3c7-8be0864e4f12",
+      "content": "아직 검증되지 않은 일정 가정은 가정이라고 표시하라."
+    },
+    "75af48aa-b39e-5b55-95d9-f7f7d2becbad": {
+      "type": "memory",
+      "uid": "75af48aa-b39e-5b55-95d9-f7f7d2becbad",
+      "content": "아직 검증되지 않은 모집 가정은 가정이라고 표시하라."
+    },
+    "292e33b0-4bfd-5e3a-9379-0fbf3619c42d": {
+      "type": "memory",
+      "uid": "292e33b0-4bfd-5e3a-9379-0fbf3619c42d",
+      "content": "아직 검증되지 않은 기술 가정은 가정이라고 표시하라."
+    },
+    "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48": {
+      "type": "memory",
+      "uid": "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48",
+      "content": "각 핵심 시제품 기능과 현장 연구 절차에 필요한 자원을 역으로 확인하라."
+    },
+    "7be25c27-6d67-50fe-90b5-76fca32a93d8": {
+      "type": "memory",
+      "uid": "7be25c27-6d67-50fe-90b5-76fca32a93d8",
+      "content": "운영 검토자는 각 절차에 필요한 사람을 보고 실행 가능성을 판단한다."
+    },
+    "1aae182f-4eb3-58b7-b8cd-5ce517ead36a": {
+      "type": "memory",
+      "uid": "1aae182f-4eb3-58b7-b8cd-5ce517ead36a",
+      "content": "운영 검토자는 각 절차에 필요한 장비를 보고 실행 가능성을 판단한다."
+    },
+    "84f6e5e3-96b4-538b-a633-1b656204a296": {
+      "type": "memory",
+      "uid": "84f6e5e3-96b4-538b-a633-1b656204a296",
+      "content": "운영 검토자는 각 절차에 필요한 시간을 보고 실행 가능성을 판단한다."
+    },
+    "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be": {
+      "type": "memory",
+      "uid": "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be",
+      "content": "모집, 설치, 운영 지원에 필요한 현장 파트너의 약속과 확인 상태를 각각 적어라."
+    },
+    "0ce26892-666f-5ebe-95b2-c6f48915f18b": {
+      "type": "memory",
+      "uid": "0ce26892-666f-5ebe-95b2-c6f48915f18b",
+      "content": "배포 기간 중 소프트웨어 업데이트, 장비 점검, 사용자 지원을 맡을 책임자를 지정하라."
+    },
+    "4f35fd0c-005a-56a7-b33a-d74bde2d65eb": {
+      "type": "memory",
+      "uid": "4f35fd0c-005a-56a7-b33a-d74bde2d65eb",
+      "content": "사용자의 배포 준비도는 외부 서비스와 현장 인력 의존성이 드러날 때만 검토될 수 있다."
+    },
+    "3b96bf66-59e4-5dbf-98d3-937402abc67b": {
+      "type": "memory",
+      "uid": "3b96bf66-59e4-5dbf-98d3-937402abc67b",
+      "content": "현장 일정과 담당 인력은 연구자가 통제할 수 없는 운영 사정으로 바뀔 수 있다."
+    }
+  },
+  "order": [
+    "5c9755f8-78bd-5654-a3c7-8be0864e4f12",
+    "75af48aa-b39e-5b55-95d9-f7f7d2becbad",
+    "292e33b0-4bfd-5e3a-9379-0fbf3619c42d",
+    "c0c1fd8d-1aae-51a3-a1d4-66c1481d7b48",
+    "7be25c27-6d67-50fe-90b5-76fca32a93d8",
+    "1aae182f-4eb3-58b7-b8cd-5ce517ead36a",
+    "84f6e5e3-96b4-538b-a633-1b656204a296",
+    "16a461c4-d90d-5d0f-bfd0-4c1a116ec2be",
+    "0ce26892-666f-5ebe-95b2-c6f48915f18b",
+    "4f35fd0c-005a-56a7-b33a-d74bde2d65eb",
+    "3b96bf66-59e4-5dbf-98d3-937402abc67b"
+  ]
+}

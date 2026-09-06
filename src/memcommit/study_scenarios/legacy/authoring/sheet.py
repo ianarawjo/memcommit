@@ -164,7 +164,7 @@ def _read_tsv(path: Path) -> tuple[dict[str, str], ...]:
 
 
 def _source_file(record: FixtureMemory) -> str:
-    return f"{record.source_path.parent.name}/{record.source_path.name}"
+    return record.source_location
 
 
 def _section(record: FixtureMemory) -> str:

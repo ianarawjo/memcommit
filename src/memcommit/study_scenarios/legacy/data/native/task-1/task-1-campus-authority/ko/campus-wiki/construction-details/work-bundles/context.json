@@ -1,0 +1,200 @@
+{
+  "uid": "dd17ef33-d68c-5cc6-a9d6-7e67d94ea4db",
+  "name": "campus-wiki/construction-details/work-bundles",
+  "memories": {
+    "9c8ae937-8209-5057-9cfe-932fed08eb16": {
+      "type": "memory",
+      "uid": "9c8ae937-8209-5057-9cfe-932fed08eb16",
+      "content": "본관 전체 시설 점검에서 공용부를 육안으로 확인하라."
+    },
+    "608182cc-9e86-5483-bd58-5c23842a6c03": {
+      "type": "memory",
+      "uid": "608182cc-9e86-5483-bd58-5c23842a6c03",
+      "content": "본관 전체 시설 점검에서 기계실을 계측하라."
+    },
+    "b7bebe6a-7a43-5060-a164-682e6fa3debf": {
+      "type": "memory",
+      "uid": "b7bebe6a-7a43-5060-a164-682e6fa3debf",
+      "content": "본관 전체 시설 점검에서 전기실 기록을 대조하라."
+    },
+    "b3be2407-8fc9-5d0a-a96e-037168ad1c82": {
+      "type": "memory",
+      "uid": "b3be2407-8fc9-5d0a-a96e-037168ad1c82",
+      "content": "중앙 냉난방설비 작업에는 순환펌프 정렬 점검이 포함된다."
+    },
+    "ec0fed0f-648d-5308-82f3-b3d7a082809d": {
+      "type": "memory",
+      "uid": "ec0fed0f-648d-5308-82f3-b3d7a082809d",
+      "content": "중앙 냉난방설비 작업에는 노후 냉·온수 배관의 일부 구간 교체가 포함된다."
+    },
+    "b8c58738-47de-585c-be9f-9d9c755072d5": {
+      "type": "memory",
+      "uid": "b8c58738-47de-585c-be9f-9d9c755072d5",
+      "content": "엘리베이터 작업에는 제어반 갱신이 포함된다."
+    },
+    "964ec3de-7929-5785-a57a-07ab940ffd1d": {
+      "type": "memory",
+      "uid": "964ec3de-7929-5785-a57a-07ab940ffd1d",
+      "content": "엘리베이터 작업에는 구동장치 정렬이 포함된다."
+    },
+    "f67d88ab-798c-5a78-9b31-da24eff592d2": {
+      "type": "memory",
+      "uid": "f67d88ab-798c-5a78-9b31-da24eff592d2",
+      "content": "엘리베이터 작업에는 층별 출입문 센서 조정이 포함된다."
+    },
+    "e2b09ba0-b87e-5d1f-be41-afea42c00ada": {
+      "type": "memory",
+      "uid": "e2b09ba0-b87e-5d1f-be41-afea42c00ada",
+      "content": "소방 작업에는 화재경보·스프링클러·제연설비 연동시험이 포함된다."
+    },
+    "21917589-763e-5f85-b0e3-d49c9f2ca1ee": {
+      "type": "memory",
+      "uid": "21917589-763e-5f85-b0e3-d49c9f2ca1ee",
+      "content": "소방 작업에는 불량 감지기 교체가 포함된다."
+    },
+    "25e2cae7-5a27-57bb-a59a-ff0ae564606c": {
+      "type": "memory",
+      "uid": "25e2cae7-5a27-57bb-a59a-ff0ae564606c",
+      "content": "전기 작업에서는 주배전반, 비상전원 전환부, 노후 분전반을 순서대로 교체하라."
+    },
+    "ec3fa00a-bf6e-54ee-8f56-aa002b6cfbcc": {
+      "type": "memory",
+      "uid": "ec3fa00a-bf6e-54ee-8f56-aa002b6cfbcc",
+      "content": "1층 로비 작업을 기존 마감 철거, 바닥 평탄화, 벽체 재마감, 안내설비 재설치 순으로 진행하라."
+    },
+    "c1e21d77-64d1-522c-ac72-ac1655281240": {
+      "type": "memory",
+      "uid": "c1e21d77-64d1-522c-ac72-ac1655281240",
+      "content": "정문 작업에는 배수 경사 조정이 포함된다."
+    },
+    "20ff35b6-8e5e-5e54-a64b-8f7c898270e1": {
+      "type": "memory",
+      "uid": "20ff35b6-8e5e-5e54-a64b-8f7c898270e1",
+      "content": "정문 작업에는 미끄럼 방지 마감이 포함된다."
+    },
+    "016f9e62-8399-5ce9-947f-ce0f4a93b5c2": {
+      "type": "memory",
+      "uid": "016f9e62-8399-5ce9-947f-ce0f4a93b5c2",
+      "content": "정문 작업에는 손잡이 재설치가 포함된다."
+    },
+    "7822c660-5d62-5ef9-af7a-92e00e2bf5d2": {
+      "type": "memory",
+      "uid": "7822c660-5d62-5ef9-af7a-92e00e2bf5d2",
+      "content": "accessible ramp 작업에는 배수 경사 조정이 포함된다."
+    },
+    "79dd4cee-8c55-577d-b888-aa1e20dbf5da": {
+      "type": "memory",
+      "uid": "79dd4cee-8c55-577d-b888-aa1e20dbf5da",
+      "content": "accessible ramp 작업에는 미끄럼 방지 마감이 포함된다."
+    },
+    "908597be-55a0-5acd-ba81-51b586fb09cb": {
+      "type": "memory",
+      "uid": "908597be-55a0-5acd-ba81-51b586fb09cb",
+      "content": "accessible ramp 작업에는 손잡이 재설치가 포함된다."
+    },
+    "de397e26-c757-5870-a411-407c4ba37956": {
+      "type": "memory",
+      "uid": "de397e26-c757-5870-a411-407c4ba37956",
+      "content": "지하주차장 바닥 작업을 누수 흔적 조사, 균열 주입, 방수층 보강, 통행면 재도장 순으로 진행하라."
+    },
+    "18941847-ce45-5df5-be25-cb16b5a7dc1d": {
+      "type": "memory",
+      "uid": "18941847-ce45-5df5-be25-cb16b5a7dc1d",
+      "content": "지하주차장 배수관을 구역별로 격리해 점검하고 손상 구간만 교체하라."
+    },
+    "eebb0554-b421-5349-b499-bd08aeb7be2d": {
+      "type": "memory",
+      "uid": "eebb0554-b421-5349-b499-bd08aeb7be2d",
+      "content": "지하주차장 급수관을 구역별로 격리해 점검하고 손상 구간만 교체하라."
+    },
+    "67a7bc34-5b10-5458-9fb7-699d7d68ca5d": {
+      "type": "memory",
+      "uid": "67a7bc34-5b10-5458-9fb7-699d7d68ca5d",
+      "content": "지하주차장 오수관을 구역별로 격리해 점검하고 손상 구간만 교체하라."
+    },
+    "e3fc22ae-0728-5c86-a166-656b9b777713": {
+      "type": "memory",
+      "uid": "e3fc22ae-0728-5c86-a166-656b9b777713",
+      "content": "지하주차장 안전설비 작업에는 스프링클러 개별 시험이 포함된다."
+    },
+    "420d6948-c6b1-5c07-8581-4a3d4c7fc871": {
+      "type": "memory",
+      "uid": "420d6948-c6b1-5c07-8581-4a3d4c7fc871",
+      "content": "지하주차장 안전설비 작업에는 감지기 개별 시험이 포함된다."
+    },
+    "017143d0-2b3e-52b9-a2e8-b222b034f8d7": {
+      "type": "memory",
+      "uid": "017143d0-2b3e-52b9-a2e8-b222b034f8d7",
+      "content": "지하주차장 안전설비 작업에는 제연설비 개별 시험이 포함된다."
+    },
+    "ad74d2c3-cc96-55e9-8b2b-3575746b7dec": {
+      "type": "memory",
+      "uid": "ad74d2c3-cc96-55e9-8b2b-3575746b7dec",
+      "content": "지하주차장 안전설비 작업에는 환기설비 개별 시험이 포함된다."
+    },
+    "466b469a-7d80-5103-9802-233eff16459c": {
+      "type": "memory",
+      "uid": "466b469a-7d80-5103-9802-233eff16459c",
+      "content": "지하주차장 안전설비 작업에는 설비 간 연동 확인이 포함된다."
+    },
+    "f691d790-6ee8-5620-93d2-c44355e4b06e": {
+      "type": "memory",
+      "uid": "f691d790-6ee8-5620-93d2-c44355e4b06e",
+      "content": "본관 1층부터 3층까지의 화장실 작업에는 급배수 차단이 포함된다."
+    },
+    "a3a51312-9216-57b8-a51e-3b15af6db6d2": {
+      "type": "memory",
+      "uid": "a3a51312-9216-57b8-a51e-3b15af6db6d2",
+      "content": "본관 1층부터 3층까지의 화장실 작업에는 누수 확인이 포함된다."
+    },
+    "27134634-0816-5a5d-8c36-851d43e3196c": {
+      "type": "memory",
+      "uid": "27134634-0816-5a5d-8c36-851d43e3196c",
+      "content": "본관 1층부터 3층까지의 화장실 작업에는 천장 점검구 복구가 포함된다."
+    },
+    "b10c7133-df53-536f-8a66-53ac079661a9": {
+      "type": "memory",
+      "uid": "b10c7133-df53-536f-8a66-53ac079661a9",
+      "content": "전기, 소방, 엘리베이터, 냉난방설비를 차례로 시험한 뒤 건물 통합 운전으로 공사 완료 검수를 마무리하라."
+    },
+    "6e58dd1d-cb8f-5581-a4a3-31cc97c90200": {
+      "type": "memory",
+      "uid": "6e58dd1d-cb8f-5581-a4a3-31cc97c90200",
+      "content": "전기·소방·엘리베이터·냉난방설비 협력업체는 당일 시험 기록이 현장 책임자에게 전달되어야 작업 완료가 인정된다고 예상한다."
+    }
+  },
+  "order": [
+    "9c8ae937-8209-5057-9cfe-932fed08eb16",
+    "608182cc-9e86-5483-bd58-5c23842a6c03",
+    "b7bebe6a-7a43-5060-a164-682e6fa3debf",
+    "b3be2407-8fc9-5d0a-a96e-037168ad1c82",
+    "ec0fed0f-648d-5308-82f3-b3d7a082809d",
+    "b8c58738-47de-585c-be9f-9d9c755072d5",
+    "964ec3de-7929-5785-a57a-07ab940ffd1d",
+    "f67d88ab-798c-5a78-9b31-da24eff592d2",
+    "e2b09ba0-b87e-5d1f-be41-afea42c00ada",
+    "21917589-763e-5f85-b0e3-d49c9f2ca1ee",
+    "25e2cae7-5a27-57bb-a59a-ff0ae564606c",
+    "ec3fa00a-bf6e-54ee-8f56-aa002b6cfbcc",
+    "c1e21d77-64d1-522c-ac72-ac1655281240",
+    "20ff35b6-8e5e-5e54-a64b-8f7c898270e1",
+    "016f9e62-8399-5ce9-947f-ce0f4a93b5c2",
+    "7822c660-5d62-5ef9-af7a-92e00e2bf5d2",
+    "79dd4cee-8c55-577d-b888-aa1e20dbf5da",
+    "908597be-55a0-5acd-ba81-51b586fb09cb",
+    "de397e26-c757-5870-a411-407c4ba37956",
+    "18941847-ce45-5df5-be25-cb16b5a7dc1d",
+    "eebb0554-b421-5349-b499-bd08aeb7be2d",
+    "67a7bc34-5b10-5458-9fb7-699d7d68ca5d",
+    "e3fc22ae-0728-5c86-a166-656b9b777713",
+    "420d6948-c6b1-5c07-8581-4a3d4c7fc871",
+    "017143d0-2b3e-52b9-a2e8-b222b034f8d7",
+    "ad74d2c3-cc96-55e9-8b2b-3575746b7dec",
+    "466b469a-7d80-5103-9802-233eff16459c",
+    "f691d790-6ee8-5620-93d2-c44355e4b06e",
+    "a3a51312-9216-57b8-a51e-3b15af6db6d2",
+    "27134634-0816-5a5d-8c36-851d43e3196c",
+    "b10c7133-df53-536f-8a66-53ac079661a9",
+    "6e58dd1d-cb8f-5581-a4a3-31cc97c90200"
+  ]
+}

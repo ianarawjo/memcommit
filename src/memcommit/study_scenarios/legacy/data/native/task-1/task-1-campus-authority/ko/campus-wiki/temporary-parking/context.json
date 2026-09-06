@@ -1,0 +1,308 @@
+{
+  "uid": "c0d853a6-985e-574f-a921-7602a470d432",
+  "name": "campus-wiki/temporary-parking",
+  "memories": {
+    "5d690022-0ab6-52ed-b6a1-77d719c8c6ce": {
+      "type": "memory",
+      "uid": "5d690022-0ab6-52ed-b6a1-77d719c8c6ce",
+      "content": "본관 왼쪽의 A 야외주차장은 경사 진입로를 통해 본관 지하주차장과 연결된다."
+    },
+    "6960c0ca-295d-5449-91dc-d9293a6bb79d": {
+      "type": "memory",
+      "uid": "6960c0ca-295d-5449-91dc-d9293a6bb79d",
+      "content": "본관 지하주차장은 운영시간 동안 일반 차량이 진입해 주차할 수 있다."
+    },
+    "67d07765-ac5f-58f6-b7a5-f733cc4228d2": {
+      "type": "memory",
+      "uid": "67d07765-ac5f-58f6-b7a5-f733cc4228d2",
+      "content": "지하주차장 보행자 출입문은 운영시간 동안 일반 보행자에게 열린다."
+    },
+    "489960d6-711f-55d0-a410-16bcd6e9acf8": {
+      "type": "memory",
+      "uid": "489960d6-711f-55d0-a410-16bcd6e9acf8",
+      "content": "본관 로비에서 지하주차장으로 내려가는 내부 계단은 운영시간 동안 이용할 수 있다."
+    },
+    "df455ec8-c30d-5607-a9b8-8f84d93f0617": {
+      "type": "memory",
+      "uid": "df455ec8-c30d-5607-a9b8-8f84d93f0617",
+      "content": "C 야외주차장은 본관 지하주차장과 별개의 진입로를 사용한다."
+    },
+    "6a37c02f-4843-579f-b5b1-f90d6dbd0e5a": {
+      "type": "memory",
+      "uid": "6a37c02f-4843-579f-b5b1-f90d6dbd0e5a",
+      "content": "C 야외주차장은 본관 공사구역 밖에 있다."
+    },
+    "a81363fe-3ae5-5213-a555-e447515a1a73": {
+      "type": "memory",
+      "uid": "a81363fe-3ae5-5213-a555-e447515a1a73",
+      "content": "A 야외주차장–본관–중앙도서관 경로는 평상시 주차 뒤 도서관으로 가는 가장 짧은 동선 중 하나다."
+    },
+    "ccf54508-b01d-5fe5-bad3-083e3ce211cd": {
+      "type": "memory",
+      "uid": "ccf54508-b01d-5fe5-bad3-083e3ce211cd",
+      "content": "한 주차구역의 폐쇄를 캠퍼스 전체 주차 금지로 확대 해석하지 마라."
+    },
+    "1a4e603c-7f69-5bfc-b974-281dc8618326": {
+      "type": "memory",
+      "uid": "1a4e603c-7f69-5bfc-b974-281dc8618326",
+      "content": "이용 가능한 대체 주차구역을 별도로 확인하라."
+    },
+    "3bd9a7e3-af83-5d3d-9cca-0a3926c446e1": {
+      "type": "memory",
+      "uid": "3bd9a7e3-af83-5d3d-9cca-0a3926c446e1",
+      "content": "처음 방문하는 운전자는 본관과 가장 가까운 주차장에 일반 주차 공간이 있을 것으로 기대하는 경우가 많다."
+    },
+    "879b70b3-1404-559c-9cdb-9fdca1289e44": {
+      "type": "memory",
+      "uid": "879b70b3-1404-559c-9cdb-9fdca1289e44",
+      "content": "이동 지원이 필요한 방문객은 accessible entrance 가까이에 안전한 승하차 지점이 있기를 기대한다."
+    },
+    "c89147c1-1b06-5e93-97a1-85d59fd33e57": {
+      "type": "memory",
+      "uid": "c89147c1-1b06-5e93-97a1-85d59fd33e57",
+      "content": "짐이 있는 방문객은 본관 입구 가까이에서 잠시 하역할 수 있기를 기대한다."
+    },
+    "c9b6827a-36c3-5895-916c-a7066f398f5b": {
+      "type": "memory",
+      "uid": "c9b6827a-36c3-5895-916c-a7066f398f5b",
+      "content": "교직원은 소속 출입 자격이 있으면 본관 인접 주차장도 이용할 수 있다고 기대하는 경우가 많다."
+    },
+    "07101ab9-cebf-5fd6-8967-2ea16a80d03d": {
+      "type": "memory",
+      "uid": "07101ab9-cebf-5fd6-8967-2ea16a80d03d",
+      "content": "이동 지원이 필요한 교직원은 accessible entrance 가까운 승하차 지점을 우선 선호한다."
+    },
+    "39b76444-a4f8-53c2-ae7d-9ee71de43eea": {
+      "type": "memory",
+      "uid": "39b76444-a4f8-53c2-ae7d-9ee71de43eea",
+      "content": "장비를 운반하는 교직원은 목적 공간과 가까운 하역 지점을 선호한다."
+    },
+    "9514e9f2-d556-50dc-8739-01c37b3322fc": {
+      "type": "memory",
+      "uid": "9514e9f2-d556-50dc-8739-01c37b3322fc",
+      "content": "주차 안내 에이전트는 게시된 개방 상태를 설명할 수 있다."
+    },
+    "9acc9ad2-3a59-5b37-9f08-010fe8731a79": {
+      "type": "memory",
+      "uid": "9acc9ad2-3a59-5b37-9f08-010fe8731a79",
+      "content": "주차 안내 에이전트는 게시된 연결 동선을 설명할 수 있다."
+    },
+    "6a38e1b0-b9bb-5941-aa03-3f29b492feaa": {
+      "type": "memory",
+      "uid": "6a38e1b0-b9bb-5941-aa03-3f29b492feaa",
+      "content": "주차 안내 에이전트는 실시간 빈자리를 확인할 수 없다."
+    },
+    "7063d138-91cf-5dbf-b7af-bb0451dd342d": {
+      "type": "memory",
+      "uid": "7063d138-91cf-5dbf-b7af-bb0451dd342d",
+      "content": "주차 안내 에이전트는 현장 통제 해제 시각을 보장할 수 없다."
+    },
+    "efbe330f-eb79-5a05-8ef8-0664355d320c": {
+      "type": "memory",
+      "uid": "efbe330f-eb79-5a05-8ef8-0664355d320c",
+      "content": "배송 기사와 외부 유지보수 업체는 A 야외주차장 가장자리에서 짧게 하역할 수 있을 것으로 기대하는 경우가 있다."
+    },
+    "c0ac84d9-367b-5809-856e-9f0d6c471b2b": {
+      "type": "memory",
+      "uid": "c0ac84d9-367b-5809-856e-9f0d6c471b2b",
+      "content": "C 야외주차장은 게시된 운영시간에 방문 차량을 받는다."
+    },
+    "96092024-bab8-5c6e-b100-ff87e06cb760": {
+      "type": "memory",
+      "uid": "96092024-bab8-5c6e-b100-ff87e06cb760",
+      "content": "방문 차량의 주차 등록 방법은 주차구역 입구 안내판에 게시된다."
+    },
+    "7b323c8d-eddd-5041-aee1-bbd8dbc06918": {
+      "type": "memory",
+      "uid": "7b323c8d-eddd-5041-aee1-bbd8dbc06918",
+      "content": "accessible parking 구역을 이용하려면 유효한 주차 표지가 필요하다."
+    },
+    "8180f5e5-fd9f-51a7-b239-c75a86c20da6": {
+      "type": "memory",
+      "uid": "8180f5e5-fd9f-51a7-b239-c75a86c20da6",
+      "content": "C 야외주차장의 accessible parking 구역은 학생센터 방향 보행로 가까이에 있다."
+    },
+    "b7f4ae20-3bbf-51dd-b230-81c5e5107e48": {
+      "type": "memory",
+      "uid": "b7f4ae20-3bbf-51dd-b230-81c5e5107e48",
+      "content": "본관 정문 앞 승하차 구역은 장시간 주차 공간이 아니다."
+    },
+    "27246135-eca5-56ed-81c3-bb75584703d6": {
+      "type": "memory",
+      "uid": "27246135-eca5-56ed-81c3-bb75584703d6",
+      "content": "단기 하역 공간의 최대 이용시간은 현장 표지에 표시된다."
+    },
+    "dc40ae37-6f8d-5864-aab1-59462c325af3": {
+      "type": "memory",
+      "uid": "dc40ae37-6f8d-5864-aab1-59462c325af3",
+      "content": "이륜차는 캠퍼스 지도에 표시된 이륜차 구역에 주차한다."
+    },
+    "077234a0-bc91-589a-8d91-2cdd1180e9a1": {
+      "type": "memory",
+      "uid": "077234a0-bc91-589a-8d91-2cdd1180e9a1",
+      "content": "자전거는 차량 주차면이 아니라 지정된 자전거 거치대에 세운다."
+    },
+    "c578f6a4-6065-5752-950b-e79ff7228ce7": {
+      "type": "memory",
+      "uid": "c578f6a4-6065-5752-950b-e79ff7228ce7",
+      "content": "C 야외주차장에는 전기차 충전 주차면이 있다."
+    },
+    "38ce79ed-cae6-5a9e-bdba-eb92559ebaa8": {
+      "type": "memory",
+      "uid": "38ce79ed-cae6-5a9e-bdba-eb92559ebaa8",
+      "content": "전기차 충전 주차면은 충전 중인 차량을 위한 공간이다."
+    },
+    "7471f5bc-555a-5db4-838e-74723bbd55fe": {
+      "type": "memory",
+      "uid": "7471f5bc-555a-5db4-838e-74723bbd55fe",
+      "content": "방문 주차 요금은 주차 등록 화면에 표시된다."
+    },
+    "340389ed-6852-509c-a278-78bbbad4beb8": {
+      "type": "memory",
+      "uid": "340389ed-6852-509c-a278-78bbbad4beb8",
+      "content": "주차 안내 에이전트는 게시되지 않은 할인 요금을 추정할 수 없다."
+    },
+    "f617356c-98ff-5d40-a41b-dd4be0c8c311": {
+      "type": "memory",
+      "uid": "f617356c-98ff-5d40-a41b-dd4be0c8c311",
+      "content": "공휴일의 주차 운영시간은 평일 운영시간과 다를 수 있다."
+    },
+    "35576f85-e20a-5bed-a9fd-f47e867c1fce": {
+      "type": "memory",
+      "uid": "35576f85-e20a-5bed-a9fd-f47e867c1fce",
+      "content": "폭설이나 결빙이 있으면 야외주차장 일부가 일시 통제될 수 있다."
+    },
+    "3fc6abeb-db56-5a34-ae34-b4cd394723c4": {
+      "type": "memory",
+      "uid": "3fc6abeb-db56-5a34-ae34-b4cd394723c4",
+      "content": "대규모 공개 행사가 있는 날에는 행사장 인근 주차 수요가 늘어난다."
+    },
+    "308c9814-4989-563e-b9dd-306be896940e": {
+      "type": "memory",
+      "uid": "308c9814-4989-563e-b9dd-306be896940e",
+      "content": "이동 지원이 필요한 운전자는 주차면에서 목적지까지 계단 없는 accessible route가 이어지기를 기대한다."
+    },
+    "8061fc97-13ee-587e-ba5d-09ca5fb72171": {
+      "type": "memory",
+      "uid": "8061fc97-13ee-587e-ba5d-09ca5fb72171",
+      "content": "처음 방문하는 운전자는 A 야외주차장과 C 야외주차장을 혼동하는 경우가 있다."
+    },
+    "7d5bdc29-c284-5027-bc5e-6589b53ab5e9": {
+      "type": "memory",
+      "uid": "7d5bdc29-c284-5027-bc5e-6589b53ab5e9",
+      "content": "주차 안내 에이전트는 현장 통제 표지의 설치 여부를 실시간으로 확인할 수 없고, 게시된 주차면 상태만으로 이용 가능 여부를 판단한다."
+    },
+    "a77dadf9-5d20-57aa-bb81-b35058832bc6": {
+      "type": "memory",
+      "uid": "a77dadf9-5d20-57aa-bb81-b35058832bc6",
+      "content": "서문 정류장은 C 야외주차장 바깥쪽 보행로에 있다."
+    },
+    "012add6d-ba82-5674-a432-0c092d575d21": {
+      "type": "memory",
+      "uid": "012add6d-ba82-5674-a432-0c092d575d21",
+      "content": "캠퍼스 순환차는 학생센터 앞 순환차 정류장에 선다."
+    },
+    "6ca42597-3142-5f24-9f29-14c694bc83e2": {
+      "type": "memory",
+      "uid": "6ca42597-3142-5f24-9f29-14c694bc83e2",
+      "content": "캠퍼스 순환차의 운행시간은 학기와 방학에 따라 달라진다."
+    },
+    "f1283ab9-f63b-5249-ac89-2dcc6f3dbee4": {
+      "type": "memory",
+      "uid": "f1283ab9-f63b-5249-ac89-2dcc6f3dbee4",
+      "content": "주차 안내 에이전트는 공개 지도에 있는 주차장 진입로를 설명할 수 있다."
+    },
+    "db986c20-8190-5a89-87db-4c56c5d6c82d": {
+      "type": "memory",
+      "uid": "db986c20-8190-5a89-87db-4c56c5d6c82d",
+      "content": "주차 안내 에이전트는 방문 차량을 대신 등록할 수 없다."
+    },
+    "1a0b250f-c4f1-5a9f-a114-5420a859dd32": {
+      "type": "memory",
+      "uid": "1a0b250f-c4f1-5a9f-a114-5420a859dd32",
+      "content": "주차 안내 에이전트는 주차 요금을 면제할 수 없다."
+    },
+    "f201604e-92ae-5315-8359-5e68dd9eeecb": {
+      "type": "memory",
+      "uid": "f201604e-92ae-5315-8359-5e68dd9eeecb",
+      "content": "날씨로 인한 주차 통제는 공식 주차 공지에서 확인하라."
+    },
+    "b5466afb-8d3b-51b0-8e44-9fd47165fe17": {
+      "type": "memory",
+      "uid": "b5466afb-8d3b-51b0-8e44-9fd47165fe17",
+      "content": "한 주차장의 만차 상태를 다른 주차장의 만차로 확대 해석하지 마라."
+    },
+    "38b6565e-25a0-5b7c-ba03-747c1901af7e": {
+      "type": "memory",
+      "uid": "38b6565e-25a0-5b7c-ba03-747c1901af7e",
+      "content": "유효한 주차 자격은 특정 주차면의 확보를 보장하지 않는다."
+    },
+    "11d0062b-7941-5512-b5dc-f2d1379741e6": {
+      "type": "memory",
+      "uid": "11d0062b-7941-5512-b5dc-f2d1379741e6",
+      "content": "본관 정문 앞에는 accessible 승하차 구역이 표시되어 있다."
+    },
+    "a299c675-7179-5cb1-b5e4-552198bdc91f": {
+      "type": "memory",
+      "uid": "a299c675-7179-5cb1-b5e4-552198bdc91f",
+      "content": "C 야외주차장의 공유차량 전용면은 표지로 구분되어 있다."
+    },
+    "a671229f-9c73-5183-bec3-8d23d0dd8d53": {
+      "type": "memory",
+      "uid": "a671229f-9c73-5183-bec3-8d23d0dd8d53",
+      "content": "통행로나 accessible parking 구역을 막은 차량은 주차 관리 창구에 신고하라."
+    }
+  },
+  "order": [
+    "5d690022-0ab6-52ed-b6a1-77d719c8c6ce",
+    "6960c0ca-295d-5449-91dc-d9293a6bb79d",
+    "67d07765-ac5f-58f6-b7a5-f733cc4228d2",
+    "489960d6-711f-55d0-a410-16bcd6e9acf8",
+    "df455ec8-c30d-5607-a9b8-8f84d93f0617",
+    "6a37c02f-4843-579f-b5b1-f90d6dbd0e5a",
+    "a81363fe-3ae5-5213-a555-e447515a1a73",
+    "ccf54508-b01d-5fe5-bad3-083e3ce211cd",
+    "1a4e603c-7f69-5bfc-b974-281dc8618326",
+    "3bd9a7e3-af83-5d3d-9cca-0a3926c446e1",
+    "879b70b3-1404-559c-9cdb-9fdca1289e44",
+    "c89147c1-1b06-5e93-97a1-85d59fd33e57",
+    "c9b6827a-36c3-5895-916c-a7066f398f5b",
+    "07101ab9-cebf-5fd6-8967-2ea16a80d03d",
+    "39b76444-a4f8-53c2-ae7d-9ee71de43eea",
+    "9514e9f2-d556-50dc-8739-01c37b3322fc",
+    "9acc9ad2-3a59-5b37-9f08-010fe8731a79",
+    "6a38e1b0-b9bb-5941-aa03-3f29b492feaa",
+    "7063d138-91cf-5dbf-b7af-bb0451dd342d",
+    "efbe330f-eb79-5a05-8ef8-0664355d320c",
+    "c0ac84d9-367b-5809-856e-9f0d6c471b2b",
+    "96092024-bab8-5c6e-b100-ff87e06cb760",
+    "7b323c8d-eddd-5041-aee1-bbd8dbc06918",
+    "8180f5e5-fd9f-51a7-b239-c75a86c20da6",
+    "b7f4ae20-3bbf-51dd-b230-81c5e5107e48",
+    "27246135-eca5-56ed-81c3-bb75584703d6",
+    "dc40ae37-6f8d-5864-aab1-59462c325af3",
+    "077234a0-bc91-589a-8d91-2cdd1180e9a1",
+    "c578f6a4-6065-5752-950b-e79ff7228ce7",
+    "38ce79ed-cae6-5a9e-bdba-eb92559ebaa8",
+    "7471f5bc-555a-5db4-838e-74723bbd55fe",
+    "340389ed-6852-509c-a278-78bbbad4beb8",
+    "f617356c-98ff-5d40-a41b-dd4be0c8c311",
+    "35576f85-e20a-5bed-a9fd-f47e867c1fce",
+    "3fc6abeb-db56-5a34-ae34-b4cd394723c4",
+    "308c9814-4989-563e-b9dd-306be896940e",
+    "8061fc97-13ee-587e-ba5d-09ca5fb72171",
+    "7d5bdc29-c284-5027-bc5e-6589b53ab5e9",
+    "a77dadf9-5d20-57aa-bb81-b35058832bc6",
+    "012add6d-ba82-5674-a432-0c092d575d21",
+    "6ca42597-3142-5f24-9f29-14c694bc83e2",
+    "f1283ab9-f63b-5249-ac89-2dcc6f3dbee4",
+    "db986c20-8190-5a89-87db-4c56c5d6c82d",
+    "1a0b250f-c4f1-5a9f-a114-5420a859dd32",
+    "f201604e-92ae-5315-8359-5e68dd9eeecb",
+    "b5466afb-8d3b-51b0-8e44-9fd47165fe17",
+    "38b6565e-25a0-5b7c-ba03-747c1901af7e",
+    "11d0062b-7941-5512-b5dc-f2d1379741e6",
+    "a299c675-7179-5cb1-b5e4-552198bdc91f",
+    "a671229f-9c73-5183-bec3-8d23d0dd8d53"
+  ]
+}

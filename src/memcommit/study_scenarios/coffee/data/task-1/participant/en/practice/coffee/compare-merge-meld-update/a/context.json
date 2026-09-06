@@ -1,0 +1,32 @@
+{
+  "uid": "2a4dc8ab-cc03-5721-923f-03e3b4669cf5",
+  "name": "practice/coffee/compare-merge-meld-update/a",
+  "memories": {
+    "651ccb24-55b1-56d7-b83c-4a501ad3803f": {
+      "type": "memory",
+      "uid": "651ccb24-55b1-56d7-b83c-4a501ad3803f",
+      "content": "I avoid cafés where several conversations overlap loudly."
+    },
+    "0566c76f-6c14-5968-9e8f-7f487742486e": {
+      "type": "memory",
+      "uid": "0566c76f-6c14-5968-9e8f-7f487742486e",
+      "content": "I avoid cafés where the tables are so low that using plates or a laptop becomes uncomfortable."
+    },
+    "2d654841-c7f4-597f-88f9-928a8975b061": {
+      "type": "memory",
+      "uid": "2d654841-c7f4-597f-88f9-928a8975b061",
+      "content": "When flavor notes are too sparse, it is difficult to choose a coffee."
+    },
+    "94e0168b-7781-5b8d-97f1-9f381dca7ba3": {
+      "type": "memory",
+      "uid": "94e0168b-7781-5b8d-97f1-9f381dca7ba3",
+      "content": "If the menu is too limited, there may not be enough options when ordering with a companion."
+    }
+  },
+  "order": [
+    "651ccb24-55b1-56d7-b83c-4a501ad3803f",
+    "0566c76f-6c14-5968-9e8f-7f487742486e",
+    "2d654841-c7f4-597f-88f9-928a8975b061",
+    "94e0168b-7781-5b8d-97f1-9f381dca7ba3"
+  ]
+}

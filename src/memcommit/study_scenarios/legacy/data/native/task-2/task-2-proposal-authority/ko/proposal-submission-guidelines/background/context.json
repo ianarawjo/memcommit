@@ -1,0 +1,44 @@
+{
+  "uid": "fc469c19-05c5-5e15-9793-cca3ad277e50",
+  "name": "proposal-submission-guidelines/background",
+  "memories": {
+    "027d5bb7-a725-540b-be99-3e7ebdb95fbd": {
+      "type": "memory",
+      "uid": "027d5bb7-a725-540b-be99-3e7ebdb95fbd",
+      "content": "배경과 관련 연구를 합쳐 170~210단어로 작성하라."
+    },
+    "5b118518-2ac2-55ea-b88c-c2bea1c6ecb2": {
+      "type": "memory",
+      "uid": "5b118518-2ac2-55ea-b88c-c2bea1c6ecb2",
+      "content": "아직 해결되지 않은 연구 문제를 구체적으로 특정하라."
+    },
+    "136e33dc-714e-595b-a546-ae6e767cd0e0": {
+      "type": "memory",
+      "uid": "136e33dc-714e-595b-a546-ae6e767cd0e0",
+      "content": "해당 문제를 지금 다뤄야 하는 이유를 설명하라."
+    },
+    "7d5027f4-7e3c-59e0-b5f9-10fbbaefafe2": {
+      "type": "memory",
+      "uid": "7d5027f4-7e3c-59e0-b5f9-10fbbaefafe2",
+      "content": "제안한 연구 문제나 접근과 가장 직접 관련된 최신 근거를 제시하라."
+    },
+    "1a2f2ce9-91cf-5810-b612-83e2425008db": {
+      "type": "memory",
+      "uid": "1a2f2ce9-91cf-5810-b612-83e2425008db",
+      "content": "기존 연구가 남긴 공백을 한 문장으로 명시하라."
+    },
+    "85edce8a-b03e-5f36-92fa-4ae09e08f056": {
+      "type": "memory",
+      "uid": "85edce8a-b03e-5f36-92fa-4ae09e08f056",
+      "content": "세부 분야가 다른 심사자는 처음 정의되지 않은 핵심 개념을 같은 의미로 해석하기 어렵다."
+    }
+  },
+  "order": [
+    "027d5bb7-a725-540b-be99-3e7ebdb95fbd",
+    "5b118518-2ac2-55ea-b88c-c2bea1c6ecb2",
+    "136e33dc-714e-595b-a546-ae6e767cd0e0",
+    "7d5027f4-7e3c-59e0-b5f9-10fbbaefafe2",
+    "1a2f2ce9-91cf-5810-b612-83e2425008db",
+    "85edce8a-b03e-5f36-92fa-4ae09e08f056"
+  ]
+}

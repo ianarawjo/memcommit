@@ -1,0 +1,68 @@
+{
+  "uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+  "name": "local/personal-memory/2024/06",
+  "memories": {
+    "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06": {
+      "type": "memory",
+      "uid": "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06",
+      "content": "사용자는 신분 서류 사본을 암호화된 폴더에 보관한다."
+    },
+    "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac": {
+      "type": "memory",
+      "uid": "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac",
+      "content": "사용자는 버스를 두 번 갈아탄 날 이동 뒤 한 시간 동안 쉬었다."
+    },
+    "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e": {
+      "type": "memory",
+      "uid": "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e",
+      "content": "사용자는 소요 시간이 비슷한 직행 노선을 탄 날 목적지까지 앉아서 갔다."
+    },
+    "f772b0c7-502f-55b7-b431-ee6b20518d38": {
+      "type": "memory",
+      "uid": "f772b0c7-502f-55b7-b431-ee6b20518d38",
+      "content": "사용자는 계단만 있는 출입구에 도착한 뒤 건물 반대편 입구로 돌아갔다."
+    },
+    "0b2d800b-a4ab-5422-bf06-56d17b98f604": {
+      "type": "memory",
+      "uid": "0b2d800b-a4ab-5422-bf06-56d17b98f604",
+      "content": "사용자는 accessible entrance 위치를 미리 확인한 날 약속 시각 전에 도착했다."
+    },
+    "b233f332-4927-549b-8dab-b554977fe363": {
+      "type": "memory",
+      "uid": "b233f332-4927-549b-8dab-b554977fe363",
+      "content": "사용자는 비 오는 날 환승 정류장에서 지붕 없는 구간을 지나며 옷이 젖었다."
+    },
+    "b38d0d63-c4b0-5955-857d-03cbcfd27f5b": {
+      "type": "memory",
+      "uid": "b38d0d63-c4b0-5955-857d-03cbcfd27f5b",
+      "content": "사용자는 외삼촌과 이동한 날 엘리베이터 가까운 출입구에서 만나기로 했다."
+    },
+    "4668d326-b11c-5467-bca4-e8d5e242e375": {
+      "type": "memory",
+      "uid": "4668d326-b11c-5467-bca4-e8d5e242e375",
+      "content": "외삼촌은 장거리 이동 때 자리에서 쉽게 일어날 수 있는 통로 쪽 좌석을 선호한다."
+    },
+    "a77c985c-3986-5141-9805-e3321b3cfa2c": {
+      "type": "memory",
+      "uid": "a77c985c-3986-5141-9805-e3321b3cfa2c",
+      "content": "로컬 에이전트는 과거 경로 기록만으로 당일의 accessible entrance 운영 여부를 알 수 없다."
+    },
+    "988926a1-3e28-5b3e-a41c-d9338971643e": {
+      "type": "memory",
+      "uid": "988926a1-3e28-5b3e-a41c-d9338971643e",
+      "content": "사용자가 이용하는 환승 노선은 직행 노선보다 승하차 횟수와 보행 구간이 많다."
+    }
+  },
+  "order": [
+    "79576c1e-fa88-5d6e-b5e2-3d4ec11c3e06",
+    "28a1ff0b-e2d4-5cb6-9c26-949d86f76bac",
+    "0ad4a1f9-e3e9-517e-8cfc-f8e6307f1d3e",
+    "f772b0c7-502f-55b7-b431-ee6b20518d38",
+    "0b2d800b-a4ab-5422-bf06-56d17b98f604",
+    "b233f332-4927-549b-8dab-b554977fe363",
+    "b38d0d63-c4b0-5955-857d-03cbcfd27f5b",
+    "4668d326-b11c-5467-bca4-e8d5e242e375",
+    "a77c985c-3986-5141-9805-e3321b3cfa2c",
+    "988926a1-3e28-5b3e-a41c-d9338971643e"
+  ]
+}

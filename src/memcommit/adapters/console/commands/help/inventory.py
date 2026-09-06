@@ -492,6 +492,10 @@ COMMAND_FORMS = {
         "mem import context [source_context] --from-profile [source_profile] -r (Context tree)",
         "mem import memory [memory_selector] --from-profile [source_profile] --context [source_context] (into current Context)",
         "mem import memory [memory_selector] --from-profile [source_profile] --context [source_context] --into [target_context]",
+        "mem import context --from [context.json] (native Context JSON)",
+        "mem import context [source_context] --from [directory] -r --as [new_root] (native Context tree)",
+        "mem import context --from [directory] -r (all native Context documents)",
+        "mem import memory --from [memory.json] --into [target_context] (native Memory JSON)",
         "mem import [profile_name] --from [store] (legacy clean-baseline Profile spelling)",
     ),
     "init": (

@@ -1,9 +1,8 @@
-"""Strict loaders for the human-reviewed Task 1--3 study fixtures.
+"""Study fixture models and metadata validation.
 
-The Markdown files are authoring artifacts, not a storage format.  This
-module provides the narrow, validated boundary that a later fixture builder
-can use without teaching that builder about three different Markdown shapes.
-It deliberately keeps Memory content separate from designer-only metadata.
+Packaged content is native Context JSON. Explicit external authoring roots
+can still use the historical Markdown grammar. Designer metadata stays out
+of the ordinary Memory payload in both forms.
 """
 
 from __future__ import annotations
@@ -90,6 +89,13 @@ class FixtureMemory:
     verified: bool | None
     source_path: Path
     source_line: int
+    memory_uid: str | None = None
+    source_relative_path: str | None = None
+
+    @property
+    def source_location(self) -> str:
+        """Keep native source links unambiguous across Context directories."""
+        return self.source_relative_path or f"{self.source_path.parent.name}/{self.source_path.name}"
 
     @property
     def identity_key(self) -> str:
@@ -402,11 +408,15 @@ def load_study_fixture(
     language: str = "ko",
     root: Path | None = None,
 ) -> FixtureDataset:
-    """Load and validate one Markdown dataset and its purpose sidecar."""
+    """Load native packaged data, or an explicit historical authoring root."""
 
     spec = _resolve_spec(dataset)
     language = _validate_language(language)
     fixture_root = Path(root) if root is not None else default_fixture_root()
+    if (fixture_root / "native" / "metadata").is_dir():
+        from .native import load_native_fixture
+
+        return load_native_fixture(spec, language=language, root=fixture_root)
     source_path = _resolve_language_file(fixture_root, language, spec.file_stem, ".md")
     sidecar_path = _resolve_language_file(
         fixture_root,
@@ -496,6 +506,8 @@ def pair_fixture_translations(
                 f"Fixture ID drift at {source.canonical_locator!r}: "
                 f"{source.fixture_id!r} != {target.fixture_id!r}."
             )
+        if source.memory_uid != target.memory_uid:
+            raise StudyFixtureError(f"Memory UID drift at {source.canonical_locator!r}.")
         if source.purpose != target.purpose:
             raise StudyFixtureError(
                 f"Purpose drift at {source.canonical_locator!r}: "
@@ -884,6 +896,7 @@ def _merge_and_validate(
     spec: StudyFixtureSpec,
     language: str,
     source_path: Path,
+    preserve_content: bool = False,
 ) -> tuple[FixtureMemory, ...]:
     if len(raw_records) != spec.expected_count:
         raise StudyFixtureError(
@@ -956,8 +969,8 @@ def _merge_and_validate(
             raise StudyFixtureError(
                 f"Verified-state mismatch for {sidecar_key!r} in {source_path}."
             )
-        content = raw.content.strip()
-        if not content:
+        content = raw.content if preserve_content else raw.content.strip()
+        if not content.strip():
             raise StudyFixtureError(
                 f"Empty Memory content for {sidecar_key!r} in {source_path}."
             )

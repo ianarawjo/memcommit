@@ -1,0 +1,56 @@
+{
+  "uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+  "name": "local/guardrails/recipient-and-authority",
+  "memories": {
+    "f3fb4551-f2b4-5a94-96ee-866bb001c620": {
+      "type": "memory",
+      "uid": "f3fb4551-f2b4-5a94-96ee-866bb001c620",
+      "content": "수신자의 정확한 계정 또는 주소를 승인 전에 확인하라."
+    },
+    "2c0ded0a-75d2-53d3-8eb7-4b8ac5823ba3": {
+      "type": "memory",
+      "uid": "2c0ded0a-75d2-53d3-8eb7-4b8ac5823ba3",
+      "content": "사람이 아닌 시스템 수신자는 서비스 이름까지 표시하라."
+    },
+    "7bd3b376-95ae-58bb-b8c5-adb3431e31ed": {
+      "type": "memory",
+      "uid": "7bd3b376-95ae-58bb-b8c5-adb3431e31ed",
+      "content": "수신자의 역할만으로 공유 권한을 추정하지 마라."
+    },
+    "fe9c1c24-9eb4-5e5d-a233-14ce425164ab": {
+      "type": "memory",
+      "uid": "fe9c1c24-9eb4-5e5d-a233-14ce425164ab",
+      "content": "대리 수신자가 있으면 실제 전달 대상을 별도로 확인하라."
+    },
+    "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7": {
+      "type": "memory",
+      "uid": "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7",
+      "content": "수신자의 권한 근거가 만료되었으면 새 확인을 요구하라."
+    },
+    "c2036232-1c1a-5a48-b465-8f1b503dffd8": {
+      "type": "memory",
+      "uid": "c2036232-1c1a-5a48-b465-8f1b503dffd8",
+      "content": "수신자의 신원과 수신 권한은 서로 다른 검토 항목이다."
+    },
+    "8530cb36-8f66-5cb3-bcf6-fc4763daa2ef": {
+      "type": "memory",
+      "uid": "8530cb36-8f66-5cb3-bcf6-fc4763daa2ef",
+      "content": "로컬 에이전트는 제시된 수신자 식별정보를 대조할 수 있지만 그것만으로 실제 수신 권한을 보증할 수 없다."
+    },
+    "bd834d39-cdba-5742-b76c-5ede06d26852": {
+      "type": "memory",
+      "uid": "bd834d39-cdba-5742-b76c-5ede06d26852",
+      "content": "중개 서비스 운영자는 최종 전달 전에 입력을 변환하는 일이 허용된 처리라고 여길 수 있다."
+    }
+  },
+  "order": [
+    "f3fb4551-f2b4-5a94-96ee-866bb001c620",
+    "2c0ded0a-75d2-53d3-8eb7-4b8ac5823ba3",
+    "7bd3b376-95ae-58bb-b8c5-adb3431e31ed",
+    "fe9c1c24-9eb4-5e5d-a233-14ce425164ab",
+    "51df9ae8-3eeb-5466-99e2-fa43d6dd34f7",
+    "c2036232-1c1a-5a48-b465-8f1b503dffd8",
+    "8530cb36-8f66-5cb3-bcf6-fc4763daa2ef",
+    "bd834d39-cdba-5742-b76c-5ede06d26852"
+  ]
+}

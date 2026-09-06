@@ -20,6 +20,10 @@ IMPORT_DETAILS = (
             "so its broader resource-import role is not yet complete. It accepts "
             "Profiles from an external .mem store or package, and Profiles, "
             "Context trees, or Memories from another registered Profile. "
+            "It also accepts native Context JSON files or directories of "
+            "context.json files, and standalone Memory JSON files. File imports "
+            "preserve identities and reject unresolved external references or "
+            "live Grant/query-only bindings. "
             "Plain-text files, arbitrary documents, Skills, and Export are "
             "planned resource kinds but are not yet implemented."
         ),

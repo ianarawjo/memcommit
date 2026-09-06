@@ -1,0 +1,26 @@
+{
+  "uid": "a3229f2e-43d1-5629-9104-2d49292b7a75",
+  "name": "proposal-submission-guidelines/outcomes",
+  "memories": {
+    "10dfd39a-ceec-5f80-a629-ba7838fa7a36": {
+      "type": "memory",
+      "uid": "10dfd39a-ceec-5f80-a629-ba7838fa7a36",
+      "content": "Combine expected outcomes and contributions into 80–100 words."
+    },
+    "62614c82-39bc-517f-896a-ec7c9bff0e0f": {
+      "type": "memory",
+      "uid": "62614c82-39bc-517f-896a-ec7c9bff0e0f",
+      "content": "Identify at least one design or operational decision that research findings could change."
+    },
+    "e474b07f-9266-5632-889d-d238aeaf25eb": {
+      "type": "memory",
+      "uid": "e474b07f-9266-5632-889d-d238aeaf25eb",
+      "content": "Reviewers read expected outcomes as distinct from already confirmed effects."
+    }
+  },
+  "order": [
+    "10dfd39a-ceec-5f80-a629-ba7838fa7a36",
+    "62614c82-39bc-517f-896a-ec7c9bff0e0f",
+    "e474b07f-9266-5632-889d-d238aeaf25eb"
+  ]
+}

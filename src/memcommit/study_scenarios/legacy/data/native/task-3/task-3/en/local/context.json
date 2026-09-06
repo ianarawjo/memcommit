@@ -1,0 +1,20 @@
+{
+  "uid": "0f514d5f-1e47-5a33-a9ee-0125528a5129",
+  "name": "local",
+  "memories": {
+    "10c1e5b1-4d4b-566c-bf14-c385523c344e": {
+      "type": "context_ref",
+      "uid": "10c1e5b1-4d4b-566c-bf14-c385523c344e",
+      "name": "local/guardrails"
+    },
+    "33ffd77c-a567-5239-b4a0-25503553d5f0": {
+      "type": "context_ref",
+      "uid": "33ffd77c-a567-5239-b4a0-25503553d5f0",
+      "name": "local/personal-memory"
+    }
+  },
+  "order": [
+    "10c1e5b1-4d4b-566c-bf14-c385523c344e",
+    "33ffd77c-a567-5239-b4a0-25503553d5f0"
+  ]
+}

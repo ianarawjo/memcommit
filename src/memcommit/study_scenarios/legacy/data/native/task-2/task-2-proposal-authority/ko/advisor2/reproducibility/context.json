@@ -1,0 +1,26 @@
+{
+  "uid": "5f2f3c0f-4cb1-5151-b381-847df75b6457",
+  "name": "advisor2/reproducibility",
+  "memories": {
+    "40f11374-d91b-546a-9e93-fcf98a0fde98": {
+      "type": "memory",
+      "uid": "40f11374-d91b-546a-9e93-fcf98a0fde98",
+      "content": "HCI 심사자는 현장 배포에 사용한 시스템 버전이 드러나지 않으면 결과의 재현 가능성을 평가하기 어렵다."
+    },
+    "cc72ad54-4cf3-56cd-9119-46776f5b2184": {
+      "type": "memory",
+      "uid": "cc72ad54-4cf3-56cd-9119-46776f5b2184",
+      "content": "배포 중 바뀐 시스템 설정, 현장 절차, 자료 수집 도구를 시점과 이유와 함께 기록하라."
+    },
+    "75f22b45-fb1b-568c-bb05-080fdacdcab2": {
+      "type": "memory",
+      "uid": "75f22b45-fb1b-568c-bb05-080fdacdcab2",
+      "content": "배포 버전과 설정 변경의 이력은 서로 다른 현장에서 나온 결과를 해석하는 데 필요한 근거다."
+    }
+  },
+  "order": [
+    "40f11374-d91b-546a-9e93-fcf98a0fde98",
+    "cc72ad54-4cf3-56cd-9119-46776f5b2184",
+    "75f22b45-fb1b-568c-bb05-080fdacdcab2"
+  ]
+}

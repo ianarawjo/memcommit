@@ -1,0 +1,80 @@
+{
+  "uid": "f60cba75-9fe7-5097-8240-240420aac8ac",
+  "name": "local/personal-memory/2024",
+  "memories": {
+    "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007": {
+      "type": "context_ref",
+      "uid": "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+      "name": "local/personal-memory/2024/01"
+    },
+    "7bedad96-d78b-5977-a4c9-71049dcfcec8": {
+      "type": "context_ref",
+      "uid": "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+      "name": "local/personal-memory/2024/02"
+    },
+    "97c5905c-359b-5497-956f-b92db9ddbd2f": {
+      "type": "context_ref",
+      "uid": "97c5905c-359b-5497-956f-b92db9ddbd2f",
+      "name": "local/personal-memory/2024/03"
+    },
+    "206e1cd3-93da-5341-bda3-95cde4814c20": {
+      "type": "context_ref",
+      "uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+      "name": "local/personal-memory/2024/04"
+    },
+    "683986e6-d517-5a53-9dc1-16b69cf0d12e": {
+      "type": "context_ref",
+      "uid": "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+      "name": "local/personal-memory/2024/05"
+    },
+    "8c641e5b-01d9-560c-a8c0-b52cee7402c8": {
+      "type": "context_ref",
+      "uid": "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+      "name": "local/personal-memory/2024/06"
+    },
+    "8747b4f6-d17c-5b02-83f4-fc3af73e2da0": {
+      "type": "context_ref",
+      "uid": "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+      "name": "local/personal-memory/2024/07"
+    },
+    "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8": {
+      "type": "context_ref",
+      "uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+      "name": "local/personal-memory/2024/08"
+    },
+    "497036ef-19ef-5611-bf5a-a9eeaf1569a0": {
+      "type": "context_ref",
+      "uid": "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+      "name": "local/personal-memory/2024/09"
+    },
+    "7c55b789-a7d0-5070-9cf8-6f5e205415dc": {
+      "type": "context_ref",
+      "uid": "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+      "name": "local/personal-memory/2024/10"
+    },
+    "0d5e1eef-1669-5589-94ba-b46c9c2080dc": {
+      "type": "context_ref",
+      "uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+      "name": "local/personal-memory/2024/11"
+    },
+    "66c3e5de-61bb-5795-8e5a-4e28f64be857": {
+      "type": "context_ref",
+      "uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+      "name": "local/personal-memory/2024/12"
+    }
+  },
+  "order": [
+    "cbd2e4d6-2601-5d3f-8bf2-2f66b755b007",
+    "7bedad96-d78b-5977-a4c9-71049dcfcec8",
+    "97c5905c-359b-5497-956f-b92db9ddbd2f",
+    "206e1cd3-93da-5341-bda3-95cde4814c20",
+    "683986e6-d517-5a53-9dc1-16b69cf0d12e",
+    "8c641e5b-01d9-560c-a8c0-b52cee7402c8",
+    "8747b4f6-d17c-5b02-83f4-fc3af73e2da0",
+    "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+    "497036ef-19ef-5611-bf5a-a9eeaf1569a0",
+    "7c55b789-a7d0-5070-9cf8-6f5e205415dc",
+    "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+    "66c3e5de-61bb-5795-8e5a-4e28f64be857"
+  ]
+}

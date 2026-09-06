@@ -1,0 +1,20 @@
+{
+  "uid": "24b95215-b400-5e84-9729-1479af0308ba",
+  "name": "description",
+  "memories": {
+    "77ea44c9-0a6f-5ab2-b20d-07341e978b87": {
+      "type": "memory",
+      "uid": "77ea44c9-0a6f-5ab2-b20d-07341e978b87",
+      "content": "SITUATION · Imagine that the government provides a new AI healthcare agent capable of supporting most stages of the healthcare process. To provide more useful assistance, the agent requests access to the personal memory previously used by your local agent. This memory contains past conversations with other agents as well as information about nearly every area of your life."
+    },
+    "d3d27b7a-ae98-5aae-b04f-a591452f1f2a": {
+      "type": "memory",
+      "uid": "d3d27b7a-ae98-5aae-b04f-a591452f1f2a",
+      "content": "TASK · Decide which information to provide and which information to exclude, and then transfer only the selected information."
+    }
+  },
+  "order": [
+    "77ea44c9-0a6f-5ab2-b20d-07341e978b87",
+    "d3d27b7a-ae98-5aae-b04f-a591452f1f2a"
+  ]
+}

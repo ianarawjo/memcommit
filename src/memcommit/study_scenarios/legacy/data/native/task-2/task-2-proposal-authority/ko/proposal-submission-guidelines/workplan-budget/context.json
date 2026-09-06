@@ -1,0 +1,98 @@
+{
+  "uid": "ec1c8f65-117d-5b4d-a311-96a29e91bacf",
+  "name": "proposal-submission-guidelines/workplan-budget",
+  "memories": {
+    "3d75c3b9-5c01-5481-a197-d851845953ac": {
+      "type": "memory",
+      "uid": "3d75c3b9-5c01-5481-a197-d851845953ac",
+      "content": "석사 연구 프로젝트의 전체 실행 일정을 60~80단어로 작성하라."
+    },
+    "aa699e56-6c33-5033-9f60-fa782622f4cc": {
+      "type": "memory",
+      "uid": "aa699e56-6c33-5033-9f60-fa782622f4cc",
+      "content": "비용이 발생하거나 별도 예산이 요구되면 예산 설명을 40~60단어로 작성하라."
+    },
+    "42af8f14-805d-5902-bd80-367ac28b8426": {
+      "type": "memory",
+      "uid": "42af8f14-805d-5902-bd80-367ac28b8426",
+      "content": "모집의 주요 이정표를 표시하라."
+    },
+    "872d5f43-aca8-592f-809b-b7ecc39e53b7": {
+      "type": "memory",
+      "uid": "872d5f43-aca8-592f-809b-b7ecc39e53b7",
+      "content": "자료 수집의 주요 이정표를 표시하라."
+    },
+    "c7d88185-3862-5926-8b93-53f650ce9e05": {
+      "type": "memory",
+      "uid": "c7d88185-3862-5926-8b93-53f650ce9e05",
+      "content": "분석의 주요 이정표를 표시하라."
+    },
+    "edd014a9-08e9-5e47-a149-4eb2557c4bc2": {
+      "type": "memory",
+      "uid": "edd014a9-08e9-5e47-a149-4eb2557c4bc2",
+      "content": "선행 작업이 끝나야 시작할 수 있는 이정표의 의존성을 표시하라."
+    },
+    "30e3cef8-0e20-59d5-8eb0-189cee62f6fb": {
+      "type": "memory",
+      "uid": "30e3cef8-0e20-59d5-8eb0-189cee62f6fb",
+      "content": "별도 예산표가 요구되면 최대 한 쪽의 부록으로 제출하라."
+    },
+    "a2b14436-7a23-5cbe-8b48-d1ec945fcbcc": {
+      "type": "memory",
+      "uid": "a2b14436-7a23-5cbe-8b48-d1ec945fcbcc",
+      "content": "참가자 보상 비용이 적용되면 별도 행에 기재하라."
+    },
+    "73f96454-bd6e-5574-8a92-b36458f97ae5": {
+      "type": "memory",
+      "uid": "73f96454-bd6e-5574-8a92-b36458f97ae5",
+      "content": "이동 비용이 적용되면 별도 행에 기재하라."
+    },
+    "25d8b0d9-865f-59e1-8009-56abee290cd2": {
+      "type": "memory",
+      "uid": "25d8b0d9-865f-59e1-8009-56abee290cd2",
+      "content": "장비 비용이 적용되면 별도 행에 기재하라."
+    },
+    "47e3de35-0a8f-55a0-a6cd-2dc35bc66de3": {
+      "type": "memory",
+      "uid": "47e3de35-0a8f-55a0-a6cd-2dc35bc66de3",
+      "content": "소프트웨어 비용이 적용되면 별도 행에 기재하라."
+    },
+    "9ec38b80-4887-54e9-a1cb-df6587b61b57": {
+      "type": "memory",
+      "uid": "9ec38b80-4887-54e9-a1cb-df6587b61b57",
+      "content": "외부 서비스 비용이 적용되면 별도 행에 기재하라."
+    },
+    "ca994c16-8736-51e7-908d-4fd587c88bb1": {
+      "type": "memory",
+      "uid": "ca994c16-8736-51e7-908d-4fd587c88bb1",
+      "content": "각 주요 예산 항목에 금액의 산정 근거를 적어라."
+    },
+    "607b039e-1658-5f73-a52a-4882fd2c70db": {
+      "type": "memory",
+      "uid": "607b039e-1658-5f73-a52a-4882fd2c70db",
+      "content": "각 주요 예산 항목이 지원하는 연구 활동을 명시하라."
+    },
+    "abc911f3-663f-549a-9caa-c5dbd3a51084": {
+      "type": "memory",
+      "uid": "abc911f3-663f-549a-9caa-c5dbd3a51084",
+      "content": "재무 검토자는 각 비용이 어떤 연구 활동에 필요한지 추적해서 예산의 타당성을 판단한다."
+    }
+  },
+  "order": [
+    "3d75c3b9-5c01-5481-a197-d851845953ac",
+    "aa699e56-6c33-5033-9f60-fa782622f4cc",
+    "42af8f14-805d-5902-bd80-367ac28b8426",
+    "872d5f43-aca8-592f-809b-b7ecc39e53b7",
+    "c7d88185-3862-5926-8b93-53f650ce9e05",
+    "edd014a9-08e9-5e47-a149-4eb2557c4bc2",
+    "30e3cef8-0e20-59d5-8eb0-189cee62f6fb",
+    "a2b14436-7a23-5cbe-8b48-d1ec945fcbcc",
+    "73f96454-bd6e-5574-8a92-b36458f97ae5",
+    "25d8b0d9-865f-59e1-8009-56abee290cd2",
+    "47e3de35-0a8f-55a0-a6cd-2dc35bc66de3",
+    "9ec38b80-4887-54e9-a1cb-df6587b61b57",
+    "ca994c16-8736-51e7-908d-4fd587c88bb1",
+    "607b039e-1658-5f73-a52a-4882fd2c70db",
+    "abc911f3-663f-549a-9caa-c5dbd3a51084"
+  ]
+}

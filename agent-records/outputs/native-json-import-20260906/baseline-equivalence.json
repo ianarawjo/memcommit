@@ -1,0 +1,144 @@
+{
+  "provenance": "Captured from the working checkout before native JSON migration on 2026-09-06; agent-produced equivalence evidence, not human review.",
+  "legacy_corpus": {
+    "en": {
+      "task1-description": {
+        "count": 2,
+        "sha256": "cb1ea05aec7fd073533d7bc2d9b4802259087fdc7d17a812b307b400e1f2e2ef"
+      },
+      "task1-construction-updates": {
+        "count": 75,
+        "sha256": "d1496f02c712ed2cfdcd006f2745ad5706ede5f5ca4fa1609dba8faebafaf6fc"
+      },
+      "task1-campus-wiki": {
+        "count": 300,
+        "sha256": "737069aa7b101ff09b16df8d8a482ce9ea0cda03a10a0fd2967f64f9b793f746"
+      },
+      "task1-campus-wiki-details": {
+        "count": 78,
+        "sha256": "016eeaa46d1e44f01b5d1a477372aedc78f53c48036d49347db8bd1148efdc86"
+      },
+      "task2-description": {
+        "count": 2,
+        "sha256": "644a2c322660433e3fec58977428262808916aa2dafaf945ac7e655cf07e7b37"
+      },
+      "task2-advisor1": {
+        "count": 150,
+        "sha256": "225c02c2315b8e5a05ff2a9fa7481ce68236696204a5b93402b39043307f4033"
+      },
+      "task2-advisor2": {
+        "count": 150,
+        "sha256": "0dfcac64836e74b5fd819feac04d504ec6b564c3ece36cd4a3b0ecef5f1c039e"
+      },
+      "task2-proposal-guidelines": {
+        "count": 75,
+        "sha256": "95e53d8c6a5e52b4e396b0ecaa118fcea50d2c330a154ccd2aebb9fde2619526"
+      },
+      "task3-description": {
+        "count": 2,
+        "sha256": "25a409a95deec22454972198fbe78a707d3c5edf0783a56beea416947700518e"
+      },
+      "task3-personal-memory": {
+        "count": 300,
+        "sha256": "ad3602712535dbef4fb3f28821e834c2943b40e084d7bd0dca11f2829dcf0418"
+      },
+      "task3-guardrails": {
+        "count": 75,
+        "sha256": "be5f963dc06ecc14c031327835721d31f677ec879d971e7d20a54e67c4a658ae"
+      },
+      "task3-healthcare-qna": {
+        "count": 75,
+        "sha256": "038593b7dcc306de9d44cfbf6cff2061df888232af72d9c9ef22ea50582cd5df"
+      },
+      "task3-healthcare-public-guidance": {
+        "count": 25,
+        "sha256": "ab583443deaf7bdfc5f9ff268cbdbdda5a5b1e3974514d1d39f59e2253815a64"
+      }
+    },
+    "ko": {
+      "task1-description": {
+        "count": 2,
+        "sha256": "fe763f809d62b9726fbc2fdfb9537d3e7f616dd311cb65e9384ce9dbcec1100a"
+      },
+      "task1-construction-updates": {
+        "count": 75,
+        "sha256": "d82cf84f66fdc42d059c953677f3012833c9639eab6930a1e1ffa5c88cd4de1c"
+      },
+      "task1-campus-wiki": {
+        "count": 300,
+        "sha256": "ffa0bb3fb695ea28af06a3bb96583f7f56e570e27d50fd1fc9887ff5503f47cd"
+      },
+      "task1-campus-wiki-details": {
+        "count": 78,
+        "sha256": "f51838a3ea659b586b1986936858d6890a015b67ec68759e40e7dc6410a8fd01"
+      },
+      "task2-description": {
+        "count": 2,
+        "sha256": "74f8ab0142b27941e4b45646e1651a7428e9abd050298ad78e41e0e222840204"
+      },
+      "task2-advisor1": {
+        "count": 150,
+        "sha256": "002d046db8e1f0f591999df8d4a3872229ef1d40bf734528f1c73ac71d724a15"
+      },
+      "task2-advisor2": {
+        "count": 150,
+        "sha256": "df7b737df1ee3eb1a820c90b8ed6c13fe724dcfb49fd0718c9705c762d8e8142"
+      },
+      "task2-proposal-guidelines": {
+        "count": 75,
+        "sha256": "4037e6d261f676858af853a534b8b0d43cab583683860bb34062bea40a20cf83"
+      },
+      "task3-description": {
+        "count": 2,
+        "sha256": "fb34f5def32dd9761350246c43c4332e40232d72f6a22348bd9d3cb528ed5bcb"
+      },
+      "task3-personal-memory": {
+        "count": 300,
+        "sha256": "4162d4b13af199ad5808e58753b0bff752921afb68cbbd3c0225d614a085a2ad"
+      },
+      "task3-guardrails": {
+        "count": 75,
+        "sha256": "f05760dee9c2365f249ba2e930b2cd00eb17734f0265efa46c6b4244a3486e37"
+      },
+      "task3-healthcare-qna": {
+        "count": 75,
+        "sha256": "7a1373d3ad35a55f457e3ca6e3a7c63c0878cce3af094816b5858be04d5eba18"
+      },
+      "task3-healthcare-public-guidance": {
+        "count": 25,
+        "sha256": "075129ad80186fc762386cf9df1ccf4f2558918774ee6588eacd34e93fff0999"
+      }
+    }
+  },
+  "legacy_profiles": {
+    "task-1": {
+      "count": 8,
+      "sha256": "d36b070eefa8e56b0765ebc6dcae9bbe6f6f761676aaad27635c7af36f081cf8"
+    },
+    "task-1-campus-authority": {
+      "count": 14,
+      "sha256": "4ffdb620b9b83bde1989a6a9e8ac041c3a98ad52ed91ab1ae748d76fa44a7009"
+    },
+    "task-2": {
+      "count": 2,
+      "sha256": "85df242eb6d37547fdf74a37917c8e22370237fbcfcbd1a7a64050f7c96aef86"
+    },
+    "task-2-proposal-authority": {
+      "count": 45,
+      "sha256": "198cdf9b2d1c3e45ce02885965272e726d1f50754808a72fe7c2cbb3075bbb34"
+    },
+    "task-3": {
+      "count": 47,
+      "sha256": "61db3020205135211bf6ffd8c108681f333445a1e82357835affd550f6101f3e"
+    },
+    "task-3-healthcare-authority": {
+      "count": 13,
+      "sha256": "5414a18e2221c9172bf9946ff78ac1c0d2d0888bd4439fda5e50883d4f430cc4"
+    }
+  },
+  "coffee": {
+    "digest": "d00cdd0c419c20a7295d57338ba608130074afc3c67a03e23bbf5fea9f213589",
+    "sha256": "b2cb2db81e9ded18d6978b3dc9e8c30e658a683a2239a990fab61e5d75ef37bb"
+  },
+  "legacy_practice_sha256": "062e1112972733a17f32270e7712fdd4983620bf62e7046142506af0342a5e7b"
+}

@@ -1,0 +1,80 @@
+{
+  "uid": "7e48e68e-3c6f-541b-bfc1-e307abcc7a4f",
+  "name": "practice/source",
+  "memories": {
+    "f3ef224d-ff16-5a7a-880a-18eee2fc55b5": {
+      "type": "memory",
+      "uid": "f3ef224d-ff16-5a7a-880a-18eee2fc55b5",
+      "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division."
+    },
+    "e50c293a-2416-50c8-b35c-45b53ff58db5": {
+      "type": "memory",
+      "uid": "e50c293a-2416-50c8-b35c-45b53ff58db5",
+      "content": "If I later ask for polishing, preserve the overall strucutre and citation-needed markers, and change only wording that causes a problem."
+    },
+    "39b21971-6ad4-561f-830e-99377eeeab09": {
+      "type": "memory",
+      "uid": "39b21971-6ad4-561f-830e-99377eeeab09",
+      "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts."
+    },
+    "6fad23ab-406e-5298-98e5-0bf00b224b21": {
+      "type": "memory",
+      "uid": "6fad23ab-406e-5298-98e5-0bf00b224b21",
+      "content": "If a passage is supposed to make four points, keep all four while removing parts that are too redundent and stating repeated content only once."
+    },
+    "6cc4b8a3-eaff-5805-8d37-83dd4bf8872c": {
+      "type": "memory",
+      "uid": "6cc4b8a3-eaff-5805-8d37-83dd4bf8872c",
+      "content": "When the draft has to fit a shorter fixed limit, aim to cut around 20–30% from redundant or unnecessary material."
+    },
+    "7ebe67fb-e08d-50b1-8c3b-af25d70462eb": {
+      "type": "memory",
+      "uid": "7ebe67fb-e08d-50b1-8c3b-af25d70462eb",
+      "content": "But don't shorten sentences so aggressively that a claim sounds more categorical; keep enough wording to preserve its original strength and conditions."
+    },
+    "b976766e-d366-5065-929e-5f31e638fdbe": {
+      "type": "memory",
+      "uid": "b976766e-d366-5065-929e-5f31e638fdbe",
+      "content": "If the next idea is merely related and does not broaden the scope, don't use More broadly; use In relation to this or another accurate connector without adding a new claim merely to make two paragraphs connect."
+    },
+    "44de7eff-4117-549c-a78e-f2cd3ab50133": {
+      "type": "memory",
+      "uid": "44de7eff-4117-549c-a78e-f2cd3ab50133",
+      "content": "For any titlle about interaction with AI agent memory, keep the exact terminology and intended words: use interaction and management and AI agent memory rather than agent memory."
+    },
+    "1a9d3a74-12a1-50f1-96d0-bcaa09a65406": {
+      "type": "memory",
+      "uid": "1a9d3a74-12a1-50f1-96d0-bcaa09a65406",
+      "content": "By default, format a document title in sentence case rather than title case. An explicitly named style guide may override only that capitalization default; always keep for whenever it is part of the intended wording."
+    },
+    "94c3ce98-85f3-51e2-a351-8cb92ec040c3": {
+      "type": "memory",
+      "uid": "94c3ce98-85f3-51e2-a351-8cb92ec040c3",
+      "content": "If titles of works use quotation marks in some places and italics in others, make them consistently italic throughout the document by default; an explicitly named style guide may override only this work-title format."
+    },
+    "96300a95-2cb2-5644-bae6-f53d7b31a725": {
+      "type": "memory",
+      "uid": "96300a95-2cb2-5644-bae6-f53d7b31a725",
+      "content": "When I say that content looks wrong, find accurate information before proposing a correction by reading the original paper, book, or guide, not only an abstract or a short snippet."
+    },
+    "4fe217eb-2b65-5fb0-92ff-733ced1e9270": {
+      "type": "memory",
+      "uid": "4fe217eb-2b65-5fb0-92ff-733ced1e9270",
+      "content": "Before adding or reusing citations and refferences, verify that each source exists and supports the exact claim after reviewing the complete source. Don't invent quotations or evidence or overstate an author's contribution or a paper's status. If I asked only for review, report a verification problem first instead of silently rewriting the draft."
+    }
+  },
+  "order": [
+    "f3ef224d-ff16-5a7a-880a-18eee2fc55b5",
+    "e50c293a-2416-50c8-b35c-45b53ff58db5",
+    "39b21971-6ad4-561f-830e-99377eeeab09",
+    "6fad23ab-406e-5298-98e5-0bf00b224b21",
+    "6cc4b8a3-eaff-5805-8d37-83dd4bf8872c",
+    "7ebe67fb-e08d-50b1-8c3b-af25d70462eb",
+    "b976766e-d366-5065-929e-5f31e638fdbe",
+    "44de7eff-4117-549c-a78e-f2cd3ab50133",
+    "1a9d3a74-12a1-50f1-96d0-bcaa09a65406",
+    "94c3ce98-85f3-51e2-a351-8cb92ec040c3",
+    "96300a95-2cb2-5644-bae6-f53d7b31a725",
+    "4fe217eb-2b65-5fb0-92ff-733ced1e9270"
+  ]
+}

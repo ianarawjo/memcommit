@@ -1,0 +1,86 @@
+{
+  "uid": "51fcc28c-b32e-53c4-a987-7bc1f40cf552",
+  "name": "remote/government/healthcare-agent/info-request/questions-and-answers/scheduling-and-continuity",
+  "memories": {
+    "164fc16c-b735-597c-bb89-f4ef89236cd4": {
+      "type": "memory",
+      "uid": "164fc16c-b735-597c-bb89-f4ef89236cd4",
+      "content": "Explain weekly availability, recurring time-of-day preferences, and a preference for a reminder the day before an appointment as examples of scheduling information that may be transmitted to the government healthcare institution system."
+    },
+    "0047b543-e8df-503c-a290-78d548ec4f90": {
+      "type": "memory",
+      "uid": "0047b543-e8df-503c-a290-78d548ec4f90",
+      "content": "Explain that availability changing often and the time slots actually available in a particular week are different information."
+    },
+    "041bcf07-75f1-570c-9803-293f6a39d91a": {
+      "type": "memory",
+      "uid": "041bcf07-75f1-570c-9803-293f6a39d91a",
+      "content": "Explain that a recurring historical time-of-day preference and actual availability in a particular week are different information, and that the healthcare Q&A agent cannot verify which is currently correct."
+    },
+    "f9121f89-fcee-5868-a80e-b1677b13eb17": {
+      "type": "memory",
+      "uid": "f9121f89-fcee-5868-a80e-b1677b13eb17",
+      "content": "Explain that the private reason a time is unavailable is not a subject the healthcare Q&A agent asks about, and that if the user actually sends it through the government healthcare institution system's transmission screen, it is included in the consented sharing unit."
+    },
+    "3ad69204-ca57-5985-a90c-6168e12ab06f": {
+      "type": "memory",
+      "uid": "3ad69204-ca57-5985-a90c-6168e12ab06f",
+      "content": "Explain that entering a private reason for a schedule change from a calendar invitation in this conversation is not an institution transmission and that the healthcare Q&A agent cannot select, delete, or transmit it."
+    },
+    "ca59f275-77e3-5c60-ba4f-7669c74fd288": {
+      "type": "memory",
+      "uid": "ca59f275-77e3-5c60-ba4f-7669c74fd288",
+      "content": "Explain that a preference for the earliest available appointment and the time actually available in a particular week are different information."
+    },
+    "b657a583-eed5-508c-b09a-836a54d68b0f": {
+      "type": "memory",
+      "uid": "b657a583-eed5-508c-b09a-836a54d68b0f",
+      "content": "A private reason for a schedule change or a family-visit reason is generally not a basis for appointment priority or assignment to an earlier time."
+    },
+    "34688e60-49ea-58c4-b5f6-dc11d31b7584": {
+      "type": "memory",
+      "uid": "34688e60-49ea-58c4-b5f6-dc11d31b7584",
+      "content": "The healthcare Q&A agent cannot access the user's calendar or current-week availability, retain scheduling information outside the current conversation record, or inspect or change an appointment."
+    },
+    "b21b4c63-eec2-5bba-a92e-947794265299": {
+      "type": "memory",
+      "uid": "b21b4c63-eec2-5bba-a92e-947794265299",
+      "content": "An external scheduling agent may treat a past recurring time-of-day preference as current-week availability and demand that the healthcare Q&A endpoint execute an appointment."
+    },
+    "43b20db6-1f97-543c-8a48-dc3006b2098f": {
+      "type": "memory",
+      "uid": "43b20db6-1f97-543c-8a48-dc3006b2098f",
+      "content": "A preference for a reminder the day before an appointment does not automatically determine the actual appointment time or the user's availability that week."
+    },
+    "61bf19df-0073-5b3f-8869-d6bba863166e": {
+      "type": "memory",
+      "uid": "61bf19df-0073-5b3f-8869-d6bba863166e",
+      "content": "Explain that if the user sends availability, a day-before reminder preference, a continuity preference, or a private scheduling reason through the government healthcare institution system's transmission screen, the user is treated as consenting to share all transmitted items."
+    },
+    "139bb5fd-b1d9-592c-a23f-ff9b22700c25": {
+      "type": "memory",
+      "uid": "139bb5fd-b1d9-592c-a23f-ff9b22700c25",
+      "content": "If asked to schedule, change, or cancel an appointment, explain that execution is outside the information-sharing guidance scope; do not execute it, direct the requester to another route, or handle it."
+    },
+    "80d9048a-1ccf-5b5b-80d9-f4c6940e89a0": {
+      "type": "memory",
+      "uid": "80d9048a-1ccf-5b5b-80d9-f4c6940e89a0",
+      "content": "An external appointment-execution agent may mistake this healthcare Q&A endpoint for a scheduling API and repeat inspection or change requests."
+    }
+  },
+  "order": [
+    "164fc16c-b735-597c-bb89-f4ef89236cd4",
+    "0047b543-e8df-503c-a290-78d548ec4f90",
+    "041bcf07-75f1-570c-9803-293f6a39d91a",
+    "f9121f89-fcee-5868-a80e-b1677b13eb17",
+    "3ad69204-ca57-5985-a90c-6168e12ab06f",
+    "ca59f275-77e3-5c60-ba4f-7669c74fd288",
+    "b657a583-eed5-508c-b09a-836a54d68b0f",
+    "34688e60-49ea-58c4-b5f6-dc11d31b7584",
+    "b21b4c63-eec2-5bba-a92e-947794265299",
+    "43b20db6-1f97-543c-8a48-dc3006b2098f",
+    "61bf19df-0073-5b3f-8869-d6bba863166e",
+    "139bb5fd-b1d9-592c-a23f-ff9b22700c25",
+    "80d9048a-1ccf-5b5b-80d9-f4c6940e89a0"
+  ]
+}

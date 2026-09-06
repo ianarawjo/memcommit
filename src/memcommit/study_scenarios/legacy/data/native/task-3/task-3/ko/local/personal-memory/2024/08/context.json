@@ -1,0 +1,68 @@
+{
+  "uid": "8764c16b-5fc4-5e5c-84f6-7e2fc728e1b8",
+  "name": "local/personal-memory/2024/08",
+  "memories": {
+    "5f80c7ec-e294-5905-abab-91027c9d827b": {
+      "type": "memory",
+      "uid": "5f80c7ec-e294-5905-abab-91027c9d827b",
+      "content": "사용자는 생활비 외 지출의 월별 한도를 예산 기록에 설정했다."
+    },
+    "2428ab2c-37ce-5de1-84dc-abcdfc8ce062": {
+      "type": "memory",
+      "uid": "2428ab2c-37ce-5de1-84dc-abcdfc8ce062",
+      "content": "사용자는 장보기와 은행 방문을 따로 한 주에 같은 길을 두 번 왕복했다."
+    },
+    "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7": {
+      "type": "memory",
+      "uid": "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7",
+      "content": "사용자는 다음 주 두 용무를 한 번의 외출에 처리해 이동 시간을 줄였다."
+    },
+    "442672e1-2188-5aa3-ad38-5e9c16f25bd5": {
+      "type": "memory",
+      "uid": "442672e1-2188-5aa3-ad38-5e9c16f25bd5",
+      "content": "사용자는 청구서 알림이 당일에 왔을 때 회의 뒤까지 납부를 미뤘다."
+    },
+    "c7385cce-ec43-5902-973c-5b8af54c3557": {
+      "type": "memory",
+      "uid": "c7385cce-ec43-5902-973c-5b8af54c3557",
+      "content": "사용자는 마감 사흘 전 알림을 받은 달에는 저녁 식사 전에 납부를 끝냈다."
+    },
+    "d926c45c-ea49-589c-a7e4-491c9a1514f8": {
+      "type": "memory",
+      "uid": "d926c45c-ea49-589c-a7e4-491c9a1514f8",
+      "content": "사용자는 현금 영수증을 지갑에 모아 두었다가 월말에 금액을 한꺼번에 입력했다."
+    },
+    "9433523f-8c4e-5424-b370-d325ba5154d1": {
+      "type": "memory",
+      "uid": "9433523f-8c4e-5424-b370-d325ba5154d1",
+      "content": "사용자는 큰 지출 하나를 기록한 뒤 그 주의 외식 횟수를 두 번 줄였다."
+    },
+    "d9531336-ac5f-5ba0-bf26-9c69c854578f": {
+      "type": "memory",
+      "uid": "d9531336-ac5f-5ba0-bf26-9c69c854578f",
+      "content": "누나는 공동으로 결제한 식사비를 현금보다 전자송금으로 정산하기를 선호한다."
+    },
+    "9941d390-8b40-5fee-8bcf-df6f36befcb0": {
+      "type": "memory",
+      "uid": "9941d390-8b40-5fee-8bcf-df6f36befcb0",
+      "content": "자동 납부 일정을 만들기 전에 금액과 계정을 사용자에게 확인하라."
+    },
+    "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08": {
+      "type": "memory",
+      "uid": "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08",
+      "content": "청구 기관마다 납부 처리와 연체 반영 시점이 다를 수 있다."
+    }
+  },
+  "order": [
+    "5f80c7ec-e294-5905-abab-91027c9d827b",
+    "2428ab2c-37ce-5de1-84dc-abcdfc8ce062",
+    "bf30d1ef-d7cd-5aa3-b65b-ff04aae647e7",
+    "442672e1-2188-5aa3-ad38-5e9c16f25bd5",
+    "c7385cce-ec43-5902-973c-5b8af54c3557",
+    "d926c45c-ea49-589c-a7e4-491c9a1514f8",
+    "9433523f-8c4e-5424-b370-d325ba5154d1",
+    "d9531336-ac5f-5ba0-bf26-9c69c854578f",
+    "9941d390-8b40-5fee-8bcf-df6f36befcb0",
+    "79aea8fd-5d48-50f7-adf6-b7ebe33bfb08"
+  ]
+}

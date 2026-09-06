@@ -1,0 +1,17 @@
+{
+  "native_context_files": 301,
+  "native_metadata_sidecars": 13,
+  "installed_scenarios": [
+    "coffee",
+    "legacy"
+  ],
+  "bilingual_legacy_memory_count_per_language": 1309,
+  "test_result": "108 passed",
+  "checks": [
+    "ruff (focused Python files)",
+    "operation evidence --check",
+    "git diff --check"
+  ],
+  "wheel": "memcommit-0.0.1-py3-none-any.whl",
+  "commit_snapshot_test_result": "121 passed"
+}

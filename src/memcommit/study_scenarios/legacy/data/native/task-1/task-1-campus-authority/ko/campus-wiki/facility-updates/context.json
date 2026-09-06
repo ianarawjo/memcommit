@@ -1,0 +1,308 @@
+{
+  "uid": "0b57fe07-2a32-55b7-8ad3-cba6cd55df27",
+  "name": "campus-wiki/facility-updates",
+  "memories": {
+    "d79aa629-3e49-5c45-993e-c80efc278889": {
+      "type": "memory",
+      "uid": "d79aa629-3e49-5c45-993e-c80efc278889",
+      "content": "처음 방문하는 이용자는 1층 방문자 서비스 창구에서 목적지를 바로 안내받을 수 있으리라 기대한다."
+    },
+    "50135594-9d2a-554a-9552-c74d35b60b4f": {
+      "type": "memory",
+      "uid": "50135594-9d2a-554a-9552-c74d35b60b4f",
+      "content": "본관 2층에는 학생지원 행정실이 있다."
+    },
+    "0a35d46b-a369-560e-8363-0844ad4f9ea2": {
+      "type": "memory",
+      "uid": "0a35d46b-a369-560e-8363-0844ad4f9ea2",
+      "content": "본관 2층에는 공용 상담실이 있다."
+    },
+    "b117c1ba-c88e-52ca-8dde-ccb21661e910": {
+      "type": "memory",
+      "uid": "b117c1ba-c88e-52ca-8dde-ccb21661e910",
+      "content": "본관 2층에는 일반 화장실이 있다."
+    },
+    "2a06fd43-23f0-5d12-8d7e-d8e1df97176c": {
+      "type": "memory",
+      "uid": "2a06fd43-23f0-5d12-8d7e-d8e1df97176c",
+      "content": "본관 2층에는 accessible restroom이 있다."
+    },
+    "6620e427-90a1-5f6c-9e99-12bd39277c3a": {
+      "type": "memory",
+      "uid": "6620e427-90a1-5f6c-9e99-12bd39277c3a",
+      "content": "본관 3층에는 후문이 있다."
+    },
+    "a1f3fd8f-3c17-5020-a6b0-e50bde147841": {
+      "type": "memory",
+      "uid": "a1f3fd8f-3c17-5020-a6b0-e50bde147841",
+      "content": "본관 3층에는 중앙도서관 방향 연결 통로가 있다."
+    },
+    "d307ffc0-44d6-52d8-9ad6-f76651f2603a": {
+      "type": "memory",
+      "uid": "d307ffc0-44d6-52d8-9ad6-f76651f2603a",
+      "content": "본관 3층에는 세미나실이 있다."
+    },
+    "df86c8e5-275e-51d8-8e51-b4827e71d226": {
+      "type": "memory",
+      "uid": "df86c8e5-275e-51d8-8e51-b4827e71d226",
+      "content": "본관 3층에는 일반 화장실이 있다."
+    },
+    "7f6b1eaa-72a9-509e-85e2-a3abdccbe8ac": {
+      "type": "memory",
+      "uid": "7f6b1eaa-72a9-509e-85e2-a3abdccbe8ac",
+      "content": "본관 3층에는 accessible restroom이 있다."
+    },
+    "69e3647a-9987-5052-8d81-a231f73aeec7": {
+      "type": "memory",
+      "uid": "69e3647a-9987-5052-8d81-a231f73aeec7",
+      "content": "본관 4층에는 학과 사무실이 있다."
+    },
+    "250dc7c8-024c-5d51-9bd7-e2eefbded504": {
+      "type": "memory",
+      "uid": "250dc7c8-024c-5d51-9bd7-e2eefbded504",
+      "content": "본관 4층에는 공용 회의실이 있다."
+    },
+    "d05a9731-1c25-5d54-b8a1-65195ca18327": {
+      "type": "memory",
+      "uid": "d05a9731-1c25-5d54-b8a1-65195ca18327",
+      "content": "본관 5층에는 연구실이 있다."
+    },
+    "fa07f2f5-bb84-56c0-9b9e-85e32b47453d": {
+      "type": "memory",
+      "uid": "fa07f2f5-bb84-56c0-9b9e-85e32b47453d",
+      "content": "본관 5층에는 세미나실이 있다."
+    },
+    "7aced411-0d52-54ba-96cf-6b7fefcf1ea9": {
+      "type": "memory",
+      "uid": "7aced411-0d52-54ba-96cf-6b7fefcf1ea9",
+      "content": "본관 5층 일부 세미나실은 수업에도 사용된다."
+    },
+    "2df2602b-fa8c-5715-a7c7-1606037e3b6d": {
+      "type": "memory",
+      "uid": "2df2602b-fa8c-5715-a7c7-1606037e3b6d",
+      "content": "본관 6층에는 공동연구실이 있다."
+    },
+    "24ad69ce-b1f5-5bde-ad59-d637f261cb99": {
+      "type": "memory",
+      "uid": "24ad69ce-b1f5-5bde-ad59-d637f261cb99",
+      "content": "본관 6층에는 세미나실이 있다."
+    },
+    "11f4d4a4-85d0-5780-90f6-8d6e7edc10c6": {
+      "type": "memory",
+      "uid": "11f4d4a4-85d0-5780-90f6-8d6e7edc10c6",
+      "content": "본관 6층 일부 세미나실은 수업에도 사용된다."
+    },
+    "411a27b6-e540-530b-a5b5-764e26855173": {
+      "type": "memory",
+      "uid": "411a27b6-e540-530b-a5b5-764e26855173",
+      "content": "본관 7층에는 연구지원실이 있다."
+    },
+    "bd016a0a-0be5-52e9-a549-102ea5fe0148": {
+      "type": "memory",
+      "uid": "bd016a0a-0be5-52e9-a549-102ea5fe0148",
+      "content": "본관 7층에는 연구자 공용 업무공간이 있다."
+    },
+    "1582377c-501e-57cc-9cd0-f3281289a2fa": {
+      "type": "memory",
+      "uid": "1582377c-501e-57cc-9cd0-f3281289a2fa",
+      "content": "본관 8층에는 교직원 사무실이 있다."
+    },
+    "16f54319-1da3-5a17-830b-6524fa183511": {
+      "type": "memory",
+      "uid": "16f54319-1da3-5a17-830b-6524fa183511",
+      "content": "본관 8층에는 소규모 회의실이 있다."
+    },
+    "e06a605d-d4d2-5308-9cc5-b1cae7469f36": {
+      "type": "memory",
+      "uid": "e06a605d-d4d2-5308-9cc5-b1cae7469f36",
+      "content": "본관 9층에는 행정 사무실이 있다."
+    },
+    "9da215bb-7f87-583d-9bc2-23e08305d4f1": {
+      "type": "memory",
+      "uid": "9da215bb-7f87-583d-9bc2-23e08305d4f1",
+      "content": "본관 9층에는 10층 행사 지원실이 있다."
+    },
+    "710369be-287c-5c29-9da2-9631d099500e": {
+      "type": "memory",
+      "uid": "710369be-287c-5c29-9da2-9631d099500e",
+      "content": "본관 10층에는 전시·행사홀이 있다."
+    },
+    "e9107328-9e4b-5dcf-a74d-22c90a23b5e0": {
+      "type": "memory",
+      "uid": "e9107328-9e4b-5dcf-a74d-22c90a23b5e0",
+      "content": "본관 10층에는 행사 준비실이 있다."
+    },
+    "076ffc9d-2681-59f2-8f8f-1435c49c3f17": {
+      "type": "memory",
+      "uid": "076ffc9d-2681-59f2-8f8f-1435c49c3f17",
+      "content": "공개된 층별 시설과 임시 운영 공지를 함께 확인해 안내하라."
+    },
+    "ba35ad87-8285-5130-add8-fc694deeb8f7": {
+      "type": "memory",
+      "uid": "ba35ad87-8285-5130-add8-fc694deeb8f7",
+      "content": "비공개 공사 범위를 추정하지 마라."
+    },
+    "e59de198-f9a2-5f3f-be66-43eb9deab632": {
+      "type": "memory",
+      "uid": "e59de198-f9a2-5f3f-be66-43eb9deab632",
+      "content": "현장 점검 결과를 추정하지 마라."
+    },
+    "a3f16328-2a27-5b18-b802-11036a6d2be6": {
+      "type": "memory",
+      "uid": "a3f16328-2a27-5b18-b802-11036a6d2be6",
+      "content": "청소·보안 용역 직원은 교대 때 일반 이용자와 분리된 서비스 동선을 선호한다."
+    },
+    "c6894aba-7d8e-5448-b775-e0303efb15d1": {
+      "type": "memory",
+      "uid": "c6894aba-7d8e-5448-b775-e0303efb15d1",
+      "content": "본관 1층에는 정문 로비가 있다."
+    },
+    "666e872c-e71a-5c64-a5cc-b12d2aac9916": {
+      "type": "memory",
+      "uid": "666e872c-e71a-5c64-a5cc-b12d2aac9916",
+      "content": "본관 1층에는 방문자 서비스 창구가 있다."
+    },
+    "b3bd402a-5af7-58df-bbcc-2857c956fa74": {
+      "type": "memory",
+      "uid": "b3bd402a-5af7-58df-bbcc-2857c956fa74",
+      "content": "본관 1층에는 이노베이션 허브가 있다."
+    },
+    "b33a6790-d94b-51d7-a737-92b9793a466c": {
+      "type": "memory",
+      "uid": "b33a6790-d94b-51d7-a737-92b9793a466c",
+      "content": "본관 1층에는 일반 화장실이 있다."
+    },
+    "70b6e9b8-4a12-5e39-a564-9de4e3882337": {
+      "type": "memory",
+      "uid": "70b6e9b8-4a12-5e39-a564-9de4e3882337",
+      "content": "본관 1층에는 accessible restroom이 있다."
+    },
+    "6132cf14-ab1b-54a6-aa32-c1039c8ab0e7": {
+      "type": "memory",
+      "uid": "6132cf14-ab1b-54a6-aa32-c1039c8ab0e7",
+      "content": "본관 2층 엘리베이터 로비는 학생지원 행정실 가까이에 있다."
+    },
+    "10e2336f-921e-54c3-872e-218a6e745277": {
+      "type": "memory",
+      "uid": "10e2336f-921e-54c3-872e-218a6e745277",
+      "content": "본관 3층 엘리베이터 로비는 중앙도서관 방향 통로 가까이에 있다."
+    },
+    "0ce575cf-f16d-5434-9ac5-00d454d90a09": {
+      "type": "memory",
+      "uid": "0ce575cf-f16d-5434-9ac5-00d454d90a09",
+      "content": "본관 4층 학과 사무실의 이름은 층별 안내판에 표시된다."
+    },
+    "0fa245a2-0f0c-5ef4-9c6e-04faa98c9f5f": {
+      "type": "memory",
+      "uid": "0fa245a2-0f0c-5ef4-9c6e-04faa98c9f5f",
+      "content": "본관 4층에는 학생이 이용할 수 있는 공용 인쇄 지점이 있다."
+    },
+    "7b821e8c-2e26-52d0-b34e-314a614eeb26": {
+      "type": "memory",
+      "uid": "7b821e8c-2e26-52d0-b34e-314a614eeb26",
+      "content": "본관 5층 연구실은 일반 공개 공간이 아니다."
+    },
+    "9ab67289-f3b1-5918-9965-ecb4ab743400": {
+      "type": "memory",
+      "uid": "9ab67289-f3b1-5918-9965-ecb4ab743400",
+      "content": "본관 6층 공동연구실은 승인된 연구 구성원이 이용한다."
+    },
+    "e7272a72-48a5-544b-8771-9c9872ae34f2": {
+      "type": "memory",
+      "uid": "e7272a72-48a5-544b-8771-9c9872ae34f2",
+      "content": "본관 7층 연구지원실의 상담은 게시된 예약 방식에 따른다."
+    },
+    "f7817017-85a2-582d-bb63-2b77cd2e9311": {
+      "type": "memory",
+      "uid": "f7817017-85a2-582d-bb63-2b77cd2e9311",
+      "content": "본관 8층 교직원 사무실 방문자는 약속한 담당자가 예정 시각에 사무실에 있을 것으로 기대한다."
+    },
+    "a2c599c9-1218-5d37-a866-66222eb5e226": {
+      "type": "memory",
+      "uid": "a2c599c9-1218-5d37-a866-66222eb5e226",
+      "content": "본관 9층의 공개 행정 서비스는 부서별 운영시간에 제공된다."
+    },
+    "fdf4ee37-1183-5923-bccb-2c2b2d55cbb3": {
+      "type": "memory",
+      "uid": "fdf4ee37-1183-5923-bccb-2c2b2d55cbb3",
+      "content": "본관 엘리베이터는 지하주차장 층부터 10층까지 연결한다."
+    },
+    "cc098a87-de11-594f-b59c-126a2cec29bd": {
+      "type": "memory",
+      "uid": "cc098a87-de11-594f-b59c-126a2cec29bd",
+      "content": "층별 안내 에이전트는 공개된 시설의 층과 공간 이름을 설명할 수 있다."
+    },
+    "b1e19dc4-db1f-5328-8448-aac4d37451d7": {
+      "type": "memory",
+      "uid": "b1e19dc4-db1f-5328-8448-aac4d37451d7",
+      "content": "층별 안내 에이전트는 회의실의 현재 점유 상태를 확인할 수 없다."
+    },
+    "d842f429-c182-5fd0-baf8-8f023b85632f": {
+      "type": "memory",
+      "uid": "d842f429-c182-5fd0-baf8-8f023b85632f",
+      "content": "처음 방문하는 이용자는 층 번호보다 부서 이름에 더 익숙해 부서명 중심 안내를 이해하기 쉽다."
+    },
+    "90c6d663-e63e-591c-99c3-a300a7e7e253": {
+      "type": "memory",
+      "uid": "90c6d663-e63e-591c-99c3-a300a7e7e253",
+      "content": "공휴일에는 본관이 열려 있어도 일부 행정 사무실이 운영하지 않을 수 있다."
+    },
+    "38daa1a2-70e9-5815-957a-41c95ed6119e": {
+      "type": "memory",
+      "uid": "38daa1a2-70e9-5815-957a-41c95ed6119e",
+      "content": "층별 안내 에이전트는 공개 층별 정보가 실제 배치와 일치하는지 문의 시점에 실시간으로 검증할 수 없다."
+    }
+  },
+  "order": [
+    "d79aa629-3e49-5c45-993e-c80efc278889",
+    "50135594-9d2a-554a-9552-c74d35b60b4f",
+    "0a35d46b-a369-560e-8363-0844ad4f9ea2",
+    "b117c1ba-c88e-52ca-8dde-ccb21661e910",
+    "2a06fd43-23f0-5d12-8d7e-d8e1df97176c",
+    "6620e427-90a1-5f6c-9e99-12bd39277c3a",
+    "a1f3fd8f-3c17-5020-a6b0-e50bde147841",
+    "d307ffc0-44d6-52d8-9ad6-f76651f2603a",
+    "df86c8e5-275e-51d8-8e51-b4827e71d226",
+    "7f6b1eaa-72a9-509e-85e2-a3abdccbe8ac",
+    "69e3647a-9987-5052-8d81-a231f73aeec7",
+    "250dc7c8-024c-5d51-9bd7-e2eefbded504",
+    "d05a9731-1c25-5d54-b8a1-65195ca18327",
+    "fa07f2f5-bb84-56c0-9b9e-85e32b47453d",
+    "7aced411-0d52-54ba-96cf-6b7fefcf1ea9",
+    "2df2602b-fa8c-5715-a7c7-1606037e3b6d",
+    "24ad69ce-b1f5-5bde-ad59-d637f261cb99",
+    "11f4d4a4-85d0-5780-90f6-8d6e7edc10c6",
+    "411a27b6-e540-530b-a5b5-764e26855173",
+    "bd016a0a-0be5-52e9-a549-102ea5fe0148",
+    "1582377c-501e-57cc-9cd0-f3281289a2fa",
+    "16f54319-1da3-5a17-830b-6524fa183511",
+    "e06a605d-d4d2-5308-9cc5-b1cae7469f36",
+    "9da215bb-7f87-583d-9bc2-23e08305d4f1",
+    "710369be-287c-5c29-9da2-9631d099500e",
+    "e9107328-9e4b-5dcf-a74d-22c90a23b5e0",
+    "076ffc9d-2681-59f2-8f8f-1435c49c3f17",
+    "ba35ad87-8285-5130-add8-fc694deeb8f7",
+    "e59de198-f9a2-5f3f-be66-43eb9deab632",
+    "a3f16328-2a27-5b18-b802-11036a6d2be6",
+    "c6894aba-7d8e-5448-b775-e0303efb15d1",
+    "666e872c-e71a-5c64-a5cc-b12d2aac9916",
+    "b3bd402a-5af7-58df-bbcc-2857c956fa74",
+    "b33a6790-d94b-51d7-a737-92b9793a466c",
+    "70b6e9b8-4a12-5e39-a564-9de4e3882337",
+    "6132cf14-ab1b-54a6-aa32-c1039c8ab0e7",
+    "10e2336f-921e-54c3-872e-218a6e745277",
+    "0ce575cf-f16d-5434-9ac5-00d454d90a09",
+    "0fa245a2-0f0c-5ef4-9c6e-04faa98c9f5f",
+    "7b821e8c-2e26-52d0-b34e-314a614eeb26",
+    "9ab67289-f3b1-5918-9965-ecb4ab743400",
+    "e7272a72-48a5-544b-8771-9c9872ae34f2",
+    "f7817017-85a2-582d-bb63-2b77cd2e9311",
+    "a2c599c9-1218-5d37-a866-66222eb5e226",
+    "fdf4ee37-1183-5923-bccb-2c2b2d55cbb3",
+    "cc098a87-de11-594f-b59c-126a2cec29bd",
+    "b1e19dc4-db1f-5328-8448-aac4d37451d7",
+    "d842f429-c182-5fd0-baf8-8f023b85632f",
+    "90c6d663-e63e-591c-99c3-a300a7e7e253",
+    "38daa1a2-70e9-5815-957a-41c95ed6119e"
+  ]
+}

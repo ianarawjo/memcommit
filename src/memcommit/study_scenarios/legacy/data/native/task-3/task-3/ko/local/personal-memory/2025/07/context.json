@@ -1,0 +1,68 @@
+{
+  "uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+  "name": "local/personal-memory/2025/07",
+  "memories": {
+    "447bfd8d-1490-5404-a2b4-13b4587e6aba": {
+      "type": "memory",
+      "uid": "447bfd8d-1490-5404-a2b4-13b4587e6aba",
+      "content": "사용자는 여행용 보조 배터리를 책상 아래 첫 번째 서랍에 보관한다."
+    },
+    "3ab0326a-a006-51ea-9348-7ada19a23bce": {
+      "type": "memory",
+      "uid": "3ab0326a-a006-51ea-9348-7ada19a23bce",
+      "content": "사용자는 2박 일정에 신발 세 켤레를 챙겼다가 한 켤레만 신었다."
+    },
+    "ef467ab6-8ba6-5f81-8f12-578ec1824e09": {
+      "type": "memory",
+      "uid": "ef467ab6-8ba6-5f81-8f12-578ec1824e09",
+      "content": "사용자는 다음 2박 일정에서는 걷는 신발 한 켤레만 챙겨 가방 무게를 줄였다."
+    },
+    "aa4defc3-2b65-5688-accb-aaa49f2430b6": {
+      "type": "memory",
+      "uid": "aa4defc3-2b65-5688-accb-aaa49f2430b6",
+      "content": "사용자는 충전 케이블을 빠뜨린 여행에서 도착 뒤 새 케이블을 샀다."
+    },
+    "2d937b4b-d73d-5382-abbe-3cd4e596b3a5": {
+      "type": "memory",
+      "uid": "2d937b4b-d73d-5382-abbe-3cd4e596b3a5",
+      "content": "사용자는 다음 여행 전에 충전 물품을 사진으로 확인하고 모두 챙겼다."
+    },
+    "0be8b327-0a06-5241-b98d-daa6b0a4aa50": {
+      "type": "memory",
+      "uid": "0be8b327-0a06-5241-b98d-daa6b0a4aa50",
+      "content": "사용자는 출발 당일에 세면도구를 담다가 약속 장소에 15분 늦었다."
+    },
+    "90059fcc-436d-5453-98f0-a9b23a08faf1": {
+      "type": "memory",
+      "uid": "90059fcc-436d-5453-98f0-a9b23a08faf1",
+      "content": "사용자는 다음번에는 전날 밤 가방을 닫아 두고 제시간에 출발했다."
+    },
+    "12ef03f9-8cda-5ed7-be83-891b4702f872": {
+      "type": "memory",
+      "uid": "12ef03f9-8cda-5ed7-be83-891b4702f872",
+      "content": "누나는 짧은 여행에서도 충전 문제를 피하려고 여분의 케이블을 챙기는 편이 안전하다고 여긴다."
+    },
+    "54136935-a460-573d-ac40-f5edb0ca7e6c": {
+      "type": "memory",
+      "uid": "54136935-a460-573d-ac40-f5edb0ca7e6c",
+      "content": "여행 준비 목록을 만들 때 일정 길이와 실제 활동을 사용자에게 확인하라."
+    },
+    "029c0777-bdbb-5d48-9309-1b1e6c7d88f4": {
+      "type": "memory",
+      "uid": "029c0777-bdbb-5d48-9309-1b1e6c7d88f4",
+      "content": "로컬 에이전트는 지난 여행의 짐만으로 다음 여행에 필요한 물품을 확정할 수 없다."
+    }
+  },
+  "order": [
+    "447bfd8d-1490-5404-a2b4-13b4587e6aba",
+    "3ab0326a-a006-51ea-9348-7ada19a23bce",
+    "ef467ab6-8ba6-5f81-8f12-578ec1824e09",
+    "aa4defc3-2b65-5688-accb-aaa49f2430b6",
+    "2d937b4b-d73d-5382-abbe-3cd4e596b3a5",
+    "0be8b327-0a06-5241-b98d-daa6b0a4aa50",
+    "90059fcc-436d-5453-98f0-a9b23a08faf1",
+    "12ef03f9-8cda-5ed7-be83-891b4702f872",
+    "54136935-a460-573d-ac40-f5edb0ca7e6c",
+    "029c0777-bdbb-5d48-9309-1b1e6c7d88f4"
+  ]
+}

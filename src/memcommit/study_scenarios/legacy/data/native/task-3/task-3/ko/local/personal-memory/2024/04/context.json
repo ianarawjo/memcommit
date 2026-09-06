@@ -1,0 +1,68 @@
+{
+  "uid": "206e1cd3-93da-5341-bda3-95cde4814c20",
+  "name": "local/personal-memory/2024/04",
+  "memories": {
+    "9cea83cd-e39f-53bd-9e79-d30aa465ad02": {
+      "type": "memory",
+      "uid": "9cea83cd-e39f-53bd-9e79-d30aa465ad02",
+      "content": "사용자는 2024년 4월에 정기 치과 검진을 마쳤다."
+    },
+    "51f8326f-60d4-5ba3-ba32-a04331dcb930": {
+      "type": "memory",
+      "uid": "51f8326f-60d4-5ba3-ba32-a04331dcb930",
+      "content": "사용자는 검진 질문을 세 가지 연달아 들었을 때 첫 번째 질문을 다시 물었다."
+    },
+    "cd0bce79-71d5-5d46-9c68-8a1d096dd53a": {
+      "type": "memory",
+      "uid": "cd0bce79-71d5-5d46-9c68-8a1d096dd53a",
+      "content": "사용자는 질문을 하나씩 받은 다음 방문에서는 각 답을 빠뜨리지 않고 말했다."
+    },
+    "71e27b0c-5c10-5102-aeac-98b0841723f2": {
+      "type": "memory",
+      "uid": "71e27b0c-5c10-5102-aeac-98b0841723f2",
+      "content": "사용자는 예약 변경 전화를 점심시간에 걸었다가 연결되지 않았다."
+    },
+    "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7": {
+      "type": "memory",
+      "uid": "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7",
+      "content": "사용자는 진료소에서 받은 종이 안내를 집에 와서 사진으로 보관했다."
+    },
+    "aab36950-7e2b-588f-bb7c-d3bd6e36c501": {
+      "type": "memory",
+      "uid": "aab36950-7e2b-588f-bb7c-d3bd6e36c501",
+      "content": "사용자는 일정표에 방문 주소만 넣었던 날 어느 층인지 다시 검색했다."
+    },
+    "50ac9268-9259-56fd-8678-1dfc8f919efb": {
+      "type": "memory",
+      "uid": "50ac9268-9259-56fd-8678-1dfc8f919efb",
+      "content": "사용자는 누나에게 검진 시간을 공유한 날 귀가 뒤 확인 전화를 받았다."
+    },
+    "5141ca66-9860-5ec5-b028-ac8670f586ca": {
+      "type": "memory",
+      "uid": "5141ca66-9860-5ec5-b028-ac8670f586ca",
+      "content": "해당 진료소의 예약 직원은 일정 변경 요청이 전화로 들어올 것으로 기대한다."
+    },
+    "e265e637-fa41-53d0-aa9b-0102e9962f9a": {
+      "type": "memory",
+      "uid": "e265e637-fa41-53d0-aa9b-0102e9962f9a",
+      "content": "후속 방문을 달력에 넣기 전에 날짜·시간·주소·층을 사용자에게 확인하라."
+    },
+    "7aece7ae-b327-537e-9cef-fe24ee8fc618": {
+      "type": "memory",
+      "uid": "7aece7ae-b327-537e-9cef-fe24ee8fc618",
+      "content": "로컬 에이전트는 완료된 검진과 예정된 일정은 추적할 수 있지만 후속 방문이 필요한지는 판단할 수 없다."
+    }
+  },
+  "order": [
+    "9cea83cd-e39f-53bd-9e79-d30aa465ad02",
+    "51f8326f-60d4-5ba3-ba32-a04331dcb930",
+    "cd0bce79-71d5-5d46-9c68-8a1d096dd53a",
+    "71e27b0c-5c10-5102-aeac-98b0841723f2",
+    "86ad5410-0cc7-5876-8e3a-a3f0dd1680c7",
+    "aab36950-7e2b-588f-bb7c-d3bd6e36c501",
+    "50ac9268-9259-56fd-8678-1dfc8f919efb",
+    "5141ca66-9860-5ec5-b028-ac8670f586ca",
+    "e265e637-fa41-53d0-aa9b-0102e9962f9a",
+    "7aece7ae-b327-537e-9cef-fe24ee8fc618"
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+  "name": "local/personal-memory/2025/03",
+  "memories": {
+    "5d989bab-c471-5de9-bb73-29cabc4753dd": {
+      "type": "memory",
+      "uid": "5d989bab-c471-5de9-bb73-29cabc4753dd",
+      "content": "사용자는 냉동실 두 번째 칸에 미리 만든 식사를 보관한다."
+    },
+    "d1725ae4-3fd3-5250-92b3-73d84d9152a7": {
+      "type": "memory",
+      "uid": "d1725ae4-3fd3-5250-92b3-73d84d9152a7",
+      "content": "사용자는 장보기 목록 없이 시장에 갔다가 집에 있던 양파를 다시 샀다."
+    },
+    "904ff225-26df-5424-8a82-23d733649106": {
+      "type": "memory",
+      "uid": "904ff225-26df-5424-8a82-23d733649106",
+      "content": "사용자는 냉장고 사진을 보고 장을 본 날 중복 구매를 하지 않았다."
+    },
+    "67a003c7-648a-59dc-8e82-03f9e452ffce": {
+      "type": "memory",
+      "uid": "67a003c7-648a-59dc-8e82-03f9e452ffce",
+      "content": "사용자는 매운 찌개를 만든 날 한 그릇을 다 먹지 못하고 남겼다."
+    },
+    "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9": {
+      "type": "memory",
+      "uid": "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9",
+      "content": "사용자는 다음 조리에서 고춧가루를 절반만 넣고 식사를 끝까지 먹었다."
+    },
+    "64bf4401-e972-5d15-a526-21ca901a6a9f": {
+      "type": "memory",
+      "uid": "64bf4401-e972-5d15-a526-21ca901a6a9f",
+      "content": "사용자는 남동생과 요리할 때 조리 순서를 말로만 정했다가 같은 일을 두 번 했다."
+    },
+    "57e09ea5-54ff-5fce-aada-68daffbacc8b": {
+      "type": "memory",
+      "uid": "57e09ea5-54ff-5fce-aada-68daffbacc8b",
+      "content": "사용자는 다음번에는 재료 손질과 불 조절을 나눠 식사를 20분 일찍 완성했다."
+    },
+    "0a5d054f-94bd-5955-bdb7-9b5427e2260b": {
+      "type": "memory",
+      "uid": "0a5d054f-94bd-5955-bdb7-9b5427e2260b",
+      "content": "남동생은 함께 요리할 때 조리와 설거지 역할을 미리 나누는 방식을 선호한다."
+    },
+    "1f94b78b-1635-551c-b90c-bea2a67ca595": {
+      "type": "memory",
+      "uid": "1f94b78b-1635-551c-b90c-bea2a67ca595",
+      "content": "로컬 에이전트는 여러 식사 반응을 비교할 수 있지만 한 번 남긴 음식만으로 사용자가 그 재료를 싫어한다고 판단할 수 없다."
+    },
+    "f64ef6c4-7665-5574-9d58-fc124b0bfe3f": {
+      "type": "memory",
+      "uid": "f64ef6c4-7665-5574-9d58-fc124b0bfe3f",
+      "content": "냉동 조리식품의 상태는 포장과 보관 기간에 따라 달라질 수 있다."
+    }
+  },
+  "order": [
+    "5d989bab-c471-5de9-bb73-29cabc4753dd",
+    "d1725ae4-3fd3-5250-92b3-73d84d9152a7",
+    "904ff225-26df-5424-8a82-23d733649106",
+    "67a003c7-648a-59dc-8e82-03f9e452ffce",
+    "61b01e74-5408-5c9f-9a66-ecc6f77b0bb9",
+    "64bf4401-e972-5d15-a526-21ca901a6a9f",
+    "57e09ea5-54ff-5fce-aada-68daffbacc8b",
+    "0a5d054f-94bd-5955-bdb7-9b5427e2260b",
+    "1f94b78b-1635-551c-b90c-bea2a67ca595",
+    "f64ef6c4-7665-5574-9d58-fc124b0bfe3f"
+  ]
+}

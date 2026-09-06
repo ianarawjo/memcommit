@@ -1,0 +1,68 @@
+{
+  "uid": "fd476504-4d4e-54d9-80b8-3dc2b18555d8",
+  "name": "local/personal-memory/2026/05",
+  "memories": {
+    "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227": {
+      "type": "memory",
+      "uid": "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227",
+      "content": "사용자는 소풍용 돗자리를 현관 수납장 아래칸에 둔다."
+    },
+    "fa2735e1-f4af-57d3-a18c-795715b6715b": {
+      "type": "memory",
+      "uid": "fa2735e1-f4af-57d3-a18c-795715b6715b",
+      "content": "사용자는 강가에 갔던 날 그늘이 없는 자리에 앉아 한 시간 만에 이동했다."
+    },
+    "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a": {
+      "type": "memory",
+      "uid": "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a",
+      "content": "사용자는 다음 야외 식사에서는 큰 나무 근처에 자리를 잡아 두 시간 머물렀다."
+    },
+    "c7c4b494-39a6-5f5c-b37f-51c5061ac926": {
+      "type": "memory",
+      "uid": "c7c4b494-39a6-5f5c-b37f-51c5061ac926",
+      "content": "사용자는 물병 하나만 가져간 더운 날 중간에 음료를 다시 샀다."
+    },
+    "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075": {
+      "type": "memory",
+      "uid": "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075",
+      "content": "사용자는 다음 외출에서는 작은 물병 두 개를 얼려 가져갔다."
+    },
+    "2ed2a41c-f6ae-54d6-875c-a195d8fdacee": {
+      "type": "memory",
+      "uid": "2ed2a41c-f6ae-54d6-875c-a195d8fdacee",
+      "content": "사용자는 외삼촌과 공원에서 만났을 때 서로 다른 입구에서 15분을 기다렸다."
+    },
+    "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3": {
+      "type": "memory",
+      "uid": "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3",
+      "content": "사용자는 다음 만남에서 입구 표지판 사진을 보내 같은 장소에서 만났다."
+    },
+    "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e": {
+      "type": "memory",
+      "uid": "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e",
+      "content": "외삼촌은 공원 약속 때 주차장에서 덜 걷는 입구를 선호한다."
+    },
+    "70277b86-d5db-5b58-8a94-e77372d15a4c": {
+      "type": "memory",
+      "uid": "70277b86-d5db-5b58-8a94-e77372d15a4c",
+      "content": "야외 약속을 만들 때 정확한 입구와 비가 올 경우의 대체 장소를 확인하라."
+    },
+    "5a54437b-9b0e-5103-860d-d878be70b3ef": {
+      "type": "memory",
+      "uid": "5a54437b-9b0e-5103-860d-d878be70b3ef",
+      "content": "공원의 일부 화장실과 음수대는 계절에 따라 운영하지 않을 수 있다."
+    }
+  },
+  "order": [
+    "a9da4cfc-a6aa-51ae-9ec4-0de5c7a09227",
+    "fa2735e1-f4af-57d3-a18c-795715b6715b",
+    "3bd8b8f2-c5b4-5004-8b9e-e388cc26ea7a",
+    "c7c4b494-39a6-5f5c-b37f-51c5061ac926",
+    "dd9f5b3c-9c2e-5dbc-bf6e-eb7761eeb075",
+    "2ed2a41c-f6ae-54d6-875c-a195d8fdacee",
+    "23f3a4fc-d51e-5d0b-87f0-d5be407a57f3",
+    "e9f459f3-8ff0-5a0e-b78b-eda8d18b914e",
+    "70277b86-d5db-5b58-8a94-e77372d15a4c",
+    "5a54437b-9b0e-5103-860d-d878be70b3ef"
+  ]
+}

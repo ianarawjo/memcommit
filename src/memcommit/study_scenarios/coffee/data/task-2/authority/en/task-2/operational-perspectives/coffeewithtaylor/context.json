@@ -1,0 +1,56 @@
+{
+  "uid": "70a9907c-39b1-5ad3-846a-2cf97e96bd33",
+  "name": "task-2/operational-perspectives/coffeewithtaylor",
+  "memories": {
+    "42fc8d84-a790-551e-b7e6-aec414b29acb": {
+      "type": "memory",
+      "uid": "42fc8d84-a790-551e-b7e6-aec414b29acb",
+      "content": "Last Friday's closing shift left a handoff note saying, '12-drink pickup order at 9:00 a.m.,' and the next day's opening shift reviewed it."
+    },
+    "a94dd744-38af-571a-9597-afe884e8fba5": {
+      "type": "memory",
+      "uid": "a94dd744-38af-571a-9597-afe884e8fba5",
+      "content": "Taylor's recent work notes repeatedly record questions near closing about the last order time and how long customers may continue using the seats."
+    },
+    "ac3abad1-733e-55d8-9740-7500a01cfe91": {
+      "type": "memory",
+      "uid": "ac3abad1-733e-55d8-9740-7500a01cfe91",
+      "content": "When preparing a work schedule, protect Taylor's personal commitment every Wednesday and do not suggest a replacement shift during that time unless Taylor asks first."
+    },
+    "7566e17a-7e1b-5293-9446-23803ec2d76b": {
+      "type": "memory",
+      "uid": "7566e17a-7e1b-5293-9446-23803ec2d76b",
+      "content": "When showing Taylor a replacement-shift request, present the date, time, and position together and do not reply without Taylor's confirmation."
+    },
+    "29a41ddd-fe08-590f-84c0-43c45983ea21": {
+      "type": "memory",
+      "uid": "29a41ddd-fe08-590f-84c0-43c45983ea21",
+      "content": "This agent can compare Taylor's work schedule with personal commitments and travel time to flag conflicts, but it does not accept replacement shifts or reply to coworkers."
+    },
+    "722fcff9-ba34-5474-bc8d-22d4df2996d2": {
+      "type": "memory",
+      "uid": "722fcff9-ba34-5474-bc8d-22d4df2996d2",
+      "content": "Taylor experiences laptop customers who remain quiet for a long time after ordering as relatively easy customers who require little additional attention."
+    },
+    "d3260a56-9ec9-51ad-895b-68dfef2e2f69": {
+      "type": "memory",
+      "uid": "d3260a56-9ec9-51ad-895b-68dfef2e2f69",
+      "content": "A pickup order may be accepted and collected across different shifts, so without a written handoff the next worker must verify the order details again."
+    },
+    "7848dba7-3d7d-5d32-809d-c86095359c3a": {
+      "type": "memory",
+      "uid": "7848dba7-3d7d-5d32-809d-c86095359c3a",
+      "content": "The owner of Morrow Coffee evaluates the whole experience from a customer's entry through ordering, staying, and leaving rather than focusing only on one task's efficiency."
+    }
+  },
+  "order": [
+    "42fc8d84-a790-551e-b7e6-aec414b29acb",
+    "a94dd744-38af-571a-9597-afe884e8fba5",
+    "ac3abad1-733e-55d8-9740-7500a01cfe91",
+    "7566e17a-7e1b-5293-9446-23803ec2d76b",
+    "29a41ddd-fe08-590f-84c0-43c45983ea21",
+    "722fcff9-ba34-5474-bc8d-22d4df2996d2",
+    "d3260a56-9ec9-51ad-895b-68dfef2e2f69",
+    "7848dba7-3d7d-5d32-809d-c86095359c3a"
+  ]
+}

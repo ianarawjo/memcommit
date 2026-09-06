@@ -1,0 +1,32 @@
+{
+  "uid": "86f20c97-0838-5d35-868a-4a93892df9a5",
+  "name": "practice/coffee/compare-merge-meld-update/b",
+  "memories": {
+    "530c16dd-0482-5745-a9fe-b8b7f3cf6e5e": {
+      "type": "memory",
+      "uid": "530c16dd-0482-5745-a9fe-b8b7f3cf6e5e",
+      "content": "A café where nobody talks and the atmosphere is excessively quiet feels uncomfortable for a gathering."
+    },
+    "7b5d7d97-86f1-57ed-ba2a-0ba0846e4429": {
+      "type": "memory",
+      "uid": "7b5d7d97-86f1-57ed-ba2a-0ba0846e4429",
+      "content": "Tables that are unusually high and uniform make a café feel more like a home or an office, which I do not prefer."
+    },
+    "6510d8ba-1a6f-5040-9808-173404e53a5b": {
+      "type": "memory",
+      "uid": "6510d8ba-1a6f-5040-9808-173404e53a5b",
+      "content": "Flavor descriptions that are too abstract or exaggerated can make ordering more difficult."
+    },
+    "e06bd754-b5e3-5240-9112-e7f9fa011011": {
+      "type": "memory",
+      "uid": "e06bd754-b5e3-5240-9112-e7f9fa011011",
+      "content": "A menu with too many options makes it difficult to choose."
+    }
+  },
+  "order": [
+    "530c16dd-0482-5745-a9fe-b8b7f3cf6e5e",
+    "7b5d7d97-86f1-57ed-ba2a-0ba0846e4429",
+    "6510d8ba-1a6f-5040-9808-173404e53a5b",
+    "e06bd754-b5e3-5240-9112-e7f9fa011011"
+  ]
+}

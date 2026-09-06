@@ -1,0 +1,68 @@
+{
+  "uid": "66c3e5de-61bb-5795-8e5a-4e28f64be857",
+  "name": "local/personal-memory/2024/12",
+  "memories": {
+    "a6923620-267d-5129-b8c4-cd9b1e1a1e7b": {
+      "type": "memory",
+      "uid": "a6923620-267d-5129-b8c4-cd9b1e1a1e7b",
+      "content": "사용자는 2024년 12월에 한 진료소의 accessible entrance를 이용했다."
+    },
+    "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582": {
+      "type": "memory",
+      "uid": "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582",
+      "content": "사용자는 눈이 쌓인 날 정문 경사로가 막혀 옆 출입구로 이동했다."
+    },
+    "4cb45120-4376-5c7b-ae92-faa9e4b9330c": {
+      "type": "memory",
+      "uid": "4cb45120-4376-5c7b-ae92-faa9e4b9330c",
+      "content": "사용자는 엘리베이터가 점검 중인 것을 현장에서 알고 약속을 늦췄다."
+    },
+    "479f4434-879c-5335-b0c9-c0bfa19ecdcd": {
+      "type": "memory",
+      "uid": "479f4434-879c-5335-b0c9-c0bfa19ecdcd",
+      "content": "사용자는 다음 방문 전날 엘리베이터 운영 여부를 전화로 확인했다."
+    },
+    "0f2c78a7-8f92-573d-af8a-a360ceb77b24": {
+      "type": "memory",
+      "uid": "0f2c78a7-8f92-573d-af8a-a360ceb77b24",
+      "content": "사용자는 대기 의자 가까운 번호표 기계 앞에서 순서를 기다렸다."
+    },
+    "7b9197ac-4263-5169-8d3b-d34f5d893d36": {
+      "type": "memory",
+      "uid": "7b9197ac-4263-5169-8d3b-d34f5d893d36",
+      "content": "사용자는 의자가 없는 복도에서 기다린 날 벽에 기대어 여러 번 자세를 바꿨다."
+    },
+    "7b0b7571-f29c-56e5-a27a-82d69a4a6982": {
+      "type": "memory",
+      "uid": "7b0b7571-f29c-56e5-a27a-82d69a4a6982",
+      "content": "사용자는 누나가 동행한 날 접수 뒤 바로 앉을 자리를 찾았다."
+    },
+    "e9515d6b-10d9-579f-abf7-5030db64218a": {
+      "type": "memory",
+      "uid": "e9515d6b-10d9-579f-abf7-5030db64218a",
+      "content": "접수 직원은 처음 방문한 이용자가 accessible entrance 위치를 물을 수 있다고 예상한다."
+    },
+    "8e57141d-c603-56cd-ab9e-c14b4e944b45": {
+      "type": "memory",
+      "uid": "8e57141d-c603-56cd-ab9e-c14b4e944b45",
+      "content": "로컬 에이전트는 accessible route 이용 기록만으로 사용자의 질환을 추정할 수 없다."
+    },
+    "a6076438-307c-56fe-9d2c-848181846ce5": {
+      "type": "memory",
+      "uid": "a6076438-307c-56fe-9d2c-848181846ce5",
+      "content": "적설과 제설 작업은 평소 사용하던 출입 경로를 일시적으로 막을 수 있다."
+    }
+  },
+  "order": [
+    "a6923620-267d-5129-b8c4-cd9b1e1a1e7b",
+    "fb0e1d1f-0ef5-5214-b6d7-f6ca5c68f582",
+    "4cb45120-4376-5c7b-ae92-faa9e4b9330c",
+    "479f4434-879c-5335-b0c9-c0bfa19ecdcd",
+    "0f2c78a7-8f92-573d-af8a-a360ceb77b24",
+    "7b9197ac-4263-5169-8d3b-d34f5d893d36",
+    "7b0b7571-f29c-56e5-a27a-82d69a4a6982",
+    "e9515d6b-10d9-579f-abf7-5030db64218a",
+    "8e57141d-c603-56cd-ab9e-c14b4e944b45",
+    "a6076438-307c-56fe-9d2c-848181846ce5"
+  ]
+}

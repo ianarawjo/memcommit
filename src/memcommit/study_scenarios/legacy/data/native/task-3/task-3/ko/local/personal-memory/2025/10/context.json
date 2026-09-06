@@ -1,0 +1,68 @@
+{
+  "uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+  "name": "local/personal-memory/2025/10",
+  "memories": {
+    "82c1e806-de3a-5633-8a08-175487e69fd6": {
+      "type": "memory",
+      "uid": "82c1e806-de3a-5633-8a08-175487e69fd6",
+      "content": "사용자는 비 오는 날 신는 방수 신발을 현관 왼쪽에 둔다."
+    },
+    "25df6384-836f-5f8e-bd97-73a1fb171c48": {
+      "type": "memory",
+      "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48",
+      "content": "사용자는 얇은 신발로 빗길을 걸은 날 양말이 젖어 도착 뒤 갈아 신었다."
+    },
+    "55abae4f-206a-586e-8b35-406d7525c0a1": {
+      "type": "memory",
+      "uid": "55abae4f-206a-586e-8b35-406d7525c0a1",
+      "content": "사용자는 다음 비 오는 날 방수 신발을 신고 발이 젖지 않았다."
+    },
+    "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd": {
+      "type": "memory",
+      "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd",
+      "content": "사용자는 새 신발을 신고 오래 걸은 날 뒤꿈치가 쓸려 귀가 경로를 줄였다."
+    },
+    "a6424854-e51e-5afc-8b9f-9e2f0273f70e": {
+      "type": "memory",
+      "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e",
+      "content": "사용자는 같은 신발을 짧은 외출에 두 번 신은 뒤 장거리 산책에 사용했다."
+    },
+    "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd": {
+      "type": "memory",
+      "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd",
+      "content": "사용자는 우산을 현관 밖에서 말린 날 다음 외출 전에 바로 찾았다."
+    },
+    "ccd1f422-6130-5f19-869e-681102a3a1fa": {
+      "type": "memory",
+      "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa",
+      "content": "사용자는 접은 젖은 우산을 가방에 넣은 날 안쪽 서류가 젖었다."
+    },
+    "c69a8e87-2b6f-5514-ab0d-0037531592f8": {
+      "type": "memory",
+      "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8",
+      "content": "엄마는 비 예보가 있는 날 사용자가 우산을 잊을 수 있다고 예상해 현관에 여분 우산을 꺼내 둔다."
+    },
+    "4567ea9f-1800-51ed-bfac-f4cdf674d4cf": {
+      "type": "memory",
+      "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf",
+      "content": "장거리 도보 일정을 제안할 때 당일 날씨와 최근 신발 불편 기록을 함께 확인하라."
+    },
+    "a4ff1b76-755d-530a-b24c-8655115e4fbe": {
+      "type": "memory",
+      "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe",
+      "content": "로컬 에이전트는 신발 위치를 알아도 현재 상태나 사용 가능 여부를 알 수 없다."
+    }
+  },
+  "order": [
+    "82c1e806-de3a-5633-8a08-175487e69fd6",
+    "25df6384-836f-5f8e-bd97-73a1fb171c48",
+    "55abae4f-206a-586e-8b35-406d7525c0a1",
+    "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd",
+    "a6424854-e51e-5afc-8b9f-9e2f0273f70e",
+    "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd",
+    "ccd1f422-6130-5f19-869e-681102a3a1fa",
+    "c69a8e87-2b6f-5514-ab0d-0037531592f8",
+    "4567ea9f-1800-51ed-bfac-f4cdf674d4cf",
+    "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+  ]
+}

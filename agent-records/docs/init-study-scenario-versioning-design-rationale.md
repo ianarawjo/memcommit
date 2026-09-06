@@ -18,6 +18,12 @@ and the special `study-baseline` Profile lifecycle were removed together.
 ## Scenario ownership
 
 `memcommit.study_scenarios.coffee` owns the Coffee specification and builder.
+Both scenarios now store Memory content as native Context JSON and use the
+shared resource-import decoder/publication boundary; see
+[native JSON import](native-json-import-design-rationale.md).
+Legacy Practice is native data as well. Study retains run composition and Grant
+materialization, while historical Markdown parsing is an external authoring
+compatibility path only.
 `memcommit.study_scenarios.legacy` owns the old fixture loader, bundle builder,
 source corpus, and scenario-specific prewarm tooling. Keeping these together
 makes the scenario a coherent input package instead of distributing its source

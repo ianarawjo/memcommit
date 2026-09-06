@@ -2,12 +2,13 @@
 
 ## Status
 
-This directory contains the **English translations of the Korean design
-sources** for three tasks. These documents do not yet install actual Contexts or
-Memories; installation happens in a separate stage after content review and
-translation review. Every institution, person, construction project, policy,
-schedule, and personal event is synthetic or a de-identified semantic
-reconstruction for user research.
+Memory content is maintained in Context JSON files under
+`../native/task-N/PROFILE/LANGUAGE/`. Markdown files here retain data contracts
+and links; TSV sidecars retain purpose, review and task relations.
+`mem init-study --scenario legacy` uses shared native JSON import to install
+canonical English content and compose same-UID Korean translations. Institutions,
+people, construction projects, policies, schedules and personal events remain
+synthetic or de-identified semantic reconstructions for research.
 
 ## Count Contract
 

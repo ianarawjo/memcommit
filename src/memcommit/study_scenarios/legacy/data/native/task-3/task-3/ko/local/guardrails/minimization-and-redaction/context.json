@@ -1,0 +1,56 @@
+{
+  "uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+  "name": "local/guardrails/minimization-and-redaction",
+  "memories": {
+    "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24": {
+      "type": "memory",
+      "uid": "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24",
+      "content": "현재 목적에 필요한 최소 단위의 Memory만 선택하라."
+    },
+    "9d626b1a-d3f8-57ee-919e-4a103f974c01": {
+      "type": "memory",
+      "uid": "9d626b1a-d3f8-57ee-919e-4a103f974c01",
+      "content": "공유에 필요하지 않은 식별자는 본문에서 가려라."
+    },
+    "c679d589-afa1-59bd-9973-a20076c1fc8d": {
+      "type": "memory",
+      "uid": "c679d589-afa1-59bd-9973-a20076c1fc8d",
+      "content": "일반화한 표현이 원문의 핵심 의미를 바꾸지 않는지 확인하라."
+    },
+    "ee35327b-43ee-5dc2-9e6f-4632ce25636c": {
+      "type": "memory",
+      "uid": "ee35327b-43ee-5dc2-9e6f-4632ce25636c",
+      "content": "제거한 값을 그럴듯한 값으로 대체하지 마라."
+    },
+    "8a1824a2-c4a3-5648-9f9a-c449f82a71a5": {
+      "type": "memory",
+      "uid": "8a1824a2-c4a3-5648-9f9a-c449f82a71a5",
+      "content": "사용자에게 가려진 필드의 종류를 표시하라."
+    },
+    "2dfad7bd-3d8a-5dc0-babd-8fa4eeb1555a": {
+      "type": "memory",
+      "uid": "2dfad7bd-3d8a-5dc0-babd-8fa4eeb1555a",
+      "content": "정보의 생략은 반대 사실의 진술이 아니다."
+    },
+    "0b514128-2b69-534e-bac9-e685aefc5683": {
+      "type": "memory",
+      "uid": "0b514128-2b69-534e-bac9-e685aefc5683",
+      "content": "수신 조직은 요약에서 생략된 내용을 ‘확인되지 않음’이 아니라 ‘해당 없음’으로 해석할 수 있다."
+    },
+    "9e254845-ed87-5fe5-97e8-b4454bb4382b": {
+      "type": "memory",
+      "uid": "9e254845-ed87-5fe5-97e8-b4454bb4382b",
+      "content": "여러 비식별 단편을 결합하면 개인이 다시 식별될 수 있다."
+    }
+  },
+  "order": [
+    "98c510fb-1fe7-5af1-a85e-dbaffc7f9d24",
+    "9d626b1a-d3f8-57ee-919e-4a103f974c01",
+    "c679d589-afa1-59bd-9973-a20076c1fc8d",
+    "ee35327b-43ee-5dc2-9e6f-4632ce25636c",
+    "8a1824a2-c4a3-5648-9f9a-c449f82a71a5",
+    "2dfad7bd-3d8a-5dc0-babd-8fa4eeb1555a",
+    "0b514128-2b69-534e-bac9-e685aefc5683",
+    "9e254845-ed87-5fe5-97e8-b4454bb4382b"
+  ]
+}

@@ -1,4 +1,5 @@
 # Task 1 Description
 
-- T1-D-001 — `description/task-1` — PP — SITUATION · Imagine that you are a campus facilities coordinator responsible for maintaining a university organizational wiki used by campus members, visitors, and AI agents. The Main Building of the campus is under construction, and you have just finished collecting and verifying all resulting changes in your local work memory. This memory contains confirmed event relocations, temporary parking arrangements, updated shop and facility information, and related changes to nearby routes and facilities.
-- T1-D-002 — `description/task-1-task` — PP — TASK · Using this verified local memory, update all affected parts of the organizational wiki and contribute the completed update.
+Memory content is maintained in the Context JSON files below. This document retains the data contract and a navigation index.
+
+- [`description`](../native/task-1/task-1/en/description/context.json)

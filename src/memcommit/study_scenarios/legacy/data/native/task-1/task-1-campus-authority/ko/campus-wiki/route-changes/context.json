@@ -1,0 +1,308 @@
+{
+  "uid": "5cb64d0a-a8b5-5547-95df-d6dae155dce4",
+  "name": "campus-wiki/route-changes",
+  "memories": {
+    "ee271f65-7387-52f2-8e6e-23ad7f224f03": {
+      "type": "memory",
+      "uid": "ee271f65-7387-52f2-8e6e-23ad7f224f03",
+      "content": "본관 3층 후문은 중앙도서관으로 이어지는 보행 동선과 직접 연결된다."
+    },
+    "8a953afd-7a48-52e8-b48a-38d8c49b55c5": {
+      "type": "memory",
+      "uid": "8a953afd-7a48-52e8-b48a-38d8c49b55c5",
+      "content": "정문을 등지고 보면 A 야외주차장은 왼쪽에 있다."
+    },
+    "b54ac954-0a84-502c-a096-a4f85a0d317a": {
+      "type": "memory",
+      "uid": "b54ac954-0a84-502c-a096-a4f85a0d317a",
+      "content": "정문을 등지고 보면 서편 복합관은 왼쪽에 있다."
+    },
+    "5e23ba3e-d573-54c3-99b0-fea607a63e46": {
+      "type": "memory",
+      "uid": "5e23ba3e-d573-54c3-99b0-fea607a63e46",
+      "content": "정문을 등지고 보면 인문관은 오른쪽에 있다."
+    },
+    "9f4c539b-1205-5ed7-a441-d9a46615ea01": {
+      "type": "memory",
+      "uid": "9f4c539b-1205-5ed7-a441-d9a46615ea01",
+      "content": "학생센터는 중앙도서관 뒤편에 있다."
+    },
+    "8f2f2422-0ac3-5dc2-8a17-871c0deedcf3": {
+      "type": "memory",
+      "uid": "8f2f2422-0ac3-5dc2-8a17-871c0deedcf3",
+      "content": "A 야외주차장–본관–중앙도서관 경로는 평상시 짧다."
+    },
+    "6ded9e53-4073-5911-82c6-b3981c2daf98": {
+      "type": "memory",
+      "uid": "6ded9e53-4073-5911-82c6-b3981c2daf98",
+      "content": "A 야외주차장–본관–중앙도서관 경로는 실내 구간이 길다."
+    },
+    "494bc428-f0be-5a21-9475-14fc405c9fda": {
+      "type": "memory",
+      "uid": "494bc428-f0be-5a21-9475-14fc405c9fda",
+      "content": "C 야외주차장–학생센터 accessible entrance–중앙도서관 서측 출입구 경로는 본관을 통과하지 않는다."
+    },
+    "4369c450-1ca1-58e7-b98f-c087552a0a5a": {
+      "type": "memory",
+      "uid": "4369c450-1ca1-58e7-b98f-c087552a0a5a",
+      "content": "학생들은 여름에 냉방되는 본관 1층부터 3층까지의 실내 경로를 야외 경로보다 선호한다."
+    },
+    "02df0e1e-fc32-5136-a0c2-5af11f99293e": {
+      "type": "memory",
+      "uid": "02df0e1e-fc32-5136-a0c2-5af11f99293e",
+      "content": "현재 개방이 확인된 경로만 추천하라."
+    },
+    "759a38f7-7b7f-5eae-bbec-f00df27c9f4b": {
+      "type": "memory",
+      "uid": "759a38f7-7b7f-5eae-bbec-f00df27c9f4b",
+      "content": "일반 최단경로와 accessible route를 구분해 설명하라."
+    },
+    "78ebae58-9630-5674-90e7-a35951661d19": {
+      "type": "memory",
+      "uid": "78ebae58-9630-5674-90e7-a35951661d19",
+      "content": "동선 안내 에이전트는 저장된 지형정보로 경로를 비교할 수 있다."
+    },
+    "f0864b5f-4148-5c8c-a778-de0a028146d7": {
+      "type": "memory",
+      "uid": "f0864b5f-4148-5c8c-a778-de0a028146d7",
+      "content": "동선 안내 에이전트는 실시간 혼잡을 확인할 수 없다."
+    },
+    "056cce65-dd73-50e6-8745-27d4d71effb1": {
+      "type": "memory",
+      "uid": "056cce65-dd73-50e6-8745-27d4d71effb1",
+      "content": "동선 안내 에이전트는 이동식 장애물을 확인할 수 없다."
+    },
+    "084210ca-d235-52d4-9801-3e78c7d53454": {
+      "type": "memory",
+      "uid": "084210ca-d235-52d4-9801-3e78c7d53454",
+      "content": "동선 안내 에이전트는 문의 시점에 새로 설치된 임시 표지나 이동식 통제선을 실시간으로 확인할 수 없다."
+    },
+    "1fa0cf4f-6bc2-50f6-90a7-871b286b00bf": {
+      "type": "memory",
+      "uid": "1fa0cf4f-6bc2-50f6-90a7-871b286b00bf",
+      "content": "본관 오른쪽 계단 방향에는 휠체어가 지날 수 있는 연속된 accessible route가 부족하다."
+    },
+    "c33f2c68-d304-51e0-8489-7e8876775cfd": {
+      "type": "memory",
+      "uid": "c33f2c68-d304-51e0-8489-7e8876775cfd",
+      "content": "본관 오른쪽 계단 방향에서 학생센터까지의 우회 거리는 길다."
+    },
+    "f9832b10-f7cf-5ac0-a7bc-9e9da6ca3646": {
+      "type": "memory",
+      "uid": "f9832b10-f7cf-5ac0-a7bc-9e9da6ca3646",
+      "content": "이동 지원 동행인은 본관 실내 경로를 중앙도서관까지 날씨 영향을 덜 받는 동선으로 선호한다."
+    },
+    "fd111f85-255e-5c35-acfb-b860f35cc4a8": {
+      "type": "memory",
+      "uid": "fd111f85-255e-5c35-acfb-b860f35cc4a8",
+      "content": "공개 캠퍼스 지도에는 건물 출입구와 건물 사이의 보행로가 표시된다."
+    },
+    "4bad21e5-cc32-5995-93fd-d0938a41d427": {
+      "type": "memory",
+      "uid": "4bad21e5-cc32-5995-93fd-d0938a41d427",
+      "content": "공개 캠퍼스 지도에는 계단 없는 accessible route가 별도로 표시된다."
+    },
+    "d1aaec66-fff8-5270-b939-cd8877f75339": {
+      "type": "memory",
+      "uid": "d1aaec66-fff8-5270-b939-cd8877f75339",
+      "content": "본관 정문 앞 보행로에는 accessible ramp 방향을 알리는 표지가 있다."
+    },
+    "b7802de6-8e3c-5e90-8e2e-b7d949009352": {
+      "type": "memory",
+      "uid": "b7802de6-8e3c-5e90-8e2e-b7d949009352",
+      "content": "C 야외주차장에서 학생센터 accessible entrance까지 계단 없는 보행로가 이어진다."
+    },
+    "065b33d3-3aae-5aa2-b9f0-f779f612e0ea": {
+      "type": "memory",
+      "uid": "065b33d3-3aae-5aa2-b9f0-f779f612e0ea",
+      "content": "학생센터에서 중앙도서관 서측 출입구까지 accessible route가 이어진다."
+    },
+    "79728c8e-66d0-574d-aeee-2e6e4a928db3": {
+      "type": "memory",
+      "uid": "79728c8e-66d0-574d-aeee-2e6e4a928db3",
+      "content": "서편 복합관에서 본관 정문까지 가는 지상 보행로가 있다."
+    },
+    "41f16b3e-4ab3-5f38-9942-7e8896fec3b6": {
+      "type": "memory",
+      "uid": "41f16b3e-4ab3-5f38-9942-7e8896fec3b6",
+      "content": "인문관에서 본관 정문까지 가는 보행로는 본관 오른쪽 계단 앞을 지난다."
+    },
+    "2af1d276-7a46-514d-b8c8-cd9f1e2a9ef2": {
+      "type": "memory",
+      "uid": "2af1d276-7a46-514d-b8c8-cd9f1e2a9ef2",
+      "content": "본관 1층 로비에서 엘리베이터를 이용하면 3층 후문 높이까지 계단 없이 이동할 수 있다."
+    },
+    "cae9af0e-9225-5193-b581-5b2d8096fc14": {
+      "type": "memory",
+      "uid": "cae9af0e-9225-5193-b581-5b2d8096fc14",
+      "content": "본관 에스컬레이터 경로에는 계단을 피할 수 없는 구간이 있다."
+    },
+    "a1617fa2-fa36-5af1-91c9-a8924ae1f5a9": {
+      "type": "memory",
+      "uid": "a1617fa2-fa36-5af1-91c9-a8924ae1f5a9",
+      "content": "계단 없는 이동이 필요한 경우 에스컬레이터가 아니라 엘리베이터 경로를 안내하라."
+    },
+    "03c25e0f-3cd1-5a27-a806-0d09664a3fc3": {
+      "type": "memory",
+      "uid": "03c25e0f-3cd1-5a27-a806-0d09664a3fc3",
+      "content": "본관 정문에서 가장 가까운 엘리베이터는 1층 로비 안쪽에 있다."
+    },
+    "6fad00c2-1f97-5377-8a3a-b36d19705d4b": {
+      "type": "memory",
+      "uid": "6fad00c2-1f97-5377-8a3a-b36d19705d4b",
+      "content": "본관과 중앙도서관 사이의 지상 경로에는 중간 휴식 벤치가 있다."
+    },
+    "c3558237-458f-5487-8718-0c48b9bdf568": {
+      "type": "memory",
+      "uid": "c3558237-458f-5487-8718-0c48b9bdf568",
+      "content": "솔빛광장은 본관 정문과 서편 복합관 사이에 있다."
+    },
+    "09862f9d-91cd-5e36-b6b9-b042b5d84d5b": {
+      "type": "memory",
+      "uid": "09862f9d-91cd-5e36-b6b9-b042b5d84d5b",
+      "content": "비나 눈이 오면 야외 경사 보행로의 이동 시간이 평소보다 길어질 수 있다."
+    },
+    "034676e0-f7b6-52ea-90a3-e6d3f656bc2f": {
+      "type": "memory",
+      "uid": "034676e0-f7b6-52ea-90a3-e6d3f656bc2f",
+      "content": "제설 담당자는 눈이 오면 주요 accessible route를 다른 보행로보다 먼저 확보해야 한다고 판단한다."
+    },
+    "6c4eeef5-0905-5923-b201-666b504b95f1": {
+      "type": "memory",
+      "uid": "6c4eeef5-0905-5923-b201-666b504b95f1",
+      "content": "주차 뒤 도서관으로 가는 학생은 익숙하고 짧은 A 야외주차장–본관–중앙도서관 동선을 선호한다."
+    },
+    "4dcddb86-e56c-552a-810d-c04a1934b475": {
+      "type": "memory",
+      "uid": "4dcddb86-e56c-552a-810d-c04a1934b475",
+      "content": "수업 교체 시간에는 본관 3층과 중앙도서관 사이 보행량이 늘어난다."
+    },
+    "ddcc1848-f9df-5772-9e9a-0c6ed42e557a": {
+      "type": "memory",
+      "uid": "ddcc1848-f9df-5772-9e9a-0c6ed42e557a",
+      "content": "처음 방문하는 사람은 건물 번호보다 눈에 보이는 시설을 기준으로 한 길 안내를 이해하기 쉽다."
+    },
+    "0a78908e-a479-5e5a-b54e-b09f2cb1f7bc": {
+      "type": "memory",
+      "uid": "0a78908e-a479-5e5a-b54e-b09f2cb1f7bc",
+      "content": "경사진 대지 때문에 처음 방문하는 사람은 본관 1층 정문과 3층 후문의 높이를 혼동하는 경우가 있다."
+    },
+    "80355a5f-5170-59b1-82b1-517c5c20a1bb": {
+      "type": "memory",
+      "uid": "80355a5f-5170-59b1-82b1-517c5c20a1bb",
+      "content": "배송 기사는 보행자와 섞이지 않는 지정 서비스 동선을 더 예측 가능하고 안전하다고 여긴다."
+    },
+    "27e0d8cf-02ac-5b42-8970-da451a27e055": {
+      "type": "memory",
+      "uid": "27e0d8cf-02ac-5b42-8970-da451a27e055",
+      "content": "동선 안내 에이전트는 현장 혼잡을 실시간으로 확인할 수 없고, 게시된 우회로 중 분기 수가 적은 경로를 비교할 수 있다."
+    },
+    "08d5128e-e371-5251-a3e8-acf488ccbc59": {
+      "type": "memory",
+      "uid": "08d5128e-e371-5251-a3e8-acf488ccbc59",
+      "content": "동선 안내 에이전트는 공개 지도에서 계단과 엘리베이터 경로를 구분할 수 있다."
+    },
+    "d7a22205-1d0a-5106-a764-fc2e97769bc8": {
+      "type": "memory",
+      "uid": "d7a22205-1d0a-5106-a764-fc2e97769bc8",
+      "content": "동선 안내 에이전트는 문의 시점의 현장 보행량을 측정할 수 없다."
+    },
+    "2db61a85-42af-5b31-b070-5ba2ef965cc7": {
+      "type": "memory",
+      "uid": "2db61a85-42af-5b31-b070-5ba2ef965cc7",
+      "content": "동선 안내 에이전트는 이용자 개인의 이동 시간을 보장할 수 없다."
+    },
+    "5a6b05a2-e14b-5b88-a9b7-58db2e3b2845": {
+      "type": "memory",
+      "uid": "5a6b05a2-e14b-5b88-a9b7-58db2e3b2845",
+      "content": "경로를 안내하기 전에 목적지 출입구의 현재 공지를 확인하라."
+    },
+    "49a1ffe4-b705-5503-9853-e755bef73239": {
+      "type": "memory",
+      "uid": "49a1ffe4-b705-5503-9853-e755bef73239",
+      "content": "일반 이용자에게 교직원 전용 통로를 우회로로 추천하지 마라."
+    },
+    "2742f895-9179-5e72-bef7-2ab08c68db2c": {
+      "type": "memory",
+      "uid": "2742f895-9179-5e72-bef7-2ab08c68db2c",
+      "content": "최단경로에 계단이 있으면 이용 가능한 accessible route도 함께 제시하라."
+    },
+    "3b535b19-637b-5f2a-8441-8c509e7a1bfa": {
+      "type": "memory",
+      "uid": "3b535b19-637b-5f2a-8441-8c509e7a1bfa",
+      "content": "비상 상황에는 일반 길안내보다 현장 대피 표지와 안전요원의 지시를 따르도록 안내하라."
+    },
+    "2f6bcece-e018-5b44-8936-430839892e49": {
+      "type": "memory",
+      "uid": "2f6bcece-e018-5b44-8936-430839892e49",
+      "content": "서문 정류장에서 본관 정문까지는 솔빛광장을 지나는 보행로가 이어진다."
+    },
+    "675f922d-084f-54bd-bc38-f7aae69a370b": {
+      "type": "memory",
+      "uid": "675f922d-084f-54bd-bc38-f7aae69a370b",
+      "content": "학생센터 앞 순환차 정류장에서 중앙도서관 서측 출입구까지 계단 없는 경로가 있다."
+    },
+    "30e5c146-ea97-5317-bf6f-dedbffaeaafa": {
+      "type": "memory",
+      "uid": "30e5c146-ea97-5317-bf6f-dedbffaeaafa",
+      "content": "자전거 이용자는 솔빛광장 가장자리의 지정 거치대에서 내려 보행한다."
+    },
+    "da43a5f5-41af-5a8a-b867-b854fe4c4ae5": {
+      "type": "memory",
+      "uid": "da43a5f5-41af-5a8a-b867-b854fe4c4ae5",
+      "content": "공개 지도에 없는 비공식 지름길을 기본 경로로 제안하지 마라."
+    }
+  },
+  "order": [
+    "ee271f65-7387-52f2-8e6e-23ad7f224f03",
+    "8a953afd-7a48-52e8-b48a-38d8c49b55c5",
+    "b54ac954-0a84-502c-a096-a4f85a0d317a",
+    "5e23ba3e-d573-54c3-99b0-fea607a63e46",
+    "9f4c539b-1205-5ed7-a441-d9a46615ea01",
+    "8f2f2422-0ac3-5dc2-8a17-871c0deedcf3",
+    "6ded9e53-4073-5911-82c6-b3981c2daf98",
+    "494bc428-f0be-5a21-9475-14fc405c9fda",
+    "4369c450-1ca1-58e7-b98f-c087552a0a5a",
+    "02df0e1e-fc32-5136-a0c2-5af11f99293e",
+    "759a38f7-7b7f-5eae-bbec-f00df27c9f4b",
+    "78ebae58-9630-5674-90e7-a35951661d19",
+    "f0864b5f-4148-5c8c-a778-de0a028146d7",
+    "056cce65-dd73-50e6-8745-27d4d71effb1",
+    "084210ca-d235-52d4-9801-3e78c7d53454",
+    "1fa0cf4f-6bc2-50f6-90a7-871b286b00bf",
+    "c33f2c68-d304-51e0-8489-7e8876775cfd",
+    "f9832b10-f7cf-5ac0-a7bc-9e9da6ca3646",
+    "fd111f85-255e-5c35-acfb-b860f35cc4a8",
+    "4bad21e5-cc32-5995-93fd-d0938a41d427",
+    "d1aaec66-fff8-5270-b939-cd8877f75339",
+    "b7802de6-8e3c-5e90-8e2e-b7d949009352",
+    "065b33d3-3aae-5aa2-b9f0-f779f612e0ea",
+    "79728c8e-66d0-574d-aeee-2e6e4a928db3",
+    "41f16b3e-4ab3-5f38-9942-7e8896fec3b6",
+    "2af1d276-7a46-514d-b8c8-cd9f1e2a9ef2",
+    "cae9af0e-9225-5193-b581-5b2d8096fc14",
+    "a1617fa2-fa36-5af1-91c9-a8924ae1f5a9",
+    "03c25e0f-3cd1-5a27-a806-0d09664a3fc3",
+    "6fad00c2-1f97-5377-8a3a-b36d19705d4b",
+    "c3558237-458f-5487-8718-0c48b9bdf568",
+    "09862f9d-91cd-5e36-b6b9-b042b5d84d5b",
+    "034676e0-f7b6-52ea-90a3-e6d3f656bc2f",
+    "6c4eeef5-0905-5923-b201-666b504b95f1",
+    "4dcddb86-e56c-552a-810d-c04a1934b475",
+    "ddcc1848-f9df-5772-9e9a-0c6ed42e557a",
+    "0a78908e-a479-5e5a-b54e-b09f2cb1f7bc",
+    "80355a5f-5170-59b1-82b1-517c5c20a1bb",
+    "27e0d8cf-02ac-5b42-8970-da451a27e055",
+    "08d5128e-e371-5251-a3e8-acf488ccbc59",
+    "d7a22205-1d0a-5106-a764-fc2e97769bc8",
+    "2db61a85-42af-5b31-b070-5ba2ef965cc7",
+    "5a6b05a2-e14b-5b88-a9b7-58db2e3b2845",
+    "49a1ffe4-b705-5503-9853-e755bef73239",
+    "2742f895-9179-5e72-bef7-2ab08c68db2c",
+    "3b535b19-637b-5f2a-8441-8c509e7a1bfa",
+    "2f6bcece-e018-5b44-8936-430839892e49",
+    "675f922d-084f-54bd-bc38-f7aae69a370b",
+    "30e5c146-ea97-5317-bf6f-dedbffaeaafa",
+    "da43a5f5-41af-5a8a-b867-b854fe4c4ae5"
+  ]
+}

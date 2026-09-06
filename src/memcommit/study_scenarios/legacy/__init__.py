@@ -3,7 +3,9 @@
 LEGACY_SCENARIO_ID = "legacy"
 # This is a virtual provenance identity, not a registered or editable Profile.
 LEGACY_BASELINE_UID = "b803a4ca-d5de-5ea1-9339-e24df565fb9c"
-LEGACY_DIGEST = "781fd7bc77f3b9d5f1b931177ecddacce6aeefe61382f89699c65e495f49b77e"
+# Native source paths change the package fingerprint while preserving every
+# prior Context/Memory identity and body; existing runs retain their old digest.
+LEGACY_DIGEST = "7c6a595a5bd5dadb5729dd6c0751afaf7b2924b5b9a839375e10af8d94a91ba7"
 
 
 __all__ = (

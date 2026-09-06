@@ -1,0 +1,14 @@
+{
+  "uid": "e73fb145-6486-5151-b3a1-6dc310fc6e9b",
+  "name": "remote/government",
+  "memories": {
+    "323cea4e-1e29-507e-a17a-43be1da0b0a9": {
+      "type": "context_ref",
+      "uid": "323cea4e-1e29-507e-a17a-43be1da0b0a9",
+      "name": "remote/government/healthcare-agent"
+    }
+  },
+  "order": [
+    "323cea4e-1e29-507e-a17a-43be1da0b0a9"
+  ]
+}

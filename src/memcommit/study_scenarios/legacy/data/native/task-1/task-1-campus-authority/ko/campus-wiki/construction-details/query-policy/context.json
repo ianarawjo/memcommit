@@ -1,0 +1,92 @@
+{
+  "uid": "fca65366-9375-5552-a821-e90ef843f4ed",
+  "name": "campus-wiki/construction-details/query-policy",
+  "memories": {
+    "3c6863db-d82d-5072-8e4e-01e1702ccbe8": {
+      "type": "memory",
+      "uid": "3c6863db-d82d-5072-8e4e-01e1702ccbe8",
+      "content": "세부 작업 범위를 일반 Memory나 목록 응답에 복사하지 마라."
+    },
+    "39e85ee3-8def-5e52-b622-098d08f5d59f": {
+      "type": "memory",
+      "uid": "39e85ee3-8def-5e52-b622-098d08f5d59f",
+      "content": "내부 보고 상태를 일반 Memory나 목록 응답에 복사하지 마라."
+    },
+    "13308bee-18d0-510a-b7f9-1d33d841ff40": {
+      "type": "memory",
+      "uid": "13308bee-18d0-510a-b7f9-1d33d841ff40",
+      "content": "자재 배치를 일반 Memory나 목록 응답에 복사하지 마라."
+    },
+    "97510b32-94a9-53bc-9b88-4c5e75977c0c": {
+      "type": "memory",
+      "uid": "97510b32-94a9-53bc-9b88-4c5e75977c0c",
+      "content": "통제 출입 방식을 일반 Memory나 목록 응답에 복사하지 마라."
+    },
+    "312f1c5f-d650-52d6-bbed-2b96bc3f7cc9": {
+      "type": "memory",
+      "uid": "312f1c5f-d650-52d6-bbed-2b96bc3f7cc9",
+      "content": "질의 경로에서는 질문에 필요한 범위만 답하라."
+    },
+    "9320f462-f5ac-5a10-bf87-59615ab0f0da": {
+      "type": "memory",
+      "uid": "9320f462-f5ac-5a10-bf87-59615ab0f0da",
+      "content": "본관 시설개선 공사계획에 관한 질문에만 답하라."
+    },
+    "d4786324-5b65-5861-a2dc-2471f271f035": {
+      "type": "memory",
+      "uid": "d4786324-5b65-5861-a2dc-2471f271f035",
+      "content": "내부 점검·보고 범위에 관한 질문에만 답하라."
+    },
+    "b81df8e8-8f81-565d-8aeb-fa8932a180f5": {
+      "type": "memory",
+      "uid": "b81df8e8-8f81-565d-8aeb-fa8932a180f5",
+      "content": "범위 밖의 질문에는 “이 자료로는 답할 수 없습니다”라고 답하라."
+    },
+    "f05b467b-a682-54af-98ef-998f63de21b8": {
+      "type": "memory",
+      "uid": "f05b467b-a682-54af-98ef-998f63de21b8",
+      "content": "범위 밖의 질문에 다른 캠퍼스 정보를 덧붙이지 마라."
+    },
+    "29a4e3ab-a3d7-551c-a6e0-3a0b479c826e": {
+      "type": "memory",
+      "uid": "29a4e3ab-a3d7-551c-a6e0-3a0b479c826e",
+      "content": "범위 밖의 질문에 추측을 덧붙이지 마라."
+    },
+    "707a6be7-409f-5db7-a8c5-4450cddcd5fb": {
+      "type": "memory",
+      "uid": "707a6be7-409f-5db7-a8c5-4450cddcd5fb",
+      "content": "이 fixture를 실제 기관의 공사 상태를 설명하는 근거로 사용하지 마라."
+    },
+    "875d1f7a-20bf-5885-9c4a-ebf036fe67cd": {
+      "type": "memory",
+      "uid": "875d1f7a-20bf-5885-9c4a-ebf036fe67cd",
+      "content": "이 fixture를 실제 기관의 점검 상태를 설명하는 근거로 사용하지 마라."
+    },
+    "ed9dc7b8-fb0f-5f53-8f8f-711e09f75b83": {
+      "type": "memory",
+      "uid": "ed9dc7b8-fb0f-5f53-8f8f-711e09f75b83",
+      "content": "이 fixture를 실제 기관의 안전 상태를 설명하는 근거로 사용하지 마라."
+    },
+    "d39a6b23-cc30-5e74-ba0b-8eaff2caa812": {
+      "type": "memory",
+      "uid": "d39a6b23-cc30-5e74-ba0b-8eaff2caa812",
+      "content": "시설 운영부서는 내부 공사·점검 자료가 질문과 무관한 일반 캠퍼스 안내에 노출되지 않기를 기대한다."
+    }
+  },
+  "order": [
+    "3c6863db-d82d-5072-8e4e-01e1702ccbe8",
+    "39e85ee3-8def-5e52-b622-098d08f5d59f",
+    "13308bee-18d0-510a-b7f9-1d33d841ff40",
+    "97510b32-94a9-53bc-9b88-4c5e75977c0c",
+    "312f1c5f-d650-52d6-bbed-2b96bc3f7cc9",
+    "9320f462-f5ac-5a10-bf87-59615ab0f0da",
+    "d4786324-5b65-5861-a2dc-2471f271f035",
+    "b81df8e8-8f81-565d-8aeb-fa8932a180f5",
+    "f05b467b-a682-54af-98ef-998f63de21b8",
+    "29a4e3ab-a3d7-551c-a6e0-3a0b479c826e",
+    "707a6be7-409f-5db7-a8c5-4450cddcd5fb",
+    "875d1f7a-20bf-5885-9c4a-ebf036fe67cd",
+    "ed9dc7b8-fb0f-5f53-8f8f-711e09f75b83",
+    "d39a6b23-cc30-5e74-ba0b-8eaff2caa812"
+  ]
+}

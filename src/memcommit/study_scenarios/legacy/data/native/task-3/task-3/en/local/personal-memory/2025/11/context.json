@@ -1,0 +1,68 @@
+{
+  "uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+  "name": "local/personal-memory/2025/11",
+  "memories": {
+    "3f6eaf6c-00e7-5bd7-9809-367f54a0f707": {
+      "type": "memory",
+      "uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707",
+      "content": "The user recorded a family dinner in the calendar for the final week of November."
+    },
+    "9fd0b9b6-986d-54b0-965e-45feaf9cd482": {
+      "type": "memory",
+      "uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482",
+      "content": "In a crowded restaurant, the user had to ask several times for orders to be repeated, interrupting the flow of conversation."
+    },
+    "cbc477c4-83c4-506b-9da8-9252d14d7f6b": {
+      "type": "memory",
+      "uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b",
+      "content": "When the user held the next gathering at their father's home, they continued the conversation on the sofa after the meal."
+    },
+    "bbfc537e-3fcc-5065-ab93-4777bcdfc10c": {
+      "type": "memory",
+      "uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c",
+      "content": "At a gathering with loud music prepared by their older sister, the user developed a headache and went outside briefly."
+    },
+    "b61367fa-dd17-5ff2-9d6b-f81f6123735a": {
+      "type": "memory",
+      "uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a",
+      "content": "On a day the user held a yard barbecue with their younger brother, the open space dispersed the sound and made conversation easier."
+    },
+    "681cdbd5-595d-5211-914d-edfd9a6b130d": {
+      "type": "memory",
+      "uid": "681cdbd5-595d-5211-914d-edfd9a6b130d",
+      "content": "After seeing a message that their maternal aunt would arrive at 5 p.m., the user delayed meal preparation by an hour."
+    },
+    "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec": {
+      "type": "memory",
+      "uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec",
+      "content": "On a day the user waited without knowing their maternal uncle's arrival time, they reheated the food twice."
+    },
+    "56078821-34d0-540f-ae66-03bdd7bd1df3": {
+      "type": "memory",
+      "uid": "56078821-34d0-540f-ae66-03bdd7bd1df3",
+      "content": "The user's maternal uncle considers it easier to time his departure when he knows the family meal's start time in advance."
+    },
+    "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a": {
+      "type": "memory",
+      "uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a",
+      "content": "Before scheduling a family meal, confirm the attendees' arrival times and the location with the user."
+    },
+    "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7": {
+      "type": "memory",
+      "uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7",
+      "content": "Available restaurant reservation times may diminish quickly during the year-end gathering season."
+    }
+  },
+  "order": [
+    "3f6eaf6c-00e7-5bd7-9809-367f54a0f707",
+    "9fd0b9b6-986d-54b0-965e-45feaf9cd482",
+    "cbc477c4-83c4-506b-9da8-9252d14d7f6b",
+    "bbfc537e-3fcc-5065-ab93-4777bcdfc10c",
+    "b61367fa-dd17-5ff2-9d6b-f81f6123735a",
+    "681cdbd5-595d-5211-914d-edfd9a6b130d",
+    "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec",
+    "56078821-34d0-540f-ae66-03bdd7bd1df3",
+    "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a",
+    "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+  "name": "local/guardrails/audit-and-recovery",
+  "memories": {
+    "c0ce508e-2777-54e3-806d-632adbdb9073": {
+      "type": "memory",
+      "uid": "c0ce508e-2777-54e3-806d-632adbdb9073",
+      "content": "승인된 공유의 source Memory locator를 기록하라."
+    },
+    "a0b32950-42b4-58a6-b1af-dd4638086d3d": {
+      "type": "memory",
+      "uid": "a0b32950-42b4-58a6-b1af-dd4638086d3d",
+      "content": "승인된 공유의 수신자를 기록하라."
+    },
+    "620a1dee-b131-586f-a838-64d853c44a92": {
+      "type": "memory",
+      "uid": "620a1dee-b131-586f-a838-64d853c44a92",
+      "content": "승인된 공유의 목적을 기록하라."
+    },
+    "26256211-0509-5c26-a54c-e83b4bde5a4e": {
+      "type": "memory",
+      "uid": "26256211-0509-5c26-a54c-e83b4bde5a4e",
+      "content": "승인 시각을 기록하라."
+    },
+    "0d377136-da0b-570b-8deb-c662bee5bcbb": {
+      "type": "memory",
+      "uid": "0d377136-da0b-570b-8deb-c662bee5bcbb",
+      "content": "전송 오류가 발생하면 사용자에게 실패 상태를 알리라."
+    },
+    "d26befa6-62a2-5923-a31b-71e73a31e164": {
+      "type": "memory",
+      "uid": "d26befa6-62a2-5923-a31b-71e73a31e164",
+      "content": "로컬 에이전트는 자신의 승인·전송 기록은 재구성할 수 있지만 기록되지 않은 외부 처리는 추적할 수 없다."
+    },
+    "d5d34316-4878-53d9-9ba8-d4d4d3d13752": {
+      "type": "memory",
+      "uid": "d5d34316-4878-53d9-9ba8-d4d4d3d13752",
+      "content": "외부 시스템에 전달된 사본은 로컬 Memory의 후속 정정과 자동으로 동기화되지 않을 수 있다."
+    },
+    "fe68d351-4ae7-5c4c-a4e2-d6c4c7aa0220": {
+      "type": "memory",
+      "uid": "fe68d351-4ae7-5c4c-a4e2-d6c4c7aa0220",
+      "content": "외부 시스템 담당자는 사용자의 로컬 기록과 자신의 감사 기록이 불일치하면 자체 감사 기록을 더 신뢰할 수 있다."
+    }
+  },
+  "order": [
+    "c0ce508e-2777-54e3-806d-632adbdb9073",
+    "a0b32950-42b4-58a6-b1af-dd4638086d3d",
+    "620a1dee-b131-586f-a838-64d853c44a92",
+    "26256211-0509-5c26-a54c-e83b4bde5a4e",
+    "0d377136-da0b-570b-8deb-c662bee5bcbb",
+    "d26befa6-62a2-5923-a31b-71e73a31e164",
+    "d5d34316-4878-53d9-9ba8-d4d4d3d13752",
+    "fe68d351-4ae7-5c4c-a4e2-d6c4c7aa0220"
+  ]
+}

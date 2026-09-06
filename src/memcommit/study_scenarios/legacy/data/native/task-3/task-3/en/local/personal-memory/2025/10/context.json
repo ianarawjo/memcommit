@@ -1,0 +1,68 @@
+{
+  "uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+  "name": "local/personal-memory/2025/10",
+  "memories": {
+    "82c1e806-de3a-5633-8a08-175487e69fd6": {
+      "type": "memory",
+      "uid": "82c1e806-de3a-5633-8a08-175487e69fd6",
+      "content": "The user keeps waterproof shoes for rainy days to the left of the entrance."
+    },
+    "25df6384-836f-5f8e-bd97-73a1fb171c48": {
+      "type": "memory",
+      "uid": "25df6384-836f-5f8e-bd97-73a1fb171c48",
+      "content": "On a day the user walked in the rain wearing thin shoes, their socks became wet and they changed them after arrival."
+    },
+    "55abae4f-206a-586e-8b35-406d7525c0a1": {
+      "type": "memory",
+      "uid": "55abae4f-206a-586e-8b35-406d7525c0a1",
+      "content": "On the next rainy day, the user wore waterproof shoes and their feet remained dry."
+    },
+    "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd": {
+      "type": "memory",
+      "uid": "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd",
+      "content": "On a day the user walked for a long time in new shoes, their heel chafed and they shortened the route home."
+    },
+    "a6424854-e51e-5afc-8b9f-9e2f0273f70e": {
+      "type": "memory",
+      "uid": "a6424854-e51e-5afc-8b9f-9e2f0273f70e",
+      "content": "The user wore the same shoes on two short outings before using them on a long walk."
+    },
+    "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd": {
+      "type": "memory",
+      "uid": "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd",
+      "content": "On a day the user dried an umbrella outside the entrance, they found it immediately before the next outing."
+    },
+    "ccd1f422-6130-5f19-869e-681102a3a1fa": {
+      "type": "memory",
+      "uid": "ccd1f422-6130-5f19-869e-681102a3a1fa",
+      "content": "On a day the user put a folded wet umbrella in their bag, documents inside became wet."
+    },
+    "c69a8e87-2b6f-5514-ab0d-0037531592f8": {
+      "type": "memory",
+      "uid": "c69a8e87-2b6f-5514-ab0d-0037531592f8",
+      "content": "When rain is forecast, the user's mother expects the user may forget an umbrella and sets out a spare at the entrance."
+    },
+    "4567ea9f-1800-51ed-bfac-f4cdf674d4cf": {
+      "type": "memory",
+      "uid": "4567ea9f-1800-51ed-bfac-f4cdf674d4cf",
+      "content": "When proposing a long-distance walking plan, check both the weather that day and recent records of shoe discomfort."
+    },
+    "a4ff1b76-755d-530a-b24c-8655115e4fbe": {
+      "type": "memory",
+      "uid": "a4ff1b76-755d-530a-b24c-8655115e4fbe",
+      "content": "Even if the local agent knows a shoe's location, it cannot know its current condition or whether it is usable."
+    }
+  },
+  "order": [
+    "82c1e806-de3a-5633-8a08-175487e69fd6",
+    "25df6384-836f-5f8e-bd97-73a1fb171c48",
+    "55abae4f-206a-586e-8b35-406d7525c0a1",
+    "c6d21ec4-6bdf-55df-b4d4-05cb531bf4bd",
+    "a6424854-e51e-5afc-8b9f-9e2f0273f70e",
+    "1b436b46-3d1f-5aa2-99e3-94b7c2412bfd",
+    "ccd1f422-6130-5f19-869e-681102a3a1fa",
+    "c69a8e87-2b6f-5514-ab0d-0037531592f8",
+    "4567ea9f-1800-51ed-bfac-f4cdf674d4cf",
+    "a4ff1b76-755d-530a-b24c-8655115e4fbe"
+  ]
+}

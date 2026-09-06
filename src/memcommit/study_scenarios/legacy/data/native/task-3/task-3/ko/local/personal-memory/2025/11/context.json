@@ -1,0 +1,68 @@
+{
+  "uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+  "name": "local/personal-memory/2025/11",
+  "memories": {
+    "3f6eaf6c-00e7-5bd7-9809-367f54a0f707": {
+      "type": "memory",
+      "uid": "3f6eaf6c-00e7-5bd7-9809-367f54a0f707",
+      "content": "사용자는 11월 마지막 주에 가족 저녁 일정을 달력에 기록했다."
+    },
+    "9fd0b9b6-986d-54b0-965e-45feaf9cd482": {
+      "type": "memory",
+      "uid": "9fd0b9b6-986d-54b0-965e-45feaf9cd482",
+      "content": "사용자는 사람이 가득 찬 식당에서 주문을 여러 번 되묻느라 대화 흐름이 끊겼다."
+    },
+    "cbc477c4-83c4-506b-9da8-9252d14d7f6b": {
+      "type": "memory",
+      "uid": "cbc477c4-83c4-506b-9da8-9252d14d7f6b",
+      "content": "사용자는 다음 모임을 아빠 집에서 했을 때 식사 뒤에도 소파에서 대화를 이어 갔다."
+    },
+    "bbfc537e-3fcc-5065-ab93-4777bcdfc10c": {
+      "type": "memory",
+      "uid": "bbfc537e-3fcc-5065-ab93-4777bcdfc10c",
+      "content": "사용자는 누나가 준비한 음악이 큰 모임에서 머리가 아파 잠시 밖에 나갔다."
+    },
+    "b61367fa-dd17-5ff2-9d6b-f81f6123735a": {
+      "type": "memory",
+      "uid": "b61367fa-dd17-5ff2-9d6b-f81f6123735a",
+      "content": "사용자는 남동생과 마당에서 바비큐를 한 날 소리가 흩어져 대화하기 편했다."
+    },
+    "681cdbd5-595d-5211-914d-edfd9a6b130d": {
+      "type": "memory",
+      "uid": "681cdbd5-595d-5211-914d-edfd9a6b130d",
+      "content": "사용자는 이모가 오후 다섯 시에 온다는 메시지를 보고 식사 준비를 한 시간 늦췄다."
+    },
+    "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec": {
+      "type": "memory",
+      "uid": "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec",
+      "content": "사용자는 외삼촌의 도착 시간을 모른 채 기다린 날 음식을 두 번 데웠다."
+    },
+    "56078821-34d0-540f-ae66-03bdd7bd1df3": {
+      "type": "memory",
+      "uid": "56078821-34d0-540f-ae66-03bdd7bd1df3",
+      "content": "외삼촌은 가족 식사 시작 시각을 미리 알아야 자신의 출발 시각을 맞추기 쉽다고 여긴다."
+    },
+    "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a": {
+      "type": "memory",
+      "uid": "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a",
+      "content": "가족 식사 일정을 정하기 전에 참석자의 도착 시각과 장소를 사용자에게 확인하라."
+    },
+    "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7": {
+      "type": "memory",
+      "uid": "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7",
+      "content": "연말 모임 기간에는 식당 예약 가능 시간이 빠르게 줄어들 수 있다."
+    }
+  },
+  "order": [
+    "3f6eaf6c-00e7-5bd7-9809-367f54a0f707",
+    "9fd0b9b6-986d-54b0-965e-45feaf9cd482",
+    "cbc477c4-83c4-506b-9da8-9252d14d7f6b",
+    "bbfc537e-3fcc-5065-ab93-4777bcdfc10c",
+    "b61367fa-dd17-5ff2-9d6b-f81f6123735a",
+    "681cdbd5-595d-5211-914d-edfd9a6b130d",
+    "81c0c4e9-5ae4-5e8a-b11c-7d33032fd8ec",
+    "56078821-34d0-540f-ae66-03bdd7bd1df3",
+    "19c8ae40-1f5b-5fec-9538-e7bc7cfb036a",
+    "3ea9fa3b-4411-55d0-ac90-2ed5515e6ef7"
+  ]
+}
