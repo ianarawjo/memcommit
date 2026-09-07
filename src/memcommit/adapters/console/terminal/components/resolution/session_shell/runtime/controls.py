@@ -25,7 +25,7 @@ from memcommit.adapters.console.terminal.components.exact_name import (
     ExactNameFieldView,
     ExactNameInputControl,
 )
-from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.adapters.console.terminal.components.resolution.effect_preview import EffectPreviewSource
 from memcommit.adapters.console.terminal.components.multiline_input import (
     build_framed_multiline_input,
 )
@@ -95,7 +95,7 @@ def report_sections(
     review_and_apply: bool,
     report_apply: bool,
     read_only: bool,
-    impact_controller: ImpactController | None,
+    impact_controller: EffectPreviewSource | None,
     drafts: dict[str, ResponseDraft],
 ) -> tuple[WorkbenchSection, ...]:
     """Project a report into stable semantic navigation stops."""
@@ -276,7 +276,7 @@ class ResolutionControlConfig:
     split_report_conflicts_remaining: int | None
     review_and_apply: bool
     read_only: bool
-    impact_controller: ImpactController | None
+    impact_controller: EffectPreviewSource | None
     destination: ResolutionDestination | None
     destination_available: bool
     report_apply: bool = False

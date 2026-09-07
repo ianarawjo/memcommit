@@ -138,7 +138,8 @@
           "agent-records/docs/forget-application-boundary-matrix.md",
           "agent-records/docs/forget-public-python-api-design-rationale.md",
           "agent-records/docs/forget-agent-adapter-design-rationale.md",
-          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md"
+          "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+          "agent-records/docs/impact-projection-and-forget-apply-design-rationale.md"
         ],
         "reason": "CLI, TUI, Python, and agent routes share one complete-frame process-local Analyze, Select, Revise, authority/CAS Apply, and exact in-process replay lifecycle."
       },

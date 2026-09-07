@@ -53,23 +53,28 @@ permissions, Grant revalidation, source traceability, application idempotency,
 or checkpoint creation. It chooses the already-authorized exact Accept action;
 the owning command still performs its normal application path.
 
+Direct TTY Update and changed-batch Forget deliberately use a report-plus-Apply
+boundary instead of consuming this optional auto-accept policy. Their operation
+adapters decide when the report is shown; authority and recovery remain exactly
+as classified here. Forget's empty/all-KEEP completion still skips approval.
+
 ## Operation rollout matrix
 
 | Operation | Mutation target | Decision-free behavior | Rollout evidence |
 | --- | --- | --- | --- |
 | Merge, local Target | Local direct or recursive Target graph | Apply directly when no conflict remains; a verified no-op still records a command checkpoint; recover with operation-unit Undo | `VERIFIED` first vertical slice |
 | Merge, granted Target | Authority Target graph | Retain final review; exact noninteractive argv remains the explicit action | `VERIFIED` policy routing and runtime authority metadata |
-| Update, local Target | Local Target owner graph | Apply directly; recover with operation-unit Undo | `VERIFIED` policy, application, failure, and recovery tests |
-| Update, granted Source and local Target | Local Target owner graph | Apply directly; granted input remains read-only | `VERIFIED` ownership routing test |
-| Update, granted Target | Authority Target owner graph | Require final review when at least one Context change will be published; a validated zero-change receipt has boundary `NONE` and needs no authority review | `VERIFIED` routing tests and Task 1 granted-target replay |
+| Update, local Target | Local Target owner graph | TTY report plus Apply/Esc; recover with operation-unit Undo | `VERIFIED` policy, application, failure, and recovery tests |
+| Update, granted Source and local Target | Local Target owner graph | TTY report plus Apply/Esc; granted input remains read-only | `VERIFIED` ownership routing test |
+| Update, granted Target | Authority Target owner graph | TTY report plus Apply/Esc; a zero-change application still has mutation boundary `NONE` | `VERIFIED` routing tests and Task 1 granted-target replay |
 | Atomize in place or planned local Output | Local Input or new local Output | Apply directly; retain unresolved-at-apply audit | `NOT VERIFIED HERE` |
 | Meld, local Result/Baseline | Local target | Apply directly once required issues are resolved | `NOT VERIFIED HERE` |
 | Meld, granted Incoming and local Baseline | Local Baseline | Apply directly; granted input remains read-only | `NOT VERIFIED HERE` |
 | Directional Meld, granted Baseline | Authority Baseline | Require final review | `NOT VERIFIED HERE` |
 | Sever with direct local Source | Same Source for SELF-SAVE or new local Result for OTHER-SAVE | Apply directly; Undo restores the exact Source preimage or removes/restores the creation receipt | `VERIFIED` by the Sever boundary slice |
 | Sever with granted Source | New local Result only; authority Source unchanged | OTHER-SAVE applies directly; SELF-SAVE fails before provider until authority-side mutation receipts exist | `VERIFIED` by the Sever boundary slice |
-| Forget, local Source | Local Source | Apply the complete reviewed provider disposition; recover with operation-unit Undo/Redo | `VERIFIED` policy, CAS, checkpoint, and recovery tests plus PTY replay |
-| Forget, granted Source | Authority Source | Require final review when the reviewed disposition contains a change; an all-KEEP result has boundary `NONE` and completes without a Context checkpoint | `VERIFIED` routing tests and granted change/no-op PTY replay |
+| Forget, local Source | Local Source | TTY Impact plus Apply/Esc for a changed batch; recover with operation-unit Undo/Redo | `VERIFIED` policy, CAS, checkpoint, and recovery tests plus PTY replay |
+| Forget, granted Source | Authority Source | TTY Impact plus Apply/Esc for a changed batch; all-KEEP completes without a screen or Context checkpoint | `VERIFIED` routing tests and granted change/no-op PTY replay |
 
 ## Deliberate boundaries
 

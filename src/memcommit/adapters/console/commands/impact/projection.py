@@ -1,4 +1,4 @@
-"""Reusable, provider-free Impact projection for operation-owned artifacts."""
+"""Impact-owned, provider-free projection for operation artifacts."""
 
 from __future__ import annotations
 

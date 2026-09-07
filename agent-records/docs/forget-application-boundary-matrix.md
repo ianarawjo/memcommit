@@ -182,3 +182,17 @@ compact receipt; required choices remain inside the Forget invocation. The
 checkpoint now stores every exact REMOVE/EDIT pre-image, post-image, and
 reason, enabling provider-free `mem review forget --receipt UID` after Apply.
 Granted-owner checkpoint evidence is not advertised as locally reviewable.
+
+## 2026-09-06 direct TTY Impact and Apply
+
+A changed ordinary Forget batch now opens its complete Impact report with one
+Apply action and Escape cancellation for both local and granted Sources. The
+screen returns the identical frozen snapshot, offers no per-Memory revision
+controls, and never applies or reconnects a provider. The existing command
+revalidates authority and Source freshness before one atomic application.
+Empty and all-KEEP batches still finish without a screen or checkpoint, and
+explicit non-TTY invocations retain direct execution. The standalone
+`mem impact forget` route remains read-only and has no Apply capability.
+
+See [Impact ownership and Forget Apply rationale](impact-projection-and-forget-apply-design-rationale.md)
+for the selected ownership boundary, alternatives, tests, and ordered PTY evidence.

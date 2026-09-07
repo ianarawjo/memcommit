@@ -1,0 +1,124 @@
+LIVE PTY 180 x 52 · isolated authoring · current participant · granted
+$ mem forget "Forget the obsolete desk location and access code; keep accessibility guidance." --from granted/authority/notes
+MEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION . · 0s                                                                     [?12l[?25h[?1049h[H[?2004h[?1l[?25l[0m[?7l[0m[J[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[0m MEM FORGET · SELECTIVE SOURCE REVISION                                                                                                                                          [0;1m^[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m CONTEXT LOCATIONS                                                                                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m   SOURCE · granted/authority/notes                                                                                                                                              [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m PREPARED · 3 SOURCE · 1 instruction CRITERION · 2 CHANGES                                                                                                                       [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃ ASSESSMENT[0m                                                                                                                                                                      [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;139;213;255m Retain accessibility guidance and remove the obsolete location and code.[0m                                                                                                        [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m WHAT APPLIES                                                                                                                                                                    [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247m One complete batch covers 3 Source Memories. Apply publishes 2 changes; KEEP stays unchanged.[0m                                                                                   [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m IMPACT · FORGET · SAME SOURCE                                                                                                                                                   [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m These exact changes will update the granted Source. Apply accepts this batch; Escape cancels without changing the Source.                                                       [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m INSTRUCTION · Forget the obsolete desk location and access code; keep accessibility guidance.                                                                                   [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;202;211;245;1m       ▸ ~ [TRANSFORM] [0;38;2;202;211;245mgranted/authority/notes [befe1bdb][0m                                                                                                                        [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - [0;38;2;237;135;150;4mThe desk was beside the west entrance. [0;38;2;255;255;255mThe route remains step-free.[0m                                                                                               [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             + The route remains step-free.[0m                                                                                                                                      [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;202;211;245;1m       ▸ − [DROP]      [0;38;2;202;211;245mgranted/authority/notes [54013aa2][0m                                                                                                                        [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             - [0;38;2;237;135;150;4mThe obsolete access code was 4815.[0m                                                                                                                                [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;166;218;149;1m       ▸ = [KEEP]      [0;38;2;202;211;245mgranted/authority/notes [cb2ad74d][0m                                                                                                                        [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;255;255;255m             = Visitors should verify the step-free route before arrival.[0m                                                                                                        [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m APPLY                                                                                                                                                                           [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0;38;2;244;245;247m Press Enter on APPLY to apply the exact proposal. Press Esc to cancel.[0m                                                                                                          [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┃[0m                                                                                                                                                                                 [0;1mv[179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;1m› REPORT         Complete Forget report[0m                                                                                                                                          [0;1m^[179C[0m│[0m
+[0m│  FORGET DECISION The desk was beside the west entrance. The route remains step-free.                                                                                            [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  FORGET DECISION The obsolete access code was 4815.                                                                                                                             [0;48;2;68;68;68m [179C[0m│[0m
+[0m│  FORGET DECISION Visitors should verify the step-free route before arrival.                                                                                                     [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m┌────────────────────────────────────────────────────────────────────────────────────| APPLY |─────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│[0;38;2;16;36;47;48;2;139;213;255m✓ APPLY[0m                                                                                                                                                                           [179C│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+[0m ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close A apply exact proposal  H Help  y/Y copy  Q close[152D[45A[C[0m[6A[0m┌────────────────────────────────────────────────────────────────────────────────────| VIEWER |────────────────────────────────────────────────────────────────────────────────────[179C┐[0m
+[0m│ MEM FORGET · SELECTIVE SOURCE REVISION                                                                                                                                          [0;1m^[179C[0m│[0m
+[0m│ CONTEXT LOCATIONS                                                                                                                                                               [0;48;2;68;68;68m [179C[0m│[0m
+[0m│   SOURCE · granted/authority/notes                                                                                                                                              [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ PREPARED · 3 SOURCE · 1 instruction CRITERION · 2 CHANGES                                                                                                                       [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ ASSESSMENT                                                                                                                                                                      [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;244;245;247m Retain accessibility guidance and remove the obsolete location and code.[0m                                                                                                        [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ WHAT APPLIES                                                                                                                                                                    [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;244;245;247m One complete batch covers 3 Source Memories. Apply publishes 2 changes; KEEP stays unchanged.[0m                                                                                   [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ IMPACT · FORGET · SAME SOURCE                                                                                                                                                   [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ These exact changes will update the granted Source. Apply accepts this batch; Escape cancels without changing the Source.                                                       [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                     [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ INSTRUCTION · Forget the obsolete desk location and access code; keep accessibility guidance.                                                                                   [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;202;211;245;1m       ▸ ~ [TRANSFORM] [0;38;2;202;211;245mgranted/authority/notes [befe1bdb][0m                                                                                                                        [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;255;255;255m             - [0;38;2;237;135;150;4mThe desk was beside the west entrance. [0;38;2;255;255;255mThe route remains step-free.[0m                                                                                               [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;255;255;255m             + The route remains step-free.[0m                                                                                                                                      [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;202;211;245;1m       ▸ − [DROP]      [0;38;2;202;211;245mgranted/authority/notes [54013aa2][0m                                                                                                                        [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;255;255;255m             - [0;38;2;237;135;150;4mThe obsolete access code was 4815.[0m                                                                                                                                [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;166;218;149;1m       ▸ = [KEEP]      [0;38;2;202;211;245mgranted/authority/notes [cb2ad74d][0m                                                                                                                        [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;255;255;255m             = Visitors should verify the step-free route before arrival.[0m                                                                                                        [0;48;2;68;68;68m [179C[0m│[0m
+[0m│ APPLY                                                                                                                                                                           [0;48;2;68;68;68m [179C[0m│[0m
+[0m│[0;38;2;244;245;247m Press Enter on APPLY to apply the exact proposal. Press Esc to cancel.[0m                                                                                                          [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;48;2;68;68;68m [179C[0m│[0m
+[0m│                                                                                                                                                                                 [0;1mv[179C[0m│[0m
+[0m└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────[179C┘[0m
+
+
+
+
+
+
+
+
+
+
+[0;38;2;139;213;255;1m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ APPLY ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┓[0m
+[0;38;2;139;213;255;1m┃[0;38;2;16;36;47;48;2;139;213;255;1m✓ APPLY[0m                                                                                                                                                                           [179C[0;38;2;139;213;255;1m┃[0m
+[0;38;2;139;213;255;1m┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[179C┛[0m
+[C[0mEnter apply exact proposal  Tab switch [CEsc cancel A apply exac[C proposal[C H Help  Q clo[Ce[0m[K[2A[90D[0m[49A[J[0m[?7h[?1049l[?2004l[?12l[?25h[1mFORGET APPLIED · SOURCE granted/authority/notes[0m
+FORGET · Forget the obsolete desk location and access code; keep accessibility guidance.
+DIFF · 2 CHANGES
+[38;2;166;218;149m[1m~[0m [befe1bdb] [38;2;237;135;150m[4mThe desk was beside the west entrance. [0mThe route remains step-free.
+[38;2;237;135;150m[1m-[0m [54013aa2] [38;2;237;135;150m[4mThe obsolete access code was 4815.[0m
+RECEIPT · bff4e6f0-a811-4a6f-9896-1737d457046a
+CHECKPOINT · bff4e6f0-a811-4a6f-9896-1737d457046a
+RECOVERY · governed by the granted authority owner
+CAPTURE COMMAND RETURNED · exit 0
+
+[2J[H$ mem show granted/authority/notes --direct
+[1mContext: granted/authority/notes[0m
+Access: READ GRANT · READ ONLY
+  Memories 2  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+[1m
+Items (in context order):[0m
+  [memory befe1bdb] [38;2;202;211;245mThe route remains step-free.[0m
+  [memory cb2ad74d] [38;2;202;211;245mVisitors should verify the step-free route before arrival.[0m
+VERIFIED · one edit, one removal, one retained Memory; one owner checkpoint; participant unchanged
+PROVIDER · one deterministic fixture response; no external service

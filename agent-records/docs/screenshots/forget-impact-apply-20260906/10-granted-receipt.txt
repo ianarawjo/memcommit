@@ -1,0 +1,9 @@
+FORGET APPLIED · SOURCE granted/authority/notes                                                                                                                                     
+FORGET · Forget the obsolete desk location and access code; keep accessibility guidance.                                                                                            
+DIFF · 2 CHANGES                                                                                                                                                                    
+~ [befe1bdb] The desk was beside the west entrance. The route remains step-free.                                                                                                    
+- [54013aa2] The obsolete access code was 4815.                                                                                                                                     
+RECEIPT · bff4e6f0-a811-4a6f-9896-1737d457046a                                                                                                                                      
+CHECKPOINT · bff4e6f0-a811-4a6f-9896-1737d457046a                                                                                                                                   
+RECOVERY · governed by the granted authority owner                                                                                                                                  
+CAPTURE COMMAND RETURNED · exit 0

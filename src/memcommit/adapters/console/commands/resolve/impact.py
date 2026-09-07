@@ -17,7 +17,7 @@ from memcommit.adapters.console.coordination.context_operand import (
 from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
 )
-from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.adapters.console.commands.impact.projection import ImpactController
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoffError,

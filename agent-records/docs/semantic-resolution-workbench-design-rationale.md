@@ -18,7 +18,11 @@ Its optional `ImpactController` is likewise a presentation controller, not a
 mutation controller. It supplies a provider-free immutable effect projection
 bound to the same operation, artifact UID, and revision as the active view.
 The implementation is therefore owned by
-`memcommit.adapters.console.terminal.components.impact`; the former
+`memcommit.adapters.console.commands.impact.projection`. The common terminal
+host consumes only the structural `EffectPreviewSource` / `EffectPreviewView`
+contract in `terminal.components.resolution.effect_preview`; it does not import
+the Impact command or own concrete effect validation. Reuse by Update, Forget,
+and other operation hosts does not transfer Impact ownership. The former
 `memcommit.impact_controller` path was removed with the historical Python
 import layer, so imports and module-level patches use the adapter owner
 directly. Projection validation, rendered output, navigation, handoff behavior,

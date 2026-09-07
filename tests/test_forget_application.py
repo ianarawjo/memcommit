@@ -5,7 +5,10 @@ from __future__ import annotations
 import json
 
 import click
+import pytest
 import typer
+from prompt_toolkit.input.defaults import create_pipe_input
+from prompt_toolkit.output import DummyOutput
 from typer.testing import CliRunner
 
 import memcommit.application.capabilities.ops as ops
@@ -22,6 +25,84 @@ from memcommit.persistence.store import MemoryStore
 
 
 runner = CliRunner()
+
+
+@pytest.mark.parametrize("outcome", ["apply", "cancel", "stale"])
+def test_real_forget_report_gates_publication(isolated_store, monkeypatch, outcome):
+    from memcommit.adapters.console.commands.forget.workbench import screen
+    from memcommit.adapters.console.commands.impact.projection import ImpactController
+    from memcommit.adapters.console.terminal.components.resolution import (
+        run_resolution_workbench_shell,
+    )
+
+    store, context, memory = _forget_source()
+    before = store.load_direct(context.name).to_dict()
+    checkpoints = store.list_checkpoints(context.name)
+    provider_calls = []
+    previews = []
+
+    class Provider:
+        def complete(self, prompt, *, operation, output_schema=None):
+            provider_calls.append(operation)
+            messages = json.loads(prompt.split("FORGET CHAT MESSAGES:\n", 1)[1])
+            payload = json.loads(messages[1]["content"].split("FORGET PAYLOAD:\n", 1)[1])
+            return json.dumps({
+                "overview": "Remove the obsolete desk location.",
+                "candidates": [{
+                    "source_memory_id": payload["source"]["memories"][0]["item_id"],
+                    "decision": "DELETE", "proposed_content": "",
+                    "rationale": "The instruction covers this location.",
+                    "criterion_item_ids": ["k1"],
+                }],
+            })
+
+    original_view = ImpactController.view
+
+    def observe(self):
+        view = original_view(self)
+        previews.append(view)
+        return view
+
+    def run_report(view, **kwargs):
+        assert store.load_direct(context.name).to_dict() == before
+        assert store.list_checkpoints(context.name) == checkpoints
+        with create_pipe_input() as pipe:
+            pipe.send_text("\x1b" if outcome == "cancel" else "\x1b[Z\r")
+            action = run_resolution_workbench_shell(
+                view, app_input=pipe, app_output=DummyOutput(), require_tty=False,
+                **kwargs,
+            )
+        if outcome == "stale":
+            current = store.load_direct(context.name)
+            ops.add(current, "A concurrent writer added this Memory.")
+            store.save(current)
+        return action
+
+    monkeypatch.setattr(forget_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(forget_command, "connect_codex_chatgpt_provider", Provider)
+    monkeypatch.setattr(screen, "run_resolution_workbench_shell", run_report)
+    monkeypatch.setattr(ImpactController, "view", observe)
+    result = runner.invoke(app, ["forget", "Forget the old service desk."])
+
+    assert provider_calls == ["forget"]
+    assert previews and all(view.entries[0].before == memory.content for view in previews)
+    after = store.load_direct(context.name)
+    if outcome == "apply":
+        assert result.exit_code == 0, result.output
+        assert "FORGET APPLIED" in result.output
+        assert memory.uid not in after.memories
+        assert len(store.list_checkpoints(context.name)) == len(checkpoints) + 1
+    else:
+        assert memory.uid in after.memories
+        assert store.list_checkpoints(context.name) == checkpoints
+        if outcome == "cancel":
+            assert result.exit_code == 0, result.output
+            assert "Forget cancelled" in result.output
+            assert after.to_dict() == before
+        else:
+            assert result.exit_code != 0
+            assert "FORGET APPLIED" not in result.output
+            assert any("concurrent writer" in item.content for item in after.iter_items())
 
 
 def _forget_source(name: str = "forget/application"):

@@ -23,7 +23,11 @@ Use a federated console-adapter boundary:
 
 - `commands/impact/` owns the `mem impact` grammar and dispatcher, the combined
   saved-artifact catalog, saved/process-local Impact presentation, and common
-  read-only handoff mechanics.
+  read-only handoff mechanics. `projection.py` also owns `ImpactEntry`,
+  `ImpactView`, and `ImpactController`: those concrete models and conversions
+  describe the Impact feature even when another command embeds its preview.
+  The reusable session host consumes a read-only structural effect-preview
+  interface; it does not import a command package or duplicate Impact validation.
 - `commands/review/` owns the `mem review` grammar and dispatcher, the combined
   saved-artifact catalog, common saved-session selection, and common Review
   report presentation.

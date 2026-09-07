@@ -151,14 +151,15 @@ When color is unavailable, edit spans use the explicit
 left or entered the Memory. KEEP decisions are not change lines, and the
 accepted all-KEEP receipt remains the distinct no-change/no-checkpoint path.
 
-The TTY application surface is ownership-aware. Provider dispositions stage one
-answered treatment for every Source Memory. A local Source therefore applies
-that complete decision-free batch directly and names `mem undo` in its receipt.
-A granted Source is the actual authority mutation target, so it retains exact
-final review when the reviewed batch contains an edit or removal. An all-KEEP
-batch is different: it publishes no Context mutation, bypasses authority review,
-prints an explicit unchanged/no-checkpoint receipt, and creates no artificial
-Undo unit. This differs from Sever, where an all-KEEP review still records its
+The TTY application surface opens the complete Impact report whenever the
+frozen provider disposition contains an edit or removal, for both local and
+granted Sources. The report exposes one Apply action and Escape cancellation;
+it does not offer per-Memory selection or response editing. Approval returns
+the unchanged process-local snapshot to the normal authority/CAS/checkpoint
+boundary. Local recovery remains `mem undo`; granted recovery remains with the
+authority owner. An all-KEEP batch publishes no Context mutation, skips the
+Apply screen, prints an explicit unchanged/no-checkpoint receipt, and creates
+no artificial Undo unit. This differs from Sever, where an all-KEEP review still records its
 grouped Source-owner application even though Context bytes remain unchanged.
 
 The Resolution workbench never mutates the loaded Context. It returns either

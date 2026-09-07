@@ -1,0 +1,10 @@
+$ mem show granted/authority/notes --direct                                                                                                                                         
+Context: granted/authority/notes                                                                                                                                                    
+Access: READ GRANT · READ ONLY                                                                                                                                                      
+  Memories 2  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory befe1bdb] The route remains step-free.                                                                                                                                    
+  [memory cb2ad74d] Visitors should verify the step-free route before arrival.                                                                                                      
+VERIFIED · one edit, one removal, one retained Memory; one owner checkpoint; participant unchanged                                                                                  
+PROVIDER · one deterministic fixture response; no external service

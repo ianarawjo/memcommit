@@ -1,0 +1,103 @@
+{
+  "base_commit": "12f412fd7e61ffdbb1db833d269bb59209bbde86",
+  "viewport": [
+    180,
+    52
+  ],
+  "profile": "isolated virtual authoring; separate isolated authority for granted scenario",
+  "current_context": "notes; participant for granted scenario",
+  "command": "mem forget \"Forget the obsolete desk location and access code; keep accessibility guidance.\" --from notes",
+  "provenance": "actual color-preserving PTY stream rendered with pyte/Pillow; deterministic provider only",
+  "steps": [
+    {
+      "image": "01-analysis-entry.png",
+      "scenario": "apply",
+      "keys": "explicit command; no keys",
+      "durable": "fixture setup only"
+    },
+    {
+      "image": "02-apply-impact.png",
+      "scenario": "apply",
+      "keys": "provider response; no keys",
+      "durable": "none; complete process-local batch only"
+    },
+    {
+      "image": "03-apply-focused.png",
+      "scenario": "apply",
+      "keys": "Shift-Tab",
+      "durable": "none"
+    },
+    {
+      "image": "04-apply-receipt.png",
+      "scenario": "apply",
+      "keys": "Enter on Apply",
+      "durable": "owner edit/removal/checkpoint"
+    },
+    {
+      "image": "05-apply-verification.png",
+      "scenario": "apply",
+      "keys": "harness gate Enter; mem show notes --direct",
+      "durable": "none"
+    },
+    {
+      "image": "06-cancel-impact.png",
+      "scenario": "cancel",
+      "keys": "provider response; no keys",
+      "durable": "none; complete process-local batch only"
+    },
+    {
+      "image": "07-cancel-receipt.png",
+      "scenario": "cancel",
+      "keys": "Escape",
+      "durable": "none from Forget; stale scenario preserves a concurrent write"
+    },
+    {
+      "image": "08-cancel-verification.png",
+      "scenario": "cancel",
+      "keys": "harness gate Enter; mem show notes --direct",
+      "durable": "none"
+    },
+    {
+      "image": "09-granted-impact.png",
+      "scenario": "granted",
+      "keys": "provider response; no keys",
+      "durable": "none; complete process-local batch only"
+    },
+    {
+      "image": "10-granted-receipt.png",
+      "scenario": "granted",
+      "keys": "Enter on Apply",
+      "durable": "owner edit/removal/checkpoint"
+    },
+    {
+      "image": "11-granted-verification.png",
+      "scenario": "granted",
+      "keys": "harness gate Enter; mem show notes --direct",
+      "durable": "none"
+    },
+    {
+      "image": "12-noop-receipt-and-verification.png",
+      "scenario": "noop",
+      "keys": "explicit all-KEEP command, then read-only Show",
+      "durable": "none"
+    },
+    {
+      "image": "13-stale-impact.png",
+      "scenario": "stale",
+      "keys": "provider response; no keys",
+      "durable": "none; complete process-local batch only"
+    },
+    {
+      "image": "14-stale-receipt.png",
+      "scenario": "stale",
+      "keys": "Enter on Apply",
+      "durable": "none from Forget; stale scenario preserves a concurrent write"
+    },
+    {
+      "image": "15-stale-verification.png",
+      "scenario": "stale",
+      "keys": "harness gate Enter; mem show notes --direct",
+      "durable": "none"
+    }
+  ]
+}

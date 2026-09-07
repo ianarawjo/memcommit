@@ -7,9 +7,9 @@ from prompt_toolkit.utils import get_cwidth
 from memcommit.adapters.console.terminal.components.content_row import (
     render_numbered_content_row,
 )
-from memcommit.adapters.console.terminal.components.impact import (
-    ImpactController,
-    ImpactView,
+from memcommit.adapters.console.terminal.components.resolution.effect_preview import (
+    EffectPreviewSource,
+    EffectPreviewView,
 )
 from memcommit.adapters.console.terminal.components.report_card import boxed_lines
 from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
@@ -46,9 +46,9 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell.pre
 
 
 def _current_impact(
-    controller: ImpactController | None,
+    controller: EffectPreviewSource | None,
     view: ResolutionWorkbenchView,
-) -> ImpactView | None:
+) -> EffectPreviewView | None:
     if controller is None:
         return None
     impact = controller.view()
@@ -64,7 +64,7 @@ def _current_impact(
 
 
 def _impact_repeats_results(
-    impact: ImpactView | None,
+    impact: EffectPreviewView | None,
     view: ResolutionWorkbenchView,
 ) -> bool:
     return impact is not None and (
@@ -128,7 +128,7 @@ def _impact_arrow_expansion(
     return None if expanded_uid == focused_uid else expanded_uid
 
 
-def _impact_lines(impact: ImpactView) -> list[str]:
+def _impact_lines(impact: EffectPreviewView) -> list[str]:
     lines = [impact.title, impact.summary]
     if impact.detail:
         lines.extend(["", impact.detail])
@@ -228,7 +228,7 @@ def resolution_report_fragments(
     review_and_apply: bool = False,
     report_apply: bool = False,
     read_only: bool = False,
-    impact_controller: ImpactController | None = None,
+    impact_controller: EffectPreviewSource | None = None,
     expanded_impact_section_uid: str | None = None,
     content_width: int = 76,
 ) -> list[tuple[str, str]]:
@@ -238,9 +238,9 @@ def resolution_report_fragments(
         for metric in view.metrics
     )
     impact = _current_impact(impact_controller, view)
-    # ImpactController.from_resolution projects the exact same result rows,
-    # with their rationale. Rendering both copies becomes unusable for large
-    # sessions, so the richer Impact block is their single report location.
+    # A preview may project the same result rows with their rationale. Rendering
+    # both copies becomes unusable for large sessions, so its richer block is
+    # their single report location.
     impact_repeats_results = _impact_repeats_results(impact, view)
     show_results = view.show_results and not impact_repeats_results
     review_sections = 1 if view.report_items_summary is not None else len(view.items)
@@ -665,7 +665,7 @@ def _seeded_report_lines(
     strategies: tuple[ResolutionGlobalStrategy, ...],
     review_and_apply: bool = False,
     read_only: bool = False,
-    impact_controller: ImpactController | None = None,
+    impact_controller: EffectPreviewSource | None = None,
     drafts: dict[str, ResponseDraft] | None = None,
     report_apply: bool = False,
 ) -> list[str]:
@@ -829,7 +829,7 @@ def resolution_seeded_report_fragments(
     review_and_apply: bool = False,
     report_apply: bool = False,
     read_only: bool = False,
-    impact_controller: ImpactController | None = None,
+    impact_controller: EffectPreviewSource | None = None,
     content_width: int = 76,
 ) -> list[tuple[str, str]]:
     """Render Compare and Meld report sections as nested Viewer cards."""

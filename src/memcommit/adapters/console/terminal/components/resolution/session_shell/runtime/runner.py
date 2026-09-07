@@ -36,7 +36,7 @@ from memcommit.adapters.console.terminal.components.resolution.compact_shell imp
 from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerController,
 )
-from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.adapters.console.terminal.components.resolution.effect_preview import EffectPreviewSource
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
@@ -113,7 +113,7 @@ def run_resolution_workbench_shell(
     read_only: bool = False,
     read_only_handoff: SessionTodoView | None = None,
     item_handoff: SessionTodoView | None = None,
-    impact_controller: ImpactController | None = None,
+    impact_controller: EffectPreviewSource | None = None,
     destination: ResolutionDestination | None = None,
     turn_command_review: (
         Callable[[ResolutionWorkbenchAction], CommandReview | None] | None

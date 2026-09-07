@@ -38,7 +38,7 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell imp
     session_review_action_view,
     session_todo_view,
 )
-from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.adapters.console.commands.impact.projection import ImpactController
 from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionContextLocation,

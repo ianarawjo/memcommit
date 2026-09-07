@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 from memcommit.application.operations.forget.review import ForgetReview
 from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
 from memcommit.application.capabilities.resolution.workbench import (
@@ -214,4 +216,42 @@ class ForgetResolutionWorkbenchAdapter:
         )
 
 
-__all__ = ["ForgetResolutionWorkbenchAdapter", "forget_memory_changes"]
+def forget_application_view(review: ForgetReview) -> ResolutionWorkbenchView:
+    """Expose one exact batch for inspection and Apply, without revision choices."""
+
+    view = ForgetResolutionWorkbenchAdapter(review).view()
+    # The complete disposition is frozen before approval. A renderer must not
+    # expose selection or response controls that could change that exact batch.
+    return replace(
+        view,
+        status="PREPARED",
+        items=tuple(
+            replace(
+                item,
+                role="CHANGE",
+                obligation="NONE",
+                response_state="NOT_APPLICABLE",
+                response_text="",
+                question="",
+                options=(),
+                selected_option_uid=None,
+                commentable=False,
+            )
+            for item in view.items
+        ),
+        capabilities=frozenset({"ACCEPT"}),
+        report_items_summary=ResolutionDetailBlock(
+            heading="WHAT APPLIES",
+            text=(
+                f"One complete batch covers {len(review.candidates)} Source Memories. "
+                f"Apply publishes {len(review.changes())} changes; KEEP stays unchanged."
+            ),
+        ),
+    )
+
+
+__all__ = [
+    "ForgetResolutionWorkbenchAdapter",
+    "forget_application_view",
+    "forget_memory_changes",
+]

@@ -12,7 +12,7 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell imp
     resolution_report_fragments,
     run_resolution_workbench_shell,
 )
-from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.adapters.console.commands.impact.projection import ImpactController
 from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionResult,

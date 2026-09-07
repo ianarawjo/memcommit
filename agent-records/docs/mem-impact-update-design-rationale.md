@@ -125,15 +125,14 @@ provider, save a session, or apply changes. Its view must match the active
 Update UID and operation digest revision, preventing a stale preview from
 appearing above a newer Apply action.
 
-In a TTY, `mem update` saves or reuses the staged receipt first, displays that
-revision-bound Impact when review is required. A decision-free local Target
-applies through the existing exact staged plan without opening that surface and
-records its ordinary checkpoint for `mem undo`. A granted Source does not alter
-that local mutation boundary. A granted Target instead opens exact final review
-before the authority write; closing leaves the receipt staged and every target
-owner unchanged. A validated zero-operation proposal records its applied
-session receipt without changing a Context or creating an Undo checkpoint, so
-its mutation boundary is `NONE` even when the selected Target is granted.
+In a TTY, direct `mem update` saves or reuses the staged receipt first, then
+shows the revision-bound Impact with one Apply action and Escape cancellation.
+This report boundary applies to both local and granted Targets; Update does
+not use the shared local auto-accept policy. Closing leaves the receipt staged
+and every target owner unchanged. Applying a validated zero-operation proposal
+records its terminal session receipt without changing a Context or creating an
+Undo checkpoint. The report's approval does not replace application authority,
+freshness, or CAS checks.
 Non-TTY explicit update retains the
 existing scriptable application behavior; adding an interactive approval to a
 pipeline would make the command unusable rather than safer.

@@ -189,7 +189,8 @@
       "agent-records/docs/forget-application-boundary-matrix.md",
       "agent-records/docs/forget-public-python-api-design-rationale.md",
       "agent-records/docs/forget-agent-adapter-design-rationale.md",
-      "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md"
+      "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
+      "agent-records/docs/impact-projection-and-forget-apply-design-rationale.md"
     ],
     "ground": [
       "agent-records/docs/command-package-layout-design-rationale.md",
@@ -206,7 +207,8 @@
     "impact": [
       "agent-records/docs/context-locator-design-rationale.md",
       "agent-records/docs/impact-review-console-adapter-ownership-design-rationale.md",
-      "agent-records/docs/study-prewarm-retirement-design-rationale.md"
+      "agent-records/docs/study-prewarm-retirement-design-rationale.md",
+      "agent-records/docs/impact-projection-and-forget-apply-design-rationale.md"
     ],
     "import": [
       "agent-records/docs/mem-import-design-rationale.md",

@@ -463,7 +463,7 @@ def _run_workbench(
         ResolutionDestination,
         run_resolution_workbench_shell,
     )
-    from memcommit.adapters.console.terminal.components.impact import ImpactController
+    from memcommit.adapters.console.commands.impact.projection import ImpactController
     from memcommit.adapters.console.commands.sever.review import sever_review_report
 
     snapshot = execute_sever_session_open(session.uid, store=store)

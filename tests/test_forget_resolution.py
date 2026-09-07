@@ -20,7 +20,7 @@ from memcommit.adapters.console.commands.forget.workbench.presentation import (
     forget_memory_changes,
 )
 from memcommit.application.operations.forget.review import ForgetReview
-from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.adapters.console.commands.impact.projection import ImpactController
 from memcommit.providers.types import ProviderIdentity
 from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation, ResolutionWorkbenchAction
 from memcommit.application.capabilities.semantic.selective_curation import CurationAnalysis, CurationDecision
@@ -346,115 +346,85 @@ def test_forget_review_materializes_only_reviewed_operation_specific_changes():
     assert changes[-1].new_content == "Custom retained wording."
 
 
-def test_forget_tty_controller_uses_shared_resolution_actions_before_apply(monkeypatch):
+@pytest.mark.parametrize("granted", [False, True])
+def test_forget_tty_opens_exact_impact_report_before_apply(monkeypatch, granted):
     context = _context()
-    original_contents = {
-        uid: memory.content for uid, memory in context.memories.items()
-    }
-    first_uid = next(iter(context.memories))
-    source_memory_count = len(context.memories)
-    progress_events: list[tuple[object, ...]] = []
+    original = context.to_dict()
+    observed = []
 
-    def wait(operation, stage, *, total, work):
-        progress_events.append(("start", operation, stage, total))
-        try:
-            return work(object())
-        finally:
-            progress_events.append(("close",))
-
-    monkeypatch.setattr(forget_command, "run_command_wait", wait)
-    actions = iter(
-        (
-            ResolutionWorkbenchAction(
-                kind="SUBMIT_ITEM",
-                item_uid="placeholder",
-                option_uid="placeholder:keep",
-            ),
-            ResolutionWorkbenchAction(kind="ACCEPT"),
-        )
-    )
-
-    impact_labels = []
-    review_behaviors = []
-
-    def choose(view_or_supplier, **kwargs):
-        view = view_or_supplier() if callable(view_or_supplier) else view_or_supplier
+    def choose(view, **kwargs):
         impact = kwargs["impact_controller"].view()
         assert impact.replaces_results is True
         assert impact.revision == view.revision
-        impact_labels.append(impact.entries[0].label)
-        review_behaviors.append(kwargs["decision_free_behavior"])
-        action = next(actions)
-        if action.kind == "SUBMIT_ITEM":
-            candidate_uid = view.items[0].uid
-            return ResolutionWorkbenchAction(
-                kind="SUBMIT_ITEM",
-                item_uid=candidate_uid,
-                option_uid=f"{candidate_uid}:keep",
-            )
-        return action
-
-    monkeypatch.setattr(
-        "memcommit.adapters.console.commands.forget.workbench.screen.run_resolution_workbench_shell",
-        choose,
-    )
-
-    changes = forget_command._run_resolution_forget(
-        context,
-        "Forget the covered details.",
-        BatchForgetLLM(),
-    )
-
-    assert first_uid not in {change.uid for change in changes}
-    assert any(isinstance(change, RemoveChange) for change in changes)
-    assert {
-        uid: memory.content for uid, memory in context.memories.items()
-    } == original_contents
-    assert impact_labels == ["TRANSFORM", "KEEP"]
-    assert review_behaviors == ["AUTO_ACCEPT", "AUTO_ACCEPT"]
-    assert progress_events == [
-        (
-            "start",
-            "FORGET",
-            f"analyzing {source_memory_count} source memories x 1 instruction",
-            1,
-        ),
-        ("close",),
-    ]
-
-
-def test_granted_forget_requires_review_only_when_it_will_publish_a_change(
-    monkeypatch,
-):
-    observed = []
-
-    def choose(_view, **kwargs):
-        observed.append(kwargs["decision_free_behavior"])
+        assert [entry.label for entry in impact.entries] == ["TRANSFORM", "DROP", "KEEP"]
+        assert view.capabilities == frozenset({"ACCEPT"})
+        assert all(item.effective_obligation == "NONE" for item in view.items)
+        assert all(not item.options and not item.commentable for item in view.items)
+        assert kwargs["report_apply"] is True
+        assert not kwargs.get("compact_decisions", False)
+        assert "decision_free_behavior" not in kwargs
+        observed.append(impact)
         return ResolutionWorkbenchAction(kind="ACCEPT")
 
     monkeypatch.setattr(
         "memcommit.adapters.console.commands.forget.workbench.screen.run_resolution_workbench_shell",
         choose,
     )
+    monkeypatch.setattr(forget_command, "run_command_wait", lambda *args, work, **kwargs: work(object()))
+    changes = forget_command._run_resolution_forget(
+        context, "Forget the covered details.", BatchForgetLLM(),
+        mutates_granted_authority=granted,
+    )
+    assert len(observed) == 1
+    assert len(changes) == 2
+    assert context.to_dict() == original
+
+
+@pytest.mark.parametrize("granted", [False, True])
+def test_forget_all_keep_skips_application_screen(monkeypatch, granted):
+    def unexpected(*args, **kwargs):
+        pytest.fail("A batch with no Source changes has nothing to approve.")
+
     monkeypatch.setattr(
-        forget_command,
-        "run_command_wait",
-        lambda _operation, _stage, *, work, **_kwargs: work(object()),
+        "memcommit.adapters.console.commands.forget.workbench.screen.run_resolution_workbench_shell",
+        unexpected,
     )
+    monkeypatch.setattr(forget_command, "run_command_wait", lambda *args, work, **kwargs: work(object()))
+    assert forget_command._run_resolution_forget(
+        _context(), "Forget nothing.", BatchForgetProvider(),
+        mutates_granted_authority=granted,
+    ) == []
 
-    changed = forget_command._run_resolution_forget(
-        _context(),
-        "Forget the covered details.",
-        BatchForgetLLM(),
-        mutates_granted_authority=True,
-    )
-    unchanged = forget_command._run_resolution_forget(
-        _context(),
-        "Forget nothing.",
-        BatchForgetProvider(),
-        mutates_granted_authority=True,
-    )
 
-    assert changed is not None and len(changed) == 2
-    assert unchanged == []
-    assert observed == ["FINAL_REVIEW", "AUTO_ACCEPT"]
+def test_forget_report_names_public_source_without_changing_its_binding(monkeypatch):
+    from memcommit.application.operations.forget.application import FrozenForgetSource
+
+    context = _context()
+    source = FrozenForgetSource(
+        context=context, display_name="shared/accessible-notes", granted=True,
+        _runtime_token=object(),
+    )
+    seen = []
+
+    def inspect(view, **kwargs):
+        impact = kwargs["impact_controller"].view()
+        assert view.context_locations[0].name == source.display_name
+        assert all(entry.location == source.display_name for entry in impact.entries)
+        assert "INSTRUCTION" in impact.detail
+        seen.append(impact)
+        return ResolutionWorkbenchAction(kind="ACCEPT")
+
+    monkeypatch.setattr(forget_command, "_interactive_terminal", lambda: True)
+    monkeypatch.setattr(forget_command, "run_command_wait", lambda *args, work, **kwargs: work(object()))
+    monkeypatch.setattr(
+        "memcommit.adapters.console.commands.forget.workbench.screen.run_resolution_workbench_shell",
+        inspect,
+    )
+    result = forget_command._run_interactive_forget(
+        context, "Forget the covered details.", BatchForgetLLM(),
+        mutates_granted_authority=True, frozen_source=source,
+    )
+    assert len(seen) == 1
+    assert result.source is source
+    assert result.review.context_name == context.name
+    assert result.review.uid == seen[0].artifact_uid

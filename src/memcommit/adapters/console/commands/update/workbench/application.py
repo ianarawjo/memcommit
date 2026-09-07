@@ -6,7 +6,7 @@ from dataclasses import replace
 from typing import Literal
 
 from memcommit.adapters.console.commands.update.render import _view
-from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.adapters.console.commands.impact.projection import ImpactController
 from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     run_resolution_workbench_shell,
 )

@@ -133,8 +133,11 @@ authority to mutate.
   operations still produce reports and retain Viewer behavior. Reporting is
   their job.
 - An execution operation may expose an explicit Impact route for preflight
-  inspection. Impact remains non-mutating and is not silently inserted into
-  the execution lifecycle.
+  inspection. Direct TTY Update and changed-batch Forget also embed the
+  Impact report beside their single Apply action. These are operation-owned
+  approval boundaries, not the post-application Review command. Forget skips
+  the screen for empty/all-KEEP batches; explicit non-TTY execution still
+  advances directly to application. Impact projection itself remains non-mutating.
 - Required ambiguity/conflict decisions use the compact Resolution projection
   by default. Explicit Impact and Review retain the source-linked report and
   the full shared Viewer when inspection is requested.

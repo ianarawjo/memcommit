@@ -14,7 +14,7 @@ from memcommit.adapters.console.commands.impact.sessions import (
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
 )
-from memcommit.adapters.console.terminal.components.impact import ImpactController
+from memcommit.adapters.console.commands.impact.projection import ImpactController
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionContextLocation,

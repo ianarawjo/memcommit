@@ -138,8 +138,10 @@ being flattened into a name-only catalog.
 
 ### 2. Extract a reusable Impact controller — projection completed
 
-`ImpactController` now re-projects an owning operation's frozen artifact into
-an immutable `ImpactView`. It is provider-free, performs no mutation, and
+`commands.impact.projection.ImpactController` re-projects an owning operation's
+frozen artifact into an immutable `ImpactView`. The command package owns these
+concrete Impact values; the reusable terminal host consumes their structural
+read-only interface without importing command adapters. It is provider-free, performs no mutation, and
 refuses to render when the operation, artifact UID, or revision differs from
 the active workbench. It can project exact Resolution Workbench results or
 wrap an already-saved report such as Compare. Standalone `mem impact` and

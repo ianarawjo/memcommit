@@ -1,25 +1,18 @@
-"""Forget-specific adapter over the shared Resolution Session shell."""
+"""Forget's exact Impact report and Apply boundary over the shared session host."""
 
 from __future__ import annotations
 
-from memcommit.application.capabilities.review_policy import (
-    ownership_aware_application_review,
-)
-from memcommit.application.operations.forget.application import (
-    ForgetSelectionRequest,
-    ForgetSessionSnapshot,
-    run_forget_selection,
-)
-from memcommit.application.operations.forget.review import ForgetSelection
-from memcommit.adapters.console.terminal.components.impact import ImpactController
+from dataclasses import replace
+
+from memcommit.application.operations.forget.application import ForgetSessionSnapshot
+from memcommit.adapters.console.commands.impact.projection import ImpactController
 from memcommit.adapters.console.commands.forget.workbench.presentation import (
-    ForgetResolutionWorkbenchAdapter,
+    forget_application_view,
     forget_memory_changes,
 )
 from memcommit.adapters.console.terminal.components.resolution import (
     run_resolution_workbench_shell,
 )
-from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
 
 
 def run_forget_review_workbench(
@@ -27,76 +20,41 @@ def run_forget_review_workbench(
     *,
     mutates_granted_authority: bool = False,
 ) -> ForgetSessionSnapshot | None:
-    """Review one complete process-local snapshot without provider or Apply."""
+    """Inspect the frozen batch and return it only after Apply; never mutate it."""
 
-    if not snapshot.review.candidates:
+    if not snapshot.review.changes():
         return snapshot
-    navigation = ResolutionNavigation()
-    current = snapshot
-    while True:
-        review = current.review
-        active_view = ForgetResolutionWorkbenchAdapter(review).view()
-        impact_controller = ImpactController.from_memory_changes(
-            operation=active_view.operation,
-            artifact_uid=active_view.artifact_uid,
-            revision=active_view.revision,
-            title="IMPACT · PROPOSED SOURCE REVISION",
+    # Only the presentation uses the public name. The returned snapshot keeps
+    # its original owner identity and opaque authority/CAS binding unchanged.
+    displayed_review = replace(
+        snapshot.review, context_name=snapshot.source.display_name,
+    )
+    view = forget_application_view(displayed_review)
+    ownership = "granted" if mutates_granted_authority else "local"
+    action = run_resolution_workbench_shell(
+        view,
+        terminal_label="Interactive Forget",
+        snapshot_hint="Run 'mem forget INSTRUCTION' in a terminal to inspect before Apply.",
+        split_viewer_items=True,
+        report_apply=True,
+        impact_controller=ImpactController.from_memory_changes(
+            operation=view.operation,
+            artifact_uid=view.artifact_uid,
+            revision=view.revision,
+            title="IMPACT · FORGET · SAME SOURCE",
+            detail=f"INSTRUCTION · {snapshot.review.instruction}",
             summary=(
-                "These are the changes Apply would make to the selected "
-                "Source. Nothing has changed yet."
+                f"These exact changes will update the {ownership} Source. "
+                "Apply accepts this batch; Escape cancels without changing the Source."
             ),
-            changes=forget_memory_changes(review),
-        )
-        action = run_resolution_workbench_shell(
-            active_view,
-            navigation=navigation,
-            terminal_label="Interactive Forget",
-            snapshot_hint=(
-                "Run 'mem forget INSTRUCTION' in a terminal to review the batch."
-            ),
-            review_and_apply=True,
-            decision_free_behavior=ownership_aware_application_review(
-                mutates_granted_authority=mutates_granted_authority,
-                local_undo_available=True,
-                # An all-KEEP review crosses no Context mutation boundary,
-                # even when the Source was reached through a Grant.
-                publishes_context_mutation=bool(review.changes()),
-            ).decision_free_behavior,
-            split_viewer_items=True,
-            impact_controller=impact_controller,
-            compact_decisions=True,
-        )
-        if action.kind == "CLOSE":
-            return None
-        if action.kind == "ACCEPT":
-            return current
-        if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
-            raise ValueError("Unsupported Forget workbench action.")
-        if action.comment.strip():
-            current = run_forget_selection(
-                ForgetSelectionRequest(
-                    snapshot=current,
-                    candidate_uid=action.item_uid,
-                    selection="CUSTOM",
-                    custom_content=action.comment.strip(),
-                )
-            )
-            continue
-        suffix = (action.option_uid or "").rpartition(":")[2]
-        selection: ForgetSelection | None = {
-            "recommended": "RECOMMENDED",
-            "keep": "KEEP",
-            "delete": "DELETE",
-        }.get(suffix)  # type: ignore[assignment]
-        if selection is None:
-            raise ValueError("Unsupported Forget decision.")
-        current = run_forget_selection(
-            ForgetSelectionRequest(
-                snapshot=current,
-                candidate_uid=action.item_uid,
-                selection=selection,
-            )
-        )
+            changes=forget_memory_changes(displayed_review),
+        ),
+    )
+    if action.kind == "ACCEPT":
+        return snapshot
+    if action.kind == "CLOSE":
+        return None
+    raise ValueError("Unsupported Forget application action.")
 
 
 __all__ = ["run_forget_review_workbench"]

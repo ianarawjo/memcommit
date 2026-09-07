@@ -1,0 +1,15 @@
+LIVE PTY 180 x 52 · isolated authoring · current notes · noop                                                                                                                       
+$ mem forget "Keep everything unchanged." --from notes                                                                                                                              
+FORGET · NO CHANGE · SOURCE notes                                                                                                                                                   
+OUTCOME · NO CHANGE · Context unchanged · no checkpoint                                                                                                                             
+CAPTURE COMMAND RETURNED · exit 0                                                                                                                                                   
+$ mem show notes --direct                                                                                                                                                           
+Context: notes                                                                                                                                                                      
+  Memories 3  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory 36fd564c] The desk was beside the west entrance. The route remains step-free.                                                                                             
+  [memory e7fd1f1a] The obsolete access code was 4815.                                                                                                                              
+  [memory 884dd87e] Visitors should verify the step-free route before arrival.                                                                                                      
+VERIFIED · Source unchanged; no checkpoint or application receipt                                                                                                                   
+PROVIDER · one deterministic fixture response; no external service

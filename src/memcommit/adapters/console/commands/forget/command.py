@@ -186,6 +186,7 @@ def _run_interactive_forget(
     provider_factory,
     *,
     mutates_granted_authority: bool = False,
+    frozen_source: FrozenForgetSource | None = None,
 ) -> ForgetSessionSnapshot | list[ProposedChange] | None:
     """Preserve the historical command hook while entering typed use cases."""
 
@@ -194,6 +195,12 @@ def _run_interactive_forget(
             raise TypeError("Legacy Forget execution requires an instruction.")
         context = source_port
         port = _FrozenContextForgetSourcePort(context)
+        if frozen_source is not None:
+            if frozen_source.context is not context:
+                raise ValueError("Forget analysis must keep its exact frozen Source.")
+            # Keep the public Grant name and binding through the historical
+            # Context-shaped hook; approval must name the authorized Source.
+            port.source = frozen_source
         typed_request = ForgetAnalysisRequest(context.name, request)
         provider = provider_factory
 
@@ -310,6 +317,7 @@ def cmd(
             info,
             provider,
             mutates_granted_authority=source.granted,
+            frozen_source=source,
         )
     except (OSError, QueryProviderError, RuntimeError, ValueError) as e:
         typer.secho(f"Error: {e}", fg=typer.colors.RED, err=True)

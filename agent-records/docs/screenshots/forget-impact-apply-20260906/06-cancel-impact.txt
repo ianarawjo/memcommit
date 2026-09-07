@@ -1,0 +1,52 @@
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┃ VIEWER ┃━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ MEM FORGET · SELECTIVE SOURCE REVISION                                                                                                                                          ^┃
+┃ CONTEXT LOCATIONS                                                                                                                                                                ┃
+┃   SOURCE · notes                                                                                                                                                                 ┃
+┃ PREPARED · 3 SOURCE · 1 instruction CRITERION · 2 CHANGES                                                                                                                        ┃
+┃                                                                                                                                                                                  ┃
+┃ ASSESSMENT                                                                                                                                                                       ┃
+┃ Retain accessibility guidance and remove the obsolete location and code.                                                                                                         ┃
+┃                                                                                                                                                                                  ┃
+┃ WHAT APPLIES                                                                                                                                                                     ┃
+┃ One complete batch covers 3 Source Memories. Apply publishes 2 changes; KEEP stays unchanged.                                                                                    ┃
+┃                                                                                                                                                                                  ┃
+┃ IMPACT · FORGET · SAME SOURCE                                                                                                                                                    ┃
+┃ These exact changes will update the local Source. Apply accepts this batch; Escape cancels without changing the Source.                                                          ┃
+┃ Focus a Memory: → shows why, ← hides it, and Enter toggles.                                                                                                                      ┃
+┃                                                                                                                                                                                  ┃
+┃ INSTRUCTION · Forget the obsolete desk location and access code; keep accessibility guidance.                                                                                    ┃
+┃       ▸ ~ [TRANSFORM] notes [ce50467a]                                                                                                                                           ┃
+┃             - The desk was beside the west entrance. The route remains step-free.                                                                                                ┃
+┃             + The route remains step-free.                                                                                                                                       ┃
+┃       ▸ − [DROP]      notes [501cef01]                                                                                                                                           ┃
+┃             - The obsolete access code was 4815.                                                                                                                                 ┃
+┃                                                                                                                                                                                  ┃
+┃       ▸ = [KEEP]      notes [4f5be38c]                                                                                                                                           ┃
+┃             = Visitors should verify the step-free route before arrival.                                                                                                         ┃
+┃ APPLY                                                                                                                                                                            ┃
+┃ Press Enter on APPLY to apply the exact proposal. Press Esc to cancel.                                                                                                           ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                  ┃
+┃                                                                                                                                                                                 v┃
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┌────────────────────────────────────────────────────────────────────────────────────| ITEMS |─────────────────────────────────────────────────────────────────────────────────────┐
+│› REPORT         Complete Forget report                                                                                                                                          ^│
+│  FORGET DECISION The desk was beside the west entrance. The route remains step-free.                                                                                             │
+│  FORGET DECISION The obsolete access code was 4815.                                                                                                                              │
+│  FORGET DECISION Visitors should verify the step-free route before arrival.                                                                                                      │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                  │
+│                                                                                                                                                                                 v│
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────────────| APPLY |─────────────────────────────────────────────────────────────────────────────────────┐
+│✓ APPLY                                                                                                                                                                           │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+ ↑/↓ block (hold accelerates)  PgUp/PgDn page  End last  Tab switch  Enter open  Esc/Backspace/Q close A apply exact proposal  H Help  y/Y copy  Q close
