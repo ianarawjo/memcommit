@@ -27,7 +27,7 @@ from .model import (
     AtomizeProvider,
 )
 from .provider_contract.prompt import _payload, _prompt
-from .provider_contract.response import _parse_items
+from .provider_contract.response.entrypoint import parse_response
 from .provider_contract.response_schema import _output_schema
 
 
@@ -200,7 +200,7 @@ def impact_atomize(
         operation="impact_atomize",
         output_schema=_output_schema(candidates),
     )
-    items, overview, quality_issues = _parse_items(
+    items, overview, quality_issues = parse_response(
         raw,
         candidates,
         declared_frames,

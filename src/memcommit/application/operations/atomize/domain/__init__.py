@@ -1,7 +1,7 @@
 """Public compatibility facade for the Atomize domain package.
 
-Implementation lives in five responsibility-focused modules. Existing imports
-from ``memcommit.application.operations.atomize.domain`` remain stable.
+Implementation lives in five responsibility-focused modules. Response readers
+are internal to ``provider_contract.response`` and are not re-exported here.
 """
 
 # ruff: noqa: F401
@@ -73,16 +73,10 @@ from .model import (
 )
 from .provider_contract import (
     _atomize_execution_policy,
-    _exact_dict,
     _load_calibration,
     _output_schema,
-    _parse_items,
-    _parse_overview,
-    _parse_quality_issues,
     _payload,
     _prompt,
-    _reject_duplicate_json_keys,
-    _short_string,
 )
 from .session import (
     AtomizeAnalysisItem,

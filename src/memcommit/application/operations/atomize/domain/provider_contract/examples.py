@@ -16,7 +16,7 @@ from ..model import (
     AtomizeImpactError,
 )
 
-from .response import _reject_duplicate_json_keys
+from .response.fields import _reject_duplicate_json_keys
 
 
 def _load_calibration(
