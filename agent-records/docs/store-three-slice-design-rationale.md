@@ -171,8 +171,13 @@ The physical boundary now follows that distinction:
 
 `record_restore_checkpoint.py` composes `CheckpointStoreMixin` and
 `CommandRestorationStoreMixin` and forwards legacy failure-injection overrides. It owns
-no checkpoint or restoration behavior. Every moved method body, lock boundary, CAS
-check, archive format, checkpoint record, and rollback order remains unchanged.
+no checkpoint or restoration behavior. The initial package relocation preserved
+method bodies, lock boundaries, CAS checks, archive formats, checkpoint records,
+and rollback order. Atomize's retained Save As handler is now decomposed further
+into record decoding, read-only preparation, and restoration workflows, with
+per-change exception compensation. Its focused contract and failure-boundary
+changes are recorded in
+[`atomize-restoration-design-rationale.md`](atomize-restoration-design-rationale.md).
 
 ## Compatibility boundary
 

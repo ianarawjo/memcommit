@@ -13,10 +13,12 @@ from memcommit.persistence.store.command_restoration import (
 )
 from memcommit.persistence.store.command_restoration import engine
 from memcommit.persistence.store.command_restoration.handlers import (
-    atomize,
     branch,
     merge,
     sever,
+)
+from memcommit.persistence.store.command_restoration.handlers.atomize import (
+    restoration as atomize,
 )
 from memcommit.persistence.store.record_restore_checkpoint import (
     RecordRestoreCheckpointStoreMixin,
@@ -57,7 +59,10 @@ EXPECTED_METHODS = {
     "command_restoration/handlers/merge.py": {
         "_restore_merge_context_creation_command_locked",
     },
-    "command_restoration/handlers/atomize.py": {
+    "command_restoration/compensation.py": set(),
+    "command_restoration/handlers/atomize/records.py": set(),
+    "command_restoration/handlers/atomize/preparation.py": set(),
+    "command_restoration/handlers/atomize/restoration.py": {
         "_restore_atomize_context_creation_command_locked",
     },
     "command_restoration/handlers/sever.py": {
@@ -106,7 +111,7 @@ def test_checkpoint_and_restoration_surfaces_preserve_composition() -> None:
         "engine",
         "branch",
         "merge",
-        "atomize",
+        "restoration",
         "sever",
         "companion_sessions",
     )

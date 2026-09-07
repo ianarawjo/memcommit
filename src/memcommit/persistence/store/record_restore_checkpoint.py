@@ -11,7 +11,7 @@ from .checkpoint import revert as _revert_module
 from .command_restoration import CommandRestorationStoreMixin
 from .command_restoration import archive as _archive_module
 from .command_restoration import engine as _engine_module
-from .command_restoration.handlers import atomize as _atomize_module
+from .command_restoration.handlers.atomize import restoration as _atomize_module
 from .command_restoration.handlers import branch as _branch_module
 from .command_restoration.handlers import (
     companion_sessions as _companion_sessions_module,

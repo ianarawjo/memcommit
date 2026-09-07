@@ -12,6 +12,7 @@ from ..context_memory.records import (
 from ..infrastructure.atomic_io import (
     _reject_duplicate_json_keys,
 )
+from .handlers.atomize.records import AtomizeArchiveManifest
 
 
 class _CommandArchiveMixin:
@@ -73,21 +74,6 @@ class _CommandArchiveMixin:
             "context_name",
             "checkpoint_uid",
         }
-        atomize_manifest_fields = {
-            "version",
-            "command",
-            "unit_uid",
-            "context_uid",
-            "context_name",
-            "checkpoint_uid",
-            "analysis_uid",
-            "source_context_uid",
-            "source_context_name",
-            "source_workbench",
-            "reviewing_workbench_digest",
-            "terminal_workbench_digest",
-            "current_before",
-        }
         if (
             not isinstance(manifest, dict)
             or manifest.get("version") != 1
@@ -117,11 +103,7 @@ class _CommandArchiveMixin:
             ):
                 raise ValueError("Command Context archive manifest is invalid.")
         elif command == "atomize":
-            if (
-                set(manifest) != atomize_manifest_fields
-                or unit_uid != f"checkpoint:{checkpoint_uid}"
-            ):
-                raise ValueError("Command Context archive manifest is invalid.")
+            AtomizeArchiveManifest.from_dict(manifest)
         else:
             raise ValueError("Command Context archive manifest is invalid.")
         context_name = manifest.get("context_name")
@@ -146,36 +128,6 @@ class _CommandArchiveMixin:
                     for character in reviewing_digest
                 )
                 or not isinstance(manifest.get("application"), dict)
-            ):
-                raise ValueError("Command Context archive manifest is invalid.")
-        elif command == "atomize":
-            source_context_uid = manifest.get("source_context_uid")
-            source_context_name = manifest.get("source_context_name")
-            analysis_uid = manifest.get("analysis_uid")
-            current_before = manifest.get("current_before")
-            if (
-                not isinstance(source_context_uid, str)
-                or not source_context_uid
-                or not isinstance(source_context_name, str)
-                or not source_context_name
-                or not isinstance(analysis_uid, str)
-                or not analysis_uid
-                or (current_before is not None and not isinstance(current_before, str))
-            ):
-                raise ValueError("Command Context archive manifest is invalid.")
-            _context_name_parts(source_context_name)
-            source_workbench = manifest.get("source_workbench")
-            reviewing_digest = manifest.get("reviewing_workbench_digest")
-            terminal_digest = manifest.get("terminal_workbench_digest")
-            if source_workbench is None:
-                if reviewing_digest is not None or terminal_digest is not None:
-                    raise ValueError("Command Context archive manifest is invalid.")
-            elif (
-                not isinstance(source_workbench, dict)
-                or not isinstance(reviewing_digest, str)
-                or len(reviewing_digest) != 64
-                or not isinstance(terminal_digest, str)
-                or len(terminal_digest) != 64
             ):
                 raise ValueError("Command Context archive manifest is invalid.")
         _context_name_parts(context_name)

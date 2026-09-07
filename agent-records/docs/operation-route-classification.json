@@ -27,7 +27,8 @@
           "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
           "agent-records/docs/study-prewarm-retirement-design-rationale.md",
           "agent-records/docs/study-semantic-prompt-policy-design-rationale.md",
-          "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md"
+          "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md",
+          "agent-records/docs/atomize-restoration-design-rationale.md"
         ],
         "reason": "The CLI freezes a Context or direct-Memory target and enters one analysis-to-in-place-application boundary; retained records support exact recovery, non-applying Impact, and read-only Review without an Atomize-owned resolution route."
       },
@@ -368,14 +369,16 @@
       "redo": {
         "evidence": [
           "agent-records/docs/semantic-apply-undo-design-rationale.md",
-          "agent-records/docs/undo-redo-application-boundary-matrix.md"
+          "agent-records/docs/undo-redo-application-boundary-matrix.md",
+          "agent-records/docs/atomize-restoration-design-rationale.md"
         ],
         "reason": "The CLI enters one fixed Redo adapter over the shared fail-closed granted-versus-local restoration selector and preserves one durable redo operation identity."
       },
       "undo": {
         "evidence": [
           "agent-records/docs/semantic-apply-undo-design-rationale.md",
-          "agent-records/docs/undo-redo-application-boundary-matrix.md"
+          "agent-records/docs/undo-redo-application-boundary-matrix.md",
+          "agent-records/docs/atomize-restoration-design-rationale.md"
         ],
         "reason": "The CLI enters one fixed Undo adapter over the shared fail-closed granted-versus-local restoration selector and preserves one durable undo operation identity."
       },

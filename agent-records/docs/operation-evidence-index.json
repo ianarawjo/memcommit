@@ -16,7 +16,8 @@
       "agent-records/docs/execution-receipt-review-lifecycle-design-rationale.md",
       "agent-records/docs/study-prewarm-retirement-design-rationale.md",
       "agent-records/docs/study-semantic-prompt-policy-design-rationale.md",
-      "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md"
+      "agent-records/docs/terminal-semantic-session-rotation-design-rationale.md",
+      "agent-records/docs/atomize-restoration-design-rationale.md"
     ],
     "audit": [
       "agent-records/docs/audit-read-only-review-design-rationale.md",
@@ -311,7 +312,8 @@
     ],
     "redo": [
       "agent-records/docs/semantic-apply-undo-design-rationale.md",
-      "agent-records/docs/undo-redo-application-boundary-matrix.md"
+      "agent-records/docs/undo-redo-application-boundary-matrix.md",
+      "agent-records/docs/atomize-restoration-design-rationale.md"
     ],
     "reference": [
       "agent-records/docs/granted-derived-ownership-design-rationale.md",
@@ -408,7 +410,8 @@
     ],
     "undo": [
       "agent-records/docs/semantic-apply-undo-design-rationale.md",
-      "agent-records/docs/undo-redo-application-boundary-matrix.md"
+      "agent-records/docs/undo-redo-application-boundary-matrix.md",
+      "agent-records/docs/atomize-restoration-design-rationale.md"
     ],
     "unlock": [
       "agent-records/docs/mem-write-protection-design-rationale.md",
