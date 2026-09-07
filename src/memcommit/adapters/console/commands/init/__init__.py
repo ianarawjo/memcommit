@@ -1,5 +1,3 @@
-"""Lazy public CLI surface for the init command package."""
-
 from memcommit.adapters.console.commands import _load_entrypoint_attribute
 
 
