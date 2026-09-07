@@ -599,3 +599,13 @@ class _ContextLifecycleMixin:
                 ) from cleanup_failures[0][1]
             raise cleanup_failures[0][1]
         return lifecycle_event
+
+    def _prune_empty_namespace_dirs(self, start: Path) -> None:
+        """Remove empty namespace directories without removing self.contexts_dir."""
+        candidate = start
+        while candidate != self.contexts_dir:
+            try:
+                candidate.rmdir()
+            except OSError:
+                break
+            candidate = candidate.parent

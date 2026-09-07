@@ -48,14 +48,15 @@ arbitrary line limit:
 - `catalog_scan.py` scans record headers into the ordinary Context catalog and reports
   typed omissions without following unsafe namespace entries;
 - `addressing.py` resolves Context and checkpoint paths under one guarded storage root;
-- `occupancy.py` decides whether a Context exists or a name can be created without
-  colliding with pre-existing storage;
+- `context_creation_availability.py` checks name validity, existing Context records,
+  and storage availability before a new ordinary Context is created;
 - `loading.py` owns direct, referenced, current, graph, and locked snapshot reads;
 - `rename.py` plans and commits Context graph renames together with every persisted
   reference that must move atomically;
 - `saving.py` owns ordinary, batch, Meld-target, and source-bound saves;
 - `creation.py` owns create, branch, and create-missing transactions;
-- `lifecycle.py` records lifecycle events and performs guarded deletion; and
+- `lifecycle.py` records lifecycle events, performs guarded deletion, and prunes empty
+  namespace directories after deletion, rename, or failed creation; and
 - `query_source.py` stores and loads the separate Query Source record type.
 
 These modules remain mixins because their existing transactions still collaborate
@@ -68,6 +69,27 @@ This change intentionally does not redesign transaction ordering, factor shared 
 calls into services, or alter record formats. Its purpose is to expose cohesive change
 axes first, so a later extraction can introduce narrower actors without again moving a
 3,500-line source file at the same time.
+
+### Naming the Context creation checks
+
+The former `occupancy.py` name described a filesystem observation without naming
+the decision it supports. A namespace directory may already exist because a child
+Context was created first, yet still permit its parent Context to be created. A
+missing `context.json` does not prove creation is possible: unrelated files,
+symbolic links, or reserved storage entries may still block the destination.
+
+`context_creation_availability.py` names both the object and the intended action
+inside the broader Context/Memory package. Plain `availability` leaves the action
+implicit, while `init_availability` would suggest an Init-only boundary even though
+Branch and result-save paths also create ordinary Contexts. The existing public
+`context_exists` and `assert_context_creatable` methods keep their contracts.
+
+Empty namespace pruning belongs to `lifecycle.py` because it changes storage after
+an operation rather than assessing a proposed creation. Its callers and method
+body remain unchanged: pruning stops at a nonempty directory or any removal error
+and never removes the Context storage root. Creation checks remain read-only and
+do not reserve a name; transaction owners retain their locking and write-time
+revalidation. This move changes physical ownership, not storage or command behavior.
 
 ## Operation persistence and infrastructure decomposition
 

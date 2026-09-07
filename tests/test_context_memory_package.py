@@ -44,10 +44,9 @@ EXPECTED_METHODS = {
         "scan_context_catalog",
         "list_context_names",
     },
-    "occupancy.py": {
+    "context_creation_availability.py": {
         "context_exists",
         "_assert_context_storage_available",
-        "_prune_empty_namespace_dirs",
         "assert_context_creatable",
     },
     "loading.py": {
@@ -95,6 +94,7 @@ EXPECTED_METHODS = {
         "_create_missing_contexts_command_locked",
     },
     "lifecycle.py": {
+        "_prune_empty_namespace_dirs",
         "_context_lifecycle_events_dir",
         "_ensure_context_lifecycle_events_dir",
         "_context_lifecycle_ledger_lock",
@@ -149,7 +149,7 @@ def test_context_memory_surface_composes_the_focused_mixins() -> None:
         "current",
         "addressing",
         "catalog_scan",
-        "occupancy",
+        "context_creation_availability",
         "loading",
         "rename",
         "saving",

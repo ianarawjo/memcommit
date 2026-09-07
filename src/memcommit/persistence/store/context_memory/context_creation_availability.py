@@ -1,8 +1,6 @@
-"""Check ordinary Context name and storage occupancy."""
+"""Check whether a new ordinary Context can use a name and storage location."""
 
 from __future__ import annotations
-
-from pathlib import Path
 
 from memcommit.core.context_targeting.naming import (
     RESERVED_CONTEXT_SEGMENTS,
@@ -10,7 +8,7 @@ from memcommit.core.context_targeting.naming import (
 )
 
 
-class _ContextOccupancyMixin:
+class _ContextCreationAvailabilityMixin:
     def context_exists(self, name: str) -> bool:
         if not self._assert_context_storage_root():
             return False
@@ -41,16 +39,6 @@ class _ContextOccupancyMixin:
                 "precede a root Context. Invalid entries: "
                 + ", ".join(sorted(invalid_entries))
             )
-
-    def _prune_empty_namespace_dirs(self, start: Path) -> None:
-        """Remove empty namespace directories without removing self.contexts_dir."""
-        candidate = start
-        while candidate != self.contexts_dir:
-            try:
-                candidate.rmdir()
-            except OSError:
-                break
-            candidate = candidate.parent
 
     def assert_context_creatable(self, name: str) -> None:
         """Fail before expensive work when a new Context cannot use this name."""
