@@ -1,0 +1,2 @@
+Error: Context 'notes' changed before it could be saved.                                                                                                                            
+CAPTURE COMMAND RETURNED · exit 1

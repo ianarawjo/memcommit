@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from dataclasses import replace
-
 from memcommit.application.operations.forget.review import ForgetReview
 from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange
 from memcommit.application.capabilities.resolution.workbench import (
@@ -216,37 +214,37 @@ class ForgetResolutionWorkbenchAdapter:
         )
 
 
-def forget_application_view(review: ForgetReview) -> ResolutionWorkbenchView:
+def forget_application_view(
+    review: ForgetReview,
+    *,
+    source_granted: bool = False,
+) -> ResolutionWorkbenchView:
     """Expose one exact batch for inspection and Apply, without revision choices."""
 
-    view = ForgetResolutionWorkbenchAdapter(review).view()
-    # The complete disposition is frozen before approval. A renderer must not
-    # expose selection or response controls that could change that exact batch.
-    return replace(
-        view,
+    # Apply inspects one frozen batch. Do not create legacy response targets
+    # just to remove their controls again; Impact owns the exact Memory rows.
+    return ResolutionWorkbenchView(
+        operation="forget",
+        artifact_uid=review.uid,
+        revision=str(review.revision),
+        title="FORGET",
+        route=f"SOURCE {review.context_name} × INSTRUCTION → SAME SOURCE",
         status="PREPARED",
-        items=tuple(
-            replace(
-                item,
-                role="CHANGE",
-                obligation="NONE",
-                response_state="NOT_APPLICABLE",
-                response_text="",
-                question="",
-                options=(),
-                selected_option_uid=None,
-                commentable=False,
-            )
-            for item in view.items
-        ),
-        capabilities=frozenset({"ACCEPT"}),
-        report_items_summary=ResolutionDetailBlock(
-            heading="WHAT APPLIES",
-            text=(
-                f"One complete batch covers {len(review.candidates)} Source Memories. "
-                f"Apply publishes {len(review.changes())} changes; KEEP stays unchanged."
+        metrics=(),
+        context_locations=(
+            ResolutionContextLocation(
+                "SOURCE", review.context_name, state="GRANT" if source_granted else "",
             ),
         ),
+        overview=review.instruction,
+        list_label="SOURCE MEMORIES",
+        items=(),
+        empty_message="No Source Memories.",
+        results_label="SOURCE CHANGES",
+        results=(),
+        show_results=False,
+        capabilities=frozenset({"ACCEPT"}),
+        accept_enabled=True,
     )
 
 

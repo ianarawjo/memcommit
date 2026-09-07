@@ -7,7 +7,18 @@ interface in its command package without a reverse command import from the host.
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Protocol
+
+
+@dataclass(frozen=True)
+class EffectReportPresentation:
+    """Operation-authored copy for a Viewer and one exact Apply control."""
+
+    instruction: str
+    apply_label: str
+    unchanged_label: str
+    unchanged_entry_uids: frozenset[str] = frozenset()
 
 
 class EffectPreviewEntry(Protocol):

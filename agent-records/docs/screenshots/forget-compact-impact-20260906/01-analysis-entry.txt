@@ -1,0 +1,3 @@
+LIVE PTY 180 x 52 · isolated authoring · current notes · apply                                                                                                                      
+$ mem forget "Forget the obsolete desk location and access code; keep accessibility guidance." --from notes                                                                         
+MEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION . · 0s

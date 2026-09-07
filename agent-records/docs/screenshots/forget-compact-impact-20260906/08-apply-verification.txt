@@ -1,0 +1,9 @@
+$ mem show notes --direct                                                                                                                                                           
+Context: notes                                                                                                                                                                      
+  Memories 2  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory c4b735f6] The route remains step-free.                                                                                                                                    
+  [memory 02720d08] Visitors should verify the step-free route before arrival.                                                                                                      
+VERIFIED · one edit, one removal, one retained Memory; one owner checkpoint                                                                                                         
+PROVIDER · one deterministic fixture response; no external service

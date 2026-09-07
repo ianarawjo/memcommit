@@ -20,6 +20,7 @@ from memcommit.adapters.console.terminal.components.tree_row import (
     navigable_tree_row_prefix,
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_action_style
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionItem,
     ResolutionWorkbenchView,
@@ -217,6 +218,220 @@ def _impact_treatment_style(label: str, *, focused: bool) -> str:
         "REMOVE": "remove",
     }.get(token, "other")
     return f"class:impact.{key}"
+
+
+def _impact_entry_fragments(
+    view: ResolutionWorkbenchView,
+    entry,
+    index: int,
+    *,
+    active: bool,
+    expanded_impact_section_uid: str | None,
+    treatment_width: int,
+    content_width: int,
+    read_only: bool,
+    draft_values: dict[str, ResponseDraft],
+    compact: bool = False,
+    source_location: str = "",
+) -> list[tuple[str, str]]:
+    """Share exact diff, rationale, styling, and wrapping between report layouts."""
+
+    fragments: list[tuple[str, str]] = []
+    entry_section_uid = _impact_entry_section_uid(entry, index)
+    expandable = bool(entry.rules or entry.reason)
+    expanded = expandable and expanded_impact_section_uid == entry_section_uid
+    disclosure = "▾" if expanded else "▸" if expandable else "·"
+    prefix = navigable_tree_row_prefix(
+        selected=active,
+        depth=0 if compact else 1,
+        branch=disclosure if compact else f"{disclosure} {entry.marker}",
+    )
+    treatment = (
+        safe_terminal_text(entry.label) if compact
+        else f"[{safe_terminal_text(entry.label)}]"
+    )
+    treatment_field = _visual_pad(treatment, treatment_width)
+    uid_field = (
+        f"· {safe_terminal_text(entry.uid[:8] or str(index))}"
+        if compact else f"[{safe_terminal_text(entry.uid[:8] or str(index))}]"
+    )
+    displayed_location = (
+        "" if compact and entry.location == source_location
+        else safe_terminal_text(entry.location)
+    )
+    identity = f"{treatment_field} " + (
+        f"{safe_terminal_text(entry.location)} {uid_field}"
+        if entry.location
+        else f"{uid_field} "
+    )
+    content_indent = " " * (_visual_width(prefix) + 2)
+    row_content_width = max(
+        12,
+        content_width - _visual_width(content_indent) - 3,
+    )
+    treatment_style = (
+        semantic_action_style(entry.label, fallback="class:block-heading") if compact
+        else _impact_treatment_style(entry.label, focused=active)
+    )
+    if entry.location:
+        # Located diff rationale is explanatory report prose, not a
+        # Memory object. Keep it neutral while the Context/Memory
+        # identity above retains the shared lavender treatment.
+        expanded_detail_style = ""
+        location_identity = (
+            (displayed_location + " " if displayed_location else "") + uid_field + "\n"
+        )
+        header = (
+            [
+                ("", f" {prefix}"),
+                (treatment_style, f"{treatment_field} "),
+                ("", location_identity),
+            ]
+            if compact else [
+                (treatment_style, f" {prefix}{treatment_field} "),
+                ("class:memory-object", location_identity),
+            ]
+        )
+        fragments.extend(
+            semantic_viewer_block_fragments(header, active=active, focus_indices=(1,))
+            if compact else header
+        )
+        change = MemoryChange(
+            marker=entry.marker,
+            treatment=entry.label,
+            location=entry.location,
+            memory_uid=entry.uid or str(index),
+            before=entry.before,
+            after=entry.after,
+            reason=entry.reason,
+            rules=entry.rules,
+        )
+        for diff_line in memory_diff_lines(change):
+            marker = diff_line.marker
+            diff_prefix = f"{content_indent}{marker} "
+            style_key = {
+                "-": "remove",
+                "+": "add",
+                "=": "equal",
+                " ": "equal",
+            }[marker]
+            for line_index, content_spans in enumerate(
+                _visual_wrap_diff_spans(diff_line.spans, row_content_width)
+            ):
+                lead = (
+                    diff_prefix
+                    if line_index == 0
+                    else " " * _visual_width(diff_prefix)
+                )
+                fragments.append((f"class:memory-diff.{style_key}", f" {lead}"))
+                for content_text, changed in content_spans:
+                    fragments.append(
+                        (
+                            f"class:memory-diff.{style_key}"
+                            + (".changed" if changed else ""),
+                            content_text,
+                        )
+                    )
+                fragments.append(("", "\n"))
+        if not compact and (change.before is None or change.after is None):
+            # A one-sided ADD/REMOVE has half the visual body of an
+            # EDIT. One trailing spacer preserves comparable grouping
+            # without fabricating a missing before/after line.
+            fragments.append(("", "\n"))
+    else:
+        # Legacy result rows keep treatment-colored focus to bind
+        # their UID, content, and expanded basis together.
+        style = (
+            f"{treatment_style}.focused" if active else "class:memory-object"
+        )
+        expanded_detail_style = style
+        legacy_indent = " " * _visual_width(prefix + identity)
+        legacy_width = max(
+            12,
+            content_width - _visual_width(prefix + identity) - 1,
+        )
+        content_indent = legacy_indent
+        for line_index, content_line in enumerate(
+            _visual_wrap(entry.text, legacy_width)
+        ):
+            if line_index == 0:
+                fragments.extend(
+                    [
+                        (treatment_style, f" {prefix}{treatment_field} "),
+                        (style, f"{uid_field} {content_line}\n"),
+                    ]
+                )
+            else:
+                fragments.append((style, f" {content_indent}{content_line}\n"))
+    if expanded:
+        for rule in entry.rules:
+            rule_prefix = content_indent + "RULE · "
+            rule_width = max(
+                12,
+                content_width - _visual_width(rule_prefix) - 1,
+            )
+            for line_index, rule_line in enumerate(
+                _visual_wrap(rule, rule_width)
+            ):
+                lead = (
+                    rule_prefix
+                    if line_index == 0
+                    else " " * _visual_width(rule_prefix)
+                )
+                fragments.append(
+                    (expanded_detail_style, f" {lead}{rule_line}\n")
+                )
+    if entry.reason and expanded:
+        reason_prefix = content_indent + "WHY · "
+        reason_width = max(
+            12,
+            content_width - _visual_width(reason_prefix) - 1,
+        )
+        for line_index, reason_line in enumerate(
+            _visual_wrap(entry.reason, reason_width)
+        ):
+            lead = (
+                reason_prefix
+                if line_index == 0
+                else " " * _visual_width(reason_prefix)
+            )
+            fragments.append((expanded_detail_style, f" {lead}{reason_line}\n"))
+    comment_item = _impact_entry_item(view, entry)
+    if (
+        expanded
+        and not read_only
+        and comment_item is not None
+        and comment_item.commentable
+    ):
+        saved_comment = _item_draft(comment_item, draft_values).text
+        comment_text = (
+            f"SAVED · {saved_comment.strip()}"
+            if saved_comment.strip()
+            else "Press C to comment on this proposed change."
+        )
+        comment_prefix = content_indent + "RESPONSE · "
+        comment_width = max(
+            12,
+            content_width - _visual_width(comment_prefix) - 1,
+        )
+        for line_index, comment_line in enumerate(
+            _visual_wrap(comment_text, comment_width)
+        ):
+            lead = (
+                comment_prefix
+                if line_index == 0
+                else " " * _visual_width(comment_prefix)
+            )
+            fragments.append(
+                (expanded_detail_style, f" {lead}{comment_line}\n")
+            )
+    if compact:
+        fragments.append(("", "\n"))
+    if active:
+        # Anchor after the complete row so wrapped or expanded detail
+        # remains visible as one semantic Impact Memory.
+        fragments.append(("[SetCursorPosition]", ""))
+    return fragments
 
 
 def resolution_report_fragments(
@@ -446,180 +661,17 @@ def resolution_report_fragments(
             default=0,
         )
         for index, entry in enumerate(impact.entries, start=1):
-            entry_section_uid = _impact_entry_section_uid(entry, index)
-            active = section_index == focused_section
-            expandable = bool(entry.rules or entry.reason)
-            expanded = expandable and expanded_impact_section_uid == entry_section_uid
-            disclosure = "▾" if expanded else "▸" if expandable else "·"
-            prefix = navigable_tree_row_prefix(
-                selected=active,
-                depth=1,
-                branch=f"{disclosure} {entry.marker}",
+            fragments.extend(
+                _impact_entry_fragments(
+                    view, entry, index,
+                    active=section_index == focused_section,
+                    expanded_impact_section_uid=expanded_impact_section_uid,
+                    treatment_width=treatment_width,
+                    content_width=content_width,
+                    read_only=read_only,
+                    draft_values=draft_values,
+                )
             )
-            treatment = f"[{safe_terminal_text(entry.label)}]"
-            treatment_field = _visual_pad(treatment, treatment_width)
-            uid_field = f"[{safe_terminal_text(entry.uid[:8] or str(index))}]"
-            identity = f"{treatment_field} " + (
-                f"{safe_terminal_text(entry.location)} {uid_field}"
-                if entry.location
-                else f"{uid_field} "
-            )
-            content_indent = " " * (_visual_width(prefix) + 2)
-            row_content_width = max(
-                12,
-                content_width - _visual_width(content_indent) - 3,
-            )
-            treatment_style = _impact_treatment_style(
-                entry.label,
-                focused=active,
-            )
-            if entry.location:
-                # Located diff rationale is explanatory report prose, not a
-                # Memory object. Keep it neutral while the Context/Memory
-                # identity above retains the shared lavender treatment.
-                expanded_detail_style = ""
-                fragments.extend(
-                    [
-                        (treatment_style, f" {prefix}{treatment_field} "),
-                        (
-                            "class:memory-object",
-                            f"{safe_terminal_text(entry.location)} {uid_field}\n",
-                        ),
-                    ]
-                )
-                change = MemoryChange(
-                    marker=entry.marker,
-                    treatment=entry.label,
-                    location=entry.location,
-                    memory_uid=entry.uid or str(index),
-                    before=entry.before,
-                    after=entry.after,
-                    reason=entry.reason,
-                    rules=entry.rules,
-                )
-                for diff_line in memory_diff_lines(change):
-                    marker = diff_line.marker
-                    diff_prefix = f"{content_indent}{marker} "
-                    style_key = {
-                        "-": "remove",
-                        "+": "add",
-                        "=": "equal",
-                        " ": "equal",
-                    }[marker]
-                    for line_index, content_spans in enumerate(
-                        _visual_wrap_diff_spans(diff_line.spans, row_content_width)
-                    ):
-                        lead = (
-                            diff_prefix
-                            if line_index == 0
-                            else " " * _visual_width(diff_prefix)
-                        )
-                        fragments.append((f"class:memory-diff.{style_key}", f" {lead}"))
-                        for content_text, changed in content_spans:
-                            fragments.append(
-                                (
-                                    f"class:memory-diff.{style_key}"
-                                    + (".changed" if changed else ""),
-                                    content_text,
-                                )
-                            )
-                        fragments.append(("", "\n"))
-                if change.before is None or change.after is None:
-                    # A one-sided ADD/REMOVE has half the visual body of an
-                    # EDIT. One trailing spacer preserves comparable grouping
-                    # without fabricating a missing before/after line.
-                    fragments.append(("", "\n"))
-            else:
-                # Legacy result rows keep treatment-colored focus to bind
-                # their UID, content, and expanded basis together.
-                style = (
-                    f"{treatment_style}.focused" if active else "class:memory-object"
-                )
-                expanded_detail_style = style
-                legacy_indent = " " * _visual_width(prefix + identity)
-                legacy_width = max(
-                    12,
-                    content_width - _visual_width(prefix + identity) - 1,
-                )
-                content_indent = legacy_indent
-                for line_index, content_line in enumerate(
-                    _visual_wrap(entry.text, legacy_width)
-                ):
-                    if line_index == 0:
-                        fragments.extend(
-                            [
-                                (treatment_style, f" {prefix}{treatment_field} "),
-                                (style, f"{uid_field} {content_line}\n"),
-                            ]
-                        )
-                    else:
-                        fragments.append((style, f" {content_indent}{content_line}\n"))
-            if expanded:
-                for rule in entry.rules:
-                    rule_prefix = content_indent + "RULE · "
-                    rule_width = max(
-                        12,
-                        content_width - _visual_width(rule_prefix) - 1,
-                    )
-                    for line_index, rule_line in enumerate(
-                        _visual_wrap(rule, rule_width)
-                    ):
-                        lead = (
-                            rule_prefix
-                            if line_index == 0
-                            else " " * _visual_width(rule_prefix)
-                        )
-                        fragments.append(
-                            (expanded_detail_style, f" {lead}{rule_line}\n")
-                        )
-            if entry.reason and expanded:
-                reason_prefix = content_indent + "WHY · "
-                reason_width = max(
-                    12,
-                    content_width - _visual_width(reason_prefix) - 1,
-                )
-                for line_index, reason_line in enumerate(
-                    _visual_wrap(entry.reason, reason_width)
-                ):
-                    lead = (
-                        reason_prefix
-                        if line_index == 0
-                        else " " * _visual_width(reason_prefix)
-                    )
-                    fragments.append((expanded_detail_style, f" {lead}{reason_line}\n"))
-            comment_item = _impact_entry_item(view, entry)
-            if (
-                expanded
-                and not read_only
-                and comment_item is not None
-                and comment_item.commentable
-            ):
-                saved_comment = _item_draft(comment_item, draft_values).text
-                comment_text = (
-                    f"SAVED · {saved_comment.strip()}"
-                    if saved_comment.strip()
-                    else "Press C to comment on this proposed change."
-                )
-                comment_prefix = content_indent + "RESPONSE · "
-                comment_width = max(
-                    12,
-                    content_width - _visual_width(comment_prefix) - 1,
-                )
-                for line_index, comment_line in enumerate(
-                    _visual_wrap(comment_text, comment_width)
-                ):
-                    lead = (
-                        comment_prefix
-                        if line_index == 0
-                        else " " * _visual_width(comment_prefix)
-                    )
-                    fragments.append(
-                        (expanded_detail_style, f" {lead}{comment_line}\n")
-                    )
-            if active:
-                # Anchor after the complete row so wrapped or expanded detail
-                # remains visible as one semantic Impact Memory.
-                fragments.append(("[SetCursorPosition]", ""))
             section_index += 1
     if not read_only:
         if report_apply:

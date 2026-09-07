@@ -1,0 +1,10 @@
+FORGET APPLIED · SOURCE notes                                                                                                                                                       
+FORGET · Forget the obsolete desk location and access code; keep accessibility guidance.                                                                                            
+DIFF · 2 CHANGES                                                                                                                                                                    
+~ [c4b735f6] The desk was beside the west entrance. The route remains step-free.                                                                                                    
+- [5568733b] The obsolete access code was 4815.                                                                                                                                     
+RECEIPT · 59692693-a856-4bcf-b832-c4296765e9ae                                                                                                                                      
+CHECKPOINT · 59692693-a856-4bcf-b832-c4296765e9ae                                                                                                                                   
+REVIEW · mem review forget --receipt 59692693-a856-4bcf-b832-c4296765e9ae                                                                                                           
+RECOVERY · mem undo                                                                                                                                                                 
+CAPTURE COMMAND RETURNED · exit 0

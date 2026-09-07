@@ -58,6 +58,7 @@ def bind_resolution_surface_navigation(
     *,
     response_visible: Callable[[], bool],
     destination_available: bool,
+    items_available: bool = True,
 ) -> SurfaceFocusController:
     """Bind the dynamic Viewer→Responses→Items→Save→To Do topology."""
 
@@ -83,16 +84,17 @@ def bind_resolution_surface_navigation(
                     on_vertical_enter=handlers.enter_responses,
                 )
             )
-        surfaces.append(
-            FocusSurface(
-                "items",
-                controls.items,
-                move_vertical=handlers.move_items,
-                activate=handlers.activate,
-                on_focus=lambda: handlers.focus_pane("items"),
-                on_vertical_enter=handlers.enter_items,
+        if items_available:
+            surfaces.append(
+                FocusSurface(
+                    "items",
+                    controls.items,
+                    move_vertical=handlers.move_items,
+                    activate=handlers.activate,
+                    on_focus=lambda: handlers.focus_pane("items"),
+                    on_vertical_enter=handlers.enter_items,
+                )
             )
-        )
         if destination_available:
             surfaces.append(
                 FocusSurface(
@@ -252,6 +254,7 @@ def bind_focus_surfaces(
             ),
             response_visible=response_visible,
             destination_available=destination_available,
+            items_available=controls.config.effect_report is None,
         )
     else:
 

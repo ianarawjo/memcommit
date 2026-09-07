@@ -358,8 +358,11 @@ def test_forget_tty_opens_exact_impact_report_before_apply(monkeypatch, granted)
         assert impact.revision == view.revision
         assert [entry.label for entry in impact.entries] == ["TRANSFORM", "DROP", "KEEP"]
         assert view.capabilities == frozenset({"ACCEPT"})
-        assert all(item.effective_obligation == "NONE" for item in view.items)
-        assert all(not item.options and not item.commentable for item in view.items)
+        assert view.items == ()
+        assert view.title == "FORGET"
+        assert kwargs["effect_report"].instruction == "Forget the covered details."
+        assert kwargs["effect_report"].apply_label == "Apply 2 changes to personal"
+        assert kwargs["effect_report"].unchanged_label == "KEEP"
         assert kwargs["report_apply"] is True
         assert not kwargs.get("compact_decisions", False)
         assert "decision_free_behavior" not in kwargs
@@ -409,6 +412,7 @@ def test_forget_report_names_public_source_without_changing_its_binding(monkeypa
     def inspect(view, **kwargs):
         impact = kwargs["impact_controller"].view()
         assert view.context_locations[0].name == source.display_name
+        assert view.context_locations[0].state == "GRANT"
         assert all(entry.location == source.display_name for entry in impact.entries)
         assert "INSTRUCTION" in impact.detail
         seen.append(impact)

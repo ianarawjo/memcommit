@@ -1,0 +1,3 @@
+# Raw PTY streams preserve control bytes; text snapshots preserve terminal cells.
+*.typescript -text -diff
+*.txt whitespace=-blank-at-eol

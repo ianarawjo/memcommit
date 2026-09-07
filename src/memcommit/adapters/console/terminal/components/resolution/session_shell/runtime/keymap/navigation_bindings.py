@@ -103,6 +103,11 @@ def bind_navigation_keys(state: ResolutionKeyBindingState) -> None:
             event.app.invalidate()
             return
         if split_viewer_items:
+            if controls.focused_impact_group():
+                controller.unchanged_effects_expanded = True
+                set_status("")
+                event.app.invalidate()
+                return
             impact_uid = focused_impact_entry_uid()
             if impact_uid is not None:
                 impact_reason_expanded["uid"] = _impact_arrow_expansion(
@@ -110,7 +115,7 @@ def bind_navigation_keys(state: ResolutionKeyBindingState) -> None:
                     impact_uid,
                     expand=True,
                 )
-                set_status("Impact rationale shown.")
+                set_status("" if controls.config.effect_report else "Impact rationale shown.")
             elif split_kind() == "RESOLVE_ALL" and global_strategies:
                 strategy["index"] = min(
                     strategy["index"] + 1,
@@ -134,6 +139,11 @@ def bind_navigation_keys(state: ResolutionKeyBindingState) -> None:
             event.app.invalidate()
             return
         if split_viewer_items:
+            if controls.focused_impact_group():
+                controller.unchanged_effects_expanded = False
+                set_status("")
+                event.app.invalidate()
+                return
             impact_uid = focused_impact_entry_uid()
             if impact_uid is not None:
                 collapsed = _impact_arrow_expansion(
@@ -142,7 +152,7 @@ def bind_navigation_keys(state: ResolutionKeyBindingState) -> None:
                     expand=False,
                 )
                 if collapsed != impact_reason_expanded["uid"]:
-                    set_status("Impact rationale hidden.")
+                    set_status("" if controls.config.effect_report else "Impact rationale hidden.")
                 impact_reason_expanded["uid"] = collapsed
             elif split_kind() == "RESOLVE_ALL" and global_strategies:
                 strategy["index"] = max(strategy["index"] - 1, 0)

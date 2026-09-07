@@ -79,6 +79,7 @@ def build_resolution_shell_layout(
     current_response_target: Callable[[], ResponseTarget | None],
     response_visible: Callable[[], bool],
     split_viewer_items: bool,
+    items_available: bool = True,
     destination_available: bool,
     app_input: Input | None,
     app_output: Output | None,
@@ -106,7 +107,9 @@ def build_resolution_shell_layout(
         )
         items_frame = frame_factory(widgets.items_window, title="ITEMS")
         todo_frame = frame_factory(widgets.todo_window, title=widgets.todo_title)
-        session_frames = [viewer_frame, responses_container, items_frame]
+        session_frames = [viewer_frame, responses_container]
+        if items_available:
+            session_frames.append(items_frame)
         if destination_available:
             session_frames.append(widgets.destination_frame)
         session_frames.extend([todo_frame, widgets.footer])

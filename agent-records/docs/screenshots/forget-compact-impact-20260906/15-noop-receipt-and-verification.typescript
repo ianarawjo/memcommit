@@ -1,0 +1,15 @@
+LIVE PTY 180 x 52 · isolated authoring · current notes · noop
+$ mem forget "Keep everything unchanged." --from notes
+MEM FORGET · 1/1 · ANALYZING 3 SOURCE MEMORIES X 1 INSTRUCTION . · 0s                                                                     FORGET · NO CHANGE · SOURCE notes
+OUTCOME · NO CHANGE · Context unchanged · no checkpoint
+CAPTURE COMMAND RETURNED · exit 0
+$ mem show notes --direct
+[1mContext: notes[0m
+  Memories 3  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0
+[1m
+Items (in context order):[0m
+  [memory 7c088da4] [38;2;202;211;245mThe desk was beside the west entrance. The route remains step-free.[0m
+  [memory 12f476af] [38;2;202;211;245mThe obsolete access code was 4815.[0m
+  [memory ca95e4f8] [38;2;202;211;245mVisitors should verify the step-free route before arrival.[0m
+VERIFIED · Source unchanged; no checkpoint or application receipt
+PROVIDER · one deterministic fixture response; no external service

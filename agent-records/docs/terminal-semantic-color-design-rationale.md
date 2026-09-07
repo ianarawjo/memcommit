@@ -31,8 +31,8 @@ The stable role mapping is:
 | CREATE | `create`, `init`, `branch`, `CREATED` | blue `#8aadf4` |
 | ADD | `add`, `ADD`, `ADDED`, `SURVIVOR(S)` | blue `#8aadf4` |
 | EMBED | `embed`, `VIA EMBED`, live Memory Embed kind | yellow `#eed49f` |
-| EDIT | `edit`, `replace`, `EDITED` | green `#a6da95` |
-| REMOVE | `remove`, `delete`, `clear`, `REMOVED`, `ABSORB(ED)` | red `#ed8796` |
+| EDIT | `edit`, `replace`, `EDITED`, `TRANSFORM` | green `#a6da95` |
+| REMOVE | `remove`, `delete`, `clear`, `REMOVED`, `ABSORB(ED)`, `DROP` | red `#ed8796` |
 | UNDO | `undo`, `revert`, `RESTORED` | peach `#f5a97f` |
 | REDO | `redo` | lavender `#b7bdf8` |
 | HISTORY | manual checkpoint and historical-version kind | brown `#c9ad93` |
@@ -58,6 +58,13 @@ top-level command label unless their own model proves one disposition. Their
 typed child effects carry ADD, EDIT, or REMOVE colors. This avoids presenting a
 mixed Update as an edit merely because EDIT happened to be its historical
 default color.
+
+Direct Forget's compact effect report uses `TRANSFORM` and `DROP` as shared
+EDIT/REMOVE aliases. Only the treatment token carries the effect foreground;
+Memory UIDs, Source names, disclosure markers, and reasons remain neutral.
+The shared Viewer temporarily overrides a focused typed action token with its
+blue reading focus and restores its semantic color when focus leaves Viewer.
+This introduces no operation-local palette or new semantic color role.
 
 Fit judgments use separate `JUDGMENT_YES`, `JUDGMENT_MAY`, and `JUDGMENT_NO`
 roles even though their hues intentionally reuse green, yellow, and red.

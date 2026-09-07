@@ -36,7 +36,10 @@ from memcommit.adapters.console.terminal.components.resolution.compact_shell imp
 from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerController,
 )
-from memcommit.adapters.console.terminal.components.resolution.effect_preview import EffectPreviewSource
+from memcommit.adapters.console.terminal.components.resolution.effect_preview import (
+    EffectPreviewSource,
+    EffectReportPresentation,
+)
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionNavigation,
     ResolutionWorkbenchAction,
@@ -114,6 +117,7 @@ def run_resolution_workbench_shell(
     read_only_handoff: SessionTodoView | None = None,
     item_handoff: SessionTodoView | None = None,
     impact_controller: EffectPreviewSource | None = None,
+    effect_report: EffectReportPresentation | None = None,
     destination: ResolutionDestination | None = None,
     turn_command_review: (
         Callable[[ResolutionWorkbenchAction], CommandReview | None] | None
@@ -134,6 +138,17 @@ def run_resolution_workbench_shell(
         )
     if split_report_fragments is not None and split_report_text is None:
         raise ValueError("Styled split reports require matching plain report text.")
+    if effect_report is not None and (
+        not report_apply
+        or impact_controller is None
+        or split_report_text is not None
+        or destination is not None
+        or draft_loader is not None
+        or draft_saver is not None
+        or decision_free_behavior is not None
+        or start_final_review_when_no_required
+    ):
+        raise ValueError("An effect report requires an exact preview and explicit Apply.")
     if report_apply and (
         not split_viewer_items
         or review_and_apply
@@ -154,6 +169,9 @@ def run_resolution_workbench_shell(
         view_or_supplier if callable(view_or_supplier) else lambda: view_or_supplier
     )
     session_navigation = workbench_navigation or SessionWorkbenchNavigation()
+    if effect_report is not None:
+        session_navigation.focus("viewer")
+        session_navigation.row_index = 0
     destination_available = (
         split_viewer_items and destination is not None and not read_only
     )
@@ -176,6 +194,7 @@ def run_resolution_workbench_shell(
         global_strategies=global_strategies,
         review_and_apply=review_and_apply,
         report_apply=report_apply,
+        report_apply_label=effect_report.apply_label if effect_report else "APPLY",
         read_only=read_only,
         read_only_handoff=read_only_handoff,
         item_handoff=item_handoff,
@@ -185,6 +204,10 @@ def run_resolution_workbench_shell(
     current_view = controller.current_view
     if report_apply and "ACCEPT" not in current_view().capabilities:
         raise ValueError("Report Apply requires the ACCEPT capability.")
+    if effect_report is not None and (
+        current_view().items or current_view().capabilities != frozenset({"ACCEPT"})
+    ):
+        raise ValueError("An effect report cannot hide actionable review items.")
     current_item_handoff = controller.current_item_handoff
     current_response_target = controller.current_response_target
 
@@ -213,6 +236,7 @@ def run_resolution_workbench_shell(
             report_apply=report_apply,
             read_only=read_only,
             impact_controller=impact_controller,
+            effect_report=effect_report,
             destination=destination,
             destination_available=destination_available,
         ),
@@ -313,14 +337,20 @@ def run_resolution_workbench_shell(
         destination_input=destination_input,
         body_control=body_control,
     )
-    footer = Window(
-        FormattedTextControl(
-            lambda: (
-                f" {controller.status['value']}"
-                if controller.status["value"]
-                else resolution_keyboard_hint_text(keyboard_hint_state)
+
+    def footer_text() -> str:
+        if controller.status["value"]:
+            return f" {controller.status['value']}"
+        if effect_report is not None:
+            return (
+                " ↑/↓ move · Enter apply · Tab viewer · Esc cancel"
+                if session_navigation.pane == "todo"
+                else " ↑/↓ move · Enter expand/collapse · ←/→ hide/show · Tab Apply · Esc cancel"
             )
-        ),
+        return resolution_keyboard_hint_text(keyboard_hint_state)
+
+    footer = Window(
+        FormattedTextControl(footer_text),
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
@@ -362,6 +392,7 @@ def run_resolution_workbench_shell(
         current_response_target=current_response_target,
         response_visible=response_visible,
         split_viewer_items=split_viewer_items,
+        items_available=effect_report is None,
         destination_available=destination_available,
         app_input=app_input,
         app_output=app_output,

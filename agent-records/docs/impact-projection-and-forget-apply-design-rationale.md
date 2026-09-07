@@ -29,14 +29,38 @@ Source and instruction -> one complete provider analysis -> frozen batch
   -> exact authority/freshness/CAS validation -> atomic Apply -> compact receipt
 ```
 
-Both local and granted changed batches open the report. It shows all Source
-Memories as located KEEP/TRANSFORM/DROP transitions, including the original
-content of a DROP. The report and one Apply control share a screen, like direct
-TTY Update. Items remain available for evidence inspection, but this command
-surface offers no per-Memory revision choices or response composer. The existing
-application selection/revision functions remain available to their own callers.
+Both local and granted changed batches open the report. Following inspection of
+the first implementation, the requested direct Forget surface was reduced to
+`VIEWER → APPLY`: one Source identity, the original instruction, exact changed
+Memory transitions, and a collapsed KEEP count. DROP retains its original text.
+Enter or Right expands a change's reason or the KEEP group; Left collapses it.
+Expanded KEEP Memories become individual Viewer stops with their own optional
+reason, so a large retained set can still be inspected. Group disclosure and
+reason disclosure are independent process-local state. Tab and Shift-Tab move
+directly between Viewer and Apply and retain the Viewer cursor.
 
-The report uses the frozen public Source name, including a granted public path.
+The generic assessment, metrics, WHAT APPLIES prose, duplicated Apply guidance,
+and separate ITEMS frame are omitted. Forget constructs an Apply-only shell
+view without manufacturing legacy decision/response items. All Source decisions
+remain in the frozen review and Impact projection; display grouping never
+filters the application receipt. The existing application selection/revision
+functions and standalone Impact inspection remain available to their callers.
+
+The shared shell owns this optional `EffectReportPresentation` layout, its
+two-surface focus topology, and the existing exact diff/rationale renderer.
+Forget supplies instruction, Apply label, KEEP label, and the explicitly retained
+Memory UIDs. The shell does not
+test an operation name or import an Impact command implementation. The compact
+layout rejects review items, response/provider-edit hooks, automatic acceptance,
+and separate final-review modes rather than hiding required decisions.
+Collapsing requires both an operation-declared KEEP UID and exact before/after
+equality, not a treatment-label guess. Equality alone is insufficient: an
+explicit same-text TRANSFORM remains a visible proposed edit and may create a
+new revision. The renderer rejects missing or changed entries in the KEEP set.
+Other operations keep the existing complete Resolution report by default.
+
+The report uses the frozen public Source name, including a granted public path
+and an explicit neutral GRANT annotation.
 The historical Context-shaped command hook retains the original frozen Source
 binding for that projection; display-name substitution never rebinds authority.
 
@@ -70,9 +94,10 @@ The shared ownership/Undo policy remains unchanged for other operations.
   that Escape publishes nothing, Apply creates one checkpoint after approval,
   and Source drift during inspection rejects publication without losing the
   concurrent change. Non-TTY, authority, and Undo/Redo tests remain applicable.
-- The [ordered PTY record](screenshots/forget-impact-apply-20260906/README.md)
+- The [current ordered PTY record](screenshots/forget-compact-impact-20260906/README.md)
   captures real command execution with deterministic provider responses. It
-  covers preview, Apply, cancellation, no-op, and read-only verification in
+  covers preview, reason/KEEP disclosure, Apply, cancellation, no-op, stale
+  rejection, granted authority, and read-only verification in
   a 180-column by 52-row color terminal. No live provider or personal store is
   used in this evidence.
 
@@ -98,3 +123,16 @@ verification result, not a claim that the entire repository test suite passes.
 The focused patch also incorporates the concurrent Context-availability naming
 and Copy/Move ownership commits through base `430e2eb45`; unrelated working
 changes remain excluded.
+
+The implementation snapshot above records the initial ownership/Apply change.
+The earlier [full-report captures](screenshots/forget-impact-apply-20260906/README.md)
+are historical evidence of that revision, superseded for the current direct
+Forget UI by the compact record linked above. This refinement changes
+presentation only; full-frame analysis, exact approval, freshness/CAS, and
+checkpoint semantics remain the same.
+
+The compact refinement passed 238 focused tests in the primary checkout,
+including Forget lifecycle, shared Resolution/Impact rendering, keyboard focus,
+Memory diff, and adapter ownership. Ruff and operation-evidence consistency
+checks passed. Its 18 ordered PTY images cover all five execution scenarios
+described above using isolated stores and deterministic provider responses.

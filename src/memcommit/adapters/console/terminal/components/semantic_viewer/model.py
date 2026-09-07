@@ -39,9 +39,13 @@ _FOCUSED_STYLE = {
 
 
 def _focused_style(style: str) -> str:
-    """Apply focus while preserving any composed semantic foreground."""
+    """Apply the Viewer focus treatment to typed semantic and ordinary blocks."""
 
     tokens = style.split()
+    if len(tokens) == 1 and tokens[0].startswith("class:semantic."):
+        # Keep the resting role in the fragment so leaving Viewer can restore
+        # it, while the keyboard target temporarily takes the common blue.
+        return style + " class:viewer-section"
     if "class:finding-label" in tokens:
         return " ".join(
             "class:finding-label.focused"

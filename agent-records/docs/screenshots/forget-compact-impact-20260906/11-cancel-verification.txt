@@ -1,0 +1,10 @@
+$ mem show notes --direct                                                                                                                                                           
+Context: notes                                                                                                                                                                      
+  Memories 3  |  Memory Refs 0  |  Query Views 0  |  Embedded Contexts 0                                                                                                            
+                                                                                                                                                                                    
+Items (in context order):                                                                                                                                                           
+  [memory d1850d0a] The desk was beside the west entrance. The route remains step-free.                                                                                             
+  [memory 4871ee83] The obsolete access code was 4815.                                                                                                                              
+  [memory 3ae59980] Visitors should verify the step-free route before arrival.                                                                                                      
+VERIFIED · Source unchanged; no checkpoint or application receipt                                                                                                                   
+PROVIDER · one deterministic fixture response; no external service

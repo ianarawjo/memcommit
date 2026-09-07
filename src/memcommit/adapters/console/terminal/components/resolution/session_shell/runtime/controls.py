@@ -25,7 +25,14 @@ from memcommit.adapters.console.terminal.components.exact_name import (
     ExactNameFieldView,
     ExactNameInputControl,
 )
-from memcommit.adapters.console.terminal.components.resolution.effect_preview import EffectPreviewSource
+from memcommit.adapters.console.terminal.components.resolution.effect_preview import (
+    EffectPreviewSource,
+    EffectReportPresentation,
+)
+from memcommit.adapters.console.terminal.components.resolution.session_shell.presentation.effect_report import (
+    effect_report_fragments,
+    effect_report_sections,
+)
 from memcommit.adapters.console.terminal.components.multiline_input import (
     build_framed_multiline_input,
 )
@@ -97,8 +104,16 @@ def report_sections(
     read_only: bool,
     impact_controller: EffectPreviewSource | None,
     drafts: dict[str, ResponseDraft],
+    effect_report: EffectReportPresentation | None = None,
+    unchanged_expanded: bool = False,
 ) -> tuple[WorkbenchSection, ...]:
     """Project a report into stable semantic navigation stops."""
+
+    if effect_report is not None:
+        impact = _current_impact(impact_controller, view)
+        if impact is None:
+            raise ValueError("An effect report requires an exact preview.")
+        return effect_report_sections(impact, effect_report, unchanged_expanded=unchanged_expanded)
 
     if split_report_text is not None:
         lines = _seeded_report_lines(
@@ -280,6 +295,7 @@ class ResolutionControlConfig:
     destination: ResolutionDestination | None
     destination_available: bool
     report_apply: bool = False
+    effect_report: EffectReportPresentation | None = None
 
 
 class ResolutionShellControls:
@@ -445,6 +461,8 @@ class ResolutionShellControls:
             read_only=self.config.read_only,
             impact_controller=self.config.impact_controller,
             drafts=self.controller.local_drafts,
+            effect_report=self.config.effect_report,
+            unchanged_expanded=self.controller.unchanged_effects_expanded,
         )
 
     def item_sections(self) -> tuple[WorkbenchSection, ...]:
@@ -524,6 +542,13 @@ class ResolutionShellControls:
             return "ITEM"
         return "RESOLVE_ALL"
 
+    def focused_impact_group(self) -> bool:
+        return (
+            self.config.effect_report is not None
+            and self.controller.session_navigation.pane == "viewer"
+            and self.active_viewer_sections()[self.viewer_section_index()].kind == "IMPACT_GROUP"
+        )
+
     def focused_impact_entry_uid(self) -> str | None:
         navigation = self.controller.session_navigation
         if not (
@@ -592,6 +617,20 @@ class ResolutionShellControls:
                 focused=navigation.pane == "viewer",
             )
         if self.controller.viewer_content["kind"] == "REPORT":
+            if config.effect_report is not None:
+                impact = _current_impact(config.impact_controller, active_view)
+                if impact is None:
+                    raise ValueError("An effect report requires an exact preview.")
+                return _viewer_focus_fragments(
+                    effect_report_fragments(
+                        active_view, impact, config.effect_report,
+                        focused_section=self.viewer_section_index(),
+                        expanded_uid=self.controller.impact_reason_expanded["uid"],
+                        unchanged_expanded=self.controller.unchanged_effects_expanded,
+                        content_width=self.pane_content_width(),
+                    ),
+                    focused=navigation.pane == "viewer",
+                )
             if config.split_report_text is not None:
                 return _viewer_focus_fragments(
                     resolution_seeded_report_fragments(

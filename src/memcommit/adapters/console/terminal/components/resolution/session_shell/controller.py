@@ -74,6 +74,7 @@ class ResolutionSessionController:
     global_strategies: tuple[ResolutionGlobalStrategy, ...] = ()
     review_and_apply: bool = False
     report_apply: bool = False
+    report_apply_label: str = "APPLY"
     read_only: bool = False
     read_only_handoff: SessionTodoView | None = None
     item_handoff: SessionTodoView | Callable[[], SessionTodoView | None] | None = None
@@ -96,6 +97,7 @@ class ResolutionSessionController:
     impact_reason_expanded: dict[str, str | None] = field(
         default_factory=lambda: {"uid": None}
     )
+    unchanged_effects_expanded: bool = False
     other_direction: dict[str, bool] = field(default_factory=lambda: {"focused": False})
     other_direction_editor: dict[str, bool] = field(
         default_factory=lambda: {"open": False}
@@ -125,7 +127,7 @@ class ResolutionSessionController:
                 options=(
                     SelectionOption(
                         "APPLY",
-                        "APPLY",
+                        self.report_apply_label,
                     ),
                 ),
                 cursor_uid="APPLY",

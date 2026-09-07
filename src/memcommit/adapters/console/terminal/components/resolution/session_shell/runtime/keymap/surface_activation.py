@@ -120,6 +120,13 @@ def build_surface_activation(
                 ):
                     sections = active_viewer_sections()
                     section = sections[viewer_section_index()]
+                    if section.kind == "IMPACT_GROUP":
+                        controller.unchanged_effects_expanded = (
+                            not controller.unchanged_effects_expanded
+                        )
+                        set_status("")
+                        event.app.invalidate()
+                        return
                     if section.kind == "IMPACT_ENTRY":
                         impact_reason_expanded["uid"] = (
                             None
@@ -127,10 +134,17 @@ def build_surface_activation(
                             else section.uid
                         )
                         set_status(
-                            "Impact rationale hidden."
-                            if impact_reason_expanded["uid"] is None
-                            else "Impact rationale shown."
+                            "" if controls.config.effect_report is not None else (
+                                "Impact rationale hidden."
+                                if impact_reason_expanded["uid"] is None
+                                else "Impact rationale shown."
+                            )
                         )
+                        event.app.invalidate()
+                        return
+                    if controls.config.effect_report is not None:
+                        # The instruction is a reading stop, never an implicit
+                        # approval or a route to the hidden legacy Items frame.
                         event.app.invalidate()
                         return
                     if section.kind == "REPORT_APPLY":

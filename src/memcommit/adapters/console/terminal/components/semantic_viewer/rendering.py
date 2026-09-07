@@ -36,6 +36,10 @@ def _resting_style(style: str) -> str:
     """Remove transient focus without discarding composed semantic color."""
 
     tokens = style.split()
+    if "class:viewer-section" in tokens and any(
+        token.startswith("class:semantic.") for token in tokens
+    ):
+        return " ".join(token for token in tokens if token != "class:viewer-section")
     if "class:finding-label.focused" in tokens:
         style = " ".join(
             "class:finding-label"
