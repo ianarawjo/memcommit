@@ -43,6 +43,14 @@ It represents only process-local selection.  Cancellation returns no Source.
 The operation still audits one direct Context; making setup opt-in and adopting the shared component
 does not add descendant or Profile-wide execution.
 
+The Audit adapter lives in `audit/audit_endpoint_setup_screen.py`, with
+`run_audit_endpoint_setup_screen()` as its screen entry point. Matching the
+module and entry-point names makes the operation-specific screen easy to locate.
+`audit_endpoint_setup_spec()` remains the configuration builder: it assembles
+the imported shared models and belongs beside the screen entry point rather
+than in a separate Audit model module. This naming change preserves selection,
+cancellation, and execution behavior.
+
 ## Why not migrate the legacy semantic operations yet
 
 Visual similarity is not sufficient evidence of capability parity.  Compare

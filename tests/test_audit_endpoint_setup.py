@@ -6,9 +6,9 @@ import pytest
 
 import memcommit.adapters.console.commands.audit.command as audit_command
 import memcommit.application.capabilities.ops as ops
-from memcommit.adapters.console.commands.audit.endpoint_setup import (
+from memcommit.adapters.console.commands.audit.audit_endpoint_setup_screen import (
     audit_endpoint_setup_spec,
-    choose_audit_setup,
+    run_audit_endpoint_setup_screen,
 )
 from memcommit.persistence.store import MemoryStore
 
@@ -32,7 +32,7 @@ def test_audit_setup_returns_the_visible_selected_source() -> None:
     with create_pipe_input() as pipe_input:
         # SOURCE starts focused. Choose the next row, then continue.
         pipe_input.send_text("\x1b[B\r\t\r")
-        selected = choose_audit_setup(
+        selected = run_audit_endpoint_setup_screen(
             ("audit/current", "audit/peer"),
             current="audit/current",
             app_input=pipe_input,
@@ -46,7 +46,7 @@ def test_audit_setup_returns_the_visible_selected_source() -> None:
 def test_audit_setup_cancel_returns_no_source() -> None:
     with create_pipe_input() as pipe_input:
         pipe_input.send_text("\x1b")
-        selected = choose_audit_setup(
+        selected = run_audit_endpoint_setup_screen(
             ("audit/current",),
             current="audit/current",
             app_input=pipe_input,
@@ -83,7 +83,7 @@ def test_audit_command_loads_the_source_selected_by_the_shared_setup(
         )
         return peer.name
 
-    monkeypatch.setattr(audit_command, "choose_audit_setup", choose)
+    monkeypatch.setattr(audit_command, "run_audit_endpoint_setup_screen", choose)
 
     access, selected = audit_command._interactive_source(
         store,

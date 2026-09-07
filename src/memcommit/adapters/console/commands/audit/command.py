@@ -41,7 +41,9 @@ from memcommit.adapters.console.commands.audit.receipt import (
 from memcommit.adapters.console.commands.audit.review import (
     render_quality_audit_review_snapshot,
 )
-from memcommit.adapters.console.commands.audit.endpoint_setup import choose_audit_setup
+from memcommit.adapters.console.commands.audit.audit_endpoint_setup_screen import (
+    run_audit_endpoint_setup_screen,
+)
 from memcommit.core.context import Context
 from memcommit.application.operations.check_conformance.model import ConformanceError
 from memcommit.application.capabilities.memory_issue_analysis.model import (
@@ -138,7 +140,7 @@ def _interactive_source(store: MemoryStore, *, current_name: str | None):
         for name in names
         if catalog.access_for(name).is_granted
     }
-    selected_name = choose_audit_setup(
+    selected_name = run_audit_endpoint_setup_screen(
         names,
         current=access.access_name,
         annotations=annotations,

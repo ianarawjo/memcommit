@@ -61,7 +61,7 @@ def audit_endpoint_setup_spec(
     )
 
 
-def choose_audit_setup(
+def run_audit_endpoint_setup_screen(
     names: Sequence[str],
     *,
     current: str,

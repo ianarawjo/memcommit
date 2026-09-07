@@ -835,7 +835,7 @@ def test_flagless_audit_uses_current_context_and_prints_saved_session_receipt(
         EmptyAuditProvider,
     )
     monkeypatch.setattr(
-        "memcommit.adapters.console.commands.audit.command.choose_audit_setup",
+        "memcommit.adapters.console.commands.audit.command.run_audit_endpoint_setup_screen",
         lambda *_args, **_kwargs: pytest.fail(
             "flagless Audit must not open Source setup"
         ),

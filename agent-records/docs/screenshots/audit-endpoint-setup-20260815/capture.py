@@ -43,7 +43,9 @@ def _prepare_store(root: Path):
 
 
 def _run_child(store_root: Path, *, cancel: bool) -> None:
-    from memcommit.adapters.console.commands.audit.endpoint_setup import choose_audit_setup
+    from memcommit.adapters.console.commands.audit.audit_endpoint_setup_screen import (
+        run_audit_endpoint_setup_screen,
+    )
 
     store, current, peer = _prepare_store(store_root)
     before = {
@@ -55,7 +57,7 @@ def _run_child(store_root: Path, *, cancel: bool) -> None:
         f"PTY {os.get_terminal_size().columns} {os.get_terminal_size().lines}",
         flush=True,
     )
-    selected = choose_audit_setup(
+    selected = run_audit_endpoint_setup_screen(
         (current.name, peer.name),
         current=current.name,
     )
