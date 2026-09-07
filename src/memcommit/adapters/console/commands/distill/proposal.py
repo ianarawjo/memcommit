@@ -30,18 +30,16 @@ def distill_result_lines(result: DistillResult) -> tuple[str, ...]:
         f"PROPOSED RULES · {len(analysis.rules)}",
     ]
     for index, rule in enumerate(analysis.rules, 1):
-        lines.append(
-            safe_terminal_text(
-                render_numbered_content_row(
-                    index,
-                    rule.content,
-                    suffix=(
-                        f"SUPPORT {len(rule.support_memory_uids)} · "
-                        f"BOUNDARY {len(rule.boundary_memory_uids)}"
-                    ),
-                )
-            )
+        suffix = (
+            f"SUPPORT {len(rule.support_memory_uids)} · "
+            f"BOUNDARY {len(rule.boundary_memory_uids)}"
         )
+        row = render_numbered_content_row(
+            index,
+            rule.content,
+            suffix=suffix,
+        )
+        lines.append(safe_terminal_text(row))
     lines.extend(
         (
             "",
