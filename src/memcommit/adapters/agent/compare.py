@@ -122,7 +122,6 @@ def _result(result: ComparisonResult, *, kind: CompareAgentKind) -> JsonObject:
     return {
         "analysis_uid": result.analysis_uid,
         "version": result.version,
-        "ruleset_version": result.ruleset_version,
         "frames": [
             {
                 "uid": frame.uid,
@@ -135,16 +134,12 @@ def _result(result: ComparisonResult, *, kind: CompareAgentKind) -> JsonObject:
         ],
         "include_descendants": list(result.include_descendants),
         "overview": result.overview,
-        "reports": (
-            {
-                "both": result.reports.both,
-                "differences": result.reports.differences,
-                "reference_only": result.reports.reference_only,
-                "compared_only": result.reports.compared_only,
-            }
-            if result.reports is not None
-            else None
-        ),
+        "reports": {
+            "both": result.reports.both,
+            "differences": result.reports.differences,
+            "reference_only": result.reports.reference_only,
+            "compared_only": result.reports.compared_only,
+        },
         "relations": [
             {
                 "uid": relation.uid,

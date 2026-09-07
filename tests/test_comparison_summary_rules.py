@@ -11,7 +11,6 @@ from memcommit.application.capabilities.memory_issue_analysis.peer_relations.mod
 from memcommit.application.operations.compare.compare_summary import ComparisonSummaryError
 from memcommit.application.operations.compare.provider_contract import summarize_comparison
 from memcommit.application.operations.compare.compare_rules import (
-    COMPARISON_SUMMARY_RULESET_VERSION,
     COMPARISON_SUMMARY_WORD_LIMIT,
     comparison_summary_ruleset,
 )
@@ -61,7 +60,7 @@ def _primary_ids(payload: dict[str, object]) -> tuple[list[str], list[str]]:
     return result[0], result[1]
 
 
-def test_complete_versioned_ruleset_enters_every_provider_turn():
+def test_complete_ruleset_enters_every_provider_turn():
     provider = ResponseProvider(
         lambda payload: {
             "text": "Both rules prioritize an immediate opening, but they use different sentence bounds.",
@@ -75,7 +74,6 @@ def test_complete_versioned_ruleset_enters_every_provider_turn():
         provider.prompts[0].split("COMPARISON SUMMARY PAYLOAD:\n", 1)[1]
     )
     assert payload["ruleset"] == {
-        "ruleset_version": COMPARISON_SUMMARY_RULESET_VERSION,
         "rules": comparison_summary_ruleset()["rules"],
         "cases": comparison_summary_ruleset()["cases"],
     }

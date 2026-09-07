@@ -119,11 +119,7 @@ def _comparison_artifacts(
             "sources": [frame.context_name for frame in analysis.frames],
             "created_at": analysis.created_at,
             "overview": analysis.understanding.text,
-            "reports": (
-                analysis.reports.to_dict()
-                if analysis.reports is not None
-                else None
-            ),
+            "reports": analysis.reports.to_dict(),
             "relations": [relation.to_dict() for relation in analysis.relations],
             "issues": [issue.to_dict() for issue in analysis.issues],
         }

@@ -139,6 +139,19 @@ def test_live_embed_source_change_invalidates_the_frozen_frame() -> None:
     assert not frozen.matches_context(containing("After"))
 
 
+def test_frame_without_saved_provenance_cannot_match_current_source() -> None:
+    context = _peer()
+    frame = ComparisonFrame.from_context(context, side="REFERENCE")
+    value = frame.to_dict()
+    for memory in value["memories"]:
+        memory.pop("source")
+
+    restored = ComparisonFrame.from_dict(value)
+
+    assert frame.matches_context(context)
+    assert not restored.matches_context(context)
+
+
 def test_live_embed_retarget_with_same_content_invalidates_the_frozen_frame() -> None:
     containing_uid = _uid()
     embed_uid = _uid()

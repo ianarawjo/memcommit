@@ -8,6 +8,7 @@ from memcommit.adapters.python_api import (
     CompareConflictError,
     ComparisonFrameResult,
     ComparisonResult,
+    ComparisonReportsResult,
     MemCommitClient,
 )
 from memcommit.adapters.agent.compare import (
@@ -26,7 +27,6 @@ def _result(*, origin="LIVE"):
     return ComparisonResult(
         analysis_uid="analysis-1",
         version="a" * 64,
-        ruleset_version="peer-relations-v3",
         frames=(
             ComparisonFrameResult(
                 "frame-a", "REFERENCE", "a", ("memory-a",), None
@@ -37,7 +37,7 @@ def _result(*, origin="LIVE"):
         ),
         include_descendants=(False, True),
         overview="The peers overlap and differ in one bounded way.",
-        reports=None,
+        reports=ComparisonReportsResult("Shared guidance.", "One difference.", "", ""),
         relations=(),
         issues=(),
         origin=origin,
@@ -68,6 +68,7 @@ def test_run_forwards_the_complete_ordered_scope(client, monkeypatch):
     )
 
     assert response["ok"] is True
+    assert "ruleset_version" not in response["result"]
     assert response["result"]["effect"] == "COMPARE_ANALYSIS_SLOT"
     assert calls == [
         {

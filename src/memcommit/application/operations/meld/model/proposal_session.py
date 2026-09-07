@@ -8,7 +8,6 @@ from dataclasses import dataclass, replace
 from typing import Iterable
 
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
-    MEMORY_RELATION_RULESET_VERSION,
     MemoryRelationAnalysis,
 )
 from memcommit.application.operations.update.model import GrantedUpdateTarget
@@ -833,10 +832,6 @@ class MeldSession:
 
         if self.relation_analysis_seed is not None:
             analysis = self.relation_analysis_seed.analysis
-            if analysis.ruleset_version != MEMORY_RELATION_RULESET_VERSION:
-                raise MeldError(
-                    "Meld relation-analysis seed uses an unsupported ruleset."
-                )
             if self.mode == "SYMMETRIC":
                 expected_frames = _relation_analysis_meld_frames(analysis)
                 if tuple(frame.to_dict() for frame in self.frames) != tuple(

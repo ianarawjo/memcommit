@@ -78,8 +78,9 @@ Context names remain presentation-only. The strict output schema contains
 only one `{text, source_ids}` paragraph. It has no field capable of carrying a
 relation ledger or review Issue.
 
-The versioned `compact-peer-relation-v3` ruleset and its exact plus known-wrong
-cases enter every provider turn. They calibrate the shapes observed in real
+The single current ruleset enters each provider turn, with its exact plus
+known-wrong cases when the prompt policy includes authored examples. They
+calibrate the shapes observed in real
 Study data: selected numeric conditions, one rule against many instances,
 temporary overrides against a larger baseline, a general policy against its
 domain specialization, and two tasks whose shared selection work leads toward
@@ -144,9 +145,8 @@ loop over independent provider calls is not a valid shortcut.
 
 ## Compatibility and limitations
 
-Existing deep analysis JSON, saved-session reopening, public deep Compare API,
-Study ledger prewarms, and Meld basis validation are unchanged. The default
-CLI no longer creates or refreshes those artifacts. Automation that depended
+The summary/ledger split keeps the deep saved-analysis lifecycle separate.
+The default CLI does not create or refresh those artifacts. Automation that depended
 on that implicit side effect must add `--ledger` (or `--refresh` when replacing
 an exact reviewed slot).
 
@@ -160,3 +160,18 @@ The compact result is not an exhaustive coverage claim. A caller that needs
 every Memory disposition, issue, or application-ready relation must use
 `--ledger`. An empty direct frame still fails before provider connection rather
 than producing prose about absence.
+
+## Single current contract (2026-09-06)
+
+The user explicitly removed the requirement to maintain comparison ruleset
+revisions or read older comparison results in this unreleased prototype.
+`ComparisonSummary` therefore carries no `ruleset_version`, and neither the
+checked-in rule fixture nor the provider payload has a semantic version label.
+The fixture still has one structural format and its named rules, examples,
+word limit, source citations, and strict decoder are unchanged. There is no
+replacement prompt hash, revision counter, or regeneration policy.
+
+The module exports its error and result in their definition order, at the top
+of the file; the rule module owns the rules without re-exporting a version
+through the result model. The shared ledger's matching cleanup is recorded in
+[Peer Relation Analysis](peer-relation-analysis-design-rationale.md#single-current-contract-2026-09-06).

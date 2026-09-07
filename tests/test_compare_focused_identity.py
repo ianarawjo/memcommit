@@ -4,9 +4,13 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+import pytest
+
 import memcommit.application.capabilities.ops as ops
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     ComparisonInput,
+    ComparisonError,
+    ComparisonFrame,
     comparison_analysis_matches_input,
 )
 
@@ -97,3 +101,17 @@ def test_singleton_explicit_focus_remains_distinct_from_whole_context() -> None:
     assert focused.frames[0].context_evidence == ()
     assert not comparison_analysis_matches_input(_analysis_shape(focused), whole)
     assert not comparison_analysis_matches_input(_analysis_shape(whole), focused)
+
+
+def test_focused_frame_does_not_infer_missing_selection_from_neighboring_evidence():
+    reference = ops.init("reference")
+    focus = ops.add(reference, "Focused claim.")
+    ops.add(reference, "Neighboring context.")
+    frame, _ = ComparisonFrame.focused_from_context(
+        reference, side="REFERENCE", memory_selector=focus.uid,
+    )
+    value = frame.to_dict()
+    value.pop("selected_memory_uid")
+
+    with pytest.raises(ComparisonError, match="explicit selected Memory"):
+        ComparisonFrame.from_dict(value)

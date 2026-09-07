@@ -8,7 +8,6 @@ import re
 import uuid
 
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
-    COMPARISON_RULESET_VERSION,
     ComparisonAnalysis,
     comparison_canonical_digest,
 )
@@ -191,11 +190,6 @@ def revalidate_saved_comparison(
         raise ComparisonSessionConflictError(
             "A source Context changed after this comparison was saved. Run "
             "an explicit refresh before using it as current analysis."
-        )
-    if analysis.ruleset_version != COMPARISON_RULESET_VERSION:
-        raise ComparisonSessionConflictError(
-            "This comparison uses an older semantic ruleset. Refresh the "
-            "explicit ordered pair before reopening it as current analysis."
         )
 
 

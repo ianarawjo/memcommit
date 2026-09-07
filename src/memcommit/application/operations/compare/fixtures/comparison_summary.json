@@ -1,7 +1,6 @@
 {
   "command": "compare",
   "schema_version": 1,
-  "ruleset_version": "compact-peer-relation-v3",
   "description": "Compact default Compare rules distilled from actual small, asymmetric, selected-Memory, and large task frames. Cases are production-visible calibration, not held-out evaluation data.",
   "rules": [
     {

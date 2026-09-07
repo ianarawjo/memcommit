@@ -80,7 +80,6 @@ def _project_comparison(
     return ComparisonResult(
         analysis_uid=analysis.uid,
         version=comparison_canonical_digest(analysis.to_dict()),
-        ruleset_version=analysis.ruleset_version,
         frames=tuple(  # type: ignore[arg-type]
             ComparisonFrameResult(
                 uid=frame.uid,
@@ -93,15 +92,11 @@ def _project_comparison(
         ),
         include_descendants=analysis.include_descendants,
         overview=analysis.overview,
-        reports=(
-            ComparisonReportsResult(
-                both=reports.both,
-                differences=reports.differences,
-                reference_only=reports.reference_only,
-                compared_only=reports.compared_only,
-            )
-            if reports is not None
-            else None
+        reports=ComparisonReportsResult(
+            both=reports.both,
+            differences=reports.differences,
+            reference_only=reports.reference_only,
+            compared_only=reports.compared_only,
         ),
         relations=tuple(
             ComparisonRelationResult(

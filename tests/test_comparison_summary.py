@@ -81,6 +81,7 @@ def test_summary_contract_has_no_relation_or_issue_output_shape():
     assert "assignments" not in schema_text
     assert summary.paragraph.text.startswith("Both peers")
     assert summary.source_count == 2
+    assert not hasattr(summary, "ruleset_version")
 
 
 def test_summary_treats_live_embed_content_as_an_ordinary_claim():

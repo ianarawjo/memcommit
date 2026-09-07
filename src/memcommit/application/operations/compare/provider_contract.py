@@ -35,7 +35,6 @@ from memcommit.application.capabilities.semantic.understanding import (
 
 
 COMPARISON_SUMMARY_OPERATION = "compare_summary"
-COMPARISON_SUMMARY_PROVIDER_CONTRACT_VERSION = "compact-relation-source-linked-v3"
 COMPARISON_SUMMARY_TEXT_LIMIT = 2_000
 
 COMPARISON_SUMMARY_EXECUTION_POLICY = SemanticExecutionPolicy(
@@ -310,7 +309,6 @@ def summarize_comparison(
 __all__ = [
     "COMPARISON_SUMMARY_EXECUTION_POLICY",
     "COMPARISON_SUMMARY_OPERATION",
-    "COMPARISON_SUMMARY_PROVIDER_CONTRACT_VERSION",
     "COMPARISON_SUMMARY_TEXT_LIMIT",
     "ComparisonSummaryProvider",
     "comparison_summary_output_schema",

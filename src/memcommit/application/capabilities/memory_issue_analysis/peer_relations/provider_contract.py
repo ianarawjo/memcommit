@@ -39,13 +39,6 @@ from memcommit.application.capabilities.semantic.understanding import understand
 
 
 COMPARISON_PAYLOAD_MARKER = "COMPARISON PAYLOAD:\n"
-COMPARISON_PROVIDER_CONTRACT_VERSION = "exhaustive-validation-repair-v2"
-SUPPORTED_COMPARISON_PROVIDER_CONTRACT_VERSIONS = frozenset(
-    {
-        "one-shot-exhaustive-v1",
-        COMPARISON_PROVIDER_CONTRACT_VERSION,
-    }
-)
 COMPARISON_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 COMPARISON_RESPONSE_CHAR_LIMIT = 1_000_000
 COMPARISON_KEY_LIMIT = 100
@@ -552,21 +545,16 @@ def _parse_analysis(
         raise MemoryRelationProviderError(
             "Codex compare returned invalid structured output."
         ) from error
-    legacy_relation_shape = isinstance(value, dict) and "relations" in value
-    split_relation_shape = isinstance(value, dict) and (
-        "paired_relations" in value or "distinct_relations" in value
-    )
-    if legacy_relation_shape and split_relation_shape:
-        raise MemoryRelationProviderError("Codex compare returned mixed relation formats.")
-    source_assignment_shape = isinstance(value, dict) and "source_assignments" in value
-    response_keys = {"overview", "reports", "issues"}
-    response_keys.update(
-        {"relations"}
-        if legacy_relation_shape
-        else {"paired_relations", "distinct_relations"}
-    )
-    if source_assignment_shape:
-        response_keys.add("source_assignments")
+    # Decode the same exhaustive assignment contract advertised by the schema;
+    # accepting older shapes would bypass its explicit per-Source coverage.
+    response_keys = {
+        "overview",
+        "reports",
+        "issues",
+        "paired_relations",
+        "distinct_relations",
+        "source_assignments",
+    }
     data = _exact_dict(
         value,
         response_keys,
@@ -610,18 +598,14 @@ def _parse_analysis(
     except MemoryRelationError as error:
         raise MemoryRelationProviderError(str(error)) from error
 
-    if legacy_relation_shape:
-        raw_paired_relations = _array(data["relations"], "comparison relations")
-        raw_distinct_relations: list[object] = []
-    else:
-        raw_paired_relations = _array(
-            data["paired_relations"],
-            "paired comparison relations",
-        )
-        raw_distinct_relations = _array(
-            data["distinct_relations"],
-            "distinct comparison relations",
-        )
+    raw_paired_relations = _array(
+        data["paired_relations"],
+        "paired comparison relations",
+    )
+    raw_distinct_relations = _array(
+        data["distinct_relations"],
+        "distinct comparison relations",
+    )
     relation_records: list[tuple[str, dict[str, object]]] = []
     for item in raw_paired_relations:
         relation_fields = {
@@ -631,14 +615,12 @@ def _parse_analysis(
             "summary",
             "reason",
         }
-        if not source_assignment_shape:
-            relation_fields.update({"reference_memory_ids", "compared_memory_ids"})
         record = _exact_dict(
             item,
             relation_fields,
             "comparison relation",
         )
-        if not legacy_relation_shape and record["kind"] == "DISTINCT":
+        if record["kind"] == "DISTINCT":
             raise MemoryRelationProviderError(
                 "Codex compare returned DISTINCT in paired_relations."
             )
@@ -652,11 +634,6 @@ def _parse_analysis(
             )
         )
     for item in raw_distinct_relations:
-        if not source_assignment_shape:
-            raise MemoryRelationProviderError(
-                "Codex compare returned a distinct relation without source "
-                "assignments."
-            )
         record = _exact_dict(
             item,
             {
@@ -693,70 +670,69 @@ def _parse_analysis(
             "Codex compare returned duplicate or empty relations."
         )
 
-    if source_assignment_shape:
-        try:
-            assignments = decode_exact_source_assignments(
-                data["source_assignments"],
-                tuple(view.memory_by_id),
-            )
-        except CoverageError as error:
+    try:
+        assignments = decode_exact_source_assignments(
+            data["source_assignments"],
+            tuple(view.memory_by_id),
+        )
+    except CoverageError as error:
+        raise MemoryRelationProviderError(
+            "Codex compare source assignments must cover every source "
+            "Memory exactly once."
+        ) from error
+    assignment_by_source: dict[str, str] = {}
+    relation_key_set = set(relation_keys)
+    for source_id, raw_relation_key in assignments:
+        relation_key = _key(
+            raw_relation_key,
+            "comparison source assignment relation key",
+        )
+        if relation_key not in relation_key_set:
             raise MemoryRelationProviderError(
-                "Codex compare source assignments must cover every source "
-                "Memory exactly once."
-            ) from error
-        assignment_by_source: dict[str, str] = {}
-        relation_key_set = set(relation_keys)
-        for source_id, raw_relation_key in assignments:
-            relation_key = _key(
-                raw_relation_key,
-                "comparison source assignment relation key",
+                "Codex compare assigned a source Memory to an unknown " "relation."
             )
-            if relation_key not in relation_key_set:
+        assignment_by_source[source_id] = relation_key
+    reference_frame_uid = comparison_input.frames[0].uid
+    assigned_members = {
+        key: {"reference": [], "compared": []} for key in relation_keys
+    }
+    # Canonical Source order, rather than model row order, keeps durable
+    # member ordering stable across semantically equivalent completions.
+    for source_id, member in view.memory_by_id.items():
+        side = (
+            "reference" if member.frame_uid == reference_frame_uid else "compared"
+        )
+        assigned_members[assignment_by_source[source_id]][side].append(source_id)
+    normalized_records: list[tuple[str, dict[str, object]]] = []
+    for key, record in relation_records:
+        reference_ids = assigned_members[key]["reference"]
+        compared_ids = assigned_members[key]["compared"]
+        if record["kind"] == "DISTINCT":
+            actual_side = (
+                "REFERENCE"
+                if reference_ids and not compared_ids
+                else "COMPARED" if compared_ids and not reference_ids else None
+            )
+            if actual_side != record["side"]:
                 raise MemoryRelationProviderError(
-                    "Codex compare assigned a source Memory to an unknown " "relation."
+                    "Codex compare assigned a DISTINCT relation to invalid "
+                    "PEER sides."
                 )
-            assignment_by_source[source_id] = relation_key
-        reference_frame_uid = comparison_input.frames[0].uid
-        assigned_members = {
-            key: {"reference": [], "compared": []} for key in relation_keys
-        }
-        # Canonical Source order, rather than model row order, keeps durable
-        # member ordering stable across semantically equivalent completions.
-        for source_id, member in view.memory_by_id.items():
-            side = (
-                "reference" if member.frame_uid == reference_frame_uid else "compared"
+        normalized_records.append(
+            (
+                key,
+                {
+                    "relation_key": record["relation_key"],
+                    "kind": record["kind"],
+                    "status": record["status"],
+                    "summary": record["summary"],
+                    "reason": record["reason"],
+                    "reference_memory_ids": reference_ids,
+                    "compared_memory_ids": compared_ids,
+                },
             )
-            assigned_members[assignment_by_source[source_id]][side].append(source_id)
-        normalized_records: list[tuple[str, dict[str, object]]] = []
-        for key, record in relation_records:
-            reference_ids = assigned_members[key]["reference"]
-            compared_ids = assigned_members[key]["compared"]
-            if record["kind"] == "DISTINCT" and "side" in record:
-                actual_side = (
-                    "REFERENCE"
-                    if reference_ids and not compared_ids
-                    else "COMPARED" if compared_ids and not reference_ids else None
-                )
-                if actual_side != record["side"]:
-                    raise MemoryRelationProviderError(
-                        "Codex compare assigned a DISTINCT relation to invalid "
-                        "PEER sides."
-                    )
-            normalized_records.append(
-                (
-                    key,
-                    {
-                        "relation_key": record["relation_key"],
-                        "kind": record["kind"],
-                        "status": record["status"],
-                        "summary": record["summary"],
-                        "reason": record["reason"],
-                        "reference_memory_ids": reference_ids,
-                        "compared_memory_ids": compared_ids,
-                    },
-                )
-            )
-        relation_records = normalized_records
+        )
+    relation_records = normalized_records
 
     relation_uid_by_key = {
         key: _stable_uid(

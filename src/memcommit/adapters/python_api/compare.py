@@ -62,11 +62,10 @@ class ComparisonResult:
 
     analysis_uid: str
     version: str
-    ruleset_version: str
     frames: tuple[ComparisonFrameResult, ComparisonFrameResult]
     include_descendants: tuple[bool, bool]
     overview: str
-    reports: ComparisonReportsResult | None
+    reports: ComparisonReportsResult
     relations: tuple[ComparisonRelationResult, ...]
     issues: tuple[ComparisonIssueResult, ...]
     origin: str

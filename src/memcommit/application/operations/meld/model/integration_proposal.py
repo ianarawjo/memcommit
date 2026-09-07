@@ -7,7 +7,6 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Iterable
 
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
-    MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION,
     MemoryRelationAnalysis,
     MemoryRelationMemory,
 )
@@ -530,10 +529,7 @@ def _relation_analysis_meld_frames(
     """Project ordered relation frames without changing durable identities."""
     frames: list[MeldFrame] = []
     for index, frame in enumerate(analysis.frames):
-        owner_aware = (
-            analysis.schema_version >= MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION
-            and analysis.include_descendants[index]
-        )
+        owner_aware = analysis.include_descendants[index]
         memories: list[dict[str, object]] = []
         for memory in frame.memories:
             item: dict[str, object] = {
@@ -559,8 +555,7 @@ def _relation_analysis_meld_frames(
             # Descendant scopes retain their established owner grouping.
             "memories": memories,
         }
-        if analysis.schema_version >= MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION:
-            value["include_descendants"] = analysis.include_descendants[index]
+        value["include_descendants"] = analysis.include_descendants[index]
         frames.append(MeldFrame.from_dict(value))
     return frames[0], frames[1]
 

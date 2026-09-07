@@ -7,7 +7,6 @@ from functools import lru_cache
 from importlib import resources
 import json
 
-COMPARISON_SUMMARY_RULESET_VERSION = "compact-peer-relation-v3"
 COMPARISON_SUMMARY_RULESET_FIXTURE = "comparison_summary.json"
 COMPARISON_SUMMARY_WORD_LIMIT = 80
 
@@ -176,7 +175,6 @@ def _loaded_ruleset() -> dict[str, object]:
         {
             "command",
             "schema_version",
-            "ruleset_version",
             "description",
             "rules",
             "cases",
@@ -186,10 +184,9 @@ def _loaded_ruleset() -> dict[str, object]:
     if (
         data["command"] != "compare"
         or data["schema_version"] != 1
-        or data["ruleset_version"] != COMPARISON_SUMMARY_RULESET_VERSION
     ):
         raise ComparisonSummaryRulesError(
-            "Unsupported compact Compare ruleset version."
+            "Invalid compact Compare ruleset format."
         )
     _text(data["description"], "description")
     rules = data["rules"]
@@ -235,14 +232,12 @@ def comparison_summary_ruleset_prompt_payload(
 
     data = comparison_summary_ruleset()
     return {
-        "ruleset_version": data["ruleset_version"],
         "rules": data["rules"],
         "cases": data["cases"] if include_cases else [],
     }
 
 
 __all__ = [
-    "COMPARISON_SUMMARY_RULESET_VERSION",
     "COMPARISON_SUMMARY_WORD_LIMIT",
     "ComparisonSummaryRulesError",
     "comparison_summary_ruleset",

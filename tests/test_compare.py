@@ -308,6 +308,34 @@ class ExhaustiveCompareProvider:
         return json.dumps(self.source_indexed_response(builder(payload)))
 
 
+@pytest.mark.parametrize("shape", ["flat", "missing-assignments", "mixed"])
+def test_compare_decoder_rejects_retired_provider_shapes(isolated_store, shape):
+    reference, compared = _task2_contexts(MemoryStore())
+
+    class RetiredShapeProvider:
+        def __init__(self):
+            self.operations = []
+
+        def complete(self, prompt, *, operation, output_schema=None):
+            self.operations.append(operation)
+            payload = json.loads(prompt.split(COMPARISON_PAYLOAD_MARKER, 1)[1])
+            response = ExhaustiveCompareProvider.default_response(payload)
+            if shape != "flat":
+                response = ExhaustiveCompareProvider.source_indexed_response(response)
+                if shape == "missing-assignments":
+                    response.pop("source_assignments")
+                else:
+                    response["relations"] = []
+            return json.dumps(response)
+
+    provider = RetiredShapeProvider()
+    with pytest.raises(ComparisonProviderError, match="comparison response"):
+        analyze_comparison(ComparisonInput.from_contexts(reference, compared), provider)
+
+    assert provider.operations == ["compare_contexts", "compare_contexts_repair"]
+    assert not comparison_analysis_path(reference.uid, compared.uid).exists()
+
+
 def test_compare_output_schema_requires_one_assignment_per_frozen_source():
     source_ids = ("m1_000001", "m2_000001", "m2_000002")
 
@@ -1319,7 +1347,7 @@ def test_saved_frame_snapshot_is_cryptographically_bound_to_context_digest(
         load_comparison_analysis(reference.uid, compared.uid)
 
 
-def test_older_supported_ruleset_is_readable_but_not_reused(
+def test_saved_ledger_roundtrips_and_reuses_without_a_ruleset_version(
     isolated_store,
     monkeypatch,
 ):
@@ -1336,29 +1364,59 @@ def test_older_supported_ruleset_is_readable_but_not_reused(
     )
     path = comparison_analysis_path(reference.uid, compared.uid)
     value = json.loads(path.read_text())
-    value["schema_version"] = 1
-    value["ruleset_version"] = "peer-relations-v2"
-    value.pop("reports")
-    value.pop("include_descendants")
-    path.write_text(json.dumps(value))
-    older = load_comparison_analysis(reference.uid, compared.uid)
-    assert older is not None
-    assert older.ruleset_version == "peer-relations-v2"
-    assert older.reports is None
-    assert older.to_dict()["schema_version"] == 1
-    assert "reports" not in older.to_dict()
+    assert "ruleset_version" not in value
+    current = load_comparison_analysis(reference.uid, compared.uid)
+    assert current is not None
+    assert current.to_dict() == value
+    assert not hasattr(current, "ruleset_version")
 
-    replaced = runner.invoke(
+    reused = runner.invoke(
         app,
         ["compare", "--to", compared.name, "--ledger"],
     )
 
-    assert replaced.exit_code == 0, replaced.output
-    assert "NEW" in replaced.output
-    assert len(provider.payloads) == 2
-    current = load_comparison_analysis(reference.uid, compared.uid)
-    assert current is not None
-    assert current.ruleset_version == "peer-relations-v4"
+    assert reused.exit_code == 0, reused.output
+    assert "REUSED" in reused.output
+    assert len(provider.payloads) == 1
+    assert json.loads(path.read_text()) == value
+
+
+@pytest.mark.parametrize(
+    "retired_shape",
+    ["schema-1", "schema-2", "schema-3", "ruleset", "reports", "scope"],
+)
+def test_saved_ledger_rejects_retired_shapes_without_replacing_them(
+    isolated_store,
+    monkeypatch,
+    retired_shape,
+):
+    store = MemoryStore()
+    reference, compared = _task2_contexts(store)
+    provider = ExhaustiveCompareProvider()
+    _patch_provider(monkeypatch, provider)
+    command = ["compare", "--to", compared.name, "--ledger"]
+    assert runner.invoke(app, command).exit_code == 0
+    path = comparison_analysis_path(reference.uid, compared.uid)
+    value = json.loads(path.read_text())
+    if retired_shape.startswith("schema-"):
+        value["schema_version"] = int(retired_shape[-1])
+    elif retired_shape == "ruleset":
+        value["ruleset_version"] = "peer-relations-v4"
+    elif retired_shape == "reports":
+        value.pop("reports")
+    else:
+        value.pop("include_descendants")
+    path.write_text(json.dumps(value))
+    before = path.read_bytes()
+
+    with pytest.raises(ValueError, match="Saved comparison analysis is invalid"):
+        load_comparison_analysis(reference.uid, compared.uid)
+    rejected = runner.invoke(app, command)
+
+    assert rejected.exit_code == 1
+    assert "Saved comparison analysis is invalid" in rejected.output
+    assert len(provider.payloads) == 1
+    assert path.read_bytes() == before
 
 
 def test_ordered_slot_cas_rejects_stale_competing_refresh(

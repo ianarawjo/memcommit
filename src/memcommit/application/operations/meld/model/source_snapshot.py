@@ -9,7 +9,6 @@ from dataclasses import dataclass, replace
 from typing import Literal
 
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
-    MEMORY_RELATION_RULESET_VERSION,
     MemoryRelationAnalysis,
     memory_relation_canonical_digest,
 )
@@ -733,10 +732,6 @@ class MeldRelationAnalysisSeed:
         if not isinstance(analysis, MemoryRelationAnalysis):
             raise MeldError("Meld relation seed must be a relation analysis.")
         restored = MemoryRelationAnalysis.from_dict(analysis.to_dict())
-        if restored.ruleset_version != MEMORY_RELATION_RULESET_VERSION:
-            raise MeldError(
-                "Meld requires analysis from the current relation ruleset."
-            )
         return cls.from_dict(
             {
                 "analysis_digest": memory_relation_canonical_digest(restored.to_dict()),

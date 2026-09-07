@@ -1291,20 +1291,20 @@ def test_compare_reads_recursive_grant_excludes_query_override_and_saves_nothing
                         "reference_only": "",
                         "compared_only": "",
                     },
-                    "relations": [
+                    "paired_relations": [
                         {
                             "relation_key": "all",
-                            "reference_memory_ids": [
-                                item["memory_id"] for item in reference["memories"]
-                            ],
-                            "compared_memory_ids": [
-                                item["memory_id"] for item in compared["memories"]
-                            ],
                             "kind": "COMPATIBLE",
                             "status": "RESOLVED",
                             "summary": "The service guidance can coexist.",
                             "reason": "The supplied claims address service access.",
                         }
+                    ],
+                    "distinct_relations": [],
+                    "source_assignments": [
+                        {"source_memory_id": item["memory_id"], "relation_key": "all"}
+                        for frame in (reference, compared)
+                        for item in frame["memories"]
                     ],
                     "issues": [],
                 }
@@ -1563,20 +1563,20 @@ def test_granted_compare_is_retained_and_seeds_local_symmetric_meld(
                         "reference_only": "",
                         "compared_only": "",
                     },
-                    "relations": [
+                    "paired_relations": [
                         {
                             "relation_key": "all",
-                            "reference_memory_ids": [
-                                item["memory_id"] for item in reference["memories"]
-                            ],
-                            "compared_memory_ids": [
-                                item["memory_id"] for item in compared["memories"]
-                            ],
                             "kind": "COMPATIBLE",
                             "status": "RESOLVED",
                             "summary": "The location guidance can coexist.",
                             "reason": "Both sources address the public service desk.",
                         }
+                    ],
+                    "distinct_relations": [],
+                    "source_assignments": [
+                        {"source_memory_id": item["memory_id"], "relation_key": "all"}
+                        for frame in (reference, compared)
+                        for item in frame["memories"]
                     ],
                     "issues": [],
                 }

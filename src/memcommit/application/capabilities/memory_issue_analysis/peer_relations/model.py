@@ -36,20 +36,10 @@ from memcommit.application.capabilities.semantic.understanding import (
 )
 
 
+# This marks the single stored shape, not a revision of the semantic rules.
 MEMORY_RELATION_SCHEMA_VERSION = 4
-MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION = 3
-MEMORY_RELATION_REPORTS_SCHEMA_VERSION = 2
-MEMORY_RELATION_LEGACY_SCHEMA_VERSION = 1
-MEMORY_RELATION_RULESET_VERSION = "peer-relations-v4"
-SUPPORTED_MEMORY_RELATION_RULESET_VERSIONS = {
-    "peer-relations-v1",
-    "peer-relations-v2",
-    "peer-relations-v3",
-    MEMORY_RELATION_RULESET_VERSION,
-}
 MEMORY_RELATION_TEXT_LIMIT = 20_000
 MEMORY_RELATION_NAME_LIMIT = MEMORY_RELATION_TEXT_LIMIT
-MEMORY_RELATION_ID_LIMIT = 240
 
 MemoryRelationSide = Literal["REFERENCE", "COMPARED"]
 MemoryRelationKind = Literal[
@@ -125,10 +115,6 @@ def _string(
     ):
         raise MemoryRelationError(f"Invalid {label}.")
     return value
-
-
-def _identifier(value: object, label: str) -> str:
-    return _string(value, label, limit=MEMORY_RELATION_ID_LIMIT)
 
 
 def _canonical_uuid(value: object, label: str) -> str:
@@ -370,11 +356,7 @@ class MemoryRelationFrame:
             result["selected_memory_uid"] = self.selected_memory_uid
         return result
 
-    def source_state(
-        self,
-        *,
-        include_provenance: bool = True,
-    ) -> tuple[object, ...]:
+    def source_state(self) -> tuple[object, ...]:
         """Return the exact source state without the call-local frame UID."""
 
         def memory_state(memory: MemoryRelationMemory) -> tuple[object, ...]:
@@ -385,7 +367,7 @@ class MemoryRelationFrame:
                 memory.content_digest,
                 (
                     memory.source.to_dict()
-                    if include_provenance and memory.source is not None
+                    if memory.source is not None
                     else None
                 ),
             )
@@ -411,18 +393,7 @@ class MemoryRelationFrame:
             )
         except MemoryRelationError:
             return False
-        # Older artifacts did not retain provenance. Preserve their direct
-        # owned-Memory readability while current-rule artifacts bind every
-        # Embed/Reference owner and placement explicitly.
-        include_provenance = any(
-            memory.source is not None
-            for memory in (*self.memories, *self.context_evidence)
-        )
-        return self.source_state(
-            include_provenance=include_provenance
-        ) == current.source_state(
-            include_provenance=include_provenance
-        )
+        return self.source_state() == current.source_state()
 
     @classmethod
     def from_dict(cls, value: object) -> "MemoryRelationFrame":
@@ -463,16 +434,12 @@ class MemoryRelationFrame:
                 "selected comparison Memory uid",
             )
             if "selected_memory_uid" in data
-            else (
-                # Older focused frames can be identified by their neighboring
-                # evidence. Singleton legacy frames remain intentionally
-                # unmarked because whole-Context and explicit-focus intent
-                # cannot be reconstructed from their payload.
-                memories[0].uid
-                if context_evidence and len(memories) == 1
-                else None
-            )
+            else None
         )
+        if context_evidence and selected_memory_uid is None:
+            raise MemoryRelationError(
+                "Comparison Context evidence requires an explicit selected Memory."
+            )
         all_memories = (*memories, *context_evidence)
         if (
             not memories
@@ -792,7 +759,6 @@ class MemoryRelationReports:
 class MemoryRelationInput:
     uid: str
     created_at: str
-    ruleset_version: str
     frames: tuple[MemoryRelationFrame, MemoryRelationFrame]
     include_descendants: tuple[bool, bool] = (False, False)
     context_evidence: tuple[
@@ -831,7 +797,6 @@ class MemoryRelationInput:
         result = cls(
             uid=str(uuid.uuid4()),
             created_at=datetime.now(timezone.utc).isoformat(),
-            ruleset_version=MEMORY_RELATION_RULESET_VERSION,
             frames=(
                 reference_frame,
                 compared_frame,
@@ -853,13 +818,6 @@ class MemoryRelationInput:
             or any(type(value) is not bool for value in self.include_descendants)
         ):
             raise MemoryRelationError("Invalid comparison descendant scopes.")
-        if (
-            self.ruleset_version
-            not in SUPPORTED_MEMORY_RELATION_RULESET_VERSIONS
-        ):
-            raise MemoryRelationError(
-                "Unsupported comparison ruleset version."
-            )
         if (
             len(self.frames) != 2
             or tuple(frame.side for frame in self.frames)
@@ -912,10 +870,9 @@ def memory_relation_analysis_matches_input(
 class MemoryRelationAnalysis:
     uid: str
     created_at: str
-    ruleset_version: str
     frames: tuple[MemoryRelationFrame, MemoryRelationFrame]
     understanding: UnderstandingSummary
-    reports: MemoryRelationReports | None
+    reports: MemoryRelationReports
     relations: tuple[MemoryRelation, ...]
     issues: tuple[MemoryRelationIssue, ...]
     include_descendants: tuple[bool, bool] = (False, False)
@@ -934,7 +891,6 @@ class MemoryRelationAnalysis:
         result = cls(
             uid=comparison_input.uid,
             created_at=comparison_input.created_at,
-            ruleset_version=comparison_input.ruleset_version,
             frames=comparison_input.frames,
             understanding=UnderstandingSummary(
                 text=overview,
@@ -959,30 +915,19 @@ class MemoryRelationAnalysis:
         return cls.from_dict(result.to_dict())
 
     def to_dict(self) -> dict[str, object]:
-        # A legacy analysis remains serializable without fabricating prose
-        # that was never returned by its provider call.
-        schema_version = (
-            self.schema_version
-            if self.reports is not None
-            else MEMORY_RELATION_LEGACY_SCHEMA_VERSION
-        )
-        result: dict[str, object] = {
-            "schema_version": schema_version,
+        return {
+            "schema_version": self.schema_version,
             "uid": self.uid,
             "created_at": self.created_at,
-            "ruleset_version": self.ruleset_version,
             "frames": [frame.to_dict() for frame in self.frames],
             "overview": self.understanding.text,
             "relations": [
                 relation.to_dict() for relation in self.relations
             ],
             "issues": [issue.to_dict() for issue in self.issues],
+            "reports": self.reports.to_dict(),
+            "include_descendants": list(self.include_descendants),
         }
-        if self.reports is not None:
-            result["reports"] = self.reports.to_dict()
-        if schema_version >= MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION:
-            result["include_descendants"] = list(self.include_descendants)
-        return result
 
     @classmethod
     def from_dict(cls, value: object) -> "MemoryRelationAnalysis":
@@ -990,14 +935,8 @@ class MemoryRelationAnalysis:
             raise MemoryRelationError("Invalid comparison analysis.")
         schema_version = value.get("schema_version")
         if (
-            isinstance(schema_version, bool)
-            or schema_version
-            not in {
-                MEMORY_RELATION_LEGACY_SCHEMA_VERSION,
-                MEMORY_RELATION_REPORTS_SCHEMA_VERSION,
-                MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION,
-                MEMORY_RELATION_SCHEMA_VERSION,
-            }
+            type(schema_version) is not int
+            or schema_version != MEMORY_RELATION_SCHEMA_VERSION
         ):
             raise MemoryRelationError(
                 "Unsupported comparison analysis schema version."
@@ -1006,16 +945,13 @@ class MemoryRelationAnalysis:
             "schema_version",
             "uid",
             "created_at",
-            "ruleset_version",
             "frames",
             "overview",
             "relations",
             "issues",
+            "reports",
+            "include_descendants",
         }
-        if schema_version >= MEMORY_RELATION_REPORTS_SCHEMA_VERSION:
-            keys.add("reports")
-        if schema_version >= MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION:
-            keys.add("include_descendants")
         data = _exact_dict(
             value,
             keys,
@@ -1040,11 +976,7 @@ class MemoryRelationAnalysis:
             MemoryRelationIssue.from_dict(item)
             for item in _array(data["issues"], "comparison issues")
         )
-        raw_descendant_scopes = (
-            data["include_descendants"]
-            if schema_version >= MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION
-            else [False, False]
-        )
+        raw_descendant_scopes = data["include_descendants"]
         if (
             not isinstance(raw_descendant_scopes, list)
             or len(raw_descendant_scopes) != 2
@@ -1057,10 +989,6 @@ class MemoryRelationAnalysis:
                 data["created_at"],
                 "comparison creation time",
             ),
-            ruleset_version=_identifier(
-                data["ruleset_version"],
-                "comparison ruleset version",
-            ),
             frames=(frames[0], frames[1]),
             understanding=UnderstandingSummary(
                 text=_string(data["overview"], "comparison overview"),
@@ -1072,11 +1000,7 @@ class MemoryRelationAnalysis:
                     )
                 ),
             ),
-            reports=(
-                MemoryRelationReports.from_dict(data["reports"])
-                if schema_version >= MEMORY_RELATION_REPORTS_SCHEMA_VERSION
-                else None
-            ),
+            reports=MemoryRelationReports.from_dict(data["reports"]),
             relations=relations,
             issues=issues,
             include_descendants=tuple(raw_descendant_scopes),  # type: ignore[arg-type]
@@ -1108,24 +1032,14 @@ class MemoryRelationAnalysis:
         MemoryRelationInput(
             uid=self.uid,
             created_at=self.created_at,
-            ruleset_version=self.ruleset_version,
             frames=self.frames,
             include_descendants=self.include_descendants,
         ).validate()
-        if self.schema_version not in {
-            MEMORY_RELATION_LEGACY_SCHEMA_VERSION,
-            MEMORY_RELATION_REPORTS_SCHEMA_VERSION,
-            MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION,
-            MEMORY_RELATION_SCHEMA_VERSION,
-        }:
-            raise MemoryRelationError("Unsupported comparison analysis schema version.")
         if (
-            self.schema_version < MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION
-            and any(self.include_descendants)
+            type(self.schema_version) is not int
+            or self.schema_version != MEMORY_RELATION_SCHEMA_VERSION
         ):
-            raise MemoryRelationError(
-                "Legacy comparison analysis cannot include descendant scopes."
-            )
+            raise MemoryRelationError("Unsupported comparison analysis schema version.")
         if (
             not self.relations
             or len({relation.uid for relation in self.relations})
@@ -1144,12 +1058,9 @@ class MemoryRelationAnalysis:
             or set(self.understanding.source_uids) != expected_source_uids
         ):
             raise MemoryRelationError("Invalid comparison understanding summary.")
-        if (
-            self.ruleset_version == MEMORY_RELATION_RULESET_VERSION
-            and self.reports is None
-        ):
+        if not isinstance(self.reports, MemoryRelationReports):
             raise MemoryRelationError(
-                "The current comparison ruleset requires semantic reports."
+                "Comparison analysis requires semantic reports."
             )
 
         frame_by_uid = {frame.uid: frame for frame in self.frames}
@@ -1197,47 +1108,46 @@ class MemoryRelationAnalysis:
                 "comparison relation."
             )
 
-        if self.reports is not None:
-            reference_uid, compared_uid = (
-                frame.uid for frame in self.frames
-            )
-            # The ledger, rather than provider-authored counts or labels, is
-            # authoritative for whether each compact report may exist.
-            report_groups = {
-                "both": any(
-                    relation.kind in {"EQUIVALENT", "COMPATIBLE"}
-                    for relation in self.relations
-                ),
-                "differences": any(
-                    relation.kind in {"SCOPED", "CONFLICT", "UNCLEAR"}
-                    for relation in self.relations
-                ),
-                "reference_only": any(
-                    relation.kind == "DISTINCT"
-                    and all(
-                        member.frame_uid == reference_uid
-                        for member in relation.members
-                    )
-                    for relation in self.relations
-                ),
-                "compared_only": any(
-                    relation.kind == "DISTINCT"
-                    and all(
-                        member.frame_uid == compared_uid
-                        for member in relation.members
-                    )
-                    for relation in self.relations
-                ),
-            }
-            for name, present in report_groups.items():
-                report = getattr(self.reports, name)
-                if (present and not report.strip()) or (
-                    not present and report != ""
-                ):
-                    raise MemoryRelationError(
-                        f"Comparison {name.replace('_', '-')} report does "
-                        "not match its relation group."
-                    )
+        reference_uid, compared_uid = (
+            frame.uid for frame in self.frames
+        )
+        # The ledger, rather than provider-authored counts or labels, is
+        # authoritative for whether each compact report may exist.
+        report_groups = {
+            "both": any(
+                relation.kind in {"EQUIVALENT", "COMPATIBLE"}
+                for relation in self.relations
+            ),
+            "differences": any(
+                relation.kind in {"SCOPED", "CONFLICT", "UNCLEAR"}
+                for relation in self.relations
+            ),
+            "reference_only": any(
+                relation.kind == "DISTINCT"
+                and all(
+                    member.frame_uid == reference_uid
+                    for member in relation.members
+                )
+                for relation in self.relations
+            ),
+            "compared_only": any(
+                relation.kind == "DISTINCT"
+                and all(
+                    member.frame_uid == compared_uid
+                    for member in relation.members
+                )
+                for relation in self.relations
+            ),
+        }
+        for name, present in report_groups.items():
+            report = getattr(self.reports, name)
+            if (present and not report.strip()) or (
+                not present and report != ""
+            ):
+                raise MemoryRelationError(
+                    f"Comparison {name.replace('_', '-')} report does "
+                    "not match its relation group."
+                )
 
         unresolved_uids = {
             relation.uid
@@ -1262,7 +1172,7 @@ class MemoryRelationAnalysis:
 
 # The capability owns the Python model under MemoryRelation names. The old
 # Compare vocabulary remains an identity-preserving compatibility surface for
-# persisted artifacts and external callers; no schema migration is implied.
+# Compare-labelled callers. These aliases do not enable older artifact formats.
 ComparisonSide = MemoryRelationSide
 ComparisonRelationKind = MemoryRelationKind
 ComparisonRelationStatus = MemoryRelationStatus
@@ -1278,13 +1188,7 @@ ComparisonReports = MemoryRelationReports
 ComparisonInput = MemoryRelationInput
 ComparisonAnalysis = MemoryRelationAnalysis
 COMPARISON_SCHEMA_VERSION = MEMORY_RELATION_SCHEMA_VERSION
-COMPARISON_DESCENDANT_SCHEMA_VERSION = MEMORY_RELATION_DESCENDANT_SCHEMA_VERSION
-COMPARISON_REPORTS_SCHEMA_VERSION = MEMORY_RELATION_REPORTS_SCHEMA_VERSION
-COMPARISON_LEGACY_SCHEMA_VERSION = MEMORY_RELATION_LEGACY_SCHEMA_VERSION
-COMPARISON_RULESET_VERSION = MEMORY_RELATION_RULESET_VERSION
-SUPPORTED_COMPARISON_RULESET_VERSIONS = SUPPORTED_MEMORY_RELATION_RULESET_VERSIONS
 COMPARISON_TEXT_LIMIT = MEMORY_RELATION_TEXT_LIMIT
 COMPARISON_NAME_LIMIT = MEMORY_RELATION_NAME_LIMIT
-COMPARISON_ID_LIMIT = MEMORY_RELATION_ID_LIMIT
 comparison_canonical_digest = memory_relation_canonical_digest
 comparison_analysis_matches_input = memory_relation_analysis_matches_input

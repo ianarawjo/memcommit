@@ -8,13 +8,20 @@ the exhaustive ledger.
 
 from __future__ import annotations
 
+__all__ = [
+    "ComparisonSummaryError",
+    "ComparisonSummary",
+]
+
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import ComparisonFrame, ComparisonInput
-from memcommit.application.operations.compare.compare_rules import (
-    COMPARISON_SUMMARY_RULESET_VERSION,
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
+    ComparisonFrame,
+    ComparisonInput,
 )
-from memcommit.application.capabilities.semantic.understanding import UnderstandingSummary
+from memcommit.application.capabilities.semantic.understanding import (
+    UnderstandingSummary,
+)
 
 
 class ComparisonSummaryError(ValueError):
@@ -30,7 +37,6 @@ class ComparisonSummary:
     frames: tuple[ComparisonFrame, ComparisonFrame]
     include_descendants: tuple[bool, bool]
     paragraph: UnderstandingSummary
-    ruleset_version: str = COMPARISON_SUMMARY_RULESET_VERSION
 
     def __post_init__(self) -> None:
         if (
@@ -44,7 +50,6 @@ class ComparisonSummary:
             or len(self.include_descendants) != 2
             or any(type(value) is not bool for value in self.include_descendants)
             or not isinstance(self.paragraph, UnderstandingSummary)
-            or self.ruleset_version != COMPARISON_SUMMARY_RULESET_VERSION
         ):
             raise ComparisonSummaryError("Invalid lightweight Compare summary.")
         available = {
@@ -95,10 +100,3 @@ class ComparisonSummary:
                 )
             )
         )
-
-
-__all__ = [
-    "COMPARISON_SUMMARY_RULESET_VERSION",
-    "ComparisonSummary",
-    "ComparisonSummaryError",
-]

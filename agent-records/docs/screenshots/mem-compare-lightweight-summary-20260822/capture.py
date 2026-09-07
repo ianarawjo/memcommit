@@ -67,7 +67,9 @@ class _Provider:
         assert operation == "compare_summary"
         assert output_schema is not None
         payload = json.loads(prompt.split("COMPARISON SUMMARY PAYLOAD:\n", 1)[1])
-        assert payload["ruleset"]["ruleset_version"] == "compact-peer-relation-v3"
+        assert set(payload["ruleset"]) == {"rules", "cases"}
+        assert payload["ruleset"]["rules"]
+        assert payload["ruleset"]["cases"]
         assert payload["length"] == {"limit": 80, "unit": "words"}
         assert all(
             row["role"] == "PRIMARY"

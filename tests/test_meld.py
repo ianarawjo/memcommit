@@ -428,11 +428,9 @@ class Task2CompareProvider:
                     "reference_only": "",
                     "compared_only": "",
                 },
-                "relations": [
+                "paired_relations": [
                     {
                         "relation_key": "payment_relation",
-                        "reference_memory_ids": [reference_id],
-                        "compared_memory_ids": [compared_id],
                         "kind": "CONFLICT",
                         "status": "UNRESOLVED",
                         "summary": "Participant compensation differs.",
@@ -441,6 +439,11 @@ class Task2CompareProvider:
                             "their scope and allowed methods are settled."
                         ),
                     }
+                ],
+                "distinct_relations": [],
+                "source_assignments": [
+                    {"source_memory_id": source_id, "relation_key": "payment_relation"}
+                    for source_id in (reference_id, compared_id)
                 ],
                 "issues": [
                     {
@@ -496,11 +499,9 @@ class PriorityCompareProvider:
                     "reference_only": "",
                     "compared_only": "",
                 },
-                "relations": [
+                "paired_relations": [
                     {
                         "relation_key": "conflict",
-                        "reference_memory_ids": [left[0]["memory_id"]],
-                        "compared_memory_ids": [right[0]["memory_id"]],
                         "kind": "CONFLICT",
                         "status": "UNRESOLVED",
                         "summary": "The directives conflict.",
@@ -508,13 +509,17 @@ class PriorityCompareProvider:
                     },
                     {
                         "relation_key": "compatible",
-                        "reference_memory_ids": [left[1]["memory_id"]],
-                        "compared_memory_ids": [right[1]["memory_id"]],
                         "kind": "COMPATIBLE",
                         "status": "RESOLVED",
                         "summary": "The guidance can coexist.",
                         "reason": "Each source addresses a separate detail.",
                     },
+                ],
+                "distinct_relations": [],
+                "source_assignments": [
+                    {"source_memory_id": rows[index]["memory_id"], "relation_key": key}
+                    for index, key in enumerate(("conflict", "compatible"))
+                    for rows in (left, right)
                 ],
                 "issues": [
                     {

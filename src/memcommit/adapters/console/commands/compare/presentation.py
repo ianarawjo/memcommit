@@ -49,7 +49,6 @@ def render_comparison(
         durable=durable,
         retention=retention,
         heading="MEM COMPARE · SYMMETRIC PEERS",
-        refresh_command=shlex.join([*argv, "--refresh"]),
         inspection_command=shlex.join([*argv, "--ledger"]),
     )
 

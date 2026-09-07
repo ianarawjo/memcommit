@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING
 
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     AnalysisRetention,
-    MEMORY_RELATION_RULESET_VERSION,
     MemoryRelationAnalysis,
     MemoryRelationError,
     MemoryRelationInput,
@@ -182,11 +181,12 @@ def ensure_memory_relation_analysis(
         if existing is not None
         else None
     )
+    # One current ruleset serves this prototype. Reuse is bound to the frozen
+    # sources and authority; editing a prompt does not invalidate a saved result.
     if (
         existing is not None
         and memory_relation_analysis_matches_input(existing, comparison_input)
         and existing.matches(reference, compared)
-        and existing.ruleset_version == MEMORY_RELATION_RULESET_VERSION
         and not refresh
     ):
         return MemoryRelationExecutionResult(

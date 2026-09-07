@@ -49,7 +49,7 @@ by either application boundary.
 
 | Candidate | Durable | Provider | Result origin | Boundary |
 | --- | --- | --- | --- | --- |
-| exact current saved analysis | yes | no | `SAVED_REUSE` | exact frame, scope, source digest, and ruleset |
+| exact current saved analysis | yes | no | `SAVED_REUSE` | exact frame, scope, source digest, and provenance |
 | ancestor-equivalent hidden analysis | materialized on use | no | recorded equivalent origin | operation-owned equivalence proof |
 | safe descendant-subset projection | no | no | `PROJECTED` | complete projected relation coverage; cannot Open |
 | live miss | according to local/Grant retention | one complete turn | `LIVE` | strict decoder and post-provider source revalidation |

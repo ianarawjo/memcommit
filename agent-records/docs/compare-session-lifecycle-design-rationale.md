@@ -18,7 +18,7 @@ run(reference, compared, exact scope)
 
 open(analysis_uid)
   -> load the exact latest-slot artifact
-  -> revalidate its complete source scopes and ruleset
+  -> revalidate its complete source scopes and provenance
   -> return the analysis plus an opaque canonical-digest version
 
 refresh(analysis_uid, expected_version)
@@ -67,7 +67,8 @@ analysis use the stricter Open-to-Refresh token contract.
 ## Freshness and scope
 
 Open means “show this saved analysis as current.” It therefore rejects a
-changed or missing source and an obsolete ruleset without calling the provider.
+changed or missing source without calling the provider. There is one current
+analysis format and no semantic ruleset revision check.
 Refresh has different intent: updating a stale analysis is its purpose. It
 validates the saved artifact version first, then reloads the current sources
 under the original ordered names, descendant flags, and exact-Memory focus.

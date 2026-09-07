@@ -6,7 +6,6 @@ from collections import Counter
 
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
     MemoryRelationAnalysis,
-    MemoryRelationError,
     MemoryRelation,
 )
 from memcommit.application.capabilities.memory_issue_analysis.peer_relations.model import (
@@ -235,7 +234,6 @@ def render_peer_relation_analysis(
     durable: bool = True,
     retention: AnalysisRetention | None = None,
     heading: str = "MEMORY RELATION ANALYSIS · ORDERED PEERS",
-    refresh_command: str | None = None,
     inspection_command: str | None = None,
 ) -> str:
     """Render a compact report, optionally followed by the complete ledger."""
@@ -262,15 +260,6 @@ def render_peer_relation_analysis(
     )
 
     if not ledger:
-        if analysis.reports is None:
-            guidance = (
-                f" Run '{display_escape_text(refresh_command)}' to update it."
-                if refresh_command is not None
-                else ""
-            )
-            raise MemoryRelationError(
-                "This saved relation analysis predates compact reports." + guidance
-            )
         report_sections = [
             (
                 f"WHAT BOTH CONTAIN · {len(groups['both'])}",

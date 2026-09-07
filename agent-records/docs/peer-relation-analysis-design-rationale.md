@@ -88,3 +88,71 @@ the visible Compare-labelled report heading retained by the current Meld UI.
 It also does not construct a virtual combined candidate, run Audit, enter an
 Audit–Resolve loop, or invoke Update. Those steps depend on a separately stable
 Update revision contract and remain outside this change.
+
+## Single current contract (2026-09-06)
+
+The user requested one current comparison contract and explicitly declined
+both older-result compatibility and rule-change-driven regeneration. The
+prototype has no released comparison format to preserve. Retaining hand-edited
+semantic revision labels, supported-version lists, and alternate decoders
+would add maintenance without a current requirement.
+
+`MemoryRelationInput` and `MemoryRelationAnalysis` no longer carry
+`ruleset_version`. The provider has no contract-version constants or supported
+version list. It accepts exactly the advertised response shape: `overview`,
+`reports`, `paired_relations`, `distinct_relations`, `source_assignments`, and
+`issues`. The former flat `relations` response and omitted-assignment paths
+are rejected; the existing one bounded repair turn may still obtain a valid
+current response.
+
+Saved analyses use one strict structural shape. `schema_version: 4` continues
+to identify that shape, but schema 1–3 readers, optional semantic reports,
+missing descendant-scope defaults, and the old `ruleset_version` field are
+removed. Reports and scope are required. Focused frames must carry their exact
+selected Memory UID, and missing evidence provenance cannot suppress source
+identity comparisons. These changes supersede the artifact-readability claims
+in the earlier ownership history above. Existing files are neither migrated,
+deleted, silently ignored, nor overwritten when decoding fails.
+
+Saved reuse and exact Open retain ordered frame identity, selection, scope,
+Context/Memory digests, provenance, and Grant revalidation. They do not compare
+semantic revisions. A prompt edit alone can therefore leave a saved result
+reusable; this is the selected behavior, not an implicit freshness guarantee.
+Explicit Refresh remains available, but no manual-refresh requirement, hidden
+regeneration, or replacement hash has been introduced.
+
+UID-plus-canonical-digest CAS still protects publication and exact reviewed
+Refresh. These tokens describe the saved artifact, not the ruleset, and remain
+necessary to detect competing writes. Meld consumes the same current relation
+model while retaining its own authority and Apply checks. Compare-labelled
+Python aliases, provider operation names, and store paths retain their existing
+ownership contracts; unrelated operations' versioning is outside this change.
+
+Verification in the primary checkout: 261 related tests passed across Compare,
+summary rules, evidence/focus identity, Grant consumers, Meld, semantic
+execution, retained-artifact search, and operation-evidence integrity. Three
+unrelated failures were reproduced against a temporary source copy with this
+task's implementation changes removed, then excluded from that focused run:
+
+- `test_relative_peer_locator_errors_before_provider`: the endpoint error text
+  no longer includes the resolved Context name expected by the test;
+- `test_new_compare_and_update_setup_include_a_granted_target`: the endpoint
+  catalog returns more values than the test's four-value unpacking expects;
+- `test_update_between_distinct_grants_writes_only_accepting_target`: its
+  Profile fixture fails the existing one-placement-per-Grant validation.
+
+Regression coverage now verifies version-free saved round trips and reuse,
+rejection of retired saved/provider shapes, exact focused selection, retained
+provenance checks, source-change suppression, and competing-publication CAS.
+`python scripts/verify_operation_evidence.py --check` and undefined-name lint
+also pass. The historical terminal capture harness was adapted to the changed
+internal payload; no visible current terminal flow or capture image changed.
+
+The focused commit was also tested independently of pending adapter/Meld
+removals in the working tree. Comparison consumers still present in the
+committed tree now omit the ruleset field and require reports; their Meld
+seed adapters consume the current scope shape directly. The isolated tree
+passed 127 Compare/public-adapter tests, 32 Grant tests, and two direct Meld
+seed projection/round-trip tests. Existing endpoint, Grant, and legacy Meld
+workflow failures were checked against the unmodified commit separately.
+Pending removals and unrelated refactors were not folded into this change.

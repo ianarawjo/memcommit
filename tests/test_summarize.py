@@ -385,16 +385,19 @@ class PairProvider:
                     "reference_only": "",
                     "compared_only": "",
                 },
-                "relations": [
+                "paired_relations": [
                     {
                         "relation_key": "shared",
-                        "reference_memory_ids": [left],
-                        "compared_memory_ids": [right],
                         "kind": "EQUIVALENT",
                         "status": "RESOLVED",
                         "summary": "The access rules match.",
                         "reason": "The credential and scope are the same.",
                     }
+                ],
+                "distinct_relations": [],
+                "source_assignments": [
+                    {"source_memory_id": source_id, "relation_key": "shared"}
+                    for source_id in (left, right)
                 ],
                 "issues": [],
             }

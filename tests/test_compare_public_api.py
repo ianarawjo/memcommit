@@ -42,7 +42,7 @@ class _CompareProvider:
                     "reference_only": "",
                     "compared_only": "",
                 },
-                "relations": [
+                "paired_relations": [
                     {
                         "relation_key": "same_policy",
                         "kind": "EQUIVALENT",
@@ -51,6 +51,7 @@ class _CompareProvider:
                         "reason": "Their operational scope and outcome agree.",
                     }
                 ],
+                "distinct_relations": [],
                 "source_assignments": [
                     {
                         "source_memory_id": reference,

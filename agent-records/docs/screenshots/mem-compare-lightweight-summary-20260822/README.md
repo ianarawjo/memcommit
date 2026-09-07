@@ -27,7 +27,11 @@ path. Bare setup selection is independently captured in
 focused set starts at the reviewed explicit command so it does not duplicate
 unchanged setup mechanics.
 
-The capture provider also asserts the production `compact-peer-relation-v3`
-ruleset, the 80-word hard bound, and PRIMARY rows on both sides. Opaque evidence
+The capture provider asserts the production rules and cases, the 80-word hard
+bound, and PRIMARY rows on both sides. Opaque evidence
 aliases remain only in the structured provider response and never appear in
 the human receipt.
+
+On 2026-09-06 the harness assertion was adapted to the removal of the internal
+ruleset-version field. The images remain the original 2026-08-22 captures;
+that metadata was never part of their visible terminal output.

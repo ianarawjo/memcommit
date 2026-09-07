@@ -64,11 +64,11 @@ distinct entries even though the compact title uses a symmetric peer marker.
 Selecting a row freezes its analysis UID process-locally. Compare reloads that
 exact persisted UID after the picker closes, loads both sources by the names
 and UIDs captured in the artifact, verifies their complete direct digests and
-the current Compare ruleset, and only then prints a bounded saved-analysis
+provenance, and only then prints a bounded saved-analysis
 receipt with the exact `mem review compare --session UID` route. It does
 not consult or switch the global current Context after selection, connect a
 provider, refresh an analysis, save a replacement, or create a checkpoint. A
-deleted, replaced, stale, or older-ruleset selection fails with an explicit
+deleted, replaced, or stale selection fails with an explicit
 refresh instruction instead of silently entering the normal `--to` path.
 
 The shared picker currently requires an argv-shaped presentation field. The
@@ -184,9 +184,10 @@ Context names do not determine storage paths. If either source UID, name,
 complete direct record digest, or order changes, `mem compare --ledger`
 performs a fresh analysis and atomically replaces that ordered latest slot.
 `--refresh` forces a fresh analysis even when both source snapshots still
-match. A changed semantic ruleset also performs a fresh analysis while an
-older supported artifact remains readable for replacement CAS. Provider or
-validation failure leaves the prior saved analysis intact.
+match. Semantic rules have no revision marker and editing them does not
+invalidate a saved result. Only the current artifact shape is readable;
+obsolete formats fail without conversion or replacement. Provider or validation
+failure leaves the prior saved analysis intact.
 
 Compare intentionally keeps `A → B` and `B → A` as separate ordered slots.
 This preserves the ability to study whether presentation order changes a
@@ -286,7 +287,7 @@ descendant-scope pair. `mem meld LEFT
 RIGHT` loads only `LEFT → RIGHT`; it never silently substitutes `RIGHT →
 LEFT`, because the two saved slots deliberately retain observable
 presentation-order effects. A fresh slot is reused provider-free. A missing,
-stale, differently scoped, or older-ruleset slot is regenerated and saved
+stale, or differently scoped slot is regenerated and saved
 through the same shared Compare execution path before the Meld session is
 created. An invalid stored artifact still fails closed.
 
@@ -372,13 +373,13 @@ soft generation targets, not truncation or validation rules. A material
 difference, exception, or unresolved relation must be retained even when doing
 so exceeds the target; exact relations remain complete in `--ledger`.
 
-Schema version 2 added reports, version 3 added independent descendant scope,
-and version 4 adds optional typed evidence provenance. Schema-version-1 through
-version-3 artifacts remain strictly readable and preserve their old
-serialization shape so they can participate in ordered-slot replacement CAS.
-Ruleset version 4 requires the current content-evidence contract for newly
-created analyses, so an unchanged pair with an older ruleset is refreshed
-rather than reused.
+The current structural format contains reports, independent descendant scope,
+and typed evidence provenance. It retains the structural `schema_version: 4`
+marker but no older-shape reader or semantic `ruleset_version`. Earlier
+formats are rejected, and an unchanged pair is not refreshed merely because
+comparison instructions were edited. The rationale and exact compatibility
+boundary are recorded in
+[Peer Relation Analysis](peer-relation-analysis-design-rationale.md#single-current-contract-2026-09-06).
 
 The schema deliberately omits JSON Schema `uniqueItems` because the Codex
 structured-output subset rejects that keyword. Exact row count and alias enums
@@ -386,13 +387,13 @@ therefore reduce, but cannot prove, global uniqueness. The shared exact-source
 decoder rejects a repeated, omitted, or unknown alias and a relation key that
 was not returned. The operation parser then reconstructs relation members in
 canonical Source order and rechecks side shape and exhaustive coverage before
-an analysis can be saved. Legacy call-local responses that embedded member
-arrays remain parser-compatible for tests and older provider adapters; all new
-schema-constrained turns use source assignments. The provider response schema
+an analysis can be saved. All responses must use the advertised split relation
+and source-assignment shape; legacy nested member-array responses are rejected.
+The provider response schema
 does not expose or reproduce host provenance; the host attaches and validates
 that metadata independently.
 
-Provider contract `exhaustive-validation-repair-v2` permits at most one
+The provider contract permits at most one
 explicit validation-repair call after a complete response fails a local
 cross-record invariant. The repair payload contains the unchanged complete
 frame payload, the complete rejected response, and one trusted structural
