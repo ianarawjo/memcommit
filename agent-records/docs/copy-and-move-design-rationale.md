@@ -237,12 +237,45 @@ The console surface nevertheless has two command owners. Copy's grammar,
 Grant-aware setup, execution handoff, and fresh-UID receipt live under
 `adapters.console.commands.copy`; Move's grammar, local-owner setup, link
 policy, execution handoff, and mixed-effect receipt live under
-`adapters.console.commands.move`. They share only the direct-Memory selection,
-Target-gap placement, editable exact-command, common operand, and placement
-receipt mechanics under `adapters.console.coordination.copy_and_move`. The former
-combined CLI module and operation-specific TUI package are removed without
-facades. This keeps Help operations navigable by their public names without
-duplicating one workbench or inventing a generic Transfer operation.
+`adapters.console.commands.move`. Their shared operation-specific workbench
+lives under `adapters.console.commands.copy_and_move`. Common operands, frozen
+setup values, and placement-receipt helpers remain under
+`adapters.console.coordination.copy_and_move`. The former combined CLI module
+and operation-specific TUI package are removed without facades. This keeps Help
+operations navigable by their public names without duplicating one workbench
+or inventing a generic Transfer operation.
+
+### Console workbench responsibility split (2026-09-06)
+
+The 859-line `terminal.components.copy_and_move` module mixed explicit command
+forms, editable argv parsing, exact-command review projection, and interactive
+screen assembly. It also knew Copy/Move request types, link policy, Source
+authority boundaries, and frozen plans. Those are operation-specific console
+responsibilities even though two commands share them, so the module moves into
+`adapters.console.commands.copy_and_move` without a terminal compatibility facade:
+
+- `command_forms.py` keeps `COPY_COMMAND_FORM` and `MOVE_COMMAND_FORM` as two
+  explicit definitions in one file. Their short, closely related grammars are
+  easier to compare together than across separate operation files; a conditional
+  form factory would obscure their differences without a useful reduction.
+- `command_codec.py` owns editable argv parsing, gap arguments, and exact-command
+  review projection. It does not load Contexts, mutate controls, or freeze plans.
+- `workbench.py` composes shared terminal controls and owns selection-to-command
+  synchronization, focus, navigation, validation feedback, and the freeze handoff.
+
+Copy and Move's separate setup adapters still supply their own catalogs and
+freeze callbacks. Bare Memory selectors remain local-only, granted Copy Sources
+require explicit public owners, and edited forms finish validation before
+updating local controls. Approval still compares the frozen plan's gap with the
+reviewed gap; durable execution remains in the operation application layer.
+
+This split preserves public symbol names, command text, key bindings, layout,
+and execution behavior. It deliberately leaves the screen's existing closures
+together and does not merge the two operation entry points. Shared selectors,
+placement controls, command editing, and focus primitives retain their terminal
+component ownership. Existing parser, review, interactive-flow, and ownership
+tests verify the relocation; no new or materially changed TUI flow requires a
+refreshed capture set.
 
 Copy is presented with the shared ADD color because it creates ordinary Target
 Memories. Move is deliberately not assigned one action color: it is a mixed

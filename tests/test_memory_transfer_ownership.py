@@ -68,7 +68,14 @@ def test_copy_and_move_own_commands_while_transfer_mechanics_stay_coordinated() 
         "model.py",
         "receipt.py",
     }
-    assert (console / "terminal" / "components" / "copy_and_move.py").is_file()
+    workbench = console / "commands" / "copy_and_move"
+    assert {path.name for path in workbench.glob("*.py")} == {
+        "__init__.py",
+        "command_forms.py",
+        "command_codec.py",
+        "workbench.py",
+    }
+    assert not (console / "terminal" / "components" / "copy_and_move.py").exists()
     assert not (console / "shared").exists()
     assert not (interfaces / "cli" / "copy_and_move.py").exists()
     assert not tuple(

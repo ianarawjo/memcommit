@@ -24,7 +24,7 @@ from memcommit.adapters.console.commands.move.setup import (
     choose_move_setup,
 )
 from memcommit.adapters.console.entrypoint import app
-from memcommit.adapters.console.terminal.components.copy_and_move import (
+from memcommit.adapters.console.commands.copy_and_move.command_codec import (
     copy_and_move_exact_command_review,
     parse_copy_and_move_command_argv,
 )

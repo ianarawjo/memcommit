@@ -8,7 +8,7 @@ from prompt_toolkit.output import Output
 from memcommit.adapters.console.coordination.copy_and_move.model import (
     CopyAndMoveTuiSetup,
 )
-from memcommit.adapters.console.terminal.components.copy_and_move import (
+from memcommit.adapters.console.commands.copy_and_move.workbench import (
     run_copy_and_move_workbench,
 )
 from memcommit.application.context_access.access import (
