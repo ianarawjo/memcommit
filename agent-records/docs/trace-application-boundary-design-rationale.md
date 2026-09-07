@@ -34,10 +34,10 @@ The Store-backed composition lives in `trace.runtime`. It resolves existing
 Context locators against the command-start current Context, preserves the
 Profile-wide ambiguity contract for bare Memory UIDs, distinguishes ordinary
 Memory, MemoryRef, and READ-granted current views, enforces the retained-owner
-history boundary, and delegates to Trace-owned Context, Memory, MemoryRef, and
-granted-current lineage constructors. Those constructors consume verified
-retained records without giving target or result policy back to persistence or
-the console.
+history boundary, and delegates to History-owned Context/Memory queries and
+Trace-owned MemoryRef/granted-current projections. Those constructors consume
+verified retained records without giving target or result policy back to
+persistence or the console.
 
 The console Trace command retains only interface concerns: CLI grammar,
 content-free Recents, interactive target choice, option validation, terminal
@@ -84,6 +84,36 @@ operation evidence steps; Memory follows typed relations from the selected UID
 occurrence; MemoryRef keeps its relationship occurrence distinct from its
 target. History verification remains below this topology and does not acquire
 Trace target, report, or presentation policy.
+
+## Direct imports and the application export boundary
+
+`trace.application` previously advertised 30 names, including 13 imported
+History values/builders and Trace report projections. That made shared Memory
+targeting, Log coordination, and the Rationale console depend on the Trace
+application module merely to obtain functions owned elsewhere.
+
+Consumers now import History queries from their owning query modules and
+Trace report projections from `trace.granted_view` or
+`trace.reference_lineage`. `trace.application.__all__` contains only its 17
+locally defined request, catalog, subject, result, error, port, and execution
+names. The four concrete report types remain internal imports because the
+result union and frozen-subject validation use them. Imports used only for
+forwarding have been removed.
+
+Removing names from `__all__` alone would leave explicit imports unchanged,
+so this change also migrates production and test consumers to the direct
+owners. It preserves the same class/function objects, request validation,
+authority checks, report serialization, and CLI/TUI behavior. No compatibility
+forwarder is added for these internal import paths; downstream code using the
+removed forwarding imports must adopt the owning module.
+
+The remaining 17 names stay together for this change. They comprise twelve
+request/result/catalog data types or aliases, two errors, one source port,
+and two entry functions. Further restructuring should first examine whether
+each distinction is necessary or duplicates another contract. Export count
+alone does not justify a file split; related request and result types can be
+easier to understand together. Separating data contracts from execution is an
+option only if it improves that understanding.
 
 ## Authority and relationship boundaries
 

@@ -12,9 +12,13 @@ import pytest
 import memcommit.application.capabilities.ops as ops
 import memcommit.application.operations.trace.application as trace_application
 import memcommit.application.operations.trace.runtime as trace_runtime
-from memcommit.application.operations.trace.application import (
+from memcommit.application.capabilities.history.query.context_history_slicing import (
     ContextHistorySlice,
+)
+from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistory,
+)
+from memcommit.application.operations.trace.application import (
     FrozenTraceSubject,
     TraceContextTarget,
     TraceError,

@@ -24,14 +24,18 @@ from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
     safe_terminal_text,
 )
-from memcommit.application.operations.trace.application import (
+from memcommit.application.capabilities.history.query.context_history_slicing import (
     ContextHistorySlice,
-    GrantedMemoryTraceReport,
-    MemoryReferenceTraceReport,
     build_context_history_slice,
-    build_granted_memory_trace,
-    build_reference_trace,
     current_context_history_slice,
+)
+from memcommit.application.operations.trace.granted_view import (
+    GrantedMemoryTraceReport,
+    build_granted_memory_trace,
+)
+from memcommit.application.operations.trace.reference_lineage import (
+    MemoryReferenceTraceReport,
+    build_reference_trace,
 )
 from memcommit.application.operations.rationale.context import synthesize_context_rationale
 from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTarget

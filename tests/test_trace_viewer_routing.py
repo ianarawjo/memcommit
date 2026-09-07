@@ -10,8 +10,10 @@ from memcommit.adapters.console.entrypoint import app
 from memcommit.adapters.console.commands.trace import (
     command as trace_command,
 )
-from memcommit.application.operations.trace.application import (
+from memcommit.application.capabilities.history.query.context_history_slicing import (
     ContextHistorySlice,
+)
+from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistory,
 )
 from memcommit.core.context import Memory

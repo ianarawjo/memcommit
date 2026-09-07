@@ -72,8 +72,11 @@ current CLI route set.
 
 ## Internal normal form
 
-All four report classes and the Context, Memory, and MemoryRef construction
-stages have one physical owner under Trace. Their public representations remain
-purpose-specific, but they are projections of one operation/occurrence
-topology. READ-granted current Trace remains an authority-limited view rather
-than a hidden checkpoint projection.
+Context and Memory report classes and query construction have one physical
+owner under History. MemoryRef and granted-current report projections remain
+Trace-owned. Consumers import each value or builder from its owning module;
+`trace.application` exports its own contracts and entry functions, with no
+History or report-builder forwarding API. Their public representations remain
+purpose-specific, but retained Context, Memory, and MemoryRef reports project
+one operation/occurrence topology. READ-granted current Trace remains an
+authority-limited view rather than a hidden checkpoint projection.

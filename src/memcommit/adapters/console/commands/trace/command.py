@@ -42,16 +42,24 @@ from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTa
 from memcommit.application.capabilities.history.verification import (
     MemoryHistoryReconstructionError,
 )
-from memcommit.application.operations.trace.application import (
+from memcommit.application.capabilities.history.query.context_history_slicing import (
     ContextHistorySlice,
-    GrantedMemoryTraceReport,
+)
+from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistory,
-    MemoryReferenceTraceReport,
+)
+from memcommit.application.operations.trace.application import (
     TraceContextTarget,
     TraceMemoryTarget,
     TraceReport,
     TraceRequest,
     TraceTargetCatalogRequest,
+)
+from memcommit.application.operations.trace.granted_view import (
+    GrantedMemoryTraceReport,
+)
+from memcommit.application.operations.trace.reference_lineage import (
+    MemoryReferenceTraceReport,
 )
 from memcommit.application.operations.trace.runtime import (
     execute_trace,

@@ -8,7 +8,7 @@ from memcommit.application.context_access.operand_resolution import (
     resolve_existing_context_access,
 )
 from memcommit.core.context import Context
-from memcommit.application.operations.trace.application import (
+from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistory,
     reconstruct_memory_history,
 )

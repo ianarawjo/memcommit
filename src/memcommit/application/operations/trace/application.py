@@ -7,26 +7,15 @@ from typing import Literal, Protocol, TypeAlias
 
 from memcommit.application.capabilities.history.query.context_history_slicing import (
     ContextHistorySlice,
-    build_context_history_slice,
-    current_context_history_slice,
-)
-from memcommit.application.operations.trace.granted_view import (
-    GrantedMemoryTraceReport,
-    build_granted_memory_trace,
 )
 from memcommit.application.capabilities.history.query.memory_history_slicing import (
     MemoryHistory,
-    MemoryHistoryCandidate,
-    collect_memory_history_candidates,
-    reconstruct_memory_history,
 )
-from memcommit.application.capabilities.history.model.memory_event import (
-    MemoryHistoryEvent,
-    MemoryHistoryEventKind,
+from memcommit.application.operations.trace.granted_view import (
+    GrantedMemoryTraceReport,
 )
 from memcommit.application.operations.trace.reference_lineage import (
     MemoryReferenceTraceReport,
-    build_reference_trace,
 )
 
 
@@ -298,13 +287,6 @@ def run_trace(
 
 __all__ = [
     "FrozenTraceSubject",
-    "MemoryHistory",
-    "MemoryHistoryCandidate",
-    "MemoryHistoryEvent",
-    "MemoryHistoryEventKind",
-    "MemoryReferenceTraceReport",
-    "ContextHistorySlice",
-    "GrantedMemoryTraceReport",
     "TraceCandidateStatus",
     "TraceContextTarget",
     "TraceError",
@@ -319,12 +301,6 @@ __all__ = [
     "TraceTargetCandidate",
     "TraceTargetCatalog",
     "TraceTargetCatalogRequest",
-    "build_context_history_slice",
-    "build_granted_memory_trace",
-    "build_reference_trace",
-    "collect_memory_history_candidates",
-    "current_context_history_slice",
     "list_trace_targets",
-    "reconstruct_memory_history",
     "run_trace",
 ]
