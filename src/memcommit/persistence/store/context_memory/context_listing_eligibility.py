@@ -1,4 +1,4 @@
-"""Scan ordinary Context records into a validated catalog."""
+"""Decide which ordinary Context records qualify for listing, with diagnostics."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from memcommit.persistence.store.context_memory.catalog_model import (
 from .records import _context_name_parts, _validate_context_header
 
 
-class _ContextCatalogScanMixin:
+class _ContextListingEligibilityMixin:
     def _catalog_diagnostic(
         self,
         code: ContextCatalogDiagnosticCode,

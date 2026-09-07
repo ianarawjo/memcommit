@@ -34,8 +34,8 @@ the namespace reads the active Profile and Store, resolves exact
 `ContextAccess`, revalidates Grant attachments, and routes Context loads across
 local and authority stores. Those are application access decisions rather than
 core name-resolution mechanics. Pure lexical expansion remains in
-`core.context_targeting.resolution`, and physical Context discovery remains in
-`persistence.store.context_memory.catalog_scan`.
+`core.context_targeting.resolution`, and ordinary on-disk Context listing
+eligibility remains in `persistence.store.context_memory.context_listing_eligibility`.
 
 The catalog observes these invariants:
 

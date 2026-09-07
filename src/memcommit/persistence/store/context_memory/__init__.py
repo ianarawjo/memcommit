@@ -9,7 +9,7 @@ from . import models as _models_module
 from . import records as _records_module
 from . import current as _current_module
 from . import addressing as _addressing_module
-from . import catalog_scan as _catalog_scan_module
+from . import context_listing_eligibility as _context_listing_eligibility_module
 from . import context_creation_availability as _context_creation_availability_module
 from . import loading as _loading_module
 from . import rename as _rename_module
@@ -18,7 +18,7 @@ from . import creation as _creation_module
 from . import lifecycle as _lifecycle_module
 from . import query_source as _query_source_module
 from .addressing import _ContextAddressingMixin
-from .catalog_scan import _ContextCatalogScanMixin
+from .context_listing_eligibility import _ContextListingEligibilityMixin
 from .context_creation_availability import _ContextCreationAvailabilityMixin
 from .loading import _ContextLoadingMixin
 from .rename import _ContextRenameMixin
@@ -34,7 +34,7 @@ _IMPLEMENTATION_MODULES = (
     _records_module,
     _current_module,
     _addressing_module,
-    _catalog_scan_module,
+    _context_listing_eligibility_module,
     _context_creation_availability_module,
     _loading_module,
     _rename_module,
@@ -48,7 +48,7 @@ _IMPLEMENTATION_MODULES = (
 class ContextMemoryStoreMixin(
     _CurrentContextStoreMixin,
     _ContextAddressingMixin,
-    _ContextCatalogScanMixin,
+    _ContextListingEligibilityMixin,
     _ContextCreationAvailabilityMixin,
     _ContextLoadingMixin,
     _ContextRenameMixin,

@@ -45,8 +45,9 @@ three initial slices or the seven Context/Memory modules are final service bound
 The second-stage split follows independently named persistence actions rather than an
 arbitrary line limit:
 
-- `catalog_scan.py` scans record headers into the ordinary Context catalog and reports
-  typed omissions without following unsafe namespace entries;
+- `context_listing_eligibility.py` decides which ordinary Context records qualify
+  for listing through path, JSON, and minimum-header checks, retaining typed
+  omission diagnostics without following unsafe namespace entries;
 - `addressing.py` resolves Context and checkpoint paths under one guarded storage root;
 - `context_creation_availability.py` checks name validity, existing Context records,
   and storage availability before a new ordinary Context is created;
@@ -90,6 +91,28 @@ body remain unchanged: pruning stops at a nonempty directory or any removal erro
 and never removes the Context storage root. Creation checks remain read-only and
 do not reserve a name; transaction owners retain their locking and write-time
 revalidation. This move changes physical ownership, not storage or command behavior.
+
+### Naming the Context listing checks
+
+Finding a record path is only the first step of ordinary Context enumeration.
+The persistence owner must decide whether that entry can appear in the list and
+retain a typed diagnostic when a candidate fails its path, JSON, or minimum-header
+checks. A malformed sibling should not hide the names that pass those checks;
+callers that require a complete graph can reject the reported omissions instead.
+
+`context_listing_eligibility.py` and `_ContextListingEligibilityMixin` name this
+inclusion decision. The former `catalog_scan` and considered `context_discovery`
+names emphasize traversal without explaining how candidates become list entries.
+The module description no longer calls the result a generally validated catalog:
+minimum-header checks do not establish Memory-content or reference integrity, and
+storage listing eligibility does not grant read authority.
+
+The move preserves the existing method bodies, diagnostic codes, result models,
+ordering, legacy-name rules, and public `scan_context_catalog`/`list_context_names`
+contracts. `_scan_context_record_paths` keeps its narrower path-discovery role for
+both tolerant listing and strict graph loading. Full record validation stays with
+the loaders; Grant-aware readable namespace composition stays in the application
+access layer. This change does not broaden listing or introduce a new validator.
 
 ## Operation persistence and infrastructure decomposition
 

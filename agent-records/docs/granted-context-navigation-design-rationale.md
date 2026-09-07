@@ -77,8 +77,8 @@ active Profile registry, verifies that the supplied Store belongs to that
 Profile, joins each receiver-owned placement to its exact Grant UID, and applies the
 READ-versus-visible-only policy. Pure access-name hierarchy and lexical
 expansion remain under `core.context_targeting.resolution`, while ordinary
-on-disk Context discovery remains under
-`persistence.store.context_memory.catalog_scan`.
+on-disk Context listing eligibility remains under
+`persistence.store.context_memory.context_listing_eligibility`.
 
 The capability remains shared rather than moving into the Contexts operation.
 Contexts, Switch, setup screens, and other operations all consume the same

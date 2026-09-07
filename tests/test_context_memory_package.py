@@ -38,7 +38,7 @@ EXPECTED_METHODS = {
         "_context_file",
         "_checkpoints_dir",
     },
-    "catalog_scan.py": {
+    "context_listing_eligibility.py": {
         "_catalog_diagnostic",
         "_scan_context_record_paths",
         "scan_context_catalog",
@@ -148,7 +148,7 @@ def test_context_memory_surface_composes_the_focused_mixins() -> None:
     ) == (
         "current",
         "addressing",
-        "catalog_scan",
+        "context_listing_eligibility",
         "context_creation_availability",
         "loading",
         "rename",
