@@ -1,8 +1,3 @@
-from memcommit.adapters.console.commands import _load_entrypoint_attribute
-
+from .command import cmd
 
 __all__ = ["cmd"]
-
-
-def __getattr__(name: str):
-    return _load_entrypoint_attribute(__name__, __all__, name)

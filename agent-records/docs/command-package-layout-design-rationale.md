@@ -20,9 +20,22 @@ in that package's `command.py`; an adapter with independently meaningful CLI
 and workflow responsibilities may instead use a nested
 `commands/<entry>/command/` package. The entry's `__init__.py` publishes only
 the CLI surface used by composition (`cmd`, `app`, or the two write-protection
-apps). That surface loads lazily: importing a sibling such as
+apps). Most surfaces load lazily: importing a sibling such as
 `find.chat_shell` must not initialize `find.command` and create a cycle back
 through operation code.
+
+The ordinary `init` console package directly exports `cmd` from `.command`.
+The CLI entry point accesses `init.cmd` during registration for every invocation,
+and the only production imports of `init.choose_name` and `init.receipt` are
+inside that command implementation. Deferring this particular export therefore
+does not avoid command loading on the current user execution path. The direct
+import removes the attribute hook and loader indirection while preserving
+`init.cmd`, `__all__`, and callback identity. Importing an Init helper now also
+loads the command; independent helper loading is not a contract for this
+package. This decision is scoped to ordinary Init and does not remove lazy
+loading from other command or application packages. No repository test required
+the removed Init attribute hook; functional Init tests remain.
+
 Files used by one entry live beside that command and drop the repeated prefix:
 
 ```text
