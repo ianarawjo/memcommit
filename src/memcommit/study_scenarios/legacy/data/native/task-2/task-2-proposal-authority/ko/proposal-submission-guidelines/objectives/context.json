@@ -1,0 +1,44 @@
+{
+  "uid": "beb9059e-15c3-52d5-8805-70aecbb5da7f",
+  "name": "proposal-submission-guidelines/objectives",
+  "memories": {
+    "ef3d227a-30c3-559f-8bd0-5dfc49dc5e69": {
+      "type": "memory",
+      "uid": "ef3d227a-30c3-559f-8bd0-5dfc49dc5e69",
+      "content": "연구 목표와 질문을 합쳐 60~80단어로 작성하라."
+    },
+    "baae7762-a298-57da-8b56-dedca1e74b1f": {
+      "type": "memory",
+      "uid": "baae7762-a298-57da-8b56-dedca1e74b1f",
+      "content": "주된 연구 목표를 한 문장으로 작성하라."
+    },
+    "fe75068c-5a22-5ccd-87c8-aa815ff146aa": {
+      "type": "memory",
+      "uid": "fe75068c-5a22-5ccd-87c8-aa815ff146aa",
+      "content": "이 제안서를 작성하는 사용자는 제한된 두 쪽에 맞추기 위해 연구 질문을 세 개 이하로 좁히려 한다."
+    },
+    "ec87bfc6-a068-587b-92ef-b328d27705be": {
+      "type": "memory",
+      "uid": "ec87bfc6-a068-587b-92ef-b328d27705be",
+      "content": "이 제안서를 작성하는 사용자는 서로 다른 내부 조언을 공식 제출 지침과 대조해 최종 구성을 결정하려 한다."
+    },
+    "3c80ea67-5aca-5887-8945-24581a5fffbc": {
+      "type": "memory",
+      "uid": "3c80ea67-5aca-5887-8945-24581a5fffbc",
+      "content": "주된 연구 목표가 달성되었다고 판단할 기준을 명시하라."
+    },
+    "182188e7-ab1a-52d5-8fe0-2d4bec452758": {
+      "type": "memory",
+      "uid": "182188e7-ab1a-52d5-8fe0-2d4bec452758",
+      "content": "심사 패널은 명시된 연구 목표와 성공 기준을 대응시켜 제안서의 초점을 비교한다."
+    }
+  },
+  "order": [
+    "ef3d227a-30c3-559f-8bd0-5dfc49dc5e69",
+    "baae7762-a298-57da-8b56-dedca1e74b1f",
+    "fe75068c-5a22-5ccd-87c8-aa815ff146aa",
+    "ec87bfc6-a068-587b-92ef-b328d27705be",
+    "3c80ea67-5aca-5887-8945-24581a5fffbc",
+    "182188e7-ab1a-52d5-8fe0-2d4bec452758"
+  ]
+}

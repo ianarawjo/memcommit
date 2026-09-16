@@ -1,0 +1,26 @@
+{
+  "uid": "d5d0a8b4-d425-5c9f-9325-56329df711ef",
+  "name": "practice/description",
+  "memories": {
+    "89ff1887-d807-5a04-94d7-424fff9a93b9": {
+      "type": "memory",
+      "uid": "89ff1887-d807-5a04-94d7-424fff9a93b9",
+      "content": "memcommit is a research prototype that provides command-line and terminal user interfaces (CLI/TUI) for managing agent memory and supporting collaboration among people and agents. Through memcommit's operations and structural concepts—including Memories, Contexts, Profiles, Grants, and Sessions—you can manage agent memories as they are collected, organized, and propagated among people and agents. In this study, you will use memcommit in three different situations, each involving a different context, goal, and kind of memory."
+    },
+    "cbd46e2b-722d-5fac-abb9-36abad820333": {
+      "type": "memory",
+      "uid": "cbd46e2b-722d-5fac-abb9-36abad820333",
+      "content": "SITUATION · Before beginning the three study tasks, complete a short practice exercise to become familiar with how memcommit organizes and presents its commands. Each newline-separated editing note in `practice/source` is stored as its own Memory, preserving the boundaries between the original requests. Some notes still combine recurring constraints, rough wording, and typos."
+    },
+    "1e046596-b6f1-5623-aebb-52c46b4a54be": {
+      "type": "memory",
+      "uid": "1e046596-b6f1-5623-aebb-52c46b4a54be",
+      "content": "TASK · Divide their underlying constraints into appropriate atomic Memories without performing the requested edits, adding instructions, or changing the intended meaning, so that each constraint can be reviewed independently. Open `mem help`, inspect the available operations, find the operation designed for atomization, and use it to atomize the notes and save the result as `practice/source-atomized`."
+    }
+  },
+  "order": [
+    "89ff1887-d807-5a04-94d7-424fff9a93b9",
+    "cbd46e2b-722d-5fac-abb9-36abad820333",
+    "1e046596-b6f1-5623-aebb-52c46b4a54be"
+  ]
+}

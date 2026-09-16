@@ -1,0 +1,44 @@
+{
+  "uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+  "name": "local/guardrails/retention-and-revocation",
+  "memories": {
+    "13b65314-02d9-5f22-bfc0-fd08b861f8f0": {
+      "type": "memory",
+      "uid": "13b65314-02d9-5f22-bfc0-fd08b861f8f0",
+      "content": "Retain a sharing draft temporarily only for as long as user review requires."
+    },
+    "9bf4b3d7-ab89-5a22-8caa-de9debc744e9": {
+      "type": "memory",
+      "uid": "9bf4b3d7-ab89-5a22-8caa-de9debc744e9",
+      "content": "Remove a draft rejected by the user from reusable working state."
+    },
+    "4004ad20-547d-5588-a4d5-2bceff66005f": {
+      "type": "memory",
+      "uid": "4004ad20-547d-5588-a4d5-2bceff66005f",
+      "content": "Do not convey the content of an excluded Memory to the recipient."
+    },
+    "38256d79-12a4-5f38-aca9-357056cab7ce": {
+      "type": "memory",
+      "uid": "38256d79-12a4-5f38-aca9-357056cab7ce",
+      "content": "Do not reuse a revoked sharing item in a later transmission."
+    },
+    "9db14c6f-298a-5b48-b7a6-d323cafbfd7f": {
+      "type": "memory",
+      "uid": "9db14c6f-298a-5b48-b7a6-d323cafbfd7f",
+      "content": "Removing a sharing draft does not delete the source local Memory."
+    },
+    "044511b2-40d0-55cb-912c-49c4ec0874fc": {
+      "type": "memory",
+      "uid": "044511b2-40d0-55cb-912c-49c4ec0874fc",
+      "content": "A recipient that does not receive a revocation notice may judge that the prior approval remains valid."
+    }
+  },
+  "order": [
+    "13b65314-02d9-5f22-bfc0-fd08b861f8f0",
+    "9bf4b3d7-ab89-5a22-8caa-de9debc744e9",
+    "4004ad20-547d-5588-a4d5-2bceff66005f",
+    "38256d79-12a4-5f38-aca9-357056cab7ce",
+    "9db14c6f-298a-5b48-b7a6-d323cafbfd7f",
+    "044511b2-40d0-55cb-912c-49c4ec0874fc"
+  ]
+}

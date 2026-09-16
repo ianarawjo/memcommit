@@ -1,0 +1,68 @@
+{
+  "uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+  "name": "local/personal-memory/2025/08",
+  "memories": {
+    "15c3941e-ed44-508f-ae30-b51456b5ba86": {
+      "type": "memory",
+      "uid": "15c3941e-ed44-508f-ae30-b51456b5ba86",
+      "content": "The user keeps packing tape for returns in an upper kitchen drawer."
+    },
+    "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4": {
+      "type": "memory",
+      "uid": "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4",
+      "content": "The user arrived ten minutes before the post office closed and found that numbered-ticket intake had ended."
+    },
+    "8946f9da-e325-59c3-9260-2d2f590d3701": {
+      "type": "memory",
+      "uid": "8946f9da-e325-59c3-9260-2d2f590d3701",
+      "content": "Before the next visit, the user checked the operating hours and arrived one hour before closing."
+    },
+    "67e8b160-a57d-56e5-a766-741b7ce0e939": {
+      "type": "memory",
+      "uid": "67e8b160-a57d-56e5-a766-741b7ce0e939",
+      "content": "The user went to the counter without closing a return box and had to go back to the packing station."
+    },
+    "efd0706b-600a-5ac1-926e-cc0602ca0086": {
+      "type": "memory",
+      "uid": "efd0706b-600a-5ac1-926e-cc0602ca0086",
+      "content": "For the next return, the user sealed the box at home and completed intake in one attempt."
+    },
+    "1e8a6f7e-0911-5a34-ad82-172479d1a7a4": {
+      "type": "memory",
+      "uid": "1e8a6f7e-0911-5a34-ad82-172479d1a7a4",
+      "content": "The user scheduled bank and post-office errands for the same day, but they took a long time because the destinations were in different directions."
+    },
+    "a8670161-257e-51ab-8e30-0e282952278f": {
+      "type": "memory",
+      "uid": "a8670161-257e-51ab-8e30-0e282952278f",
+      "content": "The following week, after checking the locations on a map, the user visited nearby branches in sequence."
+    },
+    "2db70f53-99ee-556c-a8c1-b809881cbebd": {
+      "type": "memory",
+      "uid": "2db70f53-99ee-556c-a8c1-b809881cbebd",
+      "content": "Postal staff expect a return-label barcode to arrive affixed flat, without a fold."
+    },
+    "38d60cc4-2f91-5cc2-b511-55cdbbe12c32": {
+      "type": "memory",
+      "uid": "38d60cc4-2f91-5cc2-b511-55cdbbe12c32",
+      "content": "Before grouping errands into one outing, check each institution's location and operating hours that day."
+    },
+    "1272087c-a535-5612-8c7a-1bc257183788": {
+      "type": "memory",
+      "uid": "1272087c-a535-5612-8c7a-1bc257183788",
+      "content": "Postal and financial counters may operate on different hours than usual around public holidays."
+    }
+  },
+  "order": [
+    "15c3941e-ed44-508f-ae30-b51456b5ba86",
+    "84d1fd1c-9508-5f05-9a7c-1d5f20ecf4a4",
+    "8946f9da-e325-59c3-9260-2d2f590d3701",
+    "67e8b160-a57d-56e5-a766-741b7ce0e939",
+    "efd0706b-600a-5ac1-926e-cc0602ca0086",
+    "1e8a6f7e-0911-5a34-ad82-172479d1a7a4",
+    "a8670161-257e-51ab-8e30-0e282952278f",
+    "2db70f53-99ee-556c-a8c1-b809881cbebd",
+    "38d60cc4-2f91-5cc2-b511-55cdbbe12c32",
+    "1272087c-a535-5612-8c7a-1bc257183788"
+  ]
+}

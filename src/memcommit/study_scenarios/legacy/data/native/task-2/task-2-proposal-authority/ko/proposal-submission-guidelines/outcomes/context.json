@@ -1,0 +1,26 @@
+{
+  "uid": "a3229f2e-43d1-5629-9104-2d49292b7a75",
+  "name": "proposal-submission-guidelines/outcomes",
+  "memories": {
+    "10dfd39a-ceec-5f80-a629-ba7838fa7a36": {
+      "type": "memory",
+      "uid": "10dfd39a-ceec-5f80-a629-ba7838fa7a36",
+      "content": "예상 결과와 기여를 합쳐 80~100단어로 작성하라."
+    },
+    "62614c82-39bc-517f-896a-ec7c9bff0e0f": {
+      "type": "memory",
+      "uid": "62614c82-39bc-517f-896a-ec7c9bff0e0f",
+      "content": "연구 결과가 바꿀 수 있는 설계 또는 운영 결정을 하나 이상 특정하라."
+    },
+    "e474b07f-9266-5632-889d-d238aeaf25eb": {
+      "type": "memory",
+      "uid": "e474b07f-9266-5632-889d-d238aeaf25eb",
+      "content": "심사자는 예상 결과를 이미 확인된 효과와 구분해 읽는다."
+    }
+  },
+  "order": [
+    "10dfd39a-ceec-5f80-a629-ba7838fa7a36",
+    "62614c82-39bc-517f-896a-ec7c9bff0e0f",
+    "e474b07f-9266-5632-889d-d238aeaf25eb"
+  ]
+}

@@ -1,10 +1,16 @@
+# Keep the public repository limited to the distributable source and setup.
+/*
+!/.gitignore
+!/README.md
+!/pyproject.toml
+!/uv.lock
+!/src/
+
+# Generated files and local configuration are never distribution inputs.
 __pycache__/
 *.py[cod]
-*$py.class
-*.egg
 *.egg-info/
-
-.venv/
-.env/
-.pytest_cache/
 .DS_Store
+.env
+.env.*
+.venv/

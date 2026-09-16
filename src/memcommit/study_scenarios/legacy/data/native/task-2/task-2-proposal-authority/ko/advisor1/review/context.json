@@ -1,0 +1,80 @@
+{
+  "uid": "57ec8c37-1a0a-5f3b-82e9-51adad82677c",
+  "name": "advisor1/review",
+  "memories": {
+    "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9": {
+      "type": "memory",
+      "uid": "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9",
+      "content": "제출 전 한 차례는 사용자 문제, 설계 개입, 평가 논리의 타당성만 따로 검토하라."
+    },
+    "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25": {
+      "type": "memory",
+      "uid": "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25",
+      "content": "연구 질문과 시제품의 핵심 기능이 서로 일치하는지 대조하라."
+    },
+    "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9": {
+      "type": "memory",
+      "uid": "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9",
+      "content": "평가 과업과 대표 측정값이 서로 일치하는지 대조하라."
+    },
+    "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5": {
+      "type": "memory",
+      "uid": "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5",
+      "content": "수집할 근거와 바꾸려는 설계·운영 결정이 서로 일치하는지 대조하라."
+    },
+    "0f89ab25-d9ee-5669-aa99-a0fe07803915": {
+      "type": "memory",
+      "uid": "0f89ab25-d9ee-5669-aa99-a0fe07803915",
+      "content": "사용자 문제, 설계 개입, 사용자 연구, 기대 기여가 같은 논리적 흐름을 이루는지 마지막에 점검하라."
+    },
+    "3e4a9a3b-abc2-54ed-9b87-f81abf61b541": {
+      "type": "memory",
+      "uid": "3e4a9a3b-abc2-54ed-9b87-f81abf61b541",
+      "content": "HCI 심사자는 연구 질문과 시제품 기능이 연결되지 않으면 설계 개입의 타당성을 낮게 본다."
+    },
+    "fb785649-1947-5e7d-aafb-308f14fb21b4": {
+      "type": "memory",
+      "uid": "fb785649-1947-5e7d-aafb-308f14fb21b4",
+      "content": "HCI 심사자는 평가 과업이 대표 측정값을 만들지 못하면 평가 계획의 타당성을 낮게 본다."
+    },
+    "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2": {
+      "type": "memory",
+      "uid": "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2",
+      "content": "HCI 심사자는 수집할 근거가 설계·운영 결정을 바꾸지 못하면 기여의 실용성을 낮게 본다."
+    },
+    "d17ba26c-187e-57bc-8468-c9c053fc303d": {
+      "type": "memory",
+      "uid": "d17ba26c-187e-57bc-8468-c9c053fc303d",
+      "content": "각 연구 질문, 형성 평가 자료, 설계 수정 판단이 끊김 없이 이어지는지 마지막에 대조하라."
+    },
+    "48a91d19-cc68-5400-8971-8125236f3fbf": {
+      "type": "memory",
+      "uid": "48a91d19-cc68-5400-8971-8125236f3fbf",
+      "content": "제안한 설계 원리의 적용 조건과 실패할 경계 사례가 함께 제시되었는지 검토하라."
+    },
+    "774341c9-b92d-53a5-a24c-59c75e39756b": {
+      "type": "memory",
+      "uid": "774341c9-b92d-53a5-a24c-59c75e39756b",
+      "content": "사용자는 시제품 결과와 그 결과에서 도출한 이전 가능한 설계 지식을 분리해야 기여를 검토받을 수 있다."
+    },
+    "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e": {
+      "type": "memory",
+      "uid": "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e",
+      "content": "통제된 형성 평가의 관찰 범위에는 실제 사용 맥락의 장기 적응과 운영 변화가 포함되지 않는다."
+    }
+  },
+  "order": [
+    "0dda8eb3-3287-5bb6-9b26-b1c00cc038d9",
+    "c8e0c9dd-dc4a-5a7d-9a82-e7ee449a4b25",
+    "f93c5baa-3c2b-5e37-b07b-0b00e8b22ab9",
+    "8dae0ad6-2a6d-5d99-98db-b0d48a1140e5",
+    "0f89ab25-d9ee-5669-aa99-a0fe07803915",
+    "3e4a9a3b-abc2-54ed-9b87-f81abf61b541",
+    "fb785649-1947-5e7d-aafb-308f14fb21b4",
+    "02f8ddd8-32b0-5e3b-b358-5e0472a6e0d2",
+    "d17ba26c-187e-57bc-8468-c9c053fc303d",
+    "48a91d19-cc68-5400-8971-8125236f3fbf",
+    "774341c9-b92d-53a5-a24c-59c75e39756b",
+    "877015ae-ab0b-561c-9fe3-3abb2d0aaa4e"
+  ]
+}

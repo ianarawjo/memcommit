@@ -1,0 +1,68 @@
+{
+  "uid": "f95f7748-b112-5084-ad52-6848cdf1280b",
+  "name": "participant/construction-updates/event-relocations",
+  "memories": {
+    "3fcfa405-cf3d-500e-810b-28ddc81fefca": {
+      "type": "memory",
+      "uid": "3fcfa405-cf3d-500e-810b-28ddc81fefca",
+      "content": "campus-wiki/event-relocations 수정: 공사기간 10층 전시·행사홀의 관람은 중단된다."
+    },
+    "1754ab18-13ca-5e07-a40c-eb12e45dcd1e": {
+      "type": "memory",
+      "uid": "1754ab18-13ca-5e07-a40c-eb12e45dcd1e",
+      "content": "campus-wiki/event-relocations 수정: 공사기간에는 본관 행사장의 신규 예약을 받지 마라."
+    },
+    "686d630d-defe-5aa1-a28d-470b3ebb9059": {
+      "type": "memory",
+      "uid": "686d630d-defe-5aa1-a28d-470b3ebb9059",
+      "content": "campus-wiki/event-relocations 추가: 공사기간 본관 행사장의 대체 장소로 동측 독립동 대강당을 안내하라."
+    },
+    "967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a": {
+      "type": "memory",
+      "uid": "967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a",
+      "content": "campus-wiki/event-relocations 추가: 공사기간 본관 행사장의 대체 장소로 공학관 3층 다목적실을 안내하라."
+    },
+    "9d4a1560-5a6d-5c3f-8414-a56f1acc7f18": {
+      "type": "memory",
+      "uid": "9d4a1560-5a6d-5c3f-8414-a56f1acc7f18",
+      "content": "campus-wiki/event-relocations 추가: 공사기간 동측 독립동 대강당은 본관 행사장의 대체 행사 공간으로 전환된다."
+    },
+    "2587dbb3-dc02-5e13-b1de-9d704c7a706a": {
+      "type": "memory",
+      "uid": "2587dbb3-dc02-5e13-b1de-9d704c7a706a",
+      "content": "campus-wiki/event-relocations 수정: 행사 안내 에이전트는 공사기간 폐쇄된 본관 행사장을 비교 후보에서 제외하고 지정 대체 공간만 비교할 수 있다."
+    },
+    "eee1213e-3582-5c9a-bde8-78af7b216df0": {
+      "type": "memory",
+      "uid": "eee1213e-3582-5c9a-bde8-78af7b216df0",
+      "content": "campus-wiki/event-relocations 수정: 행사 안내 에이전트는 공사기간 본관 행사장 예약을 생성하거나 복원할 수 없고 대체 공간별 예약 창구만 안내할 수 있다."
+    },
+    "b867c632-6a7e-55c8-8371-91b3f0e1bb89": {
+      "type": "memory",
+      "uid": "b867c632-6a7e-55c8-8371-91b3f0e1bb89",
+      "content": "campus-wiki/event-relocations 수정: 본관 행사장에 와 본 적 있는 외부 방문객은 이전 방문 때의 출입구와 층이 그대로라고 기대해 공사기간 대체 장소 안내를 놓칠 가능성이 있다."
+    },
+    "9ab36f33-97ce-5790-8b2e-d0ab195039ef": {
+      "type": "memory",
+      "uid": "9ab36f33-97ce-5790-8b2e-d0ab195039ef",
+      "content": "campus-wiki/event-relocations 추가: 공사기간 동측 독립동 대강당의 별도 반입구는 본관 이전 행사 장비의 반입 지점으로 전환된다."
+    },
+    "8bf7a20c-ced2-51ad-8847-1fbb946ea3a5": {
+      "type": "memory",
+      "uid": "8bf7a20c-ced2-51ad-8847-1fbb946ea3a5",
+      "content": "campus-wiki/event-relocations 수정: 외부 행사 운영업체는 공사기간에도 기존 본관 반입 절차가 유효하다고 가정해 장비를 기존 반입구로 보내거나 대체 장소의 접근 규칙을 뒤늦게 확인할 가능성이 있다."
+    }
+  },
+  "order": [
+    "3fcfa405-cf3d-500e-810b-28ddc81fefca",
+    "1754ab18-13ca-5e07-a40c-eb12e45dcd1e",
+    "686d630d-defe-5aa1-a28d-470b3ebb9059",
+    "967fc4ad-d6e6-5f2c-b3e0-973f163f9a9a",
+    "9d4a1560-5a6d-5c3f-8414-a56f1acc7f18",
+    "2587dbb3-dc02-5e13-b1de-9d704c7a706a",
+    "eee1213e-3582-5c9a-bde8-78af7b216df0",
+    "b867c632-6a7e-55c8-8371-91b3f0e1bb89",
+    "9ab36f33-97ce-5790-8b2e-d0ab195039ef",
+    "8bf7a20c-ced2-51ad-8847-1fbb946ea3a5"
+  ]
+}

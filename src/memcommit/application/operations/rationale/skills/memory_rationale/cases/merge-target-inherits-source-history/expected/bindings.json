@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "document": {
+    "status": "AVAILABLE",
+    "provenance": {
+      "$memory": "2b485b16-91e3-55c1-baa6-406a9432f4b0"
+    },
+    "rule_ids": [
+      "R01_COMPLETE_RETAINED_LINEAGE",
+      "R02_ORIGIN_CONTEXT",
+      "R04_CHRONOLOGICAL_LIFECYCLE",
+      "R05_SELECTED_MEMORY_BOUNDARY",
+      "R06_NATURAL_NARRATIVE",
+      "R07_COMPACT_COMPLETE",
+      "R10_EXACT_EXCERPT_ANCHOR",
+      "R12_CONTEXT_MOVEMENT",
+      "R14_MERGE_DISPOSITION"
+    ]
+  }
+}

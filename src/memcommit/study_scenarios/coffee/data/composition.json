@@ -1,0 +1,227 @@
+{
+  "1": {
+    "grants": [
+      {
+        "key": "coffee-task-1-customer-perspectives",
+        "authority_context": "task-1/customer-perspectives",
+        "attachment_context": "task-1",
+        "public_name": "task-1/customer-perspectives",
+        "permissions": [
+          "READ"
+        ],
+        "recursive": true
+      }
+    ],
+    "participant": [
+      {
+        "name": "practice",
+        "purposes": []
+      },
+      {
+        "name": "practice/coffee",
+        "purposes": []
+      },
+      {
+        "name": "practice/coffee/chunk-atomize-summarize",
+        "purposes": [
+          "PRACTICE_TRANSCRIPT"
+        ]
+      },
+      {
+        "name": "practice/coffee/compare-merge-meld-update",
+        "purposes": []
+      },
+      {
+        "name": "practice/coffee/compare-merge-meld-update/a",
+        "purposes": [
+          "PP",
+          "PP",
+          "PP",
+          "PP"
+        ]
+      },
+      {
+        "name": "practice/coffee/compare-merge-meld-update/b",
+        "purposes": [
+          "PP",
+          "PP",
+          "PP",
+          "PP"
+        ]
+      },
+      {
+        "name": "practice/coffee/search-find-sever-forget",
+        "purposes": [
+          "KB",
+          "KB",
+          "KB",
+          "KB",
+          "KB"
+        ]
+      },
+      {
+        "name": "task-1",
+        "purposes": []
+      }
+    ],
+    "authority": [
+      {
+        "name": "task-1/customer-perspectives",
+        "purposes": []
+      },
+      {
+        "name": "task-1/customer-perspectives/woohooovertime",
+        "purposes": [
+          "KB",
+          "PP",
+          "SM",
+          "UM",
+          "WM",
+          "WM",
+          "OM",
+          "OM"
+        ]
+      },
+      {
+        "name": "task-1/customer-perspectives/saycheesecake",
+        "purposes": [
+          "KB",
+          "PP",
+          "SM",
+          "SM",
+          "UM",
+          "WM",
+          "OM",
+          "OM"
+        ]
+      },
+      {
+        "name": "task-1/customer-perspectives/strollersnackpack",
+        "purposes": [
+          "KB",
+          "KB",
+          "PP",
+          "SM",
+          "UM",
+          "UM",
+          "WM",
+          "OM"
+        ]
+      }
+    ]
+  },
+  "2": {
+    "grants": [
+      {
+        "key": "coffee-task-2-operational-perspectives",
+        "authority_context": "task-2/operational-perspectives",
+        "attachment_context": "task-2",
+        "public_name": "task-2/operational-perspectives",
+        "permissions": [
+          "READ"
+        ],
+        "recursive": true
+      }
+    ],
+    "participant": [
+      {
+        "name": "task-2",
+        "purposes": []
+      }
+    ],
+    "authority": [
+      {
+        "name": "task-2/operational-perspectives",
+        "purposes": []
+      },
+      {
+        "name": "task-2/operational-perspectives/coffeewithtaylor",
+        "purposes": [
+          "KB",
+          "KB",
+          "PP",
+          "PP",
+          "SM",
+          "UM",
+          "WM",
+          "OM"
+        ]
+      },
+      {
+        "name": "task-2/operational-perspectives/morrowcoffee-official",
+        "purposes": [
+          "KB",
+          "PP",
+          "SM",
+          "WM",
+          "PP",
+          "UM",
+          "OM",
+          "UM"
+        ]
+      },
+      {
+        "name": "task-2/operational-perspectives/consulting-newwavecafeculture",
+        "purposes": [
+          "WM",
+          "PP",
+          "SM",
+          "OM",
+          "UM",
+          "PP",
+          "KB",
+          "KB"
+        ]
+      }
+    ]
+  },
+  "3": {
+    "grants": [
+      {
+        "key": "coffee-task-3-friend-conditions",
+        "authority_context": "task-3/friend-cafe/conditions",
+        "attachment_context": "task-3",
+        "public_name": "task-3/friend-cafe/conditions",
+        "permissions": [
+          "READ"
+        ],
+        "recursive": false
+      },
+      {
+        "key": "coffee-task-3-friend-share-endpoint",
+        "authority_context": "task-3/friend-cafe",
+        "attachment_context": "task-3",
+        "public_name": "task-3/friend-cafe",
+        "permissions": [
+          "SHARE"
+        ],
+        "recursive": false
+      }
+    ],
+    "participant": [
+      {
+        "name": "task-3",
+        "purposes": []
+      }
+    ],
+    "authority": [
+      {
+        "name": "task-3/friend-cafe",
+        "purposes": []
+      },
+      {
+        "name": "task-3/friend-cafe/conditions",
+        "purposes": [
+          "KB",
+          "PP",
+          "KB",
+          "UM",
+          "UM",
+          "KB",
+          "KB",
+          "OM"
+        ]
+      }
+    ]
+  }
+}

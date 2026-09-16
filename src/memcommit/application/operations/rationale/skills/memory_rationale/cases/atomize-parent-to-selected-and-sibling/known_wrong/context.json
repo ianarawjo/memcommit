@@ -1,0 +1,32 @@
+{
+  "uid": "9943130a-8485-5041-bc62-7690b65fa4f8",
+  "name": "rationale/skills/memory_rationale/cases/atomize-parent-to-selected-and-sibling/known_wrong",
+  "memories": {
+    "f86825e4-72c4-5822-88cd-e03931be5d54": {
+      "type": "memory",
+      "uid": "f86825e4-72c4-5822-88cd-e03931be5d54",
+      "content": "This content originally appeared as the first instruction in a longer Memory. Atomize made it independently revisable, and it remains current and unchanged."
+    },
+    "0aea864a-1510-5864-83fd-a4a17d23aeaa": {
+      "type": "memory",
+      "uid": "0aea864a-1510-5864-83fd-a4a17d23aeaa",
+      "content": "Generic purpose and status prose displace the exact compound source and the sibling result that explain what the split did."
+    },
+    "22a1939d-1356-5643-9ee5-91cf6daeffb2": {
+      "type": "memory",
+      "uid": "22a1939d-1356-5643-9ee5-91cf6daeffb2",
+      "content": "Atomize created the current no-edit Memory."
+    },
+    "c955b991-2173-59ab-b6f9-2beccb05f482": {
+      "type": "memory",
+      "uid": "c955b991-2173-59ab-b6f9-2beccb05f482",
+      "content": "The created label hides both the parent content and the second result of the split."
+    }
+  },
+  "order": [
+    "f86825e4-72c4-5822-88cd-e03931be5d54",
+    "0aea864a-1510-5864-83fd-a4a17d23aeaa",
+    "22a1939d-1356-5643-9ee5-91cf6daeffb2",
+    "c955b991-2173-59ab-b6f9-2beccb05f482"
+  ]
+}

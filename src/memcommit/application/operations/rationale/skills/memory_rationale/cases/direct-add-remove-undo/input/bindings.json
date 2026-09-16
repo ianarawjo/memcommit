@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "document": {
+    "selected_memory_id": "selected",
+    "context_name": "lifecycle",
+    "history_available": true,
+    "originals": [],
+    "current": [
+      {
+        "id": "selected",
+        "content": {
+          "$memory": "dfdc2db5-d1dd-54ea-b4db-b5be3eb9c0a6"
+        },
+        "position": 0
+      }
+    ],
+    "events": [
+      {
+        "kind": "ADD",
+        "command": "add",
+        "description": {
+          "$memory": "2873c1cf-ba00-54f6-a3e1-bc3f723e5c4e"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "88a1ec83-c565-54b6-84ae-9cbea16c41e1"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "REMOVE",
+        "command": "remove",
+        "description": {
+          "$memory": "010c531b-0f55-5c44-8051-d853e6f4d6dc"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "31b4abfb-e10e-5d69-a6ae-9550a9336f93"
+            },
+            "position": 0
+          }
+        ],
+        "after": []
+      },
+      {
+        "kind": "ADD",
+        "command": "undo",
+        "description": {
+          "$memory": "f63fe908-4295-57db-a7a2-030009d51746"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "ae1f1f6e-7a88-5b27-9600-ccaa6a34fd30"
+            },
+            "position": 0
+          }
+        ]
+      }
+    ],
+    "warnings": [],
+    "limit": 40,
+    "unit": "words",
+    "relations": []
+  }
+}

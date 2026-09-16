@@ -1,0 +1,278 @@
+{
+  "uid": "2a28d793-1cef-58b1-8392-36d7a32941d8",
+  "name": "rationale/skills/memory_rationale/cases/um-sentence-chunk-lifecycle/input",
+  "memories": {
+    "ba3a841b-949e-59f5-8c3a-8cef95d39c3a": {
+      "type": "memory",
+      "uid": "ba3a841b-949e-59f5-8c3a-8cef95d39c3a",
+      "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts."
+    },
+    "5f50b0d5-d5c7-5086-9583-bc16a348f0f1": {
+      "type": "memory",
+      "uid": "5f50b0d5-d5c7-5086-9583-bc16a348f0f1",
+      "content": "Chunked 3 Memory(s) into 8 Memories (method=sentences)"
+    },
+    "151cf7ba-d448-5d2f-9b14-1f276eb89075": {
+      "type": "memory",
+      "uid": "151cf7ba-d448-5d2f-9b14-1f276eb89075",
+      "content": "Context structural split using method 'sentences'."
+    },
+    "1087eaa6-e645-5006-81b5-458d696034bb": {
+      "type": "memory",
+      "uid": "1087eaa6-e645-5006-81b5-458d696034bb",
+      "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts."
+    },
+    "1dfe82fd-48d0-5b82-8f69-4a546ed833f2": {
+      "type": "memory",
+      "uid": "1dfe82fd-48d0-5b82-8f69-4a546ed833f2",
+      "content": "Chunked 3 Memory(s) into 8 Memories (method=sentences)"
+    },
+    "ddad953f-d750-5f7d-afaa-cef2c40f6cd7": {
+      "type": "memory",
+      "uid": "ddad953f-d750-5f7d-afaa-cef2c40f6cd7",
+      "content": "Context structural split using method 'sentences'."
+    },
+    "4e276a2b-8572-5240-b96a-65e826029214": {
+      "type": "memory",
+      "uid": "4e276a2b-8572-5240-b96a-65e826029214",
+      "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected."
+    },
+    "16a4aaa8-7e7f-58d3-88ce-6acc04cdd3d6": {
+      "type": "memory",
+      "uid": "16a4aaa8-7e7f-58d3-88ce-6acc04cdd3d6",
+      "content": "Chunked 3 Memory(s) into 8 Memories (method=sentences)"
+    },
+    "0f8610c9-ddb8-54c3-a8bd-95a6dafd3c1d": {
+      "type": "memory",
+      "uid": "0f8610c9-ddb8-54c3-a8bd-95a6dafd3c1d",
+      "content": "Context structural split using method 'sentences'."
+    },
+    "296fae88-ad4d-58f2-b103-796c2fb9d8dd": {
+      "type": "memory",
+      "uid": "296fae88-ad4d-58f2-b103-796c2fb9d8dd",
+      "content": "Um..."
+    },
+    "2e6dd1cc-8529-5383-a44c-e9a1fd4478ad": {
+      "type": "memory",
+      "uid": "2e6dd1cc-8529-5383-a44c-e9a1fd4478ad",
+      "content": "Chunked 3 Memory(s) into 8 Memories (method=sentences)"
+    },
+    "93ab0ecc-36f5-54e9-8f8f-217819aa2d2b": {
+      "type": "memory",
+      "uid": "93ab0ecc-36f5-54e9-8f8f-217819aa2d2b",
+      "content": "Context structural split using method 'sentences'."
+    },
+    "655830e8-6393-5895-9624-4b7e1db8cb74": {
+      "type": "memory",
+      "uid": "655830e8-6393-5895-9624-4b7e1db8cb74",
+      "content": "for example, use distribute, not divide, when material is absorbed into two parts."
+    },
+    "9350fd75-4101-549e-9abd-3539f433cd43": {
+      "type": "memory",
+      "uid": "9350fd75-4101-549e-9abd-3539f433cd43",
+      "content": "Undo command 'mem chunk'"
+    },
+    "4913cf24-ffde-5ab9-b484-7c65cda4cb64": {
+      "type": "memory",
+      "uid": "4913cf24-ffde-5ab9-b484-7c65cda4cb64",
+      "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected."
+    },
+    "3cfb2941-2c13-55e3-b23a-c3ed5fe598b0": {
+      "type": "memory",
+      "uid": "3cfb2941-2c13-55e3-b23a-c3ed5fe598b0",
+      "content": "Undo command 'mem chunk'"
+    },
+    "6ff4d3da-2159-5739-85d3-f2de6fc4bbc7": {
+      "type": "memory",
+      "uid": "6ff4d3da-2159-5739-85d3-f2de6fc4bbc7",
+      "content": "Um..."
+    },
+    "7f08c080-3abe-5ab1-bc38-ab16f3181f1d": {
+      "type": "memory",
+      "uid": "7f08c080-3abe-5ab1-bc38-ab16f3181f1d",
+      "content": "Undo command 'mem chunk'"
+    },
+    "71e78f48-c537-5aef-8fd9-4ce43f6ff59e": {
+      "type": "memory",
+      "uid": "71e78f48-c537-5aef-8fd9-4ce43f6ff59e",
+      "content": "for example, use distribute, not divide, when material is absorbed into two parts."
+    },
+    "a832badf-39e3-51f4-b515-f33cd437a073": {
+      "type": "memory",
+      "uid": "a832badf-39e3-51f4-b515-f33cd437a073",
+      "content": "Undo command 'mem chunk'"
+    },
+    "b2eea6e5-a37e-5f5b-a9e6-07c049ebd970": {
+      "type": "memory",
+      "uid": "b2eea6e5-a37e-5f5b-a9e6-07c049ebd970",
+      "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts."
+    },
+    "8203388b-01f6-5775-9552-b3878d55c8ec": {
+      "type": "memory",
+      "uid": "8203388b-01f6-5775-9552-b3878d55c8ec",
+      "content": "Redo command 'mem chunk'"
+    },
+    "0284101e-9fb2-5a4c-93b1-84ca5434c22d": {
+      "type": "memory",
+      "uid": "0284101e-9fb2-5a4c-93b1-84ca5434c22d",
+      "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts."
+    },
+    "40bb5698-680a-5f4a-a387-feeb9cf694a3": {
+      "type": "memory",
+      "uid": "40bb5698-680a-5f4a-a387-feeb9cf694a3",
+      "content": "Redo command 'mem chunk'"
+    },
+    "acfa399b-2038-56ea-9496-ec546da3161c": {
+      "type": "memory",
+      "uid": "acfa399b-2038-56ea-9496-ec546da3161c",
+      "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected."
+    },
+    "cc6292d1-df62-59d6-9199-93bc630bf7cf": {
+      "type": "memory",
+      "uid": "cc6292d1-df62-59d6-9199-93bc630bf7cf",
+      "content": "Redo command 'mem chunk'"
+    },
+    "f3c67fec-90ac-500d-ad5c-c713dd7c8541": {
+      "type": "memory",
+      "uid": "f3c67fec-90ac-500d-ad5c-c713dd7c8541",
+      "content": "Um..."
+    },
+    "5a3b798c-511c-5830-a860-7d8505523959": {
+      "type": "memory",
+      "uid": "5a3b798c-511c-5830-a860-7d8505523959",
+      "content": "Redo command 'mem chunk'"
+    },
+    "cca1b1a9-a442-5c56-97fa-06437104834e": {
+      "type": "memory",
+      "uid": "cca1b1a9-a442-5c56-97fa-06437104834e",
+      "content": "for example, use distribute, not divide, when material is absorbed into two parts."
+    },
+    "ae46522c-417d-55f0-8881-f7a086c38af9": {
+      "type": "memory",
+      "uid": "ae46522c-417d-55f0-8881-f7a086c38af9",
+      "content": "Removed memory: Um..."
+    },
+    "3a91a2c6-d7a7-5c95-b733-a321ff33e1a7": {
+      "type": "memory",
+      "uid": "3a91a2c6-d7a7-5c95-b733-a321ff33e1a7",
+      "content": "Um..."
+    },
+    "ad98c2dc-7e0f-581c-8443-6da4ebb2b4e8": {
+      "type": "memory",
+      "uid": "ad98c2dc-7e0f-581c-8443-6da4ebb2b4e8",
+      "content": "Chunked 3 Memory(s) into 8 Memories (method=sentences)"
+    },
+    "8dab8144-5fa5-553e-8cc2-2501c2b88caa": {
+      "type": "memory",
+      "uid": "8dab8144-5fa5-553e-8cc2-2501c2b88caa",
+      "content": "Context structural split using method 'sentences'."
+    },
+    "11572041-645d-5839-b76e-3368b20eb261": {
+      "type": "memory",
+      "uid": "11572041-645d-5839-b76e-3368b20eb261",
+      "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected. Um... for example, use distribute, not divide, when material is absorbed into two parts."
+    },
+    "c2fcee7e-98fc-567e-91d2-8bb2f91cdcde": {
+      "type": "memory",
+      "uid": "c2fcee7e-98fc-567e-91d2-8bb2f91cdcde",
+      "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected."
+    },
+    "a91d9c4e-e3b7-5e3f-9e4c-3942a025889c": {
+      "type": "memory",
+      "uid": "a91d9c4e-e3b7-5e3f-9e4c-3942a025889c",
+      "content": "Um..."
+    },
+    "a525779d-3093-528b-8101-f0244990d117": {
+      "type": "memory",
+      "uid": "a525779d-3093-528b-8101-f0244990d117",
+      "content": "for example, use distribute, not divide, when material is absorbed into two parts."
+    },
+    "400173b0-694b-5dda-b28b-e6c676ffd70b": {
+      "type": "memory",
+      "uid": "400173b0-694b-5dda-b28b-e6c676ffd70b",
+      "content": "Preserved the preceding sibling Memory"
+    },
+    "9e20eb32-4206-5ace-a680-2902633a2d80": {
+      "type": "memory",
+      "uid": "9e20eb32-4206-5ace-a680-2902633a2d80",
+      "content": "The condition and inclusive example jointly define one minimal-change instruction."
+    },
+    "9af06c59-6fd9-59f8-bf7a-dd7f72cd5588": {
+      "type": "memory",
+      "uid": "9af06c59-6fd9-59f8-bf7a-dd7f72cd5588",
+      "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected."
+    },
+    "ccca35c7-7bee-5149-bdaf-2a25d9a9fe68": {
+      "type": "memory",
+      "uid": "ccca35c7-7bee-5149-bdaf-2a25d9a9fe68",
+      "content": "When I ask to change one expression, leave almost everything else as it is, including technical or project-specific terms that I selected."
+    },
+    "585b325e-5858-5b52-aa11-9c37b33420de": {
+      "type": "memory",
+      "uid": "585b325e-5858-5b52-aa11-9c37b33420de",
+      "content": "Preserved the following sibling Memory"
+    },
+    "ebd1caa7-af18-52fd-84ed-75b9c5f1061c": {
+      "type": "memory",
+      "uid": "ebd1caa7-af18-52fd-84ed-75b9c5f1061c",
+      "content": "The example's scope could not be decided safely."
+    },
+    "7573bd94-13c1-5101-9648-19ccfa7b8a7a": {
+      "type": "memory",
+      "uid": "7573bd94-13c1-5101-9648-19ccfa7b8a7a",
+      "content": "for example, use distribute, not divide, when material is absorbed into two parts."
+    },
+    "4f716bf0-0b15-5c1a-8293-7b64dc48444e": {
+      "type": "memory",
+      "uid": "4f716bf0-0b15-5c1a-8293-7b64dc48444e",
+      "content": "for example, use distribute, not divide, when material is absorbed into two parts."
+    }
+  },
+  "order": [
+    "ba3a841b-949e-59f5-8c3a-8cef95d39c3a",
+    "5f50b0d5-d5c7-5086-9583-bc16a348f0f1",
+    "151cf7ba-d448-5d2f-9b14-1f276eb89075",
+    "1087eaa6-e645-5006-81b5-458d696034bb",
+    "1dfe82fd-48d0-5b82-8f69-4a546ed833f2",
+    "ddad953f-d750-5f7d-afaa-cef2c40f6cd7",
+    "4e276a2b-8572-5240-b96a-65e826029214",
+    "16a4aaa8-7e7f-58d3-88ce-6acc04cdd3d6",
+    "0f8610c9-ddb8-54c3-a8bd-95a6dafd3c1d",
+    "296fae88-ad4d-58f2-b103-796c2fb9d8dd",
+    "2e6dd1cc-8529-5383-a44c-e9a1fd4478ad",
+    "93ab0ecc-36f5-54e9-8f8f-217819aa2d2b",
+    "655830e8-6393-5895-9624-4b7e1db8cb74",
+    "9350fd75-4101-549e-9abd-3539f433cd43",
+    "4913cf24-ffde-5ab9-b484-7c65cda4cb64",
+    "3cfb2941-2c13-55e3-b23a-c3ed5fe598b0",
+    "6ff4d3da-2159-5739-85d3-f2de6fc4bbc7",
+    "7f08c080-3abe-5ab1-bc38-ab16f3181f1d",
+    "71e78f48-c537-5aef-8fd9-4ce43f6ff59e",
+    "a832badf-39e3-51f4-b515-f33cd437a073",
+    "b2eea6e5-a37e-5f5b-a9e6-07c049ebd970",
+    "8203388b-01f6-5775-9552-b3878d55c8ec",
+    "0284101e-9fb2-5a4c-93b1-84ca5434c22d",
+    "40bb5698-680a-5f4a-a387-feeb9cf694a3",
+    "acfa399b-2038-56ea-9496-ec546da3161c",
+    "cc6292d1-df62-59d6-9199-93bc630bf7cf",
+    "f3c67fec-90ac-500d-ad5c-c713dd7c8541",
+    "5a3b798c-511c-5830-a860-7d8505523959",
+    "cca1b1a9-a442-5c56-97fa-06437104834e",
+    "ae46522c-417d-55f0-8881-f7a086c38af9",
+    "3a91a2c6-d7a7-5c95-b733-a321ff33e1a7",
+    "ad98c2dc-7e0f-581c-8443-6da4ebb2b4e8",
+    "8dab8144-5fa5-553e-8cc2-2501c2b88caa",
+    "11572041-645d-5839-b76e-3368b20eb261",
+    "c2fcee7e-98fc-567e-91d2-8bb2f91cdcde",
+    "a91d9c4e-e3b7-5e3f-9e4c-3942a025889c",
+    "a525779d-3093-528b-8101-f0244990d117",
+    "400173b0-694b-5dda-b28b-e6c676ffd70b",
+    "9e20eb32-4206-5ace-a680-2902633a2d80",
+    "9af06c59-6fd9-59f8-bf7a-dd7f72cd5588",
+    "ccca35c7-7bee-5149-bdaf-2a25d9a9fe68",
+    "585b325e-5858-5b52-aa11-9c37b33420de",
+    "ebd1caa7-af18-52fd-84ed-75b9c5f1061c",
+    "7573bd94-13c1-5101-9648-19ccfa7b8a7a",
+    "4f716bf0-0b15-5c1a-8293-7b64dc48444e"
+  ]
+}

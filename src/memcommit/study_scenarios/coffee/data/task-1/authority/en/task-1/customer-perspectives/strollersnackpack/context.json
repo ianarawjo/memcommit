@@ -1,0 +1,56 @@
+{
+  "uid": "9027149c-9f5b-55bb-b7d0-19c8411f8879",
+  "name": "task-1/customer-perspectives/strollersnackpack",
+  "memories": {
+    "62ed75fb-0af9-53d3-8dbc-723c98142578": {
+      "type": "memory",
+      "uid": "62ed75fb-0af9-53d3-8dbc-723c98142578",
+      "content": "The café gathering that the user regularly organizes includes four adults and four to six young children."
+    },
+    "f8c2046a-e7b7-5b04-8d44-b502d64977fd": {
+      "type": "memory",
+      "uid": "f8c2046a-e7b7-5b04-8d44-b502d64977fd",
+      "content": "Every café the user marked for a return visit had a step-free entrance and an easy route for a stroller to reach the tables."
+    },
+    "943800ae-a7f8-5c77-be42-7114522dfb8d": {
+      "type": "memory",
+      "uid": "943800ae-a7f8-5c77-be42-7114522dfb8d",
+      "content": "When suggesting a gathering place for visits with children, lower the priority of cafés that strongly expect customers to maintain a quiet atmosphere."
+    },
+    "cdd303d8-f678-5fe9-90d0-5fdf57d0090e": {
+      "type": "memory",
+      "uid": "cdd303d8-f678-5fe9-90d0-5fdf57d0090e",
+      "content": "In addition to organizing visit records, this agent helps the user coordinate companions' arrival times and the children's nap and meal times."
+    },
+    "d510dde0-5c7f-5b2b-b600-0c1539b4c308": {
+      "type": "memory",
+      "uid": "d510dde0-5c7f-5b2b-b600-0c1539b4c308",
+      "content": "The user prefers one large table where the group can sit together without dispersing, even if the interior is less distinctive."
+    },
+    "03fd9413-2fe7-571d-8bad-bfed506c2ca3": {
+      "type": "memory",
+      "uid": "03fd9413-2fe7-571d-8bad-bfed506c2ca3",
+      "content": "Because the user has experienced people staring when a child cried, the user cannot relax in an atmosphere where even a small sound draws scrutiny."
+    },
+    "b3c5f20e-f0e3-5ceb-b49c-306b3c696e33": {
+      "type": "memory",
+      "uid": "b3c5f20e-f0e3-5ceb-b49c-306b3c696e33",
+      "content": "Hard table corners or breakable decorations at a young child's height can turn small movements into collisions or damage."
+    },
+    "5074ad89-7101-551f-a5f7-18ef4c71d186": {
+      "type": "memory",
+      "uid": "5074ad89-7101-551f-a5f7-18ef4c71d186",
+      "content": "The user expects that customers working or studying alone may experience a baby's crying and a large group's conversation as disruptive."
+    }
+  },
+  "order": [
+    "62ed75fb-0af9-53d3-8dbc-723c98142578",
+    "f8c2046a-e7b7-5b04-8d44-b502d64977fd",
+    "943800ae-a7f8-5c77-be42-7114522dfb8d",
+    "cdd303d8-f678-5fe9-90d0-5fdf57d0090e",
+    "d510dde0-5c7f-5b2b-b600-0c1539b4c308",
+    "03fd9413-2fe7-571d-8bad-bfed506c2ca3",
+    "b3c5f20e-f0e3-5ceb-b49c-306b3c696e33",
+    "5074ad89-7101-551f-a5f7-18ef4c71d186"
+  ]
+}

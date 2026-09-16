@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "document": {
+    "selected_memory_id": "selected",
+    "context_name": "practice/source-atomized",
+    "history_available": true,
+    "originals": [
+      {
+        "id": "parent",
+        "content": {
+          "$memory": "e485c557-e78a-56f2-b8d2-c55736e19010"
+        },
+        "position": 0
+      }
+    ],
+    "current": [
+      {
+        "id": "selected",
+        "content": {
+          "$memory": "ccc666b2-0f2e-545b-a0fa-8bbe75d22d73"
+        },
+        "position": 0
+      },
+      {
+        "id": "sibling",
+        "content": {
+          "$memory": "bc193701-f522-5e78-b75c-282449482784"
+        },
+        "position": 1
+      }
+    ],
+    "events": [
+      {
+        "kind": "ADD",
+        "command": "atomize",
+        "description": {
+          "$memory": "a64fa3ce-0aa1-51b9-8960-297738aaa25f"
+        },
+        "reason": {
+          "$memory": "0f6653bd-8779-5d87-9a6f-eae60ef9e15a"
+        },
+        "before": [],
+        "after": [
+          {
+            "id": "parent",
+            "content": {
+              "$memory": "55fc8dc2-dd49-56ba-a9ba-6874b52a2e92"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "REMOVE",
+        "command": "atomize",
+        "description": {
+          "$memory": "fa7aae89-3025-5758-bfc4-e40ce8e13461"
+        },
+        "reason": {
+          "$memory": "65db979d-2e77-512f-bae6-204275d1e471"
+        },
+        "before": [
+          {
+            "id": "parent",
+            "content": {
+              "$memory": "2d287d9d-d082-5cd9-b03f-c2d5d5496e2a"
+            },
+            "position": 0
+          }
+        ],
+        "after": []
+      },
+      {
+        "kind": "ADD",
+        "command": "atomize",
+        "description": {
+          "$memory": "b75e0da9-8071-50ba-ad1c-71e0684530dc"
+        },
+        "reason": {
+          "$memory": "4333b54b-bcd9-5526-87ef-b4e47bb4c4df"
+        },
+        "before": [],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "84dfb3e5-3cce-5553-8187-ec5723bc3450"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "ADD",
+        "command": "atomize",
+        "description": {
+          "$memory": "edaa1d0e-f2d0-5374-887e-ceb5ae545e5a"
+        },
+        "reason": {
+          "$memory": "1c62c048-3f92-55d4-8cc5-6da27a8c5cef"
+        },
+        "before": [],
+        "after": [
+          {
+            "id": "sibling",
+            "content": {
+              "$memory": "19adb376-a065-559c-a88f-3d4fcb867ed5"
+            },
+            "position": 1
+          }
+        ]
+      }
+    ],
+    "warnings": [],
+    "limit": 40,
+    "unit": "words",
+    "relations": [
+      {
+        "kind": "DERIVED_FROM",
+        "command": "atomize",
+        "description": {
+          "$memory": "649d48f1-3995-5481-817f-2beac22c74a5"
+        },
+        "reason": {
+          "$memory": "9a6bdf18-6c4a-5e4d-938f-4715ac6b1fc2"
+        },
+        "before": [
+          {
+            "id": "parent",
+            "content": {
+              "$memory": "42e94ef3-93fb-5f01-b533-c8d2ae772c4d"
+            },
+            "position": 0
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "b4ec8182-eb9b-52aa-96b8-4aaaa19d95c9"
+            },
+            "position": 0
+          },
+          {
+            "id": "sibling",
+            "content": {
+              "$memory": "1e3bc2bf-c19f-5a7d-a535-9b39b553d1ab"
+            },
+            "position": 1
+          }
+        ]
+      }
+    ]
+  }
+}

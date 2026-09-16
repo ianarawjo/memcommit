@@ -1,0 +1,14 @@
+{
+  "uid": "490af365-ef23-5791-8006-affaeed45f73",
+  "name": "rationale/skills/memory_rationale/cases/um-sentence-chunk-lifecycle/expected",
+  "memories": {
+    "26b2f3f7-c698-5b3e-8f27-2d9303630a60": {
+      "type": "memory",
+      "uid": "26b2f3f7-c698-5b3e-8f27-2d9303630a60",
+      "content": "“Um...” began as a hesitation between a minimal-change instruction and its “distribute, not divide” example. Sentence chunking made it a standalone Memory; undo removed it, redo restored it, and remove later deleted it."
+    }
+  },
+  "order": [
+    "26b2f3f7-c698-5b3e-8f27-2d9303630a60"
+  ]
+}

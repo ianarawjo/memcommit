@@ -1,0 +1,80 @@
+{
+  "uid": "dbe52d14-8d33-5e1e-b380-71066eab0218",
+  "name": "local/personal-memory/2025",
+  "memories": {
+    "2ce7ce06-145c-50c7-bfb4-cb175b9a5255": {
+      "type": "context_ref",
+      "uid": "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+      "name": "local/personal-memory/2025/01"
+    },
+    "ce7367b8-8532-5f43-972a-1665ca8e3e80": {
+      "type": "context_ref",
+      "uid": "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+      "name": "local/personal-memory/2025/02"
+    },
+    "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1": {
+      "type": "context_ref",
+      "uid": "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+      "name": "local/personal-memory/2025/03"
+    },
+    "720d2021-1ec5-52ab-ace4-a93e02b05ad9": {
+      "type": "context_ref",
+      "uid": "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+      "name": "local/personal-memory/2025/04"
+    },
+    "1f913bb6-790c-5490-a20d-127c7aab5892": {
+      "type": "context_ref",
+      "uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+      "name": "local/personal-memory/2025/05"
+    },
+    "870f7336-726a-5d9c-bae4-12585311463e": {
+      "type": "context_ref",
+      "uid": "870f7336-726a-5d9c-bae4-12585311463e",
+      "name": "local/personal-memory/2025/06"
+    },
+    "5c264a7f-0300-587c-ad1c-0439cedc7737": {
+      "type": "context_ref",
+      "uid": "5c264a7f-0300-587c-ad1c-0439cedc7737",
+      "name": "local/personal-memory/2025/07"
+    },
+    "ed84de75-8e18-5bec-908c-a1ff9827b3e3": {
+      "type": "context_ref",
+      "uid": "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+      "name": "local/personal-memory/2025/08"
+    },
+    "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99": {
+      "type": "context_ref",
+      "uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+      "name": "local/personal-memory/2025/09"
+    },
+    "8130b676-dc51-5c31-b7dc-185afdf9cf07": {
+      "type": "context_ref",
+      "uid": "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+      "name": "local/personal-memory/2025/10"
+    },
+    "af363401-7cdc-5426-ad00-4f98635e2dab": {
+      "type": "context_ref",
+      "uid": "af363401-7cdc-5426-ad00-4f98635e2dab",
+      "name": "local/personal-memory/2025/11"
+    },
+    "c54e9dde-005a-5d20-b41b-1313b4713061": {
+      "type": "context_ref",
+      "uid": "c54e9dde-005a-5d20-b41b-1313b4713061",
+      "name": "local/personal-memory/2025/12"
+    }
+  },
+  "order": [
+    "2ce7ce06-145c-50c7-bfb4-cb175b9a5255",
+    "ce7367b8-8532-5f43-972a-1665ca8e3e80",
+    "913e0bfd-f6d9-579e-9a37-ba5daa9d17f1",
+    "720d2021-1ec5-52ab-ace4-a93e02b05ad9",
+    "1f913bb6-790c-5490-a20d-127c7aab5892",
+    "870f7336-726a-5d9c-bae4-12585311463e",
+    "5c264a7f-0300-587c-ad1c-0439cedc7737",
+    "ed84de75-8e18-5bec-908c-a1ff9827b3e3",
+    "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+    "8130b676-dc51-5c31-b7dc-185afdf9cf07",
+    "af363401-7cdc-5426-ad00-4f98635e2dab",
+    "c54e9dde-005a-5d20-b41b-1313b4713061"
+  ]
+}

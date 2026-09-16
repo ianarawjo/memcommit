@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "document": {
+    "selected_memory_id": "selected",
+    "context_name": "practice/2",
+    "history_available": true,
+    "originals": [
+      {
+        "id": "selected",
+        "content": {
+          "$memory": "eb603093-b710-5d84-a7f4-b715ac0028df"
+        },
+        "position": 0
+      }
+    ],
+    "current": [
+      {
+        "id": "selected",
+        "content": {
+          "$memory": "dbd4e69e-b450-5a85-97b0-44b8bb2098a2"
+        },
+        "position": 0
+      }
+    ],
+    "events": [
+      {
+        "kind": "ADD",
+        "command": "add",
+        "description": {
+          "$memory": "3c23e0f1-3824-57b8-ac09-c78c11681a6e"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "ad9c0597-d310-5e9a-a9e0-566c7a6bfd0c"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "ADD",
+        "command": "branch",
+        "description": {
+          "$memory": "1186e870-84e1-5cfb-938f-e478ddf1b802"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "6402102c-997b-59ce-b095-f1172099b315"
+            },
+            "position": 0
+          }
+        ]
+      }
+    ],
+    "warnings": [],
+    "limit": 40,
+    "unit": "words",
+    "relations": [
+      {
+        "kind": "DERIVED_FROM",
+        "command": "branch",
+        "description": {
+          "$memory": "f68bc5f1-bd6f-507d-8656-ff7f1a103b61"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "d936395e-ac6d-5e90-9e2f-a0439ec281e8"
+            },
+            "position": 0
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "67076710-1b1a-5f8f-8645-3e174ffadbd9"
+            },
+            "position": 0
+          }
+        ],
+        "context_transition": {
+          "source": "practice/1",
+          "target": "practice/2"
+        }
+      }
+    ]
+  }
+}

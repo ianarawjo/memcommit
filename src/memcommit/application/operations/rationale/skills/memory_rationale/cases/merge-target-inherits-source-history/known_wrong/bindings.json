@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "document": [
+    {
+      "provenance": {
+        "$memory": "429b9af9-dfa7-5ccc-a2b6-d6e06cfd3a94"
+      },
+      "violates": [
+        "R01_COMPLETE_RETAINED_LINEAGE",
+        "R02_ORIGIN_CONTEXT",
+        "R12_CONTEXT_MOVEMENT",
+        "R14_MERGE_DISPOSITION"
+      ],
+      "reason": {
+        "$memory": "d6284f58-1527-5596-bcd0-d0d92348558f"
+      }
+    },
+    {
+      "provenance": {
+        "$memory": "3ee3bad4-647e-5bdf-ba01-774ddf263ab1"
+      },
+      "violates": [
+        "R05_SELECTED_MEMORY_BOUNDARY",
+        "R12_CONTEXT_MOVEMENT"
+      ],
+      "reason": {
+        "$memory": "70d5f712-3ade-5a2d-a997-cbd3cb11e51c"
+      }
+    }
+  ]
+}

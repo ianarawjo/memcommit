@@ -1,0 +1,38 @@
+{
+  "uid": "86efd53c-c08d-537c-983f-91a7b915640d",
+  "name": "advisor2/scope",
+  "memories": {
+    "6cfd5026-0c04-5ed8-baac-a56e68723aa3": {
+      "type": "memory",
+      "uid": "6cfd5026-0c04-5ed8-baac-a56e68723aa3",
+      "content": "설계 지식을 적용하려는 사용자 집단과 실제 사용 환경을 한 문장으로 특정하라."
+    },
+    "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e": {
+      "type": "memory",
+      "uid": "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e",
+      "content": "심사자는 명시된 대상 집단과 환경을 통해 결과의 일반화 경계를 판단한다."
+    },
+    "25731e2b-8535-5b37-a377-0a3a99dbe189": {
+      "type": "memory",
+      "uid": "25731e2b-8535-5b37-a377-0a3a99dbe189",
+      "content": "설계 지침을 다른 현장에 적용하려면 같아야 하는 업무 흐름, 기술 기반, 운영 권한 조건을 명시하라."
+    },
+    "d79ba448-76b6-592e-b4ba-8cfd98683755": {
+      "type": "memory",
+      "uid": "d79ba448-76b6-592e-b4ba-8cfd98683755",
+      "content": "현장 설계 지식의 전이 가능성은 사용자 특성뿐 아니라 업무 흐름과 기술·조직 기반에도 좌우된다."
+    },
+    "cde0ee2b-af3c-5c0d-b23c-632778c93e20": {
+      "type": "memory",
+      "uid": "cde0ee2b-af3c-5c0d-b23c-632778c93e20",
+      "content": "사용자는 한 배포 현장에서 확인한 결과를 유사한 모든 조직에 적용하려는 경향이 있다."
+    }
+  },
+  "order": [
+    "6cfd5026-0c04-5ed8-baac-a56e68723aa3",
+    "5bc7cf05-8c47-57d4-a749-ec7d2ec45e3e",
+    "25731e2b-8535-5b37-a377-0a3a99dbe189",
+    "d79ba448-76b6-592e-b4ba-8cfd98683755",
+    "cde0ee2b-af3c-5c0d-b23c-632778c93e20"
+  ]
+}

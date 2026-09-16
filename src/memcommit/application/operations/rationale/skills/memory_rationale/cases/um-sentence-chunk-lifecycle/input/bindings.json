@@ -1,0 +1,365 @@
+{
+  "schema_version": 1,
+  "document": {
+    "selected_memory_id": "selected",
+    "context_name": "practice/source",
+    "history_available": true,
+    "originals": [
+      {
+        "id": "parent",
+        "content": {
+          "$memory": "ba3a841b-949e-59f5-8c3a-8cef95d39c3a"
+        },
+        "position": 2
+      }
+    ],
+    "current": [],
+    "events": [
+      {
+        "kind": "REMOVE",
+        "command": "chunk",
+        "description": {
+          "$memory": "5f50b0d5-d5c7-5086-9583-bc16a348f0f1"
+        },
+        "reason": {
+          "$memory": "151cf7ba-d448-5d2f-9b14-1f276eb89075"
+        },
+        "before": [
+          {
+            "id": "parent",
+            "content": {
+              "$memory": "1087eaa6-e645-5006-81b5-458d696034bb"
+            },
+            "position": 2
+          }
+        ],
+        "after": []
+      },
+      {
+        "kind": "ADD",
+        "command": "chunk",
+        "description": {
+          "$memory": "1dfe82fd-48d0-5b82-8f69-4a546ed833f2"
+        },
+        "reason": {
+          "$memory": "ddad953f-d750-5f7d-afaa-cef2c40f6cd7"
+        },
+        "before": [],
+        "after": [
+          {
+            "id": "preceding",
+            "content": {
+              "$memory": "4e276a2b-8572-5240-b96a-65e826029214"
+            },
+            "position": 2
+          }
+        ]
+      },
+      {
+        "kind": "ADD",
+        "command": "chunk",
+        "description": {
+          "$memory": "16a4aaa8-7e7f-58d3-88ce-6acc04cdd3d6"
+        },
+        "reason": {
+          "$memory": "0f8610c9-ddb8-54c3-a8bd-95a6dafd3c1d"
+        },
+        "before": [],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "296fae88-ad4d-58f2-b103-796c2fb9d8dd"
+            },
+            "position": 3
+          }
+        ]
+      },
+      {
+        "kind": "ADD",
+        "command": "chunk",
+        "description": {
+          "$memory": "2e6dd1cc-8529-5383-a44c-e9a1fd4478ad"
+        },
+        "reason": {
+          "$memory": "93ab0ecc-36f5-54e9-8f8f-217819aa2d2b"
+        },
+        "before": [],
+        "after": [
+          {
+            "id": "following",
+            "content": {
+              "$memory": "655830e8-6393-5895-9624-4b7e1db8cb74"
+            },
+            "position": 4
+          }
+        ]
+      },
+      {
+        "kind": "REMOVE",
+        "command": "undo",
+        "description": {
+          "$memory": "9350fd75-4101-549e-9abd-3539f433cd43"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "preceding",
+            "content": {
+              "$memory": "4913cf24-ffde-5ab9-b484-7c65cda4cb64"
+            },
+            "position": 2
+          }
+        ],
+        "after": []
+      },
+      {
+        "kind": "REMOVE",
+        "command": "undo",
+        "description": {
+          "$memory": "3cfb2941-2c13-55e3-b23a-c3ed5fe598b0"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "6ff4d3da-2159-5739-85d3-f2de6fc4bbc7"
+            },
+            "position": 3
+          }
+        ],
+        "after": []
+      },
+      {
+        "kind": "REMOVE",
+        "command": "undo",
+        "description": {
+          "$memory": "7f08c080-3abe-5ab1-bc38-ab16f3181f1d"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "following",
+            "content": {
+              "$memory": "71e78f48-c537-5aef-8fd9-4ce43f6ff59e"
+            },
+            "position": 4
+          }
+        ],
+        "after": []
+      },
+      {
+        "kind": "ADD",
+        "command": "undo",
+        "description": {
+          "$memory": "a832badf-39e3-51f4-b515-f33cd437a073"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "parent",
+            "content": {
+              "$memory": "b2eea6e5-a37e-5f5b-a9e6-07c049ebd970"
+            },
+            "position": 2
+          }
+        ]
+      },
+      {
+        "kind": "REMOVE",
+        "command": "redo",
+        "description": {
+          "$memory": "8203388b-01f6-5775-9552-b3878d55c8ec"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "parent",
+            "content": {
+              "$memory": "0284101e-9fb2-5a4c-93b1-84ca5434c22d"
+            },
+            "position": 2
+          }
+        ],
+        "after": []
+      },
+      {
+        "kind": "ADD",
+        "command": "redo",
+        "description": {
+          "$memory": "40bb5698-680a-5f4a-a387-feeb9cf694a3"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "preceding",
+            "content": {
+              "$memory": "acfa399b-2038-56ea-9496-ec546da3161c"
+            },
+            "position": 2
+          }
+        ]
+      },
+      {
+        "kind": "ADD",
+        "command": "redo",
+        "description": {
+          "$memory": "cc6292d1-df62-59d6-9199-93bc630bf7cf"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "f3c67fec-90ac-500d-ad5c-c713dd7c8541"
+            },
+            "position": 3
+          }
+        ]
+      },
+      {
+        "kind": "ADD",
+        "command": "redo",
+        "description": {
+          "$memory": "5a3b798c-511c-5830-a860-7d8505523959"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "following",
+            "content": {
+              "$memory": "cca1b1a9-a442-5c56-97fa-06437104834e"
+            },
+            "position": 4
+          }
+        ]
+      },
+      {
+        "kind": "REMOVE",
+        "command": "remove",
+        "description": {
+          "$memory": "ae46522c-417d-55f0-8881-f7a086c38af9"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "3a91a2c6-d7a7-5c95-b733-a321ff33e1a7"
+            },
+            "position": 3
+          }
+        ],
+        "after": []
+      }
+    ],
+    "warnings": [],
+    "limit": 40,
+    "unit": "words",
+    "relations": [
+      {
+        "kind": "DERIVED_FROM",
+        "command": "chunk",
+        "description": {
+          "$memory": "ad98c2dc-7e0f-581c-8443-6da4ebb2b4e8"
+        },
+        "reason": {
+          "$memory": "8dab8144-5fa5-553e-8cc2-2501c2b88caa"
+        },
+        "before": [
+          {
+            "id": "parent",
+            "content": {
+              "$memory": "11572041-645d-5839-b76e-3368b20eb261"
+            },
+            "position": 2
+          }
+        ],
+        "after": [
+          {
+            "id": "preceding",
+            "content": {
+              "$memory": "c2fcee7e-98fc-567e-91d2-8bb2f91cdcde"
+            },
+            "position": 2
+          },
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "a91d9c4e-e3b7-5e3f-9e4c-3942a025889c"
+            },
+            "position": 3
+          },
+          {
+            "id": "following",
+            "content": {
+              "$memory": "a525779d-3093-528b-8101-f0244990d117"
+            },
+            "position": 4
+          }
+        ]
+      },
+      {
+        "kind": "CONTINUES_AS",
+        "command": "atomize",
+        "description": {
+          "$memory": "400173b0-694b-5dda-b28b-e6c676ffd70b"
+        },
+        "reason": {
+          "$memory": "9e20eb32-4206-5ace-a680-2902633a2d80"
+        },
+        "before": [
+          {
+            "id": "preceding",
+            "content": {
+              "$memory": "9af06c59-6fd9-59f8-bf7a-dd7f72cd5588"
+            },
+            "position": 2
+          }
+        ],
+        "after": [
+          {
+            "id": "preceding",
+            "content": {
+              "$memory": "ccca35c7-7bee-5149-bdaf-2a25d9a9fe68"
+            },
+            "position": 3
+          }
+        ]
+      },
+      {
+        "kind": "CONTINUES_AS",
+        "command": "atomize",
+        "description": {
+          "$memory": "585b325e-5858-5b52-aa11-9c37b33420de"
+        },
+        "reason": {
+          "$memory": "ebd1caa7-af18-52fd-84ed-75b9c5f1061c"
+        },
+        "before": [
+          {
+            "id": "following",
+            "content": {
+              "$memory": "7573bd94-13c1-5101-9648-19ccfa7b8a7a"
+            },
+            "position": 3
+          }
+        ],
+        "after": [
+          {
+            "id": "following",
+            "content": {
+              "$memory": "4f716bf0-0b15-5c1a-8293-7b64dc48444e"
+            },
+            "position": 4
+          }
+        ]
+      }
+    ]
+  }
+}

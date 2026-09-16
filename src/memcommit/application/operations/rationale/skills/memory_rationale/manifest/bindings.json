@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "document": {
+    "schema_version": 1,
+    "cases": [
+      {
+        "id": "um-sentence-chunk-lifecycle",
+        "description": {
+          "$memory": "3645a536-dee1-5e62-950a-c431e23a3cf4"
+        }
+      },
+      {
+        "id": "direct-add-remove-undo",
+        "description": {
+          "$memory": "6716281f-514f-532b-8e5d-0592173e6017"
+        }
+      },
+      {
+        "id": "atomize-parent-to-selected-and-sibling",
+        "description": {
+          "$memory": "b4c9ecd4-a56d-5b0f-b47f-21efba0188d0"
+        }
+      },
+      {
+        "id": "distilled-rule-then-edited",
+        "description": {
+          "$memory": "05c92b0a-11a1-551b-b41d-45c0afcb20f9"
+        }
+      },
+      {
+        "id": "branch-inherited-unchanged-memory",
+        "description": {
+          "$memory": "186edacf-7943-5e4f-9371-4cb411cce75e"
+        }
+      },
+      {
+        "id": "merge-source-copied-to-fresh-target",
+        "description": {
+          "$memory": "70749f21-71c4-5a07-a4ff-aff40070cf3d"
+        }
+      },
+      {
+        "id": "merge-target-inherits-source-history",
+        "description": {
+          "$memory": "059f1c07-da6c-569b-8bce-193f41a08391"
+        }
+      },
+      {
+        "id": "long-edit-run-with-remove-undo-redo",
+        "description": {
+          "$memory": "bd8692ea-9d4a-5964-8ac1-460d2149a79b"
+        }
+      },
+      {
+        "id": "grant-hidden-history",
+        "description": {
+          "$memory": "2b068fe5-11d9-5eca-8528-3f7140eb9167"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "uid": "007fc559-55f7-59a1-b62d-4aae10383425",
+  "name": "practice/coffee/search-find-sever-forget",
+  "memories": {
+    "4e083d72-54ee-596f-8c22-61949a4be826": {
+      "type": "memory",
+      "uid": "4e083d72-54ee-596f-8c22-61949a4be826",
+      "content": "After finishing an errand at a nearby government office, I had some time left and stopped by with my family."
+    },
+    "5b849804-3fb2-5f92-88e6-d5c869a1c223": {
+      "type": "memory",
+      "uid": "5b849804-3fb2-5f92-88e6-d5c869a1c223",
+      "content": "The dessert display showed only prices, so I did not know what the desserts were called, but the one I chose was delicious."
+    },
+    "d3f922a7-5038-5646-8b9a-273b7f716cf5": {
+      "type": "memory",
+      "uid": "d3f922a7-5038-5646-8b9a-273b7f716cf5",
+      "content": "The coffee was also really delicious."
+    },
+    "d5fc7c83-487b-5b3b-bc62-22e1a41e72cf": {
+      "type": "memory",
+      "uid": "d5fc7c83-487b-5b3b-bc62-22e1a41e72cf",
+      "content": "I had to get a key to use the restroom, and it smelled a little, but the building was old, so it seemed unavoidable."
+    },
+    "ddcc08c6-a7a2-525d-b467-eba90de4aca0": {
+      "type": "memory",
+      "uid": "ddcc08c6-a7a2-525d-b467-eba90de4aca0",
+      "content": "The takeaway cup was pretty and felt really good to hold."
+    }
+  },
+  "order": [
+    "4e083d72-54ee-596f-8c22-61949a4be826",
+    "5b849804-3fb2-5f92-88e6-d5c869a1c223",
+    "d3f922a7-5038-5646-8b9a-273b7f716cf5",
+    "d5fc7c83-487b-5b3b-bc62-22e1a41e72cf",
+    "ddcc08c6-a7a2-525d-b467-eba90de4aca0"
+  ]
+}

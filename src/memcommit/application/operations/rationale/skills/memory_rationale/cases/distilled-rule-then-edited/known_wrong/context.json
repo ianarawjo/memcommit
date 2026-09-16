@@ -1,0 +1,32 @@
+{
+  "uid": "c4dda749-8d04-5807-acab-b2b7e9c22dfb",
+  "name": "rationale/skills/memory_rationale/cases/distilled-rule-then-edited/known_wrong",
+  "memories": {
+    "4b12528d-087b-5c0f-8bf1-3290fd6a38e8": {
+      "type": "memory",
+      "uid": "4b12528d-087b-5c0f-8bf1-3290fd6a38e8",
+      "content": "This Memory was distilled as a rule requiring propositions to follow a three-token pattern, then edited to “adfadfafasdf.”"
+    },
+    "9f8324fd-96ec-57e5-b43d-030bb85b746e": {
+      "type": "memory",
+      "uid": "9f8324fd-96ec-57e5-b43d-030bb85b746e",
+      "content": "The abstraction drops the retained Source Context and the exact first derived content even though both fit within the bound."
+    },
+    "8bcc4707-e512-5d0d-8ad7-3166c44c0392": {
+      "type": "memory",
+      "uid": "8bcc4707-e512-5d0d-8ad7-3166c44c0392",
+      "content": "This Memory was edited to “adfadfafasdf.”"
+    },
+    "8fe5ed39-fc1c-5be7-a784-c75940007350": {
+      "type": "memory",
+      "uid": "8fe5ed39-fc1c-5be7-a784-c75940007350",
+      "content": "The latest edit alone hides the Distill origin and the content it replaced."
+    }
+  },
+  "order": [
+    "4b12528d-087b-5c0f-8bf1-3290fd6a38e8",
+    "9f8324fd-96ec-57e5-b43d-030bb85b746e",
+    "8bcc4707-e512-5d0d-8ad7-3166c44c0392",
+    "8fe5ed39-fc1c-5be7-a784-c75940007350"
+  ]
+}

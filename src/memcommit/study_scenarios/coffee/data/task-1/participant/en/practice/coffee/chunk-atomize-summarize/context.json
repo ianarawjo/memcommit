@@ -1,0 +1,14 @@
+{
+  "uid": "ce2d6964-943e-5542-8e54-0b5c95fa8dc5",
+  "name": "practice/coffee/chunk-atomize-summarize",
+  "memories": {
+    "04e5c79e-0274-5818-9da9-b86fdff690c5": {
+      "type": "memory",
+      "uid": "04e5c79e-0274-5818-9da9-b86fdff690c5",
+      "content": "In summer, because the espresso is hot, the ice in an iced coffee, an iced Americano, melts really quickly, so you need a lot of ice from the start. The reason you need a lot of ice is because if you only put in a little, it melts right away, so then the drink gets warm. The ice gets warm, and because the ice gets warm, you should use cold water instead of room-temperature filtered water, the water needs to be cold too, and you also need to clean the buildup properly. Because if you look inside the ice machine and only clean the parts you can see, it can start to smell, and whatever is left inside comes through in the taste of the water, so you need to clean that too."
+    }
+  },
+  "order": [
+    "04e5c79e-0274-5818-9da9-b86fdff690c5"
+  ]
+}

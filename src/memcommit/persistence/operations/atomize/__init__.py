@@ -1,0 +1,1 @@
+"""Atomize persistence owners."""

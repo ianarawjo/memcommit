@@ -1,0 +1,308 @@
+{
+  "uid": "c56f66c9-ea2f-504b-85f3-69eb66929924",
+  "name": "campus-wiki/event-relocations",
+  "memories": {
+    "a0700edb-d51a-54f3-88e9-6096cec36b1e": {
+      "type": "memory",
+      "uid": "a0700edb-d51a-54f3-88e9-6096cec36b1e",
+      "content": "The meeting space on the first floor of the Main Building can be reserved for external events."
+    },
+    "63986020-57b0-574d-aa13-277405aed516": {
+      "type": "memory",
+      "uid": "63986020-57b0-574d-aa13-277405aed516",
+      "content": "The meeting space on the first floor of the Main Building can be reserved for campus meetings."
+    },
+    "a2ec4e87-1f0c-5c29-af2c-5bb560286a2e": {
+      "type": "memory",
+      "uid": "a2ec4e87-1f0c-5c29-af2c-5bb560286a2e",
+      "content": "The exhibition and event hall on the tenth floor of the Main Building remains open for exhibition viewing during recess."
+    },
+    "11e4782c-aad4-580a-9620-beab3072266d": {
+      "type": "memory",
+      "uid": "11e4782c-aad4-580a-9620-beab3072266d",
+      "content": "The exhibition and event hall on the tenth floor of the Main Building continues to host reserved events during recess."
+    },
+    "ec3a4511-80d6-5881-9623-25a75c6a0899": {
+      "type": "memory",
+      "uid": "ec3a4511-80d6-5881-9623-25a75c6a0899",
+      "content": "The auditorium in the separate building east of the Main Building does not share equipment with the Main Building's event facilities."
+    },
+    "a224b6db-0154-5174-86ff-9c1dfa558762": {
+      "type": "memory",
+      "uid": "a224b6db-0154-5174-86ff-9c1dfa558762",
+      "content": "The auditorium in the separate building east of the Main Building does not share an entrance with the Main Building's event facilities."
+    },
+    "50369ec7-7a24-55e3-898c-d9dc9a4c86ed": {
+      "type": "memory",
+      "uid": "50369ec7-7a24-55e3-898c-d9dc9a4c86ed",
+      "content": "Present only spaces confirmed to be operating as alternative event venues."
+    },
+    "a3c819d4-5ec6-5622-a27f-ce8b6e18b2d0": {
+      "type": "memory",
+      "uid": "a3c819d4-5ec6-5622-a27f-ce8b6e18b2d0",
+      "content": "Do not present a space whose available schedule has not been checked as though it were a confirmed reservation."
+    },
+    "2a0f0a0e-1930-5983-9074-de449f8669d5": {
+      "type": "memory",
+      "uid": "2a0f0a0e-1930-5983-9074-de449f8669d5",
+      "content": "External visitors who have previously been to an event venue in the Main Building tend to look for the same entrance and floor they used on their previous visit when they visit again."
+    },
+    "ed4e7c60-edeb-59e3-a590-f6e359069f77": {
+      "type": "memory",
+      "uid": "ed4e7c60-edeb-59e3-a590-f6e359069f77",
+      "content": "The event information agent can compare published event spaces."
+    },
+    "0170aa1a-9723-5f87-9aa3-37150022f6ac": {
+      "type": "memory",
+      "uid": "0170aa1a-9723-5f87-9aa3-37150022f6ac",
+      "content": "The event information agent can compare published operating hours."
+    },
+    "1929991c-36ee-5897-9409-d83400120362": {
+      "type": "memory",
+      "uid": "1929991c-36ee-5897-9409-d83400120362",
+      "content": "The event information agent cannot create reservations."
+    },
+    "c7b42a0e-e4c9-53d2-b2b5-87307bb4957f": {
+      "type": "memory",
+      "uid": "c7b42a0e-e4c9-53d2-b2b5-87307bb4957f",
+      "content": "The event information agent cannot guarantee remaining seat availability."
+    },
+    "a1b88b90-3b59-5f36-8ac4-e45f1962ae64": {
+      "type": "memory",
+      "uid": "a1b88b90-3b59-5f36-8ac4-e45f1962ae64",
+      "content": "Some seminar rooms on the fifth floor of the Main Building are also used for regularly scheduled classes."
+    },
+    "c4fe128d-067a-528d-8ef8-b2810e56884c": {
+      "type": "memory",
+      "uid": "c4fe128d-067a-528d-8ef8-b2810e56884c",
+      "content": "Some seminar rooms on the sixth floor of the Main Building are also used for regularly scheduled classes."
+    },
+    "b79a722a-c043-5e7f-8469-1c761d85219a": {
+      "type": "memory",
+      "uid": "b79a722a-c043-5e7f-8469-1c761d85219a",
+      "content": "Check class schedules before presenting any seminar rooms on the fifth and sixth floors of the Main Building as alternative event rooms."
+    },
+    "4bc2268d-5966-53bd-9501-e8fb0861ddd0": {
+      "type": "memory",
+      "uid": "4bc2268d-5966-53bd-9501-e8fb0861ddd0",
+      "content": "External event operators expect the loading entrance and route to the stage to be clearly confirmed by the day before the event."
+    },
+    "d8cc31a3-a547-5691-92a9-efcb1c96367d": {
+      "type": "memory",
+      "uid": "d8cc31a3-a547-5691-92a9-efcb1c96367d",
+      "content": "The names and capacities of reservable campus spaces are published in the public space directory."
+    },
+    "087bb085-9bc8-57f3-83ee-7e90895904ef": {
+      "type": "memory",
+      "uid": "087bb085-9bc8-57f3-83ee-7e90895904ef",
+      "content": "Submit event space reservation requests through the campus space reservation portal."
+    },
+    "bf506b28-8854-567c-80de-477512ae1f11": {
+      "type": "memory",
+      "uid": "bf506b28-8854-567c-80de-477512ae1f11",
+      "content": "Event organizers must confirm that the capacity is appropriate for the expected number of attendees."
+    },
+    "5015ee36-4f8c-54c7-ae80-caa21c1c837f": {
+      "type": "memory",
+      "uid": "5015ee36-4f8c-54c7-ae80-caa21c1c837f",
+      "content": "Events that require accessible seating can indicate that need in the reservation request."
+    },
+    "bc10fe3c-0618-5c74-91c9-e50ef58d287e": {
+      "type": "memory",
+      "uid": "bc10fe3c-0618-5c74-91c9-e50ef58d287e",
+      "content": "Campus event reservations by external organizations require a campus sponsoring department."
+    },
+    "a2b87746-8b25-5f2e-b5f9-78b2d8f8281d": {
+      "type": "memory",
+      "uid": "a2b87746-8b25-5f2e-b5f9-78b2d8f8281d",
+      "content": "Student organization event reservations must be requested through a registered organization account."
+    },
+    "f995af31-6820-58b1-a805-3d2d03c75014": {
+      "type": "memory",
+      "uid": "f995af31-6820-58b1-a805-3d2d03c75014",
+      "content": "A space reservation is confirmed after an approval confirmation is issued."
+    },
+    "cc720c59-0014-5460-9ccc-94316c641a3c": {
+      "type": "memory",
+      "uid": "cc720c59-0014-5460-9ccc-94316c641a3c",
+      "content": "Space use for recurring events must be approved again each semester."
+    },
+    "a72cb1ad-ea1d-5e17-a5cd-06b082340d0d": {
+      "type": "memory",
+      "uid": "a72cb1ad-ea1d-5e17-a5cd-06b082340d0d",
+      "content": "The reservation time includes the time needed for event setup and teardown."
+    },
+    "c70f4d03-7cc1-528b-a5f8-5944c2012b10": {
+      "type": "memory",
+      "uid": "c70f4d03-7cc1-528b-a5f8-5944c2012b10",
+      "content": "After the event ends, return moved furniture to the space's default arrangement."
+    },
+    "55540a25-fbd0-5cc8-b2db-b83ac4042735": {
+      "type": "memory",
+      "uid": "55540a25-fbd0-5cc8-b2db-b83ac4042735",
+      "content": "Check the usage rules for each space to determine whether food may be brought in."
+    },
+    "9e496450-0188-5f64-84b2-295cd1e9c5da": {
+      "type": "memory",
+      "uid": "9e496450-0188-5f64-84b2-295cd1e9c5da",
+      "content": "Request event audio and video support separately from the space reservation."
+    },
+    "819beea8-c827-53e1-9a95-cb22de35f9ee": {
+      "type": "memory",
+      "uid": "819beea8-c827-53e1-9a95-cb22de35f9ee",
+      "content": "Install temporary event signs so they do not obstruct passageways or emergency exits."
+    },
+    "a4c8e1a2-81e8-52a5-92cd-c79a382cb671": {
+      "type": "memory",
+      "uid": "a4c8e1a2-81e8-52a5-92cd-c79a382cb671",
+      "content": "The event information agent can compare the capacities of spaces in the public directory."
+    },
+    "7795aa61-2921-549b-996c-64240f8e9b2a": {
+      "type": "memory",
+      "uid": "7795aa61-2921-549b-996c-64240f8e9b2a",
+      "content": "The event information agent cannot access private participant lists."
+    },
+    "fdae8ad0-8b99-543b-8c09-f0af60653036": {
+      "type": "memory",
+      "uid": "fdae8ad0-8b99-543b-8c09-f0af60653036",
+      "content": "The event information agent cannot guarantee when a reservation under review will be approved."
+    },
+    "232cd8db-6319-5bd0-a4b9-5861838268e3": {
+      "type": "memory",
+      "uid": "232cd8db-6319-5bd0-a4b9-5861838268e3",
+      "content": "Check both the official event schedule and facilities notices to confirm whether a space is operating that day."
+    },
+    "3329f2cc-afc5-559f-bc3b-ea82df8881d1": {
+      "type": "memory",
+      "uid": "3329f2cc-afc5-559f-bc3b-ea82df8881d1",
+      "content": "Do not present a temporarily held space as a confirmed reserved space."
+    },
+    "f986e70e-4775-5ab3-9d8e-3ea9fc3df540": {
+      "type": "memory",
+      "uid": "f986e70e-4775-5ab3-9d8e-3ea9fc3df540",
+      "content": "Visitors attending external events often expect that they can enter the building any time before the event begins."
+    },
+    "13211336-6483-5331-96e5-24490ce7da63": {
+      "type": "memory",
+      "uid": "13211336-6483-5331-96e5-24490ce7da63",
+      "content": "Event operators bringing equipment expect the loading entrance and route to the stage to be clearly stated in the reservation confirmation."
+    },
+    "22f9c5bf-d01c-59e0-90e3-0cf93bdae8b6": {
+      "type": "memory",
+      "uid": "22f9c5bf-d01c-59e0-90e3-0cf93bdae8b6",
+      "content": "Attendees who need event accessibility support may easily miss the advance contact requirement because they expect the necessary support to be prepared without a separate request."
+    },
+    "e9c632bf-da2a-5b8a-86c0-87da4a8f3ffc": {
+      "type": "memory",
+      "uid": "e9c632bf-da2a-5b8a-86c0-87da4a8f3ffc",
+      "content": "The small seminar rooms in the Main Building have lower capacities than the auditorium in the separate building."
+    },
+    "8ec61da7-e53e-5ef4-b7e6-edafc872ffd8": {
+      "type": "memory",
+      "uid": "8ec61da7-e53e-5ef4-b7e6-edafc872ffd8",
+      "content": "Exhibition viewing hours on the tenth floor of the Main Building are published separately from the usage hours for reserved events."
+    },
+    "5fa014b2-5fca-581b-b07a-7990cea080af": {
+      "type": "memory",
+      "uid": "5fa014b2-5fca-581b-b07a-7990cea080af",
+      "content": "The meeting space on the first floor of the Main Building has a flexible area without fixed seating."
+    },
+    "bb2aa827-e021-5b02-b7ed-e005ca2c291b": {
+      "type": "memory",
+      "uid": "bb2aa827-e021-5b02-b7ed-e005ca2c291b",
+      "content": "The auditorium in the separate building has an event information desk separate from the Main Building."
+    },
+    "cc2a4dc4-bf8a-5902-8ee1-c3c334549ef2": {
+      "type": "memory",
+      "uid": "cc2a4dc4-bf8a-5902-8ee1-c3c334549ef2",
+      "content": "External event vendors expect the campus sponsoring department to confirm the loading time and route."
+    },
+    "5bc6cebc-fff5-59e7-bec6-b6d8d83feb35": {
+      "type": "memory",
+      "uid": "5bc6cebc-fff5-59e7-bec6-b6d8d83feb35",
+      "content": "Canceled public events are marked as canceled on the official event schedule."
+    },
+    "a32a3a9f-4d3e-5727-a91a-ce827831d7d2": {
+      "type": "memory",
+      "uid": "a32a3a9f-4d3e-5727-a91a-ce827831d7d2",
+      "content": "Spaces that can be reserved on weekdays may not operate on public holidays."
+    },
+    "ff9fa75e-f040-54a7-b4b6-30153da4eebd": {
+      "type": "memory",
+      "uid": "ff9fa75e-f040-54a7-b4b6-30153da4eebd",
+      "content": "Emergency safety measures take priority over approved space reservations."
+    },
+    "83b95f40-46ad-54f6-b535-85e99a83ee99": {
+      "type": "memory",
+      "uid": "83b95f40-46ad-54f6-b535-85e99a83ee99",
+      "content": "If space names appear identical, check the building name and floor together."
+    },
+    "d68f7446-40e6-54bf-b812-313b2595c2c8": {
+      "type": "memory",
+      "uid": "d68f7446-40e6-54bf-b812-313b2595c2c8",
+      "content": "Turn in items found at an event venue to the information desk in that building."
+    },
+    "4510b985-b70a-5606-8bbe-98bf494ab656": {
+      "type": "memory",
+      "uid": "4510b985-b70a-5606-8bbe-98bf494ab656",
+      "content": "Event organizers expect the permitted scope of photography to be clearly communicated to attendees in advance."
+    },
+    "2fa16a36-c2d4-5fcd-ad8f-29780fc0bf06": {
+      "type": "memory",
+      "uid": "2fa16a36-c2d4-5fcd-ad8f-29780fc0bf06",
+      "content": "Distinguish between public event information and private participant information when providing guidance."
+    }
+  },
+  "order": [
+    "a0700edb-d51a-54f3-88e9-6096cec36b1e",
+    "63986020-57b0-574d-aa13-277405aed516",
+    "a2ec4e87-1f0c-5c29-af2c-5bb560286a2e",
+    "11e4782c-aad4-580a-9620-beab3072266d",
+    "ec3a4511-80d6-5881-9623-25a75c6a0899",
+    "a224b6db-0154-5174-86ff-9c1dfa558762",
+    "50369ec7-7a24-55e3-898c-d9dc9a4c86ed",
+    "a3c819d4-5ec6-5622-a27f-ce8b6e18b2d0",
+    "2a0f0a0e-1930-5983-9074-de449f8669d5",
+    "ed4e7c60-edeb-59e3-a590-f6e359069f77",
+    "0170aa1a-9723-5f87-9aa3-37150022f6ac",
+    "1929991c-36ee-5897-9409-d83400120362",
+    "c7b42a0e-e4c9-53d2-b2b5-87307bb4957f",
+    "a1b88b90-3b59-5f36-8ac4-e45f1962ae64",
+    "c4fe128d-067a-528d-8ef8-b2810e56884c",
+    "b79a722a-c043-5e7f-8469-1c761d85219a",
+    "4bc2268d-5966-53bd-9501-e8fb0861ddd0",
+    "d8cc31a3-a547-5691-92a9-efcb1c96367d",
+    "087bb085-9bc8-57f3-83ee-7e90895904ef",
+    "bf506b28-8854-567c-80de-477512ae1f11",
+    "5015ee36-4f8c-54c7-ae80-caa21c1c837f",
+    "bc10fe3c-0618-5c74-91c9-e50ef58d287e",
+    "a2b87746-8b25-5f2e-b5f9-78b2d8f8281d",
+    "f995af31-6820-58b1-a805-3d2d03c75014",
+    "cc720c59-0014-5460-9ccc-94316c641a3c",
+    "a72cb1ad-ea1d-5e17-a5cd-06b082340d0d",
+    "c70f4d03-7cc1-528b-a5f8-5944c2012b10",
+    "55540a25-fbd0-5cc8-b2db-b83ac4042735",
+    "9e496450-0188-5f64-84b2-295cd1e9c5da",
+    "819beea8-c827-53e1-9a95-cb22de35f9ee",
+    "a4c8e1a2-81e8-52a5-92cd-c79a382cb671",
+    "7795aa61-2921-549b-996c-64240f8e9b2a",
+    "fdae8ad0-8b99-543b-8c09-f0af60653036",
+    "232cd8db-6319-5bd0-a4b9-5861838268e3",
+    "3329f2cc-afc5-559f-bc3b-ea82df8881d1",
+    "f986e70e-4775-5ab3-9d8e-3ea9fc3df540",
+    "13211336-6483-5331-96e5-24490ce7da63",
+    "22f9c5bf-d01c-59e0-90e3-0cf93bdae8b6",
+    "e9c632bf-da2a-5b8a-86c0-87da4a8f3ffc",
+    "8ec61da7-e53e-5ef4-b7e6-edafc872ffd8",
+    "5fa014b2-5fca-581b-b07a-7990cea080af",
+    "bb2aa827-e021-5b02-b7ed-e005ca2c291b",
+    "cc2a4dc4-bf8a-5902-8ee1-c3c334549ef2",
+    "5bc6cebc-fff5-59e7-bec6-b6d8d83feb35",
+    "a32a3a9f-4d3e-5727-a91a-ce827831d7d2",
+    "ff9fa75e-f040-54a7-b4b6-30153da4eebd",
+    "83b95f40-46ad-54f6-b535-85e99a83ee99",
+    "d68f7446-40e6-54bf-b812-313b2595c2c8",
+    "4510b985-b70a-5606-8bbe-98bf494ab656",
+    "2fa16a36-c2d4-5fcd-ad8f-29780fc0bf06"
+  ]
+}

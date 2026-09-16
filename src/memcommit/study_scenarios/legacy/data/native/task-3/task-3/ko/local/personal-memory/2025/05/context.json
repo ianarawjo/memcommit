@@ -1,0 +1,68 @@
+{
+  "uid": "1f913bb6-790c-5490-a20d-127c7aab5892",
+  "name": "local/personal-memory/2025/05",
+  "memories": {
+    "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d": {
+      "type": "memory",
+      "uid": "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d",
+      "content": "사용자는 남향 창가에 허브 화분 두 개를 두었다."
+    },
+    "95978183-0070-5b12-b117-be39bb343a5e": {
+      "type": "memory",
+      "uid": "95978183-0070-5b12-b117-be39bb343a5e",
+      "content": "사용자가 흙 표면만 보고 매일 물을 준 주에는 한 화분의 잎이 노랗게 변했다."
+    },
+    "8c610ce5-1eb7-52e5-ad81-e8062d23cd19": {
+      "type": "memory",
+      "uid": "8c610ce5-1eb7-52e5-ad81-e8062d23cd19",
+      "content": "사용자가 손가락으로 흙 속을 확인한 뒤 물을 준 주에는 화분에 새 잎이 났다."
+    },
+    "3f886c0c-071b-5f2d-adad-da01345d702f": {
+      "type": "memory",
+      "uid": "3f886c0c-071b-5f2d-adad-da01345d702f",
+      "content": "사용자는 창문을 오래 열어 둔 날 강한 바람에 화분 하나가 넘어졌다."
+    },
+    "afe855b8-f5ad-559c-a63f-6f655ba371a2": {
+      "type": "memory",
+      "uid": "afe855b8-f5ad-559c-a63f-6f655ba371a2",
+      "content": "사용자는 다음날 화분을 창틀 안쪽으로 옮겨 같은 바람에도 넘어지지 않게 했다."
+    },
+    "384c4f5f-b15c-5742-ac79-20106d0dd30b": {
+      "type": "memory",
+      "uid": "384c4f5f-b15c-5742-ac79-20106d0dd30b",
+      "content": "사용자는 이모에게 받은 작은 화분에 식물 이름 표지를 꽂아 두었다."
+    },
+    "48dc89af-ed9d-51a5-a4b1-b809fd818143": {
+      "type": "memory",
+      "uid": "48dc89af-ed9d-51a5-a4b1-b809fd818143",
+      "content": "사용자는 이름 표지가 없는 화분의 관리법을 다른 식물과 혼동했다."
+    },
+    "a2426820-65d6-5c78-ac50-0f32b366ae47": {
+      "type": "memory",
+      "uid": "a2426820-65d6-5c78-ac50-0f32b366ae47",
+      "content": "이모는 화분 관리에서 물 주기보다 햇빛 위치를 먼저 이해하는 일이 중요하다고 여긴다."
+    },
+    "efd51196-ed48-5699-a0f4-c5b8e149d11c": {
+      "type": "memory",
+      "uid": "efd51196-ed48-5699-a0f4-c5b8e149d11c",
+      "content": "식물 관리 알림을 만들기 전에 화분별 이름과 최근 물 준 날짜를 확인하라."
+    },
+    "4c93eeff-566e-5a1a-afb9-035c97fb9c73": {
+      "type": "memory",
+      "uid": "4c93eeff-566e-5a1a-afb9-035c97fb9c73",
+      "content": "사용자의 남향 창가에 둔 허브 화분은 계절과 햇빛 양에 따라 흙이 마르는 속도가 달라진다."
+    }
+  },
+  "order": [
+    "cb09b8ab-c7c4-51bb-a227-039c7cdfae5d",
+    "95978183-0070-5b12-b117-be39bb343a5e",
+    "8c610ce5-1eb7-52e5-ad81-e8062d23cd19",
+    "3f886c0c-071b-5f2d-adad-da01345d702f",
+    "afe855b8-f5ad-559c-a63f-6f655ba371a2",
+    "384c4f5f-b15c-5742-ac79-20106d0dd30b",
+    "48dc89af-ed9d-51a5-a4b1-b809fd818143",
+    "a2426820-65d6-5c78-ac50-0f32b366ae47",
+    "efd51196-ed48-5699-a0f4-c5b8e149d11c",
+    "4c93eeff-566e-5a1a-afb9-035c97fb9c73"
+  ]
+}

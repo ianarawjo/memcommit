@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "document": [
+    {
+      "provenance": {
+        "$memory": "bcb55732-8eb3-593c-a1da-6c039102be11"
+      },
+      "violates": [
+        "R02_ORIGIN_CONTEXT",
+        "R03_DERIVATION_MECHANISM",
+        "R06_NATURAL_NARRATIVE"
+      ],
+      "reason": {
+        "$memory": "348ffc15-799e-56c1-a978-5ced26cdae8a"
+      }
+    },
+    {
+      "provenance": {
+        "$memory": "686ff045-0c1d-5501-9c54-1764f5aa2bdf"
+      },
+      "violates": [
+        "R01_COMPLETE_RETAINED_LINEAGE",
+        "R02_ORIGIN_CONTEXT",
+        "R04_CHRONOLOGICAL_LIFECYCLE"
+      ],
+      "reason": {
+        "$memory": "cd0fb3c5-7a82-555b-8fd1-6a18b2216605"
+      }
+    },
+    {
+      "provenance": {
+        "$memory": "ffe35018-09c6-5604-973a-356abd16512c"
+      },
+      "violates": [
+        "R08_NO_INVENTED_INTENT"
+      ],
+      "reason": {
+        "$memory": "dc2ee244-23b9-551a-b3a6-635a02285a3b"
+      }
+    },
+    {
+      "provenance": {
+        "$memory": "13de1674-d617-5051-8dd4-344ddda84641"
+      },
+      "violates": [
+        "R05_SELECTED_MEMORY_BOUNDARY"
+      ],
+      "reason": {
+        "$memory": "6b6e63fe-f8d0-53fb-8b5b-107f90fa21e2"
+      }
+    }
+  ]
+}

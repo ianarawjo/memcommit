@@ -1,0 +1,62 @@
+{
+  "uid": "725d4213-9ce1-569c-9e91-e4cd0d046bd5",
+  "name": "participant/construction-updates/route-changes",
+  "memories": {
+    "8017409a-8af8-5a55-a49e-e9ccb44b9f34": {
+      "type": "memory",
+      "uid": "8017409a-8af8-5a55-a49e-e9ccb44b9f34",
+      "content": "campus-wiki/route-changes 추가: 본관 1층부터 3층까지를 통과해 중앙도서관으로 가던 실내 동선은 공사기간 이용할 수 없다."
+    },
+    "dbb3c40c-7699-509d-901d-be9de2f110dc": {
+      "type": "memory",
+      "uid": "dbb3c40c-7699-509d-901d-be9de2f110dc",
+      "content": "campus-wiki/route-changes 추가: 3층 후문에서 중앙도서관으로 이어지는 동선은 공사기간 폐쇄된다."
+    },
+    "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f": {
+      "type": "memory",
+      "uid": "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f",
+      "content": "campus-wiki/route-changes 추가: A 야외주차장–본관–중앙도서관 동선은 공사기간 폐쇄된다."
+    },
+    "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9": {
+      "type": "memory",
+      "uid": "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9",
+      "content": "campus-wiki/route-changes 수정: 여름에 냉방되는 본관 실내 동선을 선호하는 학생은 공사기간 야외 대체 경로로 바뀌면 더위와 이동 부담을 크게 느낄 가능성이 있다."
+    },
+    "8276ab56-741f-5f60-ab77-79fe6dc0ba55": {
+      "type": "memory",
+      "uid": "8276ab56-741f-5f60-ab77-79fe6dc0ba55",
+      "content": "campus-wiki/route-changes 추가: 공사기간 학생센터 accessible restroom을 안내할 때는 본관 기준 왼쪽의 accessible route를 이용하도록 안내하라."
+    },
+    "9af0f95c-0a5e-584e-ba7b-92789e071f7e": {
+      "type": "memory",
+      "uid": "9af0f95c-0a5e-584e-ba7b-92789e071f7e",
+      "content": "campus-wiki/route-changes 추가: 공사기간 중앙도서관 접근 가능한 대체 동선은 C 야외주차장–학생센터 accessible entrance–중앙도서관 서측 출입구로 지정된다."
+    },
+    "fd27f19b-5f2c-51ee-a9b2-7182120163cb": {
+      "type": "memory",
+      "uid": "fd27f19b-5f2c-51ee-a9b2-7182120163cb",
+      "content": "campus-wiki/route-changes 추가: 공사기간 중앙도서관 서측 출입구는 폐쇄된 본관 연결 동선의 공식 대체 출입구로 지정된다."
+    },
+    "638f272f-9fbd-5d1f-bfd8-b01618424065": {
+      "type": "memory",
+      "uid": "638f272f-9fbd-5d1f-bfd8-b01618424065",
+      "content": "campus-wiki/route-changes 수정: 동선 안내 에이전트는 공사기간 본관 1층부터 3층까지, 3층 후문, A 야외주차장을 지나는 폐쇄 경로를 비교 후보에서 제외할 수 있다."
+    },
+    "ba9d70f9-02c4-56d9-ac23-f2a532c22488": {
+      "type": "memory",
+      "uid": "ba9d70f9-02c4-56d9-ac23-f2a532c22488",
+      "content": "campus-wiki/route-changes 수정: 이동 지원 동행인은 공사기간 본관 실내 지름길이 폐쇄되면 동행 전에 accessible 대체 동선의 거리와 경사를 다시 확인할 가능성이 있다."
+    }
+  },
+  "order": [
+    "8017409a-8af8-5a55-a49e-e9ccb44b9f34",
+    "dbb3c40c-7699-509d-901d-be9de2f110dc",
+    "2d20c61d-ff20-5bb6-bcdc-3dcbf6c3e21f",
+    "a8bb36e1-2629-5b8f-b4dc-af9b88020dc9",
+    "8276ab56-741f-5f60-ab77-79fe6dc0ba55",
+    "9af0f95c-0a5e-584e-ba7b-92789e071f7e",
+    "fd27f19b-5f2c-51ee-a9b2-7182120163cb",
+    "638f272f-9fbd-5d1f-bfd8-b01618424065",
+    "ba9d70f9-02c4-56d9-ac23-f2a532c22488"
+  ]
+}

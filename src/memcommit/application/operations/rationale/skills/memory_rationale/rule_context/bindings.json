@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "document": {
+    "command": "rationale",
+    "schema_version": 2,
+    "ruleset_version": "rationale-natural-provenance-v6",
+    "description": {
+      "$memory": "38dff940-c8d7-5c65-afa3-9623cb61a582"
+    },
+    "rules": [
+      {
+        "id": "R01_COMPLETE_RETAINED_LINEAGE",
+        "title": {
+          "$memory": "a31f5e24-3634-5617-8e74-f4f47e2909e9"
+        },
+        "invariant": {
+          "$memory": "39deb958-74e7-5213-89c4-333733f6f73e"
+        }
+      },
+      {
+        "id": "R02_ORIGIN_CONTEXT",
+        "title": {
+          "$memory": "8f1c4142-a2cb-5eb3-bbba-be010526ac6e"
+        },
+        "invariant": {
+          "$memory": "3f8f0a99-7d1c-573b-b37c-cd26b179b064"
+        }
+      },
+      {
+        "id": "R03_DERIVATION_MECHANISM",
+        "title": {
+          "$memory": "fc4059d5-6a86-521b-aa6a-2b1aee156708"
+        },
+        "invariant": {
+          "$memory": "546f3ef0-6d79-5b08-9581-633d5a5f9e67"
+        }
+      },
+      {
+        "id": "R04_CHRONOLOGICAL_LIFECYCLE",
+        "title": {
+          "$memory": "ea6eae89-0fae-5400-a63c-3e0483f0cc8b"
+        },
+        "invariant": {
+          "$memory": "e3d8b720-adc7-50ee-9643-96f0f5534394"
+        }
+      },
+      {
+        "id": "R05_SELECTED_MEMORY_BOUNDARY",
+        "title": {
+          "$memory": "33cdaf08-1869-5767-86af-3406c4162b8e"
+        },
+        "invariant": {
+          "$memory": "ab891ff8-74d0-550f-ac65-ab62a045cce7"
+        }
+      },
+      {
+        "id": "R06_NATURAL_NARRATIVE",
+        "title": {
+          "$memory": "ecf02b73-c3f9-5c3b-a4f1-48c0c1a3218c"
+        },
+        "invariant": {
+          "$memory": "fd982b68-2b39-5e6f-9dfc-858843d6ecd8"
+        }
+      },
+      {
+        "id": "R07_COMPACT_COMPLETE",
+        "title": {
+          "$memory": "4874d424-43f0-56c7-a415-76b4e39655aa"
+        },
+        "invariant": {
+          "$memory": "549ccd68-1c7a-5e34-a834-47c5ede6b567"
+        }
+      },
+      {
+        "id": "R08_NO_INVENTED_INTENT",
+        "title": {
+          "$memory": "4fb10b2d-e356-5dc9-a785-654266582bd3"
+        },
+        "invariant": {
+          "$memory": "7e30885b-e603-5ec3-a7d1-aa80a63a6517"
+        }
+      },
+      {
+        "id": "R09_EXPLICIT_HISTORY_BOUNDARY",
+        "title": {
+          "$memory": "8a35a99f-f801-57cf-af19-9096c10f694d"
+        },
+        "invariant": {
+          "$memory": "7ba2b946-c7d7-57e0-998c-c763afdabf8d"
+        }
+      },
+      {
+        "id": "R10_EXACT_EXCERPT_ANCHOR",
+        "title": {
+          "$memory": "d444178b-dfa5-5954-a425-f48afabe9d40"
+        },
+        "invariant": {
+          "$memory": "5c5b9f27-9f11-5c6a-9056-6562a6b5fcd7"
+        }
+      },
+      {
+        "id": "R11_OPERATION_SHAPE",
+        "title": {
+          "$memory": "b5e59adf-d4e2-584e-a6b5-ff79b706f85d"
+        },
+        "invariant": {
+          "$memory": "8113ffb4-4c4a-5b8c-8fae-b70c1f2a6be0"
+        }
+      },
+      {
+        "id": "R12_CONTEXT_MOVEMENT",
+        "title": {
+          "$memory": "6af99eb6-72c1-517e-b0dd-885753d42c65"
+        },
+        "invariant": {
+          "$memory": "2e9c3d85-86a9-5ed2-b20b-d49c7c59f8f3"
+        }
+      },
+      {
+        "id": "R13_MATERIAL_PHASE_COMPRESSION",
+        "title": {
+          "$memory": "bcd81ab6-4fb7-5d1b-8b2f-e41fd8c919c6"
+        },
+        "invariant": {
+          "$memory": "502df5b8-66f0-554a-a330-84275067bbb6"
+        }
+      },
+      {
+        "id": "R14_MERGE_DISPOSITION",
+        "title": {
+          "$memory": "693fa1d3-df69-5247-83b1-51982babff08"
+        },
+        "invariant": {
+          "$memory": "4a5d210b-66ef-5b16-93fe-5c61ace60b6c"
+        }
+      },
+      {
+        "id": "R15_LENGTH_HEADROOM_AND_REPAIR",
+        "title": {
+          "$memory": "39b4c778-28ee-5f4a-989b-3c3fdc1363cb"
+        },
+        "invariant": {
+          "$memory": "98db5448-0555-584b-9e10-b406007b7df7"
+        }
+      }
+    ]
+  }
+}

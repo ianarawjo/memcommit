@@ -1,0 +1,86 @@
+{
+  "uid": "56c85980-0afd-50d9-a104-8a0307eaa5d8",
+  "name": "rationale/skills/memory_rationale/cases/merge-target-inherits-source-history/input",
+  "memories": {
+    "c1d353d9-5cde-54e4-a779-64d15c13e849": {
+      "type": "memory",
+      "uid": "c1d353d9-5cde-54e4-a779-64d15c13e849",
+      "content": "Audit draft: …"
+    },
+    "33329ca7-698b-5d21-a33f-1e074d8edf29": {
+      "type": "memory",
+      "uid": "33329ca7-698b-5d21-a33f-1e074d8edf29",
+      "content": "Wiki update draft: …"
+    },
+    "08ff0455-0717-53d4-ac6e-642f8398ced1": {
+      "type": "memory",
+      "uid": "08ff0455-0717-53d4-ac6e-642f8398ced1",
+      "content": "Wiki update draft: …"
+    },
+    "75952854-7ad4-5d2c-97af-e31c26eb351d": {
+      "type": "memory",
+      "uid": "75952854-7ad4-5d2c-97af-e31c26eb351d",
+      "content": "Moved the Source Memory into facility-updates"
+    },
+    "9948ebdf-ac1c-5ca8-a134-a68ecbe614b2": {
+      "type": "memory",
+      "uid": "9948ebdf-ac1c-5ca8-a134-a68ecbe614b2",
+      "content": "Audit draft: …"
+    },
+    "91691e26-4f44-5938-9e07-797ff0557edd": {
+      "type": "memory",
+      "uid": "91691e26-4f44-5938-9e07-797ff0557edd",
+      "content": "Replaced Audit draft with Wiki update draft"
+    },
+    "b9ceae4c-b3d6-5902-b46f-7ab872751cb2": {
+      "type": "memory",
+      "uid": "b9ceae4c-b3d6-5902-b46f-7ab872751cb2",
+      "content": "Audit draft: …"
+    },
+    "68bc3b79-2088-588e-9254-05db29d59893": {
+      "type": "memory",
+      "uid": "68bc3b79-2088-588e-9254-05db29d59893",
+      "content": "Wiki update draft: …"
+    },
+    "1093fcdc-d5fb-5a81-b323-7cc3f072ba6f": {
+      "type": "memory",
+      "uid": "1093fcdc-d5fb-5a81-b323-7cc3f072ba6f",
+      "content": "Merged facility-updates into transform-scratch/source: new 1"
+    },
+    "5f176e23-efcf-5850-820d-0737858edaa9": {
+      "type": "memory",
+      "uid": "5f176e23-efcf-5850-820d-0737858edaa9",
+      "content": "Wiki update draft: …"
+    },
+    "d742ad94-bf06-5586-a282-6df6449216c2": {
+      "type": "memory",
+      "uid": "d742ad94-bf06-5586-a282-6df6449216c2",
+      "content": "Merged facility-updates into transform-scratch/source: new 1"
+    },
+    "eb6c9525-fe69-57e9-9266-5cdd185d0773": {
+      "type": "memory",
+      "uid": "eb6c9525-fe69-57e9-9266-5cdd185d0773",
+      "content": "Wiki update draft: …"
+    },
+    "b502efa9-47a9-57f2-bc7c-8e3a5a5b3152": {
+      "type": "memory",
+      "uid": "b502efa9-47a9-57f2-bc7c-8e3a5a5b3152",
+      "content": "Wiki update draft: …"
+    }
+  },
+  "order": [
+    "c1d353d9-5cde-54e4-a779-64d15c13e849",
+    "33329ca7-698b-5d21-a33f-1e074d8edf29",
+    "08ff0455-0717-53d4-ac6e-642f8398ced1",
+    "75952854-7ad4-5d2c-97af-e31c26eb351d",
+    "9948ebdf-ac1c-5ca8-a134-a68ecbe614b2",
+    "91691e26-4f44-5938-9e07-797ff0557edd",
+    "b9ceae4c-b3d6-5902-b46f-7ab872751cb2",
+    "68bc3b79-2088-588e-9254-05db29d59893",
+    "1093fcdc-d5fb-5a81-b323-7cc3f072ba6f",
+    "5f176e23-efcf-5850-820d-0737858edaa9",
+    "d742ad94-bf06-5586-a282-6df6449216c2",
+    "eb6c9525-fe69-57e9-9266-5cdd185d0773",
+    "b502efa9-47a9-57f2-bc7c-8e3a5a5b3152"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "uid": "d061aaf4-5106-538b-a454-5653036ad6e1",
+  "name": "rationale/skills/memory_rationale/cases/direct-add-remove-undo/input",
+  "memories": {
+    "dfdc2db5-d1dd-54ea-b4db-b5be3eb9c0a6": {
+      "type": "memory",
+      "uid": "dfdc2db5-d1dd-54ea-b4db-b5be3eb9c0a6",
+      "content": "Keep the selected terminology."
+    },
+    "2873c1cf-ba00-54f6-a3e1-bc3f723e5c4e": {
+      "type": "memory",
+      "uid": "2873c1cf-ba00-54f6-a3e1-bc3f723e5c4e",
+      "content": "Added one Memory"
+    },
+    "88a1ec83-c565-54b6-84ae-9cbea16c41e1": {
+      "type": "memory",
+      "uid": "88a1ec83-c565-54b6-84ae-9cbea16c41e1",
+      "content": "Keep the selected terminology."
+    },
+    "010c531b-0f55-5c44-8051-d853e6f4d6dc": {
+      "type": "memory",
+      "uid": "010c531b-0f55-5c44-8051-d853e6f4d6dc",
+      "content": "Removed one Memory"
+    },
+    "31b4abfb-e10e-5d69-a6ae-9550a9336f93": {
+      "type": "memory",
+      "uid": "31b4abfb-e10e-5d69-a6ae-9550a9336f93",
+      "content": "Keep the selected terminology."
+    },
+    "f63fe908-4295-57db-a7a2-030009d51746": {
+      "type": "memory",
+      "uid": "f63fe908-4295-57db-a7a2-030009d51746",
+      "content": "Undid the remove command"
+    },
+    "ae1f1f6e-7a88-5b27-9600-ccaa6a34fd30": {
+      "type": "memory",
+      "uid": "ae1f1f6e-7a88-5b27-9600-ccaa6a34fd30",
+      "content": "Keep the selected terminology."
+    }
+  },
+  "order": [
+    "dfdc2db5-d1dd-54ea-b4db-b5be3eb9c0a6",
+    "2873c1cf-ba00-54f6-a3e1-bc3f723e5c4e",
+    "88a1ec83-c565-54b6-84ae-9cbea16c41e1",
+    "010c531b-0f55-5c44-8051-d853e6f4d6dc",
+    "31b4abfb-e10e-5d69-a6ae-9550a9336f93",
+    "f63fe908-4295-57db-a7a2-030009d51746",
+    "ae1f1f6e-7a88-5b27-9600-ccaa6a34fd30"
+  ]
+}

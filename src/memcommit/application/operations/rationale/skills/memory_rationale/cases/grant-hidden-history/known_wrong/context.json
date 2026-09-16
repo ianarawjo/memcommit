@@ -1,0 +1,20 @@
+{
+  "uid": "08d19fa9-8477-5ca7-8d69-a777084e8fbc",
+  "name": "rationale/skills/memory_rationale/cases/grant-hidden-history/known_wrong",
+  "memories": {
+    "9077fce0-e37d-5a83-a611-99e924dc349d": {
+      "type": "memory",
+      "uid": "9077fce0-e37d-5a83-a611-99e924dc349d",
+      "content": "This Memory was probably added by its owner as a durable reference."
+    },
+    "2ba146ea-8703-569a-ad30-bc5a9950435c": {
+      "type": "memory",
+      "uid": "2ba146ea-8703-569a-ad30-bc5a9950435c",
+      "content": "Readable content does not authorize owner-history inference."
+    }
+  },
+  "order": [
+    "9077fce0-e37d-5a83-a611-99e924dc349d",
+    "2ba146ea-8703-569a-ad30-bc5a9950435c"
+  ]
+}

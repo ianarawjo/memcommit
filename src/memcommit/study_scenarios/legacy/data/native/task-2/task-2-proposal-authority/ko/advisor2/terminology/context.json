@@ -1,0 +1,56 @@
+{
+  "uid": "a2976fe7-0e07-5045-9e91-6a214128a482",
+  "name": "advisor2/terminology",
+  "memories": {
+    "e2ae95ed-9033-5625-9179-33f4cf4a95c1": {
+      "type": "memory",
+      "uid": "e2ae95ed-9033-5625-9179-33f4cf4a95c1",
+      "content": "같은 사용자 역할, 시스템 기능, 운영 단계를 가리키는 명칭은 중간에 바꾸지 마라."
+    },
+    "4be60357-09fa-523d-8c8d-8e03ace8fde9": {
+      "type": "memory",
+      "uid": "4be60357-09fa-523d-8c8d-8e03ace8fde9",
+      "content": "두 쪽짜리 제안서에서는 반복되는 긴 명칭에만 약어를 사용하라."
+    },
+    "0dd5d707-7d13-5be0-8377-421507650cba": {
+      "type": "memory",
+      "uid": "0dd5d707-7d13-5be0-8377-421507650cba",
+      "content": "약어를 처음 사용할 때 전체 명칭과 약어를 함께 제시하라."
+    },
+    "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2": {
+      "type": "memory",
+      "uid": "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2",
+      "content": "참가자는 상태가 아니라 연구에서 수행하는 역할을 중심으로 지칭하라."
+    },
+    "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe": {
+      "type": "memory",
+      "uid": "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe",
+      "content": "세부 분야가 다른 심사자는 처음에 정의되지 않은 약어를 문맥만으로 복원하기 어려워한다."
+    },
+    "dc9e3f25-7aac-500b-b431-f6d810dd09bb": {
+      "type": "memory",
+      "uid": "dc9e3f25-7aac-500b-b431-f6d810dd09bb",
+      "content": "운영 역할을 처음 제시할 때 그 역할이 내릴 수 있는 결정과 수행할 수 있는 조치를 함께 정의하라."
+    },
+    "04956cab-eb3a-5b71-be45-b1edd6c4a216": {
+      "type": "memory",
+      "uid": "04956cab-eb3a-5b71-be45-b1edd6c4a216",
+      "content": "같은 직함을 쓰는 사람이라도 배포 현장에 따라 시스템 변경 권한과 자료 접근 권한이 다를 수 있다."
+    },
+    "fc8613e8-86ca-5322-bb5d-03dfbca71c46": {
+      "type": "memory",
+      "uid": "fc8613e8-86ca-5322-bb5d-03dfbca71c46",
+      "content": "사용자는 서로 다른 현장 역할을 모두 사용자라는 한 명칭으로 묶는 경향이 있다."
+    }
+  },
+  "order": [
+    "e2ae95ed-9033-5625-9179-33f4cf4a95c1",
+    "4be60357-09fa-523d-8c8d-8e03ace8fde9",
+    "0dd5d707-7d13-5be0-8377-421507650cba",
+    "9b3f0cde-7c3e-5b6a-9500-855f31d65ef2",
+    "8c896114-85e6-5c3c-ae3f-6e8e6b59f2fe",
+    "dc9e3f25-7aac-500b-b431-f6d810dd09bb",
+    "04956cab-eb3a-5b71-be45-b1edd6c4a216",
+    "fc8613e8-86ca-5322-bb5d-03dfbca71c46"
+  ]
+}

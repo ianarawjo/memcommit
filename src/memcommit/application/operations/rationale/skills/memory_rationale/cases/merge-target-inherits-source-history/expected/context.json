@@ -1,0 +1,14 @@
+{
+  "uid": "a1e62421-7d28-507a-b563-b6b6f65c988c",
+  "name": "rationale/skills/memory_rationale/cases/merge-target-inherits-source-history/expected",
+  "memories": {
+    "2b485b16-91e3-55c1-baa6-406a9432f4b0": {
+      "type": "memory",
+      "uid": "2b485b16-91e3-55c1-baa6-406a9432f4b0",
+      "content": "Its Source moved into facility-updates as “Audit draft: …” and was revised to “Wiki update draft: ….” Merge then copied that wording unchanged into transform-scratch/source as this fresh Target occurrence."
+    }
+  },
+  "order": [
+    "2b485b16-91e3-55c1-baa6-406a9432f4b0"
+  ]
+}

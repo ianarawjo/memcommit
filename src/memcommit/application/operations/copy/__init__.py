@@ -1,0 +1,1 @@
+"""Copy application operation."""

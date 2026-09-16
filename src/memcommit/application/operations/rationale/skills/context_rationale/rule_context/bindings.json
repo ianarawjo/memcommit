@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "document": {
+    "version": "context-rationale-v1",
+    "invariants": [
+      {
+        "$memory": "df2af72c-6b8f-5d5d-922d-d22b8fd89386"
+      },
+      {
+        "$memory": "73d15fb2-0c49-5d4d-bc6c-b5e88b2bee09"
+      },
+      {
+        "$memory": "d158c8cf-752e-58f2-ace9-3d9802a2c2e2"
+      },
+      {
+        "$memory": "44037408-ee9a-531a-b79b-3c22e15a5cb6"
+      },
+      {
+        "$memory": "6bf9fec9-449e-59e8-b212-10e8e36dd178"
+      }
+    ]
+  }
+}

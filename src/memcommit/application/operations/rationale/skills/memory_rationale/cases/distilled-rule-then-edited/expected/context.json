@@ -1,0 +1,14 @@
+{
+  "uid": "a048e300-358b-5701-8c4d-2853e10bf77c",
+  "name": "rationale/skills/memory_rationale/cases/distilled-rule-then-edited/expected",
+  "memories": {
+    "497dba50-831b-5cff-ac96-960593a16bf0": {
+      "type": "memory",
+      "uid": "497dba50-831b-5cff-ac96-960593a16bf0",
+      "content": "Distill created this Memory from practice/1 as “Write each proposition in the exact three-token pattern `<lowercase letter> is <lowercase word>`.” A later edit replaced it with “adfadfafasdf.”"
+    }
+  },
+  "order": [
+    "497dba50-831b-5cff-ac96-960593a16bf0"
+  ]
+}

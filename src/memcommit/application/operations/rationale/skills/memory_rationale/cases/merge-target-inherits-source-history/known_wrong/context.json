@@ -1,0 +1,32 @@
+{
+  "uid": "1e3e1092-9b82-5dab-ad29-281235e2cc92",
+  "name": "rationale/skills/memory_rationale/cases/merge-target-inherits-source-history/known_wrong",
+  "memories": {
+    "429b9af9-dfa7-5ccc-a2b6-d6e06cfd3a94": {
+      "type": "memory",
+      "uid": "429b9af9-dfa7-5ccc-a2b6-d6e06cfd3a94",
+      "content": "This Memory was added directly to transform-scratch/source as “Wiki update draft: ….”"
+    },
+    "d6284f58-1527-5596-bcd0-d0d92348558f": {
+      "type": "memory",
+      "uid": "d6284f58-1527-5596-bcd0-d0d92348558f",
+      "content": "The direct-Add account hides both the Source history and the NEW Merge copy that created this occurrence."
+    },
+    "3ee3bad4-647e-5bdf-ba01-774ddf263ab1": {
+      "type": "memory",
+      "uid": "3ee3bad4-647e-5bdf-ba01-774ddf263ab1",
+      "content": "The Target Memory changed from “Audit draft: …” to “Wiki update draft: …” before Merge."
+    },
+    "70d5f712-3ade-5a2d-a997-cbd3cb11e51c": {
+      "type": "memory",
+      "uid": "70d5f712-3ade-5a2d-a997-cbd3cb11e51c",
+      "content": "The earlier move and revision belong to the distinct Source occurrence, not to the Target before it existed."
+    }
+  },
+  "order": [
+    "429b9af9-dfa7-5ccc-a2b6-d6e06cfd3a94",
+    "d6284f58-1527-5596-bcd0-d0d92348558f",
+    "3ee3bad4-647e-5bdf-ba01-774ddf263ab1",
+    "70d5f712-3ade-5a2d-a997-cbd3cb11e51c"
+  ]
+}

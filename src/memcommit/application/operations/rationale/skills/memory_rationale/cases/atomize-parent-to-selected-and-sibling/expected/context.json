@@ -1,0 +1,14 @@
+{
+  "uid": "0b6e9a35-264b-53a7-a83b-660ce6ced9f7",
+  "name": "rationale/skills/memory_rationale/cases/atomize-parent-to-selected-and-sibling/expected",
+  "memories": {
+    "565fb2df-af75-5a14-9c31-9458f0ff1586": {
+      "type": "memory",
+      "uid": "565fb2df-af75-5a14-9c31-9458f0ff1586",
+      "content": "In practice/source, it began as “don't edit the draft immediately; first check the sentence order and paragraph division.” Atomize split it into this “don't edit the draft immediately” instruction and “first check the sentence order and paragraph division.”"
+    }
+  },
+  "order": [
+    "565fb2df-af75-5a14-9c31-9458f0ff1586"
+  ]
+}

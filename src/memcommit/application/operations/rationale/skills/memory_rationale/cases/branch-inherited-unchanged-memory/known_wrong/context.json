@@ -1,0 +1,20 @@
+{
+  "uid": "7c9fa120-ec77-5523-924c-e511efbd09bc",
+  "name": "rationale/skills/memory_rationale/cases/branch-inherited-unchanged-memory/known_wrong",
+  "memories": {
+    "06fcdef6-91ea-5eab-b41a-bf2796e64e7b": {
+      "type": "memory",
+      "uid": "06fcdef6-91ea-5eab-b41a-bf2796e64e7b",
+      "content": "This Memory originally appeared as “a is apple” and was added directly as a standalone Memory; it remains present and unchanged."
+    },
+    "ca2430b6-f8d3-5362-908c-7d40edfb0e6d": {
+      "type": "memory",
+      "uid": "ca2430b6-f8d3-5362-908c-7d40edfb0e6d",
+      "content": "The direct-Add account omits the retained practice/1-to-practice/2 branch inheritance route and spends the remaining budget on generic status prose."
+    }
+  },
+  "order": [
+    "06fcdef6-91ea-5eab-b41a-bf2796e64e7b",
+    "ca2430b6-f8d3-5362-908c-7d40edfb0e6d"
+  ]
+}

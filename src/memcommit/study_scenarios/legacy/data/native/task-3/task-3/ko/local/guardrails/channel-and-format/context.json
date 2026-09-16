@@ -1,0 +1,56 @@
+{
+  "uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+  "name": "local/guardrails/channel-and-format",
+  "memories": {
+    "6e6f2c1f-18e8-56ab-b7e9-af5f1ef15b6e": {
+      "type": "memory",
+      "uid": "6e6f2c1f-18e8-56ab-b7e9-af5f1ef15b6e",
+      "content": "사용자가 승인한 전달 채널만 사용하라."
+    },
+    "c11769a3-cb4c-589d-91fc-48a7fc5f4b28": {
+      "type": "memory",
+      "uid": "c11769a3-cb4c-589d-91fc-48a7fc5f4b28",
+      "content": "수신 채널이 지원하는 형식을 전송 전에 확인하라."
+    },
+    "d75604e1-1e25-5c2b-8316-3db4224965bf": {
+      "type": "memory",
+      "uid": "d75604e1-1e25-5c2b-8316-3db4224965bf",
+      "content": "문서 메타데이터에 불필요한 식별정보가 남지 않게 하라."
+    },
+    "c6dd9cd4-bbc5-55a6-922f-2b78f2f37c20": {
+      "type": "memory",
+      "uid": "c6dd9cd4-bbc5-55a6-922f-2b78f2f37c20",
+      "content": "민감한 항목에는 승인된 보호 방식을 적용하라."
+    },
+    "b40d9699-8a5f-552e-97db-1a9ae59a9c34": {
+      "type": "memory",
+      "uid": "b40d9699-8a5f-552e-97db-1a9ae59a9c34",
+      "content": "전송이 실패하면 같은 내용을 다른 채널로 자동 재전송하지 마라."
+    },
+    "e0c0f0bb-e602-5597-8b7b-27e8b06ce7ff": {
+      "type": "memory",
+      "uid": "e0c0f0bb-e602-5597-8b7b-27e8b06ce7ff",
+      "content": "한 채널의 접근 제한은 다른 채널에 자동으로 적용되지 않는다."
+    },
+    "69e95464-217e-5620-8ffc-c5d0f20afc46": {
+      "type": "memory",
+      "uid": "69e95464-217e-5620-8ffc-c5d0f20afc46",
+      "content": "로컬 에이전트는 선택한 채널과 전송 형식을 기록할 수 있지만 외부 채널의 실제 보관 방식은 확인할 수 없다."
+    },
+    "f9492eaf-c1e8-5adc-9987-e58fcf527ed6": {
+      "type": "memory",
+      "uid": "f9492eaf-c1e8-5adc-9987-e58fcf527ed6",
+      "content": "수신 조직은 형식 표지가 명확히 구분되지 않으면 그것이 지시인지, 본문인지, 인용문인지 판단하지 못할 수 있다."
+    }
+  },
+  "order": [
+    "6e6f2c1f-18e8-56ab-b7e9-af5f1ef15b6e",
+    "c11769a3-cb4c-589d-91fc-48a7fc5f4b28",
+    "d75604e1-1e25-5c2b-8316-3db4224965bf",
+    "c6dd9cd4-bbc5-55a6-922f-2b78f2f37c20",
+    "b40d9699-8a5f-552e-97db-1a9ae59a9c34",
+    "e0c0f0bb-e602-5597-8b7b-27e8b06ce7ff",
+    "69e95464-217e-5620-8ffc-c5d0f20afc46",
+    "f9492eaf-c1e8-5adc-9987-e58fcf527ed6"
+  ]
+}

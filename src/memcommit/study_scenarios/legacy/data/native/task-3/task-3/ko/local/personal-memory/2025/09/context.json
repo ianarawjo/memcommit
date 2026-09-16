@@ -1,0 +1,68 @@
+{
+  "uid": "5cd8ed5f-2f1f-5deb-8347-fc3bfa484d99",
+  "name": "local/personal-memory/2025/09",
+  "memories": {
+    "3d3f7960-daf5-5a51-98b3-14261c5aa66c": {
+      "type": "memory",
+      "uid": "3d3f7960-daf5-5a51-98b3-14261c5aa66c",
+      "content": "사용자는 읽던 책과 필기 노트를 거실 작은 책상에 둔다."
+    },
+    "28714a4e-bc14-5703-b594-126471ae0585": {
+      "type": "memory",
+      "uid": "28714a4e-bc14-5703-b594-126471ae0585",
+      "content": "사용자는 텔레비전이 켜진 거실에서 책을 읽다가 같은 문단을 세 번 읽었다."
+    },
+    "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df": {
+      "type": "memory",
+      "uid": "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df",
+      "content": "사용자는 텔레비전을 끈 다음 날 40쪽을 이어서 읽었다."
+    },
+    "1b1c9f90-2561-53d5-88fe-d54618450143": {
+      "type": "memory",
+      "uid": "1b1c9f90-2561-53d5-88fe-d54618450143",
+      "content": "사용자는 휴대전화가 책상 위에 있던 날 알림을 볼 때마다 필기를 멈췄다."
+    },
+    "076a7caa-5dcf-5f9d-8bee-efc952652efa": {
+      "type": "memory",
+      "uid": "076a7caa-5dcf-5f9d-8bee-efc952652efa",
+      "content": "사용자는 다음 읽기 시간에 휴대전화를 다른 방에 두고 한 시간 동안 확인하지 않았다."
+    },
+    "1dad71ec-6a5d-550e-89d2-a86dc3dacb11": {
+      "type": "memory",
+      "uid": "1dad71ec-6a5d-550e-89d2-a86dc3dacb11",
+      "content": "사용자는 종이 책에 붙인 메모지가 떨어져 읽던 위치를 다시 찾았다."
+    },
+    "58494743-fc7f-59e9-8e17-80b8a644470a": {
+      "type": "memory",
+      "uid": "58494743-fc7f-59e9-8e17-80b8a644470a",
+      "content": "사용자는 다음 책에서는 페이지 번호를 노트에 적어 바로 이어 읽었다."
+    },
+    "cce66589-892c-5d73-bdbc-2c6e94e0992e": {
+      "type": "memory",
+      "uid": "cce66589-892c-5d73-bdbc-2c6e94e0992e",
+      "content": "아빠는 사용자가 책을 읽을 때 텔레비전 음량을 낮추면 집중하기 쉬울 것이라고 예상한다."
+    },
+    "20b2a27f-908f-5ed7-a288-f7c1030674fc": {
+      "type": "memory",
+      "uid": "20b2a27f-908f-5ed7-a288-f7c1030674fc",
+      "content": "로컬 에이전트는 과거 독서 환경과 중단 기록을 요약할 수 있지만 다음 독서 시간을 예측할 수 없다."
+    },
+    "310f4cfc-b117-5511-8e13-2bd2ebec9fe5": {
+      "type": "memory",
+      "uid": "310f4cfc-b117-5511-8e13-2bd2ebec9fe5",
+      "content": "사용자는 반복되는 알림이 집중 흐름을 끊는다고 느낀다."
+    }
+  },
+  "order": [
+    "3d3f7960-daf5-5a51-98b3-14261c5aa66c",
+    "28714a4e-bc14-5703-b594-126471ae0585",
+    "0ee2290c-f3ef-5c0f-87c4-41bc94bf47df",
+    "1b1c9f90-2561-53d5-88fe-d54618450143",
+    "076a7caa-5dcf-5f9d-8bee-efc952652efa",
+    "1dad71ec-6a5d-550e-89d2-a86dc3dacb11",
+    "58494743-fc7f-59e9-8e17-80b8a644470a",
+    "cce66589-892c-5d73-bdbc-2c6e94e0992e",
+    "20b2a27f-908f-5ed7-a288-f7c1030674fc",
+    "310f4cfc-b117-5511-8e13-2bd2ebec9fe5"
+  ]
+}

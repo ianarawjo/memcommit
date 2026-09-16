@@ -1,0 +1,68 @@
+{
+  "uid": "10c1e5b1-4d4b-566c-bf14-c385523c344e",
+  "name": "local/guardrails",
+  "memories": {
+    "900828d4-48ca-5a05-9807-620165233930": {
+      "type": "context_ref",
+      "uid": "900828d4-48ca-5a05-9807-620165233930",
+      "name": "local/guardrails/purpose-and-scope"
+    },
+    "755575aa-19e8-5649-83d1-2b7b6499f2e5": {
+      "type": "context_ref",
+      "uid": "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+      "name": "local/guardrails/privacy-and-others"
+    },
+    "136dface-67b3-5116-86e2-b70449b30366": {
+      "type": "context_ref",
+      "uid": "136dface-67b3-5116-86e2-b70449b30366",
+      "name": "local/guardrails/evidence-and-uncertainty"
+    },
+    "37cd6139-4882-5fd3-a261-97370a3b5d12": {
+      "type": "context_ref",
+      "uid": "37cd6139-4882-5fd3-a261-97370a3b5d12",
+      "name": "local/guardrails/approval-and-delivery"
+    },
+    "9fd65004-661c-5349-8c35-1b96e8d5c9de": {
+      "type": "context_ref",
+      "uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+      "name": "local/guardrails/retention-and-revocation"
+    },
+    "cfdffebb-4a4d-55e4-947e-f845913fc658": {
+      "type": "context_ref",
+      "uid": "cfdffebb-4a4d-55e4-947e-f845913fc658",
+      "name": "local/guardrails/recipient-and-authority"
+    },
+    "d0f950bf-3dff-5662-9098-fc19c3edc2e4": {
+      "type": "context_ref",
+      "uid": "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+      "name": "local/guardrails/minimization-and-redaction"
+    },
+    "34f4d62a-2433-54cd-8374-2d0a81357e57": {
+      "type": "context_ref",
+      "uid": "34f4d62a-2433-54cd-8374-2d0a81357e57",
+      "name": "local/guardrails/channel-and-format"
+    },
+    "62523a5e-66f1-5023-a78b-9151bd72055f": {
+      "type": "context_ref",
+      "uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+      "name": "local/guardrails/downstream-use"
+    },
+    "731a18ea-cb2f-52a1-8ccb-c990928b0093": {
+      "type": "context_ref",
+      "uid": "731a18ea-cb2f-52a1-8ccb-c990928b0093",
+      "name": "local/guardrails/audit-and-recovery"
+    }
+  },
+  "order": [
+    "900828d4-48ca-5a05-9807-620165233930",
+    "755575aa-19e8-5649-83d1-2b7b6499f2e5",
+    "136dface-67b3-5116-86e2-b70449b30366",
+    "37cd6139-4882-5fd3-a261-97370a3b5d12",
+    "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+    "cfdffebb-4a4d-55e4-947e-f845913fc658",
+    "d0f950bf-3dff-5662-9098-fc19c3edc2e4",
+    "34f4d62a-2433-54cd-8374-2d0a81357e57",
+    "62523a5e-66f1-5023-a78b-9151bd72055f",
+    "731a18ea-cb2f-52a1-8ccb-c990928b0093"
+  ]
+}

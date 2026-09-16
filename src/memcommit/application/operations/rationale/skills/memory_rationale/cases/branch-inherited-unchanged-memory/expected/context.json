@@ -1,0 +1,14 @@
+{
+  "uid": "9d3d4a9e-609d-57d1-bcd1-e1942c6ce7fb",
+  "name": "rationale/skills/memory_rationale/cases/branch-inherited-unchanged-memory/expected",
+  "memories": {
+    "8ec1ecfc-b044-5f14-bb13-abc859dd9e0c": {
+      "type": "memory",
+      "uid": "8ec1ecfc-b044-5f14-bb13-abc859dd9e0c",
+      "content": "“a is apple” was added in practice/1 and inherited unchanged by practice/2 when that Context branched."
+    }
+  },
+  "order": [
+    "8ec1ecfc-b044-5f14-bb13-abc859dd9e0c"
+  ]
+}

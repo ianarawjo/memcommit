@@ -1,0 +1,68 @@
+{
+  "uid": "0d5e1eef-1669-5589-94ba-b46c9c2080dc",
+  "name": "local/personal-memory/2024/11",
+  "memories": {
+    "bb17c696-0c1c-516f-8ad9-68a4b159ce22": {
+      "type": "memory",
+      "uid": "bb17c696-0c1c-516f-8ad9-68a4b159ce22",
+      "content": "사용자는 2024년 11월에 엄마의 병원 방문 때문에 일정을 한 차례 변경했다."
+    },
+    "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea": {
+      "type": "memory",
+      "uid": "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea",
+      "content": "사용자는 일정 변경 이유가 캘린더 초대에 적힌 것을 보고 삭제를 요청했다."
+    },
+    "4c8759cc-66aa-527c-a9d5-197d39b5d2b7": {
+      "type": "memory",
+      "uid": "4c8759cc-66aa-527c-a9d5-197d39b5d2b7",
+      "content": "사용자는 이유 없이 새 시간만 제시한 뒤에도 약속을 다시 잡을 수 있었다."
+    },
+    "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958": {
+      "type": "memory",
+      "uid": "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958",
+      "content": "사용자는 아빠의 차량으로 이동한 날 주차 위치를 사진으로 남겼다."
+    },
+    "32a19a57-9b04-5f86-92ba-202a9ac803e4": {
+      "type": "memory",
+      "uid": "32a19a57-9b04-5f86-92ba-202a9ac803e4",
+      "content": "사용자는 사진을 남기지 않은 다음 방문에서 출구를 찾느라 주차장을 한 바퀴 돌았다."
+    },
+    "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3": {
+      "type": "memory",
+      "uid": "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3",
+      "content": "사용자는 엄마에게 준비물을 전화로 들은 뒤 두 항목을 빠뜨렸다."
+    },
+    "07ea3801-8666-581d-b846-2f45bf99ca19": {
+      "type": "memory",
+      "uid": "07ea3801-8666-581d-b846-2f45bf99ca19",
+      "content": "사용자는 준비물을 문자로 다시 받아 가방에 모두 넣었다."
+    },
+    "9e70b92e-1d8d-51ef-962d-bd9b348a56d5": {
+      "type": "memory",
+      "uid": "9e70b92e-1d8d-51ef-962d-bd9b348a56d5",
+      "content": "엄마는 자신의 방문 사유가 사용자의 외부 일정에 공개되는 것을 원하지 않는다."
+    },
+    "d76686fd-9f1d-5d94-931b-4b49c86a8f4e": {
+      "type": "memory",
+      "uid": "d76686fd-9f1d-5d94-931b-4b49c86a8f4e",
+      "content": "사용 가능 시간을 외부에 전달할 때 엄마의 방문 사유를 포함하지 마라."
+    },
+    "820a5de9-9e08-52c7-8747-5155fe341bb4": {
+      "type": "memory",
+      "uid": "820a5de9-9e08-52c7-8747-5155fe341bb4",
+      "content": "연말 휴일 기간에는 일부 생활 서비스의 운영 시간이 짧아질 수 있다."
+    }
+  },
+  "order": [
+    "bb17c696-0c1c-516f-8ad9-68a4b159ce22",
+    "195ba5ab-3ee0-5594-a859-9f2b5eadf9ea",
+    "4c8759cc-66aa-527c-a9d5-197d39b5d2b7",
+    "d4b27ea7-d329-5dc7-b7ca-91d0cd50a958",
+    "32a19a57-9b04-5f86-92ba-202a9ac803e4",
+    "0eeffd8c-acd6-57bf-950d-20cfa1fe62b3",
+    "07ea3801-8666-581d-b846-2f45bf99ca19",
+    "9e70b92e-1d8d-51ef-962d-bd9b348a56d5",
+    "d76686fd-9f1d-5d94-931b-4b49c86a8f4e",
+    "820a5de9-9e08-52c7-8747-5155fe341bb4"
+  ]
+}

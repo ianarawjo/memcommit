@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "document": {
+    "status": "HIDDEN",
+    "provenance": "",
+    "rule_ids": [
+      "R09_EXPLICIT_HISTORY_BOUNDARY"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "document": [
+    {
+      "provenance": {
+        "$memory": "06fcdef6-91ea-5eab-b41a-bf2796e64e7b"
+      },
+      "violates": [
+        "R02_ORIGIN_CONTEXT",
+        "R07_COMPACT_COMPLETE",
+        "R12_CONTEXT_MOVEMENT"
+      ],
+      "reason": {
+        "$memory": "ca2430b6-f8d3-5362-908c-7d40edfb0e6d"
+      }
+    }
+  ]
+}

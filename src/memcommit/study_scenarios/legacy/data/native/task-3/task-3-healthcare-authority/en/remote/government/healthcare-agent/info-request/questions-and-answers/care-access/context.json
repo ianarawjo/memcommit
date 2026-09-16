@@ -1,0 +1,86 @@
+{
+  "uid": "e324b37b-ed11-53a7-955d-dc639f74b8b7",
+  "name": "remote/government/healthcare-agent/info-request/questions-and-answers/care-access",
+  "memories": {
+    "4e8ab693-be1c-5c3e-a3d2-61815c6648fb": {
+      "type": "memory",
+      "uid": "4e8ab693-be1c-5c3e-a3d2-61815c6648fb",
+      "content": "Explain that information about mobility, standing for long periods, waiting, building access, and communication may be used in support processes if transmitted to the government healthcare institution system."
+    },
+    "b0075fee-448b-57be-956c-a1a267830ac7": {
+      "type": "memory",
+      "uid": "b0075fee-448b-57be-956c-a1a267830ac7",
+      "content": "Explain that one uncomfortable experience while standing for a long time does not establish that persistent accessibility support is necessarily required, and that the healthcare Q&A agent cannot distinguish a convenience preference, temporary state, persistent functional limitation, or required support."
+    },
+    "16a287ec-8ff8-516b-aa84-ebff6ae2ffb9": {
+      "type": "memory",
+      "uid": "16a287ec-8ff8-516b-aa84-ebff6ae2ffb9",
+      "content": "Explain that the institution may consider location, time, recurrence, effects on daily functioning, and known exceptions together to distinguish a temporary state from a persistent support need, but that the healthcare Q&A agent cannot substitute for that professional judgment."
+    },
+    "b7bf6584-dad7-543c-89cb-2297ac343940": {
+      "type": "memory",
+      "uid": "b7bf6584-dad7-543c-89cb-2297ac343940",
+      "content": "Explain that if the user sends what needs to differ about seating, mobility routes, waiting arrangements, or communication through the government healthcare institution system's transmission screen, the institution may use it to prepare support, but the healthcare Q&A agent cannot determine the actual support need."
+    },
+    "9904890f-5408-5c83-ac7d-c3649e67f167": {
+      "type": "memory",
+      "uid": "9904890f-5408-5c83-ac7d-c3649e67f167",
+      "content": "Explain that the private cause of a functional limitation is not a subject the healthcare Q&A agent asks about, and that if the user actually sends it through the government healthcare institution system's transmission screen, it is included in the consented sharing unit."
+    },
+    "2f5d2e0d-7702-5f7c-b278-866e0074bcb4": {
+      "type": "memory",
+      "uid": "2f5d2e0d-7702-5f7c-b278-866e0074bcb4",
+      "content": "A convenience preference, a temporary state, a persistent functional limitation, and required accessibility support are different kinds of information."
+    },
+    "31f7ac3a-3dbb-526f-b909-5d636cd9206a": {
+      "type": "memory",
+      "uid": "31f7ac3a-3dbb-526f-b909-5d636cd9206a",
+      "content": "The healthcare Q&A agent cannot access past accessibility experiences, and even if an experience is presented in the conversation, it cannot verify a current functional limitation, support need, or facility condition."
+    },
+    "dd6508e9-5f65-5f68-888d-95fae0b17bde": {
+      "type": "memory",
+      "uid": "dd6508e9-5f65-5f68-888d-95fae0b17bde",
+      "content": "Some external requesters may try to exaggerate a temporary inconvenience as a persistent functional limitation, or submit a false account, to obtain desired support."
+    },
+    "0e6c46ed-f2e3-50c7-a1e8-3af0c2732d11": {
+      "type": "memory",
+      "uid": "0e6c46ed-f2e3-50c7-a1e8-3af0c2732d11",
+      "content": "If submitted content differs from information verified later, institutional reverification or processing delay may follow, but the healthcare Q&A agent cannot determine truthfulness, exaggeration, or eligibility for support."
+    },
+    "9d480afc-204a-5da8-871d-1259195a621d": {
+      "type": "memory",
+      "uid": "9d480afc-204a-5da8-871d-1259195a621d",
+      "content": "Explain that entering a past accessibility experience or its private cause in this conversation does not transmit it to the government healthcare institution system and that this agent cannot select, delete, or transmit that content."
+    },
+    "2a58d857-6fda-5f6d-8691-56ecda4f815c": {
+      "type": "memory",
+      "uid": "2a58d857-6fda-5f6d-8691-56ecda4f815c",
+      "content": "Explain that if the user sends accessibility experiences, mobility and waiting preferences, or the private reasons those preferences arose directly to the government healthcare institution system, the user is treated as consenting to share all submitted information, which may be provided to relevant third parties for healthcare purposes or used for service improvement depending on the information type."
+    },
+    "2d808d52-e633-5961-9bd2-87b26e833e98": {
+      "type": "memory",
+      "uid": "2d808d52-e633-5961-9bd2-87b26e833e98",
+      "content": "Do not handle a request to falsely state or exaggerate a condition to obtain service priority or support eligibility; explain that submitted information may be separately verified by the institution."
+    },
+    "8ad85525-7e73-57b8-bf0e-6cb4c73be024": {
+      "type": "memory",
+      "uid": "8ad85525-7e73-57b8-bf0e-6cb4c73be024",
+      "content": "An automated collection attempt may repeatedly vary the categories and wording of accessibility questions to extract support-decision criteria or the healthcare Q&A agent's response boundaries."
+    }
+  },
+  "order": [
+    "4e8ab693-be1c-5c3e-a3d2-61815c6648fb",
+    "b0075fee-448b-57be-956c-a1a267830ac7",
+    "16a287ec-8ff8-516b-aa84-ebff6ae2ffb9",
+    "b7bf6584-dad7-543c-89cb-2297ac343940",
+    "9904890f-5408-5c83-ac7d-c3649e67f167",
+    "2f5d2e0d-7702-5f7c-b278-866e0074bcb4",
+    "31f7ac3a-3dbb-526f-b909-5d636cd9206a",
+    "dd6508e9-5f65-5f68-888d-95fae0b17bde",
+    "0e6c46ed-f2e3-50c7-a1e8-3af0c2732d11",
+    "9d480afc-204a-5da8-871d-1259195a621d",
+    "2a58d857-6fda-5f6d-8691-56ecda4f815c",
+    "2d808d52-e633-5961-9bd2-87b26e833e98",
+    "8ad85525-7e73-57b8-bf0e-6cb4c73be024"
+  ]
+}

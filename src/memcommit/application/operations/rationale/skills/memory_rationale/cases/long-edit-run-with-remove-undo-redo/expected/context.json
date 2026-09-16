@@ -1,0 +1,14 @@
+{
+  "uid": "5ac5dc3e-29bf-5d78-bf8c-6d5e6756bc47",
+  "name": "rationale/skills/memory_rationale/cases/long-edit-run-with-remove-undo-redo/expected",
+  "memories": {
+    "5c4bb3b6-5aae-5bb0-b2b4-f86bb745cb7c": {
+      "type": "memory",
+      "uid": "5c4bb3b6-5aae-5bb0-b2b4-f86bb745cb7c",
+      "content": "Added as “Release notes should identify the changed command,” it was repeatedly expanded and reworded into the current instruction covering Context, user-visible effect, remaining compatibility boundary, and intentional non-goal. A remove–undo–redo–undo cycle temporarily removed and restored it."
+    }
+  },
+  "order": [
+    "5c4bb3b6-5aae-5bb0-b2b4-f86bb745cb7c"
+  ]
+}

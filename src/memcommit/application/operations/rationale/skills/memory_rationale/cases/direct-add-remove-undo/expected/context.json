@@ -1,0 +1,14 @@
+{
+  "uid": "dc93c70c-a601-5d89-b3a7-bffd8da48098",
+  "name": "rationale/skills/memory_rationale/cases/direct-add-remove-undo/expected",
+  "memories": {
+    "991a0286-059a-531c-a47e-328b8674a9c2": {
+      "type": "memory",
+      "uid": "991a0286-059a-531c-a47e-328b8674a9c2",
+      "content": "This Memory was added directly, later removed, and restored when that removal was undone."
+    }
+  },
+  "order": [
+    "991a0286-059a-531c-a47e-328b8674a9c2"
+  ]
+}

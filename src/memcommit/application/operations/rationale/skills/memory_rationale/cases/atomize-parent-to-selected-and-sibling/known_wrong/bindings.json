@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "document": [
+    {
+      "provenance": {
+        "$memory": "f86825e4-72c4-5822-88cd-e03931be5d54"
+      },
+      "violates": [
+        "R07_COMPACT_COMPLETE",
+        "R10_EXACT_EXCERPT_ANCHOR",
+        "R11_OPERATION_SHAPE"
+      ],
+      "reason": {
+        "$memory": "0aea864a-1510-5864-83fd-a4a17d23aeaa"
+      }
+    },
+    {
+      "provenance": {
+        "$memory": "22a1939d-1356-5643-9ee5-91cf6daeffb2"
+      },
+      "violates": [
+        "R02_ORIGIN_CONTEXT",
+        "R03_DERIVATION_MECHANISM",
+        "R11_OPERATION_SHAPE"
+      ],
+      "reason": {
+        "$memory": "c955b991-2173-59ab-b6f9-2beccb05f482"
+      }
+    }
+  ]
+}

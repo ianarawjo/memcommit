@@ -1,0 +1,56 @@
+{
+  "uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+  "name": "local/guardrails/downstream-use",
+  "memories": {
+    "e8c87c6c-1c32-534b-87be-32b5bb93584f": {
+      "type": "memory",
+      "uid": "e8c87c6c-1c32-534b-87be-32b5bb93584f",
+      "content": "승인되지 않은 재전달을 허용하는 표현을 공유물에 넣지 마라."
+    },
+    "8cd6d58b-9325-584d-8c5c-396e1af03423": {
+      "type": "memory",
+      "uid": "8cd6d58b-9325-584d-8c5c-396e1af03423",
+      "content": "사용 목적 제한을 수신자에게 명시하라."
+    },
+    "00564a98-72a6-57ce-9fc6-20a918e9e593": {
+      "type": "memory",
+      "uid": "00564a98-72a6-57ce-9fc6-20a918e9e593",
+      "content": "수신자의 준수 여부를 확인하지 않은 채 삭제를 보장하지 마라."
+    },
+    "aeb15a51-9870-5e89-bcef-d5ad49792a02": {
+      "type": "memory",
+      "uid": "aeb15a51-9870-5e89-bcef-d5ad49792a02",
+      "content": "공유된 Memory를 모델 학습에 사용할 수 있다고 가정하지 마라."
+    },
+    "c2f154f8-6340-57d6-bd12-efa5411592b1": {
+      "type": "memory",
+      "uid": "c2f154f8-6340-57d6-bd12-efa5411592b1",
+      "content": "2차 처리자가 필요하면 사용자에게 별도 승인을 요청하라."
+    },
+    "62a622be-5e30-50f6-b1c0-f3b6454d0a64": {
+      "type": "memory",
+      "uid": "62a622be-5e30-50f6-b1c0-f3b6454d0a64",
+      "content": "정보를 수신할 권한은 정보를 재사용할 권한과 다르다."
+    },
+    "975278ec-2ea5-5dec-b9bc-8054d880d0e3": {
+      "type": "memory",
+      "uid": "975278ec-2ea5-5dec-b9bc-8054d880d0e3",
+      "content": "한 번 생성된 사본은 여러 처리 단계에 남을 수 있다."
+    },
+    "9b320cc6-d3d3-5135-82dc-93b48c4bfb71": {
+      "type": "memory",
+      "uid": "9b320cc6-d3d3-5135-82dc-93b48c4bfb71",
+      "content": "수신 조직은 내부 업무에 필요한 2차 처리자 이용이 원래 승인에 포함된다고 판단할 수 있다."
+    }
+  },
+  "order": [
+    "e8c87c6c-1c32-534b-87be-32b5bb93584f",
+    "8cd6d58b-9325-584d-8c5c-396e1af03423",
+    "00564a98-72a6-57ce-9fc6-20a918e9e593",
+    "aeb15a51-9870-5e89-bcef-d5ad49792a02",
+    "c2f154f8-6340-57d6-bd12-efa5411592b1",
+    "62a622be-5e30-50f6-b1c0-f3b6454d0a64",
+    "975278ec-2ea5-5dec-b9bc-8054d880d0e3",
+    "9b320cc6-d3d3-5135-82dc-93b48c4bfb71"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "uid": "2635ef6a-c239-5754-ad88-6a52e25c6097",
+  "name": "rationale/skills/context_rationale/rule_context",
+  "memories": {
+    "df2af72c-6b8f-5d5d-922d-d22b8fd89386": {
+      "type": "memory",
+      "uid": "df2af72c-6b8f-5d5d-922d-d22b8fd89386",
+      "content": "Explain how the Context evolved, not merely what it contains."
+    },
+    "73d15fb2-0c49-5d4d-bc6c-b5e88b2bee09": {
+      "type": "memory",
+      "uid": "73d15fb2-0c49-5d4d-bc6c-b5e88b2bee09",
+      "content": "Ground every causal claim in a recorded command, description, or visible before/after change."
+    },
+    "d158c8cf-752e-58f2-ace9-3d9802a2c2e2": {
+      "type": "memory",
+      "uid": "d158c8cf-752e-58f2-ace9-3d9802a2c2e2",
+      "content": "When history records a change but no reason, describe the change without inventing intent."
+    },
+    "44037408-ee9a-531a-b79b-3c22e15a5cb6": {
+      "type": "memory",
+      "uid": "44037408-ee9a-531a-b79b-3c22e15a5cb6",
+      "content": "Preserve material chronology and compress mechanical or wording-only repetition."
+    },
+    "6bf9fec9-449e-59e8-b212-10e8e36dd178": {
+      "type": "memory",
+      "uid": "6bf9fec9-449e-59e8-b212-10e8e36dd178",
+      "content": "Do not treat checkpoint order as authorship, purpose, or external-world evidence."
+    }
+  },
+  "order": [
+    "df2af72c-6b8f-5d5d-922d-d22b8fd89386",
+    "73d15fb2-0c49-5d4d-bc6c-b5e88b2bee09",
+    "d158c8cf-752e-58f2-ace9-3d9802a2c2e2",
+    "44037408-ee9a-531a-b79b-3c22e15a5cb6",
+    "6bf9fec9-449e-59e8-b212-10e8e36dd178"
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "uid": "5cdea05f-b6ec-586d-a87f-5347d1d51f96",
+  "name": "advisor1/ethics",
+  "memories": {
+    "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50": {
+      "type": "memory",
+      "uid": "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50",
+      "content": "각 사용자 연구 과업에서 예상되는 참가자 부담과 그 완화책을 연결하라."
+    },
+    "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6": {
+      "type": "memory",
+      "uid": "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6",
+      "content": "참가자가 시제품과 연구 과업에 접근하는 데 필요한 편의를 명시하라."
+    },
+    "bc41fce0-dbfc-5d23-9d97-9f81531c098c": {
+      "type": "memory",
+      "uid": "bc41fce0-dbfc-5d23-9d97-9f81531c098c",
+      "content": "접근성 편의를 사용자 연구 세션에서 제공하는 방식을 명시하라."
+    },
+    "9768e0d9-ef46-52a4-af04-8f6ca3c176c5": {
+      "type": "memory",
+      "uid": "9768e0d9-ef46-52a4-af04-8f6ca3c176c5",
+      "content": "수집 직후 개인 식별자를 연구자료에서 분리하는 방법을 적어라."
+    },
+    "e874407e-4d36-55a6-949e-44e5944f1bb4": {
+      "type": "memory",
+      "uid": "e874407e-4d36-55a6-949e-44e5944f1bb4",
+      "content": "참가자에게 필요한 장비가 없을 때 대여할 장비를 적어라."
+    },
+    "df16dca6-0b48-5753-aa18-7e5524187a1e": {
+      "type": "memory",
+      "uid": "df16dca6-0b48-5753-aa18-7e5524187a1e",
+      "content": "참가자에게 대여한 장비의 반환 절차를 적어라."
+    },
+    "7d0b3072-7bac-5bc6-9c79-acc808c38f1f": {
+      "type": "memory",
+      "uid": "7d0b3072-7bac-5bc6-9c79-acc808c38f1f",
+      "content": "HCI 윤리 검토자는 사용자 연구 과업마다 예상 부담과 완화책이 대응하는지 확인한다."
+    },
+    "407a4c1c-c333-5764-8d89-252bed150f99": {
+      "type": "memory",
+      "uid": "407a4c1c-c333-5764-8d89-252bed150f99",
+      "content": "형성 평가용 시제품이 완성된 서비스가 아님을 참가자에게 설명하라."
+    },
+    "28646fd3-54af-51f9-97da-ad9489ecda79": {
+      "type": "memory",
+      "uid": "28646fd3-54af-51f9-97da-ad9489ecda79",
+      "content": "같은 참가자에게 반복 평가를 요청할 때 누적 과업 부담의 상한을 정하라."
+    },
+    "218aafb6-9332-5693-a2e7-c7777dc64de7": {
+      "type": "memory",
+      "uid": "218aafb6-9332-5693-a2e7-c7777dc64de7",
+      "content": "사용자는 참가자 부담보다 시제품의 예상 이점을 먼저 설명하는 경향이 있다."
+    },
+    "1ecb7268-f77a-5643-a456-357df6cd8f6e": {
+      "type": "memory",
+      "uid": "1ecb7268-f77a-5643-a456-357df6cd8f6e",
+      "content": "지도자나 기관 관계자가 모집을 맡는 조직에서는 모집 권한과 학업·업무 평가 권한이 같은 역할에 결합될 수 있다."
+    }
+  },
+  "order": [
+    "e93ea2ee-a8b0-5f3d-b6fd-c76f385eef50",
+    "6ecf6a7b-f4e9-5d96-a52c-520197d4a2a6",
+    "bc41fce0-dbfc-5d23-9d97-9f81531c098c",
+    "9768e0d9-ef46-52a4-af04-8f6ca3c176c5",
+    "e874407e-4d36-55a6-949e-44e5944f1bb4",
+    "df16dca6-0b48-5753-aa18-7e5524187a1e",
+    "7d0b3072-7bac-5bc6-9c79-acc808c38f1f",
+    "407a4c1c-c333-5764-8d89-252bed150f99",
+    "28646fd3-54af-51f9-97da-ad9489ecda79",
+    "218aafb6-9332-5693-a2e7-c7777dc64de7",
+    "1ecb7268-f77a-5643-a456-357df6cd8f6e"
+  ]
+}

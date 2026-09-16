@@ -1,0 +1,98 @@
+{
+  "uid": "b392133c-278c-5c86-aaf9-5791ed5e9cd4",
+  "name": "participant/construction-updates/temporary-parking",
+  "memories": {
+    "84196dc5-9ae8-5663-866a-048024119fd2": {
+      "type": "memory",
+      "uid": "84196dc5-9ae8-5663-866a-048024119fd2",
+      "content": "campus-wiki/temporary-parking 수정: 공사기간 지하주차장은 일반 주차를 위해 사용할 수 없다."
+    },
+    "fdffd727-3579-5edc-8433-1f1f372b7576": {
+      "type": "memory",
+      "uid": "fdffd727-3579-5edc-8433-1f1f372b7576",
+      "content": "campus-wiki/temporary-parking 수정: 공사기간 지하주차장 보행자 출입문은 잠긴 상태로 운영된다."
+    },
+    "6dc791c0-f2a0-5e5e-a1ae-4ec35d7159a4": {
+      "type": "memory",
+      "uid": "6dc791c0-f2a0-5e5e-a1ae-4ec35d7159a4",
+      "content": "campus-wiki/temporary-parking 추가: 공사기간 교직원에게 잠긴 지하주차장 보행자 출입문을 실물 출입증으로 통과하도록 안내하라."
+    },
+    "fb0765f1-92fa-50b6-ab78-35ca165ab2e6": {
+      "type": "memory",
+      "uid": "fb0765f1-92fa-50b6-ab78-35ca165ab2e6",
+      "content": "campus-wiki/temporary-parking 추가: 공사·건물 관계자에게 현장에서 승인된 통제 출입 절차를 통해 지하주차장에 출입하도록 안내하라."
+    },
+    "5a4dd86f-bead-50bb-b6e8-45c176b6d65f": {
+      "type": "memory",
+      "uid": "5a4dd86f-bead-50bb-b6e8-45c176b6d65f",
+      "content": "campus-wiki/temporary-parking 수정: 본관에서 지하주차장으로 내려가는 계단은 모든 이용자에게 폐쇄된다."
+    },
+    "32e116a4-526b-5cd1-af16-4872680376b5": {
+      "type": "memory",
+      "uid": "32e116a4-526b-5cd1-af16-4872680376b5",
+      "content": "campus-wiki/temporary-parking 추가: 지하주차장은 공사 자재를 임시로 적재하는 장소로 사용한다."
+    },
+    "8fa46317-ba39-54bb-8cf0-f85770bd5032": {
+      "type": "memory",
+      "uid": "8fa46317-ba39-54bb-8cf0-f85770bd5032",
+      "content": "campus-wiki/temporary-parking 추가: 철거 뒤 지하주차장에 남은 개인 물품은 분실물센터로 옮겨졌다."
+    },
+    "cc5f97c1-ce8c-5ac0-8f3e-ecdc6df597fc": {
+      "type": "memory",
+      "uid": "cc5f97c1-ce8c-5ac0-8f3e-ecdc6df597fc",
+      "content": "campus-wiki/temporary-parking 추가: 본관 연결 A 야외주차장은 공사기간 폐쇄된다."
+    },
+    "9b8a7458-4ebc-5b82-be5b-522268680f63": {
+      "type": "memory",
+      "uid": "9b8a7458-4ebc-5b82-be5b-522268680f63",
+      "content": "campus-wiki/temporary-parking 수정: 공사기간 C 야외주차장은 본관 방문 차량의 임시 대체 주차장으로 운영된다."
+    },
+    "d47493d3-5b50-53d0-a5b9-5dedbdb268a4": {
+      "type": "memory",
+      "uid": "d47493d3-5b50-53d0-a5b9-5dedbdb268a4",
+      "content": "campus-wiki/temporary-parking 추가: A 야외주차장은 본관 공사 종료 직후 재개방할 계획이다."
+    },
+    "91de6da4-a9f4-5e2a-a585-14609a8d8497": {
+      "type": "memory",
+      "uid": "91de6da4-a9f4-5e2a-a585-14609a8d8497",
+      "content": "campus-wiki/temporary-parking 수정: 공사기간 A 야외주차장과 본관 지하주차장을 잇는 경사 진입로는 차단된다."
+    },
+    "71a5daa6-e289-51bf-bf1f-051d9958091e": {
+      "type": "memory",
+      "uid": "71a5daa6-e289-51bf-bf1f-051d9958091e",
+      "content": "campus-wiki/temporary-parking 수정: 주차 안내 에이전트는 공사기간 지하주차장·A 야외주차장 폐쇄와 C 야외주차장 대체 이용을 게시정보에 근거해 설명할 수 있다."
+    },
+    "7f72387d-58fc-511c-84c3-940933217e9d": {
+      "type": "memory",
+      "uid": "7f72387d-58fc-511c-84c3-940933217e9d",
+      "content": "campus-wiki/temporary-parking 수정: 주차 안내 에이전트는 공사기간 C 야외주차장의 위치를 설명할 수 있지만 문의 시점의 빈자리는 확인하거나 보장할 수 없다."
+    },
+    "85518d54-4515-5bc0-ad8c-f5dd4e2b7d51": {
+      "type": "memory",
+      "uid": "85518d54-4515-5bc0-ad8c-f5dd4e2b7d51",
+      "content": "campus-wiki/temporary-parking 수정: 본관 주차에 익숙한 방문객은 공사기간에도 지하주차장이나 A 야외주차장에 진입할 수 있다고 기대해 폐쇄된 진입로까지 운전한 뒤 C 야외주차장을 다시 찾을 가능성이 있다."
+    },
+    "ceffae14-e966-566e-83b2-df46680d4582": {
+      "type": "memory",
+      "uid": "ceffae14-e966-566e-83b2-df46680d4582",
+      "content": "campus-wiki/temporary-parking 수정: A 야외주차장 하역에 익숙한 배송 기사와 외부 유지보수 업체는 공사기간에도 같은 지점으로 접근해 통제선 앞에서 반입 시간이나 하역 위치를 다시 확인할 가능성이 있다."
+    }
+  },
+  "order": [
+    "84196dc5-9ae8-5663-866a-048024119fd2",
+    "fdffd727-3579-5edc-8433-1f1f372b7576",
+    "6dc791c0-f2a0-5e5e-a1ae-4ec35d7159a4",
+    "fb0765f1-92fa-50b6-ab78-35ca165ab2e6",
+    "5a4dd86f-bead-50bb-b6e8-45c176b6d65f",
+    "32e116a4-526b-5cd1-af16-4872680376b5",
+    "8fa46317-ba39-54bb-8cf0-f85770bd5032",
+    "cc5f97c1-ce8c-5ac0-8f3e-ecdc6df597fc",
+    "9b8a7458-4ebc-5b82-be5b-522268680f63",
+    "d47493d3-5b50-53d0-a5b9-5dedbdb268a4",
+    "91de6da4-a9f4-5e2a-a585-14609a8d8497",
+    "71a5daa6-e289-51bf-bf1f-051d9958091e",
+    "7f72387d-58fc-511c-84c3-940933217e9d",
+    "85518d54-4515-5bc0-ad8c-f5dd4e2b7d51",
+    "ceffae14-e966-566e-83b2-df46680d4582"
+  ]
+}

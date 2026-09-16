@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "document": {
+    "selected_memory_id": "selected",
+    "context_name": "transform-scratch/source",
+    "history_available": true,
+    "originals": [
+      {
+        "id": "related_source",
+        "content": {
+          "$memory": "c1d353d9-5cde-54e4-a779-64d15c13e849"
+        },
+        "position": 17
+      }
+    ],
+    "current": [
+      {
+        "id": "related_source",
+        "content": {
+          "$memory": "33329ca7-698b-5d21-a33f-1e074d8edf29"
+        },
+        "position": 17
+      },
+      {
+        "id": "selected",
+        "content": {
+          "$memory": "08ff0455-0717-53d4-ac6e-642f8398ced1"
+        },
+        "position": 0
+      }
+    ],
+    "events": [
+      {
+        "kind": "ADD",
+        "command": "move",
+        "description": {
+          "$memory": "75952854-7ad4-5d2c-97af-e31c26eb351d"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "related_source",
+            "content": {
+              "$memory": "9948ebdf-ac1c-5ca8-a134-a68ecbe614b2"
+            },
+            "position": 17
+          }
+        ]
+      },
+      {
+        "kind": "EDIT",
+        "command": "replace",
+        "description": {
+          "$memory": "91691e26-4f44-5938-9e07-797ff0557edd"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "related_source",
+            "content": {
+              "$memory": "b9ceae4c-b3d6-5902-b46f-7ab872751cb2"
+            },
+            "position": 17
+          }
+        ],
+        "after": [
+          {
+            "id": "related_source",
+            "content": {
+              "$memory": "68bc3b79-2088-588e-9254-05db29d59893"
+            },
+            "position": 17
+          }
+        ]
+      },
+      {
+        "kind": "ADD",
+        "command": "merge",
+        "description": {
+          "$memory": "1093fcdc-d5fb-5a81-b323-7cc3f072ba6f"
+        },
+        "reason": null,
+        "reason_codes": [
+          "MERGE",
+          "NEW"
+        ],
+        "before": [],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "5f176e23-efcf-5850-820d-0737858edaa9"
+            },
+            "position": 0
+          }
+        ]
+      }
+    ],
+    "warnings": [],
+    "limit": 40,
+    "unit": "words",
+    "relations": [
+      {
+        "kind": "DERIVED_FROM",
+        "command": "merge",
+        "description": {
+          "$memory": "d742ad94-bf06-5586-a282-6df6449216c2"
+        },
+        "reason": null,
+        "reason_codes": [
+          "MERGE",
+          "NEW"
+        ],
+        "before": [
+          {
+            "id": "related_source",
+            "content": {
+              "$memory": "eb6c9525-fe69-57e9-9266-5cdd185d0773"
+            },
+            "position": 17
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "b502efa9-47a9-57f2-bc7c-8e3a5a5b3152"
+            },
+            "position": 0
+          }
+        ],
+        "context_transition": {
+          "source": "facility-updates",
+          "target": "transform-scratch/source"
+        }
+      }
+    ]
+  }
+}

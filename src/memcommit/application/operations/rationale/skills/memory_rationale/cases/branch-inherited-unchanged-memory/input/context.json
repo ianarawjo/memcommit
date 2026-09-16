@@ -1,0 +1,62 @@
+{
+  "uid": "fef9e5d1-038c-5e46-a5c1-f5d5304fe41e",
+  "name": "rationale/skills/memory_rationale/cases/branch-inherited-unchanged-memory/input",
+  "memories": {
+    "eb603093-b710-5d84-a7f4-b715ac0028df": {
+      "type": "memory",
+      "uid": "eb603093-b710-5d84-a7f4-b715ac0028df",
+      "content": "a is apple"
+    },
+    "dbd4e69e-b450-5a85-97b0-44b8bb2098a2": {
+      "type": "memory",
+      "uid": "dbd4e69e-b450-5a85-97b0-44b8bb2098a2",
+      "content": "a is apple"
+    },
+    "3c23e0f1-3824-57b8-ac09-c78c11681a6e": {
+      "type": "memory",
+      "uid": "3c23e0f1-3824-57b8-ac09-c78c11681a6e",
+      "content": "Added: a is apple"
+    },
+    "ad9c0597-d310-5e9a-a9e0-566c7a6bfd0c": {
+      "type": "memory",
+      "uid": "ad9c0597-d310-5e9a-a9e0-566c7a6bfd0c",
+      "content": "a is apple"
+    },
+    "1186e870-84e1-5cfb-938f-e478ddf1b802": {
+      "type": "memory",
+      "uid": "1186e870-84e1-5cfb-938f-e478ddf1b802",
+      "content": "Branched 'practice/1' to 'practice/2'."
+    },
+    "6402102c-997b-59ce-b095-f1172099b315": {
+      "type": "memory",
+      "uid": "6402102c-997b-59ce-b095-f1172099b315",
+      "content": "a is apple"
+    },
+    "f68bc5f1-bd6f-507d-8656-ff7f1a103b61": {
+      "type": "memory",
+      "uid": "f68bc5f1-bd6f-507d-8656-ff7f1a103b61",
+      "content": "Branched 'practice/1' to 'practice/2'."
+    },
+    "d936395e-ac6d-5e90-9e2f-a0439ec281e8": {
+      "type": "memory",
+      "uid": "d936395e-ac6d-5e90-9e2f-a0439ec281e8",
+      "content": "a is apple"
+    },
+    "67076710-1b1a-5f8f-8645-3e174ffadbd9": {
+      "type": "memory",
+      "uid": "67076710-1b1a-5f8f-8645-3e174ffadbd9",
+      "content": "a is apple"
+    }
+  },
+  "order": [
+    "eb603093-b710-5d84-a7f4-b715ac0028df",
+    "dbd4e69e-b450-5a85-97b0-44b8bb2098a2",
+    "3c23e0f1-3824-57b8-ac09-c78c11681a6e",
+    "ad9c0597-d310-5e9a-a9e0-566c7a6bfd0c",
+    "1186e870-84e1-5cfb-938f-e478ddf1b802",
+    "6402102c-997b-59ce-b095-f1172099b315",
+    "f68bc5f1-bd6f-507d-8656-ff7f1a103b61",
+    "d936395e-ac6d-5e90-9e2f-a0439ec281e8",
+    "67076710-1b1a-5f8f-8645-3e174ffadbd9"
+  ]
+}

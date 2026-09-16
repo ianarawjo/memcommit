@@ -1,0 +1,32 @@
+{
+  "uid": "3e8eae98-3937-5949-bfa0-c6c967a6ab9e",
+  "name": "rationale/skills/memory_rationale/cases/direct-add-remove-undo/known_wrong",
+  "memories": {
+    "b34c51de-3bf0-5529-89d0-ba49c3ff0958": {
+      "type": "memory",
+      "uid": "b34c51de-3bf0-5529-89d0-ba49c3ff0958",
+      "content": "This Memory currently exists."
+    },
+    "d8826a26-0465-508c-8dad-8b1098cdd597": {
+      "type": "memory",
+      "uid": "d8826a26-0465-508c-8dad-8b1098cdd597",
+      "content": "The endpoint alone hides both the removal and its undo."
+    },
+    "bcf3a5f9-6eb6-5bfa-b0a9-d8f1c9076c20": {
+      "type": "memory",
+      "uid": "bcf3a5f9-6eb6-5bfa-b0a9-d8f1c9076c20",
+      "content": "The selected Memory entered the Context through a direct Add and stayed there until Remove deleted it. Undo then reversed that removal, restored the same Memory to the Context, and left its original wording available again as the current retained state."
+    },
+    "8bf3edf9-0bb0-5b81-9858-9967b89fca2d": {
+      "type": "memory",
+      "uid": "8bf3edf9-0bb0-5b81-9858-9967b89fca2d",
+      "content": "The grounded 41-word draft exceeds the 40-word hard bound and must be rewritten from the complete Trace rather than published or clipped."
+    }
+  },
+  "order": [
+    "b34c51de-3bf0-5529-89d0-ba49c3ff0958",
+    "d8826a26-0465-508c-8dad-8b1098cdd597",
+    "bcf3a5f9-6eb6-5bfa-b0a9-d8f1c9076c20",
+    "8bf3edf9-0bb0-5b81-9858-9967b89fca2d"
+  ]
+}

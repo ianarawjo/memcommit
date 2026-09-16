@@ -1,0 +1,62 @@
+{
+  "uid": "dc9f8757-6ef1-5d9a-9557-c4a980e8e1d1",
+  "name": "rationale/skills/memory_rationale/manifest",
+  "memories": {
+    "3645a536-dee1-5e62-950a-c431e23a3cf4": {
+      "type": "memory",
+      "uid": "3645a536-dee1-5e62-950a-c431e23a3cf4",
+      "content": "A hesitation inside one longer instruction becomes a standalone sentence chunk, disappears under undo, returns under redo, and is later removed while sibling atomize events remain outside its lifecycle."
+    },
+    "6716281f-514f-532b-8e5d-0592173e6017": {
+      "type": "memory",
+      "uid": "6716281f-514f-532b-8e5d-0592173e6017",
+      "content": "A directly added Memory is removed and restored when that removal is undone."
+    },
+    "b4c9ecd4-a56d-5b0f-b47f-21efba0188d0": {
+      "type": "memory",
+      "uid": "b4c9ecd4-a56d-5b0f-b47f-21efba0188d0",
+      "content": "A copied compound instruction is atomized into the selected no-edit instruction and one sibling instruction, so the compact narrative should show the exact parent-to-two-results contrast."
+    },
+    "05c92b0a-11a1-551b-b41d-45c0afcb20f9": {
+      "type": "memory",
+      "uid": "05c92b0a-11a1-551b-b41d-45c0afcb20f9",
+      "content": "A Rule distilled from another Context is later replaced by Edit, so the narrative should quote the first derived rule before the current replacement instead of abstracting the rule's purpose."
+    },
+    "186edacf-7943-5e4f-9371-4cb411cce75e": {
+      "type": "memory",
+      "uid": "186edacf-7943-5e4f-9371-4cb411cce75e",
+      "content": "A Memory added in one Context is carried unchanged into a new Context by a recorded Branch transition."
+    },
+    "70749f21-71c4-5a07-a4ff-aff40070cf3d": {
+      "type": "memory",
+      "uid": "70749f21-71c4-5a07-a4ff-aff40070cf3d",
+      "content": "A Source occurrence moves and is revised before Merge copies that recorded wording into a fresh Target occurrence without removing Source."
+    },
+    "059f1c07-da6c-569b-8bce-193f41a08391": {
+      "type": "memory",
+      "uid": "059f1c07-da6c-569b-8bce-193f41a08391",
+      "content": "Selecting the fresh Merge Target still exposes the Source occurrence's earlier move and revision before the recorded copy."
+    },
+    "bd8692ea-9d4a-5964-8ac1-460d2149a79b": {
+      "type": "memory",
+      "uid": "bd8692ea-9d4a-5964-8ac1-460d2149a79b",
+      "content": "Fifteen retained events combine ten successive edits with a Remove, Undo, Redo, and second Undo; the narrative must read every event but compress wording-only revisions into material phases within the ordinary 40-word bound."
+    },
+    "2b068fe5-11d9-5eca-8528-3f7140eb9167": {
+      "type": "memory",
+      "uid": "2b068fe5-11d9-5eca-8528-3f7140eb9167",
+      "content": "Readable content received through a Grant does not expose retained owner history to Rationale."
+    }
+  },
+  "order": [
+    "3645a536-dee1-5e62-950a-c431e23a3cf4",
+    "6716281f-514f-532b-8e5d-0592173e6017",
+    "b4c9ecd4-a56d-5b0f-b47f-21efba0188d0",
+    "05c92b0a-11a1-551b-b41d-45c0afcb20f9",
+    "186edacf-7943-5e4f-9371-4cb411cce75e",
+    "70749f21-71c4-5a07-a4ff-aff40070cf3d",
+    "059f1c07-da6c-569b-8bce-193f41a08391",
+    "bd8692ea-9d4a-5964-8ac1-460d2149a79b",
+    "2b068fe5-11d9-5eca-8528-3f7140eb9167"
+  ]
+}

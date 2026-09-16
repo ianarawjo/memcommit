@@ -1,0 +1,74 @@
+{
+  "uid": "56a96e37-098f-563e-b04d-21a7777e3daf",
+  "name": "campus-wiki/construction-details/report-status",
+  "memories": {
+    "4baad939-eadf-575f-8513-977e584ad810": {
+      "type": "memory",
+      "uid": "4baad939-eadf-575f-8513-977e584ad810",
+      "content": "초기점검 기록에는 공용부 육안 확인이 완료된 것으로 표시되어 있다."
+    },
+    "da439990-b241-5383-b8b0-d72fd4c5f96a": {
+      "type": "memory",
+      "uid": "da439990-b241-5383-b8b0-d72fd4c5f96a",
+      "content": "초기점검 기록에는 기계실 계측값 검토가 진행 중인 것으로 표시되어 있다."
+    },
+    "9639a66f-66b3-5535-aceb-c13a290da16e": {
+      "type": "memory",
+      "uid": "9639a66f-66b3-5535-aceb-c13a290da16e",
+      "content": "지하주차장 균열 위치표 초안이 작성되었다."
+    },
+    "ac19d9f7-98c3-59a1-9893-771031511da0": {
+      "type": "memory",
+      "uid": "ac19d9f7-98c3-59a1-9893-771031511da0",
+      "content": "지하주차장 보수 우선순위 승인은 보류 상태다."
+    },
+    "d32eb402-f8da-58c2-99f8-371b9204b952": {
+      "type": "memory",
+      "uid": "d32eb402-f8da-58c2-99f8-371b9204b952",
+      "content": "소방설비 목록의 감지기 수량 대조를 마쳤다."
+    },
+    "dc799aca-3458-56be-bc01-351355a4b2be": {
+      "type": "memory",
+      "uid": "dc799aca-3458-56be-bc01-351355a4b2be",
+      "content": "제연설비 시험 결과 입력은 아직 끝나지 않았다."
+    },
+    "473885d0-f0e1-54f8-8981-c4573fab227f": {
+      "type": "memory",
+      "uid": "473885d0-f0e1-54f8-8981-c4573fab227f",
+      "content": "전기설비 보고서에서 교체 대상 분전반 목록이 승인되었다."
+    },
+    "b2080c78-2298-5b08-819a-097d4e9e559b": {
+      "type": "memory",
+      "uid": "b2080c78-2298-5b08-819a-097d4e9e559b",
+      "content": "전기설비 보고서의 비상전원 전환시험 결과는 비어 있다."
+    },
+    "91af5729-d795-56ea-80dc-c076808241dd": {
+      "type": "memory",
+      "uid": "91af5729-d795-56ea-80dc-c076808241dd",
+      "content": "개별 작업이 완료되기 전에는 최종검수 보고서를 작성하지 마라."
+    },
+    "1c1c1910-cd34-56f0-ac1a-937001befd33": {
+      "type": "memory",
+      "uid": "1c1c1910-cd34-56f0-ac1a-937001befd33",
+      "content": "최종검수 보고서의 현재 상태는 시작 전이다."
+    },
+    "5f50d2f4-3ab3-57af-beea-fae73cec37f2": {
+      "type": "memory",
+      "uid": "5f50d2f4-3ab3-57af-beea-fae73cec37f2",
+      "content": "각 설비 담당업체는 미완료 시험 항목을 완료로 표시하면 후속 검수의 신뢰가 훼손된다고 판단한다."
+    }
+  },
+  "order": [
+    "4baad939-eadf-575f-8513-977e584ad810",
+    "da439990-b241-5383-b8b0-d72fd4c5f96a",
+    "9639a66f-66b3-5535-aceb-c13a290da16e",
+    "ac19d9f7-98c3-59a1-9893-771031511da0",
+    "d32eb402-f8da-58c2-99f8-371b9204b952",
+    "dc799aca-3458-56be-bc01-351355a4b2be",
+    "473885d0-f0e1-54f8-8981-c4573fab227f",
+    "b2080c78-2298-5b08-819a-097d4e9e559b",
+    "91af5729-d795-56ea-80dc-c076808241dd",
+    "1c1c1910-cd34-56f0-ac1a-937001befd33",
+    "5f50d2f4-3ab3-57af-beea-fae73cec37f2"
+  ]
+}

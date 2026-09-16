@@ -1,0 +1,382 @@
+{
+  "schema_version": 1,
+  "document": {
+    "selected_memory_id": "selected",
+    "context_name": "long-history",
+    "history_available": true,
+    "originals": [
+      {
+        "id": "selected",
+        "content": {
+          "$memory": "2d107279-c0bb-5f5a-8b85-d9ed2c6d1c0d"
+        },
+        "position": 0
+      }
+    ],
+    "current": [
+      {
+        "id": "selected",
+        "content": {
+          "$memory": "e0acd829-da9f-5812-bf88-3654c3f7cc73"
+        },
+        "position": 0
+      }
+    ],
+    "events": [
+      {
+        "kind": "ADD",
+        "command": "add",
+        "description": {
+          "$memory": "87981b35-1168-543a-b777-53d8d17cd9ec"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "f3604bc2-d126-59c2-a7f8-da795d4b9919"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "EDIT",
+        "command": "edit",
+        "description": {
+          "$memory": "5e897b8f-4ce3-5ea9-a0bf-a89a88375cd1"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "f48186b7-0be7-5e80-b301-0ffae5f34e56"
+            },
+            "position": 0
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "a31d1b69-b202-5dc2-9519-93a08a056a55"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "EDIT",
+        "command": "edit",
+        "description": {
+          "$memory": "46003e1f-e8a0-575c-85f0-9d1feefbf7e6"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "1dae1d24-874e-5107-ac55-43bb13d6bc3d"
+            },
+            "position": 0
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "681c2203-8d20-531e-97b2-66b4f3099f22"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "EDIT",
+        "command": "edit",
+        "description": {
+          "$memory": "66ffefa7-c47e-56cb-896b-c7abace8ee9c"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "6b740bd1-be8d-59f4-b514-817c6cae0ff6"
+            },
+            "position": 0
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "5f8b7189-1b7d-5820-b972-92a9d027b1fd"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "EDIT",
+        "command": "edit",
+        "description": {
+          "$memory": "1c9904a4-3fc9-58ad-abfd-936a4408e1d6"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "b4a385fb-399a-5a27-8805-4962c0b3a513"
+            },
+            "position": 0
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "f227f9ed-22cd-5400-91df-29b34fb650ef"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "EDIT",
+        "command": "edit",
+        "description": {
+          "$memory": "e2405e83-d761-516e-afdc-c78d0c15440c"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "3ccc2dd9-6a14-5eec-951f-88b1808ce350"
+            },
+            "position": 0
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "aafd6fd8-7aae-5683-bc53-8569885e39bc"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "EDIT",
+        "command": "edit",
+        "description": {
+          "$memory": "f68f1ecd-6f75-5c9e-9f24-b293087e6c17"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "01ce5348-ca9e-5112-a31a-af10125a908d"
+            },
+            "position": 0
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "ea6fcb7e-c7e1-5ba6-8f7b-1a93cb744a27"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "EDIT",
+        "command": "edit",
+        "description": {
+          "$memory": "0ad47c93-f5d4-5e71-adba-2d351dca62e1"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "3236be5b-c1c8-5f68-9a51-a127bae237ee"
+            },
+            "position": 0
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "006e5ab3-1158-5134-9d87-d1196545555c"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "REMOVE",
+        "command": "remove",
+        "description": {
+          "$memory": "9a62b3fe-dac1-5483-94f8-26a6aca9f4eb"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "73d174c3-7fef-5925-a16e-b0710517cccd"
+            },
+            "position": 0
+          }
+        ],
+        "after": []
+      },
+      {
+        "kind": "ADD",
+        "command": "undo",
+        "description": {
+          "$memory": "8ac443cd-858f-599b-a0a8-9e1988184cc0"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "7442d8e9-2c25-58e7-8f36-19fd276f3de7"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "REMOVE",
+        "command": "redo",
+        "description": {
+          "$memory": "c2e82a24-0ae0-5dde-8118-8f72de391d78"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "6ee6ee0b-1f18-5a62-935a-1862282f56ec"
+            },
+            "position": 0
+          }
+        ],
+        "after": []
+      },
+      {
+        "kind": "ADD",
+        "command": "undo",
+        "description": {
+          "$memory": "5266bc45-5922-56a7-820d-59e1d984f5a3"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "7937d292-f460-5c4b-b162-1ebc1ae67ed7"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "EDIT",
+        "command": "edit",
+        "description": {
+          "$memory": "79627767-9a88-5772-9196-554ce2ae8d72"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "d82a0a92-5449-5f45-ab5a-11586102b7c3"
+            },
+            "position": 0
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "9bb34335-c4ea-5fca-a37c-7c3ac63142e6"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "EDIT",
+        "command": "edit",
+        "description": {
+          "$memory": "e438fec7-4d1d-5265-a88b-b66b6504dd05"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "d9154549-7e78-59dc-b19e-b6074da8c6d3"
+            },
+            "position": 0
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "58eed619-d879-54c8-8e8f-723f46dd6d30"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "EDIT",
+        "command": "edit",
+        "description": {
+          "$memory": "91d396b3-c358-5f57-8482-a4bbc6e2f9aa"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "5773fd39-b948-59f5-b984-fb79319929ea"
+            },
+            "position": 0
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "499f8dbf-6283-5ffb-978c-4938055701e7"
+            },
+            "position": 0
+          }
+        ]
+      }
+    ],
+    "warnings": [],
+    "limit": 40,
+    "unit": "words",
+    "relations": []
+  }
+}

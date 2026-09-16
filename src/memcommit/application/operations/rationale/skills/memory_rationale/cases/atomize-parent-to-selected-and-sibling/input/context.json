@@ -1,0 +1,128 @@
+{
+  "uid": "d57c7700-978d-58ea-8d48-3c28aa2aa877",
+  "name": "rationale/skills/memory_rationale/cases/atomize-parent-to-selected-and-sibling/input",
+  "memories": {
+    "e485c557-e78a-56f2-b8d2-c55736e19010": {
+      "type": "memory",
+      "uid": "e485c557-e78a-56f2-b8d2-c55736e19010",
+      "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division."
+    },
+    "ccc666b2-0f2e-545b-a0fa-8bbe75d22d73": {
+      "type": "memory",
+      "uid": "ccc666b2-0f2e-545b-a0fa-8bbe75d22d73",
+      "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately."
+    },
+    "bc193701-f522-5e78-b75c-282449482784": {
+      "type": "memory",
+      "uid": "bc193701-f522-5e78-b75c-282449482784",
+      "content": "When I ask “How does this read?”, first check the sentence order and paragraph division."
+    },
+    "a64fa3ce-0aa1-51b9-8960-297738aaa25f": {
+      "type": "memory",
+      "uid": "a64fa3ce-0aa1-51b9-8960-297738aaa25f",
+      "content": "Copied the source frame before the reviewed Atomize transform"
+    },
+    "0f6653bd-8779-5d87-9a6f-eae60ef9e15a": {
+      "type": "memory",
+      "uid": "0f6653bd-8779-5d87-9a6f-eae60ef9e15a",
+      "content": "Copied into this Context from 'practice/source' before the reviewed Atomize transform."
+    },
+    "55fc8dc2-dd49-56ba-a9ba-6874b52a2e92": {
+      "type": "memory",
+      "uid": "55fc8dc2-dd49-56ba-a9ba-6874b52a2e92",
+      "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division."
+    },
+    "fa7aae89-3025-5758-bfc4-e40ce8e13461": {
+      "type": "memory",
+      "uid": "fa7aae89-3025-5758-bfc4-e40ce8e13461",
+      "content": "Atomized 1 compound Memory into 2 children"
+    },
+    "65db979d-2e77-512f-bae6-204275d1e471": {
+      "type": "memory",
+      "uid": "65db979d-2e77-512f-bae6-204275d1e471",
+      "content": "The request contains independently revisable instructions to withhold immediate editing and to check sentence order and paragraph division first."
+    },
+    "2d287d9d-d082-5cd9-b03f-c2d5d5496e2a": {
+      "type": "memory",
+      "uid": "2d287d9d-d082-5cd9-b03f-c2d5d5496e2a",
+      "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division."
+    },
+    "b75e0da9-8071-50ba-ad1c-71e0684530dc": {
+      "type": "memory",
+      "uid": "b75e0da9-8071-50ba-ad1c-71e0684530dc",
+      "content": "Atomized 1 compound Memory into 2 children"
+    },
+    "4333b54b-bcd9-5526-87ef-b4e47bb4c4df": {
+      "type": "memory",
+      "uid": "4333b54b-bcd9-5526-87ef-b4e47bb4c4df",
+      "content": "The request contains independently revisable instructions to withhold immediate editing and to check sentence order and paragraph division first."
+    },
+    "84dfb3e5-3cce-5553-8187-ec5723bc3450": {
+      "type": "memory",
+      "uid": "84dfb3e5-3cce-5553-8187-ec5723bc3450",
+      "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately."
+    },
+    "edaa1d0e-f2d0-5374-887e-ceb5ae545e5a": {
+      "type": "memory",
+      "uid": "edaa1d0e-f2d0-5374-887e-ceb5ae545e5a",
+      "content": "Atomized 1 compound Memory into 2 children"
+    },
+    "1c62c048-3f92-55d4-8cc5-6da27a8c5cef": {
+      "type": "memory",
+      "uid": "1c62c048-3f92-55d4-8cc5-6da27a8c5cef",
+      "content": "The request contains independently revisable instructions to withhold immediate editing and to check sentence order and paragraph division first."
+    },
+    "19adb376-a065-559c-a88f-3d4fcb867ed5": {
+      "type": "memory",
+      "uid": "19adb376-a065-559c-a88f-3d4fcb867ed5",
+      "content": "When I ask “How does this read?”, first check the sentence order and paragraph division."
+    },
+    "649d48f1-3995-5481-817f-2beac22c74a5": {
+      "type": "memory",
+      "uid": "649d48f1-3995-5481-817f-2beac22c74a5",
+      "content": "Atomized 1 compound Memory into 2 children"
+    },
+    "9a6bdf18-6c4a-5e4d-938f-4715ac6b1fc2": {
+      "type": "memory",
+      "uid": "9a6bdf18-6c4a-5e4d-938f-4715ac6b1fc2",
+      "content": "The request contains independently revisable instructions to withhold immediate editing and to check sentence order and paragraph division first."
+    },
+    "42e94ef3-93fb-5f01-b533-c8d2ae772c4d": {
+      "type": "memory",
+      "uid": "42e94ef3-93fb-5f01-b533-c8d2ae772c4d",
+      "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately; first check the sentence order and paragraph division."
+    },
+    "b4ec8182-eb9b-52aa-96b8-4aaaa19d95c9": {
+      "type": "memory",
+      "uid": "b4ec8182-eb9b-52aa-96b8-4aaaa19d95c9",
+      "content": "When I ask “How does this read?”, I really want an opinion, so don't edit the draft immediately."
+    },
+    "1e3bc2bf-c19f-5a7d-a535-9b39b553d1ab": {
+      "type": "memory",
+      "uid": "1e3bc2bf-c19f-5a7d-a535-9b39b553d1ab",
+      "content": "When I ask “How does this read?”, first check the sentence order and paragraph division."
+    }
+  },
+  "order": [
+    "e485c557-e78a-56f2-b8d2-c55736e19010",
+    "ccc666b2-0f2e-545b-a0fa-8bbe75d22d73",
+    "bc193701-f522-5e78-b75c-282449482784",
+    "a64fa3ce-0aa1-51b9-8960-297738aaa25f",
+    "0f6653bd-8779-5d87-9a6f-eae60ef9e15a",
+    "55fc8dc2-dd49-56ba-a9ba-6874b52a2e92",
+    "fa7aae89-3025-5758-bfc4-e40ce8e13461",
+    "65db979d-2e77-512f-bae6-204275d1e471",
+    "2d287d9d-d082-5cd9-b03f-c2d5d5496e2a",
+    "b75e0da9-8071-50ba-ad1c-71e0684530dc",
+    "4333b54b-bcd9-5526-87ef-b4e47bb4c4df",
+    "84dfb3e5-3cce-5553-8187-ec5723bc3450",
+    "edaa1d0e-f2d0-5374-887e-ceb5ae545e5a",
+    "1c62c048-3f92-55d4-8cc5-6da27a8c5cef",
+    "19adb376-a065-559c-a88f-3d4fcb867ed5",
+    "649d48f1-3995-5481-817f-2beac22c74a5",
+    "9a6bdf18-6c4a-5e4d-938f-4715ac6b1fc2",
+    "42e94ef3-93fb-5f01-b533-c8d2ae772c4d",
+    "b4ec8182-eb9b-52aa-96b8-4aaaa19d95c9",
+    "1e3bc2bf-c19f-5a7d-a535-9b39b553d1ab"
+  ]
+}

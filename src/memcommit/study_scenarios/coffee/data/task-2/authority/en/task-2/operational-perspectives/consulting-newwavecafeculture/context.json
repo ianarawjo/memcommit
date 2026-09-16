@@ -1,0 +1,56 @@
+{
+  "uid": "952a6068-5c0b-5966-bd05-f84c21df495f",
+  "name": "task-2/operational-perspectives/consulting-newwavecafeculture",
+  "memories": {
+    "b2b77035-9806-5b46-a6cb-ec374eefd8c6": {
+      "type": "memory",
+      "uid": "b2b77035-9806-5b46-a6cb-ec374eefd8c6",
+      "content": "A café experience connects online information, the entrance, ordering, seating, and staff service, so designing even one element in a different direction makes the visit feel inconsistent from one stage to the next."
+    },
+    "f95ba515-75f2-553d-8eea-e2455d7a08bc": {
+      "type": "memory",
+      "uid": "f95ba515-75f2-553d-8eea-e2455d7a08bc",
+      "content": "When proposing operational improvements, prioritize methods that can be carried out with the current furniture and staff."
+    },
+    "0154dabf-1fd9-5cb2-8472-15529160e86d": {
+      "type": "memory",
+      "uid": "0154dabf-1fd9-5cb2-8472-15529160e86d",
+      "content": "This agent can create proposals from consulting records and store operating data, but without an in-person site visit it cannot verify the actual taste of the drinks, the internal condition of equipment, or the atmosphere of staff service."
+    },
+    "9e318743-9b00-52a6-9abf-a83b1fb11be5": {
+      "type": "memory",
+      "uid": "9e318743-9b00-52a6-9abf-a83b1fb11be5",
+      "content": "When café owners describe conditions as impossible to change, they sometimes combine physically difficult conditions such as the location and building structure with conditions they have chosen to retain for now, such as the budget, staff composition, and store philosophy."
+    },
+    "c7948690-8cab-5620-a730-9e63f35b57f7": {
+      "type": "memory",
+      "uid": "c7948690-8cab-5620-a730-9e63f35b57f7",
+      "content": "The head of New Wave Cafe Culture believes that a consultant can provide a good starting point, but continually testing and developing recipes and operating methods is ultimately the café owner's responsibility."
+    },
+    "0afc50c8-c12a-545b-a87a-27f76bff31f4": {
+      "type": "memory",
+      "uid": "0afc50c8-c12a-545b-a87a-27f76bff31f4",
+      "content": "When transferring a recipe, do not present it as a finished correct answer; include repeated preparation, blind comparison with other products, and regular subsequent revision in the process."
+    },
+    "e57ace08-a994-5394-bf7f-aba3c5e299e8": {
+      "type": "memory",
+      "uid": "e57ace08-a994-5394-bf7f-aba3c5e299e8",
+      "content": "Because hot espresso quickly melts the ice in an iced Americano, use chilled water rather than water near room temperature and fill the cup with enough ice to account for the time before it is served."
+    },
+    "d41aeeb3-3a90-56cb-aa85-2e22f00816a7": {
+      "type": "memory",
+      "uid": "d41aeeb3-3a90-56cb-aa85-2e22f00816a7",
+      "content": "Residue inside an ice machine can leave an unpleasant taste in iced drinks even when the visible surfaces look clean, so clean the interior as well as the visible parts on a regular basis."
+    }
+  },
+  "order": [
+    "b2b77035-9806-5b46-a6cb-ec374eefd8c6",
+    "f95ba515-75f2-553d-8eea-e2455d7a08bc",
+    "0154dabf-1fd9-5cb2-8472-15529160e86d",
+    "9e318743-9b00-52a6-9abf-a83b1fb11be5",
+    "c7948690-8cab-5620-a730-9e63f35b57f7",
+    "0afc50c8-c12a-545b-a87a-27f76bff31f4",
+    "e57ace08-a994-5394-bf7f-aba3c5e299e8",
+    "d41aeeb3-3a90-56cb-aa85-2e22f00816a7"
+  ]
+}

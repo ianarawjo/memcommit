@@ -1,0 +1,3 @@
+"task"	"profile"	"context"	"memory_uid"	"fixture_id"	"locator"	"audiences"	"verified"	"impact_en"	"impact_ko"
+"1"	"task-1"	"description"	"2db26309-b11b-5963-87ff-497f135eb150"	"T1-D-001"	"description/task-1"	"[]"	"null"	""	""
+"1"	"task-1"	"description"	"f2c46cec-ff25-5246-a0d8-46b6002b3c6f"	"T1-D-002"	"description/task-1-task"	"[]"	"null"	""	""

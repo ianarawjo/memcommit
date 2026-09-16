@@ -1,0 +1,38 @@
+{
+  "uid": "6db29abe-5784-5eec-acaa-060bac0e11f1",
+  "name": "advisor1/scope",
+  "memories": {
+    "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7": {
+      "type": "memory",
+      "uid": "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7",
+      "content": "설계 지식이 적용되지 않는 사용자 집단과 사용 맥락을 한 문장으로 경계 지어라."
+    },
+    "31cdacff-7c49-547d-9f97-598a07b67fb6": {
+      "type": "memory",
+      "uid": "31cdacff-7c49-547d-9f97-598a07b67fb6",
+      "content": "심사자는 명시적으로 제외된 대상과 상황을 통해 결과의 일반화 경계를 판단한다."
+    },
+    "1459d986-4dc9-51f3-bf13-dbb0b07045c8": {
+      "type": "memory",
+      "uid": "1459d986-4dc9-51f3-bf13-dbb0b07045c8",
+      "content": "제안한 설계 지식이 이전될 수 있는 사용자 목표, 상호작용 조건, 기술 제약을 명시하라."
+    },
+    "1db5fcd6-f93c-5630-9810-053c10b5ceba": {
+      "type": "memory",
+      "uid": "1db5fcd6-f93c-5630-9810-053c10b5ceba",
+      "content": "소규모 형성 연구도 결과를 설계 조건과 메커니즘으로 표현하면 통계적 대표성과 다른 분석적 일반화를 지원할 수 있다."
+    },
+    "fd29c315-521f-53c0-add5-c668ec318a43": {
+      "type": "memory",
+      "uid": "fd29c315-521f-53c0-add5-c668ec318a43",
+      "content": "사용자는 접근 가능한 표본에서 얻을 설계 지식을 더 넓은 사용자 집단에 적용하려는 경향이 있다."
+    }
+  },
+  "order": [
+    "e594a6ab-81e9-5e5f-8ef5-e6bb8f3760d7",
+    "31cdacff-7c49-547d-9f97-598a07b67fb6",
+    "1459d986-4dc9-51f3-bf13-dbb0b07045c8",
+    "1db5fcd6-f93c-5630-9810-053c10b5ceba",
+    "fd29c315-521f-53c0-add5-c668ec318a43"
+  ]
+}

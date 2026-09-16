@@ -1,0 +1,56 @@
+{
+  "uid": "62523a5e-66f1-5023-a78b-9151bd72055f",
+  "name": "local/guardrails/downstream-use",
+  "memories": {
+    "e8c87c6c-1c32-534b-87be-32b5bb93584f": {
+      "type": "memory",
+      "uid": "e8c87c6c-1c32-534b-87be-32b5bb93584f",
+      "content": "Do not put language in the shared material that permits unapproved forwarding."
+    },
+    "8cd6d58b-9325-584d-8c5c-396e1af03423": {
+      "type": "memory",
+      "uid": "8cd6d58b-9325-584d-8c5c-396e1af03423",
+      "content": "State the purpose-of-use restriction to the recipient."
+    },
+    "00564a98-72a6-57ce-9fc6-20a918e9e593": {
+      "type": "memory",
+      "uid": "00564a98-72a6-57ce-9fc6-20a918e9e593",
+      "content": "Do not guarantee deletion without verifying the recipient's compliance."
+    },
+    "aeb15a51-9870-5e89-bcef-d5ad49792a02": {
+      "type": "memory",
+      "uid": "aeb15a51-9870-5e89-bcef-d5ad49792a02",
+      "content": "Do not assume that a shared Memory may be used for model training."
+    },
+    "c2f154f8-6340-57d6-bd12-efa5411592b1": {
+      "type": "memory",
+      "uid": "c2f154f8-6340-57d6-bd12-efa5411592b1",
+      "content": "If a secondary processor is needed, ask the user for separate approval."
+    },
+    "62a622be-5e30-50f6-b1c0-f3b6454d0a64": {
+      "type": "memory",
+      "uid": "62a622be-5e30-50f6-b1c0-f3b6454d0a64",
+      "content": "Authority to receive information differs from authority to reuse it."
+    },
+    "975278ec-2ea5-5dec-b9bc-8054d880d0e3": {
+      "type": "memory",
+      "uid": "975278ec-2ea5-5dec-b9bc-8054d880d0e3",
+      "content": "Once created, a copy may remain across multiple processing stages."
+    },
+    "9b320cc6-d3d3-5135-82dc-93b48c4bfb71": {
+      "type": "memory",
+      "uid": "9b320cc6-d3d3-5135-82dc-93b48c4bfb71",
+      "content": "A recipient organization may judge that use of secondary processors needed for internal work is included in the original approval."
+    }
+  },
+  "order": [
+    "e8c87c6c-1c32-534b-87be-32b5bb93584f",
+    "8cd6d58b-9325-584d-8c5c-396e1af03423",
+    "00564a98-72a6-57ce-9fc6-20a918e9e593",
+    "aeb15a51-9870-5e89-bcef-d5ad49792a02",
+    "c2f154f8-6340-57d6-bd12-efa5411592b1",
+    "62a622be-5e30-50f6-b1c0-f3b6454d0a64",
+    "975278ec-2ea5-5dec-b9bc-8054d880d0e3",
+    "9b320cc6-d3d3-5135-82dc-93b48c4bfb71"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "uid": "554bdbac-9370-5cf6-b09d-6a02e7b58b19",
+  "name": "rationale/skills/memory_rationale/cases/merge-source-copied-to-fresh-target/known_wrong",
+  "memories": {
+    "26321010-1210-5d5a-9b4d-5773d8765208": {
+      "type": "memory",
+      "uid": "26321010-1210-5d5a-9b4d-5773d8765208",
+      "content": "This Memory moved from facility-updates into transform-scratch/source during Merge."
+    },
+    "2ec83596-ecb3-520b-9063-bdf6630c94c8": {
+      "type": "memory",
+      "uid": "2ec83596-ecb3-520b-9063-bdf6630c94c8",
+      "content": "NEW creates a distinct Target occurrence and retains Source; it neither moves the Source away nor erases the earlier revision."
+    },
+    "c929109a-56cd-51e2-bf93-d20a21b2e230": {
+      "type": "memory",
+      "uid": "c929109a-56cd-51e2-bf93-d20a21b2e230",
+      "content": "This Memory was revised from “Audit draft: …” to “Wiki update draft: ….”"
+    },
+    "357563ec-2fbe-597a-9b88-be926f6bbc4c": {
+      "type": "memory",
+      "uid": "357563ec-2fbe-597a-9b88-be926f6bbc4c",
+      "content": "The Source-only edit account omits the recorded downstream Merge use."
+    }
+  },
+  "order": [
+    "26321010-1210-5d5a-9b4d-5773d8765208",
+    "2ec83596-ecb3-520b-9063-bdf6630c94c8",
+    "c929109a-56cd-51e2-bf93-d20a21b2e230",
+    "357563ec-2fbe-597a-9b88-be926f6bbc4c"
+  ]
+}

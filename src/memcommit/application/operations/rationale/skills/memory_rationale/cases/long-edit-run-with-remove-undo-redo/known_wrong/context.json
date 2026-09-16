@@ -1,0 +1,32 @@
+{
+  "uid": "e92b4f41-0c69-5206-9459-f59e9ae152dd",
+  "name": "rationale/skills/memory_rationale/cases/long-edit-run-with-remove-undo-redo/known_wrong",
+  "memories": {
+    "039dbf07-3461-5e7f-9c5b-0ceff75b7a74": {
+      "type": "memory",
+      "uid": "039dbf07-3461-5e7f-9c5b-0ceff75b7a74",
+      "content": "Added directly as “Release notes should identify the changed command,” this Memory was successively edited to add the affected Context and user-visible effect, strengthen “should” to “must,” change “Release notes” to “Every release note,” and add the compatibility boundary and intentional non-goal, before “Every” became “Each.” It was then removed, restored by undo, removed again by redo, and restored by another undo; later edits changed “Each release note must identify” to “For each release note, identify,” then “state,” and finally changed “compatibility boundary” to “remaining compatibility boundary.”"
+    },
+    "533ee6f3-c407-5f64-95c3-97b9fb3ff444": {
+      "type": "memory",
+      "uid": "533ee6f3-c407-5f64-95c3-97b9fb3ff444",
+      "content": "The event-by-event wording inventory is accurate but treats every micro-edit as a separate prose obligation and cannot fit the ordinary receipt bound."
+    },
+    "abfe1fc0-4cae-5d20-817b-db98f21b1c36": {
+      "type": "memory",
+      "uid": "abfe1fc0-4cae-5d20-817b-db98f21b1c36",
+      "content": "This Memory was repeatedly edited from its original release-note instruction into the current version."
+    },
+    "bab3c482-18ee-5a93-a108-6baa39420c9b": {
+      "type": "memory",
+      "uid": "bab3c482-18ee-5a93-a108-6baa39420c9b",
+      "content": "Endpoint-only compression drops the retained Remove, Undo, Redo, and second Undo cycle and provides no distinguishing content evidence."
+    }
+  },
+  "order": [
+    "039dbf07-3461-5e7f-9c5b-0ceff75b7a74",
+    "533ee6f3-c407-5f64-95c3-97b9fb3ff444",
+    "abfe1fc0-4cae-5d20-817b-db98f21b1c36",
+    "bab3c482-18ee-5a93-a108-6baa39420c9b"
+  ]
+}

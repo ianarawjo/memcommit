@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "document": [
+    {
+      "provenance": {
+        "$memory": "039dbf07-3461-5e7f-9c5b-0ceff75b7a74"
+      },
+      "violates": [
+        "R07_COMPACT_COMPLETE",
+        "R13_MATERIAL_PHASE_COMPRESSION"
+      ],
+      "reason": {
+        "$memory": "533ee6f3-c407-5f64-95c3-97b9fb3ff444"
+      }
+    },
+    {
+      "provenance": {
+        "$memory": "abfe1fc0-4cae-5d20-817b-db98f21b1c36"
+      },
+      "violates": [
+        "R01_COMPLETE_RETAINED_LINEAGE",
+        "R04_CHRONOLOGICAL_LIFECYCLE",
+        "R10_EXACT_EXCERPT_ANCHOR"
+      ],
+      "reason": {
+        "$memory": "bab3c482-18ee-5a93-a108-6baa39420c9b"
+      }
+    }
+  ]
+}

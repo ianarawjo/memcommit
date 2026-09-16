@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "document": [
+    {
+      "provenance": {
+        "$memory": "9077fce0-e37d-5a83-a611-99e924dc349d"
+      },
+      "violates": [
+        "R08_NO_INVENTED_INTENT",
+        "R09_EXPLICIT_HISTORY_BOUNDARY"
+      ],
+      "reason": {
+        "$memory": "2ba146ea-8703-569a-ad30-bc5a9950435c"
+      }
+    }
+  ]
+}

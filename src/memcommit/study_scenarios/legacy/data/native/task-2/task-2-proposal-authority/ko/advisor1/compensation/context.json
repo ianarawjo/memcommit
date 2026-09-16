@@ -1,0 +1,68 @@
+{
+  "uid": "7ba75d6b-cef6-5c8b-9b17-d3901e168d24",
+  "name": "advisor1/compensation",
+  "memories": {
+    "0ae46268-cca7-57d5-a0ee-6eb3b85cda84": {
+      "type": "memory",
+      "uid": "0ae46268-cca7-57d5-a0ee-6eb3b85cda84",
+      "content": "사용자 연구 보상 예산은 세션 시간과 준비 부담을 합친 예상 참여 부담을 기준으로 산정하라."
+    },
+    "bdda6e22-ea06-5a13-8854-67f7521724db": {
+      "type": "memory",
+      "uid": "bdda6e22-ea06-5a13-8854-67f7521724db",
+      "content": "대면 사용자 연구에서 요구하는 필수 이동 시간도 보상하라."
+    },
+    "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a": {
+      "type": "memory",
+      "uid": "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a",
+      "content": "연구 방식과 관계없이 세션에 실제로 참여한 시간을 보상하라."
+    },
+    "1f4d05e4-2a79-572c-8050-beb1464fb781": {
+      "type": "memory",
+      "uid": "1f4d05e4-2a79-572c-8050-beb1464fb781",
+      "content": "대면 연구에서는 현금 지급을 사용할 수 있는 보상 방식으로 남겨 두어라."
+    },
+    "abcba764-6f35-5dae-bb3d-7860fb72ccf2": {
+      "type": "memory",
+      "uid": "abcba764-6f35-5dae-bb3d-7860fb72ccf2",
+      "content": "예산의 동등성이 설명되었다면 제안서 단계에서 지급 방식을 확정하도록 요구하지 마라."
+    },
+    "c6a28f37-1a7c-5dbd-b75c-c829f0461504": {
+      "type": "memory",
+      "uid": "c6a28f37-1a7c-5dbd-b75c-c829f0461504",
+      "content": "과업 부담이 같다면 대면 연구와 원격 연구에 같은 기본 시급을 적용하라."
+    },
+    "874de649-9c04-5960-b3a9-e68356ef666c": {
+      "type": "memory",
+      "uid": "874de649-9c04-5960-b3a9-e68356ef666c",
+      "content": "참가자는 세션 시간과 필수 이동·준비 시간을 합친 부담으로 보상의 공정성을 판단한다."
+    },
+    "529559f5-850d-5920-8e27-0b1e7138dc36": {
+      "type": "memory",
+      "uid": "529559f5-850d-5920-8e27-0b1e7138dc36",
+      "content": "같은 참가자가 여러 형성 평가 세션에 참여하면 반복 일정 조정과 재방문의 부담을 보상에 반영하라."
+    },
+    "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5": {
+      "type": "memory",
+      "uid": "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5",
+      "content": "시제품 오류로 세션을 조기 종료해도 참가자가 이미 들인 시간은 보상하라."
+    },
+    "bdac8cf8-dd11-5794-b4b2-9774ff344436": {
+      "type": "memory",
+      "uid": "bdac8cf8-dd11-5794-b4b2-9774ff344436",
+      "content": "사용자는 반복 연구의 보상을 계산할 때 세션 사이의 준비 부담을 빼는 경향이 있다."
+    }
+  },
+  "order": [
+    "0ae46268-cca7-57d5-a0ee-6eb3b85cda84",
+    "bdda6e22-ea06-5a13-8854-67f7521724db",
+    "f49b1d0a-7a1a-53b5-b7fc-815cc2cc134a",
+    "1f4d05e4-2a79-572c-8050-beb1464fb781",
+    "abcba764-6f35-5dae-bb3d-7860fb72ccf2",
+    "c6a28f37-1a7c-5dbd-b75c-c829f0461504",
+    "874de649-9c04-5960-b3a9-e68356ef666c",
+    "529559f5-850d-5920-8e27-0b1e7138dc36",
+    "c8be56ee-860a-5f6c-abbf-02c8dbc59eb5",
+    "bdac8cf8-dd11-5794-b4b2-9774ff344436"
+  ]
+}

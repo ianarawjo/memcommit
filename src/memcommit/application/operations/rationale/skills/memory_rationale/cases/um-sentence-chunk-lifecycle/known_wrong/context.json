@@ -1,0 +1,56 @@
+{
+  "uid": "8d11469a-cb6f-53d3-b69f-b8ec459aad01",
+  "name": "rationale/skills/memory_rationale/cases/um-sentence-chunk-lifecycle/known_wrong",
+  "memories": {
+    "bcb55732-8eb3-593c-a1da-6c039102be11": {
+      "type": "memory",
+      "uid": "bcb55732-8eb3-593c-a1da-6c039102be11",
+      "content": "CREATED via chunk → REMOVED via undo → RESTORED via redo → REMOVED via remove"
+    },
+    "348ffc15-799e-56c1-a978-5ced26cdae8a": {
+      "type": "memory",
+      "uid": "348ffc15-799e-56c1-a978-5ced26cdae8a",
+      "content": "The event chain omits the parent instruction and example, and exposes internal labels instead of explaining the provenance."
+    },
+    "686ff045-0c1d-5501-9c54-1764f5aa2bdf": {
+      "type": "memory",
+      "uid": "686ff045-0c1d-5501-9c54-1764f5aa2bdf",
+      "content": "Context structural split using method 'sentences'."
+    },
+    "cd0fb3c5-7a82-555b-8fd1-6a18b2216605": {
+      "type": "memory",
+      "uid": "cd0fb3c5-7a82-555b-8fd1-6a18b2216605",
+      "content": "The latest recorded reason neither explains the fragment's source context nor its later disappearance and return."
+    },
+    "ffe35018-09c6-5604-973a-356abd16512c": {
+      "type": "memory",
+      "uid": "ffe35018-09c6-5604-973a-356abd16512c",
+      "content": "The author deliberately inserted a disposable placeholder, which was removed because it was useless."
+    },
+    "dc2ee244-23b9-551a-b3a6-635a02285a3b": {
+      "type": "memory",
+      "uid": "dc2ee244-23b9-551a-b3a6-635a02285a3b",
+      "content": "The Trace supports a hesitation's wording and placement but records neither placeholder intent nor a usefulness judgment."
+    },
+    "13de1674-d617-5051-8dd4-344ddda84641": {
+      "type": "memory",
+      "uid": "13de1674-d617-5051-8dd4-344ddda84641",
+      "content": "After removal, the Memory was preserved by Atomize."
+    },
+    "6b6e63fe-f8d0-53fb-8b5b-107f90fa21e2": {
+      "type": "memory",
+      "uid": "6b6e63fe-f8d0-53fb-8b5b-107f90fa21e2",
+      "content": "The later Atomize events contain only the preceding and following sibling UIDs."
+    }
+  },
+  "order": [
+    "bcb55732-8eb3-593c-a1da-6c039102be11",
+    "348ffc15-799e-56c1-a978-5ced26cdae8a",
+    "686ff045-0c1d-5501-9c54-1764f5aa2bdf",
+    "cd0fb3c5-7a82-555b-8fd1-6a18b2216605",
+    "ffe35018-09c6-5604-973a-356abd16512c",
+    "dc2ee244-23b9-551a-b3a6-635a02285a3b",
+    "13de1674-d617-5051-8dd4-344ddda84641",
+    "6b6e63fe-f8d0-53fb-8b5b-107f90fa21e2"
+  ]
+}

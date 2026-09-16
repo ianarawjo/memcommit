@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "document": {
+    "selected_memory_id": "selected",
+    "context_name": "practice/3",
+    "history_available": true,
+    "originals": [
+      {
+        "id": "selected",
+        "content": {
+          "$memory": "a4d9d757-f79e-5dba-9090-3ace31a6a9bb"
+        },
+        "position": 0
+      }
+    ],
+    "current": [
+      {
+        "id": "selected",
+        "content": {
+          "$memory": "64cb95e0-667d-5cbb-89c4-6bdde780d298"
+        },
+        "position": 0
+      }
+    ],
+    "events": [
+      {
+        "kind": "ADD",
+        "command": "distill",
+        "description": {
+          "$memory": "0053ae99-5ac8-5f4e-a879-edf4b7600af8"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "131ba70c-3cc9-5b02-83b6-e68134ba5096"
+            },
+            "position": 0
+          }
+        ]
+      },
+      {
+        "kind": "EDIT",
+        "command": "edit",
+        "description": {
+          "$memory": "fdeac992-d51d-5b2c-a668-49e04b4021be"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "3a4e556f-88f9-5e11-898e-704acdb6557a"
+            },
+            "position": 0
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "766f86d9-dea5-5e70-a38b-69540bf0f67a"
+            },
+            "position": 0
+          }
+        ]
+      }
+    ],
+    "warnings": [],
+    "limit": 40,
+    "unit": "words",
+    "relations": []
+  }
+}

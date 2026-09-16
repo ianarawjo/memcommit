@@ -1,0 +1,56 @@
+{
+  "uid": "fe900e43-843e-5423-ad37-6efbc182e1d0",
+  "name": "task-1/customer-perspectives/woohooovertime",
+  "memories": {
+    "ec278527-89c9-5494-90ef-0119dcefc326": {
+      "type": "memory",
+      "uid": "ec278527-89c9-5494-90ef-0119dcefc326",
+      "content": "Over the past month, the user made six café visits on weekday afternoons and brought a laptop on five of those visits."
+    },
+    "a3acf15d-200f-571a-987a-091b4a5e07c4": {
+      "type": "memory",
+      "uid": "a3acf15d-200f-571a-987a-091b4a5e07c4",
+      "content": "When recommending a café to the user for a stay of two hours or longer, check table height, power outlets, and closing time together."
+    },
+    "d01a4030-793a-5fcb-9b92-c5f9c5cf3176": {
+      "type": "memory",
+      "uid": "d01a4030-793a-5fcb-9b92-c5f9c5cf3176",
+      "content": "This agent can retrieve and compare the user's café visit history, but it does not make reservations or make the final choice of where to visit on the user's behalf."
+    },
+    "69114d56-bf86-5f3c-8c12-caf2ddaa2636": {
+      "type": "memory",
+      "uid": "69114d56-bf86-5f3c-8c12-caf2ddaa2636",
+      "content": "The user avoids visiting near closing time because even a short stay can feel rushed."
+    },
+    "678eff82-ea25-523b-b5bb-d68dec786901": {
+      "type": "memory",
+      "uid": "678eff82-ea25-523b-b5bb-d68dec786901",
+      "content": "Low tables and limited power outlets concentrate laptop users in a small number of seats, increasing competition for seats during busy periods."
+    },
+    "290a328a-4190-55db-96e4-4f1fa523218a": {
+      "type": "memory",
+      "uid": "290a328a-4190-55db-96e4-4f1fa523218a",
+      "content": "Desk-height tables, ample seating, plentiful power outlets, and comfortable chairs signal that long work and study visits are welcome."
+    },
+    "1b4f8d2b-0674-561a-b05b-2b69801325e9": {
+      "type": "memory",
+      "uid": "1b4f8d2b-0674-561a-b05b-2b69801325e9",
+      "content": "The user expects that an owner may see long laptop use as reducing table turnover when other customers are waiting."
+    },
+    "92f8b069-e559-5ed7-8366-770e0075225d": {
+      "type": "memory",
+      "uid": "92f8b069-e559-5ed7-8366-770e0075225d",
+      "content": "The user expects that staff may welcome laptop customers who remain quiet after ordering because they require little additional attention."
+    }
+  },
+  "order": [
+    "ec278527-89c9-5494-90ef-0119dcefc326",
+    "a3acf15d-200f-571a-987a-091b4a5e07c4",
+    "d01a4030-793a-5fcb-9b92-c5f9c5cf3176",
+    "69114d56-bf86-5f3c-8c12-caf2ddaa2636",
+    "678eff82-ea25-523b-b5bb-d68dec786901",
+    "290a328a-4190-55db-96e4-4f1fa523218a",
+    "1b4f8d2b-0674-561a-b05b-2b69801325e9",
+    "92f8b069-e559-5ed7-8366-770e0075225d"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "uid": "048171de-278b-56d7-b014-185d3e8a3c98",
+  "name": "rationale/skills/memory_rationale/cases/merge-source-copied-to-fresh-target/expected",
+  "memories": {
+    "e1c820f8-9f23-560b-838e-35066a5c26ff": {
+      "type": "memory",
+      "uid": "e1c820f8-9f23-560b-838e-35066a5c26ff",
+      "content": "After moving into facility-updates as “Audit draft: …,” this Memory was revised to “Wiki update draft: ….” Merge later copied that wording unchanged into transform-scratch/source while retaining the Source occurrence."
+    }
+  },
+  "order": [
+    "e1c820f8-9f23-560b-838e-35066a5c26ff"
+  ]
+}

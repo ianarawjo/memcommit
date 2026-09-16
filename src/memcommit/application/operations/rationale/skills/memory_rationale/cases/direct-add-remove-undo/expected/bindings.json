@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "document": {
+    "status": "AVAILABLE",
+    "provenance": {
+      "$memory": "991a0286-059a-531c-a47e-328b8674a9c2"
+    },
+    "rule_ids": [
+      "R01_COMPLETE_RETAINED_LINEAGE",
+      "R04_CHRONOLOGICAL_LIFECYCLE",
+      "R06_NATURAL_NARRATIVE",
+      "R07_COMPACT_COMPLETE",
+      "R15_LENGTH_HEADROOM_AND_REPAIR"
+    ]
+  }
+}

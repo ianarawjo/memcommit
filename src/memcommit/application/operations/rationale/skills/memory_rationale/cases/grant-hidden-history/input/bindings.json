@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "document": {
+    "selected_memory_id": "selected",
+    "context_name": "granted/source",
+    "history_available": false,
+    "originals": [],
+    "current": [
+      {
+        "id": "selected",
+        "content": {
+          "$memory": "752885a0-d902-5bd4-bfa3-6240a57c9a9d"
+        },
+        "position": 0
+      }
+    ],
+    "events": [],
+    "warnings": [],
+    "limit": 40,
+    "unit": "words",
+    "relations": []
+  }
+}

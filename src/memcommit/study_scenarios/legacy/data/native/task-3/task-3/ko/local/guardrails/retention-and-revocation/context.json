@@ -1,0 +1,44 @@
+{
+  "uid": "9fd65004-661c-5349-8c35-1b96e8d5c9de",
+  "name": "local/guardrails/retention-and-revocation",
+  "memories": {
+    "13b65314-02d9-5f22-bfc0-fd08b861f8f0": {
+      "type": "memory",
+      "uid": "13b65314-02d9-5f22-bfc0-fd08b861f8f0",
+      "content": "공유 초안은 사용자 검토에 필요한 동안만 임시로 유지하라."
+    },
+    "9bf4b3d7-ab89-5a22-8caa-de9debc744e9": {
+      "type": "memory",
+      "uid": "9bf4b3d7-ab89-5a22-8caa-de9debc744e9",
+      "content": "사용자가 거절한 초안은 재사용 가능한 작업 상태에서 제거하라."
+    },
+    "4004ad20-547d-5588-a4d5-2bceff66005f": {
+      "type": "memory",
+      "uid": "4004ad20-547d-5588-a4d5-2bceff66005f",
+      "content": "제외한 Memory 본문을 수신자에게 전달하지 마라."
+    },
+    "38256d79-12a4-5f38-aca9-357056cab7ce": {
+      "type": "memory",
+      "uid": "38256d79-12a4-5f38-aca9-357056cab7ce",
+      "content": "취소된 공유 항목을 후속 전송에 재사용하지 마라."
+    },
+    "9db14c6f-298a-5b48-b7a6-d323cafbfd7f": {
+      "type": "memory",
+      "uid": "9db14c6f-298a-5b48-b7a6-d323cafbfd7f",
+      "content": "공유 초안을 제거해도 원본 로컬 Memory는 삭제되지 않는다."
+    },
+    "044511b2-40d0-55cb-912c-49c4ec0874fc": {
+      "type": "memory",
+      "uid": "044511b2-40d0-55cb-912c-49c4ec0874fc",
+      "content": "철회 통지를 받지 못한 수신자는 이전 승인이 여전히 유효하다고 판단할 수 있다."
+    }
+  },
+  "order": [
+    "13b65314-02d9-5f22-bfc0-fd08b861f8f0",
+    "9bf4b3d7-ab89-5a22-8caa-de9debc744e9",
+    "4004ad20-547d-5588-a4d5-2bceff66005f",
+    "38256d79-12a4-5f38-aca9-357056cab7ce",
+    "9db14c6f-298a-5b48-b7a6-d323cafbfd7f",
+    "044511b2-40d0-55cb-912c-49c4ec0874fc"
+  ]
+}

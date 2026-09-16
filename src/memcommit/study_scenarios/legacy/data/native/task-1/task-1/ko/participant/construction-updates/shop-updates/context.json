@@ -1,0 +1,86 @@
+{
+  "uid": "94dbac4b-70b5-5c76-b53a-1ebc69248a41",
+  "name": "participant/construction-updates/shop-updates",
+  "memories": {
+    "37113bd0-5194-521b-9d9e-48903d819520": {
+      "type": "memory",
+      "uid": "37113bd0-5194-521b-9d9e-48903d819520",
+      "content": "campus-wiki/shop-updates 추가: 본관 1층 ATM은 공사기간 폐쇄된다."
+    },
+    "741db845-9a4e-5281-825c-e046801b8be5": {
+      "type": "memory",
+      "uid": "741db845-9a4e-5281-825c-e046801b8be5",
+      "content": "campus-wiki/shop-updates 추가: 본관 1층 24시간 무인매장은 공사기간 폐쇄된다."
+    },
+    "b49d48fb-d2d9-55b8-bc87-b8e0066541f8": {
+      "type": "memory",
+      "uid": "b49d48fb-d2d9-55b8-bc87-b8e0066541f8",
+      "content": "campus-wiki/shop-updates 추가: 공사기간 본관 ATM 이용자를 서편 복합관 1층 ATM으로 안내하라."
+    },
+    "3094e271-3bb6-57cf-ae78-c67eeac30d94": {
+      "type": "memory",
+      "uid": "3094e271-3bb6-57cf-ae78-c67eeac30d94",
+      "content": "campus-wiki/shop-updates 추가: 공사기간 본관 24시간 매장 이용자를 오전 7시부터 오후 11시까지 공학관 캠퍼스스토어로 안내하라."
+    },
+    "c88880dc-ebfa-5847-89d2-692cd22406d5": {
+      "type": "memory",
+      "uid": "c88880dc-ebfa-5847-89d2-692cd22406d5",
+      "content": "campus-wiki/shop-updates 추가: 오후 11시 이후에는 본관 24시간 무인매장을 대신할 교내 대체 매장이 없다고 설명하라."
+    },
+    "9e0d0ca2-362c-5498-9560-a217d74eaaab": {
+      "type": "memory",
+      "uid": "9e0d0ca2-362c-5498-9560-a217d74eaaab",
+      "content": "campus-wiki/shop-updates 수정: 본관 1층 캠퍼스스토어는 공사기간 폐쇄된다."
+    },
+    "9c623c17-1942-52a6-bf3d-ebc25d6ad078": {
+      "type": "memory",
+      "uid": "9c623c17-1942-52a6-bf3d-ebc25d6ad078",
+      "content": "campus-wiki/shop-updates 수정: 공학관 캠퍼스스토어는 공사기간 오전 7시부터 오후 11시까지 운영한다."
+    },
+    "048d155c-f81b-5293-b493-44fbce424662": {
+      "type": "memory",
+      "uid": "048d155c-f81b-5293-b493-44fbce424662",
+      "content": "campus-wiki/shop-updates 추가: 공사기간 본관 1층 카페는 운영하지 않는다."
+    },
+    "80d1e21d-3839-5515-b235-e1c1282599e5": {
+      "type": "memory",
+      "uid": "80d1e21d-3839-5515-b235-e1c1282599e5",
+      "content": "campus-wiki/shop-updates 추가: 카페 폐쇄기간에는 교직원에게만 1층 이노베이션 허브 안의 커피머신을 이용하도록 안내하라."
+    },
+    "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f": {
+      "type": "memory",
+      "uid": "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f",
+      "content": "campus-wiki/shop-updates 수정: 본관 ATM을 저녁에 이용하던 학생은 공사기간에도 같은 위치에서 현금을 찾을 수 있으리라 기대해 본관까지 온 뒤 서편 복합관 ATM을 다시 찾아갈 가능성이 있다."
+    },
+    "e7b747cf-a1d2-571a-af5b-e1d3514434f1": {
+      "type": "memory",
+      "uid": "e7b747cf-a1d2-571a-af5b-e1d3514434f1",
+      "content": "campus-wiki/shop-updates 수정: 편의시설 안내 에이전트는 공사기간 폐쇄된 본관 ATM·무인매장·캠퍼스스토어·카페를 추천에서 제외하고 게시된 대체 시설만 안내할 수 있다."
+    },
+    "b8300d7e-381c-5bce-81e7-fbb8a00eac9d": {
+      "type": "memory",
+      "uid": "b8300d7e-381c-5bce-81e7-fbb8a00eac9d",
+      "content": "campus-wiki/shop-updates 추가: 공사기간 ATM 이용 동선은 본관 1층에서 본관 공사구역을 통과하지 않는 서편 복합관 1층으로 바뀐다."
+    },
+    "50be93d9-d0da-542c-beab-be56adde4ee2": {
+      "type": "memory",
+      "uid": "50be93d9-d0da-542c-beab-be56adde4ee2",
+      "content": "campus-wiki/shop-updates 수정: 공학관 캠퍼스스토어 위탁 운영업체는 본관 시설 폐쇄로 대체 이용자가 늘어날 것으로 예상해 공사기간 저녁 시간대의 인력과 재고를 평소보다 늘리려 할 수 있다."
+    }
+  },
+  "order": [
+    "37113bd0-5194-521b-9d9e-48903d819520",
+    "741db845-9a4e-5281-825c-e046801b8be5",
+    "b49d48fb-d2d9-55b8-bc87-b8e0066541f8",
+    "3094e271-3bb6-57cf-ae78-c67eeac30d94",
+    "c88880dc-ebfa-5847-89d2-692cd22406d5",
+    "9e0d0ca2-362c-5498-9560-a217d74eaaab",
+    "9c623c17-1942-52a6-bf3d-ebc25d6ad078",
+    "048d155c-f81b-5293-b493-44fbce424662",
+    "80d1e21d-3839-5515-b235-e1c1282599e5",
+    "0a73702a-306c-5b54-a2c3-d3e4a23d6a9f",
+    "e7b747cf-a1d2-571a-af5b-e1d3514434f1",
+    "b8300d7e-381c-5bce-81e7-fbb8a00eac9d",
+    "50be93d9-d0da-542c-beab-be56adde4ee2"
+  ]
+}

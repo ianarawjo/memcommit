@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "document": {
+    "selected_memory_id": "selected",
+    "context_name": "facility-updates",
+    "history_available": true,
+    "originals": [
+      {
+        "id": "selected",
+        "content": {
+          "$memory": "1cc18741-61df-5cd2-8a67-566b5b9e23b3"
+        },
+        "position": 17
+      }
+    ],
+    "current": [
+      {
+        "id": "selected",
+        "content": {
+          "$memory": "84a6e826-e8a2-5eb3-8426-9c1ad04a3c8d"
+        },
+        "position": 17
+      },
+      {
+        "id": "related_target",
+        "content": {
+          "$memory": "daff85f6-d7dd-52f0-93a2-995aa87424d9"
+        },
+        "position": 0
+      }
+    ],
+    "events": [
+      {
+        "kind": "ADD",
+        "command": "move",
+        "description": {
+          "$memory": "371ee036-95fc-55df-b9cf-4467b46173e0"
+        },
+        "reason": null,
+        "before": [],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "fcaef429-60f2-5797-8fe2-20f741c5ed5c"
+            },
+            "position": 17
+          }
+        ]
+      },
+      {
+        "kind": "EDIT",
+        "command": "replace",
+        "description": {
+          "$memory": "1e21923d-e5db-5152-8bd8-08342b36f36d"
+        },
+        "reason": null,
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "ad083327-678d-550f-8d05-0e2a1631242f"
+            },
+            "position": 17
+          }
+        ],
+        "after": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "a150e563-fd52-57f5-9ca6-5646224c5dcd"
+            },
+            "position": 17
+          }
+        ]
+      },
+      {
+        "kind": "ADD",
+        "command": "merge",
+        "description": {
+          "$memory": "e2446ec8-dbdf-574b-8fbb-731f069670e2"
+        },
+        "reason": null,
+        "reason_codes": [
+          "MERGE",
+          "NEW"
+        ],
+        "before": [],
+        "after": [
+          {
+            "id": "related_target",
+            "content": {
+              "$memory": "ec43e917-1987-5c29-8086-e9c9fe675a33"
+            },
+            "position": 0
+          }
+        ]
+      }
+    ],
+    "warnings": [],
+    "limit": 40,
+    "unit": "words",
+    "relations": [
+      {
+        "kind": "DERIVED_FROM",
+        "command": "merge",
+        "description": {
+          "$memory": "75073d3b-78d6-548a-9ea1-7fd574818e78"
+        },
+        "reason": null,
+        "reason_codes": [
+          "MERGE",
+          "NEW"
+        ],
+        "before": [
+          {
+            "id": "selected",
+            "content": {
+              "$memory": "55e3162a-9ad2-5b03-a8c2-0a7917197403"
+            },
+            "position": 17
+          }
+        ],
+        "after": [
+          {
+            "id": "related_target",
+            "content": {
+              "$memory": "983b2279-dab9-5b3e-b24e-454cbd731b61"
+            },
+            "position": 0
+          }
+        ],
+        "context_transition": {
+          "source": "facility-updates",
+          "target": "transform-scratch/source"
+        }
+      }
+    ]
+  }
+}

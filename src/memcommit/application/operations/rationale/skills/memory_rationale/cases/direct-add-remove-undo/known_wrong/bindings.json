@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "document": [
+    {
+      "provenance": {
+        "$memory": "b34c51de-3bf0-5529-89d0-ba49c3ff0958"
+      },
+      "violates": [
+        "R01_COMPLETE_RETAINED_LINEAGE",
+        "R04_CHRONOLOGICAL_LIFECYCLE"
+      ],
+      "reason": {
+        "$memory": "d8826a26-0465-508c-8dad-8b1098cdd597"
+      }
+    },
+    {
+      "provenance": {
+        "$memory": "bcf3a5f9-6eb6-5bfa-b0a9-d8f1c9076c20"
+      },
+      "violates": [
+        "R07_COMPACT_COMPLETE",
+        "R15_LENGTH_HEADROOM_AND_REPAIR"
+      ],
+      "reason": {
+        "$memory": "8bf3edf9-0bb0-5b81-9858-9967b89fca2d"
+      }
+    }
+  ]
+}

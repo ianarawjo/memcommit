@@ -8,24 +8,35 @@ version = "0.0.1"
 description = "A git-like memory store CLI"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["typer>=0.12", "rich>=13.0"]
-
-[project.scripts]
-mem = "memcommit.cli:app"
-
-[tool.setuptools]
-packages = [
-  "memcommit",
-  "memcommit.commands",
-  "memcommit.semantic",
-  "memcommit.eval",
+dependencies = [
+  # CLI adapters still rely on Typer's Click-backed context and test-runner APIs.
+  "click>=8.1,<8.2",
+  "typer>=0.12,<0.13",
+  "rich>=13.0",
+  "markdown-it-py>=3,<5",
+  "PyYAML>=6,<7",
+  "prompt-toolkit>=3.0.52,<4",
 ]
 
+[project.scripts]
+mem = "memcommit.adapters.console.entrypoint:app"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["memcommit*"]
+# README-only future interfaces are not distributable Python packages.
+exclude = ["memcommit.adapters.python_api", "memcommit.adapters.python_api.*", "memcommit.adapters.agent", "memcommit.adapters.agent.*"]
+
 [tool.setuptools.package-data]
-"memcommit.eval" = ["fixtures/*.json"]
-
-[project.optional-dependencies]
-dev = ["pytest>=8.0"]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
+"memcommit.application.capabilities.memory_issue_analysis" = ["fixtures/*.json"]
+"memcommit.application.capabilities.semantic" = ["fixtures/*.json"]
+"memcommit.application.operations.atomize" = ["fixtures/*.json"]
+"memcommit.application.operations.compare" = ["fixtures/*.json"]
+"memcommit.application.operations.rationale.skills.memory_rationale" = ["**/context.json", "**/bindings.json"]
+"memcommit.application.operations.rationale.skills.context_rationale" = ["**/context.json", "**/bindings.json"]
+"memcommit.application.operations.resolve" = ["fixtures/*.json"]
+"memcommit.study_scenarios.legacy" = ["data/en/*", "data/ko/*", "data/native/**/*.json", "data/native/metadata/*.tsv"]
+"memcommit.study_scenarios.coffee" = ["data/composition.json", "data/**/context.json"]

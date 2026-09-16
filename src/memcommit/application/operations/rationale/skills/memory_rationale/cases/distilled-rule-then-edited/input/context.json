@@ -1,0 +1,50 @@
+{
+  "uid": "321f9a42-5c43-5636-a028-f1fbb01df109",
+  "name": "rationale/skills/memory_rationale/cases/distilled-rule-then-edited/input",
+  "memories": {
+    "a4d9d757-f79e-5dba-9090-3ace31a6a9bb": {
+      "type": "memory",
+      "uid": "a4d9d757-f79e-5dba-9090-3ace31a6a9bb",
+      "content": "Write each proposition in the exact three-token pattern `<lowercase letter> is <lowercase word>`, using the literal lowercase copula `is` with one space on each side and no terminal punctuation."
+    },
+    "64cb95e0-667d-5cbb-89c4-6bdde780d298": {
+      "type": "memory",
+      "uid": "64cb95e0-667d-5cbb-89c4-6bdde780d298",
+      "content": "adfadfafasdf"
+    },
+    "0053ae99-5ac8-5f4e-a879-edf4b7600af8": {
+      "type": "memory",
+      "uid": "0053ae99-5ac8-5f4e-a879-edf4b7600af8",
+      "content": "Added 2 distilled Rules from 'practice/1' to 'practice/3'"
+    },
+    "131ba70c-3cc9-5b02-83b6-e68134ba5096": {
+      "type": "memory",
+      "uid": "131ba70c-3cc9-5b02-83b6-e68134ba5096",
+      "content": "Write each proposition in the exact three-token pattern `<lowercase letter> is <lowercase word>`, using the literal lowercase copula `is` with one space on each side and no terminal punctuation."
+    },
+    "fdeac992-d51d-5b2c-a668-49e04b4021be": {
+      "type": "memory",
+      "uid": "fdeac992-d51d-5b2c-a668-49e04b4021be",
+      "content": "Edited the distilled Memory"
+    },
+    "3a4e556f-88f9-5e11-898e-704acdb6557a": {
+      "type": "memory",
+      "uid": "3a4e556f-88f9-5e11-898e-704acdb6557a",
+      "content": "Write each proposition in the exact three-token pattern `<lowercase letter> is <lowercase word>`, using the literal lowercase copula `is` with one space on each side and no terminal punctuation."
+    },
+    "766f86d9-dea5-5e70-a38b-69540bf0f67a": {
+      "type": "memory",
+      "uid": "766f86d9-dea5-5e70-a38b-69540bf0f67a",
+      "content": "adfadfafasdf"
+    }
+  },
+  "order": [
+    "a4d9d757-f79e-5dba-9090-3ace31a6a9bb",
+    "64cb95e0-667d-5cbb-89c4-6bdde780d298",
+    "0053ae99-5ac8-5f4e-a879-edf4b7600af8",
+    "131ba70c-3cc9-5b02-83b6-e68134ba5096",
+    "fdeac992-d51d-5b2c-a668-49e04b4021be",
+    "3a4e556f-88f9-5e11-898e-704acdb6557a",
+    "766f86d9-dea5-5e70-a38b-69540bf0f67a"
+  ]
+}

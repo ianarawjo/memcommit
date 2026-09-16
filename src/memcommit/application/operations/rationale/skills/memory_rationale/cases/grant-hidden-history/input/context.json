@@ -1,0 +1,14 @@
+{
+  "uid": "a4fff6a9-448a-554d-b2ea-21f8b9d7564c",
+  "name": "rationale/skills/memory_rationale/cases/grant-hidden-history/input",
+  "memories": {
+    "752885a0-d902-5bd4-bfa3-6240a57c9a9d": {
+      "type": "memory",
+      "uid": "752885a0-d902-5bd4-bfa3-6240a57c9a9d",
+      "content": "A readable granted Memory."
+    }
+  },
+  "order": [
+    "752885a0-d902-5bd4-bfa3-6240a57c9a9d"
+  ]
+}
