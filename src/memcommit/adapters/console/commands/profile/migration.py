@@ -176,11 +176,7 @@ def migrate_context_cmd(
     typer.echo(f"  Remaining legacy descendants: {len(remaining_legacy)}")
     typer.echo(f"  Live references: {plan.reference_count}")
     typer.echo(f"  Checkpoint references: {plan.checkpoint_reference_count}")
-    typer.echo(
-        "  Derived bindings: "
-        f"translation {plan.translation_artifact_count}, "
-        f"Meld {plan.meld_session_count}"
-    )
+    typer.echo(f"  Derived bindings: translation {plan.translation_artifact_count}")
     if blockers:
         typer.echo("  Grant blockers: " + ", ".join(item.uid for item in blockers))
         typer.echo(

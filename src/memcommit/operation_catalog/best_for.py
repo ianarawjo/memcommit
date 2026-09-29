@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-
 BEST_FOR_BY_OPERATION = {
     "add": "Adding one or more facts, instructions, or notes directly to a Context.",
     "atomize": (
@@ -65,10 +64,7 @@ BEST_FOR_BY_OPERATION = {
         "Reusing a Memory or Context in another Context while following later "
         "Source changes."
     ),
-    "eval": (
-        "Recognizing the reserved Eval surface while its future application "
-        "contract is still undefined."
-    ),
+    "dev-eval": "Creating reusable test data and checking operations with repeatable scenarios.",
     "find": (
         "Locating exact words, identifiers, or text patterns within a selected "
         "Context scope."
@@ -92,8 +88,7 @@ BEST_FOR_BY_OPERATION = {
         "or other propositions can jointly hold."
     ),
     "resolve": (
-        "Deciding how to repair semantic conflicts or ambiguities within a "
-        "bounded Context frame."
+        "Deciding how to repair semantic conflicts within a bounded Context frame."
     ),
     "forget": (
         "Removing or rewriting Memories according to a natural-language "
@@ -134,9 +129,7 @@ BEST_FOR_BY_OPERATION = {
         "Getting a grounded natural-language answer instead of a list of matching "
         "Memories."
     ),
-    "rationale": (
-        "Understanding the source context and lifecycle of one Memory."
-    ),
+    "rationale": ("Understanding the source context and lifecycle of one Memory."),
     "redo": "Reapplying a command that was undone accidentally.",
     "reference": (
         "Retaining one exact Memory version or Context scope even if its Source "

@@ -13,8 +13,9 @@ from enum import Enum
 
 
 class ImpactLifecycle(str, Enum):
-    """How an Impact route obtains the artifact that it projects."""
+    """How an Impact route obtains its artifact, or advertises deferred work."""
 
+    PLACEHOLDER = "PLACEHOLDER"
     PREPARE_PROCESS_LOCAL = "PREPARE_PROCESS_LOCAL"
     PREPARE_DURABLE = "PREPARE_DURABLE"
     PREPARE_OR_OPEN = "PREPARE_OR_OPEN"
@@ -130,14 +131,9 @@ IMPACT_ROUTES = ImpactRouteCatalog(
             "Preview the unverified Memories Makemore would add.",
         ),
         ImpactRoute(
-            "resolve",
-            ImpactLifecycle.PREPARE_PROCESS_LOCAL,
-            "Preview one exact verified Resolve candidate without applying it.",
-        ),
-        ImpactRoute(
-            "meld",
-            ImpactLifecycle.OPEN_SAVED,
-            "Inspect one saved Meld assessment.",
+            "merge",
+            ImpactLifecycle.PLACEHOLDER,
+            "Show the planned Merge Impact scope (not implemented).",
         ),
         ImpactRoute(
             "sever",
@@ -158,6 +154,11 @@ IMPACT_ROUTES = ImpactRouteCatalog(
         ),
     ),
     excluded=(
+        ExcludedImpactOperation(
+            "resolve",
+            "Resolve requires explicit issue decisions; issue inspection and "
+            "choice previews belong to Audit and Resolve itself.",
+        ),
         ExcludedImpactOperation(
             "translate",
             "Translation changes representation rather than proposing a Memory "

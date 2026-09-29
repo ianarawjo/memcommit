@@ -17,10 +17,8 @@ from memcommit.application.operations.elaborate.runtime import execute_elaborate
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_semantic_provider,
-)
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 
 
 def cmd(

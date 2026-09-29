@@ -16,7 +16,7 @@ from memcommit.adapters.console.terminal.components.endpoint_setup.role import (
     EndpointSetupRole,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.screen import (
-    run_endpoint_setup,
+    run_endpoint_setup_screen,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.spec import (
     EndpointSetupMode,
@@ -119,7 +119,7 @@ def choose_branch_creation(
 
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError("Interactive Branch setup requires a terminal.")
-    draft = run_endpoint_setup(
+    draft = run_endpoint_setup_screen(
         branch_endpoint_setup_spec(
             local_names,
             current=current,

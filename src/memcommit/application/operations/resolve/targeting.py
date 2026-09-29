@@ -23,7 +23,7 @@ from memcommit.core.context_targeting.model import (
 from memcommit.core.context_targeting.resolution import (
     parse_direct_memory_locator,
 )
-from memcommit.application.operations.resolve.application import ResolveError
+from memcommit.application.operations.resolve.model import ResolveError
 
 
 @dataclass(frozen=True, slots=True)

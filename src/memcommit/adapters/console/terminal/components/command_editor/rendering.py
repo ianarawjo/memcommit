@@ -23,19 +23,27 @@ def render_exact_command_blocks(
 
     command = "\n".join(
         [
-            "PROPOSED COMMAND · NOT RUN",
+            (
+                "REOPEN COMMAND · CHOOSE AGAIN IN THE TERMINAL"
+                if review.replay_requires_input
+                else "PROPOSED COMMAND · NOT RUN"
+            ),
             f"  {format_exact_command(review)}",
         ]
     )
     effects = "\n".join(
         [
-            "EFFECTS · ONE COMMAND",
+            "EFFECTS · CURRENT PLAN" if review.replay_requires_input else "EFFECTS · ONE COMMAND",
             *[
                 f"  {display_escape_text(effect)}"
                 for effect in review.effects
             ],
             "",
-            "Approval applies only to the exact command shown above.",
+            (
+                "Approval applies only to the current plan and choices shown above."
+                if review.replay_requires_input
+                else "Approval applies only to the exact command shown above."
+            ),
         ]
     )
     return command, effects

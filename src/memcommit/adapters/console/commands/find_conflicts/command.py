@@ -6,9 +6,6 @@ from typing import Annotated, Optional
 
 import typer
 
-from memcommit.adapters.console.commands.resolve.finding_handoff import (
-    run_conflict_resolve_handoff,
-)
 from memcommit.adapters.console.coordination.context_operand import (
     ContextOperandSnapshot,
     choose_context_operand,
@@ -16,14 +13,11 @@ from memcommit.adapters.console.coordination.context_operand import (
 from memcommit.adapters.console.terminal.components.quality_find.rendering import (
     render_heading,
     render_memory,
-    render_question,
     render_reason,
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.terminal.components.quality_find.workbench import (
     annotate_quality_find_attempt,
-    interactive_quality_find_available,
-    run_interactive_quality_find,
 )
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
@@ -34,23 +28,18 @@ from memcommit.adapters.console.terminal.core.identity import (
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     FindingsError,
 )
-from memcommit.application.operations.fit.judgment import FitJudgmentError
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
+from memcommit.application.capabilities.memory_issue_analysis.report import (
+    conflict_label,
 )
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.application.operations.resolve.application import ResolveError
 from memcommit.application.operations.find_conflicts.application import (
     FindConflictsRequest,
     analyze_find_conflicts,
     prepare_find_conflicts,
-)
-from memcommit.application.capabilities.memory_issue_analysis.handoff import (
-    quality_finding_handoff_json,
-    quality_finding_handoffs,
 )
 
 
@@ -85,20 +74,6 @@ def cmd(
             help="Inspect all readable Contexts in the active Profile",
         ),
     ] = False,
-    handoff_json: Annotated[
-        bool,
-        typer.Option(
-            "--handoff-json",
-            help="Print one canonical JSON handoff per finding",
-        ),
-    ] = False,
-    select_targets: Annotated[
-        bool,
-        typer.Option(
-            "--select",
-            help="Choose readable Context targets and lexical reach interactively",
-        ),
-    ] = False,
 ) -> None:
     """Report conflicting Memory pairs; never reconcile or checkpoint them."""
     try:
@@ -122,59 +97,6 @@ def cmd(
             err=True,
         )
         raise typer.Exit(1)
-    if select_targets:
-        if context_name is not None or all_contexts or handoff_json:
-            typer.secho(
-                "Find conflicts error: --select cannot be combined with "
-                "an explicit Context, --all/-a, or --handoff-json.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        if not interactive_quality_find_available():
-            typer.secho(
-                "Find conflicts error: --select requires an interactive terminal.",
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        try:
-            context_snapshot = ContextOperandSnapshot.capture(store)
-            completed = run_interactive_quality_find(
-                store,
-                current_name=context_snapshot.current_name,
-                kind="conflicts",
-                analyze=lambda source: analyze_find_conflicts(
-                    source,
-                    connect_codex_chatgpt_provider,
-                ).report,
-                handoff_handler=lambda handoff: run_conflict_resolve_handoff(
-                    store,
-                    current_name=context_snapshot.current_name,
-                    handoff=handoff,
-                ),
-            )
-        except (
-            FileNotFoundError,
-            OSError,
-            ProfileConfigError,
-            ProfileError,
-            RuntimeError,
-            ValueError,
-            FindingsError,
-            FitJudgmentError,
-            QueryProviderError,
-            ResolveError,
-        ) as error:
-            typer.secho(
-                "Find conflicts error: " + display_escape_text(str(error)),
-                fg=typer.colors.RED,
-                err=True,
-            )
-            raise typer.Exit(1)
-        if not completed:
-            typer.echo("Find conflicts cancelled.")
-        return
     try:
         context_snapshot = ContextOperandSnapshot.capture(store)
         source = prepare_find_conflicts(
@@ -213,7 +135,7 @@ def cmd(
         ):
             result = analyze_find_conflicts(
                 source,
-                connect_codex_chatgpt_provider,
+                connect_semantic_provider,
             )
             report = result.report
     except (FindingsError, QueryProviderError) as error:
@@ -225,11 +147,6 @@ def cmd(
         raise typer.Exit(1)
 
     annotate_quality_find_attempt("conflicts", source)
-
-    if handoff_json:
-        for handoff in quality_finding_handoffs(result.session):
-            typer.echo(quality_finding_handoff_json(handoff))
-        return
 
     involved_uids = {
         memory.uid
@@ -254,7 +171,7 @@ def cmd(
     uid_prefixes = collision_safe_uid_prefixes(involved_uids)
     for index, finding in enumerate(report.findings, start=1):
         typer.echo()
-        label = "POSSIBLE CONFLICT" if finding.conflict == "MAY" else "CONFLICT"
+        label = conflict_label(finding.conflict)
         typer.secho(
             f"  {label} {index}/{len(report.findings)}",
             fg=_CONFLICT_COLORS.get(finding.conflict, typer.colors.YELLOW),
@@ -275,4 +192,3 @@ def cmd(
             ),
         )
         render_reason(finding.reason)
-        render_question(finding.question)

@@ -18,6 +18,9 @@ from memcommit.providers.policy import (
 from memcommit.adapters.console.commands.init_study.name_dialog import (
     choose_study_profile_name,
 )
+from memcommit.adapters.console.commands.init_study.receipt import (
+    render_study_init_receipt,
+)
 from memcommit.application.operations.profile.config import (
     ProfileConfigError,
     load_profile_registry,
@@ -47,7 +50,7 @@ def cmd(
         Optional[str],
         typer.Argument(
             help=(
-                "New Profile name; omit to edit a timestamped default in a "
+                "New Profile name; omit to edit a local-date study-YYMMDD-N default in a "
                 "terminal, or generate it automatically outside a terminal"
             )
         ),
@@ -145,40 +148,4 @@ def cmd(
             )
             raise typer.Exit(1)
 
-    typer.secho(
-        f"Initialized Study run '{display_escape_text(result.profile.name)}'.",
-        fg=typer.colors.GREEN,
-    )
-    typer.echo("Scenario: " + display_escape_text(result.scenario_id))
-    typer.echo("Participant Profile: " + display_escape_text(result.profile.name))
-    typer.echo(
-        "Granted-memory Profile: " + display_escape_text(result.authority_profile.name)
-    )
-    typer.echo(
-        "Provider config: "
-        f"{STUDY_PROVIDER_POLICY_VERSION} · locked · "
-        f"sha256 {STUDY_PROVIDER_POLICY_DIGEST}"
-    )
-    current = (
-        display_escape_text(result.inspection.current_context)
-        if result.inspection.current_context
-        else "(none)"
-    )
-    typer.echo(
-        f"Contexts {len(result.inspection.context_names)} · "
-        f"Memories {result.inspection.ordinary_memory_count} · current={current}"
-    )
-    typer.echo(
-        f"Granted Contexts {result.inspection.granted_context_count} · "
-        f"Granted Memories {result.inspection.granted_memory_count}"
-    )
-    typer.echo(
-        "Task-owned and granted-memory data were copied into isolated run "
-        "Profiles and connected with real authority grants."
-    )
-    typer.echo(
-        "Operational history starts empty. "
-        "Checkpoints, sessions, ad-hoc caches, locks, and run logs "
-        "were not imported."
-    )
-    typer.echo("Active Profile: " + display_escape_text(result.active_profile_name))
+    render_study_init_receipt(result)

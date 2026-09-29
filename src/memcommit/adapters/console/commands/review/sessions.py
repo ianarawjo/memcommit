@@ -22,20 +22,15 @@ from memcommit.adapters.console.commands.compare.sessions import (
 from memcommit.adapters.console.terminal.components.operation_launcher.location import (
     session_picker_location,
 )
-from memcommit.adapters.console.commands.merge.semantic.sessions import list_meld_session_catalog
 from memcommit.adapters.console.terminal.components.operation_launcher.session import (
     SessionOpenReceipt,
     SessionPickerEntry,
     choose_session,
 )
-from memcommit.adapters.console.commands.audit.session_catalog import (
-    audit_session_entries,
-)
 from memcommit.adapters.console.commands.sever.sessions import (
     list_sever_session_catalog,
 )
 from memcommit.application.operations.sever.session_store import SeverSessionStore
-from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.operations.update.receipt_repository import (
     UpdateReceiptRepository,
@@ -320,10 +315,6 @@ def review_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]
     entries.extend(_checkpoint_review_entries(store))
     entries.extend(
         _review_entry(entry)
-        for entry in audit_session_entries(JsonAuditRecordRepository(store))
-    )
-    entries.extend(
-        _review_entry(entry)
         for entry in atomize_record_entries(store)
         if entry.status == "APPLIED"
     )
@@ -335,23 +326,6 @@ def review_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]
             for catalog_entry in list_sever_session_catalog(SeverSessionStore(store))
             if catalog_entry.picker_entry.status == "APPLIED"
         )
-    )
-    entries.extend(
-        _review_entry(
-            SessionPickerEntry(
-                kind="meld",
-                key=catalog_entry.session_uid,
-                title=catalog_entry.title,
-                status=catalog_entry.status,
-                subtitle=catalog_entry.subtitle,
-                group=catalog_entry.group,
-                sort_timestamp=catalog_entry.modified_timestamp,
-                detail=catalog_entry.detail,
-                reopen_argv=catalog_entry.reopen_argv,
-            )
-        )
-        for catalog_entry in list_meld_session_catalog(store)
-        if catalog_entry.status == "APPLIED"
     )
     entries.extend(_retained_update_entries(store))
     update_entry = _saved_update_entry(store)

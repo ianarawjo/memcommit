@@ -71,8 +71,8 @@ from memcommit.persistence.command_ledger.study_actions import (
     record_study_help_lookup_completed,
     record_study_help_lookup_submitted,
 )
-from memcommit.providers.operation_connections import connect_help_provider
-from memcommit.providers.subscription import QueryProviderError
+from memcommit.providers.connection import connect_help_provider
+from memcommit.providers.errors import QueryProviderError
 
 
 # The command module was the original owner of the complete Help implementation.

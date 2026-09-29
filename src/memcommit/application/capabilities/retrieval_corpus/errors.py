@@ -6,3 +6,4 @@ class RetrievalCorpusError(RuntimeError):
 
 
 __all__ = ["RetrievalCorpusError"]
+

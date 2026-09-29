@@ -55,8 +55,6 @@ REVIEW_SESSION_SOURCES_DIR = _ActiveStorePath("review-session-sources")
 ATOMIZE_ANALYSES_DIR = _ActiveStorePath("atomize-analyses")
 ATOMIZE_WORKBENCHES_DIR = _ActiveStorePath("atomize-workbenches")
 ATOMIZE_SESSION_HISTORY_DIR = _ActiveStorePath("atomize-session-history")
-MELD_SESSIONS_DIR = _ActiveStorePath("meld-sessions")
-MELD_SESSION_HISTORY_DIR = _ActiveStorePath("meld-session-history")
 
 
 class _StorePathsMixin:
@@ -148,11 +146,3 @@ class _StorePathsMixin:
     @property
     def atomize_session_history_dir(self) -> Path:
         return self.store_dir / "atomize-session-history"
-
-    @property
-    def meld_sessions_dir(self) -> Path:
-        return self.store_dir / "meld-sessions"
-
-    @property
-    def meld_session_history_dir(self) -> Path:
-        return self.store_dir / "meld-session-history"

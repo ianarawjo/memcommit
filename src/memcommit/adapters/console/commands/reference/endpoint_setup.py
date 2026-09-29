@@ -16,7 +16,7 @@ from memcommit.adapters.console.terminal.components.endpoint_setup.role import (
     EndpointSetupRole,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.screen import (
-    run_endpoint_setup,
+    run_endpoint_setup_screen,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.spec import (
     EndpointSetupMode,
@@ -181,7 +181,7 @@ def run_reference_tui(
 
     del prepare_context  # Compatibility only; bare interactive setup is exact-Memory.
     spec = reference_endpoint_setup_spec(setup)
-    draft = run_endpoint_setup(
+    draft = run_endpoint_setup_screen(
         spec,
         memory_loader=_endpoint_memories(memory_loader),
         validate_draft=_validate_reference_draft,

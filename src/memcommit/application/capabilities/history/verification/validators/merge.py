@@ -11,7 +11,7 @@ from memcommit.application.capabilities.history.reconstruction.memory_lineage_re
 )
 
 from ..checkpoint import _checkpoint_fields
-from ..frame import _Frame, _empty_frame, _frame_from_snapshot
+from ..frame import _empty_frame, _Frame, _frame_from_snapshot
 from ..model import (
     MemoryHistoryCommandContext,
     MemoryHistoryCommandOperation,
@@ -29,6 +29,8 @@ class _RecordedMergeEdge:
         "ALREADY_PRESENT",
         "TAKE_SOURCE",
         "KEEP_TARGET",
+        "KEEP_BOTH",
+        "TRANSFORMED",
     ]
 
 
@@ -46,11 +48,12 @@ class _RecordedMergeTransition:
     before: _Frame
     after: _Frame
     edges: tuple[_RecordedMergeEdge, ...]
+    source_memories: tuple[tuple[str, str], ...] = ()
 
 
 def _merge_decisions(
     args: dict[str, Any],
-) -> dict[tuple[str, str], Literal["TAKE_SOURCE", "KEEP_TARGET"]]:
+) -> dict[tuple[str, str], Literal["TAKE_SOURCE", "KEEP_TARGET", "KEEP_BOTH"]]:
     """Validate the reviewed per-occurrence Merge dispositions."""
 
     record = args.get("merge_decisions")
@@ -59,7 +62,9 @@ def _merge_decisions(
     raw_decisions = record.get("decisions")
     if record.get("version") != 1 or not isinstance(raw_decisions, list):
         raise ValueError("Merge decision metadata is invalid.")
-    result: dict[tuple[str, str], Literal["TAKE_SOURCE", "KEEP_TARGET"]] = {}
+    result: dict[
+        tuple[str, str], Literal["TAKE_SOURCE", "KEEP_TARGET", "KEEP_BOTH"]
+    ] = {}
     expected = {
         "conflict_uid",
         "kind",
@@ -70,13 +75,18 @@ def _merge_decisions(
         "target_uids",
     }
     for raw in raw_decisions:
-        if not isinstance(raw, dict) or set(raw) != expected:
+        if not isinstance(raw, dict):
             raise ValueError("Merge decision metadata is invalid.")
         decision = raw.get("decision")
+        fields = (
+            expected | {"added_target_uid"} if decision == "KEEP_BOTH" else expected
+        )
+        if set(raw) != fields:
+            raise ValueError("Merge decision metadata is invalid.")
         source_uid = raw.get("source_uid")
         target_uids = raw.get("target_uids")
         if (
-            decision not in {"TAKE_SOURCE", "KEEP_TARGET"}
+            decision not in {"TAKE_SOURCE", "KEEP_TARGET", "KEEP_BOTH"}
             or not isinstance(source_uid, str)
             or not source_uid
             or not isinstance(target_uids, list)
@@ -85,6 +95,15 @@ def _merge_decisions(
             or len(target_uids) != len(set(target_uids))
         ):
             raise ValueError("Merge decision metadata is invalid.")
+        if decision == "KEEP_BOTH":
+            added_uid = raw["added_target_uid"]
+            if (
+                not isinstance(added_uid, str)
+                or not added_uid
+                or added_uid in {source_uid, *target_uids}
+            ):
+                raise ValueError("Keep Both result identity is invalid.")
+            target_uids = [added_uid]
         for target_uid in target_uids:
             key = (source_uid, target_uid)
             if key in result:
@@ -99,6 +118,8 @@ def _recorded_merge_transition(
     """Validate one Merge checkpoint before it can join two History owners."""
 
     checkpoint_uid, timestamp, command, description, args = _checkpoint_fields(entry)
+    if command == "merge" and "merge" in args:
+        return _common_merge_transition(entry)
     if command != "merge" or "memory_lineage" not in args:
         return None, None
     warning = (
@@ -124,7 +145,20 @@ def _recorded_merge_transition(
         )
         memory_edges = parse_memory_lineage_receipt(args)
         decisions = _merge_decisions(args)
-    except (MemoryHistoryReconstructionError, TypeError, ValueError):
+        # A Keep Both edge proves the added copy only when every original item
+        # survives exactly; a re-labelled replacement must not pass as retention.
+        for decision in args["merge_decisions"]["decisions"]:
+            if decision["decision"] != "KEEP_BOTH":
+                continue
+            before_records = command_before["memories"]
+            after_records = entry["snapshot"]["memories"]
+            if decision["added_target_uid"] in before_records or any(
+                uid not in before_records
+                or before_records[uid] != after_records.get(uid)
+                for uid in decision["target_uids"]
+            ):
+                raise ValueError("Keep Both changed an existing Target item.")
+    except (MemoryHistoryReconstructionError, KeyError, TypeError, ValueError):
         return None, warning
     target_created = tree.get("target_created") if isinstance(tree, dict) else None
     has_command_preimage = isinstance(command_before, dict)
@@ -166,13 +200,13 @@ def _recorded_merge_transition(
         target_before = before.memories.get(edge.target_memory_uid)
         decision = decisions.get((edge.source_memory_uid, edge.target_memory_uid))
         if target_before is None:
-            if decision is not None or (
+            if decision not in {None, "KEEP_BOTH"} or (
                 edge.source_content_sha256 != edge.target_content_sha256
             ):
                 return None, warning
             disposition: Literal[
-                "NEW", "ALREADY_PRESENT", "TAKE_SOURCE", "KEEP_TARGET"
-            ] = "NEW"
+                "NEW", "ALREADY_PRESENT", "TAKE_SOURCE", "KEEP_TARGET", "KEEP_BOTH"
+            ] = "KEEP_BOTH" if decision == "KEEP_BOTH" else "NEW"
         elif decision == "TAKE_SOURCE":
             if edge.source_content_sha256 != edge.target_content_sha256:
                 return None, warning
@@ -190,6 +224,13 @@ def _recorded_merge_transition(
         else:
             return None, warning
         recorded_edges.append(_RecordedMergeEdge(edge=edge, disposition=disposition))
+
+    if {key for key, decision in decisions.items() if decision == "KEEP_BOTH"} != {
+        (item.edge.source_memory_uid, item.edge.target_memory_uid)
+        for item in recorded_edges
+        if item.disposition == "KEEP_BOTH"
+    }:
+        return None, warning
 
     operation_uid = f"merge:{tree['operation_uid']}"
     context_records: list[MemoryHistoryCommandContext] = []
@@ -226,3 +267,60 @@ def _recorded_merge_transition(
         ),
         None,
     )
+
+
+def _common_merge_transition(entry):
+    from memcommit.application.operations.merge.analysis.candidate import MergeCandidate
+
+    from .merge_record import validated_merge_record
+
+    try:
+        record = validated_merge_record(entry)
+        source, target = record["inputs"]["source"], record["inputs"]["target"]
+        if not record["lineage"]["edges"]:
+            return None, None
+        operation_uid = f"merge:{record['operation_uid']}"
+        target_context = MemoryHistoryCommandContext(
+            uid=target["context_uid"], name=target["context_name"]
+        )
+        candidate = MergeCandidate.from_dict(record["review_rounds"][0]["candidate"])
+        transition = _RecordedMergeTransition(
+            checkpoint_uid=entry["uid"],
+            timestamp=entry["timestamp"],
+            description=entry["description"],
+            operation_uid=operation_uid,
+            source=MemoryHistoryCommandContext(
+                uid=source["context_uid"], name=source["context_name"]
+            ),
+            target=target_context,
+            command_operation=MemoryHistoryCommandOperation(
+                uid=operation_uid, command="merge", contexts=(target_context,)
+            ),
+            before=_frame_from_snapshot(entry["command_before"], label="Merge before"),
+            after=_frame_from_snapshot(entry["snapshot"], label="Merge after"),
+            edges=tuple(
+                _RecordedMergeEdge(
+                    MemoryLineageEdge(
+                        **{
+                            key: value
+                            for key, value in edge.items()
+                            if key != "disposition"
+                        }
+                    ),
+                    edge["disposition"],
+                )
+                for edge in record["lineage"]["edges"]
+            ),
+            source_memories=tuple(
+                (origin.item_uid, origin.record()["content"])
+                for origin in candidate.origins
+                if origin.context_uid == source["context_uid"]
+                and origin.record()["type"] == "memory"
+            ),
+        )
+        return transition, None
+    except (KeyError, TypeError, ValueError, AttributeError, IndexError, StopIteration):
+        return (
+            None,
+            f"Checkpoint [{entry.get('uid', '')[:8]}] has invalid Merge review evidence; Source and Target histories were not connected.",
+        )

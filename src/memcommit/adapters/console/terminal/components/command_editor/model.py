@@ -7,12 +7,15 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class CommandReview:
-    """A frozen argv and its complete user-facing effect boundary."""
+    """A frozen command and effects, optionally with choices held in review."""
 
     argv: tuple[str, ...]
     effects: tuple[str, ...]
+    replay_requires_input: bool = False
 
     def __post_init__(self) -> None:
+        if type(self.replay_requires_input) is not bool:
+            raise TypeError("Command replay input requirement must be a boolean.")
         # ``frozen=True`` protects attributes, but callers could otherwise
         # mutate a list after review. Owning immutable copies keeps the
         # displayed command identical to the command later approved.

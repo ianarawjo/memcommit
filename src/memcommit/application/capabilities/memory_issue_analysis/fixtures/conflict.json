@@ -1,7 +1,7 @@
 {
   "operation": "find-conflicts",
   "schema_version": 1,
-  "ruleset_version": "conflict-v2-draft",
+  "ruleset_version": "conflict-v3-draft",
   "description": "Initial calibration cases for pairwise semantic conflict detection. YES, MAY, and NO use one shared entrance frame so that MAY denotes an unresolved ordinary reading rather than model confidence.",
   "labels": [
     "YES",
@@ -24,8 +24,8 @@
       ],
       "expected": {
         "conflict": "YES",
-        "question": "Which after-hours rule for the main entrance is authoritative?",
-        "rationale": "The same entrance, time, and staff audience are explicit. One Memory denies all use while the other permits staff use, so both cannot govern simultaneously under the shared frame."
+        "rationale": "The same entrance, time, and staff audience are explicit. One Memory denies all use while the other permits staff use, so both cannot govern simultaneously under the shared frame.",
+        "reason": "The rules both prohibit and permit staff entry after 5pm."
       }
     },
     {
@@ -43,8 +43,8 @@
       ],
       "expected": {
         "conflict": "MAY",
-        "question": "Does \"the entrance\" mean the main entrance or the separate staff entrance?",
-        "rationale": "The pair conflicts if the unspecified entrance is the main entrance and remains compatible if it is the staff entrance. MAY records this unresolved ordinary reading, not uncertainty in the judge."
+        "rationale": "The pair conflicts if the unspecified entrance is the main entrance and remains compatible if it is the staff entrance. MAY records this unresolved ordinary reading, not uncertainty in the judge.",
+        "reason": "Which entrance permits staff entry is unclear."
       }
     },
     {
@@ -62,8 +62,8 @@
       ],
       "expected": {
         "conflict": "NO",
-        "question": "",
-        "rationale": "The Memories govern different entrances. Closing the main entrance is compatible with allowing staff through the separately identified staff entrance."
+        "rationale": "The Memories govern different entrances. Closing the main entrance is compatible with allowing staff through the separately identified staff entrance.",
+        "reason": "The rules govern different entrances."
       }
     }
   ]

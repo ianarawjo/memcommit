@@ -354,20 +354,9 @@ class _ContextLifecycleMixin:
             if canonical_context_uid == context_uid
             else None
         )
-        meld_path = (
-            self._meld_session_path(context_uid)
-            if canonical_context_uid == context_uid
-            else None
-        )
-        meld_session_history_dir = (
-            self.meld_session_history_dir / context_uid
-            if canonical_context_uid == context_uid
-            else None
-        )
         for artifact, label in (
             (analysis_path, "Atomize analysis"),
             (workbench_path, "Atomize workbench"),
-            (meld_path, "Meld session"),
         ):
             if (
                 artifact is not None
@@ -401,12 +390,6 @@ class _ContextLifecycleMixin:
             # Strict loading rejects malformed entries before the primary
             # Context deletion can commit.
             self.list_atomize_session_history()
-        meld_history_paths = tuple(
-            path
-            for session, path in self.list_meld_session_history()
-            if any(frame.context_uid == context_uid for frame in session.frames)
-            or session.target.context_uid == context_uid
-        )
         ctx_dir = self._context_dir(name)
         context_file = self._context_file(name)
         checkpoints_dir = self._checkpoints_dir(name)
@@ -517,10 +500,6 @@ class _ContextLifecycleMixin:
             # Workbench responses may contain free-form user context. They are
             # scoped to the deleted Context and must not survive it.
             attempt_cleanup("Atomize workbench", workbench_path.unlink)
-        if meld_path is not None and meld_path.exists():
-            # Meld dialogue may retain both source text and verbatim user
-            # comments. Its privacy and validity lifetime is the target.
-            attempt_cleanup("Meld session", meld_path.unlink)
         attempt_cleanup(
             "Compare analyses",
             lambda: delete_comparison_paths(comparison_paths),
@@ -551,25 +530,6 @@ class _ContextLifecycleMixin:
                     pass
 
             attempt_cleanup("Atomize session history", remove_atomize_session_history)
-        for retained_meld_path in meld_history_paths:
-            attempt_cleanup("Meld session history", retained_meld_path.unlink)
-        if meld_session_history_dir is not None and meld_session_history_dir.exists():
-
-            def remove_empty_meld_history_directory() -> None:
-                try:
-                    meld_session_history_dir.rmdir()
-                except OSError:
-                    return
-                _fsync_directory(meld_session_history_dir.parent)
-                try:
-                    self.meld_session_history_dir.rmdir()
-                except OSError:
-                    pass
-
-            attempt_cleanup(
-                "Meld session history directory",
-                remove_empty_meld_history_directory,
-            )
         if delete_review_session and self.review_session_file.exists():
             # Review answers may contain user-supplied local context. Once
             # their exact Context is deleted, retaining that global artifact

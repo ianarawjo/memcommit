@@ -4,12 +4,15 @@ MemCommit is a command-line memory store with named Contexts, editable Memories,
 checkpoints, and semantic operations. Its console interface includes both
 scriptable commands and interactive terminal workbenches.
 
+This prototype snapshot is published on the `user-study-prototype` branch.
+
 ## Install
 
 Python 3.10 or later is required. With [uv](https://docs.astral.sh/uv/) installed,
 run these commands from the repository root:
 
 ```sh
+git switch user-study-prototype
 uv sync --locked
 uv run --locked mem --help
 ```
@@ -67,9 +70,41 @@ ChatGPT login in the Codex CLI. Select a reasoning level supported by your model
 an unconfigured route can request `none`, which some models reject. Study
 Profiles use their own fixed provider configuration.
 
-`mem eval` currently reserves a name for a future evaluation workflow; it does
-not yet implement evaluation commands. The Agent and Python API adapters are
-also reserved; the supported interface is the Console CLI/TUI.
+## Merge and Resolve
+
+`mem merge` opens an interactive setup for two existing Contexts. Semantic Merge
+first handles structural conflicts, then reviews semantic issues in the merged
+Context. `--literal` handles the stored items without language-model inference:
+
+```sh
+uv run --locked mem merge
+uv run --locked mem merge incoming notes --literal
+uv run --locked mem resolve --help
+```
+
+Merge and Resolve require an interactive terminal. Semantic checks can vary
+between provider calls; this prototype does not guarantee identical findings on
+repeated runs. Saved Audit records from earlier schema versions are not migrated
+automatically by this snapshot.
+
+## Developer scenarios
+
+List the registered scenarios with `mem dev-eval`. Supplying a scenario name
+runs its authored steps in the current Profile and prints their PASS/FAIL results:
+
+```sh
+uv run --locked mem dev-eval
+uv run --locked mem dev-eval merge_visitor_notices
+```
+
+`merge_visitor_notices` currently exercises CLI Init and Add for two Contexts,
+each with five visitor notices, and verifies the stored results. It prepares the
+Merge inputs; it does not yet run the interactive Merge decisions.
+`duplicates_coffee` exercises exact and semantic duplicate discovery and removal,
+and requires a semantic provider. Both scenarios retain their created Contexts.
+
+The Agent and Python API adapters remain reserved; the supported interface is
+the Console CLI/TUI.
 
 ## Source layout
 

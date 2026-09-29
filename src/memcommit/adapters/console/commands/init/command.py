@@ -11,7 +11,7 @@ from memcommit.application.operations.init.runtime import (
     prepare_context_init,
 )
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import choose_context_name
-from memcommit.adapters.console.commands.init.receipt import render_context_init
+from memcommit.adapters.console.commands.init.receipt import render_context_init_receipt
 from memcommit.adapters.console.commands.init.choose_name import (
     ContextInitTuiSetup,
     run_context_init_tui,
@@ -74,4 +74,4 @@ def cmd(
         typer.secho(f"Error: {error}", fg=typer.colors.RED, err=True)
         raise typer.Exit(1)
 
-    render_context_init(result)
+    render_context_init_receipt(result)

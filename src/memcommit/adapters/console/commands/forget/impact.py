@@ -43,7 +43,7 @@ from memcommit.application.context_access.readable_contexts import (
     freeze_profile_readable_context_catalog,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.providers.subscription import QueryProviderError
+from memcommit.providers.errors import QueryProviderError
 
 
 def forget_impact_presentation(

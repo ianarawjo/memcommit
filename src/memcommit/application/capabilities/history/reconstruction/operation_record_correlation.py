@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from typing import Any
 import uuid
+from typing import Any
 
 
 class OperationRecordCorrelationError(RuntimeError):
@@ -88,13 +88,13 @@ def operation_record_identity(
     if command == "meld":
         record = args.get("meld")
         if isinstance(record, dict):
-            session_uid = record.get("session_uid")
+            operation_uid = record.get("operation_uid")
             change_set_digest = record.get("change_set_digest")
             if all(
                 isinstance(value, str) and value
-                for value in (session_uid, change_set_digest)
+                for value in (operation_uid, change_set_digest)
             ):
-                return f"meld:{session_uid}:{change_set_digest}"
+                return f"meld:{operation_uid}:{change_set_digest}"
     if command == "sever":
         record = args.get("sever")
         if isinstance(record, dict) and isinstance(args.get("command_contexts"), list):
@@ -109,6 +109,24 @@ def operation_record_identity(
                 # one reviewed, atomic in-place Sever command.
                 return f"sever:{session_uid}:{session_digest}"
     if command == "merge":
+        common = args.get("merge")
+        if isinstance(common, dict):
+            uid = common.get("operation_uid")
+            try:
+                from memcommit.application.operations.merge.checkpoint import (
+                    MERGE_CHECKPOINT_VERSION,
+                )
+
+                if (
+                    common.get("schema_version") != MERGE_CHECKPOINT_VERSION
+                    or str(uuid.UUID(uid)) != uid
+                ):
+                    raise ValueError()
+            except (TypeError, ValueError, AttributeError) as error:
+                raise OperationRecordCorrelationError(
+                    "Merge operation identity is invalid."
+                ) from error
+            return f"merge:{uid}"
         record = args.get("merge_tree")
         if isinstance(record, dict):
             operation_uid = record.get("operation_uid")

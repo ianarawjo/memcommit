@@ -18,7 +18,7 @@ from memcommit.adapters.console.terminal.components.endpoint_setup.role import (
     EndpointSetupRole,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.screen import (
-    run_endpoint_setup,
+    run_endpoint_setup_screen,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.spec import (
     EndpointSetupMode,
@@ -137,7 +137,7 @@ def choose_compare_endpoint_setup(
 ) -> CompareEndpointSelection | None:
     """Return one typed Compare scope without provider or durable work."""
 
-    draft = run_endpoint_setup(
+    draft = run_endpoint_setup_screen(
         compare_endpoint_setup_spec(setup),
         memory_loader=memory_loader,
         validate_draft=lambda value: (

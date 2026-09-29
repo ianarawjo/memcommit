@@ -42,10 +42,8 @@ from memcommit.application.operations.update.model import (
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique_uid
 from memcommit.persistence.store import MemoryStore
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-)
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 
 
 def open_saved_update_impact(
@@ -184,7 +182,7 @@ def run_directional_update_impact(
                 # Keep connection lazy so Update's complete authority and
                 # semantic-disclosure preflight runs first. A nested live
                 # Grant must fail without contacting a provider at all.
-                connect_codex_chatgpt_provider,
+                connect_semantic_provider,
                 status="impact",
                 source_include_descendants=source_descendants,
                 target_include_descendants=target_descendants,

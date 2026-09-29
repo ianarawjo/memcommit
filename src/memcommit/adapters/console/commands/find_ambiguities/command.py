@@ -36,10 +36,8 @@ from memcommit.adapters.console.terminal.core.theme import (
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     FindingsError,
 )
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-)
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
@@ -128,7 +126,7 @@ def cmd(
                 kind="ambiguities",
                 analyze=lambda source: analyze_find_ambiguities(
                     source,
-                    connect_codex_chatgpt_provider,
+                    connect_semantic_provider,
                 ).report,
             )
         except (
@@ -188,7 +186,7 @@ def cmd(
         ):
             result = analyze_find_ambiguities(
                 source,
-                connect_codex_chatgpt_provider,
+                connect_semantic_provider,
             )
             report = result.report
     except (FindingsError, QueryProviderError) as error:

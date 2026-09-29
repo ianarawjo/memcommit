@@ -30,9 +30,6 @@ from memcommit.adapters.console.terminal.core.keybindings import (
 from memcommit.adapters.console.terminal.core.capabilities import (
     require_interactive_terminal,
 )
-from memcommit.adapters.console.terminal.components.resolution.compact_shell import (
-    run_compact_resolution_decisions,
-)
 from memcommit.adapters.console.terminal.components.semantic_viewer import (
     SemanticViewerController,
 )
@@ -45,7 +42,6 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionWorkbenchAction,
     ResolutionWorkbenchView,
 )
-from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft
 from memcommit.persistence.command_ledger.study_actions import record_study_action
 from memcommit.application.capabilities.reviewing.session_navigation import (
     SessionWorkbenchNavigation,
@@ -81,8 +77,6 @@ from memcommit.adapters.console.terminal.components.resolution.session_shell.pre
     ResolutionDestination,
     ResolutionGlobalStrategy,
     SessionTodoView,
-    _item_draft,
-    session_todo_view,
 )
 
 
@@ -122,7 +116,6 @@ def run_resolution_workbench_shell(
     turn_command_review: (
         Callable[[ResolutionWorkbenchAction], CommandReview | None] | None
     ) = None,
-    compact_decisions: bool = False,
 ) -> ResolutionWorkbenchAction:
     """Collect one UID-bound semantic or close action; never call a provider.
 
@@ -143,7 +136,6 @@ def run_resolution_workbench_shell(
         or not split_viewer_items
         or review_and_apply
         or global_strategies
-        or compact_decisions
         or item_handoff is not None
         or impact_controller is None
         or split_report_text is not None
@@ -159,7 +151,6 @@ def run_resolution_workbench_shell(
         or review_and_apply
         or read_only
         or global_strategies
-        or compact_decisions
     ):
         raise ValueError(
             "Report Apply requires the full writable report without a "
@@ -214,7 +205,6 @@ def run_resolution_workbench_shell(
         or current_view().capabilities != (frozenset() if read_only else frozenset({"ACCEPT"}))
     ):
         raise ValueError("An effect report cannot hide actionable review items.")
-    current_item_handoff = controller.current_item_handoff
     current_response_target = controller.current_response_target
 
     def response_visible() -> bool:
@@ -223,7 +213,6 @@ def run_resolution_workbench_shell(
     semantic_action = controller.semantic_action
     response_state = controller.response_state
     input_heading = controller.input_heading
-    local_drafts = controller.local_drafts
 
     viewer_controller = SemanticViewerController(session_navigation)
 
@@ -300,7 +289,6 @@ def run_resolution_workbench_shell(
         turn_command_review=turn_command_review,
     )
     open_final_review = review_flow.open_final_review
-    final_review_action = review_flow.final_review_action
 
     bind_resolution_keymap(
         bindings,
@@ -434,114 +422,6 @@ def run_resolution_workbench_shell(
                 action=automatic.kind,
             )
             return automatic
-
-    if compact_decisions:
-        compact_response_changes: set[str] = set()
-
-        def selected_compact_option(item_uid: str) -> str | None:
-            item = current_view().item(item_uid)
-            return _item_draft(item, local_drafts).selected_choice_uid
-
-        def stage_compact_option(item_uid: str, option_uid: str) -> None:
-            item = current_view().item(item_uid)
-            item.option(option_uid)
-            existing = _item_draft(item, local_drafts)
-            draft = ResponseDraft(option_uid, existing.text)
-            # A compact choice is process-local until Apply/Continue consumes
-            # it. Closing this surface must not manufacture a durable draft.
-            local_drafts[item_uid] = draft
-
-        def compact_response_text(item_uid: str) -> str:
-            item = current_view().item(item_uid)
-            return _item_draft(item, local_drafts).text
-
-        def stage_compact_response(item_uid: str, text: str) -> None:
-            item = current_view().item(item_uid)
-            existing = _item_draft(item, local_drafts)
-            # Response text follows the same process-local boundary as compact
-            # choices. Continue consumes it; opening or closing this surface
-            # must not manufacture a durable draft.
-            local_drafts[item_uid] = ResponseDraft(
-                existing.selected_choice_uid,
-                text,
-            )
-            compact_response_changes.add(item_uid)
-
-        def compact_continue_action(
-            focused_item_uid: str | None,
-        ) -> ResolutionWorkbenchAction | None:
-            active_view = current_view()
-            changed_responses = tuple(
-                item
-                for item in active_view.items
-                if item.uid in compact_response_changes
-            )
-            if changed_responses and global_strategies:
-                action = final_review_action(active_view, open_custom=False)
-                if action is not None:
-                    return action
-            if changed_responses:
-                item = next(
-                    (
-                        candidate
-                        for candidate in changed_responses
-                        if candidate.uid == focused_item_uid
-                    ),
-                    changed_responses[0],
-                )
-                draft = _item_draft(item, local_drafts)
-                if draft.selected_choice_uid is None and not draft.text.strip():
-                    return None
-                return semantic_action(
-                    "SUBMIT_ITEM",
-                    item_uid=item.uid,
-                    option_uid=draft.selected_choice_uid,
-                    comment=draft.text,
-                )
-            action = final_review_action(active_view, open_custom=False)
-            if action is not None:
-                return action
-            if focused_item_uid is None:
-                return None
-            draft = _item_draft(active_view.item(focused_item_uid), local_drafts)
-            if draft.selected_choice_uid is None and not draft.text.strip():
-                return None
-            return semantic_action(
-                "SUBMIT_ITEM",
-                item_uid=focused_item_uid,
-                option_uid=draft.selected_choice_uid,
-                comment=draft.text,
-            )
-
-        def compact_continue_label() -> str:
-            todo = session_todo_view(
-                current_view(),
-                local_drafts,
-                review_and_apply=review_and_apply,
-                read_only=read_only,
-                whole_set_available=bool(global_strategies),
-                read_only_handoff=read_only_handoff,
-                item_handoff=current_item_handoff(),
-            )
-            return {
-                "REVIEW AND APPLY": "Apply",
-                "RESOLVE ALL": "Continue",
-                "COMPLETE": "Close",
-            }.get(todo.kind, "Submit selected")
-
-        return run_compact_resolution_decisions(
-            current_view,
-            selected_option=selected_compact_option,
-            stage_option=stage_compact_option,
-            response_text=compact_response_text,
-            stage_response=stage_compact_response,
-            response_validator=response_validator,
-            build_continue_action=compact_continue_action,
-            continue_label=compact_continue_label,
-            destination=destination,
-            app_input=app_input,
-            app_output=app_output,
-        )
 
     def open_initial_final_review() -> None:
         if (

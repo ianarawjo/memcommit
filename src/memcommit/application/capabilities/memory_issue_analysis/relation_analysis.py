@@ -14,6 +14,9 @@ from memcommit.application.capabilities.memory_issue_analysis.provider_contract 
     find_redundancies,
 )
 from memcommit.core.context import Context
+from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
+    ExactDuplicateGroup,
+)
 
 
 def analyze_memory_redundancies(
@@ -21,6 +24,7 @@ def analyze_memory_redundancies(
     provider_factory: Callable[[], FindingsProvider],
     *,
     context_name_by_uid: Mapping[str, str] | None = None,
+    exact_groups: tuple[ExactDuplicateGroup, ...] | None = None,
 ) -> DuplicateReport:
     """Return removable exact and semantic redundancy evidence."""
 
@@ -28,6 +32,7 @@ def analyze_memory_redundancies(
         context,
         provider_factory,
         context_name_by_uid=context_name_by_uid,
+        exact_groups=exact_groups,
     )
 
 

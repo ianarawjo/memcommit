@@ -338,8 +338,11 @@ def run_inline_resolution_workbench(
                 else " Tab Controls to close · PgUp/PgDn receipt · Esc/Q close"
             )
         if review_mode["value"] is not None:
+            apply_label = (
+                "reviewed plan" if current_review().replay_requires_input else "exact command"
+            )
             return (
-                " Enter apply exact command · Esc/Backspace return"
+                f" Enter apply {apply_label} · Esc/Backspace return"
                 if get_app().layout.has_focus(actions_control)
                 else " Tab Controls to apply · PgUp/PgDn review · Esc/Backspace return"
             )

@@ -88,10 +88,9 @@ from memcommit.application.capabilities.memory_issue_analysis.workbench import (
 )
 from memcommit.application.capabilities.memory_issue_analysis.handoff import (
     QualityFindingHandoff,
-    quality_finding_handoff,
     quality_finding_handoffs,
 )
-from memcommit.application.operations.dedun.application import DEDUN_ELIGIBLE_RELATIONS
+from memcommit.application.operations.duplicates.dedun.application import DEDUN_ELIGIBLE_RELATIONS
 from memcommit.source_projection.presentation import SourceDisplayValue
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.capabilities.reviewing.read_report import (
@@ -614,7 +613,6 @@ def run_quality_find_resolution_workbench(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
-    handoff_handler: Callable[[QualityFindingHandoff], None] | None = None,
     duplicate_handoff_handler: (
         Callable[[tuple[QualityFindingHandoff, ...]], None] | None
     ) = None,
@@ -631,12 +629,6 @@ def run_quality_find_resolution_workbench(
             if handoff.classification in DEDUN_ELIGIBLE_RELATIONS
         )
 
-    conflict_handoff_available = (
-        handoff_handler is not None
-        and session.kind == "conflicts"
-        and len(session.source.contexts) == 1
-        and bool(session.report.findings)
-    )
     duplicate_handoffs = eligible_duplicate_handoffs()
     duplicate_handoff_available = duplicate_handoff_handler is not None and bool(
         duplicate_handoffs
@@ -646,9 +638,7 @@ def run_quality_find_resolution_workbench(
             session,
             source,
             operation_label=_operation_label(session.kind, operation_name),
-            handoff_available=(
-                conflict_handoff_available or duplicate_handoff_available
-            ),
+            handoff_available=duplicate_handoff_available,
         ),
         app_input=app_input,
         app_output=app_output,
@@ -663,16 +653,10 @@ def run_quality_find_resolution_workbench(
             )
         duplicate_handoff_handler(duplicate_handoffs)
         return session
-    if (
-        session.kind != "conflicts"
-        or handoff_handler is None
-        or action.item_uid is None
-    ):
-        raise QualityFindWorkbenchError(
-            "Quality finding handoff is unavailable in this adapter."
-        )
-    handoff_handler(quality_finding_handoff(session, action.item_uid))
-    return session
+    raise QualityFindWorkbenchError(
+        "Quality finding handoff is unavailable in this adapter."
+    )
+
 
 
 def run_interactive_quality_find(
@@ -681,7 +665,6 @@ def run_interactive_quality_find(
     current_name: str | None,
     kind: QualityFindKind,
     analyze: QualityFindAnalyzer,
-    handoff_handler: Callable[[QualityFindingHandoff], None] | None = None,
     duplicate_handoff_handler: (
         Callable[[tuple[QualityFindingHandoff, ...]], None] | None
     ) = None,
@@ -780,7 +763,6 @@ def run_interactive_quality_find(
     run_quality_find_resolution_workbench(
         session,
         source,
-        handoff_handler=handoff_handler,
         duplicate_handoff_handler=duplicate_handoff_handler,
         operation_name=operation,
     )

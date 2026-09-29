@@ -13,14 +13,8 @@ from memcommit.application.operations.atomize.records import AtomizeRecordError
 from memcommit.adapters.console.commands.atomize.review import (
     open_atomize_review as _run_atomize_workbench,
 )
-from memcommit.adapters.console.commands.audit.review import (
-    open_audit_review as _run_audit_review,
-)
 from memcommit.adapters.console.commands.compare.review import (
     open_compare_review as _run_compare_report,
-)
-from memcommit.adapters.console.commands.merge.semantic.review import (
-    open_meld_review as _run_meld_report,
 )
 from memcommit.adapters.console.commands.sever.review import (
     open_sever_review as _run_sever_report,
@@ -69,11 +63,8 @@ from memcommit.adapters.console.terminal.core.text import (
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     FindingsError,
 )
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-)
-from memcommit.application.operations.audit.model import QualityAuditError
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 from memcommit.application.operations.review.model import (
     ReviewError,
     atomize_review_matches_analysis,
@@ -188,14 +179,40 @@ def _load_direct_context(
     return store.load_direct(selected_name)
 
 
+def _show_audit_review_scope() -> None:
+    # TODO(audit-review): Load a saved Audit record and reuse
+    # audit.receipt.render_quality_audit_receipt. Review owns reopening;
+    # Audit owns receipt formatting. Never rerun checks or connect a provider.
+    typer.echo(
+        "REVIEW AUDIT · NOT IMPLEMENTED\n"
+        "Planned: saved Audit record → the same completion receipt as mem audit.\n"
+        "Show Source, completed checks, and findings.\n"
+        "Read-only receipt; no new Audit, decisions, or Apply."
+    )
+
+
+def _show_merge_review_scope() -> None:
+    """Describe deferred Merge receipt Review without opening a saved record."""
+    # TODO(merge-review): Validate a saved Merge checkpoint and reconstruct its
+    # completion receipt using Merge's receipt renderer. Keep this adapter here;
+    # do not rerun analysis, resume a session, or apply the recorded work again.
+    typer.echo(
+        "REVIEW MERGE · NOT IMPLEMENTED\n"
+        "Planned: saved Merge checkpoint → completion receipt.\n"
+        "Show method, Source/Target note counts, applied decisions, "
+        "and unresolved issues.\n"
+        "Read-only receipt; no analysis, session resume, or Apply."
+    )
+
+
 def cmd(
     kind: Annotated[
         Optional[str],
         typer.Argument(
             help=(
-                "Open a review report (audit, compare, merge, sever, update, "
+                "Open a review report (compare, sever, update, "
                 "atomize, dedun, distill, makemore, forget, resolve, or "
-                "ambiguities); "
+                "ambiguities); audit and merge show their planned receipt-review scope; "
                 "omit to enter the interactive Review session"
             )
         ),
@@ -259,6 +276,28 @@ def cmd(
     ] = None,
 ) -> None:
     """Inspect terminal evidence or saved reports without applying Memories."""
+    if kind is not None and kind.casefold() in {"audit", "merge"}:
+        planned_kind = kind.casefold()
+        # The placeholder must work without an initialized Store or a receipt.
+        if (
+            session_uid is not None
+            or receipt_uid is not None
+            or context_name is not None
+            or snapshot
+            or replace_review
+            or respond_to is not None
+            or response is not None
+        ):
+            raise typer.BadParameter(
+                f"{planned_kind.title()} Review is not implemented; "
+                f"run 'mem review {planned_kind}' "
+                "without options to see the planned scope."
+            )
+        if planned_kind == "audit":
+            _show_audit_review_scope()
+        else:
+            _show_merge_review_scope()
+        return
     store = MemoryStore()
     retained_review_source = False
     try:
@@ -273,9 +312,6 @@ def cmd(
             ).name
         )
         normalized_kind = kind.casefold() if kind is not None else None
-        # The public Merge name still opens the unchanged semantic session kind.
-        if normalized_kind == "merge":
-            normalized_kind = "meld"
         if session_uid is not None and receipt_uid is not None:
             raise ReviewError("Use either --session or --receipt, not both.")
         selected_session_uid = session_uid
@@ -322,23 +358,7 @@ def cmd(
                 snapshot=snapshot,
             )
             return
-        if normalized_kind == "audit":
-            if (
-                replace_review
-                or context_name is not None
-                or respond_to is not None
-                or response is not None
-            ):
-                raise ReviewError(
-                    "Saved Audit Review uses --session and --snapshot only."
-                )
-            _run_audit_review(
-                store,
-                session_uid=selected_session_uid,
-                snapshot=snapshot,
-            )
-            return
-        if normalized_kind in {"compare", "meld", "sever", "update"}:
+        if normalized_kind in {"compare", "sever", "update"}:
             if replace_review or respond_to is not None or response is not None:
                 raise ReviewError(
                     "Adaptive operation reports do not use --replace-review or "
@@ -346,7 +366,6 @@ def cmd(
                 )
             runners = {
                 "compare": _run_compare_report,
-                "meld": _run_meld_report,
                 "sever": _run_sever_report,
                 "update": _run_update_report,
             }
@@ -433,7 +452,7 @@ def cmd(
                     "Unsupported review adapter. "
                     "Implemented adapters are 'ambiguities', 'atomize', "
                     "'audit', 'compare', 'dedun', 'distill', 'makemore', "
-                    "'forget', 'merge', 'resolve', 'sever', and 'update'."
+                    "'forget', 'resolve', 'sever', and 'update'."
                 )
             if session_uid is not None:
                 if replace_review:
@@ -486,7 +505,7 @@ def cmd(
                     ):
                         report = memory_readings.analyze_memory_ambiguities(
                             ctx,
-                            connect_codex_chatgpt_provider,
+                            connect_semantic_provider,
                         )
                     session = create_ambiguity_review(ctx, report)
                     # The semantic report and its source snapshot are durable
@@ -502,7 +521,6 @@ def cmd(
         AtomizeImpactError,
         AtomizeRecordError,
         QueryProviderError,
-        QualityAuditError,
         ReviewError,
     ) as error:
         typer.secho(

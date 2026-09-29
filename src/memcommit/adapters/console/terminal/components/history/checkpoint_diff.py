@@ -5,7 +5,6 @@ from __future__ import annotations
 import difflib
 import json
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass
 from typing import Any
 
 from prompt_toolkit.formatted_text.base import StyleAndTextTuples
@@ -26,116 +25,15 @@ from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_action_style
-from memcommit.application.capabilities.reviewing.memory_diff import MemoryChange, memory_diff_lines
+from memcommit.adapters.console.terminal.components.context_diff import render_context_item_change
+from memcommit.application.capabilities.reviewing.context_diff import (
+    ContextItemChange,
+    context_item_changes,
+    context_item_text,
+)
 from memcommit.application.capabilities.history.query.checkpoint_history_slicing import (
     CheckpointHistorySlice,
 )
-
-
-@dataclass(frozen=True)
-class _CheckpointItemChange:
-    uid: str
-    before: Mapping[str, Any] | None
-    after: Mapping[str, Any] | None
-
-    @property
-    def treatment(self) -> str:
-        if self.before is None:
-            return "ADD"
-        if self.after is None:
-            return "REMOVE"
-        if self.before != self.after:
-            return "EDIT"
-        return "KEEP"
-
-
-def _snapshot_items(snapshot: object) -> tuple[dict[str, Mapping[str, Any]], list[str]]:
-    if not isinstance(snapshot, Mapping):
-        return {}, []
-    raw_items = snapshot.get("memories")
-    items = (
-        {
-            uid: item
-            for uid, item in raw_items.items()
-            if isinstance(uid, str) and isinstance(item, Mapping)
-        }
-        if isinstance(raw_items, Mapping)
-        else {}
-    )
-    raw_order = snapshot.get("order")
-    order = (
-        [uid for uid in raw_order if isinstance(uid, str) and uid in items]
-        if isinstance(raw_order, list)
-        else list(items)
-    )
-    order.extend(uid for uid in items if uid not in order)
-    return items, order
-
-
-def _checkpoint_revision_items(
-    before_snapshot: object,
-    after_snapshot: object,
-) -> tuple[tuple[_CheckpointItemChange, ...], int, bool]:
-    """Project one compact unified stream without losing the complete result.
-
-    When retained items keep their relative order, a two-cursor merge places
-    removals and additions at the transition where they occurred.  This keeps
-    every direct item in one scan path while stable UIDs continue to prove
-    KEEP or EDIT.  A reorder falls back to authoritative result order and an
-    explicit note instead of misrepresenting a move as REMOVE plus ADD.
-    """
-
-    before, before_order = _snapshot_items(before_snapshot)
-    after, after_order = _snapshot_items(after_snapshot)
-    common = set(before) & set(after)
-    reordered = [uid for uid in before_order if uid in common] != [
-        uid for uid in after_order if uid in common
-    ]
-    if reordered:
-        result_items = tuple(
-            _CheckpointItemChange(uid, before.get(uid), after[uid])
-            for uid in after_order
-        )
-        removed_items = tuple(
-            _CheckpointItemChange(uid, before[uid], None)
-            for uid in before_order
-            if uid not in after
-        )
-        return (*result_items, *removed_items), len(after_order), True
-
-    items: list[_CheckpointItemChange] = []
-    before_index = 0
-    after_index = 0
-    while before_index < len(before_order) or after_index < len(after_order):
-        before_uid = (
-            before_order[before_index]
-            if before_index < len(before_order)
-            else None
-        )
-        after_uid = (
-            after_order[after_index]
-            if after_index < len(after_order)
-            else None
-        )
-        if before_uid is not None and before_uid == after_uid:
-            items.append(
-                _CheckpointItemChange(
-                    before_uid,
-                    before[before_uid],
-                    after[before_uid],
-                )
-            )
-            before_index += 1
-            after_index += 1
-        elif before_uid is not None and before_uid not in after:
-            items.append(_CheckpointItemChange(before_uid, before[before_uid], None))
-            before_index += 1
-        elif after_uid is not None and after_uid not in before:
-            items.append(_CheckpointItemChange(after_uid, None, after[after_uid]))
-            after_index += 1
-        else:  # pragma: no cover - reordered common items take the branch above.
-            raise AssertionError("Ordered checkpoint merge could not advance.")
-    return tuple(items), len(after_order), False
 
 
 def _before_snapshots(
@@ -159,79 +57,8 @@ def _before_snapshots(
     return result
 
 
-def _item_text(item: Mapping[str, Any] | None) -> str | None:
-    if item is None:
-        return None
-    if item.get("type") == "memory":
-        content = item.get("content")
-        return content if isinstance(content, str) else ""
-    return json.dumps(item, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-
-
 def _direct_item_count(count: int) -> str:
     return f"{count} DIRECT ITEM{'S' if count != 1 else ''}"
-
-
-def _render_revision_item(
-    change: _CheckpointItemChange,
-    *,
-    location: str,
-    verbose_uid: bool = False,
-) -> StyleAndTextTuples:
-    """Render a dense diff row while keeping its disposition text-visible."""
-
-    treatment = change.treatment
-    fragments: StyleAndTextTuples = []
-    memory_change = MemoryChange(
-        marker={"KEEP": "=", "ADD": "+", "REMOVE": "−", "EDIT": "~"}[
-            treatment
-        ],
-        treatment=treatment,
-        location=location,
-        memory_uid=change.uid,
-        before=_item_text(change.before),
-        after=_item_text(change.after),
-    )
-    for line in memory_diff_lines(memory_change):
-        style_key = {
-            "-": "remove",
-            "+": "add",
-            "=": "equal",
-            " ": "equal",
-        }[line.marker]
-        visible_marker = line.marker if line.marker in {"-", "+"} else " "
-        marker_style = {
-            "-": "class:memory-diff.before-marker",
-            "+": "class:memory-diff.after-marker",
-        }.get(line.marker, "class:memory-diff.equal")
-        label = f"[{treatment}]"
-        fragments.append((marker_style, f" {visible_marker} "))
-        fragments.append(("class:report-neutral", "["))
-        fragments.append(
-            (
-                semantic_action_style(treatment, fallback="class:report-neutral"),
-                treatment,
-            )
-        )
-        fragments.append(
-            (
-                "class:report-neutral",
-                "]" + " " * (9 - len(label))
-                + f"[{display_escape_text(change.uid if verbose_uid else change.uid[:8])}] ",
-            )
-        )
-        fragments.extend(
-            (
-                (
-                    f"class:memory-diff.{style_key}"
-                    + (".changed" if span.changed else "")
-                ),
-                display_escape_text(span.text),
-            )
-            for span in line.spans
-        )
-        fragments.append(("", "\n"))
-    return fragments
 
 
 def _revision_projection(
@@ -239,7 +66,7 @@ def _revision_projection(
     entry: HistoryPickerItem,
 ) -> tuple[
     Mapping[str, Any],
-    tuple[_CheckpointItemChange, ...],
+    tuple[ContextItemChange, ...],
     int,
     bool,
 ]:
@@ -261,7 +88,7 @@ def _revision_projection(
     else:
         before_snapshot = _before_snapshots(checkpoints)[entry.uid]
         after_snapshot = checkpoint.get("snapshot")
-    changes, result_count, reordered = _checkpoint_revision_items(
+    changes, result_count, reordered = context_item_changes(
         before_snapshot,
         after_snapshot,
     )
@@ -345,7 +172,7 @@ def checkpoint_revision_document_fragments(
     if visible_changes:
         for change in visible_changes:
             fragments.extend(
-                _render_revision_item(
+                render_context_item_change(
                     change,
                     location=entry.uid,
                     verbose_uid=verbose,
@@ -452,7 +279,7 @@ def checkpoint_revision_detail_renderer(
             assert before_by_uid is not None
             before_snapshot = before_by_uid[entry.uid]
             after_snapshot = checkpoint.get("snapshot")
-        revision_items, result_count, reordered = _checkpoint_revision_items(
+        revision_items, result_count, reordered = context_item_changes(
             before_snapshot,
             after_snapshot,
         )
@@ -500,7 +327,7 @@ def checkpoint_revision_detail_renderer(
                 sum(text.count("\n") for _style, text in fragments)
             )
             fragments.extend(
-                _render_revision_item(
+                render_context_item_change(
                     change,
                     location=entry.uid,
                     verbose_uid=verbose_uids,
@@ -542,7 +369,7 @@ def _encoded_lines(content: str) -> list[str]:
 
 
 def _raw_revision_lines(
-    changes: Sequence[_CheckpointItemChange],
+    changes: Sequence[ContextItemChange],
     *,
     context_name: str,
 ) -> list[str]:
@@ -550,8 +377,8 @@ def _raw_revision_lines(
     for change in changes:
         if change.treatment == "KEEP":
             continue
-        before = _item_text(change.before)
-        after = _item_text(change.after)
+        before = context_item_text(change.before)
+        after = context_item_text(change.after)
         label = f"{context_name}#{change.uid}"
         lines.append(f"diff --mem {label}")
         encoded = difflib.unified_diff(

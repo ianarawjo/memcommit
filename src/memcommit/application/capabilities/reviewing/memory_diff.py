@@ -10,6 +10,9 @@ from __future__ import annotations
 import difflib
 import re
 from dataclasses import dataclass
+from typing import Literal
+
+from diff_match_patch import diff_match_patch
 
 from memcommit.application.operations.update.model import AddOperation, EditOperation, RemoveOperation, UpdateOperation
 
@@ -215,4 +218,51 @@ def update_operation_change(operation: UpdateOperation) -> MemoryChange:
         before=before,
         after=after,
         reason=operation.reason,
+    )
+
+
+@dataclass(frozen=True)
+class WordDiffSpan:
+    """One whole-token span in a display-cleaned inline Memory edit."""
+
+    kind: Literal["equal", "remove", "add"]
+    text: str
+
+
+class _WordDiffEngine(diff_match_patch):
+    def diff_cleanupSemanticLossless(self, diffs):
+        # Encoded characters are arbitrary token IDs, not visible punctuation or
+        # whitespace. Their Unicode categories must not influence edit boundaries.
+        # Every boundary already lies between whole original tokens.
+        pass
+
+
+def word_diff_spans(
+    before: str,
+    after: str,
+) -> tuple[WordDiffSpan, ...]:
+    """Group edits with semantic cleanup measured in whole words/whitespace."""
+
+    tokens: list[str] = []
+    symbols: dict[str, str] = {}
+
+    def encode(text: str) -> str:
+        encoded = []
+        for token in _word_tokens(text):
+            if token not in symbols:
+                symbols[token] = chr(len(tokens))
+                tokens.append(token)
+            encoded.append(symbols[token])
+        return "".join(encoded)
+
+    before_encoded, after_encoded = encode(before), encode(after)
+    engine = _WordDiffEngine()
+    # A display must not change according to machine speed or a timed fallback.
+    engine.Diff_Timeout = 0
+    diffs = engine.diff_main(before_encoded, after_encoded, checklines=False)
+    engine.diff_cleanupSemantic(diffs)
+    kinds = {engine.DIFF_EQUAL: "equal", engine.DIFF_DELETE: "remove", engine.DIFF_INSERT: "add"}
+    return tuple(
+        WordDiffSpan(kinds[kind], "".join(tokens[ord(symbol)] for symbol in value))
+        for kind, value in diffs
     )

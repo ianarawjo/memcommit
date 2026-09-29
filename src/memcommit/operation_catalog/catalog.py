@@ -72,9 +72,10 @@ _OPERATIONS = (
     ),
     _operation(
         "audit",
-        "Run Duplicate, Ambiguity, Conflict, and whole-Context Fit checks plus "
-        "optional Rule Conformance, save the result, and print its Review receipt.",
-        "Context + Rules? -> saved Audit report",
+        "Run the standard or selected Duplicate, Ambiguity, and Conflict "
+        "checks, save the result, "
+        "and print its completion receipt.",
+        "Context -> saved Audit report",
         ExecutionKind.SEMANTIC,
         "No Context content changes",
         "One exact direct Context",
@@ -235,12 +236,12 @@ _OPERATIONS = (
         "One direct local Memory or one readable Child Context, and one exact local Target",
     ),
     _operation(
-        "eval",
-        "Reserve the Eval operation name for a future evaluation workflow.",
-        "Reserved command name -> no executable evaluation operation",
+        "dev-eval",
+        "Run a registered scenario and verify its results.",
+        "Scenario-defined steps -> scenario-owned checks -> PASS/FAIL",
         ExecutionKind.MIXED,
-        "Prints reservation guidance; does not call a provider or change stored data",
-        maturity="PARTIAL",
+        "Each scenario defines its Context use and mutations in the active Profile; listing is read-only",
+        "One registered scenario; execution and judgment methods belong to that scenario",
     ),
     _operation(
         "find",
@@ -275,9 +276,9 @@ _OPERATIONS = (
     ),
     _operation(
         "resolve",
-        "Collect explicit conflict decisions, let Update plan once over the complete "
-        "Context, and reject an unforced conflict in the detached post-image.",
-        "Complete Context frame -> CONFIRM / INTENT / FORCE decisions -> one UpdatePlan -> complete post-image check",
+        "Find semantic conflicts, collect resolution decisions, and recheck the "
+        "result for conflicts before applying it.",
+        "Direct Context -> conflict check -> decisions and proposed changes -> conflict recheck -> Apply",
         ExecutionKind.SEMANTIC,
         "Decisions are process-local; an accepted UpdatePlan applies as one Resolve checkpoint",
         "One complete bounded direct Context frame; explicit Memory UID prefixes limit actionable conflict members, not semantic reading or Update scope",
@@ -428,13 +429,12 @@ _OPERATIONS = (
     ),
     _operation(
         "merge",
-        "Merge semantically by default; --literal merges stored items without an LLM. "
-        "Use an existing Baseline or derive a separate Result from two peers.",
-        "INCOMING -> BASELINE; PEER A + PEER B -> RESULT; --literal: SOURCE -> TARGET",
+        "Combine two exact Contexts into the existing Target. "
+        "Semantic by default; --literal merges stored items without an LLM.",
+        "SOURCE Context -> TARGET Context; METHOD: semantic or literal",
         ExecutionKind.MIXED,
-        "Symmetric mode requires a distinct empty Result; directional mode "
-        "changes only the existing Target after required execution decisions",
-        "Each side exact or readable descendants",
+        "Source is preserved; Setup continues through review before Apply to Target",
+        "Two distinct existing Contexts, direct contents only",
     ),
     _operation(
         "move",
@@ -662,7 +662,7 @@ if set(OPERATION_FAMILY_BY_OPERATION) != set(OPERATION_BY_NAME):  # pragma: no c
     missing = sorted(set(OPERATION_BY_NAME) - set(OPERATION_FAMILY_BY_OPERATION))
     stale = sorted(set(OPERATION_FAMILY_BY_OPERATION) - set(OPERATION_BY_NAME))
     raise RuntimeError(
-        "Operation family coverage mismatch: " f"missing={missing!r}, stale={stale!r}."
+        f"Operation family coverage mismatch: missing={missing!r}, stale={stale!r}."
     )
 
 if set(BEST_FOR_BY_OPERATION) != set(OPERATION_BY_NAME):  # pragma: no cover

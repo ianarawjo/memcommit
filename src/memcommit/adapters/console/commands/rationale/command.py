@@ -89,10 +89,8 @@ from memcommit.application.operations.trace.reference_lineage import (
 )
 from memcommit.core.context_targeting.model import ContextTarget, DirectMemoryTarget
 from memcommit.persistence.store import MemoryStore
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_semantic_provider,
-)
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 
 
 def _uid(value: str, verbose: bool) -> str:

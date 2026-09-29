@@ -22,13 +22,13 @@ from memcommit.application.operations.atomize.domain import (
     impact_atomize,
 )
 from memcommit.core.context import Context, Memory
-from memcommit.application.operations.dedun.application import (
+from memcommit.application.operations.duplicates.dedun.application import (
     DedunRequest,
     DedunSelection,
     dedun_projection_record,
     project_dedun,
 )
-from memcommit.application.operations.dedun.analysis import freeze_dedun_analysis
+from memcommit.application.operations.duplicates.dedun.analysis import freeze_dedun_analysis
 from memcommit.application.capabilities.memory_issue_analysis.model import (
     DuplicateFinding,
     DuplicateReport,

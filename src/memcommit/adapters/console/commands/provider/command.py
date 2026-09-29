@@ -36,8 +36,8 @@ from memcommit.providers.types import (
     OPENROUTER_PROVIDER,
     ProviderIdentity,
 )
-from memcommit.providers.subscription import QueryProviderError
-from memcommit.providers.semantic import connect_operation_provider
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_operation_provider
 
 
 app = typer.Typer(

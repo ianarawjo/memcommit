@@ -20,7 +20,7 @@ from memcommit.application.operations.ground.contracts import (
     validate_ground_contract_name,
 )
 from memcommit.core.context_targeting.naming import validate_portable_context_name
-from memcommit.providers.subscription import QueryProviderError
+from memcommit.providers.errors import QueryProviderError
 
 
 GROUND_DIALOGUE_USER_TEXT_LIMIT = 20_000

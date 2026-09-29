@@ -28,10 +28,6 @@ from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.capabilities.reviewing.memory_diff import (
     update_operation_change,
 )
-from memcommit.application.operations.merge.semantic.model import MeldSession
-from memcommit.application.operations.merge.semantic.candidate_projection import (
-    MeldCandidateWorkbenchAdapter,
-)
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionWorkbenchView,
 )
@@ -96,21 +92,6 @@ def update_impact_presentation(
     )
 
 
-def meld_impact_presentation(session: MeldSession) -> ImpactSessionPresentation:
-    """Show the frozen candidate without treating it as an approved Target change."""
-    view = MeldCandidateWorkbenchAdapter(session).view()
-    return ImpactSessionPresentation(
-        view=view,
-        controller=ImpactController.from_resolution(
-            view,
-            title="IMPACT · MERGE",
-            summary="This is the saved candidate; eligible Target changes require Resolve, Update, Audit, and Source coverage verification.",
-        ),
-        report_text="",
-        handoff_available=session.state == "AWAITING_REPLY",
-    )
-
-
 def sever_impact_presentation(session: SeverSession) -> ImpactSessionPresentation:
     """Project one saved Sever result with its exact save mode."""
 
@@ -153,8 +134,9 @@ def _apply_handoff(presentation: ImpactSessionPresentation) -> SessionTodoView:
         "APPLY?",
         f"Continue to {operation} Apply",
         (
-            "" if presentation.effect_report is not None else
-            f"Enter to open the owning {operation} workflow; this choice does "
+            ""
+            if presentation.effect_report is not None
+            else f"Enter to open the owning {operation} workflow; this choice does "
             "not apply anything yet."
         ),
     )
@@ -169,8 +151,12 @@ def render_impact_session_snapshot(
         impact = _current_impact(presentation.controller, presentation.view)
         assert impact is not None
         fragments = effect_report_fragments(
-            presentation.view, impact, presentation.effect_report,
-            focused_section=-1, expanded_uid=None, content_width=176,
+            presentation.view,
+            impact,
+            presentation.effect_report,
+            focused_section=-1,
+            expanded_uid=None,
+            content_width=176,
         )
     elif presentation.report_text:
         fragments = resolution_seeded_report_fragments(
@@ -191,9 +177,8 @@ def render_impact_session_snapshot(
     if not presentation.handoff_available:
         return rendered
     handoff = _apply_handoff(presentation)
-    return (
-        f"{rendered}\n\nTO DO\n[ {handoff.kind} ]  {handoff.label}"
-        + (f" · {handoff.detail}" if handoff.detail else "")
+    return f"{rendered}\n\nTO DO\n[ {handoff.kind} ]  {handoff.label}" + (
+        f" · {handoff.detail}" if handoff.detail else ""
     )
 
 

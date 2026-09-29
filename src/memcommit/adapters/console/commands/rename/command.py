@@ -89,7 +89,7 @@ def cmd(
             )
             typer.echo(
                 "Ordinary Context references, restorable checkpoint pointers, "
-                "the current Context pointer, and unapplied Meld bindings will "
+                "the current Context pointer will "
                 "follow the stable UIDs; query-only Context references are "
                 "unchanged."
             )

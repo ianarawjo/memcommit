@@ -95,11 +95,9 @@ from memcommit.persistence.store import MemoryStore
 from memcommit.providers.profile_routes import (
     ProfileProviderRoutesError,
 )
-from memcommit.providers.semantic import connect_operation_provider
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-)
+from memcommit.providers.connection import connect_operation_provider
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 
 # A full Task 1 subtree Compare is one intentionally indivisible relation
 # frame. The subscription-backed xhigh run can remain healthy beyond the
@@ -191,7 +189,7 @@ def _render_selected_rationale(
     )
     projection = generate_memory_rationale(
         report.trace,
-        provider_factory=connect_codex_chatgpt_provider,
+        provider_factory=connect_semantic_provider,
         history_available=report.recorded_evidence_available,
     )
     render_rationale(report, projection)
@@ -617,7 +615,7 @@ def cmd(
 
         def analyze_input(comparison_input: ComparisonInput) -> ComparisonAnalysis:
             def compare_frames(progress):
-                provider = _connect_compare_provider(connect_codex_chatgpt_provider)
+                provider = _connect_compare_provider(connect_semantic_provider)
                 progress.update("analyzing relations", step=2)
                 return analyze_comparison(comparison_input, provider)
 

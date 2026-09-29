@@ -58,13 +58,13 @@ def open_saved_sever_impact(
     def open_owning_workflow() -> None:
         # Sever retains its ordinary reviewed materialization path; Impact does
         # not bypass its destination validation, CAS save, or Source boundary.
-        from memcommit.adapters.console.commands.sever.command import _run_workbench
+        from memcommit.adapters.console.commands.sever.command import _run_preview
 
         session = active_session["value"]
         if session is None:
             raise ValueError("The saved Sever session is unavailable.")
         owning_opened["value"] = True
-        active_session["value"] = _run_workbench(store, session)
+        active_session["value"] = _run_preview(store, session)
 
     run_saved_impact_handoff_loop(
         load_presentation=load_presentation,

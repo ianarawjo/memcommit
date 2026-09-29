@@ -154,7 +154,7 @@ class _EndpointSetupForm:
     def render_mode(self) -> StyleAndTextTuples:
         return render_horizontal_choice(
             self.mode_state,
-            title="MODE",
+            title=self.spec.mode_label,
             focused=get_app().layout.has_focus(self.mode_control),
             inline_boxed=True,
         )

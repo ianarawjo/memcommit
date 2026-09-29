@@ -6,7 +6,7 @@ from memcommit.adapters.console.terminal.components.endpoint_setup.role import (
     EndpointSetupRole,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.screen import (
-    run_endpoint_setup,
+    run_endpoint_setup_screen,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.spec import (
     EndpointSetupMode,
@@ -27,5 +27,5 @@ __all__ = [
     "EndpointSetupRole",
     "EndpointSetupSpec",
     "EndpointSetupValue",
-    "run_endpoint_setup",
+    "run_endpoint_setup_screen",
 ]

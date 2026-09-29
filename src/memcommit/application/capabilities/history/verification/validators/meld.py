@@ -7,12 +7,10 @@ from ..frame import _Frame
 def _meld_change_evidence(
     *, args: dict[str, Any], before: _Frame, after: _Frame
 ) -> tuple[dict[str, dict[str, Any]], str | None]:
-    from memcommit.application.operations.merge.semantic.model import MELD_CANDIDATE_SCHEMA_VERSION
-
     record = args.get("meld")
     if (
         not isinstance(record, dict)
-        or record.get("schema_version") != MELD_CANDIDATE_SCHEMA_VERSION
+        or record.get("schema_version") != 1
         or record.get("contract") != "AUDIT_RESOLVE_UPDATE"
     ):
         return {}, "has an unsupported Meld receipt contract"
@@ -70,7 +68,7 @@ def _meld_change_evidence(
         else:
             return {}, "has a Meld effect outside its Target snapshot"
         by_uid[uid] = {
-            "session_uid": record.get("session_uid"),
+            "operation_uid": record.get("operation_uid"),
             "change_set_digest": record.get("change_set_digest"),
             "mode": record.get("mode"),
             "operation": kind,
@@ -80,3 +78,28 @@ def _meld_change_evidence(
     if expected != {uid: memory.content for uid, memory in after.memories.items()}:
         return {}, "has incomplete Meld Target effects"
     return by_uid, None
+
+
+def meld_creation_preimage(entry: dict, after: _Frame) -> _Frame | None:
+    """Prove an empty predecessor only for an exact newly created Result."""
+    from ..frame import _empty_frame
+
+    args = entry.get("args")
+    if (
+        entry.get("command") != "meld"
+        or entry.get("auto") is not True
+        or not isinstance(args, dict)
+    ):
+        return None
+    record = args.get("meld")
+    if not isinstance(record, dict) or record.get("target_created") is not True:
+        return None
+    if args.get("context_creation") != {
+        "version": 1,
+        "context_uid": after.context_uid,
+        "context_name": after.context_name,
+    }:
+        return None
+    before = _empty_frame(after.context_uid, after.context_name)
+    _, error = _meld_change_evidence(args=args, before=before, after=after)
+    return before if error is None else None

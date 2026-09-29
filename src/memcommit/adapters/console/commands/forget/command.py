@@ -41,16 +41,9 @@ from memcommit.adapters.console.commands.forget.workbench import (
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.providers.types import SemanticProvider
-from memcommit.providers.subscription import QueryProviderError
+from memcommit.providers.errors import QueryProviderError
 from memcommit.application.capabilities.semantic.changes import ProposedChange
 from memcommit.persistence.store import MemoryStore
-
-
-def connect_codex_chatgpt_provider() -> SemanticProvider:
-    """Compatibility name for Forget's infrastructure-owned provider factory."""
-
-    return connect_forget_provider()
 
 
 def _interactive_terminal() -> bool:
@@ -311,7 +304,7 @@ def cmd(
         raise typer.Exit(1)
 
     try:
-        provider = connect_codex_chatgpt_provider()
+        provider = connect_forget_provider()
         reviewed = _run_interactive_forget(
             source.context,
             info,

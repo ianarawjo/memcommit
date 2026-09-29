@@ -12,10 +12,6 @@ from memcommit.adapters.console.commands.forget.impact import (
     forget_cmd,
     forget_impact_presentation,
 )
-from memcommit.adapters.console.commands.resolve.impact import (
-    resolve_cmd,
-    resolve_impact_presentation,
-)
 
 
 __all__ = [
@@ -25,6 +21,4 @@ __all__ = [
     "makemore_impact_presentation",
     "forget_cmd",
     "forget_impact_presentation",
-    "resolve_cmd",
-    "resolve_impact_presentation",
 ]

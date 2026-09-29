@@ -168,8 +168,15 @@ def semantic_quality_role(value: str) -> SemanticColorRole | None:
         raise TypeError("Quality finding categories must be text.")
     return {
         "duplicates": SemanticColorRole.QUALITY_DUPLICATE,
+        "duplicate": SemanticColorRole.QUALITY_DUPLICATE,
+        "redundancy": SemanticColorRole.QUALITY_DUPLICATE,
+        "dup": SemanticColorRole.QUALITY_DUPLICATE,
+        "dun": SemanticColorRole.QUALITY_DUPLICATE,
         "ambiguities": SemanticColorRole.QUALITY_AMBIGUITY,
+        "ambiguity": SemanticColorRole.QUALITY_AMBIGUITY,
         "conflicts": SemanticColorRole.QUALITY_CONFLICT,
+        "conflict": SemanticColorRole.QUALITY_CONFLICT,
+        "merge_conflicts": SemanticColorRole.QUALITY_CONFLICT,
     }.get(value.strip().casefold())
 
 

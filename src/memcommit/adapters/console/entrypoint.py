@@ -31,7 +31,7 @@ from memcommit.adapters.console.commands import (
 )
 from memcommit.adapters.console.commands import (
     config,
-    eval,
+    dev_eval,
     help,
     init_study,
     provider,
@@ -63,13 +63,13 @@ from memcommit.adapters.console.commands import (
     audit,
     find_ambiguities,
     find_conflicts,
+    resolve,
+)
+from memcommit.adapters.console.commands.duplicates import (
     find_duplicates,
     find_redundancies,
-)
-from memcommit.adapters.console.commands import (
     dedun,
     dedup,
-    resolve,
 )
 from memcommit.adapters.console.commands import (
     check_conformance,
@@ -97,7 +97,6 @@ from memcommit.adapters.console.commands import (
 from memcommit.adapters.console.commands import update
 from memcommit.adapters.console.commands import translate
 from memcommit.adapters.console.coordination.root_group import MemCommandGroup
-from memcommit.adapters.console.diagnostics import dev
 from memcommit.operation_catalog import operation_summary
 from memcommit.operation_catalog.details.init_study import (
     INIT_STUDY_SHELL_REQUIREMENT,
@@ -228,10 +227,9 @@ app.command(
     "merge",
     help=operation_summary("merge"),
     epilog=(
-        "Semantic by default: 'mem merge INCOMING [BASELINE]' or "
-        "'mem merge PEER_A PEER_B RESULT'. With --literal, use "
-        "'mem merge SOURCE [TARGET] --literal'; --to/--into name TARGET. "
-        "Omitted directional targets use the command-start current Context."
+        "'mem merge SOURCE [TARGET]' merges two exact Contexts semantically; "
+        "--literal merges stored items. Omit SOURCE to choose the method and "
+        "both Contexts in Setup. An omitted Target uses the command-start current Context."
     ),
 )(merge.cmd)
 app.command(
@@ -436,11 +434,7 @@ app.add_typer(
     name="impact",
     help=operation_summary("impact"),
 )
-app.add_typer(
-    eval.app,
-    name="eval",
-    help=operation_summary("eval"),
-)
+app.command("dev-eval", help=operation_summary("dev-eval"))(dev_eval.cmd)
 app.add_typer(config.app, name="config", help=operation_summary("config"))
 app.add_typer(
     provider.app,
@@ -451,12 +445,6 @@ app.add_typer(
     profile.app,
     name="profile",
     help=operation_summary("profile"),
-)
-app.add_typer(
-    dev.app,
-    name="dev",
-    help="Developer diagnostics and fixture utilities.",
-    hidden=True,
 )
 
 

@@ -1,4 +1,4 @@
-"""Terminal-independent orchestration for one complete quality Audit."""
+"""Terminal-independent orchestration for the requested quality Audit checks."""
 
 from __future__ import annotations
 
@@ -17,31 +17,22 @@ from memcommit.application.capabilities.memory_issue_analysis.relation_analysis 
     analyze_memory_redundancies,
 )
 from memcommit.application.operations.audit.model import (
+    QUALITY_AUDIT_OPERATIONS,
     QUALITY_AUDIT_RULESETS,
+    AuditCheckKind,
     QualityAuditCheck,
     QualityAuditError,
     QualityAuditKind,
     QualityAuditProvenance,
-    QualityAuditFit,
     QualityAuditReport,
     QualityAuditSession,
     QualityAuditSource,
 )
 from memcommit.application.operations.audit.repository import AuditRecordRepository
-from memcommit.application.operations.check_conformance.model import (
-    ConformanceReport,
-    check_context_conformance,
+from memcommit.application.operations.duplicates.find_duplicates.application import (
+    analyze_exact_duplicates,
 )
-from memcommit.application.operations.check_conformance.runtime import (
-    FrozenContextConformance,
-    freeze_context_conformance,
-)
-from memcommit.application.operations.fit.judgment import (
-    FIT_JUDGMENT_OPERATION,
-    FitProposition,
-    judge_fit,
-)
-from memcommit.core.context import Context, Memory
+from memcommit.core.context import Context
 from memcommit.providers.types import CompletionRun, ProviderIdentity
 
 
@@ -94,24 +85,21 @@ def create_quality_audit(
     ctx: Context,
     checks: tuple[QualityAuditCheck, ...],
     *,
-    fit: QualityAuditFit | None = None,
-    conformance: ConformanceReport | None = None,
+    requested_checks: tuple[AuditCheckKind, ...],
     uid: str | None = None,
     created_at: str | None = None,
 ) -> QualityAuditSession:
     """Create and fully validate one completed Audit snapshot."""
 
     source = QualityAuditSource.from_context(ctx)
-    session = QualityAuditSession(
+    return QualityAuditSession(
         uid=uid or str(uuid.uuid4()),
         created_at=created_at
         or datetime.now(timezone.utc).isoformat(timespec="seconds"),
         source=source,
         checks=checks,
-        fit=fit,
-        conformance=conformance,
+        requested_checks=requested_checks,
     )
-    return QualityAuditSession.from_dict(session.to_dict())
 
 
 def record_quality_audit(
@@ -120,52 +108,52 @@ def record_quality_audit(
 ) -> None:
     """Publish one fully validated completed Audit through its persistence port."""
 
-    repository.create(QualityAuditSession.from_dict(session.to_dict()))
+    repository.create(session)
 
 
-def _conformance_matches(
-    session: QualityAuditSession,
-    frozen_rules: FrozenContextConformance | None,
-) -> bool:
-    """Match an explicitly requested Rules frame without weakening Audit reuse."""
-
-    if frozen_rules is None:
-        # With no newly supplied Rules operand, the newest exact-source Audit is
-        # reusable as recorded, including its optional Conformance check.
-        return True
-    conformance = session.conformance
-    if conformance is None:
-        return False
-    return (
-        conformance.rules_label == frozen_rules.rules_name
-        and tuple((rule.uid, rule.content) for rule in conformance.rules)
-        == tuple((rule.uid, rule.content) for rule in frozen_rules.rules)
+def standard_quality_audit_checks() -> frozenset[AuditCheckKind]:
+    """Build the standard issue-finding selection for Audit callers."""
+    return frozenset(
+        {
+            AuditCheckKind.DUN,
+            AuditCheckKind.AMBIGUITIES,
+            AuditCheckKind.CONFLICTS,
+        }
     )
+
+
+def _select_checks(
+    checks: frozenset[AuditCheckKind],
+) -> tuple[AuditCheckKind, ...]:
+    """Validate the entire request before connecting to any provider."""
+
+    if not isinstance(checks, frozenset) or any(
+        not isinstance(kind, AuditCheckKind) for kind in checks
+    ):
+        raise QualityAuditError(
+            "Audit checks must be a frozenset of AuditCheckKind values."
+        )
+    if not checks:
+        raise QualityAuditError("Audit must request at least one check.")
+    return tuple(kind for kind in AuditCheckKind if kind in checks)
 
 
 def find_current_quality_audit(
     repository: AuditRecordRepository,
     ctx: Context,
     *,
-    conformance_rules: Context | None = None,
+    checks: frozenset[AuditCheckKind],
 ) -> QualityAuditSession | None:
     """Return the newest Audit over the exact current direct-Memory frame."""
 
     source = QualityAuditSource.from_context(ctx)
-    frozen_rules = (
-        None
-        if conformance_rules is None
-        else freeze_context_conformance(source.context(), conformance_rules)
-    )
+    selected = _select_checks(checks)
     matches = tuple(
         session
         for session in repository.list()
-        if session.source.context_uid == source.context_uid
-        and session.source.context_digest == source.context_digest
-        # Schema-v1 records remain reviewable, but a multi-Memory Audit without
-        # its whole-set Fit section is not reusable for current Resolve/Meld.
-        and (len(source.memories) < 2 or session.fit is not None)
-        and _conformance_matches(session, frozen_rules)
+        if session.source == source
+        # Reusing a superset would send unrequested findings into Resolve.
+        and session.requested_checks == selected
     )
     if not matches:
         return None
@@ -177,74 +165,40 @@ def get_or_run_quality_audit(
     provider_factory: Callable[[], FindingsProvider],
     repository: AuditRecordRepository,
     *,
-    conformance_rules: Context | None = None,
+    checks: frozenset[AuditCheckKind],
     on_check: Callable[[QualityAuditKind, int, int], None] | None = None,
-    on_fit: Callable[[], None] | None = None,
-    on_conformance: Callable[[], None] | None = None,
 ) -> QualityAuditSession:
     """Reuse one exact completed Audit or atomically publish a fresh result."""
 
     current = find_current_quality_audit(
         repository,
         ctx,
-        conformance_rules=conformance_rules,
+        checks=checks,
     )
     if current is not None:
         return current
     session = run_quality_audit(
         ctx,
         provider_factory,
-        conformance_rules=conformance_rules,
+        checks=checks,
         on_check=on_check,
-        on_fit=on_fit,
-        on_conformance=on_conformance,
     )
     record_quality_audit(repository, session)
     return session
-
-
-def audit_conformance_rules_context(
-    session: QualityAuditSession,
-) -> Context | None:
-    """Reconstruct the exact frozen Rules frame for a post-image Audit."""
-
-    conformance = session.conformance
-    if conformance is None:
-        return None
-    rules = Context(
-        uid=str(
-            uuid.uuid5(
-                uuid.NAMESPACE_URL,
-                f"memcommit:audit-rules:{conformance.digest}",
-            )
-        ),
-        name=conformance.rules_label,
-    )
-    for rule in conformance.rules:
-        rules.add(Memory(rule.uid, rule.content))
-    return rules
 
 
 def run_quality_audit(
     ctx: Context,
     provider_factory: Callable[[], FindingsProvider],
     *,
-    conformance_rules: Context | None = None,
+    checks: frozenset[AuditCheckKind],
     on_check: Callable[[QualityAuditKind, int, int], None] | None = None,
-    on_fit: Callable[[], None] | None = None,
-    on_conformance: Callable[[], None] | None = None,
 ) -> QualityAuditSession:
-    """Run every configured Audit check over one frozen direct Context frame."""
+    """Run exactly the explicitly selected checks over one frozen Source."""
 
     source = QualityAuditSource.from_context(ctx)
+    selected = _select_checks(checks)
     frozen = source.context()
-    # Validate the optional Rules frame before any provider connection so an
-    # invalid Rules Context cannot leave an expensive partial Audit in flight.
-    frozen_conformance = (
-        None
-        if conformance_rules is None
-        else freeze_context_conformance(frozen, conformance_rules)
-    )
     operations: tuple[
         tuple[
             QualityAuditKind,
@@ -252,85 +206,65 @@ def run_quality_audit(
         ],
         ...,
     ] = (
-        ("duplicates", analyze_memory_redundancies),
+        ("dup", lambda context, _provider: analyze_exact_duplicates(context)),
+        ("dun", analyze_memory_redundancies),
         ("ambiguities", analyze_memory_ambiguities),
         ("conflicts", analyze_memory_conflicts),
     )
-    checks: list[QualityAuditCheck] = []
+    operations = tuple(
+        (kind, finder)
+        for kind, finder in operations
+        if AuditCheckKind(kind) in selected
+    )
+    results: list[QualityAuditCheck] = []
+    exact_groups = None
     for index, (kind, finder) in enumerate(operations, start=1):
         if on_check is not None:
             on_check(kind, index, len(operations))
         capture = _CapturingProviderFactory(provider_factory)
-        report = finder(frozen, capture)
-        checks.append(
+        if kind == "dun":
+            report = analyze_memory_redundancies(
+                frozen, capture, exact_groups=exact_groups
+            )
+        else:
+            report = finder(frozen, capture)
+        if kind == "dup":
+            exact_groups = report.groups
+        results.append(
             QualityAuditCheck(
                 kind=kind,
                 ruleset_version=QUALITY_AUDIT_RULESETS[kind],
                 report=report,
-                provenance=capture.provenance(f"find_{kind}"),
+                provenance=capture.provenance(QUALITY_AUDIT_OPERATIONS[kind]),
             )
         )
 
-    fit = None
-    frozen_memories = tuple(
-        item for item in frozen.iter_items() if isinstance(item, Memory)
-    )
-    if len(frozen_memories) >= 2:
-        if on_fit is not None:
-            on_fit()
-        capture = _CapturingProviderFactory(provider_factory)
-        aliases = tuple(
-            f"m{index:06d}" for index in range(1, len(frozen_memories) + 1)
-        )
-        fit_analysis = judge_fit(
-            tuple(
-                FitProposition(alias, memory.content, role="MEMORY")
-                for alias, memory in zip(aliases, frozen_memories, strict=True)
-            ),
-            provider=capture(),
-        )
-        material_aliases = set(fit_analysis.assessment.material_proposition_ids)
-        fit = QualityAuditFit(
-            uid=fit_analysis.uid,
-            created_at=fit_analysis.created_at,
-            verdict=fit_analysis.assessment.verdict,
-            reason=fit_analysis.assessment.reason,
-            overview=fit_analysis.overview,
-            considered_memory_uids=tuple(memory.uid for memory in frozen_memories),
-            material_memory_uids=tuple(
-                memory.uid
-                for alias, memory in zip(aliases, frozen_memories, strict=True)
-                if alias in material_aliases
-            ),
-            consistent_reading=fit_analysis.assessment.consistent_reading,
-            inconsistent_reading=fit_analysis.assessment.inconsistent_reading,
-            provenance=capture.provenance(FIT_JUDGMENT_OPERATION),
-        )
-
-    conformance = None
-    if frozen_conformance is not None:
-        if on_conformance is not None:
-            on_conformance()
-        conformance = check_context_conformance(
-            source_label=frozen_conformance.target_name,
-            rules_label=frozen_conformance.rules_name,
-            rules=frozen_conformance.rules,
-            subjects=frozen_conformance.subjects,
-            provider=provider_factory(),
-        )
     return create_quality_audit(
         frozen,
-        tuple(checks),
-        fit=fit,
-        conformance=conformance,
+        tuple(results),
+        requested_checks=selected,
     )
 
 
 __all__ = [
-    "audit_conformance_rules_context",
     "create_quality_audit",
     "find_current_quality_audit",
     "get_or_run_quality_audit",
     "record_quality_audit",
     "run_quality_audit",
+    "standard_quality_audit_checks",
 ]
+
+
+def audit_post_image(
+    previous: QualityAuditSession,
+    context: Context,
+    provider_factory: Callable[[], FindingsProvider],
+) -> QualityAuditSession:
+    """Recheck the selected policy without silently widening to default checks."""
+    selected = frozenset(previous.requested_checks)
+    return run_quality_audit(
+        context,
+        provider_factory,
+        checks=selected,
+    )

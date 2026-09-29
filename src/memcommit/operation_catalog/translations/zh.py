@@ -2,12 +2,16 @@
 
 from memcommit.operation_catalog.translations.model import (
     LocalizedOperationCopy,
+)
+from memcommit.operation_catalog.translations.model import (
     localized_copy as _copy,
 )
 
-
 TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
-    "export": LocalizedOperationCopy('将当前 Context 内容导出为文档、Agent Skill 或 mem 格式。', '将编辑后的记忆文档输出为可在 mem 外部使用的文件。'),
+    "export": LocalizedOperationCopy(
+        "将当前 Context 内容导出为文档、Agent Skill 或 mem 格式。",
+        "将编辑后的记忆文档输出为可在 mem 外部使用的文件。",
+    ),
     "add": _copy(
         "向当前或指定 Context 添加一个或多个 Memory。",
         "将一个或多个事实、指令或笔记直接添加到 Context 时。",
@@ -17,7 +21,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "解开写在一起的要求或主张，使每一项都能独立审查和修改时。",
     ),
     "audit": _copy(
-        "运行重复、歧义和冲突检查，可选执行 Rule 一致性检查，然后审查已保存的综合结果。",
+        "运行重复、歧义和冲突及 Fit 检查，然后审查已保存的综合结果。",
         "在修改 Context 前进行综合质量审查时。",
     ),
     "branch": _copy(
@@ -91,9 +95,9 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "在保留 Source 所有权的同时，将指向一个 Memory 或 Context 的实时链接放入本地 Target。",
         "在另一个 Context 中复用 Memory 或 Context，并跟随 Source 后续变化时。",
     ),
-    "eval": _copy(
-        "为未来的评估工作流保留 Eval 操作名称。",
-        "在应用契约尚未定义时识别保留的 Eval 界面。",
+    "dev-eval": _copy(
+        "运行已注册的场景并验证结果。",
+        "创建可重复使用的测试数据，并通过可重复的场景验证操作。",
     ),
     "find": _copy(
         "在可读 Memory 中查找精确文本或明确的正则表达式（regex）匹配。",
@@ -155,8 +159,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "调查先前 operation、checkpoint 或 Memory 历史时。",
     ),
     "merge": _copy(
-        '在语义上协调两个 Context，可生成独立 Result，也可将提议的修改纳入现有 Target Context。 默认按语义合并；--literal 不使用 LLM，按已存储条目合并。',
-        '合并两组工作，并需要对重叠、冲突和新合成内容进行语义审查时。',
+        "将两个 Context 的直接内容合并到现有 Target Context。默认按语义合并；--literal 不使用 LLM，按已存储条目合并。",
+        "合并两组工作，并需要对重叠、冲突和新合成内容进行语义审查时。",
     ),
     "move": _copy(
         "将一个或多个直接拥有的 Memory 移动到另一个现有本地 Context。",
@@ -198,8 +202,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "在已知本地 Context 范围内纠正、重命名或遮蔽精确文本时。",
     ),
     "resolve": _copy(
-        "提出并验证使一个有界直接 Memory Context frame 达到 Fit YES 的最小修改。",
-        "决定如何修复有界 Context frame 中的语义冲突或歧义时。",
+        "查找语义冲突，收集解决选择，并在应用结果前重新检查冲突。",
+        "决定如何修复有界 Context frame 中的语义冲突时。",
     ),
     "revert": _copy(
         "将当前或指定的本地 Context 恢复到选定 checkpoint，并先审查该 revision 的完整结果状态。",

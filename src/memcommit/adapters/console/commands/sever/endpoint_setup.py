@@ -17,7 +17,7 @@ from memcommit.adapters.console.terminal.components.endpoint_setup.role import (
     EndpointSetupRole,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.screen import (
-    run_endpoint_setup,
+    run_endpoint_setup_screen,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.spec import (
     EndpointSetupMode,
@@ -183,7 +183,7 @@ def choose_sever_endpoint_setup(
             if row.selector is not None
         )
 
-    draft = run_endpoint_setup(
+    draft = run_endpoint_setup_screen(
         sever_endpoint_setup_spec(setup),
         memory_loader=load_memories,
         validate_draft=lambda draft: _validate_sever_draft(setup, draft),

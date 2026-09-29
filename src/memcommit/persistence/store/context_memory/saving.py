@@ -220,54 +220,72 @@ class _ContextSavingMixin:
             context._store_digest = context_record_digest(context)
         return tuple(checkpoint for _, checkpoint in created)
 
-    def save_meld_target(
+    def save_merge_target(
         self,
         ctx: Context,
         auto_checkpoint: AutoCheckpoint,
         *,
-        expected_context_digest: str,
+        expected_context_digest: str | None,
+        require_new: bool = False,
         source_bindings: Iterable[tuple[str, str, str]],
     ) -> Checkpoint | None:
-        """Save one Meld result as one globally ordered command."""
+        """Save one Merge result as one globally ordered command."""
         with self._command_write_lock():
-            return self._save_meld_target_command_locked(
+            return self._save_merge_target_command_locked(
                 ctx,
                 auto_checkpoint,
                 expected_context_digest=expected_context_digest,
+                require_new=require_new,
                 source_bindings=source_bindings,
             )
 
-    def _save_meld_target_command_locked(
+    def _save_merge_target_command_locked(
         self,
         ctx: Context,
         auto_checkpoint: AutoCheckpoint,
         *,
-        expected_context_digest: str,
+        expected_context_digest: str | None,
+        require_new: bool = False,
         source_bindings: Iterable[tuple[str, str, str]],
     ) -> Checkpoint | None:
-        """Save one meld target while its exact source snapshots stay locked.
+        """Save one Merge target while its exact source snapshots stay locked.
 
-        Ordinary Context CAS protects only the target. A meld result also
+        Ordinary Context CAS protects only the target. A Merge result also
         depends on read-only source snapshots, so all participating Context
         locks must remain held from the final source recheck through the
-        target checkpoint and write. In a directional meld the BASELINE frame
+        target checkpoint and write. In a Merge the BASELINE frame
         is the target itself and is protected by target CAS rather than being
         repeated in ``source_bindings``.
         """
         bindings = tuple(source_bindings)
         source_names = tuple(name for name, _, _ in bindings)
         if len(source_names) != len(set(source_names)) or ctx.name in source_names:
-            raise ValueError("Invalid meld source lock set.")
-        with self._context_graph_lock(exclusive=False):
+            raise ValueError("Invalid Merge source lock set.")
+        with self._context_graph_lock(exclusive=require_new):
             with self._context_write_locks((*source_names, ctx.name)):
                 self._assert_source_bindings_locked(
                     bindings,
-                    result_label="meld target",
+                    result_label="Merge target",
                 )
+                record = auto_checkpoint.args.get("merge", {})
+                operation_uid = record.get("operation_uid")
+                if (
+                    operation_uid
+                    and self.context_exists(ctx.name)
+                    and any(
+                        entry.get("args", {}).get("merge", {}).get("operation_uid")
+                        == operation_uid
+                        for entry in self.list_checkpoints(ctx.name)
+                    )
+                ):
+                    raise ConcurrentContextUpdateError(
+                        "This Merge proposal was already applied."
+                    )
                 checkpoint = self._save_locked(
                     ctx,
                     auto_checkpoint,
                     expected_context_digest=expected_context_digest,
+                    require_new=require_new,
                 )
         ctx._store_digest = context_record_digest(ctx)
         return checkpoint

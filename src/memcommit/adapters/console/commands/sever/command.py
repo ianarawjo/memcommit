@@ -7,9 +7,6 @@ from typing import Annotated, Literal, Optional
 
 import typer
 
-from memcommit.application.capabilities.review_policy import (
-    ownership_aware_application_review,
-)
 from memcommit.application.context_access.access import (
     GrantedReadStore,
     resolve_context_access,
@@ -37,7 +34,6 @@ from memcommit.application.context_access.granted_context_navigation import (
 from memcommit.adapters.console.coordination.endpoint_operand import (
     choose_endpoint_operand,
 )
-from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.adapters.console.terminal.components.context_picker import (
     context_memory_rows,
 )
@@ -54,18 +50,12 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_descendant_scopes,
     resolve_scope_preset,
 )
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-)
-from memcommit.application.capabilities.resolution.workbench import ResolutionNavigation
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 from memcommit.application.operations.sever.model import (
     SeverError,
     SeverSelection,
     SeverSession,
-)
-from memcommit.adapters.console.commands.sever import (
-    command_codec as sever_command_review,
 )
 from memcommit.application.operations.sever.application import (
     SeverAnalysisProgress,
@@ -74,22 +64,16 @@ from memcommit.application.operations.sever.application import (
     SeverApplicationError,
     SeverApplyRequest,
     SeverDecisionRequest,
-    SeverDestinationRequest,
     SeverPersistedApplyRequest,
     SeverSessionSnapshot,
 )
 from memcommit.application.operations.sever.provider import SeverProviderError
-from memcommit.application.operations.sever.resolution_adapter import (
-    SeverResolutionWorkbenchAdapter,
-    sever_memory_changes,
-)
 from memcommit.application.operations.sever.inputs import capture_sever_binding
 from memcommit.application.operations.sever.runtime import (
     execute_sever_analysis,
     execute_sever_apply,
     execute_sever_session_apply,
     execute_sever_session_decision,
-    execute_sever_session_destination_change,
     execute_sever_session_open,
     execute_sever_session_start,
 )
@@ -159,7 +143,7 @@ def _start_analysis(
         return execute_sever_analysis(
             request,
             store=store,
-            provider_factory=provider_factory or connect_codex_chatgpt_provider,
+            provider_factory=provider_factory or connect_semantic_provider,
             progress_callback=lambda event: _start_progress(progress, event),
         )
 
@@ -341,11 +325,7 @@ def render_sever_receipt(session: SeverSession) -> str:
 def render_sever_incomplete_receipt(session: SeverSession) -> str:
     """Return saved Sever state without repeating its candidate report."""
 
-    view = SeverResolutionWorkbenchAdapter(session).view()
-    required = sum(
-        item.effective_obligation == "REQUIRED" and item.response_state != "ANSWERED"
-        for item in view.items
-    )
+    required = 0  # Analysis already supplied one complete treatment per Source Memory.
     if session.save_mode == "SELF_SAVE":
         route = f"{session.source.root_name} × {session.criteria.root_name} · IN PLACE"
         destination = (
@@ -453,167 +433,22 @@ def _choose_saved_sever_session(
     return "OPEN", reload_selected_sever_session(sessions, entry)
 
 
-def _run_workbench(
-    store: MemoryStore,
-    session: SeverSession,
-    *,
-    allow_apply: bool = True,
-) -> SeverSession:
-    from memcommit.adapters.console.terminal.components.resolution.session_shell import (
-        ResolutionDestination,
-        run_resolution_workbench_shell,
-    )
-    from memcommit.adapters.console.commands.impact.projection import ImpactController
-    from memcommit.adapters.console.commands.sever.review import sever_review_report
+def _run_preview(store: MemoryStore, session: SeverSession) -> SeverSession:
+    from memcommit.adapters.console.commands.sever.preview import run_sever_preview
 
     snapshot = execute_sever_session_open(session.uid, store=store)
     if snapshot.session != session:
-        raise SeverCommandError(
-            "The Sever session changed before its workbench opened. Reopen it."
-        )
-    navigation = ResolutionNavigation()
-    while snapshot.session.state == "REVIEWING":
-        session = snapshot.session
+        raise SeverCommandError("The Sever result changed before Preview. Reopen it.")
+    if session.state == "APPLIED":
+        return session
 
-        def validate_destination(name: str) -> None:
-            validate_portable_context_name(name)
-            if name == session.source.root_name:
-                if session.source.granted is not None:
-                    raise ValueError(
-                        "In-place Sever requires an ordinary local Source root."
-                    )
-                return
-            if name != session.output_name and store.context_exists(name):
-                raise ValueError(f"Output Context '{name}' already exists.")
+    def apply_preview():
+        # The application snapshot token binds the displayed treatments to Apply.
+        return execute_sever_session_apply(
+            SeverPersistedApplyRequest(snapshot=snapshot), store=store,
+        ).snapshot.session
 
-        adapter = SeverResolutionWorkbenchAdapter(session)
-        review_view = None
-        if not allow_apply:
-            review_view = sever_review_report(session).report().view
-            if review_view is None:
-                raise SeverCommandError("Sever Review report has no interactive view.")
-        active_view = review_view if review_view is not None else adapter.view()
-        impact_controller = ImpactController.from_memory_changes(
-            operation=active_view.operation,
-            artifact_uid=active_view.artifact_uid,
-            revision=active_view.revision,
-            title=(
-                "IMPACT · SEVER IN PLACE · SOURCE OWNERS WILL BE UPDATED"
-                if session.save_mode == "SELF_SAVE"
-                else "IMPACT · SEVER OTHER-SAVE"
-            ),
-            summary=(
-                "This is the exact reviewed after-state that Apply would save. "
-                + (
-                    "Each selected Source Context stays at its existing location."
-                    if session.save_mode == "SELF_SAVE"
-                    else "It creates a separate Result Context."
-                )
-            ),
-            changes=sever_memory_changes(session),
-        )
-        action = run_resolution_workbench_shell(
-            active_view,
-            navigation=navigation,
-            terminal_label="Interactive Sever",
-            snapshot_hint="Run 'mem sever --resume SESSION' outside a TTY for a snapshot.",
-            review_and_apply=allow_apply,
-            decision_free_behavior=(
-                ownership_aware_application_review(
-                    mutates_granted_authority=False,
-                    local_undo_available=True,
-                ).decision_free_behavior
-                if allow_apply
-                else "REPORT_FIRST"
-            ),
-            split_viewer_items=True,
-            impact_controller=None if not allow_apply else impact_controller,
-            destination=(
-                ResolutionDestination(
-                    value=session.output_name,
-                    state="CREATE ON APPLY",
-                    validate=validate_destination,
-                    context_names=tuple(store.list_context_names()),
-                    current_context=store.current_context_name(),
-                )
-                # New console sessions are always in place and expose no Save
-                # Location. Retain the destination surface only when reopening
-                # an older other-save session with a frozen output contract.
-                if allow_apply and session.save_mode == "OTHER_SAVE"
-                else None
-            ),
-            turn_command_review=lambda proposed: (
-                sever_command_review.build_turn_review(
-                    session_uid=session.uid,
-                    candidate_uid=proposed.item_uid,
-                    choice=(
-                        "custom"
-                        if proposed.comment.strip()
-                        else (proposed.option_uid or "").rpartition(":")[2]
-                    ),
-                    comment=proposed.comment.strip(),
-                    expected_session=snapshot.version_token,
-                )
-                if proposed.kind == "SUBMIT_ITEM" and proposed.item_uid is not None
-                else None
-            ),
-            compact_decisions=allow_apply,
-        )
-        if action.kind == "CLOSE":
-            break
-        if action.kind == "CHANGE_DESTINATION":
-            if not allow_apply or action.destination is None:
-                raise SeverCommandError("Review cannot change a Sever output location.")
-            validate_destination(action.destination)
-            snapshot = execute_sever_session_destination_change(
-                SeverDestinationRequest(
-                    snapshot=snapshot,
-                    output_name=action.destination,
-                ),
-                store=store,
-            )
-            continue
-        if action.kind == "ACCEPT":
-            if not allow_apply:
-                raise SeverCommandError("Review cannot apply a Sever output.")
-            snapshot = execute_sever_session_apply(
-                SeverPersistedApplyRequest(snapshot=snapshot),
-                store=store,
-            ).snapshot
-            break
-        if action.kind != "SUBMIT_ITEM" or action.item_uid is None:
-            raise SeverCommandError("Unsupported Sever workbench action.")
-        selection: SeverSelection
-        if action.comment.strip():
-            selection = "CUSTOM"
-            custom_content = action.comment.strip()
-        else:
-            suffix = (action.option_uid or "").rpartition(":")[2]
-            selection = {
-                "recommended": "RECOMMENDED",
-                "as-written": "AS_WRITTEN",
-                "forget": "FORGET",
-            }.get(
-                suffix
-            )  # type: ignore[assignment]
-            if selection is None:
-                raise SeverCommandError("Unsupported Sever decision.")
-            custom_content = ""
-        snapshot = execute_sever_session_decision(
-            SeverDecisionRequest(
-                snapshot=snapshot,
-                candidate_uid=action.item_uid,
-                selection=selection,
-                custom_content=custom_content,
-            ),
-            store=store,
-        )
-    return snapshot.session
-
-
-def run_sever_review(store: MemoryStore, session: SeverSession) -> SeverSession:
-    """Run Sever decisions without exposing output materialization."""
-    return _run_workbench(store, session, allow_apply=False)
+    return run_sever_preview(session, apply_preview=apply_preview) or session
 
 
 def _resolve_endpoint_syntax(
@@ -993,7 +828,7 @@ def cmd(
             snapshot = applied.snapshot
             session = snapshot.session
         elif sys.stdin.isatty() and sys.stdout.isatty():
-            session = _run_workbench(store, session)
+            session = _run_preview(store, session)
 
         if session.state == "APPLIED":
             typer.echo(render_sever_receipt(session))

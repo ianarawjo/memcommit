@@ -8,3 +8,4 @@ __all__ = ["cmd"]
 
 def __getattr__(name: str):
     return _load_entrypoint_attribute(__name__, __all__, name)
+

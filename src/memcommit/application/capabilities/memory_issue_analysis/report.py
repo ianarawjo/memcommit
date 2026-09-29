@@ -11,7 +11,9 @@ from dataclasses import dataclass
 from typing import Literal
 
 
-QualityFindReportKind = Literal["ambiguities", "conflicts", "duplicates"]
+QualityFindReportKind = Literal[
+    "ambiguities", "conflicts", "duplicates", "merge_conflicts"
+]
 
 
 class QualityFindReportError(ValueError):
@@ -26,6 +28,7 @@ def quality_find_category_label(kind: QualityFindReportKind) -> str:
             "ambiguities": "AMBIGUITIES",
             "conflicts": "CONFLICTS",
             "duplicates": "REDUNDANCIES",
+            "merge_conflicts": "MERGE CONFLICTS",
         }[kind]
     except KeyError as error:
         raise QualityFindReportError("Unsupported quality finding category.") from error
@@ -48,8 +51,18 @@ class QualityFindingSource:
     memory_uid: str
     content: str
     ordinal: int
+    item_kind: str = "MEMORY"
 
     def __post_init__(self) -> None:
+        if self.item_kind not in {
+            "MEMORY",
+            "MEMORY_EMBED",
+            "CONTEXT_EMBED",
+            "MEMORY_REFERENCE",
+            "CONTEXT_REFERENCE",
+            "QUERY_CONTEXT_REFERENCE",
+        }:
+            raise QualityFindReportError("Invalid finding Source item kind.")
         _text(self.label, "finding Source label")
         _text(self.context_name, "finding Source Context")
         _text(self.memory_uid, "finding Source Memory uid")
@@ -89,7 +102,12 @@ class QualityFindingReportItem:
 
     def __post_init__(self) -> None:
         _text(self.uid, "finding uid")
-        if self.category not in {"ambiguities", "conflicts", "duplicates"}:
+        if self.category not in {
+            "ambiguities",
+            "conflicts",
+            "duplicates",
+            "merge_conflicts",
+        }:
             raise QualityFindReportError("Unsupported quality finding category.")
         _text(self.kind, "finding kind")
         _text(self.classification, "finding classification")
@@ -103,11 +121,17 @@ class QualityFindingReportItem:
             raise QualityFindReportError("A finding repeats a Source Memory.")
 
 
+def conflict_label(classification: str) -> str:
+    return "MAY CONFLICT" if classification == "MAY" else "CONFLICT"
+
+
 def quality_finding_label_parts(
     item: QualityFindingReportItem,
 ) -> tuple[str, str, str]:
     """Return the shared marker, category label, and compact classification."""
 
+    if item.category == "merge_conflicts":
+        return "!", "MERGE CONFLICT", item.classification.replace("_", " ")
     if item.category == "ambiguities":
         label = (
             "UNDERSPECIFIED"
@@ -116,8 +140,7 @@ def quality_finding_label_parts(
         )
         return "?", label, ""
     if item.category == "conflicts":
-        label = "POSSIBLE CONFLICT" if item.classification == "MAY" else "CONFLICT"
-        return "!", label, ""
+        return "!", conflict_label(item.classification), ""
     relation_labels = {
         "EXACT": ("=", "DUPLICATE", "EXACT"),
         "SURFACE_EQUIVALENT": ("≈", "REDUNDANT", "SURFACE EQUIVALENT"),
@@ -148,9 +171,15 @@ class QualityFindReportView:
     items: tuple[QualityFindingReportItem, ...]
     empty_message: str
     handoff_label: str | None = None
+    direct_item_count: int | None = None
 
     def __post_init__(self) -> None:
-        if self.kind not in {"ambiguities", "conflicts", "duplicates"}:
+        if self.kind not in {
+            "ambiguities",
+            "conflicts",
+            "duplicates",
+            "merge_conflicts",
+        }:
             raise QualityFindReportError("Unsupported quality finding kind.")
         for value, label in (
             (self.operation, "finding operation"),
@@ -167,6 +196,7 @@ class QualityFindReportView:
             if not isinstance(value, int) or isinstance(value, bool) or value < 0:
                 raise QualityFindReportError(f"Invalid {label}.")
         for value, label in (
+            (self.direct_item_count, "direct item count"),
             (self.pair_count, "finding pair count"),
             (self.group_count, "finding group count"),
             (self.redundant_item_count, "redundant item count"),
@@ -196,6 +226,11 @@ class QualityFindReportView:
                 or len(self.items) > self.pair_count
             ):
                 raise QualityFindReportError("Invalid Conflict report counts.")
+        elif self.kind == "merge_conflicts":
+            if self.direct_item_count is None:
+                raise QualityFindReportError(
+                    "Merge report requires direct item coverage."
+                )
         elif (
             self.pair_count is not None
             or self.group_count is None
@@ -221,6 +256,8 @@ class QualityFindReportView:
 def quality_find_report_summary_text(view: QualityFindReportView) -> str:
     """Return counts whose denominators match each finder's execution unit."""
 
+    if view.kind == "merge_conflicts":
+        return f"{view.direct_item_count} DIRECT ITEMS · {len(view.items)} STRUCTURAL CONFLICTS"
     if view.kind == "ambiguities":
         return f"{len(view.items)}/{view.memory_count} MEMORIES FLAGGED"
     if view.kind == "conflicts":
@@ -233,8 +270,13 @@ def quality_find_report_summary_text(view: QualityFindReportView) -> str:
     assert view.redundant_item_count is not None
     group_label = "GROUP" if view.group_count == 1 else "GROUPS"
     absorption_label = "ABSORPTION" if view.redundant_item_count == 1 else "ABSORPTIONS"
+    scope = (
+        f"{view.direct_item_count} DIRECT ITEMS · "
+        if view.direct_item_count is not None
+        else ""
+    )
     return (
-        f"{view.memory_count} MEMORIES CHECKED · "
+        scope + f"{view.memory_count} MEMORIES CHECKED · "
         f"{view.group_count} {group_label} · "
         f"{view.redundant_item_count} PROPOSED {absorption_label}"
     )
@@ -259,6 +301,7 @@ class QualityFindBrowserReceipt:
 
 
 __all__ = [
+    "conflict_label",
     "QualityFindBrowserReceipt",
     "QualityFindReportError",
     "QualityFindReportKind",

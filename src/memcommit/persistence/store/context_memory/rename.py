@@ -169,7 +169,6 @@ class _ContextRenameMixin:
         state: dict[str, object],
         *,
         translation_records: dict[str, dict[str, object]],
-        meld_records: dict[str, dict[str, object]],
     ) -> str:
         return _canonical_json_digest(
             {
@@ -190,10 +189,6 @@ class _ContextRenameMixin:
                 "translations": [
                     {"file": name, "record": record}
                     for name, record in sorted(translation_records.items())
-                ],
-                "melds": [
-                    {"file": name, "record": record}
-                    for name, record in sorted(meld_records.items())
                 ],
             }
         )
@@ -243,40 +238,6 @@ class _ContextRenameMixin:
                 raise ValueError(
                     f"Saved translation catalog '{path.name}' is invalid."
                 ) from error
-            records[path.name] = raw
-        return records
-
-    def _read_meld_records_for_rename(self) -> dict[str, dict[str, object]]:
-        """Load every target-keyed Meld artifact into rename freshness."""
-
-        from memcommit.application.operations.merge.semantic.model import MeldError, MeldSession
-
-        root = self.meld_sessions_dir
-        if not root.exists():
-            if root.is_symlink():
-                raise ValueError("Meld session storage is invalid.")
-            return {}
-        if not root.is_dir() or root.is_symlink():
-            raise ValueError("Meld session storage is invalid.")
-        records: dict[str, dict[str, object]] = {}
-        for path in sorted(root.iterdir()):
-            if path.is_symlink() or not path.is_file() or path.suffix != ".json":
-                raise ValueError("Meld session storage is invalid.")
-            try:
-                with open(path, encoding="utf-8") as file:
-                    raw = json.load(
-                        file,
-                        object_pairs_hook=_reject_duplicate_json_keys,
-                    )
-                session = MeldSession.from_dict(raw)
-            except (json.JSONDecodeError, MeldError, OSError, ValueError) as error:
-                raise ValueError(
-                    f"Saved Meld session '{path.name}' is invalid."
-                ) from error
-            if path.stem != session.target.context_uid:
-                raise ValueError(
-                    f"Saved Meld session '{path.name}' does not match its file."
-                )
             records[path.name] = raw
         return records
 
@@ -480,51 +441,11 @@ class _ContextRenameMixin:
                 ) from error
             post_translation_records[filename] = post
 
-        meld_records = self._read_meld_records_for_rename()
-        post_meld_records: dict[str, dict[str, object]] = {}
-        meld_session_count = 0
-        from memcommit.application.operations.merge.semantic.model import MeldError, MeldSession
-
-        def rewrite_meld_binding(binding: object) -> bool:
-            if not isinstance(binding, dict):
-                raise ValueError("Saved Meld session has an invalid Context binding.")
-            context_uid = binding.get("context_uid")
-            if not isinstance(context_uid, str) or context_uid not in changed_uids:
-                return False
-            binding["context_name"] = post_name_by_uid[context_uid]
-            if binding.get("context_digest") == pre_digest_by_uid[context_uid]:
-                binding["context_digest"] = post_digest_by_uid[context_uid]
-            return True
-
-        for filename, record in meld_records.items():
-            post = copy.deepcopy(record)
-            changed = rewrite_meld_binding(post.get("target"))
-            frames = post.get("frames")
-            if not isinstance(frames, list):
-                raise ValueError(f"Saved Meld session '{filename}' has invalid frames.")
-            for frame in frames:
-                changed = rewrite_meld_binding(frame) or changed
-            if changed and post.get("state") == "APPLIED":
-                raise ValueError(
-                    "An applied Meld target or source cannot be renamed until "
-                    "its application is undone."
-                )
-            try:
-                MeldSession.from_dict(post)
-            except MeldError as error:
-                raise ValueError(
-                    f"Saved Meld session '{filename}' cannot follow this rename."
-                ) from error
-            if changed:
-                meld_session_count += 1
-            post_meld_records[filename] = post
-
         graph_digest = self._context_graph_digest_for_rename(
             records,
             checkpoints,
             raw_state,
             translation_records=translation_records,
-            meld_records=meld_records,
         )
         plan = ContextRenamePlan(
             old_name=old_name,
@@ -534,7 +455,6 @@ class _ContextRenameMixin:
             reference_count=live_reference_count,
             checkpoint_reference_count=checkpoint_reference_count,
             translation_artifact_count=translation_artifact_count,
-            meld_session_count=meld_session_count,
             current_before=current_before,
             current_after=current_after,
             graph_digest=graph_digest,
@@ -549,8 +469,6 @@ class _ContextRenameMixin:
             post_state=post_state,
             translation_records=translation_records,
             post_translation_records=post_translation_records,
-            meld_records=meld_records,
-            post_meld_records=post_meld_records,
         )
 
     @staticmethod
@@ -615,7 +533,6 @@ class _ContextRenameMixin:
         changed_context_paths: list[tuple[Path, dict[str, object]]] = []
         changed_checkpoint_paths: list[tuple[Path, dict[str, object]]] = []
         changed_translation_paths: list[tuple[Path, dict[str, object]]] = []
-        changed_meld_paths: list[tuple[Path, dict[str, object]]] = []
 
         for owner_name in plan.changed_owner_names:
             before_path = self._context_file(owner_name)
@@ -646,13 +563,6 @@ class _ContextRenameMixin:
                 path = translation_root / filename
                 restore_files[path] = path.read_bytes()
                 changed_translation_paths.append((path, after))
-        for filename, before in prepared.meld_records.items():
-            after = prepared.post_meld_records[filename]
-            if after == before:
-                continue
-            path = self.meld_sessions_dir / filename
-            restore_files[path] = path.read_bytes()
-            changed_meld_paths.append((path, after))
         if prepared.post_state != prepared.state:
             restore_files[self.state_file] = self.state_file.read_bytes()
 
@@ -717,7 +627,6 @@ class _ContextRenameMixin:
                 _write_json_atomic(path, record)
             for path, record in changed_translation_paths:
                 _write_json_atomic(path, record)
-            for path, record in changed_meld_paths:
                 _write_json_atomic(path, record)
             for path, record in checkpoint_writes:
                 path.parent.mkdir(parents=True, exist_ok=True)
@@ -753,17 +662,6 @@ class _ContextRenameMixin:
                 raise RuntimeError(
                     "Current Context state failed post-rename verification."
                 )
-            for filename, expected in prepared.post_meld_records.items():
-                path = self.meld_sessions_dir / filename
-                with open(path, encoding="utf-8") as file:
-                    actual = json.load(
-                        file,
-                        object_pairs_hook=_reject_duplicate_json_keys,
-                    )
-                if actual != expected:
-                    raise RuntimeError(
-                        f"Meld session '{filename}' failed post-rename verification."
-                    )
         except Exception as error:
             rollback_error: Exception | None = None
             for path in checkpoint_paths:
@@ -801,7 +699,6 @@ class _ContextRenameMixin:
             reference_count=plan.reference_count,
             checkpoint_reference_count=plan.checkpoint_reference_count,
             translation_artifact_count=plan.translation_artifact_count,
-            meld_session_count=plan.meld_session_count,
             current_context=plan.current_after,
         )
 

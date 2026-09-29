@@ -7,7 +7,6 @@ from memcommit.operation_catalog.details.atomize import ATOMIZE_DETAILS
 from memcommit.operation_catalog.details.check_conformance import CHECK_CONFORMANCE_DETAILS
 from memcommit.operation_catalog.details.dedun import DEDUN_DETAILS
 from memcommit.operation_catalog.details.distill import DISTILL_DETAILS
-from memcommit.operation_catalog.details.eval import EVAL_DETAILS
 from memcommit.operation_catalog.details.fit import FIT_DETAILS
 from memcommit.operation_catalog.details.impact import IMPACT_DETAILS
 from memcommit.operation_catalog.details.import_operation import IMPORT_DETAILS
@@ -33,7 +32,6 @@ _DETAIL_GROUPS = (
     CHECK_CONFORMANCE_DETAILS,
     DEDUN_DETAILS,
     DISTILL_DETAILS,
-    EVAL_DETAILS,
     FIT_DETAILS,
     IMPACT_DETAILS,
     IMPORT_DETAILS,

@@ -24,10 +24,8 @@ from memcommit.adapters.console.commands.summarize.presentation import (
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-)
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.capabilities.reviewing.read_report import ReadReportTarget
 from memcommit.application.operations.summarize.model import (
@@ -50,7 +48,7 @@ def _provider_session() -> Iterator[SummarizeProvider]:
         "connecting provider",
         total=2,
     ) as progress:
-        provider = connect_codex_chatgpt_provider()
+        provider = connect_semantic_provider()
         progress.update("summarizing memories", step=2)
         yield provider
 

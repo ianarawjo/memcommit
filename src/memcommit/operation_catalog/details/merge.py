@@ -30,7 +30,7 @@ MERGE_DETAILS = (
             OperationComparisonOption(
                 label="CONFLICT",
                 guidance=(
-                    "Choose KEEP TARGET or TAKE SOURCE; Merge never synthesizes "
+                    "Choose KEEP TARGET, TAKE SOURCE, or KEEP BOTH for Memories; Merge never synthesizes "
                     "custom content."
                 ),
             ),
@@ -41,8 +41,8 @@ MERGE_DETAILS = (
                 ),
             ),
             OperationComparisonOption(
-                label="RECURSIVE",
-                guidance="Align descendants by the same relative path.",
+                label="SCOPE",
+                guidance="Use only the direct contents of the two selected Contexts.",
             ),
         ),
     ),

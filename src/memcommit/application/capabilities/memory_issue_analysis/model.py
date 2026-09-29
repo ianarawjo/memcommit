@@ -14,7 +14,7 @@ from memcommit.core.context import Memory
 QUALITY_RULESET_VERSIONS = {
     "find_duplicates": "duplicates-v1-draft",
     "find_ambiguities": "ambiguity-v1-draft",
-    "find_conflicts": "conflict-v2-draft",
+    "find_conflicts": "conflict-v3-draft",
 }
 
 DuplicateRelation = Literal[
@@ -79,7 +79,6 @@ class ConflictFinding:
     right: Memory
     conflict: ConflictLabel
     reason: str
-    question: str
 
 
 @dataclass(frozen=True)

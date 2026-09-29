@@ -45,8 +45,6 @@ from .infrastructure.paths import (
     ATOMIZE_WORKBENCHES_DIR,
     CONTEXTS_DIR,
     IMPACT_PLAN_FILE,
-    MELD_SESSIONS_DIR,
-    MELD_SESSION_HISTORY_DIR,
     QUERY_SOURCES_DIR,
     REVIEW_SESSION_FILE,
     REVIEW_SESSION_HISTORY_DIR,
@@ -66,8 +64,6 @@ from memcommit.persistence.operations.atomize import (
 from memcommit.persistence.operations.atomize.state_repository import (
     _AtomizeStateStoreMixin,
 )
-from memcommit.persistence.operations.meld import state_repository as _meld_state_module
-from memcommit.persistence.operations.meld.state_repository import _MeldStateStoreMixin
 from memcommit.persistence.operations.review import (
     state_repository as _review_state_module,
 )
@@ -89,7 +85,6 @@ class MemoryStore(
     ContextMemoryStoreMixin,
     _UpdateStateStoreMixin,
     _ReviewStateStoreMixin,
-    _MeldStateStoreMixin,
     _AtomizeStateStoreMixin,
     RecordRestoreCheckpointStoreMixin,
 ):
@@ -103,7 +98,6 @@ _IMPLEMENTATION_MODULES = (
     _locking_module,
     _update_state_module,
     _review_state_module,
-    _meld_state_module,
     _atomize_state_module,
     _context_memory_module,
     _checkpoint_module,
@@ -123,8 +117,6 @@ _FORWARDED_COMPATIBILITY_NAMES = frozenset(
         "ATOMIZE_ANALYSES_DIR",
         "ATOMIZE_WORKBENCHES_DIR",
         "ATOMIZE_SESSION_HISTORY_DIR",
-        "MELD_SESSIONS_DIR",
-        "MELD_SESSION_HISTORY_DIR",
         "_write_json_atomic",
         "_write_bytes_atomic",
         "_fsync_directory",

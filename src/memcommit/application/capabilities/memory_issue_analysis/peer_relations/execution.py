@@ -41,7 +41,7 @@ from memcommit.application.operations.profile.model import (
 from memcommit.providers.policy import (
     COMPARE_LEDGER_PROVIDER_POLICY,
 )
-from memcommit.providers.subscription import CodexChatGPTProvider
+from memcommit.providers.clients.codex import CodexChatGPTProvider
 from memcommit.persistence.store import MemoryStore
 
 if TYPE_CHECKING:

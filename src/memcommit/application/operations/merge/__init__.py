@@ -1,1 +1,1 @@
-"""Merge owns independent semantic and literal execution packages."""
+"""Common Merge preparation, classification and reviewed Apply."""

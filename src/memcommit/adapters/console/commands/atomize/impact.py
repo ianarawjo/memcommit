@@ -72,10 +72,8 @@ if TYPE_CHECKING:
         ResolutionDestination,
     )
 
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-)
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 
 
 _LIST_READING_PREVIEW_LIMIT = 2
@@ -528,7 +526,7 @@ def run_atomize_impact(
         with progressing_provider_factory(
             "IMPACT ATOMIZE",
             "analyzing memory structure",
-            connect_codex_chatgpt_provider,
+            connect_semantic_provider,
         ) as provider_factory:
             opened = execute_atomize_analysis_open(
                 AtomizeAnalysisOpenRequest(

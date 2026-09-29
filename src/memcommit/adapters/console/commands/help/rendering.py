@@ -376,7 +376,7 @@ def _help_group_fragments(
             # Anchor after the complete connected record. Prompt-toolkit only
             # guarantees visibility through the cursor row; anchoring before
             # a two-line record let the final WHEN row (and the closing border
-            # after `mem eval`) fall below the viewport at the end of Help.
+            # after the last operation) fall below the viewport at the end of Help.
             fragments.append(("[SetCursorPosition]", ""))
         if expanded:
             if entry.operation_help is not None:

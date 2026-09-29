@@ -23,6 +23,29 @@ def terminal_cell_width(value: str) -> int:
     return get_cwidth(value)
 
 
+def wrap_terminal_fragments(fragments, width: int):
+    """Wrap trusted styles and safe text without losing individual span styles."""
+    if width <= 0:
+        raise ValueError("terminal wrap width must be positive")
+    rows, row, cells = [], [], 0
+    for style, text in fragments:
+        for character in text:
+            size = terminal_cell_width(character)
+            if character == "\n" or (row and cells + size > width):
+                rows.append(tuple(row))
+                row, cells = [], 0
+            if character == "\n":
+                continue
+            if row and row[-1][0] == style:
+                row[-1] = (style, row[-1][1] + character)
+            else:
+                row.append((style, character))
+            cells += size
+    if row or not rows:
+        rows.append(tuple(row))
+    return rows
+
+
 def single_line_terminal_text(value: str) -> str:
     """Fold whitespace into one presentation line without discarding content."""
 

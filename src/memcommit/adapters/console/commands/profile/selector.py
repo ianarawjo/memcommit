@@ -21,7 +21,7 @@ from memcommit.adapters.console.commands.profile.picker.app import (
     choose_profile,
 )
 from memcommit.adapters.console.commands.profile.presentation import (
-    _print_profile_creation,
+    render_profile_create_receipt,
     _print_profile_removal,
     _print_profile_rename,
     _print_study_removal,
@@ -185,7 +185,7 @@ def _apply_profile_picker_action(
         _fail(error)
     if action.kind == "CREATE_PROFILE":
         if print_receipt:
-            _print_profile_creation(result)
+            render_profile_create_receipt(result)
         return _profile_creation_status(result)
     if action.kind == "RENAME_PROFILE":
         if print_receipt:

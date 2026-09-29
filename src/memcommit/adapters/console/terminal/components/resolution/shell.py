@@ -385,7 +385,10 @@ def run_resolution_workbench(
         if result["value"] is not None:
             return " Enter/Esc/Q close · durable receipt shown"
         if review_mode["value"] is not None:
-            return " Enter applies the displayed exact command · Esc/Backspace returns"
+            apply_label = (
+                "reviewed plan" if current_review().replay_requires_input else "exact command"
+            )
+            return f" Enter applies the displayed {apply_label} · Esc/Backspace returns"
         if spec.show_viewer:
             return (
                 " ↑/↓ move · Enter open/select · Tab frames · Esc/Backspace back "

@@ -44,7 +44,6 @@ class RenamePlan:
     reference_count: int
     checkpoint_reference_count: int
     translation_artifact_count: int
-    meld_session_count: int
     current_before: str | None
     current_after: str | None
     graph_digest: str
@@ -66,7 +65,6 @@ class RenameResult:
     reference_count: int
     checkpoint_reference_count: int
     translation_artifact_count: int
-    meld_session_count: int
     current_context: str | None
 
 

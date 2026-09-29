@@ -10,7 +10,7 @@ import typer
 from memcommit.adapters.console.commands.profile._support import _fail
 from memcommit.adapters.console.commands.profile.presentation import (
     _inventory_label,
-    _print_profile_creation,
+    render_profile_create_receipt,
     _print_profile_removal,
     _print_profile_rename,
 )
@@ -103,7 +103,7 @@ def create_cmd(
         result = create_profile(name)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
-    _print_profile_creation(result)
+    render_profile_create_receipt(result)
 
 
 def remove_cmd(

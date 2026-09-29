@@ -78,7 +78,7 @@ from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 
 
-def run_endpoint_setup(
+def run_endpoint_setup_screen(
     spec: EndpointSetupSpec,
     *,
     memory_loader: MemoryProjectionLoader | None = None,

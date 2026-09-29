@@ -16,6 +16,7 @@ dependencies = [
   "markdown-it-py>=3,<5",
   "PyYAML>=6,<7",
   "prompt-toolkit>=3.0.52,<4",
+  "diff-match-patch==20241021",
 ]
 
 [project.scripts]

@@ -17,7 +17,7 @@ from memcommit.adapters.console.terminal.components.endpoint_setup.role import (
     EndpointSetupRole,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.screen import (
-    run_endpoint_setup,
+    run_endpoint_setup_screen,
 )
 from memcommit.adapters.console.terminal.components.endpoint_setup.spec import (
     EndpointSetupMode,
@@ -88,7 +88,7 @@ def choose_update_endpoint_setup(
 ) -> UpdateEndpointSelection | None:
     """Return one typed Update scope without planning or durable state."""
 
-    draft = run_endpoint_setup(
+    draft = run_endpoint_setup_screen(
         update_endpoint_setup_spec(setup),
         memory_loader=memory_loader,
         validate_draft=lambda value: _validate_update_draft(setup, value),

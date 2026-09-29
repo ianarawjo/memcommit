@@ -1,4 +1,5 @@
 """Provider-neutral contracts for one-shot semantic completions."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -77,3 +78,8 @@ class SemanticProvider(Protocol):
 
     def query(self, source_name: str, source_content: str, question: str) -> str:
         """Answer from one opaque query-only source."""
+
+
+class QueryProvider(Protocol):
+    def query(self, source_name: str, source_content: str, question: str) -> str:
+        """Answer a question using one opaque source."""

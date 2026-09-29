@@ -26,10 +26,19 @@ def _detail(operation: str, start_effect: str, turn_effect: str) -> OperationTex
 
 
 SEMANTIC_SESSION_COMMAND_DETAILS = (
-    _detail(
-        "merge",
-        "running it starts or resumes Merge analysis and its decision session",
-        "running it replaces the saved decisions; completion Applies the target",
+    OperationTextDetail(
+        id="interactive-commands",
+        operation="merge",
+        title="INTERACTIVE COMMANDS",
+        use_when="Reviewing the Merge analysis and publication boundary.",
+        discovery=DetailDiscovery.ON_DEMAND,
+        detail_kind=HelpDetailKind.LIMITATION,
+        body=(
+            "Each invocation analyzes its frozen inputs and keeps decisions in memory. "
+            "Apply saves the verified Target and checkpoint. Cancelling discards "
+            "the work; a later invocation starts a new analysis. Undo restores "
+            "Context history. Receipt review is not available yet."
+        ),
     ),
     _detail(
         "update",

@@ -19,6 +19,7 @@ from ..verification.validators.branch import (
     _RecordedBranchTransition,
 )
 from ..verification.validators.command_operation import _command_restore_operation
+from ..verification.validators.meld import meld_creation_preimage
 from .memory_effects.derivation import _transition_events
 from .memory_effects.recorded import _branch_transition_events
 
@@ -94,17 +95,21 @@ def derive_memory_history_events(
                 )
             else:
                 # A first observed snapshot does not prove that its Memories
-                # were created here. Init alone declares an empty new Context.
+                # were created here. A verified Merge creation receipt also
+                # proves absence before publication, without an empty saved Target.
                 previous = (
                     _empty_frame(frame.context_uid, frame.context_name)
-                    if entry.get("command") == "init" else frame
+                    if entry.get("command") == "init"
+                    else meld_creation_preimage(entry, frame) or frame
                 )
 
         recorded_branch = recorded_branches.get(entry["uid"])
         if recorded_branch is not None:
             direct, messages = _transition_events(
                 before=_empty_frame(frame.context_uid, frame.context_name),
-                after=frame, entry=entry, source=store,
+                after=frame,
+                entry=entry,
+                source=store,
             )
             events.extend(direct)
             warnings.extend(messages)
@@ -140,8 +145,11 @@ def derive_memory_history_events(
         # are outside the supplied window. Do not attribute intervening changes.
         raw_before = entry.get("command_before")
         command_before = (
-            _frame_from_snapshot(raw_before, label=f"Checkpoint [{entry['uid'][:8]}] pre-image")
-            if isinstance(raw_before, dict) else previous
+            _frame_from_snapshot(
+                raw_before, label=f"Checkpoint [{entry['uid'][:8]}] pre-image"
+            )
+            if isinstance(raw_before, dict)
+            else previous
         )
         if command == "revert":
             command_before = frame

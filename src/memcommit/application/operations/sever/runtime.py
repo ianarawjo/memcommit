@@ -46,10 +46,7 @@ from memcommit.persistence.command_ledger.attempts import annotate_sever_attempt
 from memcommit.persistence.store import (
     MemoryStore,
 )
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    QueryProviderTimeoutError,
-)
+from memcommit.providers.errors import QueryProviderError, QueryProviderTimeoutError
 
 SeverProgressCallback = SeverProgressObserver
 

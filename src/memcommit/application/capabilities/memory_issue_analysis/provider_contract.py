@@ -17,6 +17,7 @@ from typing import Callable
 
 from memcommit.core.context import Context, Memory
 from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
+    ExactDuplicateGroup,
     find_exact_duplicate_groups,
 )
 from memcommit.application.capabilities.memory_issue_analysis.model import (
@@ -47,6 +48,7 @@ from memcommit.application.capabilities.semantic.prompt_policy import (
 QUALITY_INPUT_CHAR_LIMIT = SEMANTIC_PROVIDER_INPUT_CHAR_LIMIT
 QUALITY_RESPONSE_CHAR_LIMIT = 1_000_000
 QUALITY_REASON_CHAR_LIMIT = 1_000
+CONFLICT_REASON_WORD_LIMIT = 10
 QUALITY_QUESTION_CHAR_LIMIT = 500
 QUALITY_READING_LIMIT = 5
 _INTERPRETATIONS = {"SINGLE", "DOMINANT", "COMPETING"}
@@ -369,16 +371,23 @@ def _surface_key(content: str) -> str:
 
 def _mechanical_duplicate_forest(
     candidates: list[MemoryCandidate],
+    exact_groups: tuple[ExactDuplicateGroup, ...],
 ) -> tuple[list[DuplicateFinding], list[MemoryCandidate]]:
     """Find exact/surface components without constructing their pair cliques."""
     findings: list[DuplicateFinding] = []
-    exact_representatives: dict[str, MemoryCandidate] = {}
+    candidate_by_uid = {candidate.memory.uid: candidate for candidate in candidates}
+    exact_survivors = {
+        uid: group.survivor_uid
+        for group in exact_groups
+        if group.item_kind == "MEMORY"
+        for uid in group.absorbed_uids
+    }
     surface_representatives: dict[str, MemoryCandidate] = {}
     semantic_representatives: list[MemoryCandidate] = []
 
     for candidate in candidates:
         content = candidate.memory.content
-        exact = exact_representatives.get(content)
+        exact = candidate_by_uid.get(exact_survivors.get(candidate.memory.uid))
         if exact is not None:
             # One edge to the first identical occurrence is enough to preserve
             # the complete component; emitting its clique would be quadratic.
@@ -392,7 +401,6 @@ def _mechanical_duplicate_forest(
             )
             continue
 
-        exact_representatives[content] = candidate
         surface_key = _surface_key(content)
         surface = surface_representatives.get(surface_key)
         if surface is not None:
@@ -439,13 +447,18 @@ def find_redundancies(
     provider_factory: Callable[[], FindingsProvider],
     *,
     context_name_by_uid: Mapping[str, str] | None = None,
+    exact_groups: tuple[ExactDuplicateGroup, ...] | None = None,
 ) -> DuplicateReport:
     """Discover complete DUN evidence: exact DUP plus semantic redundancy."""
     candidates = collect_direct_memories(
         ctx,
         context_name_by_uid=context_name_by_uid,
     )
-    mechanical, semantic_candidates = _mechanical_duplicate_forest(candidates)
+    if exact_groups is None:
+        exact_groups = find_exact_duplicate_groups(ctx)
+    mechanical, semantic_candidates = _mechanical_duplicate_forest(
+        candidates, exact_groups
+    )
     # DUN is the inclusive cleanup relation. Deterministic DUP edges and
     # differently stored semantic edges remain typed so presentation and Apply
     # can show their composition without hiding either class.
@@ -604,9 +617,7 @@ def find_redundancies(
         memory_count=len(candidates),
         findings=_ordered_duplicate_findings(candidates, findings),
         exact_item_groups=tuple(
-            group
-            for group in find_exact_duplicate_groups(ctx)
-            if group.item_kind != "MEMORY"
+            group for group in exact_groups if group.item_kind != "MEMORY"
         ),
     )
 
@@ -859,17 +870,14 @@ def find_conflicts(
                 "type": "string",
                 "minLength": 1,
                 "maxLength": QUALITY_REASON_CHAR_LIMIT,
-            },
-            "question": {
-                "type": "string",
-                "maxLength": QUALITY_QUESTION_CHAR_LIMIT,
+                "description": "One English sentence, at most 10 whitespace-delimited words.",
+                "pattern": r"^\S+(?:[ \t]+\S+){0,9}$",
             },
         },
         "required": [
             "pair_id",
             "conflict",
             "reason",
-            "question",
         ],
         "additionalProperties": False,
     }
@@ -889,10 +897,12 @@ def find_conflicts(
             "and jointly explainable under others. MAY is semantic "
             "indeterminacy, never low model confidence. Omit NO pairs that are "
             "jointly explainable. Do not invent exotic assumptions to force "
-            "compatibility. For every emitted pair, give the smallest question "
-            "that would resolve which rule applies. For MAY, ask for the "
-            "missing distinction; the reason must state which readings conflict "
-            "and which remain jointly explainable."
+            "compatibility. Write reason as one English sentence of at most "
+            "10 whitespace-delimited words. Pinpoint the disagreement for YES "
+            "or the unresolved meaning or scope for MAY. Do not enumerate "
+            "interpretations, repeat the Memories, ask a question, or propose "
+            "a solution. Keep the distinction between definite conflict and "
+            "unresolved meaning explicit."
         ),
         payload={
             "operation": "find_conflicts",
@@ -912,7 +922,6 @@ def find_conflicts(
                 "pair_id",
                 "conflict",
                 "reason",
-                "question",
             },
             operation="find_conflicts",
         )
@@ -928,24 +937,24 @@ def find_conflicts(
                 "Codex find_conflicts returned an unknown, duplicate, or "
                 "invalid finding."
             )
-        question = _short_string(
-            record["question"],
+        reason = _short_string(
+            record["reason"],
             operation="find_conflicts",
-            label="question",
-            limit=QUALITY_QUESTION_CHAR_LIMIT,
+            label="reason",
+            limit=QUALITY_REASON_CHAR_LIMIT,
         )
+        if len(reason.split()) > CONFLICT_REASON_WORD_LIMIT or any(
+            separator in reason for separator in ("\n", "\r")
+        ):
+            raise FindingsError(
+                "Conflict reason must be one line with at most 10 words."
+            )
         pair = by_id[pair_id]
         findings[pair_id] = ConflictFinding(
             left=pair.left.memory,
             right=pair.right.memory,
             conflict=conflict,  # type: ignore[arg-type]
-            reason=_short_string(
-                record["reason"],
-                operation="find_conflicts",
-                label="reason",
-                limit=QUALITY_REASON_CHAR_LIMIT,
-            ),
-            question=question,
+            reason=reason,
         )
     return ConflictReport(
         memory_count=len(candidates),

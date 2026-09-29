@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from collections.abc import Mapping
 
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     focused_control_style,
@@ -11,10 +12,15 @@ from memcommit.adapters.console.terminal.core.text import (
     safe_terminal_text,
 )
 from memcommit.adapters.console.terminal.core.text_layout import (
+    elide_terminal_text,
+    single_line_terminal_text,
     terminal_cell_width,
     wrap_terminal_text,
+    wrap_terminal_fragments,
 )
-from memcommit.adapters.console.terminal.components.selection.state import FlatSelectionState
+from memcommit.adapters.console.terminal.components.selection.state import (
+    FlatSelectionState,
+)
 
 
 @dataclass(frozen=True)
@@ -83,28 +89,42 @@ def tree_choice_styles(
 
 
 def render_choice_card_rows(
-    lines: tuple[str, ...],
+    lines: tuple[str | tuple[tuple[str, str], ...], ...],
     *,
     visual: ChoiceVisualState,
     width: int | None = None,
+    title: str | None = None,
 ) -> tuple[tuple[tuple[str, str], ...], ...]:
     """Render one Meld-style rectangle as rows of styled fragments."""
 
     if not lines:
         raise ValueError("A choice card requires visible content.")
+    body_style = "" if title is not None else visual.content_style
     safe_lines = tuple(
-        safe_terminal_text(line)
-        .replace("\r\n", "↵")
-        .replace("\r", "↵")
-        .replace("\n", "↵")
+        tuple(
+            (style, safe_terminal_text(text).replace("\n", "↵"))
+            for style, text in (
+                ((body_style, line),) if isinstance(line, str) else line
+            )
+        )
         for line in lines
     )
-    content_width = max(1, max(terminal_cell_width(line) for line in safe_lines))
+    widths = tuple(
+        sum(terminal_cell_width(text) for _, text in line) for line in safe_lines
+    )
+    content_width = max(1, max(widths))
+    safe_title = (
+        single_line_terminal_text(safe_terminal_text(title))
+        if title is not None
+        else None
+    )
+    if safe_title is not None:
+        content_width = max(content_width, terminal_cell_width(safe_title) + 3)
     if width is not None:
-        if width < 3:
+        if width < (6 if title is not None else 3):
             raise ValueError("A choice card width must leave room for its border.")
         content_width = width - 2
-        if any(terminal_cell_width(line) > content_width for line in safe_lines):
+        if any(line_width > content_width for line_width in widths):
             raise ValueError("Choice card content exceeds its requested width.")
     horizontal = "━" if visual.keyboard_target else "─"
     vertical = "┃" if visual.keyboard_target else "│"
@@ -112,15 +132,24 @@ def render_choice_card_rows(
     top_right = "┓" if visual.keyboard_target else "┐"
     bottom = "┗" if visual.keyboard_target else "└"
     bottom_right = "┛" if visual.keyboard_target else "┘"
-    rows: list[tuple[tuple[str, str], ...]] = [
-        ((visual.border_style, top + horizontal * content_width + top_right),)
-    ]
-    for line in safe_lines:
-        padding = max(0, content_width - terminal_cell_width(line))
+    if title is None:
+        top_row = ((visual.border_style, top + horizontal * content_width + top_right),)
+    else:
+        label = elide_terminal_text(safe_title, max(1, content_width - 3))
+        remaining = max(0, content_width - terminal_cell_width(label) - 3)
+        top_row = (
+            (visual.border_style, top + horizontal + " "),
+            (visual.content_style, label),
+            (visual.border_style, " " + horizontal * remaining + top_right),
+        )
+    rows: list[tuple[tuple[str, str], ...]] = [top_row]
+    # A border title carries the choice state; keep its evidence readable.
+    for line, line_width in zip(safe_lines, widths, strict=True):
+        padding = max(0, content_width - line_width)
         rows.append(
             (
                 (visual.border_style, vertical),
-                (visual.content_style, line),
+                *line,
                 ("", " " * padding),
                 (visual.border_style, vertical),
             )
@@ -139,6 +168,8 @@ def render_vertical_choice_cards(
     numbered: bool = True,
     anchor_cursor: bool = True,
     indent: str = "",
+    label_in_border: bool = False,
+    descriptions: Mapping[str, tuple[tuple[str, str], ...]] | None = None,
 ) -> list[tuple[str, str]]:
     """Render long choices as stacked cards through the Meld rectangle policy."""
 
@@ -160,10 +191,22 @@ def render_vertical_choice_cards(
         label_lines = tuple(
             wrap_terminal_text(safe_terminal_text(option.label), label_width)
         )
-        lines = [prefix + label_lines[0]]
+        title = prefix.strip() + " " + option.label if label_in_border else None
+        lines = [] if label_in_border else [prefix + label_lines[0]]
         continuation = " " * terminal_cell_width(prefix)
-        lines.extend(continuation + line for line in label_lines[1:])
-        if option.description:
+        if not label_in_border:
+            lines.extend(continuation + line for line in label_lines[1:])
+        rich_description = (descriptions or {}).get(option.uid)
+        if rich_description is not None:
+            safe_description = tuple(
+                (style, safe_terminal_text(text).replace("\t", "    "))
+                for style, text in rich_description
+            )
+            lines.extend(
+                (("", "  "), *line)
+                for line in wrap_terminal_fragments(safe_description, inner_width - 2)
+            )
+        elif option.description:
             description_prefix = "  "
             description_width = max(
                 1,
@@ -177,9 +220,10 @@ def render_vertical_choice_cards(
                 )
             )
         rows = render_choice_card_rows(
-            tuple(lines),
+            tuple(lines) or ("",),
             visual=visual,
             width=width,
+            title=title.strip() if title is not None else None,
         )
         for row in rows:
             if indent:
@@ -193,6 +237,7 @@ def render_vertical_choice_cards(
         if index < len(state.options):
             fragments.append(("", "\n"))
     return fragments
+
 
 def render_vertical_choice_rows(
     state: FlatSelectionState,

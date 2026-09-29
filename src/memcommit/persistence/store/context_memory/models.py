@@ -74,7 +74,6 @@ class ContextRenamePlan:
     reference_count: int
     checkpoint_reference_count: int
     translation_artifact_count: int
-    meld_session_count: int
     current_before: str | None
     current_after: str | None
     graph_digest: str
@@ -93,7 +92,6 @@ class ContextRenameResult:
     reference_count: int
     checkpoint_reference_count: int
     translation_artifact_count: int
-    meld_session_count: int
     current_context: str | None
 
 
@@ -110,8 +108,6 @@ class _PreparedContextRename:
     post_state: dict[str, object]
     translation_records: dict[str, dict[str, object]]
     post_translation_records: dict[str, dict[str, object]]
-    meld_records: dict[str, dict[str, object]]
-    post_meld_records: dict[str, dict[str, object]]
 
 
 _NO_CURRENT_CONTEXT_EXPECTATION = object()

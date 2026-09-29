@@ -15,21 +15,17 @@ from memcommit.adapters.console.terminal.core.text import (
 )
 from memcommit.adapters.console.terminal.core.theme import (
     semantic_color_rgb,
-    semantic_judgment_role,
     semantic_quality_role,
 )
 from memcommit.application.operations.audit.model import QualityAuditSession
 from memcommit.application.capabilities.memory_issue_analysis.report import (
     QualityFindingReportItem,
-    quality_find_category_label,
     quality_find_report_summary_text,
 )
-from memcommit.application.capabilities.memory_issue_analysis.source import (
-    QualityFindSourceFrame,
-)
-from memcommit.application.capabilities.memory_issue_analysis.workbench import (
-    QualityFindWorkbenchSession,
-    quality_find_report_view,
+from memcommit.application.operations.audit.report import (
+    audit_check_label,
+    audit_check_report_view,
+    ordered_audit_checks,
 )
 
 
@@ -45,6 +41,7 @@ def _render_quality_audit_finding_preview(
         item,
         prefix="  ",
         show_context=False,
+        show_label=False,
         uid_prefixes=uid_prefixes,
     )
 
@@ -53,36 +50,27 @@ def render_quality_audit_receipt(session: QualityAuditSession) -> None:
     """Print the saved artifact with each finder's truthful result unit."""
 
     typer.secho("Audit saved:", bold=True, nl=False)
-    typer.echo(f" {len(session.checks) + int(session.fit is not None)} quality checks.")
+    check_count = len(session.completed_checks)
+    check_label = "check" if check_count == 1 else "checks"
+    typer.echo(f" {check_count} quality {check_label}.")
     memory_count = len(session.source.memories)
     memory_label = "memory" if memory_count == 1 else "memories"
     typer.secho("Source:", bold=True, nl=False)
     typer.echo(
         f" {display_escape_text(session.source.context_name)} · "
-        f"{memory_count} {memory_label}"
+        f"{len(session.source.items)} direct items · {memory_count} {memory_label}"
     )
 
-    context = session.source.context()
-    source_frame = QualityFindSourceFrame.create((context,))
     uid_prefixes = collision_safe_uid_prefixes(
-        memory.uid for memory in session.source.memories
+        item.uid for item in session.source.items
     )
     typer.echo()
-    for check in session.checks:
-        label = quality_find_category_label(check.kind)
+    for check in ordered_audit_checks(session):
+        label = audit_check_label(check.kind)
         role = semantic_quality_role(check.kind)
         if role is None:  # pragma: no cover - Audit validates this union.
             raise ValueError("Unsupported Audit quality check kind.")
-        report_view = quality_find_report_view(
-            QualityFindWorkbenchSession(
-                uid=session.uid,
-                kind=check.kind,
-                source=source_frame,
-                report=check.report,
-            ),
-            source_frame,
-            operation_label=f"AUDIT · {label}",
-        )
+        report_view = audit_check_report_view(session, check)
         typer.secho(
             label,
             fg=semantic_color_rgb(role),
@@ -101,30 +89,9 @@ def render_quality_audit_receipt(session: QualityAuditSession) -> None:
         if remaining > 0:
             typer.echo(f"  … {remaining} more")
 
-    fit = session.fit
-    if fit is not None:
-        typer.secho("FIT", bold=True, nl=False)
-        typer.echo(" " * 12, nl=False)
-        role = semantic_judgment_role(fit.verdict)
-        if role is None:  # pragma: no cover - Audit validates the Fit union.
-            raise ValueError("Unsupported Audit Fit verdict.")
-        typer.secho(
-            fit.verdict,
-            fg=semantic_color_rgb(role),
-            bold=True,
-            nl=False,
-        )
-        if fit.verdict == "YES":
-            typer.echo(" · WHOLE CONTEXT JOINTLY COMPATIBLE")
-        else:
-            typer.echo(
-                f" · {len(fit.material_memory_uids)}/{memory_count} MEMORIES MATERIAL"
-                f" · WHY · {display_escape_text(fit.reason)}"
-            )
-
     typer.echo()
-    typer.secho("Review full audit:", bold=True)
-    typer.echo(f"mem review audit --session {session.uid}")
+    typer.secho("Audit record:", bold=True, nl=False)
+    typer.echo(f" {session.uid}")
 
 
 __all__ = ["render_quality_audit_receipt"]

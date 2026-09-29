@@ -56,7 +56,7 @@ from memcommit.application.operations.ground.workspace_runtime import (
 )
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.persistence.store import MemoryStore
-from memcommit.providers.subscription import connect_codex_chatgpt_provider
+from memcommit.providers.connection import connect_semantic_provider
 
 from . import apply as approved_apply
 
@@ -174,7 +174,7 @@ def _interpret_new_ground_turn(
         )
     turn = interpret_ground_dialogue(
         text,
-        connect_codex_chatgpt_provider,
+        connect_semantic_provider,
         context_names=context_names,
         ground_name=ground_name,
     )

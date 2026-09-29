@@ -11,7 +11,8 @@ _BODY = (
     "Update is revision-oriented: it treats a Source as verified change evidence "
     "and semantically patches an existing Target. Merge is merge-oriented: it "
     "semantically combines two inputs while reconciling their relationships and "
-    "conflicts, either into an existing Baseline or a new Result."
+    "conflicts in an existing Target. Merge takes two exact Contexts; "
+    "individual Memory selection and inline input are available in Update."
 )
 
 

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import shutil
 import uuid
 from datetime import datetime, timezone
@@ -18,6 +19,7 @@ from memcommit.application.operations.profile.config import (
     AUTHORING_PROFILE_NAME,
     ProfileConfigError,
     ProfileEntry,
+    ProfileRegistry,
     load_profile_registry,
     profile_stores_dir,
     validate_profile_name,
@@ -43,21 +45,22 @@ def init_legacy_study_profile(
 
     generated_uid = uuid.uuid4()
     created = datetime.now(timezone.utc)
-    if name is None:
-        profile_name = generate_study_profile_name(
-            created=created,
-            generated_uid=generated_uid,
-        )
-    else:
+    if name is not None:
         try:
-            profile_name = validate_profile_name(name)
+            name = validate_profile_name(name)
         except (ProfileConfigError, ValueError) as error:
             raise ProfileError("Study Profile name is invalid.") from error
-    if profile_name == AUTHORING_PROFILE_NAME:
+    if name == AUTHORING_PROFILE_NAME:
         raise ProfileError("The fixed authoring name cannot identify a Study Profile.")
 
     with _registry_lock():
         registry = load_profile_registry()
+        # Allocate automatic names inside the same lock that publishes the pair.
+        profile_name = (
+            name
+            if name is not None
+            else generate_study_profile_name(created=created, registry=registry)
+        )
         staging = profile_stores_dir() / (
             f".{profile_name}.legacy-source-{uuid.uuid4().hex}"
         )
@@ -102,21 +105,23 @@ def init_coffee_study_profile(
 
     generated_uid = uuid.uuid4()
     created = datetime.now(timezone.utc)
-    if name is None:
-        profile_name = generate_study_profile_name(
-            created=created,
-            generated_uid=generated_uid,
-        )
-    else:
+    if name is not None:
         try:
-            profile_name = validate_profile_name(name)
+            name = validate_profile_name(name)
         except (ProfileConfigError, ValueError) as error:
             raise ProfileError("Study Profile name is invalid.") from error
-    if profile_name == AUTHORING_PROFILE_NAME:
+    if name == AUTHORING_PROFILE_NAME:
         raise ProfileError("The fixed authoring name cannot identify a Study Profile.")
 
     with _registry_lock():
         registry = load_profile_registry()
+        # The editable console suggestion is an exact name; only unnamed
+        # requests allocate a fresh sequence here, never silently retarget edits.
+        profile_name = (
+            name
+            if name is not None
+            else generate_study_profile_name(created=created, registry=registry)
+        )
         staging = profile_stores_dir() / (
             f".{profile_name}.coffee-source-{uuid.uuid4().hex}"
         )
@@ -151,12 +156,20 @@ def init_coffee_study_profile(
 def generate_study_profile_name(
     *,
     created: datetime | None = None,
-    generated_uid: uuid.UUID | None = None,
+    registry: ProfileRegistry | None = None,
 ) -> str:
-    """Return the editable timestamp-and-UUID default for one Study run."""
+    """Suggest study-YYMMDD-N locally; publication must hold the registry lock."""
     timestamp = created or datetime.now(timezone.utc)
     if timestamp.tzinfo is None:
         raise ValueError("Study name timestamps must be timezone-aware.")
-    timestamp = timestamp.astimezone(timezone.utc)
-    suffix = generated_uid or uuid.uuid4()
-    return f"study-{timestamp.strftime('%Y%m%dT%H%M%SZ')}-{str(suffix)[:8]}"
+    day = timestamp.astimezone().strftime("%y%m%d")
+    registry = registry if registry is not None else load_profile_registry()
+    pattern = re.compile(rf"study-{day}-([1-9][0-9]*)(?:-granted-memory)?", re.IGNORECASE)
+    # Include tombstones and authority-only collisions: old study names must
+    # not acquire a new meaning when a participant Profile is removed.
+    used = (
+        int(match.group(1))
+        for profile in registry.profiles
+        if (match := pattern.fullmatch(profile.name)) is not None
+    )
+    return f"study-{day}-{max(used, default=0) + 1}"

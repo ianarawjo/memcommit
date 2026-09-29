@@ -66,16 +66,15 @@ class JsonAuditRecordRepository:
     def create(self, session: QualityAuditSession) -> None:
         """Create one immutable UID-addressed Audit record."""
 
-        restored = QualityAuditSession.from_dict(session.to_dict())
-        path = self._path(restored.uid)
-        data = restored.to_dict()
+        path = self._path(session.uid)
+        data = session.to_dict()
         with self.store.profile_write_guard():
             if self.directory.exists() and (
                 not self.directory.is_dir() or self.directory.is_symlink()
             ):
                 raise QualityAuditError("Audit session storage is invalid.")
             self.directory.mkdir(parents=True, exist_ok=True, mode=0o700)
-            with self._write_lock(restored.uid):
+            with self._write_lock(session.uid):
                 if path.exists() and (not path.is_file() or path.is_symlink()):
                     raise QualityAuditError("Audit session storage is invalid.")
                 if path.exists():

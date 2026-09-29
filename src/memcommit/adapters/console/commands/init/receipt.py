@@ -5,10 +5,11 @@ from __future__ import annotations
 import typer
 
 from memcommit.application.operations.init.application import ContextInitResult
+from memcommit.adapters.console.terminal.core.output import echo_text
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 
 
-def render_context_init(result: ContextInitResult) -> None:
+def render_context_init_receipt(result: ContextInitResult) -> None:
     """Preserve the established successful ``mem init`` output."""
 
     name = display_escape_text(result.requested_name)
@@ -20,16 +21,8 @@ def render_context_init(result: ContextInitResult) -> None:
         f"Ensured context hierarchy '{name}'.",
         fg=typer.colors.GREEN,
     )
-    created = ", ".join(
-        display_escape_text(created_name) for created_name in result.created_names
-    )
-    typer.echo("  Created: " + (created if created else "(none)"))
+    created = ", ".join(result.created_names) or "(none)"
+    echo_text("  Created: {names}", names=created)
     if result.reused_names:
-        typer.echo(
-            "  Reused: "
-            + ", ".join(
-                display_escape_text(reused_name)
-                for reused_name in result.reused_names
-            )
-        )
-    typer.echo(f"  Current: {display_escape_text(result.current_name)}")
+        echo_text("  Reused: {names}", names=", ".join(result.reused_names))
+    echo_text("  Current: {name}", name=result.current_name)

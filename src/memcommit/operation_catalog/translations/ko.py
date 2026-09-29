@@ -2,12 +2,16 @@
 
 from memcommit.operation_catalog.translations.model import (
     LocalizedOperationCopy,
+)
+from memcommit.operation_catalog.translations.model import (
     localized_copy as _copy,
 )
 
-
 TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
-    "export": LocalizedOperationCopy('현재 Context 내용을 문서, Agent Skill 또는 mem 형식으로 내보낸다.', '편집한 메모리 문서를 외부에서 사용할 수 있는 파일로 출력할 때 사용한다.'),
+    "export": LocalizedOperationCopy(
+        "현재 Context 내용을 문서, Agent Skill 또는 mem 형식으로 내보낸다.",
+        "편집한 메모리 문서를 외부에서 사용할 수 있는 파일로 출력할 때 사용한다.",
+    ),
     "add": _copy(
         "현재 또는 지정한 Context에 하나 이상의 Memory를 추가합니다.",
         "하나 이상의 사실, 지침 또는 메모를 Context에 직접 추가할 때.",
@@ -17,7 +21,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "함께 적힌 요구사항이나 주장을 각각 독립적으로 검토하고 수정할 수 있도록 풀어낼 때.",
     ),
     "audit": _copy(
-        "중복·모호성·충돌 검사와 선택적인 Rule Conformance를 실행한 뒤 저장된 종합 결과를 검토합니다.",
+        "중복·모호성·충돌·Fit 중 기본 목록 또는 지정한 검사들을 실행하고 결과를 저장합니다.",
         "Context를 수정하기 전에 종합적인 품질 검토를 수행할 때.",
     ),
     "branch": _copy(
@@ -92,9 +96,9 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Source 소유권을 유지하면서 하나의 Memory 또는 Context를 가리키는 live link를 로컬 Target 안에 둡니다.",
         "Source의 이후 변경을 따라가면서 Memory나 Context를 다른 Context에서 재사용할 때.",
     ),
-    "eval": _copy(
-        "향후 evaluation workflow를 위해 Eval operation 이름을 예약해 둡니다.",
-        "아직 application contract가 정의되지 않은 예약 Eval surface를 확인할 때.",
+    "dev-eval": _copy(
+        "등록된 시나리오를 실행하고 결과를 검증합니다.",
+        "재사용할 테스트 데이터를 만들고 반복 가능한 시나리오로 operation을 검증할 때.",
     ),
     "find": _copy(
         "읽을 수 있는 Memory에서 정확한 텍스트 또는 명시적인 정규식(regex) 일치를 찾습니다.",
@@ -157,8 +161,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "이전 operation, checkpoint 또는 Memory 기록을 조사할 때.",
     ),
     "merge": _copy(
-        '두 Context를 의미적으로 조정하여 별도 Result를 만들거나 제안된 변경을 기존 Target Context에 반영합니다. 기본은 의미 기반 통합이며, --literal은 LLM 없이 저장된 항목 기준으로 병합합니다.',
-        '겹침, 충돌, 새로 합성된 내용을 의미적으로 검토하면서 두 작업 묶음을 결합할 때.',
+        "두 Context의 직접 내용을 기존 Target Context에 병합합니다. 기본은 의미 기반 통합이며, --literal은 LLM 없이 저장된 항목 기준으로 병합합니다.",
+        "겹침, 충돌, 새로 합성된 내용을 의미적으로 검토하면서 두 작업 묶음을 결합할 때.",
     ),
     "move": _copy(
         "직접 소유한 하나 이상의 Memory를 다른 기존 로컬 Context로 옮깁니다.",
@@ -201,8 +205,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "알고 있는 로컬 Context 범위 전체에서 정확한 텍스트를 수정·이름 변경·가림 처리할 때.",
     ),
     "resolve": _copy(
-        "제한된 direct-Memory Context frame을 Fit YES로 만드는 최소 변경을 제안하고 검증합니다.",
-        "제한된 Context frame 안의 의미적 충돌이나 모호성을 어떻게 고칠지 결정할 때.",
+        "의미적 충돌을 찾아 해결 선택을 받고, 결과를 충돌 재검사한 뒤 적용합니다.",
+        "제한된 Context frame 안의 의미적 충돌을 어떻게 고칠지 결정할 때.",
     ),
     "revert": _copy(
         "현재 또는 명시한 로컬 Context를 선택한 checkpoint로 복원하기 전에 해당 revision과 완전한 결과 상태를 검토합니다.",

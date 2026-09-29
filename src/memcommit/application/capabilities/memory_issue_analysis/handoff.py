@@ -552,7 +552,6 @@ def quality_finding_handoffs(
                 memory_uids=(finding.left.uid, finding.right.uid),
                 classification=finding.conflict,
                 reason=finding.reason,
-                question=finding.question,
             )
             for finding in session.report.findings
         )

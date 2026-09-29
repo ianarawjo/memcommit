@@ -32,7 +32,7 @@ from memcommit.application.operations.rationale.skills.context_inference import 
 )
 from memcommit.core.context import Context
 from memcommit.persistence.store import MemoryStore, context_record_digest
-from memcommit.providers.subscription import QueryProviderError
+from memcommit.providers.errors import QueryProviderError
 
 
 def load_context_rationale_history(

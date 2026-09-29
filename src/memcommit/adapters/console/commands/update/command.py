@@ -58,10 +58,8 @@ from memcommit.adapters.console.coordination.context_scope_options import (
 )
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-)
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 from memcommit.persistence.store import MemoryStore
 from memcommit.application.operations.update.model import (
     UpdateError,
@@ -244,7 +242,7 @@ def _plan_update_with_wait(
 
     def plan(progress):
         def connect():
-            provider = connect_codex_chatgpt_provider()
+            provider = connect_semantic_provider()
             progress.update("planning memory changes", step=2)
             return provider
 

@@ -26,14 +26,14 @@ def render_add_receipt(result: AddResult) -> None:
         bold=True,
     )
     memory_or_memories = "Memory" if result.count == 1 else "Memories"
-
-
+    
+    
 
     typer.echo(
         f"{checkpoint_uid} "
         f"{action} {result.count} {memory_or_memories} to '{target_context}'"
     )
-
+    
 
     for memory in result.memories:
         content = typer.style(

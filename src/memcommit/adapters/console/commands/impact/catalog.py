@@ -17,7 +17,6 @@ from memcommit.adapters.console.commands.atomize.records import atomize_record_e
 from memcommit.adapters.console.terminal.components.operation_launcher.location import (
     session_picker_location,
 )
-from memcommit.adapters.console.commands.merge.semantic.sessions import list_meld_session_catalog
 from memcommit.adapters.console.commands.sever.sessions import (
     list_sever_session_catalog,
 )
@@ -37,7 +36,7 @@ from memcommit.persistence.operations.update.receipt_repository import (
 )
 
 
-IMPACT_SESSION_KINDS = ("atomize", "meld", "sever", "update")
+IMPACT_SESSION_KINDS = ("atomize", "sever", "update")
 
 
 def select_saved_session(
@@ -100,7 +99,7 @@ def _impact_entry(
     """Orient one operation-owned row without changing its saved identity."""
 
     kind = operation or entry.kind
-    public_name = "merge" if kind == "meld" else kind
+    public_name = kind
     label = public_name.replace("_", " ").replace("-", " ").upper()
     return replace(
         entry,
@@ -125,25 +124,6 @@ def _impact_entry(
         # content while still making the UID authoritative.
         reopen_argv=("mem", "impact", public_name, "--session", entry.key),
         detail_only=True,
-    )
-
-
-def _meld_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]:
-    return tuple(
-        _impact_entry(
-            SessionPickerEntry(
-                kind="meld",
-                key=entry.session_uid,
-                title=entry.title,
-                status=entry.status,
-                subtitle=entry.subtitle,
-                group=entry.group,
-                sort_timestamp=entry.modified_timestamp,
-                detail=entry.detail,
-                reopen_argv=entry.reopen_argv,
-            )
-        )
-        for entry in list_meld_session_catalog(store)
     )
 
 
@@ -224,7 +204,6 @@ def impact_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]
 
     entries: list[SessionPickerEntry] = []
     entries.extend(_impact_entry(entry) for entry in atomize_record_entries(store))
-    entries.extend(_meld_entries(store))
     entries.extend(
         _impact_entry(entry.picker_entry)
         for entry in list_sever_session_catalog(SeverSessionStore(store))

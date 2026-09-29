@@ -149,6 +149,7 @@ class EndpointSetupSpec:
     initial_mode_uid: str
     roles: tuple[EndpointSetupRole, ...]
     action_label: str = "CONTINUE TO PLAN REVIEW"
+    mode_label: str = "MODE"
     screen_layout: Literal["WORKBENCH", "FORM"] = "WORKBENCH"
     _resolved_modes: tuple[_ResolvedMode, ...] = field(
         init=False, repr=False, compare=False
@@ -178,7 +179,7 @@ class EndpointSetupSpec:
             )
 
     def _validate_presentation(self) -> None:
-        labels = (self.title, self.subtitle, self.action_label)
+        labels = (self.title, self.subtitle, self.action_label, self.mode_label)
         if any(
             not isinstance(label, str)
             or not label

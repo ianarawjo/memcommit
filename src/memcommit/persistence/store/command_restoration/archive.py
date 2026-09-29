@@ -88,11 +88,11 @@ class _CommandArchiveMixin:
                 or unit_uid != f"checkpoint:{checkpoint_uid}"
             ):
                 raise ValueError("Command Context archive manifest is invalid.")
-        elif command == "merge":
+        elif command in {"merge", "meld"}:
             if (
                 set(manifest) != lifecycle_manifest_fields
                 or not isinstance(unit_uid, str)
-                or not unit_uid.startswith("merge:")
+                or not unit_uid.startswith(f"{command}:")
             ):
                 raise ValueError("Command Context archive manifest is invalid.")
         elif command == "branch":

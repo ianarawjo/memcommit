@@ -25,7 +25,7 @@ from memcommit.application.operations.search.errors import SearchError
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
-from memcommit.providers.subscription import QueryProviderError
+from memcommit.providers.errors import QueryProviderError
 
 
 def _interactive_terminal() -> bool:

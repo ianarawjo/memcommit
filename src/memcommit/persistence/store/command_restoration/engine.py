@@ -225,7 +225,7 @@ class _CommandRestorationEngineMixin:
                 unit,
                 direction,
             )
-        if unit.command == "merge":
+        if unit.command in {"merge", "meld"}:
             return self._restore_merge_context_creation_command_locked(
                 unit,
                 direction,
@@ -250,8 +250,6 @@ class _CommandRestorationEngineMixin:
         direction: str,
     ) -> tuple[Path, dict[str, object], dict[str, object]] | None:
         """Prepare a saved operation session coupled to one Context command."""
-        if unit.command == "meld":
-            return self._prepare_meld_command_restore(unit, direction)
         if unit.command == "sever":
             return self._prepare_sever_command_restore(unit, direction)
         if unit.command == "update":

@@ -30,7 +30,7 @@ class _MergeRestorationMixin:
         )
 
         if (
-            unit.command != "merge"
+            unit.command not in {"merge", "meld"}
             or not unit.changes
             or any(change.after is None for change in unit.changes)
             or not any(change.before is None for change in unit.changes)
@@ -164,7 +164,7 @@ class _MergeRestorationMixin:
                                 archive / "manifest.json",
                                 {
                                     "version": 1,
-                                    "command": "merge",
+                                    "command": unit.command,
                                     "unit_uid": unit.uid,
                                     "context_uid": change.context_uid,
                                     "context_name": change.context_name,
@@ -264,7 +264,7 @@ class _MergeRestorationMixin:
                         )
                         assert change.after is not None
                         if (
-                            manifest.get("command") != "merge"
+                            manifest.get("command") != unit.command
                             or manifest.get("unit_uid") != unit.uid
                             or archived.uid != change.context_uid
                             or archived.name != change.context_name

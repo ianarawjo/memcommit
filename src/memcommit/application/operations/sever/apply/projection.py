@@ -31,7 +31,7 @@ from memcommit.persistence.store import (
 )
 
 
-def _result_uid(session_uid: str, source_uid: str, content: str) -> str:
+def sever_result_memory_uid(session_uid: str, source_uid: str, content: str) -> str:
     return str(
         uuid.uuid5(uuid.UUID(session_uid), f"result\x1f{source_uid}\x1f{content}")
     )
@@ -102,7 +102,7 @@ def result_context(
     sources: list[dict[str, str]] = []
     operations: list[UpdateOperation] = []
     for candidate, source, content in session.results():
-        uid = _result_uid(session.uid, source.uid, content)
+        uid = sever_result_memory_uid(session.uid, source.uid, content)
         operations.append(
             AddOperation(
                 owner_context_uid=output.uid,

@@ -57,10 +57,8 @@ from memcommit.application.capabilities.history.query.semantic_history_query imp
     HistorySearchResult,
     search_history,
 )
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-)
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 from memcommit.application.capabilities.history.verification import (
     MemoryHistoryReconstructionError,
 )
@@ -570,7 +568,7 @@ def cmd(
                 "connecting provider",
                 total=2,
             ) as progress:
-                provider = connect_codex_chatgpt_provider()
+                provider = connect_semantic_provider()
                 progress.update("searching history", step=2)
                 results = search_history(
                     timeline,

@@ -2,12 +2,16 @@
 
 from memcommit.operation_catalog.translations.model import (
     LocalizedOperationCopy,
+)
+from memcommit.operation_catalog.translations.model import (
     localized_copy as _copy,
 )
 
-
 TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
-    "export": LocalizedOperationCopy('Exporter le contenu actuel des Contexts en documents, en Agent Skill ou au format mem.', 'Produire des fichiers utilisables hors de mem à partir des documents de mémoire modifiés.'),
+    "export": LocalizedOperationCopy(
+        "Exporter le contenu actuel des Contexts en documents, en Agent Skill ou au format mem.",
+        "Produire des fichiers utilisables hors de mem à partir des documents de mémoire modifiés.",
+    ),
     "add": _copy(
         "Ajouter une ou plusieurs Memories au Context courant ou indiqué.",
         "Ajouter directement à un Context un ou plusieurs faits, consignes ou notes.",
@@ -17,7 +21,7 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Démêler des exigences ou affirmations écrites ensemble afin de pouvoir les examiner et les réviser séparément.",
     ),
     "audit": _copy(
-        "Exécuter les contrôles de doublons, d’ambiguïtés et de conflits, avec une conformité aux Rules facultative, puis examiner le résultat enregistré.",
+        "Exécuter les contrôles de doublons, d’ambiguïtés et de conflits et de Fit, puis examiner le résultat enregistré.",
         "Effectuer un contrôle qualité combiné avant de réviser un Context.",
     ),
     "branch": _copy(
@@ -92,9 +96,9 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Placer dans un Target local un lien vivant vers une Memory ou un Context tout en conservant la propriété de la Source.",
         "Réutiliser une Memory ou un Context dans un autre Context en suivant les modifications ultérieures de la Source.",
     ),
-    "eval": _copy(
-        "Réserver le nom de l’opération Eval pour un futur flux d’évaluation.",
-        "Reconnaître la surface Eval réservée tant que son contrat d’application reste indéfini.",
+    "dev-eval": _copy(
+        "Exécuter un scénario enregistré et vérifier ses résultats.",
+        "Créer des données de test réutilisables et vérifier les opérations avec des scénarios reproductibles.",
     ),
     "find": _copy(
         "Trouver dans les Memories lisibles un texte exact ou des correspondances d’expression régulière explicite (regex).",
@@ -157,8 +161,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Étudier des opérations, checkpoints ou historiques de Memory antérieurs.",
     ),
     "merge": _copy(
-        'Réconcilier sémantiquement deux Contexts, soit dans un Result distinct, soit en incorporant des changements proposés à un Target Context existant. Par défaut, fusion sémantique ; --literal fusionne les éléments stockés sans LLM.',
-        'Combiner deux ensembles de travail lorsque chevauchements, conflits et nouveau contenu synthétisé doivent être examinés sémantiquement.',
+        "Combiner le contenu direct de deux Contexts dans un Target Context existant. Par défaut, fusion sémantique ; --literal fusionne les éléments stockés sans LLM.",
+        "Combiner deux ensembles de travail lorsque chevauchements, conflits et nouveau contenu synthétisé doivent être examinés sémantiquement.",
     ),
     "move": _copy(
         "Déplacer une ou plusieurs Memories directement possédées vers un autre Context local existant.",
@@ -201,8 +205,8 @@ TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
         "Corriger, renommer ou masquer un texte exact dans une portée locale de Context connue.",
     ),
     "resolve": _copy(
-        "Proposer et vérifier les changements minimaux qui rendent Fit YES un cadre borné de Context à Memories directes.",
-        "Décider comment réparer des conflits sémantiques ou des ambiguïtés dans un cadre de Context borné.",
+        "Détecter les conflits sémantiques, recueillir les décisions de résolution et vérifier à nouveau les conflits avant d’appliquer le résultat.",
+        "Décider comment réparer des conflits sémantiques dans un cadre de Context borné.",
     ),
     "revert": _copy(
         "Restaurer le Context local courant ou indiqué à un checkpoint sélectionné après examen de la révision et de son état résultant complet.",

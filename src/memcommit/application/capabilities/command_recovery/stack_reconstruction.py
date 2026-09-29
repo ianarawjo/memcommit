@@ -609,6 +609,19 @@ def _context_parts(
             and isinstance(merge_tree.get("operation_uid"), str)
             and bool(merge_tree.get("operation_uid"))
         )
+        meld = args.get("meld")
+        is_semantic_merge_creation = (
+            command == "meld"
+            and isinstance(meld, dict)
+            and meld.get("schema_version") == 1
+            and meld.get("contract") == "AUDIT_RESOLVE_UPDATE"
+            and meld.get("target_created") is True
+            and isinstance(meld.get("operation_uid"), str)
+            and bool(meld.get("operation_uid"))
+            and isinstance(creation, dict)
+            and creation
+            == {"version": 1, "context_uid": context.uid, "context_name": context.name}
+        )
         save_as = args.get("atomize_save_as")
         is_exact_atomize_creation = (
             command == "atomize"
@@ -629,6 +642,7 @@ def _context_parts(
             and (
                 is_exact_sever_creation
                 or is_merge_creation
+                or is_semantic_merge_creation
                 or is_exact_atomize_creation
             )
             and owned
@@ -671,11 +685,8 @@ def _context_parts(
             or command in {"checkpoint", "init"}
             or not owned
             or before is None
-            # A zero-change Meld still changes its durable session from READY
-            # to APPLIED. Keep that checkpoint in the command stack so Undo
-            # and Redo restore the complete operation rather than only visible
-            # Context bytes.
-            or (before == snapshot and command not in {"meld", "merge", "sever"})
+            # Merge has no companion state; an unchanged Context needs no Undo.
+            or (before == snapshot and command not in {"merge", "sever"})
         ):
             continue
         originals.append(

@@ -48,10 +48,8 @@ from memcommit.adapters.console.coordination.context_scope_options import (
     resolve_scope_preset,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_semantic_provider,
-)
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 
 
 def distill_impact_presentation(

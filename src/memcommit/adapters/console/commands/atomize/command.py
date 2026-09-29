@@ -37,10 +37,8 @@ from memcommit.core.context_targeting.resolution import (
     parse_auto_typed_context_memory_operand,
 )
 from memcommit.persistence.store import MemoryStore
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-)
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 
 
 def _parse_target(
@@ -173,7 +171,7 @@ def cmd(
         with progressing_provider_factory(
             "ATOMIZE",
             "analyzing and normalizing memory structure",
-            connect_codex_chatgpt_provider,
+            connect_semantic_provider,
         ) as provider_factory:
             executed = execute_atomize_in_place(
                 AtomizeInPlaceRequest(

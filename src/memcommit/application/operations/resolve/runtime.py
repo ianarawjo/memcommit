@@ -6,6 +6,10 @@ import hashlib
 import json
 from dataclasses import dataclass
 
+from memcommit.application.operations.audit.model import (
+    QualityAuditMemory,
+    QualityAuditSource,
+)
 from memcommit.application.authorization.context_operation import (
     authorized_context_mutation,
 )
@@ -20,14 +24,13 @@ from memcommit.application.context_access.access import (
 from memcommit.core.context import AutoCheckpoint, Context, Memory, MemoryRef
 from memcommit.application.capabilities.context_locator import resolve_context_locator
 from memcommit.application.operations.profile.config import ProfileRegistry
-from memcommit.application.operations.resolve.application import (
+from memcommit.application.operations.resolve.model import (
     RESOLVE_CONTRACT_VERSION,
     FrozenResolveFrame,
     ResolveAuthorityError,
     ResolveConflictError,
     ResolveEffectKind,
     ResolveError,
-    ResolveFrameMemory,
     ResolveReceipt,
     ResolveRequest,
 )
@@ -41,6 +44,9 @@ from memcommit.application.operations.update.model import (
     UpdatePlan,
 )
 from memcommit.persistence.store import MemoryStore, context_record_digest
+from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
+    find_exact_duplicate_groups,
+)
 
 
 _EFFECT_PERMISSION_ORDER: tuple[ResolveEffectKind, ...] = (
@@ -82,7 +88,7 @@ def _revision(
 
 
 def _select_actionable(
-    memories: tuple[ResolveFrameMemory, ...],
+    memories: tuple[QualityAuditMemory, ...],
     selectors: tuple[str, ...],
 ) -> tuple[str, ...]:
     if not selectors:
@@ -160,27 +166,23 @@ class MemoryStoreResolvePort:
             raise TypeError("Resolve freeze requires a typed request.")
         access = self._access(request)
         authority, projected = self._records(access)
-        memories = tuple(
-            ResolveFrameMemory(
-                alias=f"m{index}",
-                uid=item.uid,
-                content=item.content,
-            )
-            for index, item in enumerate(
-                (
-                    value
-                    for value in projected.iter_items()
-                    if isinstance(value, Memory)
-                ),
-                1,
-            )
-        )
-        if len(memories) < 2:
+        source = QualityAuditSource.from_context(authority)
+        # A Grant projection may rename the Context, but cannot change its Memories.
+        if access.is_granted and tuple(
+            (item.uid, item.content)
+            for item in projected.iter_items()
+            if isinstance(item, Memory)
+        ) != tuple((item.uid, item.content) for item in source.memories):
+            raise ResolveError("Resolve Source and Memory projection disagree.")
+        if len(projected.ordered_uids()) < 2:
             raise ResolveError(
-                "Resolve requires at least two directly owned Memories in the "
-                "selected Context."
+                "Resolve requires at least two direct items in the selected Context."
             )
-        actionable_uids = _select_actionable(memories, request.memory_selectors)
+        actionable_uids = (
+            _select_actionable(source.memories, request.memory_selectors)
+            if request.memory_selectors
+            else tuple(projected.ordered_uids())
+        )
         requested = request.requested_effects
         grant_permissions = (
             set(access.view.grant.permissions) if access.view is not None else None
@@ -199,22 +201,18 @@ class MemoryStoreResolvePort:
             )
             missing_authority = ()
             binding = freeze_granted_context_binding(access)
-        digest = context_record_digest(authority)
         return FrozenResolveFrame(
+            source=source,
             request=request,
-            context_uid=authority.uid,
-            context_name=authority.name,
             display_name=access.access_name,
-            context_digest=digest,
             revision=_revision(
                 request,
                 context_uid=authority.uid,
                 context_name=authority.name,
                 display_name=access.access_name,
-                context_digest=digest,
+                context_digest=source.context_digest,
                 actionable_uids=actionable_uids,
             ),
-            memories=memories,
             actionable_uids=actionable_uids,
             allowed_effects=allowed,
             denied_effects=denied,
@@ -232,13 +230,13 @@ class MemoryStoreResolvePort:
                 )
             except Exception as error:
                 raise ResolveAuthorityError(str(error)) from error
-        if not self.active_store.context_exists(frame.context_name):
+        if not self.active_store.context_exists(frame.source.context_name):
             raise ResolveConflictError(
-                f"Resolve Context '{frame.context_name}' no longer exists."
+                f"Resolve Context '{frame.source.context_name}' no longer exists."
             )
         return ContextAccess(
             store=self.active_store,
-            context_name=frame.context_name,
+            context_name=frame.source.context_name,
             access_name=frame.display_name,
             permission="READ",
         )
@@ -247,8 +245,8 @@ class MemoryStoreResolvePort:
     def _require_current(frame: FrozenResolveFrame, access: ContextAccess) -> Context:
         current = access.store.load_direct(access.context_name)
         if (
-            current.uid != frame.context_uid
-            or context_record_digest(current) != frame.context_digest
+            current.uid != frame.source.context_uid
+            or context_record_digest(current) != frame.source.context_digest
         ):
             raise ResolveConflictError(
                 "The Resolve Context changed during review. Reopen Resolve."
@@ -307,6 +305,7 @@ class MemoryStoreResolvePort:
         *,
         unresolved_issue_uids: tuple[str, ...] = (),
         finalized_inputs: tuple[ResolveFinalizedInput, ...] = (),
+        removed_item_uids: tuple[str, ...] = (),
     ) -> ResolveReceipt:
         """Publish one exact Update-generated plan through Resolve's lock."""
 
@@ -314,7 +313,10 @@ class MemoryStoreResolvePort:
             plan, UpdatePlan
         ):
             raise TypeError("Resolve Apply requires a frozen frame and UpdatePlan.")
-        if plan.target_uid != frame.context_uid or plan.target_name != frame.context_name:
+        if (
+            plan.target_uid != frame.source.context_uid
+            or plan.target_name != frame.source.context_name
+        ):
             raise ResolveConflictError(
                 "Resolve UpdatePlan does not name its frozen target Context."
             )
@@ -325,11 +327,25 @@ class MemoryStoreResolvePort:
         ):
             raise ResolveError("Resolve unresolved Issue identities are invalid.")
         if not isinstance(finalized_inputs, tuple) or any(
-            not isinstance(value, ResolveFinalizedInput)
-            for value in finalized_inputs
+            not isinstance(value, ResolveFinalizedInput) for value in finalized_inputs
         ):
             raise TypeError("Resolve finalized inputs must use the typed contract.")
 
+        eligible = {
+            uid
+            for group in find_exact_duplicate_groups(frame.source.context())
+            if group.item_kind != "MEMORY"
+            for uid in group.absorbed_uids
+        }
+        if (
+            not isinstance(removed_item_uids, tuple)
+            or any(not isinstance(uid, str) for uid in removed_item_uids)
+            or len(set(removed_item_uids)) != len(removed_item_uids)
+            or not set(removed_item_uids) <= eligible
+        ):
+            raise ResolveError(
+                "Resolve structural removals must name frozen exact duplicate placements."
+            )
         effect_by_type = {
             AddOperation: "CREATE",
             EditOperation: "UPDATE",
@@ -337,7 +353,7 @@ class MemoryStoreResolvePort:
         }
         effect_labels = tuple(
             effect_by_type.get(type(operation)) for operation in plan.operations
-        )
+        ) + (("DELETE",) if removed_item_uids else ())
         if any(label is None for label in effect_labels):
             raise ResolveError("Resolve UpdatePlan contains an unsupported operation.")
         if any(label not in frame.allowed_effects for label in effect_labels):
@@ -345,8 +361,8 @@ class MemoryStoreResolvePort:
                 "Resolve UpdatePlan exceeds the finalized effect capabilities."
             )
         if any(
-            operation.owner_context_uid != frame.context_uid
-            or operation.owner_context_name != frame.context_name
+            operation.owner_context_uid != frame.source.context_uid
+            or operation.owner_context_name != frame.source.context_name
             for operation in plan.operations
         ):
             raise ResolveConflictError(
@@ -355,13 +371,9 @@ class MemoryStoreResolvePort:
 
         required_permissions = (
             "READ",
-            *(
-                effect
-                for effect in _EFFECT_PERMISSION_ORDER
-                if effect in effect_labels
-            ),
+            *(effect for effect in _EFFECT_PERMISSION_ORDER if effect in effect_labels),
         )
-        if not plan.operations:
+        if not plan.operations and not removed_item_uids:
             # A force-only Resolve still writes its audit checkpoint. Require
             # one reviewed mutation capability instead of treating that write
             # as though READ authority alone permitted it.
@@ -381,15 +393,15 @@ class MemoryStoreResolvePort:
             with access.store._command_write_lock():  # noqa: SLF001
                 current = access.store.load_for_update(access.context_name)
                 if (
-                    current.uid != frame.context_uid
-                    or context_record_digest(current) != frame.context_digest
+                    current.uid != frame.source.context_uid
+                    or context_record_digest(current) != frame.source.context_digest
                 ):
                     raise ResolveConflictError(
                         "The Resolve Context changed before Apply; nothing was written."
                     )
                 inbound = self._inbound_references(
                     access.store,
-                    context_uid=frame.context_uid,
+                    context_uid=frame.source.context_uid,
                     deleted_uids=deleted_uids,
                 )
                 if inbound:
@@ -431,6 +443,11 @@ class MemoryStoreResolvePort:
                             )
                         current.remove(operation.memory_uid)
 
+                # Remove only the local redundant placements. Never mutate
+                # their referenced Context or Memory, even for live embeds.
+                for uid in removed_item_uids:
+                    current.remove(uid)
+
                 checkpoint = access.store._save_command_locked(  # noqa: SLF001
                     current,
                     AutoCheckpoint(
@@ -440,6 +457,7 @@ class MemoryStoreResolvePort:
                             "revision": frame.revision,
                             "update_plan_uid": plan.uid,
                             "update_plan_digest": plan.digest,
+                            "removed_item_uids": list(removed_item_uids),
                             "effects": [
                                 operation.to_dict() for operation in plan.operations
                             ],
@@ -451,11 +469,11 @@ class MemoryStoreResolvePort:
                             **grant_checkpoint_args(access),
                         },
                         description=(
-                            f"Resolved {len(plan.operations)} Memory effect(s) "
+                            f"Resolved {len(plan.operations)} Memory effect(s) and {len(removed_item_uids)} duplicate placement(s) "
                             "from finalized decisions"
                         ),
                     ),
-                    expected_context_digest=frame.context_digest,
+                    expected_context_digest=frame.source.context_digest,
                 )
                 if checkpoint is None:
                     raise ResolveError(
@@ -463,7 +481,7 @@ class MemoryStoreResolvePort:
                     )
 
         return ResolveReceipt(
-            context_uid=frame.context_uid,
+            context_uid=frame.source.context_uid,
             context_name=frame.display_name,
             revision=frame.revision,
             plan_uid=plan.uid,
@@ -482,7 +500,8 @@ class MemoryStoreResolvePort:
                 operation.memory_uid
                 for operation in plan.operations
                 if isinstance(operation, RemoveOperation)
-            ),
+            )
+            + removed_item_uids,
             unresolved_issue_uids=unresolved_issue_uids,
         )
 

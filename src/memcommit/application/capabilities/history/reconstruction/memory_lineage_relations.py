@@ -198,7 +198,10 @@ def checkpoint_memory_lineage_edges(
     accepted: list[MemoryLineageEdge] = []
     seen: set[MemoryLineageEdge] = set()
     # Import locally because history reconstruction itself depends on Store.
-    from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import HistoryError, flatten_checkpoint_entries
+    from memcommit.application.capabilities.history.reconstruction.checkpoint_state_projection import (
+        HistoryError,
+        flatten_checkpoint_entries,
+    )
 
     for physical in histories:
         try:
@@ -207,6 +210,28 @@ def checkpoint_memory_lineage_edges(
             raise ValueError("Memory lineage checkpoint history is invalid.") from error
         for entry in entries:
             args = entry.get("args")
+            if isinstance(args, dict) and "merge" in args:
+                from ..verification.validators.merge_record import (
+                    validated_merge_record,
+                )
+
+                record = validated_merge_record(entry)
+                # Semantic derivation is evidence, not equivalence of writable
+                # occurrences. Never use it to collapse later Merge inputs.
+                for raw in record["lineage"]["edges"]:
+                    if raw["disposition"] == "TRANSFORMED":
+                        continue
+                    edge = MemoryLineageEdge(
+                        **{
+                            key: value
+                            for key, value in raw.items()
+                            if key != "disposition"
+                        }
+                    )
+                    if edge not in seen:
+                        accepted.append(edge)
+                        seen.add(edge)
+                continue
             if not isinstance(args, dict) or "memory_lineage" not in args:
                 continue
             if entry.get("auto") is not True or entry.get("command") not in {
@@ -305,10 +330,19 @@ def resolve_lineage_target_uids(
                 visited.add(neighbor)
                 pending.append(neighbor)
         if len(matches) > 1:
-            raise ValueError(
-                "Checkpoint lineage maps one Source Memory to multiple current "
-                "Target Memories."
-            )
+            # Keep Both can fork a proven relation. A unique unchanged copy is
+            # already present; differing or duplicate candidates remain ambiguous.
+            exact = {
+                uid
+                for uid in matches
+                if target.memories[uid].content == source_item.content
+            }
+            if len(exact) != 1:
+                raise ValueError(
+                    "Checkpoint lineage maps one Source Memory to multiple current "
+                    "Target Memories."
+                )
+            matches = exact
         if not matches:
             continue
         (target_uid,) = matches

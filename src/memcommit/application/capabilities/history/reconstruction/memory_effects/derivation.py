@@ -17,6 +17,7 @@ from ...verification.validators.atomize import (
 from ...verification.validators.chunk import verify_context_chunk, verify_legacy_chunk
 from ...verification.validators.command_operation import _update_command_operation
 from ...verification.validators.meld import _meld_change_evidence
+from ...verification.validators.merge_record import merge_change_evidence
 from ...verification.validators.translate import verify_translation
 from ..memory_state_delta import direct_memory_deltas
 from ..operation_record_correlation import (
@@ -153,15 +154,19 @@ def _transition_events(
                 annotations[uid]["reason"] = (
                     f"Copied from Context '{origin.get('name', '')}' into the initial frame."
                 )
-    if command == "meld":
-        meld, message = _meld_change_evidence(args=args, before=before, after=after)
+    if command == "meld" or command == "merge" and "merge" in args:
+        meld, message = (
+            merge_change_evidence(entry)
+            if command == "merge"
+            else _meld_change_evidence(args=args, before=before, after=after)
+        )
         if message is not None:
             warnings.append(f"Checkpoint [{checkpoint_uid[:8]}] {message}.")
         for uid, detail in meld.items():
             if uid in annotations:
                 annotations[uid].update(
                     reason=detail["reason"],
-                    source_review_uid=detail["session_uid"],
+                    source_review_uid=detail["operation_uid"],
                     source_review_digest=detail["change_set_digest"],
                 )
     if command == "update" and source is not None:

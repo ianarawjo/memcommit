@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 
 import typer
 
+from memcommit.adapters.console.terminal.core.output import echo_text
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
@@ -166,20 +167,16 @@ def _profile_creation_status(result) -> str:
     )
 
 
-def _print_profile_creation(result) -> None:
+def render_profile_create_receipt(result) -> None:
     typer.secho(
         "Created empty Profile '" + display_escape_text(result.profile.name) + "'.",
         fg=semantic_color_rgb(SemanticColorRole.CREATE),
     )
-    typer.echo("Profile UID: " + display_escape_text(result.profile.uid))
-    typer.echo("Store: " + display_escape_text(str(result.inspection.root)))
+    echo_text("Profile UID: {uid}", uid=result.profile.uid)
+    echo_text("Store: {path}", path=result.inspection.root)
     typer.echo("Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted")
-    typer.echo(
-        "Active Profile unchanged: " + display_escape_text(result.active_profile_name)
-    )
-    typer.echo(
-        "Use it with: mem profile use " + display_escape_text(result.profile.name)
-    )
+    echo_text("Active Profile unchanged: {name}", name=result.active_profile_name)
+    echo_text("Use it with: mem profile use {name}", name=result.profile.name)
     typer.echo("Then create its first Context with: mem init CONTEXT")
 
 

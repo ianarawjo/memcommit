@@ -36,6 +36,7 @@ def issue_one_line_fragments(
     *,
     focused: bool = False,
     show_context: bool = True,
+    show_label: bool = True,
     uid_prefixes: Mapping[str, str] | None = None,
 ) -> list[tuple[str, str]]:
     """Present one issue as exactly one source-linked logical line.
@@ -56,19 +57,29 @@ def issue_one_line_fragments(
     if role is None:  # pragma: no cover - the typed report validates the union.
         raise ValueError("Unsupported quality issue category.")
     marker, issue_label, classification = quality_finding_label_parts(item)
+    # A group heading identifies conflicts, but cannot convey an individual MAY.
+    show_issue_label = show_label or (
+        item.category == "conflicts" and item.classification == "MAY"
+    )
 
+    # Grouped reports already name the category in their section heading.
     fragments: list[tuple[str, str]] = [
-        (styled("class:report-neutral"), f"{marker} "),
-        (styled(semantic_role_style(role)), issue_label),
+        (
+            styled("class:report-neutral" if show_label else semantic_role_style(role)),
+            f"{marker} ",
+        ),
     ]
+    if show_issue_label:
+        fragments.append((styled(semantic_role_style(role)), issue_label))
     if classification:
         fragments.extend(
             [
-                (styled("class:report-neutral"), " · "),
+                (styled("class:report-neutral"), " · " if show_issue_label else ""),
                 (styled("class:report-label"), _inline(classification)),
             ]
         )
-    fragments.append((styled("class:report-neutral"), " · "))
+    if show_issue_label or classification:
+        fragments.append((styled("class:report-neutral"), " · "))
     prefixes = (
         collision_safe_uid_prefixes(source.memory_uid for source in item.sources)
         if uid_prefixes is None
@@ -90,9 +101,16 @@ def issue_one_line_fragments(
             [
                 (
                     styled("class:report-label"),
-                    f"[MEMORY {_inline(prefixes[source.memory_uid])}] ",
+                    f"[{source.item_kind} {_inline(prefixes[source.memory_uid])}] ",
                 ),
-                (styled("class:memory-object"), f"“{_inline(source.content)}”"),
+                (
+                    styled(
+                        "class:memory-object"
+                        if source.item_kind == "MEMORY"
+                        else "class:report-neutral"
+                    ),
+                    f"“{_inline(source.content)}”",
+                ),
             ]
         )
 
@@ -108,7 +126,11 @@ def issue_one_line_fragments(
             [
                 (styled("class:report-neutral"), " · "),
                 (
-                    styled(semantic_role_style(SemanticColorRole.RATIONALE)),
+                    styled(
+                        semantic_role_style(SemanticColorRole.RATIONALE)
+                        if show_label
+                        else "class:report-label"
+                    ),
                     "WHY",
                 ),
                 (styled("class:report-neutral"), " · "),
@@ -132,6 +154,7 @@ def issue_one_line_text(
     item: QualityFindingReportItem,
     *,
     show_context: bool = True,
+    show_label: bool = True,
     uid_prefixes: Mapping[str, str] | None = None,
 ) -> str:
     """Return the ANSI-free equivalent of one issue-line presentation."""
@@ -141,6 +164,7 @@ def issue_one_line_text(
         for _style, text in issue_one_line_fragments(
             item,
             show_context=show_context,
+            show_label=show_label,
             uid_prefixes=uid_prefixes,
         )
     )
@@ -151,6 +175,7 @@ def echo_issue_one_line(
     *,
     prefix: str = "",
     show_context: bool = True,
+    show_label: bool = True,
     uid_prefixes: Mapping[str, str] | None = None,
 ) -> None:
     """Render the same presentation through the line-oriented CLI adapter."""
@@ -160,6 +185,7 @@ def echo_issue_one_line(
     for style, value in issue_one_line_fragments(
         item,
         show_context=show_context,
+        show_label=show_label,
         uid_prefixes=uid_prefixes,
     ):
         if style == "class:memory-object":

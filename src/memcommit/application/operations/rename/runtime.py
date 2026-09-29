@@ -89,7 +89,6 @@ class ContextOrGrantPlacementRenamePort:
             reference_count=token.reference_count,
             checkpoint_reference_count=token.checkpoint_reference_count,
             translation_artifact_count=token.translation_artifact_count,
-            meld_session_count=token.meld_session_count,
             current_before=token.current_before,
             current_after=token.current_after,
             graph_digest=token.graph_digest,
@@ -155,7 +154,6 @@ class ContextOrGrantPlacementRenamePort:
             reference_count=0,
             checkpoint_reference_count=0,
             translation_artifact_count=0,
-            meld_session_count=0,
             current_before=current_context,
             current_after=current_context,
             graph_digest=str(registry.generation),
@@ -179,7 +177,6 @@ class ContextOrGrantPlacementRenamePort:
             reference_count=result.reference_count,
             checkpoint_reference_count=result.checkpoint_reference_count,
             translation_artifact_count=result.translation_artifact_count,
-            meld_session_count=result.meld_session_count,
             current_context=result.current_context,
         )
 
@@ -239,7 +236,6 @@ class ContextOrGrantPlacementRenamePort:
             reference_count=0,
             checkpoint_reference_count=0,
             translation_artifact_count=0,
-            meld_session_count=0,
             current_context=self._store.current_context_name(),
         )
 

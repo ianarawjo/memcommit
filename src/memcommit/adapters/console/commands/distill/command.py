@@ -46,10 +46,8 @@ from memcommit.adapters.console.terminal.components.applied_memory_preview impor
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_semantic_provider,
-)
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 from memcommit.application.capabilities.semantic_result_memorization import (
     resolve_existing_semantic_result_endpoints,
 )

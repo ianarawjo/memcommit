@@ -42,10 +42,8 @@ from memcommit.core.memory_translation import (
     MemoryTranslationCatalog,
     TranslationCatalogError,
 )
-from memcommit.providers.subscription import (
-    QueryProviderError,
-    connect_codex_chatgpt_provider,
-)
+from memcommit.providers.errors import QueryProviderError
+from memcommit.providers.connection import connect_semantic_provider
 from memcommit.source_projection.model import (
     SourceDisplayFacts,
     SourceForm,
@@ -229,7 +227,7 @@ def _provider_scope():
     return progressing_provider_factory(
         "TRANSLATE",
         "translating memories",
-        connect_codex_chatgpt_provider,
+        connect_semantic_provider,
     )
 
 

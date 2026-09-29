@@ -38,9 +38,9 @@ from memcommit.application.operations.query.granted_runtime import (
     freeze_granted_query_targets,
     resolve_granted_query_target,
 )
-from memcommit.providers.operation_connections import (
-    connect_ordinary_query_provider as connect_codex_chatgpt_provider,
-    connect_query_route_provider as connect_query_provider,
+from memcommit.providers.connection import (
+    connect_ordinary_query_provider,
+    connect_query_route_provider,
 )
 from memcommit.adapters.console.commands.query.workbench.screen import (
     run_query_workbench,
@@ -78,7 +78,7 @@ from memcommit.application.operations.profile.config import (
     ProfileConfigError,
 )
 from memcommit.application.operations.profile.model import ProfileError
-from memcommit.providers.subscription import QueryProviderError
+from memcommit.providers.errors import QueryProviderError
 from memcommit.application.operations.query.ordinary_application import (
     OrdinaryQueryRequest,
 )
@@ -160,7 +160,7 @@ def _query_ordinary_context(
             request,
             store=store,
             catalog=catalog,
-            provider_factory=connect_codex_chatgpt_provider,
+            provider_factory=connect_ordinary_query_provider,
             observer=lambda stage: (
                 progress.update(
                     "answering question",
@@ -221,7 +221,7 @@ def _open_query_workbench(
             request,
             store=store,
             catalog=catalog,
-            provider_factory=connect_codex_chatgpt_provider,
+            provider_factory=connect_ordinary_query_provider,
         )
 
     query_targets = freeze_granted_query_targets(store)
@@ -248,7 +248,7 @@ def _open_query_workbench(
         run_granted=lambda request: execute_granted_query_request(
             request,
             store=store,
-            provider_factory=lambda: connect_query_provider("codex_chatgpt"),
+            provider_factory=lambda: connect_query_route_provider("codex_chatgpt"),
         ),
         initial_query_target=query_target,
         initial_include_descendants=initial_descendants,
@@ -304,7 +304,7 @@ def _query_granted_target(
                 federate_descendants=federate_descendants,
             ),
             store=store,
-            provider_factory=lambda: connect_query_provider("codex_chatgpt"),
+            provider_factory=lambda: connect_query_route_provider("codex_chatgpt"),
             observer=lambda stage: progress.update(
                 {
                     "PREPARING_SOURCES": "preparing authorized sources",
@@ -911,7 +911,7 @@ def cmd(
                     language=language,
                 ),
                 store=store,
-                provider_factory=connect_query_provider,
+                provider_factory=connect_query_route_provider,
                 observer=lambda stage: (
                     progress.update("answering query", step=2)
                     if stage == "ANSWERING"

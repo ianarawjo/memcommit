@@ -10,52 +10,77 @@ from __future__ import annotations
 import hashlib
 import json
 import uuid
-from dataclasses import dataclass
+from copy import deepcopy
+from dataclasses import asdict, dataclass, field, replace
 from datetime import datetime
+from enum import Enum
 from typing import Literal
 
-from memcommit.core.context import Context, Memory
-from memcommit.application.operations.check_conformance.model import ConformanceReport
-from memcommit.application.operations.fit.judgment import (
-    FIT_JUDGMENT_CONTRACT_VERSION,
-    FIT_JUDGMENT_OPERATION,
-    FitVerdict,
-)
+from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
 from memcommit.application.capabilities.memory_issue_analysis.model import (
+    QUALITY_RULESET_VERSIONS,
     AmbiguityFinding,
     AmbiguityReport,
     ConflictFinding,
     ConflictReport,
     DuplicateFinding,
     DuplicateReport,
-    QUALITY_RULESET_VERSIONS,
 )
+from memcommit.application.capabilities.reviewing.direct_item_duplicates import (
+    ExactDuplicateGroup,
+    find_exact_duplicate_groups,
+)
+from memcommit.application.operations.duplicates.find_duplicates.application import (
+    ExactDuplicateReport,
+)
+from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
+from memcommit.persistence.store.context_memory.records import context_record_digest
 from memcommit.providers.types import ProviderIdentity
-from memcommit.application.operations.review.model import direct_context_digest
 
-
-# Schema 1 is retained as a review-only compatibility shape. Schema 2 adds the
-# whole-Context Fit judgment required by current multi-Memory Audit consumers.
-QUALITY_AUDIT_SCHEMA_VERSION = 2
-QUALITY_AUDIT_LEGACY_SCHEMA_VERSION = 1
-QUALITY_AUDIT_KINDS = ("duplicates", "ambiguities", "conflicts")
+# Audit records retain individual findings; whole-set Fit is a separate operation.
+QUALITY_AUDIT_SCHEMA_VERSION = 10
+QUALITY_AUDIT_KINDS = ("dup", "dun", "ambiguities", "conflicts")
 QUALITY_AUDIT_RULESETS = {
-    "duplicates": QUALITY_RULESET_VERSIONS["find_duplicates"],
+    "dup": "exact-direct-items-v1",
+    "dun": QUALITY_RULESET_VERSIONS["find_duplicates"],
     "ambiguities": QUALITY_RULESET_VERSIONS["find_ambiguities"],
     "conflicts": QUALITY_RULESET_VERSIONS["find_conflicts"],
 }
+QUALITY_AUDIT_OPERATIONS = {
+    "dup": "find_exact_duplicates",
+    "dun": "find_duplicates",
+    "ambiguities": "find_ambiguities",
+    "conflicts": "find_conflicts",
+}
 
-QualityAuditKind = Literal["duplicates", "ambiguities", "conflicts"]
-QualityAuditReport = DuplicateReport | AmbiguityReport | ConflictReport
+QualityAuditKind = Literal["dup", "dun", "ambiguities", "conflicts"]
+QualityAuditReport = (
+    ExactDuplicateReport | DuplicateReport | AmbiguityReport | ConflictReport
+)
 
 
 class QualityAuditError(ValueError):
     """Invalid, incomplete, or stale durable Audit state."""
 
 
+class AuditCheckKind(str, Enum):
+    """Selectable Audit operations, in their canonical execution order."""
+
+    DUP = "dup"
+    DUN = "dun"
+    AMBIGUITIES = "ambiguities"
+    CONFLICTS = "conflicts"
+
+
 def _exact_dict(value: object, keys: set[str], label: str) -> dict[str, object]:
     if not isinstance(value, dict) or set(value) != keys:
         raise QualityAuditError(f"Invalid {label}.")
+    return value
+
+
+def _array(value: object, label: str) -> list:
+    if not isinstance(value, list):
+        raise QualityAuditError(f"Invalid {label} array.")
     return value
 
 
@@ -99,100 +124,133 @@ def _digest(value: object) -> str:
 
 
 @dataclass(frozen=True)
-class QualityAuditMemory:
+class QualityAuditMemory(Memory):
     """One exact direct Memory supplied to every finder in the Audit."""
 
     uid: str
     content: str
 
-    def to_dict(self) -> dict[str, str]:
-        return {"uid": self.uid, "content": self.content}
 
-    @classmethod
-    def from_dict(cls, value: object) -> "QualityAuditMemory":
-        data = _exact_dict(value, {"uid", "content"}, "Audit Memory")
-        return cls(
-            uid=_canonical_uuid(data["uid"], "Audit Memory uid"),
-            content=_string(
-                data["content"],
-                "Audit Memory content",
-                empty=True,
-                limit=1_000_000,
-            ),
-        )
+@dataclass(frozen=True)
+class QualityAuditItem:
+    """One direct occurrence; pointers retain their role rather than becoming Memories."""
+
+    uid: str
+    kind: str
+    summary: str
+
+
+def _copy_source_context(context: Context) -> Context:
+    """Detach direct evidence; resolved live pointers must not bring in content."""
+    copied = Context(uid=context.uid, name=context.name)
+    for item in context.iter_items():
+        if isinstance(item, Memory):
+            copied.add(Memory(item.uid, item.content))
+        elif isinstance(item, (MemoryRef, QueryContextRef, ContextSnapshotRef)):
+            copied.add(item.copy())
+        else:
+            pointer = Context(uid=item.uid, name=item.name)
+            pointer._granted_link = item._granted_link  # noqa: SLF001
+            copied.add(pointer)
+    # An analysis snapshot is not a Store load or an optimistic-write handle.
+    copied._store_digest = None  # noqa: SLF001
+    copied.document = deepcopy(context.document)
+    copied.attached_files = deepcopy(context.attached_files)
+    for item in copied.iter_items():
+        if isinstance(item, MemoryRef) and not item.is_snapshot:
+            item.target = None
+    return copied
 
 
 @dataclass(frozen=True)
 class QualityAuditSource:
-    """The immutable direct-Context interpretation frame used by all checks."""
+    """Detached direct Context; callers receive copies, never its owned snapshot."""
 
     context_uid: str
     context_name: str
     context_digest: str
-    memories: tuple[QualityAuditMemory, ...]
+    _context: Context = field(repr=False, compare=False)
+
+    def __post_init__(self):
+        context = self._context
+        _canonical_uuid(context.uid, "Audit Context uid")
+        _string(context.name, "Audit Context name", limit=500)
+        for uid, item in context.iter_entries():
+            _canonical_uuid(uid, "Audit item uid")
+            if uid != item.uid:
+                raise QualityAuditError(
+                    "Audit occurrence identity does not match its slot."
+                )
+            if isinstance(item, Memory):
+                _string(
+                    item.content, "Audit Memory content", empty=True, limit=1_000_000
+                )
+            elif not isinstance(item, (MemoryRef, QueryContextRef, Context)):
+                raise QualityAuditError("Invalid Audit direct-item type.")
+        if (context.uid, context.name, context_record_digest(context)) != (
+            self.context_uid,
+            self.context_name,
+            self.context_digest,
+        ):
+            raise QualityAuditError("Invalid Audit Context identity or digest.")
+        object.__setattr__(self, "_context", _copy_source_context(context))
 
     @classmethod
     def from_context(cls, ctx: Context) -> "QualityAuditSource":
-        memories = tuple(
-            QualityAuditMemory(item.uid, item.content)
-            for item in ctx.iter_items()
-            if isinstance(item, Memory)
-        )
-        frozen = Context(uid=ctx.uid, name=ctx.name)
-        for memory in memories:
-            frozen.add(Memory(memory.uid, memory.content))
-        return cls(
-            context_uid=ctx.uid,
-            context_name=ctx.name,
-            context_digest=direct_context_digest(frozen),
-            memories=memories,
-        )
+        return cls(ctx.uid, ctx.name, context_record_digest(ctx), ctx)
 
     def context(self) -> Context:
-        ctx = Context(uid=self.context_uid, name=self.context_name)
-        for memory in self.memories:
-            ctx.add(Memory(memory.uid, memory.content))
-        return ctx
+        return _copy_source_context(self._context)
+
+    @property
+    def memories(self) -> tuple[QualityAuditMemory, ...]:
+        return tuple(
+            QualityAuditMemory(item.uid, item.content)
+            for item in self._context.iter_items()
+            if isinstance(item, Memory)
+        )
+
+    @property
+    def items(self) -> tuple[QualityAuditItem, ...]:
+        result = []
+        for item in self._context.iter_items():
+            if isinstance(item, Memory):
+                kind, summary = "MEMORY", item.content
+            else:
+                if isinstance(item, MemoryRef):
+                    kind = "MEMORY_REFERENCE" if item.is_snapshot else "MEMORY_EMBED"
+                    name = item.target_context_name
+                elif isinstance(item, ContextSnapshotRef):
+                    kind, name = "CONTEXT_REFERENCE", item.name
+                elif isinstance(item, QueryContextRef):
+                    kind, name = "QUERY_CONTEXT_REFERENCE", item.name
+                else:
+                    kind, name = "CONTEXT_EMBED", item.name
+                summary = f"{kind} · {name}"
+                if isinstance(item, MemoryRef):
+                    summary += "#" + item.target_memory_uid[:8]
+            result.append(QualityAuditItem(item.uid, kind, summary))
+        return tuple(result)
 
     def to_dict(self) -> dict[str, object]:
         return {
-            "context_uid": self.context_uid,
-            "context_name": self.context_name,
+            "context": self._context.to_dict(),
             "context_digest": self.context_digest,
-            "memories": [memory.to_dict() for memory in self.memories],
         }
 
     @classmethod
     def from_dict(cls, value: object) -> "QualityAuditSource":
-        data = _exact_dict(
-            value,
-            {"context_uid", "context_name", "context_digest", "memories"},
-            "Audit Source",
-        )
-        raw_memories = data["memories"]
-        if not isinstance(raw_memories, list):
-            raise QualityAuditError("Invalid Audit Source Memories.")
-        memories = tuple(QualityAuditMemory.from_dict(item) for item in raw_memories)
-        if len({memory.uid for memory in memories}) != len(memories):
-            raise QualityAuditError("Duplicate Audit Source Memory uid.")
-        source = cls(
-            context_uid=_canonical_uuid(data["context_uid"], "Audit Context uid"),
-            context_name=_string(data["context_name"], "Audit Context name", limit=500),
-            context_digest=_string(
-                data["context_digest"], "Audit Context digest", limit=64
-            ),
-            memories=memories,
-        )
-        if (
-            len(source.context_digest) != 64
-            or any(
-                character not in "0123456789abcdef"
-                for character in source.context_digest
-            )
-            or direct_context_digest(source.context()) != source.context_digest
-        ):
-            raise QualityAuditError("Invalid Audit Context digest.")
-        return source
+        data = _exact_dict(value, {"context", "context_digest"}, "Audit Source")
+        try:
+            record = data["context"]
+            context = Context.from_dict(record)
+            # The general Context codec accepts old omissions; retained Audit
+            # evidence must not silently discard or normalize malformed input.
+            if context.to_dict() != record:
+                raise QualityAuditError("Audit Context record is not canonical.")
+            return cls(context.uid, context.name, data["context_digest"], context)
+        except (KeyError, TypeError, ValueError, AttributeError) as error:
+            raise QualityAuditError(f"Invalid Audit Source: {error}") from error
 
 
 @dataclass(frozen=True)
@@ -204,6 +262,31 @@ class QualityAuditProvenance:
     identity: ProviderIdentity | None = None
     upstream_model: str | None = None
     upstream_provider: str | None = None
+
+    def __post_init__(self):
+        _string(self.operation, "Audit operation", limit=100)
+        if not isinstance(self.provider_called, bool) or self.provider_called != (
+            self.identity is not None
+        ):
+            raise QualityAuditError("Invalid Audit provider provenance.")
+        if self.identity is not None:
+            if not isinstance(self.identity, ProviderIdentity):
+                raise QualityAuditError("Invalid Audit provider identity.")
+            _string(self.identity.provider, "Audit provider", limit=100)
+            _string(self.identity.model, "Audit model", limit=256)
+            for name, limit in (
+                ("model_digest", 256),
+                ("runtime", 500),
+                ("endpoint", 2000),
+                ("reasoning_effort", 100),
+            ):
+                value = getattr(self.identity, name)
+                if value is not None:
+                    _string(value, f"Audit provider {name}", limit=limit)
+        for name in ("upstream_model", "upstream_provider"):
+            value = getattr(self, name)
+            if value is not None:
+                _string(value, f"Audit {name}", limit=500)
 
     def to_dict(self) -> dict[str, object]:
         identity = self.identity
@@ -239,9 +322,6 @@ class QualityAuditProvenance:
             },
             "Audit provenance",
         )
-        provider_called = data["provider_called"]
-        if not isinstance(provider_called, bool):
-            raise QualityAuditError("Invalid Audit provider-call marker.")
         raw_identity = data["identity"]
         identity = None
         if raw_identity is not None:
@@ -257,39 +337,8 @@ class QualityAuditProvenance:
                 },
                 "Audit provider identity",
             )
-
-            def optional(field: str, *, limit: int = 500) -> str | None:
-                raw = identity_data[field]
-                return (
-                    None
-                    if raw is None
-                    else _string(raw, f"Audit provider {field}", limit=limit)
-                )
-
-            identity = ProviderIdentity(
-                provider=_string(
-                    identity_data["provider"], "Audit provider", limit=100
-                ),
-                model=_string(identity_data["model"], "Audit model", limit=256),
-                model_digest=optional("model_digest", limit=256),
-                runtime=optional("runtime"),
-                endpoint=optional("endpoint", limit=2_000),
-                reasoning_effort=optional("reasoning_effort", limit=100),
-            )
-        if provider_called != (identity is not None):
-            raise QualityAuditError("Invalid Audit provider provenance.")
-
-        def optional_top(field: str) -> str | None:
-            raw = data[field]
-            return None if raw is None else _string(raw, f"Audit {field}", limit=500)
-
-        return cls(
-            operation=_string(data["operation"], "Audit operation", limit=100),
-            provider_called=provider_called,
-            identity=identity,
-            upstream_model=optional_top("upstream_model"),
-            upstream_provider=optional_top("upstream_provider"),
-        )
+            identity = ProviderIdentity(**identity_data)
+        return cls(**(data | {"identity": identity}))
 
     def display_name(self) -> str:
         if self.identity is None:
@@ -297,152 +346,19 @@ class QualityAuditProvenance:
         return self.identity.display_name()
 
 
-@dataclass(frozen=True)
-class QualityAuditFit:
-    """One whole-Context Fit judgment retained beside finder reports.
-
-    Fit is set-level evidence rather than a pair or single-Memory finding.  The
-    exact considered frame is retained so a MAY/NO result can become one
-    Resolve item without fabricating independent per-Memory judgments.
-    """
-
-    uid: str
-    created_at: str
-    verdict: FitVerdict
-    reason: str
-    overview: str
-    considered_memory_uids: tuple[str, ...]
-    material_memory_uids: tuple[str, ...]
-    consistent_reading: str
-    inconsistent_reading: str
-    provenance: QualityAuditProvenance
-    contract_version: str = FIT_JUDGMENT_CONTRACT_VERSION
-
-    def to_dict(self) -> dict[str, object]:
-        return {
-            "uid": self.uid,
-            "created_at": self.created_at,
-            "verdict": self.verdict,
-            "reason": self.reason,
-            "overview": self.overview,
-            "considered_memory_uids": list(self.considered_memory_uids),
-            "material_memory_uids": list(self.material_memory_uids),
-            "consistent_reading": self.consistent_reading,
-            "inconsistent_reading": self.inconsistent_reading,
-            "provenance": self.provenance.to_dict(),
-            "contract_version": self.contract_version,
-        }
-
-    @classmethod
-    def from_dict(
-        cls,
-        value: object,
-        *,
-        source_memory_uids: tuple[str, ...],
-    ) -> "QualityAuditFit":
-        data = _exact_dict(
-            value,
-            {
-                "uid",
-                "created_at",
-                "verdict",
-                "reason",
-                "overview",
-                "considered_memory_uids",
-                "material_memory_uids",
-                "consistent_reading",
-                "inconsistent_reading",
-                "provenance",
-                "contract_version",
-            },
-            "Audit Fit",
-        )
-        considered = data["considered_memory_uids"]
-        material = data["material_memory_uids"]
-        if not isinstance(considered, list) or not isinstance(material, list):
-            raise QualityAuditError("Audit Fit Memory coverage must be arrays.")
-        if any(not isinstance(uid, str) for uid in (*considered, *material)):
-            raise QualityAuditError("Audit Fit Memory identities must be text.")
-        considered_uids = tuple(considered)
-        material_uids = tuple(material)
-        if considered_uids != source_memory_uids:
-            raise QualityAuditError(
-                "Audit Fit must consider every frozen Source Memory exactly once."
-            )
-        if len(material_uids) != len(set(material_uids)) or any(
-            uid not in considered_uids for uid in material_uids
-        ):
-            raise QualityAuditError("Audit Fit material Memories are invalid.")
-        # Canonical Source order keeps the set-level issue key stable even if a
-        # provider returns its material subset in a different order.
-        if material_uids != tuple(uid for uid in considered_uids if uid in material_uids):
-            raise QualityAuditError(
-                "Audit Fit material Memories must retain frozen Source order."
-            )
-        verdict = data["verdict"]
-        if verdict not in {"YES", "MAY", "NO"}:
-            raise QualityAuditError("Audit Fit verdict is invalid.")
-        consistent = _string(
-            data["consistent_reading"],
-            "Audit Fit consistent reading",
-            empty=True,
-        )
-        inconsistent = _string(
-            data["inconsistent_reading"],
-            "Audit Fit inconsistent reading",
-            empty=True,
-        )
-        if verdict == "YES":
-            if material_uids or consistent or inconsistent:
-                raise QualityAuditError(
-                    "A YES Audit Fit cannot retain material Memories or split readings."
-                )
-        elif not material_uids:
-            raise QualityAuditError(
-                "A MAY or NO Audit Fit must identify material Memories."
-            )
-        if verdict == "MAY":
-            if not consistent.strip() or not inconsistent.strip():
-                raise QualityAuditError(
-                    "A MAY Audit Fit must retain both ordinary readings."
-                )
-        elif consistent or inconsistent:
-            raise QualityAuditError(
-                "Only a MAY Audit Fit may retain split ordinary readings."
-            )
-        provenance = QualityAuditProvenance.from_dict(data["provenance"])
-        if (
-            provenance.operation != FIT_JUDGMENT_OPERATION
-            or not provenance.provider_called
-        ):
-            raise QualityAuditError(
-                "Audit Fit provenance must name its provider judgment."
-            )
-        if data["contract_version"] != FIT_JUDGMENT_CONTRACT_VERSION:
-            raise QualityAuditError("Unsupported Audit Fit contract.")
-        result = cls(
-            uid=_canonical_uuid(data["uid"], "Audit Fit uid"),
-            created_at=_string(data["created_at"], "Audit Fit creation time", limit=100),
-            verdict=verdict,
-            reason=_string(data["reason"], "Audit Fit reason"),
-            overview=_string(data["overview"], "Audit Fit overview"),
-            considered_memory_uids=considered_uids,
-            material_memory_uids=material_uids,
-            consistent_reading=consistent,
-            inconsistent_reading=inconsistent,
-            provenance=provenance,
-        )
-        try:
-            datetime.fromisoformat(result.created_at)
-        except ValueError as error:
-            raise QualityAuditError("Invalid Audit Fit creation time.") from error
-        return result
-
-
 def _report_to_dict(
     kind: QualityAuditKind, report: QualityAuditReport
 ) -> dict[str, object]:
-    if kind == "duplicates" and isinstance(report, DuplicateReport):
+    if kind == "dup" and isinstance(report, ExactDuplicateReport):
+        return {
+            "memory_count": report.memory_count,
+            "item_count": report.item_count,
+            "groups": [
+                asdict(group) | {"absorbed_uids": list(group.absorbed_uids)}
+                for group in report.groups
+            ],
+        }
+    if kind == "dun" and isinstance(report, DuplicateReport):
         findings = [
             {
                 "left_uid": item.left.uid,
@@ -452,7 +368,14 @@ def _report_to_dict(
             }
             for item in report.findings
         ]
-        return {"memory_count": report.memory_count, "findings": findings}
+        return {
+            "memory_count": report.memory_count,
+            "findings": findings,
+            "exact_item_groups": [
+                asdict(group) | {"absorbed_uids": list(group.absorbed_uids)}
+                for group in report.exact_item_groups
+            ],
+        }
     if kind == "ambiguities" and isinstance(report, AmbiguityReport):
         findings = [
             {
@@ -473,7 +396,6 @@ def _report_to_dict(
                 "right_uid": item.right.uid,
                 "conflict": item.conflict,
                 "reason": item.reason,
-                "question": item.question,
             }
             for item in report.findings
         ]
@@ -485,21 +407,124 @@ def _report_to_dict(
     raise QualityAuditError("Audit check kind does not match its report type.")
 
 
+def _bind_report(
+    kind: QualityAuditKind, report: QualityAuditReport, source: QualityAuditSource
+) -> QualityAuditReport:
+    """Validate typed findings and bind immutable leaves to the frozen Source."""
+    types = {
+        "dup": ExactDuplicateReport,
+        "dun": DuplicateReport,
+        "ambiguities": AmbiguityReport,
+        "conflicts": ConflictReport,
+    }
+    if not isinstance(report, types[kind]):
+        raise QualityAuditError("Audit check kind does not match its report type.")
+    _integer(report.memory_count, "Audit report Memory count")
+    if kind in {"dup", "dun"}:
+        groups = find_exact_duplicate_groups(source.context())
+        if kind == "dup":
+            _integer(report.item_count, "DUP item count")
+            if report != ExactDuplicateReport(
+                len(source.memories), groups, len(source.items)
+            ):
+                raise QualityAuditError(
+                    "DUP report does not match the exact frozen Source."
+                )
+            return report
+        if report.exact_item_groups != tuple(
+            group for group in groups if group.item_kind != "MEMORY"
+        ):
+            raise QualityAuditError("DUN exact items do not match the frozen Source.")
+    memories = {memory.uid: memory for memory in source.memories}
+
+    def memory(item):
+        if not isinstance(item, Memory) or item.uid not in memories:
+            raise QualityAuditError(
+                "Audit finding references a Memory outside its frozen Source."
+            )
+        frozen = memories[item.uid]
+        if item.content != frozen.content:
+            raise QualityAuditError(
+                "Audit finding content differs from its frozen Source."
+            )
+        return frozen
+
+    if not isinstance(report.findings, tuple):
+        raise QualityAuditError("Audit findings must be immutable ordered values.")
+    findings = []
+    for finding in report.findings:
+        _string(finding.reason, "Audit finding reason", limit=1000)
+        if kind == "dun":
+            if not isinstance(finding, DuplicateFinding):
+                raise QualityAuditError("Invalid Duplicate Audit finding.")
+            findings.append(
+                replace(finding, left=memory(finding.left), right=memory(finding.right))
+            )
+        elif kind == "ambiguities":
+            if (
+                not isinstance(finding, AmbiguityFinding)
+                or finding.interpretation not in {"SINGLE", "DOMINANT", "COMPETING"}
+                or finding.clarification not in {"NONE", "HELPFUL", "REQUIRED"}
+                or not isinstance(finding.ordinary_readings, tuple)
+            ):
+                raise QualityAuditError("Invalid Ambiguity Audit finding.")
+            for reading in finding.ordinary_readings:
+                _string(reading, "Audit ordinary reading", limit=500)
+            _string(finding.question, "Ambiguity Audit question", empty=True, limit=500)
+            findings.append(replace(finding, memory=memory(finding.memory)))
+        else:
+            if not isinstance(finding, ConflictFinding) or finding.conflict not in {
+                "YES",
+                "MAY",
+            }:
+                raise QualityAuditError("Invalid Conflict Audit finding.")
+            findings.append(
+                replace(finding, left=memory(finding.left), right=memory(finding.right))
+            )
+    if kind == "conflicts":
+        _integer(report.pair_count, "Audit pair count")
+    return replace(report, findings=tuple(findings))
+
+
 def _report_from_dict(
     kind: QualityAuditKind,
     value: object,
     source_by_uid: dict[str, Memory],
 ) -> QualityAuditReport:
-    keys = {"memory_count", "findings"}
+    """Decode wire shapes; Session construction validates the bound object graph."""
+    keys = (
+        {"memory_count", "groups", "item_count"}
+        if kind == "dup"
+        else {"memory_count", "findings"}
+    )
+    if kind == "dun":
+        keys.add("exact_item_groups")
     if kind == "conflicts":
         keys.add("pair_count")
     data = _exact_dict(value, keys, f"{kind} Audit report")
-    memory_count = _integer(data["memory_count"], "Audit report Memory count")
-    raw_findings = data["findings"]
-    if not isinstance(raw_findings, list):
-        raise QualityAuditError("Invalid Audit report findings.")
 
-    def memory(uid: object) -> Memory:
+    def groups(raw):
+        result = []
+        for entry in _array(raw, "DUP groups"):
+            item = _exact_dict(
+                entry,
+                {"item_kind", "survivor_uid", "absorbed_uids", "summary", "content"},
+                "DUP group",
+            )
+            result.append(
+                ExactDuplicateGroup(
+                    item_kind=item["item_kind"],
+                    survivor_uid=item["survivor_uid"],
+                    absorbed_uids=tuple(
+                        _array(item["absorbed_uids"], "DUP absorbed identities")
+                    ),
+                    summary=item["summary"],
+                    content=item["content"],
+                )
+            )
+        return tuple(result)
+
+    def memory(uid):
         parsed = _canonical_uuid(uid, "Audit finding Memory uid")
         try:
             return source_by_uid[parsed]
@@ -508,31 +533,13 @@ def _report_from_dict(
                 "Audit finding references a Memory outside its frozen Source."
             ) from error
 
-    if kind == "duplicates":
-        findings: list[DuplicateFinding] = []
-        for raw in raw_findings:
-            item = _exact_dict(
-                raw,
-                {"left_uid", "right_uid", "relation", "reason"},
-                "Duplicate Audit finding",
-            )
-            relation = item["relation"]
-            if relation not in {"EXACT", "SURFACE_EQUIVALENT", "SEMANTIC_EQUIVALENT"}:
-                raise QualityAuditError("Invalid Duplicate Audit relation.")
-            findings.append(
-                DuplicateFinding(
-                    left=memory(item["left_uid"]),
-                    right=memory(item["right_uid"]),
-                    relation=relation,
-                    reason=_string(
-                        item["reason"], "Duplicate Audit reason", limit=1_000
-                    ),
-                )
-            )
-        return DuplicateReport(memory_count=memory_count, findings=tuple(findings))
-    if kind == "ambiguities":
-        ambiguity_findings: list[AmbiguityFinding] = []
-        for raw in raw_findings:
+    if kind == "dup":
+        return ExactDuplicateReport(
+            data["memory_count"], groups(data["groups"]), data["item_count"]
+        )
+    findings = []
+    for raw in _array(data["findings"], "Audit findings"):
+        if kind == "ambiguities":
             item = _exact_dict(
                 raw,
                 {
@@ -545,74 +552,52 @@ def _report_from_dict(
                 },
                 "Ambiguity Audit finding",
             )
-            interpretation = item["interpretation"]
-            clarification = item["clarification"]
-            readings = item["ordinary_readings"]
-            if (
-                interpretation not in {"SINGLE", "DOMINANT", "COMPETING"}
-                or clarification not in {"NONE", "HELPFUL", "REQUIRED"}
-                or not isinstance(readings, list)
-            ):
-                raise QualityAuditError("Invalid Ambiguity Audit finding.")
-            ambiguity_findings.append(
+            findings.append(
                 AmbiguityFinding(
-                    memory=memory(item["memory_uid"]),
-                    interpretation=interpretation,
-                    clarification=clarification,
-                    ordinary_readings=tuple(
-                        _string(reading, "Audit ordinary reading", limit=500)
-                        for reading in readings
-                    ),
-                    reason=_string(
-                        item["reason"], "Ambiguity Audit reason", limit=1_000
-                    ),
-                    question=_string(
-                        item["question"],
-                        "Ambiguity Audit question",
-                        empty=True,
-                        limit=500,
-                    ),
+                    memory(item["memory_uid"]),
+                    item["interpretation"],
+                    item["clarification"],
+                    tuple(_array(item["ordinary_readings"], "Audit ordinary readings")),
+                    item["reason"],
+                    item["question"],
                 )
             )
-        return AmbiguityReport(
-            memory_count=memory_count, findings=tuple(ambiguity_findings)
-        )
-
-    conflict_findings: list[ConflictFinding] = []
-    for raw in raw_findings:
-        item = _exact_dict(
-            raw,
-            {
-                "left_uid",
-                "right_uid",
-                "conflict",
-                "reason",
-                "question",
-            },
-            "Conflict Audit finding",
-        )
-        conflict = item["conflict"]
-        if conflict not in {"YES", "MAY"}:
-            raise QualityAuditError("Invalid Conflict Audit finding.")
-        conflict_findings.append(
-            ConflictFinding(
-                left=memory(item["left_uid"]),
-                right=memory(item["right_uid"]),
-                conflict=conflict,
-                reason=_string(item["reason"], "Conflict Audit reason", limit=1_000),
-                question=_string(
-                    item["question"],
-                    "Conflict Audit question",
-                    empty=True,
-                    limit=500,
-                ),
+        else:
+            keys = {"left_uid", "right_uid", "reason"} | (
+                {"relation"} if kind == "dun" else {"conflict"}
             )
+            item = _exact_dict(raw, keys, f"{kind} Audit finding")
+            if kind == "dun":
+                if item["relation"] not in {
+                    "EXACT",
+                    "SURFACE_EQUIVALENT",
+                    "SEMANTIC_EQUIVALENT",
+                }:
+                    raise QualityAuditError("Invalid Duplicate Audit relation.")
+                findings.append(
+                    DuplicateFinding(
+                        memory(item["left_uid"]),
+                        memory(item["right_uid"]),
+                        item["relation"],
+                        item["reason"],
+                    )
+                )
+            else:
+                findings.append(
+                    ConflictFinding(
+                        memory(item["left_uid"]),
+                        memory(item["right_uid"]),
+                        item["conflict"],
+                        item["reason"],
+                    )
+                )
+    if kind == "dun":
+        return DuplicateReport(
+            data["memory_count"], tuple(findings), groups(data["exact_item_groups"])
         )
-    return ConflictReport(
-        memory_count=memory_count,
-        pair_count=_integer(data["pair_count"], "Audit pair count"),
-        findings=tuple(conflict_findings),
-    )
+    if kind == "ambiguities":
+        return AmbiguityReport(data["memory_count"], tuple(findings))
+    return ConflictReport(data["memory_count"], data["pair_count"], tuple(findings))
 
 
 @dataclass(frozen=True)
@@ -623,6 +608,13 @@ class QualityAuditCheck:
     ruleset_version: str
     report: QualityAuditReport
     provenance: QualityAuditProvenance
+
+    def __post_init__(self):
+        if self.kind not in QUALITY_AUDIT_KINDS:
+            raise QualityAuditError("Invalid Audit check kind.")
+        _string(self.ruleset_version, "Audit ruleset", limit=100)
+        if not isinstance(self.provenance, QualityAuditProvenance):
+            raise QualityAuditError("Invalid Audit provenance.")
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -668,12 +660,88 @@ class QualityAuditSession:
     created_at: str
     source: QualityAuditSource
     checks: tuple[QualityAuditCheck, ...]
-    fit: QualityAuditFit | None = None
-    conformance: ConformanceReport | None = None
+    requested_checks: tuple[AuditCheckKind, ...]
+
+    def __post_init__(self):
+        _canonical_uuid(self.uid, "Audit session uid")
+        _string(self.created_at, "Audit creation time", limit=100)
+        try:
+            datetime.fromisoformat(self.created_at)
+        except ValueError as error:
+            raise QualityAuditError("Invalid Audit creation time.") from error
+        source = self.source
+        if not isinstance(self.checks, tuple) or not isinstance(
+            self.requested_checks, tuple
+        ):
+            raise QualityAuditError("Audit checks must be immutable ordered values.")
+        requested_checks = self.requested_checks
+        if not requested_checks or any(
+            not isinstance(kind, AuditCheckKind) for kind in requested_checks
+        ):
+            raise QualityAuditError("Audit must request typed checks.")
+        checks = tuple(
+            replace(check, report=_bind_report(check.kind, check.report, source))
+            for check in self.checks
+        )
+        object.__setattr__(self, "checks", checks)
+        expected_memory_count = len(source.memories)
+        for check in checks:
+            if check.report.memory_count != expected_memory_count:
+                raise QualityAuditError("Audit check does not match its frozen Source.")
+            if check.kind == "dup" and check.provenance.provider_called:
+                raise QualityAuditError(
+                    "Deterministic Audit cannot have provider provenance."
+                )
+            expected_ruleset = QUALITY_AUDIT_RULESETS[check.kind]
+            if check.ruleset_version != expected_ruleset:
+                raise QualityAuditError("Unsupported Audit finder ruleset.")
+            if check.provenance.operation != QUALITY_AUDIT_OPERATIONS[check.kind]:
+                raise QualityAuditError(
+                    "Audit check provenance does not match its finder."
+                )
+        for check in checks:
+            if check.kind == "conflicts":
+                conflict_report = check.report
+                assert isinstance(conflict_report, ConflictReport)
+                if (
+                    conflict_report.pair_count
+                    != expected_memory_count * (expected_memory_count - 1) // 2
+                ):
+                    raise QualityAuditError(
+                        "Conflict Audit does not cover its frozen pair frame."
+                    )
+
+        completed_checks = tuple(AuditCheckKind(check.kind) for check in checks)
+        canonical = tuple(kind for kind in AuditCheckKind if kind in requested_checks)
+        if requested_checks != canonical:
+            raise QualityAuditError(
+                "Requested Audit checks must be unique and ordered."
+            )
+        if completed_checks != requested_checks:
+            raise QualityAuditError(
+                "A completed Audit must contain exactly its requested checks."
+            )
+
+    @property
+    def completed_checks(self) -> tuple[AuditCheckKind, ...]:
+        """Only checks with results; an absent check does not mean no findings."""
+
+        return tuple(AuditCheckKind(check.kind) for check in self.checks)
 
     @property
     def finding_count(self) -> int:
-        return sum(len(check.report.findings) for check in self.checks)
+        return sum(
+            len(check.report.groups)
+            if isinstance(check.report, ExactDuplicateReport)
+            else len(check.report.findings)
+            + (
+                len(check.report.exact_item_groups)
+                if isinstance(check.report, DuplicateReport)
+                else 0
+            )
+            for check in self.checks
+            if not (check.kind == "dup" and AuditCheckKind.DUN in self.requested_checks)
+        )
 
     def snapshot_dict(self) -> dict[str, object]:
         return {
@@ -681,10 +749,7 @@ class QualityAuditSession:
             "created_at": self.created_at,
             "source": self.source.to_dict(),
             "checks": [check.to_dict() for check in self.checks],
-            "fit": None if self.fit is None else self.fit.to_dict(),
-            "conformance": (
-                self.conformance.to_dict() if self.conformance is not None else None
-            ),
+            "requested_checks": [kind.value for kind in self.requested_checks],
         }
 
     @property
@@ -702,10 +767,7 @@ class QualityAuditSession:
         if not isinstance(value, dict):
             raise QualityAuditError("Invalid Audit session.")
         schema_version = value.get("schema_version")
-        if schema_version not in {
-            QUALITY_AUDIT_LEGACY_SCHEMA_VERSION,
-            QUALITY_AUDIT_SCHEMA_VERSION,
-        }:
+        if schema_version != QUALITY_AUDIT_SCHEMA_VERSION:
             raise QualityAuditError("Unsupported Audit session schema version.")
         keys = {
             "schema_version",
@@ -713,23 +775,15 @@ class QualityAuditSession:
             "created_at",
             "source",
             "checks",
-            "conformance",
+            "requested_checks",
         }
-        if schema_version == QUALITY_AUDIT_SCHEMA_VERSION:
-            keys.add("fit")
         data = _exact_dict(
             value,
             keys,
             "Audit session",
         )
-        raw_fit = data.get("fit")
-        raw_conformance = data["conformance"]
         source = QualityAuditSource.from_dict(data["source"])
-        source_by_uid = {
-            memory.uid: memory
-            for memory in source.context().iter_items()
-            if isinstance(memory, Memory)
-        }
+        source_by_uid = {memory.uid: memory for memory in source.memories}
         raw_checks = data["checks"]
         if not isinstance(raw_checks, list):
             raise QualityAuditError("Invalid Audit checks.")
@@ -740,75 +794,22 @@ class QualityAuditSession:
             )
             for check in raw_checks
         )
-        if tuple(check.kind for check in checks) != QUALITY_AUDIT_KINDS:
-            raise QualityAuditError(
-                "A complete Audit must contain Duplicate, Ambiguity, and Conflict checks."
-            )
-        expected_memory_count = len(source.memories)
-        for check in checks:
-            if check.report.memory_count != expected_memory_count:
-                raise QualityAuditError("Audit check does not match its frozen Source.")
-            expected_ruleset = QUALITY_AUDIT_RULESETS[check.kind]
-            if check.ruleset_version != expected_ruleset:
-                raise QualityAuditError("Unsupported Audit finder ruleset.")
-            if check.provenance.operation != f"find_{check.kind}":
-                raise QualityAuditError(
-                    "Audit check provenance does not match its finder."
-                )
-        conformance = (
-            None
-            if raw_conformance is None
-            else ConformanceReport.from_dict(raw_conformance)
-        )
-        if conformance is not None:
-            if (
-                conformance.source_label != source.context_name
-                or conformance.provider_identity is None
-            ):
-                raise QualityAuditError(
-                    "Audit Conformance does not match its frozen Source or provider."
-                )
-            conformance_subjects = {
-                item.uid: item.content for item in conformance.subjects
-            }
-            source_subjects = {item.uid: item.content for item in source.memories}
-            if conformance_subjects != source_subjects:
-                raise QualityAuditError(
-                    "Audit Conformance does not cover the exact frozen Source."
-                )
-        fit = (
-            None
-            if raw_fit is None
-            else QualityAuditFit.from_dict(
-                raw_fit,
-                source_memory_uids=tuple(item.uid for item in source.memories),
-            )
-        )
-        if fit is not None and expected_memory_count < 2:
-            raise QualityAuditError("Audit Fit requires at least two Source Memories.")
-        conflict_report = checks[2].report
-        assert isinstance(conflict_report, ConflictReport)
-        if (
-            conflict_report.pair_count
-            != expected_memory_count * (expected_memory_count - 1) // 2
-        ):
-            raise QualityAuditError(
-                "Conflict Audit does not cover its frozen pair frame."
-            )
 
-        session = cls(
-            uid=_canonical_uuid(data["uid"], "Audit session uid"),
-            created_at=_string(data["created_at"], "Audit creation time", limit=100),
+        raw_requested = data["requested_checks"]
+        if not isinstance(raw_requested, list) or not raw_requested:
+            raise QualityAuditError("Audit must request at least one check.")
+        try:
+            requested_checks = tuple(AuditCheckKind(kind) for kind in raw_requested)
+        except (TypeError, ValueError) as error:
+            raise QualityAuditError("Invalid requested Audit check kind.") from error
+
+        return cls(
+            uid=data["uid"],
+            created_at=data["created_at"],
             source=source,
             checks=checks,
-            fit=fit,
-            conformance=conformance,
+            requested_checks=requested_checks,
         )
-        try:
-            datetime.fromisoformat(session.created_at)
-        except ValueError as error:
-            raise QualityAuditError("Invalid Audit creation time.") from error
-        return session
 
 
 def quality_audit_record_digest(session: QualityAuditSession) -> str:

@@ -1,285 +1,82 @@
-"""Public Merge entrypoint over unchanged semantic and literal workflows."""
+"""One CLI grammar and Setup for exact Context-to-Context Merge."""
 
 from typing import Annotated, Optional
-import typer
-from memcommit.adapters.console.coordination.context_scope_options import (
-    legacy_root_only_option_alias,
-)
 
-SEMANTIC_PARAMETERS = (
-    "left",
-    "right",
-    "result",
-    "into",
-    "to",
-    "from_",
-    "issue",
-    "choice",
-    "comment",
-    "expect_session",
-    "preserve_all",
-    "defer_all",
-    "accept",
-    "restart",
-    "revision",
-    "revises_turn",
-    "expand",
-    "sessions",
-    "direct",
-    "recursive",
-    "left_descendants",
-    "right_descendants",
-    "memory",
-    "incoming_memory",
-    "baseline_memory",
+import typer
+
+from memcommit.adapters.console.commands.merge.endpoint_setup import (
+    choose_merge_request,
 )
-SEMANTIC_ONLY = (
-    "result",
-    "issue",
-    "choice",
-    "comment",
-    "expect_session",
-    "preserve_all",
-    "defer_all",
-    "accept",
-    "restart",
-    "revision",
-    "revises_turn",
-    "expand",
-    "sessions",
-    "left_descendants",
-    "right_descendants",
-    "memory",
-    "incoming_memory",
-    "baseline_memory",
+from memcommit.adapters.console.commands.merge.preview import (
+    run_merge_preview,
 )
+from memcommit.adapters.console.commands.resolve.resolution_rounds import run_resolution_rounds
+from memcommit.adapters.console.coordination.endpoint_operand import (
+    choose_endpoint_operand,
+)
+from memcommit.adapters.console.terminal.components.command_wait import run_command_wait
+from memcommit.adapters.console.terminal.core.capabilities import (
+    require_interactive_terminal,
+)
+from memcommit.adapters.console.terminal.core.text import display_escape_text
+from memcommit.application.capabilities.memory_issue_analysis.peer_relations.provider_contract import (
+    MemoryRelationProviderError,
+)
+from memcommit.application.context_access.operand_resolution import (
+    resolve_existing_context_access,
+)
+from memcommit.application.operations.merge.apply import apply_merge
+from memcommit.application.operations.merge.inputs import (
+    MergeDecision,
+    MergeRequest,
+    PreparedMerge,
+)
+from memcommit.application.operations.merge.preparation import (
+    prepare_literal_merge,
+    prepare_merge,
+)
+from memcommit.application.operations.merge.resolve_preparation import (
+    prepare_semantic_review,
+)
+from memcommit.application.operations.merge.result import finish_merge
+from memcommit.application.operations.merge.setup import (
+    build_merge_setup,
+    merge_target_permission,
+)
+from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.model import ProfileError
+from memcommit.persistence.operations.audit import JsonAuditRecordRepository
+from memcommit.persistence.store import MemoryStore
+from memcommit.providers.connection import connect_semantic_provider
+from memcommit.providers.errors import QueryProviderError
+
+from .conflict_screen import run_merge_conflicts
 
 
 def cmd(
-    left: Annotated[
+    source: Annotated[
+        Optional[str],
+        typer.Argument(help="Existing Source Context; omit to open Setup."),
+    ] = None,
+    target: Annotated[
         Optional[str],
         typer.Argument(
-            help=(
-                "Directional INCOMING A, or symmetric PEER A when a third "
-                "RESULT or two-source --to is supplied; an unambiguously "
-                "non-Context sole sentence is inline Memory content"
-            )
-        ),
-    ] = None,
-    right: Annotated[
-        Optional[str],
-        typer.Argument(
-            help=(
-                "Directional BASELINE B, or symmetric PEER B when a third "
-                "RESULT or two-source --to is supplied"
-            )
-        ),
-    ] = None,
-    result: Annotated[
-        Optional[str],
-        typer.Argument(
-            help=("Symmetric RESULT C; equivalent to --to and created when absent")
-        ),
-    ] = None,
-    into: Annotated[
-        Optional[str],
-        typer.Option(
-            "--into",
-            help=(
-                "Explicit directional BASELINE alias for 'mem merge INCOMING BASELINE'"
-            ),
-        ),
-    ] = None,
-    to: Annotated[
-        Optional[str],
-        typer.Option(
-            "--to",
-            help=(
-                "Directional BASELINE when fewer than two positional sources "
-                "are supplied; otherwise symmetric RESULT C, created when absent"
-            ),
+            help="Existing Target Context; defaults to the current Context."
         ),
     ] = None,
     from_: Annotated[
-        Optional[str],
-        typer.Option(
-            "--from",
-            help=(
-                "Directional INCOMING Context or unambiguous inline Memory; "
-                "--to may name BASELINE, otherwise current supplies it"
-            ),
-        ),
+        Optional[str], typer.Option("--from", help="Source Context.")
     ] = None,
-    issue: Annotated[
-        Optional[str],
-        typer.Option(
-            "--issue",
-            help="Issue number or unique uid prefix for this comment",
-        ),
+    into: Annotated[
+        Optional[str], typer.Option("--into", help="Target Context.")
     ] = None,
-    choice: Annotated[
-        Optional[int],
-        typer.Option(
-            "--choice",
-            min=1,
-            help="Choose one displayed reading for --issue",
-        ),
-    ] = None,
-    comment: Annotated[
-        Optional[str],
-        typer.Option(
-            "--comment",
-            help="Explain one issue or guide all remaining relations",
-        ),
-    ] = None,
-    expect_session: Annotated[
-        Optional[str],
-        typer.Option(
-            "--expect-session",
-            metavar="SHA256",
-            help="Require the exact saved Merge revision reviewed for this turn",
-        ),
-    ] = None,
-    preserve_all: Annotated[
-        bool,
-        typer.Option(
-            "--preserve-all",
-            help="Ask to retain every remaining source distinction",
-        ),
-    ] = False,
-    defer_all: Annotated[
-        bool,
-        typer.Option(
-            "--defer-all",
-            help="Close as review-only without applying the target",
-        ),
-    ] = False,
-    accept: Annotated[
-        bool,
-        typer.Option(
-            "--accept",
-            help="Apply the exact ready proposal without another model call",
-        ),
-    ] = False,
-    restart: Annotated[
-        bool,
-        typer.Option(
-            "--restart",
-            help=(
-                "Replace the saved review session after rechecking its bound Contexts"
-            ),
-        ),
-    ] = False,
-    revision: Annotated[
-        Optional[str],
-        typer.Option(
-            "--revision",
-            help="How the comment relates to prior dialogue",
-        ),
-    ] = None,
-    revises_turn: Annotated[
-        list[str] | None,
-        typer.Option(
-            "--revises-turn",
-            help="Prior turn uid for a correction or retraction",
-        ),
-    ] = None,
-    expand: Annotated[
-        Optional[str],
-        typer.Option(
-            "--expand",
-            help="Render one issue's complete options provider-free",
-        ),
-    ] = None,
-    sessions: Annotated[
-        bool,
-        typer.Option(
-            "--sessions",
-            help="Enter the interactive Merge session launcher",
-        ),
-    ] = False,
-    direct: Annotated[
-        bool,
-        typer.Option(
-            "-d",
-            "--direct",
-            help="Use only the selected LEFT/INCOMING and RIGHT/BASELINE roots",
-        ),
-    ] = False,
-    recursive: Annotated[
-        bool,
-        typer.Option(
-            "-r",
-            "--recursive",
-            help="Include descendants under both Merge roots",
-        ),
-    ] = False,
-    left_descendants: Annotated[
-        Optional[bool],
-        typer.Option(
-            "--left-descendants/--left-root-only",
-            legacy_root_only_option_alias("left"),
-            help="Include all readable descendants under PEER or INCOMING A",
-        ),
-    ] = None,
-    right_descendants: Annotated[
-        Optional[bool],
-        typer.Option(
-            "--right-descendants/--right-root-only",
-            legacy_root_only_option_alias("right"),
-            help=(
-                "Include readable descendants under PEER B, or writable "
-                "owner Contexts under directional BASELINE B"
-            ),
-        ),
-    ] = None,
-    memory: Annotated[
-        Optional[str],
-        typer.Option(
-            "--memory",
-            "-m",
-            help=(
-                "Use exact text as one process-local INCOMING Memory; the "
-                "current Context, --into, or directional --to supplies BASELINE"
-            ),
-        ),
-    ] = None,
-    incoming_memory: Annotated[
-        Optional[str],
-        typer.Option(
-            "--incoming-memory",
-            metavar="UID_OR_PREFIX",
-            help=(
-                "In directional Merge, select one INCOMING Memory while its "
-                "neighbors remain non-actionable context"
-            ),
-        ),
-    ] = None,
-    baseline_memory: Annotated[
-        Optional[str],
-        typer.Option(
-            "--baseline-memory",
-            metavar="UID_OR_PREFIX",
-            help=(
-                "In directional Merge, restrict mutation to one BASELINE Memory "
-                "while its neighbors remain non-actionable context"
-            ),
-        ),
-    ] = None,
+    to: Annotated[Optional[str], typer.Option("--to", help="Target Context.")] = None,
     literal: Annotated[
         bool,
         typer.Option(
-            "--literal",
-            help="Use stored-item merging without semantic inference; retain the existing literal conflict and recursive behavior.",
+            "--literal", help="Merge stored items without semantic inference."
         ),
     ] = False,
-    resolution: Annotated[
-        Optional[list[str]],
-        typer.Option(
-            "--resolve",
-            help="With --literal: ID=keep-target or ID=take-source; repeat for every conflict.",
-        ),
-    ] = None,
     keep_target_all: Annotated[
         bool,
         typer.Option(
@@ -292,53 +89,170 @@ def cmd(
             "--take-source-all", help="With --literal: take Source for every conflict."
         ),
     ] = False,
+    keep_both_all: Annotated[
+        bool,
+        typer.Option(
+            "--keep-both-all",
+            help="With --literal: retain both versions of every Memory conflict.",
+        ),
+    ] = False,
 ) -> None:
-    """Merge semantically by default; --literal selects stored-item merging."""
-    values = locals().copy()
-    semantic_flags = {"preserve_all", "defer_all", "accept", "restart", "sessions"}
-    if literal:
-        # Dispatch before either implementation opens a Store or provider. Keeping
-        # each parser authoritative preserves the two established operand grammars.
-        incompatible = [
-            name
-            for name in SEMANTIC_ONLY
-            if (
-                values[name]
-                if name in semantic_flags
-                else values[name] is not None and values[name] != []
-            )
-        ]
-        if incompatible:
-            options = ", ".join(
-                "RESULT" if name == "result" else "--" + name.replace("_", "-")
-                for name in incompatible
-            )
-            raise typer.BadParameter(
-                f"{options} require semantic Merge; remove --literal."
-            )
-        from memcommit.adapters.console.commands.merge.literal.command import (
-            cmd as run_literal,
+    """Merge two exact Contexts; review Setup changes before Apply."""
+    try:
+        source = choose_endpoint_operand(
+            source, role="Source", options=(("--from", from_),)
         )
+        target = choose_endpoint_operand(
+            target, role="Target", options=(("--into", into), ("--to", to))
+        )
+        if sum((keep_target_all, take_source_all, keep_both_all)) > 1:
+            raise ValueError(
+                "Choose one of --keep-target-all, --take-source-all, or --keep-both-all."
+            )
+        if not literal and any((keep_target_all, take_source_all, keep_both_all)):
+            raise ValueError(
+                "--keep-target-all, --take-source-all, and --keep-both-all require --literal."
+            )
+    except ValueError as error:
+        raise typer.BadParameter(str(error)) from error
 
-        run_literal(
-            source=left,
-            target=right,
-            from_=from_,
-            into=into,
-            to=to,
-            direct=direct,
-            recursive=recursive,
-            resolution=resolution,
-            keep_target_all=keep_target_all,
-            take_source_all=take_source_all,
+    try:
+        # Reject an unavailable console before Store access or semantic work.
+        require_interactive_terminal("Merge")
+        store = MemoryStore(create=False)
+        current_name = store.current_context_name()
+        method = "LITERAL" if literal else "SEMANTIC"
+        from_setup = source is None
+        bulk = (
+            MergeDecision.KEEP_TARGET
+            if keep_target_all
+            else MergeDecision.TAKE_SOURCE
+            if take_source_all
+            else MergeDecision.KEEP_BOTH
+            if keep_both_all
+            else None
         )
-        return
-    if resolution is not None or keep_target_all or take_source_all:
-        raise typer.BadParameter(
-            "--resolve, --keep-target-all, and --take-source-all require --literal."
+        if from_setup:
+            setup = build_merge_setup(
+                store, current_name=current_name, method=method, requested_target=target
+            )
+            request = choose_merge_request(setup, literal_only=bulk is not None)
+            if request is None:
+                typer.echo("Merge cancelled; no changes made.")
+                return
+        else:
+            # Both locators use the same command-start snapshot. UID selectors
+            # resolve to canonical names here as well, before planning/approval.
+            source_access = resolve_existing_context_access(
+                store, source, current_name=current_name
+            ).value
+            target_access = resolve_existing_context_access(
+                store,
+                target,
+                current_name=current_name,
+                required_permission=merge_target_permission(method),
+            ).value
+            request = MergeRequest(
+                source_access.access_name, target_access.access_name, method
+            )
+
+        result = execute_merge(
+            request,
+            store=store,
+            current_name=current_name,
+            bulk=bulk,
+            review_before_apply=from_setup,
         )
-    from memcommit.adapters.console.commands.merge.semantic.entrypoint import (
-        cmd as run_semantic,
+        if result is None:
+            typer.echo("Merge cancelled; no changes made.")
+        else:
+            from memcommit.adapters.console.commands.merge.receipt import (
+                render_merge_receipt,
+            )
+
+            typer.echo(render_merge_receipt(result))
+    except (
+        OSError,
+        RuntimeError,
+        TypeError,
+        ValueError,
+        ProfileConfigError,
+        ProfileError,
+        QueryProviderError,
+        MemoryRelationProviderError,
+    ) as error:
+        typer.secho(
+            f"Merge error: {display_escape_text(str(error))}",
+            fg=typer.colors.RED,
+            err=True,
+        )
+        raise typer.Exit(1) from error
+
+
+def execute_merge(
+    request: MergeRequest,
+    *,
+    store,
+    current_name,
+    bulk=None,
+    review_before_apply=False,
+):
+    """Prepare once, then enter the same review/publication flow for either method."""
+    prepared = prepare_merge(request, store=store, current_name=current_name)
+    review = prepare_literal_merge(prepared.literal_input)
+    return review_merge(
+        prepared,
+        review,
+        provider_factory=connect_semantic_provider,
+        repository=JsonAuditRecordRepository(store),
+        bulk=bulk,
+        review_before_apply=review_before_apply,
     )
 
-    run_semantic(**{name: values[name] for name in SEMANTIC_PARAMETERS})
+
+def review_merge(
+    prepared: PreparedMerge,
+    review,
+    *,
+    provider_factory,
+    repository=None,
+    bulk=None,
+    review_before_apply=False,
+):
+    """Resolve → Preview → Apply through the same flow for either method."""
+    literal = run_merge_conflicts(review, bulk=bulk)
+    if literal is None:
+        return None
+    resolved = None
+    if prepared.request.method == "SEMANTIC":
+        semantic_review = run_command_wait(
+            "MERGE",
+            "auditing the merged Context",
+            total=1,
+            work=lambda progress: prepare_semantic_review(
+                prepared,
+                literal,
+                provider_factory=provider_factory,
+                repository=repository,
+            ),
+        )
+        results = run_resolution_rounds(
+            (semantic_review,),
+            provider_factory=provider_factory,
+            preview_choices=True,
+            header_label="MERGE · RESOLVE",
+        )
+        if results is None:
+            return None
+        (resolved,) = results
+    result = finish_merge(prepared, literal, resolved)
+
+    def apply_reviewed(reviewed):
+        return apply_merge(prepared, reviewed)
+
+    interactive_decisions = bulk is None and any(
+        round.decisions.decisions for round in result.rounds
+    )
+    if review_before_apply or interactive_decisions:
+        return run_merge_preview(prepared, result, apply_preview=apply_reviewed)
+    return apply_reviewed(result)

@@ -29,7 +29,9 @@ from memcommit.application.capabilities.history.verification import (
     _recorded_merge_transition,
 )
 from memcommit.application.capabilities.history.model.memory_event import (
-    MemoryHistoryEvent, MemoryHistoryRelation, MemoryHistoryRecord,
+    MemoryHistoryEvent,
+    MemoryHistoryRelation,
+    MemoryHistoryRecord,
 )
 from memcommit.application.capabilities.history.reconstruction.history_graph_reconstruction import (
     HistoryGraphAssembly,
@@ -122,7 +124,15 @@ class MemoryHistory:
 
     @property
     def records(self) -> tuple[MemoryHistoryRecord, ...]:
-        return tuple(sorted((*self.events, *self.relations), key=lambda record: (record.timestamp or "", record.checkpoint_uid or "")))
+        return tuple(
+            sorted(
+                (*self.events, *self.relations),
+                key=lambda record: (
+                    record.timestamp or "",
+                    record.checkpoint_uid or "",
+                ),
+            )
+        )
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -196,7 +206,9 @@ def _analysis_attachments(
     component: set[str],
     events: Iterable[MemoryHistoryRecord],
 ) -> tuple[tuple[MemoryHistoryAnalysis, ...], list[str]]:
-    from memcommit.application.operations.atomize.domain import atomize_analysis_matches_context
+    from memcommit.application.operations.atomize.domain import (
+        atomize_analysis_matches_context,
+    )
 
     try:
         session = store.load_atomize_analysis(ctx.uid)
@@ -370,8 +382,7 @@ def _construct_local_memory_history(
     selected_uid = _resolve_historical_uid(selector, assembly)
     component = assembly.graph.memory_component(selected_uid)
     relevant_events = tuple(
-        events[index]
-        for index in assembly.graph.memory_event_indexes(component)
+        events[index] for index in assembly.graph.memory_event_indexes(component)
     )
     current_frame = frames[-1]
     current = tuple(
@@ -394,9 +405,17 @@ def _construct_local_memory_history(
         component_uids=tuple(sorted(component)),
         originals=originals,
         current=current,
-        events=tuple(event for event in relevant_events if isinstance(event, MemoryHistoryEvent)),
-        relations=tuple(event for event in relevant_events if isinstance(event, MemoryHistoryRelation)),
-        current_matches_last_checkpoint=(len(frames) > 1 and _frame_equal(frames[-2], frames[-1])),
+        events=tuple(
+            event for event in relevant_events if isinstance(event, MemoryHistoryEvent)
+        ),
+        relations=tuple(
+            event
+            for event in relevant_events
+            if isinstance(event, MemoryHistoryRelation)
+        ),
+        current_matches_last_checkpoint=(
+            len(frames) > 1 and _frame_equal(frames[-2], frames[-1])
+        ),
         analyses=analyses,
         warnings=tuple(
             dict.fromkeys((*assembly.graph.memory_warnings, *analysis_warnings))
@@ -532,6 +551,19 @@ def _merge_transition_event(
         uid=edge.source_memory_uid,
         content_digest=edge.source_content_sha256,
     )
+    if source_state is None:
+        from ..reconstruction.memory_lineage_relations import memory_content_sha256
+
+        retained = dict(transition.source_memories).get(edge.source_memory_uid)
+        if (
+            retained is not None
+            and memory_content_sha256(retained) == edge.source_content_sha256
+        ):
+            source_state = MemoryState(
+                uid=edge.source_memory_uid,
+                content=retained,
+                position=target_after.position,
+            )
     if source_state is None and (
         edge.source_content_sha256 == edge.target_content_sha256
     ):
@@ -666,6 +698,14 @@ def reconstruct_memory_history(
         if owner is None:
             continue
         try:
+            if not _checkpoint_entries(store, owner.name) and any(
+                source_node == node
+                and dict(transition.source_memories).get(memory_uid) is not None
+                for source_node, _target_node, transition, _mapping in recorded_mappings
+            ):
+                # The retained input proves the Merge's Source value. With no
+                # Source history, do not invent a current-to-checkpoint comparison.
+                continue
             reports[node] = _construct_local_memory_history(store, owner, memory_uid)
         except MemoryHistoryReconstructionError:
             # The receipt still proves the immediate copied value. Older
@@ -730,9 +770,15 @@ def reconstruct_memory_history(
         component_uids=tuple(sorted(component)),
         originals=originals,
         current=current,
-        events=tuple(event for event in events if isinstance(event, MemoryHistoryEvent)),
-        relations=tuple(event for event in events if isinstance(event, MemoryHistoryRelation)),
-        current_matches_last_checkpoint=all(report.current_matches_last_checkpoint for report in reports.values()),
+        events=tuple(
+            event for event in events if isinstance(event, MemoryHistoryEvent)
+        ),
+        relations=tuple(
+            event for event in events if isinstance(event, MemoryHistoryRelation)
+        ),
+        current_matches_last_checkpoint=all(
+            report.current_matches_last_checkpoint for report in reports.values()
+        ),
         analyses=tuple(analyses),
         warnings=warnings,
     )

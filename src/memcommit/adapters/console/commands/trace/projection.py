@@ -27,7 +27,9 @@ from memcommit.adapters.console.terminal.core.text_layout import (
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     semantic_action_style,
 )
-from memcommit.adapters.console.terminal.components.read_only_viewer import run_read_only_viewer
+from memcommit.adapters.console.terminal.components.read_only_viewer import (
+    run_read_only_viewer,
+)
 from memcommit.application.capabilities.history.verification import (
     MemoryState,
     MemoryHistoryContextTransition,
@@ -154,9 +156,11 @@ def format_trace_states(
 
 
 def trace_row_effect(row: TraceOperationRow) -> str:
-    return "+".join(dict.fromkeys(
-        event.kind for event in row.events if isinstance(event, MemoryHistoryEvent)
-    ))
+    return "+".join(
+        dict.fromkeys(
+            event.kind for event in row.events if isinstance(event, MemoryHistoryEvent)
+        )
+    )
 
 
 def trace_row_action(row: TraceOperationRow) -> str:
@@ -219,10 +223,22 @@ def _trace_row_summary(row: TraceOperationRow) -> str:
                 code
                 for event in row.events
                 for code in event.reason_codes
-                if code in {"NEW", "ALREADY_PRESENT", "TAKE_SOURCE", "KEEP_TARGET"}
+                if code
+                in {
+                    "NEW",
+                    "ALREADY_PRESENT",
+                    "TAKE_SOURCE",
+                    "KEEP_TARGET",
+                    "KEEP_BOTH",
+                    "TRANSFORMED",
+                }
             }
             suffix = (
-                "Memory content unchanged"
+                "Content transformed through reviewed decisions"
+                if "TRANSFORMED" in dispositions
+                else "Target retained; Source added separately"
+                if dispositions == {"KEEP_BOTH"}
+                else "Memory content unchanged"
                 if dispositions <= {"NEW", "ALREADY_PRESENT"}
                 else (
                     "Target content replaced from Source"
@@ -369,7 +385,9 @@ def _state_uid(state: MemoryState, *, verbose: bool) -> str:
 def _after_marker_action(row: TraceOperationRow, state: MemoryState | None) -> str:
     if state is not None:
         for record in row.events:
-            if isinstance(record, MemoryHistoryEvent) and state.uid in {item.uid for item in record.after}:
+            if isinstance(record, MemoryHistoryEvent) and state.uid in {
+                item.uid for item in record.after
+            }:
                 return record.kind.lower()
     return "add"
 
@@ -385,11 +403,16 @@ def _extend_diff_states(
     if not any(isinstance(record, MemoryHistoryEvent) for record in row.events):
         for label, states in (("Input", row.before), ("Result", row.after)):
             for state in states:
-                fragments.extend((
-                    ("class:report-label", f"  {label}: "),
-                    ("class:memory-object", f"[{_state_uid(state, verbose=verbose)}] "
-                     f"{display_escape_text(state.content)}\n"),
-                ))
+                fragments.extend(
+                    (
+                        ("class:report-label", f"  {label}: "),
+                        (
+                            "class:memory-object",
+                            f"[{_state_uid(state, verbose=verbose)}] "
+                            f"{display_escape_text(state.content)}\n",
+                        ),
+                    )
+                )
         return
     before = row.before or (None,)
     after = row.after or (None,)
@@ -398,7 +421,10 @@ def _extend_diff_states(
         ("+", None, after),
     ):
         for state in states:
-            marker_style = semantic_action_style(action or _after_marker_action(row, state), fallback="class:report-label")
+            marker_style = semantic_action_style(
+                action or _after_marker_action(row, state),
+                fallback="class:report-label",
+            )
             fragments.append((marker_style, f"  {marker} "))
             if state is None:
                 fragments.append(("class:report-neutral", "∅\n"))
@@ -407,8 +433,7 @@ def _extend_diff_states(
                 (
                     (
                         "class:memory-object",
-                        f"[{_state_uid(state, verbose=verbose)}]"
-                        f"@{state.position + 1} ",
+                        f"[{_state_uid(state, verbose=verbose)}]@{state.position + 1} ",
                     ),
                     (
                         "class:memory-object",
@@ -486,7 +511,10 @@ def _extend_merge_transition(
     """Render each validated Merge edge as its Source and Target occurrence."""
 
     for event in row.events:
-        if not isinstance(event, MemoryHistoryRelation) or event.context_transition is None:
+        if (
+            not isinstance(event, MemoryHistoryRelation)
+            or event.context_transition is None
+        ):
             continue
         source_state = event.before[0] if event.before else None
         target_after = event.after[0] if event.after else None
@@ -648,13 +676,18 @@ def _extend_verbose_event_evidence(
         )
     sources = dict.fromkeys(source for event in row.events for source in event.sources)
     for source in sources:
-        fragments.extend((
-            ("class:report-label", "  Operation input: "),
-            ("class:report-neutral", f"{display_escape_text(source.context_name)} "
-             f"[{display_escape_text(source.context_uid)}] · Memory "
-             f"[{display_escape_text(source.memory_uid)}]\n"
-             f"    Source digest: {source.content_digest}\n"),
-        ))
+        fragments.extend(
+            (
+                ("class:report-label", "  Operation input: "),
+                (
+                    "class:report-neutral",
+                    f"{display_escape_text(source.context_name)} "
+                    f"[{display_escape_text(source.context_uid)}] · Memory "
+                    f"[{display_escape_text(source.memory_uid)}]\n"
+                    f"    Source digest: {source.content_digest}\n",
+                ),
+            )
+        )
     for event in row.events:
         occurrence = event.source_occurrence
         if occurrence is not None:
@@ -786,11 +819,7 @@ def _extend_operation(
             _extend_effect_fragments(fragments, trace_row_effect(row))
         else:
             fragments.append(("class:report-neutral", "none"))
-        fragments.extend(
-            (
-                ("class:report-neutral", "\n"),
-            )
-        )
+        fragments.extend((("class:report-neutral", "\n"),))
         _extend_verbose_event_evidence(fragments, row)
     fragments.append(("class:report-neutral", "\n"))
 
@@ -931,8 +960,7 @@ def trace_document_fragments(
         ("class:memory-object", f"[MEMORY {selected_uid}]"),
         (
             "class:report-neutral",
-            f" · {len(rows)} OPERATION{'S' if len(rows) != 1 else ''}"
-            " · LATEST FIRST",
+            f" · {len(rows)} OPERATION{'S' if len(rows) != 1 else ''} · LATEST FIRST",
         ),
     ]
     if hidden:

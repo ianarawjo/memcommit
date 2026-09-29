@@ -299,9 +299,6 @@ def _conflict_item(
             ordinal_by_uid=ordinal_by_uid,
         ),
     )
-    question = finding.question or (
-        "Record any correction or decision needed for this pair."
-    )
     return ResolutionItem(
         uid=item_uid,
         kind="CONFLICT",
@@ -312,7 +309,7 @@ def _conflict_item(
         obligation="OPTIONAL",
         response_state=state,
         response_text=text,
-        question=question,
+        question="",
         options=(),
         selected_option_uid=selected,
         issue_presentation=ResolutionIssuePresentation(
@@ -326,7 +323,7 @@ def _conflict_item(
                     sources=sources,
                 ),
             ),
-            prompt_heading="CONFLICT QUESTION",
+            prompt_heading="REVIEW",
             options_heading="PROPOSED RESOLUTIONS",
             other_option_label="Different resolution",
             response_heading="RESPONSE",
@@ -505,7 +502,6 @@ def quality_find_report_view(
                         report_source(finding.left, "SOURCE 1"),
                         report_source(finding.right, "SOURCE 2"),
                     ),
-                    follow_up=finding.question,
                 )
             )
         empty_message = "No conflict findings in this analysis."
@@ -536,6 +532,36 @@ def quality_find_report_view(
                     ),
                 )
             )
+        # Exact pointer groups keep their role and identity; they are not
+        # fabricated Memory claims and their live contents are never loaded.
+        for group in session.report.exact_item_groups:
+            members = (group.survivor_uid, *group.absorbed_uids)
+            owner = next(
+                ctx for ctx in current_contexts if group.survivor_uid in ctx.memories
+            )
+            ordinals = {uid: index for index, uid in enumerate(owner.ordered_uids(), 1)}
+            items.append(
+                QualityFindingReportItem(
+                    uid="exact-item:" + group.survivor_uid,
+                    category="duplicates",
+                    kind="DUP / " + group.item_kind,
+                    classification="EXACT",
+                    title=group.summary,
+                    reason_heading="WHY THESE ITEMS ARE EXACT DUPLICATES",
+                    reason="The direct occurrences have the same role and target identity.",
+                    sources=tuple(
+                        QualityFindingSource(
+                            label=group.item_kind,
+                            context_name=owner.name,
+                            memory_uid=uid,
+                            content=group.summary,
+                            ordinal=ordinals[uid],
+                            item_kind=group.item_kind,
+                        )
+                        for uid in members
+                    ),
+                )
+            )
         empty_message = "No redundancy evidence in this analysis."
 
     default_operation_label = (
@@ -553,11 +579,8 @@ def quality_find_report_view(
         )
 
     handoff_label: str | None = None
-    if handoff_available and items:
-        if session.kind == "conflicts":
-            handoff_label = "open Resolve"
-        elif session.kind == "duplicates":
-            handoff_label = "open Dedun"
+    if handoff_available and items and session.kind == "duplicates":
+        handoff_label = "open Dedun"
 
     return QualityFindReportView(
         kind=session.kind,

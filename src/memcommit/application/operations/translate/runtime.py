@@ -14,7 +14,7 @@ from memcommit.core.memory_translation import (
     TRANSLATED_CONTENT_CHAR_LIMIT,
     TRANSLATION_TARGET_CHAR_LIMIT,
 )
-from memcommit.providers.subscription import CodexChatGPTProvider
+from memcommit.providers.clients.codex import CodexChatGPTProvider
 from memcommit.application.capabilities.semantic_execution import (
     BudgetLimits,
     BudgetVector,

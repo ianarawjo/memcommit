@@ -10,7 +10,7 @@ from memcommit.application.operations.search.application import (
     SearchStage,
 )
 from memcommit.application.operations.search.runtime import execute_search
-from memcommit.providers.operation_connections import connect_search_provider
+from memcommit.providers.connection import connect_search_provider
 from memcommit.persistence.store import MemoryStore
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 

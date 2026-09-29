@@ -144,61 +144,6 @@ def _comparison_artifacts(
     return records
 
 
-def _meld_artifacts(
-    store: MemoryStore,
-    contexts: Sequence[Context],
-) -> list[RetrievalArtifactRecord]:
-    records: list[RetrievalArtifactRecord] = []
-    for context in contexts:
-        # Meld latest slots use the target Context UID as their public storage
-        # key. Loading only those exact keys keeps unrelated invalid sessions
-        # outside this already-frozen artifact frame and avoids a dependency on
-        # the terminal session picker's presentation catalog.
-        session = store.load_meld_session(context.uid)
-        if session is None:
-            continue
-        left, right = session.frames
-        title = (
-            f"{left.context_name} → {right.context_name}"
-            if session.mode == "DIRECTIONAL"
-            else (
-                f"{left.context_name} + {right.context_name} → "
-                f"{session.target.context_name}"
-            )
-        )
-        projection: dict[str, object] = {
-            "mode": session.mode,
-            "state": session.state,
-            "sources": [frame.context_name for frame in session.frames],
-            "target": session.target.context_name,
-            "candidate_review": session.candidate_review.to_dict(),
-            "application": (
-                session.application.to_dict()
-                if session.application is not None
-                else None
-            ),
-        }
-        records.append(
-            (
-                context.uid,
-                context.name,
-                RetrievalArtifact(
-                    uid=session.uid,
-                    artifact_kind="meld_session",
-                    title=title,
-                    content=_json_projection(projection),
-                    summary=_single_line(
-                        (
-                            f"{session.state}; latest review: "
-                            f"Resolve round {session.candidate_review.round + 1}"
-                        )
-                    ),
-                ),
-            )
-        )
-    return records
-
-
 def _rationale_artifacts(
     contexts: Sequence[Context],
 ) -> list[RetrievalArtifactRecord]:
@@ -239,7 +184,6 @@ def collect_retrieval_artifacts(
         [
             *_checkpoint_artifacts(store, unique_contexts),
             *_comparison_artifacts(store, unique_contexts),
-            *_meld_artifacts(store, unique_contexts),
             *_rationale_artifacts(unique_contexts),
         ]
     )

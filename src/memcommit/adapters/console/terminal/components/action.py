@@ -11,6 +11,17 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 
 
+def render_action_button(label: str, *, focused: bool) -> list[tuple[str, str]]:
+    """Share button chrome between individual controls and action lists."""
+
+    return [
+        (
+            focused_control_style(focused=focused, selected=focused),
+            f"{'›' if focused else ' '} [ {safe_terminal_text(label)} ]",
+        )
+    ]
+
+
 def build_action_control(
     label: str, *, describe: Callable[[], str] | None = None
 ) -> FormattedTextControl:
@@ -23,12 +34,7 @@ def build_action_control(
             fragments.append(
                 ("class:report-neutral", f" {safe_terminal_text(describe())}\n")
             )
-        fragments.append(
-            (
-                focused_control_style(focused=focused, selected=focused),
-                f"{'›' if focused else ' '} [ {safe_terminal_text(label)} ]",
-            )
-        )
+        fragments.extend(render_action_button(label, focused=focused))
         return fragments
 
     control = FormattedTextControl(render, focusable=True, show_cursor=False)

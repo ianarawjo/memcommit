@@ -28,12 +28,10 @@ def install_impact_routes(
         missing = ", ".join(sorted(expected - supplied)) or "none"
         extra = ", ".join(sorted(supplied - expected)) or "none"
         raise ValueError(
-            "Impact handler registry mismatch: "
-            f"missing [{missing}], extra [{extra}]."
+            f"Impact handler registry mismatch: missing [{missing}], extra [{extra}]."
         )
     for route in IMPACT_ROUTES.routes:
-        public_name = "merge" if route.name == "meld" else route.name
-        app.command(public_name, help=route.help.replace("Meld", "Merge"))(handlers[route.name])
+        app.command(route.name, help=route.help)(handlers[route.name])
 
 
 __all__ = [

@@ -31,14 +31,8 @@ from memcommit.adapters.console.commands.makemore.impact import (
 from memcommit.adapters.console.commands.forget.impact import (
     forget_cmd as forget_impact_cmd,
 )
-from memcommit.adapters.console.commands.resolve.impact import (
-    resolve_cmd as resolve_impact_cmd,
-)
 from memcommit.adapters.console.commands.impact.registry import (
     install_impact_routes,
-)
-from memcommit.adapters.console.commands.merge.semantic.impact import (
-    open_saved_meld_impact as _saved_meld_impact,
 )
 from memcommit.adapters.console.commands.sever.impact import (
     open_saved_sever_impact as _saved_sever_impact,
@@ -95,7 +89,6 @@ class ImpactOperation(str, Enum):
     """Internal discriminator used by the legacy dispatcher behind the registry."""
 
     atomize = "atomize"
-    meld = "merge"
     sever = "sever"
     update = "update"
 
@@ -114,7 +107,6 @@ def _operation_session_impact(
     try:
         store = MemoryStore(create=False)
         runners = {
-            ImpactOperation.meld: _saved_meld_impact,
             ImpactOperation.sever: _saved_sever_impact,
             ImpactOperation.update: _saved_update_impact,
         }
@@ -152,10 +144,7 @@ def _browse_impact_sessions(
         store = MemoryStore(create=False)
         receipt = choose_impact_session(
             store,
-            kinds=(
-                None if operation is None
-                else ("meld" if operation is ImpactOperation.meld else operation.value,)
-            ),
+            kinds=(None if operation is None else (operation.value,)),
             title=(
                 "MEM IMPACT · SAVED ANALYSES"
                 if operation is None
@@ -173,7 +162,7 @@ def _browse_impact_sessions(
         typer.echo("Impact selection cancelled; no analysis was opened.")
         return
     _operation_session_impact(
-        operation=ImpactOperation("merge" if receipt.kind == "meld" else receipt.kind),
+        operation=ImpactOperation(receipt.kind),
         session_uid=receipt.key,
         show_all=show_all,
     )
@@ -184,7 +173,7 @@ def _dispatch_impact(
         Optional[ImpactOperation],
         typer.Argument(
             help=(
-                "Impact operation: atomize, merge, sever, or update; omit for "
+                "Impact operation: atomize, sever, or update; omit for "
                 "a directional Update preview"
             ),
         ),
@@ -444,7 +433,7 @@ def _dispatch_impact(
         _usage_error(
             "choose an endpoint with '--from SOURCE' or '--to TARGET', "
             "preview atomization with 'mem impact atomize', or inspect a "
-            "saved 'merge', 'sever', or 'update' Impact."
+            "saved 'sever' or 'update' Impact."
         )
     if (
         session_uid is not None
@@ -595,6 +584,19 @@ def cmd(
     )
 
 
+def merge_impact_cmd() -> None:
+    """Describe deferred Merge Impact without preparing or loading anything."""
+    # TODO(merge-impact): Build a validated KEEP_BOTH result through Merge's
+    # preparation/Resolve contracts and reuse its Preview projection read-only.
+    # Keep this auxiliary view here; it must not become another Apply pipeline.
+    typer.echo(
+        "IMPACT MERGE · NOT IMPLEMENTED\n"
+        "Planned: Source + Target → KEEP BOTH → Merge Preview.\n"
+        "Show the complete result and changes with Context:Memory identifiers.\n"
+        "Read-only preview; no Apply or saving."
+    )
+
+
 def atomize_impact_cmd(
     context_operand: Annotated[
         Optional[str],
@@ -721,17 +723,6 @@ def atomize_impact_cmd(
 
 def _saved_impact_cmd(operation: ImpactOperation, session_uid: str | None) -> None:
     _dispatch_impact(operation=operation, session_uid=session_uid)
-
-
-def meld_impact_cmd(
-    session_uid: Annotated[
-        Optional[str],
-        typer.Option("--session", help="Saved Merge artifact uid or unique prefix"),
-    ] = None,
-) -> None:
-    """Inspect one exact saved Merge assessment."""
-
-    _saved_impact_cmd(ImpactOperation.meld, session_uid)
 
 
 def sever_impact_cmd(
@@ -869,8 +860,7 @@ install_impact_routes(
         "distill": distill_impact_cmd,
         "elaborate": elaborate_impact_cmd,
         "makemore": makemore_impact_cmd,
-        "resolve": resolve_impact_cmd,
-        "meld": meld_impact_cmd,
+        "merge": merge_impact_cmd,
         "sever": sever_impact_cmd,
         "update": update_impact_cmd,
     },
