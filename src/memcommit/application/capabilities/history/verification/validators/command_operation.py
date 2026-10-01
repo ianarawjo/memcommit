@@ -85,7 +85,7 @@ def _update_command_operation(
     """Recover the shared command unit recorded by a semantic Update."""
     if command != "update":
         return None
-    session_uid = args.get("update_session_uid")
+    session_uid = args.get("update_operation_uid", args.get("update_session_uid"))
     operation_digest = args.get("operation_digest")
     raw_contexts = args.get("command_contexts")
     if (

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
-from dataclasses import replace as dataclass_replace
 
 from memcommit.adapters.console.terminal.components.history.checkpoint_diff import (
     checkpoint_revision_detail_renderer,
@@ -24,7 +23,9 @@ from memcommit.adapters.console.terminal.components.history.model import (
     HistoryBackNavigation,
 )
 from memcommit.adapters.console.terminal.components.history.picker import choose_history
-from memcommit.adapters.console.terminal.components.history.presentation import checkpoint_picker_entries
+from memcommit.adapters.console.terminal.components.history.presentation import (
+    checkpoint_picker_entries,
+)
 from memcommit.adapters.console.terminal.components.history.update_checkpoint import (
     choose_update_checkpoint_at_location,
     choose_update_checkpoint_subtree,
@@ -36,16 +37,20 @@ from memcommit.adapters.console.terminal.components.history.display import (
     checkpoint_inherited_from,
     project_history_display_rows,
 )
-from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_action_style
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
+    semantic_action_style,
+)
 from memcommit.persistence.store import MemoryStore
-from memcommit.application.operations.update.model import UpdateSession
+from memcommit.application.operations.update.model import UpdateReceipt
 
 
-def _update_locations(session: UpdateSession | None) -> tuple[str, ...]:
+def _update_locations(session: UpdateReceipt | None) -> tuple[str, ...]:
     if session is None:
         return ()
     return tuple(
-        dict.fromkeys(operation.owner_context_name for operation in session.operations)
+        dict.fromkeys(
+            operation.owner_context_name for operation in session.plan.operations
+        )
     )
 
 
@@ -90,18 +95,13 @@ def _local_operation_ids(
     return direct, inherited
 
 
-def _update_operation_ids(session: UpdateSession | None) -> dict[str, set[str]]:
-    """Project participant-visible Update lifecycle operations by owner."""
+def _update_operation_ids(session: UpdateReceipt | None) -> dict[str, set[str]]:
+    """Project completed Update operations by owner; restoration comes from checkpoints."""
 
-    if session is None or session.application is None:
+    if session is None:
         return {}
     update_uid = f"update:{session.uid}:{session.application.operation_digest}"
     identities = {update_uid}
-    if session.status == "undone":
-        # Schema v6 retains current restoration state but not the authority's
-        # private receipt UID. UNDONE still proves one visible Undo after this
-        # retained Update, which is sufficient for the current lifecycle count.
-        identities.add(f"restore:undo:{update_uid}")
     return {name: set(identities) for name in _update_locations(session)}
 
 
@@ -221,17 +221,13 @@ def _context_rows_from_history(
 
 
 def _update_operation_rows(
-    session: UpdateSession | None,
+    session: UpdateReceipt | None,
     name: str,
 ) -> tuple[ContextMemoryRow, ...]:
-    if (
-        session is None
-        or session.application is None
-        or name not in _update_locations(session)
-    ):
+    if session is None or name not in _update_locations(session):
         return ()
     operation_count = sum(
-        operation.owner_context_name == name for operation in session.operations
+        operation.owner_context_name == name for operation in session.plan.operations
     )
     checkpoint_uid = next(
         (
@@ -261,20 +257,6 @@ def _update_operation_rows(
             ),
         )
     ]
-    if session.status == "undone":
-        rows.insert(
-            0,
-            ContextMemoryRow(
-                "undo",
-                "restored the retained Update operation",
-                style="report-neutral",
-                label_style=(
-                    semantic_action_style("undo").removeprefix("class:") or None
-                ),
-                section_label=f"DIRECT COMMANDS · {name}",
-            ),
-        )
-        rows[1] = dataclass_replace(rows[1], section_label=None)
     return tuple(rows)
 
 
@@ -319,7 +301,7 @@ def _browse_local_checkpoints(
 def browse_checkpoint_locations(
     store: MemoryStore,
     *,
-    session: UpdateSession | None,
+    session: UpdateReceipt | None,
     context_locator: str | None,
     title: str,
     manual: bool = False,
@@ -331,7 +313,7 @@ def browse_checkpoint_locations(
     local_names = tuple(store.list_context_names())
     update_locations = _update_locations(session)
     target_catalog = (
-        tuple(context.name for context in session.target_contexts)
+        tuple(context.name for context in session.inputs.target_contexts)
         if session is not None
         else ()
     )

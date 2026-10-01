@@ -27,29 +27,33 @@ def restore_context_command(
 ) -> CommandRestoreResult:
     """Restore the newest eligible granted or ordinary command unit.
 
-    A staged granted receipt is consulted only when its status can participate
-    in the requested direction. An empty authority stack falls back to the
+    A completed granted receipt is consulted only when authority history permits
+    the requested direction. An empty authority stack falls back to the
     ordinary global stack; every other authority failure remains fail-closed.
     """
 
     if direction not in {"undo", "redo"}:
         raise ValueError("Restoration direction must be 'undo' or 'redo'.")
-    staged = store.load_staged_update()
-    eligible_statuses = {"applied"} if direction == "undo" else {"applied", "undone"}
-    if (
-        staged is not None
-        and staged.status in eligible_statuses
-        and staged.granted_target is not None
-    ):
+    from memcommit.persistence.operations.update.receipt_repository import (
+        UpdateReceiptRepository,
+    )
+
+    receipts = UpdateReceiptRepository(store).list()
+    from memcommit.application.capabilities.command_recovery.update import (
+        UpdateAlreadyRestored,
+    )
+
+    for receipt in receipts:
+        if receipt.inputs.granted_target is None or not receipt.plan.operations:
+            continue
         try:
-            return restore_granted(store, staged, direction)
+            return restore_granted(store, receipt, direction)
+        except UpdateAlreadyRestored:
+            continue
         except CommandHistoryError as error:
             expected_empty = f"There is no recorded Context command to {direction}."
             if str(error) != expected_empty:
                 raise
-            # A stale granted receipt can coexist with a newer local command.
-            # Fall back only when its authority stack is definitely empty.
+            # Only an empty stack or an explicit opposite-stack match permits
+            # fallback. A newer authority command must never be substituted.
     return store.restore_recent_context_command(direction)
-
-
-__all__ = ["GrantedCommandRestorer", "restore_context_command"]

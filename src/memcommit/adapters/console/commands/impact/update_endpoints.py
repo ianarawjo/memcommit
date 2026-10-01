@@ -1,10 +1,12 @@
-"""Resolve console operands for one directional Update invocation."""
+"""Resolve existing directional Update Impact operands."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from memcommit.application.capabilities.operand_resolution import ContextOperandCandidate
+from memcommit.application.capabilities.operand_resolution import (
+    ContextOperandCandidate,
+)
 from memcommit.application.context_access.access import ContextAccess
 from memcommit.application.context_access.operand_resolution import (
     ResolvedContextAccess,

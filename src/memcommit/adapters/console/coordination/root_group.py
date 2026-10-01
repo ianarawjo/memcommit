@@ -37,12 +37,18 @@ class MemCommandGroup(CanonicalCommandGroup):
             ensure_isolated_study_shell,
         )
 
+        from memcommit.configuration.workspace import WorkspaceError
+
         arguments = list(sys.argv[1:] if args is None else args)
+        # Configuration locates the Store, so it must also work before migration
+        # and must not enter a Study shell belonging to the old workspace.
+        if arguments and arguments[0] == "config":
+            return super().main(args=arguments, prog_name=prog_name, **kwargs)
 
         def ensure(command_argv: Any = None) -> int | None:
             try:
                 return ensure_isolated_study_shell(command_argv)
-            except IsolatedStudyShellError as error:
+            except (IsolatedStudyShellError, WorkspaceError) as error:
                 render_cli_error(error)
                 raise SystemExit(1) from error
 
@@ -57,6 +63,31 @@ class MemCommandGroup(CanonicalCommandGroup):
             ensure()
 
     def invoke(self, ctx: Any) -> Any:
+        from memcommit.configuration.workspace import (
+            WorkspaceError,
+            ensure_workspace,
+            require_workspace_ready,
+            workspace_lock,
+        )
+
+        protected = tuple(getattr(ctx, "_protected_args", ())) or tuple(
+            getattr(ctx, "protected_args", ())
+        )
+        entered = (*protected, *tuple(getattr(ctx, "args", ())))
+        if entered and entered[0] == "config":
+            # Relocation owns its exclusive lease and cannot record into a Store
+            # whose location it is changing. Other config edits have no Store IO.
+            return super().invoke(ctx)
+        try:
+            with workspace_lock():
+                require_workspace_ready()
+                ensure_workspace()
+                return self._invoke_in_workspace(ctx)
+        except WorkspaceError as error:
+            render_cli_error(error)
+            raise click.exceptions.Exit(1) from error
+
+    def _invoke_in_workspace(self, ctx: Any) -> Any:
         # A long interactive command may make several semantic turns. Freeze
         # one provider/model instance for that root invocation, while separate
         # CliRunner or embedded invocations still observe explicit config

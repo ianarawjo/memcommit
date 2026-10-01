@@ -640,12 +640,11 @@ _OPERATIONS = (
     ),
     _operation(
         "update",
-        "Update a Target Context from a Source Context, resolving required execution "
-        "decisions before atomic Apply.",
-        "Source Context -> decisions -> Target Apply -> receipt",
+        "Apply one instruction or a stored Memory’s instruction to a Target Context.",
+        "Instruction -> Target changes -> Apply -> receipt",
         ExecutionKind.SEMANTIC,
-        "Changes only the local Target after Apply",
-        "Each endpoint exact or readable descendants",
+        "Changes only the authorized Target",
+        "One instruction; direct Target contents",
     ),
 )
 

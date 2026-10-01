@@ -15,6 +15,8 @@ from pathlib import Path
 import re
 import uuid
 
+from memcommit.configuration.workspace import require_workspace_ready, workspace_paths
+
 from memcommit.application.authorization.checkpoint_read_model import (
     CheckpointRead,
     CheckpointReadValueError,
@@ -378,13 +380,15 @@ class ProfileRegistry:
 
 
 def default_store_dir() -> Path:
-    """Return the backward-compatible authoring store location."""
+    """Return the authoring Store within the selected workspace."""
 
-    return Path.home() / ".mem"
+    require_workspace_ready()
+    return workspace_paths().store_dir / "authoring"
 
 
 def profile_control_dir() -> Path:
-    return Path.home() / ".mem-profiles"
+    require_workspace_ready()
+    return workspace_paths().store_dir / "profiles"
 
 
 def profile_stores_dir() -> Path:

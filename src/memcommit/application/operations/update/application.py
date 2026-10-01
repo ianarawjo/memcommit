@@ -12,7 +12,6 @@ from memcommit.application.operations.update.model import (
     UpdateError,
     UpdatePlan,
     UpdateResult,
-    UpdateSession,
 )
 from memcommit.core.context import Context, Memory, MemoryRef, QueryContextRef
 
@@ -221,27 +220,4 @@ def materialize_update_post_image(
     return root
 
 
-def apply_staged_update_plan(
-    session: UpdateSession,
-    target: Context,
-) -> UpdateResult:
-    """Apply the exact plan carried by one staged direct-Update session."""
-
-    if not isinstance(session, UpdateSession):
-        raise TypeError("Expected an UpdateSession.")
-    if session.status != "staged":
-        raise UpdateApplicationError(
-            "Update application requires a staged update session."
-        )
-    return apply_update(
-        session.plan,
-        target,
-    )
-
-
-__all__ = [
-    "UpdateApplicationError",
-    "apply_staged_update_plan",
-    "apply_update",
-    "materialize_update_post_image",
-]
+__all__ = ["UpdateApplicationError", "apply_update", "materialize_update_post_image"]

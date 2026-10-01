@@ -36,8 +36,11 @@ from memcommit.application.operations.sever.resolution_adapter import (
     SeverResolutionWorkbenchAdapter,
     sever_memory_changes,
 )
-from memcommit.application.operations.update.model import UpdateSession
-from memcommit.adapters.console.commands.update.workbench.effects import (
+from memcommit.application.operations.update.model import (
+    UpdateContextInputs,
+    UpdatePlan,
+)
+from memcommit.adapters.console.commands.update.effects import (
     update_effect_view,
     update_effect_report,
 )
@@ -62,19 +65,14 @@ class ImpactSessionPresentation:
 
 
 def update_impact_presentation(
-    session: UpdateSession,
+    inputs: UpdateContextInputs,
+    plan: UpdatePlan,
+    *,
+    completed=False,
 ) -> ImpactSessionPresentation:
     """Project one saved Update receipt as exact located Memory changes."""
 
-    view = update_effect_view(session)
-    state_summary = {
-        "impact": "These exact target changes are planned. Nothing is applied.",
-        "staged": (
-            "These exact target changes are staged. Apply remains a separate operation."
-        ),
-        "applied": "These are the exact target changes recorded as applied.",
-        "undone": "These are the exact target changes recorded as undone.",
-    }.get(session.status, "These are the exact changes in the saved Update receipt.")
+    view = update_effect_view(inputs, plan, completed=completed)
     return ImpactSessionPresentation(
         view=view,
         controller=ImpactController.from_memory_changes(
@@ -82,13 +80,15 @@ def update_impact_presentation(
             artifact_uid=view.artifact_uid,
             revision=view.revision,
             title="IMPACT · UPDATE",
-            summary=state_summary,
+            summary="Recorded Update changes."
+            if completed
+            else "Proposed Update changes; nothing applied.",
             changes=tuple(
-                update_operation_change(operation) for operation in session.operations
+                update_operation_change(operation) for operation in plan.operations
             ),
         ),
-        handoff_available=session.status in {"impact", "staged"},
-        effect_report=update_effect_report(session),
+        handoff_available=False,
+        effect_report=update_effect_report(plan),
     )
 
 

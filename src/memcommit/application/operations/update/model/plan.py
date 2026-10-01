@@ -11,10 +11,8 @@ from .changes import UpdateOperation, operation_digest
 class UpdatePlan:
     """One exact ordered Update against a named working Target root.
 
-    A plan deliberately carries no Impact, review, persistence, or Undo state.
-    A direct ``mem update`` invocation may wrap it in an ``UpdateSession`` for
-    compatibility, while Meld, Sever, Resolve, and other application
-    operations can apply it directly to their own working Target.
+    A plan carries no review, persistence or Undo state. Resolve and other
+    operations can calculate its result on their own working Target.
     """
 
     uid: str

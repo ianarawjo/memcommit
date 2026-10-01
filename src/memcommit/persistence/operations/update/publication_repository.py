@@ -1,4 +1,4 @@
-"""Persist one exact UpdateSession as an atomic multi-Context transaction."""
+"""Publish a process-local Update plan and its immutable completion receipt."""
 
 from __future__ import annotations
 
@@ -18,7 +18,9 @@ from memcommit.application.context_access import (
     GrantedContextBinding,
     authority_context_name,
 )
-from memcommit.application.operations.update.application import apply_staged_update_plan
+from memcommit.application.operations.update.application import apply_update
+from memcommit.application.operations.update.checkpoint import build_update_checkpoint
+from .receipt_repository import UpdateReceiptRepository
 from memcommit.application.operations.update.model import (
     EditOperation,
     RemoveOperation,
@@ -26,12 +28,13 @@ from memcommit.application.operations.update.model import (
     UpdateCheckpointReceipt,
     UpdateError,
     UpdateOperation,
-    UpdateSession,
-    applied_session_matches,
+    UpdateContextInputs,
+    UpdatePlan,
+    UpdateReceipt,
     collect_update_inputs,
-    inline_update_session_source,
+    inline_update_source,
     operation_digest,
-    session_matches,
+    update_inputs_match,
 )
 from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.persistence.store import (
@@ -75,8 +78,11 @@ def _load_endpoint(
     *,
     include_descendants: bool,
     registry,
+    direct: bool = False,
 ) -> Context:
     store = _reader(active_store, access, registry=registry)
+    if direct:
+        return store.load_direct(binding.access_name if binding is not None else name)
     return load_context_scope(
         store,
         binding.access_name if binding is not None else name,
@@ -106,79 +112,25 @@ def _apply_operations_to_direct(
     return post_image
 
 
-def _checkpoint_args(
-    session: UpdateSession,
-    *,
-    operation_hash: str,
-    owner_uid: str,
-    owner_operations: tuple[UpdateOperation, ...],
-    affected_owners,
-) -> dict[str, object]:
-    target_binding = session.granted_target
-    args: dict[str, object] = {
-        "update_session_uid": session.uid,
-        "operation_digest": operation_hash,
-        "source_context_uid": session.source_uid,
-        "source_context_name": session.source_name,
-        "target_context_uid": session.target_uid,
-        "target_context_name": session.target_name,
-        "goal_focus": (
-            None
-            if session.goal_focus is None
-            else session.goal_focus.receipt_record()
-        ),
-        "owner_context_uid": owner_uid,
-        "operation_memory_uids": [
-            operation.memory_uid for operation in owner_operations
-        ],
-        # Authority history is reconstructed from physical Context records;
-        # participant receipts retain the public names separately.
-        "command_contexts": [
-            {
-                "uid": owner.owner_context_uid,
-                "name": _physical_name(
-                    target_binding,
-                    owner.owner_context_name,
-                ),
-            }
-            for owner in affected_owners
-        ],
-    }
-    if session.granted_source is not None:
-        args["granted_source"] = session.granted_source.to_dict()
-    if target_binding is not None:
-        args.update(
-            {
-                "authority_target_context_name": (
-                    target_binding.authority_context_name
-                ),
-                "authority_grant": {
-                    "uid": target_binding.grant_uid,
-                    "revision": target_binding.grant_revision,
-                    "grantee_profile_uid": target_binding.grantee_profile_uid,
-                    "access_context": target_binding.access_name,
-                },
-            }
-        )
-    return args
-
-
 def _apply_locked(
     active_store: MemoryStore,
-    session: UpdateSession,
+    inputs: UpdateContextInputs,
+    plan: UpdatePlan,
     *,
     registry,
     source_access: ContextAccess | None,
     target_access: ContextAccess | None,
-) -> UpdateSession:
+) -> UpdateReceipt:
     """Apply after all participant records and control-plane state are locked."""
 
-    source_binding = session.granted_source
-    target_binding = session.granted_target
-    inline_source = inline_update_session_source(session)
-    if session.goal_focus is not None:
+    if UpdateReceiptRepository(active_store).path(plan.uid).exists():
+        raise ConcurrentContextUpdateError("This Update was already applied.")
+    source_binding = inputs.granted_source
+    target_binding = inputs.granted_target
+    inline_source = inline_update_source(inputs)
+    if inputs.goal_focus is not None:
         try:
-            revalidate_goal_focus(active_store, session.goal_focus)
+            revalidate_goal_focus(active_store, inputs.goal_focus)
         except GoalFocusError as error:
             raise ConcurrentContextUpdateError(
                 "The Update Goal focus changed before application."
@@ -187,20 +139,22 @@ def _apply_locked(
         active_store,
         source_access,
         source_binding,
-        session.source_name,
-        include_descendants=session.source_include_descendants,
+        inputs.source_name,
+        include_descendants=inputs.source_include_descendants,
+        direct=inputs.instruction is not None,
         registry=registry,
     )
     target = _load_endpoint(
         active_store,
         target_access,
         target_binding,
-        session.target_name,
-        include_descendants=session.target_include_descendants,
+        inputs.target_name,
+        include_descendants=inputs.target_include_descendants,
+        direct=inputs.instruction is not None,
         registry=registry,
     )
-    if not session_matches(
-        session,
+    if not update_inputs_match(
+        inputs,
         source,
         target,
         granted_source=source_binding,
@@ -210,18 +164,16 @@ def _apply_locked(
             "The Update Source or Target changed before application."
         )
 
-    result = apply_staged_update_plan(session, target)
+    result = apply_update(plan, target)
     target_store = active_store if target_access is None else target_access.store
     base_by_identity = {
-        (context.uid, context.name): context for context in session.target_contexts
+        (context.uid, context.name): context for context in inputs.target_contexts
     }
     originals: dict[str, dict[str, object]] = {}
     post_images: dict[str, Context] = {}
     expected_digests: dict[str, str] = {}
     for owner in result.affected_owners:
-        base = base_by_identity.get(
-            (owner.owner_context_uid, owner.owner_context_name)
-        )
+        base = base_by_identity.get((owner.owner_context_uid, owner.owner_context_name))
         if base is None:
             raise UpdateError("Update owner is outside the recorded Target.")
         physical_name = _physical_name(target_binding, owner.owner_context_name)
@@ -236,7 +188,7 @@ def _apply_locked(
             )
         owner_operations = tuple(
             operation
-            for operation in session.operations
+            for operation in plan.operations
             if operation.owner_context_uid == owner.owner_context_uid
         )
         originals[physical_name] = direct.to_dict()
@@ -246,32 +198,34 @@ def _apply_locked(
         )
         expected_digests[physical_name] = context_record_digest(direct)
 
+    written_receipts = []
     created_checkpoints: list[tuple[str, str, str]] = []
     written_names: list[str] = []
     try:
-        operation_hash = operation_digest(session.operations)
+        operation_hash = operation_digest(plan.operations)
         for owner in result.affected_owners:
             public_name = owner.owner_context_name
             physical_name = _physical_name(target_binding, public_name)
             owner_operations = tuple(
                 operation
-                for operation in session.operations
+                for operation in plan.operations
                 if operation.owner_context_uid == owner.owner_context_uid
             )
             checkpoint = target_store._save_locked(
                 post_images[physical_name],
                 AutoCheckpoint(
                     command="update",
-                    args=_checkpoint_args(
-                        session,
+                    args=build_update_checkpoint(
+                        inputs,
+                        plan,
                         operation_hash=operation_hash,
                         owner_uid=owner.owner_context_uid,
                         owner_operations=owner_operations,
                         affected_owners=result.affected_owners,
                     ),
                     description=(
-                        f"Applied semantic update {session.uid[:8]} from "
-                        f"{session.source_name}."
+                        f"Applied semantic update {plan.uid[:8]} from "
+                        f"{inputs.source_name}."
                     ),
                 ),
                 expected_context_digest=expected_digests[physical_name],
@@ -279,27 +233,32 @@ def _apply_locked(
             if checkpoint is None:
                 raise RuntimeError("Update application created no checkpoint.")
             written_names.append(physical_name)
-            created_checkpoints.append(
-                (physical_name, public_name, checkpoint.uid)
-            )
+            created_checkpoints.append((physical_name, public_name, checkpoint.uid))
 
         source_after = inline_source or _load_endpoint(
             active_store,
             source_access,
             source_binding,
-            session.source_name,
-            include_descendants=session.source_include_descendants,
+            inputs.source_name,
+            include_descendants=inputs.source_include_descendants,
+            direct=inputs.instruction is not None,
             registry=registry,
         )
         target_after = _load_endpoint(
             active_store,
             target_access,
             target_binding,
-            session.target_name,
-            include_descendants=session.target_include_descendants,
+            inputs.target_name,
+            include_descendants=inputs.target_include_descendants,
+            direct=inputs.instruction is not None,
             registry=registry,
         )
-        inputs_after = collect_update_inputs(source_after, target_after)
+        inputs_after = collect_update_inputs(
+            source_after,
+            target_after,
+            source_memory_selector=inputs.source_memory_uid,
+            instruction=inputs.instruction,
+        )
         checkpoint_by_public = {
             public_name: checkpoint_uid
             for _physical, public_name, checkpoint_uid in created_checkpoints
@@ -318,18 +277,24 @@ def _apply_locked(
                 for owner in result.affected_owners
             ),
         )
-        applied = session.with_application(receipt)
-        if not applied_session_matches(
-            applied,
-            source_after,
-            target_after,
-            granted_source=source_binding,
-            granted_target=target_binding,
-        ):
-            raise RuntimeError("Applied Update does not match its receipt.")
-        active_store._save_active_terminal_update(applied)
+        applied = UpdateReceipt(inputs, plan, receipt)
+        # Evidence stays with the initiating Profile. Copying it into a granted
+        # authority would disclose participant-only inline instructions and also
+        # make that authority misidentify its own local Undo as a granted route.
+        repository = UpdateReceiptRepository(active_store)
+        path = repository.path(applied.uid)
+        if path.exists() or path.is_symlink():
+            raise ConcurrentContextUpdateError("This Update was already applied.")
+        written_receipts.append(path)
+        repository.save(applied)
+
     except Exception:
         rollback_error: Exception | None = None
+        for path in written_receipts:
+            try:
+                path.unlink(missing_ok=True)
+            except Exception as candidate:
+                rollback_error = rollback_error or candidate
         for name in written_names:
             try:
                 _write_json_atomic(target_store._context_file(name), originals[name])
@@ -348,55 +313,48 @@ def _apply_locked(
     return applied
 
 
-def _source_lock_names(session: UpdateSession) -> set[str]:
-    binding = session.granted_source
-    if inline_update_session_source(session) is not None:
+def _source_lock_names(inputs: UpdateContextInputs, plan: UpdatePlan) -> set[str]:
+    binding = inputs.granted_source
+    if inline_update_source(inputs) is not None:
         return set()
-    public_names = {context.name for context in session.source_contexts}
-    public_names.add(session.source_name)
+    public_names = {context.name for context in inputs.source_contexts}
+    public_names.add(inputs.source_name)
     public_names.update(
         source.context_name
-        for operation in session.operations
+        for operation in plan.operations
         for source in operation.source_refs
     )
     return {_physical_name(binding, name) for name in public_names}
 
 
-def _target_lock_names(session: UpdateSession) -> set[str]:
-    binding = session.granted_target
-    public_names = {context.name for context in session.target_contexts}
-    public_names.add(session.target_name)
+def _target_lock_names(inputs: UpdateContextInputs) -> set[str]:
+    binding = inputs.granted_target
+    public_names = {context.name for context in inputs.target_contexts}
+    public_names.add(inputs.target_name)
     return {_physical_name(binding, name) for name in public_names}
-
-
-def _assert_current_session(active_store: MemoryStore, session: UpdateSession) -> None:
-    current = active_store._load_update_session(active_store.staged_update_file)
-    if current != session:
-        raise ConcurrentContextUpdateError(
-            "The active staged Update changed before application."
-        )
 
 
 def publish_update_transaction(
     active_store: MemoryStore,
-    session: UpdateSession,
+    inputs: UpdateContextInputs,
+    plan: UpdatePlan,
     *,
     registry,
     source_access: ContextAccess | None,
     target_access: ContextAccess | None,
-) -> UpdateSession:
-    """Publish a pre-authorized staged Update or leave no partial effect."""
+) -> UpdateReceipt:
+    """Publish a pre-authorized Update or leave no partial effect."""
 
-    if not isinstance(session, UpdateSession) or session.status != "staged":
-        raise ValueError("Expected one staged UpdateSession.")
+    if not isinstance(inputs, UpdateContextInputs) or not isinstance(plan, UpdatePlan):
+        raise TypeError("Expected frozen Update inputs and an exact plan.")
     source_store = active_store if source_access is None else source_access.store
     target_store = active_store if target_access is None else target_access.store
-    source_locks = _source_lock_names(session)
-    target_locks = _target_lock_names(session)
+    source_locks = _source_lock_names(inputs, plan)
+    target_locks = _target_lock_names(inputs)
     goal_locks: set[str] = set()
-    if session.goal_focus is not None and session.goal_focus.kind != "INLINE":
-        assert session.goal_focus.context_name is not None
-        goal_locks.add(session.goal_focus.context_name)
+    if inputs.goal_focus is not None and inputs.goal_focus.kind != "INLINE":
+        assert inputs.goal_focus.context_name is not None
+        goal_locks.add(inputs.goal_focus.context_name)
 
     if target_store.store_dir == active_store.store_dir:
         with ExitStack() as external_source:
@@ -406,52 +364,50 @@ def publish_update_transaction(
                 )
             with active_store._command_write_lock():
                 active_store._assert_profile_write_allowed()
-                with active_store._update_session_write_lock():
-                    _assert_current_session(active_store, session)
-                    local_locks = target_locks | goal_locks
-                    if source_store.store_dir == active_store.store_dir:
-                        local_locks.update(source_locks)
-                    with active_store._context_write_locks(local_locks):
-                        return _apply_locked(
-                            active_store,
-                            session,
-                            registry=registry,
-                            source_access=source_access,
-                            target_access=target_access,
-                        )
-
-    with active_store._update_session_write_lock():
-        _assert_current_session(active_store, session)
-        active_store._assert_profile_write_allowed()
-        with ExitStack() as non_target_locks:
-            active_goal_locked = False
-            if source_store.store_dir != target_store.store_dir:
-                source_and_goal = set(source_locks)
+                local_locks = target_locks | goal_locks
                 if source_store.store_dir == active_store.store_dir:
-                    source_and_goal.update(goal_locks)
-                    active_goal_locked = True
-                non_target_locks.enter_context(
-                    source_store._context_write_locks(source_and_goal)
-                )
-            if goal_locks and not active_goal_locked:
-                non_target_locks.enter_context(
-                    active_store._context_write_locks(goal_locks)
-                )
-            with target_store._command_write_lock():
-                target_store._assert_profile_write_allowed()
-                combined_target_locks = set(target_locks)
-                if source_store.store_dir == target_store.store_dir:
-                    combined_target_locks.update(source_locks)
-                if target_store.store_dir == active_store.store_dir:
-                    combined_target_locks.update(goal_locks)
-                with target_store._context_write_locks(combined_target_locks):
+                    local_locks.update(source_locks)
+                with active_store._context_write_locks(local_locks):
                     return _apply_locked(
                         active_store,
-                        session,
+                        inputs,
+                        plan,
                         registry=registry,
                         source_access=source_access,
                         target_access=target_access,
                     )
+
+    active_store._assert_profile_write_allowed()
+    with ExitStack() as non_target_locks:
+        active_goal_locked = False
+        if source_store.store_dir != target_store.store_dir:
+            source_and_goal = set(source_locks)
+            if source_store.store_dir == active_store.store_dir:
+                source_and_goal.update(goal_locks)
+                active_goal_locked = True
+            non_target_locks.enter_context(
+                source_store._context_write_locks(source_and_goal)
+            )
+        if goal_locks and not active_goal_locked:
+            non_target_locks.enter_context(
+                active_store._context_write_locks(goal_locks)
+            )
+        with target_store._command_write_lock():
+            target_store._assert_profile_write_allowed()
+            combined_target_locks = set(target_locks)
+            if source_store.store_dir == target_store.store_dir:
+                combined_target_locks.update(source_locks)
+            if target_store.store_dir == active_store.store_dir:
+                combined_target_locks.update(goal_locks)
+            with target_store._context_write_locks(combined_target_locks):
+                return _apply_locked(
+                    active_store,
+                    inputs,
+                    plan,
+                    registry=registry,
+                    source_access=source_access,
+                    target_access=target_access,
+                )
 
 
 __all__ = ["publish_update_transaction"]

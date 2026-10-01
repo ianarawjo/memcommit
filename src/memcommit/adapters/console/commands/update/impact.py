@@ -8,15 +8,13 @@ import typer
 
 from memcommit.application.authorization import ContextUse, authorize_context_use
 from memcommit.adapters.console.commands.impact.sessions import (
-    ImpactSessionPresentation,
-    run_saved_impact_handoff_loop,
     update_impact_presentation,
 )
 from memcommit.adapters.console.commands.update.render import (
     render_plan,
 )
-from memcommit.adapters.console.commands.update.workbench.application import (
-    run_update_workbench,
+from memcommit.adapters.console.commands.update.impact_screen import (
+    run_update_impact_screen,
 )
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.terminal.core.text import display_escape_text
@@ -30,14 +28,15 @@ from memcommit.application.operations.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
 )
-from memcommit.adapters.console.commands.update.endpoint_operands import (
+from memcommit.adapters.console.commands.impact.update_endpoints import (
     resolve_update_endpoint_accesses,
 )
 from memcommit.application.operations.update.model import (
     UpdateError,
     plan_update,
     required_update_context_uses,
-    session_matches,
+    update_inputs_match,
+    freeze_update_context_inputs,
 )
 from memcommit.application.capabilities.context_scope_loading import load_context_scope
 from memcommit.core.context_targeting.uid_locator import resolve_exact_or_unique_uid
@@ -54,58 +53,23 @@ def open_saved_update_impact(
     from memcommit.persistence.operations.update.receipt_repository import (
         UpdateReceiptRepository,
     )
+    from memcommit.adapters.console.commands.impact.sessions import (
+        show_process_local_impact,
+    )
 
-    current = store.load_staged_update() or store.load_impact_plan()
-    receipts = UpdateReceiptRepository(store)
-    retained = receipts.list()
-    if current is None and not retained:
-        raise ValueError(
-            "No saved Update or directional Impact plan exists. Run "
-            "'mem impact --from SOURCE --to TARGET' first."
+    receipts = UpdateReceiptRepository(store).list()
+    if not receipts:
+        raise ValueError("No completed Update receipt exists.")
+    receipt = (
+        receipts[0]
+        if session_uid is None
+        else resolve_exact_or_unique_uid(
+            receipts, session_uid, uid=lambda item: item.uid, label="Update receipt"
         )
-    retained_uids = {candidate.uid for candidate in retained}
-    if session_uid is None:
-        session = current or retained[0]
-    else:
-        candidates = retained
-        if current is not None and current.uid not in retained_uids:
-            candidates = (*retained, current)
-        session = resolve_exact_or_unique_uid(
-            candidates,
-            session_uid,
-            uid=lambda candidate: candidate.uid,
-            label="Saved Update Impact artifact",
-        )
-    selected_is_retained = session.uid in retained_uids
-
-    def load_presentation() -> ImpactSessionPresentation:
-        if selected_is_retained:
-            return update_impact_presentation(receipts.load(session.uid))
-        current = store.load_staged_update() or store.load_impact_plan()
-        if current is None or current.uid != session.uid:
-            raise ValueError(
-                "The saved Update changed while returning from Apply. Reopen it."
-            )
-        return update_impact_presentation(current)
-
-    def open_owning_workflow() -> None:
-        # Re-enter through Update's public command boundary so the exact live
-        # endpoints, grants, operation digest, and final Apply confirmation are
-        # checked again after leaving this immutable Impact projection.
-        from memcommit.adapters.console.commands.update.command import cmd as update_cmd
-
-        update_cmd(
-            source_name=session.source_name,
-            target_name=session.target_name,
-            replace_stage=False,
-            source_descendants=session.source_include_descendants,
-            target_descendants=session.target_include_descendants,
-        )
-
-    run_saved_impact_handoff_loop(
-        load_presentation=load_presentation,
-        open_owning_workflow=open_owning_workflow,
-        kind="update",
+    )
+    show_process_local_impact(
+        update_impact_presentation(receipt.inputs, receipt.plan, completed=True),
+        operation="update",
     )
 
 
@@ -170,20 +134,29 @@ def run_directional_update_impact(
             if target_access.is_granted
             else None
         )
+        inputs = freeze_update_context_inputs(
+            source,
+            target,
+            source_include_descendants=source_descendants,
+            target_include_descendants=target_descendants,
+            granted_source=granted_source,
+            granted_target=granted_target,
+            source_memory_selector=source_memory,
+            target_memory_selector=target_memory,
+        )
         with CommandProgress(
             "IMPACT UPDATE",
             "connecting provider",
             total=2,
         ) as progress:
             progress.update("planning memory changes", step=2)
-            session = plan_update(
+            plan = plan_update(
                 source,
                 target,
                 # Keep connection lazy so Update's complete authority and
                 # semantic-disclosure preflight runs first. A nested live
                 # Grant must fail without contacting a provider at all.
                 connect_semantic_provider,
-                status="impact",
                 source_include_descendants=source_descendants,
                 target_include_descendants=target_descendants,
                 granted_source=granted_source,
@@ -195,7 +168,7 @@ def run_directional_update_impact(
 
         authorize_context_use(
             target_access,
-            required_update_context_uses(session.operations),
+            required_update_context_uses(plan.operations),
         )
 
         # Provider latency is not an authorization lease. Re-resolve both
@@ -218,7 +191,7 @@ def run_directional_update_impact(
             authorize_context_use(current_source_access, ContextUse.READ)
             authorize_context_use(
                 current_target_access,
-                required_update_context_uses(session.operations),
+                required_update_context_uses(plan.operations),
             )
             current_source_store = (
                 GrantedReadStore(
@@ -264,8 +237,8 @@ def run_directional_update_impact(
                 if current_target_access.is_granted
                 else None
             )
-            if not session_matches(
-                session,
+            if not update_inputs_match(
+                inputs,
                 current_source,
                 current_target,
                 granted_source=current_granted_source,
@@ -273,9 +246,8 @@ def run_directional_update_impact(
             ):
                 raise UpdateError(
                     "An update endpoint or grant changed while planning; "
-                    "no preview was saved."
+                    "no preview was displayed."
                 )
-            store.save_impact_plan(session)
     except (
         OSError,
         ProfileConfigError,
@@ -293,9 +265,9 @@ def run_directional_update_impact(
         raise typer.Exit(1)
 
     if sys.stdin.isatty() and sys.stdout.isatty():
-        run_update_workbench(session)
+        run_update_impact_screen(inputs, plan)
     else:
-        render_plan(session, staged=False)
+        render_plan(inputs, plan)
 
 
 __all__ = ["open_saved_update_impact", "run_directional_update_impact"]

@@ -1,45 +1,20 @@
-"""Frozen Context fingerprints and durable Update application receipts."""
+"""Immutable completed Update evidence, independent of work-in-progress state."""
 
 from __future__ import annotations
-
 from dataclasses import dataclass
-
+from .fingerprints import ContextFingerprint
+from .inputs import UpdateContextInputs
+from .plan import UpdatePlan
 from .changes import (
     _is_sha256,
     _require_exact_keys,
     _require_string,
     _require_uuid,
+    _operation_from_dict,
+    AddOperation,
 )
 
 
-@dataclass(frozen=True)
-class ContextFingerprint:
-    uid: str
-    name: str
-    digest: str
-
-    def to_dict(self) -> dict[str, str]:
-        return {
-            "uid": self.uid,
-            "name": self.name,
-            "digest": self.digest,
-        }
-
-    @classmethod
-    def from_dict(cls, value: object) -> ContextFingerprint:
-        data = _require_exact_keys(
-            value,
-            {"uid", "name", "digest"},
-            "Context fingerprint",
-        )
-        digest = data["digest"]
-        if not _is_sha256(digest):
-            raise ValueError("Invalid Context fingerprint digest.")
-        return cls(
-            uid=_require_string(data["uid"], "Context fingerprint uid"),
-            name=_require_string(data["name"], "Context fingerprint name"),
-            digest=digest,
-        )
 @dataclass(frozen=True)
 class UpdateCheckpointReceipt:
     context_uid: str
@@ -144,4 +119,85 @@ class UpdateApplicationReceipt:
             target_digest=target_digest,
             target_contexts=target_contexts,
             checkpoints=checkpoints,
+        )
+
+
+@dataclass(frozen=True, slots=True)
+class UpdateReceipt:
+    inputs: UpdateContextInputs
+    plan: UpdatePlan
+    application: UpdateApplicationReceipt
+
+    @property
+    def uid(self) -> str:
+        return self.plan.uid
+
+    def __post_init__(self) -> None:
+        if (self.plan.target_uid, self.plan.target_name) != (
+            self.inputs.target_uid,
+            self.inputs.target_name,
+        ):
+            raise ValueError("Update receipt names a different Target.")
+        if self.application.operation_digest != self.plan.digest:
+            raise ValueError("Update receipt does not match its operations.")
+        identities = [
+            (op.owner_context_uid, op.memory_uid) for op in self.plan.operations
+        ]
+        if len(identities) != len(set(identities)):
+            raise ValueError("Duplicate Update effect.")
+        owners = {
+            (op.owner_context_uid, op.owner_context_name) for op in self.plan.operations
+        }
+        checkpoints = {
+            (cp.context_uid, cp.context_name) for cp in self.application.checkpoints
+        }
+        if owners != checkpoints:
+            raise ValueError("Update checkpoints do not cover its changed Contexts.")
+        before = [(c.uid, c.name) for c in self.inputs.target_contexts]
+        after = [(c.uid, c.name) for c in self.application.target_contexts]
+        if before != after or not owners <= set(before):
+            raise ValueError("Update receipt changed its Target identities.")
+        for op in self.plan.operations:
+            if self.inputs.target_memory_uid is not None and (
+                isinstance(op, AddOperation)
+                or op.memory_uid != self.inputs.target_memory_uid
+            ):
+                raise ValueError("Update effect exceeds its Target Memory scope.")
+            if self.inputs.source_memory_uid is not None and any(
+                ref.memory_uid != self.inputs.source_memory_uid
+                for ref in op.source_refs
+            ):
+                raise ValueError("Update effect exceeds its Source Memory scope.")
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "schema_version": 1,
+            "uid": self.uid,
+            "inputs": self.inputs.to_dict(),
+            "operations": [op.to_dict() for op in self.plan.operations],
+            "application": self.application.to_dict(),
+        }
+
+    @classmethod
+    def from_dict(cls, value: object) -> UpdateReceipt:
+        data = _require_exact_keys(
+            value,
+            {"schema_version", "uid", "inputs", "operations", "application"},
+            "Update receipt",
+        )
+        if (
+            type(data["schema_version"]) is not int
+            or data["schema_version"] != 1
+            or not isinstance(data["operations"], list)
+        ):
+            raise ValueError("Invalid Update receipt schema.")
+        inputs = UpdateContextInputs.from_dict(data["inputs"])
+        plan = UpdatePlan(
+            _require_uuid(data["uid"], "Update operation uid"),
+            inputs.target_uid,
+            inputs.target_name,
+            tuple(_operation_from_dict(op) for op in data["operations"]),
+        )
+        return cls(
+            inputs, plan, UpdateApplicationReceipt.from_dict(data["application"])
         )

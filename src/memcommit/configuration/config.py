@@ -1,7 +1,7 @@
-"""Global configuration for mem (~/.mem/config.json)."""
+"""Workspace settings, with only its location kept in the bootstrap file."""
+
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import Optional
 
@@ -13,40 +13,63 @@ from memcommit.providers.types import (
     SEMANTIC_PROVIDER_IDS,
 )
 
-CONFIG_FILE = Path.home() / ".mem" / "config.json"
+from memcommit.configuration.workspace import (
+    configuration_lock,
+    read_configuration,
+    require_workspace_ready,
+    write_configuration,
+    workspace_paths,
+)
+
+# An explicit override remains useful to embedding callers and isolated tests.
+CONFIG_FILE: Path | None = None
 
 
 class Config:
-
     def __init__(self):
-        CONFIG_FILE.parent.mkdir(exist_ok=True)
-        if not CONFIG_FILE.exists():
-            self._write({})
+        self._path_override = Path(CONFIG_FILE) if CONFIG_FILE is not None else None
+
+    @property
+    def path(self) -> Path:
+        if self._path_override is not None:
+            return self._path_override
+        require_workspace_ready()
+        return workspace_paths().store_dir / "config.json"
 
     def _read(self) -> dict:
-        with open(CONFIG_FILE) as f:
-            return json.load(f)
+        return read_configuration(self.path)
 
     def _write(self, data: dict) -> None:
-        with open(CONFIG_FILE, "w") as f:
-            json.dump(data, f, indent=2)
+        write_configuration(data, self.path)
 
     def get(self, key: str) -> Optional[str]:
+        if key == "workspace_dir":
+            return str(workspace_paths().workspace_dir)
         return self._read().get(key)
 
     def set(self, key: str, value: str) -> None:
-        data = self._read()
-        data[key] = value
-        self._write(data)
+        if key == "workspace_dir":
+            raise ValueError(
+                "Use the Config operation to relocate workspace_dir with its data."
+            )
+        with configuration_lock():
+            data = self._read()
+            data[key] = value
+            self._write(data)
 
     def update(self, values: dict[str, object]) -> None:
         """Write one coherent configuration change instead of partial keys."""
-        data = self._read()
-        data.update(values)
-        self._write(data)
+        if "workspace_dir" in values:
+            raise ValueError(
+                "Change workspace_dir separately with mem config set workspace_dir PATH."
+            )
+        with configuration_lock():
+            data = self._read()
+            data.update(values)
+            self._write(data)
 
     def all(self) -> dict:
-        return self._read()
+        return {**self._read(), "workspace_dir": str(workspace_paths().workspace_dir)}
 
     # --- Typed accessors ---
 

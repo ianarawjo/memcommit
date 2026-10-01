@@ -1,4 +1,4 @@
-"""Authorize and coordinate publication of one exact Update session."""
+"""Authorize and coordinate publication of one exact Update plan."""
 
 from __future__ import annotations
 
@@ -9,7 +9,9 @@ from memcommit.application.context_access.access import (
     ContextAccess,
     revalidate_granted_context_binding,
 )
-from memcommit.application.context_access.granted_view import resolve_granted_context_view
+from memcommit.application.context_access.granted_view import (
+    resolve_granted_context_view,
+)
 from memcommit.application.operations.profile.model import (
     ProfileError,
     authority_grant_snapshot_lock,
@@ -20,7 +22,9 @@ from memcommit.application.operations.update.model import (
     RemoveOperation,
     UpdateError,
     UpdateOperation,
-    UpdateSession,
+    UpdateContextInputs,
+    UpdatePlan,
+    UpdateReceipt,
     required_update_context_uses,
 )
 from memcommit.persistence.operations.update.publication_repository import (
@@ -40,18 +44,19 @@ def _operation_use(operation: UpdateOperation) -> ContextUse:
 
 
 def authorize_granted_target_operations(
-    session: UpdateSession,
+    inputs: UpdateContextInputs,
+    plan: UpdatePlan,
     access: ContextAccess,
     *,
     registry,
 ) -> None:
     """Authorize every public owner against the same frozen Target Grant."""
 
-    binding = session.granted_target
+    binding = inputs.granted_target
     if binding is None or access.view is None:
         raise UpdateError("Expected a granted Update Target.")
     uses_by_owner: dict[str, set[ContextUse]] = {}
-    for operation in session.operations:
+    for operation in plan.operations:
         uses_by_owner.setdefault(operation.owner_context_name, set()).add(
             _operation_use(operation)
         )
@@ -84,16 +89,32 @@ def authorize_granted_target_operations(
             )
 
 
-def apply_staged_update(
+def publish_update(
     active_store: MemoryStore,
-    session: UpdateSession,
-) -> UpdateSession:
-    """Authorize an exact staged Update and publish it transactionally."""
+    inputs: UpdateContextInputs,
+    plan: UpdatePlan,
+) -> UpdateReceipt:
+    """Authorize an exact Update and publish it transactionally."""
 
-    if not isinstance(session, UpdateSession) or session.status != "staged":
-        raise ValueError("Expected one staged UpdateSession.")
-    source_binding = session.granted_source
-    target_binding = session.granted_target
+    if not isinstance(inputs, UpdateContextInputs) or not isinstance(plan, UpdatePlan):
+        raise TypeError("Expected frozen Update inputs and an exact plan.")
+    if (plan.target_uid, plan.target_name) != (inputs.target_uid, inputs.target_name):
+        raise UpdateError(
+            "Update plan names a different Target from its frozen inputs."
+        )
+    if inputs.target_memory_uid is not None and any(
+        isinstance(op, AddOperation) or op.memory_uid != inputs.target_memory_uid
+        for op in plan.operations
+    ):
+        raise UpdateError("Update plan exceeds its selected Target Memory.")
+    if inputs.source_memory_uid is not None and any(
+        ref.memory_uid != inputs.source_memory_uid
+        for op in plan.operations
+        for ref in op.source_refs
+    ):
+        raise UpdateError("Update plan cites an unselected Source Memory.")
+    source_binding = inputs.granted_source
+    target_binding = inputs.granted_target
     grant_lock = (
         authority_grant_snapshot_lock()
         if source_binding is not None or target_binding is not None
@@ -125,20 +146,22 @@ def apply_staged_update(
         if target_access is not None:
             authorize_context_use(
                 target_access,
-                required_update_context_uses(session.operations),
+                required_update_context_uses(plan.operations),
             )
             authorize_granted_target_operations(
-                session,
+                inputs,
+                plan,
                 target_access,
                 registry=registry,
             )
         return publish_update_transaction(
             active_store,
-            session,
+            inputs,
+            plan,
             registry=registry,
             source_access=source_access,
             target_access=target_access,
         )
 
 
-__all__ = ["apply_staged_update", "authorize_granted_target_operations"]
+__all__ = ["publish_update", "authorize_granted_target_operations"]

@@ -134,68 +134,32 @@ def _artifact_timestamp(path, *, fallback: str) -> float:
     return timestamp
 
 
-def _saved_update_entry(store: MemoryStore) -> SessionPickerEntry | None:
-    session = store.load_staged_update()
-    path = store.staged_update_file
-    if session is None:
-        session = store.load_impact_plan()
-        path = store.impact_plan_file
-    if session is None:
-        return None
-    if session.status not in {"applied", "undone"}:
-        return None
-    entry = SessionPickerEntry(
-        kind="update",
-        key=session.uid,
-        title=f"{session.source_name} → {session.target_name}",
-        status=session.status.upper(),
-        subtitle=(
-            f"{len(session.operations)} planned "
-            f"{'change' if len(session.operations) == 1 else 'changes'}"
-        ),
-        group=session.target_name,
-        sort_timestamp=_artifact_timestamp(path, fallback=session.created_at),
-        detail=(
-            f"Session {session.uid}\n"
-            f"Source {session.source_name}\n"
-            f"Target {session.target_name}\n"
-            "The singleton Update or Impact receipt remains operation-owned."
-        ),
-        reopen_argv=("mem", "review", "update", "--session", session.uid),
-    )
-    return _review_entry(entry)
-
-
 def _retained_update_entries(
     store: MemoryStore,
 ) -> tuple[SessionPickerEntry, ...]:
     """Project immutable completed receipts not already represented as active."""
 
     receipts = UpdateReceiptRepository(store)
-    current = store.load_staged_update() or store.load_impact_plan()
-    current_uid = current.uid if current is not None else None
     entries: list[SessionPickerEntry] = []
     for session in receipts.list():
-        if session.uid == current_uid:
-            continue
         entry = SessionPickerEntry(
             kind="update",
             key=session.uid,
-            title=f"{session.source_name} → {session.target_name}",
-            status=session.status.upper(),
+            title=f"{session.inputs.source_name} → {session.inputs.target_name}",
+            status="APPLIED",
             subtitle=(
-                f"{len(session.operations)} retained "
-                f"{'change' if len(session.operations) == 1 else 'changes'}"
+                f"{len(session.plan.operations)} retained "
+                f"{'change' if len(session.plan.operations) == 1 else 'changes'}"
             ),
-            group=session.target_name,
+            group=session.inputs.target_name,
             sort_timestamp=_artifact_timestamp(
                 receipts.path(session.uid),
                 fallback=session.application.applied_at,
             ),
             detail=(
-                f"Session {session.uid}\n"
-                f"Source {session.source_name}\n"
-                f"Target {session.target_name}\n"
+                f"Receipt {session.uid}\n"
+                f"Source {session.inputs.source_name}\n"
+                f"Target {session.inputs.target_name}\n"
                 "Immutable completed Update evidence."
             ),
             reopen_argv=("mem", "review", "update", "--session", session.uid),
@@ -328,9 +292,6 @@ def review_session_entries(store: MemoryStore) -> tuple[SessionPickerEntry, ...]
         )
     )
     entries.extend(_retained_update_entries(store))
-    update_entry = _saved_update_entry(store)
-    if update_entry is not None:
-        entries.append(update_entry)
     entries.extend(_saved_review_entries(store))
     return tuple(entries)
 

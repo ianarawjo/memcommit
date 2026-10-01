@@ -420,11 +420,9 @@ app.command(
     "update",
     help=operation_summary("update"),
     epilog=(
-        "Positional forms: 'mem update SOURCE' uses the current Target and "
-        "'mem update SOURCE TARGET' is fully explicit. An unambiguous sentence "
-        "may supply one process-local Source Memory; --memory forces text. Zero "
-        "operands opens setup, and --from/--to retain role-named routes. Quote "
-        "multiword inline text so the shell passes it as one operand."
+        "Pass one quoted instruction, or --memory/-m UID or CONTEXT:UID to use "
+        "one stored Memory outside the Target. --to chooses the Target; otherwise "
+        "the current Context is used. Changes apply immediately and print a receipt."
     ),
 )(update.cmd)
 

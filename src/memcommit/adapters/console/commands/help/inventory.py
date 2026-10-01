@@ -728,20 +728,10 @@ COMMAND_FORMS = {
         "mem unlock profile (compatibility active Profile)",
     ),
     "update": (
-        "mem update (choose Source and Target for a new Update)",
-        "mem update --sessions (enter the interactive Update session launcher)",
-        "mem update [source_context] [target_context] (explicit direction)",
-        "mem update [source_context] (current Context is target)",
-        "mem update [non_context_sentence] --to [target_context] (one process-local Source Memory)",
-        "mem update --memory [exact_text] --to [target_context] (force one process-local Source Memory)",
-        "mem update --from [source_context] --to [target_context] (compatibility aliases)",
-        "mem update --from [source] --to [target] --goal [context|memory|text] "
-        "(bind a non-evidence relevance focus through planning and Apply)",
-        "mem update -r --from [source_context] --to [target_context] (both subtrees)",
-        "mem update -r --from [source_context] --to [target_context] --target-root-only (Source subtree, target root)",
-        "mem update --from [source_context] --source-descendants --to [target_context] --target-descendants (include both readable subtrees)",
-        "mem update --from [source_context] (current Context is target)",
-        "mem update --to [target_context] (current Context is source)",
+        'mem update "Set the closing time to 19:00." (apply to the current Context)',
+        'mem update "Set the closing time to 19:00." --to [target_context]',
+        "mem update -m [uid] --to [target_context] (one instruction Memory outside the Target)",
+        "mem update --memory [context:uid] (explicit instruction Memory location)",
     ),
 }
 

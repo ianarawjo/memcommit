@@ -143,26 +143,23 @@ def _proposal_evidence(
     trace: MemoryHistory,
 ) -> tuple[tuple[UpdateProposalEvidence, ...], list[str]]:
     warnings: list[str] = []
-    sessions = []
-    for label, loader in (
-        ("impact", store.load_impact_plan),
-        ("active update", store.load_staged_update),
-    ):
-        try:
-            session = loader()
-        except ValueError as error:
-            warnings.append(f"Saved {label} could not be read: {error}")
-            continue
-        if session is not None:
-            sessions.append(session)
+    from memcommit.persistence.operations.update.receipt_repository import (
+        UpdateReceiptRepository,
+    )
+
+    try:
+        receipts = UpdateReceiptRepository(store).list()
+    except ValueError as error:
+        warnings.append(f"Completed Update evidence could not be read: {error}")
+        receipts = ()
 
     component = set(trace.component_uids)
     by_key: dict[
         tuple[str, str, str, str],
         UpdateProposalEvidence,
     ] = {}
-    for session in sessions:
-        for operation in session.operations:
+    for session in receipts:
+        for operation in session.plan.operations:
             source_uids = tuple(source.memory_uid for source in operation.source_refs)
             roles: list[str] = []
             if (
@@ -178,7 +175,7 @@ def _proposal_evidence(
             for role in roles:
                 evidence = UpdateProposalEvidence(
                     session_uid=session.uid,
-                    status=session.status,
+                    status="applied",
                     role=role,
                     operation=operation.operation,
                     reason=operation.reason,
@@ -192,11 +189,7 @@ def _proposal_evidence(
                     operation.owner_context_uid,
                     operation.memory_uid,
                 )
-                # A staged artifact supersedes the same impact artifact in the
-                # display, but remains explicitly an unapplied proposal.
-                previous = by_key.get(key)
-                if previous is None or session.status == "staged":
-                    by_key[key] = evidence
+                by_key[key] = evidence
     return tuple(by_key.values()), warnings
 
 

@@ -26,12 +26,6 @@ class UpdateResult:
     affected_owners: tuple[AppliedOwner, ...]
 
     @property
-    def session_uid(self) -> str:
-        """Compatibility name for callers consuming an UpdateSession plan."""
-
-        return self.plan_uid
-
-    @property
     def post_images(self) -> tuple[Context, ...]:
         """Return detached Context records in canonical save order."""
 

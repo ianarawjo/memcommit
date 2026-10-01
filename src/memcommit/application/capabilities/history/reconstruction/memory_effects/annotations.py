@@ -48,7 +48,7 @@ def update_annotations(
     """Bind retained reasons to the exact checkpoint, operation set and states."""
     from memcommit.application.operations.update.model import operation_digest
 
-    session_uid = args.get("update_session_uid")
+    session_uid = args.get("update_operation_uid", args.get("update_session_uid"))
     if not isinstance(session_uid, str):
         return {}
     receipt = source.load_update_receipt(session_uid)
@@ -57,7 +57,7 @@ def update_annotations(
         receipt.uid != session_uid
         or application is None
         or args.get("owner_context_uid") != after.context_uid
-        or operation_digest(receipt.operations) != args.get("operation_digest")
+        or operation_digest(receipt.plan.operations) != args.get("operation_digest")
         or not any(
             cp.checkpoint_uid == checkpoint_uid and cp.context_uid == after.context_uid
             for cp in application.checkpoints
@@ -65,7 +65,9 @@ def update_annotations(
     ):
         raise ValueError("Update application record does not match this checkpoint.")
     operations = tuple(
-        op for op in receipt.operations if op.owner_context_uid == after.context_uid
+        op
+        for op in receipt.plan.operations
+        if op.owner_context_uid == after.context_uid
     )
     if {op.memory_uid for op in operations} != set(
         args.get("operation_memory_uids", ())

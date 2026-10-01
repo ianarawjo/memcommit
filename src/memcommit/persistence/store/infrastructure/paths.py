@@ -89,6 +89,14 @@ class _StorePathsMixin:
         # pointer but must not inherit the host process's active Profile Grants.
         self._resolve_granted_links = resolve_granted_links
         if create:
+            if root is None:
+                from memcommit.configuration.workspace import (
+                    ensure_workspace,
+                    workspace_paths,
+                )
+
+                if self.store_dir.is_relative_to(workspace_paths().store_dir):
+                    ensure_workspace()
             ensure_private_directory(self.store_dir, parents=True)
             ensure_private_directory(self.contexts_dir, parents=True)
             if not self.state_file.exists():

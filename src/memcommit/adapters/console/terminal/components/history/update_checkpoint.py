@@ -20,9 +20,14 @@ from memcommit.adapters.console.terminal.components.checkpoint_location import (
 from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
-from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import semantic_action_style
-from memcommit.application.capabilities.reviewing.memory_diff import memory_diff_lines, update_operation_change
-from memcommit.application.operations.update.model import UpdateSession
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
+    semantic_action_style,
+)
+from memcommit.application.capabilities.reviewing.memory_diff import (
+    memory_diff_lines,
+    update_operation_change,
+)
+from memcommit.application.operations.update.model import UpdateReceipt
 
 
 @dataclass(frozen=True)
@@ -32,38 +37,34 @@ class UpdateSubtreeCheckpointEntry(HistoryPickerEntry):
     location: str
 
 
-def _location_names(session: UpdateSession) -> tuple[str, ...]:
+def _location_names(receipt: UpdateReceipt) -> tuple[str, ...]:
     return tuple(
-        dict.fromkeys(operation.owner_context_name for operation in session.operations)
+        dict.fromkeys(
+            operation.owner_context_name for operation in receipt.plan.operations
+        )
     )
 
 
-def _checkpoint_by_location(session: UpdateSession) -> dict[str, str]:
-    if session.application is None:
-        return {}
+def _checkpoint_by_location(receipt: UpdateReceipt) -> dict[str, str]:
     return {
-        receipt.context_name: receipt.checkpoint_uid
-        for receipt in session.application.checkpoints
+        checkpoint.context_name: checkpoint.checkpoint_uid
+        for checkpoint in receipt.application.checkpoints
     }
 
 
-def update_location_annotations(session: UpdateSession) -> dict[str, str]:
+def update_location_annotations(receipt: UpdateReceipt) -> dict[str, str]:
     """Summarize each checkpoint location without flattening its operations."""
-    checkpoints = _checkpoint_by_location(session)
+    checkpoints = _checkpoint_by_location(receipt)
     annotations: dict[str, str] = {}
-    for name in _location_names(session):
+    for name in _location_names(receipt):
         operations = [
             operation
-            for operation in session.operations
+            for operation in receipt.plan.operations
             if operation.owner_context_name == name
         ]
         counts = Counter(operation.operation.upper() for operation in operations)
-        checkpoint = checkpoints.get(name)
-        lifecycle = (
-            f"checkpoint {checkpoint[:8]}"
-            if checkpoint is not None
-            else "NOT CHECKPOINTED"
-        )
+        checkpoint = checkpoints[name]
+        lifecycle = f"checkpoint {checkpoint[:8]}"
         annotations[name] = (
             f"update · {len(operations)} "
             f"{'change' if len(operations) == 1 else 'changes'} · "
@@ -74,41 +75,33 @@ def update_location_annotations(session: UpdateSession) -> dict[str, str]:
 
 
 def update_checkpoint_entry(
-    session: UpdateSession,
+    receipt: UpdateReceipt,
     location: str,
 ) -> HistoryPickerEntry:
     operations = tuple(
         operation
-        for operation in session.operations
+        for operation in receipt.plan.operations
         if operation.owner_context_name == location
     )
     if not operations:
         raise ValueError("The selected Update location has no changes.")
-    checkpoint = _checkpoint_by_location(session).get(location)
-    lifecycle = session.status.upper()
+    checkpoint = _checkpoint_by_location(receipt)[location]
+    lifecycle = "APPLIED"
     description = (
         f"{lifecycle} semantic update · {len(operations)} target Memory "
         f"change{'s' if len(operations) != 1 else ''}"
     )
     return HistoryPickerEntry(
-        uid=checkpoint or session.uid,
-        timestamp=(
-            session.application.applied_at
-            if session.application is not None
-            else session.created_at
-        ),
+        uid=checkpoint,
+        timestamp=receipt.application.applied_at,
         command="update",
         description=description,
-        detail=(
-            "Recorded Update checkpoint."
-            if checkpoint is not None
-            else "Staged Update · no checkpoint has been created."
-        ),
+        detail="Recorded Update checkpoint.",
     )
 
 
 def update_subtree_locations(
-    session: UpdateSession,
+    receipt: UpdateReceipt,
     root: str,
 ) -> tuple[str, ...]:
     """Return changed owners at or lexically below one frozen catalog root."""
@@ -116,31 +109,23 @@ def update_subtree_locations(
     prefix = root + "/"
     return tuple(
         location
-        for location in _location_names(session)
+        for location in _location_names(receipt)
         if location == root or location.startswith(prefix)
     )
 
 
 def update_subtree_checkpoint_entries(
-    session: UpdateSession,
+    receipt: UpdateReceipt,
     root: str,
 ) -> tuple[UpdateSubtreeCheckpointEntry, ...]:
     """Project every available changed owner into one inspectable list."""
 
     entries: list[UpdateSubtreeCheckpointEntry] = []
-    for index, location in enumerate(update_subtree_locations(session, root), 1):
-        entry = update_checkpoint_entry(session, location)
-        # Staged locations share one session UID. The process-local suffix only
-        # keeps history rows addressable; detail still labels the checkpoint as
-        # not created and never presents this projection as a durable identity.
-        projected_uid = (
-            entry.uid
-            if location in _checkpoint_by_location(session)
-            else f"{entry.uid}:location-{index}"
-        )
+    for location in update_subtree_locations(receipt, root):
+        entry = update_checkpoint_entry(receipt, location)
         entries.append(
             UpdateSubtreeCheckpointEntry(
-                uid=projected_uid,
+                uid=entry.uid,
                 timestamp=entry.timestamp,
                 command=entry.command,
                 description=f"{location} · {entry.description}",
@@ -152,33 +137,28 @@ def update_subtree_checkpoint_entries(
 
 
 def update_checkpoint_detail_renderer(
-    session: UpdateSession,
+    receipt: UpdateReceipt,
     location: str,
 ):
     """Return a History detail renderer with exact directional Memory changes."""
     operations = tuple(
         operation
-        for operation in session.operations
+        for operation in receipt.plan.operations
         if operation.owner_context_name == location
     )
 
     def render(entry: HistoryPickerItem) -> HistoryDetailView:
-        checkpoint = _checkpoint_by_location(session).get(location)
+        checkpoint = _checkpoint_by_location(receipt)[location]
         fragments: StyleAndTextTuples = [
             ("class:report-label", " CHECKPOINT  "),
             (
                 "class:report-neutral",
-                (
-                    display_escape_text(checkpoint)
-                    if checkpoint is not None
-                    else "(pending)"
-                )
-                + "\n",
+                display_escape_text(checkpoint) + "\n",
             ),
-            ("class:report-label", " SESSION     "),
+            ("class:report-label", " OPERATION   "),
             (
                 "class:report-neutral",
-                display_escape_text(session.uid) + "\n",
+                display_escape_text(receipt.uid) + "\n",
             ),
             ("class:report-label", " TIME        "),
             (
@@ -252,41 +232,43 @@ def update_checkpoint_detail_renderer(
     return render
 
 
-def choose_update_checkpoint_history(session: UpdateSession) -> None:
+def choose_update_checkpoint_history(receipt: UpdateReceipt) -> None:
     """Select an affected Context, then inspect its saved Update checkpoint."""
-    locations = _location_names(session)
+    locations = _location_names(receipt)
     if not locations:
         raise ValueError("No Update locations are available to inspect.")
     selected = choose_history_location(
         locations,
-        current=session.target_name if session.target_name in locations else None,
-        annotations=update_location_annotations(session),
+        current=receipt.inputs.target_name
+        if receipt.inputs.target_name in locations
+        else None,
+        annotations=update_location_annotations(receipt),
         title="DIFF · SELECT A CHANGED CONTEXT",
         catalog_names=tuple(
-            dict.fromkeys((context.name for context in session.target_contexts))
+            dict.fromkeys((context.name for context in receipt.inputs.target_contexts))
         ),
     )
     if selected is None:
         return
     if not isinstance(selected, str):
         raise ValueError("This Update history does not expose a subtree scope.")
-    choose_update_checkpoint_at_location(session, selected)
+    choose_update_checkpoint_at_location(receipt, selected)
 
 
 def choose_update_checkpoint_at_location(
-    session: UpdateSession,
+    receipt: UpdateReceipt,
     location: str,
     *,
     back_navigation: bool = False,
     title: str | None = None,
 ) -> HistoryBackNavigation | None:
     """Inspect the recorded Update checkpoint for one already-selected location."""
-    entry = update_checkpoint_entry(session, location)
+    entry = update_checkpoint_entry(receipt, location)
     result = choose_history(
         (entry,),
         context_name=location,
         initial_details_open=True,
-        detail_renderer=update_checkpoint_detail_renderer(session, location),
+        detail_renderer=update_checkpoint_detail_renderer(receipt, location),
         back_navigation=back_navigation,
         title=title,
     )
@@ -294,14 +276,14 @@ def choose_update_checkpoint_at_location(
 
 
 def choose_update_checkpoint_subtree(
-    session: UpdateSession,
+    receipt: UpdateReceipt,
     root: str,
     *,
     back_navigation: bool = False,
 ) -> HistoryBackNavigation | None:
     """Inspect all Update checkpoints owned at or below one catalog root."""
 
-    entries = update_subtree_checkpoint_entries(session, root)
+    entries = update_subtree_checkpoint_entries(receipt, root)
     if not entries:
         raise ValueError("The selected Update subtree has no changed Contexts.")
 
@@ -309,7 +291,7 @@ def choose_update_checkpoint_subtree(
         if not isinstance(entry, UpdateSubtreeCheckpointEntry):
             raise ValueError("Update subtree history received an invalid entry.")
         return update_checkpoint_detail_renderer(
-            session,
+            receipt,
             entry.location,
         )(entry)
 
