@@ -16,7 +16,8 @@ from memcommit.application.operations.update.model import (
     RemoveOperation,
     SourceReference,
     UpdateOperation,
-    UpdateSession,
+    UpdateContextInputs,
+    UpdatePlan,
     operation_digest,
 )
 
@@ -37,7 +38,7 @@ def _source_references(refs: tuple[SourceReference, ...]) -> str:
 def _operation_item(
     operation: UpdateOperation,
     *,
-    session_status: str,
+    status: str,
 ) -> ResolutionItem:
     kind = operation.operation.upper()
     blocks: list[ResolutionDetailBlock] = [
@@ -51,9 +52,13 @@ def _operation_item(
         ResolutionDetailBlock(heading="MEMORY UID", text=operation.memory_uid),
     ]
     if isinstance(operation, (EditOperation, RemoveOperation)):
-        blocks.append(ResolutionDetailBlock(heading="BEFORE", text=operation.old_content))
+        blocks.append(
+            ResolutionDetailBlock(heading="BEFORE", text=operation.old_content)
+        )
     if isinstance(operation, (EditOperation, AddOperation)):
-        blocks.append(ResolutionDetailBlock(heading="AFTER", text=operation.new_content))
+        blocks.append(
+            ResolutionDetailBlock(heading="AFTER", text=operation.new_content)
+        )
     blocks.extend(
         (
             ResolutionDetailBlock(heading="REASON", text=operation.reason),
@@ -69,13 +74,7 @@ def _operation_item(
             f"{operation.memory_uid}"
         ),
         kind=kind,
-        status=(
-            "APPLIED"
-            if session_status == "applied"
-            else "UNDONE"
-            if session_status == "undone"
-            else "PLANNED"
-        ),
+        status="APPLIED" if status == "applied" else "PLANNED",
         priority="CHANGE",
         title=f"{operation.owner_context_name} Memory [{operation.memory_uid}]",
         summary=operation.reason,
@@ -90,30 +89,30 @@ def _operation_item(
 class UpdateResolutionWorkbenchAdapter:
     """Expose exact saved operations without inventing an issue lifecycle."""
 
-    def __init__(self, session: UpdateSession):
-        if not isinstance(session, UpdateSession):
-            raise TypeError("Expected an UpdateSession.")
-        self._session = session
+    def __init__(
+        self, inputs: UpdateContextInputs, plan: UpdatePlan, *, completed=False
+    ):
+        self.inputs = inputs
+        self.plan = plan
+        self.completed = completed
 
     def view(self) -> ResolutionWorkbenchView:
-        session = self._session
+        inputs, plan = self.inputs, self.plan
+        status = "applied" if self.completed else "planned"
         items = tuple(
-            _operation_item(operation, session_status=session.status)
-            for operation in session.operations
+            _operation_item(operation, status=status) for operation in plan.operations
         )
         edit_count = sum(
-            isinstance(operation, EditOperation) for operation in session.operations
+            isinstance(operation, EditOperation) for operation in plan.operations
         )
         add_count = sum(
-            isinstance(operation, AddOperation) for operation in session.operations
+            isinstance(operation, AddOperation) for operation in plan.operations
         )
         remove_count = sum(
-            isinstance(operation, RemoveOperation) for operation in session.operations
+            isinstance(operation, RemoveOperation) for operation in plan.operations
         )
         locations = tuple(
-            dict.fromkeys(
-                operation.owner_context_name for operation in session.operations
-            )
+            dict.fromkeys(operation.owner_context_name for operation in plan.operations)
         )
         location_text = (
             "no target Context locations"
@@ -124,32 +123,22 @@ class UpdateResolutionWorkbenchAdapter:
                 else f"{len(locations)} target Context locations"
             )
         )
-        overview = {
-            "impact": (
-                "Mem matched the verified Source against the Target and planned "
-                "only the exact target Memory changes shown below. Nothing has "
-                "been applied."
-            ),
-            "staged": (
-                "The exact target Memory changes are staged and bound to this "
-                "Source and Target revision. Apply remains separate."
-            ),
-            "applied": (
-                "The exact target Memory changes shown below were applied to the "
-                "recorded Target revision."
-            ),
-            "undone": (
-                "The recorded target Memory changes were undone; this artifact "
-                "still describes the exact reversible transition."
-            ),
-        }.get(session.status, "This Update records exact target Memory changes.")
+        overview = (
+            "The exact target Memory changes shown below were applied to the recorded Target revision."
+            if self.completed
+            else "The exact target Memory changes are bound to this Source and Target revision. Apply remains separate."
+        )
+        if inputs.instruction is not None:
+            overview = f"INSTRUCTION · {inputs.instruction.text}\n{overview}"
         return ResolutionWorkbenchView(
             operation="UPDATE",
-            artifact_uid=session.uid,
-            revision=f"{session.status}:{operation_digest(session.operations)}",
+            artifact_uid=plan.uid,
+            revision=f"{status}:{operation_digest(plan.operations)}",
             title="MEM UPDATE",
-            route=f"SOURCE {session.source_name} → TARGET {session.target_name}",
-            status=session.status.upper(),
+            route=f"TARGET {inputs.target_name}"
+            if inputs.instruction is not None
+            else f"SOURCE {inputs.source_name} → TARGET {inputs.target_name}",
+            status=status.upper(),
             metrics=(
                 ResolutionMetric("EDITS", str(edit_count)),
                 ResolutionMetric("ADDITIONS", str(add_count)),
@@ -157,8 +146,12 @@ class UpdateResolutionWorkbenchAdapter:
                 ResolutionMetric("CHANGES", str(len(items))),
             ),
             context_locations=(
-                ResolutionContextLocation("SOURCE", session.source_name),
-                ResolutionContextLocation("TARGET", session.target_name),
+                *(
+                    (ResolutionContextLocation("SOURCE", inputs.source_name),)
+                    if inputs.inline_source_content is None
+                    else ()
+                ),
+                ResolutionContextLocation("TARGET", inputs.target_name),
             ),
             overview=overview,
             overview_sections=(ResolutionOverviewSection("plan", "PLAN", overview),),
@@ -168,9 +161,9 @@ class UpdateResolutionWorkbenchAdapter:
             results_label="APPLICATION",
             results=(),
             capabilities=(
-                frozenset({"ACCEPT"}) if session.status == "staged" else frozenset()
+                frozenset({"ACCEPT"}) if status == "planned" else frozenset()
             ),
-            accept_enabled=session.status == "staged",
+            accept_enabled=status == "planned",
             input_locked=False,
             report_items_summary=ResolutionDetailBlock(
                 heading="WHAT WILL CHANGE",
@@ -184,10 +177,4 @@ class UpdateResolutionWorkbenchAdapter:
         )
 
 
-def project_update_resolution(session: UpdateSession) -> ResolutionWorkbenchView:
-    """Return a read-only common projection of one exact Update plan."""
-
-    return UpdateResolutionWorkbenchAdapter(session).view()
-
-
-__all__ = ["UpdateResolutionWorkbenchAdapter", "project_update_resolution"]
+__all__ = ["UpdateResolutionWorkbenchAdapter"]

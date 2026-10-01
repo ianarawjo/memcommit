@@ -775,6 +775,26 @@ def _restored_command(unit: ContextCommandUnit) -> str:
     }
     if not targets and len(unit.changes) == 1:
         targets = {unit.changes[0].context_name}
+    instruction_records = [
+        args
+        for args in unit.checkpoint_args
+        if args.get("instruction_kind") in {"TEXT", "MEMORY"}
+    ]
+    if instruction_records and len(targets) == 1:
+        instruction = instruction_records[0]
+        target = _command_arg(next(iter(targets)))
+        memory_uid = instruction.get("source_memory_uid")
+        if (
+            instruction["instruction_kind"] == "MEMORY"
+            and isinstance(memory_uid, str)
+            and len(sources) == 1
+        ):
+            source = _command_arg(f"{next(iter(sources))}:{memory_uid}")
+            return f"mem update -m {source} --to {target}"
+        text = instruction.get("instruction_text")
+        if isinstance(text, str):
+            return f"mem update {_command_arg(text)} --to {target}"
+        return f"mem update (instruction retained in initiating Profile) --to {target}"
     if len(sources) == 1 and len(targets) == 1:
         source = _command_arg(next(iter(sources)))
         target = _command_arg(next(iter(targets)))

@@ -12,6 +12,7 @@ from memcommit.application.operations.update.application import (
     materialize_update_post_image,
 )
 from memcommit.application.operations.update.model import UpdatePlan, plan_update
+from memcommit.application.operations.update.model.instruction import UpdateInstruction
 from memcommit.core.context import Context
 from .model import ResolveError
 from .resolution_options.catalog import build_resolution_options
@@ -81,10 +82,10 @@ def prepare_resolve_choice(analysis, decision, *, frame_port, provider_factory):
             source,
             before,
             provider_factory,
-            status="staged",
+            instruction=UpdateInstruction(next(iter(source.memories.values())).content),
             granted_target=analysis.frame.granted_binding,
             allowed_target_uses=allowed_target_uses(analysis),
-        ).plan
+        )
     after = materialize_update_post_image(apply_update(plan, before), before)
     frame_port.revalidate(analysis.frame)
     return ResolveChoicePlan(

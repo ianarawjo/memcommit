@@ -4,7 +4,8 @@ MemCommit is a command-line memory store with named Contexts, editable Memories,
 checkpoints, and semantic operations. Its console interface includes both
 scriptable commands and interactive terminal workbenches.
 
-This prototype snapshot is published on the `user-study-prototype` branch.
+This demo snapshot is published on the `innovathon` branch. It shares executable
+code with the `user-study-prototype` snapshot and adds demo documents and examples.
 
 ## Install
 
@@ -12,7 +13,7 @@ Python 3.10 or later is required. With [uv](https://docs.astral.sh/uv/) installe
 run these commands from the repository root:
 
 ```sh
-git switch user-study-prototype
+git switch innovathon
 uv sync --locked
 uv run --locked mem --help
 ```
@@ -31,10 +32,45 @@ uv run --locked mem checkpoint
 uv run --locked mem log
 ```
 
-These commands create local data. MemCommit stores configuration and Profile
-metadata under `~/.mem`, and additional Profile stores under `~/.mem-profiles`.
+These commands create local data in a workspace, defaulting to `~/memcommit`.
+Internal configuration and Profile data live under `<workspace>/.mem/`;
+`<workspace>/contexts/` is reserved for document work and does not automatically
+import, export, or synchronize files.
+
+To choose a workspace or migrate existing `~/.mem` / `~/.mem-profiles` data:
+
+```sh
+uv run --locked mem config set workspace_dir ~/memcommit
+```
+
+This copies and verifies existing data before selecting the new workspace; the
+original files remain intact. Choose a new, unoccupied destination for relocation.
+Only the workspace pointer lives outside the workspace, in
+`~/Library/Application Support/memcommit/config.json` on macOS or
+`~/.config/memcommit/config.json` elsewhere.
 Use `mem --help` for the command list and `mem COMMAND --help` for exact options.
 When using `uv`, prefix those commands with `uv run --locked`.
+
+## Innovathon demo
+
+Start with a new empty ordinary Profile:
+
+```sh
+uv run --locked mem profile create innovathon-demo
+uv run --locked mem profile use innovathon-demo
+```
+
+Creation and selection are separate: `profile create` leaves the active
+Profile unchanged; `profile use` selects the new empty store. No study fixture,
+companion Profile, Context, or Memory is created by these two commands.
+
+When ready, import the example documents explicitly from this checkout:
+
+```sh
+uv run --locked mem import skill --from examples/openai-docs -r --as openai-docs
+```
+
+The example files are input data, not instructions executed by the initializer.
 
 ## Study scenarios
 
@@ -69,6 +105,25 @@ The example configures an ordinary Profile for Codex and requires an existing
 ChatGPT login in the Codex CLI. Select a reasoning level supported by your model;
 an unconfigured route can request `none`, which some models reject. Study
 Profiles use their own fixed provider configuration.
+
+## Update
+
+Apply one instruction to the current Context or an explicit Target:
+
+```sh
+uv run --locked mem update "Set the cafe opening time to ten." --to demo
+uv run --locked mem update -m instructions:MEMORY_UID --to demo
+```
+
+`-m` uses one stored Memory outside the Target as the instruction; it does not
+select a Memory to edit. Update considers the Target's direct contents, without
+expanding embedded or descendant Contexts. Submitting the command plans and
+applies the changes, then prints their diff and completed receipt. Checkpoints,
+Review, Undo and Redo retain the completed evidence.
+
+The earlier Context-source syntax, endpoint setup screen, Apply confirmation,
+and resumable Update sessions are removed. Repeating the command plans afresh.
+`mem impact` remains a separate read-only preview operation.
 
 ## Merge and Resolve
 

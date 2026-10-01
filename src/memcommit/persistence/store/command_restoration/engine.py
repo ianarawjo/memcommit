@@ -252,8 +252,6 @@ class _CommandRestorationEngineMixin:
         """Prepare a saved operation session coupled to one Context command."""
         if unit.command == "sever":
             return self._prepare_sever_command_restore(unit, direction)
-        if unit.command == "update":
-            return self._prepare_update_command_restore(unit, direction)
         return None
 
     def _write_companion_session_restore(
@@ -264,17 +262,6 @@ class _CommandRestorationEngineMixin:
         value: dict[str, object],
     ) -> None:
         """CAS-write one companion session inside command restoration."""
-        if path == self.staged_update_file:
-            with self._update_session_write_lock():
-                current = self._load_update_session(path)
-                if current is None or current.to_dict() != expected:
-                    raise ConcurrentContextUpdateError(
-                        "The active Update receipt changed during restoration."
-                    )
-                from memcommit.application.operations.update.model import UpdateSession
-
-                self._save_update_session(path, UpdateSession.from_dict(value))
-            return
         from memcommit.application.operations.sever.session_store import (
             SeverSessionStore,
         )

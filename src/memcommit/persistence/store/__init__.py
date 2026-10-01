@@ -71,10 +71,10 @@ from memcommit.persistence.operations.review.state_repository import (
     _ReviewStateStoreMixin,
 )
 from memcommit.persistence.operations.update import (
-    state_repository as _update_state_module,
+    receipt_repository as _update_state_module,
 )
-from memcommit.persistence.operations.update.state_repository import (
-    _UpdateStateStoreMixin,
+from memcommit.persistence.operations.update.receipt_repository import (
+    _UpdateReceiptStoreMixin,
 )
 
 
@@ -83,7 +83,7 @@ class MemoryStore(
     _WriteProtectionStoreMixin,
     _StoreLockingMixin,
     ContextMemoryStoreMixin,
-    _UpdateStateStoreMixin,
+    _UpdateReceiptStoreMixin,
     _ReviewStateStoreMixin,
     _AtomizeStateStoreMixin,
     RecordRestoreCheckpointStoreMixin,

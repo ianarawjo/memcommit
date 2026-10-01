@@ -1,10 +1,11 @@
-# Keep the public repository limited to the distributable source and setup.
+# Keep the public repository limited to source, setup, and deliberate examples.
 /*
 !/.gitignore
 !/README.md
 !/pyproject.toml
 !/uv.lock
 !/src/
+!/examples/
 
 # Generated files and local configuration are never distribution inputs.
 __pycache__/

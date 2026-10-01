@@ -78,7 +78,7 @@ def operation_record_identity(
                 else f"checkpoint-set:{operation_uid}"
             )
     if command == "update":
-        session_uid = args.get("update_session_uid")
+        session_uid = args.get("update_operation_uid", args.get("update_session_uid"))
         operation_digest = args.get("operation_digest")
         if all(
             isinstance(value, str) and value

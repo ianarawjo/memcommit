@@ -134,7 +134,9 @@ def build_surface_activation(
                             else section.uid
                         )
                         set_status(
-                            "" if controls.config.effect_report is not None else (
+                            ""
+                            if controls.config.effect_report is not None
+                            else (
                                 "Impact rationale hidden."
                                 if impact_reason_expanded["uid"] is None
                                 else "Impact rationale shown."
@@ -235,7 +237,7 @@ def build_surface_activation(
                 action = controller.report_apply_action()
                 if action is not None:
                     record_study_action(
-                        "APPLICATION_ACCEPTED",
+                        "APPROVAL_ACCEPTED",
                         surface="resolution",
                         action=action.kind,
                     )

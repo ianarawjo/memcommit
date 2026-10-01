@@ -198,15 +198,13 @@ def prepare_resolve_proposal(
             analysis, finalized, reviewed_choices, working_target
         )
     elif source.memories:
-        session = plan_update(
+        plan = plan_update(
             source,
             working_target,
             update_provider_factory,
-            status="staged",
             granted_target=analysis.frame.granted_binding,
             allowed_target_uses=allowed_target_uses(analysis),
         )
-        plan = session.plan
     else:
         plan = UpdatePlan(
             uid=str(

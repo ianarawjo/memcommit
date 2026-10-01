@@ -43,6 +43,10 @@ def set_configuration(
     """Normalize a public key alias and persist its exact value."""
 
     canonical_key = _PUBLIC_KEY_ALIASES.get(key, key)
+    if canonical_key == "workspace_dir":
+        from .workspace import relocate_workspace
+
+        return ConfigEntry(canonical_key, str(relocate_workspace(value)))
     port.set(canonical_key, value)
     return ConfigEntry(canonical_key, value)
 

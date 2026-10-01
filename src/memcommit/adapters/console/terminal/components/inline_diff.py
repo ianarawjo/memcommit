@@ -9,6 +9,9 @@ from memcommit.application.capabilities.reviewing.memory_diff import (
     MemoryChange,
     word_diff_spans,
 )
+from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
+    SEMANTIC_VIEWER_STYLE,
+)
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.terminal.core.theme import (
     SemanticColorRole,
@@ -94,3 +97,24 @@ def render_inline_memory_change(
             fragments.append((style, text))
     fragments.append(("", "\n"))
     return fragments
+
+
+def render_inline_memory_change_text(
+    change: MemoryChange, *, identity: str | None = None, color: bool = False
+) -> str:
+    """Render the same located diff as the TUI into ordinary terminal scrollback."""
+    parts = []
+    for style, text in render_inline_memory_change(
+        change, identity=identity, color=color
+    ):
+        if color and style:
+            # Resolve the existing screen styles rather than duplicating diff colors.
+            attrs = SEMANTIC_VIEWER_STYLE.get_attrs_for_style_str(style)
+            text = typer.style(
+                text,
+                fg=tuple(bytes.fromhex(attrs.color)) if attrs.color else None,
+                bold=attrs.bold,
+                underline=attrs.underline,
+            )
+        parts.append(text)
+    return "".join(parts).removesuffix("\n")

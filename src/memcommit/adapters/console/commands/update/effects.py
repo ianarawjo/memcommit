@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from memcommit.adapters.console.commands.update.workbench.presentation import (
+from memcommit.adapters.console.commands.update.presentation import (
     UpdateResolutionWorkbenchAdapter,
     _source_references,
 )
@@ -15,15 +15,22 @@ from memcommit.adapters.console.terminal.components.resolution.effect_preview im
 from memcommit.application.capabilities.resolution.workbench import (
     ResolutionWorkbenchView,
 )
-from memcommit.application.operations.update.model import UpdateSession
+from memcommit.application.operations.update.model import (
+    UpdateContextInputs,
+    UpdatePlan,
+)
 
 
 def update_effect_view(
-    session: UpdateSession, *, applying: bool = False
+    inputs: UpdateContextInputs,
+    plan: UpdatePlan,
+    *,
+    applying: bool = False,
+    completed=False,
 ) -> ResolutionWorkbenchView:
     """Keep artifact and endpoint identity without creating review obligations."""
 
-    view = UpdateResolutionWorkbenchAdapter(session).view()
+    view = UpdateResolutionWorkbenchAdapter(inputs, plan, completed=completed).view()
     return replace(
         view,
         items=(),
@@ -37,27 +44,27 @@ def update_effect_view(
             replace(location, state="GRANT" if binding is not None else "")
             for location, binding in zip(
                 view.context_locations,
-                (session.granted_source, session.granted_target),
+                (inputs.granted_source, inputs.granted_target),
                 strict=True,
             )
         ),
         capabilities=frozenset({"ACCEPT"}) if applying else frozenset(),
-        accept_enabled=applying and session.status == "staged",
+        accept_enabled=applying and not completed,
     )
 
 
-def update_effect_report(session: UpdateSession) -> EffectReportPresentation:
+def update_effect_report(plan: UpdatePlan) -> EffectReportPresentation:
     """Attach frozen provenance to its diff, without a separate Items surface."""
 
-    count = len(session.operations)
+    count = len(plan.operations)
     return EffectReportPresentation(
-        apply_label=f"Apply {count} {'change' if count == 1 else 'changes'} to {session.target_name}",
+        apply_label=f"Apply {count} {'change' if count == 1 else 'changes'} to {plan.target_name}",
         entry_details=tuple(
             EffectReportDetail(
                 operation.memory_uid,
                 "SOURCE REFERENCES",
                 _source_references(operation.source_refs),
             )
-            for operation in session.operations
+            for operation in plan.operations
         ),
     )
