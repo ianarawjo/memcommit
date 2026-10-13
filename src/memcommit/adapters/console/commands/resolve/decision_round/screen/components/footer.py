@@ -28,5 +28,5 @@ def render_footer(state, *, intent=None, is_focused, activation_hint) -> str:
         + safe_terminal_text(activation_hint)
         + " · PgUp/PgDn read"
         + (" · Tab navigation" if state.navigation_visible else "")
-        + " · Esc close"
+        + (" · Esc back to choices" if state.back_label is not None else " · Esc close")
     )

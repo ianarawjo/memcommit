@@ -37,6 +37,7 @@ class DecisionScreenState:
     bulk_options: tuple[ResolutionOption, ...] = ()
     show_item_navigation: bool = False
     require_all_decisions: bool = True
+    back_label: str | None = None
     items: tuple[ResolutionItem, ...] = field(init=False)
     current_issue_index: int = field(default=0, init=False)
     focused_row_index: int = field(default=0, init=False)
@@ -116,6 +117,8 @@ class DecisionScreenState:
             SelectionOption(f"bulk:{option.uid}", option.label)
             for option in self.bulk_options
         )
+        if self.back_label is not None:
+            rows.append(SelectionOption("action:BACK", self.back_label))
         rows.append(SelectionOption("action:CONTINUE", self.continue_label()))
         return tuple(rows)
 

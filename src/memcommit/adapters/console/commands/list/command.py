@@ -477,6 +477,7 @@ def _render_snapshot_item(
     separate_context_blocks: bool,
     style_relationships: bool,
     uid_prefixes: dict[str, str],
+    sync_statuses: dict[str, str] | None = None,
 ) -> None:
     prefix = " " * indent
     kind = _require_string(item, "kind")
@@ -573,6 +574,9 @@ def _render_snapshot_item(
                     f"{prefix}{reach_label} · {name}/"
                     + (f" · {state_annotation}" if state_annotation else "")
                 )
+        if kind != "context_snapshot_ref" and sync_statuses:
+            from memcommit.adapters.console.terminal.components.context_sync_status import context_sync_status_text
+            lines[-1] += context_sync_status_text(sync_statuses.get(name))
         if not cycle and children is not None:
             if not children:
                 lines.append(f"{' ' * (indent + 2)}(empty)")
@@ -588,6 +592,7 @@ def _render_snapshot_item(
                     separate_context_blocks=separate_context_blocks,
                     style_relationships=style_relationships,
                     uid_prefixes=uid_prefixes,
+                    sync_statuses=sync_statuses,
                 )
         return
     if kind == "query_context_ref":
@@ -719,6 +724,7 @@ def _render_snapshot_items(
     separate_context_blocks: bool,
     style_relationships: bool,
     uid_prefixes: dict[str, str],
+    sync_statuses: dict[str, str] | None = None,
 ) -> None:
     contexts, memories = _group_snapshot_items(items)
     for index, item in enumerate(contexts):
@@ -737,6 +743,7 @@ def _render_snapshot_items(
             separate_context_blocks=separate_context_blocks,
             style_relationships=style_relationships,
             uid_prefixes=uid_prefixes,
+            sync_statuses=sync_statuses,
         )
     if contexts and memories:
         # Namespace/embedded Contexts and direct Memories are different
@@ -754,6 +761,7 @@ def _render_snapshot_items(
             separate_context_blocks=separate_context_blocks,
             style_relationships=style_relationships,
             uid_prefixes=uid_prefixes,
+            sync_statuses=sync_statuses,
         )
 
 
@@ -772,7 +780,9 @@ def _render_snapshot(
     memory_layout: _MemoryLayout,
     terminal_width: int = 100,
     style_relationships: bool = False,
+    sync_statuses: dict[str, str] | None = None,
 ) -> str:
+    from memcommit.adapters.console.terminal.components.context_sync_status import context_sync_status_text
     if memory_layout not in {"hanging", "inline"}:
         raise _snapshot_error()
     if terminal_width < 1:
@@ -799,7 +809,7 @@ def _render_snapshot(
 
     contexts, memories = _group_snapshot_items(items)
     lines = [
-        f"Context: {name}",
+        f"Context: {name}" + context_sync_status_text(sync_statuses.get(name) if sync_statuses else None),
         f"  {_memory_count_text(len(memories))}",
         f"  {_subcontext_count_text(len(contexts))}",
     ]
@@ -818,6 +828,7 @@ def _render_snapshot(
             separate_context_blocks=recursive,
             style_relationships=style_relationships,
             uid_prefixes=uid_prefixes,
+            sync_statuses=sync_statuses,
         )
     return "\n".join(lines) + "\n"
 
@@ -1037,6 +1048,7 @@ def cmd(
         memory_layout="hanging",
         terminal_width=shutil.get_terminal_size(fallback=(100, 24)).columns,
         style_relationships=True,
+        sync_statuses=selection.sync_statuses,
     )
     _emit_snapshot_text(
         annotated_text,

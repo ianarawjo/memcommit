@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import uuid
+from copy import deepcopy
 from dataclasses import asdict, dataclass
 from typing import Mapping
 
@@ -253,6 +254,10 @@ def copy_direct_context(context: Context) -> Context:
     """Copy one direct Context record while preserving canonical order."""
 
     copied = Context(uid=context.uid, name=context.name)
+    # Merge changes direct items; it must retain the Target's export layout
+    # and attachment membership rather than silently turning it into plain text.
+    copied.document = deepcopy(context.document)
+    copied.attached_files = deepcopy(context.attached_files)
     for item in context.iter_items():
         copied.add(copy_direct_item(item))
     copied._store_digest = context._store_digest  # noqa: SLF001

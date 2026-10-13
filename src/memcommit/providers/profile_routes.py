@@ -267,7 +267,10 @@ def load_active_provider_scope(
     try:
         study = study_provider_config(version)
     except ProviderPolicyError as error:
-        raise ProfileProviderRoutesError(str(error)) from error
+        raise ProfileProviderRoutesError(
+            f"{error} Create a new Study Profile with 'mem init-study' "
+            "to use the installed condition."
+        ) from error
     if study.digest != digest:
         raise ProfileProviderRoutesError(
             "Study provider policy digest does not match the installed policy."

@@ -103,6 +103,7 @@ BEST_FOR_BY_OPERATION = {
         "Verifying an operation's proposed effects before its separate Apply action."
     ),
     "export": "Write edited memory documents for use outside mem, preserving their current format and attached files.",
+    "sync": "Keep Context documents aligned with a matching external file tree, including optional post-command automatic export.",
     "import": ("Bringing externally supplied material into a locally managed store."),
     "init": (
         "Starting a separate workspace for a new topic, task, or group of Memories."

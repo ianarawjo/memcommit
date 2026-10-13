@@ -39,6 +39,8 @@ app = typer.Typer(
     ),
 )
 app.add_typer(grant_app, name="grant")
+from .configuration import app as configuration_app
+app.add_typer(configuration_app, name="config")
 
 
 def profile_cmd(ctx: typer.Context) -> None:

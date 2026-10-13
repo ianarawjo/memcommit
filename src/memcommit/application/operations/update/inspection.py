@@ -95,15 +95,38 @@ def inspect_update(
                 )
                 target_store = GrantedReadStore(target_access, registry=registry)
                 target_name = inputs.granted_target.access_name
-            target = (
-                target_store.load_direct(target_name)
-                if inputs.instruction is not None
-                else load_context_scope(
-                    target_store,
-                    target_name,
-                    include_descendants=inputs.target_include_descendants,
+            if inputs.instruction is not None and inputs.target_include_descendants:
+                from memcommit.application.capabilities.context_scope_loading import (
+                    load_mutable_context_scope,
                 )
-            )
+                from memcommit.application.context_access.access import (
+                    resolve_context_access,
+                )
+
+                access = (
+                    target_access
+                    if inputs.granted_target
+                    else resolve_context_access(
+                        active_store,
+                        target_name,
+                        current_name=None,
+                        required_permission="READ",
+                        registry=registry,
+                    )
+                )
+                target = load_mutable_context_scope(
+                    active_store, access, registry=registry
+                )
+            else:
+                target = (
+                    target_store.load_direct(target_name)
+                    if inputs.instruction is not None
+                    else load_context_scope(
+                        target_store,
+                        target_name,
+                        include_descendants=inputs.target_include_descendants,
+                    )
+                )
             after_inputs = replace(
                 inputs,
                 target_digest=receipt.application.target_digest,

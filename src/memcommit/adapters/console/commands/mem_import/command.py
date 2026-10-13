@@ -65,6 +65,7 @@ def _profile_import(
     source: Path | None,
     source_profile: str | None,
     expected_source_profile_uid: str | None = None,
+    root: Path | None = None,
 ) -> None:
     if (source is None) == (source_profile is None):
         _fail("Profile import requires exactly one of --from or --from-profile.")
@@ -73,10 +74,11 @@ def _profile_import(
             name,
             source_profile,
             expected_source_profile_uid=expected_source_profile_uid,
+            root_dir=root,
         )
     else:
         assert source is not None
-        profile, inspection = import_baseline_profile(name, source)
+        profile, inspection = import_baseline_profile(name, source, root_dir=root)
 
     typer.secho(
         f"Imported clean baseline Profile '{display_escape_text(profile.name)}'.",
@@ -200,6 +202,10 @@ def cmd(
         Optional[str],
         typer.Option("--from-profile", help="Registered source Profile name"),
     ] = None,
+    root: Annotated[
+        Optional[Path],
+        typer.Option("--root", help="Project folder for a newly imported Profile"),
+    ] = None,
     source_context: Annotated[
         Optional[str],
         typer.Option("--context", "-c", help="Source Context containing a Memory"),
@@ -239,14 +245,19 @@ def cmd(
     """Import documents or resources without copying source operational history."""
 
     document_kind = (kind_or_name or "").casefold()
+    if root is not None and document_kind in {"document", "documents", "skill", "mem", "context", "memory"}:
+        _fail("--root applies only to a new Profile.")
     path_operand = (
         source is None
         and kind_or_name is not None
         and (
             Path(kind_or_name).suffix.lower() in {".md", ".txt", ".yaml", ".yml"}
-            or ("/" in kind_or_name and Path(kind_or_name).is_dir())
+            or kind_or_name in {".", ".."}
+            or kind_or_name.startswith(("./", "../", "/", "~/"))
         )
     )
+    if path_operand and root is not None:
+        _fail("--root applies only to a new Profile.")
     if (
         document_kind in {"document", "documents", "skill", "mem"}
         or path_operand
@@ -316,6 +327,7 @@ def cmd(
         _fail(str(error))
 
     options: dict[str, object] = {
+        "--root": root,
         "--from": source,
         "--from-profile": source_profile,
         "--context": source_context,
@@ -328,7 +340,7 @@ def cmd(
     if kind not in _RESOURCE_KINDS:
         if resource_name is not None:
             _fail("Legacy Profile import accepts only one positional Profile name.")
-        _reject_options(options, allowed={"--from"})
+        _reject_options(options, allowed={"--from", "--root"})
         if source is None:
             _fail("Legacy Profile import requires --from PATH.")
         kind = "profile"
@@ -378,11 +390,12 @@ def cmd(
 
         assert resource_name is not None
         if kind == "profile":
-            _reject_options(options, allowed={"--from", "--from-profile"})
+            _reject_options(options, allowed={"--from", "--from-profile", "--root"})
             _profile_import(
                 resource_name,
                 source=source,
                 source_profile=source_profile,
+                root=root,
             )
             return
 

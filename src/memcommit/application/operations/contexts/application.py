@@ -19,6 +19,7 @@ class ContextCatalogEntry:
     portable_name: bool
     capabilities: str | None = None
     authority_profile: str | None = None
+    sync_status: str | None = None
 
     def __post_init__(self) -> None:
         if self.ownership == "OWNED":

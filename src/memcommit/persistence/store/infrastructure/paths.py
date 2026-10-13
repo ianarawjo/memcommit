@@ -72,7 +72,7 @@ class _StorePathsMixin:
 
         Normal commands create missing store infrastructure. Read-only
         inspection commands can pass create=False to guarantee that merely
-        checking absent state does not create ~/.mem or state.json.  ``root``
+        checking absent state does not create a Profile Store or state.json. ``root``
         is an explicit, already-authorized store boundary used by profile
         grants; omitting it resolves and freezes the active Profile now.
         ``resolve_granted_links=False`` keeps live granted relationships opaque
@@ -88,16 +88,20 @@ class _StorePathsMixin:
         # In particular, a public explicit-root client may inspect a persisted
         # pointer but must not inherit the host process's active Profile Grants.
         self._resolve_granted_links = resolve_granted_links
+        if root is None:
+            from memcommit.application.operations.mem_sync.automatic.run_after_commit import register_default_store_for_completion
+            register_default_store_for_completion(self)
         if create:
-            if root is None:
-                from memcommit.configuration.workspace import (
-                    ensure_workspace,
-                    workspace_paths,
-                )
-
-                if self.store_dir.is_relative_to(workspace_paths().store_dir):
-                    ensure_workspace()
             ensure_private_directory(self.store_dir, parents=True)
+            if root is None:
+                from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir
+                from memcommit.application.operations.profile.project_root import write_profile_marker, validate_profile_marker
+                profile = load_profile_registry().active
+                if profile_store_dir(profile).resolve() == self.store_dir.resolve():
+                    if (self.store_dir / "profile.json").exists():
+                        validate_profile_marker(profile)
+                    else:
+                        write_profile_marker(self.store_dir, profile.uid)
             ensure_private_directory(self.contexts_dir, parents=True)
             if not self.state_file.exists():
                 self._write_state({"current": None})

@@ -8,6 +8,7 @@ from memcommit.operation_catalog.translations.model import (
 )
 
 TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
+    "sync": LocalizedOperationCopy('将自己拥有的 Context 文档与外部文件同步，执行一次或在命令完成后自动执行。', '维护与 Context 名称对应的外部文档树，并开启或关闭所选范围的自动 Sync。'),
     "export": LocalizedOperationCopy(
         "将当前 Context 内容导出为文档、Agent Skill 或 mem 格式。",
         "将编辑后的记忆文档输出为可在 mem 外部使用的文件。",

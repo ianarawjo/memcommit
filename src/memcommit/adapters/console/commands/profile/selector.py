@@ -146,6 +146,7 @@ def _apply_profile_picker_action(
             result = create_profile(
                 action.name,
                 expected_generation=action.registry_generation,
+                root_dir=action.root_dir,
             )
         elif action.kind == "RENAME_PROFILE":
             if action.new_name is None:

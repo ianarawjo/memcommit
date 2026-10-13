@@ -8,6 +8,7 @@ from memcommit.operation_catalog.translations.model import (
 )
 
 TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
+    "sync": LocalizedOperationCopy('Synchroniser les documents des Contexts possédés avec les fichiers externes, une fois ou après chaque commande.', 'Maintenir un arbre de documents externes correspondant aux noms des Contexts et activer ou désactiver la synchronisation automatique.'),
     "export": LocalizedOperationCopy(
         "Exporter le contenu actuel des Contexts en documents, en Agent Skill ou au format mem.",
         "Produire des fichiers utilisables hors de mem à partir des documents de mémoire modifiés.",

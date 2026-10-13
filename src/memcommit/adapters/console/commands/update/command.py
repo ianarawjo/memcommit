@@ -34,13 +34,21 @@ def cmd(
         typer.Option(
             "--to",
             metavar="CONTEXT",
-            help="Target Context (defaults to current; direct contents only).",
+            help="Target Context (defaults to current; -r includes descendants and embeds).",
         ),
     ] = None,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Update the Target, lexical descendants, and embedded Contexts together.",
+        ),
+    ] = False,
 ) -> None:
     """Apply one instruction or --memory UID, then print the completed changes."""
     try:
-        request = UpdateRequest(instruction, memory, target_name)
+        request = UpdateRequest(instruction, memory, target_name, recursive=recursive)
     except (ValueError, RuntimeError) as error:
         echo_text("Update error: {error}", error=error, err=True)
         raise typer.Exit(2) from error

@@ -23,6 +23,8 @@ def load_contexts_catalog(store: MemoryStore) -> ContextsCatalog:
     """Freeze the active pointer and its local-plus-Grant public hierarchy."""
 
     current = store.current_context_name()
+    from memcommit.application.operations.mem_sync.automatic.status import context_sync_statuses
+    sync_statuses = context_sync_statuses(store)
     local_name_values = tuple(store.list_context_names())
 
     granted_navigation = freeze_granted_context_navigation(store)
@@ -58,6 +60,7 @@ def load_contexts_catalog(store: MemoryStore) -> ContextsCatalog:
                     current=name == current,
                     ownership="OWNED",
                     portable_name=is_portable_context_name(name),
+                    sync_status=sync_statuses.get(name),
                 )
             )
             continue

@@ -4,7 +4,11 @@ from __future__ import annotations
 
 import json
 from importlib import resources
-from importlib.resources.abc import Traversable
+try:
+    from importlib.resources.abc import Traversable
+except ImportError:
+    # Python 3.10 exposes the same resource interface under importlib.abc.
+    from importlib.abc import Traversable
 from pathlib import Path
 from uuid import UUID
 

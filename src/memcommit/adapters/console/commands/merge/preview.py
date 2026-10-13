@@ -133,15 +133,29 @@ def _round_sections(rounds, target, *, group):
         )
         mappings = dict(round.input_result_uids or ())
         issues = {issue.uid: issue for issue in round.issues}
+        replaced_memory_uids_by_issue = {}
+        if not literal:
+            for review in round.change_choice_records:
+                for candidate in review.candidates:
+                    if candidate.uid != review.chosen_candidate_uid:
+                        replaced_memory_uids_by_issue.setdefault(
+                            candidate.decision.issue_uid, set()
+                        ).add(review.memory_uid)
         for index, decision in enumerate(round.decisions.decisions):
             issue = issues[decision.issue_uid]
+            lost_a_change = issue.uid in replaced_memory_uids_by_issue
             fragments = [
                 (
                     "class:section",
                     ("\n" if index else "") + issue.kind.replace("_", " ") + "\n",
                 )
             ]
+            showed_change = False
             for uid in round.affected_uids(issue.uid):
+                if uid in replaced_memory_uids_by_issue.get(issue.uid, ()):
+                    # The decision remains review evidence, but its losing
+                    # Memory effect must not be presented as applied.
+                    continue
                 result_uid = (
                     mappings.get(uid) if round.input_result_uids is not None else uid
                 )
@@ -170,11 +184,18 @@ def _round_sections(rounds, target, *, group):
                 # Later rounds compare against the previous prepared destination.
                 if new is not None and result_uid not in destination_uids:
                     old = None
+                if lost_a_change and old == new:
+                    continue
+                showed_change |= old != new
                 fragments.extend(
                     render_inline_memory_change(
                         _change(original_uid, location, old, new), identity=identity
                     )
                 )
+            if lost_a_change and not showed_change:
+                # The input stays in the checkpoint, while the final Preview
+                # shows only decisions that contribute to the reviewed result.
+                continue
             labels = {choice.uid: choice.label for choice in issue.choices}
             label = {
                 "CONFIRM": "USE SUGGESTION",

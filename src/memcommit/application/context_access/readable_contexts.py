@@ -305,12 +305,14 @@ def freeze_readable_context_catalog(
     root_access: ContextAccess,
     *,
     include_query_routes: bool = True,
+    registry: ProfileRegistry | None = None,
 ) -> ReadableContextCatalog:
     """Freeze one command's unified access namespace and exact read bindings."""
 
     return ReadableContextCatalog(
         active_store,
         root_access,
+        registry=registry,
         include_query_routes=include_query_routes,
     )
 

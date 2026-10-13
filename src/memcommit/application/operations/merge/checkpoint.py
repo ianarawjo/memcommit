@@ -96,11 +96,11 @@ def merge_review_round_from_dict(value):
     if value.get("phase") == "LITERAL":
         return LiteralMergeRound.from_dict(value)
     if value.get("phase") == "RESOLVE":
-        from memcommit.application.operations.resolve.issue_review import (
-            IssueReviewRound,
+        from memcommit.application.operations.resolve.review_round.review_round_record import (
+            ReviewRoundRecord,
         )
 
-        return IssueReviewRound.from_dict(
+        return ReviewRoundRecord.from_dict(
             {k: v for k, v in value.items() if k != "phase"}
         )
     raise ValueError("Unknown Merge review phase.")

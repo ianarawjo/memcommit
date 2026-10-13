@@ -13,7 +13,7 @@ from memcommit.application.operations.merge.checkpoint import (
 )
 from memcommit.application.operations.merge.lineage import project_merge_lineage
 from memcommit.application.operations.merge.records import LiteralMergeRound
-from memcommit.application.operations.resolve.issues import all_audit_issue_keys
+from memcommit.application.operations.resolve.analysis.convert_audit_to_issues import all_audit_issue_keys
 from memcommit.persistence.store import context_record_digest
 
 

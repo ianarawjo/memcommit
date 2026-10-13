@@ -53,6 +53,11 @@ def render_decision_controls(
         fragments.extend(render_action_button(option.label, focused=focused))
         fragments.append(("", "\n"))
         action_offset += 1
+    if state.back_label is not None:
+        focused = state.focused_row_index == action_offset and is_focused("actions")
+        fragments.extend(render_action_button(state.back_label, focused=focused))
+        fragments.append(("", "\n"))
+        action_offset += 1
     focused = state.focused_row_index == action_offset and is_focused("actions")
     label = state.continue_label().strip().upper()
     if label == "APPLY":

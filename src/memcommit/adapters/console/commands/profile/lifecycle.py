@@ -96,11 +96,12 @@ def create_cmd(
         str,
         typer.Argument(help="Unique name for the new empty managed Profile"),
     ],
+    root: Annotated[Optional[Path], typer.Option("--root", help="Project folder; omitted uses the application default")] = None,
 ) -> None:
     """Create one empty managed Profile without selecting it."""
 
     try:
-        result = create_profile(name)
+        result = create_profile(name, root_dir=root)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
     render_profile_create_receipt(result)
@@ -176,11 +177,12 @@ def import_cmd(
         Path,
         typer.Option("--from", help="Complete .mem store or package directory"),
     ],
+    root: Annotated[Optional[Path], typer.Option("--root", help="Destination project folder; omitted uses the application default")] = None,
 ) -> None:
     """Copy one complete store into a new editable managed profile."""
 
     try:
-        profile, inspection = import_profile(name, source)
+        profile, inspection = import_profile(name, source, root_dir=root)
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
     typer.secho(

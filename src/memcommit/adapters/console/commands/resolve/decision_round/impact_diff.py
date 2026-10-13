@@ -8,6 +8,17 @@ from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.application.operations.resolve.model import ResolveAnalysis
 
 
+def _placement(analysis, uid, extra_origins=()):
+    if analysis.frame.memory_target is None:
+        return analysis.frame.display_name, uid
+    origin = next(
+        item
+        for item in (*analysis.frame.memory_target.origins, *extra_origins)
+        if item.analysis_uid == uid
+    )
+    return origin.context_name, origin.memory_uid
+
+
 def project_choice_previews(analysis: ResolveAnalysis):
     """Preservation cards show the current Context; no Source/Target choices."""
     previews = {}
@@ -22,8 +33,8 @@ def project_choice_previews(analysis: ResolveAnalysis):
                     MemoryChange(
                         marker="=",
                         treatment="KEEP",
-                        location=analysis.frame.display_name,
-                        memory_uid=uid,
+                        location=_placement(analysis, uid)[0],
+                        memory_uid=_placement(analysis, uid)[1],
                         before=item.content,
                         after=item.content,
                     )
@@ -41,8 +52,8 @@ def project_choice_previews(analysis: ResolveAnalysis):
                         MemoryChange(
                             marker="=" if index == 0 else "-",
                             treatment="KEEP" if index == 0 else "REMOVE",
-                            location=analysis.frame.display_name,
-                            memory_uid=uid,
+                            location=_placement(analysis, uid)[0],
+                            memory_uid=_placement(analysis, uid)[1],
                             before=text,
                             after=text if index == 0 else None,
                         )
@@ -74,8 +85,8 @@ def project_semantic_choice(analysis, choice, *, include_explanation=True):
         )
     )
     for uid in uids:
-        location = before.name
-        identity = f"[{location}:{uid[:8]}]"
+        location, memory_uid = _placement(analysis, uid, choice.memory_origins)
+        identity = f"[{location}:{memory_uid[:8]}]"
         old = before.memories[uid].content if uid in before.memories else None
         new = after.memories[uid].content if uid in after.memories else None
         treatment = (
@@ -95,7 +106,7 @@ def project_semantic_choice(analysis, choice, *, include_explanation=True):
                     ],
                     treatment=treatment,
                     location=location,
-                    memory_uid=uid,
+                    memory_uid=memory_uid,
                     before=old,
                     after=new,
                 ),

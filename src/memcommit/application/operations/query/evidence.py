@@ -1,4 +1,4 @@
-"""Project one frozen ordinary-Query corpus into bounded answer evidence."""
+"""Project one frozen ordinary-Query corpus into authorized answer evidence."""
 
 from __future__ import annotations
 
@@ -92,31 +92,8 @@ def compact_artifact_references(
     )
 
 
-def compact_reference_content(
-    evidence: Sequence[OrdinaryQueryEvidence],
-    *,
-    limit: int = 600,
-) -> tuple[OrdinaryQueryEvidence, ...]:
-    """Bound Query citations without changing provider synthesis evidence."""
-
-    if limit < 80:
-        raise ValueError("Reference excerpt limit is too small.")
-    return tuple(
-        replace(
-            item,
-            content=(
-                item.content
-                if len(item.content) <= limit
-                else item.content[: limit - 1].rstrip() + "…"
-            ),
-        )
-        for item in evidence
-    )
-
-
 __all__ = [
     "OrdinaryQueryEvidenceError",
     "compact_artifact_references",
-    "compact_reference_content",
     "visible_result_evidence",
 ]

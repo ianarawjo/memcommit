@@ -173,6 +173,7 @@ def create_profile(
     name: str,
     *,
     expected_generation: int | None = None,
+    root_dir: Path | str | None = None,
 ) -> ProfileCreationResult:
     """Atomically publish one empty managed Profile and keep selection fixed."""
 
@@ -211,11 +212,14 @@ def create_profile(
                 "created_at": datetime.now(timezone.utc).isoformat(),
             },
         )
-        staging = profile_stores_dir() / f".{profile.uid}.staging-{uuid.uuid4().hex}"
+        from memcommit.application.operations.profile.project_root import prepare_profile_root, write_profile_marker
+        profile = prepare_profile_root(profile, root_dir, registry)
         destination = profile_store_dir(profile)
+        staging = destination.parent / f".mem-staging-{uuid.uuid4().hex}"
         published = False
         try:
             inspection = _write_empty_profile_store(staging)
+            write_profile_marker(staging, profile.uid)
             if destination.exists() or destination.is_symlink():
                 raise ProfileError("Managed Profile destination is occupied.")
             os.replace(staging, destination)
@@ -491,6 +495,7 @@ def import_profile(
     source: Path,
     *,
     provenance: dict[str, object] | None = None,
+    root_dir: Path | str | None = None,
 ) -> tuple[ProfileEntry, StoreInspection]:
     canonical = validate_profile_name(name)
     if canonical == AUTHORING_PROFILE_NAME:
@@ -507,10 +512,13 @@ def import_profile(
             kind="MANAGED",
             source=provenance,
         )
-        staging = profile_stores_dir() / f".{profile.uid}.staging-{uuid.uuid4().hex}"
+        from memcommit.application.operations.profile.project_root import prepare_profile_root, write_profile_marker
+        profile = prepare_profile_root(profile, root_dir, registry)
+        staging = profile_store_dir(profile).parent / f".mem-staging-{uuid.uuid4().hex}"
         published = False
         try:
             inspection = _copy_store(source_root, staging)
+            write_profile_marker(staging, profile.uid)
             destination = profile_store_dir(profile)
             if destination.exists() or destination.is_symlink():
                 raise ProfileError("Managed profile destination is occupied.")

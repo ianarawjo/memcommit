@@ -51,7 +51,7 @@ def config_set(
 
     \b
     Keys:
-      workspace_dir — workspace containing .mem/ and contexts/
+      study_root_dir — common parent for future Study runs
       llm       — legacy Ollama model name
       provider  — codex_chatgpt, ollama, or openrouter
       model     — model name used by the selected provider
@@ -63,15 +63,6 @@ def config_set(
 
         echo_text("Config error: {error}", error=error, err=True)
         raise typer.Exit(1) from error
-    if key == "workspace_dir":
-        from memcommit.adapters.console.terminal.core.output import echo_text
-
-        echo_text("Workspace: {path}", path=entry.value)
-        typer.echo("Internal data: .mem/ · File workspace: contexts/")
-        typer.echo(
-            "Previous data was retained. Automatic file synchronization is not enabled."
-        )
-        return
     typer.secho(
         f"Set {entry.key} = {entry.value!r}",
         fg=typer.colors.GREEN,

@@ -16,7 +16,7 @@ from memcommit.application.capabilities.resolution.workbench import (
     ResolutionWorkbenchAction,
     ResolutionWorkbenchView,
 )
-from memcommit.application.operations.resolve.decisions import (
+from memcommit.application.operations.resolve.review_round.finalize_review_decisions import (
     ResolveDecision,
     finalize_resolve_decisions,
 )

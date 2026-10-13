@@ -24,11 +24,7 @@ from memcommit.application.authorization.checkpoint_read_model import (
 )
 
 
-PROFILE_REGISTRY_SCHEMA_VERSION = 5
-CHECKPOINT_READ_PROFILE_REGISTRY_SCHEMA_VERSION = 4
-REMOVED_PROFILE_REGISTRY_SCHEMA_VERSION = 3
-GRANT_PROFILE_REGISTRY_SCHEMA_VERSION = 2
-LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION = 1
+PROFILE_REGISTRY_SCHEMA_VERSION = 6
 AUTHORING_PROFILE_UID = "00000000-0000-0000-0000-000000000001"
 AUTHORING_PROFILE_NAME = "authoring"
 STUDY_RUN_PARTICIPANT_SOURCE_KIND = "STUDY_RUN"
@@ -81,12 +77,17 @@ class ProfileEntry:
     name: str
     kind: str
     source: dict[str, object] | None = None
+    root_dir: str | None = None
+
+    def __post_init__(self):
+        object.__setattr__(self, "root_dir", str(profile_root_dir(self).resolve()))
 
     def to_dict(self) -> dict[str, object]:
         result: dict[str, object] = {
             "uid": self.uid,
             "name": self.name,
             "kind": self.kind,
+            "root_dir": str(profile_root_dir(self)),
         }
         if self.source is not None:
             result["source"] = self.source
@@ -383,12 +384,12 @@ def default_store_dir() -> Path:
     """Return the authoring Store within the selected workspace."""
 
     require_workspace_ready()
-    return workspace_paths().store_dir / "authoring"
+    return workspace_paths().workspace_dir / "authoring" / ".mem"
 
 
 def profile_control_dir() -> Path:
     require_workspace_ready()
-    return workspace_paths().store_dir / "profiles"
+    return workspace_paths().workspace_dir / "profiles"
 
 
 def profile_stores_dir() -> Path:
@@ -440,7 +441,7 @@ def _reject_duplicate_keys(
 
 
 def virtual_authoring_registry() -> ProfileRegistry:
-    """Represent legacy operation without creating any profile metadata."""
+    """Represent the default authoring Profile without creating metadata."""
 
     return ProfileRegistry(
         generation=0,
@@ -458,7 +459,7 @@ def virtual_authoring_registry() -> ProfileRegistry:
 
 
 def load_profile_registry() -> ProfileRegistry:
-    """Load the registry; absence alone means legacy authoring mode."""
+    """Load registered project roots; absence selects the default authoring root."""
 
     path = profile_registry_file()
     if not path.exists():
@@ -473,13 +474,7 @@ def load_profile_registry() -> ProfileRegistry:
     if not isinstance(value, dict):
         raise ProfileConfigError("Profile registry must be a JSON object.")
     schema_version = value.get("schema_version")
-    if schema_version not in {
-        LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION,
-        GRANT_PROFILE_REGISTRY_SCHEMA_VERSION,
-        REMOVED_PROFILE_REGISTRY_SCHEMA_VERSION,
-        CHECKPOINT_READ_PROFILE_REGISTRY_SCHEMA_VERSION,
-        PROFILE_REGISTRY_SCHEMA_VERSION,
-    }:
+    if schema_version != PROFILE_REGISTRY_SCHEMA_VERSION:
         raise ProfileConfigError("Unsupported profile registry schema version.")
     generation = value.get("generation")
     if (
@@ -498,41 +493,32 @@ def load_profile_registry() -> ProfileRegistry:
             raise ProfileConfigError("Profile registry entry is invalid.")
         uid = _canonical_uid(raw.get("uid"), field="Profile uid")
         name = validate_profile_name(raw.get("name"))
+        if set(raw) - {"uid", "name", "kind", "source", "root_dir"}:
+            raise ProfileConfigError("Unexpected Profile registry fields.")
         kind = raw.get("kind")
         if kind not in {"AUTHORING", "MANAGED"}:
             raise ProfileConfigError("Profile kind is invalid.")
         source = raw.get("source")
         if source is not None and not isinstance(source, dict):
             raise ProfileConfigError("Profile source provenance is invalid.")
-        profiles.append(ProfileEntry(uid=uid, name=name, kind=kind, source=source))
+        root = raw.get("root_dir")
+        if not isinstance(root, str) or not Path(root).is_absolute() or str(Path(root).resolve()) != root:
+            raise ProfileConfigError("Profile root must be a canonical absolute directory.")
+        profiles.append(ProfileEntry(uid=uid, name=name, kind=kind, source=source, root_dir=root))
 
     if len({profile.uid for profile in profiles}) != len(profiles):
         raise ProfileConfigError("Profile uids must be unique.")
     if len({profile.name.casefold() for profile in profiles}) != len(profiles):
         raise ProfileConfigError("Profile names must be unique.")
     authoring = [profile for profile in profiles if profile.kind == "AUTHORING"]
-    if authoring != [
-        ProfileEntry(
-            uid=AUTHORING_PROFILE_UID,
-            name=AUTHORING_PROFILE_NAME,
-            kind="AUTHORING",
-        )
-    ]:
-        raise ProfileConfigError(
-            "Profile registry must contain exactly the fixed authoring profile."
-        )
+    if len(authoring) != 1 or authoring[0].uid != AUTHORING_PROFILE_UID or authoring[0].name != AUTHORING_PROFILE_NAME:
+        raise ProfileConfigError("Profile registry must contain the fixed authoring Profile.")
     active_uid = _canonical_uid(value.get("active_uid"), field="Active profile uid")
     profile_uids = {profile.uid for profile in profiles}
     if active_uid not in profile_uids:
         raise ProfileConfigError("Active profile is not registered.")
 
     raw_removed_profile_uids = value.get("removed_profile_uids", [])
-    if schema_version < REMOVED_PROFILE_REGISTRY_SCHEMA_VERSION:
-        if "removed_profile_uids" in value:
-            raise ProfileConfigError(
-                "Older profile registries cannot contain removed Profiles."
-            )
-        raw_removed_profile_uids = []
     if not isinstance(raw_removed_profile_uids, list):
         raise ProfileConfigError("Removed Profile identities must be a list.")
     removed_profile_uids = tuple(
@@ -548,18 +534,17 @@ def load_profile_registry() -> ProfileRegistry:
     if active_uid in removed_profile_uids:
         raise ProfileConfigError("The active Profile cannot be removed.")
 
+    live_profiles = tuple(p for p in profiles if p.uid not in removed_profile_uids)
+    for index, profile in enumerate(live_profiles):
+        root = profile_root_dir(profile)
+        for other in live_profiles[index + 1:]:
+            other_root = profile_root_dir(other)
+            if root == other_root or root.is_relative_to(other_root) or other_root.is_relative_to(root):
+                raise ProfileConfigError("Registered Profile project roots overlap.")
+
     raw_grants = value.get("grants", [])
-    if schema_version == LEGACY_PROFILE_REGISTRY_SCHEMA_VERSION:
-        if "grants" in value:
-            raise ProfileConfigError("Legacy profile registry cannot contain grants.")
-        raw_grants = []
     if not isinstance(raw_grants, list):
         raise ProfileConfigError("Profile grants must be a list.")
-    if schema_version < PROFILE_REGISTRY_SCHEMA_VERSION and raw_grants:
-        raise ProfileConfigError(
-            "Legacy attached Grants are unsupported; recreate them with "
-            "receiver-owned placements."
-        )
     grants: list[AuthorityGrant] = []
     for raw in raw_grants:
         grant_fields = {
@@ -671,12 +656,6 @@ def load_profile_registry() -> ProfileRegistry:
         raise ProfileConfigError("Profile grant uids must be unique.")
 
     raw_placements = value.get("grant_placements", [])
-    if schema_version < PROFILE_REGISTRY_SCHEMA_VERSION:
-        if "grant_placements" in value:
-            raise ProfileConfigError(
-                "Older profile registries cannot contain Grant placements."
-            )
-        raw_placements = []
     if not isinstance(raw_placements, list):
         raise ProfileConfigError("Grant placements must be a list.")
     grants_by_uid = {grant.uid: grant for grant in grants}
@@ -730,12 +709,17 @@ def load_profile_registry() -> ProfileRegistry:
     )
 
 
-def profile_store_dir(profile: ProfileEntry) -> Path:
-    """Map a validated registry entry to its non-user-controlled root."""
-
+def profile_root_dir(profile: ProfileEntry) -> Path:
+    if profile.root_dir is not None:
+        return Path(profile.root_dir)
     if profile.kind == "AUTHORING":
-        return default_store_dir()
-    return profile_stores_dir() / profile.uid
+        return default_store_dir().parent
+    return workspace_paths().workspace_dir / "projects" / profile.uid
+
+
+def profile_store_dir(profile: ProfileEntry) -> Path:
+    """An explicit internal Store root, always below the Profile project."""
+    return profile_root_dir(profile) / ".mem"
 
 
 def active_profile_registry_for_store(

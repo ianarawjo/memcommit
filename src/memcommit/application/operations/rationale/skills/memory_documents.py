@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from importlib.resources.abc import Traversable
+try:
+    from importlib.resources.abc import Traversable
+except ImportError:
+    # Python 3.10 exposes the same resource interface under importlib.abc.
+    from importlib.abc import Traversable
 
 from memcommit.application.operations.rationale.model import RationaleRulesError
 from memcommit.core.context import Memory

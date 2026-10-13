@@ -4,11 +4,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
-from memcommit.application.capabilities.import_export.conversion import (
-    convert_for_export,
+from memcommit.application.capabilities.import_export.export_documents import (
+    prepare_export_documents,
 )
 from memcommit.application.capabilities.import_export.model import (
     ConversionIssue,
+    ExportFileEffect,
     MemContent,
     OutputFile,
 )
@@ -30,6 +31,7 @@ class ExportResult:
     destination: Path
     files: tuple[tuple[str, bool], ...]
     issues: tuple[ConversionIssue, ...] = ()
+    effects: tuple[ExportFileEffect, ...] = ()
 
 
 class ExportPort(Protocol):
@@ -50,7 +52,7 @@ def run_export(request: ExportRequest, port: ExportPort) -> ExportResult:
     if request.skill_name is not None and request.format != "skill":
         raise ValueError("New skill metadata requires --format skill.")
     content = port.load_content(request)
-    files, issues = convert_for_export(
+    files, issues = prepare_export_documents(
         content,
         request.format,
         skill_name=request.skill_name,
@@ -63,4 +65,5 @@ def run_export(request: ExportRequest, port: ExportPort) -> ExportResult:
         destination,
         tuple((path, file.attached) for path, file in zip(written, files, strict=True)),
         issues,
+        getattr(getattr(port, "last_plan", None), "effects", ()),
     )

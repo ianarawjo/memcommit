@@ -137,6 +137,7 @@ def _publish_baseline_profile_locked(
     source_root: Path,
     digest: str,
     source_record: dict[str, object],
+    root_dir: Path | None = None,
 ) -> tuple[ProfileEntry, StoreInspection]:
     """Publish one clean copy while the caller holds the registry lock."""
 
@@ -148,7 +149,9 @@ def _publish_baseline_profile_locked(
         kind="MANAGED",
         source=source_record,
     )
-    staging = profile_stores_dir() / f".{profile.uid}.staging-{uuid.uuid4().hex}"
+    from memcommit.application.operations.profile.project_root import prepare_profile_root, write_profile_marker
+    profile = prepare_profile_root(profile, root_dir, registry)
+    staging = profile_store_dir(profile).parent / f".mem-staging-{uuid.uuid4().hex}"
     published = False
     try:
         inspection = _copy_store_baseline(
@@ -159,6 +162,7 @@ def _publish_baseline_profile_locked(
         destination = profile_store_dir(profile)
         if destination.exists() or destination.is_symlink():
             raise ProfileError("Managed profile destination is occupied.")
+        write_profile_marker(staging, profile.uid)
         os.replace(staging, destination)
         published = True
         updated = replace(
@@ -196,6 +200,7 @@ def import_baseline_profile(
     source: Path,
     *,
     source_profile: ProfileEntry | None = None,
+    root_dir: Path | None = None,
 ) -> tuple[ProfileEntry, StoreInspection]:
     """Create a managed Profile from content baseline without run history."""
 
@@ -226,6 +231,7 @@ def import_baseline_profile(
             source_root=source_root,
             digest=digest,
             source_record=source_record,
+            root_dir=root_dir,
         )
 
 
@@ -234,6 +240,7 @@ def import_profile_from_profile(
     source_profile_name: str,
     *,
     expected_source_profile_uid: str | None = None,
+    root_dir: Path | None = None,
 ) -> tuple[ProfileEntry, StoreInspection]:
     """Create one clean Profile from another registered Profile."""
 
@@ -248,4 +255,5 @@ def import_profile_from_profile(
         name,
         profile_store_dir(source),
         source_profile=source,
+        root_dir=root_dir,
     )

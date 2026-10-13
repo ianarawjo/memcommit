@@ -31,6 +31,10 @@ class ImportRuntime:
         self.store = store or MemoryStore()
         self.current = self.store.current_context_name()
         self.parent_binding = None
+        from memcommit.application.operations.profile.config import load_profile_registry, profile_store_dir, profile_root_dir
+        registry = load_profile_registry()
+        self.profile = next((p for p in registry.visible_profiles if profile_store_dir(p).resolve() == self.store.store_dir.resolve()), None)
+        self.project_root = profile_root_dir(self.profile) if self.profile else None
 
     def read_source(self, request):
         self.request = request
@@ -44,8 +48,15 @@ class ImportRuntime:
             )
             for path in result.skipped
         )
+        source = Path(request.source).expanduser().resolve()
+        self.profile_placement = bool(self.project_root and source.is_relative_to(self.project_root) and not request.name and not request.target and request.format not in {"mem", "skill"})
+        prefix = source.relative_to(self.project_root).as_posix() if self.profile_placement else "."
+        if result.single_file and self.profile_placement:
+            files = tuple(InputFile(prefix, data) for _, data in result.files)
+        else:
+            files = tuple(InputFile((prefix + "/" if prefix != "." else "") + path, data) for path, data in result.files)
         return (
-            tuple(InputFile(path, data) for path, data in result.files),
+            files,
             issues,
             result.single_file,
         )
@@ -58,6 +69,8 @@ class ImportRuntime:
                     "mem-format import preserves Context names; use --as to rename its root."
                 )
             return request.name or "imported"
+        if self.profile_placement:
+            return None
         if request.name:
             return validate_portable_context_name(request.name)
         parent = request.target or self.current

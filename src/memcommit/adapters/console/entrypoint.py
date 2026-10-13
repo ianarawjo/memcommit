@@ -21,6 +21,7 @@ from memcommit.adapters.console.commands import (
     reference,
     mem_import,
     mem_export,
+    mem_sync,
 )
 from memcommit.adapters.console.commands import ground
 from memcommit.adapters.console.commands import profile
@@ -128,6 +129,10 @@ app.command(
     "export",
     help=operation_summary("export"),
 )(mem_export.cmd)
+app.command(
+    "sync",
+    help=operation_summary("sync"),
+)(mem_sync.cmd)
 app.command(
     "init-study",
     help=operation_summary("init-study"),

@@ -1,4 +1,4 @@
-"""Resolve editable ordinary-Profile routes and versioned Study routes."""
+"""Resolve editable ordinary-Profile routes and the current Study route."""
 
 from __future__ import annotations
 
@@ -28,8 +28,7 @@ ProviderPolicySource = Literal[
 ]
 
 POLICY_VERSION = "semantic-provider-policy-v2"
-LEGACY_STUDY_PROVIDER_POLICY_VERSION = "study-provider-config-v1"
-STUDY_PROVIDER_POLICY_VERSION = "study-provider-config-v2-fast"
+STUDY_PROVIDER_POLICY_VERSION = "study-provider-config-gpt-6.1-sol-fast"
 
 
 class ProviderPolicyError(ValueError):
@@ -80,7 +79,7 @@ class ConfiguredProviderRoute:
 
 @dataclass(frozen=True)
 class StudyProviderConfig:
-    """One immutable provider matrix retained for Study reproducibility."""
+    """One fixed provider matrix identified by a Study Profile pin."""
 
     version: str
     default: ProviderRoute
@@ -101,8 +100,6 @@ class StudyProviderConfig:
             },
         }
         if self.service_tier is not None:
-            # Omit the absent field so the retained v1 digest remains exactly
-            # compatible with Study Profiles created before Fast mode.
             payload_value["service_tier"] = self.service_tier
         payload = json.dumps(
             payload_value,
@@ -175,30 +172,25 @@ class ResolvedProviderPolicy:
 
 _STUDY_DEFAULT_ROUTE = ProviderRoute(
     provider_id=CODEX_CHATGPT_PROVIDER,
-    model="gpt-5.6-sol",
-    reasoning_effort="none",
+    model="gpt-6.1-sol",
+    reasoning_effort="low",
     timeout_seconds=600.0,
 )
 _STUDY_ROUTES = {
-    "search": ProviderRoute(
-        provider_id=CODEX_CHATGPT_PROVIDER,
-        model="gpt-5.6-terra",
-        reasoning_effort="low",
-        timeout_seconds=600.0,
-    ),
+    "search": _STUDY_DEFAULT_ROUTE,
     "query": _STUDY_DEFAULT_ROUTE,
     "help": _STUDY_DEFAULT_ROUTE,
     "forget": _STUDY_DEFAULT_ROUTE,
     "compare_contexts": ProviderRoute(
         provider_id=CODEX_CHATGPT_PROVIDER,
-        model="gpt-5.6-sol",
-        reasoning_effort="none",
+        model="gpt-6.1-sol",
+        reasoning_effort="low",
         timeout_seconds=900.0,
     ),
     "meld_contexts": ProviderRoute(
         provider_id=CODEX_CHATGPT_PROVIDER,
-        model="gpt-5.6-sol",
-        reasoning_effort="none",
+        model="gpt-6.1-sol",
+        reasoning_effort="low",
         timeout_seconds=900.0,
     ),
 }
@@ -208,36 +200,26 @@ _STUDY_ROUTES = {
 # neither is a routable policy namespace. Compare Summary uses the Study
 # default today but has its own active-Profile connector in ordinary Profiles.
 PROFILE_PROVIDER_OPERATION_NAMES = frozenset({*_STUDY_ROUTES, "compare_summary"})
-STUDY_PROVIDER_CONFIGS: Mapping[str, StudyProviderConfig] = {
-    LEGACY_STUDY_PROVIDER_POLICY_VERSION: StudyProviderConfig(
-        version=LEGACY_STUDY_PROVIDER_POLICY_VERSION,
-        default=_STUDY_DEFAULT_ROUTE,
-        operations=_STUDY_ROUTES,
-    ),
-    STUDY_PROVIDER_POLICY_VERSION: StudyProviderConfig(
-        version=STUDY_PROVIDER_POLICY_VERSION,
-        default=_STUDY_DEFAULT_ROUTE,
-        operations=_STUDY_ROUTES,
-        service_tier="fast",
-    ),
-}
-STUDY_PROVIDER_POLICY_DIGEST = STUDY_PROVIDER_CONFIGS[
-    STUDY_PROVIDER_POLICY_VERSION
-].digest
+STUDY_PROVIDER_CONFIG = StudyProviderConfig(
+    version=STUDY_PROVIDER_POLICY_VERSION,
+    default=_STUDY_DEFAULT_ROUTE,
+    operations=_STUDY_ROUTES,
+    service_tier="fast",
+)
+STUDY_PROVIDER_POLICY_DIGEST = STUDY_PROVIDER_CONFIG.digest
 
 
 def study_provider_config(version: str | None = None) -> StudyProviderConfig:
     selected = version or STUDY_PROVIDER_POLICY_VERSION
-    try:
-        return STUDY_PROVIDER_CONFIGS[selected]
-    except KeyError as error:
+    if selected != STUDY_PROVIDER_POLICY_VERSION:
         raise ProviderPolicyError(
             f"Unsupported Study provider policy version {selected!r}."
-        ) from error
+        )
+    return STUDY_PROVIDER_CONFIG
 
 
 def _compatibility_policy(operation: str) -> OperationProviderPolicy:
-    route = STUDY_PROVIDER_CONFIGS[STUDY_PROVIDER_POLICY_VERSION].route_for(operation)
+    route = STUDY_PROVIDER_CONFIG.route_for(operation)
     return OperationProviderPolicy(
         operation=operation,
         provider_id=route.provider_id,
@@ -465,7 +447,6 @@ __all__ = [
     "SEARCH_PROVIDER_POLICY",
     "FORGET_PROVIDER_POLICY",
     "HELP_PROVIDER_POLICY",
-    "LEGACY_STUDY_PROVIDER_POLICY_VERSION",
     "MELD_PROVIDER_POLICY",
     "OPERATION_PROVIDER_POLICIES",
     "OperationProviderPolicy",
@@ -479,7 +460,7 @@ __all__ = [
     "ProviderRoute",
     "QUERY_PROVIDER_POLICY",
     "ResolvedProviderPolicy",
-    "STUDY_PROVIDER_CONFIGS",
+    "STUDY_PROVIDER_CONFIG",
     "STUDY_PROVIDER_POLICY_DIGEST",
     "STUDY_PROVIDER_POLICY_VERSION",
     "StudyProviderConfig",

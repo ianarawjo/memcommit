@@ -17,6 +17,8 @@ def relative_document_path(value: str) -> str:
     path = PurePosixPath(value)
     if path.is_absolute() or any(part in {"", ".", ".."} for part in value.split("/")):
         raise ValueError(f"Document path escapes its package: {value!r}.")
+    if any(part.casefold() in {".mem", ".git"} for part in path.parts):
+        raise ValueError("Document paths cannot claim internal .mem or .git state.")
     if any(":" in part for part in path.parts):
         raise ValueError(f"Document path contains an invalid segment: {value!r}.")
     return value
@@ -30,9 +32,12 @@ class DocumentState:
     package: str = "documents"
     opening: str = ""
     closing: str = ""
+    path_scope: str = "PACKAGE"
 
     def __post_init__(self):
         relative_document_path(self.path)
+        if self.path_scope not in {"PACKAGE", "PROFILE"}:
+            raise ValueError("Unsupported document path scope.")
         if self.format not in {"md", "txt", "yaml"}:
             raise ValueError("Unsupported document format.")
         if self.role not in {"document", "package", "skill_body", "skill_metadata"}:

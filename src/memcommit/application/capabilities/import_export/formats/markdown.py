@@ -11,6 +11,15 @@ from memcommit.core.document import DocumentState
 
 
 def parse_markdown(text: str, *, path="document.md", state=None) -> Document:
+    if state is not None and state.path_scope == "PROFILE":
+        # Project imports retain separators as ordinary Memory text so initial
+        # Sync can adopt identical files without normalizing somebody's rules.
+        tokens = MarkdownIt("commonmark").enable(["table", "strikethrough"]).parse(text)
+        lines = text.splitlines(keepends=True)
+        starts = sorted({t.map[0] for t in tokens if t.level == 0 and t.map is not None})
+        boundaries = sorted({0, *starts, len(lines)})
+        blocks = tuple(DocumentBlock("raw", "".join(lines[a:z])) for a, z in zip(boundaries, boundaries[1:]) if a != z)
+        return Document(state, blocks)
     lines = text.splitlines(keepends=True)
     # Frontmatter is a protected syntax block even outside a Skill package.
     if lines and lines[0].lstrip("\ufeff").rstrip("\r\n") == "---":
@@ -71,6 +80,8 @@ def _raw_gap(lines):
 
 
 def render_markdown(document: Document, policy=SpacingPolicy()) -> str:
+    if document.state.path_scope == "PROFILE":
+        return "".join(block.text for block in document.blocks)
     result = ""
     previous = None
     for block in document.blocks:

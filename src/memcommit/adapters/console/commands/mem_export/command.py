@@ -21,7 +21,7 @@ def cmd(
         Optional[Path],
         typer.Option(
             "--to",
-            help="New output directory; existing destinations are never overwritten.",
+            help="Output directory; add or replace generated files and preserve unrelated files.",
         ),
     ] = None,
     format: Annotated[

@@ -168,6 +168,7 @@ def collect_update_inputs(
     source_memory_selector: str | None = None,
     target_memory_selector: str | None = None,
     instruction: UpdateInstruction | None = None,
+    target_include_descendants: bool = False,
 ) -> UpdateInputs:
     """Collect readable source facts and directly writable target Memories."""
     try:
@@ -177,9 +178,13 @@ def collect_update_inputs(
         )
     except SemanticDisclosureError as error:
         raise UpdateError(str(error)) from error
-    # An instruction changes one Context; embedded Contexts remain independent.
+    # The instruction Source stays exact even when its Target spans several owners.
     source_contexts = (source,) if instruction is not None else _walk_contexts(source)
-    target_contexts = (target,) if instruction is not None else _walk_contexts(target)
+    target_contexts = (
+        (target,)
+        if instruction is not None and not target_include_descendants
+        else _walk_contexts(target)
+    )
     overlap = {context.uid for context in source_contexts} & {
         context.uid for context in target_contexts
     }
@@ -312,7 +317,18 @@ def collect_update_inputs(
         source_digest=_sha256_json(source_payload),
         target_digest=_sha256_json(target_payload),
         source_contexts=_fingerprint_contexts(source_contexts),
-        target_context_fingerprints=_fingerprint_contexts(target_contexts),
+        # Lexical loading adds analysis-only edges. Recursive instruction CAS
+        # binds direct records, rather than pretending those edges are embeds.
+        target_context_fingerprints=tuple(
+            ContextFingerprint(
+                owner.uid,
+                owner.name,
+                owner._store_digest or _sha256_json(owner.to_dict()),
+            )
+            for owner in target_contexts
+        )
+        if target_include_descendants and instruction is not None
+        else _fingerprint_contexts(target_contexts),
         source_context_only=()
         if instruction is not None
         else source_scope.context_only,
@@ -452,6 +468,7 @@ def freeze_update_context_inputs(
         source_memory_selector=source_memory_selector,
         target_memory_selector=target_memory_selector,
         instruction=instruction,
+        target_include_descendants=target_include_descendants,
     )
     return UpdateContextInputs(
         source.uid,
@@ -520,6 +537,7 @@ def update_inputs_match(
             source_memory_selector=inputs.source_memory_uid,
             target_memory_selector=inputs.target_memory_uid,
             instruction=inputs.instruction,
+            target_include_descendants=inputs.target_include_descendants,
         )
     except UpdateError:
         return False

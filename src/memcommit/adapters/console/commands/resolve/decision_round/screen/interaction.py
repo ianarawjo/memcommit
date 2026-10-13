@@ -220,6 +220,8 @@ class CompactInteraction:
             self.state.status_message = "Bulk choices staged; finalize to continue."
         elif action_uid == "action:CONTINUE":
             self.finish()
+        elif action_uid == "action:BACK":
+            get_app().exit(result=ResolutionWorkbenchAction(kind="CLOSE"))
         elif action_uid == "action:RESPONSE" and self.intent is not None:
             self.intent.open_response()
         else:  # pragma: no cover - action rows are closed above

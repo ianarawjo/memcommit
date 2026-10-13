@@ -6,7 +6,10 @@ import typer
 
 from memcommit.adapters.console.terminal.core.output import echo_text
 from memcommit.adapters.console.terminal.core.text import display_escape_text
-from memcommit.application.operations.resolve.model import ResolveAnalysis, ResolveReceipt
+from memcommit.application.operations.resolve.model import (
+    ResolveAnalysis,
+    ResolveReceipt,
+)
 
 
 def _line(label: str, value: str) -> None:
@@ -55,7 +58,10 @@ def render_resolve_receipt(
     _line("APPLIED", f"{effects} · {verification}")
     if receipt.unresolved_issue_uids:
         _line("UNRESOLVED", str(len(receipt.unresolved_issue_uids)))
-    _line("CHECKPOINT", receipt.checkpoint_uid)
+    for name, uid in receipt.checkpoints or (
+        (receipt.context_name, receipt.checkpoint_uid),
+    ):
+        _line("CHECKPOINT", f"{name} · {uid}" if receipt.checkpoints else uid)
     _line(
         "REVIEW",
         f"mem review resolve --receipt {receipt.checkpoint_uid}",

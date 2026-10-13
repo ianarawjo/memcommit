@@ -22,20 +22,26 @@ from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.application.operations.resolve.application import (
     RESOLVE_CHECKS,
-    run_resolve,
 )
 from memcommit.application.operations.resolve.model import ResolveError, ResolveRequest
-from memcommit.application.operations.resolve.issue_review import ResolveReviewInput
-from memcommit.application.operations.resolve.proposal import (
+from memcommit.application.operations.resolve.review_round.review_session import (
+    ResolveReviewSession,
+)
+from memcommit.application.operations.resolve.resolve_finalization.proposal import (
     apply_resolve_proposal,
 )
-from memcommit.application.operations.resolve.runtime import MemoryStoreResolvePort
-from memcommit.application.operations.resolve.issues import all_audit_issue_keys
-from memcommit.application.operations.resolve.resolution_options.generation import (
+from memcommit.application.operations.resolve.resolve_finalization.runtime import (
+    ResolveStoreAdapter,
+    run_resolve_from_store,
+)
+from memcommit.application.operations.resolve.analysis.convert_audit_to_issues import (
+    all_audit_issue_keys,
+)
+from memcommit.application.operations.resolve.analysis.resolution_options.generate_resolution_directions import (
     ProviderResolveOptionsPort,
 )
-from memcommit.application.operations.resolve.targeting import (
-    normalize_resolve_cli_targets,
+from memcommit.application.operations.resolve.console_input_targets.finalize_console_targets import (
+    finalize_console_targets,
 )
 from memcommit.persistence.operations.audit import JsonAuditRecordRepository
 from memcommit.persistence.store import MemoryStore
@@ -97,6 +103,14 @@ def cmd(
             help="Additional context available while deriving Audit directions",
         ),
     ] = None,
+    recursive: Annotated[
+        bool,
+        typer.Option(
+            "-r",
+            "--recursive",
+            help="Resolve conflicts across the Context, lexical descendants, and embeds together.",
+        ),
+    ] = False,
 ) -> None:
     """Review conflicts, choose resolutions, and apply the resulting changes."""
 
@@ -104,12 +118,13 @@ def cmd(
         require_interactive_terminal("Resolve")
         store = MemoryStore(create=False)
         snapshot = ContextOperandSnapshot.capture(store)
-        targets = normalize_resolve_cli_targets(
+        targets = finalize_console_targets(
             store,
             tuple(auto_operands or ()),
             context_locator=context_name,
             memory_operands=tuple(memory_operands or ()),
             current_context_name=snapshot.current_name,
+            recursive=recursive,
         )
         request = ResolveRequest(
             context_name=targets.context_name,
@@ -117,6 +132,7 @@ def cmd(
             allow_create=allow_create,
             allow_delete=allow_delete,
             guidance=guidance or "",
+            recursive=recursive,
         )
         run_resolve_request(request, store=store, current_name=snapshot.current_name)
     except (
@@ -145,7 +161,7 @@ def run_resolve_request(
     current_name: str | None,
 ) -> None:
     """Run review and Apply for the parsed Resolve request."""
-    port = MemoryStoreResolvePort(
+    port = ResolveStoreAdapter(
         store,
         current_name=current_name,
     )
@@ -154,10 +170,10 @@ def run_resolve_request(
         "building and checking repair",
         total=1,
     ) as progress:
-        analysis = run_resolve(
+        analysis = run_resolve_from_store(
             request,
             checks=RESOLVE_CHECKS,
-            frame_port=port,
+            store_port=port,
             semantic_port=ProviderResolveOptionsPort(),
             audit_repository=JsonAuditRecordRepository(store),
             audit_provider_factory=connect_semantic_provider,
@@ -173,15 +189,24 @@ def run_resolve_request(
         run_resolution_rounds,
     )
 
+    def revalidate_target():
+        # Later rounds use post-images while the original Store target stays frozen.
+        port.revalidate(analysis.frame)
+
     proposal = run_resolution_rounds(
-        (ResolveReviewInput(analysis),),
-        frame_port=port,
+        (ResolveReviewSession(analysis),),
+        revalidate_target=revalidate_target,
         provider_factory=connect_semantic_provider,
+        **(
+            {"preview_choices": True, "header_label": "RESOLVE · RECURSIVE"}
+            if request.recursive
+            else {}
+        ),
     )
     if proposal is None:
         return
     (proposal,) = proposal
-    receipt = apply_resolve_proposal(proposal, frame_port=port)
+    receipt = apply_resolve_proposal(proposal, apply_port=port)
     render_resolve_receipt(
         receipt,
         verification=(

@@ -446,6 +446,9 @@ def _publish_study_profile_batch(
         for profile in profiles:
             source = batch / profile.uid
             destination = profile_store_dir(profile)
+            from memcommit.application.operations.profile.project_root import prepare_profile_root, write_profile_marker
+            prepare_profile_root(profile, profile.root_dir, registry)
+            write_profile_marker(source, profile.uid)
             os.replace(source, destination)
             published.append((destination, source))
         _write_registry(updated)
@@ -505,19 +508,27 @@ def _publish_study_run_pair(
         "provider_policy_version": provider_policy_version,
         "provider_policy_digest": provider_policy_digest,
     }
+    from memcommit.configuration.config import Config
+    study_parent = Path(Config().get("study_root_dir"))
+    run_root = study_parent / study_uid
+    study_parent.mkdir(parents=True, exist_ok=True)
+    if run_root.exists() or run_root.is_symlink():
+        raise ProfileError("Study run directory is already occupied.")
     participant = ProfileEntry(
         uid=str(uuid.uuid4()),
         name=study_name,
         kind="MANAGED",
         source={"kind": _STUDY_RUN_SOURCE_KIND, **common_source},
+        root_dir=str((run_root / "participant").resolve()),
     )
     authority = ProfileEntry(
         uid=str(uuid.uuid4()),
         name=authority_name,
         kind="MANAGED",
         source={"kind": _STUDY_RUN_GRANTED_SOURCE_KIND, **common_source},
+        root_dir=str((run_root / "authority").resolve()),
     )
-    batch = profile_stores_dir() / f".{study_name}.study-run-{uuid.uuid4().hex}"
+    batch = study_parent / f".{study_name}.study-run-{uuid.uuid4().hex}"
     batch.mkdir()
     participant_staging = batch / participant.uid
     authority_staging = batch / authority.uid
@@ -588,6 +599,9 @@ def _publish_study_run_pair(
             destination = profile_store_dir(profile)
             if destination.exists() or destination.is_symlink():
                 raise ProfileError("Managed profile destination is occupied.")
+            from memcommit.application.operations.profile.project_root import prepare_profile_root, write_profile_marker
+            prepare_profile_root(profile, profile.root_dir, registry)
+            write_profile_marker(source, profile.uid)
             os.replace(source, destination)
             published.append((destination, source))
         try:
@@ -595,8 +609,11 @@ def _publish_study_run_pair(
         except Exception as error:
             try:
                 replacement_is_visible = load_profile_registry() == updated
-            except (OSError, ProfileConfigError, ValueError):
-                replacement_is_visible = False
+            except (OSError, ProfileConfigError, ValueError) as read_error:
+                # An unreadable registry cannot authorize deleting a possibly
+                # published Study pair. Preserve both Stores for inspection.
+                committed = True
+                raise ProfileError("Study registry publication could not be confirmed; inspect the registered Profiles.") from read_error
             if replacement_is_visible:
                 # A post-replace fsync failure may still leave the complete
                 # pair and grant generation visible. Keep both stores so that
@@ -631,3 +648,10 @@ def _publish_study_run_pair(
     finally:
         if batch.exists() and not batch.is_symlink():
             shutil.rmtree(batch)
+        if not committed:
+            # Only empty directories created for this new run may be removed.
+            for directory in (run_root / "participant", run_root / "authority", run_root):
+                try:
+                    directory.rmdir()
+                except OSError:
+                    pass

@@ -15,8 +15,8 @@ from memcommit.adapters.console.terminal.core.theme import (
 
 def render_add_receipt(result: AddResult) -> None:
     """Present one completed Add without owning command execution."""
-    checkpoint_uid = typer.style(
-        f"[checkpoint {result.checkpoint_uid[:8]}]",
+    checkpoint_label = typer.style(
+        "checkpoint",
         fg=semantic_color_rgb(SemanticColorRole.HISTORY),
     )
     target_context = display_escape_text(result.context_name)
@@ -26,14 +26,10 @@ def render_add_receipt(result: AddResult) -> None:
         bold=True,
     )
     memory_or_memories = "Memory" if result.count == 1 else "Memories"
-    
-    
-
     typer.echo(
-        f"{checkpoint_uid} "
+        f"[{checkpoint_label} {result.checkpoint_uid[:8]}] "
         f"{action} {result.count} {memory_or_memories} to '{target_context}'"
     )
-    
 
     for memory in result.memories:
         content = typer.style(

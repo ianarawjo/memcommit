@@ -1,4 +1,4 @@
-"""Freeze one Resolve input, acquire its Audit, and derive issue directions."""
+"""Analyze one frozen Context and derive its issue directions."""
 
 from __future__ import annotations
 
@@ -14,30 +14,35 @@ from memcommit.application.operations.audit.repository import AuditRecordReposit
 
 from .model import (
     AuditResolutionIssue,
-    FrozenResolveFrame,
+    ResolveTarget,
     ResolveAnalysis,
     ResolveConflictError,
-    ResolveRequest,
     ResolveReceipt,
 )
-from . import preparation
-from .review_policy import remaining_review_issues, select_round_issues
+from .analysis import reuse_or_run_audit
+from .analysis.select_issues_for_review import (
+    remaining_review_issues,
+    select_round_issues,
+)
 
 if TYPE_CHECKING:
-    from .decisions import ResolveFinalizedInput
-    from .issue_review import IssueReviewRound
+    from memcommit.application.capabilities.context_memory_target import (
+        ContextMemoryOrigin,
+    )
+    from .review_round.finalize_review_decisions import ResolveFinalizedInput
+    from memcommit.application.operations.resolve.review_round.review_round_record import (
+        ReviewRoundRecord,
+    )
     from memcommit.application.operations.update.model import UpdatePlan
-    from memcommit.core.context import Context
 
 # Entry points share this scope; Audit and explicit application callers stay selective.
 RESOLVE_CHECKS = frozenset({AuditCheckKind.CONFLICTS})
 
 
 def run_resolve(
-    request: ResolveRequest,
+    frame: ResolveTarget,
     *,
     checks: frozenset[AuditCheckKind],
-    frame_port: ResolveFramePort,
     semantic_port: ResolveSemanticPort,
     audit_repository: AuditRecordRepository,
     audit_provider_factory: ResolveProviderFactory,
@@ -46,7 +51,6 @@ def run_resolve(
 ) -> ResolveAnalysis:
     """Acquire one exact Audit, then derive directions without applying them."""
 
-    frame = frame_port.freeze(request)
     _require_source_precondition(frame)
     if expected_revision is not None and expected_revision != frame.revision:
         raise ResolveConflictError(
@@ -64,8 +68,8 @@ def run_resolve(
                 else "No requested Resolve mutation effect is authorized."
             ),
         )
-    target = frame_port.load_target(frame)
-    audit = preparation.audit_resolve_context(
+    target = frame.source.context()
+    audit = reuse_or_run_audit.audit_resolve_context(
         target,
         provider_factory=audit_provider_factory,
         repository=audit_repository,
@@ -77,19 +81,16 @@ def run_resolve(
         semantic_port=semantic_port,
         direction_provider_factory=direction_provider_factory,
     )
-    # No report is published from a stale semantic turn. Apply performs the
-    # same check again under the mutation and Grant locks.
-    frame_port.revalidate(frame)
     return analysis
 
 
 def analyze_resolve_audit(
-    frame: FrozenResolveFrame,
+    frame: ResolveTarget,
     audit: QualityAuditSession,
     *,
     semantic_port: ResolveSemanticPort,
     direction_provider_factory: ResolveProviderFactory,
-    rounds: tuple[IssueReviewRound, ...] = (),
+    rounds: tuple[ReviewRoundRecord, ...] = (),
 ) -> ResolveAnalysis:
     """Derive decisions from an already acquired Audit; never apply them."""
 
@@ -106,7 +107,7 @@ def analyze_resolve_audit(
     return analysis
 
 
-def _require_source_precondition(frame: FrozenResolveFrame) -> None:
+def _require_source_precondition(frame: ResolveTarget) -> None:
     expected = frame.request.source_precondition
     if expected is None:
         return
@@ -123,7 +124,7 @@ def _require_source_precondition(frame: FrozenResolveFrame) -> None:
         )
 
 
-def _direct_memory_digest(frame: FrozenResolveFrame) -> str:
+def _direct_memory_digest(frame: ResolveTarget) -> str:
     payload = [
         {"uid": memory.uid, "content": memory.content}
         for memory in frame.source.memories
@@ -154,26 +155,18 @@ class ResolveProviderFactory(Protocol):
         """Connect after the complete local frame and authority are frozen."""
 
 
-class ResolveFramePort(Protocol):
-    """Freeze, revalidate, and apply one Resolve frame."""
-
-    def freeze(self, request: ResolveRequest) -> FrozenResolveFrame:
-        """Freeze direct Memories and effective effect capabilities."""
-
-    def revalidate(self, frame: FrozenResolveFrame) -> None:
-        """Fail when the Context or Grant changed during semantic execution."""
-
-    def load_target(self, frame: FrozenResolveFrame) -> Context:
-        """Return the exact detached whole Context frozen for Update planning."""
+class ResolveApplyPort(Protocol):
+    """Publish the final reviewed proposal; calculation needs no Store port."""
 
     def apply_update_plan(
         self,
-        frame: FrozenResolveFrame,
+        frame: ResolveTarget,
         plan: UpdatePlan,
         *,
         unresolved_issue_uids: tuple[str, ...] = (),
         finalized_inputs: tuple[ResolveFinalizedInput, ...] = (),
         removed_item_uids: tuple[str, ...] = (),
+        memory_origins: tuple[ContextMemoryOrigin, ...] = (),
     ) -> ResolveReceipt:
         """Publish one Resolve-generated exact Update plan atomically."""
 
@@ -181,7 +174,7 @@ class ResolveFramePort(Protocol):
 class ResolveSemanticPort(Protocol):
     def analyze(
         self,
-        frame: FrozenResolveFrame,
+        frame: ResolveTarget,
         audit: QualityAuditSession,
         *,
         issues: tuple[AuditResolutionIssue, ...],

@@ -90,9 +90,10 @@ def creation_review(action: ProfilePickerAction) -> CommandReview:
     if action.kind != "CREATE_PROFILE":
         raise ValueError("Profile creation review requires an exact new name.")
     return CommandReview(
-        argv=("mem", "profile", "create", action.name),
+        argv=("mem", "profile", "create", action.name, "--root", action.root_dir) if action.root_dir else ("mem", "profile", "create", action.name),
         effects=(
             f"Create empty managed Profile {action.name!r} with a fresh UID.",
+            f"Project folder: {action.root_dir}" if action.root_dir else "Use the default project folder.",
             "Create a private store with no Contexts, Memories, Grants, or history.",
             "Keep the current Profile selected.",
             "Select the new Profile separately, then run mem init CONTEXT.",

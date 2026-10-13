@@ -46,6 +46,7 @@ class ProfilePickerAction:
     registry_generation: int | None
     new_name: str | None = None
     row_index: int | None = None
+    root_dir: str | None = None
 
 
 @dataclass(frozen=True)

@@ -9,61 +9,118 @@ This prototype snapshot is published on the `user-study-prototype` branch.
 ## Install
 
 Python 3.10 or later is required. With [uv](https://docs.astral.sh/uv/) installed,
-run these commands from the repository root:
+install the public prototype directly from GitHub:
 
 ```sh
-git switch user-study-prototype
+uv tool install 'git+https://github.com/ianarawjo/memcommit.git@user-study-prototype'
+mem --help
+```
+
+For a source checkout with locked dependencies:
+
+```sh
+git clone --branch user-study-prototype --single-branch https://github.com/ianarawjo/memcommit.git
+cd memcommit
 uv sync --locked
 uv run --locked mem --help
 ```
 
-The committed `uv.lock` records the resolved dependency versions. Alternatively,
-install the package into a Python environment with `python -m pip install .`;
-pip uses the dependency ranges in `pyproject.toml` rather than `uv.lock`.
+The committed `uv.lock` records resolved dependency versions. Alternatively,
+install from a checkout with `python -m pip install .`. The examples below use
+`mem` from a tool installation; in a source checkout, use `uv run --locked mem`.
 
 ## Try it
 
 ```sh
-uv run --locked mem init demo
-uv run --locked mem add "The cafe opens at nine."
-uv run --locked mem list
-uv run --locked mem checkpoint
-uv run --locked mem log
+mem init demo
+mem add "The cafe opens at nine."
+mem list
+mem checkpoint
+mem log
 ```
 
-These commands create local data in a workspace, defaulting to `~/memcommit`.
-Internal configuration and Profile data live under `<workspace>/.mem/`;
-`<workspace>/contexts/` is reserved for document work and does not automatically
-import, export, or synchronize files.
+## Project folders and document Sync
 
-To choose a workspace or migrate existing `~/.mem` / `~/.mem-profiles` data:
+The default `authoring` Profile stores its data and history in
+`~/.memcommit/authoring/.mem/`. Connect another Profile to your project folder:
 
 ```sh
-uv run --locked mem config set workspace_dir ~/memcommit
+mem profile create my-project --root /path/to/my-project
+mem profile use my-project
+mem profile config
 ```
 
-This copies and verifies existing data before selecting the new workspace; the
-original files remain intact. Choose a new, unoccupied destination for relocation.
-Only the workspace pointer lives outside the workspace, in
-`~/Library/Application Support/memcommit/config.json` on macOS or
-`~/.config/memcommit/config.json` elsewhere.
+Each registered project has its own `.mem/` for internal data, checkpoints,
+settings, and saved operation history. Commands use the selected Profile.
+Creating a Profile leaves existing project files unchanged and does not select
+it automatically. A second Profile at the same or an overlapping folder is
+rejected. When `--root` is omitted, a new Profile gets a separate directory under
+`~/.memcommit/projects/`. The interactive `mem profile` creation screen lets you
+choose a folder, initially suggesting the current directory.
+
+From the registered project folder, import supported existing documents and
+synchronize them back to those paths:
+
+```sh
+cd /path/to/my-project
+mem import .
+mem sync -a
+mem sync -a --always
+```
+
+Import retains paths such as `AGENTS.md`, `.agents/skills/reviewer/SKILL.md`, and
+`.claude/rules/project.md`. Ordinary document import supports Markdown, text,
+YAML, and YML; `.mdc` is not yet supported. `.mem` and `.git` are excluded.
+An initial Sync adopts identical files, creates missing files, and reports a
+conflict when existing bytes differ. Unmanaged project files are preserved.
+
+`--always` toggles automatic outbound Sync for the selected scope. Once enabled,
+successful mem commands synchronize changed Memories to the project files;
+Undo and Redo can synchronize their resulting content too. Repeating
+`mem sync -a --always` disables it. External edits are detected as conflicts;
+there is no background or automatic inbound file watcher.
+
+For an independent copy, use Export:
+
+```sh
+mem export AGENTS.md --to /path/to/export-copy
+```
+
+The registered project folder is the Sync destination. To relocate an existing
+Profile with its Store and connected documents, use:
+
+```sh
+mem profile config set root_dir /new/project-folder
+```
+
+This verifies the copy and selects the new folder while retaining the original
+files. Global settings live in `~/.memcommit/config.json`, separately from each
+project's `.mem`. This prototype starts with the current location and registry
+schema; it does not automatically migrate older workspace or registry data.
+
 Use `mem --help` for the command list and `mem COMMAND --help` for exact options.
-When using `uv`, prefix those commands with `uv run --locked`.
 
 ## Study scenarios
 
 The built-in Coffee Study includes its participant and granted-memory data:
 
 ```sh
-uv run --locked mem init-study demo-study
-uv run --locked mem profile list
-uv run --locked mem contexts
+mem init-study demo-study
+mem profile list
+mem contexts
 ```
 
 `init-study` creates an isolated pair of Profiles and switches to the participant
 Profile. An interactive terminal can also enter its Study shell. The older
 fixture is available explicitly with `mem init-study NAME --scenario legacy`.
 Both scenarios and their required data are included in the installed package.
+New runs default to `~/.memcommit/studies/<Study UID>/participant/` and
+`authority/`, each with its own `.mem/`. The participant shell starts in its
+registered project folder. To choose the parent for future runs:
+
+```sh
+mem config set study_root_dir /path/to/studies
+```
 
 ## Semantic operations
 
@@ -73,10 +130,10 @@ its own runtime or credentials; the Python package does not install those
 services. Inspect the available settings and verify a connection with:
 
 ```sh
-uv run --locked mem provider --help
-uv run --locked mem provider use codex_chatgpt --reasoning low
-uv run --locked mem provider status
-uv run --locked mem provider probe
+mem provider --help
+mem provider use codex_chatgpt --reasoning low
+mem provider status
+mem provider probe
 ```
 
 The example configures an ordinary Profile for Codex and requires an existing
@@ -89,14 +146,16 @@ Profiles use their own fixed provider configuration.
 Apply one instruction to the current Context or an explicit Target:
 
 ```sh
-uv run --locked mem update "Set the cafe opening time to ten." --to demo
-uv run --locked mem update -m instructions:MEMORY_UID --to demo
+mem update "Set the cafe opening time to ten." --to demo
+mem update -m instructions:MEMORY_UID --to demo
 ```
 
 `-m` uses one stored Memory outside the Target as the instruction; it does not
 select a Memory to edit. Update considers the Target's direct contents, without
-expanding embedded or descendant Contexts. Submitting the command plans and
-applies the changes, then prints their diff and completed receipt. Checkpoints,
+expanding embedded or descendant Contexts by default. Use `--recursive` to
+update the Target, lexical descendants, and embedded Contexts together.
+Submitting the command plans and applies the changes, then prints their diff
+and completed receipt. Checkpoints,
 Review, Undo and Redo retain the completed evidence.
 
 The earlier Context-source syntax, endpoint setup screen, Apply confirmation,
@@ -110,9 +169,9 @@ first handles structural conflicts, then reviews semantic issues in the merged
 Context. `--literal` handles the stored items without language-model inference:
 
 ```sh
-uv run --locked mem merge
-uv run --locked mem merge incoming notes --literal
-uv run --locked mem resolve --help
+mem merge
+mem merge incoming notes --literal
+mem resolve --help
 ```
 
 Merge and Resolve require an interactive terminal. Semantic checks can vary
@@ -126,8 +185,8 @@ List the registered scenarios with `mem dev-eval`. Supplying a scenario name
 runs its authored steps in the current Profile and prints their PASS/FAIL results:
 
 ```sh
-uv run --locked mem dev-eval
-uv run --locked mem dev-eval merge_visitor_notices
+mem dev-eval
+mem dev-eval merge_visitor_notices
 ```
 
 `merge_visitor_notices` currently exercises CLI Init and Add for two Contexts,

@@ -25,7 +25,7 @@ from memcommit.adapters.console.commands.resolve.decision_round.screen_content i
     build_decision_view,
 )
 from memcommit.adapters.console.terminal.components.command_wait import run_command_wait
-from memcommit.application.operations.resolve.decisions import ResolveDecision
+from memcommit.application.operations.resolve.review_round.finalize_review_decisions import ResolveDecision
 from memcommit.application.operations.resolve.model import ResolveAnalysis, ResolveError
 
 RESOLVE_PRESENTATION = CompactScreenPresentation(
@@ -45,6 +45,7 @@ def run_resolve_console(
     app_input: Input | None = None,
     app_output: Output | None = None,
     prepare_choice=None,
+    initial_decisions: tuple[ResolveDecision, ...] = (),
 ) -> tuple[ResolveDecision, ...] | None:
     """Collect decisions for one analysis without applying changes."""
 
@@ -59,6 +60,7 @@ def run_resolve_console(
         analysis,
         allow_bulk=allow_bulk,
         prepare_choice=prepare_choice,
+        initial_decisions=initial_decisions,
     )
     action = run_compact_resolution_decisions(
         view=decision_state.view,
@@ -81,6 +83,7 @@ def prepare_decision_state(
     *,
     allow_bulk: bool,
     prepare_choice,
+    initial_decisions: tuple[ResolveDecision, ...] = (),
 ) -> DecisionRoundState:
     """Prepare every initial suggestion preview before opening the screen."""
     view = build_decision_view(analysis)
@@ -122,13 +125,27 @@ def prepare_decision_state(
                 for item in view.items
             ),
         )
-    return DecisionRoundState(
+    state = DecisionRoundState(
         analysis,
         view,
         choice_previews,
         allow_bulk=allow_bulk,
         prepare_choice=prepare_choice,
     )
+    for decision in initial_decisions:
+        if decision.kind == "INTENT":
+            state.submit_intent(decision.issue_uid, decision.intent)
+            if prepare_choice is not None:
+                choice = prepare_choice(decision)
+                choice_previews[f"{decision.issue_uid}:intent"] = (
+                    project_semantic_choice(analysis, choice, include_explanation=False)
+                )
+        else:
+            state.select_choice(
+                decision.issue_uid,
+                f"{decision.issue_uid}:{decision.kind.lower()}",
+            )
+    return state
 
 
 __all__ = ["run_resolve_console"]

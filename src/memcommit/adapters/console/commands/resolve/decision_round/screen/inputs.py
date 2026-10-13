@@ -53,3 +53,4 @@ class CompactScreenPresentation:
     activation_hint: str = "select/apply"
     show_item_navigation: bool = False
     require_all_decisions: bool = True
+    back_label: str | None = None

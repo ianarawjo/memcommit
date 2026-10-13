@@ -10,10 +10,13 @@ from typing import TYPE_CHECKING, Literal
 from memcommit.application.capabilities.resolution.workbench import ResolutionOption
 from memcommit.application.operations.audit.model import (
     QualityAuditSession,
-    QualityAuditSource,
+    AuditTarget,
 )
 
 if TYPE_CHECKING:
+    from memcommit.application.capabilities.context_memory_target import (
+        ContextMemoryTarget,
+    )
     from memcommit.application.operations.update.model import GrantedUpdateTarget
 
 
@@ -49,7 +52,7 @@ class ResolveSourcePrecondition:
 
     The public display name is retained because a granted Context may have a
     different authority-local name. Authority and effect permissions are not
-    carried across this boundary; the Resolve frame port freezes them again.
+    carried across this boundary; the Resolve Store boundary freezes them again.
     """
 
     context_uid: str
@@ -79,7 +82,7 @@ class ResolveSourcePrecondition:
 
 @dataclass(frozen=True)
 class ResolveRequest:
-    """One direct-Memory Audit-resolution request.
+    """One direct or recursive Memory Audit-resolution request.
 
     UPDATE and information-preserving CREATE are ordinary Resolve effects.
     DELETE is an explicit expansion and additionally requires nonempty grounding
@@ -95,8 +98,11 @@ class ResolveRequest:
     allow_delete: bool = False
     guidance: str = ""
     source_precondition: ResolveSourcePrecondition | None = None
+    recursive: bool = False
 
     def __post_init__(self) -> None:
+        if type(self.recursive) is not bool:
+            raise ResolveError("Resolve recursive scope must be boolean.")
         if self.context_name is not None and (
             not isinstance(self.context_name, str) or not self.context_name.strip()
         ):
@@ -142,25 +148,26 @@ class ResolveRequest:
 
 
 @dataclass(frozen=True)
-class FrozenResolveFrame:
+class ResolveTarget:
     """Exact source, target capability, and freshness boundary for Resolve."""
 
     request: ResolveRequest
     display_name: str
-    # Identity and Memory content stay in this snapshot; only access and review
-    # state belong to the frame, so there are no parallel copies to synchronize.
-    source: QualityAuditSource
+    # Audit owns the semantic snapshot. Recursive owner placement stays separate
+    # so a flat analysis result can be returned to real Contexts without moving it.
+    source: AuditTarget
     revision: str
     actionable_uids: tuple[str, ...]
     allowed_effects: tuple[ResolveEffectKind, ...]
     denied_effects: tuple[ResolveEffectKind, ...] = ()
     missing_authority: tuple[str, ...] = ()
     granted_binding: "GrantedUpdateTarget | None" = None
+    memory_target: ContextMemoryTarget | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.request, ResolveRequest):
             raise TypeError("Resolve frame requires a typed request.")
-        if not isinstance(self.source, QualityAuditSource):
+        if not isinstance(self.source, AuditTarget):
             raise ResolveError("Resolve requires a frozen Audit Source.")
         for value, label in (
             (self.display_name, "display name"),
@@ -309,14 +316,14 @@ class ResolveIssue:
 class ResolveAnalysis:
     """One exact Audit and its answerable directions over a frozen revision."""
 
-    frame: FrozenResolveFrame
+    frame: ResolveTarget
     status: ResolveStatus
     audit: QualityAuditSession | None = None
     question: str = ""
     issues: tuple[ResolveIssue, ...] = ()
 
     def __post_init__(self) -> None:
-        if not isinstance(self.frame, FrozenResolveFrame):
+        if not isinstance(self.frame, ResolveTarget):
             raise TypeError("Resolve analysis requires a frozen frame.")
         if self.status not in {
             "NO_ISSUES",
@@ -374,3 +381,4 @@ class ResolveReceipt:
     updated_uids: tuple[str, ...]
     deleted_uids: tuple[str, ...]
     unresolved_issue_uids: tuple[str, ...] = ()
+    checkpoints: tuple[tuple[str, str], ...] = ()

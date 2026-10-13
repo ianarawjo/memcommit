@@ -66,6 +66,8 @@ def _parse(text, format, path, state=None):
 def convert_for_import(files, format, placement, *, single_file=False):
     files = tuple(files)
     format = detect_format(files, format)
+    if placement is None and format == "skill":
+        format = "documents"
     if format == "mem":
         return mem.decode_mem(files), ()
     documents = []
@@ -98,17 +100,18 @@ def convert_for_import(files, format, placement, *, single_file=False):
             text = file.data.decode("utf-8")
         except UnicodeError as error:
             fail("encoding", file.path, f"Expected UTF-8 text: {error}")
-        documents.append(_parse(text, file_format, file.path))
+        documents.append(_parse(text, file_format, file.path, state=DocumentState(file.path, file_format, path_scope="PROFILE") if placement is None else None))
     if not documents:
         fail("empty-input", "input", "No supported documents were selected.")
-    validate_portable_context_name(placement)
+    if placement is not None:
+        validate_portable_context_name(placement)
     package_kind = "skill" if format == "skill" else "documents"
-    root = Context.create(placement)
-    contexts = [root]
-    single = single_file and len(documents) == 1
-    if not single:
+    root = Context.create(placement) if placement is not None else None
+    contexts = [root] if root is not None else []
+    single = single_file and len(documents) == 1 and root is not None
+    if root is not None and not single:
         root.document = DocumentState("package", "md", "package", package_kind)
-    by_name = {root.name: root}
+    by_name = {root.name: root} if root is not None else {}
     for document in documents:
         if single:
             context = root
@@ -119,15 +122,16 @@ def convert_for_import(files, format, placement, *, single_file=False):
             if document.state.role == "skill_metadata":
                 segments.append("metadata")
             for depth in range(1, len(segments)):
-                parent_name = placement + "/" + "/".join(segments[:depth])
+                parent_name = (placement + "/" if placement else "") + "/".join(segments[:depth])
                 if parent_name not in by_name:
                     parent = Context.create(parent_name)
                     parent.document = DocumentState(
-                        "/".join(segments[:depth]), "md", "package", package_kind
+                        "/".join(PurePosixPath(document.state.path).parts[:depth]) if placement is None else "/".join(segments[:depth]), "md", "package", package_kind,
+                        path_scope="PROFILE" if placement is None else "PACKAGE"
                     )
                     contexts.append(parent)
                     by_name[parent_name] = parent
-            name = placement + "/" + "/".join(segments)
+            name = (placement + "/" if placement else "") + "/".join(segments)
             if name in by_name:
                 fail(
                     "context-collision",
@@ -142,10 +146,13 @@ def convert_for_import(files, format, placement, *, single_file=False):
             context.add(block.text)
     # Explicit Context membership makes the package navigable without inventing
     # additional original-file mapping records. Lexical recursion remains opt-in.
-    for context in contexts[1:]:
-        parent_name = context.name.rsplit("/", 1)[0]
-        parent = by_name.get(parent_name, root)
-        parent.add(context)
+    for context in contexts:
+        if context is root:
+            continue
+        parent_name = context.name.rsplit("/", 1)[0] if "/" in context.name else None
+        parent = by_name.get(parent_name) if parent_name else root
+        if parent is not None:
+            parent.add(context)
     attached_data = {}
     for file in attachments:
         digest = hashlib.sha256(file.data).hexdigest()
@@ -174,7 +181,7 @@ def _document_from_context(context, state):
         return yaml.parse_yaml(text, state=state)
     blocks = []
     for text in texts:
-        blocks.extend(_parse(text, state.format, state.path).blocks)
+        blocks.extend(_parse(text, state.format, state.path, state=state).blocks)
     return Document(state, tuple(blocks))
 
 
@@ -185,6 +192,7 @@ def convert_for_export(
     *,
     skill_name=None,
     description=None,
+    allow_empty_package=False,
 ):
     format = _ALIASES.get(format, format)
     if format == "mem":
@@ -323,7 +331,7 @@ def convert_for_export(
             else renderer(document, spacing_policy)
         )
         files.append(OutputFile(document.state.path, text.encode("utf-8")))
-    if not files:
+    if not files and not (allow_empty_package and all(context.document and context.document.role == "package" for context in contexts)):
         fail(
             "empty-export",
             root.name,

@@ -1,11 +1,10 @@
-"""Locate workspace data without depending on the Store or Profile registry."""
+"""Locate common application state independently of project Stores."""
 
 from contextlib import contextmanager
 from dataclasses import dataclass
 import fcntl
 import json
 import os
-import sys
 from pathlib import Path
 import tempfile
 
@@ -18,11 +17,8 @@ def config_file() -> Path:
     location = os.environ.get("MEMCOMMIT_CONFIG_DIR")
     if location:
         base = Path(location).expanduser()
-    elif sys.platform == "darwin":
-        # Use the user-owned macOS settings directory, independently of data storage.
-        base = Path.home() / "Library" / "Application Support" / "memcommit"
     else:
-        base = Path.home() / ".config" / "memcommit"
+        base = Path.home() / ".memcommit"
     return base.absolute() / "config.json"
 
 
@@ -58,68 +54,36 @@ def write_configuration(value: dict, path: Path | None = None) -> None:
         Path(temporary).unlink(missing_ok=True)
 
 
-def canonical_workspace(value: str) -> Path:
-    if not isinstance(value, str) or not value.strip():
-        raise WorkspaceError("workspace_dir must be a nonempty directory path.")
-    return Path(value).expanduser().resolve()
-
-
 @dataclass(frozen=True)
 class WorkspacePaths:
     workspace_dir: Path
 
-    @property
-    def store_dir(self) -> Path:
-        return self.workspace_dir / ".mem"
-
-    @property
-    def contexts_dir(self) -> Path:
-        return self.workspace_dir / "contexts"
 
 
 def workspace_paths() -> WorkspacePaths:
-    value = os.environ.get("MEMCOMMIT_WORKSPACE_DIR")
-    if value is None:
-        value = read_configuration().get(
-            "workspace_dir", str(Path.home() / "memcommit")
-        )
-    return WorkspacePaths(canonical_workspace(value))
-
-
-def legacy_locations() -> tuple[Path, Path]:
-    return Path.home() / ".mem", Path.home() / ".mem-profiles"
-
-
-def needs_legacy_migration() -> bool:
-    return (
-        "MEMCOMMIT_WORKSPACE_DIR" not in os.environ
-        and "workspace_dir" not in read_configuration()
-        and any(path.exists() or path.is_symlink() for path in legacy_locations())
-    )
+    """The application-owned home; project locations live in the registry."""
+    return WorkspacePaths(config_file().parent.resolve())
 
 
 def require_workspace_ready() -> None:
-    if needs_legacy_migration():
-        raise WorkspaceError(
-            "Existing ~/.mem or ~/.mem-profiles data needs migration. Run "
-            "mem config set workspace_dir ~/memcommit (or your chosen directory). "
-            "The original data will be retained."
-        )
+    path = config_file().parent
+    if path.is_symlink() or (path.exists() and not path.is_dir()):
+        raise WorkspaceError(f"Application home is invalid: {path}")
 
 
 def ensure_workspace() -> WorkspacePaths:
     paths = workspace_paths()
-    for path in (paths.workspace_dir, paths.store_dir, paths.contexts_dir):
-        if path.is_symlink() or (path.exists() and not path.is_dir()):
-            raise WorkspaceError(f"Workspace directory is invalid: {path}")
-        path.mkdir(parents=True, exist_ok=True, mode=0o700)
+    path = paths.workspace_dir
+    if path.is_symlink() or (path.exists() and not path.is_dir()):
+        raise WorkspaceError(f"Application home is invalid: {path}")
+    path.mkdir(parents=True, exist_ok=True, mode=0o700)
     return paths
 
 
 @contextmanager
 def _bootstrap_lock(name: str, *, exclusive: bool):
-    # Keep the lock outside the moving tree. CLI operations hold a shared lease;
-    # relocation cannot copy a workspace that another current CLI is modifying.
+    # Keep the lease in the common app home. A project move must exclude
+    # concurrent CLI writes even when its source and target are on other devices.
     path = config_file().parent / name
     path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     flags = os.O_CREAT | os.O_RDWR | getattr(os, "O_NOFOLLOW", 0)

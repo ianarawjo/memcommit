@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
+from pathlib import Path
 
 from prompt_toolkit.filters import Condition
 from prompt_toolkit.layout import (
@@ -173,6 +174,10 @@ class ProfilePickerView:
             "RENAME_PROFILE": self._name_field("Profile"),
             "RENAME_STUDY": self._name_field("Study"),
         }
+        self.folder_field = ExactNameFieldControl.create(
+            ExactNameFieldView(value="", label="PROJECT FOLDER", state="", detail="Tab moves between fields · Enter reviews the exact command", value_label="Project folder", strip_candidate=False),
+            input_name="profile-picker-project-folder", frame_style="class:profile-create-field")
+        self.restoring_fields = False
         self.layout = self._layout()
         self.style = merge_styles(
             [
@@ -227,7 +232,13 @@ class ProfilePickerView:
             self.layout.focus(self.control)
         else:
             field = self.active_name_field()
-            field.set_text(edit.value)
+            self.restoring_fields = True
+            try:
+                field.set_text(edit.value)
+                if edit.kind == "CREATE_PROFILE":
+                    self.folder_field.set_text(edit.root_dir or str(Path.cwd()))
+            finally:
+                self.restoring_fields = False
             self.layout.focus(field.input)
 
     def render_content(self):
@@ -295,7 +306,7 @@ class ProfilePickerView:
             )
         message = self.state.status
         if self.state.edit is not None:
-            prefix = " Ctrl-U clear  Enter review exact command  Esc back"
+            prefix = " Tab next  Shift-Tab previous  Ctrl-U clear  Enter review exact command  Esc back"
             if not message:
                 return prefix
             message_style = (
@@ -357,6 +368,7 @@ class ProfilePickerView:
                     Window(height=1, char="─"),
                     options_window,
                     *name_containers,
+                    ConditionalContainer(self.folder_field.frame, filter=self.create_mode),
                     Window(height=1, char="─"),
                     footer,
                 ]

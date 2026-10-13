@@ -1,1 +1,0 @@
-"""Conflicts resolution policy."""

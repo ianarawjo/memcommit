@@ -77,6 +77,13 @@ def operation_record_identity(
                 if record.get("version") == 2
                 else f"checkpoint-set:{operation_uid}"
             )
+    if command == "resolve" and args.get("recursive") is True:
+        operation_uid = args.get("resolve_operation_uid")
+        plan_digest = args.get("update_plan_digest")
+        if all(
+            isinstance(value, str) and value for value in (operation_uid, plan_digest)
+        ):
+            return f"resolve:{operation_uid}:{plan_digest}"
     if command == "update":
         session_uid = args.get("update_operation_uid", args.get("update_session_uid"))
         operation_digest = args.get("operation_digest")

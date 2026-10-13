@@ -31,6 +31,10 @@ from .model import (
 from .model.instruction import UpdateInstruction, UpdateRequest
 from .model.planning import UpdateProvider
 from .publication import publish_update
+from memcommit.application.capabilities.context_scope_loading import (
+    load_mutable_context_scope,
+    walk_context_owners,
+)
 
 
 @dataclass(frozen=True)
@@ -95,7 +99,11 @@ def prepare_instruction_update(
         required_permission="READ",
     ).value
     target_authorization = authorize_context_use(target_access, ContextUse.READ)
-    target = _load(target_access, store)
+    target = (
+        load_mutable_context_scope(store, target_access)
+        if request.recursive
+        else _load(target_access, store)
+    )
     source_access = None
     source_memory_uid = None
     if request.memory is not None:
@@ -106,7 +114,7 @@ def prepare_instruction_update(
         )
         # Compare identities, not public spelling: another Grant alias must not
         # make a Memory inside the Target look like an independent instruction.
-        if source.uid == target.uid:
+        if source.uid in {owner.uid for owner in walk_context_owners(target)}:
             raise UpdateError(
                 "--memory must select a Memory outside the Target Context."
             )
@@ -129,6 +137,7 @@ def prepare_instruction_update(
         if target_access.is_granted
         else None,
         instruction=instruction,
+        target_include_descendants=request.recursive,
     )
     return PreparedInstructionUpdate(
         inputs, source, target, target_authorization.allowed
@@ -152,5 +161,6 @@ def run_instruction_update(
         granted_target=inputs.granted_target,
         allowed_target_uses=prepared.allowed_target_uses,
         instruction=inputs.instruction,
+        target_include_descendants=inputs.target_include_descendants,
     )
     return publish_update(store, inputs, plan)

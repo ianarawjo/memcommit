@@ -66,3 +66,49 @@ def load_context_scope(
         root.add(descendant)
         known_uids.update(_context_uids(descendant))
     return root
+
+
+def walk_context_owners(root: Context) -> tuple[Context, ...]:
+    """Keep one occurrence of every real owner in a loaded target graph."""
+    owners = []
+    seen = set()
+
+    def visit(context):
+        if context.uid in seen:
+            return
+        seen.add(context.uid)
+        owners.append(context)
+        for item in context.iter_items():
+            if isinstance(item, Context):
+                visit(item)
+
+    visit(root)
+    return tuple(owners)
+
+
+def load_mutable_context_scope(active_store, root_access, *, registry=None) -> Context:
+    """Load recursive targets through their exact readable namespace bindings."""
+    from memcommit.application.context_access.readable_contexts import (
+        freeze_readable_context_catalog,
+    )
+
+    catalog = freeze_readable_context_catalog(
+        active_store, root_access, include_query_routes=False, registry=registry
+    )
+    root = load_context_scope(
+        catalog, root_access.access_name, include_descendants=True
+    )
+    for owner in walk_context_owners(root):
+        access = catalog.access_for(owner.name)
+        # Readable breadth can cross authorities; the existing multi-owner
+        # publisher writes under one Store and one exact Target Grant.
+        if (
+            access.store.store_dir != root_access.store.store_dir
+            or access.is_granted != root_access.is_granted
+        ):
+            raise ValueError(
+                "Recursive mutation cannot span different Context authorities."
+            )
+        if access.is_granted and access.view.grant.uid != root_access.view.grant.uid:
+            raise ValueError("Recursive mutation requires one frozen Target Grant.")
+    return root

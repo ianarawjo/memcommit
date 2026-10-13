@@ -50,8 +50,16 @@ _OPERATIONS = (
         "Export current Context content as documents, an Agent Skill, or mem records.",
         "Context -> validated external files + receipt",
         ExecutionKind.DETERMINISTIC,
-        "Creates a new output directory; does not change Context content",
+        "Adds or replaces generated files; preserves unrelated destination files and Context content",
         "Current or explicit Context; -r includes lexical descendants",
+    ),
+    _operation(
+        "sync",
+        "Match owned Context documents to external files, once or automatically after commands.",
+        "Owned Context scope -> checked Export publication + Sync receipt",
+        ExecutionKind.DETERMINISTIC,
+        "Writes document files and Sync records; --always toggles automatic synchronization",
+        "Current or explicit Context; -r includes descendants; -a/--all selects the current Profile",
     ),
     _operation(
         "add",

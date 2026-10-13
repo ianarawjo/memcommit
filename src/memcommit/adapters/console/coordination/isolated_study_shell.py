@@ -57,13 +57,14 @@ class IsolatedStudyShellError(RuntimeError):
 class IsolatedStudyProfile:
     uid: str
     name: str
+    root_dir: str | None = None
 
 
 def _active_study_profile() -> IsolatedStudyProfile | None:
     profile = load_profile_registry().active
     if study_run_identity(profile) is None:
         return None
-    return IsolatedStudyProfile(profile.uid, profile.name)
+    return IsolatedStudyProfile(profile.uid, profile.name, profile.root_dir)
 
 
 def _interactive_terminal() -> bool:
@@ -221,7 +222,7 @@ def run_isolated_study_shell(
                 # -d skips global rc files; the private .zshrc supplies our
                 # handoff hook. -f would also skip that owned startup file.
                 result = runner(
-                    (zsh_path, "-d", "-i"), check=False, env=child_environment
+                    (zsh_path, "-d", "-i"), check=False, env=child_environment, cwd=profile.root_dir
                 )
             except KeyboardInterrupt:
                 return 130

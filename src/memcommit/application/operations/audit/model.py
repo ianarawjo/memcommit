@@ -163,7 +163,7 @@ def _copy_source_context(context: Context) -> Context:
 
 
 @dataclass(frozen=True)
-class QualityAuditSource:
+class AuditTarget:
     """Detached direct Context; callers receive copies, never its owned snapshot."""
 
     context_uid: str
@@ -196,7 +196,7 @@ class QualityAuditSource:
         object.__setattr__(self, "_context", _copy_source_context(context))
 
     @classmethod
-    def from_context(cls, ctx: Context) -> "QualityAuditSource":
+    def from_context(cls, ctx: Context) -> "AuditTarget":
         return cls(ctx.uid, ctx.name, context_record_digest(ctx), ctx)
 
     def context(self) -> Context:
@@ -239,7 +239,7 @@ class QualityAuditSource:
         }
 
     @classmethod
-    def from_dict(cls, value: object) -> "QualityAuditSource":
+    def from_dict(cls, value: object) -> "AuditTarget":
         data = _exact_dict(value, {"context", "context_digest"}, "Audit Source")
         try:
             record = data["context"]
@@ -408,7 +408,7 @@ def _report_to_dict(
 
 
 def _bind_report(
-    kind: QualityAuditKind, report: QualityAuditReport, source: QualityAuditSource
+    kind: QualityAuditKind, report: QualityAuditReport, source: AuditTarget
 ) -> QualityAuditReport:
     """Validate typed findings and bind immutable leaves to the frozen Source."""
     types = {
@@ -658,7 +658,7 @@ class QualityAuditSession:
 
     uid: str
     created_at: str
-    source: QualityAuditSource
+    source: AuditTarget
     checks: tuple[QualityAuditCheck, ...]
     requested_checks: tuple[AuditCheckKind, ...]
 
@@ -782,7 +782,7 @@ class QualityAuditSession:
             keys,
             "Audit session",
         )
-        source = QualityAuditSource.from_dict(data["source"])
+        source = AuditTarget.from_dict(data["source"])
         source_by_uid = {memory.uid: memory for memory in source.memories}
         raw_checks = data["checks"]
         if not isinstance(raw_checks, list):

@@ -174,6 +174,7 @@ def render_profile_create_receipt(result) -> None:
     )
     echo_text("Profile UID: {uid}", uid=result.profile.uid)
     echo_text("Store: {path}", path=result.inspection.root)
+    typer.echo(f"Project folder: {result.profile.root_dir}")
     typer.echo("Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted")
     echo_text("Active Profile unchanged: {name}", name=result.active_profile_name)
     echo_text("Use it with: mem profile use {name}", name=result.profile.name)

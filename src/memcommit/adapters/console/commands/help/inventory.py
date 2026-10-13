@@ -496,6 +496,14 @@ COMMAND_FORMS = {
         "mem import memory --from [memory.json] --into [target_context] (native Memory JSON)",
         "mem import [profile_name] --from [store] (legacy clean-baseline Profile spelling)",
     ),
+    "sync": (
+        "mem sync [context] (one document; defaults to current Context)",
+        "mem sync [context] -r (Context and lexical descendants)",
+        "mem sync -a (every owned Context in the current Profile)",
+        "mem sync [context] -r --always (toggle automatic Sync; mixed selection enables all)",
+        "mem sync [context] --to [directory] (explicitly connect or reconnect below this base)",
+        "mem profile config set root_dir [directory] (move this Profile and reconnect Sync)",
+    ),
     "init": (
         "mem init (edit a suggested fresh Context name, create, and switch)",
         "mem init [context] (create and switch to one Context)",

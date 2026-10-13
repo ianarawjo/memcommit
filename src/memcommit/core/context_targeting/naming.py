@@ -12,7 +12,7 @@ import re
 from memcommit.core.context_targeting.uid_locator import is_memory_uid_selector
 
 
-_PORTABLE_CONTEXT_SEGMENT = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\Z")
+_PORTABLE_CONTEXT_SEGMENT = re.compile(r"[.A-Za-z0-9][A-Za-z0-9._-]*\Z")
 _WINDOWS_RESERVED_SEGMENT_ROOTS = frozenset(
     {
         "aux",
@@ -51,8 +51,13 @@ def validate_portable_context_name(value: object) -> str:
         if _PORTABLE_CONTEXT_SEGMENT.fullmatch(part) is None:
             raise ValueError(
                 f"Invalid context name {value!r}: not portable; segment {part!r} "
-                "must start with an ASCII letter or digit and contain only "
+                "must start with an ASCII letter, digit, or named dot prefix and contain only "
                 "ASCII letters, digits, '.', '_', or '-'."
+            )
+        if part in {".", ".."}:
+            raise ValueError(
+                f"Invalid context name {value!r}: navigation segment {part!r} "
+                "cannot be a durable Context name."
             )
         folded = part.casefold()
         if folded in RESERVED_CONTEXT_SEGMENTS:

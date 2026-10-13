@@ -16,7 +16,6 @@ from memcommit.application.operations.query.reference_document import (
 )
 from memcommit.application.operations.query.evidence import (
     compact_artifact_references,
-    compact_reference_content,
     visible_result_evidence,
 )
 from memcommit.application.operations.query.answer import (
@@ -172,11 +171,9 @@ def run_ordinary_query(
         raise ValueError(str(error)) from error
     if identity is not None:
         selected_candidates = identity.values
-        evidence = compact_reference_content(
-            compact_artifact_references(
-                visible_result_evidence(selected_candidates),
-                selected_candidates,
-            )
+        evidence = compact_artifact_references(
+            visible_result_evidence(selected_candidates),
+            selected_candidates,
         )
         references = tuple(
             NumberedOrdinaryQueryReference(index, item)
@@ -220,9 +217,7 @@ def run_ordinary_query(
         )
 
     reference_document = build_ordinary_query_reference_document(
-        compact_reference_content(
-            compact_artifact_references(evidence, frozen.candidates)
-        ),
+        compact_artifact_references(evidence, frozen.candidates),
         answer,
     )
     return OrdinaryQueryResponse(

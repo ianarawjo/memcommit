@@ -102,7 +102,12 @@ class MemoryStoreListSource:
             catalog=catalog,
             context_names=context_names,
             readable_uids=readable_uids,
+            sync_statuses=self.sync_statuses(),
         )
+
+    def sync_statuses(self):
+        from memcommit.application.operations.mem_sync.automatic.status import context_sync_statuses
+        return context_sync_statuses(self._store)
 
 
 def execute_list(store: MemoryStore, request: ListRequest) -> ListSelection:

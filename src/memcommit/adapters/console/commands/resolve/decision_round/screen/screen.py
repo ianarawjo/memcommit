@@ -262,6 +262,7 @@ def run_compact_resolution_decisions(
         decisions.bulk_options,
         presentation.show_item_navigation,
         require_all_decisions=presentation.require_all_decisions,
+        back_label=presentation.back_label,
     )
     state.initialize_selection()
     response = decisions.intent

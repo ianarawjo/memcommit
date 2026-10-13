@@ -9,6 +9,7 @@ from memcommit.application.operations.contexts.runtime import load_contexts_cata
 from memcommit.application.operations.profile.config import ProfileConfigError
 from memcommit.application.operations.profile.model import ProfileError
 from memcommit.persistence.store import MemoryStore
+from memcommit.adapters.console.terminal.components.context_sync_status import context_sync_status_text
 
 
 _OWNED_PREFIX = "       "
@@ -38,6 +39,7 @@ def _owned_context_line(entry: ContextCatalogEntry) -> str:
     )
     if not entry.portable_name:
         line += "  LEGACY NAME · MIGRATION REQUIRED"
+    line += context_sync_status_text(entry.sync_status)
     return line
 
 

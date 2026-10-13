@@ -498,102 +498,74 @@ def _read_granted_access_names(
     return frozenset(result)
 
 
-def _prepare_profile_deletion_batch(
-    profiles: tuple[ProfileEntry, ...],
-) -> Path:
-    """Move exact managed stores aside before publishing their tombstones.
-
-    The move and registry replacement are separate filesystem operations. A
-    private same-filesystem batch makes the pre-publication half reversible:
-    if the registry write fails, every canonical UID path can be restored
-    before the registry lock is released. Once the registry is published, the
-    batch is recursively destroyed and no mem recovery route remains.
-    """
-
-    stores = profile_stores_dir()
-    batch = stores / f".permanent-profile-removal-{uuid.uuid4().hex}"
+def _prepare_profile_deletion_batch(profiles: tuple[ProfileEntry, ...]) -> Path:
+    """Prepare reversible sibling moves, including projects on other devices."""
+    from memcommit.application.operations.profile.project_root import validate_profile_marker
+    batch = profile_stores_dir() / f".permanent-profile-removal-{uuid.uuid4().hex}"
     batch.mkdir(mode=0o700)
-    moved: list[ProfileEntry] = []
+    entries = []
     try:
         for profile in profiles:
             source = profile_store_dir(profile)
-            if (
-                profile.kind != "MANAGED"
-                or source.parent != stores
-                or source.name != profile.uid
-                or source.is_symlink()
-                or not source.is_dir()
-            ):
-                raise ProfileError(
-                    f"Profile {profile.name!r} store cannot be permanently deleted."
-                )
-            os.replace(source, batch / profile.uid)
-            moved.append(profile)
+            if profile.kind != "MANAGED" or source.is_symlink() or not source.is_dir():
+                raise ProfileError(f"Profile {profile.name!r} store cannot be deleted.")
+            validate_profile_marker(profile)
+            staged = source.parent / f".mem-removal-{uuid.uuid4().hex}"
+            entries.append({"uid": profile.uid, "source": str(source), "staged": str(staged)})
+        _write_json_file(batch / "moves.json", entries)
+        for entry in entries:
+            os.replace(entry["source"], entry["staged"])
+            _fsync_directory(Path(entry["source"]).parent)
         _fsync_directory(batch)
-        _fsync_directory(stores)
         return batch
-    except Exception as error:
-        rollback_error: Exception | None = None
-        for profile in reversed(moved):
-            staged = batch / profile.uid
-            destination = profile_store_dir(profile)
-            try:
-                if staged.exists() and not destination.exists():
-                    os.replace(staged, destination)
-            except Exception as candidate_error:  # pragma: no cover - fatal FS fault
-                rollback_error = candidate_error
-        try:
-            if batch.exists() and not batch.is_symlink():
-                batch.rmdir()
-            _fsync_directory(stores)
-        except Exception as candidate_error:  # pragma: no cover - fatal FS fault
-            rollback_error = rollback_error or candidate_error
-        if rollback_error is not None:
-            raise ProfileError(
-                "Profile deletion preparation rollback failed."
-            ) from rollback_error
-        if isinstance(error, ProfileError):
-            raise
-        raise ProfileError("Profile deletion could not be prepared.") from error
+    except Exception:
+        _rollback_profile_deletion_batch(batch, profiles)
+        raise
 
 
-def _rollback_profile_deletion_batch(
-    batch: Path,
-    profiles: tuple[ProfileEntry, ...],
-) -> None:
-    """Restore a prepared batch after a registry write did not publish."""
+def _write_json_file(path: Path, value) -> None:
+    with path.open("x", encoding="utf-8") as stream:
+        json.dump(value, stream)
+        stream.flush()
+        os.fsync(stream.fileno())
 
-    stores = profile_stores_dir()
-    try:
-        for profile in reversed(profiles):
-            staged = batch / profile.uid
-            destination = profile_store_dir(profile)
-            if staged.exists():
-                if destination.exists() or destination.is_symlink():
-                    raise ProfileError(
-                        f"Profile {profile.name!r} rollback destination is occupied."
-                    )
-                os.replace(staged, destination)
-        batch.rmdir()
-        _fsync_directory(stores)
-    except Exception as error:
-        raise ProfileError("Profile deletion rollback failed.") from error
+
+def _deletion_moves(batch: Path):
+    path = batch / "moves.json"
+    if path.is_symlink():
+        raise ProfileError("Unsafe deletion manifest.")
+    return json.loads(path.read_text()) if path.exists() else []
+
+
+def _rollback_profile_deletion_batch(batch: Path, profiles: tuple[ProfileEntry, ...]) -> None:
+    expected = {p.uid: profile_store_dir(p) for p in profiles}
+    for entry in reversed(_deletion_moves(batch)):
+        source, staged = Path(entry["source"]), Path(entry["staged"])
+        if expected.get(entry["uid"]) != source or staged.parent != source.parent:
+            raise ProfileError("Invalid deletion rollback boundary.")
+        if staged.exists():
+            if source.exists() or source.is_symlink():
+                raise ProfileError("Deletion rollback destination is occupied.")
+            os.replace(staged, source)
+            _fsync_directory(source.parent)
+    (batch / "moves.json").unlink(missing_ok=True)
+    batch.rmdir()
 
 
 def _destroy_profile_deletion_batch(batch: Path) -> None:
-    """Permanently erase a registry-detached batch, including checkpoints."""
-
-    stores = profile_stores_dir()
     try:
-        if batch.is_symlink() or not batch.is_dir():
-            raise ProfileError("Profile deletion batch is missing or unsafe.")
-        shutil.rmtree(batch)
-        _fsync_directory(stores)
+        for entry in _deletion_moves(batch):
+            source, staged = Path(entry["source"]), Path(entry["staged"])
+            if source.name != ".mem" or staged.parent != source.parent or not staged.name.startswith(".mem-removal-") or staged.is_symlink():
+                raise ProfileError("Unsafe deletion cleanup boundary.")
+            if staged.exists():
+                shutil.rmtree(staged)
+                _fsync_directory(source.parent)
+        (batch / "moves.json").unlink(missing_ok=True)
+        batch.rmdir()
+        _fsync_directory(batch.parent)
     except Exception as error:
-        raise ProfileError(
-            "Profile identities were removed, but permanent store cleanup "
-            "did not finish. No mem recovery route is available."
-        ) from error
+        raise ProfileError("Profile was removed, but private Store cleanup did not finish.") from error
 
 
 def _publish_permanent_removal(

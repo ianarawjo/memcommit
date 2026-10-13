@@ -8,6 +8,7 @@ from memcommit.operation_catalog.translations.model import (
 )
 
 TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
+    "sync": LocalizedOperationCopy('Өөрийн Context баримтыг гадаад файлтай нэг удаа эсвэл команд дууссаны дараа автоматаар синхрончилно.', 'Context нэртэй тохирох гадаад баримтын бүтцийг хадгалж, сонгосон хүрээний автомат Sync-ийг асаах эсвэл унтраах үед.'),
     "export": LocalizedOperationCopy(
         "Context-ийн одоогийн агуулгыг баримт бичиг, Agent Skill эсвэл mem хэлбэрээр экспортлоно.",
         "Засварласан санах ойн баримт бичгийг mem-ээс гадуур ашиглах файл болгон гаргахад хэрэглэнэ.",

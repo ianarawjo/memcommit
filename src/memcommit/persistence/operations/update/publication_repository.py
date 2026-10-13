@@ -79,10 +79,25 @@ def _load_endpoint(
     include_descendants: bool,
     registry,
     direct: bool = False,
+    mutable_scope: bool = False,
 ) -> Context:
     store = _reader(active_store, access, registry=registry)
     if direct:
         return store.load_direct(binding.access_name if binding is not None else name)
+    if mutable_scope:
+        from memcommit.application.capabilities.context_scope_loading import (
+            load_mutable_context_scope,
+        )
+        from memcommit.application.context_access.access import resolve_context_access
+
+        root_access = access or resolve_context_access(
+            active_store,
+            name,
+            current_name=None,
+            required_permission="READ",
+            registry=registry,
+        )
+        return load_mutable_context_scope(active_store, root_access, registry=registry)
     return load_context_scope(
         store,
         binding.access_name if binding is not None else name,
@@ -150,7 +165,9 @@ def _apply_locked(
         target_binding,
         inputs.target_name,
         include_descendants=inputs.target_include_descendants,
-        direct=inputs.instruction is not None,
+        direct=inputs.instruction is not None and not inputs.target_include_descendants,
+        mutable_scope=inputs.instruction is not None
+        and inputs.target_include_descendants,
         registry=registry,
     )
     if not update_inputs_match(
@@ -250,7 +267,10 @@ def _apply_locked(
             target_binding,
             inputs.target_name,
             include_descendants=inputs.target_include_descendants,
-            direct=inputs.instruction is not None,
+            direct=inputs.instruction is not None
+            and not inputs.target_include_descendants,
+            mutable_scope=inputs.instruction is not None
+            and inputs.target_include_descendants,
             registry=registry,
         )
         inputs_after = collect_update_inputs(
@@ -258,6 +278,7 @@ def _apply_locked(
             target_after,
             source_memory_selector=inputs.source_memory_uid,
             instruction=inputs.instruction,
+            target_include_descendants=inputs.target_include_descendants,
         )
         checkpoint_by_public = {
             public_name: checkpoint_uid

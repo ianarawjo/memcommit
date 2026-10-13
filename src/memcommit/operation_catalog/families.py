@@ -144,6 +144,7 @@ OPERATION_FAMILIES = (
             "branch",
             "import",
             "export",
+            "sync",
             "reference",
             "embed",
         ),

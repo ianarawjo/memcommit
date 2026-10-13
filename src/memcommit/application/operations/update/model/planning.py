@@ -711,6 +711,7 @@ def plan_update(
         source_memory_selector=source_memory_selector,
         target_memory_selector=target_memory_selector,
         instruction=instruction,
+        target_include_descendants=target_include_descendants,
     )
     if not inputs.source_candidates:
         raise UpdateError(f"Source Context '{source.name}' has no readable Memories.")

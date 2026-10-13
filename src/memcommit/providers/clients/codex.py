@@ -32,12 +32,15 @@ _CODEX_MODEL_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:/+-]{0,255}\Z")
 
 def _default_codex_candidates() -> list[Path]:
     """Return likely Codex executables without trusting a shell."""
-    candidates = [
+    on_path = shutil.which("codex")
+    candidates = (
+        [Path(on_path)] if on_path else []
+    ) + [
+        # Prefer the terminal's installed CLI after validating --version; the
+        # bundled CLI remains a fallback for a stale or broken PATH shim.
+        Path("/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex"),
         Path("/Applications/ChatGPT.app/Contents/Resources/codex"),
     ]
-    on_path = shutil.which("codex")
-    if on_path:
-        candidates.append(Path(on_path))
     candidates.append(Path.home() / ".local" / "bin" / "codex")
 
     unique: list[Path] = []

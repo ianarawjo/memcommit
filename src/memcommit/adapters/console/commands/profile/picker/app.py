@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import sys
+from pathlib import Path
 from collections.abc import Callable, Sequence
 from dataclasses import replace
 
@@ -78,12 +79,38 @@ def choose_profile(
     bindings = KeyBindings()
     name_mode = (view.create_mode | view.rename_mode) & Condition(
         lambda: state.edit is not None
-        and view.layout.has_focus(view.active_name_field().input)
+        and (view.layout.has_focus(view.active_name_field().input) or (state.edit.kind == "CREATE_PROFILE" and view.layout.has_focus(view.folder_field.input)))
     )
 
     def clear_stale_name_error(_buffer) -> None:
         if state.edit is not None:
             state.notify()
+
+    def mark_name_edited(_buffer):
+        if state.edit is not None and state.edit.kind == "CREATE_PROFILE" and not view.restoring_fields:
+            state.create_name_was_edited = True
+
+    view.name_fields["CREATE_PROFILE"].input.buffer.on_text_changed += mark_name_edited
+
+    def update_folder_suggestion(buffer):
+        if state.edit is None or state.edit.kind != "CREATE_PROFILE" or view.restoring_fields:
+            return
+        state.notify()
+        if not state.create_name_was_edited:
+            view.restoring_fields = True
+            try:
+                view.name_fields["CREATE_PROFILE"].set_text(Path(buffer.text).expanduser().name)
+            finally:
+                view.restoring_fields = False
+
+    view.folder_field.input.buffer.on_text_changed += update_folder_suggestion
+    from memcommit.adapters.console.terminal.components.focus.controller import FocusSurface, SurfaceFocusController, bind_surface_navigation
+    controller = SurfaceFocusController(lambda: (
+        (FocusSurface("name", view.active_name_field().input), FocusSurface("folder", view.folder_field.input))
+        if state.edit is not None and state.edit.kind == "CREATE_PROFILE"
+        else (FocusSurface("main", view.control),)
+    ))
+    bind_surface_navigation(bindings, controller, vertical=False, activate=False)
 
     for field in view.name_fields.values():
         field.input.buffer.on_text_changed += clear_stale_name_error
@@ -128,7 +155,7 @@ def choose_profile(
     @bindings.add("enter", filter=name_mode, eager=True)
     def _review_name(event) -> None:
         try:
-            state.review_name(view.active_name_field().validate_candidate())
+            state.review_name(view.active_name_field().validate_candidate(), view.folder_field.validate_candidate() if state.edit.kind == "CREATE_PROFILE" else None)
         except (ProfileConfigError, TypeError, ValueError) as error:
             state.notify(display_escape_text(str(error)), error=True)
             event.app.invalidate()

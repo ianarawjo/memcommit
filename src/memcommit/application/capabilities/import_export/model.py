@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
 
 from memcommit.core.context import Context
 from memcommit.core.document import DocumentState
@@ -58,6 +59,24 @@ class OutputFile:
     path: str
     data: bytes
     attached: bool = False
+
+
+@dataclass(frozen=True)
+class ExportFileEffect:
+    path: str
+    action: str
+    attached: bool = False
+
+
+@dataclass(frozen=True)
+class ExportPlan:
+    destination: Path
+    files: tuple[OutputFile, ...]
+    removals: tuple[str, ...]
+    directories: tuple[str, ...]
+    previous_hashes: tuple[tuple[str, str | None], ...]
+    effects: tuple[ExportFileEffect, ...]
+    removed_directories: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)

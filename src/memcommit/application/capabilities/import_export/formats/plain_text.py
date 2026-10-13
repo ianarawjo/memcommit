@@ -9,6 +9,8 @@ from memcommit.core.document import DocumentState
 
 
 def parse_text(text: str, *, path="document.txt", state=None) -> Document:
+    if state is not None and state.path_scope == "PROFILE":
+        return Document(state, (DocumentBlock("text", text),) if text else ())
     parts = re.split(r"(?:\r?\n)[ \t]*(?:\r?\n)(?:[ \t]*\r?\n)*", text)
     blocks = tuple(DocumentBlock("text", part) for part in parts if part)
     return Document(state or DocumentState(path, "txt"), blocks)

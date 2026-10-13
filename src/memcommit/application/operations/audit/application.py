@@ -26,7 +26,7 @@ from memcommit.application.operations.audit.model import (
     QualityAuditProvenance,
     QualityAuditReport,
     QualityAuditSession,
-    QualityAuditSource,
+    AuditTarget,
 )
 from memcommit.application.operations.audit.repository import AuditRecordRepository
 from memcommit.application.operations.duplicates.find_duplicates.application import (
@@ -91,7 +91,7 @@ def create_quality_audit(
 ) -> QualityAuditSession:
     """Create and fully validate one completed Audit snapshot."""
 
-    source = QualityAuditSource.from_context(ctx)
+    source = AuditTarget.from_context(ctx)
     return QualityAuditSession(
         uid=uid or str(uuid.uuid4()),
         created_at=created_at
@@ -146,7 +146,7 @@ def find_current_quality_audit(
 ) -> QualityAuditSession | None:
     """Return the newest Audit over the exact current direct-Memory frame."""
 
-    source = QualityAuditSource.from_context(ctx)
+    source = AuditTarget.from_context(ctx)
     selected = _select_checks(checks)
     matches = tuple(
         session
@@ -196,7 +196,7 @@ def run_quality_audit(
 ) -> QualityAuditSession:
     """Run exactly the explicitly selected checks over one frozen Source."""
 
-    source = QualityAuditSource.from_context(ctx)
+    source = AuditTarget.from_context(ctx)
     selected = _select_checks(checks)
     frozen = source.context()
     operations: tuple[

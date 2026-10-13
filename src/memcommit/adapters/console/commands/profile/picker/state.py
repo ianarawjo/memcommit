@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Literal
+from pathlib import Path
 
 from memcommit.adapters.console.commands.profile.picker.model import (
     ProfilePickerAction,
@@ -26,6 +27,7 @@ class NameEdit:
     kind: Literal["CREATE_PROFILE", "RENAME_PROFILE", "RENAME_STUDY"]
     value: str
     row_index: int
+    root_dir: str | None = None
 
 
 @dataclass
@@ -39,6 +41,7 @@ class ProfilePickerState:
     stage: NameEdit | ProfilePickerAction | None = None
     status: str = ""
     status_is_error: bool = False
+    create_name_was_edited: bool = False
 
     @classmethod
     def create(
@@ -127,7 +130,9 @@ class ProfilePickerState:
     def begin_create(self) -> None:
         if self.stage is None:
             # New ordinary Profiles append after all frozen Profile/Study rows.
-            self.stage = NameEdit("CREATE_PROFILE", "", len(self.rows))
+            root = Path.cwd().resolve()
+            self.create_name_was_edited = False
+            self.stage = NameEdit("CREATE_PROFILE", root.name, len(self.rows), str(root))
             self.notify()
 
     def begin_rename(self) -> None:
@@ -144,18 +149,21 @@ class ProfilePickerState:
         )
         self.notify()
 
-    def review_name(self, name: str) -> None:
+    def review_name(self, name: str, root_dir: str | None = None) -> None:
         edit = self.edit
         if edit is None:
             raise ValueError("Profile name review requires an active name input.")
         validate_profile_name(name)
         if edit.kind == "CREATE_PROFILE":
+            if any(row.name.casefold() == name.casefold() for row in self.rows):
+                raise ValueError(f"Profile {name!r} already exists; enter a new name.")
             action = ProfilePickerAction(
                 kind=edit.kind,
                 name=name,
                 uid=None,
                 registry_generation=self.registry_generation,
                 row_index=edit.row_index,
+                root_dir=str(Path(root_dir or edit.root_dir).expanduser().resolve()),
             )
         else:
             row = self.rows[edit.row_index]
@@ -203,7 +211,7 @@ class ProfilePickerState:
         if action is not None:
             if action.kind == "CREATE_PROFILE":
                 assert action.row_index is not None
-                self.stage = NameEdit(action.kind, action.name, action.row_index)
+                self.stage = NameEdit(action.kind, action.name, action.row_index, action.root_dir)
                 self.notify("Create review cancelled")
             elif action.kind in {"RENAME_PROFILE", "RENAME_STUDY"}:
                 assert action.row_index is not None and action.new_name is not None
