@@ -8,13 +8,89 @@ This prototype snapshot is published on the `user-study-prototype` branch.
 
 ## Install
 
-Python 3.10 or later is required. With [uv](https://docs.astral.sh/uv/) installed,
-install the public prototype directly from GitHub:
+Python 3.10 or later and Git are required. The current runtime is verified on
+macOS. Native Windows execution is not yet supported: Store locking depends on
+Unix `fcntl`, and isolated Study shells require zsh. A Windows Python install
+alone does not make this snapshot compatible.
+
+On macOS, check Git with `git --version`. If it is missing, run
+`xcode-select --install` and complete the Command Line Tools installation.
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) if needed:
 
 ```sh
-uv tool install 'git+https://github.com/ianarawjo/memcommit.git@user-study-prototype'
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Open a new terminal and verify `uv --version`. Then install the public prototype
+and add uv's tool executable directory to your shell's PATH:
+
+```sh
+uv tool install --python 3.10 'git+https://github.com/ianarawjo/memcommit.git@user-study-prototype'
+uv tool update-shell
+```
+
+Open another new terminal before running `command -v mem` and `mem --help`.
+`uv tool update-shell` updates shell configuration; an already open terminal
+may still have its previous PATH. See uv's
+[tool executable documentation](https://docs.astral.sh/uv/concepts/tools/#tool-executables).
+
+To use the installed tool immediately in the current macOS terminal:
+
+```sh
+export PATH="$(uv tool dir --bin):$PATH"
 mem --help
 ```
+
+To update a previously installed prototype, run `uv tool upgrade memcommit`.
+The source installation below also provides `uv run --locked mem` without
+requiring the `mem` executable itself on PATH.
+
+### Windows: WSL2 setup route
+
+Use a Linux environment in WSL2 for this Unix-based snapshot. Native PowerShell
+or Command Prompt execution is not supported yet. This route is documented
+from the platform instructions; it has not yet been verified on a Windows/WSL
+machine.
+
+If WSL is not installed, follow Microsoft's
+[WSL installation guide](https://learn.microsoft.com/en-us/windows/wsl/install).
+In an administrator PowerShell, run:
+
+```powershell
+wsl --install -d Ubuntu
+```
+
+Restart Windows if prompted, launch Ubuntu, and finish its user setup. In the
+**Ubuntu terminal**, install the required Linux tools and uv:
+
+```sh
+sudo apt update
+sudo apt install -y git curl zsh
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Open a new Ubuntu terminal and check `git --version`, `zsh --version`, and
+`uv --version`. Install memcommit inside Ubuntu:
+
+```sh
+uv tool install --python 3.10 'git+https://github.com/ianarawjo/memcommit.git@user-study-prototype'
+uv tool update-shell
+export PATH="$(uv tool dir --bin):$PATH"
+mem --help
+```
+
+The Windows and WSL installations have separate executable paths and home
+directories. Install semantic-provider tools and sign in inside the same WSL
+environment that runs memcommit.
+
+For the initial setup, keep projects in the Linux filesystem, for example
+`~/projects/my-project`, and pass Linux paths to `--root`. See Microsoft's
+[filesystem guidance](https://learn.microsoft.com/en-us/windows/wsl/filesystems).
+Windows-mounted folders such as `/mnt/c/...` have different permission
+semantics and are outside this initial setup route; see
+[WSL file permissions](https://learn.microsoft.com/en-us/windows/wsl/file-permissions).
+
+### Source installation
 
 For a source checkout with locked dependencies:
 
