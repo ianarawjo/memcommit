@@ -10,7 +10,12 @@ from memcommit.application.operations.setup.provider_probe import (
 )
 from memcommit.configuration.config import Config
 from memcommit.providers.clients.codex import CodexChatGPTProvider
+from memcommit.providers.clients.codex_model_catalog import (
+    CodexModelOption,
+    load_codex_model_catalog,
+)
 from memcommit.providers.clients.completion import model_name
+from memcommit.providers.errors import QueryProviderError
 from memcommit.providers.types import CODEX_CHATGPT_PROVIDER
 
 
@@ -19,12 +24,52 @@ class SetupProviderOption:
     uid: str
     label: str
     command: str
-    default_model: str
 
 
 SETUP_PROVIDERS = (
-    SetupProviderOption(CODEX_CHATGPT_PROVIDER, "OpenAI Codex", "codex", "gpt-6.1-sol"),
+    SetupProviderOption(CODEX_CHATGPT_PROVIDER, "OpenAI Codex", "codex"),
 )
+
+
+@dataclass(frozen=True)
+class SetupModelSelection:
+    model: str
+    reasoning_effort: str | None
+
+
+def load_setup_model_catalog(provider_id: str, *, binary: Path):
+    setup_provider_option(provider_id)
+    provider = CodexChatGPTProvider.connect(candidates=[binary])
+    return load_codex_model_catalog(provider)
+
+
+def select_setup_model(
+    catalog: tuple[CodexModelOption, ...],
+    model: str | None = None,
+    reasoning_effort: str | None = None,
+) -> SetupModelSelection:
+    if not catalog:
+        raise QueryProviderError("No visible models are available for setup.")
+    chosen = next((option for option in catalog if option.model == model), None)
+    if model is not None and chosen is None:
+        raise QueryProviderError(
+            "The requested model is not in Codex's visible catalog. Choose another model."
+        )
+    chosen = chosen or next(
+        (option for option in catalog if option.is_default), catalog[0]
+    )
+    effort = (
+        reasoning_effort
+        if reasoning_effort is not None
+        else chosen.default_reasoning_effort
+    )
+    if effort is not None and effort not in {
+        option.effort for option in chosen.supported_reasoning_efforts
+    }:
+        raise QueryProviderError(
+            "The selected model does not support that reasoning setting."
+        )
+    return SetupModelSelection(chosen.model, effort)
 
 
 def setup_provider_option(provider_id: str) -> SetupProviderOption:
@@ -36,13 +81,19 @@ def setup_provider_option(provider_id: str) -> SetupProviderOption:
     )
 
 
-def connect_setup_provider(provider_id: str, model: str, *, binary: Path | None = None):
+def connect_setup_provider(
+    provider_id: str,
+    model: str,
+    *,
+    reasoning_effort: str | None = None,
+    binary: Path | None = None,
+):
     setup_provider_option(provider_id)
     model_name(model)
     timeout = Config().semantic_timeout_seconds()
     provider = CodexChatGPTProvider.connect(
         model=model,
-        reasoning_effort="low",
+        reasoning_effort=reasoning_effort,
         timeout=timeout,
         candidates=[binary] if binary else None,
     )
@@ -58,7 +109,7 @@ def save_checked_provider(provider) -> None:
         "semantic_provider": provider_id,
         f"{provider_id}_model": provider.identity.model,
     }
-    values["codex_chatgpt_reasoning_effort"] = "low"
+    values["codex_chatgpt_reasoning_effort"] = provider.identity.reasoning_effort
     Config().update(values)
 
 
@@ -72,6 +123,7 @@ def setup_status() -> dict:
         and registry.generation > 0,
         "provider": settings.get("semantic_provider"),
         "model": settings.get(f"{settings.get('semantic_provider')}_model"),
+        "reasoning_effort": settings.get("codex_chatgpt_reasoning_effort"),
         "profile": registry.active.name if registry.generation else None,
         "root": registry.active.root_dir if registry.generation else None,
     }

@@ -21,7 +21,10 @@ from memcommit.adapters.console.commands.setup.runtime import (
     login_provider,
     provider_install_description,
 )
-from memcommit.adapters.console.commands.setup.screen import choose_setup_action
+from memcommit.adapters.console.commands.setup.screen import (
+    choose_setup_action,
+    choose_setup_model,
+)
 from memcommit.adapters.console.terminal.components.progress import CommandProgress
 from memcommit.adapters.console.terminal.components.selection.model import (
     SelectionOption,
@@ -36,7 +39,9 @@ from memcommit.application.operations.profile.model.lifecycle import create_prof
 from memcommit.application.operations.setup.application import (
     SETUP_PROVIDERS,
     connect_setup_provider,
+    load_setup_model_catalog,
     save_checked_provider,
+    select_setup_model,
     setup_provider_option,
     setup_status,
 )
@@ -49,8 +54,11 @@ def _cancel() -> None:
     raise typer.Exit(0)
 
 
-def _connect_provider_interactively(provider_id, model, *, install, login, interactive):
+def _connect_provider_interactively(
+    provider_id, model, *, reasoning_effort=None, install, login, interactive
+):
     binary = None
+    selection = None
     while True:
         try:
             binary = find_provider_binary(provider_id)
@@ -88,15 +96,57 @@ def _connect_provider_interactively(provider_id, model, *, install, login, inter
             login_provider(provider_id, binary)
             login = False
         try:
+            phase = "catalog"
+            with CommandProgress(
+                "setup", "reading Codex model and reasoning choices", total=1
+            ):
+                catalog = load_setup_model_catalog(provider_id, binary=binary)
+            if selection is None:
+                if model is not None:
+                    select_setup_model(catalog, model, reasoning_effort)
+                if interactive:
+                    initial_model = model or Config().model_for_provider(provider_id)
+                    if reasoning_effort is not None:
+                        available_initial_model = (
+                            initial_model
+                            if any(option.model == initial_model for option in catalog)
+                            else None
+                        )
+                        initial_model = select_setup_model(
+                            catalog, available_initial_model, reasoning_effort
+                        ).model
+                    selection = choose_setup_model(
+                        catalog,
+                        initial_model=initial_model,
+                        initial_reasoning_effort=reasoning_effort
+                        or (
+                            Config().get("codex_chatgpt_reasoning_effort")
+                            if model is None
+                            or model == Config().model_for_provider(provider_id)
+                            else None
+                        ),
+                    )
+                    if selection is None:
+                        return None
+                else:
+                    selection = select_setup_model(catalog, model, reasoning_effort)
+            else:
+                select_setup_model(catalog, selection.model, selection.reasoning_effort)
+            phase = "probe"
             with CommandProgress(
                 "setup", "checking provider with a synthetic prompt", total=1
             ):
-                return connect_setup_provider(provider_id, model, binary=binary)
+                return connect_setup_provider(
+                    provider_id,
+                    selection.model,
+                    reasoning_effort=selection.reasoning_effort,
+                    binary=binary,
+                )
         except QueryProviderError as error:
             if not interactive:
                 raise
             action = choose_setup_action(
-                "PROVIDER CONNECTION",
+                "MODEL CATALOG" if phase == "catalog" else "PROVIDER CONNECTION",
                 display_escape_text(str(error)),
                 (
                     SelectionOption(
@@ -116,15 +166,23 @@ def _connect_provider_interactively(provider_id, model, *, install, login, inter
                     ),
                     SelectionOption(
                         "model",
-                        "Choose provider / model again",
-                        "Change an unavailable model or provider.",
+                        "Back to provider"
+                        if phase == "catalog"
+                        else "Choose model / reasoning again",
+                        "Return to setup choices."
+                        if phase == "catalog"
+                        else "Change the model or reasoning setting, then check the connection.",
                     ),
                 ),
             )
             if action is None:
                 _cancel()
             if action == "model":
-                return None
+                if phase == "catalog":
+                    return None
+                model, reasoning_effort = selection.model, selection.reasoning_effort
+                selection = None
+                continue
             login = action == "login"
             if action == "install":
                 binary = install_provider_runtime(provider_id)
@@ -137,7 +195,17 @@ def cmd(
     ] = None,
     model: Annotated[
         Optional[str],  # noqa: UP045 - Typer 0.12 requires typing.Optional.
-        typer.Option("--model", help="Optional explicit provider model ID"),
+        typer.Option(
+            "--model",
+            help="Model ID from the Codex catalog; interactive setup shows a picker",
+        ),
+    ] = None,
+    reasoning_effort: Annotated[
+        Optional[str],  # noqa: UP045 - Typer 0.12 requires typing.Optional.
+        typer.Option(
+            "--reasoning-effort",
+            help="Supported reasoning setting; defaults to the selected model's default",
+        ),
     ] = None,
     name: Annotated[
         Optional[str],  # noqa: UP045 - Typer 0.12 requires typing.Optional.
@@ -201,6 +269,7 @@ def cmd(
             _run_setup(
                 provider,
                 model,
+                reasoning_effort,
                 name,
                 root,
                 import_files,
@@ -223,7 +292,16 @@ def cmd(
 
 
 def _run_setup(
-    provider, model, name, root, import_files, auto_sync, yes, install, login
+    provider,
+    model,
+    reasoning_effort,
+    name,
+    root,
+    import_files,
+    auto_sync,
+    yes,
+    install,
+    login,
 ) -> None:
     interactive = sys.stdin.isatty() and sys.stdout.isatty() and not yes
     if yes and (provider is None or name is None):
@@ -243,25 +321,27 @@ def _run_setup(
                     SelectionOption(
                         option.uid,
                         option.label,
-                        f"{option.command} headless · default model {option.default_model}",
+                        f"{option.command} headless · model choices are read after login",
                     )
                     for option in SETUP_PROVIDERS
                 ),
-                with_model=True,
                 initial_uid=Config().get("semantic_provider"),
-                initial_model=Config().model_for_provider(SETUP_PROVIDERS[0].uid),
             )
             if chosen is None:
                 _cancel()
-            provider, model = chosen
-        option = setup_provider_option(provider)
-        model = model or option.default_model
+            provider = chosen
+        setup_provider_option(provider)
         connected = _connect_provider_interactively(
-            provider, model, install=install, login=login, interactive=interactive
+            provider,
+            model,
+            reasoning_effort=reasoning_effort,
+            install=install,
+            login=login,
+            interactive=interactive,
         )
         if connected is not None:
             break
-        provider = model = None
+        provider = model = reasoning_effort = None
     save_checked_provider(connected)
     typer.echo(f"Provider ready: {connected.identity.display_name()}")
     if not first_profile_needed:

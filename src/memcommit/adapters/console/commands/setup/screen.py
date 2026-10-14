@@ -1,14 +1,16 @@
-"""Small setup screens composed from shared selection, input and focus controls."""
+"""Setup choices built from the shared selection grammar and focus controller."""
 
 from __future__ import annotations
 
 from prompt_toolkit.application import Application
+from prompt_toolkit.filters import Condition
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import FormattedTextControl, Layout, Window
+from prompt_toolkit.layout.dimension import Dimension
+from prompt_toolkit.layout.margins import ScrollbarMargin
 
-from memcommit.adapters.console.terminal.components.exact_name import (
-    ExactNameFieldControl,
-    ExactNameFieldView,
+from memcommit.adapters.console.commands.setup.model_selection import (
+    SetupModelSelectionState,
 )
 from memcommit.adapters.console.terminal.components.focus.controller import (
     FocusSurface,
@@ -24,7 +26,9 @@ from memcommit.adapters.console.terminal.components.selection.model import (
     SelectionOption,
 )
 from memcommit.adapters.console.terminal.components.selection.rendering import (
+    render_horizontal_choice_row,
     render_vertical_choice_cards,
+    render_vertical_choice_rows,
 )
 from memcommit.adapters.console.terminal.components.selection.state import (
     FlatSelectionState,
@@ -32,129 +36,11 @@ from memcommit.adapters.console.terminal.components.selection.state import (
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
 )
-from memcommit.application.operations.setup.application import SETUP_PROVIDERS
-from memcommit.providers.clients.completion import model_name
+from memcommit.adapters.console.terminal.core.text import safe_terminal_text
+from memcommit.providers.clients.codex_model_catalog import CodexModelOption
 
 
-def choose_setup_action(
-    title: str,
-    description: str,
-    options: tuple[SelectionOption, ...],
-    *,
-    with_model=False,
-    initial_uid=None,
-    initial_model=None,
-    app_input=None,
-    app_output=None,
-):
-    selected = (
-        initial_uid
-        if initial_uid in {option.uid for option in options}
-        else options[0].uid
-    )
-    state = FlatSelectionState(
-        options, cursor_uid=selected, selected_uid=selected, allow_empty=False
-    )
-    model = ExactNameFieldControl.create(
-        ExactNameFieldView(
-            value=initial_model
-            or next(
-                (
-                    option.default_model
-                    for option in SETUP_PROVIDERS
-                    if option.uid == selected
-                ),
-                "",
-            ),
-            label="MODEL (OPTIONAL)",
-            state="DEFAULT",
-            detail="Use the default, or Tab to enter a different model ID.",
-            value_label="Model",
-            validate=model_name,
-        ),
-        input_name="setup-model",
-    )
-    bindings = KeyBindings()
-    control = FormattedTextControl(
-        lambda: render_vertical_choice_cards(
-            state, focused=layout.has_focus(control), content_width=90
-        ),
-        focusable=True,
-        show_cursor=False,
-    )
-    frame = build_focused_frame(
-        Window(control, always_hide_cursor=True),
-        title=title,
-        is_focused=lambda: layout.has_focus(control),
-        height=min(30, len(options) * 5 + 2),
-    )
-    regions = [
-        TuiRegion(
-            Window(FormattedTextControl(" mem setup\n " + description + "\n"), height=3)
-        ),
-        TuiRegion(frame),
-    ]
-    if with_model:
-        regions.append(TuiRegion(model.frame))
-    error_message = ""
-    regions.append(
-        TuiRegion(
-            Window(
-                FormattedTextControl(
-                    lambda: (
-                        error_message
-                        or (
-                            " ↑/↓ choose · Enter continue · Tab model · Esc cancel"
-                            if with_model
-                            else " ↑/↓ choose · Enter continue · Esc cancel"
-                        )
-                    )
-                ),
-                height=1,
-            )
-        )
-    )
-    layout = Layout(build_tui_frame(*regions), focused_element=control)
-
-    def move(event, delta):
-        changed = state.move(delta)
-        state.select_cursor(toggle=False)
-        if changed and with_model:
-            model.set_text(
-                next(
-                    option.default_model
-                    for option in SETUP_PROVIDERS
-                    if option.uid == state.selected_uid
-                )
-            )
-        return "MOVED" if changed else "CONSUMED"
-
-    def accept(event):
-        nonlocal error_message
-        try:
-            result = (
-                (state.selected_uid, model.validate_candidate())
-                if with_model
-                else state.selected_uid
-            )
-        except (ValueError, RuntimeError) as error:
-            error_message = str(error)
-            event.app.invalidate()
-            return "HANDLED"
-        event.app.exit(result=result)
-        return "HANDLED"
-
-    surfaces = [FocusSurface("choice", control, move_vertical=move, activate=accept)]
-    if with_model:
-        surfaces.append(FocusSurface("model", model.input, activate=accept))
-    controller = SurfaceFocusController(surfaces)
-    bind_surface_navigation(bindings, controller)
-
-    @bindings.add("escape", eager=True)
-    @bindings.add("c-c", eager=True)
-    def cancel(event):
-        event.app.exit(result=None)
-
+def _run_screen(layout, bindings, *, app_input=None, app_output=None):
     app = Application(
         layout=layout,
         key_bindings=bindings,
@@ -168,3 +54,234 @@ def choose_setup_action(
         return app.run()
     except (EOFError, KeyboardInterrupt):
         return None
+
+
+def choose_setup_action(
+    title: str,
+    description: str,
+    options: tuple[SelectionOption, ...],
+    *,
+    initial_uid=None,
+    app_input=None,
+    app_output=None,
+):
+    selected = (
+        initial_uid
+        if initial_uid in {option.uid for option in options}
+        else options[0].uid
+    )
+    state = FlatSelectionState(
+        options, cursor_uid=selected, selected_uid=selected, allow_empty=False
+    )
+    bindings = KeyBindings()
+    control = FormattedTextControl(
+        lambda: render_vertical_choice_cards(
+            state, focused=layout.has_focus(control), content_width=90
+        ),
+        focusable=True,
+        show_cursor=False,
+    )
+    frame = build_focused_frame(
+        Window(control, always_hide_cursor=True, right_margins=[ScrollbarMargin()]),
+        title=title,
+        is_focused=lambda: layout.has_focus(control),
+        height=Dimension(
+            min=4,
+            preferred=min(30, len(options) * 5 + 2),
+            max=min(30, len(options) * 5 + 2),
+        ),
+    )
+    layout = Layout(
+        build_tui_frame(
+            TuiRegion(
+                Window(
+                    FormattedTextControl(" mem setup\n " + description + "\n"), height=3
+                )
+            ),
+            TuiRegion(frame),
+            TuiRegion(
+                Window(
+                    FormattedTextControl(" ↑/↓ choose · Enter continue · Esc cancel"),
+                    height=1,
+                )
+            ),
+        ),
+        focused_element=control,
+    )
+
+    def move(event, delta):
+        changed = state.move(delta)
+        state.select_cursor(toggle=False)
+        return "MOVED" if changed else "BOUNDARY"
+
+    def accept(event):
+        event.app.exit(result=state.selected_uid)
+        return "HANDLED"
+
+    def cancel(event):
+        event.app.exit(result=None)
+        return "HANDLED"
+
+    controller = SurfaceFocusController(
+        [
+            FocusSurface(
+                "choice", control, move_vertical=move, activate=accept, back=cancel
+            )
+        ]
+    )
+    bind_surface_navigation(bindings, controller, back=True)
+    bindings.add("c-c", eager=True)(cancel)
+    return _run_screen(layout, bindings, app_input=app_input, app_output=app_output)
+
+
+def choose_setup_model(
+    catalog: tuple[CodexModelOption, ...],
+    *,
+    initial_model: str | None = None,
+    initial_reasoning_effort: str | None = None,
+    app_input=None,
+    app_output=None,
+):
+    state = SetupModelSelectionState(
+        catalog,
+        initial_model=initial_model,
+        initial_reasoning_effort=initial_reasoning_effort,
+    )
+    bindings = KeyBindings()
+    models = FormattedTextControl(
+        lambda: render_vertical_choice_rows(
+            state.models,
+            focused=layout.has_focus(models),
+            content_width=90,
+            numbered=False,
+        ),
+        focusable=True,
+        show_cursor=False,
+    )
+    reasoning = FormattedTextControl(
+        lambda: (
+            render_horizontal_choice_row(
+                state.reasoning, focused=layout.has_focus(reasoning)
+            )
+            if state.reasoning
+            else [("", "No selectable reasoning settings for this model.")]
+        ),
+        focusable=True,
+        show_cursor=False,
+    )
+    model_frame = build_focused_frame(
+        Window(models, always_hide_cursor=True, right_margins=[ScrollbarMargin()]),
+        title="MODEL",
+        is_focused=lambda: layout.has_focus(models),
+        height=Dimension(
+            min=4,
+            preferred=min(30, len(catalog) * 2 + 2),
+            max=min(30, len(catalog) * 2 + 2),
+        ),
+    )
+    reasoning_frame = build_focused_frame(
+        Window(reasoning, always_hide_cursor=True, wrap_lines=True),
+        title="REASONING",
+        is_focused=lambda: layout.has_focus(reasoning),
+        height=Dimension(min=3, preferred=4, max=6),
+    )
+
+    def selection_details():
+        effort = state.selection.reasoning_effort
+        description = next(
+            (
+                option.description
+                for option in state.selected_model.supported_reasoning_efforts
+                if option.effort == effort
+            ),
+            "",
+        )
+        return safe_terminal_text(
+            f" Selected: {state.selected_model.model} · reasoning {effort or 'provider default'}\n"
+            f" Model default: {state.selected_model.default_reasoning_effort or 'provider default'}\n"
+            f" {state.reasoning_notice or description}"
+        )
+
+    layout = Layout(
+        build_tui_frame(
+            TuiRegion(
+                Window(
+                    FormattedTextControl(
+                        " mem setup · Codex login checked\n Choose a model and its supported reasoning setting.\n"
+                    ),
+                    height=3,
+                )
+            ),
+            TuiRegion(model_frame),
+            TuiRegion(reasoning_frame),
+            TuiRegion(
+                Window(
+                    FormattedTextControl(selection_details), height=3, wrap_lines=True
+                )
+            ),
+            TuiRegion(
+                Window(
+                    FormattedTextControl(
+                        " ↑/↓ model · Tab reasoning · ←/→ effort · Enter check connection · Esc back"
+                    ),
+                    height=2,
+                    wrap_lines=True,
+                )
+            ),
+        ),
+        focused_element=models,
+    )
+
+    def move_model(event, delta):
+        return "MOVED" if state.move_model(delta) else "BOUNDARY"
+
+    def accept(event):
+        event.app.exit(result=state.selection)
+        return "HANDLED"
+
+    def cancel(event):
+        event.app.exit(result=None)
+        return "HANDLED"
+
+    controller = SurfaceFocusController(
+        lambda: [
+            FocusSurface(
+                "model", models, move_vertical=move_model, activate=accept, back=cancel
+            ),
+            *(
+                [
+                    FocusSurface(
+                        "reasoning",
+                        reasoning,
+                        move_vertical=lambda _event, _delta: "BOUNDARY",
+                        activate=accept,
+                        back=cancel,
+                    )
+                ]
+                if state.reasoning
+                else []
+            ),
+        ]
+    )
+    bind_surface_navigation(bindings, controller, back=True)
+
+    @bindings.add(
+        "left",
+        filter=Condition(
+            lambda: layout.has_focus(reasoning) and state.reasoning is not None
+        ),
+        eager=True,
+    )
+    @bindings.add(
+        "right",
+        filter=Condition(
+            lambda: layout.has_focus(reasoning) and state.reasoning is not None
+        ),
+        eager=True,
+    )
+    def move_reasoning(event):
+        state.move_reasoning(-1 if event.key_sequence[-1].key == "left" else 1)
+        event.app.invalidate()
+
+    bindings.add("c-c", eager=True)(cancel)
+    return _run_screen(layout, bindings, app_input=app_input, app_output=app_output)

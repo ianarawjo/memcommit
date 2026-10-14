@@ -22,9 +22,14 @@ public source archive without requiring Git.
 
 The current setup offers **OpenAI Codex only**. It finds or offers to install
 the official Codex CLI, lets you complete ChatGPT login, and checks an actual
-synthetic response before creating the first Profile. The default model is
-`gpt-6.1-sol` with low reasoning; Tab edits the model when needed. Claude Code
-and GitHub Copilot are planned additions.
+synthetic response before creating the first Profile. After login, it reads
+Codex's model catalog: choose a model in the vertical list, then Tab to the
+horizontal reasoning choices and use Left/Right. Codex supplies recommended
+models, supported efforts and defaults. Compatible explicit efforts survive
+model changes; unavailable efforts return visibly to the new model's default.
+Enter checks the exact model and effort before saving them. Scripted setup can
+specify `--model ID --reasoning-effort LEVEL`; omitted values use catalog
+defaults. Claude Code and GitHub Copilot are planned additions.
 
 A **Profile is a folder workspace**. Import existing supported documents and
 Auto Sync are both enabled initially. Import includes this folder's subfolders;

@@ -19,6 +19,7 @@ CODEX_REASONING_EFFORTS = (
     "high",
     "xhigh",
     "max",
+    "ultra",
 )
 CODEX_PROVIDER_PRESETS = (CODEX_LUNA_LOW_PRESET,)
 SEMANTIC_PROVIDER_IDS = (
