@@ -154,6 +154,7 @@ def choose_setup_model(
             focused=layout.has_focus(models),
             content_width=90,
             numbered=False,
+            blank_between=False,
         ),
         focusable=True,
         show_cursor=False,
@@ -173,10 +174,12 @@ def choose_setup_model(
         Window(models, always_hide_cursor=True, right_margins=[ScrollbarMargin()]),
         title="MODEL",
         is_focused=lambda: layout.has_focus(models),
+        # The shared renderer anchors after a row's newline. Reserve its
+        # trailing row so final-model focus does not scroll a fitting list.
         height=Dimension(
             min=4,
-            preferred=min(30, len(catalog) * 2 + 2),
-            max=min(30, len(catalog) * 2 + 2),
+            preferred=max(4, min(30, len(catalog) + 3)),
+            max=max(4, min(30, len(catalog) + 3)),
         ),
     )
     reasoning_frame = build_focused_frame(
