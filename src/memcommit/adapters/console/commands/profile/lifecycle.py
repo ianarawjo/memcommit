@@ -105,6 +105,7 @@ def create_cmd(
         bool,
         typer.Option("--auto-sync", help="Enable automatic outbound Sync for this Profile, including future Contexts"),
     ] = False,
+    use: Annotated[bool, typer.Option("--use", help="Select the new Profile atomically with creation")] = False,
 ) -> None:
     """Create a managed Profile with optional project Import and automatic Sync."""
 
@@ -112,6 +113,7 @@ def create_cmd(
         result = create_profile(
             name, root_dir=root,
             import_project_files=import_files, automatic_sync=auto_sync,
+            select_created=use,
         )
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)

@@ -8,6 +8,7 @@ from memcommit.operation_catalog.translations.model import (
 )
 
 TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
+    "setup": LocalizedOperationCopy('Codex를 연결하고 첫 폴더 프로필을 만듭니다.', '설치 후 provider 연결과 첫 작업공간을 준비할 때.'),
     "sync": LocalizedOperationCopy('소유한 Context 문서를 외부 파일에 한 번 또는 명령 완료 후 자동으로 동기화합니다.', 'Context 이름과 같은 외부 문서 트리를 유지하고 선택 범위의 자동 Sync를 켜거나 끌 때.'),
     "export": LocalizedOperationCopy(
         "현재 Context 내용을 문서, Agent Skill 또는 mem 형식으로 내보낸다.",

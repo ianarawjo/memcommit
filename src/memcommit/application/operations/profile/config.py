@@ -24,7 +24,7 @@ from memcommit.application.authorization.checkpoint_read_model import (
 )
 
 
-PROFILE_REGISTRY_SCHEMA_VERSION = 6
+PROFILE_REGISTRY_SCHEMA_VERSION = 7
 AUTHORING_PROFILE_UID = "00000000-0000-0000-0000-000000000001"
 AUTHORING_PROFILE_NAME = "authoring"
 STUDY_RUN_PARTICIPANT_SOURCE_KIND = "STUDY_RUN"
@@ -465,7 +465,7 @@ def load_profile_registry() -> ProfileRegistry:
     if not isinstance(value, dict):
         raise ProfileConfigError("Profile registry must be a JSON object.")
     schema_version = value.get("schema_version")
-    if schema_version != PROFILE_REGISTRY_SCHEMA_VERSION:
+    if schema_version not in {6, PROFILE_REGISTRY_SCHEMA_VERSION}:
         raise ProfileConfigError("Unsupported profile registry schema version.")
     generation = value.get("generation")
     if (
@@ -502,8 +502,12 @@ def load_profile_registry() -> ProfileRegistry:
     if len({profile.name.casefold() for profile in profiles}) != len(profiles):
         raise ProfileConfigError("Profile names must be unique.")
     authoring = [profile for profile in profiles if profile.kind == "AUTHORING"]
-    if len(authoring) != 1 or authoring[0].uid != AUTHORING_PROFILE_UID or authoring[0].name != AUTHORING_PROFILE_NAME:
-        raise ProfileConfigError("Profile registry must contain the fixed authoring Profile.")
+    if schema_version == 6 and len(authoring) != 1:
+        raise ProfileConfigError("Legacy Profile registries must contain the fixed authoring Profile.")
+    if len(authoring) > 1 or any(profile.uid != AUTHORING_PROFILE_UID or profile.name != AUTHORING_PROFILE_NAME for profile in authoring):
+        raise ProfileConfigError("An authoring Profile must retain its fixed identity.")
+    if any(profile.kind != "AUTHORING" and (profile.uid == AUTHORING_PROFILE_UID or profile.name.casefold() == AUTHORING_PROFILE_NAME.casefold()) for profile in profiles):
+        raise ProfileConfigError("The fixed authoring Profile identity is reserved.")
     active_uid = _canonical_uid(value.get("active_uid"), field="Active profile uid")
     profile_uids = {profile.uid for profile in profiles}
     if active_uid not in profile_uids:

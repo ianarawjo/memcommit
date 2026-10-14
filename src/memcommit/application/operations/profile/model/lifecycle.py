@@ -43,7 +43,7 @@ from memcommit.application.operations.profile.study.topology import group_study_
 
 @dataclass(frozen=True)
 class ProfileCreationResult:
-    """One managed Profile and its completed project setup, without selecting it."""
+    """One published folder Profile, its setup, and explicit selection receipt."""
 
     profile: ProfileEntry
     inspection: StoreInspection
@@ -51,6 +51,7 @@ class ProfileCreationResult:
     imported_file_count: int = 0
     skipped_paths: tuple[str, ...] = ()
     automatic_sync: bool = False
+    selected: bool = False
 
 
 @dataclass(frozen=True)
@@ -173,10 +174,11 @@ def create_profile(
     import_project_files: bool = False,
     automatic_sync: bool = False,
     expected_import_digest: str | None = None,
+    select_created: bool = False,
 ) -> ProfileCreationResult:
-    """Publish project Import and Sync setup together; keep selection fixed."""
+    """Publish project setup and optional selection in one registry generation."""
 
-    if type(import_project_files) is not bool or type(automatic_sync) is not bool:
+    if any(type(value) is not bool for value in (import_project_files, automatic_sync, select_created)):
         raise TypeError("Profile setup options must be boolean.")
 
     try:
@@ -255,10 +257,19 @@ def create_profile(
                 published = False
                 _fsync_directory(destination.parent)
                 raise
+            retained_profiles = registry.profiles
+            if select_created and registry.generation == 0:
+                from memcommit.application.operations.profile.config import default_store_dir
+
+                # A new install needs only its folder Profile. A physical legacy
+                # authoring store is never discarded, even without a registry.
+                if not default_store_dir().exists() and not default_store_dir().is_symlink():
+                    retained_profiles = ()
             updated = replace(
                 registry,
                 generation=max(1, registry.generation + 1),
-                profiles=(*registry.profiles, profile),
+                profiles=(*retained_profiles, profile),
+                active_uid=profile.uid if select_created else registry.active_uid,
             )
             try:
                 _write_registry(updated)
@@ -291,6 +302,7 @@ def create_profile(
                 imported_file_count=len(prepared.files) if prepared else 0,
                 skipped_paths=prepared.skipped_paths if prepared else (),
                 automatic_sync=automatic_sync,
+                selected=select_created,
             )
         finally:
             if not published and staging.exists() and not staging.is_symlink():

@@ -269,6 +269,13 @@ class ProfilePickerView:
             else:
                 review = removal_review(action, self.state.current_row)
             return [("", render_exact_command_review(review))]
+        if self.state.select_created and self.state.edit is not None:
+            return [
+                ("", "NEW PROFILE (WORKSPACE)\n\n"),
+                ("", "Use the chosen folder and its subfolders as one workspace.\n"),
+                ("", "Review the folder and the two options below, then create your first Profile.\n"),
+                ("", "The new Profile will be selected for subsequent mem commands.\n"),
+            ]
         return render_profile_options(
             self.state.rows,
             selected=self.state.index,
@@ -397,7 +404,9 @@ class ProfilePickerView:
                         HSplit([
                             Window(height=1),
                             Window(self.import_control, height=1),
+                            Window(FormattedTextControl(" Import supported documents in this folder and its subfolders as Memories."), height=1),
                             Window(self.sync_control, height=1),
+                            Window(FormattedTextControl(" Reflect mem changes in managed documents in this folder and its subfolders, including future Contexts."), height=1),
                         ]), filter=self.create_mode,
                     ),
                     Window(height=1, char="─"),

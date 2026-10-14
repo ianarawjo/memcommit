@@ -8,6 +8,7 @@ from memcommit.operation_catalog.translations.model import (
 )
 
 TRANSLATIONS: dict[str, LocalizedOperationCopy] = {
+    "setup": LocalizedOperationCopy('Connecter Codex et créer le premier Profile lié à un dossier.', 'Préparer la connexion au fournisseur et le premier espace de travail après installation.'),
     "sync": LocalizedOperationCopy('Synchroniser les documents des Contexts possédés avec les fichiers externes, une fois ou après chaque commande.', 'Maintenir un arbre de documents externes correspondant aux noms des Contexts et activer ou désactiver la synchronisation automatique.'),
     "export": LocalizedOperationCopy(
         "Exporter le contenu actuel des Contexts en documents, en Agent Skill ou au format mem.",

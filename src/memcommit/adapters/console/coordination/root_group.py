@@ -40,9 +40,16 @@ class MemCommandGroup(CanonicalCommandGroup):
         from memcommit.configuration.workspace import WorkspaceError
 
         arguments = list(sys.argv[1:] if args is None else args)
+        if not arguments and sys.stdin.isatty() and sys.stdout.isatty():
+            from memcommit.application.operations.profile.config import (
+                default_store_dir,
+                profile_registry_file,
+            )
+            if not profile_registry_file().exists() and not default_store_dir().exists():
+                arguments = ["setup"]
         # Configuration locates the Store, so it must also work before migration
         # and must not enter a Study shell belonging to the old workspace.
-        if arguments and (arguments[0] == "config" or arguments[:2] == ["profile", "config"]):
+        if arguments and (arguments[0] in {"config", "setup"} or arguments[:2] == ["profile", "config"]):
             return super().main(args=arguments, prog_name=prog_name, **kwargs)
 
         def ensure(command_argv: Any = None) -> int | None:
@@ -74,7 +81,7 @@ class MemCommandGroup(CanonicalCommandGroup):
             getattr(ctx, "protected_args", ())
         )
         entered = (*protected, *tuple(getattr(ctx, "args", ())))
-        if entered and (entered[0] == "config" or entered[:2] == ("profile", "config")):
+        if entered and (entered[0] in {"config", "setup"} or entered[:2] == ("profile", "config")):
             # Relocation owns its exclusive lease and cannot record into a Store
             # whose location it is changing. Other config edits have no Store IO.
             return super().invoke(ctx)
@@ -82,6 +89,21 @@ class MemCommandGroup(CanonicalCommandGroup):
             with workspace_lock():
                 require_workspace_ready()
                 ensure_workspace()
+                if entered[:2] == ("profile", "create") and "--use" in entered[2:]:
+                    from memcommit.application.operations.profile.config import (
+                        default_store_dir,
+                        profile_registry_file,
+                    )
+
+                    if (
+                        not profile_registry_file().exists()
+                        and not default_store_dir().exists()
+                        and not default_store_dir().is_symlink()
+                    ):
+                        # The first exact create/use receipt has no source Store.
+                        # Starting an authoring ledger here would create a second
+                        # Profile and change the reviewed folder-only result.
+                        return super().invoke(ctx)
                 return self._invoke_in_workspace(ctx)
         except WorkspaceError as error:
             render_cli_error(error)

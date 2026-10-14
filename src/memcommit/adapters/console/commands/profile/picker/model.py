@@ -52,6 +52,7 @@ class ProfilePickerAction:
     imported_file_count: int = 0
     skipped_file_count: int = 0
     import_digest: str | None = None
+    select_created: bool = False
 
 
 @dataclass(frozen=True)

@@ -53,6 +53,9 @@ def choose_profile(
     app_input: Input | None = None,
     app_output: Output | None = None,
     require_tty: bool = True,
+    start_create: bool = False,
+    select_created: bool = False,
+    initial_root: str | None = None,
 ) -> ProfilePickerAction | ProfilePickerRefresh | None:
     """Return one reviewed/selected action, a completed removal, or cancellation."""
 
@@ -63,6 +66,11 @@ def choose_profile(
         initial_status=initial_status,
         initial_row_index=initial_row_index,
     )
+    state.select_created = select_created
+    if start_create:
+        state.begin_create()
+        if initial_root is not None:
+            state.stage = replace(state.edit, value=Path(initial_root).name, root_dir=initial_root)
     if apply_removal is not None and not callable(apply_removal):
         raise ValueError("Profile removal handler must be callable.")
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
@@ -189,9 +197,7 @@ def choose_profile(
 
     @bindings.add("backspace", filter=view.review_mode | setup_option_mode, eager=True)
     def _back_from_review(event):
-        state.back()
-        focus_stage()
-        event.app.invalidate()
+        _back_or_cancel(event)
 
     @bindings.add("c-j", filter=name_mode, eager=True)
     def _reject_name_newline(event) -> None:
@@ -267,6 +273,8 @@ def choose_profile(
         return True
 
     def back_stage(_event) -> bool:
+        if start_create and state.edit is not None:
+            return False
         if not state.back():
             return False
         focus_stage()
@@ -298,6 +306,8 @@ def choose_profile(
         output=app_output,
         style=view.style,
     )
+    if start_create:
+        focus_stage()
     try:
         return app.run()
     except (EOFError, KeyboardInterrupt):

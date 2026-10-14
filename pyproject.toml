@@ -32,6 +32,7 @@ include = ["memcommit*"]
 exclude = ["memcommit.adapters.python_api", "memcommit.adapters.python_api.*", "memcommit.adapters.agent", "memcommit.adapters.agent.*"]
 
 [tool.setuptools.package-data]
+"memcommit.installation" = ["*.sh"]
 "memcommit.application.capabilities.memory_issue_analysis" = ["fixtures/*.json"]
 "memcommit.application.capabilities.semantic" = ["fixtures/*.json"]
 "memcommit.application.operations.atomize" = ["fixtures/*.json"]

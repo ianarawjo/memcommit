@@ -357,7 +357,7 @@ OPERATION_FAMILIES = (
     OperationFamily(
         id=OperationFamilyId.SYSTEM_STUDY_TOOLS,
         title="SYSTEM & STUDY TOOLS",
-        operation_names=("help", "provider", "config", "init-study", "dev-eval"),
+        operation_names=("help", "setup", "provider", "config", "init-study", "dev-eval"),
         description=(
             "Configure MemCommit, prepare studies, and run repeatable developer scenarios."
         ),

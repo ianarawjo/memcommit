@@ -50,6 +50,7 @@ class ProfilePickerState:
     status: str = ""
     status_is_error: bool = False
     create_name_was_edited: bool = False
+    select_created: bool = False
     import_selection: FlatSelectionState = field(default_factory=_enabled_setup_selection)
     sync_selection: FlatSelectionState = field(default_factory=_enabled_setup_selection)
 
@@ -183,6 +184,7 @@ class ProfilePickerState:
                 imported_file_count=len(prepared.files) if prepared else 0,
                 skipped_file_count=len(prepared.skipped_paths) if prepared else 0,
                 import_digest=prepared.digest if prepared else None,
+                select_created=self.select_created,
             )
         else:
             row = self.rows[edit.row_index]

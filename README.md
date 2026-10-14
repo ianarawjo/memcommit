@@ -6,44 +6,54 @@ scriptable commands and interactive terminal workbenches.
 
 This prototype snapshot is published on the `user-study-prototype` branch.
 
-## Install
+## Install on macOS
 
-Python 3.10 or later and Git are required. The current runtime is verified on
-macOS. Native Windows execution is not yet supported: Store locking depends on
-Unix `fcntl`, and isolated Study shells require zsh. A Windows Python install
-alone does not make this snapshot compatible.
-
-On macOS, check Git with `git --version`. If it is missing, run
-`xcode-select --install` and complete the Command Line Tools installation.
-Install [uv](https://docs.astral.sh/uv/getting-started/installation/) if needed:
+Run this command from the folder you want to use as your first workspace:
 
 ```sh
-curl -LsSf https://astral.sh/uv/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/ianarawjo/memcommit/user-study-prototype/src/memcommit/installation/install.sh | sh
 ```
 
-Open a new terminal and verify `uv --version`. Then install the public prototype
-and add uv's tool executable directory to your shell's PATH:
+The installer finds or prepares [uv](https://docs.astral.sh/uv/getting-started/installation/),
+installs memcommit in a tool environment with Python 3.12, registers `mem` on
+PATH, and opens `mem setup`. Open a new terminal after installation if your
+current shell has not picked up the PATH change. The bootstrap installs the
+public source archive without requiring Git.
+
+The current setup offers **OpenAI Codex only**. It finds or offers to install
+the official Codex CLI, lets you complete ChatGPT login, and checks an actual
+synthetic response before creating the first Profile. The default model is
+`gpt-6.1-sol` with low reasoning; Tab edits the model when needed. Claude Code
+and GitHub Copilot are planned additions.
+
+A **Profile is a folder workspace**. Import existing supported documents and
+Auto Sync are both enabled initially. Import includes this folder's subfolders;
+Sync reflects mem changes in managed documents there, including future Contexts.
+Review the folder, document count, options and exact creation command. Creating
+the first Profile also selects it. If setup starts from your home directory,
+its editable folder suggestion is `~/mem`.
+
+For another workspace, enter its folder and run `mem profile`, then choose New
+Profile. Select it with `mem profile use NAME`. Changing directory alone does
+not switch the selected Profile. `mem init NAME` creates a Context inside it.
+Resume interrupted setup with `mem setup`; inspect readiness with
+`mem setup --status`.
+
+If uv is already available, you can install explicitly:
 
 ```sh
-uv tool install --python 3.10 'git+https://github.com/ianarawjo/memcommit.git@user-study-prototype'
+uv tool install --upgrade --python 3.12 'git+https://github.com/ianarawjo/memcommit.git@user-study-prototype'
 uv tool update-shell
-```
-
-Open another new terminal before running `command -v mem` and `mem --help`.
-`uv tool update-shell` updates shell configuration; an already open terminal
-may still have its previous PATH. See uv's
-[tool executable documentation](https://docs.astral.sh/uv/concepts/tools/#tool-executables).
-
-To use the installed tool immediately in the current macOS terminal:
-
-```sh
 export PATH="$(uv tool dir --bin):$PATH"
-mem --help
+mem setup
 ```
 
-To update a previously installed prototype, run `uv tool upgrade memcommit`.
-The source installation below also provides `uv run --locked mem` without
-requiring the `mem` executable itself on PATH.
+This Git source route requires Git (`xcode-select --install` can prepare it on
+macOS). `uv tool upgrade memcommit` updates an installed prototype.
+
+Native Windows execution is not yet supported: Store locking depends on Unix
+`fcntl`, and isolated Study shells require zsh. The automatic installer is
+macOS-only. The Windows/WSL route below remains unverified on a Windows machine.
 
 ### Windows: WSL2 setup route
 
@@ -334,3 +344,22 @@ persistence/      Stores, checkpoints, and saved sessions
 configuration/    Global configuration
 study_scenarios/  Built-in scenarios and their data
 ```
+
+
+## Setup for an AI agent
+
+Let the person complete Codex's ChatGPT login. With their intended workspace
+folder and Profile name, use explicit setup:
+
+```sh
+mem setup --provider codex_chatgpt --name notes --root /path/to/notes --yes
+```
+
+Import and automatic Sync default to ON; use `--no-import-files` or
+`--no-auto-sync` for explicit opt-outs. Authentication stays with Codex; do not
+collect or write the person's tokens. The active Profile remains selected
+until changed with `mem profile use NAME`. Existing installations retain
+their registered Profiles when setup runs again.
+
+First setup writes Profile registry version 7. Existing version-6 registries
+are read and preserved through upgrades; older runtimes cannot read version 7.

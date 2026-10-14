@@ -184,8 +184,9 @@ def render_profile_create_receipt(result) -> None:
     typer.echo(f"Automatic Sync: {'ON (including future Contexts)' if result.automatic_sync else 'OFF'}")
     if result.skipped_paths:
         typer.echo(f"Excluded paths: {len(result.skipped_paths)}")
-    echo_text("Active Profile unchanged: {name}", name=result.active_profile_name)
-    echo_text("Use it with: mem profile use {name}", name=result.profile.name)
+    echo_text("Active Profile: {name}" if result.selected else "Active Profile unchanged: {name}", name=result.active_profile_name)
+    if not result.selected:
+        echo_text("Use it with: mem profile use {name}", name=result.profile.name)
     if not result.inspection.context_names:
         typer.echo("Then create its first Context with: mem init CONTEXT")
 

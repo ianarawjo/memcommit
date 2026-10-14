@@ -102,6 +102,8 @@ def creation_review(action: ProfilePickerAction) -> CommandReview:
         argv += ("--import-files",)
     if action.automatic_sync:
         argv += ("--auto-sync",)
+    if action.select_created:
+        argv += ("--use",)
     return CommandReview(
         argv=argv,
         effects=(
@@ -110,6 +112,6 @@ def creation_review(action: ProfilePickerAction) -> CommandReview:
             f"Import {action.imported_file_count} project documents recursively; exclude {action.skipped_file_count} unsupported or internal paths." if action.import_project_files else "Start with no Contexts or Memories.",
             "Automatic Sync ON: reflect memcommit changes in project files, including future Contexts." if action.automatic_sync else "Automatic Sync OFF.",
             "Keep existing project files unchanged during creation.",
-            "Keep the current Profile selected.",
+            "Select the new Profile for subsequent mem commands." if action.select_created else "Keep the current Profile selected.",
         ),
     )
