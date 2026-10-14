@@ -16,7 +16,6 @@ from memcommit.application.operations.profile.config import (
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
-    profile_stores_dir,
     validate_profile_name,
 )
 from memcommit.persistence.store.infrastructure.storage_permissions import (
@@ -39,16 +38,19 @@ from ._storage import (
     inspect_store as inspect_store,
 )
 
-from memcommit.application.operations.profile.study.topology import study_run_profile_pairs
+from memcommit.application.operations.profile.study.topology import group_study_run_profiles
 
 
 @dataclass(frozen=True)
 class ProfileCreationResult:
-    """One fresh empty managed Profile published without selecting it."""
+    """One managed Profile and its completed project setup, without selecting it."""
 
     profile: ProfileEntry
     inspection: StoreInspection
     active_profile_name: str
+    imported_file_count: int = 0
+    skipped_paths: tuple[str, ...] = ()
+    automatic_sync: bool = False
 
 
 @dataclass(frozen=True)
@@ -64,13 +66,12 @@ class ProfileRenameResult:
 
 @dataclass(frozen=True)
 class ProfileRemovalResult:
-    """One Profile permanently deleted behind a retained identity tombstone."""
+    """One unregistered Profile whose Store was permanently deleted."""
 
     profile: ProfileEntry
     study_name: str | None
     active_profile_name: str
-    study_profile_count: int
-    study_removed_count: int
+    remaining_study_profile_count: int
     removed_grant_count: int
     deleted_store: Path
 
@@ -110,10 +111,6 @@ def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
         target = registry.by_name(canonical)
         if target is None:
             raise ProfileError(f"Profile {canonical!r} does not exist.")
-        if registry.is_removed(target):
-            raise ProfileError(
-                f"Profile {canonical!r} was removed from direct selection."
-            )
         inspection = _inspection_with_grants(
             registry,
             target,
@@ -132,7 +129,6 @@ def use_profile(name: str) -> tuple[ProfileRegistry, StoreInspection, bool]:
             active_uid=target.uid,
             profiles=registry.profiles,
             grants=registry.grants,
-            removed_profile_uids=registry.removed_profile_uids,
             grant_placements=registry.grant_placements,
         )
         _write_registry(updated)
@@ -174,8 +170,14 @@ def create_profile(
     *,
     expected_generation: int | None = None,
     root_dir: Path | str | None = None,
+    import_project_files: bool = False,
+    automatic_sync: bool = False,
+    expected_import_digest: str | None = None,
 ) -> ProfileCreationResult:
-    """Atomically publish one empty managed Profile and keep selection fixed."""
+    """Publish project Import and Sync setup together; keep selection fixed."""
+
+    if type(import_project_files) is not bool or type(automatic_sync) is not bool:
+        raise TypeError("Profile setup options must be boolean.")
 
     try:
         canonical = validate_profile_name(name)
@@ -214,12 +216,34 @@ def create_profile(
         )
         from memcommit.application.operations.profile.project_root import prepare_profile_root, write_profile_marker
         profile = prepare_profile_root(profile, root_dir, registry)
+        from memcommit.application.operations.profile.project_documents import (
+            import_project_documents,
+            prepare_project_import,
+            verify_project_import_source,
+        )
+        prepared = prepare_project_import(profile.root_dir) if import_project_files else None
+        if expected_import_digest is not None and (
+            prepared is None or prepared.digest != expected_import_digest
+        ):
+            raise ProfileError("Project files changed after create review; review creation again.")
         destination = profile_store_dir(profile)
         staging = destination.parent / f".mem-staging-{uuid.uuid4().hex}"
         published = False
         try:
             inspection = _write_empty_profile_store(staging)
             write_profile_marker(staging, profile.uid)
+            if import_project_files or automatic_sync:
+                from memcommit.persistence.store import MemoryStore
+
+                store = MemoryStore(root=staging, create=False)
+                if prepared is not None:
+                    import_project_documents(store, prepared)
+                if automatic_sync:
+                    from memcommit.application.operations.mem_sync.documents.connect_imported_documents import connect_imported_documents
+                    connect_imported_documents(store)
+                if prepared is not None:
+                    verify_project_import_source(prepared)
+                inspection = inspect_store(staging)
             if destination.exists() or destination.is_symlink():
                 raise ProfileError("Managed Profile destination is occupied.")
             os.replace(staging, destination)
@@ -264,6 +288,9 @@ def create_profile(
                 profile=profile,
                 inspection=replace(inspection, root=destination),
                 active_profile_name=updated.active.name,
+                imported_file_count=len(prepared.files) if prepared else 0,
+                skipped_paths=prepared.skipped_paths if prepared else (),
+                automatic_sync=automatic_sync,
             )
         finally:
             if not published and staging.exists() and not staging.is_symlink():
@@ -309,10 +336,6 @@ def rename_profile(
                 f"Profile {target.name!r} identity changed after rename "
                 "selection; nothing was renamed."
             )
-        if registry.is_removed(target):
-            raise ProfileError(
-                f"Profile {target.name!r} cannot be renamed while removed."
-            )
         was_active = target.uid == registry.active_uid
 
         # An exact no-op must not become a hidden store validation or registry
@@ -353,7 +376,6 @@ def rename_profile(
                 for profile in registry.profiles
             ),
             grants=registry.grants,
-            removed_profile_uids=registry.removed_profile_uids,
             grant_placements=registry.grant_placements,
         )
         try:
@@ -392,12 +414,12 @@ def _profile_study_target(
     registry: ProfileRegistry,
     profile: ProfileEntry,
 ) -> tuple[str, str, tuple[ProfileEntry, ...]] | None:
-    """Return the complete Study containing a Profile, when one exists."""
+    """Return the registered Study members containing a Profile, if any."""
 
-    for pair in study_run_profile_pairs(registry.profiles):
-        members = (pair.participant, pair.authority)
+    for group in group_study_run_profiles(registry.profiles):
+        members = group.profiles
         if any(member.uid == profile.uid for member in members):
-            return pair.uid, pair.name, members
+            return group.uid, group.name, members
     return None
 
 
@@ -430,13 +452,6 @@ def remove_profile(
                 "before removing it."
             )
         store = profile_store_dir(target)
-        if (
-            registry.is_removed(target)
-            and not store.exists()
-            and not store.is_symlink()
-        ):
-            raise ProfileError(f"Profile {target.name!r} is already removed.")
-
         # Validate every byte tree before it is moved into the private deletion
         # batch. This prevents a recursive delete from following an unsafe link
         # or accepting an already-corrupt Profile as the reviewed target.
@@ -448,10 +463,6 @@ def remove_profile(
             ),
         )
         study = _profile_study_target(registry, target)
-        removed = frozenset((*registry.removed_profile_uids, target.uid))
-        ordered_removed = tuple(
-            profile.uid for profile in registry.profiles if profile.uid in removed
-        )
         retained_grants = tuple(
             grant
             for grant in registry.grants
@@ -461,9 +472,10 @@ def remove_profile(
         updated = ProfileRegistry(
             generation=max(1, registry.generation + 1),
             active_uid=registry.active_uid,
-            profiles=registry.profiles,
+            profiles=tuple(
+                profile for profile in registry.profiles if profile.uid != target.uid
+            ),
             grants=retained_grants,
-            removed_profile_uids=ordered_removed,
             grant_placements=tuple(
                 placement
                 for placement in registry.grant_placements
@@ -483,8 +495,7 @@ def remove_profile(
             profile=target,
             study_name=study[1] if study is not None else None,
             active_profile_name=registry.active.name,
-            study_profile_count=len(members),
-            study_removed_count=sum(member.uid in removed for member in members),
+            remaining_study_profile_count=max(0, len(members) - 1),
             removed_grant_count=len(registry.grants) - len(retained_grants),
             deleted_store=store,
         )

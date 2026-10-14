@@ -222,7 +222,6 @@ class ContextOrGrantPlacementRenamePort:
                 active_uid=registry.active_uid,
                 profiles=registry.profiles,
                 grants=registry.grants,
-                removed_profile_uids=registry.removed_profile_uids,
                 grant_placements=placements,
             )
             _write_registry(updated)

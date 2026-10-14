@@ -37,6 +37,9 @@ def render_sync_receipt(result):
     change = result.automatic_change
     if change:
         action = "enabled" if change.enabled else "disabled"
+        if not change.context_names:
+            typer.echo(f"Automatic Sync {action} for this Profile, including future Contexts.")
+            return
         suffix = (
             f" ({change.newly_enabled} newly enabled, {change.already_enabled} already enabled)"
             if change.enabled and change.already_enabled

@@ -120,7 +120,6 @@ def _frozen_source_profile(
     current = registry.by_name(source.name)
     if (
         current is None
-        or registry.is_removed(current)
         or current.uid != source.uid
         or current.uid == registry.active_uid
     ):

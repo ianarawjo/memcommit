@@ -9,11 +9,11 @@ from memcommit.adapters.console.commands.profile.presentation import (
     _print_current_profile,
     _print_profile_inventory,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.config import ProfileConfigError, study_run_identity
 from memcommit.application.operations.profile.model._storage import ProfileError
 from memcommit.application.operations.profile.model.lifecycle import list_profiles
 from memcommit.application.operations.profile.study.topology import (
-    study_run_profile_pairs,
+    group_study_run_profiles,
 )
 
 
@@ -33,50 +33,35 @@ class _ProfileStudyMembership:
     first: bool
     last: bool
     profile_count: int
-    removed_count: int
 
 
 def _study_memberships(registry) -> dict[str, _ProfileStudyMembership]:
     try:
-        pairs = study_run_profile_pairs(registry.profiles)
+        groups = group_study_run_profiles(registry.profiles)
     except (ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
-    study_names = [
-        pair.name.casefold() for pair in pairs
-    ]
-    if len(study_names) != len(set(study_names)):
-        _fail(ProfileError("Study display names must be unique."))
     profile_positions = {
         profile.uid: index for index, profile in enumerate(registry.profiles)
     }
     memberships: dict[str, _ProfileStudyMembership] = {}
-    for pair in pairs:
-        if (
-            profile_positions[pair.authority.uid]
-            != profile_positions[pair.participant.uid] + 1
-        ):
-            _fail(ProfileError("Study run Profile pair must remain contiguous."))
-        pair_members = (
-            (pair.participant, "PARTICIPANT"),
-            (pair.authority, "GRANTED_MEMORY"),
-        )
-        visible_members = tuple(
-            profile
-            for profile, _role in pair_members
-            if not registry.is_removed(profile)
-        )
-        for profile, role in pair_members:
+    for group in groups:
+        members = group.profiles
+        positions = tuple(profile_positions[profile.uid] for profile in members)
+        if positions != tuple(range(positions[0], positions[0] + len(members))):
+            _fail(ProfileError("Study Profile entries must remain contiguous."))
+        for profile in members:
+            identity = study_run_identity(profile)
+            assert identity is not None
             if profile.uid in memberships:
                 _fail(ProfileError("Profile has conflicting Study provenance."))
             memberships[profile.uid] = _ProfileStudyMembership(
-                uid=pair.uid,
-                name=pair.name,
-                created_at=pair.created_at,
-                role=role,
-                first=bool(visible_members and profile.uid == visible_members[0].uid),
-                last=bool(visible_members and profile.uid == visible_members[-1].uid),
-                profile_count=len(pair_members),
-                removed_count=len(pair_members) - len(visible_members),
+                uid=group.uid,
+                name=group.name,
+                created_at=group.created_at,
+                role=identity.role,
+                first=profile.uid == members[0].uid,
+                last=profile.uid == members[-1].uid,
+                profile_count=len(members),
             )
     return memberships
 

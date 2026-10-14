@@ -43,6 +43,7 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
 )
 from memcommit.adapters.console.terminal.core.text import display_escape_text
 from memcommit.adapters.console.terminal.core.theme import REPORT_HEX
+from memcommit.adapters.console.terminal.components.selection.rendering import render_horizontal_choice_row
 
 
 def _entry_name_label(entry: ProfilePickerEntry) -> str:
@@ -80,10 +81,7 @@ def render_profile_options(
         pointer = "›" if is_selected else " "
         row_style = "class:selected" if is_selected else ""
         if row.kind == "STUDY":
-            active_count = row.profile_count - row.removed_count
-            count_label = f"{active_count} active"
-            if row.removed_count:
-                count_label += f" · {row.removed_count} removed"
+            count_label = f"{row.profile_count} active"
             fragments.append(
                 (
                     row_style or "class:study",
@@ -99,9 +97,9 @@ def render_profile_options(
             marker = "*" if is_current else " "
             action = "CURRENT" if is_current else ("USE" if is_selected else "")
             action_style = row_style or ("class:current" if is_current else "")
-            current_context = (
-                display_escape_text(entry.current_context)
-                if entry.current_context
+            project_location = (
+                display_escape_text(entry.root_dir)
+                if entry.root_dir
                 else "(none)"
             )
             query_note = (
@@ -129,7 +127,7 @@ def render_profile_options(
                         f"{entry.granted_context_count} granted · "
                         f"Memories {entry.memory_count} owned + "
                         f"{entry.granted_memory_count} granted"
-                        f"{query_note} · current={current_context}",
+                        f"{query_note} · location={project_location}",
                     ),
                 ]
             )
@@ -178,6 +176,14 @@ class ProfilePickerView:
             ExactNameFieldView(value="", label="PROJECT FOLDER", state="", detail="Tab moves between fields · Enter reviews the exact command", value_label="Project folder", strip_candidate=False),
             input_name="profile-picker-project-folder", frame_style="class:profile-create-field")
         self.restoring_fields = False
+        self.import_control = FormattedTextControl(
+            lambda: self.render_setup_option("IMPORT PROJECT FILES", self.state.import_selection, self.import_control),
+            focusable=True, show_cursor=False,
+        )
+        self.sync_control = FormattedTextControl(
+            lambda: self.render_setup_option("AUTO SYNC", self.state.sync_selection, self.sync_control),
+            focusable=True, show_cursor=False,
+        )
         self.layout = self._layout()
         self.style = merge_styles(
             [
@@ -207,7 +213,7 @@ class ProfilePickerView:
                 label=f"NEW {target.upper()} NAME",
                 state="NOT CREATED" if create else "NEW NAME",
                 detail=(
-                    "Enter to review this exact empty Profile creation."
+                    "Tab moves between fields · Enter reviews project setup."
                     if create
                     else f"Enter to review this exact {target} rename."
                 ),
@@ -225,6 +231,18 @@ class ProfilePickerView:
         edit = self.state.edit
         assert edit is not None
         return self.name_fields[edit.kind]
+
+    def render_setup_option(self, label, selection, control):
+        return [("", f" {label:<23}")] + render_horizontal_choice_row(
+            selection, focused=self.layout.has_focus(control),
+        )
+
+    def active_setup_selection(self):
+        if self.layout.has_focus(self.import_control):
+            return self.state.import_selection
+        if self.layout.has_focus(self.sync_control):
+            return self.state.sync_selection
+        return None
 
     def focus_stage(self) -> None:
         edit = self.state.edit
@@ -266,7 +284,7 @@ class ProfilePickerView:
         edit = self.state.edit
         if edit is not None:
             if edit.kind == "CREATE_PROFILE":
-                return " Create an empty Profile"
+                return " Create a Profile"
             target_kind = "Study" if edit.kind == "RENAME_STUDY" else "Profile"
             return f" Rename {target_kind} " + display_escape_text(
                 self.state.rows[edit.row_index].name
@@ -296,7 +314,7 @@ class ProfilePickerView:
         action = self.state.action
         if action is not None:
             if action.kind == "CREATE_PROFILE":
-                return " Enter/A create empty Profile  Esc back"
+                return " Enter/A create Profile  Esc back"
             if action.kind in {"RENAME_PROFILE", "RENAME_STUDY"}:
                 target_kind = "Study" if action.kind == "RENAME_STUDY" else "Profile"
                 return f" Enter/A rename {target_kind}  Esc back"
@@ -306,7 +324,7 @@ class ProfilePickerView:
             )
         message = self.state.status
         if self.state.edit is not None:
-            prefix = " Tab next  Shift-Tab previous  Ctrl-U clear  Enter review exact command  Esc back"
+            prefix = " Tab next  Shift-Tab previous  ←/→ choose  Space toggle  Enter review exact command  Esc back"
             if not message:
                 return prefix
             message_style = (
@@ -326,7 +344,7 @@ class ProfilePickerView:
         fragments = [
             ("", prefix),
             ("class:semantic.create", "N new Profile"),
-            ("", suffix + (" · " if message else "")),
+            ("", suffix + ("\n " if message else "")),
         ]
         if message:
             message_style = (
@@ -343,12 +361,18 @@ class ProfilePickerView:
         )
         options_window = Window(
             self.control,
-            wrap_lines=False,
+            # Absolute project paths must remain visible even for long Study rows.
+            wrap_lines=True,
             right_margins=[ScrollbarMargin(display_arrows=True)],
         )
         footer = Window(
             FormattedTextControl(self.footer_text),
-            height=Dimension.exact(1),
+            # A completed deletion receipt must remain readable alongside the
+            # navigation keys, including long Study-generated Profile names.
+            height=lambda: 2 if (
+                self.state.status and self.state.action is None
+                and self.state.edit is None and not self.background_turn.busy
+            ) else 1,
             dont_extend_height=True,
         )
         name_containers = [
@@ -369,6 +393,13 @@ class ProfilePickerView:
                     options_window,
                     *name_containers,
                     ConditionalContainer(self.folder_field.frame, filter=self.create_mode),
+                    ConditionalContainer(
+                        HSplit([
+                            Window(height=1),
+                            Window(self.import_control, height=1),
+                            Window(self.sync_control, height=1),
+                        ]), filter=self.create_mode,
+                    ),
                     Window(height=1, char="─"),
                     footer,
                 ]

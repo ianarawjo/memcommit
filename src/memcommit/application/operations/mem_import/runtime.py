@@ -14,16 +14,13 @@ from memcommit.application.capabilities.operand_resolution import (
 from memcommit.application.operations.profile.model._storage import (
     authority_grant_snapshot_lock,
 )
-from memcommit.core.context import AutoCheckpoint, Memory
 from memcommit.core.context_targeting.naming import validate_portable_context_name
 from memcommit.persistence.import_export.source import read_source
 from memcommit.persistence.store import MemoryStore
-from memcommit.persistence.store.attached_files import save_attached_file
 
-from .application import ImportResult
 from ._shared import require_active_profile_snapshot
 from .context_data import _closed_import_contexts, _context_name_mapping
-from .documents.publication import import_context_records
+from .documents.publication import publish_document_import
 
 
 class ImportRuntime:
@@ -110,43 +107,4 @@ class ImportRuntime:
                 name, uid = self.parent_binding
                 if self.store.load_direct(name).uid != uid:
                     raise ValueError("Import parent changed identity.")
-            # Immutable bytes are retained before any Context can point at them.
-            # An interrupted command may leave unreferenced bytes, never a live
-            # Context referring to content that was not successfully retained.
-            for digest, data in content.attached_data.items():
-                if save_attached_file(self.store.store_dir, data) != digest:
-                    raise ValueError("Attached-file identity mismatch.")
-            entries = tuple(
-                (
-                    context,
-                    AutoCheckpoint(
-                        command="import",
-                        args={
-                            "resource_kind": "document",
-                            "target_context": context.name,
-                        },
-                        description="Imported document syntax and current file composition.",
-                    ),
-                )
-                for context in content.contexts
-            )
-            created = import_context_records(self.store, entries)
-            checkpoints = tuple(
-                str(item["uid"])
-                for context in created
-                for item in self.store.list_checkpoints(context.name)
-            )
-        files = []
-        for context in created:
-            if context.document and context.document.role != "package":
-                files.append((context.document.path, "DOCUMENT", context.name))
-            files.extend(
-                (f.path, "ATTACHED", context.name) for f in context.attached_files
-            )
-        return ImportResult(
-            Path(self.request.source),
-            tuple(c.name for c in created),
-            tuple(files),
-            sum(isinstance(i, Memory) for c in created for i in c.iter_items()),
-            checkpoints,
-        )
+            return publish_document_import(self.store, self.request, content)

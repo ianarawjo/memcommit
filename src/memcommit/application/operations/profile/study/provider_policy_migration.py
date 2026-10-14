@@ -1,4 +1,4 @@
-"""Explicit pilot migration of provider policy on visible Study pairs."""
+"""Explicit pilot migration of provider policy on registered Study groups."""
 
 from __future__ import annotations
 
@@ -7,7 +7,6 @@ from dataclasses import dataclass, replace
 from memcommit.application.operations.profile.config import (
     ProfileEntry,
     ProfileRegistry,
-    StudyRunIdentity,
     load_profile_registry,
     study_run_identity,
 )
@@ -16,11 +15,12 @@ from memcommit.application.operations.profile.model._storage import (
     _registry_lock,
     _write_registry,
 )
+from .topology import group_study_run_profiles
 
 
 @dataclass(frozen=True)
 class StudyProviderPolicyMigrationResult:
-    """One atomic pilot migration of visible current Study pairs."""
+    """One atomic pilot migration of registered Study Profiles."""
 
     generation: int
     migrated_study_count: int
@@ -33,11 +33,10 @@ def migrate_visible_study_provider_policy(
     target_digest: str,
     accepted_sources: frozenset[tuple[str | None, str | None]],
 ) -> StudyProviderPolicyMigrationResult:
-    """Atomically repin every visible current Study pair during the pilot.
+    """Atomically repin the remaining registered members of each Study.
 
-    Removed Profile tombstones retain their historical provenance. Every
-    visible participant/authority pair must be complete and must share one
-    explicitly accepted source condition before any registry replacement.
+    Every group must share one explicitly accepted source condition before
+    any registry replacement, including groups with only one member left.
     """
 
     if not target_version or len(target_version) > 128:
@@ -54,44 +53,23 @@ def migrate_visible_study_provider_policy(
     target = (target_version, target_digest)
     with _registry_lock():
         registry = load_profile_registry()
-        removed = frozenset(registry.removed_profile_uids)
-        groups: dict[str, list[tuple[ProfileEntry, StudyRunIdentity]]] = {}
-        for profile in registry.profiles:
-            if profile.uid in removed:
-                continue
-            identity = study_run_identity(profile)
-            if identity is None:
-                continue
-            groups.setdefault(identity.uid, []).append((profile, identity))
-
         migrated_uids: set[str] = set()
         migrated_studies = 0
-        for study_uid, members in groups.items():
-            roles = {identity.role for _profile, identity in members}
-            conditions = {
-                (
-                    identity.provider_policy_version,
-                    identity.provider_policy_digest,
-                )
-                for _profile, identity in members
-            }
-            if len(members) != 2 or roles != {"PARTICIPANT", "GRANTED_MEMORY"}:
-                raise ProfileError(
-                    f"Visible Study {study_uid!r} does not contain one complete pair."
-                )
-            if len(conditions) != 1:
-                raise ProfileError(
-                    f"Visible Study {study_uid!r} has inconsistent provider policy."
-                )
-            current = next(iter(conditions))
+        for group in group_study_run_profiles(registry.profiles):
+            identity = study_run_identity(group.profiles[0])
+            assert identity is not None
+            current = (
+                identity.provider_policy_version,
+                identity.provider_policy_digest,
+            )
             if current == target:
                 continue
             if current not in accepted_sources:
                 raise ProfileError(
-                    f"Visible Study {study_uid!r} has an unaccepted provider policy."
+                    f"Visible Study {group.uid!r} has an unaccepted provider policy."
                 )
             migrated_studies += 1
-            migrated_uids.update(profile.uid for profile, _identity in members)
+            migrated_uids.update(profile.uid for profile in group.profiles)
 
         if not migrated_uids:
             return StudyProviderPolicyMigrationResult(
@@ -116,7 +94,6 @@ def migrate_visible_study_provider_policy(
             active_uid=registry.active_uid,
             profiles=tuple(profiles),
             grants=registry.grants,
-            removed_profile_uids=registry.removed_profile_uids,
             grant_placements=registry.grant_placements,
         )
         _write_registry(updated)

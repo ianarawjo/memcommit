@@ -134,6 +134,19 @@ rejected. When `--root` is omitted, a new Profile gets a separate directory unde
 `~/.memcommit/projects/`. The interactive `mem profile` creation screen lets you
 choose a folder, initially suggesting the current directory.
 
+To import the supported documents and enable automatic outbound Sync during
+creation, use:
+
+```sh
+mem profile create my-project --root /path/to/my-project --import-files --auto-sync
+mem profile use my-project
+```
+
+Choose either flag independently. Import includes supported nested and hidden
+document paths; automatic Sync also covers Contexts created later. Creation
+preserves existing document bytes and keeps the previous Profile selected.
+The interactive `mem profile` creation screen exposes the same two options.
+
 From the registered project folder, import supported existing documents and
 synchronize them back to those paths:
 
@@ -203,19 +216,53 @@ mem config set study_root_dir /path/to/studies
 Commands that call a language model require a configured provider. Supported
 providers are Codex with a ChatGPT login, Ollama, and OpenRouter. Each requires
 its own runtime or credentials; the Python package does not install those
-services. Inspect the available settings and verify a connection with:
+services. Init, Add, List, Import, Export, and document Sync can be used before
+setting up a language-model provider.
+
+### Codex: install, sign in, and connect
+
+On macOS or inside WSL Ubuntu, install the Codex CLI using the
+[official OpenAI installation instructions](https://learn.chatgpt.com/docs/codex/cli):
 
 ```sh
-mem provider --help
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+```
+
+Open a new terminal so the installer's PATH change takes effect. Check the CLI,
+then sign in with the ChatGPT account that will run semantic operations:
+
+```sh
+codex --version
+codex login
+codex login status
+```
+
+`codex login` opens the browser sign-in flow. If the browser cannot be opened
+from WSL or a remote terminal, use `codex login --device-auth` and follow its
+instructions. See the [official login command reference](https://learn.chatgpt.com/docs/developer-commands?surface=cli#codex-login).
+For this prototype, the status must say `Logged in using ChatGPT`; an API-key
+login is not accepted by the `codex_chatgpt` route.
+
+For an ordinary Profile, select the provider and verify an actual connection:
+
+```sh
 mem provider use codex_chatgpt --reasoning low
 mem provider status
 mem provider probe
 ```
 
-The example configures an ordinary Profile for Codex and requires an existing
-ChatGPT login in the Codex CLI. Select a reasoning level supported by your model;
-an unconfigured route can request `none`, which some models reject. Study
-Profiles use their own fixed provider configuration.
+Select a reasoning level supported by your model; an unconfigured route can
+request `none`, which some models reject. Study Profiles use their own fixed
+provider configuration: install and sign in to the Codex CLI in the same
+environment, then run `mem provider status` and `mem provider probe` in the
+selected Study Profile without overriding its provider settings.
+
+If `codex` cannot be found, reopen the terminal and check the CLI installer's
+PATH instructions. If mem reports that authentication overrides are set, the
+`codex_chatgpt` route requires a shell without `OPENAI_API_KEY`, `CODEX_API_KEY`,
+or `CODEX_ACCESS_TOKEN` overrides. Provider login and settings must be prepared on
+each new computer; installing memcommit does not transfer credentials.
+Use `mem provider --help` for Ollama, OpenRouter, and the complete settings.
 
 ## Update
 

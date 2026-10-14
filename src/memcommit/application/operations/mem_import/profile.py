@@ -17,7 +17,6 @@ from memcommit.application.operations.profile.config import (
     ProfileRegistry,
     load_profile_registry,
     profile_store_dir,
-    profile_stores_dir,
     validate_profile_name,
 )
 from memcommit.application.operations.profile.model._storage import (
@@ -218,7 +217,6 @@ def import_baseline_profile(
             frozen_source = registry.by_name(source_profile.name)
             if (
                 frozen_source is None
-                or registry.is_removed(frozen_source)
                 or frozen_source.uid != source_profile.uid
                 or profile_store_dir(frozen_source).absolute() != source_root
             ):

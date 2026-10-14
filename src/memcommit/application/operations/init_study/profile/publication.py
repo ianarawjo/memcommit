@@ -420,7 +420,6 @@ def _publish_study_profile_batch(
             active_uid=registry.active_uid,
             profiles=(*registry.profiles, *profiles),
             grants=(*registry.grants, *grants),
-            removed_profile_uids=registry.removed_profile_uids,
             grant_placements=(*registry.grant_placements, *grant_placements),
         )
         cache = {
@@ -497,6 +496,17 @@ def _publish_study_run_pair(
     ]
     if conflicts:
         raise ProfileError(f"Profile {conflicts[0]!r} already exists.")
+
+    from memcommit.application.operations.profile.study.topology import (
+        group_study_run_profiles,
+    )
+    if any(
+        group.name.casefold() == study_name.casefold()
+        for group in group_study_run_profiles(registry.profiles)
+    ):
+        # A remaining member still owns the Study label, even after its Profile
+        # was independently renamed. Only deleting the final member frees it.
+        raise ProfileError(f"Study {study_name!r} already exists.")
 
     common_source: dict[str, object] = {
         "study_uid": study_uid,
@@ -582,7 +592,6 @@ def _publish_study_run_pair(
             active_uid=participant.uid,
             profiles=(*registry.profiles, participant, authority),
             grants=(*registry.grants, *grants),
-            removed_profile_uids=registry.removed_profile_uids,
             grant_placements=(*registry.grant_placements, *grant_placements),
         )
         participant_inspection = _inspection_with_grants(

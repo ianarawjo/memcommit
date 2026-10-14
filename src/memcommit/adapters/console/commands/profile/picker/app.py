@@ -106,8 +106,13 @@ def choose_profile(
     view.folder_field.input.buffer.on_text_changed += update_folder_suggestion
     from memcommit.adapters.console.terminal.components.focus.controller import FocusSurface, SurfaceFocusController, bind_surface_navigation
     controller = SurfaceFocusController(lambda: (
-        (FocusSurface("name", view.active_name_field().input), FocusSurface("folder", view.folder_field.input))
+        (FocusSurface("name", view.active_name_field().input),
+         FocusSurface("folder", view.folder_field.input),
+         FocusSurface("import", view.import_control),
+         FocusSurface("sync", view.sync_control))
         if state.edit is not None and state.edit.kind == "CREATE_PROFILE"
+        else (FocusSurface("name", view.active_name_field().input),)
+        if state.edit is not None
         else (FocusSurface("main", view.control),)
     ))
     bind_surface_navigation(bindings, controller, vertical=False, activate=False)
@@ -152,14 +157,39 @@ def choose_profile(
         focus_stage()
         event.app.invalidate()
 
-    @bindings.add("enter", filter=name_mode, eager=True)
+    @bindings.add("enter", filter=view.create_mode | name_mode, eager=True)
     def _review_name(event) -> None:
         try:
             state.review_name(view.active_name_field().validate_candidate(), view.folder_field.validate_candidate() if state.edit.kind == "CREATE_PROFILE" else None)
-        except (ProfileConfigError, TypeError, ValueError) as error:
+        except (OSError, ProfileConfigError, TypeError, ValueError) as error:
             state.notify(display_escape_text(str(error)), error=True)
             event.app.invalidate()
             return
+        focus_stage()
+        event.app.invalidate()
+
+    setup_option_mode = view.create_mode & Condition(lambda: view.active_setup_selection() is not None)
+
+    @bindings.add("left", filter=setup_option_mode, eager=True)
+    @bindings.add("right", filter=setup_option_mode, eager=True)
+    def _choose_setup_option(event):
+        selection = view.active_setup_selection()
+        selection.move(-1 if event.key_sequence[-1].key == "left" else 1)
+        selection.select_cursor(toggle=False)
+        state.notify()
+        event.app.invalidate()
+
+    @bindings.add(" ", filter=setup_option_mode, eager=True)
+    def _toggle_setup_option(event):
+        selection = view.active_setup_selection()
+        selection.cursor_uid = "off" if selection.selected_uid == "on" else "on"
+        selection.select_cursor(toggle=False)
+        state.notify()
+        event.app.invalidate()
+
+    @bindings.add("backspace", filter=view.review_mode | setup_option_mode, eager=True)
+    def _back_from_review(event):
+        state.back()
         focus_stage()
         event.app.invalidate()
 

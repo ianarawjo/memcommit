@@ -14,6 +14,7 @@ from memcommit.adapters.console.terminal.core.theme import (
 )
 from memcommit.application.operations.profile.config import (
     ProfileRegistry,
+    profile_root_dir,
     profile_store_dir,
 )
 
@@ -112,15 +113,18 @@ def _print_profile_removal(result) -> None:
     )
     typer.echo(f"Connected Grants removed: {result.removed_grant_count}")
     typer.echo(
-        "The Profile UID and Study provenance remain only as a tombstone; "
-        "content cannot be recovered."
+        "Profile registration removed. Internal content and history cannot be recovered."
     )
+    typer.echo("Project folders and document files kept.")
     if result.study_name is not None:
         typer.echo(
             "Study "
             + display_escape_text(result.study_name)
-            + f": {result.study_profile_count - result.study_removed_count} active · "
-            + f"{result.study_removed_count} removed"
+            + (
+                f": {result.remaining_study_profile_count} active"
+                if result.remaining_study_profile_count
+                else ": removed from the registered list"
+            )
         )
     typer.echo(
         "Active Profile unchanged: " + display_escape_text(result.active_profile_name)
@@ -140,9 +144,9 @@ def _print_study_removal(result) -> None:
     )
     typer.echo(f"Connected Grants removed: {result.removed_grant_count}")
     typer.echo(
-        "Profile UIDs and Study provenance remain only as tombstones; content "
-        "cannot be recovered."
+        "Study and Profile registrations removed. Internal content and history cannot be recovered."
     )
+    typer.echo("Project folders and document files kept.")
     typer.echo(
         "Active Profile unchanged: " + display_escape_text(result.active_profile_name)
     )
@@ -160,25 +164,30 @@ def _profile_removal_status(result) -> str:
 
 def _profile_creation_status(result) -> str:
     return (
-        "Created empty Profile '"
+        "Created '"
         + display_escape_text(result.profile.name)
-        + "' · 0 Contexts · active Profile unchanged: "
+        + f"' · Import {result.imported_file_count} files · Auto Sync {'ON' if result.automatic_sync else 'OFF'} · active: "
         + display_escape_text(result.active_profile_name)
     )
 
 
 def render_profile_create_receipt(result) -> None:
     typer.secho(
-        "Created empty Profile '" + display_escape_text(result.profile.name) + "'.",
+        ("Created empty Profile '" if not result.inspection.context_names else "Created Profile '") + display_escape_text(result.profile.name) + "'.",
         fg=semantic_color_rgb(SemanticColorRole.CREATE),
     )
     echo_text("Profile UID: {uid}", uid=result.profile.uid)
     echo_text("Store: {path}", path=result.inspection.root)
-    typer.echo(f"Project folder: {result.profile.root_dir}")
-    typer.echo("Contexts 0 owned + 0 granted · Memories 0 owned + 0 granted")
+    echo_text("Project folder: {path}", path=result.profile.root_dir)
+    typer.echo(f"Contexts {len(result.inspection.context_names)} owned + 0 granted · Memories {result.inspection.ordinary_memory_count} owned + 0 granted")
+    typer.echo(f"Imported project documents: {result.imported_file_count}")
+    typer.echo(f"Automatic Sync: {'ON (including future Contexts)' if result.automatic_sync else 'OFF'}")
+    if result.skipped_paths:
+        typer.echo(f"Excluded paths: {len(result.skipped_paths)}")
     echo_text("Active Profile unchanged: {name}", name=result.active_profile_name)
     echo_text("Use it with: mem profile use {name}", name=result.profile.name)
-    typer.echo("Then create its first Context with: mem init CONTEXT")
+    if not result.inspection.context_names:
+        typer.echo("Then create its first Context with: mem init CONTEXT")
 
 
 def _profile_rename_status(result) -> str:
@@ -283,11 +292,7 @@ def _print_profile_inventory(registry, inspections, memberships) -> None:
         marker = "*" if profile.uid == registry.active_uid else " "
         action = "CURRENT" if profile.uid == registry.active_uid else "USE"
         profile_label = display_escape_text(profile.name)
-        current = (
-            display_escape_text(inspection.current_context)
-            if inspection.current_context
-            else "(none)"
-        )
+        project_location = display_escape_text(str(profile_root_dir(profile)))
         query_note = (
             " · query="
             + ",".join(
@@ -319,17 +324,11 @@ def _print_profile_inventory(registry, inspections, memberships) -> None:
         membership = memberships.get(profile.uid)
         if membership is not None:
             if membership.first:
-                removal_note = (
-                    f" · {membership.removed_count} removed"
-                    if membership.removed_count
-                    else ""
-                )
                 _echo_profile_inventory_row(
                     "  " + display_escape_text(membership.name),
                     "STUDY",
                     "created="
-                    + display_escape_text(membership.created_at)
-                    + removal_note,
+                    + display_escape_text(membership.created_at),
                     identity_width=identity_width,
                 )
             branch = "└─" if membership.last else "├─"
@@ -338,7 +337,7 @@ def _print_profile_inventory(registry, inspections, memberships) -> None:
                 action,
                 f"profile={profile_label} · "
                 f"{profile.kind.lower()} · {_inventory_label(inspection)}"
-                f"{query_note}{view_note} · current={current}",
+                f"{query_note}{view_note} · location={project_location}",
                 identity_width=identity_width,
             )
             continue
@@ -347,16 +346,11 @@ def _print_profile_inventory(registry, inspections, memberships) -> None:
             action,
             f"{profile.kind.lower():<9} "
             f"{_inventory_label(inspection)}"
-            f"{query_note}{view_note} · current={current}",
+            f"{query_note}{view_note} · location={project_location}",
             identity_width=identity_width,
         )
     typer.echo("Granted views are permission projections, not copied Profiles.")
     typer.echo("Authority Profiles are ordinary switchable owners of source data.")
-    if registry.removed_profile_uids:
-        typer.echo(
-            f"Deleted Profile tombstones hidden from this list: "
-            f"{len(registry.removed_profile_uids)}"
-        )
 
 
 def _print_current_profile(registry, inspections) -> None:

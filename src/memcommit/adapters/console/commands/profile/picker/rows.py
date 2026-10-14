@@ -50,21 +50,20 @@ def _validate_entries(
                 and bool(entry.study_name)
                 and isinstance(entry.study_created_at, str)
                 and bool(entry.study_created_at)
-                and entry.study_profile_count == 2
-                and 0 <= entry.study_removed_count < entry.study_profile_count
+                and entry.study_profile_count in {1, 2}
                 and entry.study_role in {"PARTICIPANT", "GRANTED_MEMORY"}
             )
         )
         or (
             entry.study_name is None
-            and (entry.study_profile_count != 0 or entry.study_removed_count != 0)
+            and entry.study_profile_count != 0
         )
         for entry in options
     ) or len(set(names)) != len(names):
         raise ValueError("Profile selection received invalid entries.")
     study_metadata: dict[
         str,
-        tuple[str, str, int, int, set[str]],
+        tuple[str, str, int, set[str]],
     ] = {}
     finished_studies: set[str] = set()
     previous_study: str | None = None
@@ -90,15 +89,16 @@ def _validate_entries(
             study_uid,
             created_at,
             entry.study_profile_count,
-            entry.study_removed_count,
         )
         if existing is None:
             study_metadata[study_name] = (*metadata, {member})
-        elif existing[:4] != metadata or member in existing[4]:
+        elif existing[:3] != metadata or member in existing[3]:
             raise ValueError("Study Profile entries are inconsistent.")
         else:
-            existing[4].add(member)
+            existing[3].add(member)
         previous_study = study_name
+    if any(len(metadata[3]) != metadata[2] for metadata in study_metadata.values()):
+        raise ValueError("Study Profile count does not match its registered entries.")
     if current not in names:
         raise ValueError("The current profile is not available to select.")
     return options
@@ -121,7 +121,6 @@ def build_picker_rows(
                     uid=entry.study_uid,
                     created_at=entry.study_created_at,
                     profile_count=entry.study_profile_count,
-                    removed_count=entry.study_removed_count,
                 )
             )
         rows.append(

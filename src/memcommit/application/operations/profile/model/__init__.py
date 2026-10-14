@@ -67,7 +67,7 @@ __all__ = [
     "StudyProviderPolicyMigrationResult",
     "StudyRemovalResult",
     "StudyRenameResult",
-    "StudyRunProfilePair",
+    "StudyRunProfileGroup",
     "authority_grant_snapshot_lock",
     "baseline_store_digest",
     "create_authority_grant",
@@ -85,7 +85,7 @@ __all__ = [
     "rename_profile",
     "rename_study",
     "resolve_share_endpoint",
-    "study_run_profile_pairs",
+    "group_study_run_profiles",
     "update_authority_grant",
     "use_profile",
 ]
@@ -153,10 +153,10 @@ _INIT_STUDY_PROFILE_COMPAT_EXPORTS = {
 # Study transactions import this package's storage primitives. Keep their
 # aggregate exports lazy so direct transaction imports cannot create a cycle.
 _CURRENT_STUDY_EXPORTS = {
-    "StudyRunProfilePair": "model",
+    "StudyRunProfileGroup": "model",
     "StudyRenameResult": "model",
     "StudyRemovalResult": "model",
-    "study_run_profile_pairs": "topology",
+    "group_study_run_profiles": "topology",
     "rename_study": "lifecycle",
     "remove_study": "lifecycle",
     "StudyProviderPolicyMigrationResult": "provider_policy_migration",

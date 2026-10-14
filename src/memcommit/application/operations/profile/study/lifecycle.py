@@ -23,7 +23,7 @@ from memcommit.application.operations.profile.model._storage import (
 )
 
 from .model import StudyRemovalResult, StudyRenameResult
-from .topology import _study_target, study_run_profile_pairs
+from .topology import _study_target, group_study_run_profiles
 
 
 def rename_study(
@@ -33,7 +33,7 @@ def rename_study(
     expected_uid: str | None = None,
     expected_generation: int | None = None,
 ) -> StudyRenameResult:
-    """Rename one complete Study without changing its stable identity.
+    """Rename one registered Study without changing its stable identity.
 
     The shared Study label is independent of both member Profile display names.
     """
@@ -60,8 +60,6 @@ def rename_study(
                 f"Study {study_name!r} identity changed after rename selection; "
                 "nothing was renamed."
             )
-        if all(registry.is_removed(profile) for profile in members):
-            raise ProfileError(f"Study {study_name!r} is already removed.")
         if study_name == canonical_new:
             return StudyRenameResult(
                 uid=study_uid,
@@ -72,7 +70,7 @@ def rename_study(
                 changed=False,
             )
 
-        studies = study_run_profile_pairs(registry.profiles)
+        studies = group_study_run_profiles(registry.profiles)
         collision = next(
             (
                 study
@@ -105,7 +103,6 @@ def rename_study(
             active_uid=registry.active_uid,
             profiles=updated_profiles,
             grants=registry.grants,
-            removed_profile_uids=registry.removed_profile_uids,
             grant_placements=registry.grant_placements,
         )
         try:
@@ -166,15 +163,7 @@ def remove_study(
                 f"Study {study_name!r} contains the active Profile; select "
                 "another Profile before removing it."
             )
-        existing_removed = frozenset(registry.removed_profile_uids)
-        stores_to_delete = tuple(
-            profile
-            for profile in profiles
-            if profile_store_dir(profile).exists()
-            or profile_store_dir(profile).is_symlink()
-        )
-        if not stores_to_delete:
-            raise ProfileError(f"Study {study_name!r} is already removed.")
+        stores_to_delete = profiles
         for profile in stores_to_delete:
             inspect_store(
                 profile_store_dir(profile),
@@ -183,10 +172,6 @@ def remove_study(
                     profile.uid,
                 ),
             )
-        removed = existing_removed | member_uids
-        ordered_removed = tuple(
-            profile.uid for profile in registry.profiles if profile.uid in removed
-        )
         retained_grants = tuple(
             grant
             for grant in registry.grants
@@ -197,9 +182,10 @@ def remove_study(
         updated = ProfileRegistry(
             generation=max(1, registry.generation + 1),
             active_uid=registry.active_uid,
-            profiles=registry.profiles,
+            profiles=tuple(
+                profile for profile in registry.profiles if profile.uid not in member_uids
+            ),
             grants=retained_grants,
-            removed_profile_uids=ordered_removed,
             grant_placements=tuple(
                 placement
                 for placement in registry.grant_placements

@@ -55,13 +55,15 @@ def automatic_document_exclusions(connections, policies, inventory):
     return paths, prefixes
 
 
-def toggle_automatic_selection(selection, policies):
+def set_automatic_selection(selection, policies, *, enabled):
+    """Set a reviewed value explicitly, including an empty Profile-wide scope."""
+    if type(enabled) is not bool:
+        raise TypeError("Automatic Sync enabled state must be boolean.")
     inventory = dict(selection.inventory)
     states = [
         automatic_sync_enabled(name, inventory[name], policies, inventory)
         for name in selection.names
     ]
-    enabled = not all(states)
     chosen = set(selection.names)
     # Clear opposite narrow exceptions inside the selected scope in one save.
     updated = [
@@ -98,3 +100,16 @@ def toggle_automatic_selection(selection, policies):
         sum(not value for value in states) if enabled else 0,
         sum(states) if enabled else 0,
     )
+
+
+def toggle_automatic_selection(selection, policies):
+    inventory = dict(selection.inventory)
+    if selection.names:
+        enabled = not all(
+            automatic_sync_enabled(name, inventory[name], policies, inventory)
+            for name in selection.names
+        )
+    else:
+        # An empty Profile still owns a future-Context policy that can be disabled.
+        enabled = not any(rule["scope"] == "all" and rule["enabled"] for rule in policies)
+    return set_automatic_selection(selection, policies, enabled=enabled)

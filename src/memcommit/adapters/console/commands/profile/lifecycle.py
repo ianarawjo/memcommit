@@ -94,14 +94,25 @@ def _use_profile(name: str) -> None:
 def create_cmd(
     name: Annotated[
         str,
-        typer.Argument(help="Unique name for the new empty managed Profile"),
+        typer.Argument(help="Unique name for the new managed Profile"),
     ],
     root: Annotated[Optional[Path], typer.Option("--root", help="Project folder; omitted uses the application default")] = None,
+    import_files: Annotated[
+        bool,
+        typer.Option("--import-files", help="Import all supported project documents recursively"),
+    ] = False,
+    auto_sync: Annotated[
+        bool,
+        typer.Option("--auto-sync", help="Enable automatic outbound Sync for this Profile, including future Contexts"),
+    ] = False,
 ) -> None:
-    """Create one empty managed Profile without selecting it."""
+    """Create a managed Profile with optional project Import and automatic Sync."""
 
     try:
-        result = create_profile(name, root_dir=root)
+        result = create_profile(
+            name, root_dir=root,
+            import_project_files=import_files, automatic_sync=auto_sync,
+        )
     except (OSError, ProfileConfigError, ProfileError, ValueError) as error:
         _fail(error)
     render_profile_create_receipt(result)

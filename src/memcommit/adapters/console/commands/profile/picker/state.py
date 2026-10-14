@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Literal
 from pathlib import Path
 
@@ -18,6 +18,14 @@ from memcommit.adapters.console.terminal.components.selection.state import (
     FlatSelectionState,
 )
 from memcommit.application.operations.profile.config import validate_profile_name
+from memcommit.application.operations.profile.project_documents import prepare_project_import
+
+
+def _enabled_setup_selection():
+    return FlatSelectionState(
+        (SelectionOption("on", "ON"), SelectionOption("off", "OFF")),
+        cursor_uid="on", selected_uid="on", allow_empty=False,
+    )
 
 
 @dataclass(frozen=True)
@@ -42,6 +50,8 @@ class ProfilePickerState:
     status: str = ""
     status_is_error: bool = False
     create_name_was_edited: bool = False
+    import_selection: FlatSelectionState = field(default_factory=_enabled_setup_selection)
+    sync_selection: FlatSelectionState = field(default_factory=_enabled_setup_selection)
 
     @classmethod
     def create(
@@ -132,6 +142,8 @@ class ProfilePickerState:
             # New ordinary Profiles append after all frozen Profile/Study rows.
             root = Path.cwd().resolve()
             self.create_name_was_edited = False
+            self.import_selection = _enabled_setup_selection()
+            self.sync_selection = _enabled_setup_selection()
             self.stage = NameEdit("CREATE_PROFILE", root.name, len(self.rows), str(root))
             self.notify()
 
@@ -157,13 +169,20 @@ class ProfilePickerState:
         if edit.kind == "CREATE_PROFILE":
             if any(row.name.casefold() == name.casefold() for row in self.rows):
                 raise ValueError(f"Profile {name!r} already exists; enter a new name.")
+            project_root = Path(root_dir or edit.root_dir).expanduser().resolve()
+            prepared = prepare_project_import(project_root) if self.import_selection.selected_uid == "on" else None
             action = ProfilePickerAction(
                 kind=edit.kind,
                 name=name,
                 uid=None,
                 registry_generation=self.registry_generation,
                 row_index=edit.row_index,
-                root_dir=str(Path(root_dir or edit.root_dir).expanduser().resolve()),
+                root_dir=str(project_root),
+                import_project_files=self.import_selection.selected_uid == "on",
+                automatic_sync=self.sync_selection.selected_uid == "on",
+                imported_file_count=len(prepared.files) if prepared else 0,
+                skipped_file_count=len(prepared.skipped_paths) if prepared else 0,
+                import_digest=prepared.digest if prepared else None,
             )
         else:
             row = self.rows[edit.row_index]

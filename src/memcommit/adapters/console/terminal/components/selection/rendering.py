@@ -62,6 +62,20 @@ def choice_marker(*, selected: bool, empty: str = " ") -> str:
     return "✓" if selected else empty
 
 
+def render_horizontal_choice_row(state: FlatSelectionState, *, focused: bool):
+    """Project a compact fixed choice with the same cursor and checked styles."""
+    fragments = []
+    for index, option in enumerate(state.options):
+        if index:
+            fragments.append(("", "    "))
+        selected = option.uid == state.selected_uid
+        visual = choice_visual_state(
+            cursor=option.uid == state.cursor_uid, selected=selected, focused=focused,
+        )
+        fragments.append((visual.content_style, f"{choice_marker(selected=selected)} {safe_terminal_text(option.label)}"))
+    return fragments
+
+
 def tree_choice_marker(*, selected: bool, available: bool = True) -> str:
     """Project the checked policy into the compact fixed-width tree slot."""
 

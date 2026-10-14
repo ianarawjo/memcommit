@@ -96,7 +96,7 @@ class ProfileEntry:
 
 @dataclass(frozen=True)
 class StudyRunIdentity:
-    """Validated stable provenance shared by one current Study pair."""
+    """Validated stable provenance shared by the registered Study members."""
 
     uid: str
     name: str
@@ -337,7 +337,6 @@ class ProfileRegistry:
     active_uid: str
     profiles: tuple[ProfileEntry, ...]
     grants: tuple[AuthorityGrant, ...] = ()
-    removed_profile_uids: tuple[str, ...] = ()
     grant_placements: tuple[GrantPlacement, ...] = ()
 
     @property
@@ -355,16 +354,9 @@ class ProfileRegistry:
 
     @property
     def visible_profiles(self) -> tuple[ProfileEntry, ...]:
-        """Return Profiles whose managed stores have not been deleted."""
+        """Every registered Profile is live; deletion unregisters its identity."""
 
-        removed = frozenset(self.removed_profile_uids)
-        return tuple(profile for profile in self.profiles if profile.uid not in removed)
-
-    def is_removed(self, profile: ProfileEntry | str) -> bool:
-        """Report whether one stable identity is a deletion tombstone."""
-
-        uid = profile.uid if isinstance(profile, ProfileEntry) else profile
-        return uid in self.removed_profile_uids
+        return self.profiles
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -373,7 +365,6 @@ class ProfileRegistry:
             "active_uid": self.active_uid,
             "profiles": [profile.to_dict() for profile in self.profiles],
             "grants": [grant.to_dict() for grant in self.grants],
-            "removed_profile_uids": list(self.removed_profile_uids),
             "grant_placements": [
                 placement.to_dict() for placement in self.grant_placements
             ],
@@ -521,23 +512,28 @@ def load_profile_registry() -> ProfileRegistry:
     raw_removed_profile_uids = value.get("removed_profile_uids", [])
     if not isinstance(raw_removed_profile_uids, list):
         raise ProfileConfigError("Removed Profile identities must be a list.")
-    removed_profile_uids = tuple(
+    legacy_removed_uids = tuple(
         _canonical_uid(raw, field="Removed Profile uid")
         for raw in raw_removed_profile_uids
     )
-    if len(set(removed_profile_uids)) != len(removed_profile_uids):
+    if len(set(legacy_removed_uids)) != len(legacy_removed_uids):
         raise ProfileConfigError("Removed Profile identities must be unique.")
-    if any(uid not in profile_uids for uid in removed_profile_uids):
+    if any(uid not in profile_uids for uid in legacy_removed_uids):
         raise ProfileConfigError("Removed Profile identity is not registered.")
-    if AUTHORING_PROFILE_UID in removed_profile_uids:
+    if AUTHORING_PROFILE_UID in legacy_removed_uids:
         raise ProfileConfigError("The fixed authoring Profile cannot be removed.")
-    if active_uid in removed_profile_uids:
+    if active_uid in legacy_removed_uids:
         raise ProfileConfigError("The active Profile cannot be removed.")
 
-    live_profiles = tuple(p for p in profiles if p.uid not in removed_profile_uids)
-    for index, profile in enumerate(live_profiles):
+    # Read prior deletion flags without reserving their names or writing new
+    # tombstones. Registry loading never removes files from a project.
+    profiles = [
+        profile for profile in profiles if profile.uid not in legacy_removed_uids
+    ]
+    profile_uids = {profile.uid for profile in profiles}
+    for index, profile in enumerate(profiles):
         root = profile_root_dir(profile)
-        for other in live_profiles[index + 1:]:
+        for other in profiles[index + 1:]:
             other_root = profile_root_dir(other)
             if root == other_root or root.is_relative_to(other_root) or other_root.is_relative_to(root):
                 raise ProfileConfigError("Registered Profile project roots overlap.")
@@ -704,7 +700,6 @@ def load_profile_registry() -> ProfileRegistry:
         active_uid=active_uid,
         profiles=tuple(profiles),
         grants=tuple(grants),
-        removed_profile_uids=removed_profile_uids,
         grant_placements=tuple(grant_placements),
     )
 

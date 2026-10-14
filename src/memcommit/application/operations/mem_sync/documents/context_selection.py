@@ -36,7 +36,7 @@ def select_sync_contexts(request: SyncRequest, *, current_name, contexts):
             and not request.recursive
         ):
             raise ValueError("A document package requires -r/--recursive.")
-    if not names and not request.automatic:
+    if not names and not request.automatic and not (request.all_contexts and request.toggle_always):
         raise ValueError("No Contexts selected for Sync.")
     selected = set(names)
     for name in names:

@@ -1,4 +1,4 @@
-"""Values returned by current Study Profile-pair administration."""
+"""Values returned by current Study Profile-group administration."""
 
 from __future__ import annotations
 
@@ -9,14 +9,22 @@ from memcommit.application.operations.profile.config import ProfileEntry
 
 
 @dataclass(frozen=True)
-class StudyRunProfilePair:
-    """One current ``init-study`` participant/authority Profile pair."""
+class StudyRunProfileGroup:
+    """The remaining registered Profiles in one ``init-study`` run."""
 
     uid: str
     name: str
     created_at: str
-    participant: ProfileEntry
-    authority: ProfileEntry
+    participant: ProfileEntry | None
+    authority: ProfileEntry | None
+
+    @property
+    def profiles(self) -> tuple[ProfileEntry, ...]:
+        return tuple(
+            profile
+            for profile in (self.participant, self.authority)
+            if profile is not None
+        )
 
 
 @dataclass(frozen=True)

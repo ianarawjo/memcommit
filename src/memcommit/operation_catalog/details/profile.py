@@ -23,7 +23,9 @@ PROFILE_DETAILS = (
             OperationComparisonOption(
                 label="CREATE",
                 guidance=(
-                    "Press N in the picker, or use mem profile create. The empty "
+                    "Press N in the picker to choose a project folder, import "
+                    "its documents, and enable automatic Sync. CLI creation "
+                    "accepts --root, --import-files, and --auto-sync. The new "
                     "Profile is not selected automatically."
                 ),
             ),

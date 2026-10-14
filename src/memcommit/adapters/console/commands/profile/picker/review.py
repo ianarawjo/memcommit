@@ -34,6 +34,8 @@ def removal_review(
             f"Study {row.name!r}.",
             "Delete every Memory, session, and checkpoint in those stores.",
             "Remove every Grant connected to those Profiles.",
+            "Remove the Study and its Profiles from the registered list.",
+            "Keep the project folders and their document files.",
             "This cannot be undone or recovered by mem.",
         )
         command = "remove-study"
@@ -44,11 +46,15 @@ def removal_review(
             f"Permanently delete only Profile {row.name!r} and its store.",
             "Delete every Memory, session, and checkpoint in that store.",
             "Remove every Grant connected to this Profile.",
+            "Remove this Profile from the registered list.",
+            "Keep the project folder and its document files.",
             "This cannot be undone or recovered by mem.",
         ]
         if entry.study_name is not None:
             effects_list.append(
-                f"Keep Study {entry.study_name!r} and its other Profile rows."
+                f"Keep Study {entry.study_name!r} and its remaining Profile."
+                if entry.study_profile_count > 1
+                else f"Remove the now-empty Study {entry.study_name!r} from the list."
             )
         effects = tuple(effects_list)
         command = "remove"
@@ -69,7 +75,7 @@ def rename_review(action: ProfilePickerAction) -> CommandReview:
             effects=(
                 f"Change the Study display name from {action.name!r} to "
                 f"{action.new_name!r}.",
-                "Keep both member Profile display names unchanged.",
+                "Keep the member Profile display names unchanged.",
                 "Keep the same Study UID, Profile UIDs, stores, Contexts, Memories, and Grants.",
                 "Keep the same active Profile selected.",
             ),
@@ -85,17 +91,25 @@ def rename_review(action: ProfilePickerAction) -> CommandReview:
 
 
 def creation_review(action: ProfilePickerAction) -> CommandReview:
-    """Render the exact empty-Profile publication selected in the picker."""
+    """Render the exact project setup selected in the picker."""
 
     if action.kind != "CREATE_PROFILE":
         raise ValueError("Profile creation review requires an exact new name.")
+    argv = ("mem", "profile", "create", action.name)
+    if action.root_dir:
+        argv += ("--root", action.root_dir)
+    if action.import_project_files:
+        argv += ("--import-files",)
+    if action.automatic_sync:
+        argv += ("--auto-sync",)
     return CommandReview(
-        argv=("mem", "profile", "create", action.name, "--root", action.root_dir) if action.root_dir else ("mem", "profile", "create", action.name),
+        argv=argv,
         effects=(
-            f"Create empty managed Profile {action.name!r} with a fresh UID.",
+            f"Create managed Profile {action.name!r} with a fresh UID.",
             f"Project folder: {action.root_dir}" if action.root_dir else "Use the default project folder.",
-            "Create a private store with no Contexts, Memories, Grants, or history.",
+            f"Import {action.imported_file_count} project documents recursively; exclude {action.skipped_file_count} unsupported or internal paths." if action.import_project_files else "Start with no Contexts or Memories.",
+            "Automatic Sync ON: reflect memcommit changes in project files, including future Contexts." if action.automatic_sync else "Automatic Sync OFF.",
+            "Keep existing project files unchanged during creation.",
             "Keep the current Profile selected.",
-            "Select the new Profile separately, then run mem init CONTEXT.",
         ),
     )

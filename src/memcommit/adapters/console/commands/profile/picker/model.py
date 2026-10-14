@@ -24,9 +24,9 @@ class ProfilePickerEntry:
     study_created_at: str | None = None
     study_role: str | None = None
     study_profile_count: int = 0
-    study_removed_count: int = 0
     removal_block: str | None = None
     rename_block: str | None = None
+    root_dir: str | None = None
 
 
 @dataclass(frozen=True)
@@ -47,6 +47,11 @@ class ProfilePickerAction:
     new_name: str | None = None
     row_index: int | None = None
     root_dir: str | None = None
+    import_project_files: bool = False
+    automatic_sync: bool = False
+    imported_file_count: int = 0
+    skipped_file_count: int = 0
+    import_digest: str | None = None
 
 
 @dataclass(frozen=True)
@@ -67,4 +72,3 @@ class ProfilePickerRow:
     entry: ProfilePickerEntry | None = None
     created_at: str | None = None
     profile_count: int = 1
-    removed_count: int = 0

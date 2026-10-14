@@ -576,7 +576,7 @@ def _publish_permanent_removal(
     profiles: tuple[ProfileEntry, ...],
     label: str,
 ) -> None:
-    """Publish tombstones, rolling back only before durable registry change."""
+    """Unregister deleted Profiles; roll back only before registry publication."""
 
     try:
         _write_registry(updated)

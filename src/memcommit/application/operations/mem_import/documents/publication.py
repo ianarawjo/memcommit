@@ -3,15 +3,60 @@
 from __future__ import annotations
 
 from collections.abc import Iterable
+from pathlib import Path
 
 from memcommit.application.operations.mem_import.context_data import (
     _closed_import_contexts,
     _reject_context_identity_collisions,
 )
-from memcommit.core.context import AutoCheckpoint, Context
+from memcommit.core.context import AutoCheckpoint, Context, Memory
 from memcommit.persistence.store import MemoryStore
+from memcommit.persistence.store.attached_files import save_attached_file
 
 from .codec import decode_context
+
+
+def publish_document_import(destination, request, content):
+    """Retain document bytes and checkpoints after the caller authorizes its Store.
+
+    Ordinary Import holds its active-Profile authority snapshot. Profile creation
+    instead owns an unpublished staging Store under the registry lock.
+    """
+    from memcommit.application.operations.mem_import.application import ImportResult
+
+    # Retain immutable bytes before any Context can reference them.
+    for digest, data in content.attached_data.items():
+        if save_attached_file(destination.store_dir, data) != digest:
+            raise ValueError("Attached-file identity mismatch.")
+    entries = tuple(
+        (
+            context,
+            AutoCheckpoint(
+                command="import",
+                args={"resource_kind": "document", "target_context": context.name},
+                description="Imported document syntax and current file composition.",
+            ),
+        )
+        for context in content.contexts
+    )
+    created = import_context_records(destination, entries) if entries else ()
+    checkpoints = tuple(
+        str(item["uid"])
+        for context in created
+        for item in destination.list_checkpoints(context.name)
+    )
+    files = []
+    for context in created:
+        if context.document and context.document.role != "package":
+            files.append((context.document.path, "DOCUMENT", context.name))
+        files.extend((file.path, "ATTACHED", context.name) for file in context.attached_files)
+    return ImportResult(
+        Path(request.source),
+        tuple(context.name for context in created),
+        tuple(files),
+        sum(isinstance(item, Memory) for context in created for item in context.iter_items()),
+        checkpoints,
+    )
 
 
 def import_context_records(

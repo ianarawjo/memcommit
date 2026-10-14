@@ -32,7 +32,10 @@ from memcommit.adapters.console.commands.profile.presentation import (
     _study_removal_status,
     _study_rename_status,
 )
-from memcommit.application.operations.profile.config import ProfileConfigError
+from memcommit.application.operations.profile.config import (
+    ProfileConfigError,
+    profile_root_dir,
+)
 from memcommit.application.operations.profile.model._storage import ProfileError
 from memcommit.application.operations.profile.model.lifecycle import (
     create_profile,
@@ -59,6 +62,7 @@ def _pick_profile(
             context_count=len(inspection.context_names),
             memory_count=inspection.ordinary_memory_count,
             current_context=inspection.current_context,
+            root_dir=str(profile_root_dir(profile)),
             granted_context_count=inspection.granted_context_count,
             granted_memory_count=inspection.granted_memory_count,
             query_source_count=inspection.query_source_count,
@@ -80,11 +84,6 @@ def _pick_profile(
             ),
             study_profile_count=(
                 memberships[profile.uid].profile_count
-                if profile.uid in memberships
-                else 0
-            ),
-            study_removed_count=(
-                memberships[profile.uid].removed_count
                 if profile.uid in memberships
                 else 0
             ),
@@ -147,6 +146,9 @@ def _apply_profile_picker_action(
                 action.name,
                 expected_generation=action.registry_generation,
                 root_dir=action.root_dir,
+                import_project_files=action.import_project_files,
+                automatic_sync=action.automatic_sync,
+                expected_import_digest=action.import_digest,
             )
         elif action.kind == "RENAME_PROFILE":
             if action.new_name is None:

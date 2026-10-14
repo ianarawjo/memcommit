@@ -228,10 +228,6 @@ def create_authority_grant(
             raise ProfileError(f"Profile {authority_name!r} does not exist.")
         if grantee is None:
             raise ProfileError(f"Profile {grantee_name!r} does not exist.")
-        if registry.is_removed(authority) or registry.is_removed(grantee):
-            raise ProfileError(
-                "A removed Profile cannot be used to create a new Grant."
-            )
         if authority.uid == grantee.uid:
             raise ProfileError("A Profile cannot grant a view to itself.")
         authority_store = MemoryStore(
@@ -311,7 +307,6 @@ def create_authority_grant(
             active_uid=registry.active_uid,
             profiles=registry.profiles,
             grants=(*registry.grants, grant),
-            removed_profile_uids=registry.removed_profile_uids,
             grant_placements=(*registry.grant_placements, placement),
         )
         _write_registry(updated)
@@ -381,7 +376,6 @@ def update_authority_grant(
                 replacement if grant.uid == existing.uid else grant
                 for grant in registry.grants
             ),
-            removed_profile_uids=registry.removed_profile_uids,
             grant_placements=registry.grant_placements,
         )
         _write_registry(updated)
@@ -403,7 +397,6 @@ def delete_authority_grant(
             grants=tuple(
                 grant for grant in registry.grants if grant.uid != removed.uid
             ),
-            removed_profile_uids=registry.removed_profile_uids,
             grant_placements=tuple(
                 placement
                 for placement in registry.grant_placements

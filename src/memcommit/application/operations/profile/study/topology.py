@@ -1,4 +1,4 @@
-"""Pure validation and selection of current participant/authority pairs."""
+"""Pure validation and selection of registered Study Profile groups."""
 
 from __future__ import annotations
 
@@ -11,13 +11,13 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.errors import ProfileError
 
-from .model import StudyRunProfilePair
+from .model import StudyRunProfileGroup
 
 
-def study_run_profile_pairs(
+def group_study_run_profiles(
     profiles: tuple[ProfileEntry, ...],
-) -> tuple[StudyRunProfilePair, ...]:
-    """Validate and group current two-Profile Study runs by provenance."""
+) -> tuple[StudyRunProfileGroup, ...]:
+    """Group one or both remaining Study Profiles by their shared provenance."""
 
     grouped: dict[str, list[tuple[ProfileEntry, StudyRunIdentity]]] = {}
     order: list[str] = []
@@ -30,13 +30,15 @@ def study_run_profile_pairs(
             order.append(identity.uid)
         grouped[identity.uid].append((profile, identity))
 
-    result: list[StudyRunProfilePair] = []
+    result: list[StudyRunProfileGroup] = []
     seen_names: set[str] = set()
     for study_uid in order:
         members = grouped[study_uid]
         roles = {identity.role for _profile, identity in members}
-        if len(members) != 2 or roles != {"PARTICIPANT", "GRANTED_MEMORY"}:
-            raise ProfileError("Study run Profile pair is incomplete.")
+        # Deletion unregisters one member rather than retaining a placeholder.
+        # A remaining member still owns the Study identity and display label.
+        if not 1 <= len(members) <= 2 or len(roles) != len(members):
+            raise ProfileError("Study run Profile roles must be unique.")
         identities = [identity for _profile, identity in members]
         shared = {
             (
@@ -65,15 +67,23 @@ def study_run_profile_pairs(
             raise ProfileError("Study run names must be unique.")
         seen_names.add(name.casefold())
         participant = next(
-            profile for profile, identity in members if identity.role == "PARTICIPANT"
+            (
+                profile
+                for profile, identity in members
+                if identity.role == "PARTICIPANT"
+            ),
+            None,
         )
         authority = next(
-            profile
-            for profile, identity in members
-            if identity.role == "GRANTED_MEMORY"
+            (
+                profile
+                for profile, identity in members
+                if identity.role == "GRANTED_MEMORY"
+            ),
+            None,
         )
         result.append(
-            StudyRunProfilePair(
+            StudyRunProfileGroup(
                 uid=study_uid,
                 name=name,
                 created_at=created_at,
@@ -94,12 +104,12 @@ def _study_target(
     matches: list[tuple[str, str, tuple[ProfileEntry, ...]]] = []
     matches.extend(
         (
-            pair.uid,
-            pair.name,
-            (pair.participant, pair.authority),
+            group.uid,
+            group.name,
+            group.profiles,
         )
-        for pair in study_run_profile_pairs(registry.profiles)
-        if pair.name.casefold() == canonical.casefold()
+        for group in group_study_run_profiles(registry.profiles)
+        if group.name.casefold() == canonical.casefold()
     )
     if not matches:
         raise ProfileError(f"Study {canonical!r} does not exist.")
