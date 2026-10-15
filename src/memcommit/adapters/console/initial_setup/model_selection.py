@@ -8,7 +8,7 @@ from memcommit.adapters.console.terminal.components.selection.model import (
 from memcommit.adapters.console.terminal.components.selection.state import (
     FlatSelectionState,
 )
-from memcommit.application.operations.setup.application import (
+from memcommit.application.initial_setup.configuration import (
     SetupModelSelection,
     select_setup_model,
 )

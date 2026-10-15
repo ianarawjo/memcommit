@@ -42,18 +42,18 @@ tool_bin=$("$uv_binary" tool dir --bin)
 if [ "$update_shell" -eq 1 ]; then "$uv_binary" tool update-shell; fi
 PATH="$tool_bin:$PATH"
 export PATH
-"$tool_bin/mem" setup --status
+"$tool_bin/mem" --help >/dev/null
 if [ "$update_shell" -eq 1 ]; then
     printf 'Installed mem. New terminals will use the registered PATH.\n'
 else
     printf 'Installed mem. Shell registration skipped; run uv tool update-shell to enable it.\n'
 fi
 if [ "$run_setup" -eq 1 ]; then
-    if [ -t 0 ]; then
-        "$tool_bin/mem" setup
+    if [ -t 0 ] && [ -t 1 ]; then
+        "$tool_bin/mem"
     elif ( : </dev/tty ) 2>/dev/null; then
-        "$tool_bin/mem" setup </dev/tty
+        "$tool_bin/mem" </dev/tty >/dev/tty 2>/dev/tty
     else
-        printf 'Run mem setup in a terminal to choose a provider and create your first Profile.\n'
+        printf 'Run mem in a terminal to choose a provider and create your first Profile.\n'
     fi
 fi

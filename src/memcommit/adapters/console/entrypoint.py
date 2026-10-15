@@ -25,7 +25,6 @@ from memcommit.adapters.console.commands import (
 )
 from memcommit.adapters.console.commands import ground
 from memcommit.adapters.console.commands import profile
-from memcommit.adapters.console.commands.setup import command as setup
 from memcommit.adapters.console.commands import (
     lock,
     share,
@@ -433,7 +432,6 @@ app.command(
 )(update.cmd)
 
 # --- Sub-apps ---
-app.command("setup", help=operation_summary("setup"))(setup.cmd)
 app.add_typer(
     impact.app,
     name="impact",

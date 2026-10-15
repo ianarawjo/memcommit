@@ -16,7 +16,8 @@ curl -fsSL https://raw.githubusercontent.com/ianarawjo/memcommit/user-study-prot
 
 The installer finds or prepares [uv](https://docs.astral.sh/uv/getting-started/installation/),
 installs memcommit in a tool environment with Python 3.12, registers `mem` on
-PATH, and opens `mem setup`. Open a new terminal after installation if your
+PATH, and opens `mem`. Initial setup starts automatically when no registered
+Profile or legacy authoring Store exists. Open a new terminal after installation if your
 current shell has not picked up the PATH change. The bootstrap installs the
 public source archive without requiring Git.
 
@@ -27,9 +28,8 @@ Codex's model catalog: choose a model in the vertical list, then Tab to the
 horizontal reasoning choices and use Left/Right. Codex supplies recommended
 models, supported efforts and defaults. Compatible explicit efforts survive
 model changes; unavailable efforts return visibly to the new model's default.
-Enter checks the exact model and effort before saving them. Scripted setup can
-specify `--model ID --reasoning-effort LEVEL`; omitted values use catalog
-defaults. Claude Code and GitHub Copilot are planned additions.
+Enter checks the exact model and effort before saving them. Claude Code and
+GitHub Copilot are planned additions.
 
 A **Profile is a folder workspace**. Import existing supported documents and
 Auto Sync are both enabled initially. Import includes this folder's subfolders;
@@ -41,8 +41,9 @@ its editable folder suggestion is `~/mem`.
 For another workspace, enter its folder and run `mem profile`, then choose New
 Profile. Select it with `mem profile use NAME`. Changing directory alone does
 not switch the selected Profile. `mem init NAME` creates a Context inside it.
-Resume interrupted setup with `mem setup`; inspect readiness with
-`mem setup --status`.
+Open `mem` again to resume interrupted initial setup. Existing installations
+retain their selected Profile; later settings use `mem provider`, `mem config`,
+and `mem profile`.
 
 If uv is already available, you can install explicitly:
 
@@ -50,7 +51,7 @@ If uv is already available, you can install explicitly:
 uv tool install --upgrade --python 3.12 'git+https://github.com/ianarawjo/memcommit.git@user-study-prototype'
 uv tool update-shell
 export PATH="$(uv tool dir --bin):$PATH"
-mem setup
+mem
 ```
 
 This Git source route requires Git (`xcode-select --install` can prepare it on
@@ -353,18 +354,16 @@ study_scenarios/  Built-in scenarios and their data
 
 ## Setup for an AI agent
 
-Let the person complete Codex's ChatGPT login. With their intended workspace
-folder and Profile name, use explicit setup:
+Open `mem` in a terminal after installation so the person can complete
+Codex's ChatGPT login and initial Provider/model/Profile choices. Plain
+`uv tool install` installs the package; opening mem starts the initial setup
+flow. The installer opens it automatically when a terminal is available and
+otherwise prints that next step. Interrupted setup resumes by opening mem.
 
-```sh
-mem setup --provider codex_chatgpt --name notes --root /path/to/notes --yes
-```
-
-Import and automatic Sync default to ON; use `--no-import-files` or
-`--no-auto-sync` for explicit opt-outs. Authentication stays with Codex; do not
-collect or write the person's tokens. The active Profile remains selected
-until changed with `mem profile use NAME`. Existing installations retain
-their registered Profiles when setup runs again.
+Import and automatic Sync start ON and can be changed on the Profile creation
+screen before exact approval. Authentication stays with Codex; do not collect
+or write the person's tokens. The active Profile remains selected until
+changed with `mem profile use NAME`. Existing registered Profiles are kept.
 
 First setup writes Profile registry version 7. Existing version-6 registries
 are read and preserved through upgrades; older runtimes cannot read version 7.

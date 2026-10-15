@@ -8,7 +8,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from memcommit.application.operations.setup.application import setup_provider_option
+from memcommit.application.initial_setup.configuration import setup_provider_option
 from memcommit.providers.clients.codex import resolve_codex_binary
 
 

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 BEST_FOR_BY_OPERATION = {
-    "setup": "Getting ready after installation: provider connection and the first folder Profile.",
     "add": "Adding one or more facts, instructions, or notes directly to a Context.",
     "atomize": (
         "Untangling requirements or claims that were written together so each "

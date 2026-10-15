@@ -9,7 +9,7 @@ from prompt_toolkit.layout import FormattedTextControl, Layout, Window
 from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import ScrollbarMargin
 
-from memcommit.adapters.console.commands.setup.model_selection import (
+from memcommit.adapters.console.initial_setup.model_selection import (
     SetupModelSelectionState,
 )
 from memcommit.adapters.console.terminal.components.focus.controller import (
@@ -95,7 +95,7 @@ def choose_setup_action(
         build_tui_frame(
             TuiRegion(
                 Window(
-                    FormattedTextControl(" mem setup\n " + description + "\n"), height=3
+                    FormattedTextControl(" mem · initial setup\n " + description + "\n"), height=3
                 )
             ),
             TuiRegion(frame),
@@ -210,7 +210,7 @@ def choose_setup_model(
             TuiRegion(
                 Window(
                     FormattedTextControl(
-                        " mem setup · Codex login checked\n Choose a model and its supported reasoning setting.\n"
+                        " mem · initial setup · Codex login checked\n Choose a model and its supported reasoning setting.\n"
                     ),
                     height=3,
                 )

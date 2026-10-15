@@ -41,15 +41,23 @@ class MemCommandGroup(CanonicalCommandGroup):
 
         arguments = list(sys.argv[1:] if args is None else args)
         if not arguments and sys.stdin.isatty() and sys.stdout.isatty():
-            from memcommit.application.operations.profile.config import (
-                default_store_dir,
-                profile_registry_file,
-            )
-            if not profile_registry_file().exists() and not default_store_dir().exists():
-                arguments = ["setup"]
+            from memcommit.application.initial_setup.configuration import initial_setup_needed
+            from memcommit.adapters.console.initial_setup.flow import run_initial_setup
+
+            try:
+                if initial_setup_needed():
+                    # First-use preparation precedes Store/session ownership and
+                    # is called directly, never routed through a public command.
+                    exit_code = run_initial_setup()
+                    if kwargs.get("standalone_mode", True):
+                        raise SystemExit(exit_code)
+                    return exit_code
+            except WorkspaceError as error:
+                render_cli_error(error)
+                raise SystemExit(1) from error
         # Configuration locates the Store, so it must also work before migration
         # and must not enter a Study shell belonging to the old workspace.
-        if arguments and (arguments[0] in {"config", "setup"} or arguments[:2] == ["profile", "config"]):
+        if arguments and (arguments[0] == "config" or arguments[:2] == ["profile", "config"]):
             return super().main(args=arguments, prog_name=prog_name, **kwargs)
 
         def ensure(command_argv: Any = None) -> int | None:
@@ -81,7 +89,7 @@ class MemCommandGroup(CanonicalCommandGroup):
             getattr(ctx, "protected_args", ())
         )
         entered = (*protected, *tuple(getattr(ctx, "args", ())))
-        if entered and (entered[0] in {"config", "setup"} or entered[:2] == ("profile", "config")):
+        if entered and (entered[0] == "config" or entered[:2] == ("profile", "config")):
             # Relocation owns its exclusive lease and cannot record into a Store
             # whose location it is changing. Other config edits have no Store IO.
             return super().invoke(ctx)

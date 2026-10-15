@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import Annotated, Optional
 
 import typer
 
@@ -15,13 +13,13 @@ from memcommit.adapters.console.commands.profile.picker.model import ProfilePick
 from memcommit.adapters.console.commands.profile.presentation import (
     render_profile_create_receipt,
 )
-from memcommit.adapters.console.commands.setup.runtime import (
+from memcommit.adapters.console.initial_setup.provider_runtime import (
     find_provider_binary,
     install_provider_runtime,
     login_provider,
     provider_install_description,
 )
-from memcommit.adapters.console.commands.setup.screen import (
+from memcommit.adapters.console.initial_setup.screen import (
     choose_setup_action,
     choose_setup_model,
 )
@@ -36,22 +34,25 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.operations.profile.model._storage import ProfileError
 from memcommit.application.operations.profile.model.lifecycle import create_profile
-from memcommit.application.operations.setup.application import (
+from memcommit.application.initial_setup.configuration import (
     SETUP_PROVIDERS,
     connect_setup_provider,
     load_setup_model_catalog,
     save_checked_provider,
     select_setup_model,
     setup_provider_option,
-    setup_status,
 )
 from memcommit.configuration.config import Config
 from memcommit.providers.errors import QueryProviderError
 
 
+class _InitialSetupCancelled(Exception):
+    """The person paused first-use preparation without creating a Profile."""
+
+
 def _cancel() -> None:
-    typer.echo("Setup paused. Resume with: mem setup")
-    raise typer.Exit(0)
+    typer.echo("Setup paused. Resume by running mem.")
+    raise _InitialSetupCancelled
 
 
 def _connect_provider_interactively(
@@ -91,7 +92,7 @@ def _connect_provider_interactively(
         if login:
             if not (sys.stdin.isatty() and sys.stdout.isatty()):
                 raise ValueError(
-                    "Provider login requires a person at a terminal. Run 'mem setup' interactively."
+                    "Provider login requires a person at a terminal. Run 'mem' interactively."
                 )
             login_provider(provider_id, binary)
             login = False
@@ -188,85 +189,25 @@ def _connect_provider_interactively(
                 binary = install_provider_runtime(provider_id)
 
 
-def cmd(
-    provider: Annotated[
-        Optional[str],  # noqa: UP045 - Typer 0.12 requires typing.Optional.
-        typer.Option("--provider", help="codex_chatgpt (Codex CLI)"),
-    ] = None,
-    model: Annotated[
-        Optional[str],  # noqa: UP045 - Typer 0.12 requires typing.Optional.
-        typer.Option(
-            "--model",
-            help="Model ID from the Codex catalog; interactive setup shows a picker",
-        ),
-    ] = None,
-    reasoning_effort: Annotated[
-        Optional[str],  # noqa: UP045 - Typer 0.12 requires typing.Optional.
-        typer.Option(
-            "--reasoning-effort",
-            help="Supported reasoning setting; defaults to the selected model's default",
-        ),
-    ] = None,
-    name: Annotated[
-        Optional[str],  # noqa: UP045 - Typer 0.12 requires typing.Optional.
-        typer.Option("--name", help="First Profile name"),
-    ] = None,
-    root: Annotated[
-        Optional[Path],  # noqa: UP045 - Typer 0.12 requires typing.Optional.
-        typer.Option(
-            "--root",
-            help="Folder for the first Profile; defaults to the current folder",
-        ),
-    ] = None,
-    import_files: Annotated[
-        bool,
-        typer.Option(
-            "--import-files/--no-import-files",
-            help="Import supported documents in this folder and descendants",
-        ),
-    ] = True,
-    auto_sync: Annotated[
-        bool,
-        typer.Option(
-            "--auto-sync/--no-auto-sync",
-            help="Reflect mem changes in managed documents, including future Contexts",
-        ),
-    ] = True,
-    yes: Annotated[
-        bool,
-        typer.Option(
-            "--yes",
-            help="Approve the explicit Profile setup; requires --provider and --name",
-        ),
-    ] = False,
-    install: Annotated[
-        bool,
-        typer.Option(
-            "--install", help="Install the selected provider CLI when missing (macOS)"
-        ),
-    ] = False,
-    login: Annotated[
-        bool,
-        typer.Option(
-            "--login", help="Open provider-native login before testing the connection"
-        ),
-    ] = False,
-    status: Annotated[
-        bool,
-        typer.Option(
-            "--status", help="Print JSON readiness without inference or Store creation"
-        ),
-    ] = False,
-) -> None:
-    """Connect a provider and create/select the first folder Profile."""
-    try:
-        if status:
-            typer.echo(json.dumps(setup_status(), ensure_ascii=False))
-            return
-        from memcommit.configuration.workspace import workspace_lock
+def run_initial_setup(
+    *,
+    provider: str | None = None,
+    model: str | None = None,
+    reasoning_effort: str | None = None,
+    name: str | None = None,
+    root: Path | None = None,
+    import_files: bool = True,
+    auto_sync: bool = True,
+    approve_profile_creation: bool = False,
+    install: bool = False,
+    login: bool = False,
+) -> int:
+    """Run first-use preparation from the console entry point, not a command."""
+    from memcommit.configuration.workspace import WorkspaceError, workspace_lock
 
+    try:
         with workspace_lock():
-            _run_setup(
+            _run_initial_setup(
                 provider,
                 model,
                 reasoning_effort,
@@ -274,24 +215,28 @@ def cmd(
                 root,
                 import_files,
                 auto_sync,
-                yes,
+                approve_profile_creation,
                 install,
                 login,
             )
+    except _InitialSetupCancelled:
+        return 0
     except (
         OSError,
         ValueError,
         ProfileConfigError,
         ProfileError,
         QueryProviderError,
+        WorkspaceError,
         subprocess.SubprocessError,
     ) as error:
         typer.echo("Setup error: " + display_escape_text(str(error)), err=True)
-        typer.echo("Resume with: mem setup", err=True)
-        raise typer.Exit(1) from error
+        typer.echo("Resume by running mem.", err=True)
+        return 1
+    return 0
 
 
-def _run_setup(
+def _run_initial_setup(
     provider,
     model,
     reasoning_effort,
@@ -299,16 +244,16 @@ def _run_setup(
     root,
     import_files,
     auto_sync,
-    yes,
+    approve_profile_creation,
     install,
     login,
 ) -> None:
-    interactive = sys.stdin.isatty() and sys.stdout.isatty() and not yes
-    if yes and (provider is None or name is None):
-        raise ValueError("--yes requires explicit --provider and --name.")
-    if not interactive and not yes:
+    interactive = sys.stdin.isatty() and sys.stdout.isatty() and not approve_profile_creation
+    if approve_profile_creation and (provider is None or name is None):
+        raise ValueError("Approved Profile creation requires an explicit provider and Profile name.")
+    if not interactive and not approve_profile_creation:
         raise ValueError(
-            "Run setup in a terminal, or pass --provider ID --name NAME --root PATH --yes."
+            "Run mem in a terminal to complete initial setup."
         )
     registry = load_profile_registry()
     first_profile_needed = registry.generation == 0
@@ -356,7 +301,7 @@ def _run_setup(
 
         prepared = prepare_project_import(profile_root) if import_files else None
         digest = prepared.digest if prepared else None
-        if not yes:
+        if not approve_profile_creation:
             action = choose_setup_action(
                 "FIRST PROFILE",
                 f"Create {name} in {profile_root}. Import {len(prepared.files) if prepared else 0} documents. Auto Sync {'ON' if auto_sync else 'OFF'}.",

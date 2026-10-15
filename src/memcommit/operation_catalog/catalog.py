@@ -46,14 +46,6 @@ def _operation(
 
 _OPERATIONS = (
     _operation(
-        "setup",
-        "Connect a headless CLI provider and create the first folder Profile.",
-        "Provider choice -> install/login -> synthetic probe -> reviewed Profile setup",
-        ExecutionKind.MIXED,
-        "Stores checked provider defaults and creates/selects a folder Profile",
-        "Machine configuration and the first folder Profile",
-    ),
-    _operation(
         "export",
         "Export current Context content as documents, an Agent Skill, or mem records.",
         "Context -> validated external files + receipt",

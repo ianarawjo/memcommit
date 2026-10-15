@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from memcommit.application.operations.setup.provider_probe import (
+from memcommit.application.initial_setup.provider_probe import (
     verify_provider_response,
 )
 from memcommit.configuration.config import Config
@@ -127,3 +127,20 @@ def setup_status() -> dict:
         "profile": registry.active.name if registry.generation else None,
         "root": registry.active.root_dir if registry.generation else None,
     }
+
+
+def initial_setup_needed() -> bool:
+    """Offer first-use preparation without treating legacy installs as fresh."""
+    from memcommit.application.operations.profile.config import (
+        default_store_dir,
+        profile_registry_file,
+    )
+
+    # Existing Profiles and legacy authoring data predate the completion flag.
+    # They must retain their workspace rather than enter first setup again.
+    store_dir = default_store_dir()
+    return (
+        not profile_registry_file().exists()
+        and not store_dir.exists()
+        and not store_dir.is_symlink()
+    )
