@@ -7,7 +7,7 @@ from typing import Literal
 
 from memcommit.adapters.console.terminal.components.responses.model import ResponseDraft, ResponseTarget
 from memcommit.adapters.console.terminal.components.selection.model import SelectionOption
-from memcommit.adapters.console.terminal.components.selection.state import FlatSelectionState
+from memcommit.adapters.console.terminal.components.selection.state import SingleSelectionState
 
 
 ResponseSection = Literal["DECISION", "RESPONSE"]
@@ -29,18 +29,18 @@ class ResponseFrameState:
     option_navigation_active: bool = False
     editing: bool = False
     draft: ResponseDraft = field(default_factory=ResponseDraft)
-    _choices: FlatSelectionState | None = field(default=None, repr=False)
+    _choices: SingleSelectionState | None = field(default=None, repr=False)
     _frame_focused: bool = field(default=False, repr=False)
 
     @property
-    def choice_state(self) -> FlatSelectionState | None:
+    def choice_state(self) -> SingleSelectionState | None:
         """Expose the common flat state to the common card renderer."""
 
         return self._choices
 
     @property
     def option_cursor_uid(self) -> str | None:
-        return None if self._choices is None else self._choices.cursor_uid
+        return None if self._choices is None else self._choices.cursor_value
 
     @property
     def other_choice_focused(self) -> bool:
@@ -57,7 +57,7 @@ class ResponseFrameState:
     @staticmethod
     def _selection_options(target: ResponseTarget) -> tuple[SelectionOption, ...]:
         return tuple(
-            SelectionOption(choice.uid, choice.label, choice.text)
+            SelectionOption(value=choice.uid, label=choice.label, description=choice.text)
             for choice in target.choices
         )
 
@@ -97,15 +97,15 @@ class ResponseFrameState:
             return
         options = self._selection_options(target)
         if changed or self._choices is None or self._choices.options != options:
-            cursor_uid = (
+            cursor_value = (
                 draft.selected_choice_uid
                 if draft.selected_choice_uid in choice_uids
                 else choice_uids[0]
             )
-            self._choices = FlatSelectionState(
+            self._choices = SingleSelectionState(
                 options,
-                cursor_uid=cursor_uid,
-                selected_uid=draft.selected_choice_uid,
+                cursor_value=cursor_value,
+                selected_value=draft.selected_choice_uid,
             )
         else:
             self._choices.set_selected(draft.selected_choice_uid)
@@ -134,7 +134,7 @@ class ResponseFrameState:
             self.sync(target, self.draft)
         assert self._choices is not None
         if self.draft.selected_choice_uid is not None:
-            self._choices.cursor_uid = self.draft.selected_choice_uid
+            self._choices.cursor_value = self.draft.selected_choice_uid
         return True
 
     def focus_response(self) -> None:

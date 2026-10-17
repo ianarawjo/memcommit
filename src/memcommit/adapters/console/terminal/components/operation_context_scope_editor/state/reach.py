@@ -28,16 +28,16 @@ class ContextReachState:
         return cls(
             HorizontalChoiceState(
                 (
-                    HorizontalChoiceOption("EXACT", "THIS CONTEXT ONLY"),
-                    HorizontalChoiceOption("SUBTREE", "INCLUDE DESCENDANTS"),
+                    HorizontalChoiceOption(value="EXACT", label="THIS CONTEXT ONLY"),
+                    HorizontalChoiceOption(value="SUBTREE", label="INCLUDE DESCENDANTS"),
                 ),
-                selected_uid="SUBTREE" if include_descendants else "EXACT",
+                selected_value="SUBTREE" if include_descendants else "EXACT",
             )
         )
 
     @property
     def include_descendants(self) -> bool:
-        return self.choice.selected_uid == "SUBTREE"
+        return self.choice.selected_value == "SUBTREE"
 
     def move(self, delta: int) -> bool:
         return self.choice.move(delta)
@@ -56,17 +56,17 @@ class ContextReachViewState:
         return cls(
             HorizontalChoiceState(
                 (
-                    HorizontalChoiceOption("BOTH", "BOTH"),
-                    HorizontalChoiceOption("EXACT", "THIS CONTEXT ONLY"),
-                    HorizontalChoiceOption("SUBTREE", "INCLUDE DESCENDANTS"),
+                    HorizontalChoiceOption(value="BOTH", label="BOTH"),
+                    HorizontalChoiceOption(value="EXACT", label="THIS CONTEXT ONLY"),
+                    HorizontalChoiceOption(value="SUBTREE", label="INCLUDE DESCENDANTS"),
                 ),
-                selected_uid=mode,
+                selected_value=mode,
             )
         )
 
     @property
     def mode(self) -> ContextReachViewMode:
-        selected = self.choice.selected_uid
+        selected = self.choice.selected_value
         if selected not in {"BOTH", "EXACT", "SUBTREE"}:
             raise ValueError("Context reach view state is invalid.")
         return selected

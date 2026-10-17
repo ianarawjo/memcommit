@@ -14,7 +14,6 @@ from prompt_toolkit.styles import merge_styles
 
 from memcommit.adapters.console.terminal.core.capabilities import require_interactive_terminal
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
@@ -164,8 +163,8 @@ def run_semantic_viewer(
     application: Application[SemanticViewerDocument] = Application(
         layout=Layout(
             build_tui_frame(
-                TuiRegion(viewer_frame),
-                TuiRegion(footer),
+                viewer_frame,
+                footer,
             ),
             focused_element=body_control,
         ),

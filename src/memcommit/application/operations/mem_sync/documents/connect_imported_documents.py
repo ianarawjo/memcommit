@@ -17,15 +17,15 @@ def connect_imported_documents(store):
     The caller owns this unregistered staging Store. No project writer is used:
     failure can discard staging without undoing another application's files.
     """
-    runtime = SyncRuntime(store)
+    runtime = SyncRuntime(store=store)
     with runtime.execution_boundary():
         request = SyncRequest(all_contexts=True, automatic=True)
         selection = runtime.freeze_selection(request)
         settings = runtime.settings.load()
         policies, change = set_automatic_selection(
-            selection, settings["policies"], enabled=True
+            selection=selection, policies=settings["policies"], enabled=True
         )
-        plan = runtime.prepare_plan(request, selection, settings)
+        plan = runtime.prepare_plan(request=request, selection=selection, settings=settings)
         effects = []
         for export in plan.exports:
             if any(effect.action != "UNCHANGED" for effect in export.effects):
@@ -33,7 +33,7 @@ def connect_imported_documents(store):
                     "Project files changed during Profile setup; review creation again."
                 )
             observed = read_output_files(
-                export.destination, (file.path for file in export.files)
+                base=export.destination, paths=(file.path for file in export.files)
             )
             if observed != {file.path: file.data for file in export.files}:
                 raise ValueError(
@@ -43,6 +43,17 @@ def connect_imported_documents(store):
                 replace(effect, path=str(export.destination / effect.path))
                 for effect in export.effects
             )
-        result = SyncResult(selection.names, tuple(effects), change, str(uuid4()))
-        runtime.finish_publication(plan, settings, policies, result, "profile create")
+        result = SyncResult(
+            context_names=selection.names,
+            effects=tuple(effects),
+            automatic_change=change,
+            run_uid=str(uuid4()),
+        )
+        runtime.finish_publication(
+            plan=plan,
+            settings=settings,
+            policies=policies,
+            result=result,
+            causing_command="profile create",
+        )
         return result

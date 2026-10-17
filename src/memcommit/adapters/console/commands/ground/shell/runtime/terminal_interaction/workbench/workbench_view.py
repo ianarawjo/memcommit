@@ -55,7 +55,6 @@ from memcommit.adapters.console.commands.ground.shell.runtime.terminal_interacti
     cycle_focus as cycle_terminal_focus,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
@@ -271,15 +270,15 @@ class BlankGroundWorkbenchView:
             dont_extend_height=True,
         )
         self.root = build_tui_frame(
-            TuiRegion(header),
-            TuiRegion(self.location_pane.container),
-            TuiRegion(self.goal_pane.container),
-            TuiRegion(self.contexts_pane.container),
-            TuiRegion(self.rules_pane.container),
-            TuiRegion(self.cases_pane.container),
-            TuiRegion(self.dialogue_pane.container),
-            TuiRegion(action_panel),
-            TuiRegion(footer),
+            header,
+            self.location_pane.container,
+            self.goal_pane.container,
+            self.contexts_pane.container,
+            self.rules_pane.container,
+            self.cases_pane.container,
+            self.dialogue_pane.container,
+            action_panel,
+            footer,
         )
         self.input_manager = InFrameInputManager(
             self.goal_pane,

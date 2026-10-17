@@ -34,7 +34,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
@@ -65,7 +64,7 @@ from memcommit.adapters.console.terminal.components.resolution.inline_shell impo
     run_inline_resolution_workbench,
 )
 from memcommit.adapters.console.terminal.components.selection.model import SelectionOption
-from memcommit.adapters.console.terminal.components.selection.state import FlatSelectionState
+from memcommit.adapters.console.terminal.components.selection.state import SingleSelectionState
 from memcommit.adapters.console.terminal.components.selection import render_vertical_choice_rows
 from memcommit.application.capabilities.reviewing.session_navigation import SessionWorkbenchNavigation
 
@@ -118,13 +117,13 @@ def run_resolution_workbench(
         if item.default_choice_uid is not None
     }
     choice_states = {
-        item.uid: FlatSelectionState(
+        item.uid: SingleSelectionState(
             tuple(
-                SelectionOption(choice.uid, choice.label, choice.description)
+                SelectionOption(value=choice.uid, label=choice.label, description=choice.description)
                 for choice in item.choices
             ),
-            cursor_uid=item.default_choice_uid or item.choices[0].uid,
-            selected_uid=item.default_choice_uid,
+            cursor_value=item.default_choice_uid or item.choices[0].uid,
+            selected_value=item.default_choice_uid,
             allow_empty=True,
         )
         for item in spec.items
@@ -405,13 +404,13 @@ def run_resolution_workbench(
         dont_extend_height=True,
     )
     root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(compact_summary),
-        TuiRegion(conditional_viewer),
-        TuiRegion(responses_frame),
-        TuiRegion(items_frame),
-        TuiRegion(todo_frame),
-        TuiRegion(footer),
+        header,
+        compact_summary,
+        conditional_viewer,
+        responses_frame,
+        items_frame,
+        todo_frame,
+        footer,
     )
     app: Application[T | None] = Application(
         layout=Layout(

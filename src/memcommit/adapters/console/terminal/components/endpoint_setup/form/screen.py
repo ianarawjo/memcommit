@@ -72,10 +72,10 @@ class _EndpointSetupForm:
         self.show_mode = len(spec.modes) > 1
         self.mode_state = HorizontalChoiceState(
             tuple(
-                HorizontalChoiceOption(mode.uid, mode.label, mode.description)
+                HorizontalChoiceOption(value=mode.uid, label=mode.label, description=mode.description)
                 for mode in spec.modes
             ),
-            selected_uid=spec.initial_mode_uid,
+            selected_value=spec.initial_mode_uid,
         )
         self.editors = {
             role.uid: EndpointEditor(
@@ -140,7 +140,7 @@ class _EndpointSetupForm:
         self.status = ""
 
     def selected_mode_uid(self) -> str:
-        return self.mode_state.selected_uid
+        return self.mode_state.selected_value
 
     def refresh_new_name_suggestions(self) -> None:
         """Refresh only untouched operation-owned new-name drafts."""
@@ -168,7 +168,7 @@ class _EndpointSetupForm:
 
     def finish(self, event) -> SurfaceActionResult:
         try:
-            mode_uid = self.mode_state.selected_uid
+            mode_uid = self.mode_state.selected_value
             draft = EndpointSetupDraft(
                 mode_uid,
                 tuple(

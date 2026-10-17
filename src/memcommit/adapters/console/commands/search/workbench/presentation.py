@@ -161,8 +161,8 @@ def result_selection_options(
 ) -> tuple[SelectionOption, ...]:
     return tuple(
         SelectionOption(
-            str(index),
-            search_result_selection_label(
+            value=str(index),
+            label=search_result_selection_label(
                 result,
                 number=index + 1,
                 context_annotation=labels.get(result.context_name),

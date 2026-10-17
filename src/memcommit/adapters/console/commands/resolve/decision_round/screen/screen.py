@@ -27,7 +27,6 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     SEMANTIC_VIEWER_STYLE,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
@@ -176,22 +175,18 @@ def build_compact_application(
         intent.area if intent else None,
     )
     root = build_tui_frame(
-        TuiRegion(
-            HSplit(
-                [
-                    Window(header_control, height=1, dont_extend_height=True),
-                    ConditionalContainer(
-                        Window(navigation_control, height=1, dont_extend_height=True),
-                        filter=Condition(lambda: bool(state.items)),
-                    ),
-                    Window(height=1, char=" "),
-                ]
-            )
+        HSplit(
+            [
+                Window(header_control, height=1, dont_extend_height=True),
+                ConditionalContainer(
+                    Window(navigation_control, height=1, dont_extend_height=True),
+                    filter=Condition(lambda: bool(state.items)),
+                ),
+                Window(height=1, char=" "),
+            ]
         ),
-        TuiRegion(decision_body),
-        TuiRegion(
-            Window(footer_control, height=Dimension.exact(1), dont_extend_height=True)
-        ),
+        decision_body,
+        Window(footer_control, height=Dimension.exact(1), dont_extend_height=True),
     )
     initial_response_index = (
         intent.response_choice_index(state.current_issue())

@@ -16,7 +16,8 @@ from memcommit.providers.clients.codex_model_catalog import (
 )
 from memcommit.providers.clients.completion import model_name
 from memcommit.providers.errors import QueryProviderError
-from memcommit.providers.types import CODEX_CHATGPT_PROVIDER
+from memcommit.providers.profile_routes import load_active_provider_scope
+from memcommit.providers.types import CODEX_CHATGPT_PROVIDER, SEMANTIC_PROVIDER_IDS
 
 
 @dataclass(frozen=True)
@@ -27,7 +28,7 @@ class SetupProviderOption:
 
 
 SETUP_PROVIDERS = (
-    SetupProviderOption(CODEX_CHATGPT_PROVIDER, "OpenAI Codex", "codex"),
+    SetupProviderOption(uid=CODEX_CHATGPT_PROVIDER, label="OpenAI Codex", command="codex"),
 )
 
 
@@ -69,7 +70,7 @@ def select_setup_model(
         raise QueryProviderError(
             "The selected model does not support that reasoning setting."
         )
-    return SetupModelSelection(chosen.model, effort)
+    return SetupModelSelection(model=chosen.model, reasoning_effort=effort)
 
 
 def setup_provider_option(provider_id: str) -> SetupProviderOption:
@@ -119,8 +120,7 @@ def setup_status() -> dict:
     registry = load_profile_registry()
     settings = Config().all()
     return {
-        "setup_complete": settings.get("setup_complete") is True
-        and registry.generation > 0,
+        "setup_complete": not initial_setup_needed(),
         "provider": settings.get("semantic_provider"),
         "model": settings.get(f"{settings.get('semantic_provider')}_model"),
         "reasoning_effort": settings.get("codex_chatgpt_reasoning_effort"),
@@ -129,18 +129,38 @@ def setup_status() -> dict:
     }
 
 
-def initial_setup_needed() -> bool:
-    """Offer first-use preparation without treating legacy installs as fresh."""
+def needs_provider_setup() -> bool:
+    """Check saved defaults without contacting a provider or assuming Codex was chosen."""
+    config = Config()
+    scope = load_active_provider_scope(machine_config=config)
+    if scope.mode == "STUDY":
+        return False
+    if scope.routes is not None and scope.routes.default is not None:
+        return False
+
+    # The Config accessor falls back to Codex even before a person selects it.
+    provider_id = config.get("semantic_provider")
+    if provider_id not in SEMANTIC_PROVIDER_IDS:
+        return True
+    model = config.model_for_provider(provider_id)
+    return not isinstance(model, str) or not model.strip()
+
+
+def needs_first_profile() -> bool:
+    """Keep registered Profiles and physical legacy authoring data in place."""
     from memcommit.application.operations.profile.config import (
         default_store_dir,
         profile_registry_file,
     )
 
-    # Existing Profiles and legacy authoring data predate the completion flag.
-    # They must retain their workspace rather than enter first setup again.
     store_dir = default_store_dir()
     return (
         not profile_registry_file().exists()
         and not store_dir.exists()
         and not store_dir.is_symlink()
     )
+
+
+def initial_setup_needed() -> bool:
+    """Enter setup when either provider defaults or a first Profile is missing."""
+    return needs_provider_setup() or needs_first_profile()

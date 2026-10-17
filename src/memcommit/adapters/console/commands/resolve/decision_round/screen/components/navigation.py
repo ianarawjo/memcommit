@@ -20,7 +20,7 @@ def render_navigation(state, *, is_focused) -> list[tuple[str, str]]:
         fragments.extend(
             render_action_button(
                 option.label,
-                focused=focused and state.navigation.cursor_uid == option.uid,
+                focused=focused and state.navigation.cursor_value == option.value,
             )
         )
     fragments.append(("", "\n"))

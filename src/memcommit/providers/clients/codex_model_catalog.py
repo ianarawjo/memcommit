@@ -69,7 +69,7 @@ def _decode_catalog_page(
                 )
             reasoning_options.append(
                 CodexReasoningOption(
-                    effort["reasoningEffort"], effort.get("description", "")
+                    effort=effort["reasoningEffort"], description=effort.get("description", "")
                 )
             )
         supported = tuple(option.effort for option in reasoning_options)
@@ -81,11 +81,11 @@ def _decode_catalog_page(
             )
         models.append(
             CodexModelOption(
-                model,
-                display_name,
-                is_default,
-                default_effort,
-                tuple(reasoning_options),
+                model=model,
+                display_name=display_name,
+                is_default=is_default,
+                default_reasoning_effort=default_effort,
+                supported_reasoning_efforts=tuple(reasoning_options),
             )
         )
     cursor = value.get("nextCursor")
@@ -185,7 +185,7 @@ def load_codex_model_catalog(
     with tempfile.TemporaryDirectory(prefix="memcommit-codex-catalog-") as directory:
         try:
             process = subprocess.Popen(
-                [
+                args=[
                     str(provider.binary),
                     "app-server",
                     "--listen",
@@ -204,10 +204,10 @@ def load_codex_model_catalog(
             raise QueryProviderError(
                 "Could not start the Codex model catalog connection."
             ) from error
-        session = _CodexCatalogSession(process, timeout)
+        session = _CodexCatalogSession(process=process, timeout=timeout)
         try:
             session.request(
-                "initialize", {"clientInfo": {"name": "memcommit", "version": "0.0.1"}}
+                method="initialize", params={"clientInfo": {"name": "memcommit", "version": "0.0.1"}}
             )
             session.send({"method": "initialized", "params": {}})
             models = []
@@ -220,7 +220,7 @@ def load_codex_model_catalog(
                 if cursor is not None:
                     params["cursor"] = cursor
                 page_models, cursor = _decode_catalog_page(
-                    session.request("model/list", params)
+                    session.request(method="model/list", params=params)
                 )
                 models.extend(page_models)
                 if cursor is None:

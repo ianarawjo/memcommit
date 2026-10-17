@@ -31,7 +31,7 @@ def prepare_project_import(root):
     if root.exists():
         source = read_source(root, recursive=True)
         files = tuple(
-            InputFile(path, data)
+            InputFile(path=path, data=data)
             for path, data in source.files
             if Path(path).suffix.lower() in {".md", ".txt", ".yaml", ".yml"}
         )
@@ -51,21 +51,33 @@ def prepare_project_import(root):
     else:
         files, skipped = (), ()
     content = (
-        convert_for_import(files, "documents", None)[0] if files else MemContent(())
+        convert_for_import(
+            files=files,
+            format="documents",
+            placement=None,
+        )[0]
+        if files
+        else MemContent(contexts=())
     )
     digest = sha256()
     for file in files:
         digest.update(file.path.encode("utf-8") + b"\0" + sha256(file.data).digest())
     for path in skipped:
         digest.update(b"excluded\0" + path.encode("utf-8") + b"\0")
-    return PreparedProjectImport(root, files, skipped, content, digest.hexdigest())
+    return PreparedProjectImport(
+        root=root,
+        files=files,
+        skipped_paths=skipped,
+        content=content,
+        digest=digest.hexdigest(),
+    )
 
 
 def import_project_documents(store, prepared):
     return publish_document_import(
-        store,
-        ImportRequest(prepared.root, format="documents", recursive=True),
-        prepared.content,
+        destination=store,
+        request=ImportRequest(source=prepared.root, format="documents", recursive=True),
+        content=prepared.content,
     )
 
 

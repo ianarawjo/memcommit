@@ -45,7 +45,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
@@ -56,7 +55,7 @@ from memcommit.adapters.console.terminal.components.horizontal_choice import (
 )
 from memcommit.adapters.console.terminal.components.operation_context_scope_editor.new_context_editor import suggest_fresh_context_name
 from memcommit.adapters.console.terminal.components.selection import (
-    FlatMultiSelectionState,
+    MultiSelectionState,
     SelectionOption,
 )
 from memcommit.adapters.console.terminal.components.selection.multiple import (
@@ -85,8 +84,8 @@ FindRunner = Callable[[FindRequest], FindResult]
 
 def _choice(*values: tuple[str, str], selected: str) -> HorizontalChoiceState:
     return HorizontalChoiceState(
-        tuple(HorizontalChoiceOption(uid, label) for uid, label in values),
-        selected_uid=selected,
+        tuple(HorizontalChoiceOption(value=uid, label=label) for uid, label in values),
+        selected_value=selected,
     )
 
 
@@ -202,7 +201,7 @@ def run_find_workbench(
         else "SENSITIVE",
     )
     result: FindResult | None = None
-    result_selection: FlatMultiSelectionState | None = None
+    result_selection: MultiSelectionState | None = None
     settings_row = 0
     status = "ENTER A PATTERN"
     bindings = KeyBindings()
@@ -248,12 +247,12 @@ def run_find_workbench(
     )
     save_panel = RetrieveAnswerSavePanel(
         content_summary=lambda: (
-            f"{len(result_selection.selected_uids)} CHECKED FIND MATCH(ES)"
+            f"{len(result_selection.selected_values)} CHECKED FIND MATCH(ES)"
             if result_selection is not None
             else "CHECK FIND MATCHES TO SAVE"
         ),
         action_label=lambda mode: (
-            f"SAVE {len(result_selection.selected_uids)} CHECKED AS {mode}"
+            f"SAVE {len(result_selection.selected_values)} CHECKED AS {mode}"
             if result_selection is not None
             else "SAVE CHECKED FIND MATCHES"
         ),
@@ -266,9 +265,9 @@ def run_find_workbench(
         input_name="find-save-location",
         on_status=set_status,
         mode_options=(
-            HorizontalChoiceOption("COPY", "COPY"),
-            HorizontalChoiceOption("REFERENCE", "REFERENCE"),
-            HorizontalChoiceOption("EMBED", "EMBED"),
+            HorizontalChoiceOption(value="COPY", label="COPY"),
+            HorizontalChoiceOption(value="REFERENCE", label="REFERENCE"),
+            HorizontalChoiceOption(value="EMBED", label="EMBED"),
         ),
         initial_mode="COPY",
     )
@@ -337,8 +336,8 @@ def run_find_workbench(
                 target_names=targets,
                 include_descendants=include_descendants,
                 follow_embeds=scope.follow_embeds,
-                mode=mode_choice.selected_uid,
-                ignore_case=case_choice.selected_uid == "IGNORE",
+                mode=mode_choice.selected_value,
+                ignore_case=case_choice.selected_value == "IGNORE",
             )
             result = execute(candidate)
         except (OSError, RuntimeError, TypeError, ValueError) as error:
@@ -347,15 +346,15 @@ def run_find_workbench(
                 app.layout.focus(scope.input)
             return "HANDLED"
         result_selection = (
-            FlatMultiSelectionState(
+            MultiSelectionState(
                 tuple(
                     SelectionOption(
-                        str(index),
-                        render_find_reference_row(match, number=index + 1),
+                        value=str(index),
+                        label=render_find_reference_row(match, number=index + 1),
                     )
                     for index, match in enumerate(result.matches)
                 ),
-                cursor_uid="0",
+                cursor_value="0",
             )
             if result.matches
             else None
@@ -425,7 +424,7 @@ def run_find_workbench(
         set_status(
             f"{'CHECKED' if checked else 'UNCHECKED'} MATCH "
             f"{result_selection.cursor_index + 1} · "
-            f"{len(result_selection.selected_uids)} TOTAL"
+            f"{len(result_selection.selected_values)} TOTAL"
         )
         event.app.invalidate()
         return "HANDLED"
@@ -439,7 +438,7 @@ def run_find_workbench(
             set_status("RUN FIND AND CHECK AT LEAST ONE MATCH")
             return "HANDLED"
         selected_indices = tuple(
-            int(uid) for uid in result_selection.selected_uids
+            int(uid) for uid in result_selection.selected_values
         )
         if not selected_indices:
             set_status("CHECK AT LEAST ONE FIND MATCH")
@@ -652,13 +651,17 @@ def run_find_workbench(
         filter=Condition(lambda: result is not None and bool(result.matches)),
     )
     root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(scope_frame, separator_before=True),
-        TuiRegion(find_frame, separator_before=True),
-        TuiRegion(result_frame, separator_before=True),
-        TuiRegion(save_container, separator_before=True),
-        TuiRegion(status_window),
-        TuiRegion(footer),
+        header,
+        Window(height=1, char="─"),
+        scope_frame,
+        Window(height=1, char="─"),
+        find_frame,
+        Window(height=1, char="─"),
+        result_frame,
+        Window(height=1, char="─"),
+        save_container,
+        status_window,
+        footer,
     )
     app: Application[FindTuiOutcome | None] = Application(
         layout=Layout(root, focused_element=pattern_area),

@@ -16,7 +16,6 @@ from prompt_toolkit.layout.dimension import Dimension
 from prompt_toolkit.layout.margins import Margin
 from prompt_toolkit.widgets import Frame
 
-from memcommit.adapters.console.terminal.components.frame.model import TuiRegion
 
 
 class _BlankMargin(Margin):
@@ -117,12 +116,7 @@ def build_focused_frame(
     return frame
 
 
-def build_tui_frame(*regions: TuiRegion) -> HSplit:
-    """Compose operation-owned regions into one full-screen vertical frame."""
+def build_tui_frame(*regions: AnyContainer) -> HSplit:
+    """Compose operation-owned containers in top-to-bottom screen order."""
 
-    children: list[AnyContainer] = []
-    for region in regions:
-        if region.separator_before:
-            children.append(Window(height=1, char="─"))
-        children.append(region.container)
-    return HSplit(children)
+    return HSplit(list(regions))

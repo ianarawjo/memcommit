@@ -41,7 +41,7 @@ from memcommit.adapters.console.terminal.components.horizontal_choice import (
 from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import focused_control_style
 from memcommit.application.operations.query.granted_application import GrantedQueryTarget
 from memcommit.adapters.console.terminal.components.selection.model import SelectionOption
-from memcommit.adapters.console.terminal.components.selection.state import FlatSelectionState
+from memcommit.adapters.console.terminal.components.selection.state import SingleSelectionState
 from memcommit.adapters.console.terminal.components.selection import render_vertical_choice_rows
 
 
@@ -86,23 +86,23 @@ class CompactQueryViewScopeControl:
         self._direct_dirty = False
         self._programmatic_edit = False
 
-        self.selection = FlatSelectionState(
+        self.selection = SingleSelectionState(
             tuple(
                 SelectionOption(
-                    target.grant_uid,
-                    target.access_name,
-                    "QUERY VIEW",
+                    value=target.grant_uid,
+                    label=target.access_name,
+                    description="QUERY VIEW",
                 )
                 for target in catalog
             ),
-            cursor_uid=initial_target.grant_uid,
-            selected_uid=initial_target.grant_uid,
+            cursor_value=initial_target.grant_uid,
+            selected_value=initial_target.grant_uid,
             allow_empty=False,
         )
         self.range_choice = HorizontalChoiceState(
             (
-                HorizontalChoiceOption("EXACT", "EXACT VIEW"),
-                HorizontalChoiceOption("FEDERATE", "FEDERATE DESCENDANTS"),
+                HorizontalChoiceOption(value="EXACT", label="EXACT VIEW"),
+                HorizontalChoiceOption(value="FEDERATE", label="FEDERATE DESCENDANTS"),
             ),
             "FEDERATE" if federate_descendants else "EXACT",
         )
@@ -222,12 +222,12 @@ class CompactQueryViewScopeControl:
 
     @property
     def federate_descendants(self) -> bool:
-        return self.range_choice.selected_uid == "FEDERATE"
+        return self.range_choice.selected_value == "FEDERATE"
 
     def selected_target(self) -> GrantedQueryTarget:
         if self._direct_dirty:
             self.commit_direct()
-        uid = self.selection.selected_uid
+        uid = self.selection.selected_value
         if uid is None:
             raise ValueError("Select one query-only View.")
         return self.target_by_uid[uid]
@@ -268,9 +268,9 @@ class CompactQueryViewScopeControl:
             return False
         candidate = self.name.validate_candidate()
         target = self.target_by_name[candidate]
-        before = self.selection.selected_uid
-        self.selection.selected_uid = target.grant_uid
-        self.selection.cursor_uid = target.grant_uid
+        before = self.selection.selected_value
+        self.selection.selected_value = target.grant_uid
+        self.selection.cursor_value = target.grant_uid
         self._direct_dirty = False
         changed = before != target.grant_uid
         if changed:
@@ -370,7 +370,7 @@ class CompactQueryViewScopeControl:
     def _select_catalog(self, _event: KeyPressEvent) -> SurfaceActionResult:
         if self._locked():
             return "HANDLED"
-        before = self.selection.selected_uid
+        before = self.selection.selected_value
         selected = self.selection.select_cursor(toggle=False)
         if selected is None:
             return "HANDLED"

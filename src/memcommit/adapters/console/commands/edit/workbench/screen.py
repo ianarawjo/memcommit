@@ -39,7 +39,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
 )
 from memcommit.adapters.console.terminal.components.action import build_action_control
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_tui_frame,
 )
 from memcommit.adapters.console.terminal.components.multiline_input import (
@@ -149,11 +148,11 @@ def run_edit_tui(
         dont_extend_height=True,
     )
     root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(source.frame),
-        TuiRegion(editor.frame),
-        TuiRegion(action_line),
-        TuiRegion(footer),
+        header,
+        source.frame,
+        editor.frame,
+        action_line,
+        footer,
     )
     app: Application[FrozenEditPlan | None] = Application(
         layout=Layout(root, focused_element=source.control),

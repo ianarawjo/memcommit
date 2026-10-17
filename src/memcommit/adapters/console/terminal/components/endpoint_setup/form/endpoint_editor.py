@@ -109,20 +109,20 @@ class EndpointEditor:
             self.source_type = HorizontalChoiceState(
                 (
                     HorizontalChoiceOption(
-                        "CONTEXT", "CONTEXT", "Use the selected Context frame."
+                        value="CONTEXT", label="CONTEXT", description="Use the selected Context frame."
                     ),
                     HorizontalChoiceOption(
-                        "STORED_MEMORY",
-                        "STORED MEMORY",
-                        "Use one exact Memory from its owning Context.",
+                        value="STORED_MEMORY",
+                        label="STORED MEMORY",
+                        description="Use one exact Memory from its owning Context.",
                     ),
                     HorizontalChoiceOption(
-                        "INLINE_MEMORY",
-                        "INLINE MEMORY",
-                        "Use exact process-local text without a Source Context.",
+                        value="INLINE_MEMORY",
+                        label="INLINE MEMORY",
+                        description="Use exact process-local text without a Source Context.",
                     ),
                 ),
-                selected_uid="CONTEXT",
+                selected_value="CONTEXT",
             )
         initial = (
             role.new_context.initial_name
@@ -275,7 +275,7 @@ class EndpointEditor:
     def move_source_type(self, delta: int) -> bool:
         changed = self.source_type.move(delta)
         # Keyboard and decoded-command edits must update the same requirement.
-        self.set_source_type(self.source_type.selected_uid)
+        self.set_source_type(self.source_type.selected_value)
         return changed
 
     def label(self) -> str:
@@ -386,7 +386,7 @@ class EndpointEditor:
         state = self.source_type
         if state is None:
             return "CONTEXT"
-        selected = state.selected_uid
+        selected = state.selected_value
         if selected == "INLINE_MEMORY" and (not self.role_allows_inline_memory()):
             return "CONTEXT"
         if selected == "STORED_MEMORY" and (not self.role_allows_memory_focus()):

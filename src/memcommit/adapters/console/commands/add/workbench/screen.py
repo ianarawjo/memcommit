@@ -29,7 +29,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
@@ -131,11 +130,11 @@ class _AddWorkbench:
         bind_surface_navigation(self.bindings, self.surfaces)
         self._bind_keys()
         root = build_tui_frame(
-            TuiRegion(Window(FormattedTextControl(" MEM ADD"), height=1)),
-            TuiRegion(self.context.container),
-            TuiRegion(self.viewer.container),
-            TuiRegion(memory_field.frame),
-            TuiRegion(Window(FormattedTextControl(self._render_footer), height=1)),
+            Window(FormattedTextControl(" MEM ADD"), height=1),
+            self.context.container,
+            self.viewer.container,
+            memory_field.frame,
+            Window(FormattedTextControl(self._render_footer), height=1),
         )
         self.app: Application[tuple[AddResult, ...]] = Application(
             layout=Layout(root, focused_element=self.memory_input),

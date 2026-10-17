@@ -92,7 +92,7 @@ class RetrieveAnswerSavePanel:
         if browse_height < 1:
             raise ValueError("SAVE panel Browse height must be positive.")
         if options and initial_mode is None:
-            initial_mode = options[0].uid
+            initial_mode = options[0].value
         if not options and initial_mode is not None:
             raise ValueError("A SAVE panel without modes cannot select one.")
 
@@ -105,7 +105,7 @@ class RetrieveAnswerSavePanel:
             assert initial_mode is not None
             self.mode: HorizontalChoiceState | None = HorizontalChoiceState(
                 options,
-                selected_uid=initial_mode,
+                selected_value=initial_mode,
             )
         else:
             self.mode = None
@@ -248,7 +248,7 @@ class RetrieveAnswerSavePanel:
 
     @property
     def selected_mode(self) -> str | None:
-        return None if self.mode is None else self.mode.selected_uid
+        return None if self.mode is None else self.mode.selected_value
 
     @property
     def location(self) -> str:

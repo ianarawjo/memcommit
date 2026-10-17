@@ -26,7 +26,7 @@ def publish_document_import(destination, request, content):
 
     # Retain immutable bytes before any Context can reference them.
     for digest, data in content.attached_data.items():
-        if save_attached_file(destination.store_dir, data) != digest:
+        if save_attached_file(store_root=destination.store_dir, data=data) != digest:
             raise ValueError("Attached-file identity mismatch.")
     entries = tuple(
         (
@@ -39,7 +39,7 @@ def publish_document_import(destination, request, content):
         )
         for context in content.contexts
     )
-    created = import_context_records(destination, entries) if entries else ()
+    created = import_context_records(destination=destination, entries=entries) if entries else ()
     checkpoints = tuple(
         str(item["uid"])
         for context in created
@@ -51,11 +51,11 @@ def publish_document_import(destination, request, content):
             files.append((context.document.path, "DOCUMENT", context.name))
         files.extend((file.path, "ATTACHED", context.name) for file in context.attached_files)
     return ImportResult(
-        Path(request.source),
-        tuple(context.name for context in created),
-        tuple(files),
-        sum(isinstance(item, Memory) for context in created for item in context.iter_items()),
-        checkpoints,
+        source=Path(request.source),
+        target_contexts=tuple(context.name for context in created),
+        files=tuple(files),
+        memory_count=sum(isinstance(item, Memory) for context in created for item in context.iter_items()),
+        checkpoints=checkpoints,
     )
 
 

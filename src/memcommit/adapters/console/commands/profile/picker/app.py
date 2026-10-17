@@ -60,7 +60,7 @@ def choose_profile(
     """Return one reviewed/selected action, a completed removal, or cancellation."""
 
     state = ProfilePickerState.create(
-        build_picker_rows(entries, current=current),
+        rows=build_picker_rows(entries, current=current),
         current=current,
         registry_generation=registry_generation,
         initial_status=initial_status,
@@ -83,7 +83,7 @@ def choose_profile(
         interval_seconds=_PROFILE_DELETION_BUSY_INTERVAL_SECONDS,
     )
     background_result: ProfilePickerRefresh | None = None
-    view = ProfilePickerView(state, background_turn)
+    view = ProfilePickerView(state=state, background_turn=background_turn)
     bindings = KeyBindings()
     name_mode = (view.create_mode | view.rename_mode) & Condition(
         lambda: state.edit is not None
@@ -113,17 +113,22 @@ def choose_profile(
 
     view.folder_field.input.buffer.on_text_changed += update_folder_suggestion
     from memcommit.adapters.console.terminal.components.focus.controller import FocusSurface, SurfaceFocusController, bind_surface_navigation
-    controller = SurfaceFocusController(lambda: (
-        (FocusSurface("name", view.active_name_field().input),
-         FocusSurface("folder", view.folder_field.input),
-         FocusSurface("import", view.import_control),
-         FocusSurface("sync", view.sync_control))
+    controller = SurfaceFocusController(surfaces=lambda: (
+        (FocusSurface(uid="name", control=view.active_name_field().input),
+         FocusSurface(uid="folder", control=view.folder_field.input),
+         FocusSurface(uid="import", control=view.import_control),
+         FocusSurface(uid="sync", control=view.sync_control))
         if state.edit is not None and state.edit.kind == "CREATE_PROFILE"
-        else (FocusSurface("name", view.active_name_field().input),)
+        else (FocusSurface(uid="name", control=view.active_name_field().input),)
         if state.edit is not None
-        else (FocusSurface("main", view.control),)
+        else (FocusSurface(uid="main", control=view.control),)
     ))
-    bind_surface_navigation(bindings, controller, vertical=False, activate=False)
+    bind_surface_navigation(
+        bindings=bindings,
+        controller=controller,
+        vertical=False,
+        activate=False,
+    )
 
     for field in view.name_fields.values():
         field.input.buffer.on_text_changed += clear_stale_name_error
@@ -153,13 +158,13 @@ def choose_profile(
         else:
             event.app.invalidate()
 
-    @bind_case_insensitive_key(bindings, "n", filter=view.picker_mode, eager=True)
+    @bind_case_insensitive_key(bindings=bindings, key="n", filter=view.picker_mode, eager=True)
     def _edit_new_profile_name(event) -> None:
         state.begin_create()
         focus_stage()
         event.app.invalidate()
 
-    @bind_case_insensitive_key(bindings, "r", filter=view.picker_mode, eager=True)
+    @bind_case_insensitive_key(bindings=bindings, key="r", filter=view.picker_mode, eager=True)
     def _edit_profile_name(event) -> None:
         state.begin_rename()
         focus_stage()
@@ -168,7 +173,10 @@ def choose_profile(
     @bindings.add("enter", filter=view.create_mode | name_mode, eager=True)
     def _review_name(event) -> None:
         try:
-            state.review_name(view.active_name_field().validate_candidate(), view.folder_field.validate_candidate() if state.edit.kind == "CREATE_PROFILE" else None)
+            state.review_name(
+                name=view.active_name_field().validate_candidate(),
+                root_dir=view.folder_field.validate_candidate() if state.edit.kind == "CREATE_PROFILE" else None,
+            )
         except (OSError, ProfileConfigError, TypeError, ValueError) as error:
             state.notify(display_escape_text(str(error)), error=True)
             event.app.invalidate()
@@ -190,7 +198,7 @@ def choose_profile(
     @bindings.add(" ", filter=setup_option_mode, eager=True)
     def _toggle_setup_option(event):
         selection = view.active_setup_selection()
-        selection.cursor_uid = "off" if selection.selected_uid == "on" else "on"
+        selection.cursor_value = "off" if selection.selected_value == "on" else "on"
         selection.select_cursor(toggle=False)
         state.notify()
         event.app.invalidate()
@@ -207,7 +215,7 @@ def choose_profile(
         state.notify(f"{target_kind} name must stay on one line", error=True)
         event.app.invalidate()
 
-    @bind_case_insensitive_key(bindings, "d", filter=view.picker_mode, eager=True)
+    @bind_case_insensitive_key(bindings=bindings, key="d", filter=view.picker_mode, eager=True)
     def _review_removal(event) -> None:
         state.review_removal()
         event.app.invalidate()
@@ -289,7 +297,7 @@ def choose_profile(
             close=lambda event: event.app.exit(result=None),
         )
 
-    @bind_case_insensitive_key(bindings, "q", filter=view.picker_mode, eager=True)
+    @bind_case_insensitive_key(bindings=bindings, key="q", filter=view.picker_mode, eager=True)
     @bindings.add("c-c", eager=True)
     def _cancel(event) -> None:
         if request_close(event):

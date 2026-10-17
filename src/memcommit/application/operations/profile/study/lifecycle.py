@@ -54,7 +54,7 @@ def rename_study(
                 "Profile registry changed after Study rename selection; review "
                 "the current Profile list and try again."
             )
-        study_uid, study_name, members = _study_target(registry, canonical_old)
+        study_uid, study_name, members = _study_target(registry=registry, name=canonical_old)
         if expected_uid is not None and study_uid != expected_uid:
             raise ProfileError(
                 f"Study {study_name!r} identity changed after rename selection; "
@@ -154,7 +154,7 @@ def remove_study(
             and registry.generation != expected_generation
         ):
             raise ProfileError("Profile registry changed after removal review.")
-        study_uid, study_name, profiles = _study_target(registry, name)
+        study_uid, study_name, profiles = _study_target(registry=registry, name=name)
         if expected_uid is not None and study_uid != expected_uid:
             raise ProfileError("Study identity changed after removal review.")
         member_uids = {profile.uid for profile in profiles}
@@ -168,8 +168,8 @@ def remove_study(
             inspect_store(
                 profile_store_dir(profile),
                 allowed_virtual_currents=_read_granted_access_names(
-                    registry,
-                    profile.uid,
+                    registry=registry,
+                    profile_uid=profile.uid,
                 ),
             )
         retained_grants = tuple(
@@ -194,8 +194,8 @@ def remove_study(
         )
         batch = _prepare_profile_deletion_batch(stores_to_delete)
         _publish_permanent_removal(
-            registry,
-            updated,
+            previous=registry,
+            updated=updated,
             batch=batch,
             profiles=stores_to_delete,
             label=f"Study {study_name!r}",

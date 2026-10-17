@@ -217,7 +217,7 @@ def create_profile(
             },
         )
         from memcommit.application.operations.profile.project_root import prepare_profile_root, write_profile_marker
-        profile = prepare_profile_root(profile, root_dir, registry)
+        profile = prepare_profile_root(profile=profile, requested_root=root_dir, registry=registry)
         from memcommit.application.operations.profile.project_documents import (
             import_project_documents,
             prepare_project_import,
@@ -233,13 +233,13 @@ def create_profile(
         published = False
         try:
             inspection = _write_empty_profile_store(staging)
-            write_profile_marker(staging, profile.uid)
+            write_profile_marker(store_root=staging, uid=profile.uid)
             if import_project_files or automatic_sync:
                 from memcommit.persistence.store import MemoryStore
 
                 store = MemoryStore(root=staging, create=False)
                 if prepared is not None:
-                    import_project_documents(store, prepared)
+                    import_project_documents(store=store, prepared=prepared)
                 if automatic_sync:
                     from memcommit.application.operations.mem_sync.documents.connect_imported_documents import connect_imported_documents
                     connect_imported_documents(store)
@@ -470,11 +470,11 @@ def remove_profile(
         inspect_store(
             store,
             allowed_virtual_currents=_read_granted_access_names(
-                registry,
-                target.uid,
+                registry=registry,
+                profile_uid=target.uid,
             ),
         )
-        study = _profile_study_target(registry, target)
+        study = _profile_study_target(registry=registry, profile=target)
         retained_grants = tuple(
             grant
             for grant in registry.grants
@@ -496,8 +496,8 @@ def remove_profile(
         )
         batch = _prepare_profile_deletion_batch((target,))
         _publish_permanent_removal(
-            registry,
-            updated,
+            previous=registry,
+            updated=updated,
             batch=batch,
             profiles=(target,),
             label=f"Profile {target.name!r}",

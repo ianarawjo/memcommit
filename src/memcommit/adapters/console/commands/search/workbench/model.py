@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 from memcommit.adapters.console.terminal.components.selection import (
-    FlatMultiSelectionState,
+    MultiSelectionState,
     SelectionOption,
 )
 from memcommit.adapters.console.terminal.components.plain_text_clipboard import (
@@ -98,7 +98,7 @@ class SearchWorkbenchState:
     """Own result invalidation and eligibility; shared selectors own navigation."""
 
     response: SearchResponse | None = None
-    result_selection: FlatMultiSelectionState | None = None
+    result_selection: MultiSelectionState | None = None
     status: str = "ENTER A QUERY"
     copy_receipt: PlainTextClipboardReceipt | None = None
     save_location_edited: bool = False
@@ -120,7 +120,7 @@ class SearchWorkbenchState:
         self.response = response
         self.copy_receipt = None
         self.result_selection = (
-            FlatMultiSelectionState(options, cursor_uid="0")
+            MultiSelectionState(options, cursor_value="0")
             if response.results
             else None
         )
@@ -130,7 +130,7 @@ class SearchWorkbenchState:
     def selected_save_indices(self) -> tuple[int, ...]:
         if self.response is None or self.result_selection is None:
             raise ValueError("RUN SEARCH AND CHECK AT LEAST ONE RESULT")
-        indices = tuple(int(uid) for uid in self.result_selection.selected_uids)
+        indices = tuple(int(uid) for uid in self.result_selection.selected_values)
         if not indices:
             raise ValueError("CHECK AT LEAST ONE RESULT")
         selected_results = tuple(self.response.results[index] for index in indices)

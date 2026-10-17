@@ -27,7 +27,8 @@ def select_sync_contexts(request: SyncRequest, *, current_name, contexts):
                 f"No owned Context named {root!r}. Sync does not include Grant routes."
             )
         names = expand_lexical_context_names(
-            ContextScope.create((root,), include_descendants=request.recursive), by_name
+            scope=ContextScope.create((root,), include_descendants=request.recursive),
+            catalog_names=by_name,
         )
         scope = "recursive" if request.recursive else "exact"
         if (
@@ -51,8 +52,8 @@ def select_sync_contexts(request: SyncRequest, *, current_name, contexts):
                     raise ValueError(f"Incomplete Skill document: {body_name}")
                 selected.add(companion)
     return SyncSelection(
-        tuple(sorted(selected)),
-        root,
-        scope,
-        tuple(sorted((c.name, c.uid) for c in contexts)),
+        names=tuple(sorted(selected)),
+        root_name=root,
+        scope=scope,
+        inventory=tuple(sorted((c.name, c.uid) for c in contexts)),
     )

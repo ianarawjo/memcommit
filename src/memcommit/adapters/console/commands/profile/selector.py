@@ -111,7 +111,7 @@ def _pick_profile(
         if initial_row_index is not None:
             picker_kwargs["initial_row_index"] = initial_row_index
         selected = choose_profile(
-            entries,
+            entries=entries,
             current=registry.active.name,
             registry_generation=registry.generation,
             **picker_kwargs,
@@ -165,8 +165,8 @@ def _apply_profile_picker_action(
                     "Profile picker Study rename is missing its new name."
                 )
             result = rename_study(
-                action.name,
-                action.new_name,
+                old_name=action.name,
+                new_name=action.new_name,
                 expected_uid=action.uid,
                 expected_generation=action.registry_generation,
             )

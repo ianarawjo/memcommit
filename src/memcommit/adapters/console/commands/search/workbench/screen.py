@@ -40,7 +40,6 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     SEMANTIC_VIEWER_STYLE,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
@@ -198,12 +197,12 @@ def run_search_workbench(
     )
     save_panel = RetrieveAnswerSavePanel(
         content_summary=lambda: (
-            f"{len(state.result_selection.selected_uids)} CHECKED SEARCH RESULT(S)"
+            f"{len(state.result_selection.selected_values)} CHECKED SEARCH RESULT(S)"
             if state.result_selection is not None
             else "CHECK SEARCH RESULTS TO SAVE"
         ),
         action_label=lambda mode: (
-            f"SAVE {len(state.result_selection.selected_uids)} CHECKED AS {mode}"
+            f"SAVE {len(state.result_selection.selected_values)} CHECKED AS {mode}"
             if state.result_selection is not None
             else "SAVE CHECKED SEARCH RESULTS"
         ),
@@ -215,19 +214,19 @@ def run_search_workbench(
         on_status=scope_status,
         mode_options=(
             HorizontalChoiceOption(
-                "COPY",
-                "COPY",
-                "Create independent Memory values with fresh identities.",
+                value="COPY",
+                label="COPY",
+                description="Create independent Memory values with fresh identities.",
             ),
             HorizontalChoiceOption(
-                "REFERENCE",
-                "REFERENCE",
-                "Retain immutable read-only snapshots of the selected values.",
+                value="REFERENCE",
+                label="REFERENCE",
+                description="Retain immutable read-only snapshots of the selected values.",
             ),
             HorizontalChoiceOption(
-                "EMBED",
-                "EMBED",
-                "Create read-only live links that follow their Source Memories.",
+                value="EMBED",
+                label="EMBED",
+                description="Create read-only live links that follow their Source Memories.",
             ),
         ),
         initial_mode="COPY",
@@ -299,12 +298,12 @@ def run_search_workbench(
         ),
     )
     root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(scope_frame),
-        TuiRegion(search_frame),
-        TuiRegion(results_frame),
-        TuiRegion(save_container),
-        TuiRegion(footer),
+        header,
+        scope_frame,
+        search_frame,
+        results_frame,
+        save_container,
+        footer,
     )
     app: Application[SearchWorkbenchResult] = Application(
         layout=Layout(root, focused_element=search_area),
@@ -366,13 +365,13 @@ def run_search_workbench(
 
     def _enter_results(delta: int) -> None:
         if state.result_selection is not None:
-            previous_uid = state.result_selection.cursor_uid
-            state.result_selection.cursor_uid = (
-                state.result_selection.options[0].uid
+            previous_value = state.result_selection.cursor_value
+            state.result_selection.cursor_value = (
+                state.result_selection.options[0].value
                 if delta > 0
-                else state.result_selection.options[-1].uid
+                else state.result_selection.options[-1].value
             )
-            if state.result_selection.cursor_uid != previous_uid:
+            if state.result_selection.cursor_value != previous_value:
                 state.copy_receipt = None
 
     @bindings.add("pageup", filter=has_focus(results_control), eager=True)
@@ -511,7 +510,7 @@ def run_search_workbench(
             state.status = (
                 f"{'CHECKED' if checked else 'UNCHECKED'} RESULT "
                 f"{state.result_selection.cursor_index + 1} · "
-                f"{len(state.result_selection.selected_uids)} TOTAL"
+                f"{len(state.result_selection.selected_values)} TOTAL"
             )
         event.app.invalidate()
         return "HANDLED"
@@ -525,7 +524,7 @@ def run_search_workbench(
             focused_index = (
                 0
                 if state.result_selection is None
-                else int(state.result_selection.cursor_uid)
+                else int(state.result_selection.cursor_value)
             )
             projection = project_search_results_clipboard(
                 state.response,

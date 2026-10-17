@@ -18,7 +18,7 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     ContextTreeRow,
 )
 from memcommit.adapters.console.terminal.components.selection import (
-    FlatSelectionState,
+    SingleSelectionState,
     SelectionOption,
     render_vertical_choice_rows,
 )
@@ -95,13 +95,13 @@ class EndpointMemoryFocusController:
         self.cache[context_name] = loaded
         return loaded
 
-    def state(self) -> FlatSelectionState:
+    def state(self) -> SingleSelectionState:
         memories = self.prepare_context(self.selected_context())
         memory_options = tuple(
             SelectionOption(
-                _memory_option_uid(memory.uid),
-                f"MEMORY · {memory.uid[:8]}",
-                memory.preview,
+                value=_memory_option_uid(memory.uid),
+                label=f"MEMORY · {memory.uid[:8]}",
+                description=memory.preview,
             )
             for memory in memories
         )
@@ -114,16 +114,16 @@ class EndpointMemoryFocusController:
             if self.required
             else (
                 SelectionOption(
-                    _WHOLE_CONTEXT_UID,
-                    "WHOLE CONTEXT",
-                    "Use every direct Memory in this exact Context.",
+                    value=_WHOLE_CONTEXT_UID,
+                    label="WHOLE CONTEXT",
+                    description="Use every direct Memory in this exact Context.",
                 ),
                 *memory_options,
             )
         )
-        available = {option.uid for option in options}
+        available = {option.value for option in options}
         if self.cursor_uid not in available:
-            self.cursor_uid = options[0].uid
+            self.cursor_uid = options[0].value
         selected_uid = (
             _memory_option_uid(self.selected_memory_uid)
             if self.selected_memory_uid is not None
@@ -136,10 +136,10 @@ class EndpointMemoryFocusController:
             # without using the screen's explicit Context-choice transition.
             self.clear()
             selected_uid = None if self.required else _WHOLE_CONTEXT_UID
-        return FlatSelectionState(
+        return SingleSelectionState(
             options=options,
-            cursor_uid=self.cursor_uid,
-            selected_uid=selected_uid,
+            cursor_value=self.cursor_uid,
+            selected_value=selected_uid,
             allow_empty=self.required,
         )
 
@@ -181,12 +181,12 @@ class EndpointMemoryFocusController:
     def move(self, delta: int) -> bool:
         state = self.state()
         changed = state.move(delta)
-        self.cursor_uid = state.cursor_uid
+        self.cursor_uid = state.cursor_value
         return changed
 
     def enter(self, delta: int) -> None:
         state = self.state()
-        self.cursor_uid = state.options[0 if delta > 0 else -1].uid
+        self.cursor_uid = state.options[0 if delta > 0 else -1].value
 
     def choose(self) -> str | None:
         self.selected_memory_uid = (
@@ -238,7 +238,7 @@ class EndpointMemoryFocusController:
         state = self.state()
         context_name = self.selected_context()
         memories = self.prepare_context(context_name)
-        cursor_uid = state.cursor_uid.removeprefix(_MEMORY_OPTION_PREFIX)
+        cursor_uid = state.cursor_value.removeprefix(_MEMORY_OPTION_PREFIX)
         cursor_index = next(
             index for index, memory in enumerate(memories) if memory.uid == cursor_uid
         )

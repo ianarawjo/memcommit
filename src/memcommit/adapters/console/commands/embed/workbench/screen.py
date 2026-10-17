@@ -54,7 +54,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
@@ -363,17 +362,17 @@ def run_embed_tui(
     mode = HorizontalChoiceState(
         (
             HorizontalChoiceOption(
-                "CONTEXT",
-                "CONTEXT",
-                "Keep one Child Context live inside the Target.",
+                value="CONTEXT",
+                label="CONTEXT",
+                description="Keep one Child Context live inside the Target.",
             ),
             HorizontalChoiceOption(
-                "MEMORY",
-                "MEMORY",
-                "Keep one direct Source Memory live inside the Target.",
+                value="MEMORY",
+                label="MEMORY",
+                description="Keep one direct Source Memory live inside the Target.",
             ),
         ),
-        selected_uid="CONTEXT",
+        selected_value="CONTEXT",
     )
     mode_control = FormattedTextControl(
         lambda: render_horizontal_choice(
@@ -443,7 +442,7 @@ def run_embed_tui(
     def selected_review() -> CommandReview:
         gap = placement.state.selected_gap
         gap_selector = command_gap_selector(gap)
-        if mode.selected_uid == "MEMORY":
+        if mode.selected_value == "MEMORY":
             target = selected_memory_target()
             return memory_embed_exact_command_review(
                 target.context_name,
@@ -567,7 +566,7 @@ def run_embed_tui(
                 " MEM EMBED · LIVE LINK → INTO\n"
                 + (
                     " CHOOSE ONE CHILD CONTEXT AND ONE DIRECT-ITEM INSERTION GAP"
-                    if mode.selected_uid == "CONTEXT"
+                    if mode.selected_value == "CONTEXT"
                     else " CHOOSE ONE DIRECT SOURCE MEMORY AND ONE INSERTION GAP"
                 )
             )
@@ -717,7 +716,7 @@ def run_embed_tui(
                 next_uid=gap.next_uid,
             )
             expected_review = selected_review()
-            if mode.selected_uid == "MEMORY":
+            if mode.selected_value == "MEMORY":
                 memory_target = selected_memory_target()
                 frozen = freeze_memory_exact_gap(
                     memory_target.context_name,
@@ -787,7 +786,7 @@ def run_embed_tui(
                 activate=choose_child,
                 on_vertical_enter=lambda delta: enter_selector(child_selector, delta),
             )
-            if mode.selected_uid == "CONTEXT"
+            if mode.selected_value == "CONTEXT"
             else FocusSurface(
                 "SOURCE_MEMORY",
                 memory_source_selector.control,
@@ -943,23 +942,19 @@ def run_embed_tui(
         dispatch_tui_back(event, close=close)
 
     root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(mode_frame),
-        TuiRegion(
-            ConditionalContainer(
-                content=child_selector.frame,
-                filter=Condition(lambda: mode.selected_uid == "CONTEXT"),
-            )
+        header,
+        mode_frame,
+        ConditionalContainer(
+            content=child_selector.frame,
+            filter=Condition(lambda: mode.selected_value == "CONTEXT"),
         ),
-        TuiRegion(
-            ConditionalContainer(
-                content=memory_source_selector.frame,
-                filter=Condition(lambda: mode.selected_uid == "MEMORY"),
-            )
+        ConditionalContainer(
+            content=memory_source_selector.frame,
+            filter=Condition(lambda: mode.selected_value == "MEMORY"),
         ),
-        TuiRegion(into_position_frame),
-        TuiRegion(todo_frame),
-        TuiRegion(footer),
+        into_position_frame,
+        todo_frame,
+        footer,
     )
     app: Application[FrozenEmbedPlan | FrozenMemoryEmbedPlan | None] = Application(
         layout=Layout(root, focused_element=mode_control),

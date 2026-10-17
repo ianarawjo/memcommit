@@ -8,7 +8,7 @@ from memcommit.adapters.console.terminal.components.selection.model import Selec
 
 
 @dataclass
-class FlatSelectionState:
+class SingleSelectionState:
     """Separate keyboard cursor from one staged single selection.
 
     Callers decide whether movement immediately selects, whether Enter toggles,
@@ -17,21 +17,21 @@ class FlatSelectionState:
     """
 
     options: tuple[SelectionOption, ...]
-    cursor_uid: str
-    selected_uid: str | None = None
+    cursor_value: str
+    selected_value: str | None = None
     allow_empty: bool = True
 
     def __post_init__(self) -> None:
-        uids = tuple(option.uid for option in self.options)
-        if not uids or len(set(uids)) != len(uids):
+        values = tuple(option.value for option in self.options)
+        if not values or len(set(values)) != len(values):
             raise ValueError("Flat selection requires distinct options.")
-        if self.cursor_uid not in uids:
+        if self.cursor_value not in values:
             raise ValueError("Flat selection cursor is unavailable.")
-        if self.selected_uid is not None and self.selected_uid not in uids:
+        if self.selected_value is not None and self.selected_value not in values:
             raise ValueError("Flat selection value is unavailable.")
         if not isinstance(self.allow_empty, bool):
             raise ValueError("Flat selection allow-empty state must be boolean.")
-        if not self.allow_empty and self.selected_uid is None:
+        if not self.allow_empty and self.selected_value is None:
             raise ValueError("This flat selection requires one checked value.")
 
     @property
@@ -39,7 +39,7 @@ class FlatSelectionState:
         return next(
             index
             for index, option in enumerate(self.options)
-            if option.uid == self.cursor_uid
+            if option.value == self.cursor_value
         )
 
     def move(self, delta: int) -> bool:
@@ -48,20 +48,20 @@ class FlatSelectionState:
         if isinstance(delta, bool) or not isinstance(delta, int):
             raise ValueError("Flat selection movement must be an integer.")
         index = max(0, min(self.cursor_index + delta, len(self.options) - 1))
-        cursor_uid = self.options[index].uid
-        changed = cursor_uid != self.cursor_uid
-        self.cursor_uid = cursor_uid
+        cursor_value = self.options[index].value
+        changed = cursor_value != self.cursor_value
+        self.cursor_value = cursor_value
         return changed
 
-    def set_selected(self, uid: str | None) -> bool:
+    def set_selected(self, value: str | None) -> bool:
         """Set an exact staged value without moving the keyboard cursor."""
 
-        if uid is None and not self.allow_empty:
+        if value is None and not self.allow_empty:
             raise ValueError("This flat selection requires one checked value.")
-        if uid is not None and all(option.uid != uid for option in self.options):
+        if value is not None and all(option.value != value for option in self.options):
             raise ValueError("Flat selection value is unavailable.")
-        changed = uid != self.selected_uid
-        self.selected_uid = uid
+        changed = value != self.selected_value
+        self.selected_value = value
         return changed
 
     def select_cursor(self, *, toggle: bool) -> str | None:
@@ -69,52 +69,52 @@ class FlatSelectionState:
 
         selected = (
             None
-            if toggle and self.allow_empty and self.selected_uid == self.cursor_uid
-            else self.cursor_uid
+            if toggle and self.allow_empty and self.selected_value == self.cursor_value
+            else self.cursor_value
         )
         self.set_selected(selected)
-        return self.selected_uid
+        return self.selected_value
 
     def reset_cursor_to_selection(self) -> None:
         """Align reopening with the checked row when one exists."""
 
-        if self.selected_uid is not None:
-            self.cursor_uid = self.selected_uid
+        if self.selected_value is not None:
+            self.cursor_value = self.selected_value
 
 
 @dataclass
-class FlatMultiSelectionState:
+class MultiSelectionState:
     """Separate one flat cursor from an ordered set of checked values.
 
-    Multi-result controls need the same stable option identity and boundary
+    Multi-result controls need the same stable option values and boundary
     movement as single-choice controls, but checking one row must not clear a
     previous row.  The checked order follows the fixed option order rather
     than interaction history so an executable request is deterministic.
     """
 
     options: tuple[SelectionOption, ...]
-    cursor_uid: str
-    selected_uids: tuple[str, ...] = ()
+    cursor_value: str
+    selected_values: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
-        uids = tuple(option.uid for option in self.options)
-        if not uids or len(set(uids)) != len(uids):
+        values = tuple(option.value for option in self.options)
+        if not values or len(set(values)) != len(values):
             raise ValueError("Flat multi-selection requires distinct options.")
-        if self.cursor_uid not in uids:
+        if self.cursor_value not in values:
             raise ValueError("Flat multi-selection cursor is unavailable.")
-        if len(set(self.selected_uids)) != len(self.selected_uids) or any(
-            uid not in uids for uid in self.selected_uids
+        if len(set(self.selected_values)) != len(self.selected_values) or any(
+            value not in values for value in self.selected_values
         ):
             raise ValueError("Flat multi-selection values are unavailable.")
-        selected = set(self.selected_uids)
-        self.selected_uids = tuple(uid for uid in uids if uid in selected)
+        selected = set(self.selected_values)
+        self.selected_values = tuple(value for value in values if value in selected)
 
     @property
     def cursor_index(self) -> int:
         return next(
             index
             for index, option in enumerate(self.options)
-            if option.uid == self.cursor_uid
+            if option.value == self.cursor_value
         )
 
     def move(self, delta: int) -> bool:
@@ -123,29 +123,29 @@ class FlatMultiSelectionState:
         if isinstance(delta, bool) or not isinstance(delta, int):
             raise ValueError("Flat multi-selection movement must be an integer.")
         index = max(0, min(self.cursor_index + delta, len(self.options) - 1))
-        cursor_uid = self.options[index].uid
-        changed = cursor_uid != self.cursor_uid
-        self.cursor_uid = cursor_uid
+        cursor_value = self.options[index].value
+        changed = cursor_value != self.cursor_value
+        self.cursor_value = cursor_value
         return changed
 
     def toggle_cursor(self) -> bool:
         """Toggle the cursor row while preserving canonical option order."""
 
-        selected = set(self.selected_uids)
-        checked = self.cursor_uid not in selected
+        selected = set(self.selected_values)
+        checked = self.cursor_value not in selected
         if checked:
-            selected.add(self.cursor_uid)
+            selected.add(self.cursor_value)
         else:
-            selected.remove(self.cursor_uid)
-        self.selected_uids = tuple(
-            option.uid for option in self.options if option.uid in selected
+            selected.remove(self.cursor_value)
+        self.selected_values = tuple(
+            option.value for option in self.options if option.value in selected
         )
         return checked
 
     def clear(self) -> None:
-        self.selected_uids = ()
+        self.selected_values = ()
 
-    def is_selected(self, uid: str) -> bool:
-        if all(option.uid != uid for option in self.options):
+    def is_selected(self, value: str) -> bool:
+        if all(option.value != value for option in self.options):
             raise ValueError("Flat multi-selection value is unavailable.")
-        return uid in self.selected_uids
+        return value in self.selected_values

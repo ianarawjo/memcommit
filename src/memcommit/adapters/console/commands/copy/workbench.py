@@ -37,7 +37,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
@@ -150,17 +149,17 @@ def run_copy_and_move_workbench(
     link_policy = HorizontalChoiceState(
         (
             HorizontalChoiceOption(
-                "RETARGET",
-                "FOLLOW MOVE",
-                "Live Embeds follow the moved Memory; snapshots stay unchanged.",
+                value="RETARGET",
+                label="FOLLOW MOVE",
+                description="Live Embeds follow the moved Memory; snapshots stay unchanged.",
             ),
             HorizontalChoiceOption(
-                "BREAK",
-                "BREAK LINKS",
-                "Live Embeds may become dangling; snapshots stay unchanged.",
+                value="BREAK",
+                label="BREAK LINKS",
+                description="Live Embeds may become dangling; snapshots stay unchanged.",
             ),
         ),
-        selected_uid="RETARGET",
+        selected_value="RETARGET",
     )
     status = {"value": ""}
     bindings = KeyBindings()
@@ -194,7 +193,7 @@ def run_copy_and_move_workbench(
                 into_locator=selected_into_name(),
                 before=before,
                 after=after,
-                link_policy=link_policy.selected_uid,
+                link_policy=link_policy.selected_value,
             )
         )
 
@@ -530,13 +529,13 @@ def run_copy_and_move_workbench(
             return
         dispatch_tui_back(event, close=close)
 
-    regions = [TuiRegion(header), TuiRegion(source_selector.frame)]
+    regions = [header, source_selector.frame]
     regions.extend(
         (
-            TuiRegion(into_position_frame),
-            *([TuiRegion(policy_line)] if operation == "MOVE" else []),
-            TuiRegion(action_line),
-            TuiRegion(footer),
+            into_position_frame,
+            *([policy_line] if operation == "MOVE" else []),
+            action_line,
+            footer,
         )
     )
     root = build_tui_frame(*regions)

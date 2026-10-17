@@ -15,7 +15,6 @@ from memcommit.adapters.console.terminal.core.capabilities import (
 )
 from memcommit.adapters.console.terminal.core.text import safe_terminal_text
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_tui_frame,
 )
 from memcommit.adapters.console.terminal.core.keybindings import (
@@ -125,9 +124,9 @@ def run_quality_find_browser(
         dont_extend_height=True,
     )
     root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(body),
-        TuiRegion(footer),
+        header,
+        body,
+        footer,
     )
     application: Application[QualityFindBrowserReceipt] = Application(
         layout=Layout(root, focused_element=body_control),

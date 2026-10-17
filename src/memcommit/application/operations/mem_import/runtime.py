@@ -99,12 +99,19 @@ class ImportRuntime:
                 names, source_root=roots[0], target_root=self.request.name
             )
             content = replace(
-                content, contexts=_closed_import_contexts(content.contexts, mapping)
+                content, contexts=_closed_import_contexts(
+                    source_contexts=content.contexts,
+                    mapping=mapping,
+                )
             )
         with authority_grant_snapshot_lock() as registry:
-            require_active_profile_snapshot(registry, self.store)
+            require_active_profile_snapshot(registry=registry, destination=self.store)
             if self.parent_binding:
                 name, uid = self.parent_binding
                 if self.store.load_direct(name).uid != uid:
                     raise ValueError("Import parent changed identity.")
-            return publish_document_import(self.store, self.request, content)
+            return publish_document_import(
+                destination=self.store,
+                request=self.request,
+                content=content,
+            )

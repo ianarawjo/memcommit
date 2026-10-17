@@ -26,7 +26,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
@@ -913,10 +912,10 @@ def choose_context(
             is_focused=lambda: get_app().layout.has_focus(control),
         )
         body = build_tui_frame(
-            TuiRegion(header),
-            TuiRegion(reach_frame),
-            TuiRegion(targets_frame),
-            TuiRegion(footer),
+            header,
+            reach_frame,
+            targets_frame,
+            footer,
         )
     else:
         body = HSplit(

@@ -121,7 +121,7 @@ class FormNavigation:
     def adjacent_role_uid(self, role_uid: str, delta: int) -> str | None:
         """Return the primary field on the adjacent persistent form row."""
 
-        active_role_uids = self.spec.active_role_uids(self.mode_state.selected_uid)
+        active_role_uids = self.spec.active_role_uids(self.mode_state.selected_value)
         index = active_role_uids.index(role_uid)
         candidate = index + delta
         return (
@@ -252,7 +252,7 @@ class FormNavigation:
     def move_action(self, event, delta: int) -> SurfaceMoveResult:
         if delta > 0:
             return "BOUNDARY"
-        active_role_uids = self.spec.active_role_uids(self.mode_state.selected_uid)
+        active_role_uids = self.spec.active_role_uids(self.mode_state.selected_value)
         event.app.layout.focus(self.editors[active_role_uids[-1]].role_primary_input())
         self.status = ""
         return "CONSUMED"
@@ -271,7 +271,7 @@ class FormNavigation:
                     on_focus=self.memory_picker.reset,
                 )
             )
-        for role_uid in self.spec.active_role_uids(self.mode_state.selected_uid):
+        for role_uid in self.spec.active_role_uids(self.mode_state.selected_value):
             editor = self.editors[role_uid]
             if editor.source_type_visible():
                 values.append(
@@ -503,7 +503,7 @@ class FormNavigation:
     def initial_control(self) -> object:
         if self.show_mode:
             return self.mode_control
-        first_uid = self.spec.active_role_uids(self.mode_state.selected_uid)[0]
+        first_uid = self.spec.active_role_uids(self.mode_state.selected_value)[0]
         first = self.editors[first_uid]
         return (
             first.source_type_control

@@ -61,7 +61,12 @@ def set_automatic_selection(selection, policies, *, enabled):
         raise TypeError("Automatic Sync enabled state must be boolean.")
     inventory = dict(selection.inventory)
     states = [
-        automatic_sync_enabled(name, inventory[name], policies, inventory)
+        automatic_sync_enabled(
+            name=name,
+            uid=inventory[name],
+            policies=policies,
+            inventory=inventory,
+        )
         for name in selection.names
     ]
     chosen = set(selection.names)
@@ -95,10 +100,10 @@ def set_automatic_selection(selection, policies, *, enabled):
                 }
             )
     return updated, AutomaticSyncChange(
-        enabled,
-        selection.names,
-        sum(not value for value in states) if enabled else 0,
-        sum(states) if enabled else 0,
+        enabled=enabled,
+        context_names=selection.names,
+        newly_enabled=sum(not value for value in states) if enabled else 0,
+        already_enabled=sum(states) if enabled else 0,
     )
 
 
@@ -106,10 +111,15 @@ def toggle_automatic_selection(selection, policies):
     inventory = dict(selection.inventory)
     if selection.names:
         enabled = not all(
-            automatic_sync_enabled(name, inventory[name], policies, inventory)
+            automatic_sync_enabled(
+                name=name,
+                uid=inventory[name],
+                policies=policies,
+                inventory=inventory,
+            )
             for name in selection.names
         )
     else:
         # An empty Profile still owns a future-Context policy that can be disabled.
         enabled = not any(rule["scope"] == "all" and rule["enabled"] for rule in policies)
-    return set_automatic_selection(selection, policies, enabled=enabled)
+    return set_automatic_selection(selection=selection, policies=policies, enabled=enabled)

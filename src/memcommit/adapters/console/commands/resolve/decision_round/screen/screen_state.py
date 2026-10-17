@@ -6,7 +6,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 
 from memcommit.adapters.console.terminal.components.selection import (
-    FlatSelectionState,
+    SingleSelectionState,
     SelectionOption,
 )
 from memcommit.application.capabilities.resolution.workbench import (
@@ -42,7 +42,7 @@ class DecisionScreenState:
     current_issue_index: int = field(default=0, init=False)
     focused_row_index: int = field(default=0, init=False)
     status_message: str = field(default="", init=False)
-    navigation: FlatSelectionState = field(init=False)
+    navigation: SingleSelectionState = field(init=False)
 
     def __post_init__(self) -> None:
         self.items = tuple(
@@ -51,9 +51,12 @@ class DecisionScreenState:
             if item.effective_obligation in {"REQUIRED", "OPTIONAL"}
             and item.response_state != "NOT_APPLICABLE"
         )
-        self.navigation = FlatSelectionState(
-            (SelectionOption("PREV", "← PREV"), SelectionOption("NEXT", "NEXT →")),
-            cursor_uid="PREV",
+        self.navigation = SingleSelectionState(
+            (
+                SelectionOption(value="PREV", label="← PREV"),
+                SelectionOption(value="NEXT", label="NEXT →"),
+            ),
+            cursor_value="PREV",
         )
 
     @property
@@ -109,17 +112,17 @@ class DecisionScreenState:
         self, *, response_available: bool = False
     ) -> tuple[SelectionOption, ...]:
         rows = (
-            [SelectionOption("action:RESPONSE", "Direction or note")]
+            [SelectionOption(value="action:RESPONSE", label="Direction or note")]
             if response_available
             else []
         )
         rows.extend(
-            SelectionOption(f"bulk:{option.uid}", option.label)
+            SelectionOption(value=f"bulk:{option.uid}", label=option.label)
             for option in self.bulk_options
         )
         if self.back_label is not None:
-            rows.append(SelectionOption("action:BACK", self.back_label))
-        rows.append(SelectionOption("action:CONTINUE", self.continue_label()))
+            rows.append(SelectionOption(value="action:BACK", label=self.back_label))
+        rows.append(SelectionOption(value="action:CONTINUE", label=self.continue_label()))
         return tuple(rows)
 
     def row_count(self, *, response_available: bool = False) -> int:

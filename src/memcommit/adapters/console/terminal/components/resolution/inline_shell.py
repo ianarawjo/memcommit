@@ -28,7 +28,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
@@ -53,7 +52,7 @@ from memcommit.adapters.console.terminal.components.resolution.model import (
     ResolutionWorkbenchSpec,
 )
 from memcommit.adapters.console.terminal.components.selection.model import SelectionOption
-from memcommit.adapters.console.terminal.components.selection.state import FlatSelectionState
+from memcommit.adapters.console.terminal.components.selection.state import SingleSelectionState
 from memcommit.adapters.console.terminal.components.selection import choice_marker, choice_visual_state
 
 
@@ -62,7 +61,7 @@ T = TypeVar("T")
 
 def render_inline_resolution_item(
     item: ResolutionItem,
-    state: FlatSelectionState,
+    state: SingleSelectionState,
     *,
     ordinal: int,
     focused: bool,
@@ -76,8 +75,8 @@ def render_inline_resolution_item(
         )
     ]
     for index, choice in enumerate(item.inline_choices):
-        selected = choice.choice_uid == state.selected_uid
-        cursor = choice.choice_uid == state.cursor_uid
+        selected = choice.choice_uid == state.selected_value
+        cursor = choice.choice_uid == state.cursor_value
         visual = choice_visual_state(
             cursor=cursor,
             selected=selected,
@@ -150,14 +149,18 @@ def run_inline_resolution_workbench(
         if item.default_choice_uid is not None
     }
     choice_states = {
-        item.uid: FlatSelectionState(
+        item.uid: SingleSelectionState(
             tuple(
-                SelectionOption(choice.choice_uid, choice.label, choice.content)
+                SelectionOption(
+                    value=choice.choice_uid,
+                    label=choice.label,
+                    description=choice.content,
+                )
                 for choice in item.inline_choices
                 if choice.selectable
             ),
-            cursor_uid=item.default_choice_uid or "",
-            selected_uid=item.default_choice_uid,
+            cursor_value=item.default_choice_uid or "",
+            selected_value=item.default_choice_uid,
             allow_empty=False,
         )
         for item in spec.items
@@ -357,10 +360,10 @@ def run_inline_resolution_workbench(
         dont_extend_height=True,
     )
     root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(main_frame),
-        TuiRegion(actions_frame),
-        TuiRegion(footer),
+        header,
+        main_frame,
+        actions_frame,
+        footer,
     )
     app: Application[T | None] = Application(
         layout=Layout(root, focused_element=main_control),
@@ -459,7 +462,7 @@ def run_inline_resolution_workbench(
             for item in spec.items:
                 state = choice_states[item.uid]
                 state.set_selected(strategy.choice_uid)
-                state.cursor_uid = strategy.choice_uid
+                state.cursor_value = strategy.choice_uid
                 selected[item.uid] = strategy.choice_uid
             action_cursor["value"] = 1
             refresh_main()

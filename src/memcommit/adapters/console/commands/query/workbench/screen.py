@@ -41,7 +41,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
@@ -158,9 +157,9 @@ def run_query_workbench(
     if any(not isinstance(name, str) or not name for name in local_catalog):
         raise ValueError("Query local Context names must be nonblank text.")
 
-    source_options = [HorizontalChoiceOption("ORDINARY", "VISIBLE CONTEXTS")]
+    source_options = [HorizontalChoiceOption(value="ORDINARY", label="VISIBLE CONTEXTS")]
     if targets:
-        source_options.append(HorizontalChoiceOption("GRANTED", QUERY_VIEW_LABEL))
+        source_options.append(HorizontalChoiceOption(value="GRANTED", label=QUERY_VIEW_LABEL))
     source_choice = HorizontalChoiceState(
         tuple(source_options),
         "GRANTED" if initial_query_target is not None else "ORDINARY",
@@ -242,7 +241,7 @@ def run_query_workbench(
     save_panel.name.input.buffer.on_text_changed += save_location_changed
 
     def granted_mode() -> bool:
-        return source_choice.selected_uid == "GRANTED"
+        return source_choice.selected_value == "GRANTED"
 
     source_type_control: FormattedTextControl
 
@@ -365,12 +364,12 @@ def run_query_workbench(
         ),
     )
     root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(scope_frame),
-        TuiRegion(question_frame),
-        TuiRegion(answer_frame),
-        TuiRegion(save_container),
-        TuiRegion(footer),
+        header,
+        scope_frame,
+        question_frame,
+        answer_frame,
+        save_container,
+        footer,
     )
     app: Application[QueryWorkbenchResult] = Application(
         layout=Layout(root, focused_element=question_area),

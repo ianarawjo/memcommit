@@ -284,7 +284,7 @@ def _study_removal_status(result) -> str:
 
 
 def _print_profile_inventory(registry, inspections, memberships) -> None:
-    identity_width = _profile_inventory_identity_width(registry, memberships)
+    identity_width = _profile_inventory_identity_width(registry=registry, memberships=memberships)
     for profile, inspection in zip(
         registry.visible_profiles,
         inspections,
@@ -326,26 +326,26 @@ def _print_profile_inventory(registry, inspections, memberships) -> None:
         if membership is not None:
             if membership.first:
                 _echo_profile_inventory_row(
-                    "  " + display_escape_text(membership.name),
-                    "STUDY",
-                    "created="
+                    identity="  " + display_escape_text(membership.name),
+                    action="STUDY",
+                    detail="created="
                     + display_escape_text(membership.created_at),
                     identity_width=identity_width,
                 )
             branch = "└─" if membership.last else "├─"
             _echo_profile_inventory_row(
-                f"    {branch} {marker} {_study_role_label(membership)}",
-                action,
-                f"profile={profile_label} · "
+                identity=f"    {branch} {marker} {_study_role_label(membership)}",
+                action=action,
+                detail=f"profile={profile_label} · "
                 f"{profile.kind.lower()} · {_inventory_label(inspection)}"
                 f"{query_note}{view_note} · location={project_location}",
                 identity_width=identity_width,
             )
             continue
         _echo_profile_inventory_row(
-            f"{marker} {profile_label}",
-            action,
-            f"{profile.kind.lower():<9} "
+            identity=f"{marker} {profile_label}",
+            action=action,
+            detail=f"{profile.kind.lower():<9} "
             f"{_inventory_label(inspection)}"
             f"{query_note}{view_note} · location={project_location}",
             identity_width=identity_width,

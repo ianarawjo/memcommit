@@ -16,8 +16,9 @@ curl -fsSL https://raw.githubusercontent.com/ianarawjo/memcommit/user-study-prot
 
 The installer finds or prepares [uv](https://docs.astral.sh/uv/getting-started/installation/),
 installs memcommit in a tool environment with Python 3.12, registers `mem` on
-PATH, and opens `mem`. Initial setup starts automatically when no registered
-Profile or legacy authoring Store exists. Open a new terminal after installation if your
+PATH, and opens `mem`. Initial setup starts automatically when provider settings
+are incomplete or no registered Profile or legacy authoring Store exists.
+Open a new terminal after installation if your
 current shell has not picked up the PATH change. The bootstrap installs the
 public source archive without requiring Git.
 

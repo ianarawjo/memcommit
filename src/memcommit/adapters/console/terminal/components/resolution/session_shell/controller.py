@@ -19,7 +19,7 @@ from memcommit.adapters.console.terminal.components.responses.state import (
     ResponseFrameState,
 )
 from memcommit.adapters.console.terminal.components.selection import (
-    FlatSelectionState,
+    SingleSelectionState,
     SelectionOption,
 )
 from memcommit.adapters.console.terminal.components.save_location import (
@@ -119,19 +119,19 @@ class ResolutionSessionController:
         default_factory=lambda: {"value": "COMMENT ON SELECTED ITEM"}
     )
     local_drafts: dict[str, ResponseDraft] = field(default_factory=dict)
-    report_apply_state: FlatSelectionState | None = field(init=False)
+    report_apply_state: SingleSelectionState | None = field(init=False)
 
     def __post_init__(self) -> None:
         self.report_apply_state = (
-            FlatSelectionState(
+            SingleSelectionState(
                 options=(
                     SelectionOption(
-                        "APPLY",
-                        self.report_apply_label,
+                        value="APPLY",
+                        label=self.report_apply_label,
                     ),
                 ),
-                cursor_uid="APPLY",
-                selected_uid="APPLY",
+                cursor_value="APPLY",
+                selected_value="APPLY",
                 allow_empty=False,
             )
             if self.report_apply
@@ -377,7 +377,7 @@ class ResolutionSessionController:
         """Return Apply for the single exact-report action."""
 
         state = self.report_apply_state
-        if state is None or state.selected_uid != "APPLY":
+        if state is None or state.selected_value != "APPLY":
             self.set_status("Apply is unavailable.")
             return None
         return self.semantic_action("ACCEPT")

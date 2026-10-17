@@ -36,7 +36,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     bind_focused_frame_style,
     build_focused_frame,
     build_tui_frame,
@@ -105,18 +104,18 @@ class RevertWorkbench:
         self.policy = HorizontalChoiceState(
             (
                 HorizontalChoiceOption(
-                    "DISCARD_NEWER",
-                    "DISCARD NEWER",
-                    "Remove newer active checkpoint files after restoration; "
+                    value="DISCARD_NEWER",
+                    label="DISCARD NEWER",
+                    description="Remove newer active checkpoint files after restoration; "
                     "the recovery checkpoint retains supported recovery metadata.",
                 ),
                 HorizontalChoiceOption(
-                    "KEEP_ALL",
-                    "KEEP ALL",
-                    "Preserve every currently visible checkpoint after restoration.",
+                    value="KEEP_ALL",
+                    label="KEEP ALL",
+                    description="Preserve every currently visible checkpoint after restoration.",
                 ),
             ),
-            selected_uid="KEEP_ALL" if keep_history else "DISCARD_NEWER",
+            selected_value="KEEP_ALL" if keep_history else "DISCARD_NEWER",
         )
         self.history = HistoryControls(
             entries,
@@ -154,7 +153,7 @@ class RevertWorkbench:
     def review(self) -> CommandReview:
         if self.checkpoint_uid is None:
             raise ValueError("Select a checkpoint before reviewing Revert.")
-        keep = self.policy.selected_uid == "KEEP_ALL"
+        keep = self.policy.selected_value == "KEEP_ALL"
         if self.review_factory is not None:
             return self.review_factory(self.checkpoint_uid, keep)
         return revert_exact_command_review(
@@ -217,7 +216,7 @@ class RevertWorkbench:
             result=RevertSelectionReceipt(
                 context_name=self.context_name,
                 checkpoint_uid=self.checkpoint_uid,
-                keep_history=self.policy.selected_uid == "KEEP_ALL",
+                keep_history=self.policy.selected_value == "KEEP_ALL",
             )
         )
         return "HANDLED"
@@ -383,7 +382,7 @@ def choose_revert_history(
         Application(
             layout=Layout(
                 build_tui_frame(
-                    *(TuiRegion(frame) for frame in (header, *workbench.frames, footer))
+                    header, *workbench.frames, footer
                 ),
                 focused_element=(
                     workbench.command_control.active_control

@@ -15,16 +15,16 @@ from memcommit.adapters.console.terminal.components.selection.model import (
     SelectionOption,
 )
 from memcommit.adapters.console.terminal.components.selection.state import (
-    FlatSelectionState,
+    SingleSelectionState,
 )
 from memcommit.application.operations.profile.config import validate_profile_name
 from memcommit.application.operations.profile.project_documents import prepare_project_import
 
 
 def _enabled_setup_selection():
-    return FlatSelectionState(
-        (SelectionOption("on", "ON"), SelectionOption("off", "OFF")),
-        cursor_uid="on", selected_uid="on", allow_empty=False,
+    return SingleSelectionState(
+        options=(SelectionOption(value="on", label="ON"), SelectionOption(value="off", label="OFF")),
+        cursor_value="on", selected_value="on", allow_empty=False,
     )
 
 
@@ -43,7 +43,7 @@ class ProfilePickerState:
     rows: tuple[ProfilePickerRow, ...]
     current: str
     registry_generation: int | None
-    selection: FlatSelectionState
+    selection: SingleSelectionState
     # Exactly one layer is active: browse, name input, or an exact review.
     # Executor busy/close state stays solely in BackgroundExecutorTurn.
     stage: NameEdit | ProfilePickerAction | None = None
@@ -51,8 +51,8 @@ class ProfilePickerState:
     status_is_error: bool = False
     create_name_was_edited: bool = False
     select_created: bool = False
-    import_selection: FlatSelectionState = field(default_factory=_enabled_setup_selection)
-    sync_selection: FlatSelectionState = field(default_factory=_enabled_setup_selection)
+    import_selection: SingleSelectionState = field(default_factory=_enabled_setup_selection)
+    sync_selection: SingleSelectionState = field(default_factory=_enabled_setup_selection)
 
     @classmethod
     def create(
@@ -87,14 +87,14 @@ class ProfilePickerState:
             rows=rows,
             current=current,
             registry_generation=registry_generation,
-            selection=FlatSelectionState(
+            selection=SingleSelectionState(
                 # Cursor keys live only within this frozen row set. Durable
                 # actions always carry the row's raw name and Profile/Study UID.
                 options=tuple(
-                    SelectionOption(uid=str(i), label=row.kind)
+                    SelectionOption(value=str(i), label=row.kind)
                     for i, row in enumerate(rows)
                 ),
-                cursor_uid=str(index),
+                cursor_value=str(index),
             ),
             status=initial_status,
         )
@@ -145,7 +145,12 @@ class ProfilePickerState:
             self.create_name_was_edited = False
             self.import_selection = _enabled_setup_selection()
             self.sync_selection = _enabled_setup_selection()
-            self.stage = NameEdit("CREATE_PROFILE", root.name, len(self.rows), str(root))
+            self.stage = NameEdit(
+                kind="CREATE_PROFILE",
+                value=root.name,
+                row_index=len(self.rows),
+                root_dir=str(root),
+            )
             self.notify()
 
     def begin_rename(self) -> None:
@@ -171,7 +176,7 @@ class ProfilePickerState:
             if any(row.name.casefold() == name.casefold() for row in self.rows):
                 raise ValueError(f"Profile {name!r} already exists; enter a new name.")
             project_root = Path(root_dir or edit.root_dir).expanduser().resolve()
-            prepared = prepare_project_import(project_root) if self.import_selection.selected_uid == "on" else None
+            prepared = prepare_project_import(project_root) if self.import_selection.selected_value == "on" else None
             action = ProfilePickerAction(
                 kind=edit.kind,
                 name=name,
@@ -179,8 +184,8 @@ class ProfilePickerState:
                 registry_generation=self.registry_generation,
                 row_index=edit.row_index,
                 root_dir=str(project_root),
-                import_project_files=self.import_selection.selected_uid == "on",
-                automatic_sync=self.sync_selection.selected_uid == "on",
+                import_project_files=self.import_selection.selected_value == "on",
+                automatic_sync=self.sync_selection.selected_value == "on",
                 imported_file_count=len(prepared.files) if prepared else 0,
                 skipped_file_count=len(prepared.skipped_paths) if prepared else 0,
                 import_digest=prepared.digest if prepared else None,

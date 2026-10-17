@@ -6,7 +6,7 @@ from memcommit.adapters.console.terminal.components.selection.model import (
     SelectionOption,
 )
 from memcommit.adapters.console.terminal.components.selection.state import (
-    FlatSelectionState,
+    SingleSelectionState,
 )
 from memcommit.application.initial_setup.configuration import (
     SetupModelSelection,
@@ -15,42 +15,41 @@ from memcommit.application.initial_setup.configuration import (
 from memcommit.providers.clients.codex_model_catalog import CodexModelOption
 
 
-class SetupModelSelectionState:
+class SetupModelAndReasoningSelectionState:
     def __init__(
         self,
         catalog: tuple[CodexModelOption, ...],
         *,
-        initial_model: str | None = None,
-        initial_reasoning_effort: str | None = None,
+        last_selected_model: str | None = None,
+        last_selected_reasoning_effort: str | None = None,
     ):
         self.catalog = catalog
-        available_model = (
-            initial_model
-            if any(option.model == initial_model for option in catalog)
-            else None
-        )
-        selected = select_setup_model(catalog, available_model)
-        self.models = FlatSelectionState(
-            tuple(
+        model_ids = {option.model for option in catalog}
+
+        available_model = last_selected_model
+        if last_selected_model not in model_ids:
+            available_model = None
+        selected = select_setup_model(catalog=catalog, model=available_model)
+        self.models = SingleSelectionState(
+            options=tuple(
                 SelectionOption(
-                    option.model,
-                    option.display_name
+                    value=option.model,
+                    label=option.display_name
                     + (" · RECOMMENDED" if option.is_default else ""),
                 )
                 for option in catalog
             ),
-            cursor_uid=selected.model,
-            selected_uid=selected.model,
+            cursor_value=selected.model,
+            selected_value=selected.model,
             allow_empty=False,
         )
         self.reasoning_was_chosen = (
             available_model is not None
-            and initial_reasoning_effort is not None
-            and initial_reasoning_effort in self.supported_efforts
+            and last_selected_reasoning_effort is not None
+            and last_selected_reasoning_effort in self.supported_efforts
         )
-        self.reasoning_notice = ""
         self._set_reasoning_selection(
-            initial_reasoning_effort
+            last_selected_reasoning_effort
             if self.reasoning_was_chosen
             else self.selected_model.default_reasoning_effort
         )
@@ -60,7 +59,7 @@ class SetupModelSelectionState:
         return next(
             option
             for option in self.catalog
-            if option.model == self.models.selected_uid
+            if option.model == self.models.selected_value
         )
 
     @property
@@ -72,18 +71,22 @@ class SetupModelSelectionState:
     @property
     def selection(self) -> SetupModelSelection:
         return SetupModelSelection(
-            self.selected_model.model,
-            self.reasoning.selected_uid if self.reasoning else None,
+            model=self.selected_model.model,
+            reasoning_effort=self.reasoning.selected_value if self.reasoning else None,
         )
 
     def _set_reasoning_selection(self, effort: str | None) -> None:
         options = tuple(
-            SelectionOption(option.effort, option.effort, option.description)
+            SelectionOption(
+                value=option.effort,
+                label=option.effort,
+                description=option.description,
+            )
             for option in self.selected_model.supported_reasoning_efforts
         )
         self.reasoning = (
-            FlatSelectionState(
-                options, cursor_uid=effort, selected_uid=effort, allow_empty=False
+            SingleSelectionState(
+                options=options, cursor_value=effort, selected_value=effort, allow_empty=False
             )
             if options
             else None
@@ -94,15 +97,10 @@ class SetupModelSelectionState:
         if not self.models.move(delta):
             return False
         self.models.select_cursor(toggle=False)
-        self.reasoning_notice = ""
         if self.reasoning_was_chosen and previous_effort in self.supported_efforts:
             effort = previous_effort
         else:
             effort = self.selected_model.default_reasoning_effort
-            if self.reasoning_was_chosen:
-                self.reasoning_notice = (
-                    "Previous setting is unavailable; using this model's default."
-                )
             self.reasoning_was_chosen = False
         self._set_reasoning_selection(effort)
         return True
@@ -112,5 +110,4 @@ class SetupModelSelectionState:
             return False
         self.reasoning.select_cursor(toggle=False)
         self.reasoning_was_chosen = True
-        self.reasoning_notice = ""
         return True

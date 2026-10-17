@@ -83,22 +83,22 @@ def run_help_selector(
         raise ValueError("Interactive help requires a terminal.")
     language_state = HorizontalChoiceState(
         tuple(
-            HorizontalChoiceOption(language, language) for language in HELP_LANGUAGES
+            HorizontalChoiceOption(value=language, label=language) for language in HELP_LANGUAGES
         ),
-        selected_uid="EN",
+        selected_value="EN",
     )
     view_state = HorizontalChoiceState(
         (
-            HorizontalChoiceOption("CATEGORY", "BY KIND"),
-            HorizontalChoiceOption("A_Z", "A–Z"),
+            HorizontalChoiceOption(value="CATEGORY", label="BY KIND"),
+            HorizontalChoiceOption(value="A_Z", label="A–Z"),
         ),
-        selected_uid="CATEGORY",
+        selected_value="CATEGORY",
     )
 
     def ordered_entries() -> list[CommandEntry]:
         return _ordered_help_entries(
             entries,
-            by_kind=view_state.selected_uid == "CATEGORY",
+            by_kind=view_state.selected_value == "CATEGORY",
         )
 
     visible_entries = {"value": ordered_entries()}
@@ -116,13 +116,13 @@ def run_help_selector(
             on_explore_action(action, command_name)
 
     def selected_language() -> HelpLanguage:
-        return language_state.selected_uid  # type: ignore[return-value]
+        return language_state.selected_value  # type: ignore[return-value]
 
     def select_language(delta: int) -> None:
         """Change only process-local Help prose; never mutate study data."""
 
         if language_state.move(delta):
-            emit_explore_action("LANGUAGE", language_state.selected_uid)
+            emit_explore_action("LANGUAGE", language_state.selected_value)
 
     def select_view(delta: int) -> None:
         selected_name = visible_entries["value"][selected_index["value"]].name
@@ -140,7 +140,7 @@ def run_help_selector(
 
     def concept_focus_active() -> bool:
         return (
-            view_state.selected_uid == "CATEGORY"
+            view_state.selected_value == "CATEGORY"
             and selected_concept_index["value"] is not None
         )
 
@@ -148,7 +148,7 @@ def run_help_selector(
         """Project the current rows into the same boxes the renderer shows."""
 
         indexed_entries = list(enumerate(visible_entries["value"]))
-        if view_state.selected_uid != "CATEGORY":
+        if view_state.selected_value != "CATEGORY":
             return [("A–Z", indexed_entries)]
         groups: list[tuple[str, list[tuple[int, CommandEntry]]]] = []
         for index, entry in indexed_entries:
@@ -190,7 +190,7 @@ def run_help_selector(
         """Traverse VIEW and every visible BY KIND box in screen order."""
 
         navigation_accelerator.reset()
-        if view_state.selected_uid != "CATEGORY":
+        if view_state.selected_value != "CATEGORY":
             surface_focus.focus_relative(event.app, direction, wrap=True)
             event.app.invalidate()
             return
@@ -246,7 +246,7 @@ def run_help_selector(
         terminal_columns = app.output.get_size().columns if app is not None else 80
         terminal_rows = app.output.get_size().rows if app is not None else 24
         card_width = _help_group_width(terminal_columns)
-        by_kind = view_state.selected_uid == "CATEGORY"
+        by_kind = view_state.selected_value == "CATEGORY"
         fragments.extend(
             _help_information_box_fragments(
                 width=card_width,
@@ -360,7 +360,7 @@ def run_help_selector(
         if (
             direction < 0
             and selected_index["value"] == 0
-            and view_state.selected_uid == "CATEGORY"
+            and view_state.selected_value == "CATEGORY"
         ):
             expanded_index["value"] = None
             selected_concept_index["value"] = len(HELP_CORE_CONCEPTS) - 1
@@ -398,7 +398,7 @@ def run_help_selector(
         if (
             selected_index["value"] == 0
             and selected_form["value"] is None
-            and view_state.selected_uid != "CATEGORY"
+            and view_state.selected_value != "CATEGORY"
         ):
             navigation_accelerator.reset()
             surface_focus.focus_relative(
@@ -420,7 +420,7 @@ def run_help_selector(
         selected_form["value"] = None
         expanded_index["value"] = None
         concept_count = (
-            len(HELP_CORE_CONCEPTS) if view_state.selected_uid == "CATEGORY" else 0
+            len(HELP_CORE_CONCEPTS) if view_state.selected_value == "CATEGORY" else 0
         )
         position = (
             selected_concept_index["value"]
@@ -444,7 +444,7 @@ def run_help_selector(
         selected_form["value"] = None
         expanded_index["value"] = None
         concept_count = (
-            len(HELP_CORE_CONCEPTS) if view_state.selected_uid == "CATEGORY" else 0
+            len(HELP_CORE_CONCEPTS) if view_state.selected_value == "CATEGORY" else 0
         )
         position = (
             selected_concept_index["value"]
@@ -464,7 +464,7 @@ def run_help_selector(
         navigation_accelerator.reset()
         selected_form["value"] = None
         expanded_index["value"] = None
-        if view_state.selected_uid == "CATEGORY":
+        if view_state.selected_value == "CATEGORY":
             selected_concept_index["value"] = 0
         else:
             selected_index["value"] = 0
@@ -703,7 +703,7 @@ def run_help_selector(
             toggle = " · H hide Help" if mode == "EXPLORE" else ""
             tab_hint = (
                 "Tab first kind"
-                if view_state.selected_uid == "CATEGORY"
+                if view_state.selected_value == "CATEGORY"
                 else "Tab list"
             )
             return f" VIEW: ←/→ choose · ↓ list · {tab_hint}{toggle} · Q {return_label}"
@@ -725,7 +725,7 @@ def run_help_selector(
             else "H full help  Q/Esc close"
         )
         tab_hint = (
-            "Tab next kind" if view_state.selected_uid == "CATEGORY" else "Tab surface"
+            "Tab next kind" if view_state.selected_value == "CATEGORY" else "Tab surface"
         )
         return (
             " ↑/↓ move (hold accelerates)  → expand/forms  ← back  "

@@ -19,7 +19,7 @@ from memcommit.adapters.console.terminal.core.text_layout import (
     wrap_terminal_fragments,
 )
 from memcommit.adapters.console.terminal.components.selection.state import (
-    FlatSelectionState,
+    SingleSelectionState,
 )
 
 
@@ -62,15 +62,15 @@ def choice_marker(*, selected: bool, empty: str = " ") -> str:
     return "✓" if selected else empty
 
 
-def render_horizontal_choice_row(state: FlatSelectionState, *, focused: bool):
+def render_horizontal_choice_row(state: SingleSelectionState, *, focused: bool):
     """Project a compact fixed choice with the same cursor and checked styles."""
     fragments = []
     for index, option in enumerate(state.options):
         if index:
             fragments.append(("", "    "))
-        selected = option.uid == state.selected_uid
+        selected = option.value == state.selected_value
         visual = choice_visual_state(
-            cursor=option.uid == state.cursor_uid, selected=selected, focused=focused,
+            cursor=option.value == state.cursor_value, selected=selected, focused=focused,
         )
         fragments.append((visual.content_style, f"{choice_marker(selected=selected)} {safe_terminal_text(option.label)}"))
     return fragments
@@ -175,7 +175,7 @@ def render_choice_card_rows(
 
 
 def render_vertical_choice_cards(
-    state: FlatSelectionState,
+    state: SingleSelectionState,
     *,
     focused: bool,
     content_width: int,
@@ -191,8 +191,8 @@ def render_vertical_choice_cards(
     inner_width = width - 2
     fragments: list[tuple[str, str]] = []
     for index, option in enumerate(state.options, start=1):
-        cursor = option.uid == state.cursor_uid
-        selected = option.uid == state.selected_uid
+        cursor = option.value == state.cursor_value
+        selected = option.value == state.selected_value
         visual = choice_visual_state(
             cursor=cursor,
             selected=selected,
@@ -210,7 +210,7 @@ def render_vertical_choice_cards(
         continuation = " " * terminal_cell_width(prefix)
         if not label_in_border:
             lines.extend(continuation + line for line in label_lines[1:])
-        rich_description = (descriptions or {}).get(option.uid)
+        rich_description = (descriptions or {}).get(option.value)
         if rich_description is not None:
             safe_description = tuple(
                 (style, safe_terminal_text(text).replace("\t", "    "))
@@ -254,7 +254,7 @@ def render_vertical_choice_cards(
 
 
 def render_vertical_choice_rows(
-    state: FlatSelectionState,
+    state: SingleSelectionState,
     *,
     focused: bool,
     content_width: int,
@@ -272,8 +272,8 @@ def render_vertical_choice_rows(
     width = max(12, content_width)
     fragments: list[tuple[str, str]] = []
     for index, option in enumerate(state.options, start=1):
-        cursor = option.uid == state.cursor_uid
-        selected = option.uid == state.selected_uid
+        cursor = option.value == state.cursor_value
+        selected = option.value == state.selected_value
         keyboard_target = cursor and focused
         highlighted = selected or keyboard_target
         label_style = focused_control_style(

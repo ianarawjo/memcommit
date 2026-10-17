@@ -4,7 +4,7 @@ from __future__ import annotations
 
 
 from memcommit.adapters.console.terminal.components.selection import (
-    FlatSelectionState,
+    SingleSelectionState,
     SelectionOption,
     render_vertical_choice_cards,
 )
@@ -34,13 +34,17 @@ def render_choice_cards(
     content_width = content_width()
     for index in indexes:
         option = item.options[index]
-        row = SelectionOption(f"choice:{option.uid}", option.label, option.text)
+        row = SelectionOption(
+            value=f"choice:{option.uid}",
+            label=option.label,
+            description=option.text,
+        )
         if state.focused_row_index == index:
             fragments.append(("[SetCursorPosition]", ""))
-        card_selection = FlatSelectionState(
+        card_selection = SingleSelectionState(
             (row,),
-            cursor_uid=row.uid,
-            selected_uid=(row.uid if selected_uid == option.uid else None),
+            cursor_value=row.value,
+            selected_value=(row.value if selected_uid == option.uid else None),
             allow_empty=True,
         )
         focused = state.focused_row_index == index and is_focused("choices")
@@ -52,7 +56,7 @@ def render_choice_cards(
                 numbered=False,
                 anchor_cursor=False,
                 label_in_border=True,
-                descriptions={row.uid: choice_previews[option.uid]}
+                descriptions={row.value: choice_previews[option.uid]}
                 if choice_previews is not None and option.uid in choice_previews
                 else None,
             )

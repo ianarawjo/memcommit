@@ -126,10 +126,10 @@ class CompactReadableScopeControl:
         self.range.toggle_expand_all()
         self.embed_choice = HorizontalChoiceState(
             (
-                HorizontalChoiceOption("EXCLUDE", "EXCLUDE"),
-                HorizontalChoiceOption("FOLLOW", "FOLLOW"),
+                HorizontalChoiceOption(value="EXCLUDE", label="EXCLUDE"),
+                HorizontalChoiceOption(value="FOLLOW", label="FOLLOW"),
             ),
-            selected_uid="FOLLOW" if follow_embeds else "EXCLUDE",
+            selected_value="FOLLOW" if follow_embeds else "EXCLUDE",
         )
 
         initial_direct = selected[-1]
@@ -260,7 +260,7 @@ class CompactReadableScopeControl:
 
     @property
     def follow_embeds(self) -> bool:
-        return self.embed_choice.selected_uid == "FOLLOW"
+        return self.embed_choice.selected_value == "FOLLOW"
 
     @property
     def include_descendants(self) -> bool:

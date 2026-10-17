@@ -16,7 +16,6 @@ from prompt_toolkit.styles import merge_styles
 from prompt_toolkit.widgets import Frame
 
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
@@ -118,7 +117,7 @@ def build_resolution_shell_layout(
         session_frames.append(widgets.footer)
         # Semantic surfaces are peers in one top-to-bottom sequence; they are
         # not columns even though the historical flag calls the mode "split".
-        root = build_tui_frame(*(TuiRegion(frame) for frame in session_frames))
+        root = build_tui_frame(*session_frames)
         bind_focused_frame_style(
             viewer_frame,
             is_focused=lambda: session_navigation.pane == "viewer",
@@ -166,8 +165,8 @@ def build_resolution_shell_layout(
         )
         bind_focused_frame_style(viewer_frame, is_focused=lambda: True)
         root = build_tui_frame(
-            TuiRegion(viewer_frame),
-            TuiRegion(widgets.footer),
+            viewer_frame,
+            widgets.footer,
         )
         focused_element = widgets.body_control
 

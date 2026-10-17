@@ -18,7 +18,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_tui_frame,
 )
 from memcommit.adapters.console.terminal.components.history.controls import (
@@ -116,10 +115,7 @@ def choose_history(
     app: Application[HistoryBackNavigation | None] = Application(
         layout=Layout(
             build_tui_frame(
-                *(
-                    TuiRegion(frame)
-                    for frame in (header, *history.frames, footer_window)
-                )
+                header, *history.frames, footer_window
             ),
             focused_element=history.list_control,
         ),

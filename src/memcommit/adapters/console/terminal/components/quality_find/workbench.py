@@ -40,7 +40,6 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     SEMANTIC_VIEWER_STYLE,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
@@ -420,10 +419,10 @@ def choose_quality_find_setup(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    regions = [TuiRegion(header), TuiRegion(target_frame)]
+    regions = [header, target_frame]
     if scope_frame is not None:
-        regions.append(TuiRegion(scope_frame))
-    regions.extend((TuiRegion(todo_frame), TuiRegion(footer)))
+        regions.append(scope_frame)
+    regions.extend((todo_frame, footer))
     root = build_tui_frame(*regions)
     app: Application[QualityFindSetupReceipt | None] = Application(
         layout=Layout(root, focused_element=target_control),

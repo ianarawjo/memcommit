@@ -10,7 +10,7 @@ from memcommit.adapters.console.terminal.core.text import (
     display_escape_text,
 )
 from memcommit.adapters.console.terminal.components.selection.model import SelectionOption
-from memcommit.adapters.console.terminal.components.selection.state import FlatSelectionState
+from memcommit.adapters.console.terminal.components.selection.state import SingleSelectionState
 from memcommit.adapters.console.terminal.components.selection import (
     choice_marker,
     choice_visual_state,
@@ -33,14 +33,14 @@ class HorizontalChoiceState:
     """Immediate, reversible selection over a fixed ordered option set."""
 
     options: tuple[HorizontalChoiceOption, ...]
-    selected_uid: str
-    _selection: FlatSelectionState = field(init=False, repr=False)
+    selected_value: str
+    _selection: SingleSelectionState = field(init=False, repr=False)
 
     def __post_init__(self) -> None:
-        self._selection = FlatSelectionState(
+        self._selection = SingleSelectionState(
             self.options,
-            cursor_uid=self.selected_uid,
-            selected_uid=self.selected_uid,
+            cursor_value=self.selected_value,
+            selected_value=self.selected_value,
             allow_empty=False,
         )
 
@@ -52,17 +52,17 @@ class HorizontalChoiceState:
         """Move without wrapping and report whether the value changed."""
         changed = self._selection.move(delta)
         self._selection.select_cursor(toggle=False)
-        self.selected_uid = self._selection.selected_uid or self.selected_uid
+        self.selected_value = self._selection.selected_value or self.selected_value
         return changed
 
-    def choose(self, uid: str) -> bool:
+    def choose(self, value: str) -> bool:
         """Select one exact option without exposing the shared flat state."""
 
-        if all(option.uid != uid for option in self.options):
+        if all(option.value != value for option in self.options):
             raise ValueError("Horizontal choice value is unavailable.")
-        changed = self._selection.set_selected(uid)
-        self._selection.cursor_uid = uid
-        self.selected_uid = uid
+        changed = self._selection.set_selected(value)
+        self._selection.cursor_value = value
+        self.selected_value = value
         return changed
 
 
@@ -97,7 +97,7 @@ def render_horizontal_choice(
         prefix += f"{title} · "
     fragments: StyleAndTextTuples = [("", prefix)]
     for index, option in enumerate(state.options):
-        selected = option.uid == state.selected_uid
+        selected = option.value == state.selected_value
         visual = choice_visual_state(
             cursor=selected,
             selected=selected,
@@ -133,7 +133,7 @@ def _render_inline_boxed_horizontal_choice(
     """Render checked choices as compact one-line rectangles."""
     fragments: StyleAndTextTuples = [("", f"{'›' if focused else ' '} {title} · ")]
     for index, option in enumerate(state.options):
-        selected = option.uid == state.selected_uid
+        selected = option.value == state.selected_value
         visual = choice_visual_state(
             cursor=selected,
             selected=selected,
@@ -178,7 +178,7 @@ def _render_boxed_horizontal_choice(
     cards = []
     for option in state.options:
         label = display_escape_text(option.label)
-        selected = option.uid == state.selected_uid
+        selected = option.value == state.selected_value
         cards.append(
             render_choice_card_rows(
                 (f" {choice_marker(selected=selected)} {label} ",),

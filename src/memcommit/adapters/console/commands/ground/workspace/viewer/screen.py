@@ -27,7 +27,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_tui_frame,
 )
 from memcommit.adapters.console.terminal.components.scrollable_pane import (
@@ -148,10 +147,10 @@ def run_ground_workspace_viewer(
         dont_extend_height=True,
     )
     root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(selector.frame),
-        TuiRegion(detail.container),
-        TuiRegion(footer),
+        header,
+        selector.frame,
+        detail.container,
+        footer,
     )
     app: Application[GroundWorkspaceViewerResult] = Application(
         layout=Layout(root, focused_element=selector.control),

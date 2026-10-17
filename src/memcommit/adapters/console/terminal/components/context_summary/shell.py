@@ -41,7 +41,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
@@ -259,11 +258,11 @@ def run_context_summary_workbench(
         dont_extend_height=True,
     )
     root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(range_frame),
-        TuiRegion(selector.frame),
-        TuiRegion(summary_frame),
-        TuiRegion(footer),
+        header,
+        range_frame,
+        selector.frame,
+        summary_frame,
+        footer,
     )
     initial_focus = (
         summary_control

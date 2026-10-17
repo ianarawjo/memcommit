@@ -195,16 +195,16 @@ class ContextTargetModeState:
         return cls(
             HorizontalChoiceState(
                 (
-                    HorizontalChoiceOption("SINGLE", "SINGLE TARGET"),
-                    HorizontalChoiceOption("MULTIPLE", "MULTIPLE TARGETS"),
+                    HorizontalChoiceOption(value="SINGLE", label="SINGLE TARGET"),
+                    HorizontalChoiceOption(value="MULTIPLE", label="MULTIPLE TARGETS"),
                 ),
-                selected_uid="MULTIPLE" if multiple else "SINGLE",
+                selected_value="MULTIPLE" if multiple else "SINGLE",
             )
         )
 
     @property
     def multiple(self) -> bool:
-        return self.choice.selected_uid == "MULTIPLE"
+        return self.choice.selected_value == "MULTIPLE"
 
     def move(self, delta: int) -> bool:
         return self.choice.move(delta)

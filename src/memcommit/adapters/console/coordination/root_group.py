@@ -42,7 +42,9 @@ class MemCommandGroup(CanonicalCommandGroup):
         arguments = list(sys.argv[1:] if args is None else args)
         if not arguments and sys.stdin.isatty() and sys.stdout.isatty():
             from memcommit.application.initial_setup.configuration import initial_setup_needed
-            from memcommit.adapters.console.initial_setup.flow import run_initial_setup
+            from memcommit.adapters.console.initial_setup.runtime import run_initial_setup
+            from memcommit.application.operations.profile.config import ProfileConfigError
+            from memcommit.providers.profile_routes import ProfileProviderRoutesError
 
             try:
                 if initial_setup_needed():
@@ -52,7 +54,7 @@ class MemCommandGroup(CanonicalCommandGroup):
                     if kwargs.get("standalone_mode", True):
                         raise SystemExit(exit_code)
                     return exit_code
-            except WorkspaceError as error:
+            except (WorkspaceError, ProfileConfigError, ProfileProviderRoutesError) as error:
                 render_cli_error(error)
                 raise SystemExit(1) from error
         # Configuration locates the Store, so it must also work before migration

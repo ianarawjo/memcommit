@@ -213,16 +213,16 @@ class CompactInteraction:
         if item is not None and self.state.focused_row_index < option_count:
             self.select_choice(self.state.focused_row_index)
             return
-        action_uid = self.action_rows()[self.state.focused_row_index - option_count].uid
-        if action_uid.startswith("bulk:"):
+        action_value = self.action_rows()[self.state.focused_row_index - option_count].value
+        if action_value.startswith("bulk:"):
             assert self.stage_bulk_choice is not None
-            self.stage_bulk_choice(action_uid.removeprefix("bulk:"))
+            self.stage_bulk_choice(action_value.removeprefix("bulk:"))
             self.state.status_message = "Bulk choices staged; finalize to continue."
-        elif action_uid == "action:CONTINUE":
+        elif action_value == "action:CONTINUE":
             self.finish()
-        elif action_uid == "action:BACK":
+        elif action_value == "action:BACK":
             get_app().exit(result=ResolutionWorkbenchAction(kind="CLOSE"))
-        elif action_uid == "action:RESPONSE" and self.intent is not None:
+        elif action_value == "action:RESPONSE" and self.intent is not None:
             self.intent.open_response()
         else:  # pragma: no cover - action rows are closed above
             self.state.status_message = "That action is unavailable."
@@ -246,10 +246,10 @@ class CompactInteraction:
         return "BOUNDARY"
 
     def enter_navigation(self, delta):
-        self.state.navigation.cursor_uid = "PREV" if delta > 0 else "NEXT"
+        self.state.navigation.cursor_value = "PREV" if delta > 0 else "NEXT"
 
     def activate_navigation(self, _event):
-        self.move_item(-1 if self.state.navigation.cursor_uid == "PREV" else 1)
+        self.move_item(-1 if self.state.navigation.cursor_value == "PREV" else 1)
         return "HANDLED"
 
     def move_decisions(self, _event, delta):

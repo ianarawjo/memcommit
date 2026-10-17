@@ -558,9 +558,9 @@ def _publish_study_run_pair(
                 profiles_by_name[source.name] = target
                 roots_by_name[source.name] = source.store
         grants, grant_placements = _materialize_study_grants(
-            merged,
-            profiles_by_name,
-            roots_by_name,
+            packages=merged,
+            profiles_by_name=profiles_by_name,
+            staged_roots=roots_by_name,
         )
         namespace = uuid.UUID(study_uid)
         replacement_uids = {
@@ -595,9 +595,9 @@ def _publish_study_run_pair(
             grant_placements=(*registry.grant_placements, *grant_placements),
         )
         participant_inspection = _inspection_with_grants(
-            updated,
-            participant,
-            participant_inspection,
+            registry=updated,
+            profile=participant,
+            inspection=participant_inspection,
             cache={authority.uid: authority_inspection},
         )
 
@@ -609,8 +609,12 @@ def _publish_study_run_pair(
             if destination.exists() or destination.is_symlink():
                 raise ProfileError("Managed profile destination is occupied.")
             from memcommit.application.operations.profile.project_root import prepare_profile_root, write_profile_marker
-            prepare_profile_root(profile, profile.root_dir, registry)
-            write_profile_marker(source, profile.uid)
+            prepare_profile_root(
+                profile=profile,
+                requested_root=profile.root_dir,
+                registry=registry,
+            )
+            write_profile_marker(store_root=source, uid=profile.uid)
             os.replace(source, destination)
             published.append((destination, source))
         try:

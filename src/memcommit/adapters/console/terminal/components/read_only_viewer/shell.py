@@ -13,7 +13,6 @@ from prompt_toolkit.styles import merge_styles
 
 from memcommit.adapters.console.terminal.core.capabilities import is_interactive_terminal
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     bind_focused_frame_style,
     build_tui_frame,
 )
@@ -116,7 +115,7 @@ def run_read_only_viewer(
         bindings.add(key)(close)
     bind_case_insensitive_key(bindings, "q")(close)
 
-    root = build_tui_frame(TuiRegion(pane.container), TuiRegion(footer))
+    root = build_tui_frame(pane.container, footer)
     if compact_height is not None:
         # A compact report preserves the same Viewer and scrolling mechanics;
         # only the bounded non-alternate-screen presentation differs.

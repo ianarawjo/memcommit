@@ -589,7 +589,7 @@ def _publish_permanent_removal(
                 f"prepared data remains at {batch}."
             ) from read_error
         if visible == previous:
-            _rollback_profile_deletion_batch(batch, profiles)
+            _rollback_profile_deletion_batch(batch=batch, profiles=profiles)
             raise ProfileError(f"{label} was not deleted.") from error
         if visible == updated:
             _destroy_profile_deletion_batch(batch)

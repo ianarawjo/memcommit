@@ -31,7 +31,7 @@ def install_provider_runtime(provider_id: str) -> Path:
     with tempfile.TemporaryDirectory(prefix="mem-provider-install-") as directory:
         script = Path(directory) / "install.sh"
         subprocess.run(
-            [
+            args=[
                 "/usr/bin/curl",
                 "-fsSL",
                 "--connect-timeout",
@@ -45,7 +45,7 @@ def install_provider_runtime(provider_id: str) -> Path:
             check=True,
         )
         environment = dict(os.environ, CODEX_NON_INTERACTIVE="1")
-        subprocess.run(["/bin/sh", str(script)], env=environment, check=True)
+        subprocess.run(args=["/bin/sh", str(script)], env=environment, check=True)
     # Shell configuration affects the next terminal. The running setup must
     # also prefer the newly installed CLI over an older app-bundled fallback.
     install_dir = os.environ.get(
@@ -57,4 +57,4 @@ def install_provider_runtime(provider_id: str) -> Path:
 
 def login_provider(provider_id: str, binary: Path) -> None:
     setup_provider_option(provider_id)
-    subprocess.run([str(binary), "login"], check=True)
+    subprocess.run(args=[str(binary), "login"], check=True)

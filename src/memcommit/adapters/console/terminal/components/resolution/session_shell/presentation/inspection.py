@@ -12,7 +12,7 @@ from memcommit.adapters.console.terminal.components.selection.model import (
     SelectionOption,
 )
 from memcommit.adapters.console.terminal.components.selection.state import (
-    FlatSelectionState,
+    SingleSelectionState,
 )
 from memcommit.adapters.console.terminal.components.semantic_viewer import (
     deactivate_semantic_viewer_fragments,
@@ -255,17 +255,17 @@ def resolution_workbench_fragments(
         if item.options:
             fragments.append(("class:section", "       OPTIONS\n"))
             option_uids = tuple(option.uid for option in item.options)
-            choice_state = FlatSelectionState(
+            choice_state = SingleSelectionState(
                 tuple(
-                    SelectionOption(option.uid, option.label, option.text)
+                    SelectionOption(value=option.uid, label=option.label, description=option.text)
                     for option in item.options
                 ),
-                cursor_uid=(
+                cursor_value=(
                     navigation.option_cursor_uid
                     if navigation.option_cursor_uid in option_uids
                     else option_uids[0]
                 ),
-                selected_uid=navigation.selected_option_uid,
+                selected_value=navigation.selected_option_uid,
             )
             fragments.extend(
                 render_vertical_choice_cards(
@@ -437,21 +437,21 @@ def resolution_viewer_fragments(
         if any(option.uid == other_uid for option in item.options):
             raise ValueError("Resolution option UID collides with the Other control.")
         options = tuple(
-            SelectionOption(option.uid, option.label, option.text)
+            SelectionOption(value=option.uid, label=option.label, description=option.text)
             for option in item.options
-        ) + (SelectionOption(other_uid, other_label, other_text),)
+        ) + (SelectionOption(value=other_uid, label=other_label, description=other_text),)
         option_uids = tuple(option.uid for option in item.options)
-        cursor_uid = (
+        cursor_value = (
             other_uid
             if other_direction_focused
             else navigation.option_cursor_uid
             if navigation.option_cursor_uid in option_uids
             else option_uids[0]
         )
-        choice_state = FlatSelectionState(
+        choice_state = SingleSelectionState(
             options,
-            cursor_uid=cursor_uid,
-            selected_uid=navigation.selected_option_uid,
+            cursor_value=cursor_value,
+            selected_value=navigation.selected_option_uid,
         )
         parts.extend(
             render_vertical_choice_cards(

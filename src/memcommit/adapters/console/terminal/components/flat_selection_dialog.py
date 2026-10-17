@@ -26,7 +26,7 @@ from memcommit.adapters.console.terminal.core.prompt_toolkit_theme import (
     MEMCOMMIT_TUI_STYLE,
     SEMANTIC_VIEWER_STYLE,
 )
-from memcommit.adapters.console.terminal.components.selection import FlatSelectionState, SelectionOption
+from memcommit.adapters.console.terminal.components.selection import SingleSelectionState, SelectionOption
 from memcommit.adapters.console.terminal.components.selection import render_vertical_choice_rows
 
 
@@ -57,11 +57,11 @@ def choose_flat_option(
     if require_tty and (not sys.stdin.isatty() or not sys.stdout.isatty()):
         raise ValueError("Interactive selection requires a terminal.")
 
-    initial = initial_uid or frozen[0].uid
-    state = FlatSelectionState(
+    initial = initial_uid or frozen[0].value
+    state = SingleSelectionState(
         frozen,
-        cursor_uid=initial,
-        selected_uid=initial,
+        cursor_value=initial,
+        selected_value=initial,
         allow_empty=False,
     )
     bindings = KeyBindings()
@@ -97,9 +97,9 @@ def choose_flat_option(
     @bindings.add("enter", eager=True)
     @bindings.add(" ", eager=True)
     def _accept(event) -> None:
-        selected_uid = state.select_cursor(toggle=False)
+        selected_value = state.select_cursor(toggle=False)
         event.app.exit(
-            result=next(option for option in frozen if option.uid == selected_uid)
+            result=next(option for option in frozen if option.value == selected_value)
         )
 
     @bind_case_insensitive_key(bindings, "q", eager=True)

@@ -30,7 +30,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
@@ -55,8 +54,8 @@ ReplaceRunner = Callable[[ReplaceRequest], ReplaceApplyResult]
 
 def _choice(*values: tuple[str, str], selected: str) -> HorizontalChoiceState:
     return HorizontalChoiceState(
-        tuple(HorizontalChoiceOption(uid, label) for uid, label in values),
-        selected_uid=selected,
+        tuple(HorizontalChoiceOption(value=uid, label=label) for uid, label in values),
+        selected_value=selected,
     )
 
 
@@ -200,8 +199,8 @@ def run_replace_tui(
                 # into the exact checked execution set.
                 include_descendants=include_descendants,
                 follow_embeds=scope.follow_embeds,
-                mode=mode_choice.selected_uid,
-                ignore_case=case_choice.selected_uid == "IGNORE",
+                mode=mode_choice.selected_value,
+                ignore_case=case_choice.selected_value == "IGNORE",
             )
             completed = execute(candidate)
             if not isinstance(completed, ReplaceApplyResult):
@@ -335,12 +334,14 @@ def run_replace_tui(
         dont_extend_height=True,
     )
     root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(scope_frame, separator_before=True),
-        TuiRegion(find_frame, separator_before=True),
-        TuiRegion(replacement_frame),
-        TuiRegion(status_window),
-        TuiRegion(footer),
+        header,
+        Window(height=1, char="─"),
+        scope_frame,
+        Window(height=1, char="─"),
+        find_frame,
+        replacement_frame,
+        status_window,
+        footer,
     )
     app: Application[ReplaceApplyResult | None] = Application(
         layout=Layout(root, focused_element=pattern_area),

@@ -206,7 +206,7 @@ def bind_focus_surfaces(
         response_state.open_options(target)
         choices = response_state.choice_state
         if choices is not None:
-            choices.cursor_uid = choices.options[0].uid
+            choices.cursor_value = choices.options[0].value
 
     def _move_items_surface(_event, delta: int) -> SurfaceMoveResult:
         active_view = current_view()

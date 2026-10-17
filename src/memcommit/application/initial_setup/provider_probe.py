@@ -17,7 +17,7 @@ def verify_provider_response(provider) -> None:
     try:
         response = json.loads(
             provider.complete(
-                PROBE_PROMPT, operation="provider probe", output_schema=PROBE_SCHEMA
+                prompt=PROBE_PROMPT, operation="provider probe", output_schema=PROBE_SCHEMA
             )
         )
     except (TypeError, ValueError) as error:

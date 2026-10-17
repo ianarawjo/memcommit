@@ -12,12 +12,12 @@ from memcommit.adapters.console.terminal.core.text_layout import (
     terminal_cell_width,
     wrap_terminal_text,
 )
-from memcommit.adapters.console.terminal.components.selection.state import FlatMultiSelectionState
+from memcommit.adapters.console.terminal.components.selection.state import MultiSelectionState
 from memcommit.adapters.console.terminal.components.selection.rendering import choice_marker
 
 
 def render_vertical_multi_choice_rows(
-    state: FlatMultiSelectionState,
+    state: MultiSelectionState,
     *,
     focused: bool,
     content_width: int,
@@ -29,8 +29,8 @@ def render_vertical_multi_choice_rows(
     width = max(12, content_width)
     fragments: list[tuple[str, str]] = []
     for index, option in enumerate(state.options, start=1):
-        cursor = option.uid == state.cursor_uid
-        selected = option.uid in state.selected_uids
+        cursor = option.value == state.cursor_value
+        selected = option.value in state.selected_values
         keyboard_target = cursor and focused
         label_style = focused_control_style(
             focused=keyboard_target,

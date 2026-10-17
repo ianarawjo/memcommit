@@ -138,9 +138,9 @@ def _choose_source_profile(
     selected = choose_flat_option(
         tuple(
             SelectionOption(
-                source.uid,
-                source.name,
-                f"{source.kind} · REGISTERED SOURCE",
+                value=source.uid,
+                label=source.name,
+                description=f"{source.kind} · REGISTERED SOURCE",
             )
             for source in catalog.sources
         ),
@@ -151,7 +151,7 @@ def _choose_source_profile(
         app_output=app_output,
         require_tty=require_tty,
     )
-    return by_uid[selected.uid] if selected is not None else None
+    return by_uid[selected.value] if selected is not None else None
 
 
 def _import_memory_rows(
@@ -340,11 +340,21 @@ def choose_import_setup(
 
     kind_option = choose_flat_option(
         (
-            SelectionOption("PROFILE", "PROFILE", "Create one clean baseline Profile."),
             SelectionOption(
-                "CONTEXT", "CONTEXT", "Copy one Context or lexical subtree."
+                value="PROFILE",
+                label="PROFILE",
+                description="Create one clean baseline Profile.",
             ),
-            SelectionOption("MEMORY", "MEMORY", "Copy one directly owned Memory."),
+            SelectionOption(
+                value="CONTEXT",
+                label="CONTEXT",
+                description="Copy one Context or lexical subtree.",
+            ),
+            SelectionOption(
+                value="MEMORY",
+                label="MEMORY",
+                description="Copy one directly owned Memory.",
+            ),
         ),
         title="MEM IMPORT · RESOURCE",
         detail="Choose the identity-preserving resource boundary to import.",
@@ -355,7 +365,7 @@ def choose_import_setup(
     )
     if kind_option is None:
         return None
-    kind: ImportKind = kind_option.uid  # type: ignore[assignment]
+    kind: ImportKind = kind_option.value  # type: ignore[assignment]
 
     catalog = freeze_import_source_catalog()
     source = _choose_source_profile(

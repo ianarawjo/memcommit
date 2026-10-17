@@ -14,6 +14,7 @@ from prompt_toolkit.layout import (
     Layout,
     Window,
 )
+from prompt_toolkit.layout.containers import AnyContainer
 from prompt_toolkit.layout.margins import ScrollbarMargin
 from prompt_toolkit.output import Output
 from prompt_toolkit.styles import merge_styles
@@ -45,7 +46,6 @@ from memcommit.adapters.console.terminal.components.focus.controller import (
     bind_surface_navigation,
 )
 from memcommit.adapters.console.terminal.components.frame import (
-    TuiRegion,
     build_focused_frame,
     build_tui_frame,
 )
@@ -58,7 +58,7 @@ from memcommit.adapters.console.terminal.components.operation_context_scope_edit
     render_context_reach,
 )
 from memcommit.adapters.console.terminal.components.selection import (
-    FlatSelectionState,
+    SingleSelectionState,
     SelectionOption,
     render_vertical_choice_rows,
 )
@@ -106,18 +106,18 @@ def run_endpoint_setup_screen(
             snapshot_hint="Pass explicit Context operands outside a terminal.",
         )
 
-    mode_state = FlatSelectionState(
+    mode_state = SingleSelectionState(
         options=tuple(
-            SelectionOption(mode.uid, mode.label, mode.description)
+            SelectionOption(value=mode.uid, label=mode.label, description=mode.description)
             for mode in spec.modes
         ),
-        cursor_uid=spec.initial_mode_uid,
-        selected_uid=spec.initial_mode_uid,
+        cursor_value=spec.initial_mode_uid,
+        selected_value=spec.initial_mode_uid,
         allow_empty=False,
     )
 
     def selected_mode_uid() -> str:
-        selected = mode_state.selected_uid
+        selected = mode_state.selected_value
         if selected is None:
             raise ValueError("Choose one operation shape.")
         return selected
@@ -311,7 +311,7 @@ def run_endpoint_setup_screen(
         )
 
     def make_draft() -> EndpointSetupDraft:
-        selected_mode = mode_state.selected_uid
+        selected_mode = mode_state.selected_value
         if selected_mode is None:
             raise ValueError("Choose one operation shape.")
         active_role_uids = spec.active_role_uids(selected_mode)
@@ -483,56 +483,48 @@ def run_endpoint_setup_screen(
         height=Dimension.exact(1),
         dont_extend_height=True,
     )
-    role_regions: list[TuiRegion] = []
+    role_regions: list[AnyContainer] = []
     for role in spec.roles:
         if role.uid in selectors:
             role_regions.append(
-                TuiRegion(
-                    ConditionalContainer(
-                        selectors[role.uid].frame,
-                        filter=Condition(lambda uid=role.uid: role_is_active(uid)),
-                    )
+                ConditionalContainer(
+                    selectors[role.uid].frame,
+                    filter=Condition(lambda uid=role.uid: role_is_active(uid)),
                 )
             )
         if role.uid in reach_frames:
             role_regions.append(
-                TuiRegion(
-                    ConditionalContainer(
-                        reach_frames[role.uid],
-                        filter=Condition(
-                            lambda uid=role.uid: role_is_active(uid)
-                            and role_allows_descendants(uid)
-                        ),
-                    )
+                ConditionalContainer(
+                    reach_frames[role.uid],
+                    filter=Condition(
+                        lambda uid=role.uid: role_is_active(uid)
+                        and role_allows_descendants(uid)
+                    ),
                 )
             )
         if role.uid in memory_frames:
             role_regions.append(
-                TuiRegion(
-                    ConditionalContainer(
-                        memory_frames[role.uid],
-                        filter=Condition(
-                            lambda uid=role.uid: role_is_active(uid)
-                            and role_allows_memory_focus(uid)
-                        ),
-                    )
+                ConditionalContainer(
+                    memory_frames[role.uid],
+                    filter=Condition(
+                        lambda uid=role.uid: role_is_active(uid)
+                        and role_allows_memory_focus(uid)
+                    ),
                 )
             )
         if role.uid in new_name_fields:
             role_regions.append(
-                TuiRegion(
-                    ConditionalContainer(
-                        new_name_fields[role.uid].frame,
-                        filter=Condition(lambda uid=role.uid: role_is_active(uid)),
-                    )
+                ConditionalContainer(
+                    new_name_fields[role.uid].frame,
+                    filter=Condition(lambda uid=role.uid: role_is_active(uid)),
                 )
             )
     root = build_tui_frame(
-        TuiRegion(header),
-        TuiRegion(mode_frame),
+        header,
+        mode_frame,
         *role_regions,
-        TuiRegion(action_frame),
-        TuiRegion(footer),
+        action_frame,
+        footer,
     )
     preferred_new_control = next(
         (
@@ -563,7 +555,7 @@ def run_endpoint_setup_screen(
 
     def move_mode(_event, delta: int) -> SurfaceMoveResult:
         changed = mode_state.move(delta)
-        mode_state.set_selected(mode_state.cursor_uid)
+        mode_state.set_selected(mode_state.cursor_value)
         for uid, memory_focus in memory_focuses.items():
             if not role_allows_memory_focus(uid):
                 memory_focus.clear()

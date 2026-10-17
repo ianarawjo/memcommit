@@ -177,11 +177,19 @@ class ProfilePickerView:
             input_name="profile-picker-project-folder", frame_style="class:profile-create-field")
         self.restoring_fields = False
         self.import_control = FormattedTextControl(
-            lambda: self.render_setup_option("IMPORT PROJECT FILES", self.state.import_selection, self.import_control),
+            text=lambda: self.render_setup_option(
+                label="IMPORT PROJECT FILES",
+                selection=self.state.import_selection,
+                control=self.import_control,
+            ),
             focusable=True, show_cursor=False,
         )
         self.sync_control = FormattedTextControl(
-            lambda: self.render_setup_option("AUTO SYNC", self.state.sync_selection, self.sync_control),
+            text=lambda: self.render_setup_option(
+                label="AUTO SYNC",
+                selection=self.state.sync_selection,
+                control=self.sync_control,
+            ),
             focusable=True, show_cursor=False,
         )
         self.layout = self._layout()
@@ -267,7 +275,7 @@ class ProfilePickerView:
             elif action.kind in {"RENAME_PROFILE", "RENAME_STUDY"}:
                 review = rename_review(action)
             else:
-                review = removal_review(action, self.state.current_row)
+                review = removal_review(action=action, row=self.state.current_row)
             return [("", render_exact_command_review(review))]
         if self.state.select_created and self.state.edit is not None:
             return [
@@ -362,18 +370,18 @@ class ProfilePickerView:
 
     def _layout(self) -> Layout:
         header = Window(
-            FormattedTextControl(self.header_text),
+            content=FormattedTextControl(text=self.header_text),
             height=Dimension.exact(1),
             dont_extend_height=True,
         )
         options_window = Window(
-            self.control,
+            content=self.control,
             # Absolute project paths must remain visible even for long Study rows.
             wrap_lines=True,
             right_margins=[ScrollbarMargin(display_arrows=True)],
         )
         footer = Window(
-            FormattedTextControl(self.footer_text),
+            content=FormattedTextControl(text=self.footer_text),
             # A completed deletion receipt must remain readable alongside the
             # navigation keys, including long Study-generated Profile names.
             height=lambda: 2 if (
@@ -393,7 +401,7 @@ class ProfilePickerView:
             for kind, field in self.name_fields.items()
         ]
         return Layout(
-            HSplit(
+            container=HSplit(
                 [
                     header,
                     Window(height=1, char="─"),
@@ -403,10 +411,14 @@ class ProfilePickerView:
                     ConditionalContainer(
                         HSplit([
                             Window(height=1),
-                            Window(self.import_control, height=1),
-                            Window(FormattedTextControl(" Import supported documents in this folder and its subfolders as Memories."), height=1),
-                            Window(self.sync_control, height=1),
-                            Window(FormattedTextControl(" Reflect mem changes in managed documents in this folder and its subfolders, including future Contexts."), height=1),
+                            Window(content=self.import_control, height=1),
+                            Window(content=FormattedTextControl(
+                                text=" Import supported documents in this folder and its subfolders as Memories.",
+                            ), height=1),
+                            Window(content=self.sync_control, height=1),
+                            Window(content=FormattedTextControl(
+                                text=" Reflect mem changes in managed documents in this folder and its subfolders, including future Contexts.",
+                            ), height=1),
                         ]), filter=self.create_mode,
                     ),
                     Window(height=1, char="─"),

@@ -1,4 +1,4 @@
-"""Pure option identity shared by console selection controls."""
+"""Option values and display text shared by console selection controls."""
 
 from __future__ import annotations
 
@@ -16,15 +16,15 @@ def _is_nonempty_single_line(value: object) -> bool:
 
 @dataclass(frozen=True)
 class SelectionOption:
-    """One stable selectable value independent of layout and operation meaning."""
+    """One option's stable value and display text, independent of layout."""
 
-    uid: str
+    value: str
     label: str
     description: str = ""
 
     def __post_init__(self) -> None:
         if (
-            not _is_nonempty_single_line(self.uid)
+            not _is_nonempty_single_line(self.value)
             or not _is_nonempty_single_line(self.label)
             or not isinstance(self.description, str)
         ):
