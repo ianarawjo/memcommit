@@ -20,6 +20,7 @@ from memcommit.application.operations.profile.config import (
 )
 from memcommit.application.context_access.granted_view import GrantedContextView
 from memcommit.application.context_access.granted_view import active_grant_placements
+from memcommit.application.context_access.model import granted_context_binding_digest
 from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.store.context_memory.records import context_record_digest
 from memcommit.persistence.store.translation_catalog import (
@@ -345,7 +346,7 @@ def freeze_granted_query_source_binding(
     return GrantedQuerySourceBinding(
         grant_uid=grant.uid,
         grant_revision=grant.revision,
-        grant_digest=_canonical_json_digest(grant.to_dict()),
+        grant_digest=granted_context_binding_digest(grant.to_dict()),
         grantee_profile_uid=grant.grantee_profile_uid,
         authority_profile_uid=grant.authority_profile_uid,
         resource_uid=grant.resource_uid,

@@ -13,6 +13,9 @@ from memcommit.application.capabilities.history.reconstruction.memory_lineage_re
     resolve_lineage_target_uids,
 )
 from memcommit.application.context_access.access import ContextAccess, GrantedReadStore
+from memcommit.application.capabilities.semantic.changes import (
+    get_required_permission_for_effect,
+)
 from memcommit.application.context_access.operand_resolution import (
     freeze_profile_context_access_candidates,
     resolve_existing_context_access,
@@ -126,7 +129,7 @@ def load_merge_context_inputs(
             value
             for value in ("CREATE", "UPDATE", "DELETE")
             if target_access.view is None
-            or value in target_access.view.grant.permissions
+            or get_required_permission_for_effect(value) in target_access.view.grant.permissions
         )
         projected_source.name, target.name = (
             source_access.access_name,

@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 import memcommit.application.capabilities.context_links as context_links
-from memcommit.application.authorization import ContextUse, authorize_context_use
+from memcommit.application.authorization import ContextPermission, check_context_permissions
 from memcommit.application.authorization.context_operation import (
     authorized_context_operation,
 )
@@ -67,7 +67,7 @@ def _resolve_sources(
         # snapshot, and creating a live relationship. Derived-use permissions
         # were retired because content already disclosed under READ cannot be
         # meaningfully constrained by those downstream labels.
-        authorize_context_use(access, ContextUse.READ)
+        check_context_permissions(access, ContextPermission.READ)
         context = access.store.load_direct(access.context_name)
         if context.uid != selected.source_context_uid:
             raise SaveContextFromSelectionError(
@@ -167,11 +167,11 @@ class MemoryStoreSaveContextFromSelectionPort(SaveContextFromSelectionPort):
         accesses = _unique_accesses(sources)
         checks: list[tuple[ContextAccess, tuple[str, ...]]] = []
         for access in accesses:
-            authorize_context_use(access, ContextUse.READ)
+            check_context_permissions(access, ContextPermission.READ)
             if access.is_granted:
                 # The lower-level lock primitive revalidates the same use while
                 # preventing Grant revision changes through local publication.
-                checks.append((access, (ContextUse.READ.value,)))
+                checks.append((access, (ContextPermission.READ.value,)))
 
         output = Context(uid=str(uuid.uuid4()), name=request.destination_name)
         output_uids: list[str] = []

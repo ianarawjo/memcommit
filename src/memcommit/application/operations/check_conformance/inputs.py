@@ -6,8 +6,11 @@ from dataclasses import dataclass
 import hashlib
 import uuid
 
+from memcommit.application.authorization.context_use import (
+    ContextPermission,
+    check_context_permissions,
+)
 from memcommit.application.authorization.context_operation import (
-    _require_granted_permissions,
     authorized_context_operation,
 )
 from memcommit.application.capabilities.context_snapshot import ContextSnapshotRef
@@ -107,7 +110,7 @@ def _resolve_embed_access(
         required_permission="READ",
         registry=registry,
     )
-    _require_granted_permissions(access, ("READ",))
+    check_context_permissions(access, ContextPermission.READ)
     view = access.view
     assert view is not None
     grant = view.grant

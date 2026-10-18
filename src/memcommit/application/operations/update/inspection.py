@@ -6,7 +6,7 @@ from contextlib import nullcontext
 from dataclasses import dataclass, replace
 from typing import Literal
 
-from memcommit.application.authorization import authorize_context_use
+from memcommit.application.authorization import check_context_permissions
 from memcommit.application.context_access.access import (
     GrantedReadStore,
     revalidate_granted_context_binding,
@@ -21,9 +21,6 @@ from memcommit.application.operations.update.model import (
     inline_update_source,
     required_update_context_uses,
     update_inputs_match,
-)
-from memcommit.application.operations.update.publication import (
-    authorize_granted_target_operations,
 )
 from memcommit.persistence.store import MemoryStore
 
@@ -83,15 +80,9 @@ def inspect_update(
                     registry=registry,
                     active_store=active_store,
                 )
-                authorize_context_use(
+                check_context_permissions(
                     target_access,
                     required_update_context_uses(receipt.plan.operations),
-                )
-                authorize_granted_target_operations(
-                    inputs,
-                    receipt.plan,
-                    target_access,
-                    registry=registry,
                 )
                 target_store = GrantedReadStore(target_access, registry=registry)
                 target_name = inputs.granted_target.access_name

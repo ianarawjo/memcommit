@@ -3,7 +3,10 @@
 from dataclasses import dataclass
 from typing import Callable
 
-from memcommit.application.authorization import ContextUse, authorize_context_use
+from memcommit.application.authorization import ContextPermission, check_context_permissions
+from memcommit.application.authorization.context_operation import (
+    authorized_context_operation,
+)
 from memcommit.application.capabilities.memory_report_targeting import (
     freeze_memory_report_readable_catalog,
     resolve_readable_memory_target,
@@ -27,10 +30,14 @@ from .model import (
     freeze_update_context_inputs,
     inline_update_context,
     plan_update,
+    required_update_context_uses,
 )
 from .model.instruction import UpdateInstruction, UpdateRequest
 from .model.planning import UpdateProvider
-from .publication import publish_update
+from .validate_plan_scope import validate_update_plan_scope
+from memcommit.persistence.operations.update.publication_repository import (
+    publish_update_transaction,
+)
 from memcommit.application.capabilities.context_scope_loading import (
     load_mutable_context_scope,
     walk_context_owners,
@@ -42,7 +49,9 @@ class PreparedInstructionUpdate:
     inputs: UpdateContextInputs
     source: Context
     target: Context
-    allowed_target_uses: frozenset[ContextUse]
+    allowed_target_uses: frozenset[ContextPermission]
+    granted_source_access: ContextAccess | None
+    granted_target_access: ContextAccess | None
 
 
 def _load(access: ContextAccess, store: MemoryStore) -> Context:
@@ -71,7 +80,7 @@ def _load_instruction_memory(
             raise UpdateError("No readable Memory is available for --memory.")
         selected = resolve_readable_memory_target(catalog, locator.memory_selector)
         access = selected.access
-    authorize_context_use(access, ContextUse.READ)
+    check_context_permissions(access, ContextPermission.READ)
     source = _load(access, store)
     memory = resolve_exact_or_unique_uid(
         (item for item in source.iter_items() if isinstance(item, Memory)),
@@ -98,7 +107,7 @@ def prepare_instruction_update(
         current_name=current_name,
         required_permission="READ",
     ).value
-    target_authorization = authorize_context_use(target_access, ContextUse.READ)
+    target_authorization = check_context_permissions(target_access, ContextPermission.READ)
     target = (
         load_mutable_context_scope(store, target_access)
         if request.recursive
@@ -140,7 +149,16 @@ def prepare_instruction_update(
         target_include_descendants=request.recursive,
     )
     return PreparedInstructionUpdate(
-        inputs, source, target, target_authorization.allowed
+        inputs=inputs,
+        source=source,
+        target=target,
+        allowed_target_uses=target_authorization.allowed,
+        granted_source_access=(
+            source_access
+            if source_access is not None and source_access.is_granted
+            else None
+        ),
+        granted_target_access=target_access if target_access.is_granted else None,
     )
 
 
@@ -163,4 +181,22 @@ def run_instruction_update(
         instruction=inputs.instruction,
         target_include_descendants=inputs.target_include_descendants,
     )
-    return publish_update(store, inputs, plan)
+    validate_update_plan_scope(inputs=inputs, plan=plan)
+    checks = ()
+    if prepared.granted_source_access is not None:
+        checks += ((prepared.granted_source_access, ("READ",)),)
+    if prepared.granted_target_access is not None:
+        required_permissions = tuple(
+            permission.value
+            for permission in required_update_context_uses(plan.operations)
+        )
+        checks += ((prepared.granted_target_access, required_permissions),)
+    with authorized_context_operation(checks) as registry:
+        return publish_update_transaction(
+            store,
+            inputs,
+            plan,
+            registry=registry,
+            source_access=prepared.granted_source_access,
+            target_access=prepared.granted_target_access,
+        )

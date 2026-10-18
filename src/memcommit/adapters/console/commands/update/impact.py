@@ -6,7 +6,7 @@ import sys
 
 import typer
 
-from memcommit.application.authorization import ContextUse, authorize_context_use
+from memcommit.application.authorization import ContextPermission, check_context_permissions
 from memcommit.adapters.console.commands.impact.sessions import (
     update_impact_presentation,
 )
@@ -95,10 +95,10 @@ def run_directional_update_impact(
         )
         source_access = endpoints.source.value
         target_access = endpoints.target.value
-        authorize_context_use(source_access, ContextUse.READ)
-        target_authorization = authorize_context_use(
+        check_context_permissions(source_access, ContextPermission.READ)
+        target_authorization = check_context_permissions(
             target_access,
-            ContextUse.READ,
+            ContextPermission.READ,
         )
         source_store = (
             GrantedReadStore(source_access) if source_access.is_granted else store
@@ -166,7 +166,7 @@ def run_directional_update_impact(
                 allowed_target_uses=target_authorization.allowed,
             )
 
-        authorize_context_use(
+        check_context_permissions(
             target_access,
             required_update_context_uses(plan.operations),
         )
@@ -188,8 +188,8 @@ def run_directional_update_impact(
                 required_permission="READ",
                 registry=registry,
             )
-            authorize_context_use(current_source_access, ContextUse.READ)
-            authorize_context_use(
+            check_context_permissions(current_source_access, ContextPermission.READ)
+            check_context_permissions(
                 current_target_access,
                 required_update_context_uses(plan.operations),
             )

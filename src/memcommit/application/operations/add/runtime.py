@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 
-from memcommit.application.authorization import ContextUse, authorize_context_use
+from memcommit.application.authorization import ContextPermission, check_context_permissions
 from memcommit.application.operations.add.application import (
     AddedMemory,
     AddRequest,
@@ -99,7 +99,7 @@ class MemoryStoreAddTargetPort(AddTargetPort):
                 current_name=self._current_context_name,
                 required_permission="CREATE",
             ).value
-        authorize_context_use(access, ContextUse.CREATE)
+        check_context_permissions(access, ContextPermission.CREATE)
         context = access.store.load_direct(access.context_name)
         return FrozenAddTarget(
             context_name=access.access_name,
@@ -116,7 +116,7 @@ class MemoryStoreAddTargetPort(AddTargetPort):
         if not isinstance(token, _StoreAddTargetToken):
             raise ValueError("The frozen Add target binding is invalid.")
         access = token.access
-        authorize_context_use(access, ContextUse.CREATE)
+        check_context_permissions(access, ContextPermission.CREATE)
         store = access.store
         context = store.load_direct(access.context_name)
         if context.uid != target.context_uid:

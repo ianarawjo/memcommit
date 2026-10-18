@@ -5,30 +5,16 @@ from __future__ import annotations
 from contextlib import contextmanager
 from typing import Iterator
 
+from memcommit.application.authorization.context_use import (
+    ContextPermission,
+    check_context_permissions,
+)
 from memcommit.application.context_access.access import (
     ContextAccess,
     revalidate_context_access,
 )
-from memcommit.application.operations.profile.model import (
-    ProfileError,
-    authority_grant_snapshot_lock,
-)
+from memcommit.application.operations.profile.model import authority_grant_snapshot_lock
 from memcommit.application.operations.profile.config import ProfileRegistry
-
-
-def _require_granted_permissions(
-    access: ContextAccess,
-    required_permissions: tuple[str, ...],
-) -> None:
-    if access.view is None:
-        return
-    missing = sorted(set(required_permissions) - set(access.view.grant.permissions))
-    if missing:
-        raise ProfileError(
-            f"Grant {access.view.grant.uid[:8]} does not allow "
-            + " + ".join(missing)
-            + f" access to {access.access_name!r}."
-        )
 
 
 @contextmanager
@@ -41,14 +27,18 @@ def authorized_context_operation(
     if not granted:
         yield None
         return
-    for access, permissions in granted:
-        _require_granted_permissions(access, permissions)
     # Grant changes and Profile switching use this same registry lock. Holding
     # it across the authority-store save closes the revoke-after-check race.
     with authority_grant_snapshot_lock() as registry:
         for access, permissions in granted:
             revalidate_context_access(access, registry=registry)
-            _require_granted_permissions(access, permissions)
+            check_context_permissions(
+                access,
+                tuple(
+                    ContextPermission(value)
+                    for value in (access.permission, *permissions)
+                ),
+            )
         # Some retained graph operations also bind nested override membership.
         # Exposing the already-held immutable registry snapshot lets them check
         # that evidence without taking a second, potentially deadlocking lock.

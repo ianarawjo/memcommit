@@ -86,7 +86,7 @@ def grant_create_cmd(
             "--allow",
             help=(
                 "Permission to grant; repeat QUERY, CREATE, READ, "
-                "UPDATE/EDIT, DELETE, or SHARE"
+                "EDIT, DELETE, or SHARE"
             ),
         ),
     ],

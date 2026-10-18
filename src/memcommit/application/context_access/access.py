@@ -227,11 +227,12 @@ def load_granted_context_link(
     )
     view = access.view
     assert view is not None
-    from memcommit.application.authorization.context_operation import (
-        _require_granted_permissions,
+    from memcommit.application.authorization.context_use import (
+        ContextPermission,
+        check_context_permissions,
     )
 
-    _require_granted_permissions(access, ("READ",))
+    check_context_permissions(access, ContextPermission.READ)
     grant = view.grant
     if (
         grant.uid != link.grant_uid
@@ -281,11 +282,12 @@ def load_granted_memory_source(
     )
     view = access.view
     assert view is not None
-    from memcommit.application.authorization.context_operation import (
-        _require_granted_permissions,
+    from memcommit.application.authorization.context_use import (
+        ContextPermission,
+        check_context_permissions,
     )
 
-    _require_granted_permissions(access, ("READ",))
+    check_context_permissions(access, ContextPermission.READ)
     grant = view.grant
     if (
         grant.uid != source.grant_uid
@@ -455,13 +457,17 @@ def revalidate_context_access(
         registry=registry,
         expected_grant_uid=access.view.grant.uid,
     )
-    expected = access.view
-    if (
-        current.grant.uid != expected.grant.uid
-        or current.grant.revision != expected.grant.revision
-        or current.authority.uid != expected.authority.uid
-        or current.grantee.uid != expected.grantee.uid
-        or current.authority_context_name != expected.authority_context_name
+    current_access = ContextAccess(
+        store=access.store,
+        context_name=current.authority_context_name,
+        access_name=access.access_name,
+        permission=access.permission,
+        view=current,
+    )
+    # Live operations and retained artifacts bind the same complete Grant facts;
+    # matching only its revision would miss changed scope or permission metadata.
+    if freeze_granted_context_binding(current_access) != freeze_granted_context_binding(
+        access
     ):
         raise ProfileError(
             "The authority grant changed during this command; no change was saved."

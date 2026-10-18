@@ -117,7 +117,7 @@ def _target_permissions(prepared, result):
     if prepared.request.method == "LITERAL":
         # Literal's established launch contract requires CREATE even for a no-op.
         return (
-            ("CREATE", "UPDATE")
+            ("CREATE", "EDIT")
             if any(
                 decision.kind == "TAKE_SOURCE"
                 for round in result.rounds
@@ -132,6 +132,6 @@ def _target_permissions(prepared, result):
         if old is not None and new is not None and old.to_dict() == new.to_dict():
             continue
         permissions.add(
-            "CREATE" if old is None else "DELETE" if new is None else "UPDATE"
+            "CREATE" if old is None else "DELETE" if new is None else "EDIT"
         )
     return tuple(sorted(permissions))

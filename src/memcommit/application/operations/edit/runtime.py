@@ -47,7 +47,7 @@ class _StoreEditToken:
 
 
 class MemoryStoreEditPort(EditPort):
-    """Freeze UPDATE authority and every before value before any replacement."""
+    """Freeze EDIT authority and every before value before any replacement."""
 
     def __init__(self, store: MemoryStore, *, current_name: str | None):
         self.store = store
@@ -63,7 +63,7 @@ class MemoryStoreEditPort(EditPort):
             self.store,
             context_locator,
             current_name=self.current_context_name,
-            required_permission="UPDATE",
+            required_permission="EDIT",
         ).value
 
     def inspect_context(self, context_locator: str | None) -> Context:

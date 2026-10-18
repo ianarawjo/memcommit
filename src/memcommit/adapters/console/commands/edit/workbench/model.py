@@ -23,7 +23,7 @@ class EditTuiSetup:
         ):
             raise ValueError("Edit TUI requires a distinct Context catalog.")
         if not self.selectable_names or not self.selectable_names <= set(self.names):
-            raise ValueError("Edit TUI requires an UPDATE-authorized Context.")
+            raise ValueError("Edit TUI requires an EDIT-authorized Context.")
         if self.selected_context not in self.selectable_names:
             raise ValueError("Initial Edit Context is unavailable.")
 

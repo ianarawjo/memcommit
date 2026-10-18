@@ -66,7 +66,7 @@ def _required_permissions(
     changes: Sequence[ProposedChange],
 ) -> tuple[str, ...]:
     permissions = {
-        "DELETE" if isinstance(change, RemoveChange) else "UPDATE"
+        "DELETE" if isinstance(change, RemoveChange) else "EDIT"
         for change in changes
     }
     return tuple(sorted(permissions))

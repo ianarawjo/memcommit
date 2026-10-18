@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from memcommit.application.authorization import authorize_context_use
+from memcommit.application.authorization.context_operation import (
+    authorized_context_operation,
+)
 from memcommit.application.context_access.access import (
     revalidate_granted_context_binding,
 )
@@ -14,15 +16,9 @@ from memcommit.application.capabilities.command_recovery.model import (
     RestoreDirection,
 )
 from memcommit.application.context_access import access_context_name
-from memcommit.application.operations.profile.model import (
-    authority_grant_snapshot_lock,
-)
 from memcommit.application.operations.update.model import (
     UpdateReceipt,
     required_update_context_uses,
-)
-from memcommit.application.operations.update.publication import (
-    authorize_granted_target_operations,
 )
 from memcommit.persistence.store import MemoryStore
 
@@ -59,23 +55,18 @@ def restore_update_command(
         raise ValueError("Expected a granted-target Update receipt.")
     binding = receipt.inputs.granted_target
     expected_unit_uid = f"update:{receipt.uid}:{receipt.application.operation_digest}"
-    with authority_grant_snapshot_lock() as registry:
-        access = revalidate_granted_context_binding(
-            binding,
-            required_permission="READ",
-            registry=registry,
-            active_store=active_store,
-        )
-        authorize_context_use(
-            access,
-            required_update_context_uses(receipt.plan.operations),
-        )
-        authorize_granted_target_operations(
-            receipt.inputs,
-            receipt.plan,
-            access,
-            registry=registry,
-        )
+    access = revalidate_granted_context_binding(
+        binding,
+        required_permission="READ",
+        active_store=active_store,
+    )
+    permissions = tuple(
+        permission.value
+        for permission in required_update_context_uses(receipt.plan.operations)
+    )
+    with authorized_context_operation(((access, permissions),)):
+        # Recovery follows the original Target Grant and exact authority command.
+        # Later child placements do not create or reorder Context command history.
         from memcommit.application.capabilities.command_recovery.stack_reconstruction import (
             build_command_stacks,
         )

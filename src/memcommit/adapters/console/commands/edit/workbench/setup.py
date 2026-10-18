@@ -1,4 +1,4 @@
-"""Compose Edit's console workbench with UPDATE-aware Context access."""
+"""Compose Edit's console workbench with EDIT-aware Context access."""
 
 from __future__ import annotations
 
@@ -54,7 +54,7 @@ def build_edit_tui_setup(
     elif selectable:
         selected = sorted(selectable, key=str.casefold)[0]
     else:
-        raise ValueError("Interactive Edit requires an UPDATE-authorized Context.")
+        raise ValueError("Interactive Edit requires an EDIT-authorized Context.")
 
     assert selected is not None
     return EditTuiSetup(

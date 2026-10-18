@@ -29,6 +29,9 @@ from memcommit.application.capabilities.context_scope_loading import (
     walk_context_owners,
 )
 from memcommit.application.capabilities.context_memory_target import ContextMemoryTarget
+from memcommit.application.capabilities.semantic.changes import (
+    get_required_permission_for_effect,
+)
 from memcommit.application.operations.profile.config import ProfileRegistry
 from memcommit.application.operations.resolve.model import (
     RESOLVE_CONTRACT_VERSION,
@@ -252,10 +255,14 @@ class ResolveStoreAdapter:
             binding = None
         else:
             allowed = tuple(
-                effect for effect in requested if effect in grant_permissions
+                effect
+                for effect in requested
+                if get_required_permission_for_effect(effect) in grant_permissions
             )
             denied = tuple(
-                effect for effect in requested if effect not in grant_permissions
+                effect
+                for effect in requested
+                if get_required_permission_for_effect(effect) not in grant_permissions
             )
             missing_authority = ()
             binding = freeze_granted_context_binding(access)
@@ -333,7 +340,10 @@ class ResolveStoreAdapter:
         access = self._revalidated_access(frame)
         if access.view is not None:
             permissions = set(access.view.grant.permissions)
-            required = {"READ", *frame.allowed_effects}
+            required = {
+                "READ",
+                *(get_required_permission_for_effect(effect) for effect in frame.allowed_effects),
+            }
             missing = tuple(sorted(required - permissions))
             if missing:
                 raise ResolveAuthorityError(
@@ -446,13 +456,20 @@ class ResolveStoreAdapter:
 
         required_permissions = (
             "READ",
-            *(effect for effect in _EFFECT_PERMISSION_ORDER if effect in effect_labels),
+            *(
+                get_required_permission_for_effect(effect)
+                for effect in _EFFECT_PERMISSION_ORDER
+                if effect in effect_labels
+            ),
         )
         if not plan.operations and not removed_item_uids:
             # A force-only Resolve still writes its audit checkpoint. Require
             # one reviewed mutation capability instead of treating that write
             # as though READ authority alone permitted it.
-            required_permissions = ("READ", frame.allowed_effects[0])
+            required_permissions = (
+                "READ",
+                get_required_permission_for_effect(frame.allowed_effects[0]),
+            )
         deleted_uids = {
             operation.memory_uid
             for operation in plan.operations

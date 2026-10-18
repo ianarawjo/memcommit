@@ -8,7 +8,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Literal, TypeAlias
 
-from memcommit.application.authorization import ContextUse
+from memcommit.application.authorization import ContextPermission
 
 
 class UpdateError(RuntimeError):
@@ -326,27 +326,27 @@ def _operation_from_dict(value: object) -> UpdateOperation:
     raise ValueError("Invalid update operation type.")
 def required_update_context_uses(
     operations: tuple[UpdateOperation, ...],
-) -> frozenset[ContextUse]:
+) -> frozenset[ContextPermission]:
     """Return the exact Target uses needed to apply one Update plan."""
 
-    required = {ContextUse.READ}
+    required = {ContextPermission.READ}
     if any(isinstance(operation, EditOperation) for operation in operations):
-        required.add(ContextUse.UPDATE)
+        required.add(ContextPermission.EDIT)
     if any(isinstance(operation, AddOperation) for operation in operations):
-        required.add(ContextUse.CREATE)
+        required.add(ContextPermission.CREATE)
     if any(isinstance(operation, RemoveOperation) for operation in operations):
-        required.add(ContextUse.DELETE)
+        required.add(ContextPermission.DELETE)
     return frozenset(required)
 
 
 def update_operations_are_authorized(
     operations: tuple[UpdateOperation, ...],
-    allowed: frozenset[ContextUse],
+    allowed: frozenset[ContextPermission],
 ) -> bool:
     """Return whether one exact plan fits a frozen Target authorization."""
 
-    if any(not isinstance(use, ContextUse) for use in allowed):
-        raise TypeError("Expected ContextUse values for Update authorization.")
+    if any(not isinstance(use, ContextPermission) for use in allowed):
+        raise TypeError("Expected ContextPermission values for Update authorization.")
     return required_update_context_uses(operations) <= allowed
 
 
@@ -357,9 +357,9 @@ def required_grant_permissions(
 
     required = required_update_context_uses(operations)
     order = (
-        ContextUse.READ,
-        ContextUse.CREATE,
-        ContextUse.UPDATE,
-        ContextUse.DELETE,
+        ContextPermission.READ,
+        ContextPermission.CREATE,
+        ContextPermission.EDIT,
+        ContextPermission.DELETE,
     )
     return tuple(use.value for use in order if use in required)

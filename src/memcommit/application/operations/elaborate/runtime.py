@@ -107,7 +107,7 @@ def _frame_for(
 
 
 class MemoryStoreElaboratePort(ElaborateSourcePort):
-    """Freeze one READ+UPDATE target and reject drift before Apply."""
+    """Freeze one READ+EDIT target and reject drift before Apply."""
 
     def __init__(self, store: MemoryStore, *, current_name: str | None):
         self._store = store
@@ -124,7 +124,7 @@ class MemoryStoreElaboratePort(ElaborateSourcePort):
         with authority_grant_snapshot_lock() as registry:
             access = revalidate_granted_context_binding(
                 token.granted_binding,
-                required_permission="UPDATE",
+                required_permission="EDIT",
                 registry=registry,
                 active_store=self._store,
             )
@@ -145,7 +145,7 @@ class MemoryStoreElaboratePort(ElaborateSourcePort):
                 self._store,
                 locator.context_locator,
                 current_name=self._current_name,
-                required_permission="UPDATE",
+                required_permission="EDIT",
                 registry=registry,
                 candidates=candidates,
             ).value
@@ -227,7 +227,7 @@ class MemoryStoreElaboratePort(ElaborateSourcePort):
         }
         with authorized_context_mutation(
             access,
-            required_permissions=("UPDATE",),
+            required_permissions=("EDIT",),
         ):
             checkpoint = access.store.save(
                 context,

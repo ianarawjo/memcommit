@@ -36,7 +36,7 @@ CONTEXT_USES = frozenset(
     {
         "CREATE",
         "READ",
-        "UPDATE",
+        "EDIT",
         "DELETE",
         "QUERY",
     }
@@ -58,7 +58,7 @@ LEGACY_GRANT_PERMISSIONS = frozenset(
 _GRANT_PERMISSION_ORDER = (
     "CREATE",
     "READ",
-    "UPDATE",
+    "EDIT",
     "DELETE",
     "QUERY",
     "SHARE",
@@ -236,8 +236,6 @@ def canonical_grant_permissions(
         if not isinstance(raw, str):
             raise ProfileConfigError("Grant permission is invalid.")
         permission = raw.strip().upper()
-        if permission == "EDIT":
-            permission = "UPDATE"
         if permission in LEGACY_GRANT_PERMISSIONS:
             if not allow_legacy:
                 raise ProfileConfigError(f"Unsupported grant permission: {raw!r}.")
@@ -250,8 +248,8 @@ def canonical_grant_permissions(
         if permission not in GRANT_PERMISSIONS:
             raise ProfileConfigError(f"Unsupported grant permission: {raw!r}.")
         normalized.add(permission)
-    if normalized & {"CREATE", "UPDATE", "DELETE"} and "READ" not in normalized:
-        raise ProfileConfigError("Create, update, and delete grants require READ.")
+    if normalized & {"CREATE", "EDIT", "DELETE"} and "READ" not in normalized:
+        raise ProfileConfigError("Create, edit, and delete grants require READ.")
     if not normalized:
         raise ProfileConfigError("Grant permissions contain no supported use.")
     return tuple(item for item in _GRANT_PERMISSION_ORDER if item in normalized)
@@ -263,8 +261,6 @@ def validate_grant_permission(value: object) -> str:
     if not isinstance(value, str):
         raise ProfileConfigError("Grant permission is invalid.")
     permission = value.strip().upper()
-    if permission == "EDIT":
-        permission = "UPDATE"
     if permission not in GRANT_PERMISSIONS:
         raise ProfileConfigError(f"Unsupported grant permission: {value!r}.")
     return permission

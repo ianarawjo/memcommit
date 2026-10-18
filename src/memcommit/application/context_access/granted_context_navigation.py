@@ -61,9 +61,9 @@ def grant_navigation_capability_labels(
     enabled = {
         "READ": "READ" in permission_set,
         "QUERY": "QUERY" in permission_set,
-        # CREATE and UPDATE are the two ordinary content-editing capabilities.
+        # CREATE and EDIT are the two ordinary content-editing capabilities.
         # DELETE remains separate because it has a materially different risk.
-        "EDIT": bool(permission_set & {"CREATE", "UPDATE"}),
+        "EDIT": bool(permission_set & {"CREATE", "EDIT"}),
         "DELETE": "DELETE" in permission_set,
         "SHARE": "SHARE" in permission_set,
     }

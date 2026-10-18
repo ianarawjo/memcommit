@@ -13,6 +13,9 @@ from memcommit.application.capabilities.context_scope_loading import (
 )
 from memcommit.application.context_access import authority_context_name
 from memcommit.application.context_access.access import grant_checkpoint_args
+from memcommit.application.capabilities.semantic.changes import (
+    get_required_permission_for_effect,
+)
 from memcommit.application.context_access.readable_contexts import (
     freeze_readable_context_catalog,
 )
@@ -49,7 +52,11 @@ def revalidate_recursive_target(adapter, frame, *, registry=None):
     """Bind owner membership and every direct record, including unchanged owners."""
     access = adapter._revalidated_access(frame)
     graph = load_mutable_context_scope(adapter.active_store, access, registry=registry)
-    if access.view is not None and not {"READ", *frame.allowed_effects} <= set(
+    required_permissions = {
+        "READ",
+        *(get_required_permission_for_effect(effect) for effect in frame.allowed_effects),
+    }
+    if access.view is not None and not required_permissions <= set(
         access.view.grant.permissions
     ):
         raise ResolveAuthorityError("Resolve Grant lost required authority.")
@@ -106,9 +113,14 @@ def publish_recursive_resolve(
     )
     uses_by_name = {}
     for operation, effect in zip(owner_plan.operations, effects, strict=True):
-        uses_by_name.setdefault(operation.owner_context_name, {"READ"}).add(effect)
+        uses_by_name.setdefault(operation.owner_context_name, {"READ"}).add(
+            get_required_permission_for_effect(effect)
+        )
     if not uses_by_name:
-        uses_by_name[target.graph.name] = {"READ", frame.allowed_effects[0]}
+        uses_by_name[target.graph.name] = {
+            "READ",
+            get_required_permission_for_effect(frame.allowed_effects[0]),
+        }
     checks = tuple(
         (catalog.access_for(name), tuple(sorted(uses)))
         for name, uses in uses_by_name.items()

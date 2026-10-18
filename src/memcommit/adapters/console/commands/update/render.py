@@ -6,7 +6,7 @@ from dataclasses import replace
 
 import typer
 
-from memcommit.application.authorization import ContextUse
+from memcommit.application.authorization import ContextPermission
 from memcommit.adapters.console.terminal.components.resolution.session_shell import (
     render_resolution_workbench_snapshot,
 )
@@ -67,10 +67,10 @@ def render_plan(inputs: UpdateContextInputs, plan: UpdatePlan) -> None:
         required = tuple(
             use.value
             for use in (
-                ContextUse.READ,
-                ContextUse.CREATE,
-                ContextUse.UPDATE,
-                ContextUse.DELETE,
+                ContextPermission.READ,
+                ContextPermission.CREATE,
+                ContextPermission.EDIT,
+                ContextPermission.DELETE,
             )
             if use in required_uses
         )

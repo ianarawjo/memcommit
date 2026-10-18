@@ -4,9 +4,9 @@ from importlib import import_module
 
 
 _EXPORT_MODULES = {
-    "ContextUse": "context_use",
+    "ContextPermission": "context_use",
     "ContextUseAuthorization": "context_use",
-    "authorize_context_use": "context_use",
+    "check_context_permissions": "context_use",
     "authorized_context_operation": "context_operation",
     "authorized_context_mutation": "context_operation",
 }

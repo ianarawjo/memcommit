@@ -208,7 +208,7 @@ _OPERATIONS = (
         "One direct Memory + its direct Context -> same-UID appended revision",
         ExecutionKind.SEMANTIC,
         "Standalone applies one append-only revision; Impact previews it without changing the Memory",
-        "One directly owned Memory in an exact UPDATE+DERIVE Context",
+        "One directly owned Memory in an exact EDIT+DERIVE Context",
     ),
     _operation(
         "makemore",

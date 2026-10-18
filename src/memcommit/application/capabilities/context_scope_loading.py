@@ -88,6 +88,7 @@ def walk_context_owners(root: Context) -> tuple[Context, ...]:
 
 def load_mutable_context_scope(active_store, root_access, *, registry=None) -> Context:
     """Load recursive targets through their exact readable namespace bindings."""
+    from memcommit.application.context_access.access import resolve_context_access
     from memcommit.application.context_access.readable_contexts import (
         freeze_readable_context_catalog,
     )
@@ -100,6 +101,16 @@ def load_mutable_context_scope(active_store, root_access, *, registry=None) -> C
     )
     for owner in walk_context_owners(root):
         access = catalog.access_for(owner.name)
+        if root_access.is_granted:
+            # Root-bound catalogs reuse the root access for their rows. Resolve
+            # each name so child placements cannot inherit its mutation authority.
+            access = resolve_context_access(
+                active_store,
+                owner.name,
+                current_name=None,
+                required_permission="READ",
+                registry=registry,
+            )
         # Readable breadth can cross authorities; the existing multi-owner
         # publisher writes under one Store and one exact Target Grant.
         if (

@@ -37,6 +37,13 @@ class EditChange:
 ProposedChange: TypeAlias = AddChange | RemoveChange | EditChange
 
 
+def get_required_permission_for_effect(effect: str) -> str:
+    """Map a semantic effect to its required Context permission."""
+
+    # Saved effect labels are separate from the accepted Grant vocabulary.
+    return {"CREATE": "CREATE", "UPDATE": "EDIT", "DELETE": "DELETE"}[effect]
+
+
 def parse_proposals(data: dict, ctx: Context) -> list[ProposedChange]:
     """
     Convert a parsed LLM response dict into ProposedChange objects.

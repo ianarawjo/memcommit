@@ -29,7 +29,10 @@ from memcommit.study_scenarios.legacy.fixtures import (
     load_study_fixture,
     pair_fixture_translations,
 )
-from memcommit.application.operations.profile.config import GRANT_PERMISSIONS
+from memcommit.application.operations.profile.config import (
+    ProfileConfigError,
+    validate_grant_permission,
+)
 from memcommit.persistence.store import MemoryStore
 from memcommit.persistence.store.infrastructure.atomic_io import _canonical_json_digest
 from memcommit.core.memory_translation import (
@@ -175,7 +178,7 @@ TASK_SPECS = {
                 permissions=(
                     "CREATE",
                     "READ",
-                    "UPDATE",
+                    "EDIT",
                     "DELETE",
                     "QUERY",
                 ),
@@ -773,7 +776,6 @@ def _remove_transient_lock_artifacts(store_root: Path) -> None:
     context_locks.rmdir()
 
 
-_GRANT_PERMISSIONS = GRANT_PERMISSIONS
 
 
 def _profile_store_path(package: Path, profile_name: str) -> Path:
@@ -962,11 +964,21 @@ def _grant_template_records(
         if (
             not permissions
             or len(set(permissions)) != len(permissions)
-            or any(permission not in _GRANT_PERMISSIONS for permission in permissions)
         ):
             raise StudyBundleError(
                 f"Grant template {template.key!r} has invalid permissions."
             )
+        try:
+            for permission in permissions:
+                canonical_permission = validate_grant_permission(permission)
+                if permission != canonical_permission:
+                    raise StudyBundleError(
+                        f"Grant template {template.key!r} has invalid permissions."
+                    )
+        except ProfileConfigError as error:
+            raise StudyBundleError(
+                f"Grant template {template.key!r} has invalid permissions."
+            ) from error
         if ("QUERY" in permissions) != (template.provider is not None):
             raise StudyBundleError(
                 f"Grant template {template.key!r} has an invalid provider."
@@ -1182,7 +1194,7 @@ authority Contexts into the task store.
 All fixture data, including material exposed through a QUERY grant, is stored
 as ordinary authority-owned Contexts. English is canonical Memory content and
 Korean is attached to the same Memory UID as an unreviewed imported
-translation view. A task profile sees only the READ, CREATE, UPDATE, or QUERY
+translation view. A task profile sees only the READ, CREATE, EDIT, or QUERY
 views declared in its grant templates. QUERY answers remain process-local and
 are never retained by the study Profile.
 Audience annotations remain review metadata and are not automatically

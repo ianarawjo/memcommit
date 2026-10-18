@@ -5,7 +5,7 @@ from __future__ import annotations
 from copy import deepcopy
 from dataclasses import dataclass, field, replace
 
-from memcommit.application.authorization import ContextUse
+from memcommit.application.authorization import ContextPermission
 from memcommit.application.operations.merge.analysis.candidate import digest
 from memcommit.application.operations.update.application import (
     apply_update,
@@ -34,9 +34,9 @@ from .in_round_change_review.choose_change_for_memory import (
 
 def allowed_target_uses(analysis):
     mapping = {
-        "CREATE": ContextUse.CREATE,
-        "UPDATE": ContextUse.UPDATE,
-        "DELETE": ContextUse.DELETE,
+        "CREATE": ContextPermission.CREATE,
+        "UPDATE": ContextPermission.EDIT,
+        "DELETE": ContextPermission.DELETE,
     }
     return frozenset(mapping[value] for value in analysis.frame.allowed_effects)
 
